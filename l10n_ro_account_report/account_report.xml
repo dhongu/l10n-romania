@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <report 
+            id="action_report_trial_balance_romania"
+            model="account.balance.report.romania"
+            string="Trial Balance"
+            report_type="qweb-pdf"
+            name="l10n_ro_account_report.report_trialbalance" 
+            file="l10n_ro_account_report.report_trialbalance"
+        />
+        
+    </data>
+</openerp>
