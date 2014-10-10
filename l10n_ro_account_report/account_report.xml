@@ -11,5 +11,17 @@
             file="l10n_ro_account_report.report_trialbalance"
         />
         
+        <report 
+            id="action_report_sale_purchase_journal"
+            model="sale.purchase.journal.report"
+            string="Sale/Purchase Journal"
+            report_type="qweb-pdf"
+            name="l10n_ro_account_report.report_sale_purchase_journal" 
+            file="l10n_ro_account_report.report_sale_purchase_journal"
+        />
+        <record id="action_report_sale_purchase_journal" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="l10n_ro_account_report.paperformat_A3_landscape"/>
+        </record>
+        
     </data>
 </openerp>

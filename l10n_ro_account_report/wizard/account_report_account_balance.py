@@ -38,7 +38,7 @@ class account_balance_report_romania(osv.osv_memory):
     
     def _print_report(self, cr, uid, ids, data, context=None):
         data = self.pre_print_report(cr, uid, ids, data, context=context)
-        #context['landscape'] = True
+        context['landscape'] = True
         return self.pool['report'].get_action(cr, uid, [], 'l10n_ro_account_report.report_trialbalance', data=data, context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

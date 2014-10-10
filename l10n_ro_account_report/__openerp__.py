@@ -24,18 +24,21 @@
     "author" : "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
     "category" : "Romania Adaptation",
-    "depends": ['l10n_ro_config'],
+    "depends": ['account','report','account_vat_on_payment','l10n_ro_invoice_line_not_deductible','l10n_ro_config'],
     "description": """
-Romania  - Accoutn Constrains
+Romania  - Accounting Reports
 ------------------------------------------
 
 
     """,
 
-    'data': ['views/report_trialbalance.xml',
+    'data': ['data/report_paperformat.xml',
+             'views/report_trialbalance.xml',
+             'views/report_sale_purchase_journal.xml',
              'views/layouts.xml',
              'account_report.xml',
-             'wizard/account_report_account_balance_view.xml',],
+             'wizard/account_report_account_balance_view.xml',
+             'wizard/account_report_sale_purchase_journal_view.xml',],
     'installable': True,
     'auto_install': False,
 }
