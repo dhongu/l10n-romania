@@ -20,5 +20,6 @@
 ##############################################################################
 
 import account_balance
-import sale_purchase_journal
+import sale_journal
+import purchase_journal
 

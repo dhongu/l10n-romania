@@ -267,5 +267,11 @@ class report_trialbalance(osv.AbstractModel):
     _inherit = 'report.abstract_report'
     _template = 'l10n_ro_account_report.report_trialbalance'
     _wrapped_report_class = account_balance_romania
+    
+class report_trialbalance_html(osv.AbstractModel):
+    _name = 'report.l10n_ro_account_report.report_trialbalance_html'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_ro_account_report.report_trialbalance_html'
+    _wrapped_report_class = account_balance_romania
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

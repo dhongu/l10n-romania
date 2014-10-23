@@ -45,6 +45,20 @@ class sale_purchase_journal_report(osv.osv_memory):
         data = self.read(cr, uid, ids)[0]
         context['data'] = data
         context['landscape'] = True
-        return self.pool['report'].get_action(cr, uid, [], 'l10n_ro_account_report.report_sale_purchase_journal', data=data, context=context)
+        if data['journal']=='sale':
+            return self.pool['report'].get_action(cr, uid, [], 'l10n_ro_account_report.report_sale_journal', data=data, context=context)
+        else:
+            return self.pool['report'].get_action(cr, uid, [], 'l10n_ro_account_report.report_purchase_journal', data=data, context=context)
+        
+    def print_html_report(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        data = self.read(cr, uid, ids)[0]
+        context['data'] = data
+        context['landscape'] = True
+        if data['journal']=='sale':
+            return self.pool['report'].get_action(cr, uid, [], 'l10n_ro_account_report.report_sale_journal_html', data=data, context=context)        
+        else:
+            return self.pool['report'].get_action(cr, uid, [], 'l10n_ro_account_report.report_purchase_journal_html', data=data, context=context)        
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

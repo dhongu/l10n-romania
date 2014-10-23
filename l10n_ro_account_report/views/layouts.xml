@@ -20,16 +20,6 @@
     <div class="header">
         <div class="row">
             <div class="col-xs-3">
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 20px;"/>
-            </div>
-        </div>
-        <div class="row zero_min_height">
-            <div class="col-xs-12">
-                <div style="border-bottom: 1px solid black;"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-3">
                 <div t-field="company.partner_id" 
                     t-field-options='{"widget": "contact", "fields": ["address", "name", "vat", "nrc"], "no_marker": true}'
                     style="border-bottom: 1px solid black;"/>

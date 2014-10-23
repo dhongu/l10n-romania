@@ -38,6 +38,45 @@
             name="Sale/Purchase Journal"
             parent="account.menu_journals_report"
             action="action_sale_purchase_journal"
+            id="account.menu_account_print_sale_purchase_journal"
+            icon="STOCK_PRINT"/>
+            
+        <record id="view_sale_purchase_journal_html" model="ir.ui.view">
+            <field name="name">Sale/Purchase Journal</field>
+            <field name="model">sale.purchase.journal.report</field>
+            <field name="arch" type="xml">
+				<form string="Sale/Purchase Journal">
+					<field name="company_id"/>
+					<newline/>
+					<group colspan="4">
+						<separator string="Journal type" colspan="4"/>
+						<field name="journal"/>
+						<separator string="Periods" colspan="4"/>
+						<field name="periods" colspan="4" nolabel="1"/>
+					</group>
+					<footer>
+                        <button name="print_html_report" string="Print" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+				</form>			           
+            </field>
+        </record>
+        
+       <record id="action_sale_purchase_journal_html" model="ir.actions.act_window">
+            <field name="name">Sale/Purchase Journal</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.purchase.journal.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_sale_purchase_journal_html"/>
+        </record>
+
+        <menuitem
+            name="Sale/Purchase Journal"
+            parent="final_accounting_html_reports"
+            action="action_sale_purchase_journal_html"
             id="menu_account_print_sale_purchase_journal"
             icon="STOCK_PRINT"/>
 
