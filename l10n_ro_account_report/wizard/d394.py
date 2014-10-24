@@ -147,7 +147,7 @@ class d394_report(osv.osv_memory):
 		invoices = obj_invoice.browse(cr, uid, obj_invoice.search(cr, uid, [('state','in',['open','paid']),('period_id','=',period),('fiscal_receipt','=',False),('company_id','=',company)]))
 		for inv in invoices:
 			if inv.reference:
-				if 'BF' not in inv.reference.upper():
+				if not inv.fiscal_receipt:
 					part = inv.partner_id
 					nrCUI = len(cui) + 1
 					if part.vat and part.vat_subjected and ('RO' in part.vat.upper()):
@@ -178,7 +178,7 @@ class d394_report(osv.osv_memory):
 			for inv in invoices:
 				if inv.partner_id.id==cui[key]: 
 					if inv.reference:
-						if 'BF' not in inv.reference.upper():	
+						if not inv.fiscal_receipt:	
 							nrfact += 1					
 							cuiP = inv.partner_id.vat[2:]
 							denP = inv.partner_id.name.replace('&','-').replace('"','')						
@@ -288,7 +288,7 @@ class d394_report(osv.osv_memory):
 			for inv in invoices:
 				if inv.partner_id.id==cui[key]:	
 					if inv.reference:
-						if 'BF' not in inv.reference.upper():	
+						if not inv.fiscal_receipt:	
 							nrfact += 1
 							cuiP = inv.partner_id.vat[2:]
 							denP = inv.partner_id.name.replace('&','-').replace('"','')						
