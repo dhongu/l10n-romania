@@ -1,0 +1,73 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_ro_invoice_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-27 20:53+0000\n"
+"PO-Revision-Date: 2014-11-27 20:53+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Account:"
+msgstr "Contul:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Address:"
+msgstr "Adresa:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Bank:"
+msgstr "Banca:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "CIF:"
+msgstr "CIF:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Customer"
+msgstr "Client"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Linie factura"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Invoice circulate without signature and stamp according to\n"
+"						the law 571/2003, rule 115, paragraph 6"
+msgstr "Factura circula fără semnătură și ștampilă în acord cu legea 571/2003, art. 115, alin. 6"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "NRC:"
+msgstr "NRC:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Prepared by:"
+msgstr "Întocmit de:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Supplier"
+msgstr "Furnizor"
+
+#. module: l10n_ro_invoice_report
+#: field:account.invoice.line,price_taxes:0
+msgid "Taxes"
+msgstr "Taxe"
+

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<template id="report_invoice_document" inherit_id="account.report_invoice_document">
+
+			<xpath expr="//div[@class='row']" position="replace">
+				<div class="row">
+					<div class="col-xs-5">
+						<strong t-field="res_company.partner_id.name" />
+						<div>
+							<strong>Address:</strong>
+							<address t-field="res_company.partner_id"
+								t-field-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false}' />
+						</div>
+
+					</div>
+
+					<div class="col-xs-5 col-xs-offset-2">
+						<div>
+							<strong t-if="o.type == 'out_invoice'">Customer</strong>
+							<strong t-if="o.type == 'in_invoice'">Supplier</strong>
+						</div>
+						<div>
+							<strong t-field="o.partner_id.name" />
+						</div>
+						<div>
+							<strong>Address:</strong>
+							<address t-field="o.partner_id"
+								t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false}' />
+						</div>
+
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-5">
+					  <t t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+					  	<strong>Bank:</strong><span t-field="bank.name" />
+					  	<strong>Account:</strong><span t-field="bank.acc_number" />
+					  </t>
+					</div>
+					<div class="col-xs-5 col-xs-offset-2">
+					  <t t-foreach="o.partner_id.bank_ids" t-as="bank">
+					  	<strong>Bank:</strong><span t-field="bank.name" />
+					  	<strong>Account:</strong><span t-field="bank.acc_number" />
+					  </t>				
+					</div>
+				</div>				
+				
+				
+				<div class="row">
+					<div class="col-xs-5">
+						<div>
+							<strong>CIF:</strong>
+							<span t-field="res_company.partner_id.vat" />
+						</div>
+						<div>
+							<strong>NRC:</strong>
+							<span t-field="res_company.partner_id.nrc" />
+						</div>
+					</div>
+					<div class="col-xs-5 col-xs-offset-2">
+						<div>
+							<strong>CIF:</strong>
+							<span t-field="o.partner_id.vat" />
+						</div>
+						<div>
+							<strong>NRC:</strong>
+							<span t-field="o.partner_id.nrc" />
+						</div>
+					</div>
+				</div>
+		
+				<div class="row ">
+					<div class="col-xs-5">
+					
+					</div>
+					<div class="col-xs-5 col-xs-offset-2">
+					
+					</div>
+				</div>
+
+	</xpath>
+
+			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[5]"
+				position="replace">
+
+				<td class="text-right">
+					<span t-field="l.price_taxes"
+						t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}' />
+				</td>
+
+			</xpath>
+
+			<xpath expr="//p[@t-if='o.comment']" position="after">
+				<p>
+					<span>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6
+					</span>
+				</p>
+			</xpath>
+
+			<xpath expr="//p[@t-if='o.fiscal_position']" position="after">
+				<p>
+					<span>Prepared by:</span><span t-field="o.user_id" ./>
+				</p>
+			</xpath>
+
+		</template>
+
+		<template id="report_header_custom" inherit_id="report.external_layout_header">
+			<xpath expr="//div[@class='header']" position="replace">
+				<div class="header">
+					<div class="row">
+						<div class="col-xs-3">
+							<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo"
+								style="max-height: 45px;" />
+						</div>
+						<div class="col-xs-9 text-right" style="margin-top:20px;"
+							t-field="company.rml_header1" />
+					</div>
+					<div class="row zero_min_height">
+						<div class="col-xs-12">
+							<div style="border-bottom: 1px solid black;"></div>
+						</div>
+					</div>
+
+				</div>
+			</xpath>
+		</template>
+
+
+	</data>
+</openerp>
