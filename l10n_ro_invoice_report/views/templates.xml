@@ -32,7 +32,7 @@
 
 					</div>
 				</div>
-				
+
 				<div class="row">
 					<div class="col-xs-5">
 					  <t t-foreach="res_company.partner_id.bank_ids" t-as="bank">
@@ -44,11 +44,11 @@
 					  <t t-foreach="o.partner_id.bank_ids" t-as="bank">
 					  	<strong>Bank:</strong><span t-field="bank.name" />
 					  	<strong>Account:</strong><span t-field="bank.acc_number" />
-					  </t>				
+					  </t>
 					</div>
-				</div>				
-				
-				
+				</div>
+
+
 				<div class="row">
 					<div class="col-xs-5">
 						<div>
@@ -71,13 +71,13 @@
 						</div>
 					</div>
 				</div>
-		
+
 				<div class="row ">
 					<div class="col-xs-5">
-					
+
 					</div>
 					<div class="col-xs-5 col-xs-offset-2">
-					
+
 					</div>
 				</div>
 
