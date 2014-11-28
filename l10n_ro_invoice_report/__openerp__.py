@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # Copyright (c) 2008 Deltatech All Rights Reserved
-#                    Dorin Hongu <dhongu(@)gmail(.)com       
+#                    Dorin Hongu <dhongu(@)gmail(.)com
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -25,14 +25,14 @@
     "version" : "1.0",
     "author" : "Dorin Hongu",
     "website" : "",
-    
+
     "description": """
-    
-Romania - Invoice Report layout 
+
+Romania - Invoice Report layout
 ------------------------------------------
- 
+
     """,
-    
+
     "category" : "Generic Modules",
     "depends" : ["base","account",'l10n_ro'],
 
