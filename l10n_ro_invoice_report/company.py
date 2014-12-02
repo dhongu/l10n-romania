@@ -17,16 +17,18 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#
 ##############################################################################
 
+from openerp import models, fields, api, _
+import openerp.addons.decimal_precision as dp
 
-import account_invoice
-import company
+class company(models.Model):
+    _inherit = 'res.company'
+    
+    share_capital = fields.Float(string='Share Capital', digits= dp.get_precision('Account'), default= 200 )
 
 
-
-
+company()
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-27 20:53+0000\n"
-"PO-Revision-Date: 2014-11-27 20:53+0000\n"
+"POT-Creation-Date: 2014-12-01 04:47+0000\n"
+"PO-Revision-Date: 2014-12-01 04:47+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,18 +27,53 @@ msgstr "Adresa:"
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+msgid "Amount"
+msgstr "Suma"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
 msgid "Bank:"
 msgstr "Banca:"
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
-msgid "CIF:"
-msgstr "CIF:"
+msgid "VAT:"
+msgstr "CUI:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_company
+msgid "Companies"
+msgstr "Companii"
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Customer"
 msgstr "Client"
+
+#. module: l10n_ro_invoice_report
+#: field:account.invoice,delegate_id:0
+msgid "Delegate"
+msgstr "Delegate"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Delegate:"
+msgstr "Delegat:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Elaborate:"
+msgstr "Întocmit:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Information for delivery:"
+msgstr "Informații privind livrarea:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice
+msgid "Invoice"
+msgstr "Factura"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice_line
@@ -47,9 +82,18 @@ msgstr "Linie factura"
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
-msgid "Invoice circulate without signature and stamp according to\n"
-"						the law 571/2003, rule 115, paragraph 6"
+msgid "Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6"
 msgstr "Factura circula fără semnătură și ștampilă în acord cu legea 571/2003, art. 115, alin. 6"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Mean Transp:"
+msgstr "Mijloc transport:"
+
+#. module: l10n_ro_invoice_report
+#: field:account.invoice,mean_transp:0
+msgid "Mean transport"
+msgstr "Mean transport"
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
@@ -58,8 +102,18 @@ msgstr "NRC:"
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
-msgid "Prepared by:"
-msgstr "Întocmit de:"
+msgid "Name:"
+msgstr "Nume:"
+
+#. module: l10n_ro_invoice_report
+#: field:res.company,share_capital:0
+msgid "Share Capital"
+msgstr "Capital social"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Share Capital:"
+msgstr "Capital social:"
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
@@ -68,6 +122,12 @@ msgstr "Furnizor"
 
 #. module: l10n_ro_invoice_report
 #: field:account.invoice.line,price_taxes:0
+#: view:website:account.report_invoice_document
 msgid "Taxes"
 msgstr "Taxe"
+
+#. module: l10n_ro_invoice_report
+#: field:account.invoice.line,price_unit_without_taxes:0
+msgid "Unit Price without taxes"
+msgstr "Preț fără taxe"
 

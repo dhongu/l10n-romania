@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="view_company_form_" model="ir.ui.view">
+            <field name="name">deltatech.res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+               <field name="currency_id" position="after">
+                      <field name="share_capital" />   
+               </field>
+            </field>
+        </record>
+    </data>
+</openerp>
