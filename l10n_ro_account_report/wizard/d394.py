@@ -146,18 +146,7 @@ class d394_report(osv.osv_memory):
 		nrfactC = bazaC = tvaC = bazaCc = tvaCc = 0
 		invoices = obj_invoice.browse(cr, uid, obj_invoice.search(cr, uid, [('state','in',['open','paid']),('period_id','=',period),('fiscal_receipt','=',False),('company_id','=',company)]))
 		for inv in invoices:
-			if inv.reference:
-				if not inv.fiscal_receipt:
-					part = inv.partner_id
-					nrCUI = len(cui) + 1
-					if part.vat and part.vat_subjected and ('RO' in part.vat.upper()):
-						if cui:
-							for key in cui.iterkeys():
-								if part.id==cui[key]:
-									nrCUI = key
-						if nrCUI > len(cui):
-							cui[nrCUI] = part.id
-			else:
+			if not inv.fiscal_receipt:
 				part = inv.partner_id
 				nrCUI = len(cui) + 1
 				if part.vat and part.vat_subjected and ('RO' in part.vat.upper()):
@@ -177,38 +166,18 @@ class d394_report(osv.osv_memory):
 			bazacer = tvacer = 0
 			for inv in invoices:
 				if inv.partner_id.id==cui[key]: 
-					if inv.reference:
-						if not inv.fiscal_receipt:	
-							nrfact += 1					
-							cuiP = inv.partner_id.vat[2:]
-							denP = inv.partner_id.name.replace('&','-').replace('"','')						
-							if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
-								for tax_line in inv.tax_line:
-									if 'INVERS' in tax_line.name.upper():
-										bazainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-									if (' 24' in tax_line.name) or (' 9' in tax_line.name) or (' 5' in tax_line.name) or (' 0' in tax_line.name):
-										baza += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-										tva += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
-								
-								#for line in inv.invoice_line:
-								#	taxes = tax_obj.compute_all(cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
-								#	tvainv += taxes['total_included'] - taxes['total']
-							else:
-								tva += inv.amount_tax
-								baza += inv.amount_untaxed
-					else:
+					if not inv.fiscal_receipt:	
+						nrfact += 1					
 						cuiP = inv.partner_id.vat[2:]
 						denP = inv.partner_id.name.replace('&','-').replace('"','')						
-						nrfact += 1					
 						if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
-							nrfactv += 1								
 							for tax_line in inv.tax_line:
 								if 'INVERS' in tax_line.name.upper():
 									bazainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
 								if (' 24' in tax_line.name) or (' 9' in tax_line.name) or (' 5' in tax_line.name) or (' 0' in tax_line.name):
 									baza += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
 									tva += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
-								
+							
 							#for line in inv.invoice_line:
 							#	taxes = tax_obj.compute_all(cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
 							#	tvainv += taxes['total_included'] - taxes['total']
@@ -287,38 +256,10 @@ class d394_report(osv.osv_memory):
 			bazacer = tvacer = 0
 			for inv in invoices:
 				if inv.partner_id.id==cui[key]:	
-					if inv.reference:
-						if not inv.fiscal_receipt:	
-							nrfact += 1
-							cuiP = inv.partner_id.vat[2:]
-							denP = inv.partner_id.name.replace('&','-').replace('"','')						
-							if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
-								nrfactc += 1								
-								#bazainv += inv.amount_untaxed
-								base_exig = base1 = tva1 = tva_exig = 0.00
-								for tax_line in inv.tax_line:
-									if 'colectat' in tax_line.name:
-										bazainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-										tvainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
-										base_exig += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-										tva_exig += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
-									if 'deductibil' in tax_line.name:
-										base1 += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-										tva1 += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
-								if base1 - base_exig>0:
-									nrfact+=1
-									baza += base1 - base_exig
-									tva += tva1 - tva_exig
-									#for line in inv.invoice_line:
-									#taxes = tax_obj.compute_all(cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
-									#tvainv += taxes['total_included'] - taxes['total']
-							else:
-								tva += inv.amount_tax
-								baza += inv.amount_untaxed
-					else:
+					if not inv.fiscal_receipt:	
+						nrfact += 1
 						cuiP = inv.partner_id.vat[2:]
 						denP = inv.partner_id.name.replace('&','-').replace('"','')						
-						nrfact += 1
 						if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
 							nrfactc += 1								
 							#bazainv += inv.amount_untaxed
