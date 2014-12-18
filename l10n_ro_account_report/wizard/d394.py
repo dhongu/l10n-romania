@@ -265,12 +265,12 @@ class d394_report(osv.osv_memory):
 							#bazainv += inv.amount_untaxed
 							base_exig = base1 = tva1 = tva_exig = 0.00
 							for tax_line in inv.tax_line:
-								if 'colectat' in tax_line.name:
+								if 'Ti-ach-c' in tax_line.name:
 									bazainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
 									tvainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
 									base_exig += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
 									tva_exig += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
-								if 'deductibil' in tax_line.name:
+								if 'Ti-ach-d' in tax_line.name:
 									base1 += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
 									tva1 += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
 							if base1 - base_exig>0:
