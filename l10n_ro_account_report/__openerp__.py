@@ -44,7 +44,9 @@ Romania  - Accounting Reports
              'account_report.xml',
              'wizard/account_report_account_balance_view.xml',
              'wizard/account_report_sale_purchase_journal_view.xml',
-             'wizard/d394_view.xml',],
+             'wizard/d394_view.xml',
+             'product_view.xml',
+             'security/ir.model.access.csv',],
     'installable': True,
     'auto_install': False,
 }
