@@ -267,7 +267,7 @@ class d394_report(osv.osv_memory):
 							for tax_line in inv.tax_line:
 								if 'Ti-ach-c' in tax_line.name:
 									bazainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-									tvainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
+									tvainv += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, -tax_line.amount, context={'date': inv.date_invoice}) or 0.00
 									base_exig += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
 									tva_exig += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
 								if 'Ti-ach-d' in tax_line.name:
@@ -277,9 +277,6 @@ class d394_report(osv.osv_memory):
 								nrfact+=1
 								baza += base1 - base_exig
 								tva += tva1 - tva_exig
-								#for line in inv.invoice_line:
-								#taxes = tax_obj.compute_all(cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
-								#tvainv += taxes['total_included'] - taxes['total']
 						else:
 							tva += inv.amount_tax
 							baza += inv.amount_untaxed	
