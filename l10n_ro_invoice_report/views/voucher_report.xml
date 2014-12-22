@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<template id="report_voucher">
+
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<div class="row">
+								<div class="col-xs-5">
+									<div>
+										<strong t-if="o.type == 'out_invoice'">Supplier</strong>
+										<strong t-if="o.type == 'in_invoice'">Customer</strong>
+									</div>
+									<strong t-field="res_company.partner_id.name" />
+									<div>
+										<strong>Address:</strong>
+										<address t-field="res_company.partner_id" t-field-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false}' />
+									</div>
+
+								</div>
+
+								<div class="col-xs-5 col-xs-offset-2">
+									<div>
+										<strong t-if="o.type == 'out_invoice'">Customer</strong>
+										<strong t-if="o.type == 'in_invoice'">Supplier</strong>
+									</div>
+									<div>
+										<strong t-field="o.partner_id.name" />
+									</div>
+									<div>
+										<strong>Address:</strong>
+										<address t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false}' />
+									</div>
+
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-5">
+									<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+										<div t-if="bank.bank_name">
+											<strong>Bank:</strong>
+											<span t-field="bank.bank_name" />
+										</div>
+										<div t-if="bank.acc_number">
+											<strong>Account:</strong>
+											<span t-field="bank.acc_number" />
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-5 col-xs-offset-2">
+									<div t-foreach="o.partner_id.bank_ids" t-as="bank">
+										<div t-if="bank.bank_name">
+											<strong>Bank:</strong>
+											<span t-field="bank.bank_name" />
+										</div>
+										<div t-if="bank.acc_number">
+											<strong>Account:</strong>
+											<span t-field="bank.acc_number" />
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-xs-5">
+									<div t-if="res_company.partner_id.vat">
+										<strong>CIF:</strong>
+										<span t-field="res_company.partner_id.vat" />
+									</div>
+									<div t-if="res_company.partner_id.nrc">
+										<strong>NRC:</strong>
+										<span t-field="res_company.partner_id.nrc" />
+									</div>
+									<div i-if="res_company.share_capital">
+										<strong>Share Capital:</strong>
+										<span t-field="res_company.share_capital" />
+									</div>
+								</div>
+								<div class="col-xs-5 col-xs-offset-2">
+									<div t-if="o.partner_id.vat">
+										<strong>CIF:</strong>
+										<span t-field="o.partner_id.vat" />
+									</div>
+									<div t-if="o.partner_id.nrc">
+										<strong>NRC:</strong>
+										<span t-field="o.partner_id.nrc" />
+									</div>
+								</div>
+							</div>
+							<br />
+							<br />
+
+
+							<h2>
+								<span>Voucher:</span>
+								<span t-field="o.number" />
+							</h2>
+
+							<table class="table table-condensed">
+								<thead>
+									<tr>
+										<th>
+											<strong>Date</strong>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<t t-esc="formatLang(o.date, date=True)" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<table class="table table-condensed">
+								<tr>
+									<td>Received from:</td>
+									<td>
+										<span t-field="o.partner_id.name" />
+									</td>
+								</tr>
+								<tr>
+									<td>Amount:</td>
+									<td>
+										<span t-field="o.amount" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+									</td>
+								</tr>
+								<tr>
+									<td>Amount (in words):</td>
+									<td>
+										<span t-esc="convert(o.amount)" />
+									</td>
+								</tr>
+								<tr>
+									<td>Representing:</td>
+									<td>
+ 										<span t-field="o.name" />		
+									</td>
+								</tr>
+							</table>
+
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</openerp>
+						

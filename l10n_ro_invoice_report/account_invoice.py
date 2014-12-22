@@ -54,8 +54,7 @@ class account_invoice_line(models.Model):
             self.price_taxes = self.invoice_id.currency_id.round(self.price_taxes)
             self.price_unit_without_taxes = self.invoice_id.currency_id.round(self.price_unit_without_taxes)
 
-         
-             
+          
 
     price_unit_without_taxes = fields.Float(string='Unit Price without taxes',  
                                             store=True, readonly=True, compute='_compute_price')
