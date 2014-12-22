@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+          <report 
+            string="Voucher" 
+            id="action_report_voucher" 
+            model="account.voucher" 
+            report_type="qweb-html"
+            name="l10n_ro_invoice_report.report_voucher" 
+            file="l10n_ro_invoice_report.report_voucher"    />
+    </data>
+</openerp>

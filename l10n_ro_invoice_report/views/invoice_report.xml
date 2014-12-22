@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<template id="l10n_ro_report_invoice" inherit_id="account.report_invoice">
+			<xpath expr="." position="inside">
+				<t t-if="False">
+					<t t-call="account.report_invoice_document" />
+				</t>
+			</xpath>
+		</template>
+
+
+
+
+		<template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
+
+			<xpath expr="//div[@class='row']" position="replace">
+
+				<div class="row">
+					<div class="col-xs-5">
+						<div>
+							<strong t-if="o.type == 'out_invoice'">Supplier</strong>
+							<strong t-if="o.type == 'in_invoice'">Customer</strong>
+						</div>
+						<strong t-field="res_company.partner_id.name" />
+						<div>
+							<strong>Address:</strong>
+							<address t-field="res_company.partner_id" t-field-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false}' />
+						</div>
+
+					</div>
+
+					<div class="col-xs-5 col-xs-offset-2">
+						<div>
+							<strong t-if="o.type == 'out_invoice'">Customer</strong>
+							<strong t-if="o.type == 'in_invoice'">Supplier</strong>
+						</div>
+						<div>
+							<strong t-field="o.partner_id.name" />
+						</div>
+						<div>
+							<strong>Address:</strong>
+							<address t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false}' />
+						</div>
+
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-5">
+						<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+							<div t-if="bank.bank_name">
+								<strong>Bank:</strong>
+								<span t-field="bank.bank_name" />
+							</div>
+							<div t-if="bank.acc_number">
+								<strong>Account:</strong>
+								<span t-field="bank.acc_number" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-5 col-xs-offset-2">
+						<div t-foreach="o.commercial_partner_id.bank_ids" t-as="bank">
+							<div t-if="bank.bank_name">
+								<strong>Bank:</strong>
+								<span t-field="bank.bank_name" />
+							</div>
+							<div t-if="bank.acc_number">
+								<strong>Account:</strong>
+								<span t-field="bank.acc_number" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-xs-5">
+						<div t-if="res_company.partner_id.vat">
+							<strong>CIF:</strong>
+							<span t-field="res_company.partner_id.vat" />
+						</div>
+						<div t-if="res_company.partner_id.nrc">
+							<strong>NRC:</strong>
+							<span t-field="res_company.partner_id.nrc" />
+						</div>
+						<div i-if="res_company.share_capital">
+							<strong>Share Capital:</strong>
+							<span t-field="res_company.share_capital" />
+						</div>
+					</div>
+					<div class="col-xs-5 col-xs-offset-2">
+						<div t-if="o.commercial_partner_id.vat">
+							<strong>CIF:</strong>
+							<span t-field="o.commercial_partner_id.vat" />
+						</div>
+						<div t-if="o.commercial_partner_id.nrc">
+							<strong>NRC:</strong>
+							<span t-field="o.commercial_partner_id.nrc" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+
+			</xpath>
+
+			<xpath expr="//table/thead/tr/th[5]" position="replace">
+				<th class="text-right">Amount</th>
+			</xpath>
+			<xpath expr="//table/thead/tr/th[6]" position="replace">
+				<th class="text-right">Taxes</th>
+			</xpath>
+
+			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[3]/span" position="replace">
+				<span t-field="l.price_unit_without_taxes" />
+			</xpath>
+
+			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[5]/span" position="replace">
+				<span t-field="l.price_subtotal" />
+			</xpath>
+
+
+			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[6]/span" position="replace">
+				<span t-field="l.price_taxes" />
+			</xpath>
+
+			<xpath expr="//div[@t-if='o.tax_line']" position="replace">
+				<table class="table table-condensed" t-if="o.type == 'out_invoice'">
+					<thead>
+						<tr>
+							<th>Elaborate:</th>
+							<th>Information for delivery:</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<span>Name:</span>
+								<span t-field="o.user_id" />
+							</td>
+							<td>
+								<div t-if="o.delegate_id">
+									<span>Delegate:</span>
+									<span t-field="o.delegate_id" />
+								</div>
+								<div t-if="o.mean_transp">
+									<span>Mean Transport:</span>
+									<span t-field="o.mean_transp" />
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</xpath>
+
+
+			<xpath expr="//p[@t-if='o.comment']" position="after">
+				<p t-if="o.type == 'out_invoice'">
+					<span>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6
+					</span>
+				</p>
+
+				<div t-if="o.type == 'out_invoice' and o.payment_ids">
+					<br/>
+					<br/>
+					<div t-foreach="o.payment_ids" t-as="payment" style="border-top: 1px solid black;">
+						<div>
+							<strong t-field="res_company.partner_id.name" />
+						</div>
+						<div>
+							VAT:
+							<span t-field="res_company.partner_id.vat" />
+						</div>
+						<div>
+							NRC:
+							<span t-field="res_company.partner_id.nrc" />
+						</div>
+						<address t-field="res_company.partner_id" t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}' />
+						<h4>
+							<span>Voucher:</span>
+							<span t-field="payment.ref" />
+							<span>/</span>
+							<span t-field="payment.date" />
+						</h4>
+						<div>
+							<span>I received from</span>
+							<strong t-field="o.partner_id.name" />
+							<span t-if="o.partner_id.city">
+								from
+								<span t-field="o.partner_id.city" /> <span t-field="o.partner_id.street" />  <span t-field="o.partner_id.street2" /> 
+							</span>,
+
+							<span>amount</span>
+							 
+							<span t-field="payment.credit" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+							(
+							<span t-esc="convert(payment.credit)" />
+							)
+						</div>
+						<div>
+							Representing counter value of invoice
+							<span t-field="o.number" />
+						</div>
+
+					</div>
+				</div>
+			</xpath>
+
+
+
+		</template>
+
+		<template id="report_header_custom" inherit_id="report.external_layout_header">
+			<xpath expr="//div[@class='header']" position="replace">
+				<div class="header">
+					<div class="row">
+						<div class="col-xs-3">
+							<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;" />
+						</div>
+						<div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1" />
+					</div>
+					<div class="row zero_min_height">
+						<div class="col-xs-12">
+							<div style="border-bottom: 1px solid black;"></div>
+						</div>
+					</div>
+
+				</div>
+			</xpath>
+		</template>
+
+
+	</data>
+</openerp>
