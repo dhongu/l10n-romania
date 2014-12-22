@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report 
+            string="Delivery" 
+            id="action_report_delivery" 
+            model="stock.picking" 
+            report_type="qweb-pdf"
+            name="l10n_ro_stock_picking_report.report_delivery" 
+            file="l10n_ro_stock_picking_report.report_delivery"    />
+
+        <report 
+            string="Delivery with price" 
+            id="action_report_delivery_price" 
+            model="stock.picking"          
+            report_type="qweb-pdf"
+            name="l10n_ro_stock_picking_report.report_delivery_price" 
+            file="l10n_ro_stock_picking_report.report_delivery_price"    />
+
+        <report 
+            string="Reception" 
+            id="action_report_reception" 
+            model="stock.picking" 
+            report_type="qweb-pdf"
+            name="l10n_ro_stock_picking_report.report_reception" 
+            file="l10n_ro_stock_picking_report.report_reception"    />
+            
+        <report 
+            string="Reception with sale price" 
+            id="action_report_reception_sale_price" 
+            model="stock.picking" 
+            report_type="qweb-pdf"
+            name="l10n_ro_stock_picking_report.report_reception_sale_price" 
+            file="l10n_ro_stock_picking_report.report_reception_sale_price"    />
+    </data>
+</openerp>
