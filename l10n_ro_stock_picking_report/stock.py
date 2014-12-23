@@ -42,8 +42,8 @@ class stock_picking(osv.osv):
         if type == 'out_invoice':
             for picking in self.browse(cr, uid, ids, context=context):
                 # context['date_inv'] = picking.date
-                context['delegate_id'] = picking.delegate_id.id
-                context['mean_transp'] = picking.mean_transp
+                context['default_delegate_id'] = picking.delegate_id.id
+                context['default_mean_transp'] = picking.mean_transp
                 
         res = super(stock_picking,self).action_invoice_create( cr, uid, ids, journal_id, group, type, context)
          
