@@ -19,7 +19,7 @@
 					<strong t-field="res_company.partner_id.name" />
 					<div>
 						<strong>Address:</strong>
-						<address t-field="res_company.partner_id" t-field-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false}' />
+						<address t-field="res_company.partner_id" t-field-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}' />
 					</div>
 
 				</div>
@@ -39,7 +39,7 @@
 					</div>
 					<div>
 						<strong>Address:</strong>
-						<address t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false}' />
+						<address t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}' />
 					</div>
 
 				</div>
