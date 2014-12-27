@@ -46,8 +46,4 @@ class report_voucher(osv.AbstractModel):
     _wrapped_report_class = report_invoice_print
  
 
-
- 
- 
-
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

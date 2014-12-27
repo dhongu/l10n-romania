@@ -8,16 +8,12 @@
             <field name="type">form</field>
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
-            	
                <field name="user_id" position="after">
                       <field name="delegate_id"  />
                       <field name="mean_transp" colspan="2" />              
                </field>
             </field>
         </record>
-
-
-
 
     </data>
 </openerp>
