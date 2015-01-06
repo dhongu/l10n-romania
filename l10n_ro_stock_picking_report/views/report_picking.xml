@@ -48,14 +48,16 @@
 			<div class="row">
 				<div class="col-xs-5">
 					<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-						<div t-if="bank.bank_name">
-							<strong>Bank:</strong>
-							<span t-field="bank.bank_name" />
-						</div>
-						<div t-if="bank.acc_number">
-							<strong>Account:</strong>
-							<span t-field="bank.acc_number" />
-						</div>
+						<t t-if t-if="bank.footer">
+							<div t-if="bank.bank_name">
+								<strong>Bank:</strong>
+								<span t-field="bank.bank_name" />
+							</div>
+							<div t-if="bank.acc_number">
+								<strong>Account:</strong>
+								<span t-field="bank.acc_number" />
+							</div>
+						</t>
 					</div>
 				</div>
 				<div class="col-xs-5 col-xs-offset-2">
@@ -409,7 +411,7 @@
 								<span>ascertained the following:</span>
 							</div>
 							<br />
-							<table class="table table-condensed" >
+							<table class="table table-condensed">
 								<thead>
 									<tr>
 										<th>
