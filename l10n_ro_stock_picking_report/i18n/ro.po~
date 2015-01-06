@@ -189,7 +189,7 @@ msgstr "Comisia de recepţie:"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_reception_sale_price
 msgid "Reception with sale price"
-msgstr "Recepție cu preț de vânzare"
+msgstr "Recpție cu preț de vânzare"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception
