@@ -184,7 +184,7 @@ msgstr "Recepție (NIR)"
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception_sign
 msgid "Reception Committee:"
-msgstr "Comisia de recepţie:"
+msgstr "Comisia de recepție:"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_reception_sale_price
@@ -244,7 +244,7 @@ msgstr "TVA"
 #: view:website:l10n_ro_stock_picking_report.report_reception
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "The undersigned, members of the reception, we proceeded to receive material values supplied by"
-msgstr "Subsemnaţii, membrii comisiei de recepţie, am procedat la recepţionarea valorilor materiale furnizate de firma"
+msgstr "Subsemnații, membrii comisiei de recepție, am procedat la recepționarea valorilor materiale furnizate de firma"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_totals
