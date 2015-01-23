@@ -4,7 +4,7 @@
 		<!--
         Product categories
         -->
-        
+
         <record id="10011000" model="report.394.code">
             <field name="name">10011000</field>
             <field name="description">Grau dur</field>
