@@ -44,7 +44,11 @@ class d394_report(osv.osv_memory):
         'name': fields.char('File Name'),
         'msg': fields.text('File created', readonly=True),
         'company_id': fields.many2one('res.company', 'Company', required=True),
-        'period_id': fields.many2one('account.period', 'Period', required=True),
+        'period_id': fields.many2one(
+            'account.period',
+            'Period',
+            required=True
+        ),
     }
 
     _defaults = {
@@ -56,7 +60,8 @@ class d394_report(osv.osv_memory):
     def _get_datas(self, cr, uid, ids, context=None):
         """Collects require data for vat intra xml
         :param ids: id of wizard.
-        :return: dict of all data to be used to generate xml for Partner VAT Intra.
+        :return: dict of all data to be used to generate xml for Partner VAT
+        Intra.
         :rtype: dict
         """
         if context is None:
@@ -109,7 +114,11 @@ class d394_report(osv.osv_memory):
             'functie_declar': function,
             'cui': data_company.partner_id.vat[2:],
             'den': data_company.partner_id.name,
-            'adresa': ', '.join([data_company.state_id and data_company.state_id.name, data_company.city, data_company.street, data_company.zip]),
+            'adresa': ', '.join([
+                data_company.state_id and data_company.state_id.name,
+                data_company.city,
+                data_company.street,
+                data_company.zip]),
             'telefon': data_company.phone,
             'totalPlata_A': 0,
             'nrCui': 0,
@@ -150,8 +159,19 @@ class d394_report(osv.osv_memory):
         nrfactA = bazaA = tvaA = 0
         nrfactV = bazaV = tvaV = bazaVc = tvaVc = 0
         nrfactC = bazaC = tvaC = bazaCc = tvaCc = 0
-        invoices = obj_invoice.browse(cr, uid, obj_invoice.search(cr, uid, [('state', 'in', [
-                                      'open', 'paid']), ('period_id', '=', period), ('fiscal_receipt', '=', False), ('company_id', '=', company)]))
+        invoices = obj_invoice.browse(
+            cr,
+            uid,
+            obj_invoice.search(
+                cr,
+                uid,
+                [
+                    ('state', 'in', ['open', 'paid']),
+                    ('period_id', '=', period),
+                    ('fiscal_receipt', '=', False),
+                    ('company_id', '=', company)
+                ])
+            )
         for inv in invoices:
             if not inv.fiscal_receipt:
                 part = inv.partner_id
@@ -164,8 +184,19 @@ class d394_report(osv.osv_memory):
                     if nrCUI > len(cui):
                         cui[nrCUI] = part.id
         invoices = []
-        invoices = obj_invoice.browse(cr, uid, obj_invoice.search(cr, uid, [('state', 'in', ['open', 'paid']), ('type', 'in', [
-                                      'out_invoice', 'out_refund']), ('period_id', '=', period), ('company_id', '=', company)]))
+        invoices = obj_invoice.browse(
+            cr,
+            uid,
+            obj_invoice.search(
+                cr,
+                uid,
+                [
+                    ('state', 'in', ['open', 'paid']),
+                    ('type', 'in', ['out_invoice', 'out_refund']),
+                    ('period_id', '=', period),
+                    ('company_id', '=', company)
+                ])
+        )
         for key in cui.iterkeys():
             in_xml = []
             tip = 'L'
@@ -212,7 +243,10 @@ class d394_report(osv.osv_memory):
                 cer = {}
                 cereals = []
                 codes = self.pool.get('report.394.code').search(cr, uid, [(
-                    'name', 'in', ('10011000', '10011900', '10019110', '10019120', '10019900', '1002', '1003', '1005', '1201', '1205', '120600', '121291'))])
+                    'name', 'in', (
+                        '10011000', '10011900', '10019110', '10019120',
+                        '10019900', '1002', '1003', '1005', '1201', '1205',
+                        '120600', '121291'))])
                 if codes:
                     codes = [code394.id for code394 in self.pool.get(
                         'report.394.code').browse(cr, uid, codes)]
@@ -264,8 +298,19 @@ class d394_report(osv.osv_memory):
             bazaVc += int(round(bazacer))
             tvaVc += int(round(tvacer))
         invoices = []
-        invoices = obj_invoice.browse(cr, uid, obj_invoice.search(cr, uid, [('state', 'in', [
-                                      'open', 'paid']), ('type', '=', 'in_invoice'), ('period_id', '=', period), ('company_id', '=', company)]))
+        invoices = obj_invoice.browse(
+            cr,
+            uid,
+            obj_invoice.search(
+                cr,
+                uid,
+                [
+                    ('state', 'in', ['open', 'paid']),
+                    ('type', '=', 'in_invoice'),
+                    ('period_id', '=', period),
+                    ('company_id', '=', company)
+                ])
+        )
         for key in cui.iterkeys():
             in_xml = []
             nrfact = nrfactc = baza = tva = 0
@@ -308,7 +353,10 @@ class d394_report(osv.osv_memory):
                 cer = {}
                 cereals = []
                 codes = self.pool.get('report.394.code').search(cr, uid, [(
-                    'name', 'in', ('10011000', '10011900', '10019110', '10019120', '10019900', '1002', '1003', '1005', '1201', '1205', '120600', '121291'))])
+                    'name', 'in', (
+                        '10011000', '10011900', '10019110', '10019120',
+                        '10019900', '1002', '1003', '1005', '1201', '1205',
+                        '120600', '121291'))])
                 if codes:
                     codes = [code394.id for code394 in self.pool.get(
                         'report.394.code').browse(cr, uid, codes)]

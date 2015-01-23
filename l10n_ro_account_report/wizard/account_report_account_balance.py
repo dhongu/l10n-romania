@@ -28,7 +28,14 @@ class account_balance_report_romania(osv.osv_memory):
     _description = 'Trial Balance Report'
 
     _columns = {
-        'journal_ids': fields.many2many('account.journal', 'account_balance_report_journal_rel_ro', 'account_id', 'journal_id', 'Journals', required=True),
+        'journal_ids': fields.many2many(
+            'account.journal',
+            'account_balance_report_journal_rel_ro',
+            'account_id',
+            'journal_id',
+            'Journals',
+            required=True
+        ),
     }
 
     _defaults = {
@@ -47,7 +54,14 @@ class account_balance_html_report_romania(osv.osv_memory):
     _description = 'Trial Balance Report'
 
     _columns = {
-        'journal_ids': fields.many2many('account.journal', 'account_balance_html_report_journal_rel_ro', 'account_id', 'journal_id', 'Journals', required=True),
+        'journal_ids': fields.many2many(
+            'account.journal',
+            'account_balance_html_report_journal_rel_ro',
+            'account_id',
+            'journal_id',
+            'Journals',
+            required=True
+        ),
     }
 
     _defaults = {

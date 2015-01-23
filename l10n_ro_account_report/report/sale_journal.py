@@ -43,12 +43,24 @@ class sale_journal(report_sxw.rml_parse):
         currency_obj = self.pool.get('res.currency')
 
         if data:
-            where = [('company_id', '=', data['company_id'][0]), ('state', 'in', ['open', 'paid']), '|', ('period_id', '=', data['periods'][
-                0]), ('vat_on_payment', '=', True), ('date_invoice', '<=', period_obj.browse(self.cr, self.uid, data['periods'][0]).date_stop)]
+            where = [
+                ('company_id', '=', data['company_id'][0]),
+                ('state', 'in', ['open', 'paid']),
+                '|',
+                ('period_id', '=', data['periods'][0]),
+                ('vat_on_payment', '=', True),
+                ('date_invoice', '<=', period_obj.browse(
+                    self.cr,
+                    self.uid,
+                    data['periods'][0]).date_stop)
+            ]
             period_id = data['periods'][0]
             company_id = data['company_id'][0]
             inv_ids = invoice_obj.search(
-                self.cr, self.uid, where, order="type desc, date_invoice, number")
+                self.cr,
+                self.uid,
+                where,
+                order="type desc, date_invoice, number")
 
         if not isinstance(ids, list):
             inv_ids = [inv_ids]
@@ -69,10 +81,13 @@ class sale_journal(report_sxw.rml_parse):
             for inv1 in invoices:
                 vals = {}
                 vals['type'] = inv1.type
-                vals['total_base'] = vals['base_neex'] = vals['base_exig'] = vals['base_ded1'] = vals[
-                    'base_ded2'] = vals['base_24'] = vals['base_9'] = vals['base_5'] = vals['base_0'] = 0.00
-                vals['total_vat'] = vals['tva_neex'] = vals['tva_exig'] = vals['tva_24'] = vals[
-                    'tva_9'] = vals['tva_5'] = vals['tva_bun'] = vals['tva_serv'] = 0.00
+                vals['total_base'] = vals['base_neex'] = vals[
+                    'base_exig'] = vals['base_ded1'] = vals[
+                    'base_ded2'] = vals['base_24'] = vals['base_9'] = vals[
+                    'base_5'] = vals['base_0'] = 0.00
+                vals['total_vat'] = vals['tva_neex'] = vals[
+                    'tva_exig'] = vals['tva_24'] = vals['tva_9'] = vals[
+                    'tva_5'] = vals['tva_bun'] = vals['tva_serv'] = 0.00
                 vals['base_col'] = vals['tva_col'] = 0.00
                 vals['invers'] = vals['neimp'] = vals['others'] = vals[
                     'scutit1'] = vals['scutit2'] = 0.00
@@ -88,7 +103,14 @@ class sale_journal(report_sxw.rml_parse):
                     else:
                         vals['vat'] = inv1.partner_id.vat[2:]
                 vals['total'] = currency_obj.compute(
-                    self.cr, self.uid, inv1.currency_id.id, company.currency_id.id, inv1.amount_total, dp, context={'date': inv1.date_invoice})
+                    self.cr,
+                    self.uid,
+                    inv1.currency_id.id,
+                    company.currency_id.id,
+                    inv1.amount_total,
+                    dp,
+                    context={'date': inv1.date_invoice}
+                )
                 if inv1.vat_on_payment:
                     total_base = total_vat = paid = 0.00
                     base_neex = tva_neex = 0.00

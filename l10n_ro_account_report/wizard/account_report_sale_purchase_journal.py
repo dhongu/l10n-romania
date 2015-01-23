@@ -29,7 +29,11 @@ class sale_purchase_journal_report(osv.osv_memory):
 
     _columns = {
         'company_id': fields.many2one('res.company', 'Company', required=True),
-        'journal': fields.selection([('purchase', 'Purchase'), ('sale', 'Sale')], 'Journal type', select=True),
+        'journal': fields.selection(
+            [('purchase', 'Purchase'), ('sale', 'Sale')],
+            'Journal type',
+            select=True
+        ),
         'periods': fields.many2one('account.period', 'Period'),
     }
 
