@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,14 +20,16 @@
 #
 ##############################################################################
 
-from openerp.osv import osv,fields
+from openerp.osv import osv, fields
+
 
 class product_template(osv.osv):
     _inherit = "product.template"
     _columns = {
-        'd394_id': fields.many2one('report.394.code', 'D394 code'),      
+        'd394_id': fields.many2one('report.394.code', 'D394 code'),
     }
-    
+
+
 class report_394_code(osv.osv):
     _name = "report.394.code"
     _description = "D394 code"
