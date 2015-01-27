@@ -81,7 +81,7 @@ class d394_report(osv.osv_memory):
             function = user.partner_id.function
         else:
             raise osv.except_osv(_('Error!'), _('You need to define your Job Position.'))
-        uid_name = user.partner_id.split()
+        uid_name = user.partner_id.name.split()
         uid_fname = uid_name[0]
         uid_name = ' '.join(uid_name[1:])
         
