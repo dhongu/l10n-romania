@@ -82,9 +82,10 @@ class d394_report(osv.osv_memory):
         else:
             raise osv.except_osv(_('Error!'), _('You need to define your Job Position.'))
         uid_name = user.partner_id.name.split()
-        uid_fname = uid_name[0]
-        uid_name = ' '.join(uid_name[1:])
-        
+        uid_fname = ' '.join(uid_name[:-1])
+        uid_name = uid_name[-1]
+        print uid_fname
+        print uid_name
         wiz_data = self.browse(cr, uid, ids[0], context=context)
 
         data_company = obj_company.browse(
@@ -95,8 +96,8 @@ class d394_report(osv.osv_memory):
             'luna': int(wiz_data.period_id.code[:2]),
             'an': int(wiz_data.period_id.code[3:]),
             'tip_D394': "L",
-            'nume_declar': uid_fname,
-            'prenume_declar': uid_name,
+            'nume_declar': uid_name,
+            'prenume_declar': uid_fname,
             'functie_declar': function,
             'cui': data_company.partner_id.vat[2:],
             'den': data_company.partner_id.name,
