@@ -84,8 +84,6 @@ class d394_report(osv.osv_memory):
         uid_name = user.partner_id.name.split()
         uid_fname = ' '.join(uid_name[:-1])
         uid_name = uid_name[-1]
-        print uid_fname
-        print uid_name
         wiz_data = self.browse(cr, uid, ids[0], context=context)
 
         data_company = obj_company.browse(
