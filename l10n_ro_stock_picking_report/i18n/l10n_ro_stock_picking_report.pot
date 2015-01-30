@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-22 03:32+0000\n"
-"PO-Revision-Date: 2014-12-22 03:32+0000\n"
+"POT-Creation-Date: 2015-01-30 11:07+0000\n"
+"PO-Revision-Date: 2015-01-30 11:07+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,15 +17,18 @@ msgstr ""
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_address
+#: view:website:l10n_ro_stock_picking_report.report_address_company
 msgid "Account:"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_address
+#: view:website:l10n_ro_stock_picking_report.report_address_company
 msgid "Address:"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_reception
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
@@ -40,12 +43,29 @@ msgstr ""
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_address
+#: view:website:l10n_ro_stock_picking_report.report_address_company
 msgid "Bank:"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_address
+#: view:website:l10n_ro_stock_picking_report.report_address_company
 msgid "CIF:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address_company
+msgid "Company"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_consume_voucher
+msgid "Consume Voucher"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_voucher
+msgid "Consume Voucher:"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
@@ -54,12 +74,18 @@ msgid "Customer"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_sign
 #: view:website:l10n_ro_stock_picking_report.report_delivery
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_reception
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 #: view:website:l10n_ro_stock_picking_report.report_reception_sign
 msgid "Date"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_voucher
+msgid "Date:"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
@@ -94,6 +120,7 @@ msgid "Elaborate:"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: field:report.l10n_ro_stock_picking_report.report_consume_voucher,id:0
 #: field:report.l10n_ro_stock_picking_report.report_delivery,id:0
 #: field:report.l10n_ro_stock_picking_report.report_delivery_price,id:0
 #: field:report.l10n_ro_stock_picking_report.report_reception,id:0
@@ -123,10 +150,12 @@ msgstr ""
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_address
+#: view:website:l10n_ro_stock_picking_report.report_address_company
 msgid "NRC:"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_sign
 #: view:website:l10n_ro_stock_picking_report.report_reception_sign
 msgid "Name"
 msgstr ""
@@ -149,6 +178,7 @@ msgid "Picking List"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_reception
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
@@ -156,6 +186,7 @@ msgid "Price"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_delivery
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_reception
@@ -164,6 +195,7 @@ msgid "Product"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_delivery
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_reception
@@ -182,6 +214,7 @@ msgid "Reception"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_sign
 #: view:website:l10n_ro_stock_picking_report.report_reception_sign
 msgid "Reception Committee:"
 msgstr ""
@@ -209,10 +242,12 @@ msgstr ""
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_address
+#: view:website:l10n_ro_stock_picking_report.report_address_company
 msgid "Share Capital:"
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_sign
 #: view:website:l10n_ro_stock_picking_report.report_reception_sign
 msgid "Signature"
 msgstr ""
@@ -247,6 +282,7 @@ msgid "The undersigned, members of the reception, we proceeded to receive materi
 msgstr ""
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_totals
 msgid "Total"
 msgstr ""

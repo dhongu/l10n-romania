@@ -18,6 +18,14 @@
             file="l10n_ro_stock_picking_report.report_delivery_price"    />
 
         <report 
+            string="Consume Voucher" 
+            id="action_report_consume_voucher" 
+            model="stock.picking" 
+            report_type="qweb-pdf"
+            name="l10n_ro_stock_picking_report.report_consume_voucher" 
+            file="l10n_ro_stock_picking_report.report_consume_voucher"    />
+            
+        <report 
             string="Reception" 
             id="action_report_reception" 
             model="stock.picking" 
