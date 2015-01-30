@@ -129,7 +129,12 @@ class report_delivery_price(osv.AbstractModel):
     _template = 'l10n_ro_stock_picking_report.report_delivery_price'
     _wrapped_report_class = picking_delivery
 
-
+class report_consume_voucher(osv.AbstractModel):
+    _name = 'report.l10n_ro_stock_picking_report.report_consume_voucher'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_ro_stock_picking_report.report_consume_voucher'
+    _wrapped_report_class = picking_delivery
+    
 class report_reception(osv.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_reception'
     _inherit = 'report.abstract_report'
