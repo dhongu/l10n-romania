@@ -25,6 +25,7 @@ from .currency_getter_interface import Currency_getter_interface
 
 
 class YAHOO_getter(Currency_getter_interface):
+
     """Implementation of Currency_getter_factory interface
     for Yahoo finance service
     """

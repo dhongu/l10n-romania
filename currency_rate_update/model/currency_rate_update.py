@@ -33,7 +33,7 @@ _logger = logging.getLogger(__name__)
 
 _intervalTypes = {
     'days': lambda interval: relativedelta(days=interval),
-    'weeks': lambda interval: relativedelta(days=7*interval),
+    'weeks': lambda interval: relativedelta(days=7 * interval),
     'months': lambda interval: relativedelta(months=interval),
 }
 
@@ -105,6 +105,7 @@ PL_NBP_supported_currency_array = [
 
 
 class Currency_rate_update_service(models.Model):
+
     """Class keep services and currencies that
     have to be updated"""
     _name = "currency.rate.update.service"
@@ -251,7 +252,7 @@ class Currency_rate_update_service(models.Model):
                     curr_to_fetch,
                     main_currency.name,
                     self.max_delta_days
-                    )
+                )
                 rate_name = \
                     fields.Datetime.to_string(datetime.utcnow().replace(
                         hour=0, minute=0, second=0, microsecond=0))

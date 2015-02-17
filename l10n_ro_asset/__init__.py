@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,4 +28,3 @@ import stock_asset
 import stock_account
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

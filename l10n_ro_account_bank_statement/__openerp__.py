@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,12 +20,12 @@
 #
 ##############################################################################
 {
-    "name" : "Romania - Bank Statement Operations",
-    "version" : "1.0",
-    "author" : "FOREST AND BIOMASS SERVICES ROMANIA	",
+    "name": "Romania - Bank Statement Operations",
+    "version": "1.0",
+    "author": "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
-    "category" : "Romania Adaptation",
-    "depends": ['account','l10n_ro_config'],
+    "category": "Romania Adaptation",
+    "depends": ['account', 'l10n_ro_config'],
     "description": """
 Romania  - Bank Statement Operations
 ------------------------------------------
@@ -34,7 +35,7 @@ Romania  - Bank Statement Operations
 
     'data': ['security/account_security.xml',
              'bank_statement_operation_template.xml',
-             'bank_statement_import.xml',],
+             'bank_statement_import.xml', ],
     'installable': True,
     'auto_install': False,
 }

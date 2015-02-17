@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,12 +20,20 @@
 #
 ##############################################################################
 {
-    "name" : "Romania - Account Reports",
-    "version" : "1.0",
-    "author" : "FOREST AND BIOMASS SERVICES ROMANIA	",
+    "name": "Romania - Account Reports",
+    "version": "1.0",
+    "author": "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
-    "category" : "Romania Adaptation",
-    "depends": ['account','report','account_vat_on_payment','l10n_ro_invoice_line_not_deductible','l10n_ro_config','l10n_ro_stock_account'],
+
+    "category": "Romania Adaptation",
+    "depends": [
+        'account',
+        'report',
+        'account_vat_on_payment',
+        'l10n_ro_invoice_line_not_deductible',
+        'l10n_ro_config'
+    ],
+
     "description": """
 Romania  - Accounting Reports
 ------------------------------------------
@@ -46,7 +55,7 @@ Romania  - Accounting Reports
              'wizard/account_report_sale_purchase_journal_view.xml',
              'wizard/d394_view.xml',
              'product_view.xml',
-             'security/ir.model.access.csv',],
+             'security/ir.model.access.csv', ],
     'installable': True,
     'auto_install': False,
 }

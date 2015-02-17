@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,16 +20,16 @@
 #
 ##############################################################################
 {
-    "name" : "Zipcodes - add a location field in partners to have the zipcode, city, country state, country",
-    "version" : "1.0",
-    "author" : "FOREST AND BIOMASS SERVICES ROMANIA SA",
-    "category" : "Generic Modules/Base",
+    "name": "Zipcodes",
+    "version": "1.0",
+    "author": "FOREST AND BIOMASS SERVICES ROMANIA SA",
+    "category": "Generic Modules/Base",
     "description": """Creates a model for storing zipcodes.
 Partner address zipcode related to the new zipcode model.""",
-    "depends" : ["base","l10n_ro","l10n_ro_siruta"],
-    "data" : ['zipcode_view.xml',
+    "depends": ["base", "l10n_ro", "l10n_ro_siruta"],
+    "data": ['zipcode_view.xml',
               'partner_view.xml',
               'security/ir.model.access.csv',
-        ],
+             ],
     "installable": True
 }

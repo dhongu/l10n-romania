@@ -25,30 +25,30 @@
     "name": "VAT on payment",
     "version": "2.0",
     'category': 'Generic Modules/Accounting',
-    "depends": ["account","account_voucher","l10n_ro_config","base_vat"],
+    "depends": ["account", "account_voucher", "l10n_ro_config", "base_vat"],
     "author": "Agile Business Group",
     "description": """
     See 'account_voucher_cash_basis' description.
-    
+
     To activate the VAT on payment behaviour, this module adds a checkbox on invoice form: 'Vat on payment'
-    
+
     Moreover, three things have to be configured:
      - On account object, Related account used for real registrations on a VAT on payment basis
      - On journal object, Related journal used for shadow registrations on a VAT on payment basis
      - On tax code object, Related tax code used for real registrations on a VAT on payment basis
-     
+
     Requirements: https://docs.google.com/spreadsheet/ccc?key=0Aodwq17jxF4edDJaZ2dOQkVEN0hodEtfRmpVdlg2Vnc#gid=0
     Howto:
     http://planet.domsense.com/en/2012/10/vat-on-payment-treatment-with-openerp/
     """,
     'website': 'http://www.agilebg.com',
     'data': [
-        #'vat_on_payment.xml',
+        # 'vat_on_payment.xml',
         'company_view.xml',
         'res_partner_view.xml',
         'account_view.xml',
-        ],
-    'test': [], # TODO YAML tests
+    ],
+    'test': [],  # TODO YAML tests
     'installable': True,
     'auto_install': False,
 }

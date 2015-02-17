@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # Copyright (c) 2008 Deltatech All Rights Reserved
-#                    Dorin Hongu <dhongu(@)gmail(.)com       
+#                    Dorin Hongu <dhongu(@)gmail(.)com
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -21,20 +21,20 @@
 ##############################################################################
 
 {
-    "name" : "Stock Balance",
-    "version" : "1.0",
-    "author" : "Dorin Hongu",
-    "website" : "",
+    "name": "Stock Balance",
+    "version": "1.0",
+    "author": "Dorin Hongu",
+    "website": "",
     "description": """
     Stock Balance
     """,
-    
-    "category" : "Generic Modules",
-    "depends" : ["base","stock"],
+
+    "category": "Generic Modules",
+    "depends": ["base", "stock"],
 
 
-    "data" : [
-              'security/ir.model.access.csv',
+    "data": [
+        'security/ir.model.access.csv',
               "report/stock_balance.xml"],
     "active": False,
     "installable": True,
@@ -42,4 +42,3 @@
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

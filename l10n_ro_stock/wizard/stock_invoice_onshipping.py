@@ -22,10 +22,11 @@
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 
+
 class stock_invoice_onshipping(osv.osv_memory):
     _name = "stock.invoice.onshipping"
     _inherit = "stock.invoice.onshipping"
-    
+
     def _get_invoice_date(self, cr, uid, context=None):
         if context is None:
             context = {}
@@ -35,9 +36,10 @@ class stock_invoice_onshipping(osv.osv_memory):
         vals = []
         pick = pickings and pickings[0]
         return pick.date
-    
+
     def _get_journal_type(self, cr, uid, context=None):
-        journal_type = super(stock_invoice_onshipping, self)._get_journal_type(cr, uid, context=context)
+        journal_type = super(stock_invoice_onshipping, self)._get_journal_type(
+            cr, uid, context=context)
         if context is None:
             context = {}
         res_ids = context and context.get('active_ids', [])
@@ -65,16 +67,17 @@ class stock_invoice_onshipping(osv.osv_memory):
     _columns = {
         'invoice_date':   fields.date('Invoice Date'),
     }
-    
+
     _defaults = {
         'invoice_date': _get_invoice_date,
     }
-    
+
     def create_invoice(self, cr, uid, ids, context=None):
         context = dict(context or {})
         picking_pool = self.pool.get('stock.picking')
         data = self.browse(cr, uid, ids[0], context=context)
-        journal2type = {'sale':'out_invoice', 'purchase':'in_invoice', 'sale_refund':'out_invoice', 'purchase_refund':'in_invoice'}
+        journal2type = {'sale': 'out_invoice', 'purchase': 'in_invoice',
+                        'sale_refund': 'out_invoice', 'purchase_refund': 'in_invoice'}
         context['date_inv'] = data.invoice_date
         acc_journal = self.pool.get("account.journal")
         inv_type = journal2type.get(data.journal_type) or 'out_invoice'
@@ -82,9 +85,8 @@ class stock_invoice_onshipping(osv.osv_memory):
 
         active_ids = context.get('active_ids', [])
         res = picking_pool.action_invoice_create(cr, uid, active_ids,
-              journal_id = data.journal_id.id,
-              group = data.group,
-              type = inv_type,
-              context=context)
+                                                 journal_id=data.journal_id.id,
+                                                 group=data.group,
+                                                 type=inv_type,
+                                                 context=context)
         return res
-

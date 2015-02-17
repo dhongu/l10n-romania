@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,37 +23,40 @@
 from openerp import models, fields, api, _
 from datetime import datetime
 
+
 class hr_employee_care(models.Model):
     _name = 'hr.employee.care'
     _description = "Employee person in care"
-    
+
     employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
-    name = fields.Char('Person care name', required=True, help='Person in care name')
+    name = fields.Char(
+        'Person care name', required=True, help='Person in care name')
     ssnid = fields.Char('SSN No', required=True, help='Social Security Number')
     relation = fields.Selection([('husband', 'Husband'),
                                  ('wife', 'Wife'),
                                  ('child', 'Child'),
                                  ('firstdegree', 'First degree relationship'),
                                  ('secdegree', 'Second degree relationship')],
-                                 string='Person relation', required=True)
+                                string='Person relation', required=True)
 
 
 class hr_employee_coinsured(models.Model):
     _name = 'hr.employee.coinsured'
     _description = "Employee co-insured persons"
-    
+
     employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
-    name = fields.Char('Person care name', required=True, help='Person in care name')
+    name = fields.Char(
+        'Person care name', required=True, help='Person in care name')
     ssnid = fields.Char('SSN No', required=True, help='Social Security Number')
     relation = fields.Selection([('husband', 'Husband'),
                                  ('wife', 'Wife'),
                                  ('child', 'Child'),
                                  ('firstdegree', 'First degree relationship'),
                                  ('secdegree', 'Second degree relationship')],
-                                 string='Person relation',
-                                 required=True)
-                                 
-        
+                                string='Person relation',
+                                required=True)
+
+
 class hr_employee(models.Model):
     _inherit = 'hr.employee'
 
@@ -61,7 +65,8 @@ class hr_employee(models.Model):
     def _number_personcare(self):
         self.person_in_care = len(self.person_care_ids)
 
-    ssnid_init = fields.Char('Initial SSN No', help='Initial Social Security Number')
+    ssnid_init = fields.Char(
+        'Initial SSN No', help='Initial Social Security Number')
     first_name_init = fields.Char('Initial Name')
     last_name_init = fields.Char('Initial First Name')
     casang = fields.Selection([('AB', 'Alba'), ('AR', 'Arad'),
@@ -84,13 +89,16 @@ class hr_employee(models.Model):
                                ('SV', 'Suceava'), ('TR', 'Teleorman'),
                                ('TM', 'Timis'), ('TL', 'Tulcea'),
                                ('VS', 'Vaslui'), ('VL', 'Valcea'),
-                               ('VN', 'Vrancea'),('_B', 'CAS Municipiu Bucuresti'),
-                               ('_A', 'AOPSNAJ'),('_T', 'CASMTCT')],
-                               string='Insurance', required=True)
-    person_care_ids = fields.One2many('hr.employee.care', 'employee_id', 'Person in care')
-    person_coinsured_ids = fields.One2many('hr.employee.coinsured', 'employee_id', 'Coinsured Persons')
+                               ('VN', 'Vrancea'), ('_B',
+                                                   'CAS Municipiu Bucuresti'),
+                               ('_A', 'AOPSNAJ'), ('_T', 'CASMTCT')],
+                              string='Insurance', required=True)
+    person_care_ids = fields.One2many(
+        'hr.employee.care', 'employee_id', 'Person in care')
+    person_coinsured_ids = fields.One2many(
+        'hr.employee.coinsured', 'employee_id', 'Coinsured Persons')
     person_in_care = fields.Integer(string='No of persons in care',
-                                   compute='_number_personcare',
-                                   help='Number of persons in care')
+                                    compute='_number_personcare',
+                                    help='Number of persons in care')
     emit_by = fields.Char('Emmited by')
     emit_on = fields.Date('Emmited on')

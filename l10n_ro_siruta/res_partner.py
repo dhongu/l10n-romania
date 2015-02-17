@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,9 +22,10 @@
 
 from openerp import models, fields, api
 
+
 class res_partner(models.Model):
     _inherit = "res.partner"
-    
+
     @api.onchange('city_id')
     def _onchange_city_id(self):
         if self.city_id:
@@ -31,8 +33,11 @@ class res_partner(models.Model):
             self.state_id = self.city_id.state_id.id
             self.zone_id = self.city_id.zone_id.id
             self.country_id = self.city_id.country_id.id
-    
-    city_id = fields.Many2one('res.country.city', string='City', ondelete='set null', index=True)
+
+    city_id = fields.Many2one(
+        'res.country.city', string='City', ondelete='set null', index=True)
     city = fields.Char(related='city_id.name', string='City', store=True)
-    commune_id = fields.Many2one('res.country.commune', string='City/Commune', ondelete='set null', index=True)
-    zone_id = fields.Many2one('res.country.zone', string='Zone', ondelete='set null', index=True)
+    commune_id = fields.Many2one(
+        'res.country.commune', string='City/Commune', ondelete='set null', index=True)
+    zone_id = fields.Many2one(
+        'res.country.zone', string='Zone', ondelete='set null', index=True)

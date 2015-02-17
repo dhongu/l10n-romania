@@ -29,6 +29,7 @@ _logger = logging.getLogger(__name__)
 
 
 class AbstractClassError(Exception):
+
     def __str__(self):
         return 'Abstract Class'
 
@@ -37,6 +38,7 @@ class AbstractClassError(Exception):
 
 
 class AbstractMethodError(Exception):
+
     def __str__(self):
         return 'Abstract Method'
 
@@ -45,6 +47,7 @@ class AbstractMethodError(Exception):
 
 
 class UnknowClassError(Exception):
+
     def __str__(self):
         return 'Unknown Class'
 
@@ -53,6 +56,7 @@ class UnknowClassError(Exception):
 
 
 class UnsuportedCurrencyError(Exception):
+
     def __init__(self, value):
         self.curr = value
 
@@ -64,6 +68,7 @@ class UnsuportedCurrencyError(Exception):
 
 
 class Currency_getter_interface(object):
+
     "Abstract class of currency getter"
 
     log_info = " "

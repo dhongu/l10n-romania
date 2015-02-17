@@ -2,9 +2,10 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #    Modified account.voucher module
-#    
+#
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -21,9 +22,9 @@
 ##############################################################################
 
 {
-    'name' : 'Partner Compensation',
-    'version' : '1.0',
-    'author' : 'FOREST AND BIOMASS SERVICES ROMANIA SA',
+    'name': 'Partner Compensation',
+    'version': '1.0',
+    'author': 'FOREST AND BIOMASS SERVICES ROMANIA SA',
     'summary': 'Compensate partners credits and debits',
     'description': """Accounting Compensation
 This module manages:
@@ -32,14 +33,14 @@ This module manages:
     """,
     'category': 'Accounting & Finance',
     'sequence': 4,
-    'depends' : ['account'],
-    'demo' : [],
-    'data' : [
+    'depends': ['account'],
+    'demo': [],
+    'data': [
         'account_compensation_workflow.xml',
         'account_compensation_view.xml',
         'security/ir.model.access.csv',
         'security/account_voucher_security.xml',
-    ],    
+    ],
     'auto_install': False,
     'application': True,
     'installable': True,

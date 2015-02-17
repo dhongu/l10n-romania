@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,12 +20,12 @@
 #
 ##############################################################################
 {
-    "name" : "Romania - Cash Vouchers",
-    "version" : "1.0",
-    "author" : "FOREST AND BIOMASS SERVICES ROMANIA	",
+    "name": "Romania - Cash Vouchers",
+    "version": "1.0",
+    "author": "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
-    "category" : "Romania Adaptation",
-    "depends": ['l10n_ro_config','account_voucher'],
+    "category": "Romania Adaptation",
+    "depends": ['l10n_ro_config', 'account_voucher'],
     "description": """
 Romania - Cash Vouchers
 ------------------------------------------
@@ -33,7 +34,7 @@ Romania - Cash Vouchers
     """,
 
     'data': ['account_view.xml',
-             'account_invoice_pay_cash.xml',],
+             'account_invoice_pay_cash.xml', ],
     'installable': True,
     'auto_install': False,
 }

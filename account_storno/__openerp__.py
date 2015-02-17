@@ -7,7 +7,7 @@
 #    mail:   gkliskaATgmail.com
 #    Copyright (C) 2011- Slobodni programi d.o.o., Zagreb
 #                  http://www.slobodni-programi.hr
-#    Contributions: 
+#    Contributions:
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -25,35 +25,39 @@
 ##############################################################################
 
 {
-    "name" : "Account storno",
-    "description" : """
+    "name": "Account storno",
+    "description": """
 
 Author: Goran Kliska @ Slobodni programi d.o.o.
         http://www.slobodni-programi.hr
 Contributions:
   Ivan Vađić @ Slobodni programi d.o.o.
-  Tomislav Bošnjaković @ Storm Computers d.o.o.: Bugs report  
+  Tomislav Bošnjaković @ Storm Computers d.o.o.: Bugs report
 
 Description:
- Enables Storno Accounting, a business practice commonly used in Eastern European countries.
- Adds new field "Posting policy" with values Storno/Contra on the Journal.
- For Storno Journals refund invoices are (usually) done in the same journal with negative *(-1) quantities.
+ Enables Storno Accounting, a business practice commonly used in
+ Eastern European countries.
+ Adds new field "Posting policy" with values Storno/Contra on the
+ Journal.
+ For Storno Journals refund invoices are (usually) done in the
+ same journal with negative *(-1) quantities.
 
  Countries where Storno accounting is mandatory or considered as best practice:
-     Czech Republic, Poland, Romania, Russia, China, Slovakia, Slovenia, Ukraine, Croatia, Bosnia and Herzegovina, Serbia, Romania, ...
+     Czech Republic, Poland, Romania, Russia, China, Slovakia, Slovenia,
+     Ukraine, Croatia, Bosnia and Herzegovina, Serbia, Romania, ...
 
 WARNING:
- This module is managing accounting, invoices, and refund wizard. 
+ This module is managing accounting, invoices, and refund wizard.
  Other modules are required for stock, voucher, etc. storno posting.
 
 """,
-    "version" : "13.1",
-    "author" : "Slobodni programi d.o.o.",
-    "category" : "Localisation/Croatia",
+    "version": "13.1",
+    "author": "Slobodni programi d.o.o.",
+    "category": "Localisation/Croatia",
     "website": "http://www.slobodni-programi.hr",
-    'depends': ['account','account_voucher'],
-    'data': [ 'account_view.xml',],
-    'test' : [],
+    'depends': ['account', 'account_voucher'],
+    'data': ['account_view.xml', ],
+    'test': [],
     "active": False,
     "installable": True,
 }

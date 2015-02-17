@@ -30,6 +30,7 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
 class CH_ADMIN_getter(Currency_getter_interface):
+
     """Implementation of Currency_getter_factory interface
     for Admin.ch service
 

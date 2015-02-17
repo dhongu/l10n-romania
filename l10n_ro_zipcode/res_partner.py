@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,10 +22,11 @@
 
 from openerp import models, fields, api
 
+
 class res_partner(models.Model):
     _name = "res.partner"
     _inherit = "res.partner"
-    
+
     @api.onchange('zipcode_id')
     def _onchange_zipcode_id(self):
         if self.zipcode_id:
@@ -34,7 +36,5 @@ class res_partner(models.Model):
             self.zone_id = self.zipcode_id.zone_id.id
             self.country_id = self.zipcode_id.country_id.id
     
-    zipcode_id = fields.Many2one('res.country.city', string='City', ondelete='set null', index=True)
+    zipcode_id = fields.Many2one('res.country.zipcode', string='ZipcodeID', ondelete='set null', index=True)
     zip = fields.Char(related='zipcode_id.name', string='Zipcode', store=True)
-
-    

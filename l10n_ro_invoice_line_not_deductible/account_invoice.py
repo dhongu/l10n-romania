@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,7 +29,6 @@ from openerp.exceptions import except_orm, Warning, RedirectWarning
 import openerp.addons.decimal_precision as dp
 
 
-
 class account_invoice(models.Model):
     _inherit = "account.invoice"
 
@@ -38,21 +38,25 @@ class account_invoice(models.Model):
         res['not_deductible'] = line.get('not_deductible', False)
         return res
 
+
 class account_tax(models.Model):
     _inherit = "account.tax"
-    
-    not_deductible_tax_id = fields.Many2one('account.tax', string='Not Deductible Tax')
-    
+
+    not_deductible_tax_id = fields.Many2one(
+        'account.tax', string='Not Deductible Tax')
+
+
 class account_move_line(models.Model):
     _inherit = "account.move.line"
-    
+
     not_deductible = fields.Boolean('Not Deductible')
-    
+
+
 class account_invoice_line(models.Model):
     _inherit = "account.invoice.line"
-    
+
     not_deductible = fields.Boolean('Not Deductible')
-    
+
     @api.model
     def move_line_get(self, invoice_id):
         res = super(account_invoice_line, self).move_line_get(invoice_id)
@@ -73,7 +77,7 @@ class account_invoice_line(models.Model):
                     new_tax = tax_obj.browse(tax['id'])
                     if not new_tax.not_deductible_tax_id:
                         raise except_orm(_('Warning!'),
-                             _("You must define a not deductible tax on '%s'!") % (tax.name,))
+                                         _("You must define a not deductible tax on '%s'!") % (tax.name,))
                     new_tax = new_tax.not_deductible_tax_id
                     if inv.type in ('out_invoice', 'in_invoice'):
                         price = tax['amount'] * tax['base_sign']
@@ -87,14 +91,16 @@ class account_invoice_line(models.Model):
                         tax_code_id = new_tax.ref_base_code_id.id
                         tax_amount = line.price_subtotal * tax['ref_base_sign']
 
-                    mres['account_id'] = inv.company_id.property_undeductible_account_id.id
-                    res.append(dict(mres)) 
+                    mres[
+                        'account_id'] = inv.company_id.property_undeductible_account_id.id
+                    res.append(dict(mres))
                     res[-1]['price'] = price
                     res[-1]['not_deductible'] = True
-                    res[-1]['account_analytic_id'] = False                                           
+                    res[-1]['account_analytic_id'] = False
                     res[-1]['tax_code_id'] = tax_code_id
-                    res[-1]['tax_amount'] = currency.compute(tax_amount, company_currency)
-                  
+                    res[-
+                        1]['tax_amount'] = currency.compute(tax_amount, company_currency)
+
                     mres['account_id'] = new_tax.account_collected_id.id
                     mres['type'] = 'dest'
                     if inv.type in ('out_invoice', 'in_invoice'):
@@ -104,13 +110,12 @@ class account_invoice_line(models.Model):
                         tax_code_id = new_tax.ref_tax_code_id.id
                         tax_amount = price
 
-                    
                     res.append(dict(mres))
                     res[-1]['price'] = -1 * price
                     res[-1]['not_deductible'] = True
                     res[-1]['account_analytic_id'] = False
 
                     res[-1]['tax_code_id'] = tax_code_id
-                    res[-1]['tax_amount'] = currency.compute(tax_amount, company_currency)
+                    res[-
+                        1]['tax_amount'] = currency.compute(tax_amount, company_currency)
         return res
-    

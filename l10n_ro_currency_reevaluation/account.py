@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,9 +22,9 @@
 
 from openerp import models, fields, _
 
-    
+
 class account_account(models.Model):
     _name = "account.account"
     _inherit = "account.account"
-    
+
     currency_reevaluation = fields.Boolean("Allow Currency reevaluation")

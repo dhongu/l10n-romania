@@ -21,6 +21,7 @@
 
 
 class AbstractClassError(Exception):
+
     def __str__(self):
         return 'Abstract Class'
 
@@ -29,6 +30,7 @@ class AbstractClassError(Exception):
 
 
 class AbstractMethodError(Exception):
+
     def __str__(self):
         return 'Abstract Method'
 
@@ -37,6 +39,7 @@ class AbstractMethodError(Exception):
 
 
 class UnknowClassError(Exception):
+
     def __str__(self):
         return 'Unknown Class'
 
@@ -45,6 +48,7 @@ class UnknowClassError(Exception):
 
 
 class UnsuportedCurrencyError(Exception):
+
     def __init__(self, value):
         self.curr = value
 
@@ -56,11 +60,13 @@ class UnsuportedCurrencyError(Exception):
 
 
 class Currency_getter_factory():
+
     """Factory pattern class that will return
     a currency getter class base on the name passed
     to the register method
 
     """
+
     def register(self, class_name):
         allowed = [
             'CH_ADMIN_getter',

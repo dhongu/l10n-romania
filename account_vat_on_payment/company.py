@@ -28,6 +28,10 @@ from openerp.tools.translate import _
 class res_company(osv.Model):
     _inherit = "res.company"
     _columns = {
-        'vat_on_payment': fields.related('partner_id', 'vat_on_payment', string="VAT on payment", type="boolean"), 
-        }
-    
+        'vat_on_payment': fields.related(
+            'partner_id',
+            'vat_on_payment',
+            string="VAT on payment",
+            type="boolean"
+        ),
+    }

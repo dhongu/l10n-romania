@@ -6,7 +6,7 @@
 #    Author: Goran Kliska
 #    mail:   gkliskaATgmail.com
 #    Copyright (C) 2013- Slobodni programi d.o.o., Zagreb
-#    Contributions: 
+#    Contributions:
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -32,7 +32,6 @@ from openerp.exceptions import except_orm, Warning, RedirectWarning
 import openerp.addons.decimal_precision as dp
 
 
-
 class account_invoice(models.Model):
     _inherit = "account.invoice"
 
@@ -44,23 +43,26 @@ class account_invoice(models.Model):
             credit = debit = 0.0
             if self.type in ('out_invoice', 'out_refund'):
                 if line.get('type', 'src') in ('dest'):
-                    debit = line['price']  # for OUT_invoice dest (tot. amount goes to debit)
+                    # for OUT_invoice dest (tot. amount goes to debit)
+                    debit = line['price']
                 else:  # in('src','tax')
-                    credit = line['price'] * (-1)                    
+                    credit = line['price'] * (-1)
             else:  # in ('in_invoice', 'in_refund')
                 if line.get('type', 'src') in ('dest'):
                     credit = line['price'] * (-1)
                 else:
                     debit = line['price']
                     print line
-                    if (line['type']=='tax') and self.type=='in_invoice' and line['price']<0.00:
+                    if (line['type'] == 'tax') and self.type == 'in_invoice' and line[
+                            'price'] < 0.00:
                         credit = line['price'] * (-1)
                         debit = 0.00
-                 
+
             res['debit'] = debit
             res['credit'] = credit
             if self and self.currency_id.id != self.company_id.currency_id.id:
-                if abs(res['tax_amount']) > 0.00:  # KGB tired, alternative implementation with pg trigger
+                # KGB tired, alternative implementation with pg trigger
+                if abs(res['tax_amount']) > 0.00:
                     res['tax_amount'] = res['debit'] + res['credit']
         return res
 

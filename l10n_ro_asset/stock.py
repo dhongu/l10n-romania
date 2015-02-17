@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -20,15 +21,17 @@
 ##############################################################################
 
 from openerp.osv import osv, fields
-       
+
+
 class stock_warehouse(osv.osv):
     _name = "stock.warehouse"
     _inherit = "stock.warehouse"
-    
+
     _columns = {
-        'wh_asset_loc_id': fields.many2one('stock.location', 'Asset Location', domain=[('usage','=','internal')]),
+        'wh_asset_loc_id': fields.many2one('stock.location', 'Asset Location', domain=[('usage', '=', 'internal')]),
     }
-    
+
+
 class stock_location(osv.osv):
     _name = "stock.location"
     _inherit = "stock.location"
@@ -36,5 +39,3 @@ class stock_location(osv.osv):
     _columns = {
         'asset_location': fields.boolean('Is a Assets Location?', help='Check this box to allow using this location to put assets goods.'),
     }
-
-        

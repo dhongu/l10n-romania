@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # Copyright (c) 2008 Deltatech All Rights Reserved
-#                    Dorin Hongu <dhongu(@)gmail(.)com       
+#                    Dorin Hongu <dhongu(@)gmail(.)com
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -22,10 +22,15 @@
 from openerp import models, fields, api, _
 import openerp.addons.decimal_precision as dp
 
+
 class company(models.Model):
     _inherit = 'res.company'
-    
-    share_capital = fields.Float(string='Share Capital', digits= dp.get_precision('Account'), default= 200 )
+
+    share_capital = fields.Float(
+        string='Share Capital',
+        digits=dp.get_precision('Account'),
+        default=200
+    )
 
 
 company()

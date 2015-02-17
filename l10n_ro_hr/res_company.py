@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,17 +22,20 @@
 
 from openerp import models, fields, api, _
 
+
 class res_company_caen(models.Model):
     _name = "res.company.caen"
     _description = "CAEN codes for Romanian Companies"
-    
+
     code = fields.Char('CAEN code', required=True, help='CAEN code')
     name = fields.Char('CAEN name', required=True, help='CAEN name')
     trisc = fields.Float('Accident Coefficient', required=True)
-    
+
 
 class res_company(models.Model):
     _inherit = "res.company"
-    
-    codcaen = fields.Many2one('res.company.caen','CAEN code', help="Company CAEN code.")
-    coefacc = fields.Float(string='Accident Coefficient', related='codcaen.trisc')
+
+    codcaen = fields.Many2one(
+        'res.company.caen', 'CAEN code', help="Company CAEN code.")
+    coefacc = fields.Float(
+        string='Accident Coefficient', related='codcaen.trisc')

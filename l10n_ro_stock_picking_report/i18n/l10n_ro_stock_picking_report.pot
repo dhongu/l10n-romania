@@ -1,0 +1,276 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_ro_stock_picking_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-22 03:32+0000\n"
+"PO-Revision-Date: 2014-12-22 03:32+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address
+msgid "Account:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address
+msgid "Address:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Amount"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Amount with taxes"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address
+msgid "Bank:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address
+msgid "CIF:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address
+msgid "Customer"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+#: view:website:l10n_ro_stock_picking_report.report_reception_sign
+msgid "Date"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: field:stock.picking,delegate_id:0
+msgid "Delegate"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_sign
+msgid "Delegate:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_delivery
+msgid "Delivery"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_delivery_price
+msgid "Delivery with price"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+msgid "Delivery:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_sign
+msgid "Elaborate:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: field:report.l10n_ro_stock_picking_report.report_delivery,id:0
+#: field:report.l10n_ro_stock_picking_report.report_delivery_price,id:0
+#: field:report.l10n_ro_stock_picking_report.report_reception,id:0
+#: field:report.l10n_ro_stock_picking_report.report_reception_sale_price,id:0
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_sign
+msgid "Information for delivery:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Margin"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_sign
+msgid "Mean Transport:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: field:stock.picking,mean_transp:0
+msgid "Mean transport"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address
+msgid "NRC:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception_sign
+msgid "Name"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_sign
+msgid "Name:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Origin"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.model,name:l10n_ro_stock_picking_report.model_stock_picking
+msgid "Picking List"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Price"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Product"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Quantity"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception_sign
+msgid "Received in storage:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_reception
+msgid "Reception"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception_sign
+msgid "Reception Committee:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_reception_sale_price
+msgid "Reception with sale price"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Reception:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Sale Amount"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "Sale price"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address
+msgid "Share Capital:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception_sign
+msgid "Signature"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_sign
+msgid "Signature reception:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery
+msgid "Source"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_address
+msgid "Supplier"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+#: view:website:l10n_ro_stock_picking_report.report_totals
+msgid "Taxes"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "The undersigned, members of the reception, we proceeded to receive material values supplied by"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_totals
+msgid "Total"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_totals
+msgid "Total Without Taxes"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "ascertained the following:"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "from the city"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "under the invoice (delivery note) no."
+msgstr ""
+

@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,11 +20,11 @@
 #
 ##############################################################################
 {
-    "name" : "Romania - Account Currency Reevaluation",
-    "version" : "1.0",
-    "author" : "FOREST AND BIOMASS SERVICES ROMANIA	",
+    "name": "Romania - Account Currency Reevaluation",
+    "version": "1.0",
+    "author": "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
-    "category" : "Romania Adaptation",
+    "category": "Romania Adaptation",
     "depends": ['l10n_ro_config'],
     "description": """
 Romania  - Accoutn Constrains
@@ -33,7 +34,7 @@ Romania  - Accoutn Constrains
     """,
 
     'data': ['account_view.xml',
-             'wizard/wizard_currency_revaluation_view.xml',],
+             'wizard/wizard_currency_revaluation_view.xml', ],
     'installable': True,
     'auto_install': False,
 }

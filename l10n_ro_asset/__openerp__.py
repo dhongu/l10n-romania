@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -21,14 +22,14 @@
 {
     'name': 'Romania - Assets Management',
     'version': '1.0',
-    'depends': ['account','account_asset','stock','l10n_ro_config','l10n_ro_stock'],
+    'depends': ['account', 'account_asset', 'stock', 'l10n_ro_config', 'l10n_ro_stock'],
     'author': 'FOREST AND BIOMASS SERVICES ROMANIA',
     'description': """
 Financial and accounting asset management.
 ==========================================
 
-This Module manages the assets owned by a company or an individual. It will keep 
-track of depreciation's occurred on those assets. And it allows to create Move's 
+This Module manages the assets owned by a company or an individual. It will keep
+track of depreciation's occurred on those assets. And it allows to create Move's
 of the depreciation lines.
 
     """,
@@ -40,11 +41,10 @@ of the depreciation lines.
         'account_asset_view.xml',
         'stock_assets_view.xml',
         'stock_view.xml',
-    #    'report/account_asset_report_view.xml',
+        #    'report/account_asset_report_view.xml',
     ],
     'auto_install': False,
     'installable': True,
     'application': False,
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

@@ -23,7 +23,9 @@ import time
 
 from openerp.osv import fields, osv
 
+
 class account_statement_from_invoice_lines(osv.osv_memory):
+
     """
     Generate Entries by Statement from Invoices
     """
@@ -44,7 +46,8 @@ class account_statement_from_invoice_lines(osv.osv_memory):
         statement_line_obj = self.pool.get('account.bank.statement.line')
         currency_obj = self.pool.get('res.currency')
         line_date = time.strftime('%Y-%m-%d')
-        statement = statement_obj.browse(cr, uid, statement_id, context=context)
+        statement = statement_obj.browse(
+            cr, uid, statement_id, context=context)
 
         # for each selected move lines
         for line in line_obj.browse(cr, uid, line_ids, context=context):
@@ -60,7 +63,7 @@ class account_statement_from_invoice_lines(osv.osv_memory):
 
             if line.amount_currency:
                 amount = currency_obj.compute(cr, uid, line.currency_id.id,
-                    statement.currency.id, -line.amount_residual_currency, context=ctx)
+                                              statement.currency.id, -line.amount_residual_currency, context=ctx)
 
             context.update({'move_line_ids': [line.id],
                             'invoice_id': line.invoice.id})

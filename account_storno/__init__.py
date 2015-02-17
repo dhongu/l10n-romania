@@ -6,7 +6,7 @@
 #    Author: Goran Kliska
 #    mail:   gkliskaATgmail.com
 #    Copyright (C) 2011- Slobodni programi d.o.o., Zagreb
-#    Contributions: 
+#    Contributions:
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -23,8 +23,8 @@
 #
 ##############################################################################
 
-import account 
-import invoice 
+import account
+import invoice
 import account_invoice_refund
 import account_voucher
 

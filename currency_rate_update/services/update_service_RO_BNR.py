@@ -29,6 +29,7 @@ _logger = logging.getLogger(__name__)
 
 
 class RO_BNR_getter(Currency_getter_interface):
+
     """Implementation of Currency_getter_factory interface for BNR service"""
 
     def rate_retrieve(self, dom, ns, curr):

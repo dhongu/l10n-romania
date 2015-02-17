@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,11 +20,11 @@
 #
 ##############################################################################
 {
-    "name" : "Romania - Stock",
-    "version" : "1.0",
-    "author" : "FOREST AND BIOMASS SERVICES ROMANIA	",
+    "name": "Romania - Stock",
+    "version": "1.0",
+    "author": "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
-    "category" : "Hidden",
+    "category": "Hidden",
     "depends": ['stock', 'l10n_ro_config'],
     "description": """
 Localization - Stock for Romania
@@ -34,7 +35,7 @@ Main features include:
     - Date of the invoice is the date of the first processed picking.
     """,
 
-    'data': ['stock_view.xml',],
+    'data': ['stock_view.xml', ],
     'installable': True,
     'active': False,
 }

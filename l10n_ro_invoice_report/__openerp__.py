@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # Copyright (c) 2008 Deltatech All Rights Reserved
-#                    Dorin Hongu <dhongu(@)gmail(.)com       
+#                    Dorin Hongu <dhongu(@)gmail(.)com
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -21,14 +21,14 @@
 ##############################################################################
 
 {
-    "name" : "Romania - Invoice Report",
-    "version" : "1.0",
-    "author" : "Dorin Hongu",
-    "website" : "",
-    
+    "name": "Romania - Invoice Report",
+    "version": "1.0",
+    "author": "Dorin Hongu",
+    "website": "",
+
     "description": """
-    
-Romania - Invoice Report layout 
+
+Romania - Invoice Report layout
 ------------------------------------------
 
 
@@ -38,22 +38,21 @@ La companie a fost adaugat un camp nou pentru capitalul social
 La factura au fost adugate campurile delegat si mijloc de transport
 
     """,
-    
-    "category" : "Generic Modules",
-    "depends" : ["base","account","account_voucher","l10n_ro"],
+
+    "category": "Generic Modules",
+    "depends": ["base", "account", "account_voucher", "l10n_ro"],
 
 
-    "data" : [
-                 'views/invoice_report.xml',
-                 'views/voucher_report.xml',
-                 'company_view.xml',
-                 'account_invoice_view.xml',
-                 'account_voucher_report.xml'
-               ],
+    "data": [
+        'views/invoice_report.xml',
+        'views/voucher_report.xml',
+        'company_view.xml',
+        'account_invoice_view.xml',
+        'account_voucher_report.xml'
+    ],
     "active": False,
     "installable": True,
 }
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-

@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,27 +20,28 @@
 #
 ##############################################################################
 {
-    "name" : "Romania - Stock Accounting",
-    "version" : "1.0",
-    "author" : "FOREST AND BIOMASS SERVICES ROMANIA	",
+    "name": "Romania - Stock Accounting",
+    "version": "1.0",
+    "author": "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
-    "category" : "Hidden",
-    "depends": ['stock_account','account', 'l10n_ro_config', 'l10n_ro_stock'],
+    "category": "Hidden",
+    "depends": ['stock_account', 'account', 'l10n_ro_config', 'l10n_ro_stock'],
     "description": """
 Localization - Stock Accounting for Romania
-------------------------------------------
+-------------------------------------------
 
 Main features include:
-    - Stock accounting for receptions, deliveries, consume, usage_giving, inventory, production
+    - Stock accounting for receptions, deliveries, consume, usage_giving,
+      inventory, production
 
     **~*~**
-Modulul conţine adaptarea miscarilor contabile bazate pe miscarile de stoc. 
+Modulul conține adaptarea mișcărilor contabile bazate pe mișcările de stoc.
 
     """,
 
     'data': ['product_view.xml',
              'stock_view.xml',
-             'stock_account_view.xml',],
+             'stock_account_view.xml', ],
     'installable': True,
     'active': False,
 }

@@ -2,7 +2,8 @@
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
-#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA (http://www.forbiom.eu).
+#    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
+#    (http://www.forbiom.eu).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,23 +23,30 @@
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 
+
 class account_move_line(osv.osv):
     _inherit = "account.move.line"
-    
-    def _check_currency(self, cr, uid, ids, context=None):
-        return True 
-    
-    _constraints = [
-        (_check_currency, 'The selected account of your Journal Entry forces to provide a secondary currency. You should remove the secondary currency on the account or select a multi-currency view on the journal.', ['currency_id']),
-    ]
-        
-        
-class account_journal(osv.osv):
-    _inherit = "account.journal"
-    
+
     def _check_currency(self, cr, uid, ids, context=None):
         return True
-    
+
     _constraints = [
-        (_check_currency, 'Removed Configuration error!\nThe currency chosen should be shared by the default accounts too.', ['currency','default_debit_account_id','default_credit_account_id']),
+        (_check_currency, """The selected account of your Journal Entry forces
+        to provide a secondary currency. You should remove the secondary
+        currency on the account or select a multi-currency view on the
+        journal.""",
+         ['currency_id']),
+    ]
+
+
+class account_journal(osv.osv):
+    _inherit = "account.journal"
+
+    def _check_currency(self, cr, uid, ids, context=None):
+        return True
+
+    _constraints = [
+        (_check_currency, """Removed Configuration error!\n
+        The currency chosen should be shared by the default accounts too.""", [
+         'currency', 'default_debit_account_id', 'default_credit_account_id']),
     ]

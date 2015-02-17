@@ -30,6 +30,7 @@ _logger = logging.getLogger(__name__)
 
 
 class PL_NBP_getter(Currency_getter_interface):
+
     """Implementation of Currency_getter_factory interface
     for PL NBP service
 
