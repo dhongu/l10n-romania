@@ -60,7 +60,10 @@ class account_voucher(osv.Model):
         #set the first line of the voucher
         move_line['debit'] = debit
         move_line['credit'] = credit
-        move_line['amount_currency'] = company_currency <> current_currency and voucher.amount or 0.0
+        if credit > 0:
+            move_line['amount_currency'] = company_currency <> current_currency and -voucher.amount or 0.0
+        else:
+            move_line['amount_currency'] = company_currency <> current_currency and voucher.amount or 0.0
         return move_line
 
     
