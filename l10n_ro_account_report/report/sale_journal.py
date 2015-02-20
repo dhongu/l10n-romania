@@ -329,8 +329,8 @@ class sale_journal(report_sxw.rml_parse):
                         vals1['total_base'] = 0.00
                         vals1['total_vat'] = 0.00
                         vals1['base_col'] = vals1['tva_col'] = 0.00
-                        for line in inv1.move_id.line_id:
-                            if line.tax_code_id and 'COLECTATA' in line.tax_code_id.code.upper():
+                        for line in inv1.undeductible_move_id.line_id:
+                            if 'COLECTATA' in line.tax_code_id.code.upper():
                                 if 'BAZA' in line.tax_code_id.code.upper():
                                     vals1['total_base'] += currency_obj.compute(
                                         self.cr, self.uid, inv1.currency_id.id, company.currency_id.id, line.tax_amount, context={'date': inv1.date_invoice}) or 0.00
