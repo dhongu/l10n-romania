@@ -196,22 +196,25 @@ class d394_report(osv.osv_memory):
                         denP = inv.partner_id.name.replace(
                             '&', '-').replace('"', '')
                         if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
+                            nrfactv += 1
                             for tax_line in inv.tax_line:
                                 if 'INVERS' in tax_line.name.upper():
-                                    bazainv += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
+                                    bazainv += round(currency_obj.compute(
+                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice})) or 0.00
+                                    #tvainv += round(currency_obj.compute(
+                                    #    cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice})) or 0.00
                                 if (' 24' in tax_line.name) or (' 9' in tax_line.name) or (' 5' in tax_line.name) or (' 0' in tax_line.name):
-                                    baza += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={
-                                                                 'date': inv.date_invoice}) or 0.00
-                                    tva += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={
-                                                                'date': inv.date_invoice}) or 0.00
+                                    baza += round(currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={
+                                                                 'date': inv.date_invoice})) or 0.00
+                                    tva += round(currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={
+                                                                'date': inv.date_invoice})) or 0.00
 
-                            # for line in inv.invoice_line:
-                            #    taxes = tax_obj.compute_all(cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
-                            #    tvainv += taxes['total_included'] - taxes['total']
+                            for line in inv.invoice_line:
+                                taxes = tax_obj.compute_all(cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
+                                tvainv += round(taxes['total_included'] - taxes['total'])
                         else:
-                            tva += inv.amount_tax
-                            baza += inv.amount_untaxed
+                            tva += round(inv.amount_tax)
+                            baza += round(inv.amount_untaxed)
             if baza != 0 and bazainv != 0:
                 nrfact += 1
             if nrfact - nrfactv != 0:
@@ -248,15 +251,15 @@ class d394_report(osv.osv_memory):
                                         code = line.product_id.d394_id.id
                                         if code in codes:
                                             cer[code][
-                                                'baza'] += line.price_subtotal
-                                            bazacer += line.price_subtotal
+                                                'baza'] += round(line.price_subtotal)
+                                            bazacer += round(line.price_subtotal)
                                             if line.invoice_line_tax_id:
                                                 taxes = tax_obj.compute_all(
                                                     cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
                                                 cer[code][
-                                                    'tva'] += taxes['total_included'] - taxes['total']
-                                                tvacer += taxes['total_included'] - \
-                                                    taxes['total']
+                                                    'tva'] += round(taxes['total_included'] - taxes['total'])
+                                                tvacer += round(taxes['total_included'] - \
+                                                    taxes['total'])
                     for key in cer.iterkeys():
                         if cer[key]['baza'] != 0:
                             cereals.append({'code': self.pool.get('report.394.code').browse(cr, uid, key).name,
@@ -270,7 +273,7 @@ class d394_report(osv.osv_memory):
                     'denP': denP,
                     'nrFact': nrfactv,
                     'baza': int(round(bazainv)),
-                    'tva': int(round(bazainv * 0.24)),
+                    'tva': int(round(tvainv)),
                     'cereals': cereals
                 })
 
@@ -279,7 +282,7 @@ class d394_report(osv.osv_memory):
             bazaL += int(round(baza))
             tvaL += int(round(tva))
             bazaV += int(round(bazainv))
-            tvaV += int(round(bazainv * 0.24))
+            tvaV += int(round(tvainv))
             bazaVc += int(round(bazacer))
             tvaVc += int(round(tvacer))
         invoices = []
@@ -314,19 +317,19 @@ class d394_report(osv.osv_memory):
                             base_exig = base1 = tva1 = tva_exig = 0.00
                             for tax_line in inv.tax_line:
                                 if 'Ti-ach-c' in tax_line.name:
-                                    bazainv += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-                                    tvainv += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, -tax_line.amount, context={'date': inv.date_invoice}) or 0.00
-                                    base_exig += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-                                    tva_exig += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
+                                    bazainv += round(currency_obj.compute(
+                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice})) or 0.00
+                                    tvainv += round(currency_obj.compute(
+                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, -tax_line.amount, context={'date': inv.date_invoice})) or 0.00
+                                    base_exig += round(currency_obj.compute(
+                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice})) or 0.00
+                                    tva_exig += round(currency_obj.compute(
+                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice})) or 0.00
                                 if 'Ti-ach-d' in tax_line.name:
-                                    base1 += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={
-                                                                  'date': inv.date_invoice}) or 0.00
-                                    tva1 += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={
-                                                                 'date': inv.date_invoice}) or 0.00
+                                    base1 += round(currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={
+                                                                  'date': inv.date_invoice})) or 0.00
+                                    tva1 += round(currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={
+                                                                 'date': inv.date_invoice})) or 0.00
                             if base1 - base_exig > 0:
                                 nrfact += 1
                                 baza += base1 - base_exig
@@ -358,14 +361,14 @@ class d394_report(osv.osv_memory):
                                         code = line.product_id.d394_id.id
                                         if code in codes:
                                             cer[code][
-                                                'baza'] += line.price_subtotal
-                                            bazacer += line.price_subtotal
+                                                'baza'] += round(line.price_subtotal)
+                                            bazacer += round(line.price_subtotal)
                                             taxes = tax_obj.compute_all(
                                                 cr, uid, line.product_id.supplier_taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
                                             cer[code][
-                                                'tva'] += taxes['total_included'] - taxes['total']
-                                            tvacer += taxes['total_included'] - \
-                                                taxes['total']
+                                                'tva'] += round(taxes['total_included'] - taxes['total'])
+                                            tvacer += round(taxes['total_included'] - \
+                                                taxes['total'])
                     for key in cer.iterkeys():
                         if cer[key]['baza'] != 0:
                             cereals.append({'code': self.pool.get('report.394.code').browse(cr, uid, key).name,
