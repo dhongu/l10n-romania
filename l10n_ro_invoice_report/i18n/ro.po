@@ -87,6 +87,11 @@ msgstr "Factura circula fără semnătură și ștampilă în acord cu legea 571
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+msgid "Exchange rate: 1"
+msgstr "Curs valutar: 1"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
 msgid "Mean Transport:"
 msgstr "Mijloc transport:"
 
