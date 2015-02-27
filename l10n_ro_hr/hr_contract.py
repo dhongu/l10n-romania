@@ -38,9 +38,9 @@ class hr_contract(models.Model):
 
     period_type = fields.Boolean(
         'Determined Period', help="The contract period type")
-    suspended = fields.Boolean('Is the suspended?')
-    sus_date_from = fields.Date('Contract suspended from Date')
-    sus_date_to = fields.Date('Contract suspended to Date')
+    suspended = fields.Boolean('Contract suspended?')
+    sus_date_from = fields.Date('Suspended from')
+    sus_date_to = fields.Date('Suspended to')
     pensioneer = fields.Boolean(
         'Is he a pensioneer?', help="Is the employee a pensioneer")
     work_norm = fields.Selection([('N', 'cu norma intreaga'),

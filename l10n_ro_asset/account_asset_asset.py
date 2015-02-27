@@ -75,6 +75,14 @@ class account_asset_category(models.Model):
     sequence_id = fields.Many2one('ir.sequence', 'Inventory Sequence', help="This field contains the information related to the inventory numbering \
        of the assets from this category.", copy=False)
 
+    @api.multi
+    @api.depends('name', 'code')
+    def name_get(self):
+        result = []
+        for category in self:
+            result.append((category.id, '%s - %s' % (category.code, category.name)))
+        return result
+    
     # @api.one
     # @api.constrains('parent_id')
     # def _check_recursion(self, parent=None):
@@ -120,14 +128,14 @@ class account_asset_asset(models.Model):
             res.get(self.id, 0.0) - self.salvage_value
 
     category_id = fields.Many2one('account.asset.category', 'Asset Category', required=True, change_default=True, readonly=True, states={
-                                  'draft': [('readonly', False)]}, domain="[('type','=','normal'),'|',('company_id','=',False),('company_id','=',user.company_id)]")
+                                  'draft': [('readonly', False)]}, domain="[('type','=','normal')]")
     purchase_date = fields.Date('Depreciation Start Date', required=True, readonly=True, states={
                                 'draft': [('readonly', False)]})
     prorata = fields.Boolean('Prorata Temporis', readonly=True, states={'draft': [(
         'readonly', False)]}, help='Indicates that the first depreciation entry for this asset have to be done from the purchase date instead of first day of next month')
     product_id = fields.Many2one('product.product', string='Product',
                                  required=True, readonly=True, states={'draft': [('readonly', False)]})
-    asset_type = fields.Selection([('fixed', 'Fixed Assets'), ('service', 'Services Assets')],
+    asset_type = fields.Selection([('none', 'None'), ('fixed', 'Fixed Assets'), ('service', 'Services Assets')],
                                   related='category_id.asset_type', string='Asset Type', readonly=True, store=True)
     entry_date = fields.Date(
         'Purchase Date', readonly=True, states={'draft': [('readonly', False)]})

@@ -1,66 +1,63 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-		<record id="view_employee_form_romania" model="ir.ui.view">
+        <record id="view_employee_form_romania" model="ir.ui.view">
             <field name="name">view.employee.form.romania</field>
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form"/>
             <field name="arch" type="xml">
-               <xpath expr="/form/sheet/notebook/page[@string='Personal Information']" position="inside">
-					<group string="Persons in care">
-						<field name="person_in_care"/>
-                        <field name="person_care_ids" context="{'employee_id': active_id}">
-							<tree string="Persons in Care" editable="bottom">
-								<field name="name"/>
-								<field name="ssnid"/>
-								<field name="relation"/>
-							</tree>
-						</field>
-					</group>
-					<group string="Co-insured Persons">
+            	<xpath expr="//group[@name='active_group']" position="after">
+					<group colspan="4" string="Social Security">
 						<field name="casang"/>
-                        <field name="person_coinsured_ids" context="{'employee_id': active_id}">
-							<tree string="Co-Insured Persons" editable="bottom">
-								<field name="name"/>
-								<field name="ssnid"/>
-								<field name="relation"/>
-							</tree>
+						<field name="person_in_care"/>
+						<field name="person_related" context="{'employee_id': active_id}">
+						    <tree string="Persons Related" editable="bottom">
+						        <field name="name"/>
+						        <field name="ssnid"/>
+						        <field name="relation"/>
+								<field name="relation_type"/>
+						    </tree>
 						</field>
 					</group>
-                </xpath>
-                <field name="otherid" position="after">
-					<field name="emit_by"/>
+				</xpath>
+                <field name="identification_id" position="before">
+                    <field name="ssnid" groups="base.group_hr_user"/>
+                </field>
+                <field name="identification_id" position="after">
+                    <field name="emit_by"/>
                     <field name="emit_on"/>
+					<field name="expires_on"/>
                 </field>               
                 <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group/group[@string='Contact Information']" position="before">
-					<group string="Initial Datas">
-						<field name="ssnid_init"/>
-						<field name="first_name_init"/>
-						<field name="last_name_init"/>
-					</group>
+                    <group string="Initial Datas">
+                        <field name="ssnid_init"/>
+                        <field name="first_name_init"/>
+                        <field name="last_name_init"/>
+                    </group>
                 </xpath>
             </field>
         </record>
         
         
-        <record id="view_hr_person_care_tree" model="ir.ui.view">
-            <field name="name">view.hr.person.care.tree</field>
-            <field name="model">hr.employee.care</field>
+        <record id="view_hr_person_related_tree" model="ir.ui.view">
+            <field name="name">view.hr.person.related.tree</field>
+            <field name="model">hr.employee.related</field>
             <field name="arch" type="xml">
-                <tree string="Employees Persons in care">
+                <tree string="Employees Persons related">
                     <field name="employee_id"/>
                     <field name="name"/>
                     <field name="ssnid"/>
                     <field name="relation"/>
+					<field name="relation_type"/>
                 </tree>
             </field>
         </record>
         
-        <record id="view_hr_person_care_form" model="ir.ui.view">
-            <field name="name">view.hr.person.care.form</field>
-            <field name="model">hr.employee.care</field>
+        <record id="view_hr_person_related_form" model="ir.ui.view">
+            <field name="name">view.hr.person.related.form</field>
+            <field name="model">hr.employee.related</field>
             <field name="arch" type="xml">
-                <form string="Employees Persons in care">
+                <form string="Employees Persons related">
                     <field name="employee_id"/>
                     <field name="name"/>
                     <field name="ssnid"/>
@@ -69,86 +66,34 @@
             </field>
         </record>
         
-       <record id="view_hr_person_care_search" model="ir.ui.view">
-            <field name="name">view.hr.person.care.search</field>
-            <field name="model">hr.employee.care</field>
+       <record id="view_hr_person_related_search" model="ir.ui.view">
+            <field name="name">view.hr.person.related.search</field>
+            <field name="model">hr.employee.related</field>
             <field name="arch" type="xml">
-                <search string="Persons in care">
+                <search string="Persons related">
                     <field name="employee_id"/>
                     <field name="name"/>
                     <newline/>
                     <group expand="1" string="Group By...">
                         <filter string="Employee" icon="terp-personal" domain="[]" context="{'group_by':'employee_id'}"/>
+						<filter string="Type" icon="terp-personal" domain="[]" context="{'group_by':'relation_type'}"/>
                     </group>
                 </search>
             </field>
         </record>
          
-         <record id="action_hr_person_care_form" model="ir.actions.act_window">
-            <field name="name">Person in care</field>
-            <field name="res_model">hr.employee.care</field>
+         <record id="action_hr_person_related_form" model="ir.actions.act_window">
+            <field name="name">Person related</field>
+            <field name="res_model">hr.employee.related</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="menu_hr_person_care"
+        <menuitem id="menu_hr_person_related"
                     parent="hr.menu_hr_main"
-                    action="action_hr_person_care_form"
+                    action="action_hr_person_related_form"
                     sequence="30"
-                    icon="STOCK_JUSTIFY_FILL"/>	
+                    icon="STOCK_JUSTIFY_FILL"/> 
         
-        <record id="view_hr_person_coinsured_tree" model="ir.ui.view">
-            <field name="name">view.hr.person.coinsured.tree</field>
-            <field name="model">hr.employee.coinsured</field>
-            <field name="arch" type="xml">
-                <tree string="Employees Coinsured Persons">
-                    <field name="employee_id"/>
-                    <field name="name"/>
-                    <field name="ssnid"/>
-                    <field name="relation"/>
-                </tree>
-            </field>
-        </record>
-        
-        <record id="view_hr_person_coinsured_form" model="ir.ui.view">
-            <field name="name">view.hr.person.coinsured.form</field>
-            <field name="model">hr.employee.coinsured</field>
-            <field name="arch" type="xml">
-                <form string="Employees Coinsured Persons">
-                    <field name="employee_id"/>
-                    <field name="name"/>
-                    <field name="ssnid"/>
-                    <field name="relation"/>
-                </form>
-            </field>
-        </record>
-        
-       <record id="view_hr_person_coinsured_search" model="ir.ui.view">
-            <field name="name">view.hr.person.coinsured.search</field>
-            <field name="model">hr.employee.coinsured</field>
-            <field name="arch" type="xml">
-                <search string="Coinsured Persons">
-                    <field name="employee_id"/>
-                    <field name="name"/>
-                    <newline/>
-                    <group expand="1" string="Group By...">
-                        <filter string="Employee" icon="terp-personal" domain="[]" context="{'group_by':'employee_id'}"/>
-                    </group>
-                </search>
-            </field>
-        </record>
-         
-         <record id="action_hr_person_coinsured_form" model="ir.actions.act_window">
-            <field name="name">Coinsured Persons</field>
-            <field name="res_model">hr.employee.coinsured</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-
-         <menuitem id="menu_hr_person_coinsured"
-                    parent="hr.menu_hr_main"
-                    action="action_hr_person_coinsured_form"
-                    sequence="30"
-                    icon="STOCK_JUSTIFY_FILL"/>	 
-	</data>	
+    </data> 
 </openerp>

@@ -559,7 +559,7 @@ class stock_quant(osv.Model):
             if move_type == 'usage_giving':
                 # Change the account to the usage giving one defined in
                 # company: usualy 8035
-                acc_src = acc_dest = move.company_id.property_account_usage_giving and move.company_id.property_account_usage_giving.id or False
+                acc_src = acc_dest = move.company_id.property_stock_usage_giving_account_id and move.company_id.property_stock_usage_giving_account_id.id or False
             if move_type == 'delivery':
                 # Change the account to the expense one (6xx) to suit move: 6xx
                 # = 3xx

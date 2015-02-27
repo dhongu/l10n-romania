@@ -80,7 +80,8 @@ class d394_report(osv.osv_memory):
         if user.partner_id.function:
             function = user.partner_id.function
         else:
-            raise osv.except_osv(_('Error!'), _('You need to define your Job Position.'))
+            raise osv.except_osv(_('Error!'),
+                                 _('You need to define your Job Position.'))
         uid_name = user.partner_id.name.split()
         uid_fname = ' '.join(uid_name[:-1])
         uid_name = uid_name[-1]
@@ -89,6 +90,7 @@ class d394_report(osv.osv_memory):
         data_company = obj_company.browse(
             cr, uid, wiz_data.company_id.id, context=context)
         company = wiz_data.company_id.id
+        comp_currency = data_company.currency_id.id
         period = wiz_data.period_id.id
         xmldict.update({
             'luna': int(wiz_data.period_id.code[:2]),
@@ -161,7 +163,8 @@ class d394_report(osv.osv_memory):
             if not inv.fiscal_receipt:
                 part = inv.partner_id
                 nrCUI = len(cui) + 1
-                if part.vat and part.vat_subjected and ('RO' in part.vat.upper()):
+                if part.vat and part.vat_subjected and ('RO' in
+                                                        part.vat.upper()):
                     if cui:
                         for key in cui.iterkeys():
                             if part.id == cui[key]:
@@ -195,23 +198,72 @@ class d394_report(osv.osv_memory):
                         cuiP = inv.partner_id.vat[2:]
                         denP = inv.partner_id.name.replace(
                             '&', '-').replace('"', '')
-                        if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
+                        if inv.fiscal_position and ('Taxare Inversa' in
+                                                    inv.fiscal_position.name):
+                            nrfactv += 1
                             for tax_line in inv.tax_line:
                                 if 'INVERS' in tax_line.name.upper():
                                     bazainv += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
-                                if (' 24' in tax_line.name) or (' 9' in tax_line.name) or (' 5' in tax_line.name) or (' 0' in tax_line.name):
-                                    baza += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={
-                                                                 'date': inv.date_invoice}) or 0.00
-                                    tva += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={
-                                                                'date': inv.date_invoice}) or 0.00
+                                                   cr, uid, inv.currency_id.id,
+                                                   comp_currency,
+                                                   tax_line.base,
+                                                   context={'date':
+                                                            inv.date_invoice}
+                                                   ) or 0.00
+                                if any(i in tax_line.name for i in
+                                   ('24', ' 9', ' 5', ' 0')):
+                                    baza += currency_obj.compute(
+                                                cr, uid,
+                                                inv.currency_id.id,
+                                                comp_currency,
+                                                tax_line.base,
+                                                context={'date':
+                                                         inv.date_invoice}
+                                                ) or 0.00
+                                    tva += currency_obj.compute(
+                                                cr, uid,
+                                                inv.currency_id.id,
+                                                comp_currency,
+                                                tax_line.amount,
+                                                context={'date':
+                                                         inv.date_invoice}
+                                                ) or 0.00
 
-                            # for line in inv.invoice_line:
-                            #    taxes = tax_obj.compute_all(cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
-                            #    tvainv += taxes['total_included'] - taxes['total']
+                            for line in inv.invoice_line:
+                                taxes = tax_obj.compute_all(
+                                            cr, uid,
+                                            line.product_id.taxes_id,
+                                            line.price_subtotal,
+                                            1,
+                                            product=line.product_id,
+                                            partner=line.invoice_id.partner_id)
+                                tvainv += currency_obj.compute(
+                                              cr, uid,
+                                              inv.currency_id.id,
+                                              comp_currency,
+                                              taxes['total_included'] -
+                                              taxes['total'],
+                                              context={'date':
+                                                       inv.date_invoice}
+                                              ) or 0.00
                         else:
-                            tva += inv.amount_tax
-                            baza += inv.amount_untaxed
+                            for tax_line in inv.tax_line:
+                                baza += currency_obj.compute(
+                                              cr, uid,
+                                              inv.currency_id.id,
+                                              comp_currency,
+                                              tax_line.base,
+                                              context={'date':
+                                                       inv.date_invoice}
+                                              ) or 0.00
+                                tva += currency_obj.compute(
+                                              cr, uid,
+                                              inv.currency_id.id,
+                                              comp_currency,
+                                              tax_line.amount,
+                                              context={'date':
+                                                       inv.date_invoice}
+                                              ) or 0.00
             if baza != 0 and bazainv != 0:
                 nrfact += 1
             if nrfact - nrfactv != 0:
@@ -237,32 +289,55 @@ class d394_report(osv.osv_memory):
                         'report.394.code').browse(cr, uid, codes)]
                     for code in codes:
                         cer[code] = {
-                            'baza': 0.0,
-                            'tva': 0.0,
+                            'baza': 0.00,
+                            'tva': 0.00,
                         }
                     for inv in invoices:
                         if inv.partner_id.id == cui[key]:
-                            if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
+                            if inv.fiscal_position and ('Taxare Inversa' in
+                               inv.fiscal_position.name):
                                 for line in inv.invoice_line:
-                                    if line.product_id and line.product_id.d394_id:
+                                    if line.product_id.d394_id:
                                         code = line.product_id.d394_id.id
                                         if code in codes:
-                                            cer[code][
-                                                'baza'] += line.price_subtotal
-                                            bazacer += line.price_subtotal
+                                            cer[code]['baza'] += \
+                                            currency_obj.compute(
+                                                cr, uid,
+                                                inv.currency_id.id,
+                                                comp_currency,
+                                                line.price_subtotal,
+                                                context={'date':
+                                                         inv.date_invoice}
+                                                ) or 0.00
                                             if line.invoice_line_tax_id:
                                                 taxes = tax_obj.compute_all(
-                                                    cr, uid, line.product_id.taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
-                                                cer[code][
-                                                    'tva'] += taxes['total_included'] - taxes['total']
-                                                tvacer += taxes['total_included'] - \
-                                                    taxes['total']
+                                                    cr, uid,
+                                                    line.product_id.taxes_id,
+                                                    line.price_subtotal,
+                                                    1,
+                                                    product=line.product_id,
+                                                    partner=inv.partner_id)
+                                                cer[code]['tva'] += \
+                                                currency_obj.compute(
+                                                    cr, uid,
+                                                    inv.currency_id.id,
+                                                    comp_currency,
+                                                    taxes['total_included'] -
+                                                    taxes['total'],
+                                                    context={'date':
+                                                             inv.date_invoice}
+                                                    ) or 0.00
                     for key in cer.iterkeys():
                         if cer[key]['baza'] != 0:
-                            cereals.append({'code': self.pool.get('report.394.code').browse(cr, uid, key).name,
-                                            'baza': int(round(cer[key]['baza'])),
-                                            'tva': int(round(cer[key]['tva']))
-                                            })
+                            cereals.append(
+                                {'code': self.pool.get(
+                                         'report.394.code'
+                                         ).browse(cr, uid, key).name,
+                                 'baza': int(round(cer[key]['baza'])),
+                                 'tva': int(round(cer[key]['tva']))
+                                 })
+                            bazacer += int(round(cer[key]['baza']))
+                            tvacer += int(round(cer[key]['tva']))
 
                 from_xml.append({
                     'tip': 'V',
@@ -270,7 +345,7 @@ class d394_report(osv.osv_memory):
                     'denP': denP,
                     'nrFact': nrfactv,
                     'baza': int(round(bazainv)),
-                    'tva': int(round(bazainv * 0.24)),
+                    'tva': int(round(tvainv)),
                     'cereals': cereals
                 })
 
@@ -279,7 +354,7 @@ class d394_report(osv.osv_memory):
             bazaL += int(round(baza))
             tvaL += int(round(tva))
             bazaV += int(round(bazainv))
-            tvaV += int(round(bazainv * 0.24))
+            tvaV += int(round(tvainv))
             bazaVc += int(round(bazacer))
             tvaVc += int(round(tvacer))
         invoices = []
@@ -308,32 +383,84 @@ class d394_report(osv.osv_memory):
                         cuiP = inv.partner_id.vat[2:]
                         denP = inv.partner_id.name.replace(
                             '&', '-').replace('"', '')
-                        if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
+                        if inv.fiscal_position and ('Taxare Inversa' in
+                                                    inv.fiscal_position.name):
                             nrfactc += 1
                             # bazainv += inv.amount_untaxed
                             base_exig = base1 = tva1 = tva_exig = 0.00
                             for tax_line in inv.tax_line:
                                 if 'Ti-ach-c' in tax_line.name:
                                     bazainv += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
+                                                   cr, uid,
+                                                   inv.currency_id.id,
+                                                   comp_currency,
+                                                   tax_line.base,
+                                                   context={'date':
+                                                            inv.date_invoice}
+                                                   ) or 0.00
                                     tvainv += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, -tax_line.amount, context={'date': inv.date_invoice}) or 0.00
+                                                   cr, uid,
+                                                   inv.currency_id.id,
+                                                   comp_currency,
+                                                   -tax_line.amount,
+                                                   context={'date':
+                                                            inv.date_invoice}
+                                                   ) or 0.00
                                     base_exig += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={'date': inv.date_invoice}) or 0.00
+                                                   cr, uid,
+                                                   inv.currency_id.id,
+                                                   comp_currency,
+                                                   tax_line.base,
+                                                   context={'date':
+                                                            inv.date_invoice}
+                                                   ) or 0.00
                                     tva_exig += currency_obj.compute(
-                                        cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={'date': inv.date_invoice}) or 0.00
+                                                   cr, uid,
+                                                   inv.currency_id.id,
+                                                   comp_currency,
+                                                   tax_line.amount,
+                                                   context={'date':
+                                                            inv.date_invoice}
+                                                   ) or 0.00
                                 if 'Ti-ach-d' in tax_line.name:
-                                    base1 += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.base, context={
-                                                                  'date': inv.date_invoice}) or 0.00
-                                    tva1 += currency_obj.compute(cr, uid, inv.currency_id.id, data_company.currency_id.id, tax_line.amount, context={
-                                                                 'date': inv.date_invoice}) or 0.00
+                                    base1 += currency_obj.compute(
+                                                   cr, uid,
+                                                   inv.currency_id.id,
+                                                   comp_currency,
+                                                   tax_line.base,
+                                                   context={'date':
+                                                            inv.date_invoice}
+                                                   ) or 0.00
+                                    tva1 += currency_obj.compute(
+                                                   cr, uid,
+                                                   inv.currency_id.id,
+                                                   comp_currency,
+                                                   tax_line.amount,
+                                                   context={'date':
+                                                            inv.date_invoice}
+                                                   ) or 0.00
                             if base1 - base_exig > 0:
                                 nrfact += 1
                                 baza += base1 - base_exig
                                 tva += tva1 - tva_exig
                         else:
-                            tva += inv.amount_tax
-                            baza += inv.amount_untaxed
+                            for tax_line in inv.tax_line:
+                                baza += currency_obj.compute(
+                                            cr, uid,
+                                            inv.currency_id.id,
+                                            comp_currency,
+                                            tax_line.base,
+                                            context={'date':
+                                                     inv.date_invoice}
+                                            ) or 0.00
+                                tva += currency_obj.compute(
+                                            cr, uid,
+                                            inv.currency_id.id,
+                                            comp_currency,
+                                            tax_line.amount,
+                                            context={'date':
+                                                     inv.date_invoice}
+                                            ) or 0.00
             if bazainv != 0:
                 cer = {}
                 cereals = []
@@ -352,26 +479,52 @@ class d394_report(osv.osv_memory):
                         }
                     for inv in invoices:
                         if inv.partner_id.id == cui[key]:
-                            if inv.fiscal_position and ('Taxare Inversa' in inv.fiscal_position.name):
+                            if inv.fiscal_position and \
+                            ('Taxare Inversa' in inv.fiscal_position.name):
                                 for line in inv.invoice_line:
-                                    if line.product_id and line.product_id.d394_id:
+                                    if line.product_id.d394_id:
                                         code = line.product_id.d394_id.id
+                                        prod_taxes = \
+                                        line.product_id.supplier_taxes_id
                                         if code in codes:
-                                            cer[code][
-                                                'baza'] += line.price_subtotal
-                                            bazacer += line.price_subtotal
-                                            taxes = tax_obj.compute_all(
-                                                cr, uid, line.product_id.supplier_taxes_id, line.price_subtotal, 1, product=line.product_id, partner=line.invoice_id.partner_id)
-                                            cer[code][
-                                                'tva'] += taxes['total_included'] - taxes['total']
-                                            tvacer += taxes['total_included'] - \
-                                                taxes['total']
+                                            cer[code]['baza'] += \
+                                            currency_obj.compute(
+                                                    cr, uid,
+                                                    inv.currency_id.id,
+                                                    comp_currency,
+                                                    line.price_subtotal,
+                                                    context={'date':
+                                                             inv.date_invoice}
+                                                    ) or 0.00
+                                            taxes = \
+                                            tax_obj.compute_all(
+                                                    cr, uid,
+                                                    prod_taxes,
+                                                    line.price_subtotal,
+                                                    1,
+                                                    product=line.product_id,
+                                                    partner=inv.partner_id)
+                                            cer[code]['tva'] += \
+                                            currency_obj.compute(
+                                                    cr, uid,
+                                                    inv.currency_id.id,
+                                                    comp_currency,
+                                                    taxes['total_included'] -
+                                                    taxes['total'],
+                                                    context={'date':
+                                                             inv.date_invoice}
+                                                    ) or 0.00
                     for key in cer.iterkeys():
                         if cer[key]['baza'] != 0:
-                            cereals.append({'code': self.pool.get('report.394.code').browse(cr, uid, key).name,
-                                            'baza': int(round(cer[key]['baza'])),
-                                            'tva': int(round(cer[key]['tva']))
-                                            })
+                            cereals.append(
+                                {'code': self.pool.get(
+                                         'report.394.code'
+                                         ).browse(cr, uid, key).name,
+                                 'baza': int(round(cer[key]['baza'])),
+                                 'tva': int(round(cer[key]['tva']))}
+                                )
+                            bazacer += int(round(cer[key]['baza']))
+                            tvacer += int(round(cer[key]['tva']))
 
                 from_xml.append({
                     'tip': 'C',
@@ -403,7 +556,9 @@ class d394_report(osv.osv_memory):
             bazaCc += int(round(bazacer))
             tvaCc += int(round(tvacer))
         xmldict.update({
-            'totalPlata_A': int(len(cui)) + int(bazaL) + int(tvaL) + int(bazaA) + int(tvaA) + int(bazaV) + int(tvaV) + int(bazaVc) + int(tvaVc) + int(bazaC) + int(tvaC) + int(bazaCc) + int(tvaCc),
+            'totalPlata_A': int(len(cui)) + int(bazaL) + int(tvaL) +
+            int(bazaA) + int(tvaA) + int(bazaV) + int(tvaV) + int(bazaVc) +
+            int(tvaVc) + int(bazaC) + int(tvaC) + int(bazaCc) + int(tvaCc),
             'nrCui': int(len(cui)),
             'nrFactL': nrfactL,
             'bazaL': bazaL,
@@ -432,32 +587,74 @@ class d394_report(osv.osv_memory):
         data_file = ''
         if xml_data['an'] > 2013:
             data_file = """<?xml version="1.0"?>
-<declaratie394 luna="%(luna)s" an="%(an)s" tip_D394="%(tip_D394)s" nume_declar="%(nume_declar)s" prenume_declar="%(prenume_declar)s" functie_declar="%(functie_declar)s" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="mfp:anaf:dgti:d394:declaratie:v2 D394.xsd" xmlns="mfp:anaf:dgti:d394:declaratie:v2">
-<identificare cui="%(cui)s" den="%(den)s" adresa="%(adresa)s" telefon="%(telefon)s" mail="%(mail)s" totalPlata_A="%(totalPlata_A)s"/>
-<rezumat nrCui="%(nrCui)s" nrFactL="%(nrFactL)s" bazaL="%(bazaL)s" tvaL="%(tvaL)s" nrFactA="%(nrFactA)s" bazaA="%(bazaA)s" tvaA="%(tvaA)s" nrFactV="%(nrFactV)s" bazaV="%(bazaV)s" tvaV="%(tvaV)s" bazaVc="%(bazaVc)s" tvaVc="%(tvaVc)s" nrFactC="%(nrFactC)s" bazaC="%(bazaC)s" tvaC="%(tvaC)s" bazaCc="%(bazaCc)s" tvaCc="%(tvaCc)s"/>""" % (xml_data)
+<declaratie394 luna="%(luna)s" an="%(an)s" tip_D394="%(tip_D394)s"
+nume_declar="%(nume_declar)s" prenume_declar="%(prenume_declar)s"
+functie_declar="%(functie_declar)s"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="mfp:anaf:dgti:d394:declaratie:v2 D394.xsd"
+xmlns="mfp:anaf:dgti:d394:declaratie:v2">
+<identificare cui="%(cui)s" den="%(den)s"
+adresa="%(adresa)s" telefon="%(telefon)s" mail="%(mail)s"
+totalPlata_A="%(totalPlata_A)s"/>
+<rezumat nrCui="%(nrCui)s" nrFactL="%(nrFactL)s"
+bazaL="%(bazaL)s" tvaL="%(tvaL)s"
+nrFactA="%(nrFactA)s" bazaA="%(bazaA)s"
+tvaA="%(tvaA)s" nrFactV="%(nrFactV)s"
+bazaV="%(bazaV)s" tvaV="%(tvaV)s"
+bazaVc="%(bazaVc)s" tvaVc="%(tvaVc)s"
+nrFactC="%(nrFactC)s"
+bazaC="%(bazaC)s" tvaC="%(tvaC)s"
+bazaCc="%(bazaCc)s" tvaCc="%(tvaCc)s"/>""" % (xml_data)
             for client in xml_data['oper']:
-                data_file += """
-    <op1 tip="%s" cuiP="%s" denP="%s" nrFact="%s" baza="%s" tva="%s" >""" % ((client['tip']), (client['cuiP']), (client['denP']), (client['nrFact']), (client['baza']), (client['tva']))
+                data_file += """<op1 tip="%s" cuiP="%s"
+                                denP="%s" nrFact="%s"
+                                baza="%s" tva="%s" >
+                             """ % ((client['tip']), (client['cuiP']),
+                                    (client['denP']), (client['nrFact']),
+                                    (client['baza']), (client['tva']))
                 if client['cereals']:
                     for line in client['cereals']:
-                        data_file += """
-        <op11 codPR="%s" bazaPR="%s" tvaPR="%s" /> """ % ((line['code']), (line['baza']), (line['tva']))
+                        data_file += """<op11 codPR="%s"
+                                        bazaPR="%s" tvaPR="%s"/>
+                                     """ % ((line['code']),
+                                            (line['baza']),
+                                            (line['tva']))
                 data_file += """
     </op1> """
             data_file += """
 </declaratie394>"""
         else:
             data_file = """<?xml version="1.0"?>
-<declaratie394 luna="%(luna)s" an="%(an)s" tip_D394="%(tip_D394)s" nume_declar="%(nume_declar)s" prenume_declar="%(prenume_declar)s" functie_declar="%(functie_declar)s" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="mfp:anaf:dgti:d394:declaratie:v1 D394.xsd" xmlns="mfp:anaf:dgti:d394:declaratie:v1">
-<identificare cui="%(cui)s" den="%(den)s" adresa="%(adresa)s" telefon="%(telefon)s" mail="%(mail)s" totalPlata_A="%(totalPlata_A)s"/>
-<rezumat nrCui="%(nrCui)s" bazaL="%(bazaL)s" tvaL="%(tvaL)s" bazaA="%(bazaA)s" tvaA="%(tvaA)s" bazaV="%(bazaV)s" tvaV="%(tvaV)s" bazaVc="%(bazaVc)s" tvaVc="%(tvaVc)s"  bazaC="%(bazaC)s" tvaC="%(tvaC)s" bazaCc="%(bazaCc)s" tvaCc="%(tvaCc)s"/>""" % (xml_data)
+<declaratie394 luna="%(luna)s" an="%(an)s" tip_D394="%(tip_D394)s"
+nume_declar="%(nume_declar)s" prenume_declar="%(prenume_declar)s"
+functie_declar="%(functie_declar)s"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="mfp:anaf:dgti:d394:declaratie:v1 D394.xsd"
+xmlns="mfp:anaf:dgti:d394:declaratie:v1">
+<identificare cui="%(cui)s" den="%(den)s"
+adresa="%(adresa)s" telefon="%(telefon)s" mail="%(mail)s"
+totalPlata_A="%(totalPlata_A)s"/>
+<rezumat nrCui="%(nrCui)s"
+bazaL="%(bazaL)s" tvaL="%(tvaL)s"
+bazaA="%(bazaA)s" tvaA="%(tvaA)s"
+bazaV="%(bazaV)s" tvaV="%(tvaV)s"
+bazaVc="%(bazaVc)s" tvaVc="%(tvaVc)s"
+bazaC="%(bazaC)s" tvaC="%(tvaC)s"
+bazaCc="%(bazaCc)s" tvaCc="%(tvaCc)s"/>""" % (xml_data)
             for client in xml_data['oper']:
-                data_file += """
-    <op1 tip="%s" cuiP="%s" denP="%s" baza="%s" tva="%s" >""" % ((client['tip']), (client['cuiP']), (client['denP']), (client['baza']), (client['tva']))
+                data_file += """<op1 tip="%s" cuiP="%s"
+                                denP="%s"
+                                baza="%s" tva="%s" >
+                             """ % ((client['tip']), (client['cuiP']),
+                                    (client['denP']),
+                                    (client['baza']), (client['tva']))
                 if client['cereals']:
                     for line in client['cereals']:
-                        data_file += """
-        <op11 codPR="%s" bazaPR="%s" tvaPR="%s" /> """ % ((line['code']), (line['baza']), (line['tva']))
+                        data_file += """<op11 codPR="%s"
+                                        bazaPR="%s" tvaPR="%s"/>
+                                     """ % ((line['code']),
+                                            (line['baza']),
+                                            (line['tva']))
                 data_file += """
     </op1> """
             data_file += """
@@ -465,10 +662,13 @@ class d394_report(osv.osv_memory):
 
         context['file_save'] = data_file
 
-        model_data_ids = mod_obj.search(cursor, user, [(
-            'model', '=', 'ir.ui.view'), ('name', '=', 'view_d394_save')], context=context)
-        resource_id = mod_obj.read(
-            cursor, user, model_data_ids, fields=['res_id'], context=context)[0]['res_id']
+        model_data_ids = mod_obj.search(cursor, user,
+                                        [('model', '=', 'ir.ui.view'),
+                                         ('name', '=', 'view_d394_save')],
+                                        context=context)
+        resource_id = mod_obj.read(cursor, user, model_data_ids,
+                                   fields=['res_id'],
+                                   context=context)[0]['res_id']
 
         return {
             'name': _('Save'),

@@ -108,11 +108,9 @@ class res_partner(models.Model):
                     if 'Adresa:' in result.keys():
                         adresa = result['Adresa:'].title() or ''
                     if nrc_key in result.keys():
-                        nrc = result[nrc_key]
+                        nrc = result[nrc_key].replace(' ', '')
                         if nrc == '-/-/-':
                             nrc = ''
-                        else:
-                            nrc = nrc.replace(' ', '')
                     if 'Codul postal:' in result.keys():
                         zip1 = result['Codul postal:'] or ''
                     if 'Judetul:' in result.keys():

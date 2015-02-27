@@ -20,31 +20,4 @@
 #
 ##############################################################################
 
-{
-    "name": "Romania - Human Resources",
-    "version": "1.0",
-    "author": "FOREST AND BIOMASS SERVICES ROMANIA",
-    "website": "http://www.forbiom.eu",
-    "category": "Romania Adaptation",
-    "depends": ['hr', 'hr_contract', 'l10n_ro_config'],
-    "external_dependencies": {
-        'python' : ['stdnum'],
-    },
-    "description": """
-Romania  - Human Resources
---------------------------
-
-
-    """,
-
-    "data": [
-        "data/caen.xml",
-            "data/hr_job.xml",
-            "data/insurance_type.xml",
-            "hr_employee_view.xml",
-            "hr_contract_view.xml",
-            "res_company_view.xml",
-            "security/ir.model.access.csv",
-    ],
-    "installable": True
-}
+import res_partner

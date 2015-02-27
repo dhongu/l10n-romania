@@ -19,32 +19,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 {
-    "name": "Romania - Human Resources",
+    "name": "Romania - Partners Unique",
     "version": "1.0",
-    "author": "FOREST AND BIOMASS SERVICES ROMANIA",
-    "website": "http://www.forbiom.eu",
-    "category": "Romania Adaptation",
-    "depends": ['hr', 'hr_contract', 'l10n_ro_config'],
-    "external_dependencies": {
-        'python' : ['stdnum'],
-    },
-    "description": """
-Romania  - Human Resources
---------------------------
-
-
-    """,
-
-    "data": [
-        "data/caen.xml",
-            "data/hr_job.xml",
-            "data/insurance_type.xml",
-            "hr_employee_view.xml",
-            "hr_contract_view.xml",
-            "res_company_view.xml",
-            "security/ir.model.access.csv",
-    ],
+    "author": "FOREST AND BIOMASS SERVICES ROMANIA SA",
+    "category": "Generic Modules/Base",
+    "description": """Creates a rule for vat and nrc unique for partners.""",
+    "depends": ["base", "l10n_ro"],
+    "data": [],
     "installable": True
 }

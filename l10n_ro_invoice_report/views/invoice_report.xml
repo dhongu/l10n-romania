@@ -163,6 +163,15 @@
 					<span>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6
 					</span>
 				</p>
+				
+                <p t-if='o.currency_id != res_company.currency_id'>
+                    <span>Exchange rate: 1</span> 
+                    <span t-field="res_company.currency_id.symbol"/> 
+                    <span>=</span>
+                    <t t-set="from_currency" t-value="res_company.currency_id.with_context(date=o.date_invoice)"/>
+                    <span t-esc="formatLang(from_currency.compute(1,o.currency_id,round=False),digits=6)"/> 
+                    <span t-field="o.currency_id.symbol"/>
+                </p>
 
 				<div t-if="o.type == 'out_invoice' and o.payment_ids">
 					<br />

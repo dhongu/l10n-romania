@@ -8,7 +8,8 @@
 	        <field name="inherit_id" ref="base.view_res_partner_filter"/>
 	        <field name="arch" type="xml">
         		<field name="user_id" position="before">
-					<field name="vat_on_payment"/>
+					<!--field name="vat_on_payment"/-->
+					<filter name="vat_on_payment" domain="[('vat_on_payment','=',1)]"/>
 	        	</field>
 		</field>
 	</record>

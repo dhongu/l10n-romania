@@ -62,30 +62,26 @@
 				</field>
                 <xpath expr="/form/sheet/notebook/page[@string='Information']" position="after">
 					<page string="Work Conditions" name="conditions">
-						<group string="Insurance">
-							<label for="insurance_type" string="Insurance Type"/>
-							<div>
-								<field name="insurance_type" class="oe_inline"/>
-							</div>
-						</group>
-						<group string="Work Norm">
-							<field name="work_norm"/>
-							<field name="work_hour"/>
-						</group>
-						<group string="Work Type">
-							<field name="work_type"/>
-							<field name="work_special"/>
-						</group>
-						<group string="Contract Suspended">
-							<field name="suspended"/>
-							<label for="sus_date_from" string="Duration"/>
-                            <div>
-                                 <field name="sus_date_from" class="oe_inline"/> - <field name="sus_date_to" class="oe_inline"/>
-                            </div>
-						</group>
-						<group string="Pensioneer">
-							<field name="pensioneer"/>
-						</group>					
+						<group colspan="4">
+							<group col="2" name="col1">
+								<field name="pensioneer"/>
+								<field name="suspended"/>
+								<label for="sus_date_from" string="Suspension Duration"/>
+	                            <div attrs="{'invisible': [('suspended', '==', False)]}">
+	                                 <field name="sus_date_from" class="oe_inline"/> - <field name="sus_date_to" class="oe_inline"/>
+	                            </div>
+							</group>
+							<group col="2" name="col2">
+								<label for="insurance_type" string="Insurance Type"/>
+								<div>
+									<field name="insurance_type" class="oe_inline"/>
+								</div>
+								<field name="work_norm"/>
+								<field name="work_hour"/>
+								<field name="work_type"/>
+								<field name="work_special"/>
+							</group>
+						</group>		
 					</page>
 				</xpath>
             </field>

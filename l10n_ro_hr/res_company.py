@@ -29,7 +29,7 @@ class res_company_caen(models.Model):
 
     code = fields.Char('CAEN code', required=True, help='CAEN code')
     name = fields.Char('CAEN name', required=True, help='CAEN name')
-    trisc = fields.Float('Accident Coefficient', required=True)
+    trisc = fields.Float('Accident Coefficient', required=True, digits=(0,4))
 
 
 class res_company(models.Model):
@@ -38,4 +38,4 @@ class res_company(models.Model):
     codcaen = fields.Many2one(
         'res.company.caen', 'CAEN code', help="Company CAEN code.")
     coefacc = fields.Float(
-        string='Accident Coefficient', related='codcaen.trisc')
+        string='Accident Coefficient', related='codcaen.trisc', digits=(0,4))

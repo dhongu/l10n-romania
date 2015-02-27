@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-01 04:47+0000\n"
-"PO-Revision-Date: 2014-12-01 04:47+0000\n"
+"POT-Creation-Date: 2015-02-24 15:27+0000\n"
+"PO-Revision-Date: 2015-02-24 15:27+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,119 +18,182 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Account:"
-msgstr "Contul:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#: view:website:l10n_ro_invoice_report.report_voucher
 msgid "Address:"
-msgstr "Adresa:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Amount"
-msgstr "Suma"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "Amount (in words):"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "Amount:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Bank:"
-msgstr "Banca:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
-msgid "VAT:"
-msgstr "CUI:"
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "CIF:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_company
 msgid "Companies"
-msgstr "Companii"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Customer"
-msgstr "Client"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: field:account.invoice,delegate_id:0
 msgid "Delegate"
-msgstr "Delegate"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Delegate:"
-msgstr "Delegat:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Elaborate:"
-msgstr "Întocmit:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "I received from"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: field:report.account.report_invoice,id:0
+#: field:report.l10n_ro_invoice_report.report_voucher,id:0
+msgid "ID"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Information for delivery:"
-msgstr "Informații privind livrarea:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice
 msgid "Invoice"
-msgstr "Factura"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice_line
 msgid "Invoice Line"
-msgstr "Linie factura"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6"
-msgstr "Factura circula fără semnătură și ștampilă în acord cu legea 571/2003, art. 115, alin. 6"
-
-#. module: l10n_ro_invoice_report
-#: view:website:account.report_invoice_document
-msgid "Exchange rate: 1"
-msgstr "Curs valutar: 1"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Mean Transport:"
-msgstr "Mijloc transport:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: field:account.invoice,mean_transp:0
 msgid "Mean transport"
-msgstr "Mean transport"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#: view:website:l10n_ro_invoice_report.report_voucher
 msgid "NRC:"
-msgstr "NRC:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Name:"
-msgstr "Nume:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "Received from:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Representing counter value of invoice"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "Representing:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: field:res.company,share_capital:0
 msgid "Share Capital"
-msgstr "Capital social"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#: view:website:l10n_ro_invoice_report.report_voucher
 msgid "Share Capital:"
-msgstr "Capital social:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
 msgid "Supplier"
-msgstr "Furnizor"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: field:account.invoice.line,price_taxes:0
+#: view:website:account.report_invoice_document
 msgid "Taxes"
-msgstr "Taxe"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: field:account.invoice.line,price_unit_without_taxes:0
 msgid "Unit Price without taxes"
-msgstr "Preț fără taxe"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "VAT:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report.xml,name:l10n_ro_invoice_report.action_report_voucher
+msgid "Voucher"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "Voucher:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "amount"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "from"
+msgstr ""
+

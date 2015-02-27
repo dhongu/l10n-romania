@@ -10,7 +10,7 @@
             <field name="doall" eval="False"/>
             <field name="model" eval="'res.partner'"/>
             <field name="function" eval="'_update_vat_all'"/>
-            <field name="args">(None,)</field>
+            <field name="args"></field>
         </record>
 
     </data>
