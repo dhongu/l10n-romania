@@ -341,7 +341,13 @@ msgstr ""
 #. module: l10n_ro_config
 #: help:res.company,property_undeductible_account_id:0
 #: help:l10n.ro.config.settings,property_undeductible_account_id:0
-msgid "This account will be used as the undeductible account for account move line."
+msgid "This account will be used as the undeductible expense account for account move line."
+msgstr ""
+
+#. module: l10n_ro_config
+#: help:res.company,property_undeductible_tax_account_id:0
+#: help:l10n.ro.config.settings,property_undeductible_tax_account_id:0
+msgid "This account will be used as the undeductible tax account for account move line."
 msgstr ""
 
 #. module: l10n_ro_config

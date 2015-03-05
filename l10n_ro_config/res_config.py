@@ -100,7 +100,11 @@ class l10n_ro_config_settings(models.TransientModel):
     property_undeductible_account_id = fields.Many2one('account.account', related='company_id.property_undeductible_account_id',
                                                        string="Undeductible Account",
                                                        domain="[('type', '=', 'other'),('company_id','=',company_id)]",
-                                                       help="This account will be used as the undeductible account in account move line")
+                                                       help="This account will be used as the undeductible expense account for account move line.")
+    property_undeductible_tax_account_id = fields.Many2one('account.account', related='company_id.property_undeductible_tax_account_id',
+                                                       string="Undeductible Tax Account",
+                                                       domain="[('type', '=', 'other'),('company_id','=',company_id)]",
+                                                       help="This account will be used as the undeductible tax account for account move line.")
     property_stock_picking_payable_account_id = fields.Many2one('account.account', related='company_id.property_stock_picking_payable_account_id',
                                                                 string="Picking Account Payable",
                                                                 domain="[('type', '=', 'payable'),('company_id','=',company_id)]",

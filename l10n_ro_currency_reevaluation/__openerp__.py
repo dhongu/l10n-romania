@@ -27,7 +27,7 @@
     "category": "Romania Adaptation",
     "depends": ['l10n_ro_config'],
     "description": """
-Romania  - Accoutn Constrains
+Romania  - Account Constrains
 ------------------------------------------
 
 

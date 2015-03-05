@@ -52,7 +52,6 @@ class account_invoice(models.Model):
                     credit = line['price'] * (-1)
                 else:
                     debit = line['price']
-                    print line
                     if (line['type'] == 'tax') and self.type == 'in_invoice' and line[
                             'price'] < 0.00:
                         credit = line['price'] * (-1)

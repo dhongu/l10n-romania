@@ -8,10 +8,9 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 							
-				<tree  colors="red:product_qty&lt;0;blue:product_qty&gt;=0 ;black:product_qty&gt;=0 " string="Balance" create="false">
+				<tree  colors="red:product_qty&lt;0;blue:product_qty&gt;=0 ;black:product_qty&gt;=0 " string="Balance" create="0" delete="0">
 					<field name="date" invisible="1"/>
-					<field name="year" invisible="1" />
-					<field name="month" invisible="1" />
+
 					<field name="location_id" invisible="1" />
 					 
 					<field name="categ_id" invisible="1"/>
@@ -51,8 +50,6 @@
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search string="Search">
-					
-					<filter icon="terp-go-year" string="Year" domain="[('year','=',time.strftime('%%Y'))]"	help="Stock movments from current year"/>
 					<field name="location_id" />
 					<field name="categ_id" />
 					<field name="product_id" />
@@ -65,12 +62,11 @@
 						<filter string="Location"  icon="terp-gtk-jump-to-rtl" context="{'group_by':'location_id'}"/>
 						<filter string="Category"  icon="terp-accessories-archiver" context="{'group_by':'categ_id'}" />
 						<filter string="Product" name="product" icon="terp-accessories-archiver" context="{'group_by':'product_id'}" />
+						<filter string="Date" icon="terp-go-month" context="{'group_by':'date'}"/>
 						<separator orientation="vertical"/>
 						<filter string="Company" icon="terp-go-home" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
 						<separator orientation="vertical" groups="base.group_multi_company"/>
 					
-						<filter string="Month" icon="terp-go-month" context="{'group_by':'month'}"/>
-						<filter string="Year" icon="terp-go-year" context="{'group_by':'year'}"/>
 					</group>
 				</search>
 			</field>
@@ -84,7 +80,7 @@
 			<field name="view_id" ref="view_stock_balance_tree"/>
 			<field name="search_view_id" ref="view_stock_balance_filter"/>
 			<field name="help">This reporting allows you to analyse stock movements.</field>
-			<field name="context">{'search_default_location': 1,'search_default_category': 1, 'search_default_month':1,'group_by_no_leaf':1,'group_by':['location_id'],'group_by_no_leaf':1,'search_default_year':1}</field>
+			<field name="context">{'search_default_location': 1,'search_default_category': 1, 'group_by':['location_id']}</field>
 		</record>
 		
 		<record model="ir.actions.act_window.view" id="action_stock_balance_graph">

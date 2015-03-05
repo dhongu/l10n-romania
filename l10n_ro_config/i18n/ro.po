@@ -28,7 +28,7 @@ msgstr "Compensare Parteneri"
 #. module: l10n_ro_config
 #: field:l10n.ro.config.settings,module_l10n_ro_account_constrains:0
 msgid "Account Constrains"
-msgstr "Constrangeri COntabilitate"
+msgstr "Constrangeri Contabilitate"
 
 #. module: l10n_ro_config
 #: view:l10n.ro.config.settings:l10n_ro_config.view_l10n_ro_config_settings
@@ -336,8 +336,14 @@ msgstr "Acest cont va fi folosit pentru avansuri furnizor pentru partenerul actu
 #. module: l10n_ro_config
 #: help:res.company,property_undeductible_account_id:0
 #: help:l10n.ro.config.settings,property_undeductible_account_id:0
-msgid "This account will be used as the undeductible account for account move line."
-msgstr "Acest cont va fi folosit pentru inregistrari nedeductibile."
+msgid "This account will be used as the undeductible expense account for account move line."
+msgstr "Acest cont va fi folosit pentru a inregistra a cheltuiala nedeductibila in nota contabila."
+
+#. module: l10n_ro_config
+#: help:res.company,property_undeductible_tax_account_id:0
+#: help:l10n.ro.config.settings,property_undeductible_tax_account_id:0
+msgid "This account will be used as the undeductible tax account for account move line."
+msgstr "Acest cont va fi folosit pentru a inregistra taxa aferenta unei cheltuieli nedeductibile in nota contabila."
 
 #. module: l10n_ro_config
 #: help:res.company,property_stock_usage_giving_account_id:0
@@ -493,6 +499,12 @@ msgstr "Acest modul va elimina constrangerile legate de jurnale contabile, contu
 #: field:l10n.ro.config.settings,property_undeductible_account_id:0
 msgid "Undeductible Account"
 msgstr "Cont Nedeductibil"
+
+#. module: l10n_ro_config
+#: field:res.company,property_undeductible_tax_account_id:0
+#: field:l10n.ro.config.settings,property_undeductible_tax_account_id:0
+msgid "Undeductible Tax Account"
+msgstr "Cont Taxa Nedeductibila"
 
 #. module: l10n_ro_config
 #: field:account.tax.code,uneligible_tax_code_id:0

@@ -31,14 +31,8 @@ class stock_balance(osv.osv):
 
     _columns = {
 
-        'date': fields.date('Date', size=6, readonly=True),
-        'year': fields.char('Year', size=64, readonly=True),
-        'month': fields.selection([
-            ('01', 'January'), ('02', 'February'), ('03', 'March'),
-            ('04', 'April'), ('05', 'May'), ('06', 'June'), ('07', 'July'),
-            ('08', 'August'), ('09', 'September'), ('10', 'October'),
-            ('11', 'November'), ('12', 'December')], 'Month', readonly=True),
-
+        'date': fields.datetime('Date',  readonly=True),
+ 
 
         'location_id': fields.many2one(
             'stock.location', 'Location', readonly=True, select=True),
@@ -96,7 +90,7 @@ class stock_balance(osv.osv):
          create or replace view stock_balance as (
 
 SELECT
- min(smg.id) AS id, smg.date, smg.year, smg.month,
+ min(smg.id) AS id, smg.date,
  smg.location_id, smg.categ_id, smg.product_id,  smg.product_uom,
  sum(smg.qty_in) AS qty_in,
  sum(smg.amount_in) AS amount_in,
@@ -107,9 +101,7 @@ SELECT
  smg.company_id
  FROM (
   SELECT min(sm.id) AS id,
-    date_trunc('month' , sm.date) AS date,
-    to_char(date_trunc('day' , sm.date), 'YYYY' ) AS year,
-    to_char(date_trunc('day' , sm.date), 'MM' ) AS month,
+    sm.date  AS date,
     sm.location_id, pt.categ_id, sm.product_id, pu.id AS product_uom,
     0 AS qty_in, 0 AS amount_in,
     COALESCE(sum(((sm.product_qty * pu.factor) / pu2.factor)), 0.0) AS qty_out,
@@ -127,9 +119,7 @@ SELECT
       sm.company_id
     UNION
     SELECT min(- sm.id) AS id,
-        date_trunc('month', sm.date) AS date,
-        to_char(date_trunc('day', sm.date), 'YYYY') AS year,
-        to_char(date_trunc('day', sm.date), 'MM') AS month,
+        sm.date AS date,
         sm.location_dest_id AS location_id, pt.categ_id, sm.product_id,
         pu.id AS product_uom,
         COALESCE(sum(((sm.product_qty*pu.factor)/pu2.factor)), 0.0) AS qty_in,
@@ -146,7 +136,7 @@ SELECT
   WHERE ( sm.state   = 'done')
   GROUP BY pt.categ_id, sm.product_id, pu.id, sm.location_dest_id, sm.date,
       sm.company_id) smg
- GROUP BY smg.date, smg.year, smg.month, smg.categ_id, smg.product_id,
+ GROUP BY smg.date,  smg.categ_id, smg.product_id,
  smg.location_id, smg.product_uom, smg.company_id
         )""")
 

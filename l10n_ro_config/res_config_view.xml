@@ -62,6 +62,7 @@
 								<group attrs="{'invisible': [('module_l10n_ro_invoice_line_not_deductible', '&lt;&gt;', True)]}" col="2">
 									<group>
 										<field name="property_undeductible_account_id"/>
+										<field name="property_undeductible_tax_account_id"/>
 									</group>
 									<group>
 									</group>

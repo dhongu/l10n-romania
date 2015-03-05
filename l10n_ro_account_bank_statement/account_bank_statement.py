@@ -90,6 +90,17 @@ class account_bank_statement_line(osv.osv):
                     cr, uid, st_line.statement_id.currency.id, company_currency.id, st_line.amount, context=ctx)
         else:
             amount = st_line.amount
+        to_create = []
+        if st_line.currency_id and st_line.amount_currency and st_line.currency_id.id == company_currency.id:
+            ctx = context.copy()
+            ctx['date'] = datetime.strptime(st_line.statement_id.date, "%Y-%m-%d")
+            amount_currency = currency_obj.compute(
+                cr, uid, statement_currency.id, company_currency.id, st_line.amount, context=ctx)
+            if amount - amount_currency:
+                currency_diff = amount_currency - amount
+                to_create.append(self.get_currency_rate_line(
+                            cr, uid, st_line, currency_diff, move_id, context=context))
+                amount = amount_currency
         bank_st_move_vals = bs_obj._prepare_bank_move_line(
             cr, uid, st_line, move_id, amount, company_currency.id, context=context)
         aml_obj.create(cr, uid, bank_st_move_vals, context=context)
@@ -97,7 +108,6 @@ class account_bank_statement_line(osv.osv):
         st_line_currency = st_line.currency_id or statement_currency
         st_line_currency_rate = st_line.currency_id and (
             st_line.amount_currency / st_line.amount) or False
-        to_create = []
         for mv_line_dict in mv_line_dicts:
             if mv_line_dict.get('is_tax_line'):
                 continue
