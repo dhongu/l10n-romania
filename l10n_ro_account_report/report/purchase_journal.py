@@ -30,7 +30,7 @@ from openerp.report import report_sxw
 
 from operator import itemgetter
 
-
+    
 class purchase_journal(report_sxw.rml_parse):
 
     def __init__(self, cr, uid, name, context=None):
@@ -83,7 +83,7 @@ class purchase_journal(report_sxw.rml_parse):
                         'tva_exig'] = vals['tva_bun'] = vals['tva_invers'] = vals['tva_serv'] = vals['tva_import'] = 0.00
                     vals['neimp'] = vals['scutit'] = 0.00
                     vals['payments'] = []
-                    vals['number'] = inv1.supplier_invoice_number
+                    vals['number'] = inv1.supplier_invoice_number and inv1.supplier_invoice_number or inv1.internal_number
                     vals['date'] = inv1.date_invoice
                     vals['partner'] = inv1.partner_id.name
                     vals['vat'] = ''
@@ -309,7 +309,7 @@ class purchase_journal(report_sxw.rml_parse):
                         pay['base_24'] = pay['base_9'] = pay['base_5'] = 0.00
                         pay['tva_24'] = pay['tva_9'] = pay['tva_5'] = 0.00
                         vals['payments'].append(pay)
-                if vals != {}:
+                if 'number' in vals.keys():
                     inv.append(vals)
 
         lines = [inv1 for inv1 in inv if inv1[
