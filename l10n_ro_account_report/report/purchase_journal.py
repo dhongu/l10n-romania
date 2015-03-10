@@ -30,7 +30,7 @@ from openerp.report import report_sxw
 
 from operator import itemgetter
 
-    
+
 class purchase_journal(report_sxw.rml_parse):
 
     def __init__(self, cr, uid, name, context=None):
