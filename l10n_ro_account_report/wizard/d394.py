@@ -279,11 +279,7 @@ class d394_report(osv.osv_memory):
             if bazainv != 0:
                 cer = {}
                 cereals = []
-                codes = self.pool.get('report.394.code').search(cr, uid, [(
-                    'name', 'in', (
-                        '10011000', '10011900', '10019110', '10019120',
-                        '10019900', '1002', '1003', '1005', '1201', '1205',
-                        '120600', '121291'))])
+                codes = self.pool.get('report.394.code').search(cr, uid, [])
                 if codes:
                     codes = [code394.id for code394 in self.pool.get(
                         'report.394.code').browse(cr, uid, codes)]
@@ -464,11 +460,7 @@ class d394_report(osv.osv_memory):
             if bazainv != 0:
                 cer = {}
                 cereals = []
-                codes = self.pool.get('report.394.code').search(cr, uid, [(
-                    'name', 'in', (
-                        '10011000', '10011900', '10019110', '10019120',
-                        '10019900', '1002', '1003', '1005', '1201', '1205',
-                        '120600', '121291'))])
+                codes = self.pool.get('report.394.code').search(cr, uid, [])
                 if codes:
                     codes = [code394.id for code394 in self.pool.get(
                         'report.394.code').browse(cr, uid, codes)]
