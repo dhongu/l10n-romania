@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_account_bank_statement2">
+  <t t-call="report.html_container">
+  <t t-foreach="docs" t-as="o">
+
+  <!--t t-call="report.internal_layout"-->
+
+<!--  <t t-set="data_report_margin_top" t-value="12"/>
+  <t t-set="data_report_margin_bottom" t-value="12"/>
+  <t t-set="data_report_header_spacing" t-value="8"/>
+-->    
+  <t t-call="l10n_ro_account_report.romanian_layout">
+        
+    <div class="page">
+      <h5 class="text-left">Societatea comerciala: <b><span t-esc="res_company.name"></span></b></h5>
+      <h5 class="text-left">Numar Registu Comertului <b><span t-esc="res_company.company_registry"></span></b></h5>
+      <h5 class="text-left">Cod fiscal: <b><span t-esc="res_company.vat"></span></b></h5>
+      <h5 class="text-left">Adresa: <span t-field="res_company.partner_id.street"/><span t-field="res_company.partner_id.street2"/> <span t-field="res_company.partner_id.city"/> <span t-field="res_company.partner_id.state_id"/></h5>
+      <h4  class="text-center bold" t-field="o.journal_id"> </h4>
+      <div class="oe_structure" />
+        <h5 class="text-left">Data <b><span t-esc="o.date"></span></b></h5>
+        <h5 class="text-left">Perioada <b><span t-esc="o.period_id.name"></span></b></h5>
+        <h5 class="text-left">Sold initial: <b><span t-esc="o['balance_start']"></span></b></h5>
+        <table class="table table-condensed">
+          <thead>
+            <th  class="text-center">Nr Crt</th>
+            <th  class="text-center">Data</th>
+            <th  class="text-center">Partener</th>
+            <th  class="text-center">Explicatia</th>
+            <th  class="text-center">Doc. casa</th>
+            <th  class="text-center">Incasari</th>
+            <th  class="text-center">Plati</th>
+            <th  class="text-center">Sold</th>
+          </thead>
+          <tbody>
+            <t t-set="sold" t-value="o['balance_start']"/>
+            <tr t-foreach="o['line_ids']" t-as="l">
+            <t t-set="sold" t-value="sold+l.amount"/>
+<!--aici obiectul este account.bank.statement.line -->
+            <td><span t-esc="l_index + 1"/></td>
+            <td><span t-esc="l.date"></span><!--span t-esc="formatLang(l.date,date=True)"/--></td>                                     
+            <td class="text-left"><span t-if="l.partner_id"><span t-field="l.partner_id"/></span></td>
+            <td class="text-center"><span t-field="l.name"></span></td>
+            <td class="text-center"><span t-field="l.ref"/></td>
+            <td class="text-right"><span t-if="l.amount &gt; 0"><span t-field="l.amount"/></span></td>
+            <td class="text-right"><span t-if="l.amount &lt; 0"><span t-esc="-l.amount"/></span></td>
+            <td class="text-right"><span t-esc="sold"/></td>
+           </tr>
+          </tbody>
+        </table>
+          <h5 class="text-left">Sold final calculat: <b><span t-esc="o['balance_end']"></span></b></h5>
+          <h5 class="text-left">Sold final introdus: <b><span t-esc="o['balance_end_real']"></span></b></h5>
+        <br></br>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+	     <td class="text-center">Casier</td>
+	     <td class="text-center">Compartiment financiar-contabil</td>
+	   </tr>
+	   <tr>
+	     <td class="text-center"><span style="color:#FFFFFF;">Casier</span></td>
+	     <td class="text-center"><span style="color:#FFFFFF;">Compartiment financiar-contabil</span></td>
+	  </tr>
+	</tbody>
+     </table>
+   </div>
+  </t>
+  </t>
+</t>
+</template>
+
+</data>
+</openerp>
