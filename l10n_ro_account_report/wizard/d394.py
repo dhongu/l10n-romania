@@ -293,28 +293,27 @@ class d394_report(osv.osv_memory):
                             if inv.fiscal_position and ('Taxare Inversa' in
                                inv.fiscal_position.name):
                                 for line in inv.invoice_line:
-                                    if line.product_id.d394_ids:
-                                        for code in line.product_id.d394_ids:
-                                            code = code.id                                            
-                                            if code in codes:
-                                                cer[code]['baza'] += \
-                                                currency_obj.compute(
+                                    if line.product_id.d394_id:
+                                        code = line.product_id.d394_id.id                                            
+                                        if code in codes:
+                                            cer[code]['baza'] += \
+                                            currency_obj.compute(
                                                     cr, uid,
                                                     inv.currency_id.id,
                                                     comp_currency,
                                                     line.price_subtotal,
                                                     context={'date':
                                                              inv.date_invoice}
-                                                    ) or 0.00
-                                                if line.invoice_line_tax_id:
-                                                    taxes = tax_obj.compute_all(
+                                                ) or 0.00
+                                            if line.invoice_line_tax_id:
+                                                taxes = tax_obj.compute_all(
                                                         cr, uid,
                                                         line.product_id.taxes_id,
                                                         line.price_subtotal,
                                                         1,
                                                         product=line.product_id,
                                                         partner=inv.partner_id)
-                                                    cer[code]['tva'] += \
+                                                cer[code]['tva'] += \
                                                     currency_obj.compute(
                                                         cr, uid,
                                                         inv.currency_id.id,
@@ -475,31 +474,29 @@ class d394_report(osv.osv_memory):
                             if inv.fiscal_position and \
                             ('Taxare Inversa' in inv.fiscal_position.name):
                                 for line in inv.invoice_line:
-                                    if line.product_id.d394_ids:
-                                        for code in line.product_id.d394_ids:
-                                            code = code.id
-                                            prod_taxes = \
+                                    if line.product_id.d394_id:
+                                        code = line.product_id.d394_id.id
+                                        prod_taxes = \
                                             line.product_id.supplier_taxes_id
-                                            if code in codes:
-                                                cer[code]['baza'] += \
-                                                currency_obj.compute(
+                                        if code in codes:
+                                            cer[code]['baza'] += \
+                                            currency_obj.compute(
                                                         cr, uid,
                                                         inv.currency_id.id,
                                                         comp_currency,
                                                         line.price_subtotal,
                                                         context={'date':
                                                                  inv.date_invoice}
-                                                        ) or 0.00
-                                                taxes = \
-                                                tax_obj.compute_all(
+                                                    ) or 0.00
+                                            taxes = tax_obj.compute_all(
                                                         cr, uid,
                                                         prod_taxes,
                                                         line.price_subtotal,
                                                         1,
                                                         product=line.product_id,
                                                         partner=inv.partner_id)
-                                                cer[code]['tva'] += \
-                                                currency_obj.compute(
+                                            cer[code]['tva'] += \
+                                            currency_obj.compute(
                                                         cr, uid,
                                                         inv.currency_id.id,
                                                         comp_currency,
@@ -507,7 +504,7 @@ class d394_report(osv.osv_memory):
                                                         taxes['total'],
                                                         context={'date':
                                                                  inv.date_invoice}
-                                                        ) or 0.00
+                                                    ) or 0.00
                     for key in cer.iterkeys():
                         if cer[key]['baza'] != 0:
                             cereals.append(
