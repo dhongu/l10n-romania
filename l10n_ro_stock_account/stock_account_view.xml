@@ -21,7 +21,7 @@
             </field>
         </record>
          
-        <record id="view_picking_form" model="ir.ui.view">
+        <record id="view_picking_form_notice" model="ir.ui.view">
             <field name="name">stock.picking.form.notice</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
@@ -29,21 +29,32 @@
                 <field name="backorder_id" position="after">
 					<field name="notice"/>
                 </field>
+            </field>
+        </record>
+
+        <record id="view_picking_form" model="ir.ui.view">
+            <field name="name">stock.picking.form.notice</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="groups_id" eval="[ (4, ref('account.group_account_user'))]" />
+            <field name="arch" type="xml">
                 <page string="Additional Info" position="after">
-                      <page string="Accounting Entries" groups="account.group_account_user">
+                      <page string="Accounting Entries" >
 						  <field name="acc_move_line_ids" readonly="1"/>
 					  </page>
 				</page> 
             </field>
         </record>
+        
     
         <record id="view_move_form" model="ir.ui.view">
             <field name="name">stock.move.form</field>
             <field name="model">stock.move</field>
             <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="groups_id" eval="[ (4, ref('account.group_account_user'))]" />
             <field name="arch" type="xml">
             	<group name="quants_grp" position="after">
-					<group name="acc_moves" string="Accounting Entries" colspan="4" groups="account.group_account_user">
+					<group name="acc_moves" string="Accounting Entries" colspan="4" >
                         <field name="acc_move_line_ids" readonly="1"/>
                     </group>
 				</group>
@@ -54,12 +65,11 @@
             <field name="name">stock.inventory.form.inherit</field>
             <field name="model">stock.inventory</field>
             <field name="inherit_id" ref="stock.view_inventory_form"/>
+            <field name="groups_id" eval="[ (4, ref('account.group_account_user'))]" />
             <field name="arch" type="xml">
                 <page string="Inventory Adjustments" position="after">
                     <page string="Accounting Entries" attrs="{'invisible': [('state', '!=', 'done')]}">
-						<group name="acc_moves" string="Accounting Entries" colspan="4" groups="account.group_account_user">
                             <field name="acc_move_line_ids" readonly="1"/>
-                        </group>
                     </page>
                 </page>
             </field>

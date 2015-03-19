@@ -120,12 +120,12 @@ class Currency_getter_interface(object):
         except ImportError:
             raise except_orm(
                 'Error !',
-                self.MOD_NAME + 'Unable to import urllib !'
+                 self.service + 'Unable to import urllib !'
             )
         except IOError:
             raise except_orm(
                 'Error !',
-                self.MOD_NAME + 'Web Service does not exist !'
+                 self.service + 'Web Service does not exist !'
             )
 
     def check_rate_date(self, rate_date, max_delta_days):

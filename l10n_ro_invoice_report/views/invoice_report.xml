@@ -37,11 +37,11 @@
 							<strong t-if="o.type == 'in_invoice'">Supplier</strong>
 						</div>
 						<div>
-							<strong t-field="o.partner_id.name" />
+							<strong t-field="o.commercial_partner_id.name" />
 						</div>
 						<div>
 							<strong>Address:</strong>
-							<address t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}' />
+							<address t-field="o.commercial_partner_id" t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}' />
 						</div>
 
 					</div>

@@ -233,7 +233,8 @@ class l10n_ro_config_settings(models.TransientModel):
                          'TVA deductibil 19%', 'TVA deductibil 24%')
             taxes = self.env['account.tax'].search(
                 [('company_id', '=', self.company_id.id), ('name', 'in', tax_names)])
-            if taxes:
+            cols = [col[0] for col in self.env['account.tax']._columns.items()]
+            if 'not_deductible_tax_id' in cols and taxes:
                 for tax in taxes:
                     if not tax.not_deductible_tax_id:
                         not_deduct_tax = self.env['account.tax'].search(

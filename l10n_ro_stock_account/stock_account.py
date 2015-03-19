@@ -148,9 +148,24 @@ class stock_move(osv.Model):
     _inherit = "stock.move"
 
     _columns = {
-        'acc_move_id': fields.many2one('account.move', string='Account move', ondelete='cascade'),
+        'acc_move_id': fields.many2one('account.move', string='Account move', copy=False),
         'acc_move_line_ids': fields.one2many('account.move.line', 'stock_move_id', string='Account move lines'),
     }
+
+
+    # Fix date on stock move from stock picking
+    def onchange_date(self, cr, uid, ids, date, date_expected, context=None):
+        """ On change of Scheduled Date gives a Move date.
+        @param date_expected: Scheduled Date
+        @param date: Move Date
+        @return: Move Date
+        """
+        if ids:
+            move = self.browse(cr, uid, ids[0], context=context)
+            if move.picking_id:
+                date_expected = move.picking_id.date 
+        super(stock_move, self).onchange_date(cr, uid, ids, date, date_expected, context=context)
+
 
     def create_account_move_lines(self, cr, uid, ids, context=None):
         quant_obj = self.pool.get('stock.quant')
@@ -243,6 +258,7 @@ class stock_move(osv.Model):
 class stock_quant(osv.Model):
     _name = "stock.quant"
     _inherit = "stock.quant"
+
 
     def _account_entry_move(self, cr, uid, quants, move, context=None):
         """
@@ -596,8 +612,8 @@ class stock_quant(osv.Model):
                 if move.product_id.taxes_id and move.product_id.taxes_id[0].account_collected_id:
                     acc_src = move.product_id.taxes_id[
                         0].account_collected_id.id or False
-                #if move.company_id.property_account_undeductible:
-                #    acc_dest = move.company_id and move.company_id.property_undeductible_account_id and move.company_id.property_undeductible_account_id.id or False
+                if move.company_id.property_account_undeductible:
+                    acc_dest = move.company_id and move.company_id.property_undeductible_tax_account_id and move.company_id.property_undeductible_tax_account_id.id or False
             if move_type == 'reception_diff':
                 # Receptions in location with inventory kept at list price
                 # Change the accounts with the price difference one (3x8) to
@@ -664,12 +680,13 @@ class stock_picking(osv.Model):
 
     _columns = {
         'acc_move_line_ids': fields.one2many('account.move.line', 'stock_picking_id', string='Generated accounting lines'),
-        'notice': fields.boolean('Is a notice', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]}),
+        'notice': fields.boolean('Is a notice', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]}),               
     }
 
     _defaults = {
         'notice': False,
     }
+
 
     def get_account_move_lines(self, cr, uid, ids, context=None):
         if context is None:
@@ -687,12 +704,16 @@ class stock_picking(osv.Model):
 
     @api.cr_uid_ids_context
     def do_transfer(self, cr, uid, picking_ids, context=None):
+        for pick in self.browse(cr, uid, picking_ids, context=context):
+            self.write(cr, uid, pick.id, {'date_done': pick.date})
         res = super(stock_picking, self).do_transfer(
             cr, uid, picking_ids, context=context)
         self.get_account_move_lines(cr, uid, picking_ids, context=context)
         return res
 
     def action_done(self, cr, uid, picking_ids, context=None):
+        for pick in self.browse(cr, uid, picking_ids, context=context):
+            self.write(cr, uid, pick.id, {'date_done': pick.date})
         res = super(stock_picking, self).action_done(
             cr, uid, picking_ids, context=context)
         self.get_account_move_lines(cr, uid, picking_ids, context=context)
