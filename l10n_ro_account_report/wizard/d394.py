@@ -294,7 +294,7 @@ class d394_report(osv.osv_memory):
                                inv.fiscal_position.name):
                                 for line in inv.invoice_line:
                                     if line.product_id.d394_id:
-                                        code = line.product_id.d394_id.id                                            
+                                        code = line.product_id.d394_id.id
                                         if code in codes:
                                             cer[code]['baza'] += \
                                             currency_obj.compute(
