@@ -11,7 +11,7 @@
   <t t-set="data_report_margin_bottom" t-value="12"/>
   <t t-set="data_report_header_spacing" t-value="8"/>
 -->    
-  <t t-call="l10n_ro_account_report.romanian_layout">
+  <!--t t-call="l10n_ro_account_report.romanian_layout"-->
         
     <div class="page">
       <h5 class="text-left">Societatea comerciala: <b><span t-esc="res_company.name"></span></b></h5>
@@ -37,27 +37,29 @@
           <tbody>
             <tr>
               <td class="text-left" colspan="8"> <b >Sold initial: </b></td>
-              <td class="text-right"> <b><span  t-esc="o['balance_start']"></span></b>
+              <td class="text-right"> <b><span  t-esc="formatLang(o.balance_start , dp='Account')"></span></b>
               </td></tr>
             <t t-set="sold" t-value="o['balance_start']"/>
             <tr t-foreach="o['line_ids']" t-as="l">
             <t t-set="sold" t-value="sold+l.amount"/>
 <!--aici obiectul este account.bank.statement.line -->
             <td><span t-esc="l_index + 1"/></td>
-            <td><span t-esc="l.date"></span><!--span t-esc="formatLang(l.date,date=True)"/--></td>                                     
+            <td><!--span t-esc="l.date"></span-->
+<span t-esc="formatLang(l.date,date=True)"/></td>                                     
             <td class="text-left"><span t-if="l.partner_id"><span t-field="l.partner_id"/></span></td>
             <td class="text-left"><span t-field="l.name"></span></td>
             <td class="text-left"><span t-field="l.ref"/></td>
             <td class="text-left"><span t-if="l.amount &gt; 0">Inc</span>
                                   <span t-if="l.amount &lt; 0">Plt</span></td>
 
-            <td class="text-right"><span t-if="l.amount &gt; 0"><span t-field="l.amount"/></span></td>
-            <td class="text-right"><span t-if="l.amount &lt; 0"><span t-esc="-l.amount"/></span></td>
+            <td class="text-right"><span t-if="l.amount &gt; 0"><span t-esc="formatLang(l.amount , dp='Account')"/></span></td>
+            <td class="text-right"><span t-if="l.amount &lt; 0"><span t-esc="formatLang((-l.amount) , dp='Account')"/></span></td>
             <td class="text-right"><span t-esc="sold"/></td>
            </tr>
             <tr>
               <td class="text-left" colspan="8"> <b >Sold Final: </b></td>
-              <td class="text-right"> <b><span  t-esc="o['balance_end']"></span></b>
+              <td class="text-right"> <b>
+<span  t-esc="formatLang(o.balance_end , dp='Account')"></span></b>
               </td></tr>
 
           </tbody>
@@ -72,14 +74,14 @@
 	     <td class="text-center">Compartiment financiar-contabil</td>
 	   </tr>
 	   <tr>
-	     <td class="text-center"><span style="color:#FFFFFF;">Casier</span></td>
-	     <td class="text-center"><span style="color:#FFFFFF;">Compartiment financiar-contabil</span></td>
+	     <td class="text-center">_</td>
+	     <td class="text-center"></td>
 	  </tr>
 	</tbody>
      </table>
    </div>
   </t>
-  </t>
+  <!--/t-->
 </t>
 </template>
 
