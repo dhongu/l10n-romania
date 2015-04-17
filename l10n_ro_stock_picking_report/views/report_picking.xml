@@ -48,10 +48,11 @@
 						<strong>NRC:</strong>
 						<span t-field="res_company.partner_id.nrc" />
 					</div>
-					<div i-if="res_company.share_capital">
+<!--share capital does not exist -->
+					<!--div i-if="res_company.share_capital">
 						<strong>Share Capital:</strong>
 						<span t-field="res_company.share_capital" />
-					</div>
+					</div-->
 				</div>
 			</div>
 
@@ -142,10 +143,10 @@
 						<strong>NRC:</strong>
 						<span t-field="res_company.partner_id.nrc" />
 					</div>
-					<div i-if="res_company.share_capital">
+					<!--div i-if="res_company.share_capital">
 						<strong>Share Capital:</strong>
 						<span t-field="res_company.share_capital" />
-					</div>
+					</div-->
 				</div>
 				<div class="col-xs-5 col-xs-offset-2">
 					<div t-if="o.partner_id.vat">
