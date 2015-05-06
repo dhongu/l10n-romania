@@ -30,15 +30,6 @@ import requests
 from openerp import models, fields, api, _
 from openerp.exceptions import Warning
 
-try:
-    import vatnumber
-except ImportError:
-    _logger.warning(
-        "VAT validation partially unavailable because the "
-        "`vatnumber` Python library cannot be found. Install it to support "
-        "more countries, for example with `easy_install vatnumber`.")
-    vatnumber = None
-
 ANAF_URL = 'http://static.anaf.ro/static/10/Anaf/TVA_incasare/ultim_%s.zip'
 
 
@@ -161,10 +152,7 @@ VALUES
     def _check_vat_subjected(self):
         vat_s = vat_number = vat_country = False
         if self.vat:
-            vat_country, vat_number = self.vat[
-                :2].lower(), self.vat[
-                2:].replace(
-                ' ', '')
+            vat_country, vat_number = self._split_vat(self.vat)
         if vat_number and vat_country and vat_country.upper() == 'RO':
             res = requests.get(
                 'http://openapi.ro/api/companies/' +
@@ -175,9 +163,7 @@ VALUES
                 if res['vat'] == '1':
                     vat_s = True
         elif vat_number and vat_country:
-            if vatnumber is None:
-                return False
-            vat_s = vatnumber.check_vies(vat_country.upper() + vat_number)
+            vat_s = self.vies_vat_check(vat_country, vat_number)
         return vat_s
 
     @api.one

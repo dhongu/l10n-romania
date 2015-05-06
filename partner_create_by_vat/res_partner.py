@@ -80,13 +80,17 @@ class res_partner(models.Model):
         if vat:
             self.write({'vat': part.vat.upper().replace(" ","")})
         elif part.name and len(part.name.strip())>2 and part.name.strip().upper()[:2]=='RO' and part.name.strip()[2:].isdigit():
-            part.vat = part.name.upper().replace(" ","")
-            self.write( {'vat': part.vat})
-        if not part.vat:
-            raise Warning(_("No VAT number found"))
+            self.write( {'vat': part.name.upper().replace(" ","")})
+        if not part.vat and part.name:
+            try:
+                vat_country, vat_number = self._split_vat(part.name.upper().replace(" ",""))
+                valid = self.vies_vat_check(vat_country, vat_number)
+                if valid:
+                    self.write( {'vat': part.name.upper().replace(" ","")})
+            except:
+                raise Warning(_("No VAT number found"))
 
-        vat_country, vat_number = self._split_vat(part.vat)                
- 
+        vat_country, vat_number = self._split_vat(part.vat)
 
         if part.vat_subjected:
             self.write({'vat_subjected': False})
@@ -152,7 +156,7 @@ class res_partner(models.Model):
                                 state = state[0].id
                         self.write({
                             'name': res['name'].upper(),
-                            'nrc': res['registration_id'].upper(),
+                            'nrc': res['registration_id'] and res['registration_id'].upper() or '',
                             'street': res['address'].title(),
                             'city': res['city'].title(),
                             'phone': res['phone'] and res['phone'] or '',
@@ -174,7 +178,7 @@ class res_partner(models.Model):
                             result.address and
                             result.address != '---'):
                         self.write({
-                            'street': dataTable['Address'].decode('utf-8').title()
+                            'street': result.address.decode('utf-8').title()
                         })
                     self.write({'vat_subjected': result.valid})
                 except:

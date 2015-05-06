@@ -23,10 +23,10 @@
 from openerp.osv import osv, fields
 
 
-class product_template(osv.osv):
-    _inherit = "product.template"
+class product_product(osv.osv):
+    _inherit = "product.product"
     _columns = {
-        'd394_id': fields.many2one('report.394.code', 'D394 code'),
+        'd394_id': fields.many2one('report.394.code', string='D394 codes'),
     }
 
 
@@ -36,4 +36,5 @@ class report_394_code(osv.osv):
     _columns = {
         'name': fields.char('D394 Code', size=16),
         'description': fields.char('Description', size=64),
+        'product_ids': fields.one2many('product.product', 'd394_id', string='Products'),
     }

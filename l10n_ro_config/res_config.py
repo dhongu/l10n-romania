@@ -97,6 +97,8 @@ class l10n_ro_config_settings(models.TransientModel):
                                                   help='This allows you to create partners based on VAT:\n'
                                                   'Romanian partners will be create based on Ministry of Finance / openapi.ro Webservices Datas\n'
                                                   'European partners will be create based on VIES Website Datas (for countries that allow). \n')
+    module_l10n_ro_partner_unique = fields.Boolean('Partners unique by Company, VAT, NRC',
+                                                  help='This allows you to set unique partners by company, VAT and NRC.')
     property_undeductible_account_id = fields.Many2one('account.account', related='company_id.property_undeductible_account_id',
                                                        string="Undeductible Account",
                                                        domain="[('type', '=', 'other'),('company_id','=',company_id)]",

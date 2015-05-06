@@ -133,6 +133,9 @@ class sale_journal(report_sxw.rml_parse):
                                     self.cr, self.uid, inv1.currency_id.id, company.currency_id.id, tax_line.base, dp, context={'date': inv1.date_invoice})
                                 total_vat += currency_obj.compute(
                                     self.cr, self.uid, inv1.currency_id.id, company.currency_id.id, tax_line.amount, dp, context={'date': inv1.date_invoice})
+                            elif ' 0' in tax_line.name and inv1.period_id.id == period_id:
+                                vals['base_0'] += currency_obj.compute(
+                                    self.cr, self.uid, inv1.currency_id.id, company.currency_id.id, tax_line.base, context={'date': inv1.date_invoice})
                     vals['base_neex'] = total_base - base_neex
                     vals['tva_neex'] = total_vat - tva_neex
                     if vals['tva_neex'] < 0.01 and vals['tva_neex'] > -0.01:
