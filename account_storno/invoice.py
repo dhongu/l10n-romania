@@ -41,21 +41,23 @@ class account_invoice(models.Model):
         ctx = dict(self._context)
         if self.journal_id.posting_policy == 'storno':
             credit = debit = 0.0
+            print line
             if self.type in ('out_invoice', 'out_refund'):
-                if line.get('type', 'src') in ('dest'):
+                if line.get('type', 'src') == 'dest':
                     # for OUT_invoice dest (tot. amount goes to debit)
                     debit = line['price']
                 else:  # in('src','tax')
                     credit = line['price'] * (-1)
             else:  # in ('in_invoice', 'in_refund')
-                if line.get('type', 'src') in ('dest'):
+                if line.get('type', 'src') == 'dest':
                     credit = line['price'] * (-1)
                 else:
-                    debit = line['price']
-                    if (line['type'] == 'tax') and self.type == 'in_invoice' and line[
-                            'price'] < 0.00:
+                    if line.get('tax_amount',0) != 0 and line['tax_amount']<0 and line['price']>0 and line['quantity']>0:
                         credit = line['price'] * (-1)
-                        debit = 0.00
+                    elif line.get('tax_amount',0) != 0 and line['tax_amount']>0 and line['price']<0 and line['quantity']>0:
+                        credit = line['price'] * (-1)
+                    else:
+                        debit = line['price']
 
             res['debit'] = debit
             res['credit'] = credit

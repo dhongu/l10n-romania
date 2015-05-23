@@ -91,6 +91,12 @@
 							<strong>Share Capital:</strong>
 							<span t-field="res_company.share_capital" />
 						</div>
+						<div>
+                            
+                            <span t-foreach="o.tax_line" t-as="t">
+                                 <span t-field="t.name"/>
+                            </span>
+                        </div>
 					</div>
 					<div class="col-xs-5 col-xs-offset-2">
 						<div t-if="o.commercial_partner_id.vat">
@@ -107,13 +113,23 @@
 				<br />
 
 			</xpath>
-
+			
+            <xpath expr="//table" position="attributes">
+                <attribute name="class">table table-condensed table-bordered</attribute>
+            </xpath>
+			
 			<xpath expr="//table/thead/tr/th[5]" position="replace">
 				<th class="text-right">Amount</th>
 			</xpath>
 			<xpath expr="//table/thead/tr/th[6]" position="replace">
 				<th class="text-right">Taxes</th>
 			</xpath>
+
+			<xpath expr="//table/thead/tr/th[1]" position="before">
+				<th>Ord</th>
+			</xpath>
+			
+
 
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[3]/span" position="replace">
 				<span t-field="l.price_unit_without_taxes" />
@@ -128,12 +144,16 @@
 				<span t-field="l.price_taxes" />
 			</xpath>
 
+    		<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[1]" position="before">
+				<td><span t-field="l.sequence"/></td>
+			</xpath>
+
 			<xpath expr="//div[@t-if='o.tax_line']" position="replace">
 				<table class="table table-condensed" t-if="o.type == 'out_invoice'">
 					<thead>
 						<tr>
 							<th>Elaborate:</th>
-							<th>Information for delivery:</th>
+							<th>Information for delivery:</th>						
 						</tr>
 					</thead>
 					<tbody>
@@ -159,9 +179,10 @@
 
 
 			<xpath expr="//p[@t-if='o.comment']" position="after">
-				<p t-if="o.type == 'out_invoice'">
-					<span>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6
+				<p t-if="o.type == 'out_invoice'">			
+					<span t-if="not res_company.stamp_image" >Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6
 					</span>
+					<img t-if="res_company.stamp_image" t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 200px;" />
 				</p>
 				
 				<div t-if="o.type == 'out_invoice' and o.payment_ids">

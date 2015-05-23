@@ -276,7 +276,7 @@ class d394_report(osv.osv_memory):
                     'tva': int(round(tva)),
                     'cereals': [],
                 })
-            if bazainv != 0:
+            if nrfactv != 0:
                 cer = {}
                 cereals = []
                 codes = self.pool.get('report.394.code').search(cr, uid, [])
@@ -457,7 +457,7 @@ class d394_report(osv.osv_memory):
                                             context={'date':
                                                      inv.date_invoice}
                                             ) or 0.00
-            if bazainv != 0:
+            if nrfactc != 0:
                 cer = {}
                 cereals = []
                 codes = self.pool.get('report.394.code').search(cr, uid, [])

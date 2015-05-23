@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright (c) 2008 Deltatech All Rights Reserved
-#                    Dorin Hongu <dhongu(@)gmail(.)com
+# Copyright (c) 2015 Deltatech All Rights Reserved
+#                    Dorin Hongu <dhongu(@)gmail(.)com       
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,21 +19,19 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _
-import openerp.addons.decimal_precision as dp
+
+from openerp import models, fields, api
 
 
-class company(models.Model):
-    _inherit = 'res.company'
-
-    share_capital = fields.Float(
-        string='Share Capital',
-        digits=dp.get_precision('Account'),
-        default=200
-    )
-
-    stamp_image = fields.Binary(string='Stamp image')
-
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+class res_currency_rate(models.Model):
+    _inherit = 'res.currency.rate' 
+    
+    @api.one
+    @api.depends('rate')
+    def _compute_rate_inv(self):
+        if self.rate != 0:
+            self.rate_inv = 1 / self.rate
+        else:
+            self.rate_inv = 0
+       
+    rate_inv = fields.Float( string='Inverse Rate',   compute="_compute_rate_inv", digits=(12, 4) ) 

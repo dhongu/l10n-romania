@@ -159,3 +159,21 @@ class account_voucher(osv.osv):
                     }
                     statement_line_obj.create(cr, uid, args, context=context)
         return res
+        
+    def cancel_voucher(self, cr, uid, ids, context=None):
+        reconcile_pool = self.pool.get('account.move.reconcile')
+        move_pool = self.pool.get('account.move')
+        move_line_pool = self.pool.get('account.move.line')
+        for voucher in self.browse(cr, uid, ids, context=context):
+            # refresh to make sure you don't unlink an already removed move
+            voucher.refresh()
+            for line in voucher.move_ids:
+                # refresh to make sure you don't unreconcile an already unreconciled entry
+                line.refresh()
+                if line.reconcile_partial_id:
+                    move_lines = [move_line.id for move_line in line.reconcile_partial_id.line_partial_ids]
+                    move_lines.remove(line.id)
+                    reconcile_pool.unlink(cr, uid, [line.reconcile_partial_id.id])
+                    if len(move_lines) >= 2:
+                        move_line_pool.reconcile_partial(cr, uid, move_lines, 'auto',context=context)
+        return super(account_voucher, self).cancel_voucher(cr, uid, ids, context=context)

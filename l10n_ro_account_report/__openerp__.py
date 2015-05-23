@@ -46,6 +46,7 @@ Romania  - Accounting Reports
              'views/report_trialbalance.xml',
              'views/report_trialbalance_html.xml',
              'views/report_sale_journal.xml',
+             'views/report_account_bank_statement.xml',
              'views/report_sale_journal_html.xml',
              'views/report_purchase_journal.xml',
              'views/report_purchase_journal_html.xml',

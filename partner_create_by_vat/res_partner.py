@@ -178,7 +178,7 @@ class res_partner(models.Model):
                             result.address and
                             result.address != '---'):
                         self.write({
-                            'street': result.address.decode('utf-8').title()
+                            'street': unicode(result.address).title()
                         })
                     self.write({'vat_subjected': result.valid})
                 except:

@@ -9,6 +9,12 @@
                <field name="currency_id" position="after">
                       <field name="share_capital" />   
                </field>
+               
+               <field name="custom_footer"  position="after">
+                      <field name="stamp_image" widget="image"/>   
+                      
+               </field>
+               
             </field>
         </record>
     </data>

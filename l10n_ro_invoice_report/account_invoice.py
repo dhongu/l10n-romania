@@ -28,6 +28,8 @@ import openerp.addons.decimal_precision as dp
 class account_invoice(models.Model):
     _inherit = "account.invoice"
 
+
+
     delegate_id = fields.Many2one('res.partner', string='Delegate',
                                   readonly=True, states={'draft': [('readonly', False)]}, domain=[('is_company', '=', False)])
 
@@ -57,6 +59,10 @@ class account_invoice_line(models.Model):
                 self.price_taxes)
             self.price_unit_without_taxes = self.invoice_id.currency_id.round(
                 self.price_unit_without_taxes)
+
+
+    sequence = fields.Integer(string='Sequence', default=1,
+        help="Gives the sequence of this line when displaying the invoice.")
 
     price_unit_without_taxes = fields.Float(string='Unit Price without taxes',
                                             store=True, readonly=True, compute='_compute_price')
