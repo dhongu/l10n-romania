@@ -19,35 +19,38 @@
 #
 ##############################################################################
 
-from openerp.osv import osv
-from openerp.osv import fields
+ 
+
+
+from openerp import models, fields, api, _
 from openerp.tools.translate import _
-from openerp.tools import config
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+from openerp import SUPERUSER_ID, api
 import openerp.addons.decimal_precision as dp
 
 
-class stock_picking(osv.osv):
+
+class stock_picking(models.Model):
     _inherit = 'stock.picking'
 
-    _columns = {
-        'delegate_id': fields.many2one('res.partner', 'Delegate'),
-        'mean_transp': fields.char('Mean transport', size=20, required=False),
-    }
+    delegate_id =  fields.Many2one('res.partner', string='Delegate')
+    mean_transp =  fields.Char(string='Mean transport', size=20)
 
-    def action_invoice_create(self, cr, uid, ids, journal_id=False, group=False, type='out_invoice', context=None):
-        invoice_obj = self.pool.get('account.invoice')
-        invoice_line_obj = self.pool.get('account.invoice.line')
 
+
+    @api.multi
+    def action_invoice_create(self,   journal_id=False, group=False, type='out_invoice' ):
+        invoices = []
+        context = {}
         if type == 'out_invoice':
-            for picking in self.browse(cr, uid, ids, context=context):
-                # context['date_inv'] = picking.date
+            for picking in self :
+                context = {}
                 context['default_delegate_id'] = picking.delegate_id.id
                 context['default_mean_transp'] = picking.mean_transp
+        self = self.with_context(context)       
+        invoices = super(stock_picking, self).action_invoice_create(journal_id, group, type)
 
-        res = super(stock_picking, self).action_invoice_create(
-            cr, uid, ids, journal_id, group, type, context)
-
-        return res
+        return invoices
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
