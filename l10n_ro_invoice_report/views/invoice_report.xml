@@ -46,7 +46,7 @@
 
 					</div>
 				</div>
-
+																													
 				<div class="row">
 					<div class="col-xs-5">
 						<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
