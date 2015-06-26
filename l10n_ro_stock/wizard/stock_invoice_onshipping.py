@@ -71,7 +71,10 @@ class stock_invoice_onshipping(osv.osv_memory):
     _defaults = {
         'invoice_date': _get_invoice_date,
     }
-
+    
+    
+    # metoda asta este identica cu cea standard 
+    """
     def create_invoice(self, cr, uid, ids, context=None):
         context = dict(context or {})
         picking_pool = self.pool.get('stock.picking')
@@ -90,3 +93,4 @@ class stock_invoice_onshipping(osv.osv_memory):
                                                  type=inv_type,
                                                  context=context)
         return res
+    """

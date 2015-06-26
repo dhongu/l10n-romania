@@ -40,7 +40,7 @@ La factura au fost adugate campurile delegat si mijloc de transport
     """,
 
     "category": "Generic Modules",
-    "depends": ["base", "account", "account_voucher", "l10n_ro"],
+    "depends": ["base", "account", "account_voucher", "l10n_ro_config"],
 
 
     "data": [

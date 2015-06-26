@@ -22,12 +22,17 @@
 
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
+import openerp.addons.decimal_precision as dp
 
 
 class res_company(models.Model):
     _name = 'res.company'
     _inherit = 'res.company'
 
+    share_capital = fields.Float(string='Share Capital', digits=dp.get_precision('Account'), default=200)
+    stamp_image = fields.Binary(string='Stamp image')
+    
+    
     property_stock_usage_giving_account_id = fields.Many2one(
         'account.account', string="Usage Giving Account", domain="[('type', '=', 'other')]", help="This account will be used as the usage giving account in account move line.")
     property_undeductible_account_id = fields.Many2one(
@@ -50,3 +55,5 @@ class res_company(models.Model):
         'Load Bank Statement Templates')
     account_period_close_template_installed = fields.Boolean(
         'Load Account Period Close Templates')
+    
+

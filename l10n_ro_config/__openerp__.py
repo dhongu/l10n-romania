@@ -30,12 +30,13 @@
 Romania Application Configuration
 ------------------------------------------
 
-
+La companie a fost adaugat un camp nou pentru capitalul social
     """,
 
     'data': ['res_config_view.xml',
              'account_view.xml',
              'data/res_currency_data.xml',
+             'company_view.xml',
              ],
     'installable': True,
     'auto_install': True,
