@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-30 11:04+0000\n"
-"PO-Revision-Date: 2015-01-30 11:04+0000\n"
+"POT-Creation-Date: 2015-06-26 01:31+0000\n"
+"PO-Revision-Date: 2015-06-26 01:31+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,7 @@ msgstr "Adresa:"
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_reception
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Amount"
@@ -85,6 +86,7 @@ msgstr "Data"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_consume_voucher
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 msgid "Date:"
 msgstr "Data:"
 
@@ -123,6 +125,7 @@ msgstr "Întocmit:"
 #: field:report.l10n_ro_stock_picking_report.report_consume_voucher,id:0
 #: field:report.l10n_ro_stock_picking_report.report_delivery,id:0
 #: field:report.l10n_ro_stock_picking_report.report_delivery_price,id:0
+#: field:report.l10n_ro_stock_picking_report.report_internal_transfer,id:0
 #: field:report.l10n_ro_stock_picking_report.report_reception,id:0
 #: field:report.l10n_ro_stock_picking_report.report_reception_sale_price,id:0
 msgid "ID"
@@ -134,14 +137,34 @@ msgid "Information for delivery:"
 msgstr "Informații privind livrarea:"
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
+msgid "Internal Transfer:"
+msgstr "Notă de Transfer:"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_internal_transfer
+msgid "Internal transfer"
+msgstr "Notă de Transfer"
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
+msgid "Location destination"
+msgstr "Locație destinație"
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
+msgid "Location source"
+msgstr "Locație Sursă"
+
+#. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Margin"
-msgstr "Adaos"
+msgstr "Margine"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_delivery_sign
 msgid "Mean Transport:"
-msgstr "Mijloc de transport:"
+msgstr "Mijloc transport:"
 
 #. module: l10n_ro_stock_picking_report
 #: field:stock.picking,mean_transp:0
@@ -180,6 +203,7 @@ msgstr "Listă ridicare"
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_reception
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Price"
@@ -189,6 +213,7 @@ msgstr "Preț"
 #: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_delivery
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_reception
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Product"
@@ -198,6 +223,7 @@ msgstr "Produs"
 #: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_delivery
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_reception
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Quantity"
@@ -273,7 +299,7 @@ msgstr "Furnizor"
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 #: view:website:l10n_ro_stock_picking_report.report_totals
 msgid "Taxes"
-msgstr "Taxe"
+msgstr "TVA"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception
@@ -283,6 +309,7 @@ msgstr "Subsemnaţii, membrii comisiei de recepţie, am procedat la recepţionar
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_consume_voucher
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_totals
 msgid "Total"
 msgstr "Total"
@@ -290,7 +317,7 @@ msgstr "Total"
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_totals
 msgid "Total Without Taxes"
-msgstr "Total fara Taxe"
+msgstr "Total fără TVA"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception

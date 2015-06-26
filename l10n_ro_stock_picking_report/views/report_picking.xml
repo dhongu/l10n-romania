@@ -48,11 +48,11 @@
 						<strong>NRC:</strong>
 						<span t-field="res_company.partner_id.nrc" />
 					</div>
-<!--share capital does not exist -->
-					<!--div i-if="res_company.share_capital">
+
+					<div i-if="res_company.share_capital">
 						<strong>Share Capital:</strong>
 						<span t-field="res_company.share_capital" />
-					</div-->
+					</div>
 				</div>
 			</div>
 
@@ -143,10 +143,10 @@
 						<strong>NRC:</strong>
 						<span t-field="res_company.partner_id.nrc" />
 					</div>
-					<!--div i-if="res_company.share_capital">
+					<div i-if="res_company.share_capital">
 						<strong>Share Capital:</strong>
 						<span t-field="res_company.share_capital" />
-					</div-->
+					</div>
 				</div>
 				<div class="col-xs-5 col-xs-offset-2">
 					<div t-if="o.partner_id.vat">
@@ -372,6 +372,97 @@
 				</t>
 			</t>
 		</template>
+
+
+		<template id="report_internal_transfer">
+
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<t t-call="l10n_ro_stock_picking_report.report_address_company" />
+
+							<h2>
+								<span>Internal Transfer:</span>
+								<span t-field="o.name" />
+							</h2>
+							<h3>
+								<span>Date:</span>
+								<span t-esc="formatLang(o.date, date=True)"/>
+							</h3>
+
+							<table class="table table-condensed">
+								<thead>
+									<tr>
+										<th>
+											<strong>Location source</strong>
+										</th>
+										<th>
+											<strong>Location destination</strong>
+										</th>
+										<th>
+											<strong>Product</strong>
+										</th>
+										<th class="text-right">
+											<strong>Quantity</strong>
+										</th>
+										<th class="text-right">
+											<strong>Price</strong>
+										</th>
+										<th class="text-right">
+											<strong>Amount</strong>
+										</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr t-foreach="o.move_lines" t-as="move">
+										<t t-set="line" t-value="get_line(move)" />
+										<td>
+											<span t-field="move.location_id" />
+										</td>
+										<td>
+											<span t-field="move.location_dest_id" />
+										</td>											
+										<td>
+											<span t-field="move.product_id" />
+										</td>
+										<td class="text-right">
+											<span t-field="move.product_uom_qty" />
+											<span t-field="move.product_uom" groups="product.group_uom" />
+										</td>
+										<td class="text-right">
+											<span t-esc="formatLang(move.price_unit)" />
+										</td>
+										<td class="text-right">
+											<span t-esc="formatLang(move.price_unit * move.product_uom_qty)" />
+										</td>
+									</tr>
+								</tbody>
+								<tbody>
+									<tr>
+										<td>
+										</td>
+										<td class="text-right">
+										</td>
+										<td class="text-right">
+											<strong>Total</strong>
+										</td>
+										<td class="text-right">
+											<span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							 
+							<div class="oe_structure" />
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+
 		
 		<template id="report_delivery_price">
 

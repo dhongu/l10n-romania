@@ -40,5 +40,13 @@
             report_type="qweb-pdf"
             name="l10n_ro_stock_picking_report.report_reception_sale_price" 
             file="l10n_ro_stock_picking_report.report_reception_sale_price"    />
+            
+       <report 
+            string="Internal transfer" 
+            id="action_report_internal_transfer" 
+            model="stock.picking" 
+            report_type="qweb-pdf"
+            name="l10n_ro_stock_picking_report.report_internal_transfer" 
+            file="l10n_ro_stock_picking_report.report_internal_transfer"    />
     </data>
 </openerp>

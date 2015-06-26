@@ -44,11 +44,11 @@ class stock_picking(models.Model):
         context = {}
         if type == 'out_invoice':
             for picking in self :
-                context = {}
+                context = self._context.copy()
                 context['default_delegate_id'] = picking.delegate_id.id
                 context['default_mean_transp'] = picking.mean_transp
-        self = self.with_context(context)       
-        invoices = super(stock_picking, self).action_invoice_create(journal_id, group, type)
+        picking = self.with_context(context)       
+        invoices = super(stock_picking, picking ).action_invoice_create(journal_id, group, type)
 
         return invoices
 
