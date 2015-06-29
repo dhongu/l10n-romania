@@ -209,16 +209,21 @@
 					<tr>
 						<td>
 							<span>Name:</span>
+							<span t-field="user.partner_id" />
 						</td>
 						<td>
-							<div t-if="o.delegate_id">
-								<span>Delegate:</span>
-								<span t-field="o.delegate_id" />
-							</div>
-							<div t-if="o.mean_transp">
-								<span>Mean Transport:</span>
-								<span t-field="o.mean_transp" />
-							</div>
+		                    <div>
+		                        <span>Delegate:</span>
+		                        <t t-if="o.delegate_id">
+		                            <span t-field="o.delegate_id"/>
+		                        </t>
+		                    </div>
+		                    <div>
+		                        <span>Mean Transport:</span>
+		                        <t t-if="o.mean_transp">
+		                            <span t-field="o.mean_transp"/>
+		                        </t>
+		                    </div>
 						</td>
 						<td>
 							<span />
@@ -236,10 +241,10 @@
 						<div class="page">
 							<t t-call="l10n_ro_stock_picking_report.report_address" />
 
-							<h2>
+							<h3>
 								<span>Delivery:</span>
 								<span t-field="o.name" />
-							</h2>
+							</h3>
 							<table class="table table-condensed">
 								<thead>
 									<tr>
@@ -263,7 +268,7 @@
 								</tbody>
 							</table>
 
-							<table class="table table-condensed">
+							<table class="table table-condensed table-bordered">
 								<thead>
 									<tr>
 										<th>
@@ -291,6 +296,10 @@
 
 
 							<t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
+	
+							<div t-if="o.invoice_state=='none'">
+								<span>There are not billed according to agreement</span>
+							</div>					
 							<div class="oe_structure" />
 						</div>
 					</t>
@@ -306,16 +315,16 @@
 						<div class="page">
 							<t t-call="l10n_ro_stock_picking_report.report_address_company" />
 
-							<h2>
+							<h3>
 								<span>Consume Voucher:</span>
 								<span t-field="o.name" />
-							</h2>
+							</h3>
 							<h3>
 								<span>Date:</span>
 								<span t-esc="formatLang(o.date, date=True)"/>
 							</h3>
 
-							<table class="table table-condensed">
+							<table class="table table-condensed table-bordered">
 								<thead>
 									<tr>
 										<th>
@@ -382,16 +391,16 @@
 						<div class="page">
 							<t t-call="l10n_ro_stock_picking_report.report_address_company" />
 
-							<h2>
+							<h3>
 								<span>Internal Transfer:</span>
 								<span t-field="o.name" />
-							</h2>
+							</h3>
 							<h3>
 								<span>Date:</span>
 								<span t-esc="formatLang(o.date, date=True)"/>
 							</h3>
 
-							<table class="table table-condensed">
+							<table class="table table-condensed table-bordered">
 								<thead>
 									<tr>
 										<th>
@@ -472,10 +481,10 @@
 						<div class="page">
 							<t t-call="l10n_ro_stock_picking_report.report_address" />
 
-							<h2>
+							<h3>
 								<span>Delivery:</span>
 								<span t-field="o.name" />
-							</h2>
+							</h3>
 							<table class="table table-condensed">
 								<thead>
 									<tr>
@@ -499,7 +508,7 @@
 								</tbody>
 							</table>
 
-							<table class="table table-condensed">
+							<table class="table table-condensed table-bordered">
 								<thead>
 									<tr>
 										<th>
@@ -612,10 +621,10 @@
 						<div class="page">
 							<t t-call="l10n_ro_stock_picking_report.report_address" />
 
-							<h2>
+							<h3>
 								<span>Reception:</span>
 								<span t-field="o.name" />
-							</h2>
+							</h3>
 							<table class="table table-condensed">
 								<thead>
 									<tr>
@@ -659,7 +668,7 @@
 								<span>ascertained the following:</span>
 							</div>
 							<br />
-							<table class="table table-condensed">
+							<table class="table table-condensed table-bordered">
 								<thead>
 									<tr>
 										<th>
@@ -723,10 +732,10 @@
 					<t t-call="report.external_layout">
 						<div class="page">
 							<t t-call="l10n_ro_stock_picking_report.report_address" />
-							<h2>
+							<h3>
 								<span>Reception:</span>
 								<span t-field="o.name" />
-							</h2>
+							</h3>
 							<table class="table table-condensed">
 								<thead>
 									<tr>
@@ -771,7 +780,7 @@
 
 							</div>
 							<br />
-							<table class="table table-condensed">
+							<table class="table table-condensed table-bordered">
 								<thead>
 									<tr>
 										<th>

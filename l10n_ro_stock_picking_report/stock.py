@@ -52,5 +52,14 @@ class stock_picking(models.Model):
 
         return invoices
 
+    @api.multi
+    def picking_print(self):
+        if self.picking_type_code == 'incoming':
+            res = self.env['report'].get_action(self, 'l10n_ro_stock_picking_report.report_reception')
+        elif self.picking_type_code == 'outgoing':
+            res = self.env['report'].get_action(self, 'l10n_ro_stock_picking_report.report_delivery')
+        else:
+            res = self.env['report'].get_action(self, 'l10n_ro_stock_picking_report.report_internal_transfer')
+        return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -337,3 +337,8 @@ msgstr "din localitatea"
 msgid "under the invoice (delivery note) no."
 msgstr "conform facturii (aviz de expediție) nr."
 
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery
+msgid "There are not billed according to agreement"
+msgstr "Nu se facturează conform contract"
