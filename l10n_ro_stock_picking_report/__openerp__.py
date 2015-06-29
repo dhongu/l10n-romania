@@ -35,7 +35,7 @@ Romania - Picking Report layout
     """,
 
     "category": "Generic Modules",
-    "depends": ["base", "stock", 'l10n_ro_config'],
+    "depends": ["base", "stock", 'l10n_ro_config','l10n_ro_stock_account'],
 
 
     "data": [
