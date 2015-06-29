@@ -34,7 +34,7 @@ class product_category(osv.Model):
             type='many2one',
             relation='account.account',
             string="Price Difference Account",
-            help="This account will be used to value price difference between purchase price and cost price."),
+            help="This account will be used to value price difference between purchase price and cost price.")
     }
 
 
@@ -47,7 +47,7 @@ class product_template(osv.Model):
             type='many2one',
             relation='account.account',
             string="Price Difference Account",
-            help="This account will be used to value price difference between purchase price and cost price."),
+            help="This account will be used to value price difference between purchase price and cost price.")
     }
 
     def get_product_accounts(self, cr, uid, product_id, context=None):
@@ -612,7 +612,7 @@ class stock_quant(osv.Model):
                 if move.product_id.taxes_id and move.product_id.taxes_id[0].account_collected_id:
                     acc_src = move.product_id.taxes_id[
                         0].account_collected_id.id or False
-                if move.company_id.property_account_undeductible:
+                if move.company_id.property_undeductible_tax_account_id:
                     acc_dest = move.company_id and move.company_id.property_undeductible_tax_account_id and move.company_id.property_undeductible_tax_account_id.id or False
             if move_type == 'reception_diff':
                 # Receptions in location with inventory kept at list price

@@ -39,9 +39,11 @@ Modulul conține adaptarea mișcărilor contabile bazate pe mișcările de stoc.
 
     """,
 
-    'data': ['product_view.xml',
+    'data': [
              'stock_view.xml',
-             'stock_account_view.xml', ],
+             'stock_account_view.xml',
+             #'product_view.xml',
+              ],
     'installable': True,
     'active': False,
 }
