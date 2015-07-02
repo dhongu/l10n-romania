@@ -82,7 +82,7 @@ msgstr "Locații Inventar"
 #. module: l10n_ro_stock_account
 #: field:stock.picking,notice:0
 msgid "Is a notice"
-msgstr "Este Aviz de Însoțire"
+msgstr "Factură ulterioară"
 
 #. module: l10n_ro_stock_account
 #: model:ir.model,name:l10n_ro_stock_account.model_account_move_line
