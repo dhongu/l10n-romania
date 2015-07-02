@@ -73,7 +73,7 @@ msgstr "Informații privind livrarea:"
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice
 msgid "Invoice"
-msgstr "Factura"
+msgstr "Factura Fiscală"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice_line
@@ -98,7 +98,7 @@ msgstr "Mijloc transport:"
 #. module: l10n_ro_invoice_report
 #: field:account.invoice,mean_transp:0
 msgid "Mean transport"
-msgstr "Mean transport"
+msgstr "Mijloc transport"
 
 #. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
