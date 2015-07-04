@@ -246,8 +246,15 @@ class stock_move(osv.Model):
 
         # If it is a returned stock move, change quantity in invoice with minus
         # (probably to be done in account_storno)
+
         if move.origin_returned_move_id:
-            res['quantity'] = -1 * res['quantity']
+            account_storno = False
+            mod_ids = ir_module.search(cr, uid, [('name', '=', 'account_storno')])
+            if mod_ids:
+                module = ir_module.browse(cr, uid, mod_ids[0], context)  
+                account_storno = module.state in ('installed', 'to install', 'to upgrade')     
+            if   account_storno:                 
+                res['quantity'] = -1 * res['quantity']
         return res
 
 # ----------------------------------------------------------

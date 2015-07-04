@@ -26,25 +26,22 @@ from openerp import models, fields, api, _
 class account_move(models.Model):
     _inherit = 'account.move'
 
-    close_id = fields.Many2one(
-        'account.period.closing', 'Closed Account Period')
-
+    close_id = fields.Many2one('account.period.closing', 'Closed Account Period')    
+         
 
 class account_period_closing(models.Model):
     _name = 'account.period.closing'
     _description = 'Account Period Closing'
 
     name = fields.Char('Name', required=True)
-    company_id = fields.Many2one(
-        'res.company', string='Company', required=True)
+    company_id = fields.Many2one( 'res.company', string='Company', required=True)
     type = fields.Selection(
         [
             ('income', 'Incomes'),
             ('expense', 'Expenses'),
             ('selected', 'Selected')
         ], string='Type', required=True)
-    account_ids = fields.Many2many(
-        'account.account', string='Accounts to close', select=True)
+    account_ids = fields.Many2many(  'account.account', string='Accounts to close', select=True)
     debit_account_id = fields.Many2one(
         'account.account',
         'Closing account, debit',
@@ -63,8 +60,7 @@ class account_period_closing(models.Model):
     def _onchange_type(self):
         account_ids = False
         if self.type and self.type in ('income', 'expense'):
-            user_types = self.env['account.account.type'].search(
-                [('code', '=', self.type)])
+            user_types = self.env['account.account.type'].search( [('code', '=', self.type)])
             self.account_ids = self.env['account.account'].search([
                 ('user_type', 'in', [x.id for x in user_types]),
                 ('type', '!=', 'view'),
@@ -85,10 +81,8 @@ class account_period_closing(models.Model):
         if period:
             ctx['period_from'] = period
             ctx['period_to'] = period
-        account_ids = closing.account_ids.with_context(
-            ctx)._get_children_and_consol()
-        accounts = account_obj.browse(account_ids).with_context(
-            ctx).read(['name', 'balance'])
+        account_ids = closing.account_ids.with_context(ctx)._get_children_and_consol()
+        accounts = account_obj.browse(account_ids).with_context(ctx).read(['name', 'balance'])
         move = self.env['account.move'].create({
             'date': date,
             'journal_id': journal,

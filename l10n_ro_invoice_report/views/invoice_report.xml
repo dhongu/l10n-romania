@@ -179,9 +179,12 @@
 
 
 			<xpath expr="//p[@t-if='o.comment']" position="after">
-				<p t-if="o.type == 'out_invoice'">			
-					<span t-if="not res_company.stamp_image" >Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6
-					</span>
+				<p t-if="o.type == 'out_invoice'">
+				    <sub>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006</sub>
+				    <br/>		
+					<t t-if="not res_company.stamp_image" >
+						<sub>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6</sub>
+					</t>
 					<img t-if="res_company.stamp_image" t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 200px;" />
 				</p>
 				

@@ -15,122 +15,133 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Account:"
 msgstr "Contul:"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Address:"
 msgstr "Adresa:"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Amount"
 msgstr "Suma"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Bank:"
 msgstr "Banca:"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "VAT:"
 msgstr "CUI:"
 
-#. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_company
+#. module: l10n_ro_invoice_report
 msgid "Companies"
 msgstr "Companii"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Customer"
 msgstr "Client"
 
-#. module: l10n_ro_invoice_report
 #: field:account.invoice,delegate_id:0
+#. module: l10n_ro_invoice_report
 msgid "Delegate"
 msgstr "Delegate"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Delegate:"
 msgstr "Delegat:"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Elaborate:"
 msgstr "Întocmit:"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Information for delivery:"
 msgstr "Informații privind livrarea:"
 
-#. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice
+#. module: l10n_ro_invoice_report
 msgid "Invoice"
 msgstr "Factura Fiscală"
 
-#. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice_line
+#. module: l10n_ro_invoice_report
 msgid "Invoice Line"
-msgstr "Linie factura"
+msgstr "Linie factură"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
+msgid "Ord"
+msgstr "Nr.Crt."
+
+#: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
+msgid "Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006"
+msgstr "Sistem propriu de imprimare și numerotare conform Legii 571/2003 privind Codul Fiscal cu modificările și completările ulterioare și OMFP 2226/2006"
+
+#: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6"
-msgstr "Factura circula fără semnătură și ștampilă în acord cu legea 571/2003, art. 115, alin. 6"
+msgstr "Factura circulă fără semnătură și ștampilă în acord cu legea 571/2003, art. 115, alin. 6"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Exchange rate: 1"
 msgstr "Curs valutar: 1"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Mean Transport:"
 msgstr "Mijloc transport:"
 
-#. module: l10n_ro_invoice_report
 #: field:account.invoice,mean_transp:0
+#. module: l10n_ro_invoice_report
 msgid "Mean transport"
 msgstr "Mijloc transport"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "NRC:"
 msgstr "NRC:"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Name:"
 msgstr "Nume:"
 
-#. module: l10n_ro_invoice_report
 #: field:res.company,share_capital:0
+#. module: l10n_ro_invoice_report
 msgid "Share Capital"
 msgstr "Capital social"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Share Capital:"
 msgstr "Capital social:"
 
-#. module: l10n_ro_invoice_report
 #: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
 msgid "Supplier"
 msgstr "Furnizor"
 
-#. module: l10n_ro_invoice_report
 #: field:account.invoice.line,price_taxes:0
+#. module: l10n_ro_invoice_report
 msgid "Taxes"
 msgstr "TVA"
 
-#. module: l10n_ro_invoice_report
 #: field:account.invoice.line,price_unit_without_taxes:0
+#. module: l10n_ro_invoice_report
 msgid "Unit Price without taxes"
 msgstr "Preț fără TVA"
+
