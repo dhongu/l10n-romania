@@ -46,36 +46,36 @@
 
 					</div>
 				</div>
-																													
+				<small>																									
 				<div class="row">
 					<div class="col-xs-5">
 						<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-							<t t-if="bank.footer">
-								<div t-if="bank.bank_name">
+							<div t-if="bank.footer">
+								<t t-if="bank.bank_name">
 									<strong>Bank:</strong>
 									<span t-field="bank.bank_name" />
-								</div>
-								<div t-if="bank.acc_number">
+								</t>
+								<t t-if="bank.acc_number">
 									<strong>Account:</strong>
 									<span t-field="bank.acc_number" />
-								</div>
-							</t>
+								</t>
+							</div>
 						</div>
 					</div>
 					<div class="col-xs-5 col-xs-offset-2">
 						<div t-foreach="o.commercial_partner_id.bank_ids" t-as="bank">
-							<div t-if="bank.bank_name">
+							<t t-if="bank.bank_name">
 								<strong>Bank:</strong>
 								<span t-field="bank.bank_name" />
-							</div>
-							<div t-if="bank.acc_number">
+							</t>
+							<t t-if="bank.acc_number">
 								<strong>Account:</strong>
 								<span t-field="bank.acc_number" />
-							</div>
+							</t>
 						</div>
 					</div>
 				</div>
-
+				</small>
 
 				<div class="row">
 					<div class="col-xs-5">
@@ -87,9 +87,14 @@
 							<strong>NRC:</strong>
 							<span t-field="res_company.partner_id.nrc" />
 						</div>
-						<div i-if="res_company.share_capital">
+						<div t-if="res_company.share_capital">
 							<strong>Share Capital:</strong>
 							<span t-field="res_company.share_capital" />
+						</div>
+						<div t-if="'vat_on_payment' in res_company._columns">
+							<div t-if="res_company.vat_on_payment">
+								<span>Vat on payment</span>
+							</div>
 						</div>
 						<div>
                             
@@ -109,9 +114,17 @@
 						</div>
 					</div>
 				</div>
-				<br />
-				<br />
 
+			</xpath>
+				
+			<xpath expr="//span[@t-field='o.number']" position="after">
+				<span> / </span>
+                <span t-field="o.date_invoice"/>
+			</xpath>
+			
+ 
+			<xpath expr="//div[@class='row mt32 mb32']" position="replace">
+ 				<br/>
 			</xpath>
 			
             <xpath expr="//table" position="attributes">
@@ -127,6 +140,7 @@
 
 			<xpath expr="//table/thead/tr/th[1]" position="before">
 				<th>Ord</th>
+				<t t-set = "nr_crt" t-value="1"/>
 			</xpath>
 			
 
@@ -145,7 +159,10 @@
 			</xpath>
 
     		<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[1]" position="before">
-				<td><span t-field="l.sequence"/></td>
+				<td>
+					<t t-esc="nr_crt"/>
+            		<t t-set = "nr_crt" t-value="nr_crt + 1"/>
+				</td>
 			</xpath>
 
 			<xpath expr="//div[@t-if='o.tax_line']" position="replace">
@@ -163,14 +180,17 @@
 								<span t-field="o.user_id" />
 							</td>
 							<td>
-								<div t-if="o.delegate_id">
+								 <div>
 									<span>Delegate:</span>
 									<span t-field="o.delegate_id" />
-								</div>
-								<div t-if="o.mean_transp">
+								 </div>
+								 <div>
 									<span>Mean Transport:</span>
 									<span t-field="o.mean_transp" />
-								</div>
+								 </div>
+								 <div>
+                            			<span>Signature for receive</span>
+                        		 </div>
 							</td>
 						</tr>
 					</tbody>

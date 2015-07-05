@@ -105,6 +105,17 @@ msgstr "Curs valutar: 1"
 msgid "Mean Transport:"
 msgstr "Mijloc transport:"
 
+#: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
+msgid "Signature for receive"
+msgstr "Signature de primire"
+
+#: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
+msgid "Vat on payment"
+msgstr "TVA la încasare"
+
+
 #: field:account.invoice,mean_transp:0
 #. module: l10n_ro_invoice_report
 msgid "Mean transport"
