@@ -51,27 +51,27 @@
 					<div class="col-xs-5">
 						<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
 							<div t-if="bank.footer">
-								<t t-if="bank.bank_name">
+								<div t-if="bank.bank_name">
 									<strong>Bank:</strong>
 									<span t-field="bank.bank_name" />
-								</t>
-								<t t-if="bank.acc_number">
+								</div>
+								<div t-if="bank.acc_number">
 									<strong>Account:</strong>
 									<span t-field="bank.acc_number" />
-								</t>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-5 col-xs-offset-2">
 						<div t-foreach="o.commercial_partner_id.bank_ids" t-as="bank">
-							<t t-if="bank.bank_name">
+							<div t-if="bank.bank_name">
 								<strong>Bank:</strong>
 								<span t-field="bank.bank_name" />
-							</t>
-							<t t-if="bank.acc_number">
+							</div>
+							<div t-if="bank.acc_number">
 								<strong>Account:</strong>
 								<span t-field="bank.acc_number" />
-							</t>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -122,10 +122,11 @@
                 <span t-field="o.date_invoice"/>
 			</xpath>
 			
- 
+ 			<!--  
 			<xpath expr="//div[@class='row mt32 mb32']" position="replace">
  				<br/>
 			</xpath>
+			-->
 			
             <xpath expr="//table" position="attributes">
                 <attribute name="class">table table-condensed table-bordered</attribute>
@@ -197,16 +198,24 @@
 				</table>
 			</xpath>
 
-
+			<xpath expr="//p[@t-if='o.payment_term.note']" position="after">
+            <p t-if="o.date_due">
+            	<t t-if="o.date_due!=o.date_invoice">
+                <strong>Date Due:</strong>
+                <span t-field="o.date_due"/>
+                </t>
+            </p>
+			</xpath>
+			
 			<xpath expr="//p[@t-if='o.comment']" position="after">
-				<p t-if="o.type == 'out_invoice'">
-				    <sub>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006</sub>
+				<small t-if="o.type == 'out_invoice'">
+				    <div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006</div>
 				    <br/>		
 					<t t-if="not res_company.stamp_image" >
-						<sub>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6</sub>
+						<div>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6</div>
 					</t>
 					<img t-if="res_company.stamp_image" t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 200px;" />
-				</p>
+				</small>
 				
 				<div t-if="o.type == 'out_invoice' and o.payment_ids">
 					<br />

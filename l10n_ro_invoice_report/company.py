@@ -26,11 +26,14 @@ import openerp.addons.decimal_precision as dp
 class company(models.Model):
     _inherit = 'res.company'
 
+    '''
+    share_capital  mutat in l10n_ro_config
     share_capital = fields.Float(
         string='Share Capital',
         digits=dp.get_precision('Account'),
         default=200
     )
+    '''
 
     stamp_image = fields.Binary(string='Stamp image')
 
