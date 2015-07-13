@@ -197,7 +197,7 @@
 					</tbody>
 				</table>
 			</xpath>
-
+<!--
 			<xpath expr="//p[@t-if='o.payment_term.note']" position="after">
             <p t-if="o.date_due">
             	<t t-if="o.date_due!=o.date_invoice">
@@ -206,7 +206,7 @@
                 </t>
             </p>
 			</xpath>
-			
+-->			
 			<xpath expr="//p[@t-if='o.comment']" position="after">
 				<small t-if="o.type == 'out_invoice'">
 				    <div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006</div>
