@@ -23,10 +23,10 @@
 							<strong t-if="o.type == 'out_invoice'">Supplier</strong>
 							<strong t-if="o.type == 'in_invoice'">Customer</strong>
 						</div>
-						<strong t-field="res_company.partner_id.name" />
+						<strong t-field="res_company.partner_id.name"/>
 						<div>
 							<strong>Address:</strong>
-							<address t-field="res_company.partner_id" t-field-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}' />
+							<address t-field="res_company.partner_id" t-field-options="{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}"/>
 						</div>
 
 					</div>
@@ -37,59 +37,59 @@
 							<strong t-if="o.type == 'in_invoice'">Supplier</strong>
 						</div>
 						<div>
-							<strong t-field="o.commercial_partner_id.name" />
+							<strong t-field="o.commercial_partner_id.name"/>
 						</div>
 						<div>
 							<strong>Address:</strong>
-							<address t-field="o.commercial_partner_id" t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}' />
+							<address t-field="o.commercial_partner_id" t-field-options="{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}"/>
 						</div>
 
 					</div>
 				</div>
-				<small>																									
+ 				<small>																			
 				<div class="row">
-					<div class="col-xs-5">
+					<div class="col-xs-6">
 						<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
 							<div t-if="bank.footer">
-								<div t-if="bank.bank_name">
+								<span t-if="bank.bank_name">
 									<strong>Bank:</strong>
-									<span t-field="bank.bank_name" />
-								</div>
-								<div t-if="bank.acc_number">
+									<span t-field="bank.bank_name"/>
+								</span>
+								<span t-if="bank.acc_number">
 									<strong>Account:</strong>
-									<span t-field="bank.acc_number" />
-								</div>
+									<span t-field="bank.acc_number"/>
+								</span>
 							</div>
 						</div>
 					</div>
-					<div class="col-xs-5 col-xs-offset-2">
+					<div class="col-xs-5 col-xs-offset-1">
 						<div t-foreach="o.commercial_partner_id.bank_ids" t-as="bank">
-							<div t-if="bank.bank_name">
+							<span t-if="bank.bank_name">
 								<strong>Bank:</strong>
-								<span t-field="bank.bank_name" />
-							</div>
-							<div t-if="bank.acc_number">
+								<span t-field="bank.bank_name"/>
+							</span>
+							<span t-if="bank.acc_number">
 								<strong>Account:</strong>
-								<span t-field="bank.acc_number" />
-							</div>
+								<span t-field="bank.acc_number"/>
+							</span>
 						</div>
 					</div>
 				</div>
-				</small>
+ 				</small>
 
 				<div class="row">
 					<div class="col-xs-5">
 						<div t-if="res_company.partner_id.vat">
 							<strong>CIF:</strong>
-							<span t-field="res_company.partner_id.vat" />
+							<span t-field="res_company.partner_id.vat"/>
 						</div>
 						<div t-if="res_company.partner_id.nrc">
 							<strong>NRC:</strong>
-							<span t-field="res_company.partner_id.nrc" />
+							<span t-field="res_company.partner_id.nrc"/>
 						</div>
 						<div t-if="res_company.share_capital">
 							<strong>Share Capital:</strong>
-							<span t-field="res_company.share_capital" />
+							<span t-field="res_company.share_capital"/>
 						</div>
 						<div t-if="'vat_on_payment' in res_company._columns">
 							<div t-if="res_company.vat_on_payment">
@@ -106,11 +106,11 @@
 					<div class="col-xs-5 col-xs-offset-2">
 						<div t-if="o.commercial_partner_id.vat">
 							<strong>CIF:</strong>
-							<span t-field="o.commercial_partner_id.vat" />
+							<span t-field="o.commercial_partner_id.vat"/>
 						</div>
 						<div t-if="o.commercial_partner_id.nrc">
 							<strong>NRC:</strong>
-							<span t-field="o.commercial_partner_id.nrc" />
+							<span t-field="o.commercial_partner_id.nrc"/>
 						</div>
 					</div>
 				</div>
@@ -122,11 +122,11 @@
                 <span t-field="o.date_invoice"/>
 			</xpath>
 			
- 			<!--  
+ 			   
 			<xpath expr="//div[@class='row mt32 mb32']" position="replace">
  				<br/>
 			</xpath>
-			-->
+			 
 			
             <xpath expr="//table" position="attributes">
                 <attribute name="class">table table-condensed table-bordered</attribute>
@@ -141,61 +141,69 @@
 
 			<xpath expr="//table/thead/tr/th[1]" position="before">
 				<th>Ord</th>
-				<t t-set = "nr_crt" t-value="1"/>
+				<t t-set="nr_crt" t-value="1"/>
 			</xpath>
 			
 
 
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[3]/span" position="replace">
-				<span t-field="l.price_unit_without_taxes" />
+				<span t-field="l.price_unit_without_taxes"/>
 			</xpath>
 
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[5]/span" position="replace">
-				<span t-field="l.price_subtotal" />
+				<span t-field="l.price_subtotal"/>
 			</xpath>
 
 
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[6]/span" position="replace">
-				<span t-field="l.price_taxes" />
+				<span t-field="l.price_taxes"/>
 			</xpath>
 
     		<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[1]" position="before">
 				<td>
 					<t t-esc="nr_crt"/>
-            		<t t-set = "nr_crt" t-value="nr_crt + 1"/>
+            		<t t-set="nr_crt" t-value="nr_crt + 1"/>
 				</td>
 			</xpath>
 
-			<xpath expr="//div[@t-if='o.tax_line']" position="replace">
-				<table class="table table-condensed" t-if="o.type == 'out_invoice'">
-					<thead>
-						<tr>
-							<th>Elaborate:</th>
-							<th>Information for delivery:</th>						
+
+            <xpath expr="//div[@class='col-xs-4 pull-right']" position="before">       
+                <div class="col-xs-8"  t-if="o.type == 'out_invoice'">
+                	<table class="table table-condensed">
+					 
+						<tr class="border-black">
+							<td>Elaborate:</td>
+							<td>Information for delivery:</td>						
 						</tr>
-					</thead>
-					<tbody>
-						<tr>
+				 
+						<tr class="border-black">
 							<td>
 								<span>Name:</span>
-								<span t-field="o.user_id" />
+								<span t-field="o.user_id"/>
 							</td>
 							<td>
 								 <div>
 									<span>Delegate:</span>
-									<span t-field="o.delegate_id" />
+									<span t-field="o.delegate_id"/>
 								 </div>
 								 <div>
 									<span>Mean Transport:</span>
-									<span t-field="o.mean_transp" />
+									<span t-field="o.mean_transp"/>
 								 </div>
 								 <div>
-                            			<span>Signature for receive</span>
+                            		<span>Signature for receive</span>
                         		 </div>
 							</td>
 						</tr>
-					</tbody>
-				</table>
+			    	</table>
+                </div>
+       
+            </xpath>
+            
+           
+
+			<xpath expr="//div[@t-if='o.tax_line']" position="replace">
+
 			</xpath>
 <!--
 			<xpath expr="//p[@t-if='o.payment_term.note']" position="after">
@@ -211,58 +219,59 @@
 				<small t-if="o.type == 'out_invoice'">
 				    <div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006</div>
 				    <br/>		
-					<t t-if="not res_company.stamp_image" >
+					<t t-if="not res_company.stamp_image">
 						<div>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6</div>
 					</t>
-					<img t-if="res_company.stamp_image" t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 200px;" />
+					<img t-if="res_company.stamp_image" 
+                    t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 200px; "/>
 				</small>
 				
 				<div t-if="o.type == 'out_invoice' and o.payment_ids">
-					<br />
-					<br />
+					<br/>
+					<br/>
 					<div t-foreach="o.payment_ids" t-as="payment" style="border-top: 1px solid black;">
 
 						<t t-if="payment.credit != 0">
 
 							<div>
-								<strong t-field="res_company.partner_id.name" />
+								<strong t-field="res_company.partner_id.name"/>
 							</div>
 							<div>
 								VAT:
-								<span t-field="res_company.partner_id.vat" />
+								<span t-field="res_company.partner_id.vat"/>
 							</div>
 							<div>
 								NRC:
-								<span t-field="res_company.partner_id.nrc" />
+								<span t-field="res_company.partner_id.nrc"/>
 							</div>
-							<address t-field="res_company.partner_id" t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}' />
+							<address t-field="res_company.partner_id" t-field-options="{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}"/>
 							<h4>
 								<span>Voucher:</span>
-								<span t-field="payment.ref" />
+								<span t-field="payment.ref"/>
 								<span>/</span>
-								<span t-field="payment.date" />
+								<span t-field="payment.date"/>
 							</h4>
 							<div>
 								<span>I received from</span>
-								<strong t-field="o.partner_id.name" />
+								<strong t-field="o.partner_id.name"/>
 								<span t-if="o.partner_id.city">
 									from
-									<span t-field="o.partner_id.city" />
-									<span t-field="o.partner_id.street" />
-									<span t-field="o.partner_id.street2" />
+									<span t-field="o.partner_id.city"/>
+									<span t-field="o.partner_id.street"/>
+									<span t-field="o.partner_id.street2"/>
 								</span>
 								,
 
 								<span>amount</span>
 
-								<span t-field="payment.credit" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}' />
+								<span t-field="payment.credit" t-field-options="{"widget": "monetary", "display_currency": "o.currency_id"}"/>
 								(
-								<span t-esc="convert(payment.credit)" />
+								<span t-esc="convert(payment.credit)"/>
 								)
 							</div>
 							<div>
 								Representing counter value of invoice
-								<span t-field="o.number" />
+								<span t-field="o.number"/>
 							</div>
 
 						</t>
@@ -270,7 +279,6 @@
 					</div>
 				</div>
 			</xpath>
-
 
 
 		</template>
