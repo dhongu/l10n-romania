@@ -97,8 +97,7 @@ class Currency_getter_interface(object):
     # Updated currency this arry will contain the final result
     updated_currency = {}
 
-    def get_updated_currency(self, currency_array, main_currency,
-                             max_delta_days):
+    def get_updated_currency(self, currency_array, main_currency,  max_delta_days):
         """Interface method that will retrieve the currency
            This function has to be reinplemented in child
         """
@@ -118,15 +117,9 @@ class Currency_getter_interface(object):
             objfile.close()
             return rawfile
         except ImportError:
-            raise except_orm(
-                'Error !',
-                 self.service + 'Unable to import urllib !'
-            )
+            raise except_orm('Error !', self.service + 'Unable to import urllib !' )
         except IOError:
-            raise except_orm(
-                'Error !',
-                 self.service + 'Web Service does not exist !'
-            )
+            raise except_orm(  'Error !', self.service + 'Web Service does not exist !'   )
 
     def check_rate_date(self, rate_date, max_delta_days):
         """Check date constrains. rate_date must be of datetime type"""
@@ -135,15 +128,19 @@ class Currency_getter_interface(object):
             raise Exception(
                 'The rate timestamp %s is %d days away from today, '
                 'which is over the limit (%d days). '
-                'Rate not updated in OpenERP.' % (rate_date,
-                                                  days_delta,
-                                                  max_delta_days)
+                'Rate not updated in Odoo.' % (rate_date,  days_delta,  max_delta_days)
             )
 
         # We always have a warning when rate_date != today
         if rate_date.date() != datetime.today().date():
             rate_date_str = fields.Date.to_string(rate_date)
-            msg = "The rate timestamp %s is not today's date %s" % \
-                (rate_date_str, fields.Date.today())
+            msg = "The rate timestamp %s is not today's date %s" %   (rate_date_str, fields.Date.today())
             self.log_info = ("\n WARNING : %s") % msg
             _logger.warning(msg)
+
+
+    def get_updated_all_year(self, currency_array, main_currency):
+        """Interface method that will retrieve the currency
+           This function has to be reinplemented in child
+        """
+        raise AbstractMethodError

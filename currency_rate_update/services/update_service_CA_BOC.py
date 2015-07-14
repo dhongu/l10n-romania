@@ -96,4 +96,4 @@ class CA_BOC_getter(Currency_getter_interface):
                                  _('Exchange data format error for '
                                    'Bank of Canada - %s !' % str(curr)))
 
-        return self.updated_currency, self.log_info
+        return self.updated_currency, self.log_info, rate_date_datetime

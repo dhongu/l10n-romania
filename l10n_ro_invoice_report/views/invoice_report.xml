@@ -116,14 +116,22 @@
 				</div>
 
 			</xpath>
+			
+			<xpath expr="//span[@t-if=&quot;o.type == 'out_refund'&quot;]" position="replace">
+				<span t-if="o.type == 'out_refund'">Refund Invoice</span>
+			</xpath>
 
 			<xpath expr="//span[@t-field='o.number']" position="after">
 				<span> / </span>
 				<span t-field="o.date_invoice" />
+				<div t-if="o.type == 'out_refund'">  
+					<span>Refunding invoice</span>
+					<span t-field="o.origin"/>
+				</div>
 			</xpath>
 
 
-			<!--xpath expr="//div[@class='row mt32 mb32']" position="replace">
+			<!--  xpath expr="//div[@class='row mt32 mb32']" position="replace">
 				<br />
 			</xpath -->
 
@@ -168,7 +176,7 @@
 
 
 			<xpath expr="//div[@class='col-xs-4 pull-right']" position="before">
-				<div class="col-xs-8" t-if="o.type == 'out_invoice'">
+				<div class="col-xs-8" t-if="o.type == 'out_invoice' or o.type == 'out_refund' ">
 					<table class="table table-condensed">
 
 						<tr class="border-black">
@@ -216,7 +224,7 @@
 			</xpath>
 
 			<xpath expr="//p[@t-if='o.comment']" position="after">
-				<small t-if="o.type == 'out_invoice'">
+				<small t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
 					<div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006</div>
 
 					<t t-if="not res_company.stamp_image">

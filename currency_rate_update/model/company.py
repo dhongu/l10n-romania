@@ -57,6 +57,6 @@ class res_company(models.Model):
     )
     # List of services to fetch rates
     services_to_use = fields.One2many(
-        'currency.rate.update.service',
-        'company_id',
-        string='Currency update services')
+                'currency.rate.update.service',
+                'company_id',
+                string='Currency update services')

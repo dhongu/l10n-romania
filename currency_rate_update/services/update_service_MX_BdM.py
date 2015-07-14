@@ -81,3 +81,5 @@ class MX_BdM_getter(Currency_getter_interface):
             self.updated_currency[curr] = rate
             logger.debug("Rate retrieved : %s = %s %s" %
                          (main_currency, rate, curr))
+            
+        return self.updated_currency, self.log_info,rate_date_datetime

@@ -84,7 +84,7 @@ msgstr "Linie factură"
 #: view:website:account.report_invoice_document
 #. module: l10n_ro_invoice_report
 msgid "Ord"
-msgstr "Nr.Crt."
+msgstr "Nr. Crt."
 
 #: view:website:account.report_invoice_document
 #. module: l10n_ro_invoice_report
@@ -182,6 +182,17 @@ msgstr "suma"
 #. module: l10n_ro_invoice_report
 msgid "Representing counter value of invoice"
 msgstr "Reprezentând contravaloarea facturii"
+
+
+#: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
+msgid "Refund Invoice"
+msgstr "Factură Fiscală Storno"
+
+#: view:website:account.report_invoice_document
+#. module: l10n_ro_invoice_report
+msgid "Refunding invoice"
+msgstr "Storenază factura"
 
 #: view:website:account.report_voucher
 #. module: l10n_ro_invoice_report

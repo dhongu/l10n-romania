@@ -47,4 +47,4 @@ class YAHOO_getter(Currency_getter_interface):
             else:
                 raise Exception('Could not update the %s' % (curr))
 
-        return self.updated_currency, self.log_info
+        return self.updated_currency, self.log_info, False

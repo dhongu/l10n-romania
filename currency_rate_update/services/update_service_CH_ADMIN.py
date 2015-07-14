@@ -111,4 +111,4 @@ class CH_ADMIN_getter(Currency_getter_interface):
             _logger.debug(
                 "Rate retrieved : 1 %s = %s %s" % (main_currency, rate, curr)
             )
-        return self.updated_currency, self.log_info
+        return self.updated_currency, self.log_info, rate_date_datetime
