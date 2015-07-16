@@ -14,7 +14,7 @@
                -->
                <field name="custom_footer"  position="after">
                       <field name="stamp_image" widget="image"/>   
-                      
+                      <field name="watermark_image" widget="image"/>  
                </field>
                
             </field>

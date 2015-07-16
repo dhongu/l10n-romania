@@ -36,7 +36,7 @@ class company(models.Model):
     '''
 
     stamp_image = fields.Binary(string='Stamp image')
-
+    watermark_image  = fields.Binary(string='Watermark image')
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -131,9 +131,19 @@
 			</xpath>
 
 
-			<!--  xpath expr="//div[@class='row mt32 mb32']" position="replace">
-				<br />
-			</xpath -->
+			<xpath expr="//div[@class='row mt32 mb32']" position="replace">
+			
+ 			<div t-if="company.watermark_image"  class="mb32 col-md-12"  style="
+              -webkit-transform: rotate(-45deg) translateX(-15%);
+              -moz-transform: rotate(-45deg) translateX(-15%);
+              -ms-transform: rotate(-45deg) translateX(-15%);
+              -o-transform: rotate(-45deg) translateX(-15%);
+              transform: rotate(-45deg) translateX(-15%)">  
+
+    		<img t-att-src="'data:image/png;base64,%s' % company.watermark_image" 
+            style="width:100%;text-align:center;position:absolute;opacity:0.05"/>
+			</div>
+			</xpath >
 
 
 			<xpath expr="//table" position="attributes">
