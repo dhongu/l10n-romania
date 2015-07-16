@@ -152,7 +152,10 @@
 				<t t-set="nr_crt" t-value="1" />
 			</xpath>
 
-
+			<xpath expr="//table/thead/tr/th[@groups='sale.group_discount_per_so_line']" position="attributes">
+ 				<attribute name="t-if">with_discount(o)</attribute>
+			</xpath>
+ 
 
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[3]/span" position="replace">
 				<span t-field="l.price_unit_without_taxes" />
@@ -175,6 +178,11 @@
 			</xpath>
 
 
+			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[@groups='sale.group_discount_per_so_line']" position="attributes">
+ 				<attribute name="t-if">with_discount(o)</attribute>
+			</xpath>
+			
+			
 			<xpath expr="//div[@class='col-xs-4 pull-right']" position="before">
 				<div class="col-xs-8" t-if="o.type == 'out_invoice' or o.type == 'out_refund' ">
 					<table class="table table-condensed">

@@ -35,12 +35,19 @@ class report_invoice_print(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time,
             'convert': self._convert,
+            'with_discount':self._with_discount,
         })
 
     def _convert(self, amount):
         amt_ro = amount_to_text_ro(amount)
         return amt_ro
 
+    def _with_discount(self,invoice):
+        res = False
+        for line in invoice.invoice_line:
+            if line.discount <> 0.0:
+                res = True
+        return  res
 
 class report_voucher(osv.AbstractModel):
     _name = 'report.account.report_invoice'
