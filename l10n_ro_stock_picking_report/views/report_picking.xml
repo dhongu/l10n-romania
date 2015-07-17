@@ -94,7 +94,10 @@
 						</div>
 					</div>
 					<div>
-						<strong t-field="o.partner_id.name" />
+					    <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
+                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,s                        
+                        </div>
+                        <strong t-field="o.partner_id.name" />
 					</div>
 					<div>
 						<strong>Address:</strong>
@@ -153,11 +156,11 @@
 				<div class="col-xs-5 col-xs-offset-2">
 					<div t-if="o.partner_id.vat">
 						<strong>CIF:</strong>
-						<span t-field="o.partner_id.vat" />
+						<span t-field="o.partner_id.commercial_partner_id.vat" />
 					</div>
 					<div t-if="o.partner_id.nrc">
 						<strong>NRC:</strong>
-						<span t-field="o.partner_id.nrc" />
+						<span t-field="o.partner_id.commercial_partner_id.nrc" />
 					</div>
 				</div>
 			</div>
