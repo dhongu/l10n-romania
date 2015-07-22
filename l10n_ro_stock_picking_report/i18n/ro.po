@@ -315,6 +315,18 @@ msgid "Total"
 msgstr "Total"
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
+msgid "Signature delivery:"
+msgstr "Semnătură de predare:"
+
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
+msgid "Signature reception:"
+msgstr "Semnătură de primire:"
+
+
+#. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_totals
 msgid "Total Without Taxes"
 msgstr "Total fără TVA"
