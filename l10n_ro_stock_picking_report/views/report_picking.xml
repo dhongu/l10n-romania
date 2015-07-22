@@ -461,11 +461,7 @@
 								</tbody>
 								<tbody>
 									<tr>
-										<td>
-										</td>
-										<td class="text-right">
-										</td>
-										<td class="text-right">
+										<td colspan="5" class="text-right">
 											<strong>Total</strong>
 										</td>
 										<td class="text-right">
@@ -479,8 +475,6 @@
 								<thead>
 									<tr>
 										<th>Signature delivery:</th>
-									</tr>
-									<tr>
 										<th>Signature reception:</th>
 									</tr>
 								</thead>
