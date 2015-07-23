@@ -36,13 +36,21 @@ class stock_picking(models.Model):
     delegate_id =  fields.Many2one('res.partner', string='Delegate')
     mean_transp =  fields.Char(string='Mean transport', size=20)
 
+    @api.model
+    def _get_invoice_vals(self,   key, inv_type, journal_id, move ):
+        res = super(stock_picking, self)._get_invoice_vals(key, inv_type, journal_id, move)
+        if inv_type == 'out_invoice':
+            res['delegate_id'] = move.picking_id.delegate_id.id
+            res['mean_transp'] = move.picking_id.mean_transp
+        return res
 
-
+    """
     @api.multi
     def action_invoice_create(self,   journal_id=False, group=False, type='out_invoice' ):
         invoices = []
-        context = {}
+        
         if type == 'out_invoice':
+            context = {}
             for picking in self :
                 context = self._context.copy()
                 context['default_delegate_id'] = picking.delegate_id.id
@@ -51,7 +59,9 @@ class stock_picking(models.Model):
         invoices = super(stock_picking, picking ).action_invoice_create(journal_id, group, type)
 
         return invoices
-
+    """
+    
+    
     @api.multi
     def picking_print(self):
         if self.picking_type_code == 'incoming':
