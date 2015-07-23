@@ -214,7 +214,7 @@ class stock_move(osv.Model):
         acc_move_obj = self.pool.get('account.move.line')
         for move in self.browse(cr, uid, ids, context=context):
             if move.acc_move_id:
-                acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
+                #acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
                 acc_move_obj.unlink(cr, uid, [move.acc_move_id.id])
         return super(stock_move, self).action_cancel(cr, uid, ids, context=context)
 
@@ -249,6 +249,7 @@ class stock_move(osv.Model):
 
         if move.origin_returned_move_id:
             account_storno = False
+            ir_module = self.pool.get('ir.module.module')
             mod_ids = ir_module.search(cr, uid, [('name', '=', 'account_storno')])
             if mod_ids:
                 module = ir_module.browse(cr, uid, mod_ids[0], context)  
@@ -770,7 +771,7 @@ class stock_picking(osv.Model):
         for pick in self.browse(cr, uid, ids, context=context):
             for move in pick.move_lines:
                 if move.acc_move_id:
-                    acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
+                    #acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
                     acc_move_obj.unlink(cr, uid, [move.acc_move_id.id])
         return super(stock_picking, self).action_cancel(cr, uid, ids, context=context)
 
