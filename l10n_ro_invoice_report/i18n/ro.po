@@ -192,7 +192,7 @@ msgstr "Factură Fiscală Storno"
 #: view:website:account.report_invoice_document
 #. module: l10n_ro_invoice_report
 msgid "Refunding invoice"
-msgstr "Storenază factura"
+msgstr "Stornează factura"
 
 #: view:website:account.report_voucher
 #. module: l10n_ro_invoice_report
