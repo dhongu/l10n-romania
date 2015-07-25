@@ -211,10 +211,10 @@ class stock_move(osv.Model):
         return res
 
     def action_cancel(self, cr, uid, ids, context=None):
-        acc_move_obj = self.pool.get('account.move.line')
+        acc_move_obj = self.pool.get('account.move')
         for move in self.browse(cr, uid, ids, context=context):
             if move.acc_move_id:
-                #acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
+                acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
                 acc_move_obj.unlink(cr, uid, [move.acc_move_id.id])
         return super(stock_move, self).action_cancel(cr, uid, ids, context=context)
 
@@ -767,11 +767,11 @@ class stock_picking(osv.Model):
 
     def action_cancel(self, cr, uid, ids, context=None):
         acc_move_obj = self.pool.get('account.move')
-        acc_move_line_obj = self.pool.get('account.move.line')
+        #acc_move_line_obj = self.pool.get('account.move.line')
         for pick in self.browse(cr, uid, ids, context=context):
             for move in pick.move_lines:
                 if move.acc_move_id:
-                    #acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
+                    acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
                     acc_move_obj.unlink(cr, uid, [move.acc_move_id.id])
         return super(stock_picking, self).action_cancel(cr, uid, ids, context=context)
 

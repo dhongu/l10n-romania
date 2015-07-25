@@ -167,17 +167,27 @@
 			</xpath>
  
 
+            <xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[2]/span" position="replace">
+                <span t-if="o.type == 'out_refund'">(</span>
+                <span t-field="l.quantity"/>
+                <span t-if="o.type == 'out_refund'">)</span>
+            </xpath>
+
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[3]/span" position="replace">
 				<span t-field="l.price_unit_without_taxes" />
 			</xpath>
 
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[5]/span" position="replace">
+			    <span t-if="o.type == 'out_refund'">(</span>
 				<span t-field="l.price_subtotal" />
+			    <span t-if="o.type == 'out_refund'">)</span>	
 			</xpath>
 
 
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[6]/span" position="replace">
+			    <span t-if="o.type == 'out_refund'">(</span>
 				<span t-field="l.price_taxes" />
+			    <span t-if="o.type == 'out_refund'">)</span>
 			</xpath>
 
 			<xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[1]" position="before">
@@ -226,7 +236,29 @@
 
 			</xpath>
 
-
+                 <xpath expr="//table//span[@t-field='o.amount_untaxed']" position="before">
+                    <span t-if="o.type == 'out_refund'">(</span>
+                 </xpath>
+    
+                 <xpath expr="//table//span[@t-field='o.amount_untaxed']" position="after">
+                    <span t-if="o.type == 'out_refund'">)</span>
+                 </xpath>
+    
+                 <xpath expr="//table//span[@t-field='o.amount_tax']" position="before">
+                    <span t-if="o.type == 'out_refund'">(</span>
+                 </xpath>
+    
+                 <xpath expr="//table//span[@t-field='o.amount_tax']" position="after">
+                    <span t-if="o.type == 'out_refund'">)</span>
+                 </xpath>
+    
+                 <xpath expr="//table//span[@t-field='o.amount_total']" position="before">
+                    <span t-if="o.type == 'out_refund'">(</span>
+                 </xpath>
+    
+                 <xpath expr="//table//span[@t-field='o.amount_total']" position="after">
+                    <span t-if="o.type == 'out_refund'">)</span>
+                 </xpath>
 
 			<xpath expr="//div[@t-if='o.tax_line']" position="replace">
 
@@ -256,7 +288,7 @@
 					<br />
 					<div t-foreach="o.payment_ids" t-as="payment" style="border-top: 1px solid black;">
 
-						<t t-if="payment.credit != 0">
+						<t t-if="payment.credit != 0 and payment.journal_id.type == 'cash'">
 
 							<div>
 								<strong t-field="res_company.partner_id.name" />
