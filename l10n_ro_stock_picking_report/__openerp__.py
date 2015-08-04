@@ -30,7 +30,7 @@
 
 Romania - Picking Report layout
 ------------------------------------------
- - Reports for Reception and Delivery
+ - Reports for Reception, Delivery and Internal Transfer
 
     """,
 
