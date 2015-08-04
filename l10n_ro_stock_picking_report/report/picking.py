@@ -32,8 +32,10 @@ class picking_delivery(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time,
             'get_line': self._get_line,
-            'get_totals': self._get_totals,
+            'get_totals': self._get_totals
         })
+
+     
 
     def _get_line(self, move_line):
         res = {'price': 0.0, 'amount': 0.0, 'tax': 0.0, 'amount_tax': 0.0}

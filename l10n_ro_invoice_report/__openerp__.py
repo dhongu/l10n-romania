@@ -31,11 +31,10 @@
 Romania - Invoice Report layout
 ------------------------------------------
 
-
+Funftionalitati
  - factura contine: pretul fara tva, valoare si valoare tva
-
-La companie a fost adaugat un camp nou pentru capitalul social
-La factura au fost adugate campurile delegat si mijloc de transport
+ - La factura au fost adugate campurile delegat si mijloc de transport
+ - la partener se poate adauga un text aditinonal care apara pe facura
 
     """,
 
@@ -48,7 +47,8 @@ La factura au fost adugate campurile delegat si mijloc de transport
         'views/voucher_report.xml',
         'company_view.xml',
         'account_invoice_view.xml',
-        'account_voucher_report.xml'
+        'account_voucher_report.xml',
+        'res_partner_view.xml',
     ],
     "active": False,
     "installable": True,

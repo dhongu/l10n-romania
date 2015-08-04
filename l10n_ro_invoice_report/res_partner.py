@@ -17,36 +17,16 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#
 ##############################################################################
 
-{
-    "name": "Romania - Picking Reports",
-    "version": "1.0",
-    "author": "Dorin Hongu",
-    "website": "",
-
-    "description": """
-
-Romania - Picking Report layout
-------------------------------------------
- - Reports for Reception, Delivery and Internal Transfer
-
-    """,
-
-    "category": "Generic Modules",
-    "depends": ["base", "stock", 'l10n_ro_config','l10n_ro_stock_account'],
+from openerp import models, fields, api, _
+import openerp.addons.decimal_precision as dp
 
 
-    "data": [
-        'l10n_ro_stock_picking_report.xml',
-        'views/report_picking.xml',
-        'stock_view.xml'
+class res_partner(models.Model):
+    _inherit = 'res.partner'
 
-    ],
-    "active": False,
-    "installable": True,
-}
+    info_for_invoice  = fields.Html(string='Additional info for invoice')
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -133,12 +133,13 @@
 
 			<xpath expr="//div[@class='row mt32 mb32']" position="replace">
 			
- 			<div t-if="company.watermark_image"  class="mb32 col-md-12"  style="
-              -webkit-transform: rotate(-45deg) translateX(-15%);
+ 			<div t-if="company.watermark_image"  class="mb32 col-md-12" >
+ 			<!--  style="-webkit-transform: rotate(-45deg) translateX(-15%);
               -moz-transform: rotate(-45deg) translateX(-15%);
               -ms-transform: rotate(-45deg) translateX(-15%);
               -o-transform: rotate(-45deg) translateX(-15%);
-              transform: rotate(-45deg) translateX(-15%)">  
+              transform: rotate(-45deg) translateX(-15%)>" --> 
+              
 
     		<img t-att-src="'data:image/png;base64,%s' % company.watermark_image" 
             style="width:100%;text-align:center;position:absolute;opacity:0.05"/>
@@ -165,7 +166,13 @@
 			<xpath expr="//table/thead/tr/th[@groups='sale.group_discount_per_so_line']" position="attributes">
  				<attribute name="t-if">with_discount(o)</attribute>
 			</xpath>
- 
+ <!-- 
+    Avoid page break inside paragraphs, across pages (when printing):
+                     <tr t-foreach="o.order_line" t-as="line" style="page-break-inside: avoid !important;">
+  -->
+			<xpath expr="//table/tbody[@class='invoice_tbody']/tr" position="attributes">
+ 				<attribute name="style">page-break-inside: avoid !important;</attribute>
+			</xpath>
 
             <xpath expr="//table/tbody[@class='invoice_tbody']/tr/td[2]/span" position="replace">
                 <span t-if="o.type == 'out_refund'">(</span>
@@ -280,8 +287,12 @@
 					<t t-if="not res_company.stamp_image">
 						<div>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6</div>
 					</t>
-					<img t-if="res_company.stamp_image" t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 200px; " />
+					<img t-if="res_company.stamp_image" t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 150px; " />
 				</small>
+
+				<div t-if="o.commercial_partner_id.info_for_invoice">
+					<span t-field="o.commercial_partner_id.info_for_invoice" />	
+				</div>
 
 				<div t-if="o.type == 'out_invoice' and o.payment_ids">
 					<br />

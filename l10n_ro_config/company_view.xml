@@ -11,7 +11,7 @@
                </field>
                
                <field name="custom_footer"  position="after">
-                      <field name="stamp_image" widget="image"/>   
+                      <field name="stamp_image" widget="image"  options="{'size': [150, 150]}"/>   
                </field>
                
             </field>

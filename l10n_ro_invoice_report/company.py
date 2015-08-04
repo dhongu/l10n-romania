@@ -35,7 +35,7 @@ class company(models.Model):
     )
     '''
 
-    stamp_image = fields.Binary(string='Stamp image')
+    #stamp_image = fields.Binary(string='Stamp image')  # mutat in l10n_ro_config
     watermark_image  = fields.Binary(string='Watermark image')
 
 
