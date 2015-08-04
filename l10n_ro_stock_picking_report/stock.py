@@ -28,7 +28,9 @@ from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FO
 from openerp import SUPERUSER_ID, api
 import openerp.addons.decimal_precision as dp
 
-
+class stock_location(models.Model):
+    _inherit = "stock.location"    
+    user_id = fields.Many2one('res.users', string='Manager') 
 
 class stock_picking(models.Model):
     _inherit = 'stock.picking'

@@ -482,9 +482,15 @@
 									<tr>
 										<td>
 											<span>Name:</span>
+											<t f-if="o.location_id.user_id.name">
+												<span t-field="o.location_id.user_id"/>
+											</t>
 										</td>
 										<td>
 											<span>Name:</span>
+										 	<t f-if="o.location_id.user_id.name">
+												<span t-field="o.location_dest_id.user_id"/>
+											</t>
 										</td>
 									</tr>
 								</tbody>
@@ -630,7 +636,11 @@
 				<tbody>
 					<tr>
 						<td>Name</td>
-						<td>Name</td>
+						<td><span>Name</span>
+						<t f-if="o.location_id.user_id.name">
+							<span t-field="o.location_dest_id.user_id"/>
+						</t>
+						</td>
 					</tr>
 					<tr>
 						<td>Signature</td>
