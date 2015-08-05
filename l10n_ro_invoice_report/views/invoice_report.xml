@@ -16,7 +16,6 @@
 		<template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
 
 			<xpath expr="//div[@class='row']" position="replace">
-
 				<div class="row">
 					<div class="col-xs-5">
 						<div>
@@ -114,7 +113,6 @@
 						</div>
 					</div>
 				</div>
-
 			</xpath>
 			
 			<xpath expr="//span[@t-if=&quot;o.type == 'out_refund'&quot;]" position="replace">
