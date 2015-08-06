@@ -11,7 +11,7 @@
 		</template>
 
 
-		<template id="report_header_custom" inherit_id="report.external_layout_header">
+		<template id="header_invoice">
 			<xpath expr="//div[@class='header']" position="replace">
 				<div class="header">
 					<!--div class="row" customize_show="True" >
@@ -156,8 +156,26 @@
 		</template>
 
 
+
+
+		<template id="invoice_layout">
+		    <!-- Multicompany -->
+		    <t t-if="o and 'company_id' in o">
+		        <t t-set="company" t-value="o.company_id"/>
+		    </t>
+		    <t t-if="not o or not 'company_id' in o">
+		        <t t-set="company" t-value="res_company"/>
+		    </t>
+		
+		    <t t-call="l10n_ro_invoice_report.header_invoice"/>
+		    <t t-raw="0"/>
+		    <t t-call="report.external_layout_footer"/>
+		</template>
+
+
 		<template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
-			<xpath expr="//div[@class='page']" position="replace">
+			<xpath expr="//t[@t-call='report.external_layout']" position="replace">
+			<t t-call="l10n_ro_invoice_report.invoice_layout">
 				<div class="page">
 					<t t-set="nr_crt" t-value="1" />
 					<table class="table table-condensed  table-bordered">
@@ -356,6 +374,7 @@
 						</p>
 					</div>
 				</div>
+				</t>
 			</xpath>
 		</template>
 
