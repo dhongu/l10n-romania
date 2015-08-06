@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-01 04:47+0000\n"
-"PO-Revision-Date: 2014-12-01 04:47+0000\n"
+"POT-Creation-Date: 2015-08-05 12:33+0000\n"
+"PO-Revision-Date: 2015-08-05 12:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,209 +15,307 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: view:website:account.report_invoice_document
 #. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
 msgid "Account:"
 msgstr "Contul:"
 
-#: view:website:account.report_invoice_document
-#: view:website:account.report_voucher
 #. module: l10n_ro_invoice_report
+#: field:res.partner,info_for_invoice:0
+msgid "Additional info for invoice"
+msgstr "Informație suplimentară pe factură"
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+#: view:website:report.external_layout_header
 msgid "Address:"
 msgstr "Adresa:"
 
-#: view:website:account.report_invoice_document
 #. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
 msgid "Amount"
 msgstr "Suma"
 
-#: view:website:account.report_invoice_document
 #. module: l10n_ro_invoice_report
-msgid "Bank:"
-msgstr "Banca:"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "VAT:"
-msgstr "CUI:"
-
-#: model:ir.model,name:l10n_ro_invoice_report.model_res_company
-#. module: l10n_ro_invoice_report
-msgid "Companies"
-msgstr "Companii"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Customer"
-msgstr "Client"
-
-#: field:account.invoice,delegate_id:0
-#. module: l10n_ro_invoice_report
-msgid "Delegate"
-msgstr "Delegate"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Delegate:"
-msgstr "Delegat:"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Elaborate:"
-msgstr "Întocmit:"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Information for delivery:"
-msgstr "Informații privind livrarea:"
-
-#: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice
-#. module: l10n_ro_invoice_report
-msgid "Invoice"
-msgstr "Factura Fiscală"
-
-#: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice_line
-#. module: l10n_ro_invoice_report
-msgid "Invoice Line"
-msgstr "Linie factură"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Ord"
-msgstr "Nr. Crt."
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006"
-msgstr "Sistem propriu de imprimare și numerotare conform Legii 571/2003 privind Codul Fiscal cu modificările și completările ulterioare și OMFP 2226/2006"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6"
-msgstr "Factura circulă fără semnătură și ștampilă în acord cu legea 571/2003, art. 115, alin. 6"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Exchange rate: 1"
-msgstr "Curs valutar: 1"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Mean Transport:"
-msgstr "Mijloc transport:"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Signature for receive"
-msgstr "Semnătură de primire"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Vat on payment"
-msgstr "TVA la încasare"
-
-#: field:account.invoice,mean_transp:0
-#. module: l10n_ro_invoice_report
-msgid "Mean transport"
-msgstr "Mijloc transport"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "NRC:"
-msgstr "NRC:"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Name:"
-msgstr "Nume:"
-
-#: field:res.company,share_capital:0
-#. module: l10n_ro_invoice_report
-msgid "Share Capital"
-msgstr "Capital social"
-
-#: view:website:account.report_invoice_document
-#: view:website:account.report_voucher
-#. module: l10n_ro_invoice_report
-msgid "Share Capital:"
-msgstr "Capital social:"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Supplier"
-msgstr "Furnizor"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Date Due:"
-msgstr "Data scadenței:"
-
-#: field:account.invoice.line,price_taxes:0
-#. module: l10n_ro_invoice_report
-msgid "Taxes"
-msgstr "TVA"
-
-#: field:account.invoice.line,price_unit_without_taxes:0
-#. module: l10n_ro_invoice_report
-msgid "Unit Price without taxes"
-msgstr "Preț fără TVA"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "I received from"
-msgstr "Am primit de la"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "from"
-msgstr "din"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "amount"
-msgstr "suma"
-
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Representing counter value of invoice"
-msgstr "Reprezentând contravaloarea facturii"
-
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Refund Invoice"
-msgstr "Factură Fiscală Storno"
-
-#: view:website:account.report_invoice_document
-#. module: l10n_ro_invoice_report
-msgid "Refunding invoice"
-msgstr "Stornează factura"
-
-#: view:website:account.report_voucher
-#. module: l10n_ro_invoice_report
-msgid "Voucher:"
-msgstr "Chitanța:"
-
-#: view:website:account.report_voucher
-#. module: l10n_ro_invoice_report
-msgid "Received from:"
-msgstr "Primit de la:"
-
-#: view:website:account.report_voucher
-#. module: l10n_ro_invoice_report
-msgid "Amount:"
-msgstr "Suma:"
-
-
-#: view:website:account.report_voucher
-#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
 msgid "Amount (in words):"
 msgstr "Suma (în cuvinte):"
 
-#: view:website:account.report_voucher
 #. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "Amount:"
+msgstr "Suma:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Bank:"
+msgstr "Banca:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+#: view:website:report.external_layout_header
+msgid "CIF:"
+msgstr "CIF:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Cancelled Invoice"
+msgstr "Factură anulată"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Comment:"
+msgstr "Comentariu:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_company
+msgid "Companies"
+msgstr "Companii"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Customer"
+msgstr "Client"
+
+#. module: l10n_ro_invoice_report
+#: field:account.invoice,delegate_id:0
+msgid "Delegate"
+msgstr "Delegat"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Delegate:"
+msgstr "Delegat:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Description"
+msgstr "Descriere"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Discount (%)"
+msgstr "Reducere (%)"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Draft Invoice"
+msgstr "Factură ciornă"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Elaborate:"
+msgstr "Întocmit:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Fiscal Position Remark:"
+msgstr "Remarcă poziție fiscală:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "I received from"
+msgstr "Am primit de la"
+
+#. module: l10n_ro_invoice_report
+#: field:report.account.report_invoice,id:0
+#: field:report.l10n_ro_invoice_report.report_voucher,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Information for delivery:"
+msgstr "Informații privind livrarea:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice
+#: view:website:report.external_layout_header
+msgid "Invoice"
+msgstr "Factura Fiscală"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Linie factură"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6"
+msgstr "Factura circulă fără semnătură și ștampilă în acord cu legea 571/2003, art. 115, alin. 6"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Mean Transport:"
+msgstr "Mijloc transport:"
+
+#. module: l10n_ro_invoice_report
+#: field:account.invoice,mean_transp:0
+msgid "Mean transport"
+msgstr "Mijloc transport"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+#: view:website:l10n_ro_invoice_report.report_voucher
+#: view:website:report.external_layout_header
+msgid "NRC:"
+msgstr "NRC:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Name:"
+msgstr "Nume:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Ord"
+msgstr "Nr. Crt."
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "PRO-FORMA"
+msgstr "PRO-FORMA"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_partner
+msgid "Partner"
+msgstr "Partener"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Payment Term:"
+msgstr "Termenul de plată"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006"
+msgstr "Sistem propriu de imprimare și numerotare conform Legii 571/2003 privind Codul Fiscal cu modificările și completările ulterioare și OMFP 2226/2006"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Quantity"
+msgstr "Cantitate"
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "Received from:"
+msgstr "Primit de la:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Refund Invoice"
+msgstr "Factură Fiscală Storno"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Refunding invoice"
+msgstr "Stornează factura"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Representing counter value of invoice"
+msgstr "Reprezentând contravaloarea facturii"
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
 msgid "Representing:"
 msgstr "Reprezentând:"
 
+#. module: l10n_ro_invoice_report
+#: field:res.company,share_capital:0
+msgid "Share Capital"
+msgstr "Capital Social"
+
+#. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.report_voucher
+#: view:website:report.external_layout_header
+msgid "Share Capital:"
+msgstr "Capital social:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Signature for receive"
+msgstr "Semnătură de primire"
+
+#. module: l10n_ro_invoice_report
+#: field:res.company,stamp_image:0
+msgid "Stamp image"
+msgstr "Imagine ștampilă"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Supplier"
+msgstr "Furnizor"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Supplier Invoice"
+msgstr "Factura furnizor"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Supplier Refund"
+msgstr "Restituire furnizor"
+
+#. module: l10n_ro_invoice_report
+#: field:account.invoice.line,price_taxes:0
+#: view:website:account.report_invoice_document
+msgid "Taxes"
+msgstr "TVA"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Total"
+msgstr "Total"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Total Without Taxes"
+msgstr "Total fără TVA"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "Unit Price"
+msgstr "Preț unitar"
+
+#. module: l10n_ro_invoice_report
+#: field:account.invoice.line,price_unit_without_taxes:0
+msgid "Unit Price without taxes"
+msgstr "Preț fără TVA"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "VAT:"
+msgstr "TVA:"
+
+#. module: l10n_ro_invoice_report
+#: view:website:report.external_layout_header
+msgid "Vat on payment"
+msgstr "TVA la încasare"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report.xml,name:l10n_ro_invoice_report.action_report_voucher
+msgid "Voucher"
+msgstr "Voucher"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+#: view:website:l10n_ro_invoice_report.report_voucher
+msgid "Voucher:"
+msgstr "Chitanța:"
+
+#. module: l10n_ro_invoice_report
+#: field:res.company,watermark_image:0
+msgid "Watermark image"
+msgstr "Watermark image"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "amount"
+msgstr "suma"
+
+#. module: l10n_ro_invoice_report
+#: view:website:account.report_invoice_document
+msgid "from"
+msgstr "din"
 
