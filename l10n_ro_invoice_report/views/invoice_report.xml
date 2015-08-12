@@ -26,6 +26,101 @@
 						</div>
 					</div>
 
+<table class="table table-condensed"  style="border-top: initial;">
+    <tr>
+        <td width="50%">
+                		<div>
+							<strong t-if="o.type == 'out_invoice'">Supplier</strong>
+							<strong t-if="o.type == 'in_invoice'">Customer</strong>
+						</div>
+						<strong t-field="res_company.partner_id.name"/>
+						<div>
+						    <strong>Address:</strong>
+							<address t-field="res_company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
+						</div>
+                        <small>
+                       	    <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+								<div t-if="bank.footer">
+									<span t-if="bank.bank_name">
+										<strong>Bank:</strong>
+										<span t-field="bank.bank_name"/>
+									</span>
+									<span t-if="bank.acc_number">
+										<strong>Account:</strong>
+										<span t-field="bank.acc_number"/>
+									</span>
+								</div>
+							</div>
+                        </small>
+
+        </td>
+        <td width="50%">
+    					<div>
+							<strong t-if="o.type == 'out_invoice'">Customer</strong>
+							<strong t-if="o.type == 'in_invoice'">Supplier</strong>
+						</div>
+						<div>
+							<strong t-field="o.commercial_partner_id.name"/>
+						</div>
+						<div>
+							<strong>Address:</strong>
+							<address t-field="o.commercial_partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
+						</div> 
+                        <small>
+                            <div t-foreach="o.commercial_partner_id.bank_ids" t-as="bank">
+    								<span t-if="bank.bank_name">
+    									<strong>Bank:</strong>
+    									<span t-field="bank.bank_name"/>
+    								</span>
+    								<span t-if="bank.acc_number">
+    									<strong>Account:</strong>
+    									<span t-field="bank.acc_number"/>
+    								</span>
+    						</div>
+                        </small>
+
+        </td>
+    </tr>
+    <tr>
+		<td  style="border-top: initial;">
+                  	    <div t-if="res_company.partner_id.vat">
+							<strong>CIF:</strong>
+							<span t-field="res_company.partner_id.vat"/>
+						</div>
+						<div t-if="res_company.partner_id.nrc">
+							<strong>NRC:</strong>
+							<span t-field="res_company.partner_id.nrc"/>
+						</div>
+						<div t-if="res_company.share_capital">
+							<strong>Share Capital:</strong>
+							<span t-field="res_company.share_capital"/>
+						</div>
+						<div t-if="'vat_on_payment' in res_company._columns">
+							<div t-if="res_company.vat_on_payment">
+								<span>Vat on payment</span>
+							</div>
+						</div>
+						<div>
+							<span t-foreach="o.tax_line" t-as="t">
+								<span t-field="t.name"/>
+							</span>
+						</div>		
+    	</td>
+    	<td style="border-top: initial;">
+                        <div t-if="o.commercial_partner_id.vat">
+							<strong>CIF:</strong>
+							<span t-field="o.commercial_partner_id.vat"/>
+						</div>
+						<div t-if="o.commercial_partner_id.nrc">
+							<strong>NRC:</strong>
+							<span t-field="o.commercial_partner_id.nrc"/>
+						</div>    	
+    	</td>
+    </tr>
+</table>
+
+
+<!--  
     			<div class="row">
 					<div class="col-xs-5">
 						<div>
@@ -39,7 +134,20 @@
 						</div>
 
 					</div>
-
+					<div class="col-xs-6">
+							<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+								<div t-if="bank.footer">
+									<span t-if="bank.bank_name">
+										<strong>Bank:</strong>
+										<span t-field="bank.bank_name"/>
+									</span>
+									<span t-if="bank.acc_number">
+										<strong>Account:</strong>
+										<span t-field="bank.acc_number"/>
+									</span>
+								</div>
+							</div>
+					</div>
 					<div class="col-xs-5 col-xs-offset-2">
 						<div>
 							<strong t-if="o.type == 'out_invoice'">Customer</strong>
@@ -57,20 +165,7 @@
 				</div>
 				<small>
 					<div class="row">
-						<div class="col-xs-6">
-							<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-								<div t-if="bank.footer">
-									<span t-if="bank.bank_name">
-										<strong>Bank:</strong>
-										<span t-field="bank.bank_name"/>
-									</span>
-									<span t-if="bank.acc_number">
-										<strong>Account:</strong>
-										<span t-field="bank.acc_number"/>
-									</span>
-								</div>
-							</div>
-						</div>
+
 						<div class="col-xs-5 col-xs-offset-1">
 							<div t-foreach="o.commercial_partner_id.bank_ids" t-as="bank">
 								<span t-if="bank.bank_name">
@@ -123,7 +218,7 @@
 						</div>
 					</div>
 				</div>
-
+-->
                 <h4 class="text-center">
                     <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
@@ -174,7 +269,7 @@
 		
 		    <t t-call="l10n_ro_invoice_report.header_invoice"/>
 		    <t t-raw="0"/>
-		    <t t-call="report.external_layout_footer"/>
+		    <t t-call="l10n_ro_invoice_report.footer_invoice"/>
 		</template>
 
 
@@ -383,6 +478,21 @@
 			</xpath>
 		</template>
 
+
+		<template id="footer_invoice">
+			<xpath expr="//div[@class='footer']" position="replace">
+			    <div class="footer">
+			        <div class="text-right" style="border-top: 1px solid black;">			
+			            <ul class="list-inline">
+			                <li>Page:</li>
+			                <li><span class="page"/></li>
+			                <li>/</li>
+			                <li><span class="topage"/></li>
+			            </ul>
+			        </div>
+			    </div>  
+			</xpath>		
+		</template>
 
 	</data>
 </openerp>

@@ -21,6 +21,11 @@ msgid "Account:"
 msgstr "Contul:"
 
 #. module: l10n_ro_invoice_report
+#: view:website:l10n_ro_invoice_report.footer_invoice
+msgid "Page:"
+msgstr "Pagina:"
+
+#. module: l10n_ro_invoice_report
 #: field:res.partner,info_for_invoice:0
 msgid "Additional info for invoice"
 msgstr "Informație suplimentară pe factură"
