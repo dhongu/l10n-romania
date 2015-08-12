@@ -85,6 +85,21 @@ msgid "Date"
 msgstr "Data"
 
 #. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
+msgid "Draft"
+msgstr "Cirnă"
+
+
+#. module: l10n_ro_stock_picking_report
+#: view:website:l10n_ro_stock_picking_report.report_delivery
+#: view:website:l10n_ro_stock_picking_report.report_delivery_price
+#: view:website:l10n_ro_stock_picking_report.report_internal_transfer
+msgid "Cancelled"
+msgstr "Anulat"
+
+#. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_consume_voucher
 #: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 msgid "Date:"
