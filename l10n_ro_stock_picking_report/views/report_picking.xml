@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 	<data>
-
-
 		<template id="report_address_company">
 			<div class="row">
 				<div class="col-xs-5">
@@ -214,7 +212,9 @@
 					<tr>
 						<td>
 							<span>Name:</span>
-							<span t-field="user.partner_id" />
+							<span t-field="o.location_id.user_id"/>
+							<br/>
+							<br/>
 						</td>
 						<td>
 		                    <div>
@@ -234,6 +234,8 @@
 							<span />
 						</td>
 					</tr>
+
+
 				</tbody>
 			</table>
 		</template>
@@ -249,6 +251,8 @@
 							<h3>
 								<span>Delivery:</span>
 								<span t-field="o.name" />
+								<span t-if="o.state == 'drat'">Draft</span>
+								<span t-if="o.state == 'cancel'">Cancelled</span>
 							</h3>
 							<table class="table table-condensed">
 								<thead>
@@ -302,12 +306,13 @@
 
 							<t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
 	
-							<div t-if="o.invoice_state=='none'">
-								<span>There are not billed according to agreement</span>
-							</div>	
+	
 							<div t-if="o.note">
 								<span t-field="o.note" />
-							</div>							
+							</div>	
+							<div t-if="o.invoice_state=='none'">
+								<span>There are not billed according to agreement</span>
+							</div>										
 							<div class="oe_structure" />
 						</div>
 					</t>
@@ -324,6 +329,8 @@
 							<t t-call="l10n_ro_stock_picking_report.report_address_company" />
 
 							<h3>
+								<span t-if="o.state == 'drat'">Draft</span>
+								<span t-if="o.state == 'cancel'">Cancelled</span>
 								<span>Consume Voucher:</span>
 								<span t-field="o.name" />
 							</h3>
@@ -403,23 +410,37 @@
 							<t t-call="l10n_ro_stock_picking_report.report_address_company" />
 
 							<h3>
+
 								<span>Internal Transfer:</span>
 								<span t-field="o.name" />
+								<span t-if="o.state == 'drat'">Draft</span>
+								<span t-if="o.state == 'cancel'">Cancelled</span>
 							</h3>
 							<h3>
 								<span>Date:</span>
 								<span t-esc="formatLang(o.date, date=True)"/>
 							</h3>
+							
+							<table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td><strong>Location source</strong></td>
+                                        <td><strong>Location destination</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span t-field="o.location_id"/></td>
+                                        <td><span t-field="o.location_dest_id"/></td>
+                                    </tr>
+                                </tbody>
+							</table>
 
+<
+							
 							<table class="table table-condensed table-bordered">
 								<thead>
 									<tr>
-										<th>
-											<strong>Location source</strong>
-										</th>
-										<th>
-											<strong>Location destination</strong>
-										</th>
 										<th>
 											<strong>Product</strong>
 										</th>
@@ -437,13 +458,7 @@
 								</thead>
 								<tbody>
 									<tr t-foreach="o.move_lines" t-as="move">
-										<t t-set="line" t-value="get_line(move)" />
-										<td>
-											<span t-field="move.location_id" />
-										</td>
-										<td>
-											<span t-field="move.location_dest_id" />
-										</td>											
+										<t t-set="line" t-value="get_line(move)" />											
 										<td>
 											<span t-field="move.product_id" />
 										</td>
@@ -518,6 +533,8 @@
 							<h3>
 								<span>Delivery:</span>
 								<span t-field="o.name" />
+								<span t-if="o.state == 'drat'">Draft</span>
+								<span t-if="o.state == 'cancel'">Cancelled</span>
 							</h3>
 							<table class="table table-condensed">
 								<thead>
