@@ -424,8 +424,8 @@
 							<table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <td><strong>Location source</strong></td>
-                                        <td><strong>Location destination</strong></td>
+                                        <th><strong>Location source</strong></th>
+                                        <th><strong>Location destination</strong></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -436,7 +436,7 @@
                                 </tbody>
 							</table>
 
-<
+
 							
 							<table class="table table-condensed table-bordered">
 								<thead>
