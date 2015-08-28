@@ -124,7 +124,7 @@ class account_asset_asset(models.Model):
             WHERE
                 l.asset_id = %s GROUP BY l.asset_id """, (self.id,))
         res = dict(self._cr.fetchall())
-        self.value_residual = self.purchase_value + \
+        self.value_residual = self.purchase_value - \
             res.get(self.id, 0.0) - self.salvage_value
 
     category_id = fields.Many2one('account.asset.category', 'Asset Category', required=True, change_default=True, readonly=True, states={

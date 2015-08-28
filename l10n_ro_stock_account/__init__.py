@@ -21,4 +21,5 @@
 ##############################################################################
 
 import account
+import purchase
 import stock_account

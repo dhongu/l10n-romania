@@ -200,11 +200,15 @@ class stock_move(osv.Model):
         return True
 
     def action_done(self, cr, uid, ids, context=None):
+        for move in self.browse(cr, uid, ids, context=context):
+            for link in move.linked_move_operation_ids:
+                self.pool['stock.pack.operation'].write(cr, uid, [link.operation_id.id], {'location_id': move.location_id.id,
+                                                                                          'location_dest_id':  move.location_dest_id.id})
         res = super(stock_move, self).action_done(
             cr, uid, ids, context=context)
         for move in self.browse(cr, uid, ids, context=context):
             if move.picking_id:
-                self.write(cr, uid, [move.id], {'date': move.picking_id.date})
+                self.write(cr, uid, [move.id], {'date': move.picking_id.date}, context=context)
             if not move.acc_move_id:
                 self.create_account_move_lines(
                     cr, uid, [move.id], context=context)
@@ -214,8 +218,8 @@ class stock_move(osv.Model):
         acc_move_obj = self.pool.get('account.move')
         for move in self.browse(cr, uid, ids, context=context):
             if move.acc_move_id:
-                acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
-                acc_move_obj.unlink(cr, uid, [move.acc_move_id.id])
+                acc_move_obj.button_cancel(cr, uid, [move.acc_move_id.id], context=context)
+                acc_move_obj.unlink(cr, uid, [move.acc_move_id.id], context=context)
         return super(stock_move, self).action_cancel(cr, uid, ids, context=context)
 
     def _get_invoice_line_vals(self, cr, uid, move, partner, inv_type, context=None):
@@ -389,7 +393,8 @@ class stock_quant(osv.Model):
             # Change context to create account moves for cost of goods
             # delivered  (e.g. 607 = 371)
             ctx['notice'] = False
-            ctx['type'] = 'delivery'
+            if move.location_dest_id.usage != 'internal':
+                ctx['type'] = 'delivery'
             # Change context to create account moves for collected VAT in case
             # of minus in inventory  (e.g. 635 = 4427)
             if move.location_dest_id.usage == 'inventory':
@@ -595,6 +600,13 @@ class stock_quant(osv.Model):
         journal_id, acc_src, acc_dest, acc_valuation = super(
             stock_quant, self)._get_accounting_data_for_valuation(cr, uid, move, context=context)
 
+        if move.location_id.usage == 'internal' and move.location_dest_id.usage == 'internal':
+            acc_dest = False
+            acc_dest = move.product_id.property_stock_account_input and move.product_id.property_stock_account_input.id or False
+            if not acc_dest:
+                acc_dest = move.product_id.categ_id.property_stock_account_input_categ and move.product_id.categ_id.property_stock_account_input_categ.id or False
+
+        
         if move.location_id.property_stock_account_output_location:
             acc_src = move.location_id.property_stock_account_output_location.id
         if move.location_dest_id.property_stock_account_input_location:

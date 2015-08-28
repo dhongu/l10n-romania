@@ -133,7 +133,6 @@ class account_voucher(osv.Model):
             current_currency,
             context=context)
         move_line_obj = self.pool.get('account.move.line')
-        print moves
         if moves:
             for move in moves[1]:
                 inv_line = voucher_line = False

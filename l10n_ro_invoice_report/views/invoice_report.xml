@@ -30,8 +30,8 @@
     <tr>
         <td width="50%">
                 		<div>
-							<strong t-if="o.type == 'out_invoice'">Supplier</strong>
-							<strong t-if="o.type == 'in_invoice'">Customer</strong>
+							<strong t-if="o.type in ['out_invoice', 'out_refund']">Supplier</strong>
+							<strong t-if="o.type in ['in_invoice', 'in_refund']">Customer</strong>
 						</div>
 						<strong t-field="res_company.partner_id.name"/>
 						<div>
@@ -56,8 +56,8 @@
         </td>
         <td width="50%">
     					<div>
-							<strong t-if="o.type == 'out_invoice'">Customer</strong>
-							<strong t-if="o.type == 'in_invoice'">Supplier</strong>
+							<strong t-if="o.type in ['out_invoice', 'out_refund']">Customer</strong>
+							<strong t-if="o.type in ['in_invoice', 'in_refund']">Supplier</strong>
 						</div>
 						<div>
 							<strong t-field="o.commercial_partner_id.name"/>
@@ -120,105 +120,6 @@
 </table>
 
 
-<!--  
-    			<div class="row">
-					<div class="col-xs-5">
-						<div>
-							<strong t-if="o.type == 'out_invoice'">Supplier</strong>
-							<strong t-if="o.type == 'in_invoice'">Customer</strong>
-						</div>
-						<strong t-field="res_company.partner_id.name"/>
-						<div>
-							<strong>Address:</strong>
-							<address t-field="res_company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
-						</div>
-
-					</div>
-					<div class="col-xs-6">
-							<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-								<div t-if="bank.footer">
-									<span t-if="bank.bank_name">
-										<strong>Bank:</strong>
-										<span t-field="bank.bank_name"/>
-									</span>
-									<span t-if="bank.acc_number">
-										<strong>Account:</strong>
-										<span t-field="bank.acc_number"/>
-									</span>
-								</div>
-							</div>
-					</div>
-					<div class="col-xs-5 col-xs-offset-2">
-						<div>
-							<strong t-if="o.type == 'out_invoice'">Customer</strong>
-							<strong t-if="o.type == 'in_invoice'">Supplier</strong>
-						</div>
-						<div>
-							<strong t-field="o.commercial_partner_id.name"/>
-						</div>
-						<div>
-							<strong>Address:</strong>
-							<address t-field="o.commercial_partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
-						</div>
-
-					</div>
-				</div>
-				<small>
-					<div class="row">
-
-						<div class="col-xs-5 col-xs-offset-1">
-							<div t-foreach="o.commercial_partner_id.bank_ids" t-as="bank">
-								<span t-if="bank.bank_name">
-									<strong>Bank:</strong>
-									<span t-field="bank.bank_name"/>
-								</span>
-								<span t-if="bank.acc_number">
-									<strong>Account:</strong>
-									<span t-field="bank.acc_number"/>
-								</span>
-							</div>
-						</div>
-					</div>
-				</small>
-
-				<div class="row">
-					<div class="col-xs-5">
-						<div t-if="res_company.partner_id.vat">
-							<strong>CIF:</strong>
-							<span t-field="res_company.partner_id.vat"/>
-						</div>
-						<div t-if="res_company.partner_id.nrc">
-							<strong>NRC:</strong>
-							<span t-field="res_company.partner_id.nrc"/>
-						</div>
-						<div t-if="res_company.share_capital">
-							<strong>Share Capital:</strong>
-							<span t-field="res_company.share_capital"/>
-						</div>
-						<div t-if="'vat_on_payment' in res_company._columns">
-							<div t-if="res_company.vat_on_payment">
-								<span>Vat on payment</span>
-							</div>
-						</div>
-						<div>
-
-							<span t-foreach="o.tax_line" t-as="t">
-								<span t-field="t.name"/>
-							</span>
-						</div>
-					</div>
-					<div class="col-xs-5 col-xs-offset-2">
-						<div t-if="o.commercial_partner_id.vat">
-							<strong>CIF:</strong>
-							<span t-field="o.commercial_partner_id.vat"/>
-						</div>
-						<div t-if="o.commercial_partner_id.nrc">
-							<strong>NRC:</strong>
-							<span t-field="o.commercial_partner_id.nrc"/>
-						</div>
-					</div>
-				</div>
--->
                 <h4 class="text-center">
                     <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
@@ -241,11 +142,8 @@
     				</div>
                 </h4>
          		<div t-if="company.watermark_image"  class="mb32 col-md-12" >
-         			<!--  style="-webkit-transform: rotate(-45deg) translateX(-15%);
-                      -moz-transform: rotate(-45deg) translateX(-15%);
-                      -ms-transform: rotate(-45deg) translateX(-15%);
-                      -o-transform: rotate(-45deg) translateX(-15%);
-                      transform: rotate(-45deg) translateX(-15%)>" --> 
+
+
                       
         
             		<img t-att-src="'data:image/png;base64,%s' % company.watermark_image" 
@@ -300,9 +198,13 @@
 									<span t-field="l.name" />
 								</td>
 								<td class="text-right">
-									<span t-if="o.type == 'out_refund'">(</span>
-									<span t-field="l.quantity" />
-									<span t-if="o.type == 'out_refund'">)</span>
+									<t t-if="o.type == 'out_refund'">
+										<t t-set="quantity" t-value="-1*l.quantity" />
+										<t t-esc="quantity" />
+									</t>
+									<t t-if="not o.type == 'out_refund'">
+										<span t-field="l.quantity" />	
+									</t>								 
 									<span t-field="l.uos_id" groups="product.group_uom" />
 								</td>
 								<td class="text-right">
@@ -312,14 +214,22 @@
 									<span t-field="l.discount" />
 								</td>
 								<td class="text-right">
-									<span t-if="o.type == 'out_refund'">(</span>
-									<span t-field="l.price_subtotal" />
-									<span t-if="o.type == 'out_refund'">)</span>
+									<t t-if="o.type == 'out_refund'">
+										<t t-set="price_subtotal" t-value="-1*l.price_subtotal" />
+										<t t-esc="price_subtotal" />
+									</t>
+									<t t-if="not o.type == 'out_refund'"> 
+									<span   t-field="l.price_subtotal" />
+									</t> 
 								</td>
 								<td class="text-right">
-									<span t-if="o.type == 'out_refund'">(</span>
-									<span t-field="l.price_taxes" />
-									<span t-if="o.type == 'out_refund'">)</span>
+									<t t-if="o.type == 'out_refund'">
+										<t t-set="price_taxes" t-value="-1*l.price_taxes" />
+										<t t-esc="price_taxes" />
+									</t>
+									<t t-if="not o.type == 'out_refund'">									 
+									<span   t-field="l.price_taxes" />
+									</t> 
 								</td>
 							</tr>
 						</tbody>
@@ -364,18 +274,28 @@
 											<strong>Total Without Taxes</strong>
 										</td>
 										<td class="text-right">
-											<span t-if="o.type == 'out_refund'">(</span>
-											<span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
-
-											<span t-if="o.type == 'out_refund'">)</span>
+											 <t t-if="o.type == 'out_refund'">
+												<t t-set="amount_untaxeds" t-value="-1*o.amount_untaxed" />
+												<t t-esc="amount_untaxeds"/> <span  t-field="o.currency_id.symbol" />
+											</t>
+											<t t-if="not o.type == 'out_refund'">
+											<span  t-field="o.amount_untaxed" 
+													t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
+											</t>
+ 
 										</td>
 									</tr>
 									<tr>
 										<td>Taxes</td>
 										<td class="text-right">
-											<span t-if="o.type == 'out_refund'">(</span>
-											<span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
-											<span t-if="o.type == 'out_refund'">)</span>
+											<t t-if="o.type == 'out_refund'">
+												<t t-set="amount_tax" t-value="-1*o.amount_tax" />
+												<t t-esc="amount_tax"/> <span  t-field="o.currency_id.symbol" />
+											</t>
+											<t t-if="not o.type == 'out_refund'">
+											<span  t-field="o.amount_tax" 
+												t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
+ 											</t>
 										</td>
 									</tr>
 									<tr class="border-black">
@@ -383,9 +303,13 @@
 											<strong>Total</strong>
 										</td>
 										<td class="text-right">
-											<span t-if="o.type == 'out_refund'">(</span>
-											<span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
-											<span t-if="o.type == 'out_refund'">)</span>
+											<t t-if="o.type == 'out_refund'">
+												<t t-set="amount_total" t-value="-1*o.amount_total" />
+												<t t-esc="amount_total"/> <span  t-field="o.currency_id.symbol" />
+											</t>
+											<t t-if="not o.type == 'out_refund'">
+												<span   t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
+ 											</t>
 										</td>
 									</tr>
 								</table>

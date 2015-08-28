@@ -41,7 +41,6 @@ class account_invoice(models.Model):
         ctx = dict(self._context)
         if self.journal_id.posting_policy == 'storno':
             credit = debit = 0.0
-            print line
             if self.type in ('out_invoice', 'out_refund'):
                 if line.get('type', 'src') == 'dest':
                     # for OUT_invoice dest (tot. amount goes to debit)

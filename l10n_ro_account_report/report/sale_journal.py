@@ -293,7 +293,7 @@ class sale_journal(report_sxw.rml_parse):
                     inv.append(vals)
                 # Adding undeductible vat and inverse taxation colected VAT
                 # amount from purchase
-                if inv1.type in ['in_invoice', 'in_refund']:
+                if inv1.type in ['in_invoice', 'in_refund'] and inv1.period_id.id == period_id:
                     not_deductible = False
                     for inv_line in inv1.invoice_line:
                         if inv_line.not_deductible:

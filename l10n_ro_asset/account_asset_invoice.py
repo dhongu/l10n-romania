@@ -59,7 +59,7 @@ class account_invoice_line(models.Model):
                 ctx1 = context.copy()
                 ctx1.update({'date': line.invoice_id.date_invoice})
                 price = currency_obj.compute(
-                    cr, uid, line.invoice_id.currency_id.id, line.invoice_id.company_id.currency_id.id, line.price_subtotal, context=context)
+                    cr, uid, line.invoice_id.currency_id.id, line.invoice_id.company_id.currency_id.id, line.price_subtotal, context=ctx1)
                 if line.asset_category_id.prorata:
                     new_date = line.invoice_id.date_invoice
                 else:

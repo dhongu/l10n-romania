@@ -25,10 +25,11 @@
     "author": "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
     "category": "Romania Adaptation",
-    "depends": ['l10n_ro_config'],
+    "depends": ['l10n_ro_config', 'account_storno'],
     "description": """
-Romania  - Account Constrains
-------------------------------------------
+ 
+Romania  - Account Currency Reevaluation
+ 
 
 
     """,

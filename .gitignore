@@ -51,3 +51,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+
+# ANAF Data
+/l10n_ro_fiscal_validation/data

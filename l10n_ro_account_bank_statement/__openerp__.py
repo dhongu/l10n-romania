@@ -33,9 +33,7 @@ Romania  - Bank Statement Operations
 
     """,
 
-    'data': ['security/account_security.xml',
-             'bank_statement_operation_template.xml',
-             'bank_statement_import.xml', ],
+    'data': ['bank_statement_import.xml', ],
     'installable': True,
     'auto_install': False,
 }
