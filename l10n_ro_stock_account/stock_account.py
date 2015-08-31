@@ -200,11 +200,13 @@ class stock_move(osv.Model):
         return True
 
     def action_done(self, cr, uid, ids, context=None):
+        """
         for move in self.browse(cr, uid, ids, context=context):
             for link in move.linked_move_operation_ids:
                 if link.operation_id:
                     self.pool['stock.pack.operation'].write(cr, uid, [link.operation_id.id], {'location_id': move.location_id.id,
                                                                                               'location_dest_id':  move.location_dest_id.id})
+        """
         res = super(stock_move, self).action_done(
             cr, uid, ids, context=context)
         for move in self.browse(cr, uid, ids, context=context):
