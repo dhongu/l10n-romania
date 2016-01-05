@@ -211,7 +211,7 @@ class d394_report(osv.osv_memory):
                                                             inv.date_invoice}
                                                    ) or 0.00
                                 if any(i in tax_line.name for i in
-                                   ('24', ' 9', ' 5', ' 0')):
+                                   ('24', '20', ' 9', ' 5', ' 0')):
                                     baza += currency_obj.compute(
                                                 cr, uid,
                                                 inv.currency_id.id,
