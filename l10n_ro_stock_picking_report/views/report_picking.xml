@@ -786,6 +786,130 @@
 			</t>
 		</template>
 
+
+		<template id="report_reception_no_tax">
+
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t t-call="report.external_layout">
+						<div class="page">
+							<t t-call="l10n_ro_stock_picking_report.report_address" />
+
+							<h3>
+								<span>Reception:</span>
+								<span t-field="o.name" />
+							</h3>
+							<table class="table table-condensed">
+								<thead>
+									<tr>
+										<th>
+											<strong>Origin</strong>
+										</th>
+										<th>
+											<strong>Date</strong>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<span t-field="o.origin" />
+										</td>
+										<td>
+											<t t-esc="formatLang(o.date, date=True)" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+							<div>
+								<span>The undersigned, members of the reception, we proceeded to receive material values supplied by</span>
+								<strong>
+									<span t-field="o.partner_id.name" />
+								</strong>
+
+								<span t-if="o.partner_id.city">
+									from the city
+
+									<strong>
+										<span t-field="o.partner_id.city" />
+									</strong>
+								</span>
+								<span>under the invoice (delivery note) no.</span>
+								<strong>
+									<span t-field="o.origin" />
+								</strong>
+								<span>ascertained the following:</span>
+							</div>
+							<br />
+							<table class="table table-condensed table-bordered">
+								<thead>
+									<tr>
+										<th>
+											<strong>Product</strong>
+										</th>
+										<th class="text-right">
+											<strong>Quantity</strong>
+										</th>
+										<th class="text-right">
+											<strong>Price</strong>
+										</th>
+										<th class="text-right">
+											<strong>Amount</strong>
+										</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr t-foreach="o.move_lines" t-as="move">
+										<t t-set="line" t-value="get_line(move)" />
+										<td>
+											<span t-field="move.product_id" />
+										</td>
+										<td class="text-right">
+											<span t-field="move.product_uom_qty" />
+											<span t-field="move.product_uom" groups="product.group_uom" />
+										</td>
+										<td class="text-right">
+											<span t-esc="formatLang(line['price'])" />
+										</td>
+										<td class="text-right">
+											<span t-esc="formatLang(line['amount'])" />
+										</td>
+
+									</tr>
+								</tbody>
+							</table>
+
+			<div class="row">
+				<t t-set="totals" t-value="get_totals(o.move_lines)" />
+				<div class="col-xs-4 pull-right">
+					<table class="table table-condensed">
+						<tr class="border-black">
+							<td>
+								<strong>Total</strong>
+							</td>
+							<td class="text-right">
+								<span t-esc="formatLang(totals['amount'], currency_obj=res_company.currency_id)" />
+							</td>
+						</tr>
+
+					</table>
+				</div>
+			</div>
+
+							<t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
+							<div t-if="o.note">
+								<span t-field="o.note" />
+							</div>	
+							<div class="oe_structure" />
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+
+
 		<template id="report_reception_sale_price">
 
 			<t t-call="report.html_container">
