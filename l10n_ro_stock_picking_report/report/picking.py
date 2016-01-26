@@ -172,6 +172,13 @@ class report_reception(osv.AbstractModel):
     _wrapped_report_class = picking_reception
 
 
+class report_reception_no_tax(osv.AbstractModel):
+    _name = 'report.l10n_ro_stock_picking_report.report_reception_no_tax'
+    _inherit = 'report.abstract_report'
+    _template = 'l10n_ro_stock_picking_report.report_reception_no_tax'
+    _wrapped_report_class = picking_reception
+
+
 class report_reception_sale_price(osv.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_reception_sale_price'
     _inherit = 'report.abstract_report'

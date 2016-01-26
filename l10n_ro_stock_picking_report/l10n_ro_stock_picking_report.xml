@@ -32,6 +32,14 @@
             report_type="qweb-pdf"
             name="l10n_ro_stock_picking_report.report_reception" 
             file="l10n_ro_stock_picking_report.report_reception"    />
+
+        <report 
+            string="Reception without tax" 
+            id="action_report_reception_no_tax" 
+            model="stock.picking" 
+            report_type="qweb-pdf"
+            name="l10n_ro_stock_picking_report.report_reception_no_tax" 
+            file="l10n_ro_stock_picking_report.report_reception_no_tax"    />
             
         <report 
             string="Reception with sale price" 

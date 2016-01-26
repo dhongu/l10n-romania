@@ -32,12 +32,14 @@ msgstr "Adresa:"
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Amount"
 msgstr "Suma"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Amount with taxes"
 msgstr "Valoare cu TVA"
@@ -79,6 +81,7 @@ msgstr "Client"
 #: view:website:l10n_ro_stock_picking_report.report_delivery
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 #: view:website:l10n_ro_stock_picking_report.report_reception_sign
 msgid "Date"
@@ -206,6 +209,7 @@ msgstr "Nume:"
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Origin"
 msgstr "Referința"
@@ -220,6 +224,7 @@ msgstr "Listă ridicare"
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Price"
 msgstr "Preț"
@@ -230,6 +235,7 @@ msgstr "Preț"
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Product"
 msgstr "Produs"
@@ -240,6 +246,7 @@ msgstr "Produs"
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_internal_transfer
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Quantity"
 msgstr "Cantitate"
@@ -267,6 +274,7 @@ msgstr "Recepție cu preț de vânzare"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "Reception:"
 msgstr "Notă de Recepție și Constatare Diferențe:"
@@ -311,6 +319,7 @@ msgstr "Furnizor"
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_delivery_price
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 #: view:website:l10n_ro_stock_picking_report.report_totals
 msgid "Taxes"
@@ -318,6 +327,7 @@ msgstr "TVA"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "The undersigned, members of the reception, we proceeded to receive material values supplied by"
 msgstr "Subsemnaţii, membrii comisiei de recepţie, am procedat la recepţionarea valorilor materiale furnizate de firma"
@@ -348,18 +358,21 @@ msgstr "Total fără TVA"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "ascertained the following:"
 msgstr "constatându-se următoarele:"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "from the city"
 msgstr "din localitatea"
 
 #. module: l10n_ro_stock_picking_report
 #: view:website:l10n_ro_stock_picking_report.report_reception
+#: view:website:l10n_ro_stock_picking_report.report_reception_no_tax
 #: view:website:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "under the invoice (delivery note) no."
 msgstr "conform facturii (aviz de expediție) nr."
