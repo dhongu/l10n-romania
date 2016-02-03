@@ -103,10 +103,10 @@ class d394_report(osv.osv_memory):
             'den': data_company.partner_id.name,
             'adresa': ', '.join([
                 data_company.state_id and data_company.state_id.name,
-                data_company.city or '',
-                data_company.street or '',
-                data_company.zip or '']),
-            'telefon': data_company.phone or '',
+                data_company.city,
+                data_company.street,
+                data_company.zip]),
+            'telefon': data_company.phone,
             'totalPlata_A': 0,
             'nrCui': 0,
             'nrFactL': 0,
@@ -211,7 +211,7 @@ class d394_report(osv.osv_memory):
                                                             inv.date_invoice}
                                                    ) or 0.00
                                 if any(i in tax_line.name for i in
-                                   ('24', ' 9', ' 5', ' 0')):
+                                   ('24', '20', ' 9', ' 5', ' 0')):
                                     baza += currency_obj.compute(
                                                 cr, uid,
                                                 inv.currency_id.id,
@@ -230,19 +230,11 @@ class d394_report(osv.osv_memory):
                                                 ) or 0.00
 
                             for line in inv.invoice_line:
-                                taxes = tax_obj.compute_all(
-                                            cr, uid,
-                                            line.product_id.taxes_id,
-                                            line.price_subtotal,
-                                            1,
-                                            product=line.product_id,
-                                            partner=line.invoice_id.partner_id)
                                 tvainv += currency_obj.compute(
                                               cr, uid,
                                               inv.currency_id.id,
                                               comp_currency,
-                                              taxes['total_included'] -
-                                              taxes['total'],
+                                              line.price_normal_taxes-line.price_taxes,
                                               context={'date':
                                                        inv.date_invoice}
                                               ) or 0.00

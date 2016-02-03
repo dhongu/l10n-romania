@@ -74,7 +74,7 @@ class account_invoice(models.Model):
             if self.journal_id.posting_policy == 'storno':
                 line2 = {}
                 for x, y, l in line:
-                    hash = self.inv_line_characteristic_hashcode(inv, l)
+                    hash = self.inv_line_characteristic_hashcode(l)
                     side = abs(l['credit']) > 0.0 and 'credit' or 'debit'
                     if l['credit'] == 0.00 and l['debit'] == 0:
                         tmp_c = '-'.join((hash, 'credit'))

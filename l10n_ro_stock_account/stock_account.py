@@ -786,7 +786,7 @@ class stock_picking(osv.Model):
         for pick in self.browse(cr, uid, ids, context=context):
             for move in pick.move_lines:
                 if move.acc_move_id:
-                    acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
+                    acc_move_obj.button_cancel(cr, uid, [move.acc_move_id.id])
                     acc_move_obj.unlink(cr, uid, [move.acc_move_id.id])
         return super(stock_picking, self).action_cancel(cr, uid, ids, context=context)
 
@@ -795,7 +795,7 @@ class stock_picking(osv.Model):
         for pick in self.browse(cr, uid, ids, context=context):
             for move in pick.move_lines:
                 if move.acc_move_id:
-                    acc_move_obj.cancel(cr, uid, [move.acc_move_id.id])
+                    acc_move_obj.button_cancel(cr, uid, [move.acc_move_id.id])
                     acc_move_obj.unlink(cr, uid, [move.acc_move_id.id])
         return super(stock_picking, self).action_unlink(cr, uid, ids, context=context)
 

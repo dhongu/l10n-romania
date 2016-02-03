@@ -181,8 +181,8 @@ class l10n_ro_config_settings(models.TransientModel):
         installed = self.env['ir.module.module'].search(
             [('name', '=', 'account_vat_on_payment'), ('state', '=', 'installed')])
         if installed:
-            tax_code_names = ('TVA 5%', 'TVA 9%', 'TVA 19%', 'TVA 24%',
-                              'Baza TVA 5%', 'Baza TVA 9%', 'Baza TVA 19%', 'Baza TVA 24%')
+            tax_code_names = ('TVA 5%', 'TVA 9%', 'TVA 19%', 'TVA 20%', 'TVA 24%',
+                              'Baza TVA 5%', 'Baza TVA 9%', 'Baza TVA 19%', 'Baza TVA 20%', 'Baza TVA 24%')
             tax_codes = self.env['account.tax.code'].search(
                 [('company_id', '=', self.company_id.id), ('name', 'in', tax_code_names)])
             unnelig_vat_colect_tax_code = self.env['account.tax.code'].search(
@@ -232,7 +232,8 @@ class l10n_ro_config_settings(models.TransientModel):
             [('name', '=', 'l10n_ro_invoice_line_not_deductible'), ('state', '=', 'installed')])
         if installed:
             tax_names = ('TVA deductibil 5%', 'TVA deductibil 9%',
-                         'TVA deductibil 19%', 'TVA deductibil 24%')
+                         'TVA deductibil 19%','TVA deductibil 20%',
+                         'TVA deductibil 24%')
             taxes = self.env['account.tax'].search(
                 [('company_id', '=', self.company_id.id), ('name', 'in', tax_names)])
             cols = [col[0] for col in self.env['account.tax']._columns.items()]

@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="journal_id" position="replace">
-                         <field name="journal_id" domain="[('type','in',['cash'])]"
+                         <field name="journal_id" domain="[('type','in',['cash','bank'])]"
                                 invisible="context.get('line_type', False)"
                                 widget="selection"
                                 on_change="onchange_journal(journal_id, line_cr_ids, False, partner_id, date, amount, type, company_id, context)"
