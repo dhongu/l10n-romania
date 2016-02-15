@@ -20,7 +20,15 @@
 #
 ##############################################################################
 
-import account
-import product
-import report
-import wizard
+from openerp.osv import osv, fields
+
+
+class account_tax(osv.osv):
+    _inherit = "account.tax"
+
+    def _unit_compute(self, cr, uid, taxes, price_unit, product=None, partner=None, quantity=0):
+        res = super(account_tax, self)._unit_compute(cr, uid, taxes, price_unit, product, partner, quantity)
+        for line in res:
+            tax = self.browse(cr, uid, line['id'])
+            line['name'] = tax.description and tax.description + " - " + tax.name or tax.name
+        return res
