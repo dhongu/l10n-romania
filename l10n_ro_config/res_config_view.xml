@@ -143,6 +143,7 @@
 										<field name="property_stock_picking_receivable_account_id"/>
 										<field name="property_stock_picking_payable_account_id"/>
 										<field name="property_stock_usage_giving_account_id"/>
+										<field name="property_stock_picking_custody_account_id"/>
 									</group>
 									<group>
 									</group>

@@ -43,6 +43,8 @@ class res_company(models.Model):
         'account.account', string="Picking Account Payable", domain="[('type', '=', 'payable')]", help="This account will be used as the payable account for the current partner on stock picking notice.")
     property_stock_picking_receivable_account_id = fields.Many2one(
         'account.account', string="Picking Account Receivable", domain="[('type', '=', 'receivable')]", help="This account will be used as the receivable account for the current partner on stock picking notice.")
+    property_stock_picking_custody_account_id = fields.Many2one(
+        'account.account', string="Picking Account Custody", domain="[('type', '=', 'payable')]", help="This account will be used as the extra trial balance payable account for the current partner on stock picking received in custody.")
     property_asset_reevaluation_account_id = fields.Many2one(
         'account.account', string="Asset Reevaluation Account", domain="[('type', '=', 'other')]", help="This account will be used as the reevaluation asset account.")
     property_customer_advance_account_id = fields.Many2one(

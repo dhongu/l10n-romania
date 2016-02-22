@@ -38,6 +38,7 @@
 						    <strong>Address:</strong>
 							<address t-field="res_company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
 						</div>
+
                         <small>
                        	    <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
 								<div t-if="bank.footer">
@@ -50,6 +51,7 @@
 										<span t-field="bank.acc_number"/>
 									</span>
 								</div>
+
 							</div>
                         </small>
 

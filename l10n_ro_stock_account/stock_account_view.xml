@@ -10,7 +10,7 @@
 					<field name="merchandise_type"/>
 				</field>
                 <xpath expr="//group[@name='localization']" position="after">
-                    <group string="Accounting Information" attrs="{'invisible':[('usage','not in',('internal'))]}">
+                    <group string="Accounting Information" attrs="{'invisible':[('usage','not in',('internal','in_custody'))]}">
                         <field name="property_stock_account_input_location"/>
                         <field name="property_stock_account_output_location"/>
                         <field name="property_account_creditor_price_difference_location"/>

@@ -96,6 +96,7 @@ class stock_location(osv.Model):
             ('procurement', 'Procurement'),
             ('production', 'Production'),
             ('transit', 'Transit Location'),
+            ('in_custody', 'In Custody'),
             ('usage_giving', 'Usage Giving'),
             ('consume', 'Consume')],
             'Location Type', required=True,
@@ -107,6 +108,9 @@ class stock_location(osv.Model):
                        \n* Procurement: Virtual location serving as temporary counterpart for procurement operations when the source (supplier or production) is not known yet. This location should be empty when the procurement scheduler has finished running.
                        \n* Production: Virtual counterpart location for production operations: this location consumes the raw material and produces finished products
                        \n* Transit Location: Counterpart location that should be used in inter-companies or inter-warehouses operations
+                       \n* In Custody: Virtual location for products received in custody
+                       \n* Usage Giving: Virtual location for products given in usage
+                       \n* In Custody: Virtual location for products consumed beside production.
                       """, select=True),
         'merchandise_type': fields.selection([("store", "Store"), ("warehouse", "Warehouse")], "Merchandise type"),
         'property_stock_account_input_location': fields.property(
@@ -200,13 +204,6 @@ class stock_move(osv.Model):
         return True
 
     def action_done(self, cr, uid, ids, context=None):
-        """
-        for move in self.browse(cr, uid, ids, context=context):
-            for link in move.linked_move_operation_ids:
-                if link.operation_id:
-                    self.pool['stock.pack.operation'].write(cr, uid, [link.operation_id.id], {'location_id': move.location_id.id,
-                                                                                              'location_dest_id':  move.location_dest_id.id})
-        """
         res = super(stock_move, self).action_done(
             cr, uid, ids, context=context)
         for move in self.browse(cr, uid, ids, context=context):
@@ -391,6 +388,13 @@ class stock_quant(osv.Model):
         # of refund (e.g. 371 = 607)
         if not move.picking_id.notice and move.location_id.usage == 'customer' and move.location_dest_id.usage == 'internal':
             ctx['type'] = 'delivery_refund'
+
+        # Change context to create account moves for cost of goods received in custody - extra trial balance
+        # of refund (e.g. 8033 = 899)
+        if not move.picking_id.notice and move.location_id.usage == 'supplier' and move.location_dest_id.usage == 'in_custody':
+            ctx['type'] = 'receive_custody'
+        if not move.picking_id.notice and move.location_id.usage == 'in_custody' and move.location_dest_id.usage == 'internal':
+            ctx['type'] = 'custody_to_stock'
 
         if not move.picking_id.notice and move.location_id.usage == 'internal' and move.location_dest_id.usage not in ('supplier', 'transit'):
             # Change context to create account moves for cost of goods
@@ -627,6 +631,18 @@ class stock_quant(osv.Model):
                     acc_src = move.product_id.categ_id.property_account_income_categ and move.product_id.categ_id.property_account_income_categ.id
                 if move.location_id.property_account_income_location:
                     acc_src = move.location_id.property_account_income_location.id
+            if move_type == 'usage_giving':
+                # Change the account to the usage giving one defined in
+                # company: usualy 8035
+                acc_src = acc_dest = move.company_id.property_stock_usage_giving_account_id and move.company_id.property_stock_usage_giving_account_id.id or False
+            if move_type == 'receive_custody':
+                # Change the account to the receive in custody payable account
+                # company: usualy 899
+                acc_src = move.company_id.property_stock_picking_custody_account_id and move.company_id.property_stock_picking_custody_account_id.id or False
+            if move_type == 'custody_to_stock':
+                # Change the account to the receive in custody payable account
+                # company: usualy 899
+                acc_dest = move.company_id.property_stock_picking_custody_account_id and move.company_id.property_stock_picking_custody_account_id.id or False
             if move_type == 'usage_giving':
                 # Change the account to the usage giving one defined in
                 # company: usualy 8035
