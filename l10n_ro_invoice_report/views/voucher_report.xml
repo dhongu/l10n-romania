@@ -63,14 +63,22 @@
 							<br />
 
 							<h2>
-								<span>Voucher:</span>
+                                <t t-if="o.amount&gt;0">
+                                    <span>Voucher:</span>
+                                    <t t-set="amount" t-value="o.amount"/>
+                                </t>
+                                <t t-if="o.amount&lt;0">
+                                    <span>Payment disposal:</span>
+                                    <t t-set="amount" t-value="-o.amount"/>
+                                </t> 
 								<span t-field="o.number" /> /  <span t-field="o.date" />
 							</h2>
 
 
 							<table class="table table-condensed">
 								<tr>
-									<td>Received from:</td>
+									<td t-if="o.amount&gt;0">Received from:</td>
+									<td t-if="o.amount&lt;0">For:</td> 
 									<td>
 										<span t-field="o.partner_id.name" />
 									</td>
@@ -78,13 +86,13 @@
 								<tr>
 									<td>Amount:</td>
 									<td>
-										<span t-field="o.amount" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+										<span t-esc="amount"/> <span t-field="o.currency_id.symbol"/>
 									</td>
 								</tr>
 								<tr>
 									<td>Amount (in words):</td>
 									<td>
-										<span t-esc="convert(o.amount)" />
+										<span t-esc="convert(amount)" />
 									</td>
 								</tr>
 								<tr>

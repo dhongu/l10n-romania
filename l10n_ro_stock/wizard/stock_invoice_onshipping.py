@@ -36,7 +36,10 @@ class stock_invoice_onshipping(osv.osv_memory):
         vals = []
         pick = pickings and pickings[0]
         return pick.date
-
+    
+    
+    # metoda asta o fi buna pentru stornarea in rosu !
+    """
     def _get_journal_type(self, cr, uid, context=None):
         journal_type = super(stock_invoice_onshipping, self)._get_journal_type(
             cr, uid, context=context)
@@ -63,7 +66,8 @@ class stock_invoice_onshipping(osv.osv_memory):
         else:
             journal_type = 'sale'
         return journal_type
-
+    """
+    
     _columns = {
         'invoice_date':   fields.date('Invoice Date'),
     }
