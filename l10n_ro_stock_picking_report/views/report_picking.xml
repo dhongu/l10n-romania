@@ -293,6 +293,9 @@
 									<tr t-foreach="o.move_lines" t-as="move">
 										<td>
 											<span t-field="move.product_id" />
+											<div t-foreach="move.lot_ids" t-as="lot">
+												<span t-field="lot.name" />
+											</div>											
 										</td>
 										<td class="text-right">
 											<span t-field="move.product_uom_qty" />
@@ -361,6 +364,9 @@
 										<t t-set="line" t-value="get_line(move)" />
 										<td>
 											<span t-field="move.product_id" />
+											<div t-foreach="move.lot_ids" t-as="lot">
+												<span t-field="lot.name" />
+											</div>
 										</td>
 										<td class="text-right">
 											<span t-field="move.product_uom_qty" />
@@ -461,6 +467,9 @@
 										<t t-set="line" t-value="get_line(move)" />											
 										<td>
 											<span t-field="move.product_id" />
+											<div t-foreach="move.lot_ids" t-as="lot">
+												<span t-field="lot.name" />
+											</div>
 										</td>
 										<td class="text-right">
 											<span t-field="move.product_uom_qty" />
@@ -584,6 +593,9 @@
 										<t t-set="line" t-value="get_line(move)" />
 										<td>
 											<span t-field="move.product_id" />
+											<div t-foreach="move.lot_ids" t-as="lot">
+												<span t-field="lot.name" />
+											</div>
 										</td>
 										<td class="text-right">
 											<span t-field="move.product_uom_qty" />
@@ -754,6 +766,9 @@
 										<t t-set="line" t-value="get_line(move)" />
 										<td>
 											<span t-field="move.product_id" />
+											<div t-foreach="move.lot_ids" t-as="lot">
+												<span t-field="lot.name" />
+											</div>											 
 										</td>
 										<td class="text-right">
 											<span t-field="move.product_uom_qty" />
@@ -865,6 +880,9 @@
 										<t t-set="line" t-value="get_line(move)" />
 										<td>
 											<span t-field="move.product_id" />
+											<div t-foreach="move.lot_ids" t-as="lot">
+												<span t-field="lot.name" />
+											</div>
 										</td>
 										<td class="text-right">
 											<span t-field="move.product_uom_qty" />
@@ -1002,6 +1020,9 @@
 										<t t-set="line" t-value="get_line(move)" />
 										<td>
 											<span t-field="move.product_id" />
+											<div t-foreach="move.lot_ids" t-as="lot">
+												<span t-field="lot.name" />
+											</div>
 										</td>
 										<td class="text-right">
 											<span t-field="move.product_uom_qty" />
