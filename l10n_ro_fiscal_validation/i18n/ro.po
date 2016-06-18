@@ -113,7 +113,7 @@ msgstr "Eliminare"
 #. module: l10n_ro_fiscal_validation
 #: field:res.partner.anaf,start_date:0
 msgid "Start Date"
-msgstr "Data Incaput"
+msgstr "Data Inceput"
 
 #. module: l10n_ro_fiscal_validation
 #: view:res.partner:l10n_ro_fiscal_validation.view_partner_anaf_form

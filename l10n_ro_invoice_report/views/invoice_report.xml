@@ -298,6 +298,21 @@
 											<span  t-field="o.amount_tax" 
 												t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
  											</t>
+ 											
+                                        <div t-if="o.currency_id!=res_company.currency_id">
+                                            (
+                                            <t t-if="o.type == 'out_refund'">
+                                                <t t-set="amount_total" t-value="-1*o.move_id.amount"/>
+                                                <t t-esc="amount_total"/>
+                                                <span t-field="res_company.currency_id.symbol"/>
+                                            </t>    										
+                                            <t t-if="not o.type == 'out_refund'">
+                                                <span t-field="o.move_id.amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
+                                            </t>
+                                            
+                                            )                                                                                    
+                                        </div> 											
+ 											
 										</td>
 									</tr>
 									<tr class="border-black">

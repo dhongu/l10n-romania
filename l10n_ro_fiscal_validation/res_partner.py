@@ -21,6 +21,7 @@
 
 import os
 from datetime import date
+import time
 from subprocess import Popen, PIPE
 
 from zipfile import ZipFile
@@ -29,6 +30,13 @@ import requests
 
 from openerp import models, fields, api, _
 from openerp.exceptions import Warning
+
+import logging
+#Get the logger
+_logger = logging.getLogger(__name__)
+
+from openerp.api import Environment
+import threading
 
 ANAF_URL = 'http://static.anaf.ro/static/10/Anaf/TVA_incasare/ultim_%s.zip'
 
@@ -61,18 +69,12 @@ class res_partner(models.Model):
     @api.one
     @api.depends('vat_number')
     def _compute_anaf_history(self):
-        history = self.env['res.partner.anaf'].search(
-            [('vat', '=', self.vat_number)])
+        history = self.env['res.partner.anaf'].search( [('vat', '=', self.vat_number)])
         if history:
             self.anaf_history = [(6, 0, [line.id for line in history])]
 
     vat_number = fields.Char('VAT', compute='_compute_vat')
-    anaf_history = fields.One2many(
-        'res.partner.anaf',
-        compute='_compute_anaf_history',
-        string='ANAF History',
-        readonly=True
-    )
+    anaf_history = fields.One2many( 'res.partner.anaf', compute='_compute_anaf_history',  string='ANAF History', readonly=True )
 
     # Grab VAT on Payment data from ANAF, update table - SQL injection
     @api.model
@@ -96,9 +98,7 @@ class res_partner(models.Model):
         if vat_numbers == []:
             return
         istoric = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            'data',
-            'istoric.txt')
+            os.path.dirname(os.path.abspath(__file__)), 'data', 'istoric.txt')
         vat_regex = '^[0-9]+#(%s)#' % '|'.join(vat_numbers)
         anaf_data = Popen(
             ['egrep', vat_regex, istoric],
@@ -106,8 +106,7 @@ class res_partner(models.Model):
         )
         (process_lines, err) = anaf_data.communicate()
         process_lines = [x.split('#') for x in process_lines.split()]
-        lines = self.env['res.partner.anaf'].search([
-            ('id', 'in', [int(x[0]) for x in process_lines])])
+        lines = self.env['res.partner.anaf'].search([ ('id', 'in', [int(x[0]) for x in process_lines])])
         line_ids = [l.id for l in lines]
         for line in process_lines:
             if int(line[0]) not in line_ids:
@@ -118,14 +117,18 @@ class res_partner(models.Model):
                         line[k] = 'NULL'
                     else:
                         line[k] = "'%s'" % v
-                self._cr.execute("""
-INSERT INTO res_partner_anaf
-    (id,vat,start_date, end_date, publish_date, operation_date, operation_type)
-VALUES
-    %s""" % '(' + ','.join(line) + ')')
+                try:
+                    self._cr.execute("""
+                    INSERT INTO res_partner_anaf
+                        (id,vat,start_date, end_date, publish_date, operation_date, operation_type)
+                    VALUES
+                        %s""" % '(' + ','.join(line) + ')')
+                except:
+                    pass
 
     @api.multi
     def _check_vat_on_payment(self):
+        _logger.info( "Verificare %s TVA la plata" % self.vat ) 
         ctx = dict(self._context)
         vat_on_payment = False
         if self.anaf_history:
@@ -150,18 +153,22 @@ VALUES
 
     @api.multi
     def _check_vat_subjected(self):
+        _logger.info( "Verificare %s TVA Subjected" % self.vat ) 
         vat_s = vat_number = vat_country = False
         if self.vat:
             vat_country, vat_number = self._split_vat(self.vat)
         if vat_number and vat_country and vat_country.upper() == 'RO':
-            res = requests.get(
-                'http://openapi.ro/api/companies/' +
-                str(vat_number) +
-                '.json')
+            url = 'http://openapi.ro/api/companies/' +  str(vat_number) + '.json'
+           
+            res = requests.get( url )
             if res.status_code == 200:
-                res = res.json()
-                if res['vat'] == '1':
-                    vat_s = True
+                try:
+                    res = res.json()
+                    if res['vat'] == '1':
+                        vat_s = True
+                except:
+                    _logger.error('Nu se poate accesa openapi.ro')
+                    
         elif vat_number and vat_country:
             vat_s = self.vies_vat_check(vat_country, vat_number)
         return vat_s
@@ -175,8 +182,11 @@ VALUES
 
     @api.multi
     def update_vat_one(self):
-        self.check_vat_on_payment()
-        self.check_vat_subjected()
+        _logger.info( "Start Update TVA")
+        for partner in self:
+            partner.check_vat_on_payment()
+            partner.check_vat_subjected()
+        _logger.info( "End Update TVA")
 
     @api.one
     def button_get_partner_data(self):
@@ -184,15 +194,39 @@ VALUES
         self._insert_relevant_anaf_data([self[0]])
         self.check_vat_on_payment()
 
+    @api.model
+    def _update_vat_all(self):
+        self.update_vat_all()
+
+    def update_vat_all(self, cr, uid, ids, context=None):
+        threaded_estimation = threading.Thread(target=self._background_update_vat_all, args=(cr, uid, ids, context))
+        threaded_estimation.start()        
+        return
+
+    def _background_update_vat_all(self, cr, uid, ids, context=None):
+        with Environment.manage():
+            new_cr = self.pool.cursor()
+            self._task_update_vat_all(new_cr, uid, ids, context)
+            new_cr.commit()
+            new_cr.close()
+        return {} 
+
     @api.multi
-    def update_vat_all(self):
+    def _task_update_vat_all(self):
+        _logger.info( "Start Update All")
         self._download_anaf_data()
         partners = self.search([('vat', '!=', False)])
         self._insert_relevant_anaf_data(partners)
         for partner in partners:
             partner.check_vat_on_payment()
             partner.check_vat_subjected()
+            self.env.cr.commit()        # pentru actualizarea imediata a datelor
+            # si acum asteapta putin
+            time.sleep(10)
+        _logger.info( "End Update All")
+            
 
-    @api.model
-    def _update_vat_all(self):
-        self.update_vat_all()
+ 
+
+
+ 
