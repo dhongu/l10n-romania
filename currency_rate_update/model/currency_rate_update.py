@@ -199,7 +199,7 @@ class Currency_rate_update_service(models.Model):
                                         string='Currency update frequency',
                                         default='days')
     interval_number = fields.Integer(string='Frequency', default=1)
-    next_run = fields.Date(string='Next run on', default=fields.Date.today())
+    next_run = fields.Date(string='Next run on', default=lambda * a:fields.Date.today())
 
     _sql_constraints = [('curr_service_unique', 'unique (service, company_id)',
                          _('You can use a service only one time per company !'))]

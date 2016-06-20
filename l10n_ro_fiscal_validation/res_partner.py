@@ -163,11 +163,17 @@ class res_partner(models.Model):
             res = requests.get( url )
             if res.status_code == 200:
                 try:
-                    res = res.json()
-                    if res['vat'] == '1':
+                    #print res.text
+                    if isinstance(res, dict):
+                        res_j = res.json  # () trebuie cu paraneze4 ????
+                    else:
+                        res_j = res.json()   
+                    #print res_j
+                    if res_j['vat'] == '1':
                         vat_s = True
                 except:
-                    _logger.error('Nu se poate accesa openapi.ro')
+                    _logger.error('Nu se poate accesa openapi.ro %s' % res.text)
+                    raise
                     
         elif vat_number and vat_country:
             vat_s = self.vies_vat_check(vat_country, vat_number)
@@ -222,7 +228,7 @@ class res_partner(models.Model):
             partner.check_vat_subjected()
             self.env.cr.commit()        # pentru actualizarea imediata a datelor
             # si acum asteapta putin
-            time.sleep(10)
+            time.sleep(5)
         _logger.info( "End Update All")
             
 
