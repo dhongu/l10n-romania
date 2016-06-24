@@ -40,6 +40,8 @@
               <td class="text-right"> <b><span  t-esc="formatLang(o.balance_start , dp='Account')"></span></b>
               </td></tr>
             <t t-set="sold" t-value="o['balance_start']"/>
+            <t t-set="sold_inc" t-value="0.0"/>
+            <t t-set="sold_plt" t-value="0.0"/>
             <tr t-foreach="o['line_ids']" t-as="l">
             <t t-set="sold" t-value="sold+l.amount"/>
 <!--aici obiectul este account.bank.statement.line -->
@@ -49,18 +51,25 @@
             <td class="text-left"><span t-if="l.partner_id"><span t-field="l.partner_id"/></span></td>
             <td class="text-left"><span t-field="l.name"></span></td>
             <td class="text-left"><span t-field="l.ref"/></td>
-            <td class="text-left"><span t-if="l.amount &gt; 0">Inc</span>
-                                  <span t-if="l.amount &lt; 0">Plt</span></td>
+            <td class="text-left"><span t-if="l.amount &gt; 0">Inc<t t-set="sold_inc" t-value="sold_inc+l.amount"/></span>
+                                  <span t-if="l.amount &lt; 0">Plt<t t-set="sold_plt" t-value="sold_plt-l.amount"/></span></td>
 
             <td class="text-right"><span t-if="l.amount &gt; 0"><span t-esc="formatLang(l.amount , dp='Account')"/></span></td>
             <td class="text-right"><span t-if="l.amount &lt; 0"><span t-esc="formatLang((-l.amount) , dp='Account')"/></span></td>
             <td class="text-right"><span t-esc="sold"/></td>
            </tr>
             <tr>
-              <td class="text-left" colspan="8"> <b >Sold Final: </b></td>
+              <td class="text-left" colspan="6"> <b >Sold Final: </b></td>
+              <td class="text-right"> <b>
+                <span t-esc="formatLang(sold_inc , dp='Account')"/></b>
+              </td>
+                <td class="text-right"> <b>
+                <span t-esc="formatLang(sold_plt , dp='Account')"/></b>
+              </td>
               <td class="text-right"> <b>
 <span  t-esc="formatLang(o.balance_end , dp='Account')"></span></b>
-              </td></tr>
+              </td>
+             </tr>
 
           </tbody>
         </table>
