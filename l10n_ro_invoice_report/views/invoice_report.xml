@@ -178,6 +178,9 @@
 			<t t-call="l10n_ro_invoice_report.invoice_layout">
 				<div class="page">
 					<t t-set="nr_crt" t-value="1" />
+					<t t-if="not currency_id">
+						<t t-set="currency_id" t-value="o.currency_id" />
+					</t>	
 					<table class="table table-condensed  table-bordered">
 						<thead>
 							<tr>
@@ -200,38 +203,37 @@
 									<span t-field="l.name" />
 								</td>
 								<td class="text-right">
+									<t t-set="quantity" t-value="l.quantity" />
 									<t t-if="o.type == 'out_refund'">
-										<t t-set="quantity" t-value="-1*l.quantity" />
-										<t t-esc="quantity" />
+										<t t-set="quantity" t-value="-1*l.quantity" /> 
 									</t>
-									<t t-if="not o.type == 'out_refund'">
-										<span t-field="l.quantity" />	
-									</t>								 
+									<span t-if="quantity"  id="quantity" t-esc="formatLang(quantity)"/>								 
 									<span t-field="l.uos_id" groups="product.group_uom" />
 								</td>
 								<td class="text-right">
-									<span t-field="l.price_unit_without_taxes" />
+									<t t-set="price_unit_without_taxes" t-value="l.price_unit_without_taxes" />
+									<t t-set="price_unit_without_taxes" t-value="o.currency_id.with_context(date=o.date_invoice).compute(price_unit_without_taxes,currency_id)" />
+									<span id="price_unit_without_taxes" t-esc="formatLang(price_unit_without_taxes)"/>	
 								</td>
 								<td class="text-right" t-if="with_discount(o)" groups="sale.group_discount_per_so_line">
 									<span t-field="l.discount" />
 								</td>
 								<td class="text-right">
+									<t t-set="price_subtotal" t-value="l.price_subtotal" />
 									<t t-if="o.type == 'out_refund'">
 										<t t-set="price_subtotal" t-value="-1*l.price_subtotal" />
-										<t t-esc="price_subtotal" />
 									</t>
-									<t t-if="not o.type == 'out_refund'"> 
-									<span   t-field="l.price_subtotal" />
-									</t> 
+ 									<t t-set="price_subtotal" t-value="o.currency_id.with_context(date=o.date_invoice).compute(price_subtotal,currency_id)" />
+									<span id="price_subtotal" t-esc="formatLang(price_subtotal)"/>	
 								</td>
 								<td class="text-right">
+									<t t-set="price_taxes" t-value="l.price_taxes" />
 									<t t-if="o.type == 'out_refund'">
 										<t t-set="price_taxes" t-value="-1*l.price_taxes" />
-										<t t-esc="price_taxes" />
+										 
 									</t>
-									<t t-if="not o.type == 'out_refund'">									 
-									<span   t-field="l.price_taxes" />
-									</t> 
+									<t t-set="price_taxes" t-value="o.currency_id.with_context(date=o.date_invoice).compute(price_taxes,currency_id)" />
+									<span id="price_taxes" t-esc="formatLang(price_taxes)"/>
 								</td>
 							</tr>
 						</tbody>
@@ -276,43 +278,29 @@
 											<strong>Total Without Taxes</strong>
 										</td>
 										<td class="text-right">
+											 <t t-set="amount_untaxeds" t-value="o.amount_untaxed" />
 											 <t t-if="o.type == 'out_refund'">
 												<t t-set="amount_untaxeds" t-value="-1*o.amount_untaxed" />
-												<t t-esc="amount_untaxeds"/> <span  t-field="o.currency_id.symbol" />
+												 
 											</t>
-											<t t-if="not o.type == 'out_refund'">
-											<span  t-field="o.amount_untaxed" 
-													t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
-											</t>
- 
+										 
+ 											<span id="amount_untaxeds" >
+ 												<span t-esc="formatLang(amount_untaxeds)"/> <span  t-field="currency_id.symbol" />
+ 											</span> 
 										</td>
 									</tr>
 									<tr>
 										<td>Taxes</td>
 										<td class="text-right">
+											<t t-set="amount_tax" t-value="o.amount_tax" /> 
 											<t t-if="o.type == 'out_refund'">
 												<t t-set="amount_tax" t-value="-1*o.amount_tax" />
-												<t t-esc="amount_tax"/> <span  t-field="o.currency_id.symbol" />
 											</t>
-											<t t-if="not o.type == 'out_refund'">
-											<span  t-field="o.amount_tax" 
-												t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
- 											</t>
- 											
-                                        <div t-if="o.currency_id!=res_company.currency_id">
-                                            (
-                                            <t t-if="o.type == 'out_refund'">
-                                                <t t-set="amount_total" t-value="-1*o.move_id.amount"/>
-                                                <t t-esc="amount_total"/>
-                                                <span t-field="res_company.currency_id.symbol"/>
-                                            </t>    										
-                                            <t t-if="not o.type == 'out_refund'">
-                                                <span t-field="o.move_id.amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
-                                            </t>
-                                            
-                                            )                                                                                    
-                                        </div> 											
- 											
+		 											
+ 											<span id="amount_tax" >
+ 												<span t-esc="formatLang(amount_tax)"/> <span  t-field="currency_id.symbol" />
+ 											</span>
+    
 										</td>
 									</tr>
 									<tr class="border-black">
@@ -320,13 +308,30 @@
 											<strong>Total</strong>
 										</td>
 										<td class="text-right">
+											<t t-set="amount_total" t-value="o.amount_total" />
 											<t t-if="o.type == 'out_refund'">
 												<t t-set="amount_total" t-value="-1*o.amount_total" />
-												<t t-esc="amount_total"/> <span  t-field="o.currency_id.symbol" />
+												
 											</t>
-											<t t-if="not o.type == 'out_refund'">
-												<span   t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}" />
- 											</t>
+ 
+ 											<span id="amount_total">
+ 											 <span t-esc="formatLang(amount_total)"/> <span  t-field="currency_id.symbol" />
+ 											</span>
+ 											
+	                                        <div t-if="currency_id!=res_company.currency_id">
+	                                            (
+	                                            <t t-if="o.type == 'out_refund'">
+	                                                <t t-set="amount_total" t-value="-1*o.move_id.amount"/>
+	                                                <t t-esc="amount_total"/>
+	                                                <span t-field="res_company.currency_id.symbol"/>
+	                                            </t>    										
+	                                            <t t-if="not o.type == 'out_refund'">
+	                                                <span t-field="o.move_id.amount" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
+	                                            </t>
+	                                            
+	                                            )                                                                                    
+	                                        </div> 	 											
+ 											
 										</td>
 									</tr>
 								</table>
