@@ -35,35 +35,14 @@ class account_voucher(osv.Model):
     # Adding support for storno accounting, negative numbers in voucher lines. Amount original is taken from residual amount on accoutn move line, \
     # and amount_unreconciled and amount are calculated with abs. Rewrite check if the residual amount is negative, the unreconciled and allocated amount \
     # will be negative as well.
-    def recompute_voucher_lines(
-            self,
-            cr,
-            uid,
-            ids,
-            partner_id,
-            journal_id,
-            price,
-            currency_id,
-            ttype,
-            date,
-            context=None):
-        res = super(
-            account_voucher,
-            self).recompute_voucher_lines(
-            cr,
-            uid,
-            ids,
-            partner_id,
-            journal_id,
-            price,
-            currency_id,
-            ttype,
-            date,
-            context=context)
+    def recompute_voucher_lines( self,cr, uid, ids, partner_id,journal_id,price,  currency_id, ttype, date, context=None):
+        res = super(account_voucher,self).recompute_voucher_lines(cr, uid, ids,partner_id,journal_id,price,currency_id,ttype,date,context=context)
+        print res
         for line in res['value']['line_cr_ids'] + res['value']['line_dr_ids']:
+            if isinstance(line, tuple):
+                line =  self.pool.get('account.voucher.line').browse(cr, uid, line[1],context)
             if line['amount_original'] < 0:
-                line['amount_unreconciled'] = line[
-                    'amount_unreconciled'] * (-1)
+                line['amount_unreconciled'] = line[ 'amount_unreconciled'] * (-1)
                 line['amount'] = line['amount'] * (-1)
         return res
 

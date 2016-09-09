@@ -109,6 +109,7 @@
 						</div>		
     	</td>
     	<td style="border-top: initial;">
+                        <t t-if="o.commercial_partner_id.is_company">
                         <div t-if="o.commercial_partner_id.vat">
 							<strong>CIF:</strong>
 							<span t-field="o.commercial_partner_id.vat"/>
@@ -117,6 +118,13 @@
 							<strong>NRC:</strong>
 							<span t-field="o.commercial_partner_id.nrc"/>
 						</div>    	
+                        </t>
+                         <t t-if="not o.commercial_partner_id.is_company">
+                         <div>
+    						<strong>CNP:</strong>
+							<span t-field="o.commercial_partner_id.cnp"/>
+						</div>
+                         </t>
     	</td>
     </tr>
 </table>
@@ -349,7 +357,7 @@
 							<div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006</div>
 
 							<t t-if="not res_company.stamp_image">
-								<div>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6</div>
+								<div>Invoice circulate without signature and stamp according to the law 227/2015, rule 319, paragraph 29</div>
 							</t>
 							<img t-if="res_company.stamp_image" t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 150px; " />
 						</small>
