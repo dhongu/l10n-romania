@@ -61,19 +61,15 @@ class account_voucher(osv.Model):
             # (shadow + real) won't pass validation. Anyway every entry will be
             # posted later (if 'entry_posted' is enabled)
             if entry_posted:
-                journal_pool.write(
-                    cr, uid, voucher.journal_id.id, {'entry_posted': False})
-            res = super(account_voucher, self).action_move_line_create(
-                cr, uid, [voucher.id], context)
+                journal_pool.write( cr, uid, voucher.journal_id.id, {'entry_posted': False})
+            res = super(account_voucher, self).action_move_line_create( cr, uid, [voucher.id], context)
             # because 'move_id' has been updated by 'action_move_line_create'
             voucher.refresh()
             if entry_posted:
-                journal_pool.write(
-                    cr, uid, voucher.journal_id.id, {'entry_posted': True})
+                journal_pool.write( cr, uid, voucher.journal_id.id, {'entry_posted': True})
             if self.is_vat_on_payment(voucher):
                 lines_to_create = []
-                amounts_by_invoice = self.allocated_amounts_grouped_by_invoice(
-                    cr, uid, voucher, context)
+                amounts_by_invoice = self.allocated_amounts_grouped_by_invoice( cr, uid, voucher, context)
                 for inv_id in amounts_by_invoice:
                     invoice = inv_pool.browse(cr, uid, inv_id, context)
                     for acc_move_line in invoice.move_id.line_id:
