@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <record id="view_account_form" model="ir.ui.view">
+            <field name="name">account.account.form</field>
+            <field name="model">account.account</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                  <field position="after" name="reconcile">
+                      <field name="close_check"/>
+                  </field>
+            </field>
+        </record>
+        
         <record id='view_account_period_closing_tree' model='ir.ui.view'>
             <field name='name'>account.period.closing.tree</field>
             <field name='model'>account.period.closing</field>
@@ -29,6 +41,7 @@
                         <page string="Config">
                             <group>
                                 <field name="type"/>
+                                <field name="close_result"/>
                                 <field name="debit_account_id"/>
                                 <field name="credit_account_id"/>
                             </group>
@@ -67,8 +80,6 @@
 			view_mode="form" target="new" 
 			key2="client_action_multi"  multi="True"
 			context="{'closing_id' : active_id, 'default_closing_id': active_id}"/>
-
-
 
     </data>
 </openerp>

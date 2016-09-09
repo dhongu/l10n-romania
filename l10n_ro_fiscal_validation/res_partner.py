@@ -193,6 +193,7 @@ class res_partner(models.Model):
             partner.check_vat_on_payment()
             partner.check_vat_subjected()
         _logger.info( "End Update TVA")
+ 
 
     @api.one
     def button_get_partner_data(self):

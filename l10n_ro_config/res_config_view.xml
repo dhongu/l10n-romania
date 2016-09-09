@@ -38,7 +38,11 @@
 							<div>
 								<field name="module_account_compensation" class="oe_inline"/>
 								<label for="module_account_compensation"/>
-							</div>                            
+							</div>
+							<div>
+								<field name="module_account_compensation_vat_on_payment" class="oe_inline"/>
+								<label for="module_account_compensation_vat_on_payment"/>
+							</div>                              
 						</div>
 						<label for="id" string="Romania Adaptation"/>
 						<div>

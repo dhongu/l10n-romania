@@ -27,14 +27,20 @@ class account_period_closing_wizard(models.TransientModel):
     _name = "account.period.closing.wizard"
     _description = "Wizard for Account Period Closing"
 
-
+ 
     @api.model
     def default_get(self, fields):      
         defaults = super(account_period_closing_wizard, self).default_get(fields)
         return defaults
+ 
 
-
-
+    
+    @api.onchange('date_move')
+    def onchange_date(self):      
+        if self.date_move:
+            self.period_id = self.env['account.period'].find(self.date_move)[:1]    
+    
+ 
     @api.one
     def do_close(self):
         wizard = self[0]
@@ -42,12 +48,14 @@ class account_period_closing_wizard(models.TransientModel):
             wizard.closing_id.close( wizard.date_move, wizard.period_id.id, wizard.journal_id.id)
         return {'type': 'ir.actions.act_window_close'}
 
+ 
     closing_id = fields.Many2one('account.period.closing',string='Closing Model',required=True,ondelete='cascade' )
     company_id = fields.Many2one('res.company', related='closing_id.company_id', string='Company')
     date_move = fields.Date(string='Closing Move Date', required=True, select=True)
     period_id = fields.Many2one( 'account.period', string='Closing Period', required=True)
     journal_id = fields.Many2one( 'account.journal', string='Closing Journal', required=True)
     done = fields.Boolean(string='Closing Done')
+
 
 
 
@@ -67,3 +75,6 @@ class account_period_close(models.TransientModel):
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+ 
+
+ 

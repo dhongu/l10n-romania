@@ -41,6 +41,8 @@ class l10n_ro_config_settings(models.TransientModel):
                                            help='This allows you to manage the storno behaviour in accounting.')
     module_account_vat_on_payment = fields.Boolean('Vat on Payment Accounting',
                                                    help='This allows you to manage the vat on payment behaviour in accounting.')
+    module_account_compensation_vat_on_payment = fields.Boolean('Vat on Payment on Compensations',
+                                                   help='This allows you to manage the vat on payment behaviour in compensations.')
     module_currency_rate_update = fields.Boolean('Currency Rate Update',
                                                  help='This allows you to manage the update of currency rate based on different provider, use BNR site.')
     module_l10n_ro_account_bank_statement = fields.Boolean('Bank Statement Invoices',

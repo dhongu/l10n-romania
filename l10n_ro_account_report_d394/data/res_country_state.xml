@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="l10n_ro.RO_AB"  model="res.country.state">
+            <field name="order_code">01</field>
+        </record>
+        <record id="l10n_ro.RO_AR"  model="res.country.state">
+            <field name="order_code">02</field>
+        </record>
+        <record id="l10n_ro.RO_AG"  model="res.country.state">
+            <field name="order_code">03</field>
+        </record>
+        <record id="l10n_ro.RO_BC"  model="res.country.state">
+            <field name="order_code">04</field>
+        </record>
+        <record id="l10n_ro.RO_BH"  model="res.country.state">
+            <field name="order_code">05</field>
+        </record>
+        <record id="l10n_ro.RO_BN"  model="res.country.state">
+            <field name="order_code">06</field>
+        </record>
+        <record id="l10n_ro.RO_BT"  model="res.country.state">
+            <field name="order_code">07</field>
+        </record>
+        <record id="l10n_ro.RO_BV"  model="res.country.state">
+            <field name="order_code">08</field>
+        </record>
+        <record id="l10n_ro.RO_BR"  model="res.country.state">
+            <field name="order_code">09</field>
+        </record>
+        <record id="l10n_ro.RO_BZ"  model="res.country.state">
+            <field name="order_code">10</field>
+        </record>
+        <record id="l10n_ro.RO_CS"  model="res.country.state">
+            <field name="order_code">11</field>
+        </record>
+        <record id="l10n_ro.RO_CJ"  model="res.country.state">
+            <field name="order_code">12</field>
+        </record>
+        <record id="l10n_ro.RO_CT"  model="res.country.state">
+            <field name="order_code">13</field>
+        </record>
+        <record id="l10n_ro.RO_CV"  model="res.country.state">
+            <field name="order_code">14</field>
+        </record>
+        <record id="l10n_ro.RO_DB"  model="res.country.state">
+            <field name="order_code">15</field>
+        </record>
+        <record id="l10n_ro.RO_DJ"  model="res.country.state">
+            <field name="order_code">16</field>
+        </record>
+        <record id="l10n_ro.RO_GL"  model="res.country.state">
+            <field name="order_code">17</field>
+        </record>
+        <record id="l10n_ro.RO_GJ"  model="res.country.state">
+            <field name="order_code">18</field>
+        </record>
+        <record id="l10n_ro.RO_HR"  model="res.country.state">
+            <field name="order_code">19</field>
+        </record>
+        <record id="l10n_ro.RO_HD"  model="res.country.state">
+            <field name="order_code">20</field>
+        </record>
+        <record id="l10n_ro.RO_IL"  model="res.country.state">
+            <field name="order_code">21</field>
+        </record>
+        <record id="l10n_ro.RO_IS"  model="res.country.state">
+            <field name="order_code">22</field>
+        </record>
+        <record id="l10n_ro.RO_IF"  model="res.country.state">
+            <field name="order_code">23</field>
+        </record>
+        <record id="l10n_ro.RO_MM"  model="res.country.state">
+            <field name="order_code">24</field>
+        </record>
+        <record id="l10n_ro.RO_MH"  model="res.country.state">
+            <field name="order_code">25</field>
+        </record>
+        <record id="l10n_ro.RO_MS"  model="res.country.state">
+            <field name="order_code">26</field>
+        </record>
+        <record id="l10n_ro.RO_NT"  model="res.country.state">
+            <field name="order_code">27</field>
+        </record>
+        <record id="l10n_ro.RO_OT"  model="res.country.state">
+            <field name="order_code">28</field>
+        </record>
+        <record id="l10n_ro.RO_PH"  model="res.country.state">
+            <field name="order_code">29</field>
+        </record>
+        <record id="l10n_ro.RO_SM"  model="res.country.state">
+            <field name="order_code">30</field>
+        </record>
+        <record id="l10n_ro.RO_SJ"  model="res.country.state">
+            <field name="order_code">31</field>
+        </record>
+        <record id="l10n_ro.RO_SB"  model="res.country.state">
+            <field name="order_code">32</field>
+        </record>
+        <record id="l10n_ro.RO_SV"  model="res.country.state">
+            <field name="order_code">33</field>
+        </record>
+        <record id="l10n_ro.RO_TR"  model="res.country.state">
+            <field name="order_code">34</field>
+        </record>
+        <record id="l10n_ro.RO_TM"  model="res.country.state">
+            <field name="order_code">35</field>
+        </record>
+        <record id="l10n_ro.RO_TL"  model="res.country.state">
+            <field name="order_code">36</field>
+        </record>
+        <record id="l10n_ro.RO_VS"  model="res.country.state">
+            <field name="order_code">37</field>
+        </record>
+        <record id="l10n_ro.RO_VL"  model="res.country.state">
+            <field name="order_code">38</field>
+        </record>
+        <record id="l10n_ro.RO_VN"  model="res.country.state">
+            <field name="order_code">39</field>
+        </record>
+        <record id="l10n_ro.RO_B"  model="res.country.state">
+            <field name="order_code">40</field>
+        </record>
+        <record id="l10n_ro.RO_CL"  model="res.country.state">
+            <field name="order_code">51</field>
+        </record>
+        <record id="l10n_ro.RO_GR"  model="res.country.state">
+            <field name="order_code">52</field>
+        </record>
+    </data>
+</openerp>
+

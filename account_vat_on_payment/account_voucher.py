@@ -156,8 +156,7 @@ class account_voucher(osv.Model):
     def get_invoice_total(self, invoice):
         res = 0.0
         for inv_move_line in invoice.move_id.line_id:
-            if inv_move_line.account_id.type in ('receivable', 'payable'):
-                # can both be presents?
+            if inv_move_line.account_id.id == invoice.account_id.id:
                 res += inv_move_line.debit or inv_move_line.credit
         return res
 

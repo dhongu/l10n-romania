@@ -52,7 +52,7 @@ class account_invoice(models.Model):
         tax_code_pool = self.env['account.tax.code']
         new_move_lines = []
         for line_tup in move_lines:
-            if self.vat_on_payment:
+            if self.vat_on_payment and not line_tup[2].get('not_deductible', False):
                 if line_tup[2].get('account_id', False):
                     account = acc_pool.browse(line_tup[2]['account_id'])
                     if account.type != 'receivable' and account.type != 'payable':
