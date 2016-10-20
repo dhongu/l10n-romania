@@ -91,7 +91,7 @@ class account_invoice_line(models.Model):
     sequence = fields.Integer(string='Sequence', default=1,
         help="Gives the sequence of this line when displaying the invoice.")
 
-    price_unit_without_taxes = fields.Float(string='Unit Price without taxes',
+    price_unit_without_taxes = fields.Float(string='Unit Price without taxes',digits=dp.get_precision('Account'),
                                             store=True, readonly=True, compute='_compute_price')
 
     price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'),
