@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
- 
+
 
 
 from odoo import models, fields, api, _
@@ -28,33 +28,38 @@ from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMA
 from odoo import SUPERUSER_ID, api
 import odoo.addons.decimal_precision as dp
 
+
 class res_partner(models.Model):
     _inherit = 'res.partner'
-    mean_transp = fields.Char(  string='Mean transport')
+    mean_transp = fields.Char(string='Mean transport')
 
 
 class stock_location(models.Model):
-    _inherit = "stock.location"    
-    user_id = fields.Many2one('res.users', string='Manager') 
+    _inherit = "stock.location"
+    user_id = fields.Many2one('res.users', string='Manager')
+
 
 class stock_picking(models.Model):
     _inherit = 'stock.picking'
 
-    delegate_id =  fields.Many2one('res.partner', string='Delegate')
-    mean_transp =  fields.Char(string='Mean transport', size=20)
+    delegate_id = fields.Many2one('res.partner', string='Delegate')
+    mean_transp = fields.Char(string='Mean transport', size=20)
 
+    '''
     invoice_state = fields.Selection([("invoiced", "Invoiced"),
                                       ("2binvoiced", "To Be Invoiced"),
                                       ("none", "Not Applicable")
                                       ], string="Invoice Control")
+    '''
 
     @api.onchange('delegate_id')
     def on_change_delegate_id(self):
         if self.delegate_id:
-            self.mean_transp =  self.delegate_id.mean_transp
+            self.mean_transp = self.delegate_id.mean_transp
 
+    # metoda locala sau se poate in 10 are alt nume
     @api.model
-    def _get_invoice_vals(self,   key, inv_type, journal_id, move ):
+    def _get_invoice_vals(self, key, inv_type, journal_id, move):
         res = super(stock_picking, self)._get_invoice_vals(key, inv_type, journal_id, move)
         if inv_type == 'out_invoice':
             res['delegate_id'] = move.picking_id.delegate_id.id
@@ -77,10 +82,10 @@ class stock_picking(models.Model):
 
         return invoices
     """
-    
-    
+
     @api.multi
-    def picking_print(self):
+    def do_print_picking(self):
+        self.write({'printed': True})
         if self.picking_type_code == 'incoming':
             res = self.env['report'].get_action(self, 'l10n_ro_stock_picking_report.report_reception')
         elif self.picking_type_code == 'outgoing':
