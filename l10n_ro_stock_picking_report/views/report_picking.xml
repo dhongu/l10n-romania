@@ -1,1071 +1,1088 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data>
-		<template id="report_address_company">
-			<div class="row">
-				<div class="col-xs-5">
-					<div>
-						<div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
-							<strong>Company</strong>
-						</div>
-
-					</div>
-					<strong t-field="res_company.partner_id.name" />
-					<div>
-						<strong>Address:</strong>
-						<address t-field="res_company.partner_id" t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}' />
-					</div>
-
-				</div>
-			</div>
-			<small>
-			<div class="row">
-				<div class="col-xs-6">
-					<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-						<div t-if="bank.footer">
-							<span t-if="bank.bank_name">
-								<strong>Bank:</strong>
-								<span t-field="bank.bank_name" />
-							</span>
-							<span t-if="bank.acc_number">
-								<strong>Account:</strong>
-								<span t-field="bank.acc_number" />
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			</small>
-
-
-			<div class="row">
-				<div class="col-xs-5">
-					<div t-if="res_company.partner_id.vat">
-						<strong>CIF:</strong>
-						<span t-field="res_company.partner_id.vat" />
-					</div>
-					<div t-if="res_company.partner_id.nrc">
-						<strong>NRC:</strong>
-						<span t-field="res_company.partner_id.nrc" />
-					</div>
-
-					<div i-if="res_company.share_capital">
-						<strong>Share Capital:</strong>
-						<span t-field="res_company.share_capital" />
-					</div>
-				</div>
-			</div>
-
-			<br />
-			<br />
-		</template>
-		
-		<template id="report_address">
-			<div class="row">
-				<div class="col-xs-5">
-					<div>
-						<div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
-							<strong>Customer</strong>
-						</div>
-
-						<div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
-							<strong>Supplier</strong>
-						</div>
-
-					</div>
-					<strong t-field="res_company.partner_id.name" />
-					<div>
-						<strong>Address:</strong>
-						<address t-field="res_company.partner_id" t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}' />
-					</div>
-
-				</div>
-
-				<div class="col-xs-5 col-xs-offset-2">
-					<div>
-						<div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
-							<strong>Customer</strong>
-						</div>
-
-						<div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
-							<strong>Supplier</strong>
-						</div>
-					</div>
-					<div>
-					    <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
-                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,s                        
+    <data>
+        <template id="report_address_company">
+            <div class="row">
+                <div class="col-xs-5">
+                    <div>
+                        <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
+                            <strong>Company</strong>
                         </div>
-                        <strong t-field="o.partner_id.name" />
-					</div>
-					<div>
-						<strong>Address:</strong>
-						<address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}' />
-					</div>
 
-				</div>
-			</div>
-			<small>
-			<div class="row">
-				<div class="col-xs-6">
-					<div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-						<div t-if="bank.footer">
-							<span t-if="bank.bank_name">
-								<strong>Bank:</strong>
-								<span t-field="bank.bank_name" />
-							</span>
-							<span t-if="bank.acc_number">
-								<strong>Account:</strong>
-								<span t-field="bank.acc_number" />
-							</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-5 col-xs-offset-1">
-					<div t-foreach="o.partner_id.bank_ids" t-as="bank">
-						<div t-if="bank.bank_name">
-							<strong>Bank:</strong>
-							<span t-field="bank.bank_name" />
-						</div>
-						<div t-if="bank.acc_number">
-							<strong>Account:</strong>
-							<span t-field="bank.acc_number" />
-						</div>
+                    </div>
+                    <strong t-field="res_company.partner_id.name"/>
+                    <div>
+                        <strong>Address:</strong>
+                        <address t-field="res_company.partner_id"
+                                 t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                    </div>
 
-					</div>
-				</div>
-			</div>
-			</small>
-
-			<div class="row">
-				<div class="col-xs-5">
-					<div t-if="res_company.partner_id.vat">
-						<strong>CIF:</strong>
-						<span t-field="res_company.partner_id.vat" />
-					</div>
-					<div t-if="res_company.partner_id.nrc">
-						<strong>NRC:</strong>
-						<span t-field="res_company.partner_id.nrc" />
-					</div>
-					<div i-if="res_company.share_capital">
-						<strong>Share Capital:</strong>
-						<span t-field="res_company.share_capital" />
-					</div>
-				</div>
-				<div class="col-xs-5 col-xs-offset-2">
-					<div t-if="o.partner_id.vat">
-						<strong>CIF:</strong>
-						<span t-field="o.partner_id.commercial_partner_id.vat" />
-					</div>
-					<div t-if="o.partner_id.nrc">
-						<strong>NRC:</strong>
-						<span t-field="o.partner_id.commercial_partner_id.nrc" />
-					</div>
-				</div>
-			</div>
-
-			<br />
-			<br />
-		</template>
-
-		<template id="report_totals">
-			<div class="row">
-				<t t-set="totals" t-value="get_totals(o.move_lines)" />
-				<div class="col-xs-4 pull-right">
-					<table class="table table-condensed">
-						<tr class="border-black">
-							<td>
-								<strong>Total Without Taxes</strong>
-							</td>
-							<td class="text-right">
-								<span t-esc="formatLang(totals['amount'], currency_obj=res_company.currency_id)" />
-							</td>
-						</tr>
-						<tr>
-							<td>Taxes</td>
-							<td class="text-right">
-								<span t-esc="formatLang(totals['tax'], currency_obj=res_company.currency_id)" />
-							</td>
-						</tr>
-						<tr class="border-black">
-							<td>
-								<strong>Total</strong>
-							</td>
-							<td class="text-right">
-								<span t-esc="formatLang(totals['amount_tax'], currency_obj=res_company.currency_id)" />
-							</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</template>
-
-		<template id="report_delivery_sign">
-			<table class="table table-condensed">
-				<thead>
-					<tr>
-						<th>Elaborate:</th>
-						<th>Information for delivery:</th>
-						<th>Signature reception:</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<span>Name:</span>
-							<span t-field="o.location_id.user_id"/>
-							<br/>
-							<br/>
-						</td>
-						<td>
-		                    <div>
-		                        <span>Delegate:</span>
-		                        <t t-if="o.delegate_id">
-		                            <span t-field="o.delegate_id"/>
-		                        </t>
-		                    </div>
-		                    <div>
-		                        <span>Mean Transport:</span>
-		                        <t t-if="o.mean_transp">
-		                            <span t-field="o.mean_transp"/>
-		                        </t>
-		                    </div>
-						</td>
-						<td>
-							<span />
-						</td>
-					</tr>
+                </div>
+            </div>
+            <small>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+                            <div t-if="bank.footer">
+                                <span t-if="bank.bank_name">
+                                    <strong>Bank:</strong>
+                                    <span t-field="bank.bank_name"/>
+                                </span>
+                                <span t-if="bank.acc_number">
+                                    <strong>Account:</strong>
+                                    <span t-field="bank.acc_number"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </small>
 
 
-				</tbody>
-			</table>
-		</template>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div t-if="res_company.partner_id.vat">
+                        <strong>CIF:</strong>
+                        <span t-field="res_company.partner_id.vat"/>
+                    </div>
+                    <div t-if="res_company.partner_id.nrc">
+                        <strong>NRC:</strong>
+                        <span t-field="res_company.partner_id.nrc"/>
+                    </div>
 
-		<template id="report_delivery">
+                    <div i-if="res_company.share_capital">
+                        <strong>Share Capital:</strong>
+                        <span t-field="res_company.share_capital"/>
+                    </div>
+                </div>
+            </div>
 
-			<t t-call="report.html_container">
-				<t t-foreach="docs" t-as="o">
-					<t t-call="report.external_layout">
-						<div class="page">
-							<t t-call="l10n_ro_stock_picking_report.report_address" />
+            <br/>
+            <br/>
+        </template>
 
-							<h3>
-								<span>Delivery:</span>
-								<span t-field="o.name" />
-								<span t-if="o.state == 'drat'">Draft</span>
-								<span t-if="o.state == 'cancel'">Cancelled</span>
-							</h3>
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th>
-											<strong>Source</strong>
-										</th>
-										<th>
-											<strong>Date</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<span t-field="o.origin" />
-										</td>
-										<td>
-											<t t-esc="formatLang(o.date, date=True)" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
+        <template id="report_address">
+            <div class="row">
+                <div class="col-xs-5">
+                    <div>
+                        <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
+                            <strong>Customer</strong>
+                        </div>
 
-							<table class="table table-condensed table-bordered">
-								<thead>
-									<tr>
-										<th>
-											<strong>Product</strong>
-										</th>
-										<th class="text-right">
-											<strong>Quantity</strong>
-										</th>
+                        <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
+                            <strong>Supplier</strong>
+                        </div>
 
-									</tr>
-								</thead>
-								<tbody>
-									<tr t-foreach="o.move_lines" t-as="move">
-										<td>
-											<span t-field="move.product_id" />
-											<div t-foreach="move.lot_ids" t-as="lot">
-												<span t-field="lot.name" />
-											</div>											
-										</td>
-										<td class="text-right">
-											<span t-field="move.product_uom_qty" />
-											<span t-field="move.product_uom" groups="product.group_uom" />
-										</td>
+                    </div>
+                    <strong t-field="res_company.partner_id.name"/>
+                    <div>
+                        <strong>Address:</strong>
+                        <address t-field="res_company.partner_id"
+                                 t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                    </div>
 
-									</tr>
-								</tbody>
-							</table>
+                </div>
+
+                <div class="col-xs-5 col-xs-offset-2">
+                    <div>
+                        <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
+                            <strong>Customer</strong>
+                        </div>
+
+                        <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
+                            <strong>Supplier</strong>
+                        </div>
+                    </div>
+                    <div>
+                        <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
+                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,s
+                        </div>
+                        <strong t-field="o.partner_id.name"/>
+                    </div>
+                    <div>
+                        <strong>Address:</strong>
+                        <address t-field="o.partner_id"
+                                 t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                    </div>
+
+                </div>
+            </div>
+            <small>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+                            <div t-if="bank.footer">
+                                <span t-if="bank.bank_name">
+                                    <strong>Bank:</strong>
+                                    <span t-field="bank.bank_name"/>
+                                </span>
+                                <span t-if="bank.acc_number">
+                                    <strong>Account:</strong>
+                                    <span t-field="bank.acc_number"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-5 col-xs-offset-1">
+                        <div t-foreach="o.partner_id.bank_ids" t-as="bank">
+                            <div t-if="bank.bank_name">
+                                <strong>Bank:</strong>
+                                <span t-field="bank.bank_name"/>
+                            </div>
+                            <div t-if="bank.acc_number">
+                                <strong>Account:</strong>
+                                <span t-field="bank.acc_number"/>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </small>
+
+            <div class="row">
+                <div class="col-xs-5">
+                    <div t-if="res_company.partner_id.vat">
+                        <strong>CIF:</strong>
+                        <span t-field="res_company.partner_id.vat"/>
+                    </div>
+                    <div t-if="res_company.partner_id.nrc">
+                        <strong>NRC:</strong>
+                        <span t-field="res_company.partner_id.nrc"/>
+                    </div>
+                    <div i-if="res_company.share_capital">
+                        <strong>Share Capital:</strong>
+                        <span t-field="res_company.share_capital"/>
+                    </div>
+                </div>
+                <div class="col-xs-5 col-xs-offset-2">
+                    <div t-if="o.partner_id.vat">
+                        <strong>CIF:</strong>
+                        <span t-field="o.partner_id.commercial_partner_id.vat"/>
+                    </div>
+                    <div t-if="o.partner_id.nrc">
+                        <strong>NRC:</strong>
+                        <span t-field="o.partner_id.commercial_partner_id.nrc"/>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+            <br/>
+        </template>
+
+        <template id="report_totals">
+            <div class="row">
+                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
+                <div class="col-xs-4 pull-right">
+                    <table class="table table-condensed">
+                        <tr class="border-black">
+                            <td>
+                                <strong>Total Without Taxes</strong>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(totals['amount'], currency_obj=res_company.currency_id)"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Taxes</td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(totals['tax'], currency_obj=res_company.currency_id)"/>
+                            </td>
+                        </tr>
+                        <tr class="border-black">
+                            <td>
+                                <strong>Total</strong>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(totals['amount_tax'], currency_obj=res_company.currency_id)"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <template id="report_delivery_sign">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Elaborate:</th>
+                        <th>Information for delivery:</th>
+                        <th>Signature reception:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>Name:</span>
+                            <span t-field="o.location_id.user_id"/>
+                            <br/>
+                            <br/>
+                        </td>
+                        <td>
+                            <div>
+                                <span>Delegate:</span>
+                                <t t-if="o.delegate_id">
+                                    <span t-field="o.delegate_id"/>
+                                </t>
+                            </div>
+                            <div>
+                                <span>Mean Transport:</span>
+                                <t t-if="o.mean_transp">
+                                    <span t-field="o.mean_transp"/>
+                                </t>
+                            </div>
+                        </td>
+                        <td>
+                            <span/>
+                        </td>
+                    </tr>
 
 
-							<t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
-	
-	
-							<div t-if="o.note">
-								<span t-field="o.note" />
-							</div>	
-							<div t-if="o.invoice_state=='none'">
-								<span>There are not billed according to agreement</span>
-							</div>										
-							<div class="oe_structure" />
-						</div>
-					</t>
-				</t>
-			</t>
-		</template>
+                </tbody>
+            </table>
+        </template>
 
-		<template id="report_consume_voucher">
+        <template id="report_delivery">
 
-			<t t-call="report.html_container">
-				<t t-foreach="docs" t-as="o">
-					<t t-call="report.external_layout">
-						<div class="page">
-							<t t-call="l10n_ro_stock_picking_report.report_address_company" />
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-call="l10n_ro_stock_picking_report.report_address"/>
 
-							<h3>
-								<span t-if="o.state == 'drat'">Draft</span>
-								<span t-if="o.state == 'cancel'">Cancelled</span>
-								<span>Consume Voucher:</span>
-								<span t-field="o.name" />
-							</h3>
-							<h3>
-								<span>Date:</span>
-								<span t-esc="formatLang(o.date, date=True)"/>
-							</h3>
-
-							<table class="table table-condensed table-bordered">
-								<thead>
-									<tr>
-										<th>
-											<strong>Product</strong>
-										</th>
-										<th class="text-right">
-											<strong>Quantity</strong>
-										</th>
-										<th class="text-right">
-											<strong>Price</strong>
-										</th>
-										<th class="text-right">
-											<strong>Amount</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr t-foreach="o.move_lines" t-as="move">
-										<t t-set="line" t-value="get_line(move)" />
-										<td>
-											<span t-field="move.product_id" />
-											<div t-foreach="move.lot_ids" t-as="lot">
-												<span t-field="lot.name" />
-											</div>
-										</td>
-										<td class="text-right">
-											<span t-field="move.product_uom_qty" />
-											<span t-field="move.product_uom" groups="product.group_uom" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(move.price_unit)" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(move.price_unit * move.product_uom_qty)" />
-										</td>
-									</tr>
-								</tbody>
-								<tbody>
-									<tr>
-										<td>
-										</td>
-										<td class="text-right">
-										</td>
-										<td class="text-right">
-											<strong>Total</strong>
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<t t-call="l10n_ro_stock_picking_report.report_consume_sign" />
-							<div t-if="o.note">
-								<span t-field="o.note" />
-							</div>	
-							<div class="oe_structure" />
-						</div>
-					</t>
-				</t>
-			</t>
-		</template>
-
-
-		<template id="report_internal_transfer">
-
-			<t t-call="report.html_container">
-				<t t-foreach="docs" t-as="o">
-					<t t-call="report.external_layout">
-						<div class="page">
-							<t t-call="l10n_ro_stock_picking_report.report_address_company" />
-
-							<h3>
-
-								<span>Internal Transfer:</span>
-								<span t-field="o.name" />
-								<span t-if="o.state == 'drat'">Draft</span>
-								<span t-if="o.state == 'cancel'">Cancelled</span>
-							</h3>
-							<h3>
-								<span>Date:</span>
-								<span t-esc="formatLang(o.date, date=True)"/>
-							</h3>
-							
-							<table class="table table-condensed">
+                            <h3>
+                                <span>Delivery:</span>
+                                <span t-field="o.name"/>
+                                <span t-if="o.state == 'drat'">Draft</span>
+                                <span t-if="o.state == 'cancel'">Cancelled</span>
+                            </h3>
+                            <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th><strong>Location source</strong></th>
-                                        <th><strong>Location destination</strong></th>
+                                        <th>
+                                            <strong>Source</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Date</strong>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><span t-field="o.location_id"/></td>
-                                        <td><span t-field="o.location_dest_id"/></td>
+                                        <td>
+                                            <span t-field="o.origin"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="formatLang(o.date, date=True)"/>
+                                        </td>
                                     </tr>
                                 </tbody>
-							</table>
+                            </table>
+
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Quantity</strong>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_lines" t-as="move">
+                                        <td>
+                                            <span t-field="move.product_id"/>
+                                            <div t-foreach="move.lot_ids" t-as="lot">
+                                                <span t-field="lot.name"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_uom_qty"/>
+                                            <span t-field="move.product_uom" groups="product.group_uom"/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
 
 
-							
-							<table class="table table-condensed table-bordered">
-								<thead>
-									<tr>
-										<th>
-											<strong>Product</strong>
-										</th>
-										<th class="text-right">
-											<strong>Quantity</strong>
-										</th>
-										<th class="text-right">
-											<strong>Price</strong>
-										</th>
-										<th class="text-right">
-											<strong>Amount</strong>
-										</th>
-
-									</tr>
-								</thead>
-								<tbody>
-									<tr t-foreach="o.move_lines" t-as="move">
-										<t t-set="line" t-value="get_line(move)" />											
-										<td>
-											<span t-field="move.product_id" />
-											<div t-foreach="move.lot_ids" t-as="lot">
-												<span t-field="lot.name" />
-											</div>
-										</td>
-										<td class="text-right">
-											<span t-field="move.product_uom_qty" />
-											<span t-field="move.product_uom" groups="product.group_uom" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(move.price_unit)" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(move.price_unit * move.product_uom_qty)" />
-										</td>
-									</tr>
-								</tbody>
-								<tbody>
-									<tr>
-										<td colspan="3" class="text-right">
-											<strong>Total</strong>
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th>Signature delivery:</th>
-										<th>Signature reception:</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<span>Name:</span>
-											<t f-if="o.location_id.user_id.name">
-												<span t-field="o.location_id.user_id"/>
-											</t>
-										</td>
-										<td>
-											<span>Name:</span>
-										 	<t f-if="o.location_id.user_id.name">
-												<span t-field="o.location_dest_id.user_id"/>
-											</t>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<div t-if="o.note">
-								<span t-field="o.note" />
-							</div>							 
-							<div class="oe_structure" />
-						</div>
-					</t>
-				</t>
-			</t>
-		</template>
+                            <t t-call="l10n_ro_stock_picking_report.report_delivery_sign"/>
 
 
-		
-		<template id="report_delivery_price">
+                            <div t-if="o.note">
+                                <span t-field="o.note"/>
+                            </div>
+                            <!--
+                            <div t-if="o.invoice_state=='none'">
+                                <span>There are not billed according to agreement</span>
+                            </div>
+                            -->
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
 
-			<t t-call="report.html_container">
-				<t t-foreach="docs" t-as="o">
-					<t t-call="report.external_layout">
-						<div class="page">
-							<t t-call="l10n_ro_stock_picking_report.report_address" />
+        <template id="report_consume_voucher">
 
-							<h3>
-								<span>Delivery:</span>
-								<span t-field="o.name" />
-								<span t-if="o.state == 'drat'">Draft</span>
-								<span t-if="o.state == 'cancel'">Cancelled</span>
-							</h3>
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th>
-											<strong>Origin</strong>
-										</th>
-										<th>
-											<strong>Date</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<span t-field="o.origin" />
-										</td>
-										<td>
-											<t t-esc="formatLang(o.date, date=True)" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-call="l10n_ro_stock_picking_report.report_address_company"/>
 
-							<table class="table table-condensed table-bordered">
-								<thead>
-									<tr>
-										<th>
-											<strong>Product</strong>
-										</th>
-										<th class="text-right">
-											<strong>Quantity</strong>
-										</th>
-										<th class="text-right">
-											<strong>Price</strong>
-										</th>
-										<th class="text-right">
-											<strong>Amount</strong>
-										</th>
-										<th class="text-right">
-											<strong>Taxes</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr t-foreach="o.move_lines" t-as="move">
-										<t t-set="line" t-value="get_line(move)" />
-										<td>
-											<span t-field="move.product_id" />
-											<div t-foreach="move.lot_ids" t-as="lot">
-												<span t-field="lot.name" />
-											</div>
-										</td>
-										<td class="text-right">
-											<span t-field="move.product_uom_qty" />
-											<span t-field="move.product_uom" groups="product.group_uom" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['price'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['amount'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['tax'])" />
-										</td>
+                            <h3>
+                                <span t-if="o.state == 'drat'">Draft</span>
+                                <span t-if="o.state == 'cancel'">Cancelled</span>
+                                <span>Consume Voucher:</span>
+                                <span t-field="o.name"/>
+                            </h3>
+                            <h3>
+                                <span>Date:</span>
+                                <span t-esc="formatLang(o.date, date=True)"/>
+                            </h3>
 
-									</tr>
-								</tbody>
-							</table>
-
-
-							<t t-call="l10n_ro_stock_picking_report.report_totals" />
-							<t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
-							<div t-if="o.note">
-								<span t-field="o.note" />
-							</div>	
-							<div class="oe_structure" />
-						</div>
-					</t>
-				</t>
-			</t>
-		</template>
-
-
-		<template id="report_consume_sign">
-			<table class="table table-condensed">
-				<thead>
-					<tr>
-						<th>Reception Committee:</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Name</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Signature</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Date</td>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
-		</template>
-		
-		<template id="report_reception_sign">
-			<table class="table table-condensed">
-				<thead>
-					<tr>
-						<th>Reception Committee:</th>
-						<th>Received in storage:</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Name</td>
-						<td><span>Name</span>
-						<t f-if="o.location_id.user_id.name">
-							<span t-field="o.location_dest_id.user_id"/>
-						</t>
-						</td>
-					</tr>
-					<tr>
-						<td>Signature</td>
-						<td>Signature</td>
-					</tr>
-					<tr>
-						<td>Date</td>
-						<td>Date</td>
-					</tr>
-				</tbody>
-			</table>
-		</template>
-
-		<template id="report_reception">
-
-			<t t-call="report.html_container">
-				<t t-foreach="docs" t-as="o">
-					<t t-call="report.external_layout">
-						<div class="page">
-							<t t-call="l10n_ro_stock_picking_report.report_address" />
-
-							<h3>
-								<span>Reception:</span>
-								<span t-field="o.name" />
-							</h3>
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th>
-											<strong>Origin</strong>
-										</th>
-										<th>
-											<strong>Date</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<span t-field="o.origin" />
-										</td>
-										<td>
-											<t t-esc="formatLang(o.date, date=True)" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<div>
-								<span>The undersigned, members of the reception, we proceeded to receive material values supplied by</span>
-								<strong>
-									<span t-field="o.partner_id.name" />
-								</strong>
-
-								<span t-if="o.partner_id.city">
-									from the city
-
-									<strong>
-										<span t-field="o.partner_id.city" />
-									</strong>
-								</span>
-								<span>under the invoice (delivery note) no.</span>
-								<strong>
-									<span t-field="o.origin" />
-								</strong>
-								<span>ascertained the following:</span>
-							</div>
-							<br />
-							<table class="table table-condensed table-bordered">
-								<thead>
-									<tr>
-										<th>
-											<strong>Product</strong>
-										</th>
-										<th class="text-right">
-											<strong>Quantity</strong>
-										</th>
-										<th class="text-right">
-											<strong>Price</strong>
-										</th>
-										<th class="text-right">
-											<strong>Amount</strong>
-										</th>
-										<th class="text-right">
-											<strong>Taxes</strong>
-										</th>
-										<th class="text-right">
-											<strong>Amount with taxes</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr t-foreach="o.move_lines" t-as="move">
-										<t t-set="line" t-value="get_line(move)" />
-										<td>
-											<span t-field="move.product_id" />
-											<div t-foreach="move.lot_ids" t-as="lot">
-												<span t-field="lot.name" />
-											</div>											 
-										</td>
-										<td class="text-right">
-											<span t-field="move.product_uom_qty" />
-											<span t-field="move.product_uom" groups="product.group_uom" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['price'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['amount'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['tax'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['amount_tax'])" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							<t t-call="l10n_ro_stock_picking_report.report_totals" />
-							<t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
-							<div t-if="o.note">
-								<span t-field="o.note" />
-							</div>	
-							<div class="oe_structure" />
-						</div>
-					</t>
-				</t>
-			</t>
-		</template>
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Price</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Amount</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_lines" t-as="move">
+                                        <t t-set="line" t-value="get_line(move)"/>
+                                        <td>
+                                            <span t-field="move.product_id"/>
+                                            <div t-foreach="move.lot_ids" t-as="lot">
+                                                <span t-field="lot.name"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_uom_qty"/>
+                                            <span t-field="move.product_uom" groups="product.group_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(move.price_unit)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(move.price_unit * move.product_uom_qty)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td class="text-right">
+                                        </td>
+                                        <td class="text-right">
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <t t-call="l10n_ro_stock_picking_report.report_consume_sign"/>
+                            <div t-if="o.note">
+                                <span t-field="o.note"/>
+                            </div>
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
 
 
-		<template id="report_reception_no_tax">
+        <template id="report_internal_transfer">
 
-			<t t-call="report.html_container">
-				<t t-foreach="docs" t-as="o">
-					<t t-call="report.external_layout">
-						<div class="page">
-							<t t-call="l10n_ro_stock_picking_report.report_address" />
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-call="l10n_ro_stock_picking_report.report_address_company"/>
 
-							<h3>
-								<span>Reception:</span>
-								<span t-field="o.name" />
-							</h3>
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th>
-											<strong>Origin</strong>
-										</th>
-										<th>
-											<strong>Date</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<span t-field="o.origin" />
-										</td>
-										<td>
-											<t t-esc="formatLang(o.date, date=True)" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
+                            <h3>
 
-							<div>
-								<span>The undersigned, members of the reception, we proceeded to receive material values supplied by</span>
-								<strong>
-									<span t-field="o.partner_id.name" />
-								</strong>
+                                <span>Internal Transfer:</span>
+                                <span t-field="o.name"/>
+                                <span t-if="o.state == 'drat'">Draft</span>
+                                <span t-if="o.state == 'cancel'">Cancelled</span>
+                            </h3>
+                            <h3>
+                                <span>Date:</span>
+                                <span t-esc="formatLang(o.date, date=True)"/>
+                            </h3>
 
-								<span t-if="o.partner_id.city">
-									from the city
-
-									<strong>
-										<span t-field="o.partner_id.city" />
-									</strong>
-								</span>
-								<span>under the invoice (delivery note) no.</span>
-								<strong>
-									<span t-field="o.origin" />
-								</strong>
-								<span>ascertained the following:</span>
-							</div>
-							<br />
-							<table class="table table-condensed table-bordered">
-								<thead>
-									<tr>
-										<th>
-											<strong>Product</strong>
-										</th>
-										<th class="text-right">
-											<strong>Quantity</strong>
-										</th>
-										<th class="text-right">
-											<strong>Price</strong>
-										</th>
-										<th class="text-right">
-											<strong>Amount</strong>
-										</th>
-
-									</tr>
-								</thead>
-								<tbody>
-									<tr t-foreach="o.move_lines" t-as="move">
-										<t t-set="line" t-value="get_line(move)" />
-										<td>
-											<span t-field="move.product_id" />
-											<div t-foreach="move.lot_ids" t-as="lot">
-												<span t-field="lot.name" />
-											</div>
-										</td>
-										<td class="text-right">
-											<span t-field="move.product_uom_qty" />
-											<span t-field="move.product_uom" groups="product.group_uom" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['price'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['amount'])" />
-										</td>
-
-									</tr>
-								</tbody>
-							</table>
-
-			<div class="row">
-				<t t-set="totals" t-value="get_totals(o.move_lines)" />
-				<div class="col-xs-4 pull-right">
-					<table class="table table-condensed">
-						<tr class="border-black">
-							<td>
-								<strong>Total</strong>
-							</td>
-							<td class="text-right">
-								<span t-esc="formatLang(totals['amount'], currency_obj=res_company.currency_id)" />
-							</td>
-						</tr>
-
-					</table>
-				</div>
-			</div>
-
-							<t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
-							<div t-if="o.note">
-								<span t-field="o.note" />
-							</div>	
-							<div class="oe_structure" />
-						</div>
-					</t>
-				</t>
-			</t>
-		</template>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Location source</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Location destination</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.location_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.location_dest_id"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
 
-		<template id="report_reception_sale_price">
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Price</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Amount</strong>
+                                        </th>
 
-			<t t-call="report.html_container">
-				<t t-foreach="docs" t-as="o">
-					<t t-call="report.external_layout">
-						<div class="page">
-							<t t-call="l10n_ro_stock_picking_report.report_address" />
-							<h3>
-								<span>Reception:</span>
-								<span t-field="o.name" />
-							</h3>
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th>
-											<strong>Origin</strong>
-										</th>
-										<th>
-											<strong>Date</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<span t-field="o.origin" />
-										</td>
-										<td>
-											<t t-esc="formatLang(o.date, date=True)" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_lines" t-as="move">
+                                        <t t-set="line" t-value="get_line(move)"/>
+                                        <td>
+                                            <span t-field="move.product_id"/>
+                                            <div t-foreach="move.lot_ids" t-as="lot">
+                                                <span t-field="lot.name"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_uom_qty"/>
+                                            <span t-field="move.product_uom" groups="product.group_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(move.price_unit)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(move.price_unit * move.product_uom_qty)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" class="text-right">
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-							<div>
-								<span>The undersigned, members of the reception, we proceeded to receive material values supplied by</span>
-
-								<strong>
-									<span t-field="o.partner_id.name" />
-								</strong>
-
-								<span t-if="o.partner_id.city">
-									from the city
-									<strong>
-										<span t-field="o.partner_id.city" />
-									</strong>
-								</span>
-								<span>under the invoice (delivery note) no.</span>
-								<strong>
-									<span t-field="o.origin" />
-								</strong>
-								<span>ascertained the following:</span>
-
-							</div>
-							<br />
-							<table class="table table-condensed table-bordered">
-								<thead>
-									<tr>
-										<th>
-											<strong>Product</strong>
-										</th>
-										<th class="text-right">
-											<strong>Quantity</strong>
-										</th>
-										<th class="text-right">
-											<strong>Price</strong>
-										</th>
-										<th class="text-right">
-											<strong>Amount</strong>
-										</th>
-										<th class="text-right">
-											<strong>Taxes</strong>
-										</th>
-										<th class="text-right">
-											<strong>Amount with taxes</strong>
-										</th>
-										<th class="text-right">
-											<strong>Sale price</strong>
-										</th>
-										<th class="text-right">
-											<strong>Margin</strong>
-										</th>
-										<th class="text-right">
-											<strong>Sale Amount</strong>
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr t-foreach="o.move_lines" t-as="move">
-										<t t-set="line" t-value="get_line(move)" />
-										<td>
-											<span t-field="move.product_id" />
-											<div t-foreach="move.lot_ids" t-as="lot">
-												<span t-field="lot.name" />
-											</div>
-										</td>
-										<td class="text-right">
-											<span t-field="move.product_uom_qty" />
-											<span t-field="move.product_uom" groups="product.group_uom" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['price'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['amount'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['tax'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['amount_tax'])" />
-										</td>
-										<td class="text-right">
-											<span t-field="move.product_id.list_price" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['margin'])" />
-										</td>
-										<td class="text-right">
-											<span t-esc="formatLang(line['amount_sale'])" />
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<t t-call="l10n_ro_stock_picking_report.report_totals" />
-							<t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
-							<div t-if="o.note">
-								<span t-field="o.note" />
-							</div>	
-							<div class="oe_structure" />
-						</div>
-					</t>
-				</t>
-			</t>
-		</template>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Signature delivery:</th>
+                                        <th>Signature reception:</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span>Name:</span>
+                                            <t f-if="o.location_id.user_id.name">
+                                                <span t-field="o.location_id.user_id"/>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <span>Name:</span>
+                                            <t f-if="o.location_id.user_id.name">
+                                                <span t-field="o.location_dest_id.user_id"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div t-if="o.note">
+                                <span t-field="o.note"/>
+                            </div>
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
 
 
+        <template id="report_delivery_price">
 
-	</data>
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-call="l10n_ro_stock_picking_report.report_address"/>
+
+                            <h3>
+                                <span>Delivery:</span>
+                                <span t-field="o.name"/>
+                                <span t-if="o.state == 'drat'">Draft</span>
+                                <span t-if="o.state == 'cancel'">Cancelled</span>
+                            </h3>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Origin</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Date</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.origin"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="formatLang(o.date, date=True)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Price</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Taxes</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_lines" t-as="move">
+                                        <t t-set="line" t-value="get_line(move)"/>
+                                        <td>
+                                            <span t-field="move.product_id"/>
+                                            <div t-foreach="move.lot_ids" t-as="lot">
+                                                <span t-field="lot.name"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_uom_qty"/>
+                                            <span t-field="move.product_uom" groups="product.group_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['price'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['amount'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['tax'])"/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            <t t-call="l10n_ro_stock_picking_report.report_delivery_sign"/>
+                            <div t-if="o.note">
+                                <span t-field="o.note"/>
+                            </div>
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="report_consume_sign">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Reception Committee:</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Signature</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <template id="report_reception_sign">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Reception Committee:</th>
+                        <th>Received in storage:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>
+                            <span>Name</span>
+                            <t f-if="o.location_id.user_id.name">
+                                <span t-field="o.location_dest_id.user_id"/>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Signature</td>
+                        <td>Signature</td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td>Date</td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <template id="report_reception">
+
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-call="l10n_ro_stock_picking_report.report_address"/>
+
+                            <h3>
+                                <span>Reception:</span>
+                                <span t-field="o.name"/>
+                            </h3>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Origin</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Date</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.origin"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="formatLang(o.date, date=True)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div>
+                                <span>The undersigned, members of the reception, we proceeded to receive material values
+                                    supplied by
+                                </span>
+                                <strong>
+                                    <span t-field="o.partner_id.name"/>
+                                </strong>
+
+                                <span t-if="o.partner_id.city">
+                                    from the city
+
+                                    <strong>
+                                        <span t-field="o.partner_id.city"/>
+                                    </strong>
+                                </span>
+                                <span>under the invoice (delivery note) no.</span>
+                                <strong>
+                                    <span t-field="o.origin"/>
+                                </strong>
+                                <span>ascertained the following:</span>
+                            </div>
+                            <br/>
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Price</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Taxes</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Amount with taxes</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_lines" t-as="move">
+                                        <t t-set="line" t-value="get_line(move)"/>
+                                        <td>
+                                            <span t-field="move.product_id"/>
+                                            <div t-foreach="move.lot_ids" t-as="lot">
+                                                <span t-field="lot.name"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_uom_qty"/>
+                                            <span t-field="move.product_uom" groups="product.group_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['price'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['amount'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['tax'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['amount_tax'])"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_sign"/>
+                            <div t-if="o.note">
+                                <span t-field="o.note"/>
+                            </div>
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="report_reception_no_tax">
+
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-call="l10n_ro_stock_picking_report.report_address"/>
+
+                            <h3>
+                                <span>Reception:</span>
+                                <span t-field="o.name"/>
+                            </h3>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Origin</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Date</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.origin"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="formatLang(o.date, date=True)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div>
+                                <span>The undersigned, members of the reception, we proceeded to receive material values
+                                    supplied by
+                                </span>
+                                <strong>
+                                    <span t-field="o.partner_id.name"/>
+                                </strong>
+
+                                <span t-if="o.partner_id.city">
+                                    from the city
+
+                                    <strong>
+                                        <span t-field="o.partner_id.city"/>
+                                    </strong>
+                                </span>
+                                <span>under the invoice (delivery note) no.</span>
+                                <strong>
+                                    <span t-field="o.origin"/>
+                                </strong>
+                                <span>ascertained the following:</span>
+                            </div>
+                            <br/>
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Price</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Amount</strong>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_lines" t-as="move">
+                                        <t t-set="line" t-value="get_line(move)"/>
+                                        <td>
+                                            <span t-field="move.product_id"/>
+                                            <div t-foreach="move.lot_ids" t-as="lot">
+                                                <span t-field="lot.name"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_uom_qty"/>
+                                            <span t-field="move.product_uom" groups="product.group_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['price'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['amount'])"/>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="row">
+                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
+                                <div class="col-xs-4 pull-right">
+                                    <table class="table table-condensed">
+                                        <tr class="border-black">
+                                            <td>
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="formatLang(totals['amount'], currency_obj=res_company.currency_id)"/>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_sign"/>
+                            <div t-if="o.note">
+                                <span t-field="o.note"/>
+                            </div>
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="report_reception_sale_price">
+
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-call="l10n_ro_stock_picking_report.report_address"/>
+                            <h3>
+                                <span>Reception:</span>
+                                <span t-field="o.name"/>
+                            </h3>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Origin</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Date</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.origin"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="formatLang(o.date, date=True)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div>
+                                <span>The undersigned, members of the reception, we proceeded to receive material values
+                                    supplied by
+                                </span>
+
+                                <strong>
+                                    <span t-field="o.partner_id.name"/>
+                                </strong>
+
+                                <span t-if="o.partner_id.city">
+                                    from the city
+                                    <strong>
+                                        <span t-field="o.partner_id.city"/>
+                                    </strong>
+                                </span>
+                                <span>under the invoice (delivery note) no.</span>
+                                <strong>
+                                    <span t-field="o.origin"/>
+                                </strong>
+                                <span>ascertained the following:</span>
+
+                            </div>
+                            <br/>
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Price</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Taxes</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Amount with taxes</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Sale price</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Margin</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>Sale Amount</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.move_lines" t-as="move">
+                                        <t t-set="line" t-value="get_line(move)"/>
+                                        <td>
+                                            <span t-field="move.product_id"/>
+                                            <div t-foreach="move.lot_ids" t-as="lot">
+                                                <span t-field="lot.name"/>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_uom_qty"/>
+                                            <span t-field="move.product_uom" groups="product.group_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['price'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['amount'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['tax'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['amount_tax'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="move.product_id.list_price"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['margin'])"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="formatLang(line['amount_sale'])"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_sign"/>
+                            <div t-if="o.note">
+                                <span t-field="o.note"/>
+                            </div>
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
 </openerp>
