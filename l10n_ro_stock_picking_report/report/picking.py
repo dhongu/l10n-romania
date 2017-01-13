@@ -48,7 +48,6 @@ class picking_delivery(report_sxw.rml_parse):
             else:
                 res['price'] = 0.0
 
-
         return res
 
     def _get_totals(self, move_lines):
@@ -67,33 +66,32 @@ class picking_reception(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time,
             'get_line': self._get_line,
-            'get_totals': self._get_totals,
+            'get_totals': self._get_totals
         })
 
     def _get_line(self, move_line):
         res = {'price': 0.0, 'amount': 0.0, 'tax': 0.0,
                'amount_tax': 0.0, 'amount_sale': 0.0, 'margin': 0.0}
 
-        if not move_line.quant_ids  and  move_line.purchase_line_id:
+        if move_line.purchase_line_id:
+
             line = move_line.purchase_line_id
 
-            res['tax'] = line.price_tax
-            res['amount'] = line.price_subtotal
-            res['amount_tax'] = line.price_total
+            # todo: de verificat daca pretul din miscare este actualizat inaiante de confirmarea transferului pentru a se actualiza cursul valutar !!
+            res['price'] = move_line.price_unit  # pretul caculat la genereare miscarii
+            taxes = line.taxes_id.compute_all(res['price'],
+                                              quantity=move_line.product_uom_qty,
+                                              product=move_line.product_id,
+                                              partner=move_line.partner_id)
 
-            currency = line.currency_id
+            res['tax'] = taxes['total_included'] - taxes['total_excluded']
+            res['amount'] = taxes['total_excluded']
+            res['amount_tax'] = taxes['total_included']
 
-
-            if move_line.product_uom_qty != 0.0:
-                res['price'] = currency.round(res['amount']) / move_line.product_uom_qty
-            else:
-                res['price'] = 0.0
-
-
-            taxes_sale = line.product_id.taxes_id.compute_all(line.product_id.list_price, currency=currency,
+            taxes_sale = line.product_id.taxes_id.compute_all(line.product_id.list_price,
                                                               quantity=move_line.product_uom_qty,
                                                               product=line.product_id)
-            res['amount_sale'] = currency.round(taxes_sale['total_included'])
+            res['amount_sale'] = taxes_sale['total_included']
             if res['amount_tax'] != 0.0:
                 res['margin'] = 100 * (taxes_sale['total_included'] - res['amount_tax']) / res['amount_tax']
             else:
@@ -118,14 +116,14 @@ class picking_reception(report_sxw.rml_parse):
                                                                        product=move_line.product_id,
                                                                        partner=move_line.partner_id)
 
-            res['tax'] = currency.round(taxes['total_included'] - taxes['total_excluded'])
-            res['amount_tax'] = currency.round(taxes['total_included'])
+            res['tax'] =  taxes['total_included'] - taxes['total_excluded']
+            res['amount_tax'] =  taxes['total_included']
 
             taxes_sale = move_line.product_id.taxes_id.compute_all(move_line.product_id.list_price, currency=currency,
                                                                    quantity=move_line.product_uom_qty,
                                                                    product=move_line.product_id)
 
-            res['amount_sale'] = currency.round(taxes_sale['total_included'])
+            res['amount_sale'] =  taxes_sale['total_included']
             if taxes['total_included'] != 0.0:
                 res['margin'] = 100 * (taxes_sale['total_included'] - taxes['total_included']) / taxes['total_included']
             else:
