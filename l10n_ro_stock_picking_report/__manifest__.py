@@ -31,6 +31,7 @@
 Romania - Picking Report layout
 ------------------------------------------
  - Reports for Reception, Delivery and Internal Transfer
+ - Referinta din comanda de achizitie este copiata in NIR si factura
 
     """,
 
@@ -39,6 +40,8 @@ Romania - Picking Report layout
         "base",
         "stock",
         'l10n_ro_config',
+
+        'purchase'
         # 'l10n_ro_stock_account'
     ],
 

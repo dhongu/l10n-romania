@@ -42,6 +42,7 @@ class stock_location(models.Model):
 class stock_picking(models.Model):
     _inherit = 'stock.picking'
 
+    origin = fields.Char(states={'done': [('readonly', False)]})
     delegate_id = fields.Many2one('res.partner', string='Delegate')
     mean_transp = fields.Char(string='Mean transport', size=20)
 
