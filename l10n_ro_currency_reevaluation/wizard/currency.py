@@ -180,88 +180,90 @@ class currency_reevaluation(models.TransientModel):
             created_ids.append(move_id)
 
         lines = []
-        query = """
-SELECT DISTINCT ON (journal_id) j.id as journal_id, s.date AS date,
-s.balance_end_real as balance, c.id as currency_id
-FROM account_bank_statement s
-INNER JOIN account_journal j on s.journal_id = j.id
-INNER JOIN res_company com on s.company_id = com.id
-INNER JOIN res_currency c on ((j.currency is not null and j.currency = c.id))
-INNER JOIN
-(SELECT journal_id, max(date) as max_date FROM account_bank_statement
-WHERE date <= %(reevaluation_date)s::date AND state = 'confirm'
-GROUP BY journal_id) d ON (s.journal_id = d.journal_id AND s.date = d.max_date)
-WHERE j.company_id = %(company_id)s
-ORDER BY journal_id, date"""
-        params = {
-            'reevaluation_date': reevaluation_date, 'company_id': company.id}
-        self._cr.execute(query, params)
-        lines = self._cr.dictfetchall()
-        for line in lines:
-            currency = curr_obj.browse(line['currency_id'])
-            journal = journal_obj.browse(line['journal_id'])
+        curr_journals = self.env['account.journal'].search([('currency', '!=', False)])
+        if curr_journals:
+            query = """
+    SELECT DISTINCT ON (journal_id) j.id as journal_id, s.date AS date,
+    s.balance_end_real as balance, c.id as currency_id
+    FROM account_bank_statement s
+    INNER JOIN account_journal j on s.journal_id = j.id
+    INNER JOIN res_company com on s.company_id = com.id
+    INNER JOIN res_currency c on ((j.currency is not null and j.currency = c.id))
+    INNER JOIN
+    (SELECT journal_id, max(date) as max_date FROM account_bank_statement
+    WHERE date <= %(reevaluation_date)s::date AND state = 'confirm'
+    GROUP BY journal_id) d ON (s.journal_id = d.journal_id AND s.date = d.max_date)
+    WHERE j.company_id = %(company_id)s AND j.id in %(journal_ids)s
+    ORDER BY journal_id, date"""
+            params = {
+                'reevaluation_date': reevaluation_date, 'company_id': company.id, 'journal_ids': tuple(curr_journals.ids)}
+            self._cr.execute(query, params)
+            lines = self._cr.dictfetchall()
+            for line in lines:
+                currency = curr_obj.browse(line['currency_id'])
+                journal = journal_obj.browse(line['journal_id'])
 
-            new_amount = currency.with_context(ctx).compute(
-                line['balance'], company_currency, round=True)
-            ctx1.update({'date': False,
-                         'fiscalyear': period.fiscalyear_id.id,
-                         'date_from': period.fiscalyear_id.date_start,
-                         'date_to': period.date_stop})
+                new_amount = currency.with_context(ctx).compute(
+                    line['balance'], company_currency, round=True)
+                ctx1.update({'date': False,
+                             'fiscalyear': period.fiscalyear_id.id,
+                             'date_from': period.fiscalyear_id.date_start,
+                             'date_to': period.date_stop})
 
-            old_amount = journal.default_debit_account_id.with_context(
-                ctx1).read(['balance'])[0]['balance']
-            amount = round(new_amount - old_amount, 2)
-            if amount != 0.00:
-                vals = {'name': 'Currency update ' + period.code,
+                old_amount = journal.default_debit_account_id.with_context(
+                    ctx1).read(['balance'])[0]['balance']
+                amount = round(new_amount - old_amount, 2)
+                if amount != 0.00:
+                    vals = {'name': 'Currency update ' + period.code,
+                            'journal_id': journal.id,
+                            'period_id': period.id,
+                            'date': period.date_stop}
+                    move_id = move_obj.create(vals)
+                    move = move_id[0]
+
+                    if amount > 0:
+                        eval_account = income_acc
+                        journal_account = journal.default_debit_account_id
+                        debit = abs(amount)
+                        credit = 0.00
+                    else:
+                        eval_account = expense_acc
+                        journal_account = journal.default_credit_account_id
+                        debit = 0.00
+                        credit = abs(amount)
+
+                    valsm = {
+                        'name': 'Currency update ' + str(line['balance']),
+                        'ref': 'Currency update ' + str(line['balance']),
+                        'move_id': move.id,
                         'journal_id': journal.id,
+                        'account_id': journal_account.id,
+                        'partner_id': False,
                         'period_id': period.id,
-                        'date': period.date_stop}
-                move_id = move_obj.create(vals)
-                move = move_id[0]
-
-                if amount > 0:
-                    eval_account = income_acc
-                    journal_account = journal.default_debit_account_id
-                    debit = abs(amount)
-                    credit = 0.00
-                else:
-                    eval_account = expense_acc
-                    journal_account = journal.default_credit_account_id
-                    debit = 0.00
-                    credit = abs(amount)
-
-                valsm = {
-                    'name': 'Currency update ' + str(line['balance']),
-                    'ref': 'Currency update ' + str(line['balance']),
-                    'move_id': move.id,
-                    'journal_id': journal.id,
-                    'account_id': journal_account.id,
-                    'partner_id': False,
-                    'period_id': period.id,
-                    'debit': debit,
-                    'credit': credit,
-                    'amount_currency': 0.00,
-                    'currency_id': currency.id,
-                    'date': period.date_stop,
-                }
-                move_line_obj.create(valsm)
-                valsm = {
-                    'name': 'Update ' + str(line['balance']),
-                    'ref': 'Update ' + str(line['balance']),
-                    'move_id': move.id,
-                    'journal_id': journal.id,
-                    'account_id': eval_account,
-                    'partner_id': False,
-                    'period_id': period.id,
-                    'debit': credit,
-                    'credit': debit,
-                    'amount_currency': 0.00,
-                    'currency_id': currency.id,
-                    'date': period.date_stop,
-                }
-                move_line_obj.create(valsm)
-                created_ids.append(move_id)
-                move.post()
+                        'debit': debit,
+                        'credit': credit,
+                        'amount_currency': 0.00,
+                        'currency_id': currency.id,
+                        'date': period.date_stop,
+                    }
+                    move_line_obj.create(valsm)
+                    valsm = {
+                        'name': 'Update ' + str(line['balance']),
+                        'ref': 'Update ' + str(line['balance']),
+                        'move_id': move.id,
+                        'journal_id': journal.id,
+                        'account_id': eval_account,
+                        'partner_id': False,
+                        'period_id': period.id,
+                        'debit': credit,
+                        'credit': debit,
+                        'amount_currency': 0.00,
+                        'currency_id': currency.id,
+                        'date': period.date_stop,
+                    }
+                    move_line_obj.create(valsm)
+                    created_ids.append(move_id)
+                    move.post()
         if created_ids:
             return {'domain': "[('id','in', %s)]" % (created_ids,),
                     'name': _("Created reevaluation lines"),

@@ -32,8 +32,7 @@
         'account_vat_on_payment',
         'l10n_ro_invoice_line_not_deductible',
         'l10n_ro_invoice_report',
-        'l10n_ro_config',
-       # 'l10n_ro_account_report_d394',
+        'l10n_ro_config'
     ],
 
     "description": """
@@ -56,9 +55,9 @@ Romania  - Accounting Reports
              'account_report.xml',
              'wizard/account_report_account_balance_view.xml',
              'wizard/account_report_sale_purchase_journal_view.xml',
-             'wizard/d394_view.xml',
              'wizard/account_report_partner_statement_view.xml',
-             'security/ir.model.access.csv', ],
+             'security/ir.model.access.csv' ],
+ 
     'installable': True,
     'auto_install': False,
 }

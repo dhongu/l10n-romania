@@ -4,3 +4,4 @@
 
 
 from . import d394
+from . import d394_new

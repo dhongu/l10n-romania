@@ -11,9 +11,7 @@
             file="l10n_ro_account_report.report_account_bank_statement2"
         />
         
-        <menuitem id="final_accounting_html_reports" name="HTML Legal Reports" parent="account.menu_finance_reports"/>
-
-    
+        <menuitem id="final_accounting_html_reports" name="HTML Legal Reports" parent="account.menu_finance_reports"/>    
         
         <report 
             id="action_report_trial_balance_romania"

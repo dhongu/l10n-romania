@@ -27,6 +27,7 @@
              'views/ir_sequence_view.xml',
              'views/res_company_view.xml',
              'wizard/d394_view.xml',
+             'wizard/d394_new_view.xml',
              'security/ir.model.access.csv', ],
     'installable': True,
     'auto_install': False,

@@ -14,23 +14,18 @@
                     <thead>
                         <tr>
 							<td colspan="3">
-							    <div t-field="company.partner_id" 
+							    <span t-field="company.partner_id" 
 							            t-field-options='{"widget": "contact", "fields": ["address", "name", "vat", "nrc"], "no_marker": true}'/>
                             </td>
                             <td colspan="30">
-							    <h2 t-if="data['journal'] == 'sale'" class="text-center"><span t-esc="res_company.name"/>: Sale Journal</h2>              
-                            </td>
-                            <td colspan="2">
-                                <div class="text-center">
-                                    <ul class="list-inline">
-                                        <li>Page:</li>
-                                        <li><span class="page"/></li>
-                                        <li>/</li>
-                                        <li><span class="topage"/></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
+							    <h2 t-if="data['journal'] == 'sale'" class="text-center"><span t-esc="res_company.name"/>: Sale Journal</h2>    
+                                <p align="center">
+									<strong>Period: </strong><span t-raw="data['periods'][1]"/>
+								    <strong>Dates: </strong><span t-raw="data['date_from']"/> - <span t-raw="data['date_to']"/>
+								</p>
+							</td>
+							<td colspan="2"/>
+						</tr>
                     </thead>
                 </table>
                 <table class="table table-condensed" >
@@ -145,6 +140,7 @@
                                 <span t-esc="formatLang(0.00)"/>                                     
                             </td>							
                             <td colspan="5">
+                                <t t-if="inv1['payments']">
                                 <table width="100%">
                                     <tr t-foreach="inv1['payments']" t-as="pay">
                                         <td class="text-right" width="30">
@@ -166,6 +162,7 @@
                                         </td>
                                     </tr>
                                 </table>
+                                </t>
                             </td>  
                             <td class="text-right">
                                 <span t-esc="formatLang(inv1.get('base_neex', 0.00))"/>

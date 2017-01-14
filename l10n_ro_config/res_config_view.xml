@@ -24,182 +24,198 @@
                             </div>
                         </div>
                     </group>
+                    <group string="Partner and Address Book">
+                        <label for="id" string="Partners"/>
+                        <div>
+                            <div>
+                                <field name="module_partner_create_by_vat" class="oe_inline"/>
+                                <label for="module_partner_create_by_vat"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_fiscal_validation" class="oe_inline"/>
+                                <label for="module_l10n_ro_fiscal_validation"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_partner_unique" class="oe_inline"/>
+                                <label for="module_l10n_ro_partner_unique"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_contact_address" class="oe_inline"/>
+                                <label for="module_l10n_ro_contact_address"/>
+                            </div>
+                        </div>
+                        <label for="id" string="Address Book"/>
+                        <div>
+                            <div>
+                                <field name="module_l10n_ro_siruta" class="oe_inline"/>
+                                <label for="module_l10n_ro_siruta"/>
+                                <group attrs="{'invisible': [('module_l10n_ro_siruta', '&lt;&gt;', True)]}" col="2">
+                                    <group>
+                                        <field name="siruta_update"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </div>
+                        </div>
+                    </group>
                     <group string="Accounting">
                         <label for="id" string="General Features"/>
                         <div>
-							<div>
-								<field name="module_account_storno" class="oe_inline"/>
-								<label for="module_account_storno"/>
-							</div>
-							<div>
-								<field name="module_account_vat_on_payment" class="oe_inline"/>
-								<label for="module_account_vat_on_payment"/>
-							</div>
-							<div>
-								<field name="module_account_compensation" class="oe_inline"/>
-								<label for="module_account_compensation"/>
-							</div>
-							<div>
-								<field name="module_account_compensation_vat_on_payment" class="oe_inline"/>
-								<label for="module_account_compensation_vat_on_payment"/>
-							</div>                              
-						</div>
-						<label for="id" string="Romania Adaptation"/>
-						<div>
-							<div>
-								<group col="2">
-									<group>
-										<field name="property_customer_advance_account_id"/>
-										<field name="property_supplier_advance_account_id"/>
-									</group>
-									<group>
-									</group>
-								</group>
-							</div>
-							<div>
-								<field name="module_l10n_ro_account_constrains" class="oe_inline"/>
-								<label for="module_l10n_ro_account_constrains"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_invoice_line_not_deductible" class="oe_inline"/>
-								<label for="module_l10n_ro_invoice_line_not_deductible"/>
-								<group attrs="{'invisible': [('module_l10n_ro_invoice_line_not_deductible', '&lt;&gt;', True)]}" col="2">
-									<group>
-										<field name="property_undeductible_account_id"/>
-										<field name="property_undeductible_tax_account_id"/>
-									</group>
-									<group>
-									</group>
-								</group>
-							</div>
-							<div>
-								<field name="module_l10n_ro_account_bank_statement" class="oe_inline"/>
-								<label for="module_l10n_ro_account_bank_statement"/>
-								<group attrs="{'invisible': [('module_l10n_ro_account_bank_statement', '&lt;&gt;', True)]}" col="2">
-									<group>
-										<field name="bank_statement_template_installed"/>
-									</group>
-									<group>
-									</group>
-								</group>
-							</div>
-							<div>
-								<field name="module_l10n_ro_account_voucher_cash" class="oe_inline"/>
-								<label for="module_l10n_ro_account_voucher_cash"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_asset" class="oe_inline"/>
-								<label for="module_l10n_ro_asset"/>
-								<group attrs="{'invisible': [('module_l10n_ro_asset', '&lt;&gt;', True)]}" col="2">
-									<group>
-										<field name="property_asset_reevaluation_account_id"/>
-										<field name="asset_category_chart_installed"/>
-									</group>
-									<group>
-									</group>
-								</group>
-							</div>
-							<div>
-								<field name="module_l10n_ro_account_voucher_currency_update" class="oe_inline"/>
-								<label for="module_l10n_ro_account_voucher_currency_update"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_account_compensation_currency_update" class="oe_inline"/>
-								<label for="module_l10n_ro_account_compensation_currency_update"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_currency_reevaluation" class="oe_inline"/>
-								<label for="module_l10n_ro_currency_reevaluation"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_account_period_close" class="oe_inline"/>
-								<label for="module_l10n_ro_account_period_close"/>
-								<group attrs="{'invisible': [('module_l10n_ro_account_period_close', '&lt;&gt;', True)]}" col="2">
-									<group>
-										<field name="account_period_close_template_installed"/>
-									</group>
-									<group>
-									</group>
-								</group>
-							</div>
-							<div>
-								<field name="module_l10n_ro_invoice_report" class="oe_inline"/>
-								<label for="module_l10n_ro_invoice_report"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_account_report" class="oe_inline"/>
-								<label for="module_l10n_ro_account_report"/>
-							</div>
-						</div>
+                            <div>
+                                <field name="module_account_storno" class="oe_inline"/>
+                                <label for="module_account_storno"/>
+                            </div>
+                            <div>
+                                <field name="module_account_vat_on_payment" class="oe_inline"/>
+                                <label for="module_account_vat_on_payment"/>
+                            </div>
+                            <div>
+                                <field name="module_account_compensation" class="oe_inline"/>
+                                <label for="module_account_compensation"/>
+                            </div>
+                            <div>
+                                <field name="module_account_compensation_vat_on_payment" class="oe_inline"/>
+                                <label for="module_account_compensation_vat_on_payment"/>
+                            </div>
+                        </div>
+                        <label for="id" string="Romania Adaptation"/>
+                        <div>
+                            <div>
+                                <group col="2">
+                                    <group>
+                                        <field name="property_customer_advance_account_id"/>
+                                        <field name="property_supplier_advance_account_id"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_constrains" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_constrains"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_invoice_line_not_deductible" class="oe_inline"/>
+                                <label for="module_l10n_ro_invoice_line_not_deductible"/>
+                                <group attrs="{'invisible': [('module_l10n_ro_invoice_line_not_deductible', '&lt;&gt;', True)]}" col="2">
+                                    <group>
+                                        <field name="property_undeductible_account_id"/>
+                                        <field name="property_undeductible_tax_account_id"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_bank_statement" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_bank_statement"/>
+                                <group attrs="{'invisible': [('module_l10n_ro_account_bank_statement', '&lt;&gt;', True)]}" col="2">
+                                    <group>
+                                        <field name="bank_statement_template_installed"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_bank_statement_import_mt940_brd" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_bank_statement_import_mt940_brd"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_voucher_cash" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_voucher_cash"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_asset" class="oe_inline"/>
+                                <label for="module_l10n_ro_asset"/>
+                                <group attrs="{'invisible': [('module_l10n_ro_asset', '&lt;&gt;', True)]}" col="2">
+                                    <group>
+                                        <field name="property_asset_reevaluation_account_id"/>
+                                        <field name="asset_category_chart_installed"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_voucher_currency_update" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_voucher_currency_update"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_compensation_currency_update" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_compensation_currency_update"/>
+                            </div>
+                        </div>
+                        <label for="id" string="Period Closing"/>
+                        <div>
+                            <div>
+                                <field name="module_l10n_ro_currency_reevaluation" class="oe_inline"/>
+                                <label for="module_l10n_ro_currency_reevaluation"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_period_close" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_period_close"/>
+                                <group attrs="{'invisible': [('module_l10n_ro_account_period_close', '&lt;&gt;', True)]}" col="2">
+                                    <group>
+                                        <field name="account_period_close_template_installed"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </div>
+                        </div>
+                        <label for="id" string="Reporting"/>
+                        <div>
+                            <div>
+                                <field name="module_l10n_ro_invoice_report" class="oe_inline"/>
+                                <label for="module_l10n_ro_invoice_report"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_report" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_report"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_account_report_d394" class="oe_inline"/>
+                                <label for="module_l10n_ro_account_report_d394"/>
+                            </div>
+                        </div>
                     </group>
                     <group string="Stock">
                         <label for="id" string="Stock &amp; Stock Accounting"/>
                         <div>
-							<div>
-								<field name="module_l10n_ro_stock" class="oe_inline"/>
-								<label for="module_l10n_ro_stock"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_stock_account" class="oe_inline"/>
-								<label for="module_l10n_ro_stock_account"/>
-								<group attrs="{'invisible': [('module_l10n_ro_stock_account', '&lt;&gt;', True)]}" col="2">
-									<group>
-										<field name="property_stock_picking_receivable_account_id"/>
-										<field name="property_stock_picking_payable_account_id"/>
-										<field name="property_stock_usage_giving_account_id"/>
-										<field name="property_stock_picking_custody_account_id"/>
-									</group>
-									<group>
-									</group>
-								</group>
-							</div>
-							<div>
-								<field name="module_l10n_ro_stock_picking_report" class="oe_inline"/>
-								<label for="module_l10n_ro_stock_picking_report"/>
-							</div>
-						</div>
+                            <div>
+                                <field name="module_l10n_ro_stock" class="oe_inline"/>
+                                <label for="module_l10n_ro_stock"/>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_stock_account" class="oe_inline"/>
+                                <label for="module_l10n_ro_stock_account"/>
+                                <group attrs="{'invisible': [('module_l10n_ro_stock_account', '&lt;&gt;', True)]}" col="2">
+                                    <group>
+                                        <field name="property_stock_picking_receivable_account_id"/>
+                                        <field name="property_stock_picking_payable_account_id"/>
+                                        <field name="property_stock_usage_giving_account_id"/>
+                                        <field name="property_stock_picking_custody_account_id"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </div>
+                            <div>
+                                <field name="module_l10n_ro_stock_picking_report" class="oe_inline"/>
+                                <label for="module_l10n_ro_stock_picking_report"/>
+                            </div>
+                        </div>
                     </group>
                     <group string="General">
                         <label for="id" string="Currency Update"/>
-						<div>
-							<div>
-								<field name="module_currency_rate_update" class="oe_inline"/>
-								<label for="module_currency_rate_update"/>
-							</div>
-						</div>
-						<label for="id" string="Localisation"/>
-						<div>
-							<div>
-								<field name="module_l10n_ro_siruta" class="oe_inline"/>
-								<label for="module_l10n_ro_siruta"/>
-								<group attrs="{'invisible': [('module_l10n_ro_siruta', '&lt;&gt;', True)]}" col="2">
-									<group>
-										<field name="siruta_update"/>
-									</group>
-									<group>
-									</group>
-								</group>
-							</div>  
-							<div>
-								<field name="module_l10n_ro_zipcode" class="oe_inline"/>
-								<label for="module_l10n_ro_zipcode"/>
-							</div>  
-						</div>  
-						<label for="id" string="Partners"/>
-						<div>
-							<div>
-								<field name="module_partner_create_by_vat" class="oe_inline"/>
-								<label for="module_partner_create_by_vat"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_fiscal_validation" class="oe_inline"/>
-								<label for="module_l10n_ro_fiscal_validation"/>
-							</div>
-							<div>
-								<field name="module_l10n_ro_partner_unique" class="oe_inline"/>
-								<label for="module_l10n_ro_partner_unique"/>
-							</div>
-						</div> 
+                        <div>
+                            <div>
+                                <field name="module_currency_rate_update" class="oe_inline"/>
+                                <label for="module_currency_rate_update"/>
+                            </div>
+                        </div>
                     </group>
                 </form>
             </field>

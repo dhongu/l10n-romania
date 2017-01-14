@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_d394_new" model="ir.ui.view">
+            <field name="name">D394 Form</field>
+            <field name="model">l10n_ro_account_report_d394.d394_new.report</field>
+            <field name="arch" type="xml">
+                <form string="D394 Form">
+                    <group>
+                        <separator string="D394 Declaration" colspan="4"/>
+                        <notebook colspan="4">
+                            <page string="General Information">
+                                <field name="company_id" colspan="4"/>
+                                <newline/>
+                                <separator string="Period" colspan="4"/>
+                                <field name="period_id" colspan="4"/>
+                                <group>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                </group>
+                                <separator string="ANAF Options" colspan="4"/>
+                                <label for="anaf_cross_opt"/>
+                                <field name="anaf_cross_opt" readonly="1"/>
+                                <newline/>
+                                <label for="anaf_cross_new_opt"/>
+                                <field name="anaf_cross_new_opt" attrs="{'invisible': [('anaf_cross_opt','!=',False)]}"/>
+                                <separator string="VAT Reimbursement" colspan="4"/>
+                                <label for="solicit"/>
+                                <field name="solicit"/>
+                            </page>
+                            <page string="VAT Reimbursement Details" attrs="{'invisible': [('solicit','=',False)]}">
+                                <group>
+									<group>
+										<group>
+											<separator string="Purchases"/>									
+										</group>
+										<group >
+											<separator string="Sales"/>       
+										</group>
+									</group>
+									<newline/>
+									<group>
+										<group name="purchase_real_estate" string="VAT linked with Real Estates" col="2">
+											<field name="achizitiiPE" class="oe_inline"/>
+											<field name="achizitiiCR" class="oe_inline"/>
+											<field name="achizitiiCB" class="oe_inline"/>
+											<field name="achizitiiCI" class="oe_inline"/>
+											<field name="achizitiiA" class="oe_inline"/>
+										</group>
+										<group name="sales_real_estate" string="VAT linked with Real Estates" col="2">
+											<field name="livrariBI" class="oe_inline"/>
+										</group>
+									</group>
+									<newline/>
+									<group>
+										<group name="purchase_goods" string="VAT linked with Goods" col="2">
+											<field name="achizitiiB24" class="oe_inline"/>
+											<field name="achizitiiB20" class="oe_inline"/>
+											<field name="achizitiiB19" class="oe_inline"/>
+											<field name="achizitiiB9" class="oe_inline"/>
+											<field name="achizitiiB5" class="oe_inline"/>
+										</group>
+										<group name="sales_goods" string="VAT linked with Goods" col="2">
+											<field name="BUN24" class="oe_inline"/>
+											<field name="BUN20" class="oe_inline"/>
+											<field name="BUN19" class="oe_inline"/>
+											<field name="BUN9" class="oe_inline"/>
+											<field name="BUN5" class="oe_inline"/>
+											<field name="valoareScutit" class="oe_inline"/>
+											<field name="BunTI" class="oe_inline"/>
+										</group>
+									</group>
+									<newline/>
+									<group>
+										<group name="purchase_services" string="VAT linked with Services" col="2">
+											<field name="achizitiiS24" class="oe_inline"/>
+											<field name="achizitiiS20" class="oe_inline"/>
+											<field name="achizitiiS19" class="oe_inline"/>
+											<field name="achizitiiS9" class="oe_inline"/>
+											<field name="achizitiiS5" class="oe_inline"/>
+										</group>
+										<group name="sales_services" string="VAT linked with Services" col="2">
+											<field name="Prest24" class="oe_inline"/>
+											<field name="Prest20" class="oe_inline"/>
+											<field name="Prest19" class="oe_inline"/>
+											<field name="Prest9" class="oe_inline"/>
+											<field name="Prest5" class="oe_inline"/>
+											<field name="PrestScutit" class="oe_inline"/>
+											<field name="LIntra" class="oe_inline"/>
+											<field name="PrestIntra" class="oe_inline"/>
+										</group>
+									</group>
+									<newline/>
+									<group>
+										<group name="purchase_other" string="VAT linked with Other Purchases" col="2">
+											<field name="importB" class="oe_inline"/>
+											<field name="acINecorp" class="oe_inline"/>
+										</group>
+										<group name="sales_other" string="VAT linked with Other Sales" col="2">
+											<field name="Export" class="oe_inline"/>
+											<field name="livINecorp" class="oe_inline"/>
+										</group>
+									</group>
+								</group>
+                            </page>
+                        </notebook>
+                        <separator colspan="4"/>
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                        <button name="create_xml" string="Create _XML" type="object" default_focus="1" class="oe_highlight"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_d394_new_save" model="ir.ui.view">
+            <field name="name">D394 New Form Save</field>
+            <field name="model">l10n_ro_account_report_d394.d394_new.report</field>
+            <field name="arch" type="xml">
+                <form string="Save XML">
+                    <label string="Save the File with '.xml' extension."/>
+                    <field name="name" colspan="4"/>
+                    <field name="file_save" readonly="True" filename="name"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_d394_new" model="ir.actions.act_window">
+            <field name="name">D394 New Form</field>
+            <field name="res_model">l10n_ro_account_report_d394.d394_new.report</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_d394_new"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            name="D394 New Form"
+            parent="account.final_accounting_reports"
+            action="action_d394_new"
+            id="d394_new"/>
+
+    </data>
+</openerp>

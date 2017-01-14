@@ -40,7 +40,6 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     @api.multi
-    @api.depends('state')
     def _get_inv_number(self):
         regex = re.compile('[^a-zA-Z]')
         regex1 = re.compile('[^0-9]')
@@ -77,7 +76,6 @@ class AccountInvoice(models.Model):
         return True
 
     @api.multi
-    @api.depends('state')
     def _get_partner_type(self):
         for inv in self:
             partner = inv.partner_id
@@ -99,7 +97,6 @@ class AccountInvoice(models.Model):
         return True
 
     @api.multi
-    @api.depends('state')
     def _get_operation_type(self):
         for inv in self:
             partner = inv.partner_id
@@ -131,7 +128,10 @@ class AccountInvoice(models.Model):
                         ('Scutite' in inv.fiscal_position.name):
                     if partner.country_id and \
                             partner.country_id.id == country_ro.id:
-                        oper_type = 'A'
+                        if inv.special_taxes:
+                            oper_type = 'AS'
+                        else:
+                            oper_type = 'A'
                     else:
                         oper_type = 'C'
                 elif not inv.fiscal_position or \
@@ -151,15 +151,14 @@ class AccountInvoice(models.Model):
         return True
 
     @api.multi
-    @api.depends('state')
     def _get_tax_ids(self):
         for inv in self:
             check = False
             taxes = []
             if not inv.fiscal_position or (('National' in \
                     inv.fiscal_position.name) or ('Invers' in \
-                    inv.fiscal_position.name)  or ('Scutit' in \
-                    inv.fiscal_position.name)):
+                    inv.fiscal_position.name)  or (('Scutit' in \
+                    inv.fiscal_position.name) and inv.partner_type in ('1','2'))):
                 for line in inv.invoice_line:
                     taxes += [tax.id for tax in line.invoice_line_tax_id]
             else:
@@ -205,5 +204,5 @@ class AccountInvoice(models.Model):
         res = super(AccountInvoice, self).onchange_journal_id(journal_id)
         if journal_id:
             journal = self.env['account.journal'].browse(journal_id)
-            res['value']['fiscal_receipt'] = bool(journal.fiscal_receipt)
+            res['value']['fiscal_receipt'] = journal.fiscal_receipt
         return res

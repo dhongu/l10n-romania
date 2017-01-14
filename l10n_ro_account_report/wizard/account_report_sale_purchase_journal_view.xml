@@ -12,9 +12,18 @@
 					<group colspan="4">
 						<separator string="Journal type" colspan="4"/>
 						<field name="journal"/>
-						<separator string="Periods" colspan="4"/>
-						<field name="periods" colspan="4" nolabel="1"/>
 					</group>
+					<notebook tabpos="up" colspan="4">
+					<page string="Filters" name="filters">
+							<group string="Periods">
+								<field name="periods" colspan="4" nolabel="1" on_change="onchange_period_id(periods, context)"/>
+							</group>
+							<group string="Dates">
+								<field name="date_from" />
+								<field name="date_to" />
+							</group>
+						</page>
+					</notebook>
 					<footer>
                         <button name="print_report" string="Print" type="object" class="oe_highlight"/>
                         or
@@ -51,9 +60,18 @@
 					<group colspan="4">
 						<separator string="Journal type" colspan="4"/>
 						<field name="journal"/>
-						<separator string="Periods" colspan="4"/>
-						<field name="periods" colspan="4" nolabel="1"/>
 					</group>
+					<notebook tabpos="up" colspan="4">
+					<page string="Filters" name="filters">
+							<group string="Periods">
+								<field name="periods" colspan="4" nolabel="1" on_change="onchange_period_id(periods, context)"/>
+							</group>
+							<group string="Dates">
+								<field name="date_from" />
+								<field name="date_to" />
+							</group>
+						</page>
+					</notebook>
 					<footer>
                         <button name="print_html_report" string="Print" type="object" class="oe_highlight"/>
                         or

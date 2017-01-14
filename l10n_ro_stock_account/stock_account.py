@@ -156,6 +156,32 @@ class stock_move(osv.Model):
         'acc_move_line_ids': fields.one2many('account.move.line', 'stock_move_id', string='Account move lines'),
     }
 
+    # Update prices if the move is linked with a purchase order line and the
+    # purchase order is in a different currency then the company currency
+    def _update_move_price(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        product_uom = self.pool.get('product.uom')
+        for move in self.browse(cr, uid, ids, context=context):
+            if move.purchase_line_id:
+                order_line = move.purchase_line_id
+                price_unit = order_line.price_unit
+                if order_line.product_uom.id != order_line.product_id.uom_id.id:
+                    price_unit *= order_line.product_uom.factor / \
+                                  order_line.product_id.uom_id.factor
+                ctx = dict(context)
+                if move.picking_id:
+                    ctx.update({'date': move.picking_id.date})
+                else:
+                    ctx.update({'date': move.date})
+                if order_line.order_id.currency_id.id != move.company_id.currency_id.id:
+                    #we don't round the price_unit, as we may want to store the
+                    #standard price with more digits than allowed by the currency
+                    price_unit = self.pool.get('res.currency').compute(
+                    cr, uid, order_line.order_id.currency_id.id, move.company_id.currency_id.id,
+                    price_unit, round=False, context=ctx)
+                self.write(cr, uid, [move.id], {'price_unit': price_unit}, context=context)
+        return True
 
     # Fix date on stock move from stock picking
     def onchange_date(self, cr, uid, ids, date, date_expected, context=None):
@@ -167,7 +193,7 @@ class stock_move(osv.Model):
         if ids:
             move = self.browse(cr, uid, ids[0], context=context)
             if move.picking_id:
-                date_expected = move.picking_id.date 
+                date_expected = move.picking_id.date
         super(stock_move, self).onchange_date(cr, uid, ids, date, date_expected, context=context)
 
 
@@ -191,6 +217,7 @@ class stock_move(osv.Model):
                         for line in lines:
                             line_vals = line[2]
                             line_vals['stock_move_id'] = move.id
+                            line_vals['stock_quant_id'] = quant.id
                             acc_move_lines += [(0, 0, line_vals)]
             if acc_move_lines != []:
                 move_id = acc_move_obj.create(cr, uid, {'journal_id': journal_id,
@@ -204,6 +231,9 @@ class stock_move(osv.Model):
         return True
 
     def action_done(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        self._update_move_price(cr, uid, ids, context=context)
         res = super(stock_move, self).action_done(
             cr, uid, ids, context=context)
         for move in self.browse(cr, uid, ids, context=context):
@@ -239,6 +269,9 @@ class stock_move(osv.Model):
             else:
                 if move.location_dest_id.property_stock_account_input_location:
                     account_id = move.location_dest_id.property_stock_account_input_location and move.location_dest_id.property_stock_account_input_location.id
+        else:
+            if move.location_id.property_account_income_location:
+                account_id = move.location_id.property_account_income_location.id
         if move.picking_id and move.picking_id.notice:
             if inv_type in ('in_invoice', 'in_refund'):
                 account_id = move.company_id and move.company_id.property_stock_picking_payable_account_id and move.company_id.property_stock_picking_payable_account_id.id
@@ -268,9 +301,42 @@ class stock_move(osv.Model):
 
 
 class stock_quant(osv.Model):
-    _name = "stock.quant"
     _inherit = "stock.quant"
 
+    def _get_stock_account(self, cr, uid, ids, field_name, args, context=None):
+        res = {}
+        for quant in self.browse(cr, uid, ids, context=context):
+            res[quant.id] = []
+            accounts= []
+            if quant.acc_move_line_ids:
+                for acc_move_line in quant.acc_move_line_ids:
+                    account = acc_move_line.account_id
+                    if 'asset' in account.user_type.code and '331' not in account.code and account.id not in accounts:
+                        accounts.append(account.id)
+            else:
+                if quant.history_ids:
+                    for move in quant.history_ids:
+                        if move.acc_move_line_ids:
+                            for acc_move_line in move.acc_move_line_ids:
+                                account = acc_move_line.account_id
+                                if 'asset' in account.user_type.code and '331' not in account.code and account.id not in accounts:
+                                    accounts.append(account.id)
+                        else:
+                            if move.purchase_line_id:
+                                inv_line = self.pool['account.invoice.line'].search(cr, uid, [('purchase_line_id', '=', move.purchase_line_id.id)], context=context)
+                                if inv_line:
+                                    for line in self.pool['account.invoice.line'].browse(cr, uid, inv_line, context=context):
+                                         if line.account_id.id not in accounts:
+                                             accounts.append(line.account_id.id)
+            if accounts:
+                res[quant.id] = [acc for acc in accounts]
+        return res
+
+
+    _columns = {
+        'acc_move_line_ids': fields.one2many('account.move.line', 'stock_quant_id', string='Account move lines'),
+        'stock_account_ids': fields.function(_get_stock_account, type='many2many', relation='account.account', string='Stock Account'),
+    }
 
     def _account_entry_move(self, cr, uid, quants, move, context=None):
         """
@@ -613,7 +679,7 @@ class stock_quant(osv.Model):
             if not acc_dest:
                 acc_dest = move.product_id.categ_id.property_stock_account_input_categ and move.product_id.categ_id.property_stock_account_input_categ.id or False
 
-        
+
         if move.location_id.property_stock_account_output_location:
             acc_src = move.location_id.property_stock_account_output_location.id
         if move.location_dest_id.property_stock_account_input_location:
@@ -757,7 +823,7 @@ class stock_picking(osv.Model):
 
     _columns = {
         'acc_move_line_ids': fields.one2many('account.move.line', 'stock_picking_id', string='Generated accounting lines'),
-        'notice': fields.boolean('Is a notice', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]}),               
+        'notice': fields.boolean('Is a notice', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]}),
     }
 
     _defaults = {

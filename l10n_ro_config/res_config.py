@@ -47,6 +47,8 @@ class l10n_ro_config_settings(models.TransientModel):
                                                  help='This allows you to manage the update of currency rate based on different provider, use BNR site.')
     module_l10n_ro_account_bank_statement = fields.Boolean('Bank Statement Invoices',
                                                            help='This allows you to manage imports in bank statement line of the invoices only.')
+    module_l10n_ro_account_bank_statement_import_mt940_brd = fields.Boolean('Bank Statement Import from BRD',
+                                                                           help='This allows you to manage imports in bank statement from BRD statements.')
     module_l10n_ro_account_compensation_currency_update = fields.Boolean('Currency Difference on Compensations',
                                                                          help='This allows you to manage currency difference amounts on compensation.')
     module_l10n_ro_account_constrains = fields.Boolean('Account Constrains',
@@ -54,7 +56,9 @@ class l10n_ro_config_settings(models.TransientModel):
     module_l10n_ro_account_period_close = fields.Boolean('Romania Account Period Close',
                                                          help='This allows you to close accounts on periods based on templates: Income, Expense, VAT...')
     module_l10n_ro_account_report = fields.Boolean('Romania Accounting Reports',
-                                                   help='This allows you to print reports according to legislation like: Sale/Purchase Journals, Trial Balance, D394..\n')
+                                                   help='This allows you to print reports according to legislation like: Sale/Purchase Journals, Trial Balance..\n')
+    module_l10n_ro_account_report_d394 = fields.Boolean('Romania Accounting Reports - D394',
+                                                   help='This allows you to print D394 report.')
     module_l10n_ro_account_voucher_cash = fields.Boolean('Voucher to Cash Statement',
                                                          help='This allows you to directly input in Cash Statement payments/receipts from Pay Invoice.')
     module_l10n_ro_account_voucher_currency_update = fields.Boolean('Currency Difference on Partial Payments/Receipts',
@@ -101,6 +105,9 @@ class l10n_ro_config_settings(models.TransientModel):
                                                   'European partners will be create based on VIES Website Datas (for countries that allow). \n')
     module_l10n_ro_partner_unique = fields.Boolean('Partners unique by Company, VAT, NRC',
                                                   help='This allows you to set unique partners by company, VAT and NRC.')
+    module_l10n_ro_contact_address = fields.Boolean('Contacts Detailed Address',
+                                                   help='This allows you to set street name and number, block, staircase and apartment number for contacts.\n'
+                                                        'Module depends on web_readonly_bypass from OCA/web repo: https://github.com/OCA/web/tree/8.0/web_readonly_bypass')
     property_undeductible_account_id = fields.Many2one('account.account', related='company_id.property_undeductible_account_id',
                                                        string="Undeductible Account",
                                                        domain="[('type', '=', 'other'),('company_id','=',company_id)]",
