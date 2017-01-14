@@ -14,7 +14,7 @@
         'account_storno',
         'l10n_ro_invoice_report',
         'l10n_ro_config',
-        'l10n_ro_hr',
+       # 'l10n_ro_hr',
         'l10n_ro_contact_address',
         'l10n_ro_fiscal_validation',
     ],

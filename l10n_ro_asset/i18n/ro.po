@@ -15,442 +15,442 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_form
+#. module: l10n_ro_asset
 msgid "Accounting"
-msgstr "Contabilityate"
+msgstr "Contabilitate"
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_form
+#. module: l10n_ro_asset
 msgid "Analytic Information"
 msgstr "Informatii analitice"
 
-#. module: l10n_ro_asset
 #: model:ir.model,name:l10n_ro_asset.model_account_asset_asset
 #: view:stock.move:l10n_ro_asset.view_move_form
 #: view:stock.move:l10n_ro_asset.view_move_picking_form
 #: field:stock.move,asset_id:0
+#. module: l10n_ro_asset
 msgid "Asset"
 msgstr "Active"
 
-#. module: l10n_ro_asset
 #: field:stock.move,asset_category_id:0
+#. module: l10n_ro_asset
 msgid "Asset Category"
 msgstr "Categorii Active"
 
-#. module: l10n_ro_asset
 #: field:stock.warehouse,wh_asset_loc_id:0
+#. module: l10n_ro_asset
 msgid "Asset Location"
 msgstr "Locatie Active"
 
-#. module: l10n_ro_asset
 #: model:ir.model,name:l10n_ro_asset.model_account_asset_reevaluation
+#. module: l10n_ro_asset
 msgid "Asset Reevaluation"
 msgstr "Reevaluare Active"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_search
 #: field:account.asset.asset,asset_type:0
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_search
 #: field:account.asset.category,asset_type:0
+#. module: l10n_ro_asset
 msgid "Asset Type"
 msgstr "Tip Activ"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,value_residual:0
+#. module: l10n_ro_asset
 msgid "Asset Value"
 msgstr "Valoare Activ"
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_tree
 #: model:ir.model,name:l10n_ro_asset.model_account_asset_category
+#. module: l10n_ro_asset
 msgid "Asset category"
 msgstr "Categorie activ"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,asset_id:0
+#. module: l10n_ro_asset
 msgid "Asset id"
 msgstr "Activ"
 
-#. module: l10n_ro_asset
 #: field:account.invoice.line,asset_ids:0
 #: field:stock.move,asset_ids:0
+#. module: l10n_ro_asset
 msgid "Assets"
 msgstr "Active"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.reevaluation,type:0
+#. module: l10n_ro_asset
 msgid "Cassation"
 msgstr "Casare"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_search
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_search
+#. module: l10n_ro_asset
 msgid "Category"
 msgstr "Categorie"
 
-#. module: l10n_ro_asset
 #: field:account.asset.category,type:0
+#. module: l10n_ro_asset
 msgid "Category Type"
 msgstr "Tip Categorie"
 
-#. module: l10n_ro_asset
 #: help:stock.location,asset_location:0
+#. module: l10n_ro_asset
 msgid "Check this box to allow using this location to put assets goods."
 msgstr "Bifati pentru a folosi locatia active ca locatie destinatie."
 
-#. module: l10n_ro_asset
 #: field:account.asset.category,child_ids:0
+#. module: l10n_ro_asset
 msgid "Children Categories"
 msgstr "Subcategorii"
 
-#. module: l10n_ro_asset
 #: field:account.asset.category,code:0
+#. module: l10n_ro_asset
 msgid "Code"
 msgstr "Cod"
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_search
+#. module: l10n_ro_asset
 msgid "Company"
 msgstr "Companie"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_asset_form
+#. module: l10n_ro_asset
 msgid "Create Move"
 msgstr "Creeaza Inregistrare"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,create_uid:0
+#. module: l10n_ro_asset
 msgid "Created by"
 msgstr "Creeat de"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,create_date:0
+#. module: l10n_ro_asset
 msgid "Created on"
 msgstr "Creeat la"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_search
+#. module: l10n_ro_asset
 msgid "Current"
 msgstr "Curent"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_asset_form
+#. module: l10n_ro_asset
 msgid "Depreciation Board"
 msgstr "Panou Amortizare"
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_form
+#. module: l10n_ro_asset
 msgid "Depreciation Dates"
 msgstr "Date Amortizare"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,move_id:0
+#. module: l10n_ro_asset
 msgid "Depreciation Entry"
 msgstr "Inregistrare Amortizare"
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_form
+#. module: l10n_ro_asset
 msgid "Depreciation Method"
 msgstr "Metoda Amortizare"
 
-#. module: l10n_ro_asset
 #: view:stock.move:l10n_ro_asset.view_move_form
+#. module: l10n_ro_asset
 msgid "Destination"
 msgstr "Destinatie"
 
-#. module: l10n_ro_asset
 #: field:stock.move,location_dest_asset:0
+#. module: l10n_ro_asset
 msgid "Destination Asset Location"
 msgstr "Locatie Destinatie Active"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.reevaluation,state:0
+#. module: l10n_ro_asset
 msgid "Done"
 msgstr "Efectuat"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.reevaluation,state:0
+#. module: l10n_ro_asset
 msgid "Draft"
 msgstr "Ciorna"
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/account_asset_invoice.py:96
 #: code:addons/l10n_ro_asset/stock_account.py:145
 #: code:addons/l10n_ro_asset/stock_account.py:148
 #: code:addons/l10n_ro_asset/stock_asset.py:146
+#. module: l10n_ro_asset
 #, python-format
 msgid "Error!"
 msgstr "Eroare!"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.category,asset_type:0
+#. module: l10n_ro_asset
 msgid "Fixed Assets"
 msgstr "Mijloace Fixe"
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_search
+#. module: l10n_ro_asset
 msgid "Group By"
 msgstr "Grupeaza dupa"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,id:0
+#. module: l10n_ro_asset
 msgid "ID"
 msgstr "ID"
 
-#. module: l10n_ro_asset
 #: field:account.asset.category,account_income_id:0
+#. module: l10n_ro_asset
 msgid "Income Account"
 msgstr "Cont Venituri"
 
-#. module: l10n_ro_asset
 #: model:ir.model,name:l10n_ro_asset.model_stock_location
+#. module: l10n_ro_asset
 msgid "Inventory Locations"
 msgstr "Locatie Inventar"
 
-#. module: l10n_ro_asset
 #: field:account.asset.asset,inventory_number:0
+#. module: l10n_ro_asset
 msgid "Inventory Number"
 msgstr "Numar de Inventar"
 
-#. module: l10n_ro_asset
 #: field:account.asset.category,sequence_id:0
+#. module: l10n_ro_asset
 msgid "Inventory Sequence"
 msgstr "Secventa Inventar"
 
-#. module: l10n_ro_asset
 #: field:account.asset.asset,inventory_value:0
+#. module: l10n_ro_asset
 msgid "Inventory Value"
 msgstr "Valoare Inventar"
 
-#. module: l10n_ro_asset
 #: model:ir.model,name:l10n_ro_asset.model_account_invoice
+#. module: l10n_ro_asset
 msgid "Invoice"
 msgstr "Factura"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_asset_form
+#. module: l10n_ro_asset
 msgid "Invoice Info"
 msgstr "Informatii Factura"
 
-#. module: l10n_ro_asset
 #: field:account.asset.asset,inv_line_id:0
 #: model:ir.model,name:l10n_ro_asset.model_account_invoice_line
+#. module: l10n_ro_asset
 msgid "Invoice Line"
 msgstr "Linie Factura"
 
-#. module: l10n_ro_asset
 #: field:stock.location,asset_location:0
+#. module: l10n_ro_asset
 msgid "Is a Assets Location?"
 msgstr "Este a Locatie de Active?"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,write_uid:0
+#. module: l10n_ro_asset
 msgid "Last Updated by"
 msgstr "Ultima actualizare de"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,write_date:0
+#. module: l10n_ro_asset
 msgid "Last Updated on"
 msgstr "Ultima actualizare la"
 
-#. module: l10n_ro_asset
 #: view:stock.move:l10n_ro_asset.view_move_picking_form
+#. module: l10n_ro_asset
 msgid "Locations"
 msgstr "Locatii"
 
-#. module: l10n_ro_asset
 #: field:account.asset.category,method_number_min:0
+#. module: l10n_ro_asset
 msgid "Minimum Number of Depreciations"
 msgstr "Numar minim amortizari"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.reevaluation,type:0
+#. module: l10n_ro_asset
 msgid "Modernization"
 msgstr "Modernizare"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,new_value:0
+#. module: l10n_ro_asset
 msgid "New Asset Value"
 msgstr "Valoare Noua Activ"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.category,asset_type:0
+#. module: l10n_ro_asset
 msgid "None"
 msgstr "Niciunul"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.category,type:0
+#. module: l10n_ro_asset
 msgid "Normal"
 msgstr "Normal"
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/account_asset_asset.py:119
+#. module: l10n_ro_asset
 #, python-format
 msgid "Number of depreciations invalid, it must be between asset category limits."
 msgstr "Numar de amortizari invalid, trebuie sa fie intre limitele stabilite pe categorie."
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_search
 #: field:account.asset.category,parent_id:0
+#. module: l10n_ro_asset
 msgid "Parent Category"
 msgstr "Categoria Parinte"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_search
+#. module: l10n_ro_asset
 msgid "Partner"
 msgstr "Partener"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,move_check:0
+#. module: l10n_ro_asset
 msgid "Posted"
 msgstr "Postata"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_search
 #: field:account.asset.asset,product_id:0
+#. module: l10n_ro_asset
 msgid "Product"
 msgstr "Produs"
 
-#. module: l10n_ro_asset
 #: field:account.asset.asset,prodlot_id:0
+#. module: l10n_ro_asset
 msgid "Production Lot"
 msgstr "Lot Productie"
 
-#. module: l10n_ro_asset
 #: field:account.asset.asset,entry_date:0
+#. module: l10n_ro_asset
 msgid "Purchase Date"
 msgstr "Data Achizitionarii"
 
-#. module: l10n_ro_asset
 #: model:ir.model,name:l10n_ro_asset.model_stock_quant
+#. module: l10n_ro_asset
 msgid "Quants"
 msgstr "Cantitati"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.reevaluation,type:0
+#. module: l10n_ro_asset
 msgid "Reevaluation"
 msgstr "Reevaluare"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,date:0
+#. module: l10n_ro_asset
 msgid "Reevaluation Date"
 msgstr "Data Reevaluare"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,diff_value:0
+#. module: l10n_ro_asset
 msgid "Reevaluation Difference"
 msgstr "Diferenta Reevaluare"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,state:0
+#. module: l10n_ro_asset
 msgid "Reevaluation State"
 msgstr "Status Reevaluare"
 
-#. module: l10n_ro_asset
 #: field:account.asset.reevaluation,type:0
+#. module: l10n_ro_asset
 msgid "Reevaluation Type"
 msgstr "Tip Reevaluare"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_asset_form
 #: field:account.asset.asset,reevaluation_ids:0
+#. module: l10n_ro_asset
 msgid "Reevaluations"
 msgstr "Reevaluari"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.category,asset_type:0
+#. module: l10n_ro_asset
 msgid "Services Assets"
 msgstr "Active Servicii"
 
-#. module: l10n_ro_asset
 #: field:stock.move,location_asset:0
+#. module: l10n_ro_asset
 msgid "Source Asset Location"
 msgstr "Locatie Sursa Active"
 
-#. module: l10n_ro_asset
 #: field:account.asset.asset,stock_move_id:0
+#. module: l10n_ro_asset
 msgid "Stock Entry"
 msgstr "Miscare de Stoc"
 
-#. module: l10n_ro_asset
 #: view:account.asset.asset:l10n_ro_asset.view_account_asset_asset_form
+#. module: l10n_ro_asset
 msgid "Stock Info"
 msgstr "Informatii Stoc"
 
-#. module: l10n_ro_asset
 #: model:ir.model,name:l10n_ro_asset.model_stock_move
+#. module: l10n_ro_asset
 msgid "Stock Move"
 msgstr "Miscare de Stoc"
 
-#. module: l10n_ro_asset
 #: help:account.asset.asset,inventory_value:0
+#. module: l10n_ro_asset
 msgid "Technical field used to record the product cost set by the user during a picking confirmation (when costing method used is 'average price' or 'real'). Value given in company currency and in product uom."
 msgstr "Camp folosit pentru a inregistra costul produsului stabilit de catre utilizator in timpul unei confirmari a livrarii (cand metoda folosita de calculatie a costurilor este 'pretul mediu' sau 'real'). Valoarea data in moneda companiei si in UOM a produsului."
 
-#. module: l10n_ro_asset
 #: help:account.asset.category,method_number_min:0
+#. module: l10n_ro_asset
 msgid "The minimum number of depreciations of your asset - expressed in months"
 msgstr "Numar minim de amortizari - exprimat in luni"
 
-#. module: l10n_ro_asset
 #: help:account.asset.category,sequence_id:0
+#. module: l10n_ro_asset
 msgid "This field contains the information related to the inventory numbering        of the assets from this category."
 msgstr "Campul contine informatii referitoare la numarul de inventar al mijloacelor fixe din aceasta categorie."
 
-#. module: l10n_ro_asset
 #: view:account.asset.category:l10n_ro_asset.view_account_asset_category_search
+#. module: l10n_ro_asset
 msgid "Type"
 msgstr "Tip"
 
-#. module: l10n_ro_asset
 #: selection:account.asset.category,type:0
+#. module: l10n_ro_asset
 msgid "View"
 msgstr "Vizualizare"
 
-#. module: l10n_ro_asset
 #: model:ir.model,name:l10n_ro_asset.model_stock_warehouse
+#. module: l10n_ro_asset
 msgid "Warehouse"
 msgstr "Depozit"
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/stock_asset.py:146
+#. module: l10n_ro_asset
 #, python-format
 msgid "You cannot cancel a stock move which doesn't have assets in draft state. You need to reset to draft the asset with name %s."
 msgstr "Nu puteti anula o miscare de stoc care nu are active in stadiul ciorna. Trebuie sa resetati activul cu numele %s in stadiul ciorna."
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/account_asset_invoice.py:96
+#. module: l10n_ro_asset
 #, python-format
 msgid "You cannot cancel an invoice which doesn't have assets in draft state. You need to reset to draft the asset with name %s."
 msgstr "Nu puteti anula o factura care nu are active in stadiul ciorna. Trebuie sa resetati activul cu numele %s in stadiul ciorna."
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/stock_asset.py:44
+#. module: l10n_ro_asset
 #, python-format
 msgid "You cannot have a fixed asset without a link to the stock move line."
 msgstr "Nu puteti avea un mijloc fix fara referinta la miscarea de stoc."
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/stock_asset.py:46
+#. module: l10n_ro_asset
 #, python-format
 msgid "You cannot have a service asset without a link to the supplier invoice line."
 msgstr "Nu puteti avea un activ financiar fara referire la linia facturii."
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/stock_account.py:148
+#. module: l10n_ro_asset
 #, python-format
 msgid "You cannot sell this asset ' %s ' because it has been depreciated in advance."
 msgstr "Nu puteti vinde activul ' %s ' deoarece a fost amortizat in avans."
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/stock_account.py:145
+#. module: l10n_ro_asset
 #, python-format
 msgid "You cannot sell this asset ' %s ' because it hasn't been depreciated up to date.                            Please depreciate the asset inclusive the current month. "
 msgstr "Nu puteti vinde activul ' %s ' deoarece nu a fost amortizat la zi.                            Va rugam amortizati activul inclusiv luna curenta. "
 
-#. module: l10n_ro_asset
 #: code:addons/l10n_ro_asset/account_asset_asset.py:163
+#. module: l10n_ro_asset
 #, python-format
 msgid "You need to configure the Asset Reevaluation Account in the Romanian Accounting Page of your company."
 msgstr "Trebuie sa configurati Cont Reevaluare Active in pagina de configurare Aplicatii Romania a companiei."
