@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data>
-		<template id="report_partnerstatement">
-			<t t-call="report.html_container">
-				<tr t-foreach="lines()" t-as="line">
-					<t t-call="report.external_layout">
-						<div class="page">
+<data>
+<template id="report_partnerledgerother"  inherit_id="account.report_partnerledgerother">
+
+<xpath expr="//h2" position="replace"/>
+<xpath expr="//div[@class='row']" position="replace"/>
+<xpath expr="//div[@class='row']" position="replace"/>
+
+<xpath expr="//table" position="before">
 
 							<h3>
-								<div>Către,</div><div t-esc="line['name']" />
+								<div>Către,</div>
+								<div t-esc="partner.name"/>
 							</h3>
 							<h3>Extras de cont</h3>
-
 <br/>
 							<div>
 								<span>Conform dispozițiilor în vigoare, vă înștiinățm că, în evidența noastră contabilă</span>
@@ -23,17 +25,8 @@
 									<span> la data de </span>
 									<span t-esc="data['date_stop']" />
 								</t>
-								<span>soldul contului</span>
-								<span t-esc="line['code']" />
-								<span>este</span>
-								<t t-if="line['balance']&lt;0">
-									<span t-esc="formatLang(-1*line['balance'], currency_obj=res_company.currency_id)" />
-									<span>(debitor).</span>
-								</t>
-								<t t-if="line['balance']&gt;0">
-									<span t-esc="formatLang(line['balance'], currency_obj=res_company.currency_id)" />
-									<span>(creditor).</span>
-								</t>
+								<span>soldul este</span>
+								<strong t-esc="formatLang((sum_debit_partner(partner) - sum_credit_partner(partner)), currency_obj=res_company.currency_id)"/>
 							</div>
 							<div>
 								În termen de 5 zile de la primire urmează să ne restituiți acest extras confirmat pentru suma acceptată,
@@ -42,22 +35,25 @@
 								Prezentul extras de cont ține loc de conciliere conform procedurii
 								arbitrale.
 
-							</div>
+							</div>			
+
+							
+											
+</xpath>
+
+<xpath expr="//table" position="after">
 							<br/>
 							<div>Conducătorul unității</div>
 							<div>.....................</div>
 							<br/>
-							<br />
-							<br />
-							<hr/>
-							<br />
-							<br />
+<br/>
+<br/>
+<br/>
 							<div>
 								<div>
-									<span>Unitatea</span>
-									<strong t-esc="line['name']" />
+									<span>Unitatea </span>
+									<span t-esc="partner.name"/>
 								</div>
-								
 								<div>
 									<span>Nr. de înregistrare............../..........</span>
 								</div>
@@ -86,12 +82,7 @@
 							<br/>
 
 							</div>
-
-						</div>
-					</t>
-				</tr>
-
-			</t>
-		</template>
-	</data>
+</xpath>
+</template>
+</data>
 </openerp>
