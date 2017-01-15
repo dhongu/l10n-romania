@@ -108,9 +108,12 @@
 							</div>
 						</div>
 						<div>
+							<span>Cota TVA:</span>
 							<span t-foreach="o.tax_line" t-as="t">
-								<span t-field="t.name"/>
+
+								<span t-esc="t.name[-3:]"/>
 							</span>
+						 
 						</div>		
     	</td>
     	<td style="border-top: initial;">
