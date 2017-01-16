@@ -72,10 +72,10 @@ class account_partner_statement(osv.osv_memory):
         data = self.pre_print_report(cr, uid, ids, data, context=context)
         data['form'].update(self.read(cr, uid, ids, ['display_partner'])[0])
         if data.get('form', False) and data['form'].get('period_to', False):
-            data['date_stop'] = self.pool.get('account.period').browse(self.cr, self.uid, data['form']['period_to']).name
+            data['date_stop'] = self.pool.get('account.period').browse(cr, uid, data['form']['period_to']).name
         else:
             if data.get('form', False) and data['form'].get('fiscalyear_id', False):
-                data['date_stop'] = self.pool.get('account.fiscalyear').browse(self.cr, self.uid, data['form']['fiscalyear_id']).date_stop
+                data['date_stop'] = self.pool.get('account.fiscalyear').browse(cr, uid, data['form']['fiscalyear_id']).date_stop
             else:
                 data['date_stop'] = False         
         return self.pool['report'].get_action(cr, uid, [], 'l10n_ro_account_report.report_partnerstatement', data=data, context=context)
