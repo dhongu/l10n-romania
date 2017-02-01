@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_partnerledgerother"  inherit_id="account.report_partnerledgerother">
+
+<xpath expr="//h2" position="replace"/>
+<xpath expr="//div[@class='row']" position="replace"/>
+<xpath expr="//div[@class='row']" position="replace"/>
+
+<xpath expr="//table" position="before">
+
+							<h3>
+								<div>Către,</div>
+								<div t-esc="partner.name"/>
+							</h3>
+							<h3>Extras de cont</h3>
+<br/>
+							<div>
+								<span>Conform dispozițiilor în vigoare, vă înștiinățm că, în evidența noastră contabilă</span>
+								<t t-if="get_end_period(data)">
+									<span> la data de </span>
+									<span t-esc="get_end_period(data)" />
+								</t>
+								<t t-if="not get_end_period(data)">
+									<span> la data de </span>
+									<span t-esc="data['date_stop']" />
+								</t>
+								<span>soldul este</span>
+								<strong t-esc="formatLang((sum_debit_partner(partner) - sum_credit_partner(partner)), currency_obj=res_company.currency_id)"/>
+							</div>
+							<div>
+								În termen de 5 zile de la primire urmează să ne restituiți acest extras confirmat pentru suma acceptată,
+								iar în cazul constătarii
+								de diferențe să ne anexați nota explicativă cuprinzând obiecțiile dvs.
+								Prezentul extras de cont ține loc de conciliere conform procedurii
+								arbitrale.
+
+							</div>			
+
+							
+											
+</xpath>
+
+<xpath expr="//table" position="after">
+							<br/>
+							<div>Conducătorul unității</div>
+							<div>.....................</div>
+							<br/>
+<br/>
+<br/>
+<br/>
+							<div>
+								<div>
+									<span>Unitatea </span>
+									<span t-esc="partner.name"/>
+								</div>
+								<div>
+									<span>Nr. de înregistrare............../..........</span>
+								</div>
+								<br />
+								<br />
+								<h3>
+									Către,
+									<div t-field="res_company.partner_id.name"/>
+								</h3>
+								<br />
+								<div>
+									Confirmăm prezentul extras de cont pentru suma de .............................lei, pentru achitarea căreia (se va completa după caz):
+								</div>
+								<div>
+									a) am depus la banca ordinul de plată nr. ..................../.....................
+								</div>
+								<div>
+									b) am depus la oficiul postal nr. .................. mandatul postal nr. ........./...........
+								</div>
+								<div>
+									Obiecțiile noastre privind sumele din prezentul extras de cont sunt cuprinse în nota explicativa anexată.
+								</div>
+							<br/>
+							<div>Conducătorul unității</div>
+							<div>.....................</div>
+							<br/>
+
+							</div>
+</xpath>
+</template>
+</data>
+</openerp>

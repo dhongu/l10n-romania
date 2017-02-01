@@ -69,8 +69,12 @@ class account_invoice_line(models.Model):
             normal_taxes = self.product_id.taxes_id.compute_all(
                 price, self.quantity, product=self.product_id,
                 partner=self.invoice_id.partner_id)
-            self.price_normal_taxes = \
-                normal_taxes['total_included'] - normal_taxes['total']
+        else:
+            normal_taxes = self.product_id.supplier_taxes_id.compute_all(
+                price, self.quantity, product=self.product_id,
+                partner=self.invoice_id.partner_id)
+        self.price_normal_taxes = \
+            normal_taxes['total_included'] - normal_taxes['total']
         if self.invoice_id:
             self.price_subtotal = self.invoice_id.currency_id.round(
                 self.price_subtotal)
@@ -82,17 +86,29 @@ class account_invoice_line(models.Model):
                 self.price_normal_taxes)
 
  
+ 
 
     sequence = fields.Integer(string='Sequence', default=1,
         help="Gives the sequence of this line when displaying the invoice.")
 
-    price_unit_without_taxes = fields.Float(string='Unit Price without taxes',
+    price_unit_without_taxes = fields.Float(string='Unit Price without taxes',digits=dp.get_precision('Account'),
                                             store=True, readonly=True, compute='_compute_price')
 
     price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'),
                                store=True, readonly=True, compute='_compute_price')
  
+
     price_normal_taxes = fields.Float(
         string='Normal Taxes', digits=dp.get_precision('Account'),
         store=True, readonly=True, compute='_compute_price')
+
+ 
+    @api.multi
+    def compute_all_price(self):
+        for line in self:
+            line._compute_price()
+
+
+ 
+
  

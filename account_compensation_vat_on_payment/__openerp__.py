@@ -4,6 +4,7 @@
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
 #    Copyright (C) 2014 FOREST AND BIOMASS SERVICES ROMANIA SA
 #    (http://www.forbiom.eu).
+#    Modified account.voucher module
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -20,21 +21,24 @@
 #
 ##############################################################################
 
-from openerp.osv import osv, fields
+{
+    'name': 'Partner Compensation VAT on Payment',
+    'version': '1.0',
+    'author': 'FOREST AND BIOMASS SERVICES ROMANIA SA',
+    'summary': 'Create vat on payment moves in compensation',
+    'description': """Accounting Compensation
+This module manages:
 
+* Compensation Entry
+    """,
+    'category': 'Accounting & Finance',
+    'sequence': 4,
+    'depends': ['account_vat_on_payment', 'account_compensation'],
+    'demo': [],
+    'data': [],
+    'auto_install': False,
+    'application': True,
+    'installable': True,
+}
 
-class product_product(osv.osv):
-    _inherit = "product.product"
-    _columns = {
-        'd394_id': fields.many2one('report.394.code', string='D394 codes'),
-    }
-
-
-class report_394_code(osv.osv):
-    _name = "report.394.code"
-    _description = "D394 code"
-    _columns = {
-        'name': fields.char('D394 Code', size=16),
-        'description': fields.char('Description', size=64),
-        'product_ids': fields.one2many('product.product', 'd394_id', string='Products'),
-    }
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -11,9 +11,7 @@
             file="l10n_ro_account_report.report_account_bank_statement2"
         />
         
-        <menuitem id="final_accounting_html_reports" name="HTML Legal Reports" parent="account.menu_finance_reports"/>
-
-    
+        <menuitem id="final_accounting_html_reports" name="HTML Legal Reports" parent="account.menu_finance_reports"/>    
         
         <report 
             id="action_report_trial_balance_romania"
@@ -66,6 +64,17 @@
             name="l10n_ro_account_report.report_purchase_journal_html" 
             file="l10n_ro_account_report.report_purchase_journal_html"
         />
+ 
+         <report 
+            id="action_account_3rdparty_account_statement" 
+            model="account.account" 
+            string="Partner Statement"
+            report_type="qweb-pdf" 
+            name="l10n_ro_account_report.report_partnerstatement" 
+            file="l10n_ro_account_report.report_partnerstatement" 
+            menu="False" 
+        />
+ 
         
         <record id="action_report_sale_journal" model="ir.actions.report.xml">
             <field name="paperformat_id" ref="l10n_ro_account_report.paperformat_A3_landscape"/>

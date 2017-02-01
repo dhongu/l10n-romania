@@ -12,7 +12,8 @@
         <field name="arch" type="xml">
 		    <div class="address_format" position="replace">
 				<div class="address_format">
-                    <field name="city" invisible="1"/>
+                    <field name="city" readonly="1"/>
+                    <newline/>
                     <field name="city_id" placeholder="City" style="width: 50%%" attrs="{'readonly': [('use_parent_address','=',True)]}"/>
                     <field name="commune_id" class="oe_no_button" placeholder="City/Commune" style="width: 50%%" options='{"no_open": True}' attrs="{'readonly': [('use_parent_address','=',True)]}"/>
                     <field name="state_id" class="oe_no_button" placeholder="State" style="width: 50%%" options='{"no_open": True}' attrs="{'readonly': [('use_parent_address','=',True)]}"/>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_company_d394t_form" model="ir.ui.view">
+            <field name="name">view.company.d394.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <field position="after" name="currency_id">
+                        <field name="anaf_cross_opt"/>
+                        <field name="is_fiscal_repr"/>
+                        <field name="fiscal_repr_id" attrs="{'invisible': [('is_fiscal_repr','=',False)]}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

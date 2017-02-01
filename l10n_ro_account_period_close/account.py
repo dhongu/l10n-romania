@@ -21,27 +21,40 @@
 ##############################################################################
 
 from openerp import models, fields, api, _
+from openerp.exceptions import Warning as UserError
 
+class account_account(models.Model):
+    _inherit = 'account.account'
+
+    close_check = fields.Boolean('Bypass Closing Side Check',
+        help='By checking this when you close a period, it will not respect '
+             'the side of closing, meaning: expenses closed on credit side, '
+             'incomed closed on debit side. \n You should check the 711xxx '
+             'accounts.')
 
 class account_move(models.Model):
     _inherit = 'account.move'
 
-    close_id = fields.Many2one('account.period.closing', 'Closed Account Period')    
-         
+    close_id = fields.Many2one(
+        'account.period.closing', 'Closed Account Period')
+
 
 class account_period_closing(models.Model):
     _name = 'account.period.closing'
     _description = 'Account Period Closing'
 
     name = fields.Char('Name', required=True)
-    company_id = fields.Many2one( 'res.company', string='Company', required=True)
+    company_id = fields.Many2one(
+        'res.company', string='Company', required=True)
     type = fields.Selection(
         [
             ('income', 'Incomes'),
             ('expense', 'Expenses'),
             ('selected', 'Selected')
         ], string='Type', required=True)
-    account_ids = fields.Many2many(  'account.account', string='Accounts to close', select=True)
+    close_result = fields.Boolean('Close debit and credit accounts')
+    account_ids = fields.Many2many(
+        'account.account', string='Accounts to close', select=True)
     debit_account_id = fields.Many2one(
         'account.account',
         'Closing account, debit',
@@ -60,7 +73,8 @@ class account_period_closing(models.Model):
     def _onchange_type(self):
         account_ids = False
         if self.type and self.type in ('income', 'expense'):
-            user_types = self.env['account.account.type'].search( [('code', '=', self.type)])
+            user_types = self.env['account.account.type'].search(
+                [('code', '=', self.type)])
             self.account_ids = self.env['account.account'].search([
                 ('user_type', 'in', [x.id for x in user_types]),
                 ('type', '!=', 'view'),
@@ -70,79 +84,137 @@ class account_period_closing(models.Model):
             self.account_ids = account_ids
 
     @api.one
-    def close(self, date=None, period=None, journal=None):
+    def close(self, date_from=None, date_to=None, period_id=None, journal_id=None):
         """ This method will create the closing move for the period selected"""
-        if not period or not journal:
-            raise osv.except_osv('No period or journal defined')
+        if not period_id or not journal_id:
+            raise UserError('No period or journal defined')
         closing = self[0]
         account_obj = self.env['account.account']
-        ctx = dict(self._context)
+        period_obj = self.env['account.period']
+        period = period_obj.browse(period_id)
+        ctx = self.env.context.copy()
 
-        if period:
-            ctx['period_from'] = period
-            ctx['period_to'] = period
-        account_ids = closing.account_ids.with_context(ctx)._get_children_and_consol()
-        accounts = account_obj.browse(account_ids).with_context(ctx).read(['name', 'balance'])
+        ctx['period_from'] = period_id
+        ctx['period_to'] = period_id
+        ctx['date_from'] = date_from
+        ctx['date_to'] = date_to
+        account_ids = closing.account_ids
+        account_ids = closing.account_ids.with_context(
+            ctx)._get_children_and_consol()
+        accounts = account_obj.browse(account_ids)
         move = self.env['account.move'].create({
-            'date': date,
-            'journal_id': journal,
-            'period_id': period,
+            'date': date_to,
+            'journal_id': journal_id,
+            'period_id': period_id,
             'close_id': closing.id,
             'company_id': closing.company_id.id
         })
-        sum = 0.0
+        amount = 0.0
         for account in accounts:
+            new_acc = account.with_context(ctx).read(['code', 'name', 'debit', 'credit', 'balance'])[0]
             if account['balance'] != 0.0:
-                if closing.type == 'expense':
+                check = account.close_check
+                if closing.type == 'expense' and not check:
                     val = {
                         'name': 'Closing ' + closing.name,
-                        'date': date,
+                        'date': date_to,
                         'move_id': move[0].id,
-                        'account_id': account['id'],
-                        'credit': account['balance'] or 0.0,
+                        'account_id': account.id,
+                        'credit': new_acc['balance'] or 0.0,
                         'debit': 0.0,
                         'company_id': closing.company_id.id,
-                        'journal_id': journal,
-                        'period_id': period,
+                        'journal_id': journal_id,
+                        'period_id': period_id,
                     }
-                elif closing.type == 'income':
+                elif closing.type == 'income' and not check:
                     val = {
                         'name': 'Closing ' + closing.name,
-                        'date': date,
+                        'date': date_to,
                         'move_id': move[0].id,
-                        'account_id': account['id'],
+                        'account_id': account.id,
                         'credit': 0.0,
-                        'debit': (-1 * account['balance']) or 0.0,
+                        'debit': (-1 * new_acc['balance']) or 0.0,
                         'company_id': closing.company_id.id,
-                        'journal_id': journal,
-                        'period_id': period,
+                        'journal_id': journal_id,
+                        'period_id': period_id,
                     }
                 else:
                     val = {
                         'name': 'Closing ' + closing.name,
-                        'date': date,
+                        'date': date_to,
                         'move_id': move[0].id,
-                        'account_id': account['id'],
-                        'credit': account['balance'] > 0.0 and account['balance'] or 0.0,
-                        'debit': account['balance'] < 0.0 and -account['balance'] or 0.0,
+                        'account_id': account.id,
+                        'credit': new_acc['balance'] > 0.0 and new_acc['balance'] or 0.0,
+                        'debit': new_acc['balance'] < 0.0 and -new_acc['balance'] or 0.0,
                         'company_id': closing.company_id.id,
-                        'journal_id': journal,
-                        'period_id': period,
+                        'journal_id': journal_id,
+                        'period_id': period_id,
                     }
-                sum += account['balance']
+                amount += new_acc['balance']
                 self.env['account.move.line'].create(val)
+
         diff_line = {
             'name': 'Closing ' + closing.name,
-            'date': date,
+            'date': date_to,
             'move_id': move[0].id,
-            'account_id': sum >= 0 and closing.debit_account_id.id or closing.credit_account_id.id,
-            'credit': sum <= 0.0 and -sum or 0.0,
-            'debit': sum >= 0.0 and sum or 0.0,
+            'account_id': amount >= 0 and closing.debit_account_id.id or closing.credit_account_id.id,
+            'credit': amount <= 0.0 and -amount or 0.0,
+            'debit': amount >= 0.0 and amount or 0.0,
             'company_id': closing.company_id.id,
-            'journal_id': journal,
-            'period_id': period,
+            'journal_id': journal_id,
+            'period_id': period_id,
         }
         self.env['account.move.line'].create(diff_line)
+        if self.close_result:
+            ctx1 = dict(self._context)
+            if period and amount != 0.00:
+                ctx1.update({'date': False,
+                         'fiscalyear': period.fiscalyear_id.id,
+                         'date_from': period.fiscalyear_id.date_start,
+                         'date_to': date_to})
+                debit = closing.debit_account_id.with_context(
+                    ctx1).read(['balance'])[0]['balance']
+                credit = closing.credit_account_id.with_context(
+                    ctx1).read(['balance'])[0]['balance']
+                if abs(debit) > abs(credit):
+                    new_amount = -1 * credit
+                else:
+                    new_amount = debit
+                old_balance = debit - (-1 * credit)
+                debit_acc = closing.debit_account_id
+                credit_acc = closing.credit_account_id
+                if credit and debit:
+                    if old_balance > 0:
+                        debit_acc = closing.credit_account_id
+                        credit_acc = closing.debit_account_id
+                    elif old_balance < 0:
+                        debit_acc = closing.debit_account_id
+                        credit_acc = closing.credit_account_id
+                    diff_line = {
+                        'name': 'Closing ' + closing.name + ' ' + str(debit_acc.code),
+                        'date': date_to,
+                        'move_id': move[0].id,
+                        'account_id': debit_acc.id,
+                        'credit': 0.0,
+                        'debit': new_amount,
+                        'company_id': closing.company_id.id,
+                        'journal_id': journal_id,
+                        'period_id': period_id,
+                    }
+                    self.env['account.move.line'].create(diff_line)
+                    diff_line = {
+                        'name': 'Closing ' + closing.name + ' ' + str(credit_acc.code),
+                        'date': date_to,
+                        'move_id': move[0].id,
+                        'account_id': credit_acc.id,
+                        'credit': new_amount,
+                        'debit': 0.0,
+                        'company_id': closing.company_id.id,
+                        'journal_id': journal_id,
+                        'period_id': period_id,
+                    }
+                    self.env['account.move.line'].create(diff_line)
+        move[0].post()
         return True
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

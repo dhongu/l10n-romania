@@ -27,6 +27,16 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     info_for_invoice  = fields.Html(string='Additional info for invoice')
+    vat_dispaly = fields.Char('Display VAT', compute='_compute_dispaly_vat' )
+
+    @api.one
+    @api.depends('vat')
+    def _compute_dispaly_vat(self):
+        self.vat_dispaly = self.vat
+        if not self.vat_subjected:
+            vat_number = self.vat and self.vat[2:].replace(' ', '')
+            self.vat_dispaly = vat_number
+            
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

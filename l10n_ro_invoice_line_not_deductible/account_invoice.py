@@ -58,24 +58,6 @@ class account_invoice_line(models.Model):
     not_deductible = fields.Boolean('Not Deductible')
 
     @api.model
-    def move_line_get_item(self, line):
-        if line.not_deductible:
-            return {
-                'type': 'src',
-                'name': line.name.split('\n')[0][:64],
-                'price_unit': line.price_unit,
-                'quantity': line.quantity,
-                'price': line.price_subtotal,
-                'account_id': line.company_id.property_undeductible_account_id.id,
-                'product_id': line.product_id.id,
-                'uos_id': line.uos_id.id,
-                'account_analytic_id': line.account_analytic_id.id,
-                'taxes': line.invoice_line_tax_id,
-            }
-        else:
-            return super(account_invoice_line, self).move_line_get_item(line)
-        
-    @api.model
     def move_line_get(self, invoice_id):
         res = super(account_invoice_line, self).move_line_get(invoice_id)
         tax_obj = self.env['account.tax']

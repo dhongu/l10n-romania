@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<!--    invoice     -->
+
+     <record id="invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="fiscal_position" position="before">
+                    <field name="special_taxes"/>
+                </field>
+                <page string="Payments" position="after">
+                    <page string="D394 Info">
+                        <group>
+                            <group>
+                                <field name="operation_type"/>
+                                <field name="sequence_type"/>
+                                <field name="partner_type"/>
+                            </group>
+                            <group>
+                                <field name="inv_serie"/>
+                                <field name="inv_number"/>
+                            </group>
+                        </group>
+                        <field name="tax_ids" widget="many2many_tags"/>
+                    </page>
+                </page>
+            </field>
+        </record>
+     <record id="invoice_supplier_form" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form</field>
+            <field name="model">account.invoice</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <field name="fiscal_position" position="before">
+                    <field name="special_taxes"/>
+                </field>
+                <field name="partner_id" position="after">
+                    <field name="partner_type" invisible="1"/>
+                    <field name="origin_type" attrs="{'invisible': [('partner_type','!=','2')]}"/>
+                </field>
+                <page string="Payments" position="after">
+                    <page string="D394 Info">
+                        <group>
+                            <group>
+                                <field name="operation_type"/>
+                                <field name="sequence_type"/>
+                                <field name="partner_type"/>
+                            </group>
+                            <group>
+                                <field name="inv_serie"/>
+                                <field name="inv_number"/>
+                            </group>
+                        </group>
+                        <field name="tax_ids" widget="many2many_tags"/>
+                    </page>
+                </page>
+            </field>
+        </record>
+    </data>
+</openerp>

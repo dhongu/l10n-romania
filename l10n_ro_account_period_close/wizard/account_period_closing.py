@@ -21,49 +21,47 @@
 ##############################################################################
 
 from openerp import models, fields, api, _
-
+from openerp.exceptions import Warning
 
 class account_period_closing_wizard(models.TransientModel):
     _name = "account.period.closing.wizard"
     _description = "Wizard for Account Period Closing"
 
-
     @api.model
     def default_get(self, fields):      
         defaults = super(account_period_closing_wizard, self).default_get(fields)
         return defaults
-
-
-
+    
+    @api.onchange('period_id')
+    def onchange_period(self):      
+        if self.period_id:
+            self.date_from = self.period_id.date_start
+            self.date_to = self.period_id.date_stop
+    
     @api.one
     def do_close(self):
         wizard = self[0]
+        if wizard.date_from < wizard.period_id.date_start or wizard.date_from > self.period_id.date_stop or \
+                wizard.date_to < self.period_id.date_start or wizard.date_to > self.period_id.date_stop:
+            raise Warning(_('Dates selected must be in the same period.'))
         if not wizard.done:
-            wizard.closing_id.close( wizard.date_move, wizard.period_id.id, wizard.journal_id.id)
+            wizard.closing_id.close(
+                wizard.date_from, wizard.date_to, wizard.period_id.id, wizard.journal_id.id)
         return {'type': 'ir.actions.act_window_close'}
 
-    closing_id = fields.Many2one('account.period.closing',string='Closing Model',required=True,ondelete='cascade' )
-    company_id = fields.Many2one('res.company', related='closing_id.company_id', string='Company')
-    date_move = fields.Date(string='Closing Move Date', required=True, select=True)
-    period_id = fields.Many2one( 'account.period', string='Closing Period', required=True)
-    journal_id = fields.Many2one( 'account.journal', string='Closing Journal', required=True)
-    done = fields.Boolean(string='Closing Done')
-
-
-
-class account_period_close(models.TransientModel):
-    _inherit = "account.period.close"
-
-    date_move = fields.Date(string='Closing Move Date', required=True, select=True)
-    journal_id = fields.Many2one( 'account.journal', string='Closing Journal', required=True)
-  
-    @api.one
-    def data_save(self):
-        for period_id in self.env.context['active_ids']:
-            for period_closing in self.env['account.period.closing'].search([]):
-                period_closing.close(self.date_move, period_id, self.journal_id.id)
-        
-        return super(account_period_close,self).data_save()
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    closing_id = fields.Many2one(
+        'account.period.closing',
+        'Closing Model',
+        required=True,
+        ondelete='cascade'
+    )
+    company_id = fields.Many2one(
+        'res.company', related='closing_id.company_id', string='Company')
+    date_from = fields.Date('Closing Date From', required=True, select=True)
+    date_to = fields.Date('Closing Date To', required=True, select=True,
+                          help='Created moves will have this as a date.')
+    period_id = fields.Many2one(
+        'account.period', 'Closing Period', required=True)
+    journal_id = fields.Many2one(
+        'account.journal', 'Closing Journal', required=True)
+    done = fields.Boolean('Closing Done')

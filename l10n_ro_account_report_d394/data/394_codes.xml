@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="21" model="report.394.code">
+            <field name="name">21</field>
+            <field name="description">Cereale si plante tehnice</field>
+        </record>
+        <record id="22" model="report.394.code">
+            <field name="name">22</field>
+            <field name="description">Deseuri feroase si neferoasee</field>
+        </record>
+        <record id="23" model="report.394.code">
+            <field name="name">23</field>
+            <field name="description">Masa lemnoasa</field>
+        </record>
+        <record id="24" model="report.394.code">
+            <field name="name">24</field>
+            <field name="description">Certificate de emisii de gaze cu efect de sera</field>
+        </record>
+        <record id="25" model="report.394.code">
+            <field name="name">25</field>
+            <field name="description">Energie electrica</field>
+        </record>
+        <record id="26" model="report.394.code">
+            <field name="name">26</field>
+            <field name="description">Certificate verzi</field>
+        </record>
+        <record id="27" model="report.394.code">
+            <field name="name">27</field>
+            <field name="description">Constructii terenuri</field>
+        </record>
+        <record id="28" model="report.394.code">
+            <field name="name">28</field>
+            <field name="description">Aur de investitii</field>
+        </record>
+        <record id="29" model="report.394.code">
+            <field name="name">29</field>
+            <field name="description">Telefoane mobile</field>
+        </record>
+        <record id="30" model="report.394.code">
+            <field name="name">30</field>
+            <field name="description">Microprocesoare</field>
+        </record>
+        <record id="31" model="report.394.code">
+            <field name="name">31</field>
+            <field name="description">Console de jocuri, tablete PC si laptopuri</field>
+        </record>
+        <record id="32" model="report.394.code">
+            <field name="name">32</field>
+            <field name="description">Terenuri</field>
+        </record>
+        <record id="33" model="report.394.code">
+            <field name="name">33</field>
+            <field name="description">Constructii</field>
+        </record>
+        <record id="34" model="report.394.code">
+            <field name="name">34</field>
+            <field name="description">Alte bunuri</field>
+        </record>
+        <record id="35" model="report.394.code">
+            <field name="name">35</field>
+            <field name="description">servicii</field>
+        </record>
+
+        <record id="1001" model="report.394.code">
+            <field name="name">1001</field>
+            <field name="description">Grau si meslin</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="1002" model="report.394.code">
+            <field name="name">1002</field>
+            <field name="description">Secara</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="1003" model="report.394.code">
+            <field name="name">1003</field>
+            <field name="description">Orz</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="1004" model="report.394.code">
+            <field name="name">1004</field>
+            <field name="description">Ovaz</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="1005" model="report.394.code">
+            <field name="name">1005</field>
+            <field name="description">Porumb</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="120100" model="report.394.code">
+            <field name="name">1201</field>
+            <field name="description">Boabe de soia, chiar sfaramate</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="1205" model="report.394.code">
+            <field name="name">1205</field>
+            <field name="description">Seminte de rapita sau de rapita salbatica, chiar sfaramate</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="120600" model="report.394.code">
+            <field name="name">120600</field>
+            <field name="description">Seminte de floarea-soarelui, chiar sfaramate</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="121291" model="report.394.code">
+            <field name="name">121291</field>
+            <field name="description">Sfecla de zahar</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="10086000" model="report.394.code">
+            <field name="name">10086000</field>
+            <field name="description">Triticale</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+        <record id="120400" model="report.394.code">
+            <field name="name">120400</field>
+            <field name="description">Seminte de in, chiar sfaramate</field>
+            <field name="parent_id" ref="21"/>
+        </record>
+
+
+
+    </data>
+</openerp>

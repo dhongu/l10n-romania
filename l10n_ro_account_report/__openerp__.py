@@ -43,7 +43,6 @@ Romania  - Accounting Reports
     """,
 
     'data': ['data/report_paperformat.xml',
-             'data/394_codes.xml',
              'views/report_trialbalance.xml',
              'views/report_trialbalance_html.xml',
              'views/report_sale_journal.xml',
@@ -51,13 +50,14 @@ Romania  - Accounting Reports
              'views/report_sale_journal_html.xml',
              'views/report_purchase_journal.xml',
              'views/report_purchase_journal_html.xml',
+             'views/report_partnerstatement.xml',
+             'views/report_partnerledgerother.xml',
              'views/layouts.xml',
              'account_report.xml',
              'wizard/account_report_account_balance_view.xml',
              'wizard/account_report_sale_purchase_journal_view.xml',
-             'wizard/d394_view.xml',
-             'product_view.xml',
-             'security/ir.model.access.csv', ],
+             'wizard/account_report_partner_statement_view.xml'  ],
+ 
     'installable': True,
     'auto_install': False,
 }

@@ -53,7 +53,7 @@ class account_asset_asset(osv.osv):
                     (undone_dotation_number -
                      len(posted_depreciation_line_ids))
                 if asset.prorata:
-                    amount = asset.purchase_value / asset.method_number
+                    amount = (asset.purchase_value - asset.salvage_value) / asset.method_number
                     days = total_days - float(depreciation_date.strftime('%j'))
                     if i == 1:
                         amount = round((amount_to_depr / asset.method_number) / calendar.monthrange(depreciation_date.year, depreciation_date.month)[

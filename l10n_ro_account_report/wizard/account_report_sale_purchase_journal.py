@@ -21,12 +21,21 @@
 ##############################################################################
 
 from openerp.osv import fields, osv
-
+import datetime
+import dateutil.relativedelta
 
 class sale_purchase_journal_report(osv.osv_memory):
     _name = 'sale.purchase.journal.report'
     _description = 'Sale/Purchase Journal Report'
 
+    def onchange_period_id(self, cr, uid, ids, period_id=False, context=None):
+        res = {}
+        if period_id:
+            period = self.pool.get('account.period').browse(cr, uid, period_id, context=context)
+            res['value'] = {'date_from': period.date_start, 'date_to': period.date_stop}
+        return res
+    
+    
     _columns = {
         'company_id': fields.many2one('res.company', 'Company', required=True),
         'journal': fields.selection(
@@ -34,12 +43,22 @@ class sale_purchase_journal_report(osv.osv_memory):
             'Journal type',
             select=True
         ),
-        'periods': fields.many2one('account.period', 'Period'),
+        'periods': fields.many2one('account.period', 'Period', required=True),
+        'date_from': fields.date("Start Date", required=True),
+        'date_to': fields.date("End Date", required=True),        
     }
+
+    def _get_period(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        now = datetime.date.today()
+        periods = self.pool.get('account.period').find(cr, uid, now + dateutil.relativedelta.relativedelta(months=-1))
+        return periods and periods[0] or False
 
     _defaults = {
         "company_id": lambda obj, cr, uid, context: obj.pool.get('res.users').browse(cr, uid, uid, context=context).company_id.id,
         'journal': 'sale',
+        'periods': _get_period,
     }
 
     def print_report(self, cr, uid, ids, context=None):
@@ -48,6 +67,10 @@ class sale_purchase_journal_report(osv.osv_memory):
         data = self.read(cr, uid, ids)[0]
         context['data'] = data
         context['landscape'] = True
+        period = self.pool.get('account.period').browse(cr, uid, data['periods'][0], context=context)
+        if data['date_from'] < period.date_start or data['date_from'] > period.date_stop or \
+                data['date_to'] < period.date_start or data['date_to'] > period.date_stop:
+            raise osv.except_osv(_('Error!'),_('Dates selected must be in the same period.'))
         if data['journal'] == 'sale':
             return self.pool['report'].get_action(cr, uid, [], 'l10n_ro_account_report.report_sale_journal', data=data, context=context)
         else:

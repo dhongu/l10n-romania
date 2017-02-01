@@ -24,3 +24,4 @@ import account_balance
 import sale_journal
 import purchase_journal
 import account_bank_statement
+import account_partner_statement 

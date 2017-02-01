@@ -11,12 +11,14 @@
 		</template>
 
 
+ 
 		<template id="header_invoice">
 			<xpath expr="//div[@class='header']" position="replace">
 				<div class="header">
 					<!--div class="row" customize_show="True" >
 						<div class="col-xs-3">
 							<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;"/>
+ 
 						</div>
 						<div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
 					</div-->
@@ -39,6 +41,7 @@
 							<address t-field="res_company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
 						</div>
 
+ 
                         <small>
                        	    <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
 								<div t-if="bank.footer">
@@ -50,11 +53,13 @@
 										<strong>Account:</strong>
 										<span t-field="bank.acc_number"/>
 									</span>
+ 
 								</div>
 
 							</div>
                         </small>
 
+ 
         </td>
         <td width="50%">
     					<div>
@@ -87,7 +92,7 @@
 		<td  style="border-top: initial;">
                   	    <div t-if="res_company.partner_id.vat">
 							<strong>CIF:</strong>
-							<span t-field="res_company.partner_id.vat"/>
+							<span t-field="res_company.partner_id.vat_dispaly"/>
 						</div>
 						<div t-if="res_company.partner_id.nrc">
 							<strong>NRC:</strong>
@@ -103,12 +108,16 @@
 							</div>
 						</div>
 						<div>
+							<span>Cota TVA:</span>
 							<span t-foreach="o.tax_line" t-as="t">
-								<span t-field="t.name"/>
+
+								<span t-esc="t.name[-3:]"/>
 							</span>
+						 
 						</div>		
     	</td>
     	<td style="border-top: initial;">
+                        <t t-if="o.commercial_partner_id.is_company">
                         <div t-if="o.commercial_partner_id.vat">
 							<strong>CIF:</strong>
 							<span t-field="o.commercial_partner_id.vat"/>
@@ -117,6 +126,13 @@
 							<strong>NRC:</strong>
 							<span t-field="o.commercial_partner_id.nrc"/>
 						</div>    	
+                        </t>
+                         <t t-if="not o.commercial_partner_id.is_company">
+                         <div>
+    						<strong>CNP:</strong>
+							<span t-field="o.commercial_partner_id.cnp"/>
+						</div>
+                         </t>
     	</td>
     </tr>
 </table>
@@ -155,6 +171,7 @@
 			</xpath>
 		</template>
 
+ 
 
 
 
@@ -171,6 +188,7 @@
 		    <t t-raw="0"/>
 		    <t t-call="l10n_ro_invoice_report.footer_invoice"/>
 		</template>
+ 
 
 
 		<template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
@@ -349,7 +367,7 @@
 							<div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006</div>
 
 							<t t-if="not res_company.stamp_image">
-								<div>Invoice circulate without signature and stamp according to the law 571/2003, rule 115, paragraph 6</div>
+								<div>Invoice circulate without signature and stamp according to the law 227/2015, rule 319, paragraph 29</div>
 							</t>
 							<img t-if="res_company.stamp_image" t-att-src="'data:image/png;base64,%s' % res_company.stamp_image" style="max-height: 150px; " />
 						</small>

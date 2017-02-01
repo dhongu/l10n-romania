@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+ <data>
+    <record id="view_ir_sequence_form_seq_type" model="ir.ui.view">
+        <field name="name">ir.sequence.seq.type</field>
+        <field name="model">ir.sequence</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.sequence_view" />
+        <field name="arch" type="xml">
+            <group string="Legend (for prefix, suffix)" position="before">
+                <group col="4" string="Allocation">
+                    <field name="sequence_type"/>
+                    <field name="number_first"/>
+                    <field name="number_last"/>
+                </group>
+            </group>
+        </field>
+    </record>
+ </data>
+</openerp>
