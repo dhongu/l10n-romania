@@ -161,6 +161,8 @@ class stock_move(osv.Model):
     def _update_move_price(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
+        if 'price_unit' in context:
+            return
         product_uom = self.pool.get('product.uom')
         for move in self.browse(cr, uid, ids, context=context):
             if move.purchase_line_id:
