@@ -27,16 +27,53 @@
              <field name="context">{}</field>
              <field name="target">new</field>
        </record>
-		
-		<!-- 
+       
+        <report
+            id="action_report_partner_ledger2"
+            model="res.partner"
+            string="Fisa analitica partener"
+            report_type="qweb-pdf"
+            name="account.report_partnerledger"
+            file="account.report_partnerledger"
+            menu="False"
+        />
+        <record id="action_account_partner_ledger2" model="ir.actions.act_window">
+             <field name="name">Extras Confirmare Sold</field>
+             <field name="res_model">account.partner.ledger</field>
+             <field name="type">ir.actions.act_window</field>
+             <field name="view_type">form</field>
+             <field name="view_mode">tree,form</field>
+             <field name="view_id" ref="account.account_partner_ledger_view"/>
+             <field name="context">{'default_page_split':True}</field>
+             <field name="target">new</field>
+       </record>
+
+	   <record id="account.action_account_partner_ledger" model="ir.actions.act_window">           
+             <field name="name">Fisa analitica partener</field>  
+       </record>
+        		
+	   <!-- 	 
        <record model="ir.values" id="ir_values_account_partner_statement">
            <field name="key2" eval="'client_print_multi'"/>
            <field name="model" eval="'res.partner'"/>
            <field name="name">Partner Statement</field>
            <field name="value" eval="'ir.actions.act_window,%d'%action_account_partner_statement"/>
        </record>
- 		-->
-
+ 		 
+       <record model="ir.values" id="ir_values_account_partner_statement2">
+           <field name="key2" eval="'client_print_multi'"/>
+           <field name="model" eval="'res.partner'"/>
+           <field name="name">Fisa analitica partener</field>
+           <field name="value" eval="'ir.actions.act_window,%d'%action_account_partner_statement"/>
+       </record>
+       -->
+       <record model="ir.values" id="ir_values_account_partner_ledger2">
+           <field name="key2" eval="'client_print_multi'"/>
+           <field name="model" eval="'res.partner'"/>
+           <field name="name">Fisa analitica partener</field>
+           <field name="value" eval="'ir.actions.act_window,%d'%action_account_partner_ledger2"/>
+       </record>       
+        
         <menuitem icon="STOCK_PRINT"
             name="Partner Statement"
             action="action_account_partner_statement"
