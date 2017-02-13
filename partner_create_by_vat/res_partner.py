@@ -50,6 +50,7 @@ def getMfinante(cod):
     res.raise_for_status()
 
     htm = html.fromstring(res.text)
+    #print res.text
     # sunt 2 tabele primul e important
     table = htm.xpath("//div[@id='main']//center/table")[0]
     result = dict()
@@ -67,6 +68,42 @@ class res_partner(models.Model):
     _inherit = "res.partner"
 
     name = fields.Char('Name', required=True, select=True, default=' ')
+
+    @api.one
+    @api.constrains('is_company', 'vat', 'parent_id', 'company_id')
+    def check_vat_unique(self):
+        if not self.vat:
+            return True
+
+        if not self.is_company:
+            return True
+
+        # get first parent
+        parent = self
+        while parent.parent_id:
+            parent = parent.parent_id
+
+        same_vat_partners = self.search([
+            ('is_company','=', True),
+            ('vat', '=', self.vat),
+            ('vat', '!=', False),
+            ('company_id', '=', self.company_id.id),
+            ])
+
+        if same_vat_partners:
+            related_partners = self.search([
+                ('id', 'child_of', parent.id),
+                ('company_id', '=', self.company_id.id),
+                ])
+            same_vat_partners = self.search([
+                ('id', 'in', same_vat_partners.ids),
+                ('id', 'not in', related_partners.ids),
+                ('company_id', '=', self.company_id.id),
+                ])
+            if same_vat_partners:
+                raise Warning(_(
+                    'Partner vat must be unique per company except on partner with parent/childe relationship. Partners with same vat and not related, are: %s!') % (', '.join(x.name for x in same_vat_partners)))
+
 
     @api.one
     def button_get_partner_data(self):
@@ -144,7 +181,7 @@ class res_partner(models.Model):
                         'state_id': state,
                     })                                
                 except:
-                    res = requests.get( 'http://openapi.ro/api/companies/%s.json' % vat_number)
+                    res = requests.get( 'http://legacy.openapi.ro/api/companies/%s.json' % vat_number)
                     if res.status_code == 200:
                         res = res.json()
                         state = False
