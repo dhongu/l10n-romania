@@ -31,7 +31,7 @@ class res_company(models.Model):
 
     share_capital = fields.Float(string='Share Capital', digits=dp.get_precision('Account'), default=200)
     stamp_image = fields.Binary(string='Stamp image')
-    
+
     
     property_stock_usage_giving_account_id = fields.Many2one(
         'account.account', string="Usage Giving Account", domain="[('type', '=', 'other')]", help="This account will be used as the usage giving account in account move line.")
