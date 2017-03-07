@@ -191,7 +191,10 @@ class res_partner(models.Model):
                         res = requests.get( 'https://api.openapi.ro/api/companies/%s' % vat_number,
                                             headers = headers )
                         if res.status_code == 200:
-                            res = res.json()
+                            if isinstance(res.json,dict):
+                                res = res.json
+                            else:     
+                                res = res.json()
                             state = False
                             if res['judet']:
                                 state = self.env['res.country.state'].search(  [('name', '=', res['judet'].title())])
@@ -208,66 +211,55 @@ class res_partner(models.Model):
                                 'vat_subjected': bool(res['tva']),
                                 'state_id': state,
                             })                        
-                    else:    
-                        res = requests.get( 'http://legacy.openapi.ro/api/companies/%s.json' % vat_number)
+                    else:                    
+                        headers = {
+                            "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",
+                            "Content-Type": "application/json;"
+                        }
+                        res = requests.post(
+                            'https://webservicesp.anaf.ro:/PlatitorTvaRest/api/v1/ws/tva',
+                            json=[{'cui': vat_number, 'data': fields.Date.today()}],
+                            headers = headers)
                         if res.status_code == 200:
-                            res = res.json()
-                            state = False
-                            if res['state']:
-                                state = self.env['res.country.state'].search(  [('name', '=', res['state'].title())])
-                                if state:
-                                    state = state[0].id
-                            self.write({
-                                'name': res['name'],
-                                'nrc': res['registration_id'] and res['registration_id'].upper() or '',
-                                'street': res['address'].title(),
-                                'city': res['city'].title(),
-                                'phone': res['phone'] and res['phone'] or '',
-                                'fax': res['fax'] and res['fax'] or '',
-                                'zip': res['zip'] and res['zip'] or '',
-                                'vat_subjected': bool(res['vat'] == '1'),
-                                'state_id': state,
-                            })
-                        else:                 
-                            headers = {
-                                "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",
-                                "Content-Type": "application/json;"
-                            }
-                            res = requests.post(
-                                'https://webservicesp.anaf.ro:/PlatitorTvaRest/api/v1/ws/tva',
-                                json=[{'cui': vat_number, 'data': fields.Date.today()}],
-                                headers = headers)
-                            if res.status_code == 200:
+                            if isinstance(res.json,dict):
+                                res = res.json
+                            else:     
                                 res = res.json()
-                                if res['found'] and res['found'][0]:
-                                    datas = res['found'][0]
-                                    if datas['data_sfarsit'] and datas['data_sfarsit'] != ' ':
-                                        res = requests.post(
-                                           'https://webservicesp.anaf.ro:/PlatitorTvaRest/api/v1/ws/tva',
-                                            json=[{'cui': vat_number, 'data': datas['data_sfarsit']}],
-                                            headers = headers)
-                                        if res.status_code == 200:
+                            if res['found'] and res['found'][0]:
+                                datas = res['found'][0]
+                                if datas['data_sfarsit'] and datas['data_sfarsit'] != ' ':
+                                    res = requests.post(
+                                       'https://webservicesp.anaf.ro:/PlatitorTvaRest/api/v1/ws/tva',
+                                        json=[{'cui': vat_number, 'data': datas['data_sfarsit']}],
+                                        headers = headers)
+                                    if res.status_code == 200:
+                                        if isinstance(res.json,dict):
+                                            res = res.json
+                                        else:     
                                             res = res.json()
-                                if res['found'] and res['found'][0]:
-                                                datas = res['found'][0]                            
-                                if res['notfound'] and res['notfound'][0]:
-                                    datas = res['notfound'][0]
-                                    if datas['data_sfarsit'] and datas['data_sfarsit'] != ' ':
-                                        res = requests.post(
-                                           'https://webservicesp.anaf.ro:/PlatitorTvaRest/api/v1/ws/tva',
-                                            json=[{'cui': vat_number, 'data': datas['data_sfarsit']}],
-                                            headers = headers)
-                                        if res.status_code == 200:
+                            if res['found'] and res['found'][0]:
+                                            datas = res['found'][0]                            
+                            if res['notfound'] and res['notfound'][0]:
+                                datas = res['notfound'][0]
+                                if datas['data_sfarsit'] and datas['data_sfarsit'] != ' ':
+                                    res = requests.post(
+                                       'https://webservicesp.anaf.ro:/PlatitorTvaRest/api/v1/ws/tva',
+                                        json=[{'cui': vat_number, 'data': datas['data_sfarsit']}],
+                                        headers = headers)
+                                    if res.status_code == 200:
+                                        if isinstance(res.json,dict):
+                                            res = res.json
+                                        else:     
                                             res = res.json()
-                                            if res['found'] and res['found'][0]:
-                                                datas = res['found'][0]
-                                            if res['notfound'] and res['notfound'][0]:
-                                                datas = res['notfound'][0]                            
-                                    self.write({
-                                        'name': datas['denumire'].upper(),
-                                        'street': datas['adresa'].title(),
-                                        'vat_subjected': bool(datas['tva'])
-                                    }) 
+                                        if res['found'] and res['found'][0]:
+                                            datas = res['found'][0]
+                                        if res['notfound'] and res['notfound'][0]:
+                                            datas = res['notfound'][0]                            
+                                self.write({
+                                    'name': datas['denumire'].upper(),
+                                    'street': datas['adresa'].title(),
+                                    'vat_subjected': bool(datas['tva'])
+                                }) 
                                        
             else:
                 try:
