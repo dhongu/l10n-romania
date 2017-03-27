@@ -26,18 +26,20 @@
     'description': """
 Generates Intrastat XML report for declaration
 Based on invoices.
+New report for invoice
     """,
     'author': 'Dorin Hongu',
     'depends': ['report_intrastat', 'sale_stock', 'account_accountant', 'l10n_ro'],
     'data': [
-        
-        #'data/report.intrastat.code.csv',
+
+        # 'data/report.intrastat.code.csv',
         'data/transaction.codes.xml',
         'data/transport.modes.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
         'l10n_ro_intrastat.xml',
         'wizard/l10n_ro_intrastat_xml_view.xml',
+        'views/report_invoice.xml'
     ],
     'installable': True,
 }

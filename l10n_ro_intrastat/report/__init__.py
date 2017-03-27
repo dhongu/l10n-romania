@@ -1,8 +1,8 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Odoo, Open Source Business Applications
-#    Copyright (C) 2014-2015 Odoo S.A. <http://www.odoo.com>
+# Copyright (c) 2016 Deltatech All Rights Reserved
+#                    Dorin Hongu <dhongu(@)gmail(.)com
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -15,11 +15,12 @@
 #    GNU Affero General Public License for more details.
 #
 #    You should have received a copy of the GNU Affero General Public License
-#    along with this program. If not, see <http://www.gnu.org/licenses/>.
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
 
 
-import l10n_ro_intrastat
-import wizard
-import report
+
+import account_invoice
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
