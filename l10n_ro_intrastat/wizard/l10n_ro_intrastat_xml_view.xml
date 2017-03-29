@@ -20,6 +20,9 @@
                       <field name="type"/>
 					  <field name="contact_id"/>
                     </group>
+                    <group>
+                      <field name="cn8"/>
+                    </group>
                   </group>
                   <div states="download">
                     <h2>Intrastat Declaration</h2>

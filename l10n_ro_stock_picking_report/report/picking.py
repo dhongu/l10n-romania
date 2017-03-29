@@ -88,17 +88,23 @@ class picking_reception(report_sxw.rml_parse):
         if move_line.purchase_line_id:
             line = move_line.purchase_line_id
                        
-            cur = line.order_id.pricelist_id.currency_id
-
-            taxes = tax_obj.compute_all(self.cr, self.uid, line.taxes_id, line.price_unit,
+            cur = line.order_id.currency_id  #Moneda in care a fost facuta achizitia
+            tocur = move_line.company_id.currency_id
+            
+            
+        
+            price_unit =  cur_obj.compute(self.cr, self.uid, cur.id, tocur.id, line.price_unit, context={'date':move_line.date} )  #pretul calculat in moneda companiei
+            print "Convert from %s to %s: %s -> %s" % (cur.name, tocur.name, str(line.price_unit), str(price_unit) )
+            
+            taxes = tax_obj.compute_all(self.cr, self.uid, line.taxes_id, price_unit,
                                         move_line.product_uom_qty, line.product_id, line.order_id.partner_id)
-            res['amount'] = cur_obj.round(  self.cr, self.uid, cur, taxes['total'])
+            res['amount'] = cur_obj.round(  self.cr, self.uid, tocur, taxes['total'])
             if move_line.product_uom_qty != 0.0:
-                res['price'] = cur_obj.round(  self.cr, self.uid, cur, taxes['total']) / move_line.product_uom_qty
+                res['price'] = cur_obj.round(  self.cr, self.uid, tocur, taxes['total']) / move_line.product_uom_qty
             else:
                 res['price'] = 0.0
-            res['tax'] = cur_obj.round( self.cr, self.uid, cur, taxes['total_included'] - taxes['total'])
-            res['amount_tax'] = cur_obj.round( self.cr, self.uid, cur, taxes['total_included'])
+            res['tax'] = cur_obj.round( self.cr, self.uid, tocur, taxes['total_included'] - taxes['total'])
+            res['amount_tax'] = cur_obj.round( self.cr, self.uid, tocur, taxes['total_included'])
 
             taxes_sale = tax_obj.compute_all(
                 self.cr, self.uid, line.product_id.taxes_id, line.product_id.list_price, move_line.product_uom_qty, line.product_id)

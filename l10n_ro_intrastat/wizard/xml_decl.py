@@ -73,6 +73,7 @@ class xml_decl(osv.TransientModel):
         'contact_id':fields.many2one('res.partner', 'Contact', domain=[('is_company', '=', False)], required=True),
         'file_save': fields.binary('Intrastat Report File', readonly=True),
         'state': fields.selection([('draft', 'Draft'), ('download', 'Download')], string="State"),
+        'cn8': fields.char('CN8', size=4, required=True,default='2017'),
     }
 
     _defaults = {
@@ -133,7 +134,7 @@ class xml_decl(osv.TransientModel):
         tag = ET.SubElement(CodeVersion, 'EuCountryVer')
         tag.text = '2007'
         tag = ET.SubElement(CodeVersion, 'CnVer')
-        tag.text = '2016'
+        tag.text = decl_datas.cn8
         tag = ET.SubElement(CodeVersion, 'ModeOfTransportVer')
         tag.text = '2005'
         tag = ET.SubElement(CodeVersion, 'DeliveryTermsVer')
