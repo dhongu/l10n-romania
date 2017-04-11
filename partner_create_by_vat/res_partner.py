@@ -217,7 +217,9 @@ class res_partner(models.Model):
                                 'zip': res['cod_postal'] and res['cod_postal'] or '',
                                 'vat_subjected': bool(res['tva']),
                                 'state_id': state,
-                            })                        
+                            })
+                        elif status_code == 429: # max number of request reached
+                            raise Warning(_("Numarul maxim de cereri a fost depasit pentru astazi. Va rugam reveniti maine."))
                     else:                    
                         headers = {
                             "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",
