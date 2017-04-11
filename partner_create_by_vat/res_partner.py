@@ -188,13 +188,18 @@ class res_partner(models.Model):
                             "Content-Type": "application/json;",
                             'x-api-key': openapi_key
                         }
-                        res = requests.get( 'https://api.openapi.ro/api/companies/%s' % vat_number,
-                                            headers = headers )
-                        if res.status_code == 200:
-                            if isinstance(res.json,dict):
-                                res = res.json
-                            else:     
-                                res = res.json()
+                        #res = requests.get( 'https://api.openapi.ro/api/companies/%s' % vat_number,
+                        #                    headers = headers )
+                        request = Request('https://api.openapi.ro/api/companies/%s' % vat_number, headers=headers)
+                        response = urlopen(request)
+                        status_code = response.getcode()
+                        #if res.status_code == 200:
+                        if status_code == 200:
+                            #if isinstance(res.json,dict):
+                            #    res = res.json
+                            #else:     
+                            #    res = res.json()
+                            res = json.loads(response.read())
                             state = False
                             if res['judet']:
                                 state = self.env['res.country.state'].search(  [('name', '=', res['judet'].title())])
