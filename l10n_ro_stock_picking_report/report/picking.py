@@ -43,7 +43,7 @@ class picking_delivery(report_sxw.rml_parse):
             res['amount'] = line.price_subtotal
             res['amount_tax'] = line.price_total
 
-            if move_line.product_uom_qty <> 0:
+            if move_line.product_uom_qty != 0:
                 res['price'] = line.order_id.pricelist_id.currency_id.round(res['amount']) / move_line.product_uom_qty
             else:
                 res['price'] = 0.0
@@ -74,7 +74,7 @@ class picking_reception(report_sxw.rml_parse):
                'amount_tax': 0.0, 'amount_sale': 0.0, 'margin': 0.0}
 
         if move_line.purchase_line_id:
-
+            #todo: ce fac cu receptii facute ca preturi diferite ????
             line = move_line.purchase_line_id
 
             # todo: de verificat daca pretul din miscare este actualizat inaiante de confirmarea transferului pentru a se actualiza cursul valutar !!
