@@ -25,7 +25,9 @@ import datetime
 import time
 
 from string import maketrans
+import json
 import requests
+from urllib2 import Request, urlopen
 from stdnum.eu.vat import check_vies
 from lxml import html
 
@@ -188,13 +190,18 @@ class res_partner(models.Model):
                             "Content-Type": "application/json;",
                             'x-api-key': openapi_key
                         }
-                        res = requests.get( 'https://api.openapi.ro/api/companies/%s' % vat_number,
-                                            headers = headers )
-                        if res.status_code == 200:
-                            if isinstance(res.json,dict):
-                                res = res.json
-                            else:     
-                                res = res.json()
+                        #res = requests.get( 'https://api.openapi.ro/api/companies/%s' % vat_number,
+                        #                    headers = headers )
+                        request = Request('https://api.openapi.ro/api/companies/%s' % vat_number, headers=headers)
+                        response = urlopen(request)
+                        status_code = response.getcode()
+                        #if res.status_code == 200:
+                        if status_code == 200:
+                            #if isinstance(res.json,dict):
+                            #    res = res.json
+                            #else:     
+                            #    res = res.json()
+                            res = json.loads(response.read())
                             state = False
                             if res['judet']:
                                 state = self.env['res.country.state'].search(  [('name', '=', res['judet'].title())])
@@ -210,7 +217,9 @@ class res_partner(models.Model):
                                 'zip': res['cod_postal'] and res['cod_postal'] or '',
                                 'vat_subjected': bool(res['tva']),
                                 'state_id': state,
-                            })                        
+                            })
+                        elif status_code == 429: # max number of request reached
+                            raise Warning(_("Numarul maxim de cereri a fost depasit pentru astazi. Va rugam reveniti maine."))
                     else:                    
                         headers = {
                             "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",
