@@ -21,10 +21,11 @@
 
 
 import time
-from odoo.report import report_sxw
-from odoo.osv import osv
 
+from odoo import api, models
+from odoo.tools import formatLang
 
+"""
 class picking_delivery(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(picking_delivery, self).__init__(cr, uid, name, context=context)
@@ -33,6 +34,33 @@ class picking_delivery(report_sxw.rml_parse):
             'get_line': self._get_line,
             'get_totals': self._get_totals
         })
+"""
+
+
+class ReportPickingDelivery(models.AbstractModel):
+    _name = 'report.abstract_report.delivery_report'
+    _template = None
+
+    @api.model
+    def render_html(self, docids, data=None):
+        report_obj = self.env['report']
+        report = report_obj._get_report_from_name(self._template)
+        docargs = {
+            'doc_ids': docids,
+            'doc_model': report.model,
+            'data': data,
+            'time': time,
+            'docs': self.env[report.model].browse(docids),
+            'get_line': self._get_line,
+            'get_totals': self._get_totals,
+            'formatLang': self._formatLang
+        }
+        return report_obj.render(self._template, docargs)
+
+    def _formatLang(self, value, **kwargs):
+        if 'date' in kwargs:
+            return value
+        return formatLang(self.env, value, **kwargs)
 
     def _get_line(self, move_line):
         res = {'price': 0.0, 'amount': 0.0, 'tax': 0.0, 'amount_tax': 0.0}
@@ -60,6 +88,7 @@ class picking_delivery(report_sxw.rml_parse):
         return res
 
 
+"""
 class picking_reception(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(picking_reception, self).__init__(cr, uid, name, context=context)
@@ -68,13 +97,42 @@ class picking_reception(report_sxw.rml_parse):
             'get_line': self._get_line,
             'get_totals': self._get_totals
         })
+"""
+
+
+class ReportPickingReception(models.AbstractModel):
+    _name = 'report.abstract_report.reception_report'
+    _template = None
+
+    @api.model
+    def render_html(self, docids, data=None):
+        report_obj = self.env['report']
+        report = report_obj._get_report_from_name(self._template)
+        docargs = {
+            'doc_ids': docids,
+            'doc_model': report.model,
+            'data': data,
+            'time': time,
+            'docs': self.env[report.model].browse(docids),
+            'get_line': self._get_line,
+            'get_totals': self._get_totals,
+            'formatLang': self._formatLang
+        }
+        return report_obj.render(self._template, docargs)
+
+    def _formatLang(self, value, **kwargs):
+        #todo: de tratat : formatLang(totals['amount'], currency_obj=res_company.currency_id)
+        #todo: de tratat : formatLang(o.date, date=True)
+        if 'date' in kwargs:
+            return value
+        return formatLang(self.env, value, **kwargs)
 
     def _get_line(self, move_line):
         res = {'price': 0.0, 'amount': 0.0, 'tax': 0.0,
                'amount_tax': 0.0, 'amount_sale': 0.0, 'margin': 0.0}
 
         if move_line.purchase_line_id:
-            #todo: ce fac cu receptii facute ca preturi diferite ????
+            # todo: ce fac cu receptii facute ca preturi diferite ????
             line = move_line.purchase_line_id
 
             # todo: de verificat daca pretul din miscare este actualizat inaiante de confirmarea transferului pentru a se actualiza cursul valutar !!
@@ -116,14 +174,14 @@ class picking_reception(report_sxw.rml_parse):
                                                                        product=move_line.product_id,
                                                                        partner=move_line.partner_id)
 
-            res['tax'] =  taxes['total_included'] - taxes['total_excluded']
-            res['amount_tax'] =  taxes['total_included']
+            res['tax'] = taxes['total_included'] - taxes['total_excluded']
+            res['amount_tax'] = taxes['total_included']
 
             taxes_sale = move_line.product_id.taxes_id.compute_all(move_line.product_id.list_price, currency=currency,
                                                                    quantity=move_line.product_uom_qty,
                                                                    product=move_line.product_id)
 
-            res['amount_sale'] =  taxes_sale['total_included']
+            res['amount_sale'] = taxes_sale['total_included']
             if taxes['total_included'] != 0.0:
                 res['margin'] = 100 * (taxes_sale['total_included'] - taxes['total_included']) / taxes['total_included']
             else:
@@ -140,52 +198,52 @@ class picking_reception(report_sxw.rml_parse):
         return res
 
 
-class report_delivery(osv.AbstractModel):
+class report_delivery(models.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_delivery'
-    _inherit = 'report.abstract_report'
+    _inherit = 'report.abstract_report.delivery_report'
     _template = 'l10n_ro_stock_picking_report.report_delivery'
-    _wrapped_report_class = picking_delivery
+    # _wrapped_report_class = picking_delivery
 
 
-class report_delivery_price(osv.AbstractModel):
+class report_delivery_price(models.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_delivery_price'
-    _inherit = 'report.abstract_report'
+    _inherit = 'report.abstract_report.delivery_report'
     _template = 'l10n_ro_stock_picking_report.report_delivery_price'
-    _wrapped_report_class = picking_delivery
+    # _wrapped_report_class = picking_delivery
 
 
-class report_consume_voucher(osv.AbstractModel):
+class report_consume_voucher(models.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_consume_voucher'
-    _inherit = 'report.abstract_report'
+    _inherit = 'report.abstract_report.delivery_report'
     _template = 'l10n_ro_stock_picking_report.report_consume_voucher'
-    _wrapped_report_class = picking_delivery
+    # _wrapped_report_class = picking_delivery
 
 
-class report_internal_transfer(osv.AbstractModel):
+class report_internal_transfer(models.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_internal_transfer'
-    _inherit = 'report.abstract_report'
+    _inherit = 'report.abstract_report.delivery_report'
     _template = 'l10n_ro_stock_picking_report.report_internal_transfer'
-    _wrapped_report_class = picking_delivery
+    # _wrapped_report_class = picking_delivery
 
 
-class report_reception(osv.AbstractModel):
+class report_reception(models.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_reception'
-    _inherit = 'report.abstract_report'
+    _inherit = 'report.abstract_report.reception_report'
     _template = 'l10n_ro_stock_picking_report.report_reception'
-    _wrapped_report_class = picking_reception
+    # _wrapped_report_class = picking_reception
 
 
-class report_reception_no_tax(osv.AbstractModel):
+class report_reception_no_tax(models.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_reception_no_tax'
-    _inherit = 'report.abstract_report'
+    _inherit = 'report.abstract_report.reception_report'
     _template = 'l10n_ro_stock_picking_report.report_reception_no_tax'
-    _wrapped_report_class = picking_reception
+    # _wrapped_report_class = picking_reception
 
 
-class report_reception_sale_price(osv.AbstractModel):
+class report_reception_sale_price(models.AbstractModel):
     _name = 'report.l10n_ro_stock_picking_report.report_reception_sale_price'
-    _inherit = 'report.abstract_report'
+    _inherit = 'report.abstract_report.reception_report'
     _template = 'l10n_ro_stock_picking_report.report_reception_sale_price'
-    _wrapped_report_class = picking_reception
+    # _wrapped_report_class = picking_reception
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
