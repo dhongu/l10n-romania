@@ -254,9 +254,12 @@
                             <h3>
                                 <span>Delivery:</span>
                                 <span t-field="o.name"/>
-                                <span t-if="o.state == 'drat'">Draft</span>
-                                <span t-if="o.state == 'cancel'">Cancelled</span>
                             </h3>
+                            <h4>
+                                <span t-if="o.state == 'drat'">Draft</span>
+                                <span t-if="o.state == 'assigned'">To be confirmed</span>
+                                <span t-if="o.state == 'cancel'">Cancelled</span>
+                            </h4>
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
@@ -274,7 +277,7 @@
                                             <span t-field="o.origin"/>
                                         </td>
                                         <td>
-                                            <span t-field="o.date"  t-field-options='{"widget": "date"}'/>
+                                            <span t-field="o.date" t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                                         </td>
                                     </tr>
@@ -345,7 +348,7 @@
                             </h3>
                             <h3>
                                 <span>Date:</span>
-                                <span t-field="o.date"  t-field-options='{"widget": "date"}'/>
+                                <span t-field="o.date" t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                             </h3>
 
@@ -424,14 +427,17 @@
 
                             <h3>
 
+                                <!--
                                 <span>Internal Transfer:</span>
+                                -->
+                                <span t-field="o.picking_type_id"/>
                                 <span t-field="o.name"/>
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
                             </h3>
                             <h3>
                                 <span>Date:</span>
-                                <span t-field="o.date"/>
+                                <span t-field="o.date" t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                             </h3>
 
@@ -576,7 +582,7 @@
                                             <span t-field="o.origin"/>
                                         </td>
                                         <td>
-                                            <span t-field="o.date"  t-field-options='{"widget": "date"}'/>
+                                            <span t-field="o.date"  t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                                         </td>
                                     </tr>
@@ -728,7 +734,7 @@
                                             <span t-field="o.origin"/>
                                         </td>
                                         <td>
-                                            <span t-field="o.date"  t-field-options='{"widget": "date"}'/>
+                                            <span t-field="o.date" t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                                         </td>
                                     </tr>
@@ -850,7 +856,7 @@
                                             <span t-field="o.origin"/>
                                         </td>
                                         <td>
-                                            <span t-field="o.date"  t-field-options='{"widget": "date"}'/>
+                                            <span t-field="o.date"  t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                                         </td>
                                     </tr>
@@ -978,7 +984,7 @@
                                             <span t-field="o.origin"/>
                                         </td>
                                         <td>
-                                            <span t-field="o.date"  t-field-options='{"widget": "date"}'/>
+                                            <span t-field="o.date"  t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                                         </td>
                                     </tr>

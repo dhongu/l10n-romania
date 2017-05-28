@@ -20,7 +20,7 @@ msgstr ""
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
 msgid "<span>Consume Voucher:</span>"
-msgstr "<span>Consume Voucher:</span>"
+msgstr "<span>Bon de consum:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
@@ -37,17 +37,17 @@ msgstr "<span>Delegat:</span>"
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
 msgid "<span>Delivery:</span>"
-msgstr "<span>Delivery:</span>"
+msgstr "<span>Aviz:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_internal_transfer
 msgid "<span>Internal Transfer:</span>"
-msgstr "<span>Internal Transfer:</span>"
+msgstr "<span>Transfer intern:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_sign
 msgid "<span>Mean Transport:</span>"
-msgstr "<span>Mean Transport:</span>"
+msgstr "<span>Mijloc de transport:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_sign
@@ -98,7 +98,7 @@ msgstr "<span>conform facturii (aviz expediție) nr.</span>"
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address_company
 msgid "<strong>Account:</strong>"
-msgstr "<strong>Account:</strong>"
+msgstr "<strong>Cont:</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
@@ -126,7 +126,7 @@ msgstr "<strong>Valoare</strong>"
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address_company
 msgid "<strong>Bank:</strong>"
-msgstr "<strong>Bank:</strong>"
+msgstr "<strong>Banca:</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
@@ -137,7 +137,7 @@ msgstr "<strong>CIF:</strong>"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address_company
 msgid "<strong>Company</strong>"
-msgstr "<strong>Company</strong>"
+msgstr "<strong>Compania</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
@@ -156,12 +156,12 @@ msgstr "<strong>Data</strong>"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_internal_transfer
 msgid "<strong>Location destination</strong>"
-msgstr "<strong>Location destination</strong>"
+msgstr "<strong>Destinația</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_internal_transfer
 msgid "<strong>Location source</strong>"
-msgstr "<strong>Location source</strong>"
+msgstr "<strong>Sursa</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
@@ -217,12 +217,12 @@ msgstr "<strong>Cantitate</strong>"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "<strong>Sale Amount</strong>"
-msgstr "<strong>Sale Amount</strong>"
+msgstr "<strong>Valoare vânzare</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "<strong>Sale price</strong>"
-msgstr "<strong>Sale price</strong>"
+msgstr "<strong>Preț vânzare</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
@@ -267,6 +267,15 @@ msgstr "<strong>Total</strong>"
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_internal_transfer
 msgid "Cancelled"
 msgstr "Anulat"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_internal_transfer
+msgid "To be confirmed"
+msgstr "De confirmat"
+
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_consume_voucher
@@ -406,7 +415,7 @@ msgstr "Recepție cu preț de vânzare"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report.xml,name:l10n_ro_stock_picking_report.action_report_reception_no_tax
 msgid "Reception without tax"
-msgstr "Reception without tax"
+msgstr "Recepție fără TVA"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_sign
@@ -428,7 +437,7 @@ msgstr "Semnatura de recepție:"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals
 msgid "Taxes"
-msgstr "Taxe"
+msgstr "TVA"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.model,name:l10n_ro_stock_picking_report.model_stock_picking
@@ -442,37 +451,3 @@ msgstr "Transfer"
 msgid "from the city"
 msgstr "din localitatea"
 
-#. module: l10n_ro_stock_picking_report
-#: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_consume_voucher
-msgid "report.l10n_ro_stock_picking_report.report_consume_voucher"
-msgstr "report.l10n_ro_stock_picking_report.report_consume_voucher"
-
-#. module: l10n_ro_stock_picking_report
-#: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_delivery
-msgid "report.l10n_ro_stock_picking_report.report_delivery"
-msgstr "report.l10n_ro_stock_picking_report.report_delivery"
-
-#. module: l10n_ro_stock_picking_report
-#: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_delivery_price
-msgid "report.l10n_ro_stock_picking_report.report_delivery_price"
-msgstr "report.l10n_ro_stock_picking_report.report_delivery_price"
-
-#. module: l10n_ro_stock_picking_report
-#: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_internal_transfer
-msgid "report.l10n_ro_stock_picking_report.report_internal_transfer"
-msgstr "report.l10n_ro_stock_picking_report.report_internal_transfer"
-
-#. module: l10n_ro_stock_picking_report
-#: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_reception
-msgid "report.l10n_ro_stock_picking_report.report_reception"
-msgstr "report.l10n_ro_stock_picking_report.report_reception"
-
-#. module: l10n_ro_stock_picking_report
-#: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_reception_no_tax
-msgid "report.l10n_ro_stock_picking_report.report_reception_no_tax"
-msgstr "report.l10n_ro_stock_picking_report.report_reception_no_tax"
-
-#. module: l10n_ro_stock_picking_report
-#: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_reception_sale_price
-msgid "report.l10n_ro_stock_picking_report.report_reception_sale_price"
-msgstr "report.l10n_ro_stock_picking_report.report_reception_sale_price"
