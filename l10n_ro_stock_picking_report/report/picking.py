@@ -138,7 +138,7 @@ class ReportPickingReception(models.AbstractModel):
             # todo: de verificat daca pretul din miscare este actualizat inaiante de confirmarea transferului pentru a se actualiza cursul valutar !!
             res['price'] = move_line.price_unit  # pretul caculat la genereare miscarii
             taxes = line.taxes_id.compute_all(res['price'],
-                                              quantity=move_line.product_uom_qty,
+                                              quantity=move_line.product_qty,
                                               product=move_line.product_id,
                                               partner=move_line.partner_id)
 
@@ -147,9 +147,10 @@ class ReportPickingReception(models.AbstractModel):
             res['amount_tax'] = taxes['total_included']
 
             taxes_sale = line.product_id.taxes_id.compute_all(line.product_id.list_price,
-                                                              quantity=move_line.product_uom_qty,
+                                                              quantity=move_line.product_qty,
                                                               product=line.product_id)
             res['amount_sale'] = taxes_sale['total_included']
+            res['price'] = res['price'] * line.product_uom._compute_quantity(1, line.product_id.uom_id)
             if res['amount_tax'] != 0.0:
                 res['margin'] = 100 * (taxes_sale['total_included'] - res['amount_tax']) / res['amount_tax']
             else:
