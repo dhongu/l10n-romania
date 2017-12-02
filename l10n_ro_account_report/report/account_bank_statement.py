@@ -24,8 +24,8 @@ import time
 from datetime import datetime
 from datetime import timedelta
 
-from openerp.osv import osv
-from openerp.report import report_sxw
+from odoo.osv import osv
+from odoo.report import report_sxw
 from common_report_header import common_report_header
 
 class bank_statement(report_sxw.rml_parse):

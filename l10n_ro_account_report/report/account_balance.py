@@ -108,8 +108,8 @@ class account_balance_romania(report_sxw.rml_parse, common_report_header):
 
         account_obj = self.pool.get('account.account')
         currency_obj = self.pool.get('res.currency')
-        period_obj = self.pool.get('account.period')
-        fiscalyear_obj = self.pool.get('account.fiscalyear')
+        #period_obj = self.pool.get('account.period')
+        #fiscalyear_obj = self.pool.get('account.fiscalyear')
         user = self.pool.get('res.users').browse(self.cr, self.uid, self.uid)
         company_id = user.company_id and user.company_id.id
         company = self.pool.get('res.company').browse(
@@ -124,8 +124,7 @@ class account_balance_romania(report_sxw.rml_parse, common_report_header):
         ctx = self.context.copy()
 
         if form.get('fiscalyear_id'):
-            fiscalyear = fiscalyear_obj.browse(
-                self.cr, self.uid, form['fiscalyear_id'])
+            fiscalyear = fiscalyear_obj.browse( self.cr, self.uid, form['fiscalyear_id'])
         else:
             fiscalyear = fiscalyear_obj.browse(
                 self.cr, self.uid, fiscalyear_obj.find(self.cr, self.uid))
