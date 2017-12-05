@@ -67,14 +67,19 @@ class ReportPickingDelivery(models.AbstractModel):
         if move_line.procurement_id.sale_line_id:
             line = move_line.procurement_id.sale_line_id
 
-            res['tax'] = line.price_tax
-            res['amount'] = line.price_subtotal
-            res['amount_tax'] = line.price_total
-
-            if move_line.product_uom_qty != 0:
-                res['price'] = line.order_id.pricelist_id.currency_id.round(res['amount']) / move_line.product_uom_qty
+            if line.product_uom_qty != 0:
+                res['price'] = line.price_subtotal / line.product_uom_qty
             else:
                 res['price'] = 0.0
+
+
+            taxes_sale = line.product_id.taxes_id.compute_all(res['price'],
+                                                              quantity=move_line.product_qty,
+                                                              product=line.product_id)
+
+            res['tax'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
+            res['amount'] = taxes_sale['total_excluded']
+            res['amount_tax'] = taxes_sale['total_included']
 
         return res
 
