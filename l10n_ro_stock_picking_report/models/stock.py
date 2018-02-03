@@ -44,7 +44,8 @@ class stock_picking(models.Model):
 
     origin = fields.Char(states={'done': [('readonly', False)]})
     delegate_id = fields.Many2one('res.partner', string='Delegate')
-    mean_transp = fields.Char(string='Mean transport', size=20)
+    mean_transp = fields.Char(string='Mean transport')
+
 
     '''
     invoice_state = fields.Selection([("invoiced", "Invoiced"),
@@ -95,4 +96,3 @@ class stock_picking(models.Model):
             res = self.env['report'].get_action(self, 'l10n_ro_stock_picking_report.report_internal_transfer')
         return res
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

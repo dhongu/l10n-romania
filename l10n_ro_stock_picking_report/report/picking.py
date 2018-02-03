@@ -25,37 +25,30 @@ import time
 from odoo import api, models
 from odoo.tools import formatLang
 
-"""
-class picking_delivery(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(picking_delivery, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-            'get_line': self._get_line,
-            'get_totals': self._get_totals
-        })
-"""
+
 
 
 class ReportPickingDelivery(models.AbstractModel):
     _name = 'report.abstract_report.delivery_report'
     _template = None
 
+
     @api.model
-    def render_html(self, docids, data=None):
-        report_obj = self.env['report']
-        report = report_obj._get_report_from_name(self._template)
-        docargs = {
+    def get_report_values(self, docids, data=None):
+        report = self.env['ir.actions.report']._get_report_from_name(self._template)
+        return  {
             'doc_ids': docids,
             'doc_model': report.model,
             'data': data,
             'time': time,
             'docs': self.env[report.model].browse(docids),
+            'formatLang': self._formatLang,
             'get_line': self._get_line,
             'get_totals': self._get_totals,
-            'formatLang': self._formatLang
         }
-        return report_obj.render(self._template, docargs)
+
+
+
 
     def _formatLang(self, value, **kwargs):
         if 'date' in kwargs:
@@ -64,8 +57,8 @@ class ReportPickingDelivery(models.AbstractModel):
 
     def _get_line(self, move_line):
         res = {'price': 0.0, 'amount': 0.0, 'tax': 0.0, 'amount_tax': 0.0}
-        if move_line.procurement_id.sale_line_id:
-            line = move_line.procurement_id.sale_line_id
+        if move_line.sale_line_id:
+            line = move_line.sale_line_id
 
             if line.product_uom_qty != 0:
                 res['price'] = line.price_subtotal / line.product_uom_qty
@@ -93,37 +86,29 @@ class ReportPickingDelivery(models.AbstractModel):
         return res
 
 
-"""
-class picking_reception(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(picking_reception, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-            'get_line': self._get_line,
-            'get_totals': self._get_totals
-        })
-"""
+
 
 
 class ReportPickingReception(models.AbstractModel):
     _name = 'report.abstract_report.reception_report'
     _template = None
 
+
     @api.model
-    def render_html(self, docids, data=None):
-        report_obj = self.env['report']
-        report = report_obj._get_report_from_name(self._template)
-        docargs = {
+    def get_report_values(self, docids, data=None):
+        report = self.env['ir.actions.report']._get_report_from_name(self._template)
+        return  {
             'doc_ids': docids,
             'doc_model': report.model,
             'data': data,
             'time': time,
             'docs': self.env[report.model].browse(docids),
+            'formatLang': self._formatLang,
             'get_line': self._get_line,
             'get_totals': self._get_totals,
-            'formatLang': self._formatLang
         }
-        return report_obj.render(self._template, docargs)
+
+
 
     def _formatLang(self, value, **kwargs):
         #todo: de tratat : formatLang(totals['amount'], currency_obj=res_company.currency_id)
@@ -192,6 +177,7 @@ class ReportPickingReception(models.AbstractModel):
                 res['margin'] = 100 * (taxes_sale['total_included'] - taxes['total_included']) / taxes['total_included']
             else:
                 res['margin'] = 0.0
+        print res
         return res
 
     def _get_totals(self, move_lines):
@@ -252,4 +238,4 @@ class report_reception_sale_price(models.AbstractModel):
     _template = 'l10n_ro_stock_picking_report.report_reception_sale_price'
     # _wrapped_report_class = picking_reception
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
