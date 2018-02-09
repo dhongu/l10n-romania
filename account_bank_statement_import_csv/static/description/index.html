@@ -1,0 +1,194 @@
+<div id="loempia_tabs">
+    <ul role="navigation" class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a href="#desc" data-toggle="tab">Description</a></li>
+        <li><a href="#doc" data-toggle="tab">Documentation</a></li>
+        <li><a href="#rel" data-toggle="tab">Related Modules</a></li>
+    </ul>
+</div>
+
+<div id="loempia_tabs_content" class="tab-content">
+    <div id="desc" class="tab-pane active">
+        <section class="oe_container">
+            <div class="oe_row oe_spaced">
+                <h2 class="oe_slogan">Luxembourg Bank Statements</h2>
+                <h3 class="oe_slogan">Import Bank Statements from Luxembourg</h3>
+                <div class="oe_span6" style="display: block; margin: 0 auto; height:400px;">
+                    <div style="display: inline-block; position: relative; z-index: 1;">
+                        <img src="screen_niboo.png" style="margin: 0 auto; display: block; width: 425px;">
+                    </div>
+                    <img src="module_image.png" style="margin: 0 30px -335px 18px;display: block;position: relative;width: 389px;height: 222px;z-index: 0;top: -330px;"/>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <p>
+                            This module allows you to import the machine readable CSV Files from Luxembourg in Odoo: they are parsed and stored in human readable format in
+                            Accounting / Bank and Cash / Bank Statements.
+                        </p>
+                        <p>
+                            Bank Statements may be generated containing a subset of the CSV information (taking only those transaction lines that are required for the
+                            creation of the Financial Accounting records).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="oe_container oe_separator"/>
+
+        <section class="oe_container">
+            <div class="oe_row">
+                <a href="http://www.niboo.be/page/contactus" target="_blank"><div class="oe_span6">
+                    <div class="oe_quote">
+                        <cite class="oe_cite oe_clearfix">
+                            <img class="oe_photo" src="niboo.png">
+                            <div class="oe_author">Focus on your business, we keep IT running</div>
+                        </cite>
+                    </div>
+                </div>
+                </a>
+                <div class="oe_span6">
+                    <h2>About Niboo</h2>
+                    Niboo is a technology company, specialized in developing business solutions to your needs. Niboo combines expertise in both IT and management consulting. As an active partner in the Odoo Community, Niboo also contributes to the evolution of open-source business solutions.
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="doc" class="tab-pane">
+        <h2 class="oe_slogan">User guide</h2>
+        <section class="oe_container">
+            <div class="oe_row oe_spaced">
+                <h3 class="oe_slogan">How to import statement</h3>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="display: table-cell;vertical-align: middle;">
+                        <img class="img img-responsive" style="border:1px solid lightgrey; padding: 5px;box-shadow: 4px 4px 8px lightgrey;" src="configure_company.png"/>
+                    </div>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <li style="padding-bottom:0.5em;">Define the number of hours your employee should work per day: <span class="text-primary">Settings > Company > Configuration</span> (default is 8 hours)</li>
+                        <li>This number will then be used to log a day of leave in the timesheet</li>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="oe_container oe_dark">
+            <div class="oe_row oe_spaced">
+                <h3 class="oe_slogan">How to use</h3>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <p>Once your company is configured, everything is set. The users can now make leave request.</p>
+                    </div>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="display: table-cell;vertical-align: middle;">
+                        <img class="img img-responsive" style="border:1px solid lightgrey; padding: 5px;box-shadow: 4px 4px 8px lightgrey;" src="request.png"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="oe_container">
+            <div class="oe_row oe_spaced">
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="display: table-cell;vertical-align: middle;">
+                        <img class="img img-responsive" style="border:1px solid lightgrey; padding: 5px;box-shadow: 4px 4px 8px lightgrey;" src="result.png"/>
+                    </div>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <p>As soon as the leave is approved, it will appear in your employee's timesheet in the line <b>Leaves</b>. If they took a full day off,
+                            it will be logged with the number of hours configured in the company settings. If they took half a day off, it will be logged with half of the amount.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="rel" class="tab-pane">
+        <h2 class="oe_slogan">Related modules from Niboo</h2>
+        <section class="oe_container">
+            <div class="oe_row oe_spaced">
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="display: table-cell;vertical-align: middle;">
+                        <a href="https://apps.openerp.com/apps/modules/9.0/hr_timesheet_task_presentation">
+                            <img class="img img-responsive" style="border:1px solid lightgrey; padding: 5px;box-shadow: 4px 4px 8px lightgrey;" src="hr_timesheet_task_presentation_cover.png"/>
+                        </a>
+                    </div>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <h2>Timesheet - Improved design</h2>
+                        <p>Profit from a user-friendlier timesheet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="oe_container oe_dark">
+            <div class="oe_row oe_spaced">
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div class="text-right" style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <h2>Timesheet - Select product</h2>
+                        <p>Select a product for each timesheet entry.</p>
+                    </div>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="display: table-cell;vertical-align: middle;">
+                        <a href="https://apps.openerp.com/apps/modules/9.0/hr_timesheet_select_product">
+                            <img class="img img-responsive" style="border:1px solid lightgrey; padding: 5px;box-shadow: 4px 4px 8px lightgrey;" src="hr_timesheet_select_product_cover.png"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="oe_container">
+            <div class="oe_row oe_spaced">
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="display: table-cell;vertical-align: middle;">
+                        <a href="https://apps.openerp.com/apps/modules/9.0/hr_timesheet_select_task">
+                            <img class="img img-responsive" style="border:1px solid lightgrey; padding: 5px;box-shadow: 4px 4px 8px lightgrey;" src="hr_timesheet_task_cover.png"/>
+                        </a>
+                    </div>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <h2>Timesheet - Select task</h2>
+                        <p>Select a task for each timesheet entry.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="oe_container oe_dark">
+            <div class="oe_row oe_spaced">
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div class="text-right" style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <h2>HR Timesheet - Work Logger</h2>
+                        <p>Makes logging time easy and efficient.</p>
+                    </div>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="display: table-cell;vertical-align: middle;">
+                        <a href="https://apps.openerp.com/apps/modules/9.0/hr_timesheet_work_log_wizard">
+                            <img class="img img-responsive" style="border:1px solid lightgrey; padding: 5px;box-shadow: 4px 4px 8px lightgrey;" src="hr_timesheet_work_log_wizard_cover.png"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="oe_container">
+            <div class="oe_row oe_spaced">
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="display: table-cell;vertical-align: middle;">
+                        <a href="https://apps.openerp.com/apps/modules/9.0/hr_holiday_exclude_special_days">
+                            <img class="img img-responsive" style="border:1px solid lightgrey; padding: 5px;box-shadow: 4px 4px 8px lightgrey;" src="hr_holiday_exclude_special_days_cover.png"/>
+                        </a>
+                    </div>
+                </div>
+                <div class="oe_span6" style="display: table;height: 300px;overflow: hidden;">
+                    <div style="font-size: 15px;display: table-cell;vertical-align: middle;">
+                        <h2>Leaves - exclude work-free days</h2>
+                        <p>Avoid counting weekends and public holidays in leave days.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
