@@ -177,7 +177,7 @@ class ReportPickingReception(models.AbstractModel):
                 res['margin'] = 100 * (taxes_sale['total_included'] - taxes['total_included']) / taxes['total_included']
             else:
                 res['margin'] = 0.0
-        print res
+        
         return res
 
     def _get_totals(self, move_lines):
