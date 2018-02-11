@@ -320,7 +320,7 @@ class ResPartner(models.Model):
                 'country_id': self.env['res.country'].search([('code', 'ilike', vat_country)])[0].id
             })
             if vat_country == 'ro':
-
+                values = {}
                 try:
                     '''
                     result = self._get_Mfinante(vat_number)
@@ -330,12 +330,12 @@ class ResPartner(models.Model):
                     '''
                     result = self._get_Anaf(vat_number)
                     if result:
-                        res = self._Anaf_to_Odoo(result)
+                        values = self._Anaf_to_Odoo(result)
                 except:
                     values = self._get_Openapi(vat_number)
 
-                    if values:
-                        self.write(values)
+                if values:
+                    self.write(values)
 
             else:
                 try:
