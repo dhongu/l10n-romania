@@ -176,6 +176,9 @@ class MT940(object):
                     record_line = line
             except StopIteration:
                 pass
+            except Exception as e:
+                print str(e)
+                raise e
             if self.current_statement:
                 if record_line:
                     self.handle_record(record_line)
@@ -258,10 +261,7 @@ class MT940(object):
         """get transaction values"""
         self.current_statement['transactions'].append({})
         self.current_transaction = self.current_statement['transactions'][-1]
-        self.current_transaction['date'] = datetime.strptime(
-            data[:6],
-            '%y%m%d'
-        )
+        self.current_transaction['date'] = datetime.strptime( data[:6],  '%y%m%d'  )
 
     def handle_tag_62F(self, data):
         """Get ending balance, statement date and id.
