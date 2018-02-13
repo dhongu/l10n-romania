@@ -105,6 +105,10 @@ class MT940Parser(MT940):
         self.header_lines = 1
         self.header_regex = '^{1:'  # Start of relevant data
 
+
+
+
+
     def handle_tag_25(self, data):
         """Local bank account information."""
         data = data.replace('.', '').strip()
@@ -117,6 +121,8 @@ class MT940Parser(MT940):
     def handle_tag_61(self, data):
         """get transaction values"""
         super(MT940Parser, self).handle_tag_61(data)
+        self.current_transaction['unique_import_id'] = data
+
         re_61 = self.tag_61_regex.match(data)
         if not re_61:
             raise ValueError("Cannot parse %s" % data)

@@ -141,7 +141,7 @@ class MT940(object):
                 match = '{4:\n:20:' + statement + '}'
                 matches.append(match)
         else:
-            tag_re = re.compile( r'(\{4:[^{}]+\})', re.MULTILINE)
+            tag_re = re.compile(r'(\{4:[^{}]+\})', re.MULTILINE)
             matches = tag_re.findall(data)
         if not matches:
             match = '{4:\n' + data + '}'
@@ -154,15 +154,13 @@ class MT940(object):
         matches = self.pre_process_data(data)
         for match in matches:
             self.is_mt940_statement(line=match)
-            iterator = '\n'.join(
-                match.split('\n')[1:-1]).split('\n').__iter__()
+            iterator = '\n'.join(match.split('\n')[1:-1]).split('\n').__iter__()
             line = None
             record_line = ''
             try:
                 while True:
                     if not self.current_statement:
-                        self.handle_header(line, iterator,
-                                           header_lines=header_lines)
+                        self.handle_header(line, iterator, header_lines=header_lines)
                     line = next(iterator)
                     if not self.is_tag(line) and not self.is_footer(line):
                         record_line = self.add_record_line(line, record_line)
@@ -176,9 +174,9 @@ class MT940(object):
                     record_line = line
             except StopIteration:
                 pass
-            except Exception as e:
-                print str(e)
-                raise e
+            #except Exception as e:
+            #    print str(e)
+            #    raise e
             if self.current_statement:
                 if record_line:
                     self.handle_record(record_line)
@@ -205,6 +203,7 @@ class MT940(object):
             header_lines = self.header_lines
         for dummy_i in range(header_lines):
             next(iterator)
+
         self.current_statement = {
             'name': None,
             'date': None,
@@ -254,14 +253,13 @@ class MT940(object):
             data[10:]
         )
         if not self.current_statement['date']:
-            self.current_statement['date'] = datetime.strptime(data[1:7],
-                                                               '%y%m%d')
+            self.current_statement['date'] = datetime.strptime(data[1:7], '%y%m%d')
 
     def handle_tag_61(self, data):
         """get transaction values"""
         self.current_statement['transactions'].append({})
         self.current_transaction = self.current_statement['transactions'][-1]
-        self.current_transaction['date'] = datetime.strptime( data[:6],  '%y%m%d'  )
+        self.current_transaction['date'] = datetime.strptime(data[:6], '%y%m%d')
 
     def handle_tag_62F(self, data):
         """Get ending balance, statement date and id.
