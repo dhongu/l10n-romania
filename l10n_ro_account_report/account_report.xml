@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <report 
@@ -10,7 +10,8 @@
             name="l10n_ro_account_report.report_account_bank_statement2" 
             file="l10n_ro_account_report.report_account_bank_statement2"
         />
-        
+
+      <!--
         <menuitem id="final_accounting_html_reports" name="HTML Legal Reports" parent="account.menu_finance_reports"/>    
         
         <report 
@@ -82,6 +83,6 @@
         <record id="action_report_purchase_journal" model="ir.actions.report.xml">
             <field name="paperformat_id" ref="l10n_ro_account_report.paperformat_A3_landscape"/>
         </record>
-        
+        -->
     </data>
-</openerp>
+</odoo>
