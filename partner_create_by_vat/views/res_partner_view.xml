@@ -20,6 +20,8 @@
                 <div name="vat_info" position="replace">
                      <field name="vat" on_change="base_vat.vat_change(vat)" placeholder="e.g. BE0477472701" class="oe_inline"/>
                      <field name="vat_subjected" class="oe_inline"/>
+                    <field name="split_vat"/>
+                    <field name="vat_on_payment"/>
                 </div>
             </field>
         </record>

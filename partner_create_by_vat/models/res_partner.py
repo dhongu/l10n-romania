@@ -7,11 +7,9 @@ import requests
 from odoo import models, api, fields, _
 from odoo.exceptions import Warning
 
-
-
 try:
     # For Python 3.0 and later
-    from urllib.request import Request,urlopen
+    from urllib.request import Request, urlopen
 except ImportError:
     # Fall back to Python 2's urllib2
     from urllib2 import Request, urlopen
@@ -22,9 +20,9 @@ from stdnum.eu.vat import check_vies
 from lxml import html
 import unicodedata
 
-#from string import maketrans
+# from string import maketrans
 
-#CEDILLATRANS = maketrans(u'\u015f\u0163\u015e\u0162'.encode('utf8'), u'\u0219\u021b\u0218\u021a'.encode('utf8'))
+# CEDILLATRANS = maketrans(u'\u015f\u0163\u015e\u0162'.encode('utf8'), u'\u0219\u021b\u0218\u021a'.encode('utf8'))
 
 
 
@@ -33,12 +31,14 @@ headers = {
     "Content-Type": "application/json;"
 }
 
+ANAF_URL = 'https://webservicesp.anaf.ro/PlatitorTvaRest/api/v3/ws/tva'
 
-def unaccent( text):
-    text = text.replace(u'\u015f',u'\u0219')   # ş cu ș
-    text = text.replace(u'\u0163', u'\u021b')  # ţ cu ț
-    text = text.replace(u'\u015e', u'\u0218')  # Ş cu Ș
-    text = text.replace(u'\u0162', u'\u021a')  # Ţ cu Ț
+
+def unaccent(text):
+    text = text.replace(u'\u015f', u'\u0219')
+    text = text.replace(u'\u0163', u'\u021b')
+    text = text.replace(u'\u015e', u'\u0218')
+    text = text.replace(u'\u0162', u'\u021a')
     text = unicodedata.normalize('NFD', text)
     text = text.encode('ascii', 'ignore')
     text = text.decode("utf-8")
@@ -48,93 +48,19 @@ def unaccent( text):
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    vat_subjected = fields.Boolean()
-
-    @api.model
-    def _get_Mfinante(self, cod):
-        headers = {
-            "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",
-            "Content-Type": "multipart/form-data;"
-        }
-        params = {'cod': cod}
-        res = requests.get(
-            'http://www.mfinante.ro/infocodfiscal.html',
-            params=params,
-            headers=headers
-        )
-        res.raise_for_status()
-
-        htm = html.fromstring(res.text)
-        # sunt 2 tabele primul e important
-        table = htm.xpath("//div[@id='main']//center/table")[0]
-        result = dict()
-        for tr in table.iterchildren():
-            key = ' '.join([x.strip() for x in tr.getchildren()[ 0].text_content().split('\n') if x.strip() != ''])
-            val = ' '.join([x.strip() for x in tr.getchildren()[ 1].text_content().split('\n') if x.strip() != ''])
-            result[key] = unaccent(val)
-            #result[key] = val.encode('utf8') .translate(CEDILLATRANS).decode('utf8')
-        return result
-
-    @api.model
-    def _Mfinante_to_Odoo(self, result):
-        nrc_key = 'Numar de inmatriculare la Registrul Comertului:'
-        tva_key = 'Taxa pe valoarea adaugata (data luarii in evidenta):'
-        name = nrc = adresa = tel = fax = False
-        zip1 = vat_s = state = False
-        if 'Denumire platitor:' in result.keys():
-            name = result['Denumire platitor:'].upper()
-        if 'Adresa:' in result.keys():
-            adresa = result['Adresa:'].title() or ''
-        if nrc_key in result.keys():
-            nrc = result[nrc_key].replace(' ', '')
-            if nrc == '-/-/-':
-                nrc = ''
-        if 'Codul postal:' in result.keys():
-            zip1 = result['Codul postal:'] or ''
-        if 'Judetul:' in result.keys():
-            jud = result['Judetul:'].title() or ''
-            if jud.lower().startswith('municip'):
-                jud = ' '.join(jud.split(' ')[1:])
-            if jud != '':
-                state = self.env['res.country.state'].search([('name', 'ilike', jud)])
-                if state:
-                    state = state[0].id
-        if 'Telefon:' in result.keys():
-            tel = result['Telefon:'].replace('.', '') or ''
-        if 'Fax:' in result.keys():
-            fax = result['Fax:'].replace('.', '') or ''
-        if tva_key in result.keys():
-            vat_s = bool(result[tva_key] != 'NU')
-
-        values = {
-            'name': name or '',
-            'nrc': nrc or '',
-            'street': adresa or '',
-            'phone': tel or '',
-            'fax': fax or '',
-            'zip': zip1 or '',
-            'vat_subjected': vat_s or False,
-            'state_id': state,
-        }
-
-        return values
+    vat_subjected = fields.Boolean('VAT Legal Statement')
+    split_vat = fields.Boolean('Split VAT')
+    vat_on_payment = fields.Boolean('VAT on Payment')
 
     @api.model
     def _get_Anaf(self, cod):
-        addr = 'https://webservicesp.anaf.ro:/PlatitorTvaRest/api/v1/ws/tva'
-        res = requests.post(
-            addr,
-            json=[{'cui': cod, 'data': fields.Date.today()}],
-            headers=headers)
+        res = requests.post(ANAF_URL, json=[{'cui': cod, 'data': fields.Date.today()}], headers=headers)
         if res.status_code == 200:
             res = res.json()
         if res['found'] and res['found'][0]:
             result = res['found'][0]
-            if result['data_sfarsit'] and result['data_sfarsit'] != ' ':
-                res = requests.post(
-                    addr,
-                    json=[{'cui': cod, 'data': result['data_sfarsit']}],
-                    headers=headers)
+            if result['data_sfarsit_ScpTVA'] and result['data_sfarsit_ScpTVA'] != ' ':
+                res = requests.post(ANAF_URL, json=[{'cui': cod, 'data': result['data_sfarsit_ScpTVA']}], headers=headers)
                 if res.status_code == 200:
                     res = res.json()
         if res['found'] and res['found'][0]:
@@ -142,11 +68,8 @@ class ResPartner(models.Model):
         # Check if the partner was deactived
         if res['notfound'] and res['notfound'][0]:
             result = res['notfound'][0]
-            if result['data_sfarsit'] and result['data_sfarsit'] != ' ':
-                res = requests.post(
-                    addr,
-                    json=[{'cui': cod, 'data': result['data_sfarsit']}],
-                    headers=headers)
+            if result['data_sfarsit_ScpTVA'] and result['data_sfarsit_ScpTVA'] != ' ':
+                res = requests.post(ANAF_URL, json=[{'cui': cod, 'data': result['data_sfarsit_ScpTVA']}], headers=headers)
                 if res.status_code == 200:
                     res = res.json()
                     if res['found'] and res['found'][0]:
@@ -157,34 +80,38 @@ class ResPartner(models.Model):
 
     @api.model
     def _Anaf_to_Odoo(self, result):
-        res = {'name': result['denumire'].upper(),
-               'vat_subjected': result['tva'],
+        res = {'name': result['denumire'],
+               'vat_subjected': result['scpTVA'],
+               'split_vat':result['statusSplitTVA'],
+               'vat_on_payment': result['statusTvaIncasare'],
                'company_type': 'company'}
         addr = ''
-        addr2 = ''
         if result['adresa']:
-            result['adresa'] = result['adresa'].replace('MUNICIPIUL','MUN.')
+            result['adresa'] = result['adresa'].replace('MUNICIPIUL', 'MUN.')
             lines = [x for x in result['adresa'].split(",") if x]
             nostreet = True
-            listabr = ['JUD.', 'MUN.', 'ORS.', 'COM.', 'STR.']
+            listabr = ['JUD.', 'MUN.', u'ORŞ.', 'COM.',
+                       'STR.', 'NR.', 'ET.', 'AP.']
             for line in lines:
                 if 'STR.' in line:
                     nostreet = False
                     break
             if nostreet:
                 addr = 'Principala'
-
             for line in lines:
-                line = unaccent(line) #line.encode('utf8').translate(CEDILLATRANS).decode('utf8')
+                if not any([x in line for x in listabr]):
+                    addr = line.strip().title()
+            for line in lines:
+                line = unaccent(line)  # line.encode('utf8').translate(CEDILLATRANS).decode('utf8')
                 if 'JUD.' in line:
                     state = self.env['res.country.state'].search(
-                        [('name', '=', line.replace('JUD.', '').strip().title())], limit=1)
+                        [('name', '=', line.replace('JUD.', '').strip().title())])
                     if state:
-                        res['state_id'] = state.id
+                        res['state_id'] = state[0].id
                 if 'MUN.' in line:
                     city = line.replace('MUN.', '').strip().title()
-                elif 'ORS.' in line:
-                    city = line.replace('ORS.', '').strip().title()
+                elif u'ORȘ.' in line:
+                    city = line.replace(u'ORȘ.', '').strip().title()
                 elif 'COM.' in line:
                     sat = line.replace('SAT ', '').strip().title().split(" ")
                     city = ''
@@ -196,16 +123,13 @@ class ResPartner(models.Model):
                     city = city.strip()
                 if 'STR.' in line:
                     addr += line.replace('STR.', '').strip().title()
-
+                if 'NR.' in line:
+                    addr += ' ' + line.replace('NR.', '').strip().title()
+                if 'AP.' in line:
+                    addr += '/' + line.replace('AP.', '').strip().title()
             if city:
                 res['city'] = city.replace('-', ' ').title()
-
-            for line in lines:
-                if not any([x in line for x in listabr]):
-                    addr2 += ' ' + line.strip().title()
-
         res['street'] = addr.strip()
-        res['street2'] = addr2.strip()
         return res
 
     @api.model
@@ -287,7 +211,6 @@ class ResPartner(models.Model):
         same_vat_partners = self.search([
             ('is_company', '=', True),
             ('vat', '=', self.vat),
-            ('vat', '!=', False),
             ('company_id', '=', self.company_id.id),
         ])
 
@@ -343,17 +266,10 @@ class ResPartner(models.Model):
             if vat_country == 'ro':
                 values = {}
                 try:
-                    '''
-                    result = self._get_Mfinante(vat_number)
-                    if result:
-                        values = self._Mfinante_to_Odoo(result)
-                        self.write(values)
-                    '''
                     result = self._get_Anaf(vat_number)
                     if result:
                         values = self._Anaf_to_Odoo(result)
-                except Exception as e:
-                    print ( str(e) )
+                except:
                     values = self._get_Openapi(vat_number)
 
                 if values:
@@ -364,12 +280,12 @@ class ResPartner(models.Model):
                     result = check_vies(part.vat)
                     if result.name and result.name != '---':
                         self.write({
-                            'name': result.name.upper(), #unicode(result.name).upper(),
+                            'name': result.name.upper(),  # unicode(result.name).upper(),
                             'is_company': True,
                             'vat_subjected': True
                         })
                     if (not part.street and result.address and result.address != '---'):
-                        self.write({'street': result.address.title()})      # unicode(result.address).title()})
+                        self.write({'street': result.address.title()})  # unicode(result.address).title()})
                     self.write({'vat_subjected': result.valid})
                 except:
                     self.write({
