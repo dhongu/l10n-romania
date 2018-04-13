@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xfa generator="XFA2_4" APIVersion="3.6.14289.0"?>
+<xdp:xdp xmlns:xdp="http://ns.adobe.com/xdp/"   >
+    <xfa:datasets xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/">
+        <xfa:data>
+            <form1>
+                <sub1>
+                    <formType>100</formType>
+                    <formTitle>DECLARAȚIE PRIVIND OBLIGAȚIILE DE PLATĂ LA BUGETUL DE STAT</formTitle>
+                    <tipD>1</tipD>
+                    <universalCode>D100_A300</universalCode>
+                    <luna_r/>
+                    <an_r>2018</an_r>
+                    <luna_w/>
+                    <an_w/>
+                    <bloc_modif>0</bloc_modif>
+                    <RO1>RO</RO1>
+                    <cif_retras/>
+                    <d_anulare>0</d_anulare>
+                    <temei/>
+                    <d_rec>0</d_rec>
+                    <d_retras>0</d_retras>
+                    <cota_micro/>
+                    <an_modif>0</an_modif>
+                    <d_succ>0</d_succ>
+                    <cifS/>
+                    <d_dizolv>0</d_dizolv>
+                </sub1>
+                <subA>
+                    <RO1>RO</RO1>
+                    <cif/>
+                    <DENUMIRE/>
+                    <ADRESA/>
+                    <text_telefon/>
+                    <text_fax/>
+                    <text_email/>
+                    <totalPlata_A>0</totalPlata_A>
+                </subA>
+                <subB>
+                    <SUMA01I>0</SUMA01I>
+                    <SUMA02I>0</SUMA02I>
+                    <SUMA03I>0</SUMA03I>
+                    <SUMA04I>0</SUMA04I>
+                    <SUMA01C>0</SUMA01C>
+                    <SUMA02C>0</SUMA02C>
+                    <SUMA03C>0</SUMA03C>
+                    <SUMA04C>0</SUMA04C>
+                    <seq1>1</seq1>
+                    <S1>Suma (lei)</S1>
+                    <S2>Suma corectată (lei)</S2>
+                    <COD_IMP/>
+                    <SCADENTA/>
+                    <COD_BUGETAR/>
+                    <NR_JUSTIFICATIV/>
+                    <SCADENTA2/>
+                    <Scad_JN_AC>0</Scad_JN_AC>
+                </subB>
+                <SUMA1>0</SUMA1>
+                <SUMA2>0</SUMA2>
+                <sub2>
+                    <Functia/>
+                    <Prenume/>
+                    <Nume/>
+                </sub2>
+            </form1>
+        </xfa:data>
+    </xfa:datasets>
+    <pdf href="D100.pdf" xmlns="http://ns.adobe.com/xdp/pdf/"/>
+</xdp:xdp>

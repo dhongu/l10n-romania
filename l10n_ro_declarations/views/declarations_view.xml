@@ -1,0 +1,48 @@
+<odoo>
+
+    <record id="view_declaration_tree" model="ir.ui.view">
+        <field name="name">l10n_ro.declaration.tree</field>
+        <field name="model">l10n_ro.declaration</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_declaration_form" model="ir.ui.view">
+        <field name="name">l10n_ro.declaration.form</field>
+        <field name="model">l10n_ro.declaration</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                    </group>
+                    <group>
+                        <field name="data_xdp"/>
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_declaration_view_menu" model="ir.actions.act_window">
+        <field name="name">Declarations</field>
+        <field name="res_model">l10n_ro.declaration</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_action_declaration" name="Declarations"
+              action="action_declaration_view_menu"
+              parent="l10n_ro.account_reports_ro_statements_menu" groups="account.group_account_user"/>
+
+
+</odoo>

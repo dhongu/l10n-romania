@@ -1,0 +1,32 @@
+<odoo>
+
+    <record id="view_d394_tree" model="ir.ui.view">
+        <field name="name">l10n_ro.d394.tree</field>
+        <field name="model">l10n_ro.d394</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_type"/>
+                <field name="partner_id"/>
+                <field name="net" sum="net"/>
+                <field name="tax" sum="tax"/>
+                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_D394" model="ir.actions.act_window">
+        <field name="name">D394</field>
+        <field name="res_model">l10n_ro.d394</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,pivot</field>
+    </record>
+
+    <!--
+    <menuitem id="menu_action_d394" name="D394"
+              action="action_D394"
+              parent="l10n_ro.account_reports_ro_statements_menu" groups="account.group_account_user"/>
+    -->
+
+</odoo>
