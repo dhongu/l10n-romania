@@ -93,7 +93,7 @@ class Declarations(http.Controller):
         declaration = '<?xml version="1.0" encoding="UTF-8"?><?xfa generator="XFA2_4" APIVersion="3.6.14289.0"?>'
         content = etree.tostring(xml_doc, encoding='utf8', xml_declaration=False)
 
-        content = declaration + content.decode()
+        content = declaration + content #.decode()
 
         headers = [('Content-Type', 'application/vnd.adobe.xdp+xml')]
 

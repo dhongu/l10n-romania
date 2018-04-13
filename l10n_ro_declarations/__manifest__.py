@@ -14,7 +14,7 @@
 
     "category": "Generic Modules",
     "depends": [
-        'account','l10n_ro'
+        'account','l10n_ro','date_range'
     ],
 
     "data": [
