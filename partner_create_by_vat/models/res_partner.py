@@ -87,48 +87,54 @@ class ResPartner(models.Model):
                'company_type': 'company'}
         addr = ''
         if result['adresa']:
-            result['adresa'] = result['adresa'].replace('MUNICIPIUL', 'MUN.')
-            lines = [x for x in result['adresa'].split(",") if x]
-            nostreet = True
-            listabr = ['JUD.', 'MUN.', u'ORŞ.', 'COM.',
-                       'STR.', 'NR.', 'ET.', 'AP.']
-            for line in lines:
-                if 'STR.' in line:
-                    nostreet = False
-                    break
-            if nostreet:
-                addr = 'Principala'
-            for line in lines:
-                if not any([x in line for x in listabr]):
-                    addr = line.strip().title()
-            for line in lines:
-                line = unaccent(line)  # line.encode('utf8').translate(CEDILLATRANS).decode('utf8')
-                if 'JUD.' in line:
-                    state = self.env['res.country.state'].search(
-                        [('name', '=', line.replace('JUD.', '').strip().title())])
-                    if state:
-                        res['state_id'] = state[0].id
-                if 'MUN.' in line:
-                    city = line.replace('MUN.', '').strip().title()
-                elif u'ORȘ.' in line:
-                    city = line.replace(u'ORȘ.', '').strip().title()
-                elif 'COM.' in line:
-                    sat = line.replace('SAT ', '').strip().title().split(" ")
-                    city = ''
-                    for satname in sat:
-                        if '.' not in satname:
-                            city += ' ' + satname
-                        else:
-                            break
-                    city = city.strip()
-                if 'STR.' in line:
-                    addr += line.replace('STR.', '').strip().title()
-                if 'NR.' in line:
-                    addr += ' ' + line.replace('NR.', '').strip().title()
-                if 'AP.' in line:
-                    addr += '/' + line.replace('AP.', '').strip().title()
-            if city:
-                res['city'] = city.replace('-', ' ').title()
+            addr = result['adresa']
+            try:
+                result['adresa'] = result['adresa'].replace('MUNICIPIUL', 'MUN.')
+                result['adresa'] = result['adresa'].replace(u'Ş', 'S').replace(u'Ș', 'S')
+                result['adresa'] = result['adresa'].replace('SOS.', 'STR.')
+                lines = [x for x in result['adresa'].split(",") if x]
+                nostreet = True
+                listabr = ['JUD.', 'MUN.', 'ORS.', 'COM.',
+                           'STR.', 'NR.', 'ET.', 'AP.']
+                for line in lines:
+                    if 'STR.' in line:
+                        nostreet = False
+                        break
+                if nostreet:
+                    addr = 'Principala'
+                for line in lines:
+                    if not any([x in line for x in listabr]):
+                        addr = line.strip().title()
+                for line in lines:
+                    line = unaccent(line)  # line.encode('utf8').translate(CEDILLATRANS).decode('utf8')
+                    if 'JUD.' in line:
+                        state = self.env['res.country.state'].search(
+                            [('name', '=', line.replace('JUD.', '').strip().title())])
+                        if state:
+                            res['state_id'] = state[0].id
+                    if 'MUN.' in line:
+                        city = line.replace('MUN.', '').strip().title()
+                    elif 'ORS.' in line:
+                        city = line.replace('ORS.', '').strip().title()
+                    elif 'COM.' in line:
+                        sat = line.replace('SAT ', '').strip().title().split(" ")
+                        city = ''
+                        for satname in sat:
+                            if '.' not in satname:
+                                city += ' ' + satname
+                            else:
+                                break
+                        city = city.strip()
+                    if 'STR.' in line:
+                        addr += ' ' + line.replace('STR.', '').strip().title()
+                    if 'NR.' in line:
+                        addr += ' ' + line.replace('NR.', '').strip().title()
+                    if 'AP.' in line:
+                        addr += '/' + line.replace('AP.', '').strip().title()
+                if city:
+                    res['city'] = city.replace('-', ' ').title()
+            except Exception as e:
+                print ('Error', str(e))
         res['street'] = addr.strip()
         return res
 
@@ -269,7 +275,8 @@ class ResPartner(models.Model):
                     result = self._get_Anaf(vat_number)
                     if result:
                         values = self._Anaf_to_Odoo(result)
-                except:
+                except Exception as e:
+                    print (str(e))
                     values = self._get_Openapi(vat_number)
 
                 if values:
