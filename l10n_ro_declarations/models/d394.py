@@ -36,6 +36,7 @@ class D394Report(models.TransientModel):
         partner_types = ['1', '2', '3', '4']
         for partner_type in partner_types:
             item_type = self.item_ids.filtered(lambda r: r.partner_type == partner_type)
+            item_type = item_type.sorted(key=lambda r: r.partner_id.name)
             if item_type:
                 tag = etree.Element("tip_partener")
                 tag.text = partner_type
@@ -88,23 +89,36 @@ WITH
                  
                 count(movetax.invoice_id) as invoice_count,
                 invoice.fiscal_position_id,
-                invoice.type,
+                invoice_type.type,
                 movetax.tax_line_id as tax_id, 
                 to_char(tax.amount,'99') as tax_value,
                 movetax.company_id,
                 company_currency_id,
-                abs(coalesce(sum(movetax.tax_base_amount), 0.00)) AS net,
-                abs(coalesce(sum(movetax.balance), 0.00)) AS tax
+                coalesce(sum(invoice_type.sign*abs(movetax.tax_base_amount)), 0.00) AS net,
+                coalesce(sum(invoice_type.sign*abs(movetax.balance)), 0.00) AS tax
                     FROM
                     account_move_line AS movetax
                     INNER JOIN account_tax AS tax   ON movetax.tax_line_id = tax.id
                     INNER JOIN account_move AS move
                         ON move.id = movetax.move_id
                     INNER JOIN account_invoice as invoice on movetax.invoice_id = invoice.id
+                    join 
+                    ( SELECT ai_1.id,
+                    
+                       CASE
+                         WHEN ai_1.type = ANY ( array['in_invoice' , 'in_refund' ]) THEN 'in_invoice' 
+                         ELSE 'out_invoice'
+                       END AS type,
+                        CASE
+                            WHEN ai_1.type = ANY ( array['out_refund' , 'in_invoice' ]) THEN '-1' 
+                            ELSE 1
+                        END AS sign
+                   FROM account_invoice ai_1) invoice_type ON invoice_type.id = invoice.id
+                    
                     WHERE   movetax.tax_exigible and move.state = 'posted' and 
                             move.company_id = %s AND move.date >= %s
                             AND move.date <= %s 
-                    GROUP BY movetax.partner_id,   invoice.type, invoice.fiscal_position_id,
+                    GROUP BY movetax.partner_id,   invoice_type.type, invoice.fiscal_position_id,
                      movetax.tax_line_id, tax.amount, movetax.company_id, company_currency_id
     )
 INSERT INTO
@@ -216,5 +230,7 @@ class D394(models.TransientModel):
                 oper_type = 'L'
             else:
                 oper_type = 'A'
+                if partner.vat_on_payment:  # factura trebuie sa aiba un cod anume
+                    oper_type = 'AI'
             item.operation_type = oper_type
         return True

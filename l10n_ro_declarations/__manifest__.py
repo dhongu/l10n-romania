@@ -3,7 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Deltatech Declaratii ANAF",
+    "name": "Declaratii ANAF",
     'version': '11.0.1.0.0',
     "author": "Terrabit, Dorin Hongu",
     "website": "www.terrabit.ro",
