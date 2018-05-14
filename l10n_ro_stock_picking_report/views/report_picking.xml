@@ -171,8 +171,6 @@
         </template>
 
         <template id="report_totals">
-            <div class="row">
-                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
                 <div class="col-xs-4 pull-right">
                     <table class="table table-condensed">
                         <tr class="border-black">
@@ -199,8 +197,37 @@
                         </tr>
                     </table>
                 </div>
-            </div>
         </template>
+
+        <template id="report_totals_sale">
+                <div class="col-xs-4 pull-right">
+                    <table class="table table-condensed">
+                        <tr class="border-black">
+                            <td>
+                                <strong>Total Sale Without Taxes</strong>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="totals['amount_sale']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sale Taxes</td>
+                            <td class="text-right">
+                                <span t-esc="totals['tax_sale']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                            </td>
+                        </tr>
+                        <tr class="border-black">
+                            <td>
+                                <strong>Total Sale</strong>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="totals['amount_tax_sale']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+        </template>
+
 
         <template id="report_delivery_sign">
             <table class="table table-condensed">
@@ -644,8 +671,10 @@
                                 </tbody>
                             </table>
 
-
-                            <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            <div class="row">
+                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
+                                <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            </div>
                             <t t-call="l10n_ro_stock_picking_report.report_delivery_sign"/>
                             <div t-if="o.note">
                                 <span t-field="o.note"/>
@@ -825,7 +854,10 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            <div class="row">
+                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
+                                <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            </div>
                             <t t-call="l10n_ro_stock_picking_report.report_reception_sign"/>
                             <div t-if="o.note">
                                 <span t-field="o.note"/>
@@ -1052,7 +1084,7 @@
                                             <strong>Sale price</strong>
                                         </th>
                                         <th class="text-right">
-                                            <strong>Margin</strong>
+                                            <strong>Margin</strong><span>%</span>
                                         </th>
                                         <th class="text-right">
                                             <strong>Sale Amount</strong>
@@ -1093,13 +1125,17 @@
                                             <span t-esc="formatLang(line['margin'])"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['amount_sale'])"/>
+                                            <span t-esc="formatLang(line['amount_tax_sale'])"/>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
 
-                            <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            <div class="row">
+                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
+                                <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                                <t t-call="l10n_ro_stock_picking_report.report_totals_sale"/>
+                            </div>
                             <t t-call="l10n_ro_stock_picking_report.report_reception_sign"/>
                             <div t-if="o.note">
                                 <span t-field="o.note"/>

@@ -138,7 +138,9 @@ class ReportPickingReception(models.AbstractModel):
             taxes_sale = taxes_ids.compute_all(line.product_id.list_price,
                                                               quantity=move_line.product_qty,
                                                               product=line.product_id)
-            res['amount_sale'] = taxes_sale['total_included']
+            res['amount_sale'] = taxes_sale['total_excluded']
+            res['tax_sale'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
+            res['amount_tax_sale'] = taxes['total_included']
             res['price'] = res['price'] * line.product_uom._compute_quantity(1, line.product_id.uom_id)
             if res['amount_tax'] != 0.0:
                 res['margin'] = 100 * (taxes_sale['total_included'] - res['amount_tax']) / res['amount_tax']
@@ -173,7 +175,10 @@ class ReportPickingReception(models.AbstractModel):
                                                                    quantity=move_line.product_uom_qty,
                                                                    product=move_line.product_id)
 
-            res['amount_sale'] = taxes_sale['total_included']
+            res['amount_sale'] = taxes_sale['total_excluded']
+            res['tax_sale'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
+            res['amount_tax_sale'] = taxes['total_included']
+
             if taxes['total_included'] != 0.0:
                 res['margin'] = 100 * (taxes_sale['total_included'] - taxes['total_included']) / taxes['total_included']
             else:
@@ -182,13 +187,18 @@ class ReportPickingReception(models.AbstractModel):
         return res
 
     def _get_totals(self, move_lines):
-        res = {'amount': 0.0, 'tax': 0.0, 'amount_tax': 0.0}
+        res = {'amount': 0.0, 'tax': 0.0, 'amount_tax': 0.0, 'amount_sale':0.0,'tax_sale':0.0,'amount_tax_sale':0.0}
         for move in move_lines:
             line = self._get_line(move)
             res['amount'] += line['amount']
             res['tax'] += line['tax']
             res['amount_tax'] += line['amount_tax']
+
+            res['amount_sale'] += line['amount_sale']
+            res['tax_sale'] += line['tax_sale']
+            res['amount_tax_sale'] += line['amount_tax_sale']
         return res
+
 
 
 class report_delivery(models.AbstractModel):
