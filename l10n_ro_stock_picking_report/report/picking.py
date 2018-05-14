@@ -119,6 +119,8 @@ class ReportPickingReception(models.AbstractModel):
         res = {'price': 0.0, 'amount': 0.0, 'tax': 0.0,
                'amount_tax': 0.0, 'amount_sale': 0.0, 'margin': 0.0}
 
+        currency = move_line.company_id.currency_id
+
         if move_line.purchase_line_id:
             # todo: ce fac cu receptii facute ca preturi diferite ????
             line = move_line.purchase_line_id
@@ -134,13 +136,21 @@ class ReportPickingReception(models.AbstractModel):
             res['amount'] = taxes['total_excluded']
             res['amount_tax'] = taxes['total_included']
 
-            taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
-            taxes_sale = taxes_ids.compute_all(line.product_id.list_price,
-                                                              quantity=move_line.product_qty,
-                                                              product=line.product_id)
+            taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == move_line.company_id)
+            incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+            if incl_tax:
+                list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
+            else:
+                list_price = move_line.product_id.list_price
+
+            taxes_sale = taxes_ids.compute_all(list_price, currency=currency,
+                                               quantity=move_line.product_uom_qty,
+                                               product=move_line.product_id)
+
+
             res['amount_sale'] = taxes_sale['total_excluded']
             res['tax_sale'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
-            res['amount_tax_sale'] = taxes['total_included']
+            res['amount_tax_sale'] = taxes_sale['total_included']
             res['price'] = res['price'] * line.product_uom._compute_quantity(1, line.product_id.uom_id)
             if res['amount_tax'] != 0.0:
                 res['margin'] = 100 * (taxes_sale['total_included'] - res['amount_tax']) / res['amount_tax']
@@ -149,35 +159,41 @@ class ReportPickingReception(models.AbstractModel):
         else:
             # receptie fara comanda de aprovizionare
 
-            value = 0.0
-            for quant in move_line.quant_ids:
-                value += quant.inventory_value
+            value = move_line.value
+            res['price'] = abs(move_line.price_unit)
 
-            currency = move_line.company_id.currency_id
 
-            res['amount'] = currency.round(value)
-            if move_line.product_uom_qty != 0:
-                res['price'] = currency.round(value) / move_line.product_uom_qty
-            else:
-                res['price'] = 0.0
+
+            # res['amount'] = currency.round(value)
+            # if move_line.product_uom_qty != 0:
+            #     res['price'] = currency.round(value) / move_line.product_uom_qty
+            # else:
+            #     res['price'] = 0.0
 
             taxes_ids = move_line.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move_line.company_id)
             taxes = taxes_ids.compute_all(res['price'], currency=currency,
                                                                        quantity=move_line.product_uom_qty,
                                                                        product=move_line.product_id,
                                                                        partner=move_line.partner_id)
-
+            res['amount'] = taxes['total_excluded']
             res['tax'] = taxes['total_included'] - taxes['total_excluded']
             res['amount_tax'] = taxes['total_included']
 
             taxes_ids = move_line.product_id.taxes_id.filtered(lambda r: r.company_id == move_line.company_id)
-            taxes_sale = taxes_ids.compute_all(move_line.product_id.list_price, currency=currency,
+            incl_tax = taxes_ids.filtered(lambda tax:  tax.price_include)
+            # if incl_tax:
+            #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
+            # else:
+
+            list_price = move_line.product_id.list_price
+
+            taxes_sale = taxes_ids.compute_all(list_price, currency=currency,
                                                                    quantity=move_line.product_uom_qty,
                                                                    product=move_line.product_id)
 
             res['amount_sale'] = taxes_sale['total_excluded']
             res['tax_sale'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
-            res['amount_tax_sale'] = taxes['total_included']
+            res['amount_tax_sale'] = taxes_sale['total_included']
 
             if taxes['total_included'] != 0.0:
                 res['margin'] = 100 * (taxes_sale['total_included'] - taxes['total_included']) / taxes['total_included']
