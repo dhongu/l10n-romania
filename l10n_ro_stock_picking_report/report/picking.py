@@ -65,10 +65,8 @@ class ReportPickingDelivery(models.AbstractModel):
             else:
                 res['price'] = 0.0
 
-
-            taxes_sale = line.product_id.taxes_id.compute_all(res['price'],
-                                                              quantity=move_line.product_qty,
-                                                              product=line.product_id)
+            taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
+            taxes_sale = taxes_ids.compute_all(res['price'], quantity=move_line.product_qty, product=line.product_id)
 
             res['tax'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
             res['amount'] = taxes_sale['total_excluded']
@@ -136,7 +134,8 @@ class ReportPickingReception(models.AbstractModel):
             res['amount'] = taxes['total_excluded']
             res['amount_tax'] = taxes['total_included']
 
-            taxes_sale = line.product_id.taxes_id.compute_all(line.product_id.list_price,
+            taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
+            taxes_sale = taxes_ids.compute_all(line.product_id.list_price,
                                                               quantity=move_line.product_qty,
                                                               product=line.product_id)
             res['amount_sale'] = taxes_sale['total_included']
@@ -160,7 +159,8 @@ class ReportPickingReception(models.AbstractModel):
             else:
                 res['price'] = 0.0
 
-            taxes = move_line.product_id.supplier_taxes_id.compute_all(res['price'], currency=currency,
+            taxes_ids = move_line.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move_line.company_id)
+            taxes = taxes_ids.compute_all(res['price'], currency=currency,
                                                                        quantity=move_line.product_uom_qty,
                                                                        product=move_line.product_id,
                                                                        partner=move_line.partner_id)
@@ -168,7 +168,8 @@ class ReportPickingReception(models.AbstractModel):
             res['tax'] = taxes['total_included'] - taxes['total_excluded']
             res['amount_tax'] = taxes['total_included']
 
-            taxes_sale = move_line.product_id.taxes_id.compute_all(move_line.product_id.list_price, currency=currency,
+            taxes_ids = move_line.product_id.taxes_id.filtered(lambda r: r.company_id == move_line.company_id)
+            taxes_sale = taxes_ids.compute_all(move_line.product_id.list_price, currency=currency,
                                                                    quantity=move_line.product_uom_qty,
                                                                    product=move_line.product_id)
 
