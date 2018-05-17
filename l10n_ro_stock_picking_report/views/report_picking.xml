@@ -421,7 +421,7 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tbody>
+<!--                                <tbody>
                                     <tr>
                                         <td>
                                         </td>
@@ -434,8 +434,12 @@
                                             <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
                                         </td>
                                     </tr>
-                                </tbody>
+                                </tbody>-->
                             </table>
+                            <div class="row">
+                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
+                                <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            </div>
                             <t t-call="l10n_ro_stock_picking_report.report_consume_sign"/>
                             <div t-if="o.note">
                                 <span t-field="o.note"/>
@@ -537,7 +541,7 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tbody>
+                               <!-- <tbody>
                                     <tr>
                                         <td colspan="3" class="text-right">
                                             <strong>Total</strong>
@@ -546,9 +550,12 @@
                                             <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
                                         </td>
                                     </tr>
-                                </tbody>
+                                </tbody>-->
                             </table>
-
+                            <div class="row">
+                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
+                                <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+                            </div>
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>

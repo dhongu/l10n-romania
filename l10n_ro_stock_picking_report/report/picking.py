@@ -24,7 +24,7 @@ import time
 
 from odoo import api, models
 from odoo.tools import formatLang
-
+from functools import reduce
 
 
 
@@ -45,6 +45,7 @@ class ReportPickingDelivery(models.AbstractModel):
             'formatLang': self._formatLang,
             'get_line': self._get_line,
             'get_totals': self._get_totals,
+            'reduce':reduce
         }
 
 
@@ -104,6 +105,7 @@ class ReportPickingReception(models.AbstractModel):
             'formatLang': self._formatLang,
             'get_line': self._get_line,
             'get_totals': self._get_totals,
+            'reduce': reduce
         }
 
 
