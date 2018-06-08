@@ -27,16 +27,14 @@ from odoo.tools import formatLang
 from functools import reduce
 
 
-
 class ReportPickingDelivery(models.AbstractModel):
     _name = 'report.abstract_report.delivery_report'
     _template = None
 
-
     @api.model
     def get_report_values(self, docids, data=None):
         report = self.env['ir.actions.report']._get_report_from_name(self._template)
-        return  {
+        return {
             'doc_ids': docids,
             'doc_model': report.model,
             'data': data,
@@ -45,11 +43,8 @@ class ReportPickingDelivery(models.AbstractModel):
             'formatLang': self._formatLang,
             'get_line': self._get_line,
             'get_totals': self._get_totals,
-            'reduce':reduce
+            'reduce': reduce
         }
-
-
-
 
     def _formatLang(self, value, **kwargs):
         if 'date' in kwargs:
@@ -61,19 +56,26 @@ class ReportPickingDelivery(models.AbstractModel):
         if move_line.sale_line_id:
             line = move_line.sale_line_id
 
-            if line.product_uom_qty != 0:
-                res['price'] = line.price_subtotal / line.product_uom_qty
-            else:
-                res['price'] = 0.0
 
-            taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
+
+            taxes_ids = line.tax_id #line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
 
             incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
-            if incl_tax:
-                res['price']  = incl_tax.compute_all(res['price'])['total_excluded']
+
+            if line.product_uom_qty != 0:
+                res['price'] = line.price_subtotal / line.product_uom_qty
+                if incl_tax:
+                    list_price = line.price_total / line.product_uom_qty
+                else:
+                    list_price = res['price']
+            else:
+                res['price'] = 0.0
+                list_price = 0.0
 
 
-            taxes_sale = taxes_ids.compute_all(res['price'], quantity=move_line.product_qty, product=line.product_id)
+            taxes_sale = taxes_ids.compute_all(list_price, quantity=move_line.product_qty, product=line.product_id)
+
+
 
             res['tax'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
             res['amount'] = taxes_sale['total_excluded']
@@ -91,18 +93,14 @@ class ReportPickingDelivery(models.AbstractModel):
         return res
 
 
-
-
-
 class ReportPickingReception(models.AbstractModel):
     _name = 'report.abstract_report.reception_report'
     _template = None
 
-
     @api.model
     def get_report_values(self, docids, data=None):
         report = self.env['ir.actions.report']._get_report_from_name(self._template)
-        return  {
+        return {
             'doc_ids': docids,
             'doc_model': report.model,
             'data': data,
@@ -114,11 +112,9 @@ class ReportPickingReception(models.AbstractModel):
             'reduce': reduce
         }
 
-
-
     def _formatLang(self, value, **kwargs):
-        #todo: de tratat : formatLang(totals['amount'], currency_obj=res_company.currency_id)
-        #todo: de tratat : formatLang(o.date, date=True)
+        # todo: de tratat : formatLang(totals['amount'], currency_obj=res_company.currency_id)
+        # todo: de tratat : formatLang(o.date, date=True)
         if 'date' in kwargs:
             return value
         return formatLang(self.env, value, **kwargs)
@@ -155,7 +151,6 @@ class ReportPickingReception(models.AbstractModel):
                                                quantity=move_line.product_uom_qty,
                                                product=move_line.product_id)
 
-
             res['amount_sale'] = taxes_sale['total_excluded']
             res['tax_sale'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
             res['amount_tax_sale'] = taxes_sale['total_included']
@@ -170,8 +165,6 @@ class ReportPickingReception(models.AbstractModel):
             value = move_line.value
             res['price'] = abs(move_line.price_unit)
 
-
-
             # res['amount'] = currency.round(value)
             # if move_line.product_uom_qty != 0:
             #     res['price'] = currency.round(value) / move_line.product_uom_qty
@@ -180,15 +173,15 @@ class ReportPickingReception(models.AbstractModel):
 
             taxes_ids = move_line.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move_line.company_id)
             taxes = taxes_ids.compute_all(res['price'], currency=currency,
-                                                                       quantity=move_line.product_uom_qty,
-                                                                       product=move_line.product_id,
-                                                                       partner=move_line.partner_id)
+                                          quantity=move_line.product_uom_qty,
+                                          product=move_line.product_id,
+                                          partner=move_line.partner_id)
             res['amount'] = taxes['total_excluded']
             res['tax'] = taxes['total_included'] - taxes['total_excluded']
             res['amount_tax'] = taxes['total_included']
 
             taxes_ids = move_line.product_id.taxes_id.filtered(lambda r: r.company_id == move_line.company_id)
-            incl_tax = taxes_ids.filtered(lambda tax:  tax.price_include)
+            incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
             # if incl_tax:
             #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
             # else:
@@ -196,8 +189,8 @@ class ReportPickingReception(models.AbstractModel):
             list_price = move_line.product_id.list_price
 
             taxes_sale = taxes_ids.compute_all(list_price, currency=currency,
-                                                                   quantity=move_line.product_uom_qty,
-                                                                   product=move_line.product_id)
+                                               quantity=move_line.product_uom_qty,
+                                               product=move_line.product_id)
 
             res['amount_sale'] = taxes_sale['total_excluded']
             res['tax_sale'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
@@ -207,11 +200,12 @@ class ReportPickingReception(models.AbstractModel):
                 res['margin'] = 100 * (taxes_sale['total_included'] - taxes['total_included']) / taxes['total_included']
             else:
                 res['margin'] = 0.0
-        
+
         return res
 
     def _get_totals(self, move_lines):
-        res = {'amount': 0.0, 'tax': 0.0, 'amount_tax': 0.0, 'amount_sale':0.0,'tax_sale':0.0,'amount_tax_sale':0.0}
+        res = {'amount': 0.0, 'tax': 0.0, 'amount_tax': 0.0, 'amount_sale': 0.0, 'tax_sale': 0.0,
+               'amount_tax_sale': 0.0}
         for move in move_lines:
             line = self._get_line(move)
             res['amount'] += line['amount']
@@ -222,7 +216,6 @@ class ReportPickingReception(models.AbstractModel):
             res['tax_sale'] += line['tax_sale']
             res['amount_tax_sale'] += line['amount_tax_sale']
         return res
-
 
 
 class report_delivery(models.AbstractModel):
@@ -272,5 +265,3 @@ class report_reception_sale_price(models.AbstractModel):
     _inherit = 'report.abstract_report.reception_report'
     _template = 'l10n_ro_stock_picking_report.report_reception_sale_price'
     # _wrapped_report_class = picking_reception
-
-
