@@ -67,6 +67,12 @@ class ReportPickingDelivery(models.AbstractModel):
                 res['price'] = 0.0
 
             taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
+
+            incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+            if incl_tax:
+                res['price']  = incl_tax.compute_all(res['price'])['total_excluded']
+
+
             taxes_sale = taxes_ids.compute_all(res['price'], quantity=move_line.product_qty, product=line.product_id)
 
             res['tax'] = taxes_sale['total_included'] - taxes_sale['total_excluded']
