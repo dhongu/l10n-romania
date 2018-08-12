@@ -65,14 +65,14 @@
             <div class="row">
                 <div class="col-xs-5">
                     <div>
-                        <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
+                      <!--  <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
                             <strong>Customer</strong>
                         </div>
 
                         <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
                             <strong>Supplier</strong>
-                        </div>
-
+                        </div>-->
+                        <div><strong>Company</strong></div>
                     </div>
                     <strong t-field="res_company.partner_id.name"/>
                     <div>
@@ -95,11 +95,12 @@
                     </div>
                     <div>
                         <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
-                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,s
+                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,
                         </div>
                         <strong t-field="o.partner_id.name"/>
                     </div>
                     <div>
+                        <t t-if="o.partner_id.commercial_partner_id != o.partner_id"><strong>Delivery</strong></t>
                         <strong>Address:</strong>
                         <address t-field="o.partner_id"
                                  t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
