@@ -252,6 +252,23 @@ msgstr "<strong>TVA</strong>"
 msgid "<strong>Total Without Taxes</strong>"
 msgstr "<strong>Total fără TVA</strong>"
 
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals_sale
+msgid "<strong>Total Sale Without Taxes</strong>"
+msgstr "<strong>Total vânazare fără TVA</strong>"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals_sale
+msgid "<strong>Sale Taxes</strong>"
+msgstr "<strong>TVA vânzare/strong>"
+
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals_sale
+msgid "<strong>Total Sale</strong>"
+msgstr "<strong>Total vânazare</strong>"
+
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_internal_transfer

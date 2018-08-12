@@ -129,8 +129,14 @@ class ReportPickingReception(models.AbstractModel):
             # todo: ce fac cu receptii facute ca preturi diferite ????
             line = move_line.purchase_line_id
 
-            # todo: de verificat daca pretul din miscare este actualizat inaiante de confirmarea transferului pentru a se actualiza cursul valutar !!
+            # todo: de verificat daca pretul din miscare este actualizat inainte de confirmarea transferului pentru a se actualiza cursul valutar !!
             res['price'] = move_line.price_unit  # pretul caculat la genereare miscarii
+
+            # la loturi nu este completat move_line.price_unit
+            if move_line.price_unit == 0:
+                if move_line.remaining_qty != 0:
+                    res['price'] = move_line.remaining_value /  move_line.remaining_qty
+
             taxes = line.taxes_id.compute_all(res['price'],
                                               quantity=move_line.product_qty,
                                               product=move_line.product_id,
