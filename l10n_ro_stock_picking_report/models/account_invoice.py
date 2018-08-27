@@ -34,9 +34,10 @@ class AccountInvoice(models.Model):
 
     def _prepare_invoice_line_from_po_line(self, line):
         data = super(AccountInvoice, self)._prepare_invoice_line_from_po_line(line)
-        if self.reference:
-            self.reference += self.purchase_id.partner_ref
-        else:
-            self.reference = self.purchase_id.partner_ref
+        if self.purchase_id.partner_ref:
+            if self.reference:
+                self.reference += self.purchase_id.partner_ref
+            else:
+                self.reference = self.purchase_id.partner_ref
 
         return data
