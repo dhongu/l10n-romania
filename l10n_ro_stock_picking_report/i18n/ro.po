@@ -69,6 +69,7 @@ msgstr "<span>NIR:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid ""
@@ -82,17 +83,48 @@ msgstr ""
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "<span>ascertained the following:</span>"
 msgstr "<span>după cum urmează:</span>"
 
+
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "To location"
+msgstr "În locația"
+
+
+
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "<span>under the invoice (delivery note) no.</span>"
 msgstr "<span>conform facturii (aviz expediție) nr.</span>"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "<span>under the invoice no.</span>"
+msgstr "<span>conform facturii nr.</span>"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "<span>under the delivery note no.</span>"
+msgstr "<span>conform aviz expediție nr.</span>"
+
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
@@ -148,6 +180,7 @@ msgstr "<strong>Client</strong>"
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "<strong>Date</strong>"
@@ -177,10 +210,21 @@ msgstr "<strong>NRC:</strong>"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "<strong>Origin</strong>"
 msgstr "<strong>Comanda</strong>"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "<strong>To location</strong>"
+msgstr "<strong>În locația</strong>"
+
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
@@ -464,6 +508,7 @@ msgstr "Transfer"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
 msgid "from the city"
 msgstr "din localitatea"

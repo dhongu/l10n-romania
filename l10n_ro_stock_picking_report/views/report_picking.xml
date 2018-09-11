@@ -2,6 +2,7 @@
 <openerp>
     <data>
         <template id="report_address_company">
+            <t t-set="res_company" t-value="o.company_id"/>
             <div class="row">
                 <div class="col-xs-5">
                     <div>
@@ -62,6 +63,7 @@
         </template>
 
         <template id="report_address">
+             <t t-set="res_company" t-value="o.company_id"/>
             <div class="row">
                 <div class="col-xs-5">
                     <div>
@@ -243,7 +245,13 @@
                     <tr>
                         <td>
                             <span>Name:</span>
-                            <span t-field="o.location_id.user_id"/>
+                            <t t-if="o.location_id.user_id">
+                              <span t-field="o.location_id.user_id"/>
+                            </t>
+                            <t t-if="not o.location_id.user_id">
+                                <span t-field="user.name"/>
+                            </t>
+
                             <br/>
                             <br/>
                         </td>
@@ -297,6 +305,9 @@
                                         <th>
                                             <strong>Date</strong>
                                         </th>
+                                        <th>
+                                            <strong>From Location</strong>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -307,6 +318,9 @@
                                         <td>
                                             <span t-field="o.date" t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+                                        </td>
+                                        <td>
+                                            <span t-field="o.location_id"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -615,6 +629,9 @@
                                         <th>
                                             <strong>Date</strong>
                                         </th>
+                                        <th>
+                                            <strong>From Location</strong>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -625,6 +642,9 @@
                                         <td>
                                             <span t-field="o.date"  t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+                                        </td>
+                                        <td>
+                                            <span t-field="o.location_id"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -750,19 +770,9 @@
             </table>
         </template>
 
-        <template id="report_reception">
 
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="web.external_layout">
-                        <div class="page">
-                            <t t-call="l10n_ro_stock_picking_report.report_address"/>
-
-                            <h3>
-                                <span>Reception:</span>
-                                <span t-field="o.name"/>
-                            </h3>
-                            <table class="table table-condensed">
+        <template id="report_reception_text">
+                           <table class="table table-condensed">
                                 <thead>
                                     <tr>
                                         <th>
@@ -771,16 +781,25 @@
                                         <th>
                                             <strong>Date</strong>
                                         </th>
+                                        <th>
+                                            <strong>To location</strong>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>
                                             <span t-field="o.origin"/>
+                                            <t t-if="not  o.origin">
+                                                <span t-field="o.group_id"/>
+                                            </t>
                                         </td>
                                         <td>
                                             <span t-field="o.date" t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+                                        </td>
+                                         <td>
+                                            <span t-field="o.location_dest_id"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -801,14 +820,39 @@
                                         <span t-field="o.partner_id.city"/>
                                     </strong>
                                 </span>
-                                <span>under the invoice (delivery note) no.</span>
+                                <t t-if="o.notice">
+                                    <span>under the delivery note no.</span>
+                                </t>
+                                <t t-if="not o.notice">
+                                   <span>under the invoice no.</span>
+                                </t>
+
                                 <strong>
                                     <span t-field="o.origin"/>
+                                    <t t-if="not o.origin">
+                                        <span>_______________</span>
+                                    </t>
                                 </strong>
                                 <span>ascertained the following:</span>
                             </div>
                             <br/>
-                            <table class="table table-condensed table-bordered">
+
+        </template>
+
+        <template id="report_reception">
+
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <t t-call="l10n_ro_stock_picking_report.report_address"/>
+
+                            <h3>
+                                <span>Reception:</span>
+                                <span t-field="o.name"/>
+                            </h3>
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
+                        <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>
                                         <th>
@@ -890,7 +934,8 @@
                                 <span>Reception:</span>
                                 <span t-field="o.name"/>
                             </h3>
-                            <table class="table table-condensed">
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
+                            <!--<table class="table table-condensed">
                                 <thead>
                                     <tr>
                                         <th>
@@ -898,6 +943,9 @@
                                         </th>
                                         <th>
                                             <strong>Date</strong>
+                                        </th>
+                                        <th>
+                                            <strong>To location</strong>
                                         </th>
                                     </tr>
                                 </thead>
@@ -908,7 +956,10 @@
                                         </td>
                                         <td>
                                             <span t-field="o.date"  t-options='{"widget": "date"}'/>
-                                            <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+                                            &lt;!&ndash; <t t-esc="formatLang(o.date, date=True)"/> &ndash;&gt;
+                                        </td>
+                                        <td>
+                                            <span t-field="o.location_dest_id"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -929,13 +980,21 @@
                                         <span t-field="o.partner_id.city"/>
                                     </strong>
                                 </span>
-                                <span>under the invoice (delivery note) no.</span>
+                                 <t t-if="o.notice">
+                                    <span>under the delivery note no.</span>
+                                </t>
+                                <t t-if="not o.notice">
+                                   <span>under the invoice no.</span>
+                                </t>
                                 <strong>
                                     <span t-field="o.origin"/>
+                                    <t t-if="not o.origin">
+                                        <span>_______________</span>
+                                    </t>
                                 </strong>
                                 <span>ascertained the following:</span>
                             </div>
-                            <br/>
+                            <br/>-->
                             <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>
@@ -989,7 +1048,8 @@
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="text-right">
-                                                <span t-esc="totals['amount']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                <span t-esc="totals['amount']"
+                                                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                             </td>
                                         </tr>
 
@@ -1020,7 +1080,8 @@
                                 <span>Reception:</span>
                                 <span t-field="o.name"/>
                             </h3>
-                            <table class="table table-condensed">
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
+                            <!--<table class="table table-condensed">
                                 <thead>
                                     <tr>
                                         <th>
@@ -1028,6 +1089,9 @@
                                         </th>
                                         <th>
                                             <strong>Date</strong>
+                                        </th>
+                                        <th>
+                                            <strong>To location</strong>
                                         </th>
                                     </tr>
                                 </thead>
@@ -1038,7 +1102,10 @@
                                         </td>
                                         <td>
                                             <span t-field="o.date"  t-options='{"widget": "date"}'/>
-                                            <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+                                            &lt;!&ndash; <t t-esc="formatLang(o.date, date=True)"/> &ndash;&gt;
+                                        </td>
+                                        <td>
+                                            <span t-field="o.location_dest_id"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1059,14 +1126,22 @@
                                         <span t-field="o.partner_id.city"/>
                                     </strong>
                                 </span>
-                                <span>under the invoice (delivery note) no.</span>
+                                 <t t-if="o.notice">
+                                    <span>under the delivery note no.</span>
+                                </t>
+                                <t t-if="not o.notice">
+                                   <span>under the invoice no.</span>
+                                </t>
                                 <strong>
                                     <span t-field="o.origin"/>
+                                    <t t-if="not o.origin">
+                                        <span>_______________</span>
+                                    </t>
                                 </strong>
                                 <span>ascertained the following:</span>
 
                             </div>
-                            <br/>
+                            <br/>-->
                             <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>
