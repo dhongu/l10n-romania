@@ -935,66 +935,7 @@
                                 <span t-field="o.name"/>
                             </h3>
                             <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
-                            <!--<table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <strong>Origin</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Date</strong>
-                                        </th>
-                                        <th>
-                                            <strong>To location</strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span t-field="o.origin"/>
-                                        </td>
-                                        <td>
-                                            <span t-field="o.date"  t-options='{"widget": "date"}'/>
-                                            &lt;!&ndash; <t t-esc="formatLang(o.date, date=True)"/> &ndash;&gt;
-                                        </td>
-                                        <td>
-                                            <span t-field="o.location_dest_id"/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
 
-                            <div>
-                                <span>The undersigned, members of the reception, we proceeded to receive material values
-                                    supplied by
-                                </span>
-                                <strong>
-                                    <span t-field="o.partner_id.name"/>
-                                </strong>
-
-                                <span t-if="o.partner_id.city">
-                                    from the city
-
-                                    <strong>
-                                        <span t-field="o.partner_id.city"/>
-                                    </strong>
-                                </span>
-                                 <t t-if="o.notice">
-                                    <span>under the delivery note no.</span>
-                                </t>
-                                <t t-if="not o.notice">
-                                   <span>under the invoice no.</span>
-                                </t>
-                                <strong>
-                                    <span t-field="o.origin"/>
-                                    <t t-if="not o.origin">
-                                        <span>_______________</span>
-                                    </t>
-                                </strong>
-                                <span>ascertained the following:</span>
-                            </div>
-                            <br/>-->
                             <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>
@@ -1081,67 +1022,7 @@
                                 <span t-field="o.name"/>
                             </h3>
                             <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
-                            <!--<table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <strong>Origin</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Date</strong>
-                                        </th>
-                                        <th>
-                                            <strong>To location</strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span t-field="o.origin"/>
-                                        </td>
-                                        <td>
-                                            <span t-field="o.date"  t-options='{"widget": "date"}'/>
-                                            &lt;!&ndash; <t t-esc="formatLang(o.date, date=True)"/> &ndash;&gt;
-                                        </td>
-                                        <td>
-                                            <span t-field="o.location_dest_id"/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
 
-                            <div>
-                                <span>The undersigned, members of the reception, we proceeded to receive material values
-                                    supplied by
-                                </span>
-
-                                <strong>
-                                    <span t-field="o.partner_id.name"/>
-                                </strong>
-
-                                <span t-if="o.partner_id.city">
-                                    from the city
-                                    <strong>
-                                        <span t-field="o.partner_id.city"/>
-                                    </strong>
-                                </span>
-                                 <t t-if="o.notice">
-                                    <span>under the delivery note no.</span>
-                                </t>
-                                <t t-if="not o.notice">
-                                   <span>under the invoice no.</span>
-                                </t>
-                                <strong>
-                                    <span t-field="o.origin"/>
-                                    <t t-if="not o.origin">
-                                        <span>_______________</span>
-                                    </t>
-                                </strong>
-                                <span>ascertained the following:</span>
-
-                            </div>
-                            <br/>-->
                             <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>
