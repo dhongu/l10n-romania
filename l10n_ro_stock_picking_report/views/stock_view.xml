@@ -15,11 +15,9 @@
                 </button>
 
 
-                <field name="picking_type_id" position="after">
-                    <!--
-                    <field name="delegate_id" colspan="2" domain="[('is_company','=',False)]"/>
-                    <field name="mean_transp" colspan="2"/>
-                   -->
+                <field name="group_id" position="after">
+                    <field name="delegate_id" domain="[('is_company','=',False)]"/>
+                    <field name="mean_transp"/>
                 </field>
             </field>
         </record>
