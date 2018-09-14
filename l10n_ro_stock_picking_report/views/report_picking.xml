@@ -23,18 +23,26 @@
             <small>
                 <div class="row">
                     <div class="col-xs-6">
-                        <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
 
-                                <span t-if="bank.bank_name">
-                                    <strong>Bank:</strong>
-                                    <span t-field="bank.bank_name"/>
-                                </span>
-                                <span t-if="bank.acc_number">
-                                    <strong>Account:</strong>
-                                    <span t-field="bank.acc_number"/>
-                                </span>
+                         <small>
+                                <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+                                    <t t-set="counts" t-value="0"/>
+                                    <t t-set="bank_currency" t-value="bank.currency_id or res_company.currency_id"/>
+                                    <t t-if="bank_currency == o.currency_id and counts&lt;3">
+                                        <span t-if="bank.bank_name">
+                                            <strong>Bank:</strong>
+                                            <span t-field="bank.bank_name"/>
+                                        </span>
+                                        <span t-if="bank.acc_number">
+                                            <strong>Account:</strong>
+                                            <span t-field="bank.acc_number"/>
+                                        </span>
+                                        <t t-set="counts" t-value="counts+1"/>
+                                    </t>
+                                </div>
+                         </small>
 
-                        </div>
+
                     </div>
                 </div>
             </small>
@@ -282,7 +290,7 @@
         <template id="report_delivery">
 
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'outgoing')" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
@@ -609,7 +617,7 @@
         <template id="report_delivery_price">
 
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'outgoing')" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
@@ -842,7 +850,7 @@
         <template id="report_reception">
 
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
@@ -925,7 +933,7 @@
         <template id="report_reception_no_tax">
 
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
@@ -1013,7 +1021,7 @@
         <template id="report_reception_sale_price">
 
             <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
+                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
