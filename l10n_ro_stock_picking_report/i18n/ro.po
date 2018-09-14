@@ -177,6 +177,11 @@ msgid "<strong>Customer</strong>"
 msgstr "<strong>Client</strong>"
 
 #. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
+msgid "<strong>Company</strong>"
+msgstr "<strong>Companie</strong>"
+
+#. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
