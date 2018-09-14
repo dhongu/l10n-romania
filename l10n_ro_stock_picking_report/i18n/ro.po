@@ -169,7 +169,7 @@ msgstr "<strong>CIF:</strong>"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address_company
 msgid "<strong>Company</strong>"
-msgstr "<strong>Compania</strong>"
+msgstr "<strong>Companie</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
