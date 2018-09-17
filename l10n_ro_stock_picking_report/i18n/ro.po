@@ -98,7 +98,32 @@ msgstr "<span>după cum urmează:</span>"
 msgid "To location"
 msgstr "În locația"
 
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
+msgid "<strong>Margin</strong><span>%</span>"
+msgstr "<strong>Adaos</strong><span>%</span>"
 
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
+msgid "From location"
+msgstr "Din locația"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
+msgid "<strong>From Location</strong>"
+msgstr "<strong>Din locația</strong>"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.actions.report,name:l10n_ro_stock_picking_report.action_report_internal_transfer
+msgid "Internal transfer"
+msgstr "Transfer intern"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals_sale
+msgid "Sale Taxes"
+msgstr "TVA vânzare"
 
 
 #. module: l10n_ro_stock_picking_report
@@ -305,7 +330,7 @@ msgstr "<strong>Total fără TVA</strong>"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals_sale
 msgid "<strong>Total Sale Without Taxes</strong>"
-msgstr "<strong>Total vânazare fără TVA</strong>"
+msgstr "<strong>Total vânzare fără TVA</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals_sale
@@ -316,7 +341,7 @@ msgstr "<strong>TVA vânzare/strong>"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals_sale
 msgid "<strong>Total Sale</strong>"
-msgstr "<strong>Total vânazare</strong>"
+msgstr "<strong>Total vânzare</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
