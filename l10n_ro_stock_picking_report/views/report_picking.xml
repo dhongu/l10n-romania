@@ -24,23 +24,23 @@
                 <div class="row">
                     <div class="col-xs-6">
 
-                         <small>
-                                <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-                                    <t t-set="counts" t-value="0"/>
-                                    <t t-set="bank_currency" t-value="bank.currency_id or res_company.currency_id"/>
-                                    <t t-if="bank_currency == o.currency_id and counts&lt;3">
-                                        <span t-if="bank.bank_name">
-                                            <strong>Bank:</strong>
-                                            <span t-field="bank.bank_name"/>
-                                        </span>
-                                        <span t-if="bank.acc_number">
-                                            <strong>Account:</strong>
-                                            <span t-field="bank.acc_number"/>
-                                        </span>
-                                        <t t-set="counts" t-value="counts+1"/>
-                                    </t>
-                                </div>
-                         </small>
+                        <small>
+                            <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+                                <t t-set="counts" t-value="0"/>
+                                <t t-set="bank_currency" t-value="bank.currency_id or res_company.currency_id"/>
+                                <t t-if="bank_currency == res_company.currency_id and counts&lt;3">
+                                    <span t-if="bank.bank_name">
+                                        <strong>Bank:</strong>
+                                        <span t-field="bank.bank_name"/>
+                                    </span>
+                                    <span t-if="bank.acc_number">
+                                        <strong>Account:</strong>
+                                        <span t-field="bank.acc_number"/>
+                                    </span>
+                                    <t t-set="counts" t-value="counts+1"/>
+                                </t>
+                            </div>
+                        </small>
 
 
                     </div>
@@ -71,18 +71,20 @@
         </template>
 
         <template id="report_address">
-             <t t-set="res_company" t-value="o.company_id"/>
+            <t t-set="res_company" t-value="o.company_id"/>
             <div class="row">
                 <div class="col-xs-5">
                     <div>
-                      <!--  <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
-                            <strong>Customer</strong>
-                        </div>
+                        <!--  <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
+                              <strong>Customer</strong>
+                          </div>
 
-                        <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
-                            <strong>Supplier</strong>
-                        </div>-->
-                        <div><strong>Company</strong></div>
+                          <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
+                              <strong>Supplier</strong>
+                          </div>-->
+                        <div>
+                            <strong>Company</strong>
+                        </div>
                     </div>
                     <strong t-field="res_company.partner_id.name"/>
                     <div>
@@ -110,7 +112,9 @@
                         <strong t-field="o.partner_id.name"/>
                     </div>
                     <div>
-                        <t t-if="o.partner_id.commercial_partner_id != o.partner_id"><strong>Delivery</strong></t>
+                        <t t-if="o.partner_id.commercial_partner_id != o.partner_id">
+                            <strong>Delivery</strong>
+                        </t>
                         <strong>Address:</strong>
                         <address t-field="o.partner_id"
                                  t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
@@ -121,18 +125,25 @@
             <small>
                 <div class="row">
                     <div class="col-xs-6">
-                        <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+                        <small>
+                            <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
+                                <t t-set="counts" t-value="0"/>
+                                <t t-set="bank_currency" t-value="bank.currency_id or res_company.currency_id"/>
+                                <t t-if="bank_currency == res_company.currency_id and counts&lt;3">
+                                    <span t-if="bank.bank_name">
+                                        <strong>Bank:</strong>
+                                        <span t-field="bank.bank_name"/>
+                                    </span>
+                                    <span t-if="bank.acc_number">
+                                        <strong>Account:</strong>
+                                        <span t-field="bank.acc_number"/>
+                                    </span>
+                                    <t t-set="counts" t-value="counts+1"/>
+                                </t>
+                            </div>
+                        </small>
 
-                                <span t-if="bank.bank_name">
-                                    <strong>Bank:</strong>
-                                    <span t-field="bank.bank_name"/>
-                                </span>
-                                <span t-if="bank.acc_number">
-                                    <strong>Account:</strong>
-                                    <span t-field="bank.acc_number"/>
-                                </span>
 
-                        </div>
                     </div>
                     <div class="col-xs-5 col-xs-offset-1">
                         <div t-foreach="o.partner_id.bank_ids" t-as="bank">
@@ -182,61 +193,67 @@
         </template>
 
         <template id="report_totals">
-                <div class="col-xs-4 pull-right">
-                    <table class="table table-condensed">
-                        <tr class="border-black">
-                            <td>
-                                <strong>Total Without Taxes</strong>
-                            </td>
-                            <td class="text-right">
-                                <span t-esc="totals['amount']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Taxes</td>
-                            <td class="text-right">
-                                <span t-esc="totals['tax']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                            </td>
-                        </tr>
-                        <tr class="border-black">
-                            <td>
-                                <strong>Total</strong>
-                            </td>
-                            <td class="text-right">
-                                <span t-esc="totals['amount_tax']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+            <div class="col-xs-4 pull-right">
+                <table class="table table-condensed">
+                    <tr class="border-black">
+                        <td>
+                            <strong>Total Without Taxes</strong>
+                        </td>
+                        <td class="text-right">
+                            <span t-esc="totals['amount']"
+                                  t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Taxes</td>
+                        <td class="text-right">
+                            <span t-esc="totals['tax']"
+                                  t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        </td>
+                    </tr>
+                    <tr class="border-black">
+                        <td>
+                            <strong>Total</strong>
+                        </td>
+                        <td class="text-right">
+                            <span t-esc="totals['amount_tax']"
+                                  t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </template>
 
         <template id="report_totals_sale">
-                <div class="col-xs-4 pull-right">
-                    <table class="table table-condensed">
-                        <tr class="border-black">
-                            <td>
-                                <strong>Total Sale Without Taxes</strong>
-                            </td>
-                            <td class="text-right">
-                                <span t-esc="totals['amount_sale']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Sale Taxes</td>
-                            <td class="text-right">
-                                <span t-esc="totals['tax_sale']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                            </td>
-                        </tr>
-                        <tr class="border-black">
-                            <td>
-                                <strong>Total Sale</strong>
-                            </td>
-                            <td class="text-right">
-                                <span t-esc="totals['amount_tax_sale']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+            <div class="col-xs-4 pull-right">
+                <table class="table table-condensed">
+                    <tr class="border-black">
+                        <td>
+                            <strong>Total Sale Without Taxes</strong>
+                        </td>
+                        <td class="text-right">
+                            <span t-esc="totals['amount_sale']"
+                                  t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Sale Taxes</td>
+                        <td class="text-right">
+                            <span t-esc="totals['tax_sale']"
+                                  t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        </td>
+                    </tr>
+                    <tr class="border-black">
+                        <td>
+                            <strong>Total Sale</strong>
+                        </td>
+                        <td class="text-right">
+                            <span t-esc="totals['amount_tax_sale']"
+                                  t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </template>
 
 
@@ -254,7 +271,7 @@
                         <td>
                             <span>Name:</span>
                             <t t-if="o.location_id.user_id">
-                              <span t-field="o.location_id.user_id"/>
+                                <span t-field="o.location_id.user_id"/>
                             </t>
                             <t t-if="not o.location_id.user_id">
                                 <span t-field="user.name"/>
@@ -401,7 +418,7 @@
                             <h3>
                                 <span>Date:</span>
                                 <span t-field="o.date" t-options='{"widget": "date"}'/>
-                                            <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+                                <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                             </h3>
 
                             <table class="table table-condensed table-bordered">
@@ -444,20 +461,20 @@
                                         </td>
                                     </tr>
                                 </tbody>
-<!--                                <tbody>
-                                    <tr>
-                                        <td>
-                                        </td>
-                                        <td class="text-right">
-                                        </td>
-                                        <td class="text-right">
-                                            <strong>Total</strong>
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
-                                        </td>
-                                    </tr>
-                                </tbody>-->
+                                <!--                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                            <strong>Total</strong>
+                                                                        </td>
+                                                                        <td class="text-right">
+                                                                            <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>-->
                             </table>
                             <div class="row">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)"/>
@@ -493,11 +510,11 @@
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
                             </h3>
-                            <h3>
+                            <h4>
                                 <span>Date:</span>
                                 <span t-field="o.date" t-options='{"widget": "date"}'/>
-                                            <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
-                            </h3>
+                                <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+                            </h4>
 
                             <table class="table table-condensed">
                                 <thead>
@@ -538,6 +555,14 @@
                                         <th class="text-right">
                                             <strong>Amount</strong>
                                         </th>
+                                        <t t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'">
+                                            <th class="text-right">
+                                                <strong>Sale Price</strong>
+                                            </th>
+                                            <th class="text-right">
+                                                <strong>Sale Amount</strong>
+                                            </th>
+                                        </t>
 
                                     </tr>
                                 </thead>
@@ -562,23 +587,33 @@
                                         <td class="text-right">
                                             <span t-esc="formatLang(move.price_unit * move.product_uom_qty)"/>
                                         </td>
+                                        <t t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'">
+                                            <th class="text-right">
+                                                <span t-esc="formatLang(move.product_id.list_price)"/>
+                                            </th>
+                                            <th class="text-right">
+                                                <span t-esc="formatLang(move.product_id.list_price * move.product_uom_qty )"/>
+                                            </th>
+                                        </t>
                                     </tr>
                                 </tbody>
-                               <!-- <tbody>
-                                    <tr>
-                                        <td colspan="3" class="text-right">
-                                            <strong>Total</strong>
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
-                                        </td>
-                                    </tr>
-                                </tbody>-->
+                                <!-- <tbody>
+                                     <tr>
+                                         <td colspan="3" class="text-right">
+                                             <strong>Total</strong>
+                                         </td>
+                                         <td class="text-right">
+                                             <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
+                                         </td>
+                                     </tr>
+                                 </tbody>-->
                             </table>
+                            <!--
                             <div class="row">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)"/>
                                 <t t-call="l10n_ro_stock_picking_report.report_totals"/>
                             </div>
+                            -->
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
@@ -648,7 +683,7 @@
                                             <span t-field="o.origin"/>
                                         </td>
                                         <td>
-                                            <span t-field="o.date"  t-options='{"widget": "date"}'/>
+                                            <span t-field="o.date" t-options='{"widget": "date"}'/>
                                             <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
                                         </td>
                                         <td>
@@ -780,70 +815,70 @@
 
 
         <template id="report_reception_text">
-                           <table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <strong>Origin</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Date</strong>
-                                        </th>
-                                        <th>
-                                            <strong>To location</strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span t-field="o.origin"/>
-                                            <t t-if="not  o.origin">
-                                                <span t-field="o.group_id"/>
-                                            </t>
-                                        </td>
-                                        <td>
-                                            <span t-field="o.date" t-options='{"widget": "date"}'/>
-                                            <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
-                                        </td>
-                                         <td>
-                                            <span t-field="o.location_dest_id"/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>Origin</strong>
+                        </th>
+                        <th>
+                            <strong>Date</strong>
+                        </th>
+                        <th>
+                            <strong>To location</strong>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span t-field="o.origin"/>
+                            <t t-if="not  o.origin">
+                                <span t-field="o.group_id"/>
+                            </t>
+                        </td>
+                        <td>
+                            <span t-field="o.date" t-options='{"widget": "date"}'/>
+                            <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+                        </td>
+                        <td>
+                            <span t-field="o.location_dest_id"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-                            <div>
-                                <span>The undersigned, members of the reception, we proceeded to receive material values
-                                    supplied by
-                                </span>
-                                <strong>
-                                    <span t-field="o.partner_id.name"/>
-                                </strong>
+            <div>
+                <span>The undersigned, members of the reception, we proceeded to receive material values
+                    supplied by
+                </span>
+                <strong>
+                    <span t-field="o.partner_id.name"/>
+                </strong>
 
-                                <span t-if="o.partner_id.city">
-                                    from the city
+                <span t-if="o.partner_id.city">
+                    from the city
 
-                                    <strong>
-                                        <span t-field="o.partner_id.city"/>
-                                    </strong>
-                                </span>
-                                <t t-if="o.notice">
-                                    <span>under the delivery note no.</span>
-                                </t>
-                                <t t-if="not o.notice">
-                                   <span>under the invoice no.</span>
-                                </t>
+                    <strong>
+                        <span t-field="o.partner_id.city"/>
+                    </strong>
+                </span>
+                <t t-if="o.notice">
+                    <span>under the delivery note no.</span>
+                </t>
+                <t t-if="not o.notice">
+                    <span>under the invoice no.</span>
+                </t>
 
-                                <strong>
-                                    <span t-field="o.origin"/>
-                                    <t t-if="not o.origin">
-                                        <span>_______________</span>
-                                    </t>
-                                </strong>
-                                <span>ascertained the following:</span>
-                            </div>
-                            <br/>
+                <strong>
+                    <span t-field="o.origin"/>
+                    <t t-if="not o.origin">
+                        <span>_______________</span>
+                    </t>
+                </strong>
+                <span>ascertained the following:</span>
+            </div>
+            <br/>
 
         </template>
 
@@ -860,7 +895,7 @@
                                 <span t-field="o.name"/>
                             </h3>
                             <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
-                        <table class="table table-condensed table-bordered">
+                            <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>
                                         <th>
@@ -900,16 +935,20 @@
                                         </td>
                                         <td class="text-right">
 
-                                            <span t-esc="line['price']" t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
+                                            <span t-esc="line['price']"
+                                                  t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount']" t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
+                                            <span t-esc="line['amount']"
+                                                  t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['tax']" t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
+                                            <span t-esc="line['tax']"
+                                                  t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount_tax']" t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
+                                            <span t-esc="line['amount_tax']"
+                                                  t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1056,7 +1095,8 @@
                                             <strong>Sale price</strong>
                                         </th>
                                         <th class="text-right">
-                                            <strong>Margin</strong><span>%</span>
+                                            <strong>Margin</strong>
+                                            <span>%</span>
                                         </th>
                                         <th class="text-right">
                                             <strong>Sale Amount</strong>
