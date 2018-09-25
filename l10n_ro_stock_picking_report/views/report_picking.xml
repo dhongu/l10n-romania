@@ -507,6 +507,7 @@
                                 -->
                                 <span t-field="o.picking_type_id"/>
                                 <span t-field="o.name"/>
+                                <span t-if="o.state == 'assigned'">Ready</span>
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
                             </h3>
@@ -578,21 +579,44 @@
                                             </div>
                                         </td>
                                         <td class="text-right">
-                                            <span t-field="move.product_uom_qty"/>
+
+
+
+                                            <t t-if="move.product_qty">
+                                                <t t-set="product_qty" t-value="move.product_qty"/>
+                                                <t t-set="product_uom_qty" t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_uom, rounding_method='HALF-UP')"/>
+                                                <span t-field="move.product_qty"/>
+                                            </t>
+
+                                            <t t-if="not move.product_qty">
+                                                <t t-set="product_qty" t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')"/>
+                                                <t t-set="product_uom_qty" t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_uom, rounding_method='HALF-UP')"/>
+                                                <span t-esc="product_qty"/>
+                                            </t>
                                             <span t-field="move.product_uom" groups="product.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(move.price_unit)"/>
+                                            <t t-if="move.price_unit">
+                                                <span t-esc="formatLang(move.price_unit)"/>
+                                            </t>
+                                            <t t-if="not move.price_unit">
+                                                <span t-esc="formatLang(move.product_id.standard_price)"/>
+                                            </t>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(move.price_unit * move.product_uom_qty)"/>
+                                            <t t-if="move.price_unit">
+                                                <span t-esc="formatLang(move.price_unit * product_uom_qty)"/>
+                                            </t>
+                                            <t t-if="not move.price_unit">
+                                                <span t-esc="formatLang(move.product_id.standard_price * product_uom_qty)"/>
+                                            </t>
                                         </td>
                                         <t t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'">
                                             <th class="text-right">
                                                 <span t-esc="formatLang(move.product_id.list_price)"/>
                                             </th>
                                             <th class="text-right">
-                                                <span t-esc="formatLang(move.product_id.list_price * move.product_uom_qty )"/>
+                                                <span t-esc="formatLang(move.product_id.list_price * product_uom_qty )"/>
                                             </th>
                                         </t>
                                     </tr>
