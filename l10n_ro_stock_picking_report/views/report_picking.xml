@@ -313,6 +313,7 @@
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
 
                             <h3>
+                                <t t-if="o.location_id.usage != 'internal'"><span>Reverse</span></t>
                                 <span>Delivery:</span>
                                 <span t-field="o.name"/>
                             </h3>
@@ -320,6 +321,7 @@
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'assigned'">To be confirmed</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
+
                             </h4>
                             <table class="table table-condensed">
                                 <thead>
@@ -682,6 +684,7 @@
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
 
                             <h3>
+                                <t t-if="o.location_id.usage != 'internal'"><span>Reverse</span></t>
                                 <span>Delivery:</span>
                                 <span t-field="o.name"/>
                                 <span t-if="o.state == 'drat'">Draft</span>
@@ -915,6 +918,7 @@
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
 
                             <h3>
+                                <t t-if="o.location_dest_id.usage != 'internal'"><span>Reverse</span></t>
                                 <span>Reception:</span>
                                 <span t-field="o.name"/>
                             </h3>
