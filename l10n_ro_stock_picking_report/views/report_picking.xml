@@ -24,23 +24,8 @@
                 <div class="row">
                     <div class="col-xs-6">
 
-                        <small>
-                            <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-                                <t t-set="counts" t-value="0"/>
-                                <t t-set="bank_currency" t-value="bank.currency_id or res_company.currency_id"/>
-                                <t t-if="bank_currency == res_company.currency_id and counts&lt;3">
-                                    <span t-if="bank.bank_name">
-                                        <strong>Bank:</strong>
-                                        <span t-field="bank.bank_name"/>
-                                    </span>
-                                    <span t-if="bank.acc_number">
-                                        <strong>Account:</strong>
-                                        <span t-field="bank.acc_number"/>
-                                    </span>
-                                    <t t-set="counts" t-value="counts+1"/>
-                                </t>
-                            </div>
-                        </small>
+                        <t t-set="partner_id" t-value="res_company.partner_id"/>
+                        <t t-call="base.banks"/>
 
 
                     </div>
@@ -125,38 +110,15 @@
             <small>
                 <div class="row">
                     <div class="col-xs-6">
-                        <small>
-                            <div t-foreach="res_company.partner_id.bank_ids" t-as="bank">
-                                <t t-set="counts" t-value="0"/>
-                                <t t-set="bank_currency" t-value="bank.currency_id or res_company.currency_id"/>
-                                <t t-if="bank_currency == res_company.currency_id and counts&lt;3">
-                                    <span t-if="bank.bank_name">
-                                        <strong>Bank:</strong>
-                                        <span t-field="bank.bank_name"/>
-                                    </span>
-                                    <span t-if="bank.acc_number">
-                                        <strong>Account:</strong>
-                                        <span t-field="bank.acc_number"/>
-                                    </span>
-                                    <t t-set="counts" t-value="counts+1"/>
-                                </t>
-                            </div>
-                        </small>
-
+                        <t t-set="partner_id" t-value="res_company.partner_id"/>
+                        <t t-call="base.banks"/>
 
                     </div>
                     <div class="col-xs-5 col-xs-offset-1">
-                        <div t-foreach="o.partner_id.bank_ids" t-as="bank">
-                            <div t-if="bank.bank_name">
-                                <strong>Bank:</strong>
-                                <span t-field="bank.bank_name"/>
-                            </div>
-                            <div t-if="bank.acc_number">
-                                <strong>Account:</strong>
-                                <span t-field="bank.acc_number"/>
-                            </div>
 
-                        </div>
+                        <t t-set="partner_id" t-value="o.partner_id"/>
+                        <t t-call="base.banks"/>
+
                     </div>
                 </div>
             </small>
@@ -409,7 +371,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <t t-call="l10n_ro_stock_picking_report.report_address_company"/>
+                            <t t-call="base.report_address_company"/>
 
                             <h3>
                                 <span t-if="o.state == 'drat'">Draft</span>
@@ -500,7 +462,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <t t-call="l10n_ro_stock_picking_report.report_address_company"/>
+                            <t t-call="base.report_address_company"/>
 
                             <h3>
 
