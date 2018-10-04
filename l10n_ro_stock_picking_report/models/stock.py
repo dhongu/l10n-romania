@@ -90,15 +90,13 @@ class stock_picking(models.Model):
         self.write({'printed': True})
         if self.picking_type_code == 'incoming':
             if self.location_dest_id.merchandise_type == 'store':
-                res = self.env.ref('l10n_ro_stock_picking_report.action_report_reception').report_action(self)
+                res = self.env.ref('l10n_ro_stock_picking_report.action_report_reception_sale_price').report_action(self)
             else:
-                # res = self.env['report'].get_action(self, 'l10n_ro_stock_picking_report.report_reception')
-                res= self.env.ref('l10n_ro_stock_picking_report.report_reception_sale_price').report_action(self)
+                res = self.env.ref('l10n_ro_stock_picking_report.action_report_reception').report_action(self)
+
         elif self.picking_type_code == 'outgoing':
-            # res = self.env['report'].get_action(self, 'l10n_ro_stock_picking_report.report_delivery')
             res = self.env.ref('l10n_ro_stock_picking_report.action_report_delivery').report_action(self)
         else:
-            # res = self.env['report'].get_action(self, 'l10n_ro_stock_picking_report.report_internal_transfer')
             res = self.env.ref('l10n_ro_stock_picking_report.action_report_internal_transfer').report_action(self)
         return res
 
