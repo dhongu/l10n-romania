@@ -29,6 +29,7 @@ from functools import reduce
 
 class ReportPickingDelivery(models.AbstractModel):
     _name = 'report.abstract_report.delivery_report'
+    _description = 'ReportPickingDelivery'
     _template = None
 
     @api.model
@@ -95,6 +96,7 @@ class ReportPickingDelivery(models.AbstractModel):
 
 class ReportPickingReception(models.AbstractModel):
     _name = 'report.abstract_report.reception_report'
+    _description = 'ReportPickingReception'
     _template = None
 
     @api.model
