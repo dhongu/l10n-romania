@@ -418,10 +418,10 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(move.price_unit)"/>
+                                            <span t-esc="move.price_unit" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(move.price_unit * move.product_uom_qty)"/>
+                                            <span t-esc=" move.price_unit * move.product_uom_qty" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -561,26 +561,26 @@
                                         </td>
                                         <td class="text-right">
                                             <t t-if="move.price_unit">
-                                                <span t-esc="formatLang(move.price_unit)"/>
+                                                <span t-esc="move.price_unit" t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                             <t t-if="not move.price_unit">
-                                                <span t-esc="formatLang(move.product_id.standard_price)"/>
+                                                <span t-esc="move.product_id.standard_price" t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                         </td>
                                         <td class="text-right">
                                             <t t-if="move.price_unit">
-                                                <span t-esc="formatLang(move.price_unit * product_uom_qty)"/>
+                                                <span t-esc="move.price_unit * product_uom_qty" t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                             <t t-if="not move.price_unit">
-                                                <span t-esc="formatLang(move.product_id.standard_price * product_uom_qty)"/>
+                                                <span t-esc="move.product_id.standard_price * product_uom_qty" t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                         </td>
                                         <t t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'">
                                             <th class="text-right">
-                                                <span t-esc="formatLang(move.product_id.list_price)"/>
+                                                <span t-esc="move.product_id.list_price" t-options='{"widget": "float", "precision": 2}'/>
                                             </th>
                                             <th class="text-right">
-                                                <span t-esc="formatLang(move.product_id.list_price * product_uom_qty )"/>
+                                                <span t-esc="move.product_id.list_price * product_uom_qty " t-options='{"widget": "float", "precision": 2}'/>
                                             </th>
                                         </t>
                                     </tr>
@@ -718,13 +718,13 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['price'])"/>
+                                            <span t-esc="line['price']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['amount'])"/>
+                                            <span t-esc="line['amount']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['tax'])"/>
+                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
 
                                     </tr>
@@ -1007,10 +1007,10 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['price'])"/>
+                                            <span t-esc="line['price']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['amount'])"/>
+                                            <span t-esc="line['amount']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
 
                                     </tr>
@@ -1109,25 +1109,25 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['price'])"/>
+                                            <span t-esc="line['price'])" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['amount'])"/>
+                                            <span t-esc="line['amount'])" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['tax'])"/>
+                                            <span t-esc="line['tax'])" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['amount_tax'])"/>
+                                            <span t-esc="line['amount_tax'])" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-field="move.product_id.list_price"/>
+                                            <span t-field="move.product_id.list_price" />
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['margin'])"/>
+                                            <span t-esc="line['margin']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="formatLang(line['amount_tax_sale'])"/>
+                                            <span t-esc="line['amount_tax_sale']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                     </tr>
                                 </tbody>
