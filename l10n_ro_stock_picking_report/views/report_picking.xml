@@ -57,98 +57,173 @@
 
         <template id="report_address">
             <t t-set="res_company" t-value="o.company_id"/>
-            <div class="row">
-                <div class="col-xs-5">
-                    <div>
-                        <!--  <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
-                              <strong>Customer</strong>
-                          </div>
-
-                          <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
-                              <strong>Supplier</strong>
-                          </div>-->
+            <table>
+                <tr style="background-color: transparent;">
+                    <td width="40%">
                         <div>
-                            <strong>Company</strong>
+                            <div>
+                                <strong>Company</strong>
+                            </div>
                         </div>
-                    </div>
-                    <strong t-field="res_company.partner_id.name"/>
-                    <div>
-                        <strong>Address:</strong>
-                        <address t-field="res_company.partner_id"
-                                 t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
-                    </div>
-
-                </div>
-
-                <div class="col-xs-5 col-xs-offset-2">
-                    <div>
-                        <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
-                            <strong>Customer</strong>
+                        <strong t-field="res_company.partner_id.name"/>
+                        <div>
+                            <strong>Address:</strong>
+                            <address t-field="res_company.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
                         </div>
-
-                        <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
-                            <strong>Supplier</strong>
+                        <div class="col-xs-6">
+                            <t t-set="partner_id" t-value="res_company.partner_id"/>
+                            <t t-call="l10n_ro_config.banks"/>
                         </div>
-                    </div>
-                    <div>
-                        <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
-                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,
+                        <div class="col-xs-5">
+                            <div t-if="res_company.partner_id.vat">
+                                <strong>CIF:</strong>
+                                <span t-field="res_company.partner_id.vat"/>
+                            </div>
+                            <div t-if="res_company.partner_id.nrc">
+                                <strong>NRC:</strong>
+                                <span t-field="res_company.partner_id.nrc"/>
+                            </div>
+                            <div i-if="res_company.share_capital">
+                                <strong>Share Capital:</strong>
+                                <span t-field="res_company.share_capital"/>
+                            </div>
                         </div>
-                        <strong t-field="o.partner_id.name"/>
-                    </div>
-                    <div>
-                        <t t-if="o.partner_id.commercial_partner_id != o.partner_id">
-                            <strong>Delivery</strong>
-                        </t>
-                        <strong>Address:</strong>
-                        <address t-field="o.partner_id"
-                                 t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
-                    </div>
+                    </td>
+                    <td width="20%"></td>
+                    <td width="40%">
+                        <div>
+                            <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
+                                <strong>Customer</strong>
+                            </div>
 
-                </div>
-            </div>
-            <small>
-                <div class="row">
-                    <div class="col-xs-6">
-                        <t t-set="partner_id" t-value="res_company.partner_id"/>
-                        <t t-call="l10n_ro_config.banks"/>
+                            <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
+                                <strong>Supplier</strong>
+                            </div>
+                        </div>
+                        <div>
+                            <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
+                                <strong t-field="o.partner_id.commercial_partner_id.name"/>,
+                            </div>
+                            <strong t-field="o.partner_id.name"/>
+                        </div>
+                        <div>
+                            <t t-if="o.partner_id.commercial_partner_id != o.partner_id">
+                                <strong>Delivery</strong>
+                            </t>
+                            <strong>Address:</strong>
+                            <address t-field="o.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                        </div>
+                        <div class="col-xs-5 col-xs-offset-1">
+                            <t t-set="partner_id" t-value="o.partner_id"/>
+                            <t t-call="l10n_ro_config.banks"/>
+                        </div>
+                        <div class="col-xs-5 col-xs-offset-2">
+                            <div t-if="o.partner_id.vat">
+                                <strong>CIF:</strong>
+                                <span t-field="o.partner_id.commercial_partner_id.vat"/>
+                            </div>
+                            <div t-if="o.partner_id.nrc">
+                                <strong>NRC:</strong>
+                                <span t-field="o.partner_id.commercial_partner_id.nrc"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+<!--            <div class="row">-->
+<!--                <div class="col-xs-5">-->
+<!--                    <div>-->
+<!--                        &lt;!&ndash;  <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">-->
+<!--                              <strong>Customer</strong>-->
+<!--                          </div>-->
 
-                    </div>
-                    <div class="col-xs-5 col-xs-offset-1">
+<!--                          <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">-->
+<!--                              <strong>Supplier</strong>-->
+<!--                          </div>&ndash;&gt;-->
+<!--                        <div>-->
+<!--                            <strong>Company</strong>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <strong t-field="res_company.partner_id.name"/>-->
+<!--                    <div>-->
+<!--                        <strong>Address:</strong>-->
+<!--                        <address t-field="res_company.partner_id"-->
+<!--                                 t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>-->
+<!--                    </div>-->
 
-                        <t t-set="partner_id" t-value="o.partner_id"/>
-                        <t t-call="l10n_ro_config.banks"/>
+<!--                </div>-->
 
-                    </div>
-                </div>
-            </small>
+<!--                <div class="col-xs-5 col-xs-offset-2">-->
+<!--                    <div>-->
+<!--                        <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">-->
+<!--                            <strong>Customer</strong>-->
+<!--                        </div>-->
 
-            <div class="row">
-                <div class="col-xs-5">
-                    <div t-if="res_company.partner_id.vat">
-                        <strong>CIF:</strong>
-                        <span t-field="res_company.partner_id.vat"/>
-                    </div>
-                    <div t-if="res_company.partner_id.nrc">
-                        <strong>NRC:</strong>
-                        <span t-field="res_company.partner_id.nrc"/>
-                    </div>
-                    <div i-if="res_company.share_capital">
-                        <strong>Share Capital:</strong>
-                        <span t-field="res_company.share_capital"/>
-                    </div>
-                </div>
-                <div class="col-xs-5 col-xs-offset-2">
-                    <div t-if="o.partner_id.vat">
-                        <strong>CIF:</strong>
-                        <span t-field="o.partner_id.commercial_partner_id.vat"/>
-                    </div>
-                    <div t-if="o.partner_id.nrc">
-                        <strong>NRC:</strong>
-                        <span t-field="o.partner_id.commercial_partner_id.nrc"/>
-                    </div>
-                </div>
-            </div>
+<!--                        <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">-->
+<!--                            <strong>Supplier</strong>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                        <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">-->
+<!--                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,-->
+<!--                        </div>-->
+<!--                        <strong t-field="o.partner_id.name"/>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                        <t t-if="o.partner_id.commercial_partner_id != o.partner_id">-->
+<!--                            <strong>Delivery</strong>-->
+<!--                        </t>-->
+<!--                        <strong>Address:</strong>-->
+<!--                        <address t-field="o.partner_id"-->
+<!--                                 t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--            <small>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-xs-6">-->
+<!--                        <t t-set="partner_id" t-value="res_company.partner_id"/>-->
+<!--                        <t t-call="l10n_ro_config.banks"/>-->
+
+<!--                    </div>-->
+<!--                    <div class="col-xs-5 col-xs-offset-1">-->
+
+<!--                        <t t-set="partner_id" t-value="o.partner_id"/>-->
+<!--                        <t t-call="l10n_ro_config.banks"/>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </small>-->
+
+<!--            <div class="row">-->
+<!--                <div class="col-xs-5">-->
+<!--                    <div t-if="res_company.partner_id.vat">-->
+<!--                        <strong>CIF:</strong>-->
+<!--                        <span t-field="res_company.partner_id.vat"/>-->
+<!--                    </div>-->
+<!--                    <div t-if="res_company.partner_id.nrc">-->
+<!--                        <strong>NRC:</strong>-->
+<!--                        <span t-field="res_company.partner_id.nrc"/>-->
+<!--                    </div>-->
+<!--                    <div i-if="res_company.share_capital">-->
+<!--                        <strong>Share Capital:</strong>-->
+<!--                        <span t-field="res_company.share_capital"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-xs-5 col-xs-offset-2">-->
+<!--                    <div t-if="o.partner_id.vat">-->
+<!--                        <strong>CIF:</strong>-->
+<!--                        <span t-field="o.partner_id.commercial_partner_id.vat"/>-->
+<!--                    </div>-->
+<!--                    <div t-if="o.partner_id.nrc">-->
+<!--                        <strong>NRC:</strong>-->
+<!--                        <span t-field="o.partner_id.commercial_partner_id.nrc"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <br/>
             <br/>
