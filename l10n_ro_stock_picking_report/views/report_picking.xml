@@ -230,7 +230,7 @@
         </template>
 
         <template id="report_totals">
-            <div class="col-xs-4 pull-right">
+            <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
                 <table class="table table-condensed">
                     <tr class="border-black">
                         <td>
@@ -262,7 +262,7 @@
         </template>
 
         <template id="report_totals_sale">
-            <div class="col-xs-4 pull-right">
+            <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
                 <table class="table table-condensed">
                     <tr class="border-black">
                         <td>
@@ -1001,19 +1001,19 @@
                                         <td class="text-right">
 
                                             <span t-esc="line['price']"
-                                                  t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="line['amount']"
-                                                  t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="line['tax']"
-                                                  t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
+                                                  t-optionss='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="line['amount_tax']"
-                                                  t-esc-options='{"widget": "float", "decimal_precision":"Product Price"}'/>
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                     </tr>
                                 </tbody>
