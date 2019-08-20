@@ -66,17 +66,19 @@ class DiscountLine(models.Model):
     @api.constrains('amount')
     def _check_amount(self):
         if self.amount <= 0:
-            raise ValidationError(_(f'Discount line amount is {self.amount}, which is not positive. Discount amounts should always be positive.' % self.amount))
+            raise ValidationError(_('Discount line amount is %d, which is not positive. Discount amounts should always be positive.' % self.amount))
 
     def apply_discount(self):
-        _logger.info(f'Applying discount {self.amount} from discounting invoice {self.discount_id.discounting_invoice_id.number}'
-                     f' to invoice line {self.discounted_invoice_line_id.name} which belongs to {self.discounted_invoice_id.number}')
+        _logger.info('Applying discount %d from discounting invoice %s to line %s of invoice %s'
+                     %(self.amount, self.discount_id.discounting_invoice_id.number,
+                       self.discounted_invoice_line_id.name, self.discounted_invoice_id.number))
         price_difference = -self.amount
         self.discounted_invoice_line_id.modify_stock_move_value(price_difference)
 
     def remove_discount(self):
-        _logger.info(f'Removing discount {self.amount} from discounting invoice {self.discount_id.discounting_invoice_id.number}'
-                     f' from invoice line {self.discounted_invoice_line_id.name} which belongs to {self.discounted_invoice_id.number}')
+        _logger.info('Removing discount %d from discounting invoice %s from line %s of invoice %s'
+                     % (self.amount, self.discount_id.discounting_invoice_id.number,
+                        self.discounted_invoice_line_id.name, self.discounted_invoice_id.number))
         price_difference = self.amount
         self.discounted_invoice_line_id.modify_stock_move_value(price_difference)
 

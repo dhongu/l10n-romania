@@ -36,7 +36,7 @@ class Discount(models.Model):
         string='Remaining Discount',
         currency_field='company_currency_id',
         help='Amount of discount that is left to be applied to invoice lines',
-        compute="_compute_remaining_amount"
+        compute='_compute_remaining_amount'
     )
     company_id = fields.Many2one(
         comodel_name='res.company',
@@ -68,14 +68,14 @@ class Discount(models.Model):
     @api.constrains('initial_amount')
     def _check_initial_amount(self):
         if self.initial_amount <= 0:
-            raise ValidationError(_(f'Initial amount is {self.initial_amount}, which is not positive. Discount amounts should always be positive.'))
+            raise ValidationError(_('Initial amount is %d, which is not positive. Discount amounts should always be positive.' %self.initial_amount))
 
     @api.constrains('discount_line_ids')
     def _check_discount_line_ids(self):
         total_applied = sum(self.discount_line_ids.mapped('amount'))
         if self.initial_amount < total_applied:
-            _logger.info(f'Discount application failed for {self.discounting_invoice_id.number} because an amount greater than initial amount has been tried to be applied.')
-            raise UserError(_(f'You are trying to apply a total discount of {total_applied}, which is more than the initial value of {self.initial_amount}'))
+            _logger.info('Discount application failed for %s because an amount greater than initial amount has been tried to be applied.' %self.discounting_invoice_id.number)
+            raise UserError(_('You are trying to apply a total discount of %d, which is more than the initial value of %d' %(total_applied, self.initial_amount)))
 
     @api.depends('discount_line_ids', 'initial_amount')
     def _compute_remaining_amount(self):

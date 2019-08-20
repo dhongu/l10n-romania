@@ -7,14 +7,14 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     has_discounting_invoice_lines = fields.Boolean(
-        string="Is discount invoice",
-        help="Evaluates to true if there is at least one line with account set to the received-discount account",
-        compute="_compute_has_discounting_invoice_lines"
+        string='Is discount invoice',
+        help='Evaluates to true if there is at least one line with account set to the received-discount account',
+        compute='_compute_has_discounting_invoice_lines'
     )
     has_discounted_invoice_lines = fields.Boolean(
-        string="Is discount invoice",
-        help="Evaluates to true if there is at least one line that was discounted",
-        compute="_compute_has_discounted_invoice_lines"
+        string='Is discount invoice',
+        help='Evaluates to true if there is at least one line that was discounted',
+        compute='_compute_has_discounted_invoice_lines'
     )
 
     @api.depends('invoice_line_ids')
@@ -52,7 +52,7 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def trade_discount_distribution(self, res):
-        _logger.info(f'trade_discount_distribution() from l10n_ro_stock_account has been called but do not do anything because this module is installed')
+        _logger.info('trade_discount_distribution() from l10n_ro_stock_account has been called but do not do anything because this module is installed')
         return res
 
 
