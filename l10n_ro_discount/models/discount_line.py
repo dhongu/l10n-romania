@@ -72,13 +72,13 @@ class DiscountLine(models.Model):
         _logger.info('Applying discount %d from discounting invoice %s to line %s of invoice %s'
                      %(self.amount, self.discount_id.discounting_invoice_id.number,
                        self.discounted_invoice_line_id.name, self.discounted_invoice_id.number))
-        price_difference = -self.amount
-        self.discounted_invoice_line_id.modify_stock_move_value(price_difference)
+        value = self.discounted_invoice_line_id.price_subtotal - self.amount
+        self.discounted_invoice_line_id.modify_stock_move_value(value)
 
     def remove_discount(self):
         _logger.info('Removing discount %d from discounting invoice %s from line %s of invoice %s'
                      % (self.amount, self.discount_id.discounting_invoice_id.number,
                         self.discounted_invoice_line_id.name, self.discounted_invoice_id.number))
-        price_difference = self.amount
-        self.discounted_invoice_line_id.modify_stock_move_value(price_difference)
+        value = self.discounted_invoice_line_id.price_subtotal + self.amount
+        self.discounted_invoice_line_id.modify_stock_move_value(value)
 
