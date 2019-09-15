@@ -4,7 +4,7 @@
 # See README.rst file on addons root folder for license details
 
 from odoo import api, fields, models, _
-from odoo.exceptions import AccessError, UserError
+from odoo.exceptions import UserError
 
 
 class AccountInvoice(models.Model):
@@ -158,7 +158,7 @@ class AccountInvoiceLine(models.Model):
         if should_modify_stock_value:
             stock_moves = self.env['stock.move'].search([
                 ('purchase_line_id', '=', self.purchase_line_id.id),
-                ('state', '=', 'done'), ('product_qty', '!=', 0.0)
+                ('state', '=', 'done'), ('product_qty', '!=', 0.0), ('value', '=', 0.0)
             ])
             if self.invoice_id.type == 'in_refund':
                 stock_moves = stock_moves.filtered(lambda m: m._is_out())
