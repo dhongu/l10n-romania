@@ -173,7 +173,7 @@ class AccountInvoiceLine(models.Model):
                 move.write({
                     'value':  current_move_value,
                     'remaining_value': current_move_value,
-                    'price_unit': current_move_value / move.product_qty,
+                    'price_unit': current_move_value / move.product_uom_qty,
                 })
 
             #todo: de actualizat pretul standard cu noua valoare de stoc
