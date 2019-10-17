@@ -12,3 +12,5 @@ class ResPartner(models.Model):
 
 
     vat_subjected = fields.Boolean('VAT Legal Statement')
+    split_vat = fields.Boolean('Split VAT')
+    vat_on_payment = fields.Boolean('VAT on Payment')
