@@ -109,14 +109,14 @@
                                         <span id="price_subtotal" t-esc="formatLang(price_subtotal)"/>
                                     </td>
                                     <td class="text-right">
-                                        <t t-set="price_taxes" t-value="l.price_taxes"/>
+                                        <t t-set="price_tax" t-value="l.price_tax"/>
                                         <t t-if="o.type == 'out_refund'">
-                                            <t t-set="price_taxes" t-value="-1*l.price_taxes"/>
+                                            <t t-set="price_tax" t-value="-1*l.price_tax"/>
 
                                         </t>
-                                        <t t-set="price_taxes"
-                                           t-value="o.currency_id.with_context(date=o.date_invoice).compute(price_taxes,currency_id)"/>
-                                        <span id="price_taxes" t-esc="formatLang(price_taxes)"/>
+                                        <t t-set="price_tax"
+                                           t-value="o.currency_id.with_context(date=o.date_invoice).compute(price_tax,currency_id)"/>
+                                        <span id="price_tax" t-esc="formatLang(price_tax)"/>
                                     </td>
 
                                     <td class="text-right">

@@ -47,6 +47,7 @@ class account_invoice(models.Model):
 
 class intrastat_transaction(models.Model):
     _name = 'l10n_ro_intrastat.transaction'
+    _description = 'Intrastat Transaction'
     _rec_name = 'description'
 
     code = fields.Char('Code', required=True, readonly=True)
@@ -61,6 +62,7 @@ class intrastat_transaction(models.Model):
 
 class intrastat_transport_mode(models.Model):
     _name = 'l10n_ro_intrastat.transport_mode'
+    _description = 'Intrastat Transport Mode'
 
     code = fields.Char('Code', required=True, readonly=True)
     name = fields.Char('Description', readonly=True)

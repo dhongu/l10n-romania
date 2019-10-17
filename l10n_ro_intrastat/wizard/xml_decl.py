@@ -38,7 +38,7 @@ class xml_decl(models.TransientModel):
     """
     Intrastat XML Declaration
     """
-    _name = "l10n_ro_intrastat_xml.xml_decl"
+    _name = "l10n_ro_intrastat.xml_decl"
     _description = 'Intrastat XML Declaration'
 
     # def _get_tax_code(self):
@@ -61,8 +61,12 @@ class xml_decl(models.TransientModel):
     month = fields.Selection([('01', 'January'), ('02', 'February'), ('03', 'March'),
                               ('04', 'April'), ('05', 'May'), ('06', 'June'), ('07', 'July'),
                               ('08', 'August'), ('09', 'September'), ('10', 'October'),
-                              ('11', 'November'), ('12', 'December')], 'Month', required=True, default=_get_def_month)
-    year = fields.Char('Year', size=4, required=True, default=_get_def_year)
+                              ('11', 'November'), ('12', 'December')], 'Month', required=True,
+                             #default=_get_def_month
+                             )
+    year = fields.Char('Year', size=4, required=True,
+                       #default=_get_def_year
+                       )
     # tax_code_id = fields.Many2one('account.tax.code', 'Company Tax Chart', default=_get_tax_code,
     #                               domain=[('parent_id', '=', False)], required=True)
     type = fields.Selection([('arrivals', 'Arrivals'),
