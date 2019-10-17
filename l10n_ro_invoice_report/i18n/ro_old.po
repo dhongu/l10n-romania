@@ -440,7 +440,7 @@ msgid "Supplier Refund"
 msgstr "Restituire furnizor"
 
 #. module: l10n_ro_invoice_report
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_invoice_line_price_taxes
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_invoice_line_price_tax
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Taxes"
 msgstr "TVA"

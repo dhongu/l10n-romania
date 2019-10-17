@@ -68,8 +68,9 @@ class account_invoice_line(models.Model):
     price_unit_without_taxes = fields.Float(string='Unit Price without taxes', store=True, readonly=True,
                                             compute='_compute_price')
 
-    price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'), store=True, readonly=True,
-                               compute='_compute_price')
+    # se va utiliza campul stndard price_tax
+    #price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'), store=True, readonly=True,
+    #                           compute='_compute_price')
 
     price_normal_taxes = fields.Float(tring='Normal Taxes', digits=dp.get_precision('Account'), store=True,
                                       readonly=True, compute='_compute_price')
@@ -105,13 +106,13 @@ class account_invoice_line(models.Model):
 
         taxes = False
         if self.invoice_line_tax_ids:
-            taxes = self.invoice_line_tax_ids.compute_all(price, currency, self.quantity, product=self.product_id,
+            taxes = self.invoice_line_tax_ids.compute_all(price, currency, quantity=self.quantity, product=self.product_id,
                                                           partner=self.invoice_id.partner_id)
 
         # de ce se seteaza cele doua valori ? nu au fost setate in
-        if taxes:
-            self.price_subtotal = taxes['total_excluded'] if taxes else self.quantity * price
-            self.price_taxes = taxes['total_included'] - self.price_subtotal
+        # if taxes:
+        #     self.price_subtotal = taxes['total_excluded'] if taxes else self.quantity * price
+        #     self.price_taxes = taxes['total_included'] - self.price_subtotal
 
         taxes_unit = self.invoice_line_tax_ids.compute_all(price, currency=currency,
                                                            quantity=1, product=self.product_id,
@@ -128,8 +129,8 @@ class account_invoice_line(models.Model):
             self.price_normal_taxes = normal_taxes['total_included'] - normal_taxes['total_excluded']
         # aplicare rotunjiri . asta nu trebuie facuta in functie de config
         if self.invoice_id:
-            self.price_subtotal = self.invoice_id.currency_id.round(self.price_subtotal)
-            self.price_taxes = self.invoice_id.currency_id.round(self.price_taxes)
+            #self.price_subtotal = self.invoice_id.currency_id.round(self.price_subtotal)
+            #self.price_taxes = self.invoice_id.currency_id.round(self.price_taxes)
             self.price_unit_without_taxes = self.invoice_id.currency_id.round(self.price_unit_without_taxes)
             self.price_normal_taxes = self.invoice_id.currency_id.round(self.price_normal_taxes)
 
