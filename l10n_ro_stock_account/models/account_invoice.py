@@ -20,11 +20,15 @@ class AccountInvoice(models.Model):
         res = super(AccountInvoice, self).purchase_order_change()
         return res
 
+
+    #todo: poate ca e mai bine sa determina contrul in metoda get_invoice_line_account
+
     def _prepare_invoice_line_from_po_line(self, line):
         data = super(AccountInvoice, self)._prepare_invoice_line_from_po_line(line)
 
         if self.type in ['in_invoice', 'in_refund']:
-
+            if 'account_id' not in data:
+                data['account_id'] = False   # daca ne e facuta configurarea conturilor
             if line.product_id.purchase_method == 'receive':  # receptia in baza cantitatilor primite
                 if line.product_id.type == 'product':
                     notice = False
