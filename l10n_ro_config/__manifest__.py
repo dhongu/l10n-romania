@@ -29,4 +29,5 @@
     ],
     'images': [],
     'auto_install': False,
+    'post_init_hook': '_create_unaccent',
 }
