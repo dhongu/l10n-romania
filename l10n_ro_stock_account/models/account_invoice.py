@@ -20,15 +20,14 @@ class AccountInvoice(models.Model):
         res = super(AccountInvoice, self).purchase_order_change()
         return res
 
-
-    #todo: poate ca e mai bine sa determina contrul in metoda get_invoice_line_account
+    # todo: poate ca e mai bine sa determina contrul in metoda get_invoice_line_account
 
     def _prepare_invoice_line_from_po_line(self, line):
         data = super(AccountInvoice, self)._prepare_invoice_line_from_po_line(line)
 
         if self.type in ['in_invoice', 'in_refund']:
             if 'account_id' not in data:
-                data['account_id'] = False   # daca ne e facuta configurarea conturilor
+                data['account_id'] = False  # daca ne e facuta configurarea conturilor
             if line.product_id.purchase_method == 'receive':  # receptia in baza cantitatilor primite
                 if line.product_id.type == 'product':
                     notice = False
@@ -77,7 +76,6 @@ class AccountInvoice(models.Model):
 
         return res
 
-
     @api.multi
     def trade_discount_distribution(self, res):
 
@@ -90,7 +88,7 @@ class AccountInvoice(models.Model):
             discounts[line.id] = {
                 'line_id': line,
                 'amount': line.price_subtotal,
-                'rap':0.0,
+                'rap': 0.0,
                 'lines': self.env['account.invoice.line']
             }
             for aml in res:
@@ -102,7 +100,7 @@ class AccountInvoice(models.Model):
             invoice_lines.insert(0, line)
         # pentru ce linii sunt aferente aceste discounturi - sunt luate in calcul liniile de inaintea discountului
         discount = False
-        for line in invoice_lines:   ##self.invoice_line_ids.sorted(key=lambda r: r.sequence, reverse=True):
+        for line in invoice_lines:  ##self.invoice_line_ids.sorted(key=lambda r: r.sequence, reverse=True):
             if line.account_id.id == account_id.id:
                 discount = discounts[line.id]
             else:
@@ -121,18 +119,17 @@ class AccountInvoice(models.Model):
                 for line in discounts[line_id]['lines']:
                     for aml in res:
                         if aml.get('invl_id') == line.id:
-                            val = aml['price']* discounts[line_id]['rap']
+                            val = aml['price'] * discounts[line_id]['rap']
                             aml['price'] += val
                             discounts[line_id]['aml']['price'] += -val
-                            #todo: modify_stock_move_value() primeste acum intreaga valoare, nu doar diferenta
-                            #todo: deci trebuie schimbat cum este chemata mai jos, dar nu inteleg functia asta deci nu stiu cum sa o schimb
+                            # todo: modify_stock_move_value() primeste acum intreaga valoare, nu doar diferenta
+                            # todo: deci trebuie schimbat cum este chemata mai jos, dar nu inteleg functia asta deci nu stiu cum sa o schimb
                             line.modify_stock_move_value(val)
 
         for aml in res:
             if aml['price'] == 0:
                 res.remove(aml)
         return res
-
 
     # @api.multi
     # def finalize_invoice_move_lines(self, move_lines):
@@ -145,7 +142,6 @@ class AccountInvoice(models.Model):
     #             line[2]['stock_location_id'] = self.stock_location_id.id
     #
     #     return move_lines
-
 
 
 class AccountInvoiceLine(models.Model):
@@ -175,24 +171,23 @@ class AccountInvoiceLine(models.Model):
                 current_move_value = (current_move_received_quantity / total_received_quantity) * value
 
                 move.write({
-                    'value':  current_move_value,
+                    'value': current_move_value,
                     'remaining_value': current_move_value,
                     'price_unit': current_move_value / move.product_uom_qty,
                 })
 
-            #todo: de actualizat pretul standard cu noua valoare de stoc
+            # todo: de actualizat pretul standard cu noua valoare de stoc
 
             stock_value = self.product_id.stock_value  # + line_diff_value
             new_price = stock_value / self.product_id.qty_at_date
-            self.product_id.write({'standard_price':new_price})
-
+            self.product_id.write({'standard_price': new_price})
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
-
-        if self.product_id and self.product_id.type == 'product' and not self.env.context.get('allowed_change_product',
-                                                                                              False):
-            raise UserError(_('It is not allowed to change a stored product!'))
+        if self.invoice_id.type not in ['in_refund', 'out_refund']:
+            allowed_change_product = self.env.context.get('allowed_change_product', False)
+            if self.product_id and self.product_id.type == 'product' and not allowed_change_product:
+                raise UserError(_('It is not allowed to change a stored product!'))
         return super(AccountInvoiceLine, self)._onchange_product_id()
 
     # this method creates a constraint such that we cannot invoice a quantity that we did not receive yet
@@ -209,17 +204,17 @@ class AccountInvoiceLine(models.Model):
                     if not isinstance(inv_line.id, models.NewId) and inv_line.invoice_id.state not in ['cancel']:
                         if inv_line.invoice_id.type == 'in_invoice':
                             qty_invoiced += inv_line.uom_id._compute_quantity(inv_line.quantity,
-                                                                     self.purchase_line_id.product_uom)
+                                                                              self.purchase_line_id.product_uom)
                         elif inv_line.invoice_id.type == 'in_refund':
                             qty_invoiced -= inv_line.uom_id._compute_quantity(inv_line.quantity,
-                                                                     self.purchase_line_id.product_uom)
+                                                                              self.purchase_line_id.product_uom)
 
                 invoiceable_qty = self.purchase_line_id.qty_received - qty_invoiced
                 invoiceable_uom_qty = self.purchase_line_id.product_uom._compute_quantity(invoiceable_qty, self.uom_id)
 
                 if invoiceable_uom_qty < self.quantity:
-                    raise UserError(
-                        _('It is not allowed to record an invoice for a quantity bigger than %s') % str(invoiceable_uom_qty))
+                    raise UserError(_('It is not allowed to record an invoice for a quantity bigger than %s') % str(
+                        invoiceable_uom_qty))
             else:
                 message = _('It is not indicated to change the quantity of a stored product!')
         if message:
