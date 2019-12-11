@@ -158,12 +158,14 @@ class AccountInvoiceLine(models.Model):
         if should_modify_stock_value:
             stock_moves = self.env['stock.move'].search([
                 ('purchase_line_id', '=', self.purchase_line_id.id),
-                ('state', '=', 'done'), ('product_qty', '!=', 0.0), ('value', '=', 0.0)
+                ('state', '=', 'done'), ('product_qty', '!=', 0.0)
             ])
             if self.invoice_id.type == 'in_refund':
                 stock_moves = stock_moves.filtered(lambda m: m._is_out())
             elif self.invoice_id.type == 'in_invoice':
                 stock_moves = stock_moves.filtered(lambda m: m._is_in())
+
+            stock_moves = stock_moves.filtered(lambda m: m.remaining_qty == m.product_qty)
 
             total_received_quantity = sum(stock_moves.mapped('product_qty'))
             for move in stock_moves:
