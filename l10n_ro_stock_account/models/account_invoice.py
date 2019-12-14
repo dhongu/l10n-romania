@@ -178,11 +178,13 @@ class AccountInvoiceLine(models.Model):
                     'price_unit': current_move_value / move.product_uom_qty,
                 })
 
-            # todo: de actualizat pretul standard cu noua valoare de stoc
-
-            stock_value = self.product_id.stock_value  # + line_diff_value
+            stock_value = self.product_id.stock_value
             new_price = stock_value / self.product_id.qty_at_date
             self.product_id.write({'standard_price': new_price})
+
+            return len(stock_moves) != 0
+
+        return False
 
     @api.onchange('product_id')
     def _onchange_product_id(self):

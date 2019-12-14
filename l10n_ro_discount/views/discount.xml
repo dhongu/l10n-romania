@@ -12,7 +12,7 @@
                     <sheet>
                         <group>
                             <group>
-                                <field name="discounting_invoice_id"/>
+                                <field name="discounting_invoice_id" options="{'no_create':True}"/>
                             </group>
                             <group>
                                 <field name="initial_amount"/>
@@ -34,46 +34,6 @@
                     <field name="initial_amount"/>
                     <field name="remaining_amount"/>
                     <field name="state"/>
-                </tree>
-            </field>
-        </record>
-
-        <record id="discount_line_form" model="ir.ui.view">
-            <field name="name">Discount Line Form</field>
-            <field name="model">account.invoice.discount.line</field>
-            <field name="arch" type="xml">
-                <form>
-                    <sheet>
-                            <h3 attrs="{'invisible': [('discounted_invoice_id', '!=', False)]}">
-                                First, choose the discounted invoice
-                            </h3>
-                            <h3 attrs="{'invisible': ['|',('discounted_invoice_id', '=', False), ('discounted_invoice_line_id', '!=', False)]}">
-                                Then, choose the discounted invoice line
-                            </h3>
-                            <h3 attrs="{'invisible': [('discounted_invoice_line_id', '=', False)]}">
-                                Last, choose the discounted amount
-                            </h3>
-
-                        <group>
-                            <field name="discounted_invoice_id"/>
-                            <field name="discounted_invoice_line_id"
-                                   attrs="{'invisible': [('discounted_invoice_id', '=', False)]}"/>
-                            <field name="amount"
-                                   attrs="{'invisible': [('discounted_invoice_line_id', '=', False)]}"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="discount_line_list" model="ir.ui.view">
-            <field name="name">Discount Line List</field>
-            <field name="model">account.invoice.discount.line</field>
-            <field name="arch" type="xml">
-                <tree>
-                    <field name="discounted_invoice_id"/>
-                    <field name="discounted_invoice_line_id"/>
-                    <field name="amount"/>
                 </tree>
             </field>
         </record>

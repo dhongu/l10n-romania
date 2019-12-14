@@ -9,13 +9,12 @@ class AccountInvoice(models.Model):
     has_discounting_invoice_lines = fields.Boolean(
         string='Is discount invoice',
         help='Evaluates to true if there is at least one line with account set to the received-discount account',
-        compute='_compute_has_discounting_invoice_lines'
-    )
+        compute='_compute_has_discounting_invoice_lines')
+
     has_discounted_invoice_lines = fields.Boolean(
         string='Is discount invoice',
         help='Evaluates to true if there is at least one line that was discounted',
-        compute='_compute_has_discounted_invoice_lines'
-    )
+        compute='_compute_has_discounted_invoice_lines')
 
     @api.depends('invoice_line_ids')
     def _compute_has_discounting_invoice_lines(self):
