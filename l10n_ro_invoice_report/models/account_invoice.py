@@ -65,27 +65,31 @@ class account_invoice_line(models.Model):
 
     sequence = fields.Integer(default=1)
 
-    price_unit_without_taxes = fields.Float(string='Unit Price without taxes', store=True, readonly=True,
+    # pretul fara tva utilizat pentru situatia in care tva este inclus in pret
+    price_unit_without_taxes = fields.Float(string='Unit Price without taxes', readonly=True,  # store=True,
                                             compute='_compute_price')
 
     # se va utiliza campul stndard price_tax
     #price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'), store=True, readonly=True,
     #                           compute='_compute_price')
 
-    price_normal_taxes = fields.Float(tring='Normal Taxes', digits=dp.get_precision('Account'), store=True,
-                                      readonly=True, compute='_compute_price')
+    #campul price_normal_taxes nici nu este folosit
+    #price_normal_taxes = fields.Float(tring='Normal Taxes', digits=dp.get_precision('Account'), store=True,
+    #                                  readonly=True, compute='_compute_price')
 
 
     """
     # campurile standard
+    
     price_unit = fields.Float(string='Unit Price', required=True, digits=dp.get_precision('Product Price'))
-    price_subtotal = fields.Monetary(string='Amount',
+    price_subtotal = fields.Monetary(string='Amount (without Taxes)',
         store=True, readonly=True, compute='_compute_price', help="Total amount without taxes")
-    price_total = fields.Monetary(string='Amount',
+    price_total = fields.Monetary(string='Amount (with Taxes)',
         store=True, readonly=True, compute='_compute_price', help="Total amount with taxes")
     price_subtotal_signed = fields.Monetary(string='Amount Signed', currency_field='company_currency_id',
         store=True, readonly=True, compute='_compute_price',
         help="Total amount in the currency of the company, negative for credit note.")
+    price_tax = fields.Monetary(string='Tax Amount', compute='_get_price_tax', store=False)
     """
 
     @api.one
@@ -95,10 +99,13 @@ class account_invoice_line(models.Model):
     def _compute_price(self):
 
         super(account_invoice_line, self)._compute_price()
-        # if self.price_subtotal:
-        #      self.price_unit_without_taxes = self.price_subtotal / self.quantity
-        #      self.price_taxes = (self.price_total - self.price_subtotal ) / self.quantity
+        if self.price_subtotal:
+            quantity = self.quantity or 1
+            self.price_unit_without_taxes = self.price_subtotal / quantity
+            #self.price_taxes = (self.price_total - self.price_subtotal) / quantity
 
+
+    def _compute_price_complex(self):
         #Versiunea mai complexa
         price = self.price_unit * (1 - (self.discount or 0.0) / 100.0)
 

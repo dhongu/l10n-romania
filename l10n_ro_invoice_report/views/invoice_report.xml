@@ -89,10 +89,10 @@
                                 </div>
                             </div>
                             <div>
-                                <span t-esc="', '.join(map(lambda x: (x.tax_id.description or x.tax_id.name), o.tax_line_ids))"/>
-                                <!--<span t-foreach="o.tax_line_ids" t-as="t">-->
-                                <!--<span t-field="t.name"/>-->
-                                <!--</span>-->
+<!--                                <span t-esc="', '.join(map(lambda x: (x.tax_id.description or x.tax_id.name), o.tax_line_ids))"/>-->
+                                <span t-foreach="o.tax_line_ids" t-as="t">
+                                <span t-field="t.name"/>
+                                </span>
                             </div>
                         </td>
                         <td style="border-top: initial;"></td>
@@ -379,7 +379,7 @@
                         <div class="clearfix" style="page-break-inside: avoid !important;">
                             <div  id="total" class="row">
 
-                                <div class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto" t-if="o.type == 'out_invoice' or o.type == 'out_refund' ">
+                                <div class="col-6" t-if="o.type == 'out_invoice' or o.type == 'out_refund' ">
                                     <table id="signature" class="table table-condensed">
 
                                         <tr class="border-black">
@@ -409,7 +409,7 @@
                                     </table>
                                 </div>
 
-                                <div class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                <div class="col-6">
                                     <table class="table table-condensed">
                                         <tr class="border-black">
                                             <td>
