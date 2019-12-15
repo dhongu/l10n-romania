@@ -213,44 +213,46 @@ class AccountInvoiceLine(models.Model):
                 new_price = stock_value / product.qty_at_date
                 self.product_id.write({'standard_price': new_price})
 
+
+
     @api.onchange('product_id')
     def _onchange_product_id(self):
-
-        if self.product_id and self.product_id.type == 'product' and not self.env.context.get('allowed_change_product',
-                                                                                              False):
-            raise UserError(_('It is not allowed to change a stored product!'))
+        # modulul deltatech_invoice_receipt gestioneaza adaugarea de pozitii noi in factura de achzitie
+        if  self.invoice_id.type  == 'out_invoice':
+            if self.product_id and self.product_id.type == 'product' and not self.env.context.get('allowed_change_product', False):
+                raise UserError(_('It is not allowed to change a stored product!'))
         return super(AccountInvoiceLine, self)._onchange_product_id()
 
-    @api.onchange('quantity')
-    def _onchange_quantity(self):
-        message = ''
-        if self.invoice_id.type in ['in_refund', 'out_refund']:
-            return
-        if self.product_id and self.product_id.type == 'product':
-
-            if self.purchase_line_id:
-                qty = 0
-                for inv_line in self.purchase_line_id.invoice_lines:
-                    if not isinstance(inv_line.id, models.NewId) and inv_line.invoice_id.state not in ['cancel']:
-                        if inv_line.invoice_id.type == 'in_invoice':
-                            qty += inv_line.uom_id._compute_quantity(inv_line.quantity,
-                                                                     self.purchase_line_id.product_uom)
-                        elif inv_line.invoice_id.type == 'in_refund':
-                            qty -= inv_line.uom_id._compute_quantity(inv_line.quantity,
-                                                                     self.purchase_line_id.product_uom)
-
-                qty_invoiced = qty
-
-                qty = self.purchase_line_id.qty_received - qty_invoiced
-
-                qty = self.purchase_line_id.product_uom._compute_quantity(qty, self.uom_id)
-
-                if qty < self.quantity:
-                    raise UserError(
-                        _('It is not allowed to record an invoice for a quantity bigger than %s') % str(qty))
-            else:
-                message = _('It is not indicated to change the quantity of a stored product!')
-        if message:
-            return {
-                'warning': {'title': "Warning", 'message': message},
-            }
+    # @api.onchange('quantity')
+    # def _onchange_quantity(self):
+    #     message = ''
+    #     if self.invoice_id.type in ['in_refund', 'out_refund']:
+    #         return
+    #     if self.product_id and self.product_id.type == 'product' and not self.env.context.get('allowed_change_product', False):
+    #
+    #         if self.purchase_line_id:
+    #             qty = 0
+    #             for inv_line in self.purchase_line_id.invoice_lines:
+    #                 if not isinstance(inv_line.id, models.NewId) and inv_line.invoice_id.state not in ['cancel']:
+    #                     if inv_line.invoice_id.type == 'in_invoice':
+    #                         qty += inv_line.uom_id._compute_quantity(inv_line.quantity,
+    #                                                                  self.purchase_line_id.product_uom)
+    #                     elif inv_line.invoice_id.type == 'in_refund':
+    #                         qty -= inv_line.uom_id._compute_quantity(inv_line.quantity,
+    #                                                                  self.purchase_line_id.product_uom)
+    #
+    #             qty_invoiced = qty
+    #
+    #             qty = self.purchase_line_id.qty_received - qty_invoiced
+    #
+    #             qty = self.purchase_line_id.product_uom._compute_quantity(qty, self.uom_id)
+    #
+    #             if qty < self.quantity:
+    #                 raise UserError(
+    #                     _('It is not allowed to record an invoice for a quantity bigger than %s') % str(qty))
+    #         else:
+    #             message = _('It is not indicated to change the quantity of a stored product!')
+    #     if message:
+    #         return {
+    #             'warning': {'title': "Warning", 'message': message},
+    #         }
