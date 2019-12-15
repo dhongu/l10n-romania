@@ -11,6 +11,7 @@ from odoo.tools import formatLang
 class ReportReportStatement(models.AbstractModel):
     _name = 'report.l10n_ro_account_report.report_sale_purchase_journal'
     _template = 'l10n_ro_account_report.report_sale_purchase_journal'
+    _description = 'report_sale_purchase_journal'
 
     @api.model
     def _get_report_values(self, docids, data=None):

@@ -12,6 +12,7 @@ class ActivityStatement(models.AbstractModel):
     """Model of Activity Statement"""
 
     _name = 'report.l10n_ro_account_report.activity_statement'
+    _description = 'Account Activity Statement'
 
     def _get_invoice_address(self, part):
         inv_addr_id = part.address_get(['invoice']).get('invoice', part.id)
