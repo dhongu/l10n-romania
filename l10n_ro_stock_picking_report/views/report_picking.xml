@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!--
         <template id="report_address_company">
             <t t-set="res_company" t-value="o.company_id"/>
             <div class="row">
@@ -54,7 +55,7 @@
             <br/>
             <br/>
         </template>
-
+        -->
         <template id="report_address">
             <t t-set="res_company" t-value="o.company_id"/>
             <table>
@@ -446,7 +447,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <t t-call="base.report_address_company"/>
+                            <t t-call="l10n_ro_config.report_address_company"/>
 
                             <h3>
                                 <span t-if="o.state == 'drat'">Draft</span>
@@ -537,7 +538,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <t t-call="base.report_address_company"/>
+                            <t t-call="l10n_ro_config.report_address_company"/>
 
                             <h3>
 
