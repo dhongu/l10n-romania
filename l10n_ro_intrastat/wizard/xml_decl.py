@@ -58,7 +58,7 @@ class xml_decl(models.TransientModel):
         return self._get_def_monthyear()[0]
 
     name = fields.Char('File Name', default='intrastat.xml')
-    month = fields.Selection([('01', 'January'), ('02', 'February'), ('03', 'March'),
+    month = fields.Selection([ ('01', 'January'), ('02', 'February'), ('03', 'March'),
                               ('04', 'April'), ('05', 'May'), ('06', 'June'), ('07', 'July'),
                               ('08', 'August'), ('09', 'September'), ('10', 'October'),
                               ('11', 'November'), ('12', 'December')], 'Month', required=True,
@@ -90,7 +90,7 @@ class xml_decl(models.TransientModel):
         :rtype: dict
         """
         decl_datas = self
-        company = decl_datas.tax_code_id.company_id
+        company = self.env.user.company_id
         if not (company.partner_id and company.partner_id.country_id and
                 company.partner_id.country_id.id):
             self._company_warning(
@@ -188,17 +188,18 @@ class xml_decl(models.TransientModel):
             'context': self.env.context,
             'view_type': 'form',
             'view_mode': 'form',
-            'res_model': 'l10n_ro_intrastat_xml.xml_decl',
+            'res_model': 'l10n_ro_intrastat.xml_decl',
+
             'type': 'ir.actions.act_window',
             'target': 'new',
             'res_id': self.id,
         }
 
     def _get_lines(self,   decl_datas, company, dispatchmode, decl ):
-        intrastatcode_mod = self.env('account.intrastat.code')
-        invoiceline_mod = self.env('account.invoice.line')
-        product_mod = self.env('product.product')
-        currency_mod = self.env('res.currency')
+        intrastatcode_mod = self.env['account.intrastat.code']
+        invoiceline_mod = self.env['account.invoice.line']
+        product_mod = self.env['product.product']
+        currency_mod = self.env['res.currency']
 
         if dispatchmode:
             mode1 = 'out_invoice'
@@ -225,7 +226,7 @@ class xml_decl(models.TransientModel):
                 left join res_country countrypartner on countrypartner.id = res_partner.country_id
                 join product_product on inv_line.product_id=product_product.id
                 join product_template on product_product.product_tmpl_id=product_template.id
-                left join account_period on account_period.id=inv.period_id
+                
             where
                 inv.state in ('open','paid')
                 and inv.company_id=%s
@@ -236,8 +237,8 @@ class xml_decl(models.TransientModel):
                      or (res_country.code is null and countrypartner.code is not null
                      and not countrypartner.code=%s))
                 and inv.type in (%s, %s)
-                and to_char(account_period.date_start, 'YYYY')=%s
-                and to_char(account_period.date_start, 'MM')=%s
+                and to_char(inv.date, 'YYYY')=%s
+                and to_char(inv.date, 'MM')=%s
             """
 
         self.env.cr.execute(sqlreq, (company.id, company.partner_id.country_id.code,

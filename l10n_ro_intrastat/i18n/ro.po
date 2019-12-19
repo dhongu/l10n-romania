@@ -238,7 +238,7 @@ msgstr "Țară Intrastat"
 #: model:ir.ui.menu,name:l10n_ro_intrastat.l10n_ro_intrastat_xml_declaration
 #: view:l10n_ro_intrastat_xml.xml_decl:l10n_ro_intrastat.view_intrastat_declaration_xml
 msgid "Intrastat Declaration"
-msgstr "Decalarație Intrastat"
+msgstr "Declarație Intrastat"
 
 #. module: l10n_ro_intrastat
 #: field:l10n_ro_intrastat_xml.xml_decl,file_save:0

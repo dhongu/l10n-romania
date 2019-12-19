@@ -7,59 +7,60 @@
             <field name="model">l10n_ro_intrastat.xml_decl</field>
             <field name="arch" type="xml">
                 <form>
-                  <!-- Need the field in the view in order to be able to hide or show part of the view according the state -->
-                  <field name="state" invisible="1" />
-                   <field name="name" invisible="1"/>
-                  <group states="draft">
-                    <group>
-                      <field name="month"/>
-                      <field name="year"/>
+                    <!-- Need the field in the view in order to be able to hide or show part of the view according the state -->
+                    <field name="state" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <group states="draft">
+                        <group>
+                            <field name="month"/>
+                            <field name="year"/>
 
+                        </group>
+                        <group>
+                            <field name="type"/>
+                            <field name="contact_id"/>
+                        </group>
+                        <group>
+                            <field name="cn8"/>
+                        </group>
                     </group>
-                    <group>
-                      <field name="type"/>
-					  <field name="contact_id"/>
-                    </group>
-                    <group>
-                      <field name="cn8"/>
-                    </group>
-                  </group>
-                  -
-                  <div states="download">
-                    <h2>Intrastat Declaration</h2>
-                    <p>Here is the XML file with your intrastat declaration: <field name="file_save" filename="name"/></p>
-                  </div>
-                  <footer>
-                      <group states="draft">
-<!--                          <button name="create_xml" string="Create XML" type="object"   class="oe_highlight"/>-->
-<!--                          or-->
-                          <button  string="Cancel"  special="cancel"/>
-                      </group>
-                      <group states="download">
-                          <button string="Close" special="cancel"/>
-                      </group>
-                  </footer>
+
+                    <div states="download">
+                        <h2>Intrastat Declaration</h2>
+                        <p>Here is the XML file with your intrastat declaration:
+                            <field name="file_save" filename="name"/>
+                        </p>
+                    </div>
+
+                    <footer states="draft">
+                        <button name="create_xml" string="Create XML" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" special="cancel"/>
+
+                    </footer>
+                    <footer states="download">
+                        <button string="Close" special="cancel"/>
+                    </footer>
                 </form>
             </field>
         </record>
 
 
-
-            <act_window id="action_intrastat_xml_declaration"
-                name="Intrastat Declaration"
-                res_model="l10n_ro_intrastat.xml_decl"
-                view_type="form"
-                view_mode="form"
-                view_id="view_intrastat_declaration_xml"
-                target="new" />
+        <act_window id="action_intrastat_xml_declaration"
+                    name="Intrastat Declaration"
+                    res_model="l10n_ro_intrastat.xml_decl"
+                    view_type="form"
+                    view_mode="form"
+                    view_id="view_intrastat_declaration_xml"
+                    target="new"/>
 
 
         <menuitem
-            name="Intrastat Declaration"
-            parent="account.menu_finance_reports"
-            action="action_intrastat_xml_declaration"
-            id="l10n_ro_intrastat_xml_declaration"
-            groups="account.group_account_manager"/>
+                name="Intrastat Declaration"
+                parent="account.menu_finance_reports"
+                action="action_intrastat_xml_declaration"
+                id="l10n_ro_intrastat_xml_declaration"
+                groups="account.group_account_manager"/>
     </data>
 
 </odoo>
