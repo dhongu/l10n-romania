@@ -185,7 +185,8 @@ class ResPartner(models.Model):
             if city:
                 res['city'] = city.replace('-', ' ').title()
         res['street'] = addr.strip()
-        res['street2'] = result['adresa']
+        #res['street2'] = result['adresa']
+        self.message_post(body=res['street2'])
         return res
 
     @api.model
@@ -241,11 +242,13 @@ class ResPartner(models.Model):
         if not self.vat or not self.is_company or self.parent_id:
             return True
 
+
         same_vat_partners = self.search([
             ('is_company', '=', True),
             ('parent_id', '=', False),
             ('vat', '=', self.vat),
             ('company_id', '=', self.company_id.id),
+            ('id','!=',self.id)
         ])
 
         if same_vat_partners:
