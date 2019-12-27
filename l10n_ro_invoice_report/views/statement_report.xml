@@ -167,7 +167,8 @@
                                     <td>Amount (in words):</td>
                                     <td>
 <!--                                        <span t-esc="convert(abs(o.amount))"/>-->
-                                        <span t-esc="o.currency_id.amount_to_text(o.amount)" />
+                                        <t t-set="currency" t-value="o.currency_id or user.company_id.currency_id"/>
+                                        <span t-esc="currency.amount_to_text(o.amount)" />
                                     </td>
                                 </tr>
                                 <tr>
