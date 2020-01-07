@@ -37,7 +37,8 @@
                             <div>
                                 <strong>Address:</strong>
                                 <address t-field="res_company.partner_id"
-                                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
+                                         t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'/>
+
                             </div>
 
                             <t t-set="partner_id" t-value="res_company.partner_id"/>
@@ -55,12 +56,10 @@
                             </div>
                             <div>
                                 <strong>Address:</strong>
-                                <span t-field="o.partner_id.street"/>
-                                <span t-field="o.partner_id.street2"/>
-                                <br />
-                                <span t-field="o.partner_id.city"/>, <span t-field="o.partner_id.state_id"/>
-                                <!--<address t-field="o.partner_id"-->
-                                         <!--t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>-->
+
+                                 <address t-field="o.partner_id"
+                                          t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'/>
+
                             </div>
 
                             <t t-set="partner_id" t-value="o.partner_id"/>
@@ -215,7 +214,7 @@
                                 <span t-field="res_company.partner_id.nrc"/>
                             </div>
                             <address t-field="res_company.partner_id"
-                                     t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'/>
+                                     t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'/>
                             <h4>
                                 <span>Voucher:</span>
                                 <span t-field="payment.name"/>

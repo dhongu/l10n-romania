@@ -220,7 +220,7 @@
                                                     </t>
                                                     <t t-if="not o.type == 'out_refund'">
                                                         <span t-field="o.move_id.amount"
-                                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
+                                                              t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"/>
                                                     </t>
 
                                                     )
