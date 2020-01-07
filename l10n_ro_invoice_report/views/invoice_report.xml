@@ -12,14 +12,14 @@
 
 
         <template id="header_invoice">
-<!--
-                <div class="row" customize_show="True">
+
+                <div class="row" customize_show="False">
                     <div class="col-xs-3">
                         <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % to_text(res_company.logo)"
                              style="max-height: 45px;"/>
                     </div>
                 </div>
- -->
+
                 <div class="row zero_min_height">
                     <div class="col-xs-12">
                         <!--<div style="border-bottom: 1px solid black;"/>-->
@@ -28,7 +28,7 @@
 
                 <table class="table table-condensed" style="border-top: initial;">
                     <tr>
-                        <td width="40%">
+                        <td width="45%">
                             <div>
                                 <strong t-if="o.type in ['out_invoice', 'out_refund']">Supplier</strong>
                                 <strong t-if="o.type in ['in_invoice', 'in_refund']">Customer</strong>
@@ -45,24 +45,24 @@
                             <t t-call="l10n_ro_config.banks"/>
 
                         </td>
-                        <td width="30%"></td>
-                        <td width="40%">
+                        <td width="10%"></td>
+                        <td width="45%">
                             <div>
                                 <strong t-if="o.type in ['out_invoice', 'out_refund']">Customer</strong>
                                 <strong t-if="o.type in ['in_invoice', 'in_refund']">Supplier</strong>
                             </div>
                             <div>
-                                <strong t-field="o.partner_id.name"/>
+                                <strong t-field="o.commercial_partner_id.name"/>
                             </div>
                             <div>
                                 <strong>Address:</strong>
 
-                                 <address t-field="o.partner_id"
+                                 <address t-field="o.commercial_partner_id"
                                           t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'/>
 
                             </div>
+                            <t t-set="partner_id" t-value="o.commercial_partner_id"/>
 
-                            <t t-set="partner_id" t-value="o.partner_id"/>
                             <t t-call="l10n_ro_config.banks"/>
 
 
@@ -136,7 +136,8 @@
 <!--                    <img t-att-src="'data:image/png;base64,%s' % res_company.watermark_image"-->
 <!--                         style="width:100%;text-align:center;position:absolute;opacity:0.1"/>-->
 
-                    <div   t-field="res_company.watermark_image" t-options='{"widget": "image", "style":"width:100%;text-align:center;position:absolute;opacity:0.2;top: -400px;"}'/>
+                    <div   t-field="res_company.watermark_image"
+                           t-options='{"widget": "image", "style":"width:100%;text-align:center;position:absolute;opacity:0.2;top: -400px;"}'/>
                 </div>
 
         </template>

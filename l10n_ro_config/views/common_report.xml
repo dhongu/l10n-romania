@@ -13,20 +13,19 @@
 
                     <t t-set="bank_currency" t-value="bank.currency_id or res_company.currency_id"/>
                     <t t-if="bank_currency == currency_id and counts&lt;3">
-                        <span t-if="bank.bank_name">
+                        <div t-if="bank.bank_name">
                             <strong>Bank:</strong>
                             <span t-field="bank.bank_name"/>
-                        </span>
-                        <span t-if="bank.acc_number">
+                        </div>
+                        <div t-if="bank.acc_number">
                             <strong>Account:</strong>
                             <span t-field="bank.acc_number"/>
-                        </span>
+                        </div>
                         <t t-set="counts" t-value="counts+1"/>
                     </t>
                 </div>
             </small>
         </template>
-
 
         <template id="report_address_company">
             <t t-if="'company_id' in o._fields">
