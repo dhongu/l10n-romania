@@ -186,7 +186,8 @@ class ResPartner(models.Model):
                 res['city'] = city.replace('-', ' ').title()
         res['street'] = addr.strip()
         # res['street2'] = result['adresa']
-        self.message_post(body=res['street2'])
+        if 'adresa' in result:
+            self.message_post(body=result['adresa'])
         return res
 
     @api.model
@@ -231,9 +232,21 @@ class ResPartner(models.Model):
 
         return result
 
-    # _sql_constraints = [
-    #     ('vat_uniq', 'UNIQUE(is_company,vat,parent_id,company_id)', 'Partner vat must be unique per company.'),
-    # ]
+
+
+    # @api.one
+    # @api.constrains('vat')
+    # def check_vat(self):
+    #     if not self.vat_subjected or not self.is_company:
+    #         return True
+    #     return super(ResPartner, self).check_vat()
+    #
+    # def check_vat_ro(self, vat):
+    #     self.check_vat_unique()
+    #     # date_anaf = self._get_Anaf(vat)
+    #     # if not date_anaf:
+    #     #     return  False
+    #     return True
 
     @api.one
     @api.constrains('is_company', 'vat', 'parent_id', 'company_id')
