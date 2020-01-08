@@ -2,6 +2,7 @@
 <openerp>
     <data>
 
+
         <template id="l10n_ro_report_invoice" inherit_id="account.report_invoice">
             <xpath expr="." position="inside">
                 <t t-if="False">
@@ -13,12 +14,12 @@
 
         <template id="header_invoice">
 
-                <div class="row" customize_show="False">
+          <!--      <div class="row" customize_show="False">
                     <div class="col-xs-3">
                         <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % to_text(res_company.logo)"
                              style="max-height: 45px;"/>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="row zero_min_height">
                     <div class="col-xs-12">
@@ -280,7 +281,7 @@
                         <div class="row" t-if="o.type == 'out_invoice'">
                             <t t-set="pickings" t-value="get_pickings(o)"/>
 
-                            <div id="delivery" class="col-xs-12" t-if="pickings">
+                            <div id="delivery" class="col-12" t-if="pickings">
                                 <span>Deliveries:</span>
                                 <t t-foreach="pickings" t-as="d">
                                     <span t-field="d.name"/>
@@ -291,19 +292,38 @@
                         <div class="row" t-if="o.type == 'in_invoice'">
                             <t t-set="pickings" t-value="get_pickings(o)"/>
 
-                            <div class="col-xs-12" t-if="pickings">
+                            <div class="col-12" t-if="pickings">
                                 <span>Receptions:</span>
                                 <t t-foreach="pickings" t-as="d">
                                     <span t-field="d.name"/>
                                 </t>
                             </div>
                         </div>
+
                         <div class="row">
-                            <div class="col-xs-12">
-                                <span>Reference:</span>
-                                <span t-field="o.reference"/>
+                            <div class="col-3" t-if="o.name">
+                                <strong>Description:</strong>
+                                <p t-field="o.name"/>
                             </div>
+
+                            <div class="col-3" t-if="o.origin">
+                                <strong>Source:</strong>
+                                <p t-field="o.origin"/>
+                            </div>
+
+                            <div class="col-3" t-if="o.reference">
+                                <strong>Reference:</strong>
+                                <p t-field="o.reference"/>
+                            </div>
+
+                            <div class="col-3" t-if="o.date_due">
+                                <strong>Payment Term:</strong>
+                                <p t-field="o.date_due"/>
+                            </div>
+
                         </div>
+
+
                         <t t-set="with_discount_distinct" t-value="get_discount"/>
 <!--                        <t t-if="with_discount_distinct">Cu discount</t>-->
 <!--                        <t t-if="not with_discount_distinct">Fara discount</t>-->
