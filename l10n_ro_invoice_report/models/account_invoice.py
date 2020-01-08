@@ -49,8 +49,8 @@ class account_invoice_line(models.Model):
 
     # pretul fara tva utilizat pentru situatia in care tva este inclus in pret
     # valoarea este caclulata direct in factura
-    # price_unit_without_taxes = fields.Float(string='Unit Price without taxes', readonly=True,  # store=True,
-    #                                         compute='_compute_price')
+    price_unit_without_taxes = fields.Float(string='Unit Price without taxes', readonly=True,
+                                            compute='_compute_price_unit_without_taxes')
 
     # se va utiliza campul stndard price_tax
     #price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'), store=True, readonly=True,
@@ -75,17 +75,13 @@ class account_invoice_line(models.Model):
     price_tax = fields.Monetary(string='Tax Amount', compute='_get_price_tax', store=False)
     """
 
-    # @api.one
-    # @api.depends('price_unit', 'discount', 'invoice_line_tax_ids', 'quantity',
-    #     'product_id', 'invoice_id.partner_id', 'invoice_id.currency_id', 'invoice_id.company_id',
-    #     'invoice_id.date_invoice', 'invoice_id.date')
-    # def _compute_price(self):
-    #
-    #     super(account_invoice_line, self)._compute_price()
-    #     if self.price_subtotal:
-    #         quantity = self.quantity or 1
-    #         self.price_unit_without_taxes = self.price_subtotal / quantity
-    #         #self.price_taxes = (self.price_total - self.price_subtotal) / quantity
+    @api.one
+    @api.depends('price_subtotal',  'quantity')
+    def _compute_price_unit_without_taxes(self):
+        if self.price_subtotal:
+            quantity = self.quantity or 1
+            self.price_unit_without_taxes = self.price_subtotal / quantity
+            #self.price_taxes = (self.price_total - self.price_subtotal) / quantity
     #
     #
     # def _compute_price_complex(self):

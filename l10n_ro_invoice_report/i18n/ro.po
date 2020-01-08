@@ -430,12 +430,18 @@ msgstr "Către:"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Unit Price"
-msgstr "Preț unitar"
+msgstr "Preț"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_invoice_line__price_unit_without_taxes
+msgid "Unit Price without taxes"
+msgstr "Preț fără TVA"
+
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_invoice_line_price_unit_without_taxes
 msgid "Unit Price without taxes"
-msgstr "Preț unitar fără TVA"
+msgstr "Preț fără TVA"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
