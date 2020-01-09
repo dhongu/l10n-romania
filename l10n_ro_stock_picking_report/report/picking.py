@@ -23,7 +23,7 @@
 import time
 
 from odoo import api, models
-from odoo.tools import formatLang
+
 from functools import reduce
 
 
@@ -41,16 +41,15 @@ class ReportPickingDelivery(models.AbstractModel):
             'data': data,
             'time': time,
             'docs': self.env[report.model].browse(docids),
-            'formatLang': self._formatLang,
+
             'get_line': self._get_line,
             'get_totals': self._get_totals,
             'reduce': reduce
         }
 
-    def _formatLang(self, value, **kwargs):
-        if 'date' in kwargs:
-            return value
-        return formatLang(self.env, value, **kwargs)
+
+
+
 
     def _get_line(self, move_line):
         res = {'price': 0.0, 'amount': 0.0, 'tax': 0.0, 'amount_tax': 0.0}
@@ -108,18 +107,13 @@ class ReportPickingReception(models.AbstractModel):
             'data': data,
             'time': time,
             'docs': self.env[report.model].browse(docids),
-            'formatLang': self._formatLang,
+
             'get_line': self._get_line,
             'get_totals': self._get_totals,
             'reduce': reduce
         }
 
-    def _formatLang(self, value, **kwargs):
-        # todo: de tratat : formatLang(totals['amount'], currency_obj=res_company.currency_id)
-        # todo: de tratat : formatLang(o.date, date=True)
-        if 'date' in kwargs:
-            return value
-        return formatLang(self.env, value, **kwargs)
+
 
     def _get_line(self, move_line):
         res = {'price': 0.0, 'amount': 0.0, 'tax': 0.0,
