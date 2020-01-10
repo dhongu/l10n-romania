@@ -175,7 +175,7 @@ class AccountInvoiceLine(models.Model):
                 move.write({
                     'value': current_move_value,
                     'remaining_value': current_move_value,
-                    'price_unit': current_move_value / move.product_uom_qty,
+                    'price_unit': current_move_value / current_move_received_quantity,
                 })
 
             stock_value = self.product_id.stock_value

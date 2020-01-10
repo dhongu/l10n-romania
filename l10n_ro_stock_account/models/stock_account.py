@@ -5,7 +5,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-
+from odoo.addons import decimal_precision as dp
 
 # ----------------------------------------------------------
 # Stock Location
@@ -98,6 +98,10 @@ class StockMove(models.Model):
         ('consume_store', 'Consume from Store'),
         ('production_store', 'Reception from Production')
     ], compute='_compute_move_type')
+
+    price_unit = fields.Float(
+        string='Unit Price',
+        digits=dp.get_precision('Product Standard Price'))
 
     @api.onchange('date')
     def onchange_date(self):
