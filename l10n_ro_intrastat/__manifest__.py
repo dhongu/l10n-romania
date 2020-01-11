@@ -37,7 +37,7 @@ New report for invoice
         'l10n_ro'
     ],
     'data': [
-
+        'data/country_data.xml',
         # 'data/report.intrastat.code.csv',
         'data/transaction.codes.xml',
         'data/transport.modes.xml',
@@ -45,6 +45,7 @@ New report for invoice
          'security/ir.model.access.csv',
         'views/l10n_ro_intrastat_view.xml',
         'views/product_view.xml',
+        'views/res_country_view.xml',
         'views/account_intrastat_code_view.xml',
         'wizard/l10n_ro_intrastat_xml_view.xml',
        # 'views/report_invoice.xml'

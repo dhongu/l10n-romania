@@ -34,11 +34,11 @@ unicode = str
 INTRASTAT_XMLNS = 'http://www.intrastat.ro/xml/InsSchema'
 
 
-class xml_decl(models.TransientModel):
+class IntrastatDeclaration(models.TransientModel):
     """
     Intrastat XML Declaration
     """
-    _name = "l10n_ro_intrastat.xml_decl"
+    _name = "l10n_ro_intrastat.intrastat_xml_declaration"
     _description = 'Intrastat XML Declaration'
 
     # def _get_tax_code(self):
@@ -62,10 +62,10 @@ class xml_decl(models.TransientModel):
                               ('04', 'April'), ('05', 'May'), ('06', 'June'), ('07', 'July'),
                               ('08', 'August'), ('09', 'September'), ('10', 'October'),
                               ('11', 'November'), ('12', 'December')], 'Month', required=True,
-                             #default=_get_def_month
+                             default=_get_def_month
                              )
     year = fields.Char('Year', size=4, required=True,
-                       #default=_get_def_year
+                       default=_get_def_year
                        )
     # tax_code_id = fields.Many2one('account.tax.code', 'Company Tax Chart', default=_get_tax_code,
     #                               domain=[('parent_id', '=', False)], required=True)
@@ -76,7 +76,7 @@ class xml_decl(models.TransientModel):
     contact_id = fields.Many2one('res.partner', 'Contact', domain=[('is_company', '=', False)], required=True)
     file_save = fields.Binary('Intrastat Report File', readonly=True)
     state = fields.Selection([('draft', 'Draft'), ('download', 'Download')], string="State", default='draft')
-    cn8 = fields.Char('CN8', size=4, required=True, default='2017')
+    cn8 = fields.Char('CN8', size=4, required=True, default='2018')
 
     def _company_warning(self,   translated_msg ):
         """ Raise a error with custom message, asking user to configure company settings """
@@ -176,7 +176,7 @@ class xml_decl(models.TransientModel):
             self.sudo()._get_lines(  decl_datas, company, dispatchmode=True, decl=decl)
 
         # Get xml string with declaration
-        data_file = ET.tostring(decl, encoding='UTF-8', method='xml')
+        data_file = ET.tostring(decl, encoding='utf-8', method='xml')
 
         # change state of the wizard
         self.write(
@@ -188,7 +188,7 @@ class xml_decl(models.TransientModel):
             'context': self.env.context,
             'view_type': 'form',
             'view_mode': 'form',
-            'res_model': 'l10n_ro_intrastat.xml_decl',
+            'res_model': 'l10n_ro_intrastat.intrastat_xml_declaration',
 
             'type': 'ir.actions.act_window',
             'target': 'new',
@@ -303,13 +303,19 @@ class xml_decl(models.TransientModel):
             if inv_line.price_unit and inv_line.quantity:
                 amount = inv_line.price_unit * inv_line.quantity
                 if inv_line.invoice_id.currency_id.id != company.currency_id.id:
-
-                    amount =  inv_line.invoice_id.currency_id.with_context(date=inv_line.invoice_id.date_invoice).compute(    company.currency_id,          amount)
+                    #amount =  inv_line.invoice_id.currency_id.with_context(date=inv_line.invoice_id.date_invoice).compute(    company.currency_id,          amount)
+                    amount = inv_line.invoice_id.currency_id._convert(
+                        from_amount=amount,
+                        to_currency=company.currency_id,
+                        company=company,
+                        date=inv_line.invoice_id.date_invoice
+                    )
             else:
                 amount = 0
-            weight = (inv_line.product_id.weight_net or 0.0) * inv_line.uom_id._compute_qty(  inv_line.quantity,  inv_line.product_id.uom_id )
-            if (not inv_line.uos_id.category_id or not inv_line.product_id.uom_id.category_id
-                    or inv_line.uos_id.category_id.id != inv_line.product_id.uom_id.category_id.id):
+            # product weight_net or weight
+            weight = (inv_line.product_id.weight or 0.0) * inv_line.uom_id._compute_quantity(  inv_line.quantity,  inv_line.product_id.uom_id )
+            if (not inv_line.uom_id.category_id or not inv_line.product_id.uom_id.category_id
+                    or inv_line.uom_id.category_id.id != inv_line.product_id.uom_id.category_id.id):
                 supply_units = inv_line.quantity
             else:
                 supply_units = inv_line.quantity * inv_line.uom_id.factor

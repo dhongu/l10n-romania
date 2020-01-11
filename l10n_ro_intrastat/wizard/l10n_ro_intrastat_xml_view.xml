@@ -4,7 +4,7 @@
 
         <record id="view_intrastat_declaration_xml" model="ir.ui.view">
             <field name="name">Intrastat XML Declaration</field>
-            <field name="model">l10n_ro_intrastat.xml_decl</field>
+            <field name="model">l10n_ro_intrastat.intrastat_xml_declaration</field>
             <field name="arch" type="xml">
                 <form>
                     <!-- Need the field in the view in order to be able to hide or show part of the view according the state -->
@@ -48,7 +48,7 @@
 
         <act_window id="action_intrastat_xml_declaration"
                     name="Intrastat Declaration"
-                    res_model="l10n_ro_intrastat.xml_decl"
+                    res_model="l10n_ro_intrastat.intrastat_xml_declaration"
                     view_type="form"
                     view_mode="form"
                     view_id="view_intrastat_declaration_xml"

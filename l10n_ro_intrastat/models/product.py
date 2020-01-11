@@ -9,6 +9,9 @@ class ProductTemplate(models.Model):
 
     intrastat_id = fields.Many2one('account.intrastat.code', string='Commodity Code' )
 
+class Product(models.Model):
+    _inherit = 'product.product'
+
     @api.multi
     def search_intrastat_code(self):
         self.ensure_one()

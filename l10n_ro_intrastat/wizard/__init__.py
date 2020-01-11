@@ -19,4 +19,4 @@
 #
 ##############################################################################
 
-from . import xml_decl
+from . import intrastat_xml_declaration
