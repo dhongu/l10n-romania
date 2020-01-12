@@ -2,6 +2,7 @@
 <odoo>
     <data>
 
+
         <template id="banks">
             <small>
                 <t t-set="currency_id" t-value="res_company.currency_id"/>
@@ -69,7 +70,7 @@
 
                     <div i-if="res_company.share_capital">
                         <strong>Share Capital:</strong>
-                        <span t-field="res_company.share_capital"/>
+                        <span t-esc="int(res_company.share_capital)"  />
                     </div>
                 </div>
             </div>
