@@ -13,12 +13,13 @@
                     <field name="price_unit_without_taxes" groups="account.group_show_line_subtotals_tax_included"/>
                 </field>
 
-               <field name="reference" position="after">
+                <field name="reference" position="after">
 
-                      <field name="delegate_id"  />
-                      <field name="mean_transp" />
+                    <field name="delegate_id" domain="[('type','=','contact'),('is_company','=',False)]"
+                           context="{'simple_form':True, 'parent_partner_id':partner_id } "/>  <!--                           'default_parent_id':partner_id,-->
+                    <field name="mean_transp"/>
 
-               </field>
+                </field>
             </field>
         </record>
 
