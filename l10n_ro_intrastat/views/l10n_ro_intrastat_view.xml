@@ -120,6 +120,49 @@
 
         </record>
 
+         <record id="view_report_intrastat_tree" model="ir.ui.view">
+            <field name="name">report.intrastat.tree</field>
+            <field name="model">report.intrastat</field>
+            <field name="arch" type="xml">
+                <tree string="Intrastat Data" create="false" delete="false">
+                    <field name="name" />
+                    <field name="month"/>
+                    <field name="code"/>
+                    <field name="ref"/>
+                    <field name="intrastat_name"/>
+                    <field name="weight"/>
+                    <field name="value" widget="monetary"/>
+                    <field name="supply_units"/>
+                    <field name="currency_id" groups="base.group_multi_currency"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_report_intrastat_search" model="ir.ui.view">
+            <field name="name">report.intrastat.search</field>
+            <field name="model">report.intrastat</field>
+            <field name="arch" type="xml">
+                <search string="Intrastat Data">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]" string="Intrastat Data"/>
+                    <field name="month"/>
+                    <field name="type"/>
+                    <field name="intrastat_name"/>
+                </search>
+            </field>
+        </record>
+
+         <record id="action_report_intrastat_tree_all" model="ir.actions.act_window">
+            <field name="name">Intrastat</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">report.intrastat</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban</field>
+            <field name="search_view_id" ref="view_report_intrastat_search"/>
+        </record>
+
+        <menuitem action="action_report_intrastat_tree_all" id="menu_report_intrastat_all"
+                parent="account.account_reports_management_menu" sequence="19"/>
         
         
     </data>

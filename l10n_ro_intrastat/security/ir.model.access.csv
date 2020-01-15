@@ -5,4 +5,5 @@ access_l10n_ro_intrastat_code_manager,account.intrastat.code,model_account_intra
 access_l10n_ro_intrastat_code,account.intrastat.code,model_account_intrastat_code,base.group_user,1,0,0,0
 access_l10n_ro_intrastat_transaction,access_l10n_ro_intrastat_transaction,model_l10n_ro_intrastat_transaction,base.group_user,1,0,0,0
 access_l10n_ro_intrastat_transport_mode,access_l10n_ro_intrastat_transport_mode,model_l10n_ro_intrastat_transport_mode,base.group_user,1,0,0,0
+access_l10n_ro_intrastat_report,access_l10n_ro_intrastat_report,l10n_ro_intrastat.model_report_intrastat,base.group_user,1,0,0,0
 
