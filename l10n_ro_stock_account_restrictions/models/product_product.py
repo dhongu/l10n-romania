@@ -17,4 +17,5 @@ class ProductProduct(models.Model):
 
 def _ensure_all_candidates_are_evaluated(candidates):
     if any(candidates.filtered(lambda m: m.value == 0.0)):
-        raise UserError(_('You cannot continue this action because there are stock units that have not been evaluated.'))
+        product_name = next(iter(set(candidates.mapped('product_id').mapped('name'))))
+        raise UserError(_('You cannot continue this action because there are stock units that have not been evaluated. The culprit is %s') %product_name)
