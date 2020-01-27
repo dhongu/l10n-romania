@@ -1,4 +1,5 @@
 from odoo import models, api, _
+from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -8,8 +9,12 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     def _get_fifo_candidates_in_move(self):
-        """ Find IN moves that can be used to value OUT moves.
-                """
-        _logger.info(_('Filtering out candidates that have not been evaluated yet'))
         candidates = super(ProductProduct, self)._get_fifo_candidates_in_move()
-        return candidates.filtered(lambda m: m.value != 0.0)
+        _ensure_all_candidates_are_evaluated(candidates)
+
+        return candidates
+
+
+def _ensure_all_candidates_are_evaluated(candidates):
+    if any(candidates.filtered(lambda m: m.value == 0.0)):
+        raise UserError(_('You cannot continue this action because there are stock units that have not been evaluated.'))
