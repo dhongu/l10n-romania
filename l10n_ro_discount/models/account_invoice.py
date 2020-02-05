@@ -54,6 +54,32 @@ class AccountInvoice(models.Model):
         _logger.info('trade_discount_distribution() from l10n_ro_stock_account has been called but do not do anything because this module is installed')
         return res
 
+    @api.multi
+    def action_invoice_open(self):
+        super(AccountInvoice, self).action_invoice_open()
+        invoice_types = self.mapped('type')
+        if len(invoice_types) == 1 and 'in_invoice' in invoice_types:
+            lines = self.mapped('invoice_line_ids')
+            for line in lines:
+                if line.product_id and line.product_id.type == 'product':
+                    return self._create_reminder_wizard()
+        return False
+
+    def _create_reminder_wizard(self):
+        context = {}
+        context['active_ids'] = self.ids
+
+        return {
+            'name': 'Reminder',
+            'src_model': 'account.invoice',
+            'res_model': 'discount.reminder',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'multi': False,
+            'target': 'new',
+            'context': context
+        }
 
 def _open_existing_discount(discount_id):
     return {
