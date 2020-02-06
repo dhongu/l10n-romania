@@ -31,7 +31,9 @@
     'data': [
         'security/ir.model.access.csv',
         'views/discount.xml',
-        'views/account_invoice.xml'
+        'views/discount_line.xml',
+        'views/account_invoice.xml',
+        'wizard/discount_reminder_view.xml'
     ],
     'installable': True
 }

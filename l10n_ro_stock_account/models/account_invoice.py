@@ -158,12 +158,14 @@ class AccountInvoiceLine(models.Model):
         if should_modify_stock_value:
             stock_moves = self.env['stock.move'].search([
                 ('purchase_line_id', '=', self.purchase_line_id.id),
-                ('state', '=', 'done'), ('product_qty', '!=', 0.0), ('value', '=', 0.0)
+                ('state', '=', 'done'), ('product_qty', '!=', 0.0)
             ])
             if self.invoice_id.type == 'in_refund':
                 stock_moves = stock_moves.filtered(lambda m: m._is_out())
             elif self.invoice_id.type == 'in_invoice':
                 stock_moves = stock_moves.filtered(lambda m: m._is_in())
+
+            stock_moves = stock_moves.filtered(lambda m: m.remaining_qty == m.product_qty)
 
             total_received_quantity = sum(stock_moves.mapped('product_qty'))
             for move in stock_moves:
@@ -173,14 +175,16 @@ class AccountInvoiceLine(models.Model):
                 move.write({
                     'value': current_move_value,
                     'remaining_value': current_move_value,
-                    'price_unit': current_move_value / move.product_uom_qty,
+                    'price_unit': current_move_value / current_move_received_quantity,
                 })
 
-            # todo: de actualizat pretul standard cu noua valoare de stoc
-
-            stock_value = self.product_id.stock_value  # + line_diff_value
+            stock_value = self.product_id.stock_value
             new_price = stock_value / self.product_id.qty_at_date
             self.product_id.write({'standard_price': new_price})
+
+            return len(stock_moves) != 0
+
+        return False
 
     @api.onchange('product_id')
     def _onchange_product_id(self):

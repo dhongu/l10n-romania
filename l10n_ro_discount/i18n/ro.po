@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-16 19:01+0000\n"
-"PO-Revision-Date: 2019-08-16 19:01+0000\n"
+"POT-Creation-Date: 2019-12-14 20:28+0000\n"
+"PO-Revision-Date: 2019-12-14 20:28+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -42,6 +42,18 @@ msgid "Company"
 msgstr "Companie"
 
 #. module: l10n_ro_discount
+#: code:addons/l10n_ro_discount/models/discount_line.py:81
+#, python-format
+msgid "Could not apply discount %f from discounting invoice %s to line %s of invoice %s. Probably the stock move was already consumed. You should contact your system administrator."
+msgstr "Aplicarea reducerii de %f din factura de reducere %s pe linia %s din factura redusa %s a esuat. Proabil s-a inceput consumul din miscarea de stoc respectiva. Ar trebui sa contactezi administratorul sistemului."
+
+#. module: l10n_ro_discount
+#: code:addons/l10n_ro_discount/models/discount_line.py:97
+#, python-format
+msgid "Could not remove discount %f from discounting invoice %s from line %s of invoice %s. Probably the stock move was already consumed. You should contact your system administrator."
+msgstr "Stergerea reducerii de %f din factura de reducere %s pe linia %s din factura redusa %s a esuat. Proabil s-a inceput consumul din miscarea de stoc respectiva. Ar trebui sa contactezi administratorul sistemului."
+
+#. module: l10n_ro_discount
 #: model:ir.model.fields,field_description:l10n_ro_discount.field_account_invoice_discount_create_uid
 #: model:ir.model.fields,field_description:l10n_ro_discount.field_account_invoice_discount_line_create_uid
 msgid "Created by"
@@ -62,7 +74,6 @@ msgstr "Moneda"
 #. module: l10n_ro_discount
 #: model:ir.actions.act_window,name:l10n_ro_discount.discount_action
 #: model:ir.model,name:l10n_ro_discount.model_account_invoice_discount
-#: model:ir.model,name:l10n_ro_discount.model_discount
 #: model:ir.model.fields,field_description:l10n_ro_discount.field_account_invoice_discount_line_discount_id
 #: model:ir.ui.menu,name:l10n_ro_discount.discount_menu
 msgid "Discount"
@@ -70,12 +81,12 @@ msgstr "Reducere"
 
 #. module: l10n_ro_discount
 #: model:ir.model,name:l10n_ro_discount.model_account_invoice_discount_line
-#: model:ir.model,name:l10n_ro_discount.model_discount_line
 msgid "Discount Line"
 msgstr "Linie de reducere"
 
 #. module: l10n_ro_discount
 #: model:ir.model.fields,field_description:l10n_ro_discount.field_account_invoice_discount_discount_line_ids
+#: model:ir.model.fields,field_description:l10n_ro_discount.field_account_invoice_line_discount_line_ids
 msgid "Discount Lines"
 msgstr "Linii de reducere"
 
@@ -83,6 +94,23 @@ msgstr "Linii de reducere"
 #: model:ir.model.fields,field_description:l10n_ro_discount.field_account_invoice_discount_discounting_invoice_id
 msgid "Discount invoice"
 msgstr "Factură de reducere"
+
+#. module: l10n_ro_discount
+#: code:addons/l10n_ro_discount/models/discount.py:97
+#, python-format
+msgid "Discount invoice cannot be changed when there are discount lines already. Delete them first."
+msgstr "Factura de reducere nu poate fi schimbata daca exista deja linii de discount pentru aceasta. Ar trebui sterse intai."
+
+#. module: l10n_ro_discount
+#: code:addons/l10n_ro_discount/models/discount_line.py:68
+#, python-format
+msgid "Discount line amount is %f, which is not positive. Discount amounts should always be positive."
+msgstr "Valoare lini de discount este %f, care nu este un numar pozitiv. Valorile de discount trebuie sa fie mereu pozitive."
+
+#. module: l10n_ro_discount
+#: model:ir.model.fields,help:l10n_ro_discount.field_account_invoice_line_discount_line_ids
+msgid "Discount lines that have been applied to this invoice line"
+msgstr "Linii de reduceri care au fost aplicate aceste linii de factura."
 
 #. module: l10n_ro_discount
 #: model:ir.model.fields,help:l10n_ro_discount.field_account_invoice_discount_discount_line_ids
@@ -100,9 +128,9 @@ msgid "Discounted invoice line"
 msgstr "Linie de factură redusă"
 
 #. module: l10n_ro_discount
-#: code:addons/l10n_ro_discount/models/account_invoice.py:54
-#: code:addons/l10n_ro_discount/models/account_invoice.py:64
-#: code:addons/l10n_ro_discount/models/account_invoice.py:74
+#: code:addons/l10n_ro_discount/models/account_invoice.py:60
+#: code:addons/l10n_ro_discount/models/account_invoice.py:70
+#: code:addons/l10n_ro_discount/models/account_invoice.py:80
 #, python-format
 msgid "Discounts"
 msgstr "Reduceri"
@@ -122,6 +150,11 @@ msgstr "Este bifat dacă există cel puțin o linie care a fost redusă."
 #: model:ir.model.fields,help:l10n_ro_discount.field_account_invoice_has_discounting_invoice_lines
 msgid "Evaluates to true if there is at least one line with account set to the received-discount account"
 msgstr "Este bifat dacă există cel putin o linie care are contul Reduceri Primite"
+
+#. module: l10n_ro_discount
+#: sql_constraint:account.invoice.discount:0
+msgid "Există deja o reducere creată din această factură de reducere"
+msgstr "Există deja o reducere creată din această factură de reducere"
 
 #. module: l10n_ro_discount
 #: model:ir.ui.view,arch_db:l10n_ro_discount.discount_line_form
@@ -145,9 +178,20 @@ msgid "Initial Discount"
 msgstr "Reducere inițială"
 
 #. module: l10n_ro_discount
+#: code:addons/l10n_ro_discount/models/discount.py:70
+#, python-format
+msgid "Initial amount is %f, which is not positive. Discount amounts should always be positive."
+msgstr "Valoarea de reducere este %f, care nu este un numar pozitiv. Valorile de reducere trebuie sa fie mereu un numar pozitiv."
+
+#. module: l10n_ro_discount
 #: model:ir.model,name:l10n_ro_discount.model_account_invoice
 msgid "Invoice"
 msgstr "Factură"
+
+#. module: l10n_ro_discount
+#: model:ir.model,name:l10n_ro_discount.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Linie factură"
 
 #. module: l10n_ro_discount
 #: model:ir.model.fields,help:l10n_ro_discount.field_account_invoice_discount_line_discounted_invoice_id
@@ -201,7 +245,7 @@ msgstr "Reducere ramasă de aplicat"
 #. module: l10n_ro_discount
 #: model:ir.model.fields,field_description:l10n_ro_discount.field_account_invoice_discount_state
 msgid "State"
-msgstr "Stare"
+msgstr "Județ"
 
 #. module: l10n_ro_discount
 #: model:ir.model.fields,help:l10n_ro_discount.field_account_invoice_discount_line_amount
@@ -224,7 +268,6 @@ msgid "Then, choose the discounted invoice line"
 msgstr "Apoi, alege linia de factura la care se aplică reducerea"
 
 #. module: l10n_ro_discount
-#: sql_constraint:account.invoice.discount:0
 #: code:addons/l10n_ro_discount/models/discount.py:12
 #, python-format
 msgid "There is already a discount for this invoice"
@@ -246,3 +289,8 @@ msgstr "Utility field to express amount currency"
 msgid "View discounted lines"
 msgstr "Linii reduse"
 
+#. module: l10n_ro_discount
+#: code:addons/l10n_ro_discount/models/discount.py:77
+#, python-format
+msgid "You are trying to apply a total discount of %f, which is more than the initial value of %f"
+msgstr "Incerci sa aplici o reducere de %f, care este mai mare decat valoarea totala de reducere %f"

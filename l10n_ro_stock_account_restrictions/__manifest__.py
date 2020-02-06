@@ -18,12 +18,13 @@
 #
 ##############################################################################
 {
-    'name': 'Purchase Order does not evaluate Stock',
+    'name': 'Stock Valuation from Invoice - restrictions module',
     'version': '11.0.1.0.0',
     'author': 'dataERP, Vlad Nafureanu',
     'category': 'Purchase, Warehouse',
     'depends': [
-        'purchase'
+        'purchase',
+        'l10n_ro_stock_account'
     ],
     'installable': True
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="discount_reminder_form" model="ir.ui.view">
+            <field name="name">Discount Reminder Form</field>
+            <field name="model">discount.reminder</field>
+            <field name="arch" type="xml">
+                <form>
+                    <h2>
+                        Nu uita sa aplici discount-ul pentru aceasta factura.
+                    </h2>
+                    <group>
+                        <field name="invoice_ids">
+                            <tree>
+                                <field name="number"/>
+                            </tree>
+                        </field>
+                    </group>
+
+                    <footer>
+                        <button name="confirm_discount" string="_Am înțeles" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>
