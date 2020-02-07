@@ -178,9 +178,7 @@ class AccountInvoiceLine(models.Model):
                     'price_unit': current_move_value / current_move_received_quantity,
                 })
 
-            stock_value = self.product_id.stock_value
-            new_price = stock_value / self.product_id.qty_at_date
-            self.product_id.write({'standard_price': new_price})
+            self.product_id.update_weighted_cost(self.company_id)
 
             return len(stock_moves) != 0
 
