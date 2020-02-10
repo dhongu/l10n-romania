@@ -147,7 +147,6 @@ class AccountInvoice(models.Model):
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
-    @api.multi
     def modify_stock_move_value(self, value):
         should_modify_stock_value = self.product_id and \
                                     self.product_id.valuation == 'real_time' and \
