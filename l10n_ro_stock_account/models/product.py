@@ -161,10 +161,9 @@ class ProductProduct(models.Model):
             ('product_id', '=', self.id),
             ('location_dest_id.usage', '=', 'internal'),
             ('state', '=', 'done'),
-            ('location_dest_id.company_id', '=', self.env.user.company_id.id),
+            ('location_dest_id.company_id', '=', company.id),
             ('value', '>', 0.0),
-            ('remaining_qty', '>', 0.0)
-        ]
+            ('remaining_qty', '>', 0.0)]
 
         stock_items = self.env['stock.move'].search(stock_items_domain)
 
