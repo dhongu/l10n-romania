@@ -21,7 +21,8 @@ class StorageSheetReport(models.TransientModel):
     date_from = fields.Date('Start Date', required=True, default=fields.Date.today)
     date_to = fields.Date('End Date', required=True, default=fields.Date.today)
 
-    product_id = fields.Many2one('product.product', string='Product', required=True, )
+    product_id = fields.Many2one('product.product', string='Product', required=True,
+                                 domain=[('type', '=', 'product')] )
 
     company_id = fields.Many2one('res.company', string='Company',
                                  default=lambda self: self.env.user.company_id)
