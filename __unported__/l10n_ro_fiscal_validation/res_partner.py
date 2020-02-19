@@ -58,7 +58,7 @@ class res_partner_anaf(models.Model):
 
 
 class res_partner(models.Model):
-    _name = "res.partner"
+
     _inherit = "res.partner"
 
     @api.one

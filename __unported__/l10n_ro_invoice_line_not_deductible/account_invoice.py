@@ -90,7 +90,7 @@ class account_invoice_line(models.Model):
                 tax_code_found = False
                 taxes = line.invoice_line_tax_ids.compute_all(
                     (line.price_unit * (1.0 - (line.discount or 0.0) / 100.0)),
-                    line.quantity, line.product_id, inv.partner_id)['taxes']
+                    quantity=line.quantity, product=line.product_id, partner=inv.partner_id)['taxes']
                 for tax in taxes:
                     new_tax = tax_obj.browse(tax['id'])
                     if not new_tax.not_deductible_tax_id:

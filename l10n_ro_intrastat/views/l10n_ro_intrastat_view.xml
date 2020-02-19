@@ -94,7 +94,7 @@
                 <xpath expr="//field[@name='company_registry']" position="after">
                 	<field name="intrastat_transaction_id"  groups="l10n_ro_intrastat.intrastat_extended"/>
                     <field name="transport_mode_id" groups="l10n_ro_intrastat.intrastat_extended"/>
-                    <field name="incoterm_id" groups="l10n_ro_intrastat.intrastat_extended"/>
+<!--                    <field name="incoterm_id" groups="l10n_ro_intrastat.intrastat_extended"/>--> <!-- este din account -->
                 </xpath>
             </field>
         </record>
