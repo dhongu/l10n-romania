@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 
 class SalePurchaseJournalReport(models.TransientModel):
     _name = "account.report.sale.purchase.journal"
+    _description = "SalePurchaseJournalReport"
 
     company_id = fields.Many2one('res.company', string='Company', required=True,
                                  default=lambda self: self.env.user.company_id)

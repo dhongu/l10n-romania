@@ -65,7 +65,7 @@
                                 <p>Prin semnarea prezentului document mi-am exprimat acordul expres cu privire la prelucrarea datelor mele cu caracter personal de catre <span t-field="o.company_id"/>. Am fost informat ca beneficiezde dreptul de acces la datele mele cu caracter personal, dreptul de intervenție și de opoziție justificativă la prelucrarea acestora de a nu fi supus unei decizii individuale și de a mă adresa justiției, în condițiile specificate de art. 13-18 în legea nr.677/2001.</p>
                                 </div>
                                 <div class="col-sm-4 pull-left">
-                                    <h4>DATA <span t-field="o.date" t-field-options='{"format": "dd MM yyyy"}'/>    </h4>
+                                    <h4>DATA <span t-field="o.date" t-options='{"format": "dd MM yyyy"}'/>    </h4>
                                 </div>
                                 <div class="col-sm-4 pull-right">
                                 </div>
@@ -136,7 +136,7 @@
                                 <p>Prin semnarea prezentului document mi-am exprimat acordul expres cu privire la prelucrarea datelor mele cu caracter personal de catre <span t-field="o.company_id"/>. Am fost informat ca beneficiez de dreptul de acces la datele mele cu caracter personal, dreptul de intervenție și de opoziție justificativă la prelucrarea acestora de a nu fi supus unei decizii individuale și de a mă adresa justiției, în condițiile specificate de art. 13-18 în legea nr.677/2001.</p>
                                 </div>
                                 <div class="col-sm-4 pull-left">
-                                    <h4>DATA <span t-field="o.date" t-field-options='{"format": "dd MM yyyy"}'/>    </h4>
+                                    <h4>DATA <span t-field="o.date" t-options='{"format": "dd MM yyyy"}'/>    </h4>
                                 </div>
                                 <div class="col-sm-4 pull-right">
                                 </div>
