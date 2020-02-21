@@ -28,7 +28,6 @@ class account_invoice(models.Model):
         if self.delegate_id:
             self.mean_transp = self.delegate_id.mean_transp
 
-
     # anularea facturilor cu zero
     @api.multi
     def action_invoice_cancel(self):
@@ -40,10 +39,29 @@ class account_invoice(models.Model):
         return super(account_invoice, self).action_invoice_cancel()
 
 
+    @api.multi
+    def set_origin_with_picking(self):
+        for invoice in self:
+            pickings = self.env['stock.picking']
+            for line in invoice.invoice_line_ids:
+                for sale_line in line.sale_line_ids:
+                    for move in sale_line.move_ids:
+                        if move.picking_id.state == 'done':
+                            pickings |= move.picking_id
+                if line.purchase_line_id:
+                    for move in line.purchase_line_id.move_ids:
+                        if move.picking_id.state == 'done':
+                            pickings |= move.picking_id
+            origin = ''
+            for picking in pickings:
+                origin += ' ' + picking.name
+
+            if origin:
+                invoice.write({'origin': origin})
+
+
 class account_invoice_line(models.Model):
     _inherit = "account.invoice.line"
-
-
 
     sequence = fields.Integer(default=1)
 
@@ -53,13 +71,12 @@ class account_invoice_line(models.Model):
                                             compute='_compute_price_unit_without_taxes')
 
     # se va utiliza campul stndard price_tax
-    #price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'), store=True, readonly=True,
+    # price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'), store=True, readonly=True,
     #                           compute='_compute_price')
 
-    #campul price_normal_taxes nici nu este folosit
-    #price_normal_taxes = fields.Float(tring='Normal Taxes', digits=dp.get_precision('Account'), store=True,
+    # campul price_normal_taxes nici nu este folosit
+    # price_normal_taxes = fields.Float(tring='Normal Taxes', digits=dp.get_precision('Account'), store=True,
     #                                  readonly=True, compute='_compute_price')
-
 
     """
     # campurile standard
@@ -76,12 +93,13 @@ class account_invoice_line(models.Model):
     """
 
     @api.one
-    @api.depends('price_subtotal',  'quantity')
+    @api.depends('price_subtotal', 'quantity')
     def _compute_price_unit_without_taxes(self):
         if self.price_subtotal:
             quantity = self.quantity or 1
             self.price_unit_without_taxes = self.price_subtotal / quantity
-            #self.price_taxes = (self.price_total - self.price_subtotal) / quantity
+            # self.price_taxes = (self.price_total - self.price_subtotal) / quantity
+
     #
     #
     # def _compute_price_complex(self):
@@ -120,3 +138,4 @@ class account_invoice_line(models.Model):
     #         self.price_unit_without_taxes = self.invoice_id.currency_id.round(self.price_unit_without_taxes)
     #         self.price_normal_taxes = self.invoice_id.currency_id.round(self.price_normal_taxes)
     #
+

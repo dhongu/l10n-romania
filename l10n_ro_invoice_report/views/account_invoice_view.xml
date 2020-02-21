@@ -23,5 +23,15 @@
             </field>
         </record>
 
+
+        <record id="action_invoice_set_origin_with_picking" model="ir.actions.server">
+            <field name="name">Set Origin</field>
+            <field name="model_id" ref="model_account_invoice"/>
+            <field name="state">code</field>
+            <field name="code">
+records.set_origin_with_picking()
+            </field>
+        </record>
+
     </data>
 </odoo>
