@@ -99,11 +99,11 @@
                         <td style="border-top: initial;">
                             <div t-if="o.partner_id.vat">
                                 <strong>CIF:</strong>
-                                <span t-field="o.partner_id.vat"/>
+                                <span t-field="o.commercial_partner_id.vat"/>
                             </div>
                             <div t-if="o.partner_id.nrc">
                                 <strong>NRC:</strong>
-                                <span t-field="o.partner_id.nrc"/>
+                                <span t-field="o.commercial_partner_id.nrc"/>
                             </div>
                         </td>
                     </tr>
