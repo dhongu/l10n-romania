@@ -115,10 +115,10 @@
                                     <td>
 
                                         <t t-set="communication" t-value="''"/>
-                                        <t t-if="o.invoice_ids">
-                                           <t t-foreach="o.invoice_ids" t-as="i">
+                                        <t t-if="o.reconciled_invoice_ids">
+                                           <t t-foreach="o.reconciled_invoice_ids" t-as="i">
                                                <t t-set="communication" t-value="communication + i.number"/>
-                                               <span t-field="i.number"/> <span>from date:</span>
+                                               <span t-field="i.number"/> <span>/</span>
 
                                                <span t-field="i.date_invoice"/>
                                            </t>
