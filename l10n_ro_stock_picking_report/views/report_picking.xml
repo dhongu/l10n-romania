@@ -971,7 +971,7 @@
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="line['tax']"
-                                                  t-optionss='{"widget": "float", "precision": 2}'/>
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="line['amount_tax']"
