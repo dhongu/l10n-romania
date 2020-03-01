@@ -13,42 +13,35 @@ def get_counterpart(transaction, subfield):
     if not subfield:
         return  # subfield is empty
     if len(subfield) >= 1 and subfield[0]:
-        transaction.update({'account_number': subfield[0]})
+        pass
+        #transaction.update({'account_number': subfield[0]})
     if len(subfield) >= 2 and subfield[1]:
         transaction.update({'partner_name': subfield[1]})
     if len(subfield) >= 3 and subfield[2]:
-        # Holds the partner VAT number
-        pass
+        transaction.update({'account_number': subfield[2]})
 
 
 def get_subfields(data, codewords):
     """Return dictionary with value array for each codeword in data.
-        37~INCASARE
-        PRO PARK SRL RO43INGB0000999907441589 CVF 20200033 340178419
 
-        6~COMISION PE OPERATIUNE
-        ING BANK ROMANIA
 
-        102~RETRAGERE NUMERAR
-        STR.RACARI NR.5 BUCURESTI RO NELU TRIFU
-        NR. CARD: XXXX XXXX XXXX 5832 DATA: 19-01-2020 AUTORIZARE: 001143
+    ~20 - suma
+    ~21
+    ~22
+    ~25 referinta1
+    ~26 referinta2
+    ~27 referinta3
 
-        50~INCASARE
-        ROM DEVICES SRL RO60RNCB0075035214300001 /ROC/TRANSFER 339495659
-
-        92~TRANSFER ING BUSINESS
-        ROM DEVICES SRL RO03RZBR0000060020008529 RAIB CENTRALA TRANSFER
-        5983
-
-        25~INCASARE BILET LA ORDIN
-        SC CALORSET SRL RO11WBAN2511000056500168 CCOWBAN3BA0408393
-        339422947
+    ~32 Nume Partener
+    ~33 cod iban
 
 
     """
     subfields = {}
     current_codeword = None
+
     for word in data.split('~'):
+        word = word.strip()
         if not word and not current_codeword:
             continue
         if word[:2] in codewords:
@@ -75,15 +68,16 @@ def handle_common_subfields(transaction, subfields):
     # REMI: Remitter information (text entered by other party on trans.):
     if not transaction.get('name'):
         transaction['name'] = ''
-    for counterpart_field in ['20', '21', '23', ]:
+    transaction['ref'] = ''
+    for counterpart_field in ['21', '23', ]:
         if counterpart_field in subfields:
             transaction['name'] += (''.join(x for x in subfields[counterpart_field] if x))
     for counterpart_field in ['24', '25', '26', '27']:
         if counterpart_field in subfields:
-            transaction['name'] += ('/'.join(x for x in subfields[counterpart_field] if x))
+            transaction['ref'] += ('/'.join(x for x in subfields[counterpart_field] if x))
     # Get transaction reference subfield (might vary):
-    if transaction.get('ref') in subfields:
-        transaction['ref'] = ''.join(subfields[transaction['ref']])
+    # if transaction.get('ref') in subfields:
+    #     transaction['ref'] = ''.join(subfields[transaction['ref']])
 
 
 class MT940Parser(MT940):
@@ -103,7 +97,7 @@ class MT940Parser(MT940):
         """Initialize parser - override at least header_regex."""
         super(MT940Parser, self).__init__()
         self.mt940_type = 'ING'
-        self.header_lines = 2
+        self.header_lines = 0
         self.header_regex = '^:20:'  # Start of relevant data
         self.last_unique_import_id = ''
 
@@ -123,10 +117,18 @@ class MT940Parser(MT940):
             matches = tag_re.findall(data)
         return matches
 
+
+    def handle_tag_20(self, data):
+        """Contains unique ? message ID"""
+        self.current_statement['name'] = data
+
+
     def handle_tag_25(self, data):
         """Local bank account information."""
-        data = data.replace('.', '').strip()
-        self.account_number = data
+        pass
+        # data = data.replace('.', '').strip()
+        # data = data.split('/')[-1]
+        # self.account_number = data
 
     def handle_tag_28(self, data):
         """Number of Raiffeisen bank statement."""
@@ -135,28 +137,44 @@ class MT940Parser(MT940):
     def handle_tag_61(self, data):
         """get transaction values"""
         super(MT940Parser, self).handle_tag_61(data)
-        if 'NCOMNONREF' in data:
-            self.current_transaction['unique_import_id'] = self.last_unique_import_id + data
-        else:
-            self.current_transaction['unique_import_id'] = data
-
-        self.last_unique_import_id = data
-
         re_61 = self.tag_61_regex.match(data)
         if not re_61:
             raise ValueError("Cannot parse %s" % data)
         parsed_data = re_61.groupdict()
+
+        unique_import_id = parsed_data['ingid'] + parsed_data['ingtranscode']
+        self.current_transaction['unique_import_id'] = unique_import_id
+
+        self.last_unique_import_id = data
+
         self.current_transaction['amount'] = (str2amount(parsed_data['sign'], parsed_data['amount']))
         self.current_transaction['note'] = parsed_data['reference']
-        self.current_transaction['name'] = parsed_data['ingid'] + parsed_data['ingtranscode']
+        # self.current_transaction['name'] = parsed_data['ingid'] + parsed_data['ingtranscode']
 
     def handle_tag_86(self, data):
         """Parse 86 tag containing reference data."""
         if not self.current_transaction:
             return
-        codewords = ['6', '20', '21', '22', '23','24', '25', '32', '33', '37',  '50', '92', ]
+
+        operations = {
+            '037': 'Incasare ',
+            '006': 'Comision pe operatiune ',
+            '025': 'Incasare bilet la ordin ',
+            '103': 'Retragere numerar ',
+            '092': 'Transfer ING Business ',
+            '050': 'Incasare ',
+            '164': 'Cumparare POS ',
+        }
+        operation = data[:3]
+
+
+        codewords = ['6', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '32', '33', '37', '50', '92', ]
         subfields = get_subfields(data, codewords)
         transaction = self.current_transaction
+
+        if operation in operations:
+            transaction['name'] = operations[operation]
+
         # If we have no subfields, set message to whole of data passed:
         if not subfields:
             transaction['message'] = data

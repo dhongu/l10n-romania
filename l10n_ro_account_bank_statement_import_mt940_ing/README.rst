@@ -27,6 +27,8 @@ Usage
    :alt: Try me on Runbot
    :target: https://runbot.odoo-community.org/runbot/177/11.0
 
+ - se utilizeaza formatul MT940 structurat de la ING
+
 Known issues / Roadmap
 ======================
 
