@@ -177,7 +177,7 @@ class AccountInvoiceLine(models.Model):
                     'price_unit': current_move_value / current_move_received_quantity,
                 })
 
-            self.product_id.update_weighted_cost(self.company_id)
+            self.product_id.update_fifo_cost(self.company_id)
 
             return len(stock_moves) != 0
 

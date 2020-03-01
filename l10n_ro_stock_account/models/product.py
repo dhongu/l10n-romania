@@ -155,13 +155,18 @@ class ProductProduct(models.Model):
     def _compute_stock_value(self):
         return super(ProductProduct, self)._compute_stock_value()
 
-    def update_weighted_cost(self, company):
+    @api.multi
+    def multi_update_fifo_cost(self):
+        for product in self:
+            product.update_fifo_cost(self.env.user.company_id.id)
 
+    @api.one
+    def update_fifo_cost(self, company_id):
         stock_items_domain = [
             ('product_id', '=', self.id),
             ('location_dest_id.usage', '=', 'internal'),
             ('state', '=', 'done'),
-            ('location_dest_id.company_id', '=', company.id),
+            ('location_dest_id.company_id', '=', company_id),
             ('value', '>', 0.0),
             ('remaining_qty', '>', 0.0)]
 
@@ -170,11 +175,11 @@ class ProductProduct(models.Model):
         if stock_items:
             value = sum(stock_items.mapped('remaining_value'))
             quantity = sum(stock_items.mapped('remaining_qty'))
-            self.with_context(force_company=company.id).sudo().write({'standard_price': value / quantity})
+            self.with_context(force_company=company_id).sudo().write({'standard_price': value / quantity})
         elif self.supplier_ids:
             first_supplier = self.supplier_ids[0]
             cost_from_supplier = first_supplier.product_uom._compute_price(first_supplier.price, self.uom_id)
 
-            self.with_context(force_company=company.id).sudo().write({'standard_price': cost_from_supplier})
+            self.with_context(force_company=company_id).sudo().write({'standard_price': cost_from_supplier})
         else:
-            self.with_context(force_company=company.id).sudo().write({'standard_price': 0.0})
+            self.with_context(force_company=company_id).sudo().write({'standard_price': 0.0})
