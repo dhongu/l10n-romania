@@ -415,7 +415,7 @@ class StockMove(models.Model):
 
 
         if 'refund' in self.move_type:
-            if self.env['ir.module.module'].search([('name', '=', 'account_storno'), ('state', '=', 'installed')]):
+            if self.env['ir.module.module'].sudo().search([('name', '=', 'account_storno'), ('state', '=', 'installed')]):
                 if move.product_id.categ_id.property_stock_journal.posting_policy == 'storno':
                     for acl in res:
                         acl[2]['credit'], acl[2]['debit'] = -acl[2]['debit'], -acl[2]['credit']
