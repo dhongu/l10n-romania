@@ -16,17 +16,16 @@ class ReportReportStatement(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         report = self.env['ir.actions.report']._get_report_from_name(self._template)
-        if not docids and data and 'docids' in data:
-            docids = data['docids']
+        if not docids and data and 'active_ids' in self.env.context:
+            docids = self.env.context['active_ids']
         return  {
             'doc_ids': docids,
             'doc_model': report.model,
-            'data': data,
             'time': time,
+            'wizard': self.env['account.report.sale.purchase.journal'].browse(data['wizard_id']),
             'docs': self.env[report.model].browse(docids),
-            'formatLang': self._formatLang
+
         }
 
-    def _formatLang(self, value, *args):
-        return formatLang(self.env, value, *args)
+
 

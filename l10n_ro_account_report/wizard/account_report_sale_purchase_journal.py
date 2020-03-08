@@ -17,7 +17,7 @@ class SalePurchaseJournalReport(models.TransientModel):
     date_range_id = fields.Many2one('date.range', string='Date range')
     date_from = fields.Date('Start Date', required=True)
     date_to = fields.Date('End Date', required=True)
-    journal = fields.Selection([('purchase', 'Purchase'), ('sale', 'Sale')], string='Journal type')
+    journal = fields.Selection([('purchase', 'Purchase'), ('sale', 'Sale')], string='Journal type', required=True)
 
     @api.model
     def default_get(self, fields_list):
@@ -41,9 +41,9 @@ class SalePurchaseJournalReport(models.TransientModel):
             ('date_invoice', '>=', self.date_from), ('date_invoice', '<=', self.date_to),
             ('journal_id', 'in', journals.ids),
             ('company_id', '=', self.company_id.id)
-        ])
-        data = {'data':self.read()[0]}
-        data['docids'] = invoices.ids
+        ], order='date_invoice')
+        data = {'wizard_id':self.id}
+        #data['docids'] = invoices.ids
 
         report = self.env.ref('l10n_ro_account_report.action_report_sale_purchase_journal')
         res = report.report_action(invoices,  data=data)

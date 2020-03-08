@@ -5,5 +5,5 @@
 
 from . import activity_statement
 from . import report_bank_statement
-#from . import report_sale_purchase_journal
+from . import report_sale_purchase_journal
 from . import report_partner_statement

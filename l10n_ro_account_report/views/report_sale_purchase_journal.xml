@@ -25,20 +25,20 @@
                         </div>
 
 
-                        <t t-if=" journal == 'purchase'">
+                        <t t-if="wizard.journal == 'purchase'">
                             <h2>Purchase journal</h2>
                         </t>
-                        <t t-if="data['journal'] == 'sale'">
+                        <t t-if="wizard.journal == 'sale'">
                             <h2>Sale journal</h2>
                         </t>
                         <h4>
-                            <span>From date:</span><span t-esc="data['date_from']"/><span> to date:</span><span t-esc="data['date_to']"/>
+                            <span>From date:</span><span t-field="wizard.date_from"/><span> to date:</span><span t-field="wizard.date_to"/>
                         </h4>
 
                         <table class="table table-condensed table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="1" class="text-center">Nr Crt</th>
+                                    <th colspan="1" class="text-right">Nr Crt</th>
                                     <th colspan="2" class="text-center">Document</th>
                                     <th colspan="2" class="text-center">Partner</th>
 
@@ -52,9 +52,9 @@
                                     <th colspan="1" class="text-center">Name</th>
                                     <th colspan="1" class="text-center">Fiscal code</th>
 
-                                    <th colspan="1" class="text-center">Total</th>
-                                    <th colspan="1" class="text-center">Base</th>
-                                    <th colspan="1" class="text-center">VAT</th>
+                                    <th colspan="1" class="text-right">Total</th>
+                                    <th colspan="1" class="text-right">Base</th>
+                                    <th colspan="1" class="text-right">VAT</th>
 
 
                                 </tr>
@@ -62,9 +62,16 @@
                             <tbody>
                                 <t t-set="inv_index" t-value="0"/>
                                 <tr t-foreach="docs" t-as="o">
-                                    <td><span t-esc="inv_index + 1"/></td>
+                                    <t t-set="inv_index" t-value="inv_index+1"/>
+                                    <td><span t-esc="inv_index"/></td>
                                     <td>
-                                        <span t-field="o.number"/>
+
+                                        <t t-if="wizard.journal == 'purchase'">
+                                            <span t-esc="o.reference or o.number"/>
+                                        </t>
+                                        <t t-if="wizard.journal == 'sale'">
+                                            <span t-field="o.number"/>
+                                        </t>
                                     </td>
                                     <td>
                                         <span t-field="o.date_invoice"/>
@@ -75,14 +82,14 @@
                                     <td>
                                         <span t-esc="o.commercial_partner_id.vat"/>
                                     </td>
-                                    <td>
-                                        <span t-esc="o.amount_total"/>
+                                    <td class="text-right">
+                                        <span t-esc="o.amount_total" t-options='{"widget": "float", "precision": 2}'/>
                                     </td>
-                                    <td>
-                                        <span t-esc="o.amount_untaxed"/>
+                                    <td class="text-right">
+                                        <span t-esc="o.amount_untaxed"  t-options='{"widget": "float", "precision": 2}'/>
                                     </td>
-                                    <td>
-                                        <span t-esc="o.amount_tax"/>
+                                    <td class="text-right">
+                                        <span t-esc="o.amount_tax" t-options='{"widget": "float", "precision": 2}'/>
                                     </td>
                                 </tr>
                             </tbody>
