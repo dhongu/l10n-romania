@@ -12,7 +12,7 @@ from odoo.addons import decimal_precision as dp
 # ----------------------------------------------------------
 
 
-class stock_location(models.Model):
+class StockLocation(models.Model):
     _name = "stock.location"
     _inherit = "stock.location"
 
@@ -102,6 +102,12 @@ class StockMove(models.Model):
     price_unit = fields.Float(
         string='Unit Price',
         digits=dp.get_precision('Product Standard Price'))
+
+    invoice_line_evaluated_by = fields.Many2one(
+        comodel_name='account.invoice.line',
+        string='Invoice Line evaluated by',
+        help='An invoice line is used to evaluate purchased stock moves',
+        readonly=True)
 
     @api.onchange('date')
     def onchange_date(self):
@@ -465,7 +471,7 @@ class StockMove(models.Model):
         return super(StockMove, self)._is_dropshipped()
 
 
-class stock_picking(models.Model):
+class StockPicking(models.Model):
     _name = 'stock.picking'
     _inherit = 'stock.picking'
 
@@ -481,7 +487,7 @@ class stock_picking(models.Model):
         self.ensure_one()
         for pick in self:
             pick.write({'date_done': pick.date})
-        res = super(stock_picking, self).action_done()
+        res = super(StockPicking, self).action_done()
         # self.get_account_move_lines()
         return res
 
@@ -489,7 +495,7 @@ class stock_picking(models.Model):
     def action_done(self):
         for pick in self:
             pick.write({'date_done': pick.date})
-        res = super(stock_picking, self).action_done()
+        res = super(StockPicking, self).action_done()
         return res
 
     @api.multi
@@ -499,7 +505,7 @@ class stock_picking(models.Model):
                 if move.account_move_ids:
                     move.account_move_ids.button_cancel()
                     move.account_move_ids.unlink()
-        return super(stock_picking, self).action_cancel()
+        return super(StockPicking, self).action_cancel()
 
     @api.multi
     def action_unlink(self):
@@ -508,7 +514,7 @@ class stock_picking(models.Model):
                 if move.account_move_ids:
                     move.account_move_ids.button_cancel()
                     move.account_move_ids.unlink()
-        return super(stock_picking, self).action_unlink()
+        return super(StockPicking, self).action_unlink()
 
 
 class StockInventory(models.Model):
