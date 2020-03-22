@@ -5,6 +5,8 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 # ----------------------------------------------------------
@@ -123,7 +125,7 @@ class StockMove(models.Model):
 
         debit = self.env['account.account'].browse(debit_account_id)
         credit = self.env['account.account'].browse(credit_account_id)
-        print('%s = %s   ' % (debit.name, credit.name))
+        _logger.info('NC: %s = %s   ' % (debit.name, credit.name))
 
         permit_same_account = self.env.context.get('permit_same_account', False)
         if credit_account_id != debit_account_id or permit_same_account:
@@ -244,55 +246,56 @@ class StockMove(models.Model):
 
         # nota contabila standard
         # if 'transfer' not in move_type:
-        print("Nota contabila standard")
+        _logger.info("Nota contabila standard")
         super(StockMove, move)._account_entry_move()
 
         if 'transfer' in move_type:
             # iesire  marfa din stoc
-            print("Nota contabila transfer de stoc ")
+            _logger.info("Nota contabila transfer de stoc ")
             transfer_move = move.with_context(stock_location_id=move.location_id.id,
                                               stock_location_dest_id=move.location_dest_id.id)
             transfer_move._create_account_stock_to_stock(refund=False, permit_same_account=True)
             #     # intrare marfa in stoc
-            #     print("Nota contabila intrare stoc in vederea transferului ")
+            #     _logger.info("Nota contabila intrare stoc in vederea transferului ")
             #     move.with_context(stock_location_id=move.location_dest_id.id)._create_account_stock_to_stock(refund=True, permit_same_account=False)
 
         if 'transit_out' in move_type:
-            print("Nota contabila iesire stoc in tranzit ")
+            _logger.info("Nota contabila iesire stoc in tranzit ")
             move._create_account_stock_to_stock(refund=True,
                                                 stock_transfer_account=move.company_id.property_stock_transfer_account_id)
         if 'transit_in' in move_type:
-            print("Nota contabila intrare stoc in tranzit ")
+            _logger.info("Nota contabila intrare stoc in tranzit ")
             move._create_account_stock_to_stock(refund=False,
                                                 stock_transfer_account=move.company_id.property_stock_transfer_account_id)
 
         if 'delivery' in move_type and 'notice' in move_type:  # livrare pe baza de aviz de facut nota contabila 418 = 70x
-            print("Nota contabila livrare cu aviz")
+            _logger.info("Nota contabila livrare cu aviz")
             move._create_account_delivery_notice(refund='refund' in move_type)
         if ('reception' in move_type or 'transfer' in move_type or 'transit_in' in move_type) and 'store' in move_type:
-            print("Nota contabila receptie in magazin ")
+            _logger.info("Nota contabila receptie in magazin ")
             move.with_context(stock_location_id=move.location_dest_id.id)._create_account_reception_in_store(
                 refund='refund' in move_type)
         if 'delivery' in move_type and 'store' in move_type:
-            print("Nota contabila livrare din magazin ")
+            _logger.info("Nota contabila livrare din magazin ")
             move._create_account_delivery_from_store(refund='refund' in move_type)
 
     def _create_account_stock_to_stock(self, refund, stock_transfer_account=None, permit_same_account=True):
         journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation()
         forced_quantity = self.product_qty if not refund else -1 * self.product_qty
-        move = self.with_context(forced_quantity=forced_quantity, permit_same_account=True)
+        move = self.with_context(forced_quantity=forced_quantity, permit_same_account=permit_same_account)
 
         if refund:
             # if acc_valuation == acc_dest :
             if stock_transfer_account:
                 acc_dest = stock_transfer_account
             # aml = move._create_account_move_line(acc_src, acc_dest, journal_id)
-            aml = move._create_account_move_line(acc_dest, acc_src, journal_id)
+            aml = move._create_account_move_line(acc_dest, acc_valuation, journal_id)
         else:
             # if acc_valuation == acc_dest:
             if stock_transfer_account:
                 acc_dest = stock_transfer_account
-            aml = move._create_account_move_line(acc_src, acc_dest, journal_id)
+
+            aml = move._create_account_move_line(acc_valuation, acc_dest, journal_id)
         return aml
 
     def _create_account_reception_in_store(self, refund):
@@ -356,7 +359,7 @@ class StockMove(models.Model):
         if uneligible_tax:
             if not move.company_id.tax_cash_basis_journal_id.default_debit_account_id:
                 # raise UserError(_('Please set account for uneligible tax '))
-                print(_('Please set account for uneligible tax '))
+                _logger.info(_('Please set account for uneligible tax '))
             if not refund:
                 acc_src = move.company_id.tax_cash_basis_journal_id.default_debit_account_id
             else:
@@ -422,8 +425,12 @@ class StockMove(models.Model):
             if location_id and location_dest_id:
                 if acl[2]['credit'] != 0:
                     acl[2]['stock_location_id'] = location_id
+                    # if move_type in ['transfer_store','transfer']:
+                    #     acl[2]['stock_location_dest_id'] = location_dest_id
                 else:
                     acl[2]['stock_location_dest_id'] = location_dest_id
+                    # if move_type in ['transfer_store','transfer']:
+                    #     acl[2]['stock_location_id'] = location_id
             # else:
             #     if move.location_id.usage == 'internal' and  move.location_dest_id.usage != 'internal':
             #         acl[2]['stock_location_id'] = move.location_id.id
@@ -447,6 +454,13 @@ class StockMove(models.Model):
         if move_type and ('transfer' in move_type or 'transit' in move_type):
             return True
         return super(StockMove, self)._is_dropshipped()
+
+
+    def correction_valuation(self):
+        for move in self:
+            move.product_price_update_before_done()
+            move._run_valuation()
+            move._account_entry_move()
 
 
 class stock_picking(models.Model):
