@@ -96,7 +96,7 @@
                                         <td class="text-right">
                                             <t t-if="line.quantity">
                                                 <t t-set="price" t-value="line.amount/line.quantity"/>
-                                                <span  t-esc="price"/>
+                                                <span  t-esc="price" t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                         </td>
                                     </tr>
@@ -107,7 +107,7 @@
                                         <td></td>
                                         <td></td>
                                         <td class="text-right">
-                                            <span style="font-weight:bold;" t-esc="total_qty"/>
+                                            <span style="font-weight:bold;" t-esc="total_qty" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
                                             <span style="font-weight:bold;" t-esc="total"
