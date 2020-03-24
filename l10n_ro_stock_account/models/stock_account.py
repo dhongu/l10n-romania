@@ -6,6 +6,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 import logging
+
 _logger = logging.getLogger(__name__)
 
 
@@ -51,18 +52,27 @@ class stock_location(models.Model):
     #                                                             help="When doing real-time inventory valuation, counterpart journal items for all outgoing stock moves will be posted in this account, unless "
     #                                                                  "there is a specific valuation account set on the destination location. When not set on the product, the one from the product category is used.",
     #                                                             company_dependent=True)
-    property_account_creditor_price_difference_location_id = fields.Many2one('account.account',
-                                                                             string="Price Difference Account",
-                                                                             help="This account will be used to value price difference between purchase price and cost price.",
-                                                                             company_dependent=True)
-    property_account_income_location_id = fields.Many2one('account.account',
-                                                          string="Income Account",
-                                                          help="This account will be used to value outgoing stock using sale price.",
-                                                          company_dependent=True)
-    property_account_expense_location_id = fields.Many2one('account.account',
-                                                           string="Expense Account",
-                                                           help="This account will be used to value outgoing stock using cost price.",
-                                                           company_dependent=True)
+    property_account_creditor_price_difference_location_id = fields.Many2one(
+        'account.account',
+        string="Price Difference Account",
+        help="This account will be used to value price difference between purchase price and cost price.",
+        company_dependent=True)
+    property_account_income_location_id = fields.Many2one(
+        'account.account',
+        string="Income Account",
+        help="This account will be used to value outgoing stock using sale price.",
+        company_dependent=True)
+    property_account_expense_location_id = fields.Many2one(
+        'account.account',
+        string="Expense Account",
+        help="This account will be used to value outgoing stock using cost price.",
+        company_dependent=True)
+
+    # oare este necesar sa fie utilizat si un astfel de cont ?
+    # property_stock_valuation_account_id = fields.Many2one(
+    #     'account.account', 'Stock Valuation Account', company_dependent=True,
+    #     domain=[('deprecated', '=', False)],
+    #     help="When real-time inventory valuation is enabled on a product, this account will hold the current value of the products.", )
 
 
 class StockMove(models.Model):
@@ -84,7 +94,9 @@ class StockMove(models.Model):
         ('delivery_refund_store', 'Delivery Refund Store'),
         ('consume', 'Consume'),
         ('inventory_plus', 'Inventory plus'),
+        ('inventory_plus_store','Inventory plus in store'),
         ('inventory_minus', 'Inventory minus'),
+        ('inventory_minus_store', 'Inventory minus in store'),
         ('production', 'Reception from production'),
         ('transfer', 'Transfer'),
         ('transfer_store', 'Transfer in Store'),
@@ -125,7 +137,7 @@ class StockMove(models.Model):
 
         debit = self.env['account.account'].browse(debit_account_id)
         credit = self.env['account.account'].browse(credit_account_id)
-        _logger.info('NC: %s = %s   ' % (debit.name, credit.name))
+        _logger.info('NC: %s  = %s   ' % (debit.display_name, credit.display_name))
 
         permit_same_account = self.env.context.get('permit_same_account', False)
         if credit_account_id != debit_account_id or permit_same_account:
@@ -201,6 +213,15 @@ class StockMove(models.Model):
 
         # move_type = self.env.context.get('move_type', move.get_move_type())
         move_type = self.env.context.get('move_type', move.move_type)
+
+        if move_type in ['inventory_plus_store','inventory_minus_store']:
+            _logger.error(_('Nu este implementata aceasta operatie'))
+
+            #raise UserError(_('Nu este implementata aceasta operatie'))
+
+        if 'delivery_store' == move_type:   # la livrarea din magazin se va folosi contrul specificat in locatie!
+            if move.location_id.valuation_out_account_id:  # produsele sunt evaluate dupa contrul de evaluare din locatie
+                acc_valuation = move.location_id.valuation_out_account_id
 
         if 'reception' in move_type and 'notice' in move_type:
             acc_src = move.company_id.property_stock_picking_payable_account_id
@@ -312,7 +333,10 @@ class StockMove(models.Model):
         if self.location_dest_id.valuation_in_account_id:
             acc_dest = self.location_dest_id.valuation_in_account_id.id
         else:
-            acc_dest = accounts_data['stock_input']
+            if self.location_id.valuation_out_account_id:
+                acc_dest = self.location_id.valuation_out_account_id.id
+            else:
+                acc_dest = accounts_data['stock_input']
 
         journal_id = accounts_data['stock_journal'].id
 
@@ -401,10 +425,8 @@ class StockMove(models.Model):
     def _prepare_account_move_line(self, qty, cost, credit_account_id, debit_account_id):
         self.ensure_one()
 
-
         move = self
         res = super(StockMove, move)._prepare_account_move_line(qty, cost, credit_account_id, debit_account_id)
-
 
         if not res:
             return res
@@ -455,7 +477,6 @@ class StockMove(models.Model):
             return True
         return super(StockMove, self)._is_dropshipped()
 
-
     def correction_valuation(self):
         for move in self:
             move.product_price_update_before_done()
@@ -471,7 +492,8 @@ class stock_picking(models.Model):
 
     # prin acest camp se indica daca un produs care e stocabil trece prin contul 408 / 418 la achizitie sau vanzare
     # receptie/ livrare in baza de aviz
-    notice = fields.Boolean('Is a notice', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]}, default=False)
+    notice = fields.Boolean('Is a notice', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
+                            default=False)
 
     @api.multi
     def action_done(self):
