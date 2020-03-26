@@ -1,0 +1,26 @@
+:20:2003170004
+:25:RO60RNCB0075035214300001
+:28C:20004/1
+:60F:C200316RON3537,55
+:61:2003160316D884,22NTRFNONREF//2020031617331019
+:86:Decontare - Direct debit - Platitor  ROM DEVICES SRL RO60RNCB0075
+035214300001 Beneficiar  ENEL ENERGIE MUNTENIA SA RO98RNCB0072104
+291610001 Data scadenta  16-03-2020 Suma  884.22 explicatii
+:61:2003160316C2077,87NTRFNOTPROVIDED//2020031618252891
+EURO VALVES DISTRIBUTION SRL
+:86:Referinta 200316S721621604, data valutei 16-03-2020, Decontare -P
+latitor  EURO VALVES DISTRIBUTION SRL  RO17UGBI0000422011038RON-B
+eneficiar  ROM DEVICES  RO60RNCB0075035214300001-Detalii  /ROC/PR
+OFORMA 379
+:61:2003160316D4,00NCOMNOTPROVIDED//2020031618252891
+:86:Operatiuni fara numerar - In sistem interbancar  - Incasari perso
+ane juridice - Regim uzual - com CR pentru tranzactia cu voucheru
+l 2020031618252891
+:62F:C200316RON4727,20
+:64:C200317RON4727,20
+:65:C200316RON4727,20
+:86:Va informam ca depozitul se incadreaza in categoria depozitelor e
+ligibile. Informatii privind garantarea depozitelor regasiti in F
+ormularul Pentru Informatii Oferite Deponentilor comunicat de Ban
+ca.
+
