@@ -138,7 +138,7 @@ class StorageSheetReport(models.TransientModel):
                                        aml.date >= %(date_from)s AND aml.date  <= %(date_to)s AND
                                         ( stock_location_id = %(location)s OR stock_location_dest_id = %(location)s) AND
                                        (aml.debit  -  aml.credit) >= 0 
-                              GROUP BY aml.date, aml.product_id, aml.account_id, aml.ref, aml.name"""
+                              GROUP BY aml.date, aml.product_id, aml.account_id, COALESCE(aml.ref, aml.name)"""
 
         params = {
             'location': self.location_id.id,
@@ -188,7 +188,7 @@ class StorageSheetReport(models.TransientModel):
                                                aml.date >= %(date_from)s AND aml.date  <= %(date_to)s AND
                                                 ( stock_location_id = %(location)s OR stock_location_dest_id = %(location)s) AND
                                                (aml.debit  -  aml.credit) < 0 
-                                      GROUP BY aml.date, aml.product_id, aml.account_id, aml.ref, aml.name"""
+                                      GROUP BY aml.date, aml.product_id, aml.account_id, COALESCE(aml.ref, aml.name)"""
 
         params = {
             'location': self.location_id.id,
