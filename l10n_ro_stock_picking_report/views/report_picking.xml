@@ -372,6 +372,9 @@
                                         <th>
                                             <strong>From Location</strong>
                                         </th>
+                                        <th>
+                                            <strong>Customer reference</strong>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -385,6 +388,11 @@
                                         </td>
                                         <td>
                                             <span t-field="o.location_id"/>
+                                        </td>
+
+                                        <td>
+                                            <t t-set="sale" t-value="o.sale_id"/>
+                                            <span t-field="sale.client_order_ref"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -446,7 +454,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <t t-call="base.report_address_company"/>
+                            <t t-call="l10n_ro_config.report_address_company"/>
 
                             <h3>
                                 <span t-if="o.state == 'drat'">Draft</span>
@@ -537,7 +545,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <t t-call="base.report_address_company"/>
+                            <t t-call="l10n_ro_config.report_address_company"/>
 
                             <h3>
 
@@ -739,6 +747,9 @@
                                         <th>
                                             <strong>From Location</strong>
                                         </th>
+                                        <th>
+                                            <strong>Customer reference</strong>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -752,6 +763,10 @@
                                         </td>
                                         <td>
                                             <span t-field="o.location_id"/>
+                                        </td>
+                                         <td>
+                                            <t t-set="sale" t-value="o.sale_id"/>
+                                            <span t-field="sale.client_order_ref"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1184,16 +1199,16 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['price'])" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['price']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount'])" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['amount']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['tax'])" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount_tax'])" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['amount_tax']" t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
                                             <span t-field="move.product_id.list_price" />
