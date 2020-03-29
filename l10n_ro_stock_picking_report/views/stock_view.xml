@@ -17,7 +17,8 @@
 
 
                 <field name="group_id" position="after">
-                    <field name="delegate_id" domain="[('is_company','=',False)]"/>
+                    <field name="delegate_id" domain="[('type','=','contact'),('is_company','=',False)]"
+                           context="{'simple_form':True, 'parent_partner_id':partner_id } "/>
                     <field name="mean_transp"/>
                 </field>
             </field>
@@ -29,7 +30,7 @@
             <field name="model">stock.location</field>
             <field name="inherit_id" ref="stock.view_location_form"/>
             <field name="arch" type="xml">
-                <field name="partner_id" position="after">
+                <field name="usage" position="after">
                     <field name="user_id"/>
                 </field>
             </field>
