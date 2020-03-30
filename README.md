@@ -1,6 +1,4 @@
-[![Runbot Status](https://runbot.odoo-community.org/runbot/badge/flat/177/10.0.svg)](https://runbot.odoo-community.org/runbot/repo/github-com-oca-l10n-romania-177)
-[![Build Status](https://travis-ci.org/OCA/l10n-romania.svg?branch=10.0)](https://travis-ci.org/OCA/l10n-romania)
-[![codecov](https://codecov.io/gh/OCA/l10n-romania/branch/10.0/graph/badge.svg)](https://codecov.io/gh/OCA/l10n-romania)
+
 
 Odoo Romania Localisation
 =========================
