@@ -3,9 +3,13 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
+import odoo.addons.decimal_precision as dp
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from odoo.addons import decimal_precision as dp
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 # ----------------------------------------------------------
 # Stock Location
@@ -62,6 +66,12 @@ class StockLocation(models.Model):
                                                            help="This account will be used to value outgoing stock using cost price.",
                                                            company_dependent=True)
 
+    # oare este necesar sa fie utilizat si un astfel de cont ?
+    # property_stock_valuation_account_id = fields.Many2one(
+    #     'account.account', 'Stock Valuation Account', company_dependent=True,
+    #     domain=[('deprecated', '=', False)],
+    #     help="When real-time inventory valuation is enabled on a product, this account will hold the current value of the products.", )
+
 
 class StockMove(models.Model):
     _name = "stock.move"
@@ -78,25 +88,28 @@ class StockMove(models.Model):
         ('reception_refund', 'Reception refund'),               # rambursare receptie
         ('reception_refund_notice', 'Reception refund with notice'), # rabursare receptie facuta cu aviz
         ('reception_refund_store_notice', 'Reception refund in store with notice'),# rabursare receptie in magazin facuta cu aviz
+        ('reception_store_notice','Reception in store with notice'),
 
         ('delivery', 'Delivery'),
         ('delivery_notice', 'Delivery with notice'),
         ('delivery_store', 'Delivery from store'),
+        ('delivery_store_notice', 'Delivery from store with notice'),
         ('delivery_refund', 'Delivery refund'),
         ('delivery_refund_notice', 'Delivery refund with notice'),
         ('delivery_refund_store', 'Delivery refund in store'),
         ('delivery_refund_store_notice', 'Delivery refund in store with notice'),
-
         ('consume', 'Consume'),
         ('inventory_plus', 'Inventory plus'),
+        ('inventory_plus_store','Inventory plus in store'),
         ('inventory_minus', 'Inventory minus'),
-        ('production', 'Production'),
+        ('inventory_minus_store', 'Inventory minus in store'),
+        ('production', 'Reception from production'),
         ('transfer', 'Transfer'),
         ('transfer_store', 'Transfer in Store'),
         ('transfer_in', 'Transfer in'),
         ('transfer_out', 'Transfer out'),
         ('consume_store', 'Consume from Store'),
-        ('production_store', 'Reception from Production')
+        ('production_store', 'Reception in store from production')
     ], compute='_compute_move_type')
 
     price_unit = fields.Float(
@@ -140,7 +153,7 @@ class StockMove(models.Model):
 
         debit = self.env['account.account'].browse(debit_account_id)
         credit = self.env['account.account'].browse(credit_account_id)
-        print('%s = %s   ' % (debit.name, credit.name))
+        _logger.info('NC: %s  = %s   ' % (debit.display_name, credit.display_name))
 
         permit_same_account = self.env.context.get('permit_same_account', False)
         if credit_account_id != debit_account_id or permit_same_account:
@@ -167,7 +180,9 @@ class StockMove(models.Model):
 
             if (location_from.usage == 'internal' and location_to.usage == 'customer') or \
                     (location_from.usage == 'customer' and location_to.usage == 'internal'):
-                notice = move.product_id.invoice_policy == 'delivery'
+               if  move.product_id.invoice_policy != 'delivery':
+                    notice = False
+                    _logger.warning('Pentru produsul %s nu se poate utiliza livrare pe baza de aviz  ' % move.product_id.display_name)
 
         move_type = ''
         if location_from.usage == 'supplier' and location_to.usage == 'internal':
@@ -217,27 +232,47 @@ class StockMove(models.Model):
         # move_type = self.env.context.get('move_type', move.get_move_type())
         move_type = self.env.context.get('move_type', move.move_type)
 
+        if move_type == 'inventory_plus_store':
+            if move.location_dest_id.valuation_in_account_id:
+                acc_valuation = move.location_dest_id.valuation_in_account_id
+            if move.location_dest_id.property_account_expense_location_id:
+                acc_dest = move.location_dest_id.property_account_expense_location_id
+                acc_src = acc_dest
+        if move_type == 'inventory_minus_store':
+            if move.location_id.valuation_out_account_id:
+                acc_valuation = move.location_id.valuation_out_account_id
+            if move.location_id.property_account_expense_location_id:  # 758800 Alte venituri din exploatare
+                acc_dest = move.location_id.property_account_expense_location_id
+                acc_src = acc_dest
+
+
+        if 'delivery_store' in move_type:   # la livrarea din magazin se va folosi contrul specificat in locatie!
+            if move.location_id.valuation_out_account_id:  # produsele sunt evaluate dupa contrul de evaluare din locatie
+                acc_valuation = move.location_id.valuation_out_account_id
+
         if 'reception' in move_type and 'notice' in move_type:
             acc_src = move.company_id.property_stock_picking_payable_account_id
             acc_dest = move.company_id.property_stock_picking_payable_account_id
 
-        if 'consume' in move_type or 'delivery' in move_type:
+        if 'consume' in move_type or 'delivery' in move_type or 'production' in move_type:
             acc_dest = move.product_id.property_account_expense_id
             if not acc_dest:
                 acc_dest = move.product_id.categ_id.property_account_expense_categ_id
-            if move.location_id.property_account_expense_location_id:  # 758800 Alte venituri din exploatare
+            if move.location_id.property_account_expense_location_id:
                 acc_dest = move.location_id.property_account_expense_location_id
             acc_src = acc_dest
 
-        if move_type == 'inventory_plus':
+        if 'inventory_plus' ==  move_type :
+            # cont stoc la cont de cheltuiala
             acc_dest = move.product_id.property_account_expense_id
             if not acc_dest:
                 acc_dest = move.product_id.categ_id.property_account_expense_categ_id
-            if move.location_id.property_account_expense_location_id:  # 758800 Alte venituri din exploatare
+            if move.location_id.property_account_expense_location_id:    # 758800 Alte venituri din exploatare
                 acc_dest = move.location_id.property_account_expense_location_id
             acc_src = acc_dest
 
-        if move_type == 'inventory_minus':
+        if 'inventory_minus' == move_type :
+            # cont de cheltuiala la cont de stoc
             acc_src = move.product_id.property_account_income_id
             if not acc_src:
                 acc_src = move.product_id.categ_id.property_account_income_categ_id
@@ -255,49 +290,58 @@ class StockMove(models.Model):
         use_date = fields.Datetime.context_timestamp(self, timestamp=fields.Datetime.from_string(self.date))
         use_date = fields.Date.to_string(use_date)
 
-        # move_type = self.get_move_type()
-        move_type = self.move_type
+        move_type = self.get_move_type()
+
         move = self.with_context(force_period_date=use_date, move_type=move_type)
 
         # nota contabila standard
         # if 'transfer' not in move_type:
-        print("Nota contabila standard")
+        _logger.info("Nota contabila standard")
         super(StockMove, move)._account_entry_move()
 
         if 'transfer' in move_type:
             # iesire  marfa din stoc
-            print("Nota contabila transfer de stoc ")
+            _logger.info("Nota contabila transfer de stoc ")
             transfer_move = move.with_context(stock_location_id=move.location_id.id,
                                               stock_location_dest_id=move.location_dest_id.id)
             transfer_move._create_account_stock_to_stock(refund=False, permit_same_account=True)
             #     # intrare marfa in stoc
-            #     print("Nota contabila intrare stoc in vederea transferului ")
+            #     _logger.info("Nota contabila intrare stoc in vederea transferului ")
             #     move.with_context(stock_location_id=move.location_dest_id.id)._create_account_stock_to_stock(refund=True, permit_same_account=False)
 
         if 'transit_out' in move_type:
-            print("Nota contabila iesire stoc in tranzit ")
+            _logger.info("Nota contabila iesire stoc in tranzit ")
             move._create_account_stock_to_stock(refund=True,
                                                 stock_transfer_account=move.company_id.property_stock_transfer_account_id)
         if 'transit_in' in move_type:
-            print("Nota contabila intrare stoc in tranzit ")
+            _logger.info("Nota contabila intrare stoc in tranzit ")
             move._create_account_stock_to_stock(refund=False,
                                                 stock_transfer_account=move.company_id.property_stock_transfer_account_id)
 
         if 'delivery' in move_type and 'notice' in move_type:  # livrare pe baza de aviz de facut nota contabila 418 = 70x
-            print("Nota contabila livrare cu aviz")
+            _logger.info("Nota contabila livrare cu aviz")
             move._create_account_delivery_notice(refund='refund' in move_type)
         if ('reception' in move_type or 'transfer' in move_type or 'transit_in' in move_type) and 'store' in move_type:
-            print("Nota contabila receptie in magazin ")
+            _logger.info("Nota contabila receptie in magazin")
             move.with_context(stock_location_id=move.location_dest_id.id)._create_account_reception_in_store(
                 refund='refund' in move_type)
         if 'delivery' in move_type and 'store' in move_type:
-            print("Nota contabila livrare din magazin ")
+            _logger.info("Nota contabila livrare din magazin ")
             move._create_account_delivery_from_store(refund='refund' in move_type)
+
+        if move_type == 'inventory_plus_store':
+            _logger.info("Nota contabila plus de inventar in magazin")
+            move.with_context(stock_location_id=move.location_dest_id.id)._create_account_inventory_plus_in_store()
+        elif move_type == 'inventory_minus_store':
+            _logger.info("Nota contabila minus de inventar in magazin")
+            move.with_context(stock_location_id=move.location_id.id)._create_account_inventory_minus_in_store()
+
+
 
     def _create_account_stock_to_stock(self, refund, stock_transfer_account=None, permit_same_account=True):
         journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation()
         forced_quantity = self.product_qty if not refund else -1 * self.product_qty
-        move = self.with_context(forced_quantity=forced_quantity, permit_same_account=True)
+        move = self.with_context(forced_quantity=forced_quantity, permit_same_account=permit_same_account)
 
         if refund:
             # if acc_valuation == acc_dest :
@@ -312,7 +356,20 @@ class StockMove(models.Model):
             aml = move._create_account_move_line(acc_src, acc_dest, journal_id)
         return aml
 
-    def _create_account_reception_in_store(self, refund):
+
+    def _create_account_inventory_plus_in_store(self):
+        #inregistrare diferenta de pret
+        #inregistrare taxa neexigibila
+        self._create_account_reception_in_store()
+
+
+    def _create_account_inventory_minus_in_store(self):
+        #inregistrare diferenta de pret
+        #inregistrare taxa neexigibila
+        self._create_account_reception_in_store(refund=True)
+
+
+    def _create_account_reception_in_store(self, refund=False):
         '''
         Receptions in location with inventory kept at list price
         Create account move with the price difference one (3x8) to suit move: 3xx = 3x8
@@ -326,7 +383,10 @@ class StockMove(models.Model):
         if self.location_dest_id.valuation_in_account_id:
             acc_dest = self.location_dest_id.valuation_in_account_id.id
         else:
-            acc_dest = accounts_data['stock_input']
+            if self.location_id.valuation_out_account_id:
+                acc_dest = self.location_id.valuation_out_account_id.id
+            else:
+                acc_dest = accounts_data['stock_input']
 
         journal_id = accounts_data['stock_journal'].id
 
@@ -373,7 +433,7 @@ class StockMove(models.Model):
         if uneligible_tax:
             if not move.company_id.tax_cash_basis_journal_id.default_debit_account_id:
                 # raise UserError(_('Please set account for uneligible tax '))
-                print(_('Please set account for uneligible tax '))
+                _logger.info(_('Please set account for uneligible tax '))
             if not refund:
                 acc_src = move.company_id.tax_cash_basis_journal_id.default_debit_account_id
             else:
@@ -414,7 +474,6 @@ class StockMove(models.Model):
 
     def _prepare_account_move_line(self, qty, cost, credit_account_id, debit_account_id):
         self.ensure_one()
-
 
         move = self
         res = super(StockMove, move)._prepare_account_move_line(qty, cost, credit_account_id, debit_account_id)
@@ -464,12 +523,18 @@ class StockMove(models.Model):
         return res
 
     def _is_dropshipped(self):
-        # move_type = self.get_move_type()
         move_type = self.move_type
+        if not move_type:
+            move_type = self.get_move_type()
         if move_type and ('transfer' in move_type or 'transit' in move_type):
             return True
         return super(StockMove, self)._is_dropshipped()
 
+    def correction_valuation(self):
+        for move in self:
+            move.product_price_update_before_done()
+            move._run_valuation()
+            move._account_entry_move()
 
 class StockPicking(models.Model):
     _name = 'stock.picking'

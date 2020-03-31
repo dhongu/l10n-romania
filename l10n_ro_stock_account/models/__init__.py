@@ -11,3 +11,4 @@ from . import stock_account
 from . import account_invoice
 from . import sale
 from . import product
+from . import picking
