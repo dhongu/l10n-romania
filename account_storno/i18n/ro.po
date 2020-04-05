@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-04 06:07+0000\n"
-"PO-Revision-Date: 2019-05-04 06:07+0000\n"
+"POT-Creation-Date: 2020-04-05 08:10+0000\n"
+"PO-Revision-Date: 2020-04-05 08:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -24,13 +24,13 @@ msgstr "Înregistrare contabilă"
 #: code:addons/account_storno/wizard/account_invoice_refund.py:43
 #, python-format
 msgid "Cannot create credit note for the draft/cancelled invoice."
-msgstr "Cannot create credit note for the draft/cancelled invoice."
+msgstr "Nu poti crea o nota credit pentru o factura ciorna/anulata."
 
 #. module: account_storno
 #: code:addons/account_storno/wizard/account_invoice_refund.py:47
 #, python-format
 msgid "Cannot create credit note for the invoice which is already reconciled. The invoice should be unreconciled first: only then can you add credit note for this invoice."
-msgstr "Cannot create credit note for the invoice which is already reconciled. The invoice should be unreconciled first: only then can you add credit note for this invoice."
+msgstr "Nu poti crea o nota credit pentru o factura reconciliata. Factura trebuie nereconciliata intai: doar dupa poti adauga o nota de credit pentru aceasta factura"
 
 #. module: account_storno
 #: selection:account.journal,posting_policy:0
@@ -38,9 +38,10 @@ msgid "Contra (Standard Odoo)"
 msgstr "Contra (Standard Odoo)"
 
 #. module: account_storno
-#: model:ir.model.fields,field_description:account_storno.field_product_product_cost_currency_id
-msgid "Cost Currency"
-msgstr "Cost Currency"
+#: code:addons/account_storno/wizard/account_invoice_refund.py:28
+#, python-format
+msgid "Create a storno invoice."
+msgstr "Creeaza storno cu minus"
 
 #. module: account_storno
 #: model:ir.model,name:account_storno.model_account_invoice_refund
@@ -56,7 +57,7 @@ msgstr "Factură"
 #: code:addons/account_storno/models/account_invoice.py:26
 #, python-format
 msgid "Invoice must be in draft state in order to validate it."
-msgstr "Invoice must be in draft state in order to validate it."
+msgstr "Factura trebuie sa fie in starea ciorna pentru a putea fi validata."
 
 #. module: account_storno
 #: model:ir.model,name:account_storno.model_account_journal
@@ -69,18 +70,6 @@ msgid "Journal Item"
 msgstr "Element jurnal"
 
 #. module: account_storno
-#: code:addons/account_storno/models/account_invoice.py:90
-#, python-format
-msgid "Outstanding credits"
-msgstr "Outstanding credits"
-
-#. module: account_storno
-#: code:addons/account_storno/models/account_invoice.py:102
-#, python-format
-msgid "Outstanding debits"
-msgstr "Outstanding debits"
-
-#. module: account_storno
 #: model:ir.model,name:account_storno.model_product_product
 msgid "Product"
 msgstr "Produs"
@@ -88,12 +77,7 @@ msgstr "Produs"
 #. module: account_storno
 #: model:ir.ui.view,arch_db:account_storno.account_supplier_form
 msgid "Register Payment"
-msgstr "Înregistrează Plata"
-
-#. module: account_storno
-#: model:ir.model,name:account_storno.model_account_register_payments
-msgid "Register payments on multiple invoices"
-msgstr "Register payments on multiple invoices"
+msgstr "Înregistrează Plată"
 
 #. module: account_storno
 #: selection:account.journal,posting_policy:0
@@ -114,10 +98,10 @@ msgstr "Storno allows minus postings, Refunds are posted on the same journal wit
 "Contra doesn't allow negative posting. Refunds are posted by swaping credit and debit side."
 
 #. module: account_storno
-#: code:addons/account_storno/models/account_move.py:51
+#: code:addons/account_storno/models/account_move.py:46
 #, python-format
 msgid "Storno of: "
-msgstr "Storno of: "
+msgstr "Storno pentru: "
 
 #. module: account_storno
 #: model:ir.model.fields,field_description:account_storno.field_account_journal_posting_policy
@@ -125,14 +109,14 @@ msgid "Storno or Contra"
 msgstr "Storno or Contra"
 
 #. module: account_storno
-#: code:addons/account_storno/models/account_move_line.py:52
+#: code:addons/account_storno/models/account_move_line.py:47
 #, python-format
 msgid "The amount expressed in the secondary currency must be positive when account is debited and negative when account is credited."
 msgstr "The amount expressed in the secondary currency must be positive when account is debited and negative when account is credited."
 
 #. module: account_storno
 #: sql_constraint:account.move.line:0
-#: code:addons/account_storno/models/account_move_line.py:39
+#: code:addons/account_storno/models/account_move_line.py:35
 #, python-format
 msgid "Wrong credit or debit value in accounting entry."
 msgstr "Wrong credit or debit value in accounting entry."
@@ -142,4 +126,3 @@ msgstr "Wrong credit or debit value in accounting entry."
 #, python-format
 msgid "You cannot validate an invoice with a negative total amount. You should create a credit note instead."
 msgstr "You cannot validate an invoice with a negative total amount. You should create a credit note instead."
-

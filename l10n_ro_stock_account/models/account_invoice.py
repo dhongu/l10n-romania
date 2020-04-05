@@ -191,13 +191,16 @@ class AccountInvoiceLine(models.Model):
         return stock_moves
 
     def _ensure_total_matches_line_quantity(self, stock_moves):
-        stock_quantity = sum(stock_moves.mapped('product_uom_qty'))
-        if self.quantity == stock_quantity:
-            return stock_moves
-        elif self.quantity > stock_quantity:
-            raise UserError(_('It is not allowed to record an invoice for a quantity bigger than %s') % str(stock_quantity))
+        if stock_moves:
+            stock_quantity = sum(stock_moves.mapped('product_uom_qty'))
+            if self.quantity == stock_quantity:
+                return stock_moves
+            elif self.quantity > stock_quantity:
+                raise UserError(_('It is not allowed to record an invoice for a quantity bigger than %s') % str(stock_quantity))
+            else:
+                return self._find_subset_of_moves_with_total_quantity(stock_moves)
         else:
-            return self._find_subset_of_moves_with_total_quantity(stock_moves)
+            return stock_moves
 
     def _find_subset_of_moves_with_total_quantity(self, stock_moves):
         stock_moves_list = list(stock_moves)
