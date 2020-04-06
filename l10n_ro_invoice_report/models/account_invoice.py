@@ -3,7 +3,7 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-import odoo.addons.decimal_precision as dp
+
 
 from odoo import models, fields, api
 
@@ -22,6 +22,16 @@ class account_invoice(models.Model):
                                   domain=[('is_company', '=', False)])
 
     mean_transp = fields.Char(string='Mean transport', readonly=True, states={'draft': [('readonly', False)]}, )
+
+
+    @api.model
+    def default_get(self, fields_list):
+        defaults = super(account_invoice, self).default_get(fields_list)
+        if 'delegate_id' not in defaults:
+            if 'default_delegate_id' in self.env.context:
+                defaults['default_delegate_id'] = defaults['default_delegate_id']
+        return defaults
+
 
     @api.onchange('delegate_id')
     def on_change_delegate_id(self):
