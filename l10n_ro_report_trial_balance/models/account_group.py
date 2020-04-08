@@ -13,6 +13,8 @@ class AccountGroup(models.Model):
     compute_account_ids = fields.Many2many('account.account', compute='_compute_group_accounts', string="Accounts",
                                            store=True)
 
+
+
     @api.multi
     @api.depends('parent_id', 'parent_id.level')
     def _compute_level(self):
@@ -27,9 +29,13 @@ class AccountGroup(models.Model):
                  'group_child_ids', 'group_child_ids.account_ids.code')
     def _compute_group_accounts(self):
         account_obj = self.env['account.account']
-        accounts = account_obj.search([])
+        accounts = account_obj.search([])  # ('company_id', '=', self.company_id.id)  #trebuie sa tina cont si de companie!
         for group in self:
             prefix = group.code_prefix if group.code_prefix else group.name
-            gr_acc = accounts.filtered(
-                lambda a: a.code.startswith(prefix)).ids
+            gr_acc = accounts.filtered( lambda a: a.code.startswith(prefix)).ids
+            if not gr_acc:
+                group_accounts = self.env['account.account']
+                for child in group.group_child_ids:
+                    group_accounts |= child.compute_account_ids
+                gr_acc = group_accounts.ids
             group.compute_account_ids = [(6, 0, gr_acc)]

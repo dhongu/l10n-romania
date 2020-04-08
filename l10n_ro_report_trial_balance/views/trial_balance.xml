@@ -35,6 +35,7 @@
                     </t>
                     <t t-foreach="lines" t-as="line">
                         <t t-set="style" t-value="'font-size:10px; color: black;'"/>
+
                         <t t-if="line.account_group_id and len(line.code) == 1">
                             <t t-set="style" t-value="'font-size: 13px; font-weight: bold; color: blue;'"/>
                             <t t-set="padding" t-value="0"/>
@@ -55,6 +56,11 @@
                             <t t-set="style" t-value="'font-size: 10px; font-weight: bold; color: blue;'"/>
                             <t t-set="padding" t-value="16"/>
                         </t>
+                        <t t-if="line.account_group_id and ( not line.code or '-' in line.code)">
+                            <t t-set="style" t-value="'font-size: 14px; font-weight: bold; color: blue;'"/>
+                            <t t-set="padding" t-value="0"/>
+                        </t>
+
                         <t t-if="line.account_group_id">
                             <t t-set="grcode" t-value="line.code"/>
                         </t>

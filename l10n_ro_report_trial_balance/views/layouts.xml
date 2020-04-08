@@ -32,10 +32,10 @@
         </div>
 
         <div class="footer o_background_footer">
-            <div class="col-xs-6 custom_footer">
+            <div class="col-6 custom_footer">
                 <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
             </div>
-            <div class="col-xs-6 text-right custom_footer">
+            <div class="col-6 text-right custom_footer">
                 Page:
                 <span class="page"/>
                 /

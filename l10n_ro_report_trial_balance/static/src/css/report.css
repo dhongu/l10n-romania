@@ -1,6 +1,8 @@
-body, table, td, span, div {
+
+/*body, table, td, span, div {
     font-family: Helvetica, Arial;
-}
+}*/
+
 .act_as_table {
     width: 100% !important;
     display: table !important;

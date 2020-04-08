@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- todo: de rezolvat problema sortarii -->
         <record model="account.group" id="account_group_balanta">
-            <field name="name">Balanța RO</field>
+            <field name="name">Balanța</field>
+            <field name="code_prefix">-</field>
         </record>
 
-        <record model="account.group" id="account_group_15">
+        <record model="account.group" id="account_group_1__7">
             <field name="name">Clasele 1-7. Conturi financiare</field>
-            <field name="code_prefix"></field>
+            <field name="code_prefix">1 -  7</field>
             <field name="parent_id" ref="account_group_balanta"/>
         </record>
 
-        <record model="account.group" id="account_group_16">
+        <record model="account.group" id="account_group_1__5">
             <field name="name">Clasele 1-5. Conturi de bilanț</field>
-            <field name="code_prefix"></field>
-            <field name="parent_id" ref="account_group_15"/>
+            <field name="code_prefix">1 - 5</field>
+            <field name="parent_id" ref="account_group_1__7"/>
         </record>
 
         <record model="account.group" id="account_group_1">
             <field name="name">Clasa 1. Conturi de capitaluri</field>
             <field name="code_prefix">1</field>
-            <field name="parent_id" ref="account_group_16"/>
+            <field name="parent_id" ref="account_group_1__5"/>
         </record>
 
         <record model="account.group" id="account_group_1_10">
@@ -650,7 +652,7 @@
         <record model="account.group" id="account_group_2">
             <field name="name">Clasa 2. Conturi de imobilizari</field>
             <field name="code_prefix">2</field>
-            <field name="parent_id" ref="account_group_16"/>
+            <field name="parent_id" ref="account_group_1__5"/>
         </record>
 
 
@@ -1343,7 +1345,7 @@
         <record model="account.group" id="account_group_3">
             <field name="name">Clasa 3. Conturi de stocuri și productie în curs de execuție</field>
             <field name="code_prefix">3</field>
-            <field name="parent_id" ref="account_group_16"/>
+            <field name="parent_id" ref="account_group_1__5"/>
         </record>
 
 
@@ -1821,7 +1823,7 @@
         <record model="account.group" id="account_group_4">
             <field name="name">Clasa 4. Conturi de terți</field>
             <field name="code_prefix">4</field>
-            <field name="parent_id" ref="account_group_16"/>
+            <field name="parent_id" ref="account_group_1__5"/>
         </record>
 
         <record model="account.group" id="account_group_4_40">
@@ -2511,7 +2513,7 @@
         <record model="account.group" id="account_group_5">
             <field name="name">Clasa 5. Conturi de trezorerie</field>
             <field name="code_prefix">5</field>
-            <field name="parent_id" ref="account_group_16"/>
+            <field name="parent_id" ref="account_group_1__5"/>
         </record>
 
         <record model="account.group" id="account_group_5_50">
@@ -2895,16 +2897,16 @@
 
         </record>
 
-        <record model="account.group" id="account_group_114">
+        <record model="account.group" id="account_group_6__7">
             <field name="name">Clasele 6 și 7. Conturile de venituri și cheltuieli</field>
-            <field name="code_prefix"></field>
-            <field name="parent_id" ref="account_group_15"/>
+            <field name="code_prefix">6 - 7</field>
+            <field name="parent_id" ref="account_group_1__7"/>
         </record>
 
         <record model="account.group" id="account_group_6_0">
-            <field name="name">Conturi de cheltuieli</field>
+            <field name="name">Clasa 6. Conturi de cheltuieli</field>
             <field name="code_prefix">6</field>
-            <field name="parent_id" ref="account_group_114"/>
+            <field name="parent_id" ref="account_group_6__7"/>
         </record>
 
         <record model="account.group" id="account_group_6_60">
@@ -3601,7 +3603,7 @@
         <record model="account.group" id="account_group_7">
             <field name="name">Clasa 7. Cconturi de venituri</field>
             <field name="code_prefix">7</field>
-            <field name="parent_id" ref="account_group_114"/>
+            <field name="parent_id" ref="account_group_6__7"/>
         </record>
 
         <record model="account.group" id="account_group_7_70">
@@ -4098,102 +4100,102 @@
 
                 </record>
                 -->
-        <record model="account.group" id="account_group_152">
+        <record model="account.group" id="account_group_8__9">
             <field name="name">Clasele 8-9. Conturi în afara bilantului</field>
-            <field name="code_prefix"></field>
+            <field name="code_prefix">8-9</field>
             <field name="parent_id" ref="account_group_balanta"/>
         </record>
 
-        <record model="account.group" id="account_group_153">
+        <record model="account.group" id="account_group_8">
             <field name="name">Clasa 8. conturi speciale</field>
             <field name="code_prefix">8</field>
-            <field name="parent_id" ref="account_group_152"/>
+            <field name="parent_id" ref="account_group_8__9"/>
         </record>
 
-        <record model="account.group" id="account_group_154">
+        <record model="account.group" id="account_group_80">
             <field name="name">Conturi în afara bilantului</field>
             <field name="code_prefix">80</field>
 
 
-            <field name="parent_id" ref="account_group_153"/>
+            <field name="parent_id" ref="account_group_8"/>
 
         </record>
 
-        <record model="account.group" id="account_group_155">
+        <record model="account.group" id="account_group_801">
             <field name="name">Angajamente acordate</field>
             <field name="code_prefix">801</field>
 
 
-            <field name="parent_id" ref="account_group_154"/>
+            <field name="parent_id" ref="account_group_80"/>
 
         </record>
 
-        <record model="account.group" id="account_group_156">
+        <record model="account.group" id="account_group_802">
             <field name="name">Angajamente primite</field>
             <field name="code_prefix">802</field>
 
 
-            <field name="parent_id" ref="account_group_154"/>
+            <field name="parent_id" ref="account_group_80"/>
 
         </record>
 
-        <record model="account.group" id="account_group_157">
+        <record model="account.group" id="account_group_803">
             <field name="name">803. Alte conturi în afara bilantului</field>
             <field name="code_prefix">803</field>
 
 
-            <field name="parent_id" ref="account_group_154"/>
+            <field name="parent_id" ref="account_group_80"/>
 
         </record>
 
-        <record model="account.group" id="account_group_158">
+        <record model="account.group" id="account_group_805">
             <field name="name">Amortizarea aferenta gradului de neutilizare a mijloacelor fixe</field>
             <field name="code_prefix">805</field>
 
 
-            <field name="parent_id" ref="account_group_154"/>
+            <field name="parent_id" ref="account_group_80"/>
 
         </record>
 
-        <record model="account.group" id="account_group_159">
+        <record model="account.group" id="account_group_89">
             <field name="name">Bilant</field>
             <field name="code_prefix">89</field>
 
 
-            <field name="parent_id" ref="account_group_153"/>
+            <field name="parent_id" ref="account_group_8"/>
 
         </record>
 
-        <record model="account.group" id="account_group_160">
+        <record model="account.group" id="account_group_9">
             <field name="name">Clasa 9. Cconturi de gestiune</field>
             <field name="code_prefix">9</field>
-            <field name="parent_id" ref="account_group_152"/>
+            <field name="parent_id" ref="account_group_8__9"/>
         </record>
 
-        <record model="account.group" id="account_group_161">
+        <record model="account.group" id="account_group_90">
             <field name="name">Decontări interne</field>
             <field name="code_prefix">90</field>
 
 
-            <field name="parent_id" ref="account_group_160"/>
+            <field name="parent_id" ref="account_group_9"/>
 
         </record>
 
-        <record model="account.group" id="account_group_162">
+        <record model="account.group" id="account_group_92">
             <field name="name">Conturi de calculatie</field>
             <field name="code_prefix">92</field>
 
 
-            <field name="parent_id" ref="account_group_160"/>
+            <field name="parent_id" ref="account_group_9"/>
 
         </record>
 
-        <record model="account.group" id="account_group_163">
+        <record model="account.group" id="account_group_93">
             <field name="name">Costul productiei</field>
             <field name="code_prefix">93</field>
 
 
-            <field name="parent_id" ref="account_group_160"/>
+            <field name="parent_id" ref="account_group_9"/>
 
         </record>
 
