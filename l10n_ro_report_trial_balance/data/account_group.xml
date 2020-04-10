@@ -3,18 +3,18 @@
     <data>
         <record model="account.group" id="account_group_balanta">
             <field name="name">Balanța</field>
-            <field name="code_prefix">0</field>
+            <field name="code_prefix"></field>
         </record>
 
         <record model="account.group" id="account_group_1__7">
             <field name="name">Clasele 1-7. Conturi financiare</field>
-            <field name="code_prefix">0</field>
+            <field name="code_prefix"></field>
             <field name="parent_id" ref="account_group_balanta"/>
         </record>
 
         <record model="account.group" id="account_group_1__5">
             <field name="name">Clasele 1-5. Conturi de bilanț</field>
-            <field name="code_prefix">1</field>
+            <field name="code_prefix"></field>
             <field name="parent_id" ref="account_group_1__7"/>
         </record>
 
@@ -2898,7 +2898,7 @@
 
         <record model="account.group" id="account_group_6__7">
             <field name="name">Clasele 6 și 7. Conturile de venituri și cheltuieli</field>
-            <field name="code_prefix">6</field>
+            <field name="code_prefix"></field>
             <field name="parent_id" ref="account_group_1__7"/>
         </record>
 

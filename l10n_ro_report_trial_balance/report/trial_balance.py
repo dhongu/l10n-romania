@@ -45,7 +45,7 @@ class RomaniaTrialBalanceReport(models.TransientModel):
 
 class RomaniaTrialBalanceAccountReport(models.TransientModel):
     _name = 'l10n_ro_report_trial_balance_account'
-    _order = 'code ASC, name ASC'
+    _order = 'path, code ASC, name ASC'
 
     report_id = fields.Many2one('l10n_ro_report_trial_balance', ondelete='cascade', index=True)
 
@@ -92,6 +92,25 @@ class RomaniaTrialBalanceAccountReport(models.TransientModel):
 
     # Data fields, used to browse report data
     account_ids = fields.Many2many(comodel_name='account.account', string='Accounts')
+
+    path = fields.Char()
+
+    @api.multi
+    def compute_path(self):
+        for item in self:
+            group = item.account_group_id
+            if not item.account_group_id:
+                code = item.code
+                code = code.replace('.', '')
+                while code[-1] == '0':
+                    code = code[:-1]
+                while code and not group:
+                    group =  self.env['account.group'].search([('code_prefix','=',code)])
+                    code = code[:-1]
+            if group:
+                item.write({'path':group.path})
+
+
 
 
 class RomaniaTrialBalanceComputeReport(models.TransientModel):
@@ -182,9 +201,14 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
 
         self.ensure_one()
         self._inject_account_lines()
+        self._compute_path()
         self._compute_account_group_values()
         # Refresh cache because all data are computed with SQL requests
         self.refresh()
+
+
+    def _compute_path(self):
+        self.line_account_ids.compute_path()
 
     def _inject_account_lines(self):
         """Inject report values for report_trial_balance_account"""
@@ -249,7 +273,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                 INSERT INTO
                     l10n_ro_report_trial_balance_account
                     (
-                    report_id,  create_uid,  create_date,  account_id,  code, name,
+                    report_id,  create_uid,  create_date,  account_id,  code, name, account_group_id,
                     
                     debit_opening_balance, credit_opening_balance,
                     debit_opening, credit_opening,
@@ -271,7 +295,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                     %(report_id)s AS report_id,
                     %(create_uid)s AS create_uid,
                     NOW() AS create_date,
-                    subselect.id as account_id, subselect.code, subselect.name,
+                    subselect.id as account_id, subselect.code, subselect.name, subselect.group_id,
                     
                     subselect.debit_opening_balance, subselect.credit_opening_balance,
                     
@@ -326,7 +350,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
 
                 FROM
                     (
-                    SELECT  acc.id, acc.code, acc.name, 
+                    SELECT  acc.id, acc.code, acc.name, acc.group_id,
                     coalesce(debit_opening,0.0) as debit_opening, coalesce(credit_opening,0.0) as credit_opening, 
                     coalesce(debit_initial,0.0) as debit_initial, coalesce(credit_initial,0.0) as credit_initial, 
                     coalesce(debit,0.0) as debit, coalesce(credit,0.0) as credit,
@@ -357,13 +381,14 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         }
 
         q = query_inject_account % query_inject_account_params
-        print(q)
 
-        print(query_inject_account_params)
         self.env.cr.execute(query_inject_account, query_inject_account_params)
         # if self.hide_account_without_move:
         #     lines = self.line_account_ids.filtered(lambda a: a.debit_balance == 0 and a.credit_balance == 0)
         #     lines.unlink()
+
+
+
 
     def _compute_account_group_values(self):
         if not self.account_ids:
@@ -394,7 +419,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                         'account_group_id': group.id,
                         'code': group.code_prefix or '',
                         'name': group.name,
-
+                        'path': group.path,
                         'debit_opening_balance': sum(acc.debit_opening_balance for acc in accounts),
                         'credit_opening_balance': sum(acc.credit_opening_balance for acc in accounts),
 
