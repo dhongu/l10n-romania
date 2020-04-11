@@ -26,7 +26,7 @@ Romania - Picking Report layout
 
         'purchase',
 
-        'l10n_ro_stock_account'
+        #'l10n_ro_stock_account'
     ],
 
     "data": [
