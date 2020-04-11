@@ -29,6 +29,9 @@ class stock_picking(models.Model):
     mean_transp = fields.Char(string='Mean transport')
 
 
+    notice = fields.Boolean('Is a notice', states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
+                                default=False)
+
     '''
     invoice_state = fields.Selection([("invoiced", "Invoiced"),
                                       ("2binvoiced", "To Be Invoiced"),
