@@ -160,8 +160,14 @@ class ProductProduct(models.Model):
         for product in self:
             product.update_fifo_cost(self.env.user.company_id)
 
-    @api.one
     def update_fifo_cost(self, company):
+        self.ensure_one()
+        cost = self.get_fifo_cost(company)
+        self.with_context(force_company=company.id).sudo().write({'standard_price': cost})
+
+    def get_fifo_cost(self, company):
+        self.ensure_one()
+
         stock_items_domain = [
             ('product_id', '=', self.id),
             ('location_dest_id.usage', '=', 'internal'),
@@ -171,15 +177,14 @@ class ProductProduct(models.Model):
             ('remaining_qty', '>', 0.0)]
 
         stock_items = self.env['stock.move'].search(stock_items_domain)
-
         if stock_items:
             value = sum(stock_items.mapped('remaining_value'))
             quantity = sum(stock_items.mapped('remaining_qty'))
-            self.with_context(force_company=company.id).sudo().write({'standard_price': value / quantity})
+            return value / quantity
         elif self.supplier_ids:
             first_supplier = self.supplier_ids[0]
             cost_from_supplier = first_supplier.product_uom._compute_price(first_supplier.price, self.uom_id)
-
-            self.with_context(force_company=company.id).sudo().write({'standard_price': cost_from_supplier})
+            return cost_from_supplier
         else:
-            self.with_context(force_company=company.id).sudo().write({'standard_price': 0.0})
+            return 0.0
+
