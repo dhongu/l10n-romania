@@ -6,7 +6,7 @@
 from odoo import api, fields, models, _
 from odoo.tools.float_utils import float_compare
 from odoo.exceptions import AccessError, UserError
-
+import itertools
 
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
@@ -25,7 +25,8 @@ class AccountInvoice(models.Model):
         data = super(AccountInvoice, self)._prepare_invoice_line_from_po_line(line)
 
         if self.type in ['in_invoice', 'in_refund']:
-
+            if 'account_id' not in data:
+                data['account_id'] = False  # daca ne e facuta configurarea conturilor
             if line.product_id.purchase_method == 'receive':  # receptia in baza cantitatilor primite
                 if line.product_id.type == 'product':
                     notice = False
@@ -113,7 +114,6 @@ class AccountInvoice(models.Model):
 
         return res
 
-
     @api.multi
     def trade_discount_distribution(self, res):
 
@@ -126,7 +126,7 @@ class AccountInvoice(models.Model):
             discounts[line.id] = {
                 'line_id': line,
                 'amount': line.price_subtotal,
-                'rap':0.0,
+                'rap': 0.0,
                 'lines': self.env['account.invoice.line']
             }
             for aml in res:
@@ -157,7 +157,7 @@ class AccountInvoice(models.Model):
                 for line in discounts[line_id]['lines']:
                     for aml in res:
                         if aml.get('invl_id') == line.id:
-                            val = aml['price']* discounts[line_id]['rap']
+                            val = aml['price'] * discounts[line_id]['rap']
                             aml['price'] += val
                             discounts[line_id]['aml']['price'] += -val
                             line.modify_stock_move_value(val)
@@ -213,6 +213,38 @@ class AccountInvoiceLine(models.Model):
                 new_price = stock_value / product.qty_at_date
                 self.product_id.write({'standard_price': new_price})
 
+    def _ensure_total_matches_line_quantity(self, stock_moves):
+        stock_quantity = sum(stock_moves.mapped('product_uom_qty'))
+        if self.quantity == stock_quantity:
+            return stock_moves
+        elif self.quantity > stock_quantity:
+            raise UserError(_('It is not allowed to record an invoice for a quantity bigger than %s') % str(stock_quantity))
+        else:
+            return self._find_subset_of_moves_with_total_quantity(stock_moves)
+
+    def _find_subset_of_moves_with_total_quantity(self, stock_moves):
+        stock_moves_list = list(stock_moves)
+        searched_sum = self.quantity
+        permutations = list(itertools.product([0, 1], repeat=len(stock_moves_list)))
+
+        solution = ()
+        for permutation in permutations:
+            current_sum = 0
+            for i in range(len(stock_moves_list)):
+                current_sum += stock_moves_list[i].product_uom_qty * permutation[i]
+            if current_sum == searched_sum:
+                solution = permutation
+                break
+
+        if solution:
+            solution_stock_moves = self.env['stock.move']
+            for i in range(len(stock_moves_list)):
+                should_include = solution[i]
+                if should_include:
+                    solution_stock_moves |= stock_moves_list[i]
+            return solution_stock_moves
+        else:
+            raise UserError(_('No combination of incoming stock moves to sum quantity: %s') %str(searched_sum))
 
 
     @api.onchange('product_id')

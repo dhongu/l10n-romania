@@ -170,6 +170,31 @@ class ProductProduct(models.Model):
         location = self.env.context.get('location')
         return super(ProductProduct, self)._compute_stock_value()
 
+    @api.multi
+    def multi_update_fifo_cost(self):
+        for product in self:
+            product.update_fifo_cost(self.env.user.company_id)
 
+    @api.multi
+    def update_fifo_cost(self, company):
+        stock_items_domain = [
+            ('product_id', '=', self.id),
+            ('location_dest_id.usage', '=', 'internal'),
+            ('state', '=', 'done'),
+            ('location_dest_id.company_id', '=', company.id),
+            ('value', '>', 0.0),
+            ('remaining_qty', '>', 0.0)]
 
+        stock_items = self.env['stock.move'].search(stock_items_domain)
 
+        if stock_items:
+            value = sum(stock_items.mapped('remaining_value'))
+            quantity = sum(stock_items.mapped('remaining_qty'))
+            self.with_context(force_company=company.id).sudo().write({'standard_price': value / quantity})
+        elif self.supplier_ids:
+            first_supplier = self.supplier_ids[0]
+            cost_from_supplier = first_supplier.product_uom._compute_price(first_supplier.price, self.uom_id)
+
+            self.with_context(force_company=company.id).sudo().write({'standard_price': cost_from_supplier})
+        else:
+            self.with_context(force_company=company.id).sudo().write({'standard_price': 0.0})

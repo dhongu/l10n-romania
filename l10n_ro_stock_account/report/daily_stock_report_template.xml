@@ -78,7 +78,7 @@
 
                                 </table>
                                 <div class="row">
-                                    <div class="col-xs-4 pull-right">
+                                    <div class="col-4 pull-right">
                                         <table class="table table-condensed">
                                              <tr class="border-black">
                                                 <td>
@@ -240,7 +240,7 @@
 
                                 </table>
                                 <div class="row">
-                                    <div class="col-xs-4 pull-right">
+                                    <div class="col-4 pull-right">
                                         <table class="table table-condensed">
 
                                             <tr class="border-black">

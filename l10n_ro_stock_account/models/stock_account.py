@@ -15,7 +15,7 @@ _logger = logging.getLogger(__name__)
 # ----------------------------------------------------------
 
 
-class stock_location(models.Model):
+class StockLocation(models.Model):
     _name = "stock.location"
     _inherit = "stock.location"
 
@@ -534,8 +534,7 @@ class StockMove(models.Model):
             move._run_valuation()
             move._account_entry_move()
 
-
-class stock_picking(models.Model):
+class StockPicking(models.Model):
     _name = 'stock.picking'
     _inherit = 'stock.picking'
 
@@ -551,7 +550,7 @@ class stock_picking(models.Model):
         self.ensure_one()
         for pick in self:
             pick.write({'date_done': pick.date})
-        res = super(stock_picking, self).action_done()
+        res = super(StockPicking, self).action_done()
         # self.get_account_move_lines()
         return res
 
@@ -559,7 +558,7 @@ class stock_picking(models.Model):
     def action_done(self):
         for pick in self:
             pick.write({'date_done': pick.date})
-        res = super(stock_picking, self).action_done()
+        res = super(StockPicking, self).action_done()
         return res
 
     @api.multi
@@ -569,7 +568,7 @@ class stock_picking(models.Model):
                 if move.account_move_ids:
                     move.account_move_ids.button_cancel()
                     move.account_move_ids.unlink()
-        return super(stock_picking, self).action_cancel()
+        return super(StockPicking, self).action_cancel()
 
     @api.multi
     def action_unlink(self):
@@ -578,7 +577,7 @@ class stock_picking(models.Model):
                 if move.account_move_ids:
                     move.account_move_ids.button_cancel()
                     move.account_move_ids.unlink()
-        return super(stock_picking, self).action_unlink()
+        return super(StockPicking, self).action_unlink()
 
 
 class StockInventory(models.Model):
