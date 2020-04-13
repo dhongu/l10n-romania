@@ -227,7 +227,7 @@ class StorageSheetReport(models.TransientModel):
 
     def button_show(self):
         self.do_compute()
-        action = self.env.ref('l10n_ro_stock_account.action_storage_sheet_report_line').read()[0]
+        action = self.env.ref('l10n_ro_stock_report.action_storage_sheet_report_line').read()[0]
         action['domain'] = [('report_id', '=', self.id)]
         action['context'] = {'active_id': self.id}
         action['target'] = 'main'
@@ -236,7 +236,7 @@ class StorageSheetReport(models.TransientModel):
     def button_print(self):
         self.do_compute()
         records = self
-        report_name = 'l10n_ro_stock_account.action_report_storage_sheet_report'
+        report_name = 'l10n_ro_stock_report.action_report_storage_sheet_report'
         report = self.env.ref(report_name).report_action(records)
         return report
 
