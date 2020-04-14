@@ -7,8 +7,8 @@
                 string="Daily stock report"
                 model='l10n_ro.storage_sheet_report'
                 report_type="qweb-pdf"
-                file="l10n_ro_stock_account.document_storage_sheet_report"
-                name="l10n_ro_stock_account.document_storage_sheet_report"
+                file="l10n_ro_stock_report.document_storage_sheet_report"
+                name="l10n_ro_stock_report.document_storage_sheet_report"
         />
 
 
