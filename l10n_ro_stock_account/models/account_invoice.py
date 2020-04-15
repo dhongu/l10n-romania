@@ -5,6 +5,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+from odoo.tools import float_compare
 import itertools
 
 
@@ -149,11 +150,13 @@ class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
 
     def modify_stock_move_value(self, value):
-        should_modify_stock_value = self.product_id and \
+        precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+        should_modify_stock_value = bool(self.product_id and \
                                     self.product_id.valuation == 'real_time' and \
                                     self.product_id.type == 'product' and \
                                     self.product_id.cost_method != 'standard' and \
-                                    self.purchase_line_id
+                                    self.purchase_line_id and \
+                                    float_compare(self.quantity, 0.0, precision_digits=precision) > 0)
 
         if should_modify_stock_value:
             evaluated_stock_moves = self.env['stock.move'].search([('invoice_line_evaluated_by', '=', self.id)])
