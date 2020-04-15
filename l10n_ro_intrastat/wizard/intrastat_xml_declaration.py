@@ -1,23 +1,6 @@
-# -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    Odoo, Open Source Business Applications
-#    Copyright (C) 2014-2015 Odoo S.A. <http://www.odoo.com>
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# -*- coding: utf-8 -*-
+# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
 
 import base64
 import xml.etree.ElementTree as ET
@@ -32,6 +15,12 @@ from odoo import fields, models, api
 unicode = str
 
 INTRASTAT_XMLNS = 'http://www.intrastat.ro/xml/InsSchema'
+
+
+
+INCOTERM = ['EXW', 'FCA', 'FAS', 'FOB', 'CFR', 'CIF', 'CPT', 'CIP', 'DAP', 'DAT', 'DDP' ]
+
+
 
 
 class IntrastatDeclaration(models.TransientModel):
@@ -52,21 +41,17 @@ class IntrastatDeclaration(models.TransientModel):
         return td.strftime('%Y'), td.strftime('%m')
 
     def _get_def_month(self):
-        return fields.Date.from_string(fields.Date.context_today(self)).strftime('%m')
+        return self._get_def_monthyear()[1]
 
     def _get_def_year(self):
-        return fields.Date.from_string(fields.Date.context_today(self)).strftime('%Y')
+        return self._get_def_monthyear()[0]
 
     name = fields.Char('File Name', default='intrastat.xml')
     month = fields.Selection([('01', 'January'), ('02', 'February'), ('03', 'March'),
                               ('04', 'April'), ('05', 'May'), ('06', 'June'), ('07', 'July'),
                               ('08', 'August'), ('09', 'September'), ('10', 'October'),
-                              ('11', 'November'), ('12', 'December')], 'Month', required=True,
-                             default=_get_def_month
-                             )
-    year = fields.Char('Year', size=4, required=True,
-                       default=_get_def_year
-                       )
+                              ('11', 'November'), ('12', 'December')], 'Month', required=True, default=_get_def_month)
+    year = fields.Char('Year', size=4, required=True, default=_get_def_year)
     # tax_code_id = fields.Many2one('account.tax.code', 'Company Tax Chart', default=_get_tax_code,
     #                               domain=[('parent_id', '=', False)], required=True)
     type = fields.Selection([('arrivals', 'Arrivals'),
@@ -272,6 +257,9 @@ class IntrastatDeclaration(models.TransientModel):
             else:
                 DeliveryTerms = company.incoterm_id.code
 
+            if not DeliveryTerms in INCOTERM:
+                DeliveryTerms = 'XXX'
+
             # Check country
             if inv_line.invoice_id.intrastat_country_id:
                 Country = inv_line.invoice_id.intrastat_country_id.code
@@ -283,21 +271,22 @@ class IntrastatDeclaration(models.TransientModel):
             else:
                 OriginCountry = Country
 
-
+            Cn8Code =  False
             # Check commodity codes
             intrastat_id = inv_line.product_id.get_intrastat_recursively()
             if intrastat_id:
                 intrastatcode = intrastatcode_mod.browse(intrastat_id)
-                Cn8Code = intrastatcode.name
+                Cn8Code = intrastatcode.code   # code or name ?
                 suppl_unit_code = intrastatcode.suppl_unit_code
-            else:
+
+            if not Cn8Code:
                 raise exceptions.Warning(
                     _('Product "%s" has no intrastat code, please configure it') %
                     inv_line.product_id.display_name)
 
             linekey = intrastatkey(Cn8Code=Cn8Code,
                                    SupplUnitCode=suppl_unit_code,
-                                   OriginCountry=OriginCountry,
+                                   OriginCountry=OriginCountry or Country,
                                    Country=Country,
                                    TrCodeA=TrCodeA,
                                    TrCodeB=TrCodeB,

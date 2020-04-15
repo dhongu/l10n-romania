@@ -6,10 +6,10 @@
             <field name="model">account.intrastat.code</field>
             <field name="arch" type="xml">
                 <tree string="Intrastat code">
-                    <field name="name"/>
+                    <field name="nckey"/>
                     <field name="code"/>
+                    <field name="name"/>
                     <field name="description"/>
-
                 </tree>
             </field>
         </record>
@@ -18,6 +18,7 @@
             <field name="model">account.intrastat.code</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="nckey"/>
                     <field name="name"/>
                     <field name="description"/>
                     <field name="code"/>
@@ -33,15 +34,20 @@
             <field name="arch" type="xml">
                 <form string="Intrastat Code">
                     <group>
-                        <field name="name"/>
-                        <field name="code"/>
-                        <field name="suppl_unit_code"/>
-                        <field name="description"/>
+                        <group>
+                            <field name="nckey"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                            <field name="suppl_unit_code"/>
+                            <field name="description"/>
+                        </group>
+
                     </group>
                 </form>
             </field>
         </record>
-
 
 
         <record id="action_report_intrastat_code_tree" model="ir.actions.act_window">
@@ -53,7 +59,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem action="action_report_intrastat_code_tree" id="menu_report_intrastat_code" 
+        <menuitem action="action_report_intrastat_code_tree" id="menu_report_intrastat_code"
                   parent="account.account_account_menu" sequence="10" groups="account.group_account_manager"/>
     </data>
 </odoo>
