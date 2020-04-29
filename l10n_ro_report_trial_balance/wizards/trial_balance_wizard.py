@@ -18,11 +18,10 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
     date_to = fields.Date(required=True)
     target_move = fields.Selection([('posted', 'All Posted Entries'), ('all', 'All Entries')],
                                    string='Target Moves', required=True, default='posted')
-    hide_account_without_move = fields.Boolean(  string='Hide account without move' , default=True)
+    hide_account_without_move = fields.Boolean(string='Hide account without move', default=True)
     with_special_accounts = fields.Boolean('With Special Accounts',
                                            help="Check this if you want to print classes 8 and 9 of accounts.")
     account_ids = fields.Many2many(comodel_name='account.account', string='Filter accounts', )
-
 
     col_opening_balance = fields.Boolean('Balance Opening Year', default=True)  # solduri initiale an
     col_opening = fields.Boolean('Opening Year', default=False)  # rulaje la inceput de an
@@ -30,7 +29,7 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
     col_initial = fields.Boolean('Initial period', default=False)  # sume perecente
     col_period = fields.Boolean('Period', default=True)  # rulaje perioada
 
-    col_cumulative = fields.Boolean('Cumulative', default=True)         # total rulaje (de la inceputul anului)
+    col_cumulative = fields.Boolean('Cumulative', default=True)  # total rulaje (de la inceputul anului)
 
     col_total = fields.Boolean('Total amount', default=True)  # sume totale
     col_balance = fields.Boolean('Balance', default=True)  # solduri finale
@@ -49,12 +48,12 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
         action = self.env.ref('l10n_ro_report_trial_balance.action_l10n_ro_report_trial_balance')
         vals = action.read()[0]
         context1 = vals.get('context', {})
-        if isinstance(context1, pycompat.string_types):
+        if isinstance(context1, str):
             context1 = safe_eval(context1)
         model = self.env['l10n_ro_report_trial_balance']
         report = model.create(self._prepare_report_trial_balance())
         report = report.do_execute()
-        #report.compute_data_for_report()
+        # report.compute_data_for_report()
 
         context1['active_id'] = report.id
         context1['active_ids'] = report.ids

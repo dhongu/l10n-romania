@@ -101,16 +101,7 @@ class RomaniaTrialBalanceAccountReport(models.TransientModel):
     def compute_path(self):
         for item in self:
             group = item.account_group_id
-            if not item.account_group_id:
-                code = item.code
-                code = code.replace('.', '')
-                while code[-1] == '0':
-                    code = code[:-1]
-                while code and not group:
-                    group =  self.env['account.group'].search([('code_prefix','=',code)])
-                    code = code[:-1]
-            if group:
-                item.write({'path':group.path})
+            item.write({'path': group.parent_path})
 
 
 
@@ -175,6 +166,8 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
 
     @api.multi
     def do_execute(self):
+
+
         self.ensure_one()
         domain = [
             ('date_from', '=', self.date_from),
@@ -217,8 +210,15 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         # Refresh cache because all data are computed with SQL requests
         self.refresh()
 
-
     def _compute_path(self):
+        account_group = self.env['account.group'].search([])
+        # all_accounts = env['account.account'].search([])
+
+        for group in account_group:
+            if not group.group_child_ids and  not  group.account_ids:
+                account_ids = self.env['account.account'].search([('code', '=like', group.code_prefix+'%')])
+                account_ids.write({'group_id': group.id})
+
         self.line_account_ids.compute_path()
 
     def _inject_account_lines(self):
@@ -400,13 +400,10 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         #     lines = self.line_account_ids.filtered(lambda a: a.debit_balance == 0 and a.credit_balance == 0)
         #     lines.unlink()
 
-
-
-
     def _compute_account_group_values(self):
         if not self.account_ids:
             acc_res = self.line_account_ids
-            groups = self.env['account.group'].search([]) #('code_prefix', '!=', False)])
+            groups = self.env['account.group'].search([])  # ('code_prefix', '!=', False)])
 
             # if self.account_ids:
             #     all_accounts = self.account_ids
@@ -419,9 +416,8 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
             #     if sp_acc_type:
             #         all_accounts = all_accounts.filtered(lambda a: a.user_type_id.id != sp_acc_type.id)
 
-
-
             for group in groups:
+
                 accounts = acc_res.filtered(lambda a: a.account_id.id in group.compute_account_ids.ids)
                 # if self.hide_account_without_move:
                 #     accounts = accounts.filtered(lambda a: a.debit_balance != 0 or a.credit_balance != 0)
@@ -431,6 +427,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                         'account_group_id': group.id,
                         'code': group.code_prefix or '',
                         'name': group.name,
+                        'path': group.parent_path,
 
                         'debit_opening_balance': 0.0,
                         'credit_opening_balance': 0.0,
@@ -442,7 +439,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                         'credit_initial_balance': 0.0,
 
                         'debit_initial': 0.0,
-                        'credit_initial':0.0,
+                        'credit_initial': 0.0,
                         'debit': 0.0,
                         'credit': 0.0,
 
@@ -455,7 +452,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                         'credit_balance': 0.0,
                     }
                     for acc in accounts:
-                        values['debit_opening_balance'] +=acc.debit_opening_balance
+                        values['debit_opening_balance'] += acc.debit_opening_balance
                         values['credit_opening_balance'] += acc.credit_opening_balance
                         values['debit_opening'] += acc.debit_opening
                         values['credit_opening'] += acc.credit_opening
