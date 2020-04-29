@@ -7,6 +7,7 @@ from odoo import models
 class AbstractReportXslx(models.AbstractModel):
     _name = 'report.romania.trial.balance.abstract_report_xlsx'
     _inherit = 'report.report_xlsx.abstract'
+    _description = 'report.report_xlsx.abstract'
 
     def __init__(self, pool, cr):
         # main sheet which will contains report

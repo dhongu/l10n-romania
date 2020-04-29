@@ -18,6 +18,7 @@
         ''
         'l10n_ro'],
     'data': [
+        "views/account_view.xml",
         "views/layouts.xml",
         "views/report_template.xml",
         "views/report_trial_balance.xml",
@@ -30,4 +31,5 @@
     'qweb': [
         'static/src/xml/trial_balance_report_template.xml',
     ],
+    'post_init_hook':'_set_account_group'
 }

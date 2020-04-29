@@ -55,6 +55,11 @@
                             <t t-set="style" t-value="'font-size: 10px; font-weight: bold; color: blue;'"/>
                             <t t-set="padding" t-value="16"/>
                         </t>
+                        <t t-if="line.account_group_id and ( not line.code or '-' in line.code)">
+                            <t t-set="style" t-value="'font-size: 14px; font-weight: bold; color: blue;'"/>
+                            <t t-set="padding" t-value="0"/>
+                        </t>
+
                         <t t-if="line.account_group_id">
                             <t t-set="grcode" t-value="line.code"/>
                         </t>
