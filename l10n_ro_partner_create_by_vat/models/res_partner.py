@@ -250,28 +250,29 @@ class ResPartner(models.Model):
     #     #     return  False
     #     return True
 
-    @api.one
+
     @api.constrains('is_company', 'vat', 'parent_id', 'company_id')
     def check_vat_unique(self):
-        # daca nu are vat
-        if not self.vat or not self.is_company or self.parent_id:
-            return True
         if self.env.context.get('tracking_disable', False):
             return True
 
-        same_vat_partners = self.search([
-            ('is_company', '=', True),
-            ('parent_id', '=', False),
-            ('vat', '=', self.vat),
-            ('company_id', '=', self.company_id.id),
-            ('id', '!=', self.id)
-        ])
+        for partner in self:
+            if not partner.vat or not partner.is_company or partner.parent_id:
+                continue
 
-        if same_vat_partners:
-            raise Warning(
-                _('Partner vat must be unique per company except on partner with parent/childe relationship. ' +
-                  'Partners with same vat and not related, are: %s!') % (
-                    ', '.join(x.name for x in same_vat_partners)))
+            same_vat_partners = self.search([
+                ('is_company', '=', True),
+                ('parent_id', '=', False),
+                ('vat', '=', partner.vat),
+                ('company_id', '=', partner.company_id.id),
+                ('id', '!=', partner.id)
+            ])
+
+            if same_vat_partners:
+                raise Warning(
+                    _('Partner vat must be unique per company except on partner with parent/childe relationship. ' +
+                      'Partners with same vat and not related, are: %s!') % (
+                        ', '.join(x.name for x in same_vat_partners)))
 
     def _split_vat(self, vat):
         vat_country, vat_number = super(ResPartner, self)._split_vat(vat)
