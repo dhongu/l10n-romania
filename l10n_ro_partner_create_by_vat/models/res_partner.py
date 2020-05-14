@@ -48,12 +48,14 @@ class ResPartner(models.Model):
     split_vat = fields.Boolean('Split VAT')
     vat_on_payment = fields.Boolean('VAT on Payment')
 
-    @api.one
-    @api.constrains('vat')
+
+    @api.constrains('vat', 'country_id')
     def check_vat(self):
-        if not self.vat_subjected or not self.is_company:
-            return True
-        return super(ResPartner, self).check_vat()
+        partners = self
+        for partner in partners:
+            if not partner.vat_subjected or not partner.is_company:
+                partners -= partner
+        return super(ResPartner, partners).check_vat()
 
     @api.onchange('vat')
     def onchange_vat(self):
