@@ -25,7 +25,7 @@ class AccountInvoiceRefund(models.TransientModel):
     _inherit = "account.invoice.refund"
 
     filter_refund = fields.Selection(
-        selection_add=[('storno', 'Create a storno invoice.')])
+        selection_add=[('storno', _('Create a storno invoice.'))])
 
     @api.multi
     def compute_refund(self, mode='refund'):
@@ -36,8 +36,6 @@ class AccountInvoiceRefund(models.TransientModel):
         if mode == 'storno':
             for form in self:
 
-                date = False
-                description = False
                 for inv in inv_obj.browse(context.get('active_ids')):
                     if inv.state in ['draft', 'cancel']:
                         raise UserError(_('Cannot create credit note for the '

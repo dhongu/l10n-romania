@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
 
 from odoo import models, fields, api, _
 from odoo.tools.sql import drop_view_if_exists

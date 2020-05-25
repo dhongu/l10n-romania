@@ -4,10 +4,9 @@
 # See README.rst file on addons root folder for license details
 
 
-from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from odoo.tools import float_is_zero
 
+from odoo import api, fields, models, _
 
 
 class ProductCategory(models.Model):
@@ -42,8 +41,6 @@ class ProductCategory(models.Model):
             childs.write(values)
 
 
-
-
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
@@ -55,7 +52,6 @@ class ProductTemplate(models.Model):
         res = super(ProductTemplate, self).write(vals)
 
         return res
-
 
     @api.multi
     def get_product_accounts(self, fiscal_pos=None):
@@ -87,11 +83,8 @@ class ProductTemplate(models.Model):
                                                          ('company_id', '=', self.env.user.company_id.id),
                                                          ('id', 'in', quant_loc_ids)])
 
-
-
         product_accounts = {product.id: product.product_tmpl_id.get_product_accounts() for product in products}
         ref = self.env.context.get('ref',_('Price changed'))
-        to_date = fields.Date.today()
         for location in locations.filtered(lambda r: r.merchandise_type == 'store'):
 
             for product in products.filtered( lambda r: r.valuation == 'real_time'):
@@ -109,12 +102,6 @@ class ProductTemplate(models.Model):
                 if not account_id:
                     raise UserError(_(
                         'Configuration error. Please configure the price difference account on the product or its category to process this operation.'))
-
-                # product = product.with_context(to_date=to_date)
-
-                # if product.qty_available:
-                #     old_price = abs(product.stock_value / product.qty_available)
-
 
                 product = product.with_context(location=location.id, compute_child=False)
 
@@ -152,7 +139,6 @@ class ProductTemplate(models.Model):
                     move = AccountMove.create(move_vals)
                     move.post()
 
-
         return True
 
 
@@ -167,9 +153,38 @@ class ProductProduct(models.Model):
         return res
 
     def _compute_stock_value(self):
-        location = self.env.context.get('location')
         return super(ProductProduct, self)._compute_stock_value()
 
+    @api.multi
+    def multi_update_fifo_cost(self):
+        for product in self:
+            product.update_fifo_cost(self.env.user.company_id)
 
+    def update_fifo_cost(self, company):
+        self.ensure_one()
+        cost = self.get_fifo_cost(company)
+        self.with_context(force_company=company.id).sudo().write({'standard_price': cost})
 
+    def get_fifo_cost(self, company):
+        self.ensure_one()
+
+        stock_items_domain = [
+            ('product_id', '=', self.id),
+            ('location_dest_id.usage', '=', 'internal'),
+            ('state', '=', 'done'),
+            ('location_dest_id.company_id', '=', company.id),
+            ('value', '>', 0.0),
+            ('remaining_qty', '>', 0.0)]
+
+        stock_items = self.env['stock.move'].search(stock_items_domain)
+        if stock_items:
+            value = sum(stock_items.mapped('remaining_value'))
+            quantity = sum(stock_items.mapped('remaining_qty'))
+            return value / quantity
+        elif self.supplier_ids:
+            first_supplier = self.supplier_ids[0]
+            cost_from_supplier = first_supplier.product_uom._compute_price(first_supplier.price, self.uom_id)
+            return cost_from_supplier
+        else:
+            return 0.0
 

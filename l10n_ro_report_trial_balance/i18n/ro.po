@@ -197,7 +197,7 @@ msgstr "Debit curent"
 #: model:ir.model.fields,field_description:l10n_ro_report_trial_balance.field_l10n_ro_report_trial_balance_date_from
 #: model:ir.model.fields,field_description:l10n_ro_report_trial_balance.field_l10n_ro_report_trial_balance_wizard_date_from
 msgid "Date From"
-msgstr "De la"
+msgstr "De la data"
 
 #. module: l10n_ro_report_trial_balance
 #: model:ir.model.fields,field_description:l10n_ro_report_trial_balance.field_l10n_ro_report_trial_balance_date_to
@@ -225,7 +225,7 @@ msgstr "Interval selectat"
 #: code:addons/l10n_ro_report_trial_balance/report/trial_balance_xlsx.py:70
 #, python-format
 msgid "Date to"
-msgstr "Date to"
+msgstr "La data"
 
 #. module: l10n_ro_report_trial_balance
 #: model:ir.model.fields,field_description:l10n_ro_report_trial_balance.field_l10n_ro_report_trial_balance_account_debit

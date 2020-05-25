@@ -14,7 +14,8 @@
     'license': 'AGPL-3',
     'installable': True,
     'depends': ['account'],
-    'data': ['views/account_view.xml',
-             'views/account_invoice_view.xml'],
-    'demo_xml': [],
+    'data': [
+        'views/account_view.xml',
+        'views/account_invoice_view.xml'
+    ]
 }

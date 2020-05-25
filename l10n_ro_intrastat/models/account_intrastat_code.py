@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
 
 from odoo import fields, models, api
 
@@ -16,9 +17,11 @@ class AccountIntrastatCode(models.Model):
     _name = 'account.intrastat.code'
     _description = 'Intrastat Code'
     _translate = False
+    _order = 'nckey'
 
     name = fields.Char(string='Name')
-    code = fields.Char(string='Code', required=True)
+    nckey = fields.Char(string='NC Key')
+    code = fields.Char(string='NC Code')
 
     description = fields.Char(string='Description')
     suppl_unit_code = fields.Char('SupplUnitCode')
@@ -40,5 +43,6 @@ class AccountIntrastatCode(models.Model):
         return super(AccountIntrastatCode, self).search(domain, limit=limit).name_get()
 
     _sql_constraints = [
-        ('intrastat_region_code_unique', 'UNIQUE (code )', 'The code must be unique.'),
+        ('intrastat_region_code_unique', 'UNIQUE (code)', 'The code must be unique.'),
+        ('intrastat_region_nckey_unique', 'UNIQUE (nckey)', 'The NC key must be unique.'),
     ]

@@ -15,6 +15,7 @@ class RomaniaTrialBalanceReport(models.TransientModel):
     """
 
     _name = 'l10n_ro_report_trial_balance'
+    _description = "Romania Trial Balance"
 
     # Filters fields, used for data computation
     date_from = fields.Date()
@@ -45,7 +46,8 @@ class RomaniaTrialBalanceReport(models.TransientModel):
 
 class RomaniaTrialBalanceAccountReport(models.TransientModel):
     _name = 'l10n_ro_report_trial_balance_account'
-    _order = 'code ASC, name ASC'
+    _order = 'path, code ASC, name ASC'
+    _description = "Romania Trial Balance Report"
 
     report_id = fields.Many2one('l10n_ro_report_trial_balance', ondelete='cascade', index=True)
 
@@ -92,6 +94,16 @@ class RomaniaTrialBalanceAccountReport(models.TransientModel):
 
     # Data fields, used to browse report data
     account_ids = fields.Many2many(comodel_name='account.account', string='Accounts')
+
+    path = fields.Char()
+
+    @api.multi
+    def compute_path(self):
+        for item in self:
+            group = item.account_group_id
+            item.write({'path': group.parent_path})
+
+
 
 
 class RomaniaTrialBalanceComputeReport(models.TransientModel):
@@ -182,9 +194,21 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
 
         self.ensure_one()
         self._inject_account_lines()
+        self._compute_path()
         self._compute_account_group_values()
         # Refresh cache because all data are computed with SQL requests
         self.refresh()
+
+    def _compute_path(self):
+        account_group = self.env['account.group'].search([])
+        # all_accounts = env['account.account'].search([])
+
+        # for group in account_group:
+        #     if not group.group_child_ids and  not  group.account_ids:
+        #         account_ids = self.env['account.account'].search([('code', '=like', group.code_prefix+'%')])
+        #         account_ids.write({'group_id': group.id})
+
+        self.line_account_ids.compute_path()
 
     def _inject_account_lines(self):
         """Inject report values for report_trial_balance_account"""
@@ -249,7 +273,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                 INSERT INTO
                     l10n_ro_report_trial_balance_account
                     (
-                    report_id,  create_uid,  create_date,  account_id,  code, name,
+                    report_id,  create_uid,  create_date,  account_id,  code, name, account_group_id,
                     
                     debit_opening_balance, credit_opening_balance,
                     debit_opening, credit_opening,
@@ -271,7 +295,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                     %(report_id)s AS report_id,
                     %(create_uid)s AS create_uid,
                     NOW() AS create_date,
-                    subselect.id as account_id, subselect.code, subselect.name,
+                    subselect.id as account_id, subselect.code, subselect.name, subselect.group_id,
                     
                     subselect.debit_opening_balance, subselect.credit_opening_balance,
                     
@@ -326,7 +350,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
 
                 FROM
                     (
-                    SELECT  acc.id, acc.code, acc.name, 
+                    SELECT  acc.id, acc.code, acc.name, acc.group_id,
                     coalesce(debit_opening,0.0) as debit_opening, coalesce(credit_opening,0.0) as credit_opening, 
                     coalesce(debit_initial,0.0) as debit_initial, coalesce(credit_initial,0.0) as credit_initial, 
                     coalesce(debit,0.0) as debit, coalesce(credit,0.0) as credit,
@@ -357,13 +381,14 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         }
 
         q = query_inject_account % query_inject_account_params
-        print(q)
 
-        print(query_inject_account_params)
         self.env.cr.execute(query_inject_account, query_inject_account_params)
         # if self.hide_account_without_move:
         #     lines = self.line_account_ids.filtered(lambda a: a.debit_balance == 0 and a.credit_balance == 0)
         #     lines.unlink()
+
+
+
 
     def _compute_account_group_values(self):
         if not self.account_ids:
@@ -389,32 +414,80 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                 #     accounts = accounts.filtered(lambda a: a.debit_balance != 0 or a.credit_balance != 0
 
                 if accounts:
-                    newdict = {
+                    values = {
                         'report_id': self.id,
                         'account_group_id': group.id,
                         'code': group.code_prefix or '',
                         'name': group.name,
+                        'path': group.parent_path,
 
-                        'debit_opening_balance': sum(acc.debit_opening_balance for acc in accounts),
-                        'credit_opening_balance': sum(acc.credit_opening_balance for acc in accounts),
+                        'debit_opening_balance': 0.0,
+                        'credit_opening_balance': 0.0,
 
-                        'debit_opening': sum(acc.debit_opening for acc in accounts),
-                        'credit_opening': sum(acc.credit_opening for acc in accounts),
+                        'debit_opening': 0.0,
+                        'credit_opening': 0.0,
 
-                        'debit_initial_balance': sum(acc.debit_initial_balance for acc in accounts),
-                        'credit_initial_balance': sum(acc.credit_initial_balance for acc in accounts),
+                        'debit_initial_balance': 0.0,
+                        'credit_initial_balance': 0.0,
 
-                        'debit_initial': sum(acc.debit_initial for acc in accounts),
-                        'credit_initial': sum(acc.credit_initial for acc in accounts),
-                        'debit': sum(acc.debit for acc in accounts),
-                        'credit': sum(acc.credit for acc in accounts),
+                        'debit_initial': 0.0,
+                        'credit_initial': 0.0,
+                        'debit': 0.0,
+                        'credit': 0.0,
 
-                        'debit_cumulative': sum(acc.debit_cumulative for acc in accounts),
-                        'credit_cumulative': sum(acc.credit_cumulative for acc in accounts),
+                        'debit_cumulative': 0.0,
+                        'credit_cumulative': 0.0,
 
-                        'debit_total': sum(acc.debit_total for acc in accounts),
-                        'credit_total': sum(acc.credit_total for acc in accounts),
-                        'debit_balance': sum(acc.debit_balance for acc in accounts),
-                        'credit_balance': sum(acc.credit_balance for acc in accounts),
+                        'debit_total': 0.0,
+                        'credit_total': 0.0,
+                        'debit_balance': 0.0,
+                        'credit_balance': 0.0,
                     }
-                    self.env['l10n_ro_report_trial_balance_account'].create(newdict)
+                    for acc in accounts:
+                        values['debit_opening_balance'] += acc.debit_opening_balance
+                        values['credit_opening_balance'] += acc.credit_opening_balance
+                        values['debit_opening'] += acc.debit_opening
+                        values['credit_opening'] += acc.credit_opening
+                        values['debit_initial_balance'] += acc.debit_initial_balance
+                        values['credit_initial_balance'] += acc.credit_initial_balance
+                        values['debit_initial'] += acc.debit_initial
+                        values['credit_initial'] += acc.credit_initial
+                        values['debit'] += acc.debit
+                        values['credit'] += acc.credit
+                        values['debit_cumulative'] += acc.debit_cumulative
+                        values['credit_cumulative'] += acc.credit_cumulative
+                        values['debit_total'] += acc.debit_total
+                        values['credit_total'] += acc.credit_total
+                        values['debit_balance'] += acc.debit_balance
+                        values['credit_balance'] += acc.credit_balance
+                    self.env['l10n_ro_report_trial_balance_account'].create(values)
+
+                    # newdict = {
+                    #     'report_id': self.id,
+                    #     'account_group_id': group.id,
+                    #     'code': group.code_prefix or '',
+                    #     'name': group.name,
+                    #
+                    #     'debit_opening_balance': sum(acc.debit_opening_balance for acc in accounts),
+                    #     'credit_opening_balance': sum(acc.credit_opening_balance for acc in accounts),
+                    #
+                    #     'debit_opening': sum(acc.debit_opening for acc in accounts),
+                    #     'credit_opening': sum(acc.credit_opening for acc in accounts),
+                    #
+                    #     'debit_initial_balance': sum(acc.debit_initial_balance for acc in accounts),
+                    #     'credit_initial_balance': sum(acc.credit_initial_balance for acc in accounts),
+                    #
+                    #     'debit_initial': sum(acc.debit_initial for acc in accounts),
+                    #     'credit_initial': sum(acc.credit_initial for acc in accounts),
+                    #     'debit': sum(acc.debit for acc in accounts),
+                    #     'credit': sum(acc.credit for acc in accounts),
+                    #
+                    #     'debit_cumulative': sum(acc.debit_cumulative for acc in accounts),
+                    #     'credit_cumulative': sum(acc.credit_cumulative for acc in accounts),
+                    #
+                    #     'debit_total': sum(acc.debit_total for acc in accounts),
+                    #     'credit_total': sum(acc.credit_total for acc in accounts),
+                    #     'debit_balance': sum(acc.debit_balance for acc in accounts),
+                    #     'credit_balance': sum(acc.credit_balance for acc in accounts),
+                    # }
+                    # self.env['l10n_ro_report_trial_balance_account'].create(newdict)

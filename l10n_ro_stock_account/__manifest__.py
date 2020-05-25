@@ -16,10 +16,7 @@
         'views/product_view.xml',
         'views/account_invoice_view.xml',
         'views/account_view.xml',
-        'report/daily_stock_report_view.xml',
-        'report/daily_stock_report_template.xml',
-        'report/storage_sheet_report_view.xml',
-        'report/storage_sheet_report_template.xml'
+
     ],
     'installable': True,
     'active': False,

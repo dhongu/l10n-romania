@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
 
 from odoo import api, fields, models
 
@@ -8,6 +9,8 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     intrastat_id = fields.Many2one('account.intrastat.code', string='Commodity Code' )
+    country_id = fields.Many2one('res.country', string="Country Of Origin")
+
 
 class Product(models.Model):
     _inherit = 'product.product'

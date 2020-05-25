@@ -134,16 +134,15 @@ class MT940(object):
     def pre_process_data(self, data):
         matches = []
         self.is_mt940(line=data)
-        data = data.replace(
-            '-}', '}').replace('}{', '}\r\n{').replace('\r\n', '\n')
+        data = data.replace('-}', '}').replace('}{', '}\r\n{').replace('\r\n', '\n')
+
         if data.startswith(':940:'):
             for statement in data.replace(':940:', '').split(':20:'):
                 match = '{4:\n:20:' + statement + '}'
                 matches.append(match)
         else:
-            tag_re = re.compile(
-                r'(\{4:[^{}]+\})',
-                re.MULTILINE)
+            tag_re = re.compile(r'(\{4:[^{}]+\})', re.MULTILINE)
+
             matches = tag_re.findall(data)
         return matches
 
@@ -153,15 +152,15 @@ class MT940(object):
         matches = self.pre_process_data(data)
         for match in matches:
             self.is_mt940_statement(line=match)
-            iterator = '\n'.join(
-                match.split('\n')[1:-1]).split('\n').__iter__()
+            iterator = '\n'.join(match.split('\n')[1:-1]).split('\n').__iter__()
+
             line = None
             record_line = ''
             try:
                 while True:
                     if not self.current_statement:
-                        self.handle_header(line, iterator,
-                                           header_lines=header_lines)
+                        self.handle_header(line, iterator, header_lines=header_lines)
+
                     line = next(iterator)
                     if not self.is_tag(line) and not self.is_footer(line):
                         record_line = self.add_record_line(line, record_line)
@@ -250,14 +249,13 @@ class MT940(object):
             data[10:]
         )
         if not self.current_statement['date']:
-            self.current_statement['date'] = datetime.strptime(data[1:7],
-                                                               '%y%m%d')
+            self.current_statement['date'] = datetime.strptime(data[1:7], '%y%m%d')
 
     def handle_tag_61(self, data):
         """get transaction values"""
         self.current_statement['transactions'].append({})
         self.current_transaction = self.current_statement['transactions'][-1]
-        self.current_transaction['date'] = datetime.strptime(  data[:6],   '%y%m%d'  )
+        self.current_transaction['date'] = datetime.strptime(data[:6], '%y%m%d')
 
     def handle_tag_62F(self, data):
         """Get ending balance, statement date and id.
@@ -274,7 +272,7 @@ class MT940(object):
         file. The last one counts.
         """
 
-        self.current_statement['balance_end_real'] = str2amount(  data[0], data[10:] )
+        self.current_statement['balance_end_real'] = str2amount(data[0], data[10:])
         self.current_statement['date'] = datetime.strptime(data[1:7], '%y%m%d')
 
         # Only replace logically empty (only whitespace or zeroes) id's:
