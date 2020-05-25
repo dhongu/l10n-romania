@@ -239,6 +239,7 @@ class IntrastatDeclaration(models.TransientModel):
                 and inv.type in (%s, %s)
                 and to_char(inv.date, 'YYYY')=%s
                 and to_char(inv.date, 'MM')=%s
+                and inv_line.quantity>0
             """
 
         self.env.cr.execute(sqlreq, (company.id, company.partner_id.country_id.code,
