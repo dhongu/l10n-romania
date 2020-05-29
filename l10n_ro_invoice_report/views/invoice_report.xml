@@ -267,6 +267,7 @@
         <template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
             <xpath expr="//t[@t-set='address']" position="replace">
                 <t t-call="l10n_ro_invoice_report.header_invoice"/>
+                <address style="visibility:hidden"/> <!--inherited by other modules, must be present-->
             </xpath>
             <xpath expr="//div[hasclass('page')]" position="replace">
 
