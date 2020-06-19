@@ -66,7 +66,7 @@
                     <t t-call="web.external_layout">
                         <div class="page">
                             <div class="row">
-                                <div class="col-xs-5">
+                                <div class="col-5">
 
                                     <strong t-field="res_company.partner_id.name"/>
                                     <div>
@@ -77,7 +77,7 @@
 
                                 </div>
 
-                                <div class="col-xs-5 col-xs-offset-2">
+                                <div class="col-5 col-offset-2">
                                     <div>
                                         <strong t-field="o.partner_id.name"/>
                                     </div>
@@ -92,7 +92,7 @@
 
 
                             <div class="row">
-                                <div class="col-xs-5">
+                                <div class="col-5">
                                     <div t-if="res_company.partner_id.vat">
                                         <strong>CIF:</strong>
                                         <span t-field="res_company.partner_id.vat"/>
@@ -106,7 +106,7 @@
                                         <span t-field="res_company.share_capital"/>
                                     </div>
                                 </div>
-                                <div class="col-xs-5 col-xs-offset-2">
+                                <div class="col-5 col-offset-2">
                                     <div t-if="o.partner_id.vat">
                                         <strong>CIF:</strong>
                                         <span t-field="o.partner_id.vat"/>
