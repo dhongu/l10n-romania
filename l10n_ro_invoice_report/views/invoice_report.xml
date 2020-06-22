@@ -531,7 +531,7 @@
                                 </div>
                                 -->
                                 <t t-if="not res_company.stamp_image">
-                                    <div>“Factură valabilă fără semnatură şi ştampilă cf. art.V, alin (2) din Ordonanţa nr.17/2015, art. 319 alin (29) din Legea nr. 227/2015 privind Codul fiscal” și modificările ulterioare.
+                                    <div>Factură valabilă fără semnatură şi ştampilă cf. art.V, alin (2) din Ordonanţa nr.17/2015, art. 319 alin (29) din Legea nr. 227/2015 privind Codul fiscal și modificările ulterioare.
                                     </div>
                                 </t>
                                 <img t-if="res_company.stamp_image"
