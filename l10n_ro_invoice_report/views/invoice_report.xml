@@ -15,14 +15,14 @@
         <template id="header_invoice">
 
           <!--      <div class="row" customize_show="False">
-                    <div class="col-xs-3">
+                    <div class="col-3">
                         <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % to_text(res_company.logo)"
                              style="max-height: 45px;"/>
                     </div>
                 </div>-->
 
                 <div class="row zero_min_height">
-                    <div class="col-xs-12">
+                    <div class="col-12">
                         <!--<div style="border-bottom: 1px solid black;"/>-->
                     </div>
                 </div>
@@ -513,7 +513,7 @@
 
                             <div class="clearfix">
                                 <div id="total" class="row">
-                                    <div class="col-xs-4 pull-right">
+                                    <div class="col-4 pull-right">
                                         <table class="table table-condensed" style="min-width: 250px;max-width: 400px;">
                                         </table>
                                     </div>
