@@ -414,7 +414,7 @@
                                 <span t-field="o.date" t-options='{"widget": "date"}'/>
 
                             </h3>
-
+                            <t t-set="total_amount" t-value="0"/>
                             <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>
@@ -452,6 +452,7 @@
                                         </td>
                                         <td class="text-right">
                                             <span t-esc=" move.price_unit * move.product_uom_qty" t-options='{"widget": "float", "precision": 2}'/>
+                                            <t t-set="total_amount" t-value="total_amount+(move.price_unit * move.product_uom_qty)"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -471,8 +472,21 @@
                                                                 </tbody>-->
                             </table>
                             <div class="row">
-                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
-                                <t t-call="l10n_ro_stock_picking_report.report_totals"/>
+<!--                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>-->
+<!--                                <t t-call="l10n_ro_stock_picking_report.report_totals"/>-->
+                                <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                    <table class="table table-condensed">
+                                        <tr class="border-black">
+                                            <td>
+                                                <strong>Total Without Taxes</strong>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="total_amount" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
                             </div>
                             <t t-call="l10n_ro_stock_picking_report.report_consume_sign"/>
                             <div t-if="o.note">
