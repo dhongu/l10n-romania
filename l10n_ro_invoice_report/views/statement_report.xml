@@ -159,8 +159,7 @@
                                 <tr>
                                     <td>Amount:</td>
                                     <td>
-                                        <span t-esc="abs(o.amount)" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-<!--                                        <span t-field="o.currency_id.symbol"/>-->
+                                        <span t-field="o.amount"/>
                                     </td>
                                 </tr>
                                 <tr>
