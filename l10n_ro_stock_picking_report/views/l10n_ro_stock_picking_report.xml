@@ -7,14 +7,17 @@
             model="stock.picking" 
             report_type="qweb-pdf"
             name="l10n_ro_stock_picking_report.report_delivery" 
-            file="l10n_ro_stock_picking_report.report_delivery"    />
+            file="l10n_ro_stock_picking_report.report_delivery"
+            print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+        />
 
         <report 
             string="Delivery with price" 
             id="action_report_delivery_price" 
             model="stock.picking"          
             report_type="qweb-pdf"
-            name="l10n_ro_stock_picking_report.report_delivery_price" 
+            print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+            name="l10n_ro_stock_picking_report.report_delivery_price"
             file="l10n_ro_stock_picking_report.report_delivery_price"    />
 
         <report 
