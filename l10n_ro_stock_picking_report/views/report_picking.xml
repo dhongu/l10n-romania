@@ -307,7 +307,7 @@
                         <div class="page">
                             <t t-call="l10n_ro_config.report_address_company"/>
 
-                            <h2>
+                            <h2 id="title">
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
                                 <span>Consume Voucher:</span>
