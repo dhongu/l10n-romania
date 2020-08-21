@@ -4,7 +4,7 @@
 
 {
     'name': 'Romania - Localization Config',
-    'summary': 'Romania - Localization Install and Config Apllications',
+    'summary': 'Romania - Localization Install and Config Applications',
     'version': '12.0.1.0.0',
     'category': 'Localization',
     'author': 'Forest and Biomass Services Romania, '

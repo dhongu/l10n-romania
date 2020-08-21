@@ -33,8 +33,8 @@
                 <t t-set="res_company" t-value="o.company_id"/>
             </t>
 
-            <div class="row">
-                <div class="col-xs-5">
+            <div>
+                <div>
                     <div>
                         <strong>Company</strong>
                     </div>
@@ -42,23 +42,22 @@
                     <div>
                         <strong>Address:</strong>
                         <address t-field="res_company.partner_id"
-                                 t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                                 t-options='{"widget": "contact", "fields": ["address","phone", "mobile", "fax"], "no_marker": false, "no_tag_br": true}'/>
                     </div>
 
                 </div>
             </div>
-            <small>
-                <div class="row">
-                    <div class="col-xs-6">
-                        <t t-set="partner_id" t-value="res_company.partner_id"/>
-                        <t t-call="l10n_ro_config.banks"/>
-                    </div>
+
+            <div>
+                <div class="col-6">
+                    <t t-set="partner_id" t-value="res_company.partner_id"/>
+                    <t t-call="l10n_ro_config.banks"/>
                 </div>
-            </small>
+            </div>
 
 
-            <div class="row">
-                <div class="col-xs-5">
+            <div>
+                <div>
                     <div t-if="res_company.partner_id.vat">
                         <strong>CIF:</strong>
                         <span t-field="res_company.partner_id.vat"/>
@@ -70,12 +69,12 @@
 
                     <div i-if="res_company.share_capital">
                         <strong>Share Capital:</strong>
-                        <span t-esc="int(res_company.share_capital)"  />
+                        <span t-esc="int(res_company.share_capital)"/>
                     </div>
                 </div>
             </div>
 
-            <br/>
+
             <br/>
         </template>
     </data>

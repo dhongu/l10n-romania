@@ -12,6 +12,106 @@
         </template>
 
 
+        <template id="header_invoice_old">
+
+            <!--      <div class="row" customize_show="False">
+                      <div class="col-3">
+                          <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % to_text(res_company.logo)"
+                               style="max-height: 45px;"/>
+                      </div>
+                  </div>-->
+
+            <div class="row zero_min_height">
+                <div class="col-12">
+                    <!--<div style="border-bottom: 1px solid black;"/>-->
+                </div>
+            </div>
+
+            <table class="table table-sm" style="border-top: initial;">
+                <tr>
+                    <td width="45%">
+                        <div>
+                            <strong t-if="o.type in ['out_invoice', 'out_refund']">Supplier</strong>
+                            <strong t-if="o.type in ['in_invoice', 'in_refund']">Customer</strong>
+                        </div>
+                        <strong t-field="res_company.partner_id.name"/>
+                        <div>
+                            <strong>Address:</strong>
+                            <address t-field="res_company.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'/>
+
+                        </div>
+
+                        <t t-set="partner_id" t-value="res_company.partner_id"/>
+                        <t t-call="l10n_ro_config.banks"/>
+
+                    </td>
+                    <td width="10%"></td>
+                    <td width="45%">
+                        <div>
+                            <strong t-if="o.type in ['out_invoice', 'out_refund']">Customer</strong>
+                            <strong t-if="o.type in ['in_invoice', 'in_refund']">Supplier</strong>
+                        </div>
+                        <div>
+                            <strong t-field="o.commercial_partner_id.name"/>
+                        </div>
+                        <div>
+                            <strong>Address:</strong>
+
+                            <address t-field="o.commercial_partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'/>
+
+                        </div>
+                        <t t-set="partner_id" t-value="o.commercial_partner_id"/>
+
+                        <t t-call="l10n_ro_config.banks"/>
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-top: initial;">
+                        <div t-if="res_company.partner_id.vat">
+                            <strong>CIF:</strong>
+                            <span t-field="res_company.partner_id.vat"/>
+                        </div>
+                        <div t-if="res_company.partner_id.nrc">
+                            <strong>NRC:</strong>
+                            <span t-field="res_company.partner_id.nrc"/>
+                        </div>
+                        <div t-if="res_company.share_capital">
+                            <strong>Share Capital:</strong>
+                            <span t-esc="int(res_company.share_capital)"/>
+                        </div>
+                        <div t-if="'vat_on_payment' in res_company._fields">
+                            <div t-if="res_company.vat_on_payment">
+                                <span>Vat on payment</span>
+                            </div>
+                        </div>
+                        <div>
+                            <!--                                <span t-esc="', '.join(map(lambda x: (x.tax_id.description or x.tax_id.name), o.tax_line_ids))"/>-->
+                            <span t-foreach="o.tax_line_ids" t-as="t">
+                                <span t-field="t.name"/>
+                            </span>
+                        </div>
+                    </td>
+                    <td style="border-top: initial;"></td>
+                    <td style="border-top: initial;">
+                        <div t-if="o.commercial_partner_id.vat">
+                            <strong>CIF:</strong>
+                            <span t-field="o.commercial_partner_id.vat"/>
+                        </div>
+                        <div t-if="o.commercial_partner_id.nrc">
+                            <strong>NRC:</strong>
+                            <span t-field="o.commercial_partner_id.nrc"/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+
+        </template>
+
 
         <template id="header_invoice">
             <div id="address" class="address row">
@@ -36,10 +136,10 @@
                         <strong t-if="o.type in ['out_invoice', 'out_refund']">Customer</strong>
                         <strong t-if="o.type in ['in_invoice', 'in_refund']">Supplier</strong>
                     </div>
-                    <div id='partner_name'>
+                    <div>
                         <strong t-field="o.commercial_partner_id.name"/>
                     </div>
-                    <div id="partner_address">
+                    <div>
                         <strong>Address:</strong>
 
                         <address t-field="o.commercial_partner_id"
@@ -88,6 +188,56 @@
                         <span t-field="o.commercial_partner_id.nrc"/>
                     </div>
                 </div>
+            </div>
+        </template>
+
+        <template id="invoice_layout">
+
+            <!-- Multicompany -->
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
+
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+                <t t-set="res_company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+
+            <t t-set="header_class" t-value="'header'"/>
+            <t t-set="article_class" t-value="'article o_report_layout_standard'"/>
+            <t t-set="footer_class" t-value="'footer'"/>
+
+            <t t-if="company.external_report_layout_id.name == 'boxed'">
+                <t t-set="header_class" t-value="'header o_boxed_header'"/>
+                <t t-set="article_class" t-value="'article o_report_layout_boxed'"/>
+                <t t-set="footer_class" t-value="'footer o_boxed_footer'"/>
+            </t>
+            <t t-if="company.external_report_layout_id.name == 'clean'">
+                <t t-set="header_class" t-value="'header o_clean_header'"/>
+                <t t-set="article_class" t-value="'article o_report_layout_clean'"/>
+                <t t-set="footer_class" t-value="'footer o_clean_footer'"/>
+            </t>
+
+            <t t-if="company.external_report_layout_id.name == 'background'">
+                <t t-set="header_class" t-value="'header o_background_header'"/>
+                <t t-set="article_class" t-value="'article o_report_layout_background'"/>
+                <t t-set="footer_class" t-value="'footer o_background_footer'"/>
+            </t>
+
+            <div t-attf-class="{{header_class}}">
+                <t t-call="l10n_ro_invoice_report.header_invoice"/>
+            </div>
+
+            <div t-attf-class="{{article_class}}" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+                 t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-raw="0"/>
+            </div>
+
+            <div t-atts-class="{{footer_class}}">
+                <t t-call="l10n_ro_invoice_report.footer_invoice"/>
             </div>
         </template>
 
@@ -154,6 +304,11 @@
         </template>
 
 
+        <!--
+                <template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
+            <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+                <t t-call="l10n_ro_invoice_report.invoice_layout">
+        -->
 
 
         <template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
@@ -492,6 +647,265 @@
             </xpath>
         </template>
 
+        <template id="l10n_ro_report_invoice_document_new" inherit_id="account.report_invoice_document">
+            <xpath expr="//t[@t-set='address']" position="replace">
+                <t t-call="l10n_ro_invoice_report.header_invoice"/>
+                <div style="visibility: hidden;height:1px;">
+                    <address/>
+                </div> <!--inherited by other modules, must be present-->
+            </xpath>
+
+            <xpath expr="//div[@id='informations']" position="before">
+
+                <t t-if="not currency_id">
+                    <t t-set="currency_id" t-value="o.currency_id"/>
+                </t>
+
+                <div class="row" t-if="o.type == 'out_invoice'">
+                    <t t-set="pickings" t-value="get_pickings(o)"/>
+
+                    <div id="delivery" class="col-12" t-if="pickings">
+                        <span>Deliveries:</span>
+                        <t t-foreach="pickings" t-as="d">
+                            <span t-field="d.name"/>
+                        </t>
+                    </div>
+                </div>
+
+
+                <div class="row" t-if="o.type == 'in_invoice'">
+                    <t t-set="pickings" t-value="get_pickings(o)"/>
+
+                    <div class="col-12" t-if="pickings">
+                        <span>Receptions:</span>
+                        <t t-foreach="pickings" t-as="d">
+                            <span t-field="d.name"/>
+                        </t>
+                    </div>
+                </div>
+
+            </xpath>
+            <xpath expr="//table[@name='invoice_line_table']" position="replace">
+                <t t-set="nr_crt" t-value="1"/>
+
+                <t t-set="with_discount_distinct" t-value="get_discount"/>
+
+                <table class="table table-sm o_main_table" name="invoice_line_table">
+                    <thead>
+                        <tr>
+                            <th>Ord</th>
+                            <th>Description</th>
+                            <th class="text-right">Quantity</th>
+                            <th class="text-right">Unit Price</th>
+                            <th class="text-right" t-if="with_discount(o) and with_discount_distinct"
+                                groups="sale.group_discount_per_so_line">Discount (%)
+                            </th>
+                            <th class="text-right">Amount</th>
+                            <th class="text-right">Taxes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="invoice_tbody">
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-foreach="o.invoice_line_ids" t-as="l">
+                            <t t-set="line" t-value="l"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"
+                               groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_total"
+                               groups="account.group_show_line_subtotals_tax_included"/>
+
+
+                            <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type" name="account_invoice_line_accountable">
+                                    <td>
+                                        <t t-esc="nr_crt"/>
+                                        <t t-set="nr_crt" t-value="nr_crt + 1"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="l.name"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-set="quantity" t-value="l.quantity"/>
+                                        <t t-if="o.type == 'out_refund'">
+                                            <t t-set="quantity" t-value="-1*l.quantity"/>
+                                        </t>
+
+                                        <span t-if="quantity" id="quantity" t-esc="quantity"
+                                              t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                                        <span t-field="l.uom_id" groups="uom.group_uom"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <!--                                             <t t-set="price_unit_without_taxes" t-value="l.price_unit_without_taxes"/> -->
+                                        <t t-set="price_unit_without_taxes"
+                                           t-value="l.price_subtotal / (l.quantity or 1)"/>
+                                        <t t-set="price_unit_without_taxes"
+                                           t-value="o.currency_id.with_context(date=o.date_invoice).compute(price_unit_without_taxes,currency_id)"/>
+                                        <t t-if="not with_discount_distinct and l.discount">
+
+                                        </t>
+                                        <span id="price_unit_without_taxes"
+                                              t-esc="price_unit_without_taxes"
+                                              t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                    <td class="text-right" t-if="with_discount(o) and with_discount_distinct"
+                                        groups="sale.group_discount_per_so_line">
+                                        <span t-field="l.discount"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-set="price_subtotal" t-value="l.price_subtotal"/>
+                                        <t t-if="o.type == 'out_refund'">
+                                            <t t-set="price_subtotal" t-value="-1*l.price_subtotal"/>
+                                        </t>
+                                        <t t-set="price_subtotal"
+                                           t-value="o.currency_id.with_context(date=o.date_invoice).compute(price_subtotal,currency_id)"/>
+                                        <span id="price_subtotal" t-esc="price_subtotal"
+                                              t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-set="price_tax" t-value="l.price_tax"/>
+                                        <t t-if="o.type == 'out_refund'">
+                                            <t t-set="price_tax" t-value="-1*l.price_tax"/>
+
+                                        </t>
+                                        <t t-set="price_tax"
+                                           t-value="o.currency_id.with_context(date=o.date_invoice).compute(price_tax,currency_id)"/>
+                                        <span id="price_tax" t-esc="price_tax"
+                                              t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                </t>
+                                <t t-if="line.display_type == 'line_section'">
+                                    <td colspan="99">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-if="line.display_type == 'line_note'">
+                                    <td colspan="99">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                </t>
+
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+            </xpath>
+            <xpath expr="//div[@id='total']/div" position="attributes">
+                <attribute name="t-attf-class">#{'col-4 col-sm-4 col-md-4'}</attribute>
+            </xpath>
+            <xpath expr="//div[@id='total']/div" position="before">
+
+                <div t-if="o.type == 'out_invoice' or o.type == 'out_refund' "
+                     t-attf-class="#{ 'col-8 col-sm-8 col-md-8'} ">
+                    <table class="table table-sm" style="page-break-inside: avoid;">
+
+                        <tr class="border-black">
+                            <td>Elaborate:</td>
+                            <td>Information for delivery:</td>
+                        </tr>
+
+                        <tr class="border-black">
+                            <td>
+                                <span>Name:</span>
+                                <span t-field="o.user_id"/>
+                            </td>
+                            <td>
+                                <div>
+                                    <span>Delegate:</span>
+                                    <span t-field="o.delegate_id"/>
+                                </div>
+                                <div>
+                                    <span>Mean Transport:</span>
+                                    <span t-field="o.mean_transp"/>
+                                </div>
+                                <div>
+                                    <span>Signature for receive</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <t t-set="sign"/>
+                <t t-if="o.type == 'out_refund'">
+                    <t t-set="sign" t-value="'-'"/>
+                </t>
+            </xpath>
+
+
+            <xpath expr="//span[@t-field='o.amount_untaxed']" position="before">
+                <t t-esc="sign"/>
+            </xpath>
+
+
+            <xpath expr="//span[@t-esc='amount_by_group[3]']" position="before">
+                <t t-esc="sign"/>
+            </xpath>
+
+            <xpath expr="//span[@t-field='o.amount_total']" position="before">
+                <t t-esc="sign"/>
+            </xpath>
+
+            <xpath expr="//span[@t-field='o.amount_total']" position="after">
+                <div t-if="currency_id!=res_company.currency_id">
+                    (
+                    <t t-if="o.type == 'out_refund'">
+                        <t t-set="amount_total" t-value="-1*o.move_id.amount"/>
+                        <t t-esc="amount_total"/>
+                        <span t-field="res_company.currency_id.symbol"/>
+                    </t>
+                    <t t-if="not o.type == 'out_refund'">
+                        <span t-field="o.move_id.amount"
+                              t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'/>
+
+                    </t>
+                    )
+                </div>
+            </xpath>
+
+
+            <xpath expr="//p[@name='comment']" position="after">
+                <small t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                    <p>
+                        <t t-if="not res_company.stamp_image">
+                            <div>Factură valabilă fără semnatură și ștampilă cf. art.V, alin (2) din Ordonanța
+                                nr.17/2015, art. 319 alin (29) din Legea nr. 227/2015 privind Codul fiscal și
+                                modificările ulterioare.
+                            </div>
+                        </t>
+                        <img t-if="res_company.stamp_image"
+                             t-att-src="'data:image/png;base64,%s' % res_company.stamp_image"
+                             style="max-height: 150px; "/>
+                    </p>
+                </small>
+                <p t-if="o.commercial_partner_id.info_for_invoice">
+                    <span t-field="o.commercial_partner_id.info_for_invoice"/>
+                </p>
+
+            </xpath>
+
+
+        </template>
+
+
+        <template id="footer_invoice">
+
+
+            <div class="text-right" style="border-top: 1px solid black;">
+                <ul class="list-inline">
+                    <li>Page:</li>
+                    <li>
+                        <span class="page"/>
+                    </li>
+                    <li>/</li>
+                    <li>
+                        <span class="topage"/>
+                    </li>
+                </ul>
+            </div>
+
+
+        </template>
 
     </data>
 </odoo>
