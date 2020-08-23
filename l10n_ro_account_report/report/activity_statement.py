@@ -75,6 +75,10 @@ class ActivityStatement(models.AbstractModel):
         if isinstance(date_end, str):
             date_end = fields.Date.from_string(date_end)
         account_type = data['account_type']
+        if data.get('target_move') == 'all':
+            target_move = ('posted','draft')
+        else:
+            target_move = ('posted',)
 
         today = fields.Date.today()
         amount_field = data.get('amount_field', 'amount')
@@ -93,8 +97,8 @@ class ActivityStatement(models.AbstractModel):
         res = {}
         # get base data
 
-        lines = self._get_account_display_lines(company_id, partner_ids, date_start, date_end, account_type)
-        balances_forward = self._get_account_initial_balance(company_id, partner_ids, date_start, account_type)
+        lines = self._get_account_display_lines(company_id, partner_ids, date_start, date_end, account_type, target_move)
+        balances_forward = self._get_account_initial_balance(company_id, partner_ids, date_start, account_type, target_move)
 
         # organise and format for report
         format_date = self._format_date_to_partner_lang
@@ -149,11 +153,11 @@ class ActivityStatement(models.AbstractModel):
             'company': self.env['res.company'].browse(company_id),
             'Currencies': currencies,
             'account_type': account_type,
-
             'get_inv_addr': self._get_invoice_address,
         }
 
-    def _initial_balance_sql_q1(self, partners, date_start, account_type):
+
+    def _initial_balance_sql_q1(self, partners, date_start, account_type, target_move):
         return str(self._cr.mogrify("""
             SELECT l.partner_id, l.currency_id, l.company_id,
             CASE WHEN l.currency_id is not null AND l.amount_currency > 0.0
@@ -169,6 +173,7 @@ class ActivityStatement(models.AbstractModel):
             JOIN account_move m ON (l.move_id = m.id)
             WHERE l.partner_id IN %(partners)s AND at.type = %(account_type)s
                                 AND l.date < %(date_start)s AND not l.blocked
+                                AND m.state IN %(target_move)s
             GROUP BY l.partner_id, l.currency_id, l.amount_currency,
                                 l.company_id
         """, locals()), "utf-8")
@@ -182,19 +187,19 @@ class ActivityStatement(models.AbstractModel):
             WHERE c.id = %(company_id)s
         """, locals()), "utf-8")
 
-    def _get_account_initial_balance(self, company_id, partner_ids, date_start, account_type):
+    def _get_account_initial_balance(self, company_id, partner_ids, date_start, account_type,target_move):
         balance_start = defaultdict(list)
         partners = tuple(partner_ids)
         # pylint: disable=E8103
         self.env.cr.execute("""WITH Q1 AS (%s), Q2 AS (%s)
         SELECT partner_id, currency_id, balance
-        FROM Q2""" % (self._initial_balance_sql_q1(partners, date_start, account_type),
+        FROM Q2""" % (self._initial_balance_sql_q1(partners, date_start, account_type,target_move),
                       self._initial_balance_sql_q2(company_id)))
         for row in self.env.cr.dictfetchall():
             balance_start[row.pop('partner_id')].append(row)
         return balance_start
 
-    def _display_lines_sql_q1(self, partners, date_start, date_end, account_type):
+    def _display_lines_sql_q1(self, partners, date_start, date_end, account_type, target_move):
         return str(self._cr.mogrify("""
             SELECT m.name AS move_id, l.partner_id, l.date,
                CASE WHEN (aj.type IN ('sale', 'purchase'))
@@ -228,6 +233,7 @@ class ActivityStatement(models.AbstractModel):
                 AND at.type = %(account_type)s
                 AND %(date_start)s <= l.date
                 AND l.date <= %(date_end)s
+                 AND m.state IN %(target_move)s
             GROUP BY l.partner_id, m.name, l.date, l.date_maturity,
                 CASE WHEN (aj.type IN ('sale', 'purchase'))
                     THEN l.name
@@ -253,12 +259,12 @@ class ActivityStatement(models.AbstractModel):
             WHERE c.id = %(company_id)s
         """, locals()), "utf-8")
 
-    def _get_account_display_lines(self, company_id, partner_ids, date_start, date_end, account_type):
+    def _get_account_display_lines(self, company_id, partner_ids, date_start, date_end, account_type, target_move):
         res = dict(map(lambda x: (x, []), partner_ids))
         partners = tuple(partner_ids)
 
         # pylint: disable=E8103
-        lines_sql_q1 = self._display_lines_sql_q1(partners, date_start, date_end, account_type)
+        lines_sql_q1 = self._display_lines_sql_q1(partners, date_start, date_end, account_type, target_move)
         lines_sql_q2 = self._display_lines_sql_q2(company_id)
 
         self.env.cr.execute("""

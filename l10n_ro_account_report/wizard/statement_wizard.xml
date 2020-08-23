@@ -7,7 +7,7 @@
                 src_model="res.partner"
                 res_model="activity.statement.wizard"
                 view_type="form" view_mode="form"
-                key2="client_action_multi" target="new"/>
+                key2="client_print_multi" target="new"/>
 
 
     <record id="activity_statement_wizard_view" model="ir.ui.view">
@@ -28,6 +28,8 @@
                         <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
                         <label for="account_type"/>
                         <field name="account_type" nolabel="1" widget="radio"/>
+                        <label for="target_move"/>
+                        <field name="target_move"  nolabel="1"  widget="radio"/>
                     </group>
 
 

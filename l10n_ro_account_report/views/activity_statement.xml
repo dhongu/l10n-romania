@@ -38,7 +38,7 @@
                             in
                             <span t-esc="display_currency.name"/>
                         </p>
-                        <table class="table table-condensed table-statement">
+                        <table class="table table-sm">
                             <thead>
                                 <tr>
                                     <th rowspan="2">Reference number</th>
@@ -185,7 +185,7 @@
 
     <report id="action_print_activity_statement"
             model="res.partner"
-            report_type="qweb-html"
+            report_type="qweb-pdf"
             menu="False"
             string="Activity Statement"
             name="l10n_ro_account_report.activity_statement"

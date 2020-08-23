@@ -46,6 +46,9 @@ class ActivityStatementWizard(models.TransientModel):
     account_type = fields.Selection([('receivable', 'Receivable'), ('payable', 'Payable')],
                                     string='Account type',     default=_get_account_type)
 
+    target_move = fields.Selection([('posted', 'All Posted Entries'),
+                                    ('all', 'All Entries'),
+                                    ], string='Target Moves', required=True, default='posted')
 
 
     @api.onchange('date_range_id')
@@ -59,7 +62,8 @@ class ActivityStatementWizard(models.TransientModel):
     def _export(self):
         """Export to PDF."""
         data = self._prepare_statement()
-        return self.env.ref('l10n_ro_account_report.action_print_activity_statement').report_action(self, data=data)
+        report  = self.env.ref('l10n_ro_account_report.action_print_activity_statement')
+        return report.with_context(from_transient_model=True).report_action(self, data=data)
 
 
 
@@ -80,4 +84,5 @@ class ActivityStatementWizard(models.TransientModel):
             'account_type': self.account_type,
             # 'aging_type': self.aging_type,
             'filter_negative_balances': self.filter_negative_balances,
+            'target_move':self.target_move
         }
