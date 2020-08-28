@@ -49,7 +49,7 @@
             </div>
 
             <div>
-                <div class="col-6">
+                <div >
                     <t t-set="partner_id" t-value="res_company.partner_id"/>
                     <t t-call="l10n_ro_config.banks"/>
                 </div>
@@ -59,7 +59,7 @@
             <div>
                 <div>
                     <div t-if="res_company.partner_id.vat">
-                        <strong>CIF:</strong>
+                        <strong><t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'"/>:</strong>
                         <span t-field="res_company.partner_id.vat"/>
                     </div>
                     <div t-if="res_company.partner_id.nrc">
