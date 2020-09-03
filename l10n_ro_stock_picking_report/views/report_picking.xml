@@ -4,181 +4,88 @@
 
         <template id="report_address">
             <t t-set="res_company" t-value="o.company_id"/>
-            <table>
-                <tr style="background-color: transparent;">
-                    <td width="40%">
+
+            <div id="address" class="address row">
+                <div name="information_block" class="col-6">
+                    <div>
                         <div>
-                            <div>
-                                <strong>Company</strong>
-                            </div>
+                            <strong>Company</strong>
                         </div>
-                        <strong t-field="res_company.partner_id.name"/>
-                        <div>
-                            <strong>Address:</strong>
-                            <address t-field="res_company.partner_id"
-                                     t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                    </div>
+                    <strong t-field="res_company.partner_id.name"/>
+                    <div>
+                        <strong>Address:</strong>
+                        <address t-field="res_company.partner_id"
+                                 t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                    </div>
+                    <div>
+                        <t t-set="partner_id" t-value="res_company.partner_id"/>
+                        <t t-call="l10n_ro_config.banks"/>
+                    </div>
+                    <div>
+                        <div t-if="res_company.partner_id.vat">
+                            <strong>CIF:</strong>
+                            <span t-field="res_company.partner_id.vat"/>
                         </div>
-                        <div class="col-xs-6">
-                            <t t-set="partner_id" t-value="res_company.partner_id"/>
-                            <t t-call="l10n_ro_config.banks"/>
+                        <div t-if="res_company.partner_id.nrc">
+                            <strong>NRC:</strong>
+                            <span t-field="res_company.partner_id.nrc"/>
                         </div>
-                        <div class="col-xs-5">
-                            <div t-if="res_company.partner_id.vat">
-                                <strong>CIF:</strong>
-                                <span t-field="res_company.partner_id.vat"/>
-                            </div>
-                            <div t-if="res_company.partner_id.nrc">
-                                <strong>NRC:</strong>
-                                <span t-field="res_company.partner_id.nrc"/>
-                            </div>
-                            <div i-if="res_company.share_capital">
-                                <strong>Share Capital:</strong>
-                                <span t-field="res_company.share_capital"/>
-                            </div>
+                        <div i-if="res_company.share_capital">
+                            <strong>Share Capital:</strong>
+                            <span t-field="res_company.share_capital"/>
                         </div>
-                    </td>
-                    <td width="20%"></td>
-                    <td width="40%">
-                        <div>
-                            <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
-                                <strong>Customer</strong>
-                            </div>
-
-                            <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
-                                <strong>Supplier</strong>
-                            </div>
+                    </div>
+                </div>
+                <div name="address" class="col-5 offset-1">
+                    <div>
+                        <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
+                            <strong>Customer</strong>
                         </div>
-                        <div>
-                            <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
-                                <strong t-field="o.partner_id.commercial_partner_id.name"/>,
-                            </div>
-                            <strong t-field="o.partner_id.name"/>
+
+                        <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">
+                            <strong>Supplier</strong>
                         </div>
-                        <div>
-                            <t t-if="o.partner_id.commercial_partner_id != o.partner_id">
-                                <strong>Delivery</strong>
-                            </t>
-                            <strong>Address:</strong>
-                            <address t-field="o.partner_id"
-                                     t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                    </div>
+                    <div>
+                        <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
+                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,
                         </div>
-                        <div class="col-xs-5 col-xs-offset-1">
-                            <t t-set="partner_id" t-value="o.partner_id"/>
-                            <t t-call="l10n_ro_config.banks"/>
+                        <strong t-field="o.partner_id.name"/>
+                    </div>
+                    <div>
+                        <t t-if="o.partner_id.commercial_partner_id != o.partner_id">
+                            <strong>Delivery</strong>
+                        </t>
+                        <strong>Address:</strong>
+                        <address t-field="o.partner_id"
+                                 t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>
+                    </div>
+                    <div>
+                        <t t-set="partner_id" t-value="o.partner_id"/>
+                        <t t-call="l10n_ro_config.banks"/>
+                    </div>
+                    <div>
+                        <div t-if="o.partner_id.vat">
+                            <strong>CIF:</strong>
+                            <span t-field="o.partner_id.commercial_partner_id.vat"/>
                         </div>
-                        <div class="col-xs-5 col-xs-offset-2">
-                            <div t-if="o.partner_id.vat">
-                                <strong>CIF:</strong>
-                                <span t-field="o.partner_id.commercial_partner_id.vat"/>
-                            </div>
-                            <div t-if="o.partner_id.nrc">
-                                <strong>NRC:</strong>
-                                <span t-field="o.partner_id.commercial_partner_id.nrc"/>
-                            </div>
+                        <div t-if="o.partner_id.nrc">
+                            <strong>NRC:</strong>
+                            <span t-field="o.partner_id.commercial_partner_id.nrc"/>
                         </div>
-                    </td>
-                </tr>
-            </table>
-<!--            <div class="row">-->
-<!--                <div class="col-xs-5">-->
-<!--                    <div>-->
-<!--                        &lt;!&ndash;  <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">-->
-<!--                              <strong>Customer</strong>-->
-<!--                          </div>-->
+                    </div>
+                </div>
+            </div>
 
-<!--                          <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">-->
-<!--                              <strong>Supplier</strong>-->
-<!--                          </div>&ndash;&gt;-->
-<!--                        <div>-->
-<!--                            <strong>Company</strong>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <strong t-field="res_company.partner_id.name"/>-->
-<!--                    <div>-->
-<!--                        <strong>Address:</strong>-->
-<!--                        <address t-field="res_company.partner_id"-->
-<!--                                 t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'/>-->
-<!--                    </div>-->
-
-<!--                </div>-->
-
-<!--                <div class="col-xs-5 col-xs-offset-2">-->
-<!--                    <div>-->
-<!--                        <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">-->
-<!--                            <strong>Customer</strong>-->
-<!--                        </div>-->
-
-<!--                        <div t-if="o.picking_type_id.code=='incoming' and o.partner_id">-->
-<!--                            <strong>Supplier</strong>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--                        <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">-->
-<!--                            <strong t-field="o.partner_id.commercial_partner_id.name"/>,-->
-<!--                        </div>-->
-<!--                        <strong t-field="o.partner_id.name"/>-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--                        <t t-if="o.partner_id.commercial_partner_id != o.partner_id">-->
-<!--                            <strong>Delivery</strong>-->
-<!--                        </t>-->
-<!--                        <strong>Address:</strong>-->
-<!--                        <address t-field="o.partner_id"-->
-<!--                                 t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'/>-->
-<!--                    </div>-->
-
-<!--                </div>-->
-<!--            </div>-->
-<!--            <small>-->
-<!--                <div class="row">-->
-<!--                    <div class="col-xs-6">-->
-<!--                        <t t-set="partner_id" t-value="res_company.partner_id"/>-->
-<!--                        <t t-call="l10n_ro_config.banks"/>-->
-
-<!--                    </div>-->
-<!--                    <div class="col-xs-5 col-xs-offset-1">-->
-
-<!--                        <t t-set="partner_id" t-value="o.partner_id"/>-->
-<!--                        <t t-call="l10n_ro_config.banks"/>-->
-
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </small>-->
-
-<!--            <div class="row">-->
-<!--                <div class="col-xs-5">-->
-<!--                    <div t-if="res_company.partner_id.vat">-->
-<!--                        <strong>CIF:</strong>-->
-<!--                        <span t-field="res_company.partner_id.vat"/>-->
-<!--                    </div>-->
-<!--                    <div t-if="res_company.partner_id.nrc">-->
-<!--                        <strong>NRC:</strong>-->
-<!--                        <span t-field="res_company.partner_id.nrc"/>-->
-<!--                    </div>-->
-<!--                    <div i-if="res_company.share_capital">-->
-<!--                        <strong>Share Capital:</strong>-->
-<!--                        <span t-field="res_company.share_capital"/>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="col-xs-5 col-xs-offset-2">-->
-<!--                    <div t-if="o.partner_id.vat">-->
-<!--                        <strong>CIF:</strong>-->
-<!--                        <span t-field="o.partner_id.commercial_partner_id.vat"/>-->
-<!--                    </div>-->
-<!--                    <div t-if="o.partner_id.nrc">-->
-<!--                        <strong>NRC:</strong>-->
-<!--                        <span t-field="o.partner_id.commercial_partner_id.nrc"/>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
 
             <br/>
-            <br/>
+
         </template>
 
         <template id="report_totals">
-            <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                <table class="table table-condensed">
+            <div class="col-4  col-sm-4 col-md-4">
+                <table class="table table-sm">
                     <tr class="border-black">
                         <td>
                             <strong>Total Without Taxes</strong>
@@ -209,8 +116,8 @@
         </template>
 
         <template id="report_totals_sale">
-            <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                <table class="table table-condensed">
+            <div class="col-4  col-sm-4 col-md-4">
+                <table class="table table-sm">
                     <tr class="border-black">
                         <td>
                             <strong>Total Sale Without Taxes</strong>
@@ -242,50 +149,52 @@
 
 
         <template id="report_delivery_sign">
-            <table class="table table-condensed">
-                <thead>
-                    <tr>
-                        <th>Elaborate:</th>
-                        <th>Information for delivery:</th>
-                        <th>Signature reception:</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <span>Name:</span>
-                            <t t-if="o.location_id.user_id">
-                                <span t-field="o.location_id.user_id"/>
-                            </t>
-                            <t t-if="not o.location_id.user_id">
-                                <span t-field="user.name"/>
-                            </t>
-
-                            <br/>
-                            <br/>
-                        </td>
-                        <td>
-                            <div>
-                                <span>Delegate:</span>
-                                <t t-if="o.delegate_id">
-                                    <span t-field="o.delegate_id"/>
+            <div class="col-6  col-sm-6 col-md-6 ml-auto">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Elaborate:</th>
+                            <th>Information for delivery:</th>
+                            <th>Signature reception:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span>Name:</span>
+                                <t t-if="o.location_id.user_id">
+                                    <span t-field="o.location_id.user_id"/>
                                 </t>
-                            </div>
-                            <div>
-                                <span>Mean Transport:</span>
-                                <t t-if="o.mean_transp">
-                                    <span t-field="o.mean_transp"/>
+                                <t t-if="not o.location_id.user_id">
+                                    <span t-field="user.name"/>
                                 </t>
-                            </div>
-                        </td>
-                        <td>
-                            <span/>
-                        </td>
-                    </tr>
+
+                                <br/>
+                                <br/>
+                            </td>
+                            <td>
+                                <div>
+                                    <span>Delegate:</span>
+                                    <t t-if="o.delegate_id">
+                                        <span t-field="o.delegate_id"/>
+                                    </t>
+                                </div>
+                                <div>
+                                    <span>Mean Transport:</span>
+                                    <t t-if="o.mean_transp">
+                                        <span t-field="o.mean_transp"/>
+                                    </t>
+                                </div>
+                            </td>
+                            <td>
+                                <span/>
+                            </td>
+                        </tr>
 
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </template>
 
         <template id="report_delivery">
@@ -296,56 +205,60 @@
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
 
-                            <h3>
-                                <t t-if="o.location_id.usage != 'internal'"><span>Reverse</span></t>
+                            <h2>
+                                <t t-if="o.location_id.usage != 'internal'">
+                                    <span>Reverse</span>
+                                </t>
                                 <span>Delivery:</span>
                                 <span t-field="o.name"/>
-                            </h3>
+                            </h2>
                             <h4>
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'assigned'">To be confirmed</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
 
                             </h4>
-                            <table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <strong>Source</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Date</strong>
-                                        </th>
-                                        <th>
-                                            <strong>From Location</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Customer reference</strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span t-field="o.origin"/>
-                                        </td>
-                                        <td>
-                                            <span t-field="o.date" t-options='{"widget": "date"}'/>
 
-                                        </td>
-                                        <td>
-                                            <span t-field="o.location_id"/>
-                                        </td>
 
-                                        <td>
-                                            <t t-set="sale" t-value="o.sale_id"/>
+                            <div id="information" class="row mt32 mb32">
+                                <div class="col-3 bm-2">
+                                    <strong>Source</strong>
+                                    <p>
+                                        <span t-field="o.origin"/>
+                                        <t t-if="not  o.origin">
+                                            <span t-field="o.group_id"/>
+                                        </t>
+                                    </p>
+
+                                </div>
+                                <div class="col-3 bm-2">
+                                    <strong>Date</strong>
+                                    <p>
+                                        <span t-field="o.date" t-options='{"widget": "date"}'/>
+                                    </p>
+
+                                </div>
+                                <div class="col-3 bm-2">
+                                    <strong>From location</strong>
+                                    <p>
+                                        <span t-field="o.location_id"/>
+                                    </p>
+
+                                </div>
+                                <div class="col-3 bm-2">
+                                    <strong>Customer reference</strong>
+                                    <p>
+                                        <t t-set="sale" t-value="o.sale_id"/>
                                             <span t-field="sale.client_order_ref"/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </p>
 
-                            <table class="table table-condensed table-bordered">
+                                </div>
+
+                            </div>
+
+
+
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>
@@ -403,19 +316,19 @@
                         <div class="page">
                             <t t-call="l10n_ro_config.report_address_company"/>
 
-                            <h3>
+                            <h2 id="title">
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
                                 <span>Consume Voucher:</span>
                                 <span t-field="o.name"/>
-                            </h3>
-                            <h3>
+                            </h2>
+                            <h4>
                                 <span>Date:</span>
                                 <span t-field="o.date" t-options='{"widget": "date"}'/>
-                                <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
-                            </h3>
 
-                            <table class="table table-condensed table-bordered">
+                            </h4>
+                            <t t-set="total_amount" t-value="0"/>
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>
@@ -448,28 +361,22 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="move.price_unit" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="move.price_unit"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc=" move.price_unit * move.product_uom_qty" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc=" move.price_unit * move.product_uom_qty"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                            <t t-set="total_amount"
+                                               t-value="total_amount+(move.price_unit * move.product_uom_qty)"/>
                                         </td>
                                     </tr>
                                 </tbody>
-                                <!--                                <tbody>
-                                                                    <tr>
-                                                                        <td>
-                                                                        </td>
-                                                                        <td class="text-right">
-                                                                        </td>
-                                                                        <td class="text-right">
-                                                                            <strong>Total</strong>
-                                                                        </td>
-                                                                        <td class="text-right">
-                                                                            <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>-->
+
                             </table>
+
+
+
                             <div class="row">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)"/>
                                 <t t-call="l10n_ro_stock_picking_report.report_totals"/>
@@ -494,48 +401,43 @@
                         <div class="page">
                             <t t-call="l10n_ro_config.report_address_company"/>
 
-                            <h3>
+                            <h2>
 
                                 <!--
                                 <span>Internal Transfer:</span>
                                 -->
-                                <span t-field="o.picking_type_id"/>
+                                <span t-field="o.picking_type_id.name"/>
                                 <span t-field="o.name"/>
                                 <span t-if="o.state == 'assigned'">Ready</span>
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
-                            </h3>
+                            </h2>
                             <h4>
                                 <span>Date:</span>
                                 <span t-field="o.date" t-options='{"widget": "date"}'/>
-                                <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
+
                             </h4>
 
-                            <table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <strong>Location source</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Location destination</strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span t-field="o.location_id"/>
-                                        </td>
-                                        <td>
-                                            <span t-field="o.location_dest_id"/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+                            <div id="informations" class="row mt32 mb32">
+                                <div class="col-3 bm-2">
+                                    <strong>Location source</strong>
+                                    <p>
+                                        <span t-field="o.location_id"/>
+                                    </p>
+
+                                </div>
+                                <div class="col-3 bm-2">
+                                    <strong>Location destination</strong>
+                                    <p>
+                                        <span t-field="o.location_dest_id"/>
+                                    </p>
+
+                                </div>
+                            </div>
 
 
-                            <table class="table table-condensed table-bordered">
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>
@@ -578,61 +480,56 @@
 
                                             <t t-if="move.product_qty">
                                                 <t t-set="product_qty" t-value="move.product_qty"/>
-                                                <t t-set="product_uom_qty" t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_uom, rounding_method='HALF-UP')"/>
+                                                <t t-set="product_uom_qty"
+                                                   t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_uom, rounding_method='HALF-UP')"/>
                                                 <span t-field="move.product_qty"/>
                                             </t>
 
                                             <t t-if="not move.product_qty">
-                                                <t t-set="product_qty" t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')"/>
-                                                <t t-set="product_uom_qty" t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_uom, rounding_method='HALF-UP')"/>
+                                                <t t-set="product_qty"
+                                                   t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')"/>
+                                                <t t-set="product_uom_qty"
+                                                   t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_uom, rounding_method='HALF-UP')"/>
                                                 <span t-esc="product_qty"/>
                                             </t>
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
                                             <t t-if="move.price_unit">
-                                                <span t-esc="move.price_unit" t-options='{"widget": "float", "precision": 2}'/>
+                                                <span t-esc="move.price_unit"
+                                                      t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                             <t t-if="not move.price_unit">
-                                                <span t-esc="move.product_id.standard_price" t-options='{"widget": "float", "precision": 2}'/>
+                                                <span t-esc="move.product_id.standard_price"
+                                                      t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                         </td>
                                         <td class="text-right">
                                             <t t-if="move.price_unit">
-                                                <span t-esc="move.price_unit * product_uom_qty" t-options='{"widget": "float", "precision": 2}'/>
+                                                <span t-esc="move.price_unit * product_uom_qty"
+                                                      t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                             <t t-if="not move.price_unit">
-                                                <span t-esc="move.product_id.standard_price * product_uom_qty" t-options='{"widget": "float", "precision": 2}'/>
+                                                <span t-esc="move.product_id.standard_price * product_uom_qty"
+                                                      t-options='{"widget": "float", "precision": 2}'/>
                                             </t>
                                         </td>
                                         <t t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'">
                                             <th class="text-right">
-                                                <span t-esc="move.product_id.list_price" t-options='{"widget": "float", "precision": 2}'/>
+                                                <span t-esc="move.product_id.list_price"
+                                                      t-options='{"widget": "float", "precision": 2}'/>
                                             </th>
                                             <th class="text-right">
-                                                <span t-esc="move.product_id.list_price * product_uom_qty " t-options='{"widget": "float", "precision": 2}'/>
+                                                <span t-esc="move.product_id.list_price * product_uom_qty "
+                                                      t-options='{"widget": "float", "precision": 2}'/>
                                             </th>
                                         </t>
                                     </tr>
                                 </tbody>
-                                <!-- <tbody>
-                                     <tr>
-                                         <td colspan="3" class="text-right">
-                                             <strong>Total</strong>
-                                         </td>
-                                         <td class="text-right">
-                                             <span t-esc="formatLang(reduce(lambda x, obj: x+(obj.price_unit * obj.product_uom_qty), o.move_lines , 0 ) or 0.00)"/>
-                                         </td>
-                                     </tr>
-                                 </tbody>-->
+
                             </table>
-                            <!--
-                            <div class="row">
-                                <t t-set="totals" t-value="get_totals(o.move_lines)"/>
-                                <t t-call="l10n_ro_stock_picking_report.report_totals"/>
-                            </div>
-                            -->
-                            <table class="table table-condensed">
+
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>Signature delivery:</th>
@@ -675,49 +572,52 @@
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
 
-                            <h3>
-                                <t t-if="o.location_id.usage != 'internal'"><span>Reverse</span></t>
+                            <h2>
+                                <t t-if="o.location_id.usage != 'internal'">
+                                    <span>Reverse</span>
+                                </t>
                                 <span>Delivery:</span>
                                 <span t-field="o.name"/>
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
-                            </h3>
-                            <table class="table table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <strong>Origin</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Date</strong>
-                                        </th>
-                                        <th>
-                                            <strong>From Location</strong>
-                                        </th>
-                                        <th>
-                                            <strong>Customer reference</strong>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <span t-field="o.origin"/>
-                                        </td>
-                                        <td>
-                                            <span t-field="o.date" t-options='{"widget": "date"}'/>
-                                            <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
-                                        </td>
-                                        <td>
-                                            <span t-field="o.location_id"/>
-                                        </td>
-                                         <td>
-                                            <t t-set="sale" t-value="o.sale_id"/>
-                                            <span t-field="sale.client_order_ref"/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            </h2>
+
+
+                            <div id="information" class="row mt32 mb32">
+                                <div class="col-3 bm-2">
+                                    <strong>Source</strong>
+                                    <p>
+                                        <span t-field="o.origin"/>
+                                        <t t-if="not  o.origin">
+                                            <span t-field="o.group_id"/>
+                                        </t>
+                                    </p>
+
+                                </div>
+                                <div class="col-3 bm-2">
+                                    <strong>Date</strong>
+                                    <p>
+                                        <span t-field="o.date" t-options='{"widget": "date"}'/>
+                                    </p>
+
+                                </div>
+                                <div class="col-3 bm-2">
+                                    <strong>From location</strong>
+                                    <p>
+                                        <span t-field="o.location_id"/>
+                                    </p>
+
+                                </div>
+                                <div class="col-3 bm-2">
+                                    <strong>Customer reference</strong>
+                                    <p>
+                                        <t t-set="sale" t-value="o.sale_id"/>
+                                        <span t-field="sale.client_order_ref"/>
+                                    </p>
+
+                                </div>
+                            </div>
+
 
                             <table class="table table-condensed table-bordered">
                                 <thead>
@@ -755,10 +655,12 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['price']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['price']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['amount']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
                                             <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}'/>
@@ -785,7 +687,7 @@
 
 
         <template id="report_consume_sign">
-            <table class="table table-condensed">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <th>Reception Committee:</th>
@@ -810,7 +712,7 @@
         </template>
 
         <template id="report_reception_sign">
-            <table class="table table-condensed">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <th>Reception Committee:</th>
@@ -841,38 +743,35 @@
 
 
         <template id="report_reception_text">
-            <table class="table table-condensed">
-                <thead>
-                    <tr>
-                        <th>
-                            <strong>Origin</strong>
-                        </th>
-                        <th>
-                            <strong>Date</strong>
-                        </th>
-                        <th>
-                            <strong>To location</strong>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <span t-field="o.origin"/>
-                            <t t-if="not  o.origin">
-                                <span t-field="o.group_id"/>
-                            </t>
-                        </td>
-                        <td>
-                            <span t-field="o.date" t-options='{"widget": "date"}'/>
-                            <!-- <t t-esc="formatLang(o.date, date=True)"/> -->
-                        </td>
-                        <td>
-                            <span t-field="o.location_dest_id"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+
+            <div id="information" class="row mt32 mb32">
+                <div class="col-3 bm-2">
+                    <strong>Origin</strong>
+                    <p>
+                        <span t-field="o.origin"/>
+                        <t t-if="not  o.origin">
+                            <span t-field="o.group_id"/>
+                        </t>
+                    </p>
+
+                </div>
+                <div class="col-3 bm-2">
+                    <strong>Date</strong>
+                    <p>
+                        <span t-field="o.date" t-options='{"widget": "date"}'/>
+                    </p>
+
+                </div>
+                <div class="col-3 bm-2">
+                    <strong>To location</strong>
+                    <p>
+                        <span t-field="o.location_dest_id"/>
+                    </p>
+
+                </div>
+            </div>
+
 
             <div>
                 <span>The undersigned, members of the reception, we proceeded to receive material values
@@ -916,13 +815,15 @@
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
 
-                            <h3>
-                                <t t-if="o.location_dest_id.usage != 'internal'"><span>Reverse</span></t>
+                            <h2>
+                                <t t-if="o.location_dest_id.usage != 'internal'">
+                                    <span>Reverse</span>
+                                </t>
                                 <span>Reception:</span>
                                 <span t-field="o.name"/>
-                            </h3>
+                            </h2>
                             <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
-                            <table class="table table-condensed table-bordered">
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>
@@ -980,7 +881,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="row">
+                            <div id="total" class="row justify-content-end">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)"/>
                                 <t t-call="l10n_ro_stock_picking_report.report_totals"/>
                             </div>
@@ -1004,13 +905,13 @@
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
 
-                            <h3>
+                            <h2>
                                 <span>Reception:</span>
                                 <span t-field="o.name"/>
-                            </h3>
+                            </h2>
                             <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
 
-                            <table class="table table-condensed table-bordered">
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>
@@ -1044,19 +945,21 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['price']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['price']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['amount']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
 
                                     </tr>
                                 </tbody>
                             </table>
 
-                            <div class="row">
+                            <div id="total" class="row justify-content-end">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)"/>
-                                <div class="col-xs-4 pull-right">
+                                <div class="col-4 ml-auto">
                                     <table class="table table-condensed">
                                         <tr class="border-black">
                                             <td>
@@ -1091,13 +994,13 @@
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address"/>
-                            <h3>
+                            <h2>
                                 <span>Reception:</span>
                                 <span t-field="o.name"/>
-                            </h3>
+                            </h2>
                             <t t-call="l10n_ro_stock_picking_report.report_reception_text"/>
 
-                            <table class="table table-condensed table-bordered">
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>
@@ -1146,31 +1049,38 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom"/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['price']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['price']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['amount']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['tax']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount_tax']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['amount_tax']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-field="move.product_id.list_price" />
+                                            <span t-field="move.product_id.list_price"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['margin']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['margin']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line['amount_tax_sale']" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span t-esc="line['amount_tax_sale']"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
 
-                            <div class="row">
+                            <div id="total" class="row justify-content-end">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)"/>
                                 <t t-call="l10n_ro_stock_picking_report.report_totals"/>
                                 <t t-call="l10n_ro_stock_picking_report.report_totals_sale"/>
