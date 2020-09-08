@@ -34,6 +34,10 @@ from lxml import html
 from openerp import models, fields, api, _
 from openerp.exceptions import Warning
 import unicodedata
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 CEDILLATRANS = maketrans(u'\u015f\u0163\u015e\u0162'.encode(
     'utf8'), u'\u0219\u021b\u0218\u021a'.encode('utf8'))
@@ -43,7 +47,7 @@ headers = {
     "Content-Type": "application/json;"
 }
 
-ANAF_URL = 'https://webservicesp.anaf.ro/PlatitorTvaRest/api/v3/ws/tva'
+ANAF_URL = 'https://webservicesp.anaf.ro/PlatitorTvaRest/api/v4/ws/tva'
 
 
 def unaccent(text):
@@ -69,6 +73,7 @@ class res_partner(models.Model):
 
     @api.model
     def _get_Anaf(self, cod):
+        result = {}
         res = requests.post(ANAF_URL, json=[{'cui': cod, 'data': fields.Date.today()}], headers=headers)
         if res.status_code == 200:
             res = res.json()
@@ -155,63 +160,68 @@ class res_partner(models.Model):
 
     @api.model
     def _get_Openapi(self, cod):
-
         result = {}
         openapi_key = self.env['ir.config_parameter'].get_param(key="openapi_key", default=False)
         if openapi_key:
-            headers = {
-                "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",
-                "Content-Type": "application/json;",
-                'x-api-key': openapi_key
-            }
-
-            request = Request('https://api.openapi.ro/api/companies/%s' % cod, headers=headers)
-            response = urlopen(request)
-            status_code = response.getcode()
-
-            if status_code == 200:
-
-                res = json.loads(response.read())
-                state = False
-                if res['judet']:
-                    state = self.env['res.country.state'].search([('name', '=', res['judet'].title())])
-                    if state:
-                        state = state[0].id
-
-                result = {
-                    'name': res['denumire'],
-                    'nrc': res['numar_reg_com'] or '',
-                    'street': res['adresa'].title(),
-
-                    'phone': res['telefon'] and res['telefon'] or '',
-                    'fax': res['fax'] and res['fax'] or '',
-                    'zip': res['cod_postal'] and res['cod_postal'] or '',
-                    'vat_subjected': bool(res['tva']),
-                    'state_id': state,
-                    'company_type': 'company'
+            try:
+                headers = {
+                    "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",
+                    "Content-Type": "application/json;",
+                    'x-api-key': openapi_key
                 }
+
+                request = Request('https://api.openapi.ro/api/companies/%s' % cod, headers=headers)
+                response = urlopen(request)
+                status_code = response.getcode()
+
+                if status_code == 200:
+
+                    res = json.loads(response.read())
+                    state = False
+                    if res['judet']:
+                        state = self.env['res.country.state'].search([('name', '=', res['judet'].title())])
+                        if state:
+                            state = state[0].id
+
+                    result = {
+                        'name': res['denumire'],
+                        'nrc': res['numar_reg_com'] or '',
+                        'street': res['adresa'].title(),
+
+                        'phone': res['telefon'] and res['telefon'] or '',
+                        'fax': res['fax'] and res['fax'] or '',
+                        'zip': res['cod_postal'] and res['cod_postal'] or '',
+                        'vat_subjected': bool(res['tva']),
+                        'state_id': state,
+                        'company_type': 'company'
+                    }
+            except Exception as e:
+                _logger.error("Error apel api.openapi.ro %s " % str(e))
         else:
-            res = requests.get('http://legacy.openapi.ro/api/companies/%s.json' % cod)
-            if res.status_code == 200:
-                res = res.json()
-                state = False
-                if res['state']:
-                    state = self.env['res.country.state'].search([('name', '=', res['state'].title())])
-                    if state:
-                        state = state[0].id
+            try:
+                res = requests.get('http://legacy.openapi.ro/api/companies/%s.json' % cod)
+                if res.status_code == 200:
+                    res = res.json()
+                    state = False
+                    if res['state']:
+                        state = self.env['res.country.state'].search([('name', '=', res['state'].title())])
+                        if state:
+                            state = state[0].id
 
-                result = {
-                    'name': res['name'],
-                    'nrc': res['registration_id'] and res['registration_id'].upper() or '',
-                    'street': res['address'].title(),
-                    'city': res['city'].title(),
-                    'phone': res['phone'] and res['phone'] or '',
-                    'fax': res['fax'] and res['fax'] or '',
-                    'zip': res['zip'] and res['zip'] or '',
-                    'vat_subjected': bool(res['vat'] == '1'),
-                    'state_id': state,
-                    'company_type': 'company'
-                }
+                    result = {
+                        'name': res['name'],
+                        'nrc': res['registration_id'] and res['registration_id'].upper() or '',
+                        'street': res['address'].title(),
+                        'city': res['city'].title(),
+                        'phone': res['phone'] and res['phone'] or '',
+                        'fax': res['fax'] and res['fax'] or '',
+                        'zip': res['zip'] and res['zip'] or '',
+                        'vat_subjected': bool(res['vat'] == '1'),
+                        'state_id': state,
+                        'company_type': 'company'
+                    }
+            except Exception as e:
+                _logger.error("Error apel legacy.openapi.ro %s " % str(e))
 
         return result
 
@@ -292,7 +302,7 @@ class res_partner(models.Model):
                     if result:
                         values = self._Anaf_to_Odoo(result)
                 except Exception as e:
-                    print str(e)
+                    _logger.error("Error anaf %s " % str(e))
                     values = self._get_Openapi(vat_number)
 
                 if values:
