@@ -12,7 +12,7 @@
     "website": "http://www.forbiom.eu",
     "category": "Localization",
     "depends": [
-        'l10n_ro',
+        'base',
     ],
 
 
