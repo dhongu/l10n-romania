@@ -14,6 +14,7 @@
     "depends": [
         #'l10n_ro',
         #'base_vat'
+        'base'
     ],
 
 
