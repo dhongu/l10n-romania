@@ -2,15 +2,15 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import random
+
 from odoo.tests import Form
+
 from .common import TestStockCommon
 
 # Generare note contabile la achizitie
 
+
 class TestStockPurchaseStore(TestStockCommon):
-
-
-
     def test_nir_with_invoice_in_store(self):
         """
             Receptie produse in magazin in baza facturii
@@ -29,7 +29,6 @@ class TestStockPurchaseStore(TestStockCommon):
 
         self.create_invoice()
 
-
         # in stoc produsele sunt la valoarea de achizitie
         self.check_stock_valuation(self.val_p1_i, self.val_p2_i)
 
@@ -40,7 +39,6 @@ class TestStockPurchaseStore(TestStockCommon):
         diff1 = round(self.tva_p1 - self.adaos_p1, 2)
         diff2 = round(self.tva_p2 - self.adaos_p2, 2)
         self.check_account_diff(diff1, diff2)
-
 
     def test_nir_with_invoice_and_diff_in_store(self):
         """
@@ -74,7 +72,6 @@ class TestStockPurchaseStore(TestStockCommon):
         diff2 = round(self.tva_p2 - self.adaos_p2, 2)
         self.check_account_diff(diff1, diff2)
 
-
     def test_nir_with_notice_and_invoice_in_store(self):
         """
             Receptie produse in magazin pe baza de aviz si inregistare ulterioara a facturii
@@ -92,8 +89,6 @@ class TestStockPurchaseStore(TestStockCommon):
         self.check_stock_valuation(self.val_p1_i, self.val_p2_i)
         # in contabilitate valoarea este la pret de vanzare
         self.check_account_valuation(self.val_p1_store, self.val_p2_store)
-
-
 
     def test_nir_with_notice_invoice_and_diff_in_store(self):
         """
