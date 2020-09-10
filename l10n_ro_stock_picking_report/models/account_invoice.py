@@ -1,16 +1,13 @@
-# -*- coding: utf-8 -*-
 # ©  2008-2020 Deltatech
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
 
-
-
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 
 
 class AccountInvoice(models.Model):
-    _inherit = 'account.move'
+    _inherit = "account.move"
 
     def _prepare_invoice_line_from_po_line(self, line):
         data = super(AccountInvoice, self)._prepare_invoice_line_from_po_line(line)
