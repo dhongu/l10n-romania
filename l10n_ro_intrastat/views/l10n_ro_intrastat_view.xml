@@ -107,13 +107,10 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
             <field name="arch" type="xml">
-<!--                <xpath expr="//field[@name='payment_term']" position="after">-->
-<!--                    <field name="incoterm_id" groups="l10n_ro_intrastat.intrastat_extended"/>-->
-<!--                </xpath>-->
                 <xpath expr="//field[@name='fiscal_position_id']" position="after">
                     <field name="intrastat_transaction_id" />
                     <field name="transport_mode_id" groups="l10n_ro_intrastat.intrastat_extended"/>
-
+                    <field name="incoterm_id" groups="l10n_ro_intrastat.intrastat_extended"/>
                     <field name="intrastat_country_id" help="Dispatch country" options="{'no_create': True}"/>
                 </xpath>
             </field>

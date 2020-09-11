@@ -38,7 +38,8 @@ class IntrastatDeclaration(models.TransientModel):
 
     def _get_def_monthyear(self):
         td = fields.Date.context_today(self)
-        return td.strftime('%Y'), td.strftime('%m')
+        # return td.strftime('%Y'), td.strftime('%m')
+        return td[:4], td[5:7]
 
     def _get_def_month(self):
         return self._get_def_monthyear()[1]
