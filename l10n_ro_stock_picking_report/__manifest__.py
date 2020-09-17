@@ -4,8 +4,9 @@
 
 {
     "name": "Romania - Picking Reports",
-    "version": "1.0",
-    "author": "Dorin Hongu",
+    "license": "AGPL-3",
+    "version": "13.0.1.0.0",
+    "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "",
     "description": """
 
