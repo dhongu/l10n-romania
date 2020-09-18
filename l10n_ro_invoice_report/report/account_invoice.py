@@ -23,7 +23,7 @@ import time
 
 from odoo import api, models
 
-from . import amount_to_text_ro
+# from . import amount_to_text_ro
 
 
 class ReportInvoiceWithPaymentsPrint(models.AbstractModel):
@@ -40,7 +40,7 @@ class ReportInvoiceWithPaymentsPrint(models.AbstractModel):
             "data": data,
             "time": time,
             "docs": self.env[report.model].browse(docids),
-            "convert": self._convert,
+            # "convert": self._convert,
             "with_discount": self._with_discount,
             "amount_to_text": self._amount_to_text,
             "get_pickings": self._get_pickings,
@@ -50,10 +50,10 @@ class ReportInvoiceWithPaymentsPrint(models.AbstractModel):
     def _amount_to_text(self, amount, currency):
         return currency.amount_to_text(amount)
 
-    def _convert(self, amount):
-        # todo: de folosit libraria num2words dupa ce o sa aiba si limba romana
-        amt_ro = amount_to_text_ro.amount_to_text_ro(amount)
-        return amt_ro
+    # def _convert(self, amount):
+    #     # todo: de folosit libraria num2words dupa ce o sa aiba si limba romana
+    #     amt_ro = amount_to_text_ro.amount_to_text_ro(amount)
+    #     return amt_ro
 
     def _with_discount(self, invoice):
         res = False

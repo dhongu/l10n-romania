@@ -24,7 +24,7 @@ from datetime import datetime
 
 from odoo import api, models
 
-from . import amount_to_text_ro
+# from . import amount_to_text_ro
 
 
 class ReportPaymentPrint(models.AbstractModel):
@@ -41,7 +41,7 @@ class ReportPaymentPrint(models.AbstractModel):
             "data": data,
             "time": time,
             "docs": self.env[report.model].browse(docids),
-            "convert": self._convert,
+            # "convert": self._convert,
         }
 
     @api.model
@@ -51,10 +51,10 @@ class ReportPaymentPrint(models.AbstractModel):
         docargs = self.get_report_values()
         return report_obj.render(self._template, docargs)
 
-    def _convert(self, amount):
-        # de folosit  num2words
-        amt_ro = amount_to_text_ro.amount_to_text_ro(abs(amount))
-        return amt_ro
+    # def _convert(self, amount):
+    #     # de folosit  num2words
+    #     amt_ro = amount_to_text_ro.amount_to_text_ro(abs(amount))
+    #     return amt_ro
 
 
 class ReportStatementLinePrint(models.AbstractModel):
@@ -71,7 +71,7 @@ class ReportStatementLinePrint(models.AbstractModel):
             "data": data,
             "time": time,
             "docs": self.env[report.model].browse(docids),
-            "convert": self._convert,
+            # "convert": self._convert,
         }
 
     @api.model
@@ -81,9 +81,9 @@ class ReportStatementLinePrint(models.AbstractModel):
         docargs = self.get_report_values()
         return report_obj.render(self._template, docargs)
 
-    def _convert(self, amount):
-        amt_ro = amount_to_text_ro.amount_to_text_ro(abs(amount))
-        return amt_ro
+    # def _convert(self, amount):
+    #     amt_ro = amount_to_text_ro.amount_to_text_ro(abs(amount))
+    #     return amt_ro
 
 
 class ReportStatementLineVoucher(ReportStatementLinePrint):
