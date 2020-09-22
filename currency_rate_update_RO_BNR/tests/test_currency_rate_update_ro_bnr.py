@@ -37,7 +37,7 @@ class TestCurrencyRateUpdateRoBnr(SavepointCase):
         # on the first company.
         cls.env.user.company_id = cls.company
         cls.bnr_provider = cls.CurrencyRateProvider.create(
-            {"service": "RO_BNR", "currency_ids": [(4, cls.usd_currency.id), (4, cls.ron_currency.id)],}
+            {"service": "RO_BNR", "currency_ids": [(4, cls.usd_currency.id), (4, cls.ron_currency.id)]}
         )
         cls.CurrencyRate.search([]).unlink()
 

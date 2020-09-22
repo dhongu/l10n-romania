@@ -167,7 +167,7 @@ class ReportPickingReception(models.AbstractModel):
             res["amount_tax"] = taxes["total_included"]
 
             taxes_ids = move.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
-            incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+            # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
             # if incl_tax:
             #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
             # else:

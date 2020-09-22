@@ -137,7 +137,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
 
     def _get_html(self):
         result = {}
-        rcontext = {}
+        # rcontext = {}
         context = dict(self.env.context)
         report = self.browse(context.get("active_id"))
         if report:
@@ -146,17 +146,6 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
             result["html"] = html[0]
 
         return result
-
-    # def _get_html(self):
-    #     result = {}
-    #     rcontext = {}
-    #     context = dict(self.env.context)
-    #     report = self.browse(context.get('active_id'))
-    #     if report:
-    #         rcontext['o'] = report
-    #         result['html'] = self.env.ref('l10n_ro_report_trial_balance.l10n_ro_report_trial_balance')
-    #         .render(rcontext)
-    #     return result
 
     @api.model
     def get_html(self, given_context=None):
@@ -224,149 +213,149 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                 accounts = accounts.filtered(lambda a: a.user_type_id.id != sp_acc_type.id)
         query_inject_account = """
 
-                    with q1_open as (
-                            SELECT   account_id,
-                                                coalesce(sum(open.debit),0) AS debit_opening,
-                                                coalesce(sum(open.credit),0) AS credit_opening
-                                FROM  account_move AS move
-                                    JOIN account_move_line AS open
-                                        ON open.move_id = move.id AND open.date < %(fy_start_date)s
+    with q1_open as (
+            SELECT   account_id,
+                                coalesce(sum(open.debit),0) AS debit_opening,
+                                coalesce(sum(open.credit),0) AS credit_opening
+                FROM  account_move AS move
+                    JOIN account_move_line AS open
+                        ON open.move_id = move.id AND open.date < %(fy_start_date)s
 
-                                WHERE open.account_id in %(accounts)s
-                                      and move.state in %(states)s
-                                GROUP BY open.account_id
+                WHERE open.account_id in %(accounts)s
+                      and move.state in %(states)s
+                GROUP BY open.account_id
 
-                    ),
-                     q2_init as (
-                            SELECT   account_id,
-                                    coalesce(sum(init.debit),0) AS debit_initial,
-                                    coalesce(sum(init.credit),0) AS credit_initial
-                                FROM  account_move AS move
-                                    JOIN account_move_line AS init
-                                        ON init.move_id = move.id   AND
-                                         init.date >= %(fy_start_date)s AND
-                                         init.date < %(date_from)s
+    ),
+     q2_init as (
+            SELECT   account_id,
+                    coalesce(sum(init.debit),0) AS debit_initial,
+                    coalesce(sum(init.credit),0) AS credit_initial
+                FROM  account_move AS move
+                    JOIN account_move_line AS init
+                        ON init.move_id = move.id   AND
+                         init.date >= %(fy_start_date)s AND
+                         init.date < %(date_from)s
 
-                                WHERE init.account_id in %(accounts)s
-                                and move.state in %(states)s
-                                GROUP BY init.account_id
-                    ),
+                WHERE init.account_id in %(accounts)s
+                and move.state in %(states)s
+                GROUP BY init.account_id
+    ),
 
-                    q3_current as (
-                            SELECT   account_id,
-                                    coalesce(sum(current.debit),0) AS debit ,
-                                    coalesce(sum(current.credit),0) AS credit
-                                FROM  account_move AS move
-                                    JOIN account_move_line AS current
-                                        ON current.move_id = move.id  AND
-                                        current.date >=%(date_from)s   AND
-                                         current.date <= %(date_to)s
+    q3_current as (
+            SELECT   account_id,
+                    coalesce(sum(current.debit),0) AS debit ,
+                    coalesce(sum(current.credit),0) AS credit
+                FROM  account_move AS move
+                    JOIN account_move_line AS current
+                        ON current.move_id = move.id  AND
+                        current.date >=%(date_from)s   AND
+                         current.date <= %(date_to)s
 
-                                WHERE current.account_id in %(accounts)s
-                                and move.state in %(states)s
-                                GROUP BY current.account_id
-                    )
-
-
-
-                INSERT INTO
-                    l10n_ro_report_trial_balance_account
-                    (
-                    report_id,  create_uid,  create_date,  account_id,  code, name, account_group_id,
-
-                    debit_opening_balance, credit_opening_balance,
-                    debit_opening, credit_opening,
-
-                    debit_initial_balance,  credit_initial_balance,
-
-                    debit_initial,  credit_initial,
-
-                    debit, credit,
-
-                    debit_cumulative,  credit_cumulative,
-
-                    debit_total,  credit_total,
-
-                    debit_balance,    credit_balance
-
-                    )
-                SELECT
-                    %(report_id)s AS report_id,
-                    %(create_uid)s AS create_uid,
-                    NOW() AS create_date,
-                    subselect.id as account_id, subselect.code, subselect.name, subselect.group_id,
-
-                    subselect.debit_opening_balance, subselect.credit_opening_balance,
-
-                    subselect.debit_opening, subselect.credit_opening,
-
-                    subselect.debit_initial_balance, subselect.credit_initial_balance,
-
-                    subselect.debit_initial, subselect.credit_initial,
-
-                    subselect.debit, subselect.credit,
-
-                    debit_initial + debit as debit_cumulative,  credit_initial + credit as credit_cumulative,
-
-                    debit_opening_balance + debit_initial + debit as debit_total,
-                    credit_opening_balance + credit_initial + credit as credit_total,
-
-                    subselect.debit_balance,
-                    subselect.credit_balance
+                WHERE current.account_id in %(accounts)s
+                and move.state in %(states)s
+                GROUP BY current.account_id
+    )
 
 
-                FROM (
-                SELECT
 
-                    accounts.*,
+    INSERT INTO
+        l10n_ro_report_trial_balance_account
+        (
+        report_id,  create_uid,  create_date,  account_id,  code, name, account_group_id,
 
-                    CASE WHEN accounts.debit_opening > accounts.credit_opening
-                        THEN accounts.debit_opening - accounts.credit_opening
-                        ELSE 0
-                    END AS debit_opening_balance,
-                    CASE WHEN accounts.credit_opening > accounts.debit_opening
-                        THEN accounts.credit_opening - accounts.debit_opening
-                        ELSE 0
-                    END AS credit_opening_balance,
+        debit_opening_balance, credit_opening_balance,
+        debit_opening, credit_opening,
 
-                    CASE WHEN accounts.debit_initial > accounts.credit_initial
-                        THEN accounts.debit_initial - accounts.credit_initial
-                        ELSE 0
-                    END AS debit_initial_balance,
-                    CASE WHEN accounts.credit_initial > accounts.debit_initial
-                        THEN accounts.credit_initial - accounts.debit_initial
-                        ELSE 0
-                    END AS credit_initial_balance,
+        debit_initial_balance,  credit_initial_balance,
 
-                    CASE WHEN accounts.debit_total > accounts.credit_total
-                        THEN accounts.debit_total - accounts.credit_total
-                        ELSE 0
-                    END AS debit_balance,
-                    CASE WHEN accounts.credit_total > accounts.debit_total
-                        THEN accounts.credit_total - accounts.debit_total
-                        ELSE 0
-                    END AS credit_balance
+        debit_initial,  credit_initial,
 
-                FROM
-                    (
-                    SELECT  acc.id, acc.code, acc.name, acc.group_id,
-                    coalesce(debit_opening,0.0) as debit_opening, coalesce(credit_opening,0.0) as credit_opening,
-                    coalesce(debit_initial,0.0) as debit_initial, coalesce(credit_initial,0.0) as credit_initial,
-                    coalesce(debit,0.0) as debit, coalesce(credit,0.0) as credit,
+        debit, credit,
 
-                    coalesce(debit_opening,0) + coalesce(debit_initial,0) + coalesce(debit,0)  AS debit_total,
-                    coalesce(credit_opening,0) + coalesce(credit_initial,0) + coalesce(credit,0) as credit_total
+        debit_cumulative,  credit_cumulative,
 
-                      FROM          account_account acc
-                      LEFT OUTER JOIN q1_open on q1_open.account_id = acc.id
-                      LEFT OUTER JOIN q2_init on q2_init.account_id = acc.id
-                      LEFT OUTER JOIN q3_current on q3_current.account_id = acc.id
+        debit_total,  credit_total,
 
-                      WHERE acc.id in %(accounts)s
-                      ORDER BY acc.code
+        debit_balance,    credit_balance
 
-                     ) as accounts
-                ) as subselect
+        )
+    SELECT
+        %(report_id)s AS report_id,
+        %(create_uid)s AS create_uid,
+        NOW() AS create_date,
+        subselect.id as account_id, subselect.code, subselect.name, subselect.group_id,
+
+        subselect.debit_opening_balance, subselect.credit_opening_balance,
+
+        subselect.debit_opening, subselect.credit_opening,
+
+        subselect.debit_initial_balance, subselect.credit_initial_balance,
+
+        subselect.debit_initial, subselect.credit_initial,
+
+        subselect.debit, subselect.credit,
+
+        debit_initial + debit as debit_cumulative,  credit_initial + credit as credit_cumulative,
+
+        debit_opening_balance + debit_initial + debit as debit_total,
+        credit_opening_balance + credit_initial + credit as credit_total,
+
+        subselect.debit_balance,
+        subselect.credit_balance
+
+
+    FROM (
+    SELECT
+
+        accounts.*,
+
+        CASE WHEN accounts.debit_opening > accounts.credit_opening
+            THEN accounts.debit_opening - accounts.credit_opening
+            ELSE 0
+        END AS debit_opening_balance,
+        CASE WHEN accounts.credit_opening > accounts.debit_opening
+            THEN accounts.credit_opening - accounts.debit_opening
+            ELSE 0
+        END AS credit_opening_balance,
+
+        CASE WHEN accounts.debit_initial > accounts.credit_initial
+            THEN accounts.debit_initial - accounts.credit_initial
+            ELSE 0
+        END AS debit_initial_balance,
+        CASE WHEN accounts.credit_initial > accounts.debit_initial
+            THEN accounts.credit_initial - accounts.debit_initial
+            ELSE 0
+        END AS credit_initial_balance,
+
+        CASE WHEN accounts.debit_total > accounts.credit_total
+            THEN accounts.debit_total - accounts.credit_total
+            ELSE 0
+        END AS debit_balance,
+        CASE WHEN accounts.credit_total > accounts.debit_total
+            THEN accounts.credit_total - accounts.debit_total
+            ELSE 0
+        END AS credit_balance
+
+    FROM
+        (
+        SELECT  acc.id, acc.code, acc.name, acc.group_id,
+        coalesce(debit_opening,0.0) as debit_opening, coalesce(credit_opening,0.0) as credit_opening,
+        coalesce(debit_initial,0.0) as debit_initial, coalesce(credit_initial,0.0) as credit_initial,
+        coalesce(debit,0.0) as debit, coalesce(credit,0.0) as credit,
+
+        coalesce(debit_opening,0) + coalesce(debit_initial,0) + coalesce(debit,0)  AS debit_total,
+        coalesce(credit_opening,0) + coalesce(credit_initial,0) + coalesce(credit,0) as credit_total
+
+          FROM          account_account acc
+          LEFT OUTER JOIN q1_open on q1_open.account_id = acc.id
+          LEFT OUTER JOIN q2_init on q2_init.account_id = acc.id
+          LEFT OUTER JOIN q3_current on q3_current.account_id = acc.id
+
+          WHERE acc.id in %(accounts)s
+          ORDER BY acc.code
+
+         ) as accounts
+    ) as subselect
         """
 
         query_inject_account_params = {
@@ -379,10 +368,8 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
             "accounts": accounts._ids,
         }
 
-        q = query_inject_account % query_inject_account_params
-        print(q)
+        # q = query_inject_account % query_inject_account_params
 
-        print(query_inject_account_params)
         self.env.cr.execute(query_inject_account, query_inject_account_params)
         # if self.hide_account_without_move:
         #     lines = self.line_account_ids.filtered(lambda a: a.debit_balance == 0 and a.credit_balance == 0)

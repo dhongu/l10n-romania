@@ -12,22 +12,22 @@ _logger = logging.getLogger(__name__)
 class AbstractTest(TransactionCase):
     """Common technical tests for all reports."""
 
-    def setUp(cls):
-        super(AbstractTest, cls).setUp()
+    def setUp(self):
+        super(AbstractTest, self).setUp()
 
-        cls.model = cls._getReportModel()
+        self.model = self._getReportModel()
 
-        cls.qweb_report_name = cls._getQwebReportName()
-        cls.xlsx_report_name = cls._getXlsxReportName()
-        cls.xlsx_action_name = cls._getXlsxReportActionName()
+        self.qweb_report_name = self._getQwebReportName()
+        self.xlsx_report_name = self._getXlsxReportName()
+        self.xlsx_action_name = self._getXlsxReportActionName()
 
-        cls.report_title = cls._getReportTitle()
+        self.report_title = self._getReportTitle()
 
-        cls.base_filters = cls._getBaseFilters()
-        cls.additional_filters = cls._getAdditionalFiltersToBeTested()
+        self.base_filters = self._getBaseFilters()
+        self.additional_filters = self._getAdditionalFiltersToBeTested()
 
-        cls.report = cls.model.create(cls.base_filters)
-        cls.report.compute_data_for_report()
+        self.report = self.model.create(self.base_filters)
+        self.report.compute_data_for_report()
 
     def test_html(self):
         test_reports.try_report(
@@ -52,8 +52,16 @@ class AbstractTest(TransactionCase):
         # Check if returned report action is correct
         report_type = "qweb-html"
         report_action = self.report.print_report(report_type)
-        self.assertDictContainsSubset(
-            {"type": "ir.actions.report", "report_name": self.qweb_report_name, "report_type": "qweb-html"},
+        # self.assertDictContainsSubset(
+        #     {"type": "ir.actions.report", "report_name": self.qweb_report_name, "report_type": "qweb-html"},
+        #     report_action,
+        # )
+
+        self.assertEqual(
+            dict(
+                report_action,
+                **{"type": "ir.actions.report", "report_name": self.qweb_report_name, "report_type": "qweb-html"}
+            ),
             report_action,
         )
 

@@ -1,11 +1,9 @@
-# Copyright 2018 Eficent Business and IT Consulting Services S.L.
-#   (http://www.eficent.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from odoo import _, api, fields, models
+from odoo import fields, models
 from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT
 
 
@@ -28,7 +26,7 @@ class ActivityStatement(models.AbstractModel):
         if currency_id not in currencies:
             # This will only happen if currency is inactive
             currencies[currency_id] = self.env["res.currency"].browse(currency_id)
-        return ({"lines": [], "balance_forward": balance_forward, "amount_due": balance_forward,}, currencies)
+        return ({"lines": [], "balance_forward": balance_forward, "amount_due": balance_forward}, currencies)
 
     def _get_report_values(self, docids, data):
         """

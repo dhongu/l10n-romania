@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 class TestStockConsumn(TestStockCommon):
     def set_stock(self, product, qty):
         inventory = self.env["stock.inventory"].create(
-            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, product.id)],}
+            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, product.id)]}
         )
         inventory.action_start()
 
