@@ -44,7 +44,7 @@ class ActivityStatementWizard(models.TransientModel):
     )
 
     target_move = fields.Selection(
-        [("posted", "All Posted Entries"), ("all", "All Entries"),],
+        [("posted", "All Posted Entries"), ("all", "All Entries")],
         string="Target Moves",
         required=True,
         default="posted",

@@ -20,6 +20,7 @@ List of Modules
         + l10n_ro_city
         - l10n_ro_account_report_invoice
         - l10n_ro_config
+        - l10n_ro_partner_create_by_vat
 
     - Sunt in Pool Request la OCA/l10n-romania
         - l10n_ro_account_report_journal  #74
@@ -30,12 +31,13 @@ List of Modules
         - l10n_ro_stock_report #89
 
     - sunt divergente
-        - l10n_ro_partner_create_by_vat
+
 
 * Terrabit
     - Functionale
         - l10n_ro_invoice_report
-        - l10n_ro_partner_create_by_vat
+        - l10n_ro_account_report
+        - l10n_ro_partner_create_by_vat_openapi
         - l10n_ro_stock_picking_report
 
     - In test

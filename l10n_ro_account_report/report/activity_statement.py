@@ -28,6 +28,17 @@ class ActivityStatement(models.AbstractModel):
             currencies[currency_id] = self.env["res.currency"].browse(currency_id)
         return ({"lines": [], "balance_forward": balance_forward, "amount_due": balance_forward}, currencies)
 
+    def _prepare_data(self, data):
+        if not data:
+            data = {}
+        data["amount_field"] = "amount"
+        date_start = data.get("date_start")
+        if date_start and isinstance(date_start, str):
+            data["date_start"] = fields.Date.from_string(date_start)
+        date_end = data["date_end"]
+        if isinstance(date_end, str):
+            data["date_end"] = fields.Date.from_string(date_end)
+
     def _get_report_values(self, docids, data):
         """
         @return: returns a dict of parameters to pass to qweb report.
@@ -50,21 +61,18 @@ class ActivityStatement(models.AbstractModel):
         }
         """
 
-        if not data:
-            data = {}
+        self._prepare_data(data)
+
         if "company_id" not in data:
             wiz = self.env["activity.statement.wizard"].with_context(active_ids=docids, model="res.partner")
             data.update(wiz.create({})._prepare_statement())
-        data["amount_field"] = "amount"
 
         company_id = data["company_id"]
         partner_ids = data["partner_ids"]
         date_start = data.get("date_start")
-        if date_start and isinstance(date_start, str):
-            date_start = fields.Date.from_string(date_start)
+
         date_end = data["date_end"]
-        if isinstance(date_end, str):
-            date_end = fields.Date.from_string(date_end)
+
         account_type = data["account_type"]
         if data.get("target_move") == "all":
             target_move = ("posted", "draft")
@@ -136,9 +144,8 @@ class ActivityStatement(models.AbstractModel):
                         continue
                     else:
                         res[partner_id]["no_entries"] = True
-                if data["filter_negative_balances"]:
-                    if not all([v["amount_due"] >= 0.0 for v in values]):
-                        partners_to_remove.add(partner_id)
+                if data["filter_negative_balances"] and not all([v["amount_due"] >= 0.0 for v in values]):
+                    partners_to_remove.add(partner_id)
 
         for partner in partners_to_remove:
             del res[partner]

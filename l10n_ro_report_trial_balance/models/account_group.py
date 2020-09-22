@@ -33,7 +33,7 @@ class AccountGroup(models.Model):
 
     @api.depends("code_prefix", "account_ids", "group_child_ids", "parent_id")
     def _compute_group_accounts(self):
-        account_obj = self.env["account.account"]
+        # account_obj = self.env["account.account"]
         # accounts = account_obj.search([])
         for group in self:
             accounts = group.get_accounts()

@@ -16,7 +16,7 @@ class TestIntrastat(TransactionCase):
         )
 
         self.product_1 = self.env["product.product"].create(
-            {"name": "Test intrastat", "invoice_policy": "order", "intrastat_id": self.intrastat.id,}
+            {"name": "Test intrastat", "invoice_policy": "order", "intrastat_id": self.intrastat.id}
         )
 
         self.product_2 = self.env["product.product"].create({"name": "Test intrastat", "invoice_policy": "order"})
