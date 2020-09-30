@@ -9,7 +9,7 @@ from odoo import api, fields, models
 class ActivityStatementWizard(models.TransientModel):
     """Activity Statement wizard."""
 
-    _name = "activity.statement.wizard"
+    _name = "l10n_ro.activity.statement.wizard"
     _description = "Activity Statement Wizard"
 
     def _get_company(self):

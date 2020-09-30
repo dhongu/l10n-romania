@@ -1,2 +1,2 @@
 Fisa partener
-Registru devanzari / achizitii
+Registru de vanzari / achizitii

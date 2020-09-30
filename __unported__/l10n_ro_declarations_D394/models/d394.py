@@ -43,7 +43,7 @@ class D394Report(models.TransientModel):
 
         return baza, tva
 
-    @api.multi
+
     def xml_processing(self, xml_doc):
 
         for i in ["24", "20", "19", "9", "5"]:
@@ -143,38 +143,34 @@ class D394Report(models.TransientModel):
 
         return xml_doc
 
-    @api.multi
+
     def compute_data_for_report(self):
         self.ensure_one()
 
-        """
-
-        """
 
         query_inject = """
             WITH
                 taxgroups AS (
-                SELECT 
+                SELECT
                     ai.commercial_partner_id as partner_id, count(ai.number) as invoice_count,
                      ai.fiscal_position_id,
-                     
-                     ai.type, tax_id,  
-                     to_char(coalesce(tax.amount,0),'99') as tax_value, 
-                    ai.company_id, 
-                     sum(coalesce(tax_line.base, amount_total_company_signed)) as net, 
-                    sum(tax_line.amount) as tax 
-                           
-                           FROM account_invoice as ai 
-                            LEFT JOIN account_invoice_tax as tax_line  on tax_line.invoice_id = ai.id 
+
+                     ai.type, tax_id,
+                     to_char(coalesce(tax.amount,0),'99') as tax_value,
+                    ai.company_id,
+                     sum(coalesce(tax_line.base, amount_total_company_signed)) as net,
+                    sum(tax_line.amount) as tax
+
+                           FROM account_move as ai
+                            LEFT JOIN account_invoice_tax as tax_line  on tax_line.invoice_id = ai.id
                                      LEFT JOIN account_tax AS tax   ON tax_id = tax.id
-                    
-                           WHERE 
-                           
-                           ai.date >= %(date_from)s      AND ai.date <= %(date_to)s 
+
+                           WHERE
+                            ai.type <> 'entry' AND
+                           ai.date >= %(date_from)s      AND ai.date <= %(date_to)s
                              and (tax_line.amount  > 0 or  tax_line.amount is null)
                            GROUP BY
-                           
-                               ai.commercial_partner_id, ai.type, tax_id, 
+                               ai.commercial_partner_id, ai.type, tax_id,
                                tax.amount, ai.fiscal_position_id,    ai.company_id, ai.currency_id
                 )
             INSERT INTO
@@ -182,7 +178,7 @@ class D394Report(models.TransientModel):
                 (
                 report_id,  create_uid, create_date,
                 partner_id,
-             
+
                 invoice_count,
                 fiscal_position_id,
                 type,
@@ -190,13 +186,13 @@ class D394Report(models.TransientModel):
                 tax_value,
                 company_id,
                 company_currency_id,
-                net, 
+                net,
                 tax
                 )
             SELECT
                 %(report_id)s AS report_id, %(uid)s AS create_uid, NOW() AS create_date,
                 groups.partner_id,
-             
+
                 groups.invoice_count,
                 groups.fiscal_position_id,
                 groups.type,
@@ -208,7 +204,7 @@ class D394Report(models.TransientModel):
                 abs(groups.tax)
             FROM
                 taxgroups groups
-        
+
         """
         query_inject_params = {
             "company_id": self.company_id.id,
@@ -226,14 +222,14 @@ class D394Report(models.TransientModel):
         query_inject = """
             WITH
                 taxgroups AS (
-                        SELECT  
-                            
+                        SELECT
+
                             movetax.partner_id,
-                             
+
                             count(move.id) as invoice_count,
 
                             voucher.voucher_type  as type  ,
-                            movetax.tax_line_id as tax_id, 
+                            movetax.tax_line_id as tax_id,
                             to_char(coalesce(tax.amount,0),'99') as tax_value,
                             movetax.company_id,
                             company_currency_id,
@@ -243,15 +239,15 @@ class D394Report(models.TransientModel):
                                 account_move_line AS movetax
                                 INNER JOIN account_tax AS tax   ON movetax.tax_line_id = tax.id
                                 INNER JOIN account_move AS move ON move.id = movetax.move_id
-                               
+
                                  JOIN account_voucher as voucher on move.id = voucher.move_id
                                 WHERE   movetax.tax_exigible and move.state = 'posted' and
-                                
-                          
-                                        move.company_id = %(company_id)s AND 
+
+
+                                        move.company_id = %(company_id)s AND
                                          tax_base_amount > 0 and   -- nu se caluleaza baza la taxarea inversa care nu trebuie inclusa in raport
-                                        move.date >= %(date_from)s      AND move.date <= %(date_to)s 
-                               GROUP BY movetax.partner_id,     voucher.voucher_type,  
+                                        move.date >= %(date_from)s      AND move.date <= %(date_to)s
+                               GROUP BY movetax.partner_id,     voucher.voucher_type,
                                  movetax.tax_line_id, tax.amount, movetax.company_id, company_currency_id
                 )
             INSERT INTO
@@ -267,7 +263,7 @@ class D394Report(models.TransientModel):
                 tax_value,
                 company_id,
                 company_currency_id,
-                net, 
+                net,
                 tax
                 )
             SELECT
@@ -324,14 +320,14 @@ class D394Report(models.TransientModel):
                 min(number) as de_la,
                 max(number) as pana_la
             FROM
-                account_invoice 
+                account_invoice
                 JOIN account_journal on account_journal.id = account_invoice.journal_id
             WHERE
-                  account_journal.type = 'sale' and 
-                  account_invoice.company_id = %(company_id)s AND 
-                  date >= %(date_from)s AND date <= %(date_to)s 
+                  account_journal.type = 'sale' and
+                  account_invoice.company_id = %(company_id)s AND
+                  date >= %(date_from)s AND date <= %(date_to)s
             GROUP BY journal_id
-        
+
         """
         query_inject_params = {
             "company_id": self.company_id.id,
@@ -374,7 +370,7 @@ class D394Plaje(models.TransientModel):
         NrDoc = "".join([s for s in NrDoc[-10:] if s.isdigit()])
         return NrDoc, Serie
 
-    @api.multi
+
     @api.depends("journal_id")
     def _comute_serie(self):
         for item in self:
@@ -419,20 +415,20 @@ class D394(models.TransientModel):
         "Partner Type",
         compute="_get_partner_type",
         store=True,
-        help=""" 
+        help="""
             1.Persoane impozabile inregistrate in scopuri de TVA in Romania
             2.Persoane neinregistrate in scopuri de TVA
-            3.Persoane impozabile nestabilite în România care sunt stabilite în alt stat membru, 
-              neînregistrate şi care nu sunt obligate să se înregistreze în scopuri de TVA în România 
-            4.Persoane impozabile neînregistrate şi care nu sunt obligate să se înregistreze în scopuri 
-              de TVA în România,nestabilite pe teritoriul Uniunii Europene 
+            3.Persoane impozabile nestabilite în România care sunt stabilite în alt stat membru,
+              neînregistrate şi care nu sunt obligate să se înregistreze în scopuri de TVA în România
+            4.Persoane impozabile neînregistrate şi care nu sunt obligate să se înregistreze în scopuri
+              de TVA în România,nestabilite pe teritoriul Uniunii Europene
     """,
     )
     operation_type = fields.Selection(
         OPERATION_TYPE, compute="_get_operation_type", store=True, string="Operation Type"
     )
 
-    @api.multi
+
     def _get_partner_type(self):
         for item in self:
             partner = item.partner_id
@@ -454,7 +450,7 @@ class D394(models.TransientModel):
             item.partner_type = new_type
         return True
 
-    @api.multi
+
     def _get_operation_type(self):
         """
         :return:

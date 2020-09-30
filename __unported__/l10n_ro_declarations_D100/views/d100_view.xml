@@ -11,10 +11,10 @@
                 <field name="net" sum="net" />
                 <field name="tax" sum="tax" />
                 <field
-          name="company_id"
-          options="{'no_create': True}"
-          groups="base.group_multi_company"
-        />
+                    name="company_id"
+                    options="{'no_create': True}"
+                    groups="base.group_multi_company"
+                />
             </tree>
         </field>
     </record>

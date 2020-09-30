@@ -5,14 +5,14 @@
         id="activity_statement_wizard_action"
         name="Partner Activity Statement"
         binding_model="res.partner"
-        res_model="activity.statement.wizard"
+        res_model="l10n_ro.activity.statement.wizard"
         binding_type="report"
         view_mode="form"
         target="new"
     />
     <record id="activity_statement_wizard_view" model="ir.ui.view">
         <field name="name">Activity Statement Wizard</field>
-        <field name="model">activity.statement.wizard</field>
+        <field name="model">l10n_ro.activity.statement.wizard</field>
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <form name="Report Options">

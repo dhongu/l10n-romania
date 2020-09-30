@@ -64,7 +64,7 @@ class ActivityStatement(models.AbstractModel):
         self._prepare_data(data)
 
         if "company_id" not in data:
-            wiz = self.env["activity.statement.wizard"].with_context(active_ids=docids, model="res.partner")
+            wiz = self.env["l10n_ro.activity.statement.wizard"].with_context(active_ids=docids, model="res.partner")
             data.update(wiz.create({})._prepare_statement())
 
         company_id = data["company_id"]
