@@ -56,7 +56,7 @@ class TestStockCommon(SavepointCase):
 
         cls.env.user.company_id.anglo_saxon_accounting = True
         cls.env.user.company_id.romanian_accounting = True
-
+        cls.env.user.company_id.stock_acc_price_diff = True
         cls.setUpAccounts()
 
         stock_journal = cls.env["account.journal"].search([("code", "=", "STJ")])

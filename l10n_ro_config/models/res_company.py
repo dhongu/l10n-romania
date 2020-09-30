@@ -12,7 +12,7 @@ class ResCompany(models.Model):
     company_registry = fields.Char(related="partner_id.nrc", readonly=False)
     romanian_accounting = fields.Boolean(string="Use Romanian Accounting")
     stock_acc_price_diff = fields.Boolean(
-        string="Stock Price Update",
+        string="Stock Valuation Update",
         help="If this field is checked and the company use Romanian Accounting,"
         "the currency rate differences between reception and invoice "
         "will be reflected in the stock valuation.",
