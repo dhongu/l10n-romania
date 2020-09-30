@@ -195,12 +195,7 @@ class StockMove(models.Model):
 
     def _is_production(self):
         """ Este inregistrare intrare produse finite prin productie"""
-        it_is = (
-            self.company_id.romanian_accounting
-            and self._is_in()
-            and self.location_id.usage == "production"
-            and not self.origin_returned_move_id
-        )
+        it_is = self.company_id.romanian_accounting and self._is_in() and self.location_id.usage == "production"
         return it_is
 
     def _create_production_svl(self, forced_quantity=None):
@@ -209,12 +204,7 @@ class StockMove(models.Model):
 
     def _is_production_return(self):
         """ Este retur inregistrare produse finite prin productie"""
-        it_is = (
-            self.company_id.romanian_accounting
-            and self._is_out()
-            and self.location_dest_id.usage == "production"
-            and self.origin_returned_move_id
-        )
+        it_is = self.company_id.romanian_accounting and self._is_out() and self.location_dest_id.usage == "production"
         return it_is
 
     def _create_production_return_svl(self, forced_quantity=None):
@@ -226,7 +216,7 @@ class StockMove(models.Model):
         it_is = (
             self.company_id.romanian_accounting
             and self._is_out()
-            and self.location_dest_id.usage in ["production", "consume"]
+            and self.location_dest_id.usage == "consume"
             and not self.origin_returned_move_id
         )
         return it_is
@@ -240,7 +230,7 @@ class StockMove(models.Model):
         it_is = (
             self.company_id.romanian_accounting
             and self._is_in()
-            and self.location_id.usage in ["production", "consume"]
+            and self.location_id.usage == "consume"
             and self.origin_returned_move_id
         )
         return it_is
@@ -363,13 +353,14 @@ class StockMove(models.Model):
     def romanian_account_entry_move(self, qty, description, svl_id, cost):
         location_from = self.location_id
         location_to = self.location_dest_id
+        svl = self.env["stock.valuation.layer"]
         if self._is_delivery_notice():
             # inregistrare valoare vanzare
             sale_cost = self._get_sale_amount()
             move = self.with_context(valued_type="invoice_out_notice")
 
             (journal_id, acc_src, acc_dest, acc_valuation,) = move._get_accounting_data_for_valuation()
-            move._create_account_move_line(acc_valuation, acc_dest, journal_id, qty, description, svl_id, sale_cost)
+            move._create_account_move_line(acc_valuation, acc_dest, journal_id, qty, description, svl, sale_cost)
 
         if self._is_delivery_notice_return():
             # inregistrare valoare vanzare
@@ -379,11 +370,11 @@ class StockMove(models.Model):
             (journal_id, acc_src, acc_dest, acc_valuation,) = move._get_accounting_data_for_valuation()
             move._create_account_move_line(acc_dest, acc_valuation, journal_id, qty, description, svl_id, sale_cost)
 
-        if self._is_usage_giving():
+        if self._is_usage_giving() or self._is_usage_giving_return():
             # inregistrare dare in folosinta 8035
             move = self.with_context(valued_type="usage_giving_secondary")
             (journal_id, acc_src, acc_dest, acc_valuation,) = move._get_accounting_data_for_valuation()
-            move._create_account_move_line(acc_src, acc_dest, journal_id, qty, description, svl_id, cost)
+            move._create_account_move_line(acc_src, acc_dest, journal_id, qty, description, svl, cost)
 
         if self._is_internal_transfer():
             move = self.with_context(valued_type="internal_transfer")
@@ -430,6 +421,7 @@ class StockMove(models.Model):
             self.company_id.romanian_accounting
             and credit_account_id == debit_account_id
             and not self._is_usage_giving()
+            and not self._is_usage_giving_return()
         ):
             return
         return super(StockMove, self)._create_account_move_line(

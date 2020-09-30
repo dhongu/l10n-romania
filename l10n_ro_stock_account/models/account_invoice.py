@@ -6,7 +6,6 @@
 import logging
 
 from odoo import _, models
-from odoo.tools import safe_eval
 from odoo.tools.float_utils import float_is_zero
 
 _logger = logging.getLogger(__name__)

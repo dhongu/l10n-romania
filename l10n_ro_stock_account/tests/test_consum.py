@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 class TestStockConsumn(TestStockCommon):
     def set_stock(self, product, qty):
         inventory = self.env["stock.inventory"].create(
-            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, product.id)]}
+            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, product.id)],}
         )
         inventory.action_start()
 
@@ -102,7 +102,10 @@ class TestStockConsumn(TestStockCommon):
         self.set_stock(self.product_mp, 1000)
         _logger.info("Start Consum in productie")
         location_id = self.picking_type_transfer.default_location_src_id
-        domain = [("usage", "=", "production"), ("company_id", "=", self.picking_type_transfer.company_id.id)]
+        domain = [
+            ("usage", "=", "production"),
+            ("company_id", "=", self.picking_type_transfer.company_id.id),
+        ]
         location_dest_id = self.env["stock.location"].search(domain, limit=1)
         picking = self.trasfer(location_id, location_dest_id)
         _logger.info("Consum in productie facut")
@@ -116,7 +119,10 @@ class TestStockConsumn(TestStockCommon):
         location_id = self.picking_type_transfer.default_location_src_id.copy(
             {"property_stock_valuation_account_id": self.account_valuation.id}
         )
-        domain = [("usage", "=", "production"), ("company_id", "=", self.picking_type_transfer.company_id.id)]
+        domain = [
+            ("usage", "=", "production"),
+            ("company_id", "=", self.picking_type_transfer.company_id.id),
+        ]
         location_dest_id = self.env["stock.location"].search(domain, limit=1)
         picking = self.trasfer(location_id, location_dest_id)
         _logger.info("Consum in productie facut")
@@ -127,7 +133,10 @@ class TestStockConsumn(TestStockCommon):
     def test_production(self):
         self.set_stock(self.product_mp, 1000)
         _logger.info("Start receptie din productie")
-        domain = [("usage", "=", "production"), ("company_id", "=", self.picking_type_transfer.company_id.id)]
+        domain = [
+            ("usage", "=", "production"),
+            ("company_id", "=", self.picking_type_transfer.company_id.id),
+        ]
         location_id = self.env["stock.location"].search(domain, limit=1)
         location_dest_id = self.picking_type_transfer.default_location_dest_id
         picking = self.trasfer(location_id, location_dest_id)
