@@ -213,6 +213,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
                 accounts = accounts.filtered(lambda a: a.user_type_id.id != sp_acc_type.id)
         query_inject_account = """
 
+
     with q1_open as (
             SELECT   account_id,
                                 coalesce(sum(open.debit),0) AS debit_opening,
@@ -356,7 +357,8 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
 
          ) as accounts
     ) as subselect
-        """
+
+    """
 
         query_inject_account_params = {
             "report_id": self.id,
