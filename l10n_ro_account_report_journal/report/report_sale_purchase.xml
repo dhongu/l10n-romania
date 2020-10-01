@@ -215,9 +215,7 @@
                         <span>to date:</span>
                         <span t-esc="date_to" t-options="{'widget': 'date'}" />
                     </h4>
-
                     <!--             SALE ANAF REPORT SALE ANAF REPORT SALE ANAF REPORT -->
-
                     <table t-if="report_type_sale" class="table table-sm o_main_table">
                         <thead>
                             <tr class="text-center align-middle">
@@ -360,7 +358,9 @@
                             <t t-if="lines">
                                 <t t-foreach="lines" t-as="l" class="text-right">
                                     <tr>
-                                        <t t-call="l10n_ro_account_report_journal.purchase_tbody_all_lines_without_total" />
+                                        <t
+                                            t-call="l10n_ro_account_report_journal.purchase_tbody_all_lines_without_total"
+                                        />
                                     </tr>
                                     <t t-if="l['payments']">
                                         <!--  if payments, put lines with them -->

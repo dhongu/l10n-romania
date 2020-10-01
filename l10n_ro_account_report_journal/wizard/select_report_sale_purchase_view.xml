@@ -9,16 +9,8 @@
                     <field name="company_id" options="{'no_quick_create': True, 'no_create_edit' : True}" />
                     <field name="journal_type" />
                     <field name="date_range_id" />
-                    <field
-                        name="date_from"
-                        options="{'datepicker': {'warn_future': true}    }"
-
-                    />
-                    <field
-                        name="date_to"
-                        options="{'datepicker': {'warn_future': true}    }"
-
-                    />
+                    <field name="date_from" options="{'datepicker': {'warn_future': true}    }" />
+                    <field name="date_to" options="{'datepicker': {'warn_future': true}    }" />
                     <field name="show_warnings" />
                 </group>
                 <div
