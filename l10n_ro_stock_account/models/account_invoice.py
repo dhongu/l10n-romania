@@ -151,10 +151,8 @@ class AccountMoveLine(models.Model):
         valuation_stock_moves = self.env["stock.move"].search(
             [("purchase_line_id", "=", line.purchase_line_id.id), ("state", "=", "done"), ("product_qty", "!=", 0.0),]
         )
-        if move.type == "in_refund":
-            valuation_stock_moves = valuation_stock_moves.filtered(lambda stock_move: stock_move._is_out())
-        else:
-            valuation_stock_moves = valuation_stock_moves.filtered(lambda stock_move: stock_move._is_in())
+
+        valuation_stock_moves = valuation_stock_moves.filtered(lambda stock_move: stock_move._is_in())
 
         if not valuation_stock_moves:
             return 0.0
@@ -191,7 +189,7 @@ class AccountMoveLine(models.Model):
     def modify_stock_valuation(self, price_unit_val_dif):
         # se adauga la evaluarea miscarii de stoc
         valuation_stock_move = self.env["stock.move"].search(
-            [("purchase_line_id", "=", self.purchase_line_id.id), ("state", "=", "done"), ("product_qty", "!=", 0.0)],
+            [("purchase_line_id", "=", self.purchase_line_id.id), ("state", "=", "done"), ("product_qty", "!=", 0.0),],
             limit=1,
         )
         linked_layer = valuation_stock_move.stock_valuation_layer_ids[:1]
