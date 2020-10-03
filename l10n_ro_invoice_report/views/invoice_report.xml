@@ -78,7 +78,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-5 offset-1">
+                <div id="partner_cui" class="col-5 offset-1">
                     <div t-if="o.commercial_partner_id.vat">
                         <strong>CIF:</strong>
                         <span t-field="o.commercial_partner_id.vat"/>
