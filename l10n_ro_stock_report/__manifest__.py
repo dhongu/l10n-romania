@@ -7,7 +7,7 @@
     "author": "Terrabit",
     "website": "http://www.terrabit.ro",
     "category": "Warehouse",
-    "depends": ['stock_account', 'account', 'l10n_ro_config', 'l10n_ro_stock', 'purchase_stock','date_range'],
+    "depends": ['stock_account', 'account', 'l10n_ro_config', 'l10n_ro_stock', 'date_range'],
 
     'data': [
         'report/daily_stock_report_view.xml',
