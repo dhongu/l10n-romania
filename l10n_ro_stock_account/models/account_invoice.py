@@ -73,7 +73,7 @@ class AccountMove(models.Model):
         self.ensure_one()
         purchases = self.line_ids.mapped("purchase_line_id.order_id")
         picking_notice = self.env["stock.picking"].search(
-            [("id", "in", purchases.mapped("picking_ids").ids), ("state", "=", "done"), ("notice", "=", True),]
+            [("id", "in", purchases.mapped("picking_ids").ids), ("state", "=", "done"), ("notice", "=", True)]
         )
         if picking_notice:
             return True
@@ -149,7 +149,7 @@ class AccountMoveLine(models.Model):
         move = line.move_id
         # Retrieve stock valuation moves.
         valuation_stock_moves = self.env["stock.move"].search(
-            [("purchase_line_id", "=", line.purchase_line_id.id), ("state", "=", "done"), ("product_qty", "!=", 0.0),]
+            [("purchase_line_id", "=", line.purchase_line_id.id), ("state", "=", "done"), ("product_qty", "!=", 0.0)]
         )
 
         valuation_stock_moves = valuation_stock_moves.filtered(lambda stock_move: stock_move._is_in())
@@ -189,7 +189,7 @@ class AccountMoveLine(models.Model):
     def modify_stock_valuation(self, price_unit_val_dif):
         # se adauga la evaluarea miscarii de stoc
         valuation_stock_move = self.env["stock.move"].search(
-            [("purchase_line_id", "=", self.purchase_line_id.id), ("state", "=", "done"), ("product_qty", "!=", 0.0),],
+            [("purchase_line_id", "=", self.purchase_line_id.id), ("state", "=", "done"), ("product_qty", "!=", 0.0)],
             limit=1,
         )
         linked_layer = valuation_stock_move.stock_valuation_layer_ids[:1]

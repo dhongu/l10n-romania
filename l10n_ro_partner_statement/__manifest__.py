@@ -7,5 +7,5 @@
     "website": "",
     "category": "Romania Adaptation",
     "depends": ["partner_statement"],
-    "data": ["views/activity_statement.xml", "wizard/statement_wizard.xml",],
+    "data": ["views/activity_statement.xml", "wizard/statement_wizard.xml"],
 }

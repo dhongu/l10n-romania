@@ -9,7 +9,6 @@ _logger = logging.getLogger(__name__)
 
 
 class TestStockSale(TestStockCommon):
-
     def _plus_inventory(self):
         self.make_puchase()
 
@@ -21,7 +20,6 @@ class TestStockSale(TestStockCommon):
         inventory.line_ids.product_qty = self.qty_po_p1 + 10
         _logger.info("start plus inventory")
         inventory.action_validate()
-
 
     def test_plus_inventory(self):
         self._plus_inventory()

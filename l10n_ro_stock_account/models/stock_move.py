@@ -422,7 +422,7 @@ class StockMove(models.Model):
                     acc_dest = location_to.property_stock_valuation_account_id.id
                 else:
                     acc_valuation = location_to.property_stock_valuation_account_id.id
-                if valued_type == 'reception':
+                if valued_type == "reception":
                     acc_src = acc_valuation
 
             # produsele din aceasta locatia folosesc pentru evaluare contul
@@ -456,7 +456,7 @@ class StockMove(models.Model):
                 "consumption",
                 "usage_giving",
                 "production_return",
-                "minus_inventory"
+                "minus_inventory",
             ]:
                 acc_dest = location_from.property_account_expense_location_id.id or acc_dest
             elif valued_type in [
@@ -465,7 +465,7 @@ class StockMove(models.Model):
                 "delivery_notice_return",
                 "consumption_return",
                 "usage_giving_return",
-                "plus_inventory"
+                "plus_inventory",
             ]:
-                acc_src =  location_to.property_account_expense_location_id.id or acc_src
+                acc_src = location_to.property_account_expense_location_id.id or acc_src
         return journal_id, acc_src, acc_dest, acc_valuation

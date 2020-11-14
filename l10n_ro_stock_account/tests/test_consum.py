@@ -14,14 +14,12 @@ _logger = logging.getLogger(__name__)
 class TestStockConsumn(TestStockCommon):
     def set_stock(self, product, qty):
         inventory = self.env["stock.inventory"].create(
-            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, product.id)],}
+            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, product.id)]}
         )
         inventory.action_start()
 
         inventory.line_ids.product_qty = qty
         inventory.action_validate()
-
-
 
     def test_transfer(self):
         # la transferul dintr-o locatie in alta valoarea stocului trebuie
@@ -85,7 +83,7 @@ class TestStockConsumn(TestStockCommon):
         location_id = self.picking_type_transfer.default_location_src_id.copy(
             {
                 "property_stock_valuation_account_id": self.account_valuation_mp.id,
-                "property_account_expense_location_id": self.account_expense_mp.id
+                "property_account_expense_location_id": self.account_expense_mp.id,
             }
         )
 

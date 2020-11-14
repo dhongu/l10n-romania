@@ -23,6 +23,7 @@ class TestStockCommon(SavepointCase):
         cls.account_expense = get_account("607000")
         cls.account_expense_mp = get_account("601000")
         cls.account_income = get_account("707000")
+        cls.account_income_mp = get_account("703000")
         cls.account_valuation = get_account("371000")
         cls.account_valuation_mp = get_account("301000")
 
@@ -216,8 +217,9 @@ class TestStockCommon(SavepointCase):
             {
                 "property_stock_valuation_account_id": self.account_valuation_mp.id,
                 "property_account_expense_location_id": self.account_expense_mp.id,
+                "property_account_income_location_id": self.account_income_mp.id,
                 "valuation_in_account_id": self.account_valuation_mp.id,
-                "valuation_out_account_id": self.account_valuation_mp.id
+                "valuation_out_account_id": self.account_valuation_mp.id,
             }
         )
 
@@ -297,8 +299,7 @@ class TestStockCommon(SavepointCase):
                 move_line.write({"quantity_done": move_line.product_uom_qty})
         return_pick.action_done()
 
-
-    def trasfer(self,  location, location_dest, product=None):
+    def trasfer(self, location, location_dest, product=None):
 
         self.PickingObj = self.env["stock.picking"]
         self.MoveObj = self.env["stock.move"]
@@ -332,7 +333,6 @@ class TestStockCommon(SavepointCase):
         picking.action_done()
 
         return picking
-
 
     def check_stock_valuation(self, val_p1, val_p2):
         val_p1 = round(val_p1, 2)

@@ -8,7 +8,7 @@ import requests
 
 from odoo import api, fields, models
 
-CEDILLATRANS = bytes.maketrans(u"\u015f\u0163\u015e\u0162".encode("utf8"), u"\u0219\u021b\u0218\u021a".encode("utf8"),)
+CEDILLATRANS = bytes.maketrans(u"\u015f\u0163\u015e\u0162".encode("utf8"), u"\u0219\u021b\u0218\u021a".encode("utf8"))
 
 headers = {
     "User-Agent": "Mozilla/5.0 (compatible; MSIE 7.01; Windows NT 5.0)",
@@ -49,7 +49,7 @@ class ResPartner(models.Model):
                     if resp.status_code == 200:
                         resp = resp.json()
                         for res in resp["found"] + resp["notfound"]:
-                            partner = self.search([("vat_number", "=", res["cui"]), ("is_company", "=", True),])
+                            partner = self.search([("vat_number", "=", res["cui"]), ("is_company", "=", True)])
                             if partner:
                                 data = partner._Anaf_to_Odoo(res)
                                 partner.update(data)
@@ -57,7 +57,7 @@ class ResPartner(models.Model):
     @api.model
     def update_vat_subjected_all(self):
         partners = self.search(
-            [("vat", "!=", False), ("country_id", "=", self.env.ref("base.ro").id), ("is_company", "=", True),]
+            [("vat", "!=", False), ("country_id", "=", self.env.ref("base.ro").id), ("is_company", "=", True)]
         )
         partners.update_vat_subjected()
 

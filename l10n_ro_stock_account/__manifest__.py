@@ -6,7 +6,7 @@
     "summary": "Romania - Stock Accounting",
     "author": "NextERP Romania," "Dorin Hongu," "Forest and Biomass Romania," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
-    "depends": ["stock_account", "sale_stock", "purchase_stock", "l10n_ro_config", "l10n_ro_stock",],
+    "depends": ["stock_account", "sale_stock", "purchase_stock", "l10n_ro_config", "l10n_ro_stock"],
     "license": "AGPL-3",
     "data": [
         "views/product_category_view.xml",

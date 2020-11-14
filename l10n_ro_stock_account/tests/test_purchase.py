@@ -8,7 +8,6 @@ from .common import TestStockCommon
 
 
 class TestStockPurchase(TestStockCommon):
-
     def test_nir_with_invoice_standard(self):
 
         self.env.user.company_id.romanian_accounting = False
@@ -55,8 +54,6 @@ class TestStockPurchase(TestStockCommon):
         # verificare inregistrare diferenta de pret
         self.check_account_diff(0, 0)
 
-
-
     def test_nir_with_invoice_location_valuation(self):
         """
             Receptie produse in locatie cu alta evaluare in baza facturii
@@ -68,7 +65,6 @@ class TestStockPurchase(TestStockCommon):
         """
 
         self.set_warehouse_as_mp()
-
 
         self.create_po()
 
@@ -88,9 +84,6 @@ class TestStockPurchase(TestStockCommon):
 
         # verificare inregistrare diferenta de pret
         self.check_account_diff(0, 0)
-
-
-
 
     def test_nir_with_invoice_and_diff(self):
         """
@@ -189,6 +182,9 @@ class TestStockPurchase(TestStockCommon):
 
         self.check_account_valuation(self.val_p1_i, self.val_p2_i)
 
-
+        # consum in productie
+        location_id = self.location_warehouse
+        location_dest_id = self.location_production
+        self.trasfer(location_id, location_dest_id, self.product_1)
 
         self.create_invoice(self.diff_p1, self.diff_p2)
