@@ -81,7 +81,7 @@
             <br />
         </template>
         <template id="report_totals">
-            <div class="col-4  col-sm-4 col-md-4">
+            <div class="col-4  col-sm-4 col-md-4  pull-right">
                 <table class="table table-sm">
                     <tr class="border-black">
                         <td>
@@ -118,9 +118,9 @@
             </div>
         </template>
         <template id="report_totals_sale">
-            <div class="col-4  col-sm-4 col-md-4">
-                <table class="table table-sm">
-                    <tr class="border-black">
+            <div class="col-4  col-sm-4 col-md-4  ml-auto">
+                <table class="table table-sm" style="page-break-inside: avoid;">
+                    <tr class="border-black o_subtotal" style="">
                         <td>
                             <strong>Total Sale Without Taxes</strong>
                         </td>
@@ -140,7 +140,7 @@
                             />
                         </td>
                     </tr>
-                    <tr class="border-black">
+                    <tr class="border-black o_total">
                         <td>
                             <strong>Total Sale</strong>
                         </td>
@@ -155,7 +155,7 @@
             </div>
         </template>
         <template id="report_delivery_sign">
-            <div class="col-6  col-sm-6 col-md-6 ml-auto">
+            <div class="col-6  col-sm-6 col-md-6">
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -646,9 +646,9 @@
                             </table>
                             <div class="row">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)" />
+                                <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
                                 <t t-call="l10n_ro_stock_picking_report.report_totals" />
                             </div>
-                            <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
                             <div t-if="o.note">
                                 <span t-field="o.note" />
                             </div>

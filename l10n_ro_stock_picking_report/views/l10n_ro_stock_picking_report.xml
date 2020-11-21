@@ -31,41 +31,45 @@
             <field name="binding_model_id" ref="model_stock_picking" />
             <field name="binding_type">report</field>
         </record>
-        <report
-            string="Reception"
-            id="action_report_reception"
-            model="stock.picking"
-            report_type="qweb-pdf"
-            print_report_name="(object._get_report_base_filename())"
-            name="l10n_ro_stock_picking_report.report_reception"
-            file="l10n_ro_stock_picking_report.report_reception"
-        />
-        <report
-            string="Reception without tax"
-            id="action_report_reception_no_tax"
-            model="stock.picking"
-            report_type="qweb-pdf"
-            print_report_name="(object._get_report_base_filename())"
-            name="l10n_ro_stock_picking_report.report_reception_no_tax"
-            file="l10n_ro_stock_picking_report.report_reception_no_tax"
-        />
-        <report
-            string="Reception with sale price"
-            id="action_report_reception_sale_price"
-            model="stock.picking"
-            report_type="qweb-pdf"
-            print_report_name="(object._get_report_base_filename())"
-            name="l10n_ro_stock_picking_report.report_reception_sale_price"
-            file="l10n_ro_stock_picking_report.report_reception_sale_price"
-        />
-        <report
-            string="Internal transfer"
-            id="action_report_internal_transfer"
-            model="stock.picking"
-            report_type="qweb-pdf"
-            print_report_name="(object._get_report_base_filename())"
-            name="l10n_ro_stock_picking_report.report_internal_transfer"
-            file="l10n_ro_stock_picking_report.report_internal_transfer"
-        />
+        <record id="action_report_reception" model="ir.actions.report">
+            <field name="name">Reception</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_stock_picking_report.report_reception</field>
+            <field name="report_file">l10n_ro_stock_picking_report.report_reception</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_reception_no_tax" model="ir.actions.report">
+            <field name="name">Reception without tax</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_stock_picking_report.report_reception_no_tax</field>
+            <field name="report_file">l10n_ro_stock_picking_report.report_reception_no_tax</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_reception_sale_price" model="ir.actions.report">
+            <field name="name">Reception with sale price</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_stock_picking_report.report_reception_sale_price</field>
+            <field name="report_file">l10n_ro_stock_picking_report.report_reception_sale_price</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_internal_transfer" model="ir.actions.report">
+            <field name="name">Internal transfer</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_stock_picking_report.report_internal_transfer</field>
+            <field name="report_file">l10n_ro_stock_picking_report.report_internal_transfer</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
     </data>
 </odoo>
