@@ -18,10 +18,12 @@ class StockLocation(models.Model):
     user_id = fields.Many2one("res.users", string="Manager")
     value = fields.Float()
 
+
 class StockMove(models.Model):
     _inherit = "stock.move"
 
     value = fields.Float()
+
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
