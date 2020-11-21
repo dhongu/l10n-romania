@@ -7,24 +7,14 @@
     "license": "AGPL-3",
     "version": "13.0.1.0.0",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
-    "website": "",
-    "description": """
-
-Romania - Picking Report layout
-------------------------------------------
- - Reports for Reception, Delivery and Internal Transfer
- - Referinta din comanda de achizitie este copiata in NIR si factura
-
-    """,
     "category": "Generic Modules",
     "depends": [
         "base",
         "stock",
         "l10n_ro_config",
-        "purchase",
+        "purchase_stock",
+        "sale_stock",
         # 'l10n_ro_stock_account'
     ],
     "data": ["views/l10n_ro_stock_picking_report.xml", "views/report_picking.xml", "views/stock_view.xml"],
-    "active": False,
-    "installable": True,
 }

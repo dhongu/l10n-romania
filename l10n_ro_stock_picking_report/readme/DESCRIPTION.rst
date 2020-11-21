@@ -1,0 +1,2 @@
+ - Reports for Reception, Delivery and Internal Transfer
+ - Referinta din comanda de achizitie este copiata in NIR si factura
