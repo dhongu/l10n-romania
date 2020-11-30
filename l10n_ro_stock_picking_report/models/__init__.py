@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2008 Deltatech All Rights Reserved
@@ -24,5 +23,3 @@ from . import stock
 from . import purchase
 from . import account_invoice
 from . import picking
-
-
