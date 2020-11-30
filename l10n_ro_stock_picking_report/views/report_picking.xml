@@ -245,6 +245,15 @@
                                     </p>
 
                                 </div>
+
+                                <div class="col-3 bm-2">
+                                    <strong>Customer reference</strong>
+                                    <p>
+                                        <t t-set="sale" t-value="o.sale_id"/>
+                                        <span t-field="sale.client_order_ref"/>
+                                    </p>
+                                </div>
+
                             </div>
 
 
