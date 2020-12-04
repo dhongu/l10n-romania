@@ -23,5 +23,14 @@
 records.set_origin_with_picking()
             </field>
         </record>
+        <record id="account.menu_action_account_payments_receivable" model="ir.ui.menu">
+            <field name="name">Incoming payments</field>
+        </record>
+        <record id="account.action_account_payments_payable" model="ir.actions.act_window">
+            <field name="name">Payments</field>
+        </record>
+        <record id="account.action_account_payments" model="ir.actions.act_window">
+            <field name="name">Incoming payments</field>
+        </record>
     </data>
 </odoo>

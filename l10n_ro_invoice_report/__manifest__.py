@@ -6,7 +6,7 @@
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "category": "Generic Modules",
-    "depends": ["base", "account", "l10n_ro_config", "deltatech_watermark"],
+    "depends": ["base", "account", "l10n_ro_config", "deltatech_watermark", "payment"],
     "data": [
         "views/invoice_report.xml",
         "views/voucher_report.xml",
