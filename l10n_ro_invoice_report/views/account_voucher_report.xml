@@ -1,22 +1,21 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <odoo>
     <data>
-          <report 
-            string="Voucher" 
-            id="action_report_voucher" 
-            model="account.voucher" 
+        <report
+            string="Voucher"
+            id="action_report_voucher"
+            model="account.voucher"
             report_type="qweb-pdf"
-            name="l10n_ro_invoice_report.report_voucher" 
-            file="l10n_ro_invoice_report.report_voucher"    />
-
+            name="l10n_ro_invoice_report.report_voucher"
+            file="l10n_ro_invoice_report.report_voucher"
+        />
         <report
             string="Voucher / Payment"
             id="action_report_payment"
             model="account.payment"
             report_type="qweb-pdf"
             name="l10n_ro_invoice_report.report_payment"
-            file="l10n_ro_invoice_report.report_payment"    />
-
-
+            file="l10n_ro_invoice_report.report_payment"
+        />
     </data>
 </odoo>

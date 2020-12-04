@@ -1,8 +1,4 @@
-# coding=utf-8
-
-
-
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class AccountBankStatementLine(models.Model):
@@ -10,5 +6,5 @@ class AccountBankStatementLine(models.Model):
 
     @api.multi
     def button_print(self):
-        res = self.env.ref('l10n_ro_invoice_report.action_report_statement_line').report_action(self)
+        res = self.env.ref("l10n_ro_invoice_report.action_report_statement_line").report_action(self)
         return res
