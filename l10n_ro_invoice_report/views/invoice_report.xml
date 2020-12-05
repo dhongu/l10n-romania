@@ -169,8 +169,8 @@
                     <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
                     <span t-if="o.type == 'out_refund' and o.state == 'cancel'">Factură Storno Anulată</span>
                     <span t-if="o.type == 'out_refund' and (o.state == 'open' or o.state == 'paid')">Factură
-                            Storno
-                        </span>
+                        Storno
+                    </span>
                     <span t-if="o.type == 'in_refund'">Supplier Refund</span>
                     <span t-if="o.type == 'in_invoice'">Supplier Invoice</span>
                     <t t-if="o.name">
@@ -219,8 +219,10 @@
                         <t t-if="o.type == 'out_invoice'">
                             <strong>Deliveries:</strong>
                         </t>
-                        <p class="m-0" t-foreach="pickings" t-as="d">
-                            <span t-field="d.name" />
+                        <p class="m-0">
+                            <t class="m-0" t-foreach="pickings" t-as="d">
+                                <span t-field="d.name" />
+                            </t>
                         </p>
                     </div>
                 </div>
@@ -239,7 +241,7 @@
                                 t-if="with_discount(o) and with_discount_distinct"
                                 groups="sale.group_discount_per_so_line"
                             >Discount (%)
-                                </th>
+                            </th>
                             <th class="text-right">Amount</th>
                             <th class="text-right">Taxes</th>
                         </tr>
@@ -274,7 +276,7 @@
                                 />
                                 <t t-if="not with_discount_distinct and l.discount">
 
-                                    </t>
+                                </t>
                                 <span
                                     id="price_unit_without_taxes"
                                     t-esc="price_unit_without_taxes"
@@ -403,21 +405,21 @@
                                             />
                                         </span>
                                         <div t-if="currency_id!=res_company.currency_id">
-                                                (
-                                                <t t-if="o.type == 'out_refund'">
+                                            (
+                                            <t t-if="o.type == 'out_refund'">
                                                 <t t-set="amount_total" t-value="-1*o.move_id.amount" />
                                                 <t t-esc="amount_total" />
                                                 <span t-field="res_company.currency_id.symbol" />
                                             </t>
-                                                <t t-if="not o.type == 'out_refund'">
+                                            <t t-if="not o.type == 'out_refund'">
                                                 <span
                                                     t-field="o.move_id.amount"
                                                     t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                                 />
                                             </t>
 
-                                                )
-                                            </div>
+                                            )
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
@@ -427,7 +429,7 @@
                         <div id="total" class="row">
                             <div class="col-4 pull-right">
                                 <table class="table table-sm" style="min-width: 250px;max-width: 400px;">
-                                    </table>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -441,8 +443,8 @@
                         -->
                     <small t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
                         <div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,
-                                with subsequent amendments and OMPF 2226/2006
-                            </div>
+                            with subsequent amendments and OMPF 2226/2006
+                        </div>
                         <!--                            <t t-if="not res_company.stamp_image">-->
                         <!--                                <div>Invoice valid without signature and stamp according to art.V, paragraph (2) of-->
                         <!--                                    Ordinance no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal-->
