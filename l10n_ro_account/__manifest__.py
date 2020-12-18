@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ©  2020 Terrabit
 # See README.rst file on addons root folder for license details
 
@@ -8,24 +7,16 @@
     "version": "1.0",
     "author": "Dorin Hongu",
     "website": "",
-
     "category": "Romania Adaptation",
-    "depends": [
-        'account',
-        'l10n_ro',
-    ],
-
+    "depends": ["account", "l10n_ro"],
     "description": """
-Romania  - Accounting 
+Romania  - Accounting
 ------------------------------------------
 
+- limitare incasare numerar
 
     """,
-
-    'data': [
-
-    ],
-
-    'installable': True,
-    'auto_install': False,
+    "data": [],
+    "installable": True,
+    "auto_install": False,
 }
