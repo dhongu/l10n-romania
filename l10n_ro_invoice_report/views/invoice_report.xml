@@ -164,11 +164,11 @@
             <div class="page">
                 <div name="invoice_address" />
                 <h2>
-                    <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
+                    <span t-if="o.type == 'out_invoice' and (o.state == 'posted' or o.state == 'paid')">Factură</span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
                     <span t-if="o.type == 'out_refund' and o.state == 'cancel'">Factură Storno Anulată</span>
-                    <span t-if="o.type == 'out_refund' and (o.state == 'open' or o.state == 'paid')">Factură
+                    <span t-if="o.type == 'out_refund' and (o.state == 'posted' or o.state == 'paid')">Factură
                         Storno
                     </span>
                     <span t-if="o.type == 'in_refund'">Supplier Refund</span>
@@ -308,7 +308,7 @@
                             <td class="text-right">
                                 <t
                                     t-set="price_taxes"
-                                    t-value="(l.price_total - l.price_subtotal ) / (l.quantity or 1)"
+                                    t-value="(l.price_total - l.price_subtotal )"
                                 />
                                 <t t-if="o.type == 'out_refund'">
                                     <t t-set="price_taxes" t-value="-1*price_taxes" />
@@ -441,7 +441,7 @@
                         daca livrarea nu are notice = True trebuie afisat si un mesaj de genul
                         Produsele au fost livrate impreuna cu factura. Va multumim ca ati cumparat de la noi!
                         -->
-                    <small t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                    <small id="numbering" t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
                         <div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,
                             with subsequent amendments and OMPF 2226/2006
                         </div>
