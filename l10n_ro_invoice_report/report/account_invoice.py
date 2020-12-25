@@ -1,10 +1,11 @@
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
 
 import time
 
 from odoo import api, models
 
-# from . import amount_to_text_ro
+# from odoo.tools.safe_eval import safe_eval
 
 
 class ReportInvoiceWithPaymentsPrint(models.AbstractModel):

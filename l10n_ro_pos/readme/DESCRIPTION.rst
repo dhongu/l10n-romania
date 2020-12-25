@@ -1,0 +1,2 @@
+Functionalitati
+ - tiparire factura

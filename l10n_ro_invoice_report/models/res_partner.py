@@ -1,4 +1,6 @@
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
 
 from odoo import fields, models
 

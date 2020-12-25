@@ -51,7 +51,7 @@ msgstr "<span>Semnatura primire</span>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<span>Transfer:</span>"
-msgstr ""
+msgstr "<span>Transfer:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -79,14 +79,15 @@ msgstr "<strong>Adresa:</strong>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>CIF:</strong>"
-msgstr ""
-
+msgstr "<strong>CIF:</strong>"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 msgid ""
 "<strong>Client:</strong>\n"
 "                                        <br/>"
 msgstr ""
+"<strong>Client:</strong>\n"
+"                                        <br/>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -159,13 +160,13 @@ msgstr "<strong>Total fără TVA</strong>"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong>Total</strong>"
-msgstr ""
+msgstr "<strong>Total</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__info_for_invoice
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__info_for_invoice
 msgid "Additional info for invoice"
-msgstr ""
+msgstr "Informații suplimentare în factură"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -204,7 +205,7 @@ msgstr "Dispozitie încasare"
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -333,7 +334,7 @@ msgstr "Dispoziție plată"
 msgid ""
 "Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,\n"
 "                                with subsequent amendments and OMPF 2226/2006"
-msgstr "sistem propriu de imprimare și numerotare conform Legii 571/2003 privind Codul Fiscal,\n"
+msgstr "Sistem propriu de imprimare și numerotare conform Legii 571/2003 privind Codul Fiscal,\n"
 " cu modificările și completările ulterioare și OMFP 2226/2006."
 
 #. module: l10n_ro_invoice_report

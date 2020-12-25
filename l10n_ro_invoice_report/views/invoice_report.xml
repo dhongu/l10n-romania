@@ -306,10 +306,7 @@
                                 />
                             </td>
                             <td class="text-right">
-                                <t
-                                    t-set="price_taxes"
-                                    t-value="(l.price_total - l.price_subtotal )"
-                                />
+                                <t t-set="price_taxes" t-value="(l.price_total - l.price_subtotal )" />
                                 <t t-if="o.type == 'out_refund'">
                                     <t t-set="price_taxes" t-value="-1*price_taxes" />
                                 </t>

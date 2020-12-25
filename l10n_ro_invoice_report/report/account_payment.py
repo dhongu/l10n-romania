@@ -1,10 +1,10 @@
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
 
 import time
 
 from odoo import api, models
-
-# from . import amount_to_text_ro
 
 
 class ReportPaymentPrint(models.AbstractModel):
@@ -21,20 +21,13 @@ class ReportPaymentPrint(models.AbstractModel):
             "data": data,
             "time": time,
             "docs": self.env[report.model].browse(docids),
-            # "convert": self._convert,
         }
 
     @api.model
     def render_html(self, docids, data=None):
         report_obj = self.env["report"]
-        # report = report_obj._get_report_from_name(self._template)
         docargs = self.get_report_values()
         return report_obj.render(self._template, docargs)
-
-    # def _convert(self, amount):
-    #     # de folosit  num2words
-    #     amt_ro = amount_to_text_ro.amount_to_text_ro(abs(amount))
-    #     return amt_ro
 
 
 class ReportStatementLinePrint(models.AbstractModel):
@@ -51,19 +44,13 @@ class ReportStatementLinePrint(models.AbstractModel):
             "data": data,
             "time": time,
             "docs": self.env[report.model].browse(docids),
-            # "convert": self._convert,
         }
 
     @api.model
     def render_html(self, docids, data=None):
         report_obj = self.env["report"]
-        # report = report_obj._get_report_from_name(self._template)
         docargs = self.get_report_values()
         return report_obj.render(self._template, docargs)
-
-    # def _convert(self, amount):
-    #     amt_ro = amount_to_text_ro.amount_to_text_ro(abs(amount))
-    #     return amt_ro
 
 
 class ReportStatementLineVoucher(ReportStatementLinePrint):

@@ -6,6 +6,7 @@ import time
 
 from odoo import api, models
 from odoo.tools import formatLang
+from odoo.tools.safe_eval import safe_eval
 
 
 class PosInvoiceReport(models.AbstractModel):
@@ -22,6 +23,7 @@ class PosInvoiceReport(models.AbstractModel):
                 "with_discount": self._with_discount,
                 "formatLang": self._formatLang,
                 "get_pickings": self._get_pickings,
+                "get_discount": self._get_discount(),
             }
         )
         return values
@@ -44,3 +46,10 @@ class PosInvoiceReport(models.AbstractModel):
             if line.discount != 0.0:
                 res = True
         return res
+
+    def _get_discount(self):
+        params = self.env["ir.config_parameter"].sudo()
+        show_discount = params.get_param("l10n_ro_config.show_discount", default="True")
+        show_discount = safe_eval(show_discount)
+
+        return show_discount

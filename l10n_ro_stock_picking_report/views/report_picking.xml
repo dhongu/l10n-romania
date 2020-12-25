@@ -367,11 +367,12 @@
                                                 <strong>Total</strong>
                                             </td>
                                             <td class="text-right">
-                                                <span t-esc="total_amount"
-                                                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                <span
+                                                    t-esc="total_amount"
+                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                />
                                             </td>
                                         </tr>
-
                                     </table>
                                 </div>
                             </div>
