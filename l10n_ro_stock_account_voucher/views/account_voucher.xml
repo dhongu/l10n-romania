@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+		<record id="account_voucher_form" model="ir.ui.view">
+			<field name="name">Account Voucher Form</field>
+			<field name="model">account.voucher</field>
+			<field name="inherit_id" ref="account_voucher.view_purchase_receipt_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='reference']" position="after">
+					<field name="purchase_id"/>
+				</xpath>
+				<xpath expr="//field[@name='quantity']" position="after">
+					<field name="uom_id"/>
+<!--					for default_purchase_line_id to populate the field, the field needs to be included in the view-->
+					<field name="purchase_line_id" invisible="1"/>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

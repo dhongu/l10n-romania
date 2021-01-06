@@ -8,7 +8,7 @@
     "author": "FOREST AND BIOMASS SERVICES ROMANIA, Terrabit",
     "website": "http://www.forbiom.eu",
     "category": "Warehouse",
-    "depends": ['stock_account', 'account', 'l10n_ro_config', 'l10n_ro_stock', 'purchase','date_range'],
+    "depends": ['stock_account', 'account', 'l10n_ro_config', 'l10n_ro_stock', 'purchase', 'date_range'],
 
     'data': [
         'views/stock_view.xml',

@@ -185,10 +185,9 @@ class AccountInvoiceLine(models.Model):
 
             move.write({
                 'value': current_move_value,
-                'remaining_value': current_move_value,
+                'remaining_value': current_move_value / current_move_received_quantity * move.remaining_value,
                 'price_unit': current_move_value / current_move_received_quantity,
-                'invoice_line_evaluated_by': self.id
-            })
+                'invoice_line_evaluated_by': self.id})
 
         self.product_id.update_fifo_cost(self.company_id)
         return stock_moves
