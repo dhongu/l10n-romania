@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 17:10+0000\n"
-"PO-Revision-Date: 2019-03-13 17:10+0000\n"
+"POT-Creation-Date: 2021-01-06 15:21+0000\n"
+"PO-Revision-Date: 2021-01-06 15:21+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,79 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "<span style=\"font-weight:bold;\">Total</span>"
-msgstr "<span style=\"font-weight:bold;\">Final</span>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "<span>From Date:</span>"
-msgstr "<span>De la data:</span>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "<span>Location:</span>"
-msgstr "<span>Locație:</span>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "<span>Product:</span>"
-msgstr "<span>Produs:</span>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "<span>To date</span>"
-msgstr "<span>Până la data</span>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "<strong>Amount</strong>"
-msgstr "<strong>Valoare</strong>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-msgid "<strong>Product</strong>"
-msgstr "<strong>Produs</strong>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "<strong>Quantity</strong>"
-msgstr "<strong>Cantitate</strong>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-msgid "<strong>Ref</strong>"
-msgstr "<strong>Ref</strong>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-msgid "<strong>Total In</strong>"
-msgstr "<strong>Total intări</strong>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-msgid "<strong>Total Out</strong>"
-msgstr "<strong>Total ieșiri</strong>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-msgid "<strong>Total</strong>"
-msgstr "<strong>Total</strong>"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "<strong>Type</strong>"
-msgstr "<strong>Tip</strong>"
-
-#. module: l10n_ro_stock_account
 #: model:ir.model,name:l10n_ro_stock_account.model_account_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_account_id
 msgid "Account"
 msgstr "Cont"
 
@@ -101,7 +29,7 @@ msgstr "Account move lines"
 #: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_inventory_form_inherit
 #: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_picking_account_form
 msgid "Accounting Entries"
-msgstr "Mișcări Contabile"
+msgstr "Înregistrări contabile"
 
 #. module: l10n_ro_stock_account
 #: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_location_form_inherit
@@ -109,31 +37,9 @@ msgid "Accounting Information"
 msgstr "Informații Contabile"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_aml_ids
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_aml_ids
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_aml_ids
-msgid "Aml"
-msgstr "LMC"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_amount
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_amount
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_amount
-msgid "Amount"
-msgstr "Valoare"
-
-#. module: l10n_ro_stock_account
-#: selection:l10n_ro.daily_stock_report.line,type:0
-#: selection:l10n_ro.daily_stock_report.ref,type:0
-#: selection:l10n_ro.storage_sheet_report.line,type:0
-msgid "Balance"
-msgstr "Sold"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_daily_stock_report_form
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_storage_sheet_report_form
-msgid "Cancel"
-msgstr "Anulează"
+#: model:ir.model.fields,help:l10n_ro_stock_account.field_stock_move_invoice_line_evaluated_by
+msgid "An invoice line is used to evaluate purchased stock moves"
+msgstr "An invoice line is used to evaluate purchased stock moves"
 
 #. module: l10n_ro_stock_account
 #: model:ir.model,name:l10n_ro_stock_account.model_stock_change_standard_price
@@ -141,14 +47,8 @@ msgid "Change Standard Price"
 msgstr "Schimbă prețul standard"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_company_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_company_id
-msgid "Company"
-msgstr "Companie"
-
-#. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/product.py:110
-#: code:addons/l10n_ro_stock_account/models/stock_account.py:322
+#: code:addons/l10n_ro_stock_account/models/product.py:103
+#: code:addons/l10n_ro_stock_account/models/stock_account.py:399
 #, python-format
 msgid "Configuration error. Please configure the price difference account on the product or its category to process this operation."
 msgstr "Configuration error. Please configure the price difference account on the product or its category to process this operation."
@@ -164,48 +64,19 @@ msgid "Consume from Store"
 msgstr "Consum din Magazin"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_create_uid
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_create_uid
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_create_uid
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_create_uid
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_create_uid
-msgid "Created by"
-msgstr "Creat de"
+#: model:ir.model,name:l10n_ro_stock_account.model_l10n_ro_daily_stock_report
+msgid "DailyStockReport"
+msgstr "DailyStockReport"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_create_date
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_create_date
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_create_date
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_create_date
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_create_date
-msgid "Created on"
-msgstr "Creat în"
+#: model:ir.model,name:l10n_ro_stock_account.model_l10n_ro_daily_stock_report_line
+msgid "DailyStockReportLine"
+msgstr "DailyStockReportLine"
 
 #. module: l10n_ro_stock_account
-#: model:ir.actions.act_window,name:l10n_ro_stock_account.action_daily_stock_report
-#: model:ir.actions.act_window,name:l10n_ro_stock_account.action_daily_stock_report_line
-#: model:ir.actions.act_window,name:l10n_ro_stock_account.action_daily_stock_report_ref
-#: model:ir.ui.menu,name:l10n_ro_stock_account.menu_stock_report
-msgid "Daily Stock Report"
-msgstr "Raport zilnic de stoc"
-
-#. module: l10n_ro_stock_account
-#: model:ir.actions.report,name:l10n_ro_stock_account.action_report_daily_stock_report
-#: model:ir.actions.report,name:l10n_ro_stock_account.action_report_storage_sheet_report
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-msgid "Daily stock report"
-msgstr "Raport zilnic de stoc"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_date
-msgid "Date"
-msgstr "Dată"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_date_range_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_date_range_id
-msgid "Date range"
-msgstr "Interval"
+#: model:ir.model,name:l10n_ro_stock_account.model_l10n_ro_daily_stock_report_ref
+msgid "DailyStockReportRef"
+msgstr "DailyStockReportRef"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
@@ -214,43 +85,38 @@ msgstr "Livrare"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
-msgid "Delivery Refund"
-msgstr "Return livrare"
+msgid "Delivery from store"
+msgstr "Delivery from store"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
-msgid "Delivery Refund Store"
-msgstr "Retur livrare din magazin"
+msgid "Delivery from store with notice"
+msgstr "Delivery from store with notice"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
-msgid "Delivery from Store"
-msgstr "Livrare din magazin"
+msgid "Delivery refund"
+msgstr "Delivery refund"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
+msgid "Delivery refund in store"
+msgstr "Delivery refund in store"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
+msgid "Delivery refund in store with notice"
+msgstr "Delivery refund in store with notice"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
+msgid "Delivery refund with notice"
+msgstr "Delivery refund with notice"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
 msgid "Delivery with notice"
 msgstr "Livrare cu aviz"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_mode
-msgid "Detail mode"
-msgstr "Mod detaliere"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_display_name
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_display_name
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_display_name
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_display_name
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_display_name
-msgid "Display Name"
-msgstr "Nume afișat"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_date_to
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_date_to
-msgid "End Date"
-msgstr "Dată sfârșit"
 
 #. module: l10n_ro_stock_account
 #: model:ir.model.fields,field_description:l10n_ro_stock_account.field_stock_location_property_account_expense_location_id
@@ -264,25 +130,9 @@ msgid "Generated accounting lines"
 msgstr "Generated accounting lines"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_id
-msgid "ID"
-msgstr "ID"
-
-#. module: l10n_ro_stock_account
 #: model:ir.model.fields,field_description:l10n_ro_stock_account.field_stock_location_property_account_income_location_id
 msgid "Income Account"
 msgstr "Cont de venituri"
-
-#. module: l10n_ro_stock_account
-#: selection:l10n_ro.daily_stock_report.line,type:0
-#: selection:l10n_ro.daily_stock_report.ref,type:0
-#: selection:l10n_ro.storage_sheet_report.line,type:0
-msgid "Input"
-msgstr "Intrare"
 
 #. module: l10n_ro_stock_account
 #: model:ir.model,name:l10n_ro_stock_account.model_stock_inventory
@@ -301,8 +151,18 @@ msgstr "Minus de inventar"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
+msgid "Inventory minus in store"
+msgstr "Inventory minus in store"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
 msgid "Inventory plus"
 msgstr "Plus de inventar"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
+msgid "Inventory plus in store"
+msgstr "Inventory plus in store"
 
 #. module: l10n_ro_stock_account
 #: model:ir.model,name:l10n_ro_stock_account.model_account_invoice
@@ -315,24 +175,30 @@ msgid "Invoice Line"
 msgstr "Linie factura"
 
 #. module: l10n_ro_stock_account
+#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_stock_move_invoice_line_evaluated_by
+msgid "Invoice Line evaluated by"
+msgstr "Invoice Line evaluated by"
+
+#. module: l10n_ro_stock_account
 #: model:ir.model.fields,field_description:l10n_ro_stock_account.field_stock_picking_notice
 msgid "Is a notice"
 msgstr "Este un aviz"
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/account_invoice.py:111
+#: code:addons/l10n_ro_stock_account/models/account_invoice.py:238
 #, python-format
 msgid "It is not allowed to change a stored product!"
 msgstr "Nu este permis să modificați un produs stocabil!"
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/account_invoice.py:140
+#: code:addons/l10n_ro_stock_account/models/account_invoice.py:203
+#: code:addons/l10n_ro_stock_account/models/account_invoice.py:264
 #, python-format
 msgid "It is not allowed to record an invoice for a quantity bigger than %s"
 msgstr "Nu este permis să înregistrați în factură o cantitate mai mare de %s"
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/account_invoice.py:142
+#: code:addons/l10n_ro_stock_account/models/account_invoice.py:267
 #, python-format
 msgid "It is not indicated to change the quantity of a stored product!"
 msgstr "Nu este indicat să modificați cantitatea pentru produsele stocate!"
@@ -343,45 +209,7 @@ msgid "Journal Item"
 msgstr "Element jurnal"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report___last_update
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line___last_update
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref___last_update
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report___last_update
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line___last_update
-msgid "Last Modified on"
-msgstr "Ultima modificare la"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_write_uid
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_write_uid
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_write_uid
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_write_uid
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_write_uid
-msgid "Last Updated by"
-msgstr "Ultima actualizare făcută de"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_write_date
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_write_date
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_write_date
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_write_date
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_write_date
-msgid "Last Updated on"
-msgstr "Ultima actualizare pe"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_product_ids
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_product_ids
-msgid "Line Product"
-msgstr "Line Product"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_ref_ids
-msgid "Line Ref"
-msgstr "Line Ref"
-
-#. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/product.py:131
+#: code:addons/l10n_ro_stock_account/models/product.py:118
 #, python-format
 msgid "List Price changed  - %s"
 msgstr "Modificare preț vanzare  - %s"
@@ -389,8 +217,6 @@ msgstr "Modificare preț vanzare  - %s"
 #. module: l10n_ro_stock_account
 #: model:ir.model.fields,field_description:l10n_ro_stock_account.field_account_move_line_stock_location_dest_id
 #: model:ir.model.fields,field_description:l10n_ro_stock_account.field_account_move_line_stock_location_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_location_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_location_id
 #: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_move_line_form
 msgid "Location"
 msgstr "Locație"
@@ -406,14 +232,13 @@ msgid "Move Type"
 msgstr "Tip mișcare"
 
 #. module: l10n_ro_stock_account
-#: selection:l10n_ro.daily_stock_report.line,type:0
-#: selection:l10n_ro.daily_stock_report.ref,type:0
-#: selection:l10n_ro.storage_sheet_report.line,type:0
-msgid "Output"
-msgstr "Ieșire"
+#: code:addons/l10n_ro_stock_account/models/account_invoice.py:231
+#, python-format
+msgid "No combination of incoming stock moves to sum quantity: %s"
+msgstr "No combination of incoming stock moves to sum quantity: %s"
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/stock_account.py:359
+#: code:addons/l10n_ro_stock_account/models/stock_account.py:436
 #, python-format
 msgid "Please set account for uneligible tax "
 msgstr "Please set account for uneligible tax "
@@ -424,24 +249,14 @@ msgid "Price Difference Account"
 msgstr "Cont diferență de preț"
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/product.py:93
+#: code:addons/l10n_ro_stock_account/models/product.py:87
 #, python-format
 msgid "Price changed"
 msgstr "Modificare de preț"
 
 #. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_daily_stock_report_form
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_storage_sheet_report_form
-msgid "Print"
-msgstr "Tipăriți"
-
-#. module: l10n_ro_stock_account
 #: model:ir.model,name:l10n_ro_stock_account.model_product_product
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_product_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_product_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_product_id
 #: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_move_line_form
-#: selection:l10n_ro.daily_stock_report,mode:0
 msgid "Product"
 msgstr "Produs"
 
@@ -456,20 +271,14 @@ msgid "Product Template"
 msgstr "Șablon produs"
 
 #. module: l10n_ro_stock_account
-#: selection:stock.move,move_type:0
-msgid "Production"
-msgstr "Producție"
-
-#. module: l10n_ro_stock_account
 #: model:ir.actions.server,name:l10n_ro_stock_account.action_propagate_account
 msgid "Propagate Account"
 msgstr "Propagare conturi"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_quantity
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_quantity
-msgid "Quantity"
-msgstr "Cantitate"
+#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_stock_picking_purchase_invoice_id
+msgid "Purchase Bill"
+msgstr "Purchase Bill"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
@@ -478,13 +287,8 @@ msgstr "Recepție"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
-msgid "Reception Refund"
-msgstr "Retur recepție"
-
-#. module: l10n_ro_stock_account
-#: selection:stock.move,move_type:0
-msgid "Reception from Production"
-msgstr "Recepție din producție"
+msgid "Reception from production"
+msgstr "Reception from production"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
@@ -493,45 +297,43 @@ msgstr "Recepție în magazin"
 
 #. module: l10n_ro_stock_account
 #: selection:stock.move,move_type:0
+msgid "Reception in store from production"
+msgstr "Reception in store from production"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
+msgid "Reception in store with notice"
+msgstr "Reception in store with notice"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
+msgid "Reception refund"
+msgstr "Reception refund"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
+msgid "Reception refund in store with notice"
+msgstr "Reception refund in store with notice"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
+msgid "Reception refund with notice"
+msgstr "Reception refund with notice"
+
+#. module: l10n_ro_stock_account
+#: selection:stock.move,move_type:0
 msgid "Reception with notice"
 msgstr "Recepție cu aviz"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_ref
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_ref
-#: selection:l10n_ro.daily_stock_report,mode:0
-msgid "Reference"
-msgstr "Referință"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_report_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_report_id
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_report_id
-msgid "Report"
-msgstr "Report"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_daily_stock_report_form
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_storage_sheet_report_form
-msgid "Report Options"
-msgstr "Opțiuni Raport"
+#: model:ir.model,name:l10n_ro_stock_account.model_stock_return_picking
+msgid "Return Picking"
+msgstr "Retur Ridicare"
 
 #. module: l10n_ro_stock_account
 #: model:ir.model,name:l10n_ro_stock_account.model_sale_order_line
 msgid "Sales Order Line"
 msgstr "Linie comandă vânzare"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_daily_stock_report_form
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_storage_sheet_report_form
-msgid "Show"
-msgstr "Afișare"
-
-#. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_date_from
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_date_from
-msgid "Start Date"
-msgstr "Dată început"
 
 #. module: l10n_ro_stock_account
 #: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_move_line_form
@@ -560,29 +362,6 @@ msgid "Stock Picking"
 msgstr "Ridicare stoc"
 
 #. module: l10n_ro_stock_account
-#: model:ir.actions.act_window,name:l10n_ro_stock_account.action_stock_report
-#: model:ir.ui.menu,name:l10n_ro_stock_account.menu_daily_stock_report
-msgid "Stock Report"
-msgstr "Raport stoc"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_daily_stock_report
-msgid "Stock report"
-msgstr "Raport stoc"
-
-#. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.document_storage_sheet_report
-msgid "Storage Sheet"
-msgstr "Fişă produs"
-
-#. module: l10n_ro_stock_account
-#: model:ir.actions.act_window,name:l10n_ro_stock_account.action_storage_sheet_report
-#: model:ir.actions.act_window,name:l10n_ro_stock_account.action_storage_sheet_report_line
-#: model:ir.ui.menu,name:l10n_ro_stock_account.menu_storage_sheet_report
-msgid "Storage Sheet Report"
-msgstr "Raport fișă produs"
-
-#. module: l10n_ro_stock_account
 #: model:ir.model,name:l10n_ro_stock_account.model_l10n_ro_storage_sheet_report
 msgid "Storage sheet"
 msgstr "Fișa magaizie"
@@ -591,12 +370,6 @@ msgstr "Fișa magaizie"
 #: selection:stock.location,merchandise_type:0
 msgid "Store"
 msgstr "Marfă în Magazin"
-
-#. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/account_invoice.py:76
-#, python-format
-msgid "The price difference for the product %s exceeds the %d limit "
-msgstr "The price difference for the product %s exceeds the %d limit "
 
 #. module: l10n_ro_stock_account
 #: model:ir.model.fields,help:l10n_ro_stock_account.field_account_move_line_stock_inventory_id
@@ -650,53 +423,40 @@ msgid "Transfer out"
 msgstr "Transfer out"
 
 #. module: l10n_ro_stock_account
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_line_type
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_daily_stock_report_ref_type
-#: model:ir.model.fields,field_description:l10n_ro_stock_account.field_l10n_ro_storage_sheet_report_line_type
-msgid "Type"
-msgstr "Tip"
-
-#. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/report/daily_stock_report.py:269
-#: code:addons/l10n_ro_stock_account/report/daily_stock_report.py:303
-#: code:addons/l10n_ro_stock_account/report/storage_sheet_report.py:253
-#, python-format
-msgid "Valuation"
-msgstr "Evaluare"
-
-#. module: l10n_ro_stock_account
 #: selection:stock.location,merchandise_type:0
 msgid "Warehouse"
 msgstr "Marfă în Depozit"
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/stock_account.py:522
+#: code:addons/l10n_ro_stock_account/models/stock_account.py:613
 #, python-format
 msgid "You can only delete draft inventory."
 msgstr "You can only delete draft inventory."
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/stock_account.py:335
+#: code:addons/l10n_ro_stock_account/models/stock_account.py:412
 #, python-format
 msgid "You cannot move a product if price list is lower than cost price. Please update list price to suit to be higher than %s"
 msgstr "Nu puteți mișca un produs dacă prețul de listă este mai mic decât cel de cost %s."
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/models/product.py:103
+#: code:addons/l10n_ro_stock_account/models/product.py:96
 #, python-format
 msgid "You don't have any stock valuation account defined on your product category. You must define one before processing this operation."
 msgstr "You don't have any stock valuation account defined on your product category. You must define one before processing this operation."
 
 #. module: l10n_ro_stock_account
-#: code:addons/l10n_ro_stock_account/report/storage_sheet_report.py:55
+#: code:addons/l10n_ro_stock_account/models/account_invoice.py:163
 #, python-format
-msgid "You should have defined an 'Valuation Account' on category %s"
-msgstr "You should have defined an 'Valuation Account' on category %s"
-
-
+msgid "Your action would have the consequence that a stock move is to be evaluated to %s, which is less than 0 and hence impossible"
+msgstr "Acțiunea ta ar avea ca rezultat evaluarea unei mișcări de stoc de intrare la %s, ceea ce este imposibil."
 
 #. module: l10n_ro_stock_account
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_daily_stock_report_form
-#: model:ir.ui.view,arch_db:l10n_ro_stock_account.view_storage_sheet_report_form
-msgid "or"
-msgstr "sau"
+#: model:ir.model,name:l10n_ro_stock_account.model_l10n_ro_storage_sheet_report_line
+msgid "l10n_ro.storage_sheet_report.line"
+msgstr "l10n_ro.storage_sheet_report.line"
+
+#. module: l10n_ro_stock_account
+#: model:ir.model,name:l10n_ro_stock_account.model_stock_return_picking_line
+msgid "stock.return.picking.line"
+msgstr "stock.return.picking.line"

@@ -93,3 +93,8 @@ msgstr "Linii chitanță"
 msgid "When voucher is created as part of an purchase, this field links the voucher line to the origin purchase line"
 msgstr "Când o chitanță este creată ca parte a unei Achiziții, acest câmp face legătura către linia de Achiziție din care provine"
 
+#. module: l10n_ro_stock_account_voucher
+#: code:addons/l10n_ro_stock_account_voucher/models/account_voucher_line.py:30
+#, python-format
+msgid "Your action would have the consequence that a stock move is to be evaluated to %s, which is less than 0 and hence impossible"
+msgstr "Acțiunea ta ar avea ca rezultat evaluarea unei mișcări de stoc de intrare la %s, ceea ce este imposibil."
