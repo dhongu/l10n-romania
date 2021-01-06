@@ -26,6 +26,8 @@ class AccountVoucherLine(models.Model):
         ondelete='set null')
 
     def modify_stock_move_value(self, value):
+        if value < 0:
+            raise UserError(_('Your action would have the consequence that a stock move is to be evaluated to %s, which is less than 0 and hence impossible' %str(value)))
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         should_modify_stock_value = bool(self.product_id and \
                                          self.product_id.valuation == 'real_time' and \
