@@ -1,0 +1,95 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_ro_stock_account_voucher
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-06 14:33+0000\n"
+"PO-Revision-Date: 2021-01-06 14:33+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model,name:l10n_ro_stock_account_voucher.model_account_voucher
+msgid "Accounting Voucher"
+msgstr "Chitanță"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model.fields,field_description:l10n_ro_stock_account_voucher.field_account_voucher_purchase_id
+msgid "Add Purchase Order"
+msgstr "Adaugă comandă de achiziție"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model.fields,help:l10n_ro_stock_account_voucher.field_account_voucher_line_purchase_id
+msgid "Associated Purchase Order. Filled in automatically when a PO is chosen on the account voucher."
+msgstr "Comanda de Achiziție asociată. Este completată automat când o CA este aleasă pe chitanță."
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.ui.view,arch_db:l10n_ro_stock_account_voucher.purchase_order_form
+msgid "Create Voucher"
+msgstr "Creează Chitanță"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model.fields,help:l10n_ro_stock_account_voucher.field_account_voucher_purchase_id
+msgid "Encoding help. When selected, the associated purchase order lines are added to the voucher. Several PO can be selected."
+msgstr "Când este aleasă, liniile din CA asociată sunt adaugate la chitanță. Se pot selecta, pe rând, mai multe CA."
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model.fields,field_description:l10n_ro_stock_account_voucher.field_stock_move_voucher_line_evaluated_by
+msgid "Evaluating Voucher Line"
+msgstr "Linia Chitanță Evaluatoare"
+
+#. module: l10n_ro_stock_account_voucher
+#: code:addons/l10n_ro_stock_account_voucher/models/account_voucher_line.py:72
+#, python-format
+msgid "It is not allowed to record a voucher for a quantity bigger than %s"
+msgstr "Nu este permis crearea unui voucher pentru o cantitate mai mare decât %s"
+
+#. module: l10n_ro_stock_account_voucher
+#: code:addons/l10n_ro_stock_account_voucher/models/account_voucher_line.py:100
+#, python-format
+msgid "No combination of incoming stock moves to sum quantity: %s"
+msgstr "Nu există nicio combinație de mișcări stoc de intrare care să însumeze cantitatea: %s"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model,name:l10n_ro_stock_account_voucher.model_purchase_order
+#: model:ir.model.fields,field_description:l10n_ro_stock_account_voucher.field_account_voucher_line_purchase_id
+msgid "Purchase Order"
+msgstr "Comandă de achiziție"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model.fields,field_description:l10n_ro_stock_account_voucher.field_account_voucher_line_purchase_line_id
+msgid "Purchase Order Line"
+msgstr "Linie comandă de achiziție"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model,name:l10n_ro_stock_account_voucher.model_stock_move
+msgid "Stock Move"
+msgstr "Mișcare stoc"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model.fields,help:l10n_ro_stock_account_voucher.field_stock_move_voucher_line_evaluated_by
+msgid "The voucher line that is used to evaluate purchased stock moves"
+msgstr "Linia de chitanță care a evaluat mișcarea de stoc de intrare"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model.fields,field_description:l10n_ro_stock_account_voucher.field_account_voucher_line_uom_id
+msgid "Unit of Measure"
+msgstr "Unitate de măsură"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model,name:l10n_ro_stock_account_voucher.model_account_voucher_line
+msgid "Voucher Lines"
+msgstr "Linii chitanță"
+
+#. module: l10n_ro_stock_account_voucher
+#: model:ir.model.fields,help:l10n_ro_stock_account_voucher.field_account_voucher_line_purchase_line_id
+msgid "When voucher is created as part of an purchase, this field links the voucher line to the origin purchase line"
+msgstr "Când o chitanță este creată ca parte a unei Achiziții, acest câmp face legătura către linia de Achiziție din care provine"
+

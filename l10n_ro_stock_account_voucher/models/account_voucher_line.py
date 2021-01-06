@@ -18,7 +18,7 @@ class AccountVoucherLine(models.Model):
         store=False,
         readonly=True,
         related_sudo=False,
-        help='Associated Purchase Order. Filled in automatically when a PO is chosen on the vendor bill.')
+        help='Associated Purchase Order. Filled in automatically when a PO is chosen on the account voucher.')
 
     uom_id = fields.Many2one(
         comodel_name='product.uom',
