@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6 col-sm-6 col-md-6">
+            <div id="company_cui" class="col-6 col-sm-6 col-md-6">
                 <div t-if="res_company.partner_id.vat">
                     <strong>CIF:</strong>
                     <span t-field="res_company.partner_id.vat" />
@@ -473,6 +473,23 @@
                             <p t-field="t.acquirer_id.name" />
                         </div>
                     </div>
+                </div>
+<!--                Payments-->
+                <div id="payments">
+                    <t t-set="payments" t-value="o.get_payments()"/>
+                    <t t-if="payments">
+<!--                        <span>Payments found.</span>-->
+                        <t t-foreach="payments" t-as="payment">
+                            <t t-if="payment.journal_id.type=='cash'">
+<!--                        <span>Cash Payments found.</span>-->
+                                <span t-field="payment.name"/>
+                            </t>
+                        </t>
+                    </t>
+                    <t t-else="">
+<!--                        <span>Payments not found.</span>-->
+                    </t>
+<!--                    <span t-field="o.invoice_payments_widget"/>-->
                 </div>
             </div>
         </xpath>
