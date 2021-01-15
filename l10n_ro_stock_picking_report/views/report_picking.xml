@@ -382,30 +382,35 @@
                                             />
                                         </td>
                                         <td class="text-right">
-                                            <span
-                                                t-esc="move.price_unit"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
+                                            <t t-set="line_value" t-value="0.0"/>
+                                            <t t-foreach="move.stock_valuation_layer_ids" t-as="valuation_line">
+                                                <t t-set="line_value" t-value="line_value+valuation_line.value"/>
+                                            </t>
+                                            <span t-esc="line_value/move.product_uom_qty"
+                                                  t-options='{"widget": "float", "precision": 4}'/>
+
                                         </td>
                                         <td class="text-right">
-                                            <span
-                                                t-esc=" move.price_unit * move.product_uom_qty"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                            <t
-                                                t-set="total_amount"
-                                                t-value="total_amount+(move.price_unit * move.product_uom_qty)"
-                                            />
+                                            <span t-esc="line_value" t-options='{"widget": "float", "precision": 2}'/>
+                                            <t t-set="total_amount" t-value="total_amount+line_value"/>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="row">
-                                <t t-set="totals" t-value="get_totals(o.move_lines)" />
-                                <t
-                                    t-call="l10n_ro_stock_picking_report.report_totals"
-                                />
-                            </div>
+                             <div class="col-4  col-sm-4 col-md-4  pull-right">
+                                <table class="table table-sm">
+                                    <tr class="border-black">
+                                        <td>
+                                            <strong>Total Without Taxes</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="total_amount" t-options='{"widget": "float", "precision": 2}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    </tr>
+                                </table>
+                             </div>
                             <t
                                 t-call="l10n_ro_stock_picking_report.report_consume_sign"
                             />
