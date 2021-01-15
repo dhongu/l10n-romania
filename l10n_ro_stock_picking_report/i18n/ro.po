@@ -273,7 +273,6 @@ msgid "<strong>Total Sale</strong>"
 msgstr "<strong>Total vânzare</strong>"
 
 #. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals
 msgid "<strong>Total Without Taxes</strong>"
 msgstr "<strong>Total fără TVA</strong>"
