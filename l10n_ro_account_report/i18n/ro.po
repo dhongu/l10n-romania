@@ -124,12 +124,12 @@ msgid "Activity Statement Wizard"
 msgstr ""
 
 #. module: l10n_ro_account_report
-#: selection:activity.statement.wizard,target_move:0
+#: selection:activity.statement.partner.wizard,target_move:0
 msgid "All Entries"
 msgstr "Toate înregistrările"
 
 #. module: l10n_ro_account_report
-#: selection:activity.statement.wizard,target_move:0
+#: selection:activity.statement.partner.wizard,target_move:0
 msgid "All Posted Entries"
 msgstr "Înregistrările postare"
 
@@ -350,7 +350,7 @@ msgid "Partner Activity Statement"
 msgstr ""
 
 #. module: l10n_ro_account_report
-#: selection:activity.statement.wizard,account_type:0
+#: selection:activity.statement.partner.wizard,account_type:0
 msgid "Payable"
 msgstr ""
 
@@ -376,7 +376,7 @@ msgid "Receipts"
 msgstr ""
 
 #. module: l10n_ro_account_report
-#: selection:activity.statement.wizard,account_type:0
+#: selection:activity.statement.partner.wizard,account_type:0
 msgid "Receivable"
 msgstr ""
 
