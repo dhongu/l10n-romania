@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2017 Deltatech All Rights Reserved
@@ -20,12 +19,10 @@
 ##############################################################################
 
 
-
-
-from odoo import models, fields, api, _
+from odoo import SUPERUSER_ID, _, api, fields, models
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.tools.translate import _
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
-from odoo import SUPERUSER_ID, api
+
 import odoo.addons.decimal_precision as dp
 
 
@@ -36,6 +33,6 @@ class PurchaseOrder(models.Model):
     def _prepare_picking(self):
 
         res = super(PurchaseOrder, self)._prepare_picking()
-        res['origin'] = self.partner_ref or self.origin
+        res["origin"] = self.partner_ref or self.origin
 
         return res

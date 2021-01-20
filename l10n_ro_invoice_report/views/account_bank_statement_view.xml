@@ -1,14 +1,13 @@
 <?xml version="1.0" ?>
 <odoo>
     <data>
-
         <record id="view_bank_statement_form" model="ir.ui.view">
             <field name="name">account.bank.statement.form.inherit</field>
             <field name="model">account.bank.statement</field>
-            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="inherit_id" ref="account.view_bank_statement_form" />
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='bank_account_id']" position="after">
-                    <button name="button_print" icon='fa-print' type="object"/>
+                    <button name="button_print" icon='fa-print' type="object" />
                 </xpath>
             </field>
         </record>

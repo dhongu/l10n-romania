@@ -1,39 +1,39 @@
-# -*- coding: utf-8 -*-
 # ©  2008-2019 Deltatech
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
 
-
-from odoo import models, fields, api
-
-
-class res_partner(models.Model):
-    _inherit = 'res.partner'
-
-    mean_transp = fields.Char(string='Mean transport')
+from odoo import api, fields, models
 
 
-class account_invoice(models.Model):
+class ResPartner(models.Model):
+    _inherit = "res.partner"
+
+    mean_transp = fields.Char(string="Mean transport")
+
+
+class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-    delegate_id = fields.Many2one('res.partner', string='Delegate',
-                                  readonly=True, states={'draft': [('readonly', False)]},
-                                  domain=[('is_company', '=', False)])
+    delegate_id = fields.Many2one(
+        "res.partner",
+        string="Delegate",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+        domain=[("is_company", "=", False)],
+    )
 
-    mean_transp = fields.Char(string='Mean transport', readonly=True, states={'draft': [('readonly', False)]}, )
-
+    mean_transp = fields.Char(string="Mean transport", readonly=True, states={"draft": [("readonly", False)]},)
 
     @api.model
     def default_get(self, fields_list):
-        defaults = super(account_invoice, self).default_get(fields_list)
-        if 'delegate_id' not in defaults:
-            if 'default_delegate_id' in self.env.context:
-                defaults['default_delegate_id'] = defaults['default_delegate_id']
+        defaults = super(AccountInvoice, self).default_get(fields_list)
+        if "delegate_id" not in defaults:
+            if "default_delegate_id" in self.env.context:
+                defaults["default_delegate_id"] = defaults["default_delegate_id"]
         return defaults
 
-
-    @api.onchange('delegate_id')
+    @api.onchange("delegate_id")
     def on_change_delegate_id(self):
         if self.delegate_id:
             self.mean_transp = self.delegate_id.mean_transp
@@ -42,32 +42,31 @@ class account_invoice(models.Model):
     @api.multi
     def action_invoice_cancel(self):
         for invoice in self:
-            if invoice.amount_total == 0.0 and invoice.state == 'paid':
-                invoice.state = 'open'
+            if invoice.amount_total == 0.0 and invoice.state == "paid":
+                invoice.state = "open"
                 # invoice.write({'state':'open'})
 
-        return super(account_invoice, self).action_invoice_cancel()
-
+        return super(AccountInvoice, self).action_invoice_cancel()
 
     @api.multi
     def set_origin_with_picking(self):
         for invoice in self:
-            pickings = self.env['stock.picking']
+            pickings = self.env["stock.picking"]
             for line in invoice.invoice_line_ids:
                 for sale_line in line.sale_line_ids:
                     for move in sale_line.move_ids:
-                        if move.picking_id.state == 'done':
+                        if move.picking_id.state == "done":
                             pickings |= move.picking_id
                 if line.purchase_line_id:
                     for move in line.purchase_line_id.move_ids:
-                        if move.picking_id.state == 'done':
+                        if move.picking_id.state == "done":
                             pickings |= move.picking_id
-            origin = ''
+            origin = ""
             for picking in pickings:
-                origin += ' ' + picking.name
+                origin += " " + picking.name
 
             if origin:
-                invoice.write({'origin': origin})
+                invoice.write({"origin": origin})
 
 
 class account_invoice_line(models.Model):
@@ -77,8 +76,9 @@ class account_invoice_line(models.Model):
 
     # pretul fara tva utilizat pentru situatia in care tva este inclus in pret
     # valoarea este caclulata direct in factura
-    price_unit_without_taxes = fields.Float(string='Unit Price without taxes', readonly=True,
-                                            compute='_compute_price_unit_without_taxes')
+    price_unit_without_taxes = fields.Float(
+        string="Unit Price without taxes", readonly=True, compute="_compute_price_unit_without_taxes"
+    )
 
     # se va utiliza campul stndard price_tax
     # price_taxes = fields.Float(string='Taxes', digits=dp.get_precision('Account'), store=True, readonly=True,
@@ -90,7 +90,7 @@ class account_invoice_line(models.Model):
 
     """
     # campurile standard
-    
+
     price_unit = fields.Float(string='Unit Price', required=True, digits=dp.get_precision('Product Price'))
     price_subtotal = fields.Monetary(string='Amount (without Taxes)',
         store=True, readonly=True, compute='_compute_price', help="Total amount without taxes")
@@ -103,7 +103,7 @@ class account_invoice_line(models.Model):
     """
 
     @api.one
-    @api.depends('price_subtotal', 'quantity')
+    @api.depends("price_subtotal", "quantity")
     def _compute_price_unit_without_taxes(self):
         if self.price_subtotal:
             quantity = self.quantity or 1
@@ -148,4 +148,3 @@ class account_invoice_line(models.Model):
     #         self.price_unit_without_taxes = self.invoice_id.currency_id.round(self.price_unit_without_taxes)
     #         self.price_normal_taxes = self.invoice_id.currency_id.round(self.price_normal_taxes)
     #
-

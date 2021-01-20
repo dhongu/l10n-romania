@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2008 Deltatech All Rights Reserved
@@ -25,7 +24,6 @@
     "version": "1.0",
     "author": "Dorin Hongu",
     "website": "",
-
     "description": """
 
 Romania - Picking Report layout
@@ -34,24 +32,9 @@ Romania - Picking Report layout
  - Referinta din comanda de achizitie este copiata in NIR si factura
 
     """,
-
     "category": "Generic Modules",
-    "depends": [
-        "base",
-        "stock",
-        'l10n_ro_config',
-
-        'purchase',
-
-        'l10n_ro_stock_account'
-    ],
-
-    "data": [
-        'views/l10n_ro_stock_picking_report.xml',
-        'views/report_picking.xml',
-        'views/stock_view.xml'
-
-    ],
+    "depends": ["base", "stock", "l10n_ro_config", "purchase", "l10n_ro_stock_account"],
+    "data": ["views/l10n_ro_stock_picking_report.xml", "views/report_picking.xml", "views/stock_view.xml"],
     "active": False,
     "installable": True,
 }
