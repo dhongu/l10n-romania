@@ -187,7 +187,7 @@ class AccountInvoiceLine(models.Model):
 
             move.write({
                 'value': current_move_value,
-                'remaining_value': current_move_value / current_move_received_quantity * move.remaining_value,
+                'remaining_value': current_move_value / current_move_received_quantity * move.remaining_qty,
                 'price_unit': current_move_value / current_move_received_quantity,
                 'invoice_line_evaluated_by': self.id})
 
