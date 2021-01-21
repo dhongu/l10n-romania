@@ -8,7 +8,7 @@
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",
     "category": "Generic Modules",
-    "depends": ["base", "account", "l10n_ro_config", "deltatech_watermark"],
+    "depends": ["base", "account", "l10n_ro_config", "purchase", "deltatech_watermark"],
     "data": [
         "views/invoice_report.xml",
         "views/voucher_report.xml",
