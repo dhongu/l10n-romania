@@ -1,7 +1,7 @@
 # Copyright (C) 2018 FOREST AND BIOMASS ROMANIA SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.tools.safe_eval import safe_eval
 
 

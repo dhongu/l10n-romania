@@ -4,7 +4,7 @@
         <template id="l10n_ro_report_invoice" inherit_id="account.report_invoice">
             <xpath expr="." position="inside">
                 <t t-if="False">
-                    <t t-call="account.report_invoice_document"/>
+                    <t t-call="account.report_invoice_document" />
                 </t>
             </xpath>
         </template>
@@ -21,7 +21,7 @@
                         >Customer
                         </strong>
                     </div>
-                    <strong t-field="res_company.partner_id.name"/>
+                    <strong t-field="res_company.partner_id.name" />
                     <div id="company_address">
                         <strong>Address:</strong>
                         <address
@@ -29,8 +29,8 @@
                             t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'
                         />
                     </div>
-                    <t t-set="partner_id" t-value="res_company.partner_id"/>
-                    <t t-call="l10n_ro_config.banks"/>
+                    <t t-set="partner_id" t-value="res_company.partner_id" />
+                    <t t-call="l10n_ro_config.banks" />
                 </div>
                 <div class="col-5 offset-1">
                     <div>
@@ -44,7 +44,7 @@
                         </strong>
                     </div>
                     <div id='partner_name'>
-                        <strong t-field="o.commercial_partner_id.name"/>
+                        <strong t-field="o.commercial_partner_id.name" />
                     </div>
                     <div id="partner_address">
                         <strong>Address:</strong>
@@ -53,23 +53,23 @@
                             t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'
                         />
                     </div>
-                    <t t-set="partner_id" t-value="o.commercial_partner_id"/>
-                    <t t-call="l10n_ro_config.banks"/>
+                    <t t-set="partner_id" t-value="o.commercial_partner_id" />
+                    <t t-call="l10n_ro_config.banks" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6">
                     <div t-if="res_company.partner_id.vat">
                         <strong>CIF:</strong>
-                        <span t-field="res_company.partner_id.vat"/>
+                        <span t-field="res_company.partner_id.vat" />
                     </div>
                     <div t-if="res_company.partner_id.nrc">
                         <strong>NRC:</strong>
-                        <span t-field="res_company.partner_id.nrc"/>
+                        <span t-field="res_company.partner_id.nrc" />
                     </div>
                     <div t-if="res_company.share_capital">
                         <strong>Share Capital:</strong>
-                        <span t-esc="int(res_company.share_capital)"/>
+                        <span t-esc="int(res_company.share_capital)" />
                     </div>
                     <div t-if="'vat_on_payment' in res_company._fields">
                         <div t-if="res_company.vat_on_payment">
@@ -85,11 +85,11 @@
                 <div class="col-5 offset-1">
                     <div t-if="o.commercial_partner_id.vat">
                         <strong>CIF:</strong>
-                        <span t-field="o.commercial_partner_id.vat"/>
+                        <span t-field="o.commercial_partner_id.vat" />
                     </div>
                     <div t-if="o.commercial_partner_id.nrc">
                         <strong>NRC:</strong>
-                        <span t-field="o.commercial_partner_id.nrc"/>
+                        <span t-field="o.commercial_partner_id.nrc" />
                     </div>
                 </div>
             </div>
@@ -158,11 +158,14 @@
             </xpath>
 
         </template>-->
-        <template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
+        <template
+            id="l10n_ro_report_invoice_document"
+            inherit_id="account.report_invoice_document"
+        >
             <xpath expr="//t[@t-set='address']" position="replace">
-                <t t-call="l10n_ro_invoice_report.header_invoice"/>
+                <t t-call="l10n_ro_invoice_report.header_invoice" />
                 <div style="visibility: hidden;height:1px;">
-                    <address/>
+                    <address />
                 </div>
                 <!--inherited by other modules, must be present-->
             </xpath>
@@ -171,41 +174,51 @@
                     <!--                    <div name="invoice_address"/>-->
                     <h2>
 
-                        <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">Invoice</span>
-                        <span t-if="o.move_type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
-                        <span t-if="o.move_type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
-                        <span t-if="o.move_type == 'out_refund' and o.state == 'cancel'">Factură Storno Anulată</span>
-                        <span t-if="o.move_type == 'out_refund' and (o.state == 'posted')">Factură Storno</span>
+                        <span
+                            t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
+                        >Invoice</span>
+                        <span
+                            t-if="o.move_type == 'out_invoice' and o.state == 'draft'"
+                        >Draft Invoice</span>
+                        <span
+                            t-if="o.move_type == 'out_invoice' and o.state == 'cancel'"
+                        >Cancelled Invoice</span>
+                        <span
+                            t-if="o.move_type == 'out_refund' and o.state == 'cancel'"
+                        >Factură Storno Anulată</span>
+                        <span
+                            t-if="o.move_type == 'out_refund' and (o.state == 'posted')"
+                        >Factură Storno</span>
                         <span t-if="o.move_type == 'in_refund'">Supplier Refund</span>
                         <span t-if="o.move_type == 'in_invoice'">Supplier Invoice</span>
                         <t t-if="o.name">
-                            <span t-field="o.name"/>
+                            <span t-field="o.name" />
                         </t>
                         <t t-else="">
-                            <span t-field="o.move_name"/>
+                            <span t-field="o.move_name" />
                         </t>
                         <span>/</span>
-                        <span t-field="o.invoice_date"/>
+                        <span t-field="o.invoice_date" />
 
                     </h2>
 
-                    <t t-set="nr_crt" t-value="1"/>
+                    <t t-set="nr_crt" t-value="1" />
                     <t t-if="not currency_id">
-                        <t t-set="currency_id" t-value="o.currency_id"/>
+                        <t t-set="currency_id" t-value="o.currency_id" />
                     </t>
-                    <t t-set="pickings" t-value="get_pickings(o)"/>
+                    <t t-set="pickings" t-value="get_pickings(o)" />
                     <div id="informations" class="row mt32 mb32">
                         <div class="col-auto mw-100 mb-2" t-if="o.invoice_origin">
                             <strong>Source:</strong>
-                            <p class="m-0" t-field="o.invoice_origin"/>
+                            <p class="m-0" t-field="o.invoice_origin" />
                         </div>
                         <div class="col-auto mw-100 mb-2" t-if="o.ref" name="reference">
                             <strong>Reference:</strong>
-                            <p class="m-0" t-field="o.ref"/>
+                            <p class="m-0" t-field="o.ref" />
                         </div>
                         <div class="col-auto mw-100 mb-2" t-if="o.invoice_date_due">
                             <strong>Payment Term:</strong>
-                            <p class="m-0" t-field="o.invoice_date_due"/>
+                            <p class="m-0" t-field="o.invoice_date_due" />
                         </div>
                         <div class="col-auto mw-100 mb-2" t-if="pickings">
                             <t t-if="o.move_type == 'in_invoice'">
@@ -215,14 +228,17 @@
                                 <strong>Deliveries:</strong>
                             </t>
                             <p class="m-0" t-foreach="pickings" t-as="d">
-                                <span t-field="d.name"/>
+                                <span t-field="d.name" />
                             </p>
                         </div>
                     </div>
-                    <t t-set="with_discount_distinct" t-value="get_discount"/>
+                    <t t-set="with_discount_distinct" t-value="get_discount" />
                     <!--                        <t t-if="with_discount_distinct">Cu discount</t>-->
                     <!--                        <t t-if="not with_discount_distinct">Fara discount</t>-->
-                    <table class="table table-sm o_main_table" name="invoice_line_table">
+                    <table
+                        class="table table-sm o_main_table"
+                        name="invoice_line_table"
+                    >
                         <thead>
                             <tr>
                                 <th>Ord</th>
@@ -244,14 +260,14 @@
                             <t t-foreach="o.invoice_line_ids" t-as="l">
                                 <tr t-if="not l.display_type">
                                     <td>
-                                        <t t-esc="nr_crt"/>
-                                        <t t-set="nr_crt" t-value="nr_crt + 1"/>
+                                        <t t-esc="nr_crt" />
+                                        <t t-set="nr_crt" t-value="nr_crt + 1" />
                                     </td>
                                     <td>
-                                        <span t-field="l.name"/>
+                                        <span t-field="l.name" />
                                     </td>
                                     <td class="text-right">
-                                        <t t-set="quantity" t-value="l.quantity"/>
+                                        <t t-set="quantity" t-value="l.quantity" />
                                         <t t-if="o.move_type == 'out_refund'">
                                             <t
                                                 t-set="quantity"
@@ -294,7 +310,7 @@
                                         t-if="with_discount(o) and with_discount_distinct"
                                         groups="sale.group_discount_per_so_line"
                                     >
-                                        <span t-field="l.discount"/>
+                                        <span t-field="l.discount" />
                                     </td>
                                     <td class="text-right">
                                         <t
@@ -364,16 +380,16 @@
                                     <tr class="border-black">
                                         <td>
                                             <span>Name:</span>
-                                            <span t-field="o.user_id"/>
+                                            <span t-field="o.user_id" />
                                         </td>
                                         <td>
                                             <div>
                                                 <span>Delegate:</span>
-                                                <span t-field="o.delegate_id"/>
+                                                <span t-field="o.delegate_id" />
                                             </div>
                                             <div>
                                                 <span>Mean Transport:</span>
-                                                <span t-field="o.mean_transp"/>
+                                                <span t-field="o.mean_transp" />
                                             </div>
                                             <div>
                                                 <span>Signature for receive</span>
@@ -461,7 +477,7 @@
                                                         t-set="amount_total"
                                                         t-value="-1*o.move_id.amount"
                                                     />
-                                                    <t t-esc="amount_total"/>
+                                                    <t t-esc="amount_total" />
                                                     <span
                                                         t-field="res_company.currency_id.symbol"
                                                     />
@@ -495,14 +511,17 @@
                         </div>
                         <p t-if="o.narration">
                             <strong>Comment:</strong>
-                            <span t-field="o.narration"/>
+                            <span t-field="o.narration" />
                         </p>
                         <!---
                         daca livrarea nu are notice = True trebuie afisat si un mesaj de genul
                         Produsele au fost livrate impreuna cu factura. Va multumim ca ati cumparat de la noi!
                         -->
-                        <small t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'">
-                            <div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,
+                        <small
+                            t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'"
+                        >
+                            <div
+                            >Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,
                                 with subsequent amendments and OMPF 2226/2006
                             </div>
                             <!--                            <t t-if="not res_company.stamp_image">-->
@@ -516,11 +535,11 @@
                             <!--                                 style="max-height: 150px; "/>-->
                         </small>
                         <div t-if="o.commercial_partner_id.info_for_invoice">
-                            <span t-field="o.commercial_partner_id.info_for_invoice"/>
+                            <span t-field="o.commercial_partner_id.info_for_invoice" />
                         </div>
                         <p id="payment-term" t-if="o.invoice_payment_term_id.note">
                             <strong>Payment Term:</strong>
-                            <span t-field="o.invoice_payment_term_id.note"/>
+                            <span t-field="o.invoice_payment_term_id.note" />
                         </p>
                         <!--         <p t-if="o.fiscal_position_id.note">
                                      <strong>Fiscal Position Remark:</strong>
@@ -531,7 +550,7 @@
                             t-if="o.ref and o.move_type == 'in_invoice'"
                         >
                             <strong>Reference:</strong>
-                            <p t-field="o.ref"/>
+                            <p t-field="o.ref" />
                         </div>
                     </div>
                 </div>
