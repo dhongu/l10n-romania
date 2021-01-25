@@ -382,17 +382,31 @@
                                             />
                                         </td>
                                         <td class="text-right">
-                                            <t t-set="line_value" t-value="0.0"/>
-                                            <t t-foreach="move.stock_valuation_layer_ids" t-as="valuation_line">
-                                                <t t-set="line_value" t-value="line_value+valuation_line.value"/>
+                                            <t t-set="line_value" t-value="0.0" />
+                                            <t
+                                                t-foreach="move.stock_valuation_layer_ids"
+                                                t-as="valuation_line"
+                                            >
+                                                <t
+                                                    t-set="line_value"
+                                                    t-value="line_value+valuation_line.value"
+                                                />
                                             </t>
-                                            <span t-esc="line_value/move.product_uom_qty"
-                                                  t-options='{"widget": "float", "precision": 4}'/>
+                                            <span
+                                                t-esc="line_value/move.product_uom_qty"
+                                                t-options='{"widget": "float", "precision": 4}'
+                                            />
 
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="line_value" t-options='{"widget": "float", "precision": 2}'/>
-                                            <t t-set="total_amount" t-value="total_amount+line_value"/>
+                                            <span
+                                                t-esc="line_value"
+                                                t-options='{"widget": "float", "precision": 2}'
+                                            />
+                                            <t
+                                                t-set="total_amount"
+                                                t-value="total_amount+line_value"
+                                            />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -404,7 +418,10 @@
                                             <strong>Total Without Taxes</strong>
                                         </td>
                                         <td class="text-right">
-                                            <span t-esc="total_amount" t-options='{"widget": "float", "precision": 2}'/>
+                                            <span
+                                                t-esc="total_amount"
+                                                t-options='{"widget": "float", "precision": 2}'
+                                            />
                                         </td>
                                     </tr>
                                     <tr>
