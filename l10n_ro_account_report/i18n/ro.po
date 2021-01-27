@@ -101,17 +101,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_account_report.report_statement
 msgid "<strong>User</strong>:\n"
 "                                    <br/>"
-msgstr ""
+msgstr "<strong>Utilizator</strong>:\n"
+"                                    <br/>"
 
 #. module: l10n_ro_account_report
 #: model:ir.model,name:l10n_ro_account_report.model_report_l10n_ro_account_report_activity_statement
 msgid "Account Activity Statement"
-msgstr ""
+msgstr "Extras cont"
 
 #. module: l10n_ro_account_report
 #: model:ir.model.fields,field_description:l10n_ro_account_report.field_activity_statement_wizard__account_type
 msgid "Account type"
-msgstr "tip cont"
+msgstr "Tip cont"
 
 #. module: l10n_ro_account_report
 #: model:ir.actions.report,name:l10n_ro_account_report.action_print_activity_statement
@@ -200,7 +201,7 @@ msgstr "Creat în"
 #. module: l10n_ro_account_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_account_report.activity_statement_document
 msgid "Credit"
-msgstr ""
+msgstr "Credit"
 
 #. module: l10n_ro_account_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_account_report.activity_statement_document
@@ -287,7 +288,7 @@ msgstr ""
 #. module: l10n_ro_account_report
 #: model:ir.model.fields,field_description:l10n_ro_account_report.field_account_report_sale_purchase_journal__journal
 msgid "Journal type"
-msgstr ""
+msgstr "Tip jurnal"
 
 #. module: l10n_ro_account_report
 #: model:ir.model.fields,field_description:l10n_ro_account_report.field_account_report_sale_purchase_journal____last_update
@@ -326,7 +327,7 @@ msgstr ""
 #. module: l10n_ro_account_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_account_report.report_sale_purchase_journal
 msgid "Number"
-msgstr ""
+msgstr "Număr"
 
 #. module: l10n_ro_account_report
 #: model:ir.model.fields,field_description:l10n_ro_account_report.field_activity_statement_wizard__number_partner_ids
@@ -368,7 +369,7 @@ msgstr ""
 #. module: l10n_ro_account_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_account_report.report_sale_purchase_journal
 msgid "Purchase journal"
-msgstr ""
+msgstr "Jurnal achiziții"
 
 #. module: l10n_ro_account_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_account_report.report_statement
@@ -405,7 +406,7 @@ msgstr ""
 #. module: l10n_ro_account_report
 #: selection:account.report.sale.purchase.journal,journal:0
 msgid "Sale"
-msgstr ""
+msgstr "Vânzare"
 
 #. module: l10n_ro_account_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_account_report.report_sale_purchase_journal

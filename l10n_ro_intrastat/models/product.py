@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
@@ -6,14 +5,14 @@ from odoo import api, fields, models
 
 
 class ProductTemplate(models.Model):
-    _inherit = 'product.template'
+    _inherit = "product.template"
 
-    intrastat_id = fields.Many2one('account.intrastat.code', string='Commodity Code' )
-    country_id = fields.Many2one('res.country', string="Country Of Origin")
+    intrastat_id = fields.Many2one("account.intrastat.code", string="Commodity Code")
+    country_id = fields.Many2one("res.country", string="Country Of Origin")
 
 
 class Product(models.Model):
-    _inherit = 'product.product'
+    _inherit = "product.product"
 
     @api.multi
     def search_intrastat_code(self):
@@ -25,11 +24,10 @@ class Product(models.Model):
         return self.intrastat_id.id or self.categ_id.get_intrastat_recursively()
 
 
-
 class ProductCategory(models.Model):
     _inherit = "product.category"
 
-    intrastat_id = fields.Many2one('account.intrastat.code', string='Commodity Code' )
+    intrastat_id = fields.Many2one("account.intrastat.code", string="Commodity Code")
 
     @api.multi
     def search_intrastat_code(self):

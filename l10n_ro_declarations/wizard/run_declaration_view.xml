@@ -1,34 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record id="view_run_declarations_form" model="ir.ui.view">
         <field name="name">l10n_ro.run.declaration.wizard</field>
         <field name="model">l10n_ro.run.declaration</field>
         <field name="arch" type="xml">
-        <form string="Report Options">
-            <group name="main_info">
-                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
-                <field name="declaration_id" />
-                <field name="code" invisible="1"/>
-            </group>
-            <group name="filters">
-                <group name="date_range">
-                    <field name="date_range_id" domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
-                    <field name="date_from"/>
-                    <field name="date_to"/>
+            <form string="Report Options">
+                <group name="main_info">
+                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" />
+                    <field name="declaration_id" />
+                    <field name="code" invisible="1" />
                 </group>
-            </group>
-            <footer>
-                 <button name="button_show" string="Show"  type="object" default_focus="1" class="oe_highlight"/>
+                <group name="filters">
+                    <group name="date_range">
+                        <field
+                            name="date_range_id"
+                            domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                    </group>
+                </group>
+                <footer>
+                 <button name="button_show" string="Show" type="object" default_focus="1" class="oe_highlight" />
                 or
-                    <button name="button_execute" string="Execute"  type="object"  />
+                    <button name="button_execute" string="Execute" type="object" />
                     or
                     <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
-        </form>
+            </form>
         </field>
     </record>
-
     <record id="action_run_declaration" model="ir.actions.act_window">
         <field name="name">Run Declaration</field>
         <field name="res_model">l10n_ro.run.declaration</field>
@@ -36,11 +37,10 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
-
-
-        <menuitem id="l10n_ro_declarations.menu_run_declaration" name="Run Declaration"
-              action="l10n_ro_declarations.action_run_declaration"
-              parent="base.reporting_menuitem" />
-
-
+    <menuitem
+        id="l10n_ro_declarations.menu_run_declaration"
+        name="Run Declaration"
+        action="l10n_ro_declarations.action_run_declaration"
+        parent="base.reporting_menuitem"
+    />
 </odoo>

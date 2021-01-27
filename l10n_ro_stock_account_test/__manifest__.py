@@ -4,16 +4,9 @@
     "name": "Romania - Stock Accounting Test",
     "license": "AGPL-3",
     "version": "13.0.1.0.0",
-    "author":     "Dorin Hongu,"
-    "Odoo Community Association (OCA)",
-
-
+    "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "category": "Warehouse",
-    "depends": ['purchase','stock_account','l10n_ro','l10n_ro_stock_account'],
-
-    'data': [
-
-    ],
-    'installable': True,
-
+    "depends": ["purchase", "stock_account", "l10n_ro", "l10n_ro_stock_account"],
+    "data": [],
+    "installable": True,
 }

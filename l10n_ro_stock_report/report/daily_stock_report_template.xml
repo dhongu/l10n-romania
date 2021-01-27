@@ -1,22 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
-
         <report
-                id="action_report_daily_stock_report"
-                string="Daily stock report"
-                model='l10n_ro.daily_stock_report'
-                report_type="qweb-pdf"
-                file="l10n_ro_stock_report.document_daily_stock_report"
-                name="l10n_ro_stock_report.document_daily_stock_report"
+            id="action_report_daily_stock_report"
+            string="Daily stock report"
+            model='l10n_ro.daily_stock_report'
+            report_type="qweb-pdf"
+            file="l10n_ro_stock_report.document_daily_stock_report"
+            name="l10n_ro_stock_report.document_daily_stock_report"
         />
-
-
         <template id="document_daily_stock_report">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.basic_layout">
-                        <t t-call="l10n_ro_config.report_address_company"/>
+                        <t t-call="l10n_ro_config.report_address_company" />
                         <div class="page">
                             <t t-if="o.date_from == o.date_to">
                                 <h1>Daily stock report</h1>
@@ -26,15 +23,15 @@
                             </t>
                             <h3>
                                 <span>From Date:</span>
-                                <span t-field="o.date_from" t-options='{"widget": "date"}'/>
+                                <span t-field="o.date_from" t-options='{"widget": "date"}' />
                                 <t t-if="o.date_from != o.date_to">
                                     <span>To date</span>
-                                    <span t-field="o.date_to"/>
+                                    <span t-field="o.date_to" />
                                 </t>
                             </h3>
                             <h3>
                                 <span>Location:</span>
-                                <span t-field="o.location_id"/>
+                                <span t-field="o.location_id" />
                             </h3>
                             <t t-if="o.mode=='ref'">
                                 <table class="table table-condensed table-bordered">
@@ -51,42 +48,42 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <t t-set="total" t-value="0.0"/>
-                                    <t t-set="total_in" t-value="0.0"/>
-                                    <t t-set="total_out" t-value="0.0"/>
+                                    <t t-set="total" t-value="0.0" />
+                                    <t t-set="total_in" t-value="0.0" />
+                                    <t t-set="total_out" t-value="0.0" />
                                     <tbody>
-
                                         <tr t-foreach="o.line_ref_ids" t-as="ref">
-                                            <t t-set="total" t-value="total + ref.amount"/>
+                                            <t t-set="total" t-value="total + ref.amount" />
                                             <t t-if="ref.type=='in'">
-                                                <t t-set="total_in" t-value="total_in + ref.amount"/>
+                                                <t t-set="total_in" t-value="total_in + ref.amount" />
                                             </t>
                                             <t t-if="ref.type=='out'">
-                                                <t t-set="total_out" t-value="total_out + ref.amount"/>
+                                                <t t-set="total_out" t-value="total_out + ref.amount" />
                                             </t>
                                             <td>
-                                                <span t-field="ref.type"/>
+                                                <span t-field="ref.type" />
                                             </td>
                                             <td>
-                                                <span t-field="ref.ref"/>
+                                                <span t-field="ref.ref" />
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="ref.amount"/>
+                                                <span t-field="ref.amount" />
                                             </td>
                                         </tr>
                                     </tbody>
-
                                 </table>
                                 <div class="row">
                                     <div class="col-4 pull-right">
                                         <table class="table table-condensed">
-                                             <tr class="border-black">
+                                            <tr class="border-black">
                                                 <td>
                                                     <strong>Total In</strong>
                                                 </td>
                                                 <td class="text-right">
-                                                    <span t-esc="total_in"
-                                                          t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                    <span
+                                                        t-esc="total_in"
+                                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                    />
                                                 </td>
                                             </tr>
                                             <tr class="border-black">
@@ -94,8 +91,10 @@
                                                     <strong>Total Out</strong>
                                                 </td>
                                                 <td class="text-right">
-                                                    <span t-esc="total_out"
-                                                          t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                    <span
+                                                        t-esc="total_out"
+                                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                    />
                                                 </td>
                                             </tr>
                                             <tr class="border-black">
@@ -103,8 +102,10 @@
                                                     <strong>Total</strong>
                                                 </td>
                                                 <td class="text-right">
-                                                    <span t-esc="total"
-                                                          t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                    <span
+                                                        t-esc="total"
+                                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                    />
                                                 </td>
                                             </tr>
                                         </table>
@@ -129,127 +130,127 @@
                                             </th>
                                         </tr>
                                     </thead>
-
-
-                                    <t t-set="total_general" t-value="0.0"/>
+                                    <t t-set="total_general" t-value="0.0" />
                                     <tbody>
-                                        <t t-set="total" t-value="0.0"/>
-                                        <t t-set="rows" t-value="0.0"/>
-                                        <tr t-foreach="o.line_product_ids.filtered(lambda x : x.type == 'balance')"
-                                            t-as="line">
-                                            <t t-set="total" t-value="total + line.amount"/>
-                                            <t t-set="rows" t-value="rows + 1"/>
+                                        <t t-set="total" t-value="0.0" />
+                                        <t t-set="rows" t-value="0.0" />
+                                        <tr
+                                            t-foreach="o.line_product_ids.filtered(lambda x : x.type == 'balance')"
+                                            t-as="line"
+                                        >
+                                            <t t-set="total" t-value="total + line.amount" />
+                                            <t t-set="rows" t-value="rows + 1" />
                                             <td>
-                                                <span t-field="line.type"/>
+                                                <span t-field="line.type" />
                                             </td>
                                             <td>
-                                                <span t-field="line.product_id"/>
+                                                <span t-field="line.product_id" />
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="line.quantity"/>
+                                                <span t-field="line.quantity" />
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="line.amount"/>
+                                                <span t-field="line.amount" />
                                             </td>
                                         </tr>
-                                        <t t-set="total_general" t-value="total_general + total"/>
+                                        <t t-set="total_general" t-value="total_general + total" />
                                         <tr t-if="total and rows>1" class="border-black">
                                             <td>
                                                 <strong>Total</strong>
                                             </td>
-                                            <td/>
-                                            <td/>
-
+                                            <td />
+                                            <td />
                                             <td class="text-right">
-                                                <span t-esc="total"
-                                                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                <span
+                                                    t-esc="total"
+                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                />
                                             </td>
                                         </tr>
-
-                                        <t t-set="total" t-value="0.0"/>
-                                        <t t-set="rows" t-value="0.0"/>
-                                        <tr t-foreach="o.line_product_ids.filtered(lambda x : x.type == 'in')"
-                                            t-as="line">
-                                            <t t-set="total" t-value="total + line.amount"/>
-                                            <t t-set="rows" t-value="rows + 1"/>
+                                        <t t-set="total" t-value="0.0" />
+                                        <t t-set="rows" t-value="0.0" />
+                                        <tr
+                                            t-foreach="o.line_product_ids.filtered(lambda x : x.type == 'in')"
+                                            t-as="line"
+                                        >
+                                            <t t-set="total" t-value="total + line.amount" />
+                                            <t t-set="rows" t-value="rows + 1" />
                                             <td>
-                                                <span t-field="line.type"/>
+                                                <span t-field="line.type" />
                                             </td>
                                             <td>
-                                                <span t-field="line.product_id"/>
+                                                <span t-field="line.product_id" />
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="line.quantity"/>
+                                                <span t-field="line.quantity" />
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="line.amount"/>
+                                                <span t-field="line.amount" />
                                             </td>
                                         </tr>
-
-
-                                        <t t-set="total_general" t-value="total_general + total"/>
+                                        <t t-set="total_general" t-value="total_general + total" />
                                         <tr t-if="total and rows>1" class="border-black">
                                             <td>
                                                 <strong>Total</strong>
                                             </td>
-                                            <td/>
-                                            <td/>
-
+                                            <td />
+                                            <td />
                                             <td class="text-right">
-                                                <span t-esc="total"
-                                                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                <span
+                                                    t-esc="total"
+                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                />
                                             </td>
                                         </tr>
-
-                                        <t t-set="total" t-value="0.0"/>
-                                        <t t-set="rows" t-value="0.0"/>
-                                        <tr t-foreach="o.line_product_ids.filtered(lambda x : x.type == 'out')"
-                                            t-as="line">
-                                            <t t-set="total" t-value="total + line.amount"/>
-                                            <t t-set="rows" t-value="rows + 1"/>
+                                        <t t-set="total" t-value="0.0" />
+                                        <t t-set="rows" t-value="0.0" />
+                                        <tr
+                                            t-foreach="o.line_product_ids.filtered(lambda x : x.type == 'out')"
+                                            t-as="line"
+                                        >
+                                            <t t-set="total" t-value="total + line.amount" />
+                                            <t t-set="rows" t-value="rows + 1" />
                                             <td>
-                                                <span t-field="line.type"/>
+                                                <span t-field="line.type" />
                                             </td>
                                             <td>
-                                                <span t-field="line.product_id"/>
+                                                <span t-field="line.product_id" />
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="line.quantity"/>
+                                                <span t-field="line.quantity" />
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="line.amount"/>
+                                                <span t-field="line.amount" />
                                             </td>
                                         </tr>
-
-                                        <t t-set="total_general" t-value="total_general + total"/>
+                                        <t t-set="total_general" t-value="total_general + total" />
                                         <tr t-if="total and rows>1" class="border-black">
                                             <td>
                                                 <strong>Total</strong>
                                             </td>
-                                            <td/>
-                                            <td/>
-
+                                            <td />
+                                            <td />
                                             <td class="text-right">
-                                                <span t-esc="total"
-                                                      t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                <span
+                                                    t-esc="total"
+                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                />
                                             </td>
                                         </tr>
-
-
                                     </tbody>
-
                                 </table>
                                 <div class="row">
                                     <div class="col-4 pull-right">
                                         <table class="table table-condensed">
-
                                             <tr class="border-black">
                                                 <td>
                                                     <strong>Total</strong>
                                                 </td>
                                                 <td class="text-right">
-                                                    <span t-esc="total_general"
-                                                          t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                    <span
+                                                        t-esc="total_general"
+                                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                    />
                                                 </td>
                                             </tr>
                                         </table>
@@ -261,7 +262,5 @@
                 </t>
             </t>
         </template>
-
-
     </data>
 </odoo>

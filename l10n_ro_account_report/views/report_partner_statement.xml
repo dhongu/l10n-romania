@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <openerp>
     <data>
         <template id="report_partner_statement">
@@ -6,35 +6,35 @@
                 <tr t-foreach="lines()" t-as="line">
                     <t t-call="web.external_layout">
                         <div class="page">
-
                             <h3>
                                 <div>Către,</div>
-                                <div t-esc="line['name']"/>
+                                <div t-esc="line['name']" />
                             </h3>
                             <h3>Extras de cont</h3>
-
-                            <br/>
+                            <br />
                             <div>
                                 <span>Conform dispozițiilor în vigoare, vă înștiinățm că, în evidența noastră
                                     contabilă
                                 </span>
                                 <t t-if="get_end_period(data)">
                                     <span>la data de</span>
-                                    <span t-esc="get_end_period(data)"/>
+                                    <span t-esc="get_end_period(data)" />
                                 </t>
                                 <t t-if="not get_end_period(data)">
                                     <span>la data de</span>
-                                    <span t-esc="data['date_stop']"/>
+                                    <span t-esc="data['date_stop']" />
                                 </t>
                                 <span>soldul contului</span>
-                                <span t-esc="line['code']"/>
+                                <span t-esc="line['code']" />
                                 <span>este</span>
                                 <t t-if="line['balance']&lt;0">
-                                    <span t-esc="formatLang(-1*line['balance'], currency_obj=res_company.currency_id)"/>
+                                    <span
+                                        t-esc="formatLang(-1*line['balance'], currency_obj=res_company.currency_id)"
+                                    />
                                     <span>(debitor).</span>
                                 </t>
                                 <t t-if="line['balance']&gt;0">
-                                    <span t-esc="formatLang(line['balance'], currency_obj=res_company.currency_id)"/>
+                                    <span t-esc="formatLang(line['balance'], currency_obj=res_company.currency_id)" />
                                     <span>(creditor).</span>
                                 </t>
                             </div>
@@ -45,33 +45,30 @@
                                 Prezentul extras de cont ține loc de conciliere conform procedurii arbitrale.
 
                             </div>
-                            <br/>
+                            <br />
                             <div>Conducătorul unității</div>
                             <div>.....................</div>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <hr/>
-                            <br/>
-                            <br/>
-
-
+                            <br />
+                            <br />
+                            <br />
+                            <hr />
+                            <br />
+                            <br />
                             <div style="page-break-inside: avoid">
                                 <div>
                                     <span>Unitatea</span>
-                                    <strong t-esc="line['name']"/>
+                                    <strong t-esc="line['name']" />
                                 </div>
-
                                 <div>
                                     <span>Nr. de înregistrare............../..........</span>
                                 </div>
-                                <br/>
-                                <br/>
+                                <br />
+                                <br />
                                 <h3>
                                     Către,
-                                    <div t-field="res_company.partner_id.name"/>
+                                    <div t-field="res_company.partner_id.name" />
                                 </h3>
-                                <br/>
+                                <br />
                                 <div>
                                     Confirmăm prezentul extras de cont pentru suma de .............................lei,
                                     pentru achitarea căreia (se va completa după caz):
@@ -87,17 +84,14 @@
                                     Obiecțiile noastre privind sumele din prezentul extras de cont sunt cuprinse în nota
                                     explicativa anexată.
                                 </div>
-                                <br/>
+                                <br />
                                 <div>Conducătorul unității</div>
                                 <div>.....................</div>
-                                <br/>
-
+                                <br />
                             </div>
-
                         </div>
                     </t>
                 </tr>
-
             </t>
         </template>
     </data>

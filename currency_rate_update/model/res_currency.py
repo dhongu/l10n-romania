@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2015 Deltatech All Rights Reserved
-#                    Dorin Hongu <dhongu(@)gmail(.)com       
+#                    Dorin Hongu <dhongu(@)gmail(.)com
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,17 +19,16 @@
 ##############################################################################
 
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class res_currency(models.Model):
-    _inherit = 'res.currency'
+    _inherit = "res.currency"
 
-    rate_inv = fields.Float( string='Inverse Rate',   compute="_compute_rate_inv", digits=(12, 4) )
-
+    rate_inv = fields.Float(string="Inverse Rate", compute="_compute_rate_inv", digits=(12, 4))
 
     @api.one
-    @api.depends('rate')
+    @api.depends("rate")
     def _compute_rate_inv(self):
         if self.rate != 0:
             self.rate_inv = 1 / self.rate
@@ -38,15 +36,13 @@ class res_currency(models.Model):
             self.rate_inv = 0
 
 
-
 class res_currency_rate(models.Model):
-    _inherit = 'res.currency.rate' 
+    _inherit = "res.currency.rate"
 
-    rate_inv = fields.Float( string='Inverse Rate',   compute="_compute_rate_inv", digits=(12, 4) )
-
+    rate_inv = fields.Float(string="Inverse Rate", compute="_compute_rate_inv", digits=(12, 4))
 
     @api.one
-    @api.depends('rate')
+    @api.depends("rate")
     def _compute_rate_inv(self):
         if self.rate != 0:
             self.rate_inv = 1 / self.rate

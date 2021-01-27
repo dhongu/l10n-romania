@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ©  2015 Forest and Biomass Services Romania
 # See README.rst file on addons root folder for license details
 
@@ -14,7 +13,7 @@ def _create_unaccent(cr, registry):
     # env.cr.execute("CREATE EXTENSION  IF NOT EXISTS unaccent;")
     with registry.cursor() as cr:
         env = api.Environment(cr, SUPERUSER_ID, {})
-        if tools.config['unaccent']:
+        if tools.config["unaccent"]:
             try:
                 with cr.savepoint():
                     cr.execute("CREATE EXTENSION IF NOT EXISTS  unaccent")

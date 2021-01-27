@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
-
         <!--
         <record id="view_category_property_form" model="ir.ui.view">
             <field name="name">product.category.stock.property.form.inherit</field>
@@ -12,32 +11,30 @@
                     <field name="property_stock_account_output_categ_id" position="after">
 						<field name="property_account_creditor_price_difference_categ_id"/>
 					</field>
-            
+
             </field>
         </record>
         -->
-
         <!--
         <record id="view_template_property_form" model="ir.ui.view">
             <field name="name">product.template.stock.property.form.inherit</field>
             <field name="model">product.template</field>
             <field name="inherit_id" ref="stock_account.view_template_property_form"/>
             <field name="arch" type="xml">
-             
+
                     <field name="property_stock_account_output" position="after">
 						<field name="property_account_creditor_price_difference_id"/>
 					</field>
-               
+
             </field>
         </record>
         -->
-
         <record id="action_propagate_account" model="ir.actions.server">
-			<field name="name">Propagate Account</field>
-			<field name="model_id" ref="model_product_category" />
-			<field name="state">code</field>
-			<field name="code">action = records.propagate_account()</field>
-			<field name="binding_model_id" ref="model_product_category" />
-		</record>
+            <field name="name">Propagate Account</field>
+            <field name="model_id" ref="model_product_category" />
+            <field name="state">code</field>
+            <field name="code">action = records.propagate_account()</field>
+            <field name="binding_model_id" ref="model_product_category" />
+        </record>
     </data>
 </odoo>

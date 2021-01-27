@@ -1,33 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record id="l10n_ro.tvac_19i" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_ro.ro_chart_template"/>
+        <field name="chart_template_id" ref="l10n_ro.ro_chart_template" />
         <field name="sequence">9</field>
         <field name="name">TVA colectat la incasare 19%</field>
         <field name="description">TVA colectat la incasare 19%</field>
         <field name="amount">19</field>
         <field name="amount_type">percent</field>
         <field name="type_tax_use">sale</field>
-        <field name="account_id" ref="l10n_ro.pcg_4427"/>
-        <field name="refund_account_id" ref="l10n_ro.pcg_4427"/>
-        <field name="tag_ids" eval="[(6,0,[ref('l10n_ro.tax_tag_sale_tvac_19')])]"/>
-        <field name="tax_group_id" ref="l10n_ro.tax_group_tva_19"/>
+        <field name="account_id" ref="l10n_ro.pcg_4427" />
+        <field name="refund_account_id" ref="l10n_ro.pcg_4427" />
+        <field name="tag_ids" eval="[(6,0,[ref('l10n_ro.tax_tag_sale_tvac_19')])]" />
+        <field name="tax_group_id" ref="l10n_ro.tax_group_tva_19" />
     </record>
-
-
     <record id="l10n_ro.tvad_19i" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_ro.ro_chart_template"/>
+        <field name="chart_template_id" ref="l10n_ro.ro_chart_template" />
         <field name="sequence">19</field>
         <field name="name">TVA deductibil la incsare 19%</field>
         <field name="description">TVA deductibil 19%</field>
         <field name="amount">19</field>
         <field name="amount_type">percent</field>
         <field name="type_tax_use">purchase</field>
-        <field name="account_id" ref="pcg_4426"/>
-        <field name="refund_account_id" ref="pcg_4426"/>
-        <field name="tag_ids" eval="[(6,0,[ref('l10n_ro.tax_tag_purchase_tvad_19')])]"/>
-        <field name="tax_group_id" ref="l10n_ro.tax_group_tva_0"/>
+        <field name="account_id" ref="pcg_4426" />
+        <field name="refund_account_id" ref="pcg_4426" />
+        <field name="tag_ids" eval="[(6,0,[ref('l10n_ro.tax_tag_purchase_tvad_19')])]" />
+        <field name="tax_group_id" ref="l10n_ro.tax_group_tva_0" />
     </record>
-
 </odoo>

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
@@ -7,22 +6,21 @@ import xml.etree.ElementTree as ET
 from collections import namedtuple
 from datetime import datetime
 
-from odoo import exceptions, SUPERUSER_ID, tools
-
+from odoo import SUPERUSER_ID, api, exceptions, fields, models, tools
 from odoo.tools.translate import _
-from odoo import fields, models, api
 
 unicode = str
 
-INTRASTAT_XMLNS = 'http://www.intrastat.ro/xml/InsSchema'
+INTRASTAT_XMLNS = "http://www.intrastat.ro/xml/InsSchema"
 
 
 class IntrastatDeclaration(models.TransientModel):
     """
     Intrastat XML Declaration
     """
+
     _name = "l10n_ro_intrastat.intrastat_xml_declaration"
-    _description = 'Intrastat XML Declaration'
+    _description = "Intrastat XML Declaration"
 
     # def _get_tax_code(self):
     #     company_id = self.env.user.company_id
@@ -32,7 +30,7 @@ class IntrastatDeclaration(models.TransientModel):
 
     def _get_def_monthyear(self):
         td = fields.Date.context_today(self)
-        return td.strftime('%Y'), td.strftime('%m')
+        return td.strftime("%Y"), td.strftime("%m")
 
     def _get_def_month(self):
         return self._get_def_monthyear()[1]
@@ -40,28 +38,42 @@ class IntrastatDeclaration(models.TransientModel):
     def _get_def_year(self):
         return self._get_def_monthyear()[0]
 
-    name = fields.Char('File Name', default='intrastat.xml')
-    month = fields.Selection([('01', 'January'), ('02', 'February'), ('03', 'March'),
-                              ('04', 'April'), ('05', 'May'), ('06', 'June'), ('07', 'July'),
-                              ('08', 'August'), ('09', 'September'), ('10', 'October'),
-                              ('11', 'November'), ('12', 'December')], 'Month', required=True, default=_get_def_month)
-    year = fields.Char('Year', size=4, required=True, default=_get_def_year)
+    name = fields.Char("File Name", default="intrastat.xml")
+    month = fields.Selection(
+        [
+            ("01", "January"),
+            ("02", "February"),
+            ("03", "March"),
+            ("04", "April"),
+            ("05", "May"),
+            ("06", "June"),
+            ("07", "July"),
+            ("08", "August"),
+            ("09", "September"),
+            ("10", "October"),
+            ("11", "November"),
+            ("12", "December"),
+        ],
+        "Month",
+        required=True,
+        default=_get_def_month,
+    )
+    year = fields.Char("Year", size=4, required=True, default=_get_def_year)
     # tax_code_id = fields.Many2one('account.tax.code', 'Company Tax Chart', default=_get_tax_code,
     #                               domain=[('parent_id', '=', False)], required=True)
-    type = fields.Selection([('arrivals', 'Arrivals'),
-                             ('dispatches', 'Dispatches')], default='arrivals',
-                            string='Type', required=True)
+    type = fields.Selection(
+        [("arrivals", "Arrivals"), ("dispatches", "Dispatches")], default="arrivals", string="Type", required=True
+    )
 
-    contact_id = fields.Many2one('res.partner', 'Contact', domain=[('is_company', '=', False)], required=True)
-    file_save = fields.Binary('Intrastat Report File', readonly=True)
-    state = fields.Selection([('draft', 'Draft'), ('download', 'Download')], string="State", default='draft')
-    cn8 = fields.Char('CN8', size=4, required=True, default='2018')
+    contact_id = fields.Many2one("res.partner", "Contact", domain=[("is_company", "=", False)], required=True)
+    file_save = fields.Binary("Intrastat Report File", readonly=True)
+    state = fields.Selection([("draft", "Draft"), ("download", "Download")], string="State", default="draft")
+    cn8 = fields.Char("CN8", size=4, required=True, default="2018")
 
     def _company_warning(self, translated_msg):
         """ Raise a error with custom message, asking user to configure company settings """
-        action_id = self.env('ir.model.data').xmlid_to_res_id('base.action_res_company_form')
-        raise exceptions.RedirectWarning(
-            translated_msg, action_id, _('Go to company configuration screen'))
+        action_id = self.env("ir.model.data").xmlid_to_res_id("base.action_res_company_form")
+        raise exceptions.RedirectWarning(translated_msg, action_id, _("Go to company configuration screen"))
 
     def create_xml(self):
         """Creates xml that is to be exported and sent to estate for partner vat intra.
@@ -70,127 +82,132 @@ class IntrastatDeclaration(models.TransientModel):
         """
         decl_datas = self
         company = self.env.user.company_id
-        if not (company.partner_id and company.partner_id.country_id and
-                company.partner_id.country_id.id):
+        if not (company.partner_id and company.partner_id.country_id and company.partner_id.country_id.id):
             self._company_warning(
-
-                _('The country of your company is not set, '
-                  'please make sure to configure it first.'),
+                _("The country of your company is not set, " "please make sure to configure it first."),
             )
 
         if not company.vat:
-            self._company_warning(
-
-                _('The VAT of your company is not set, '
-                  'please make sure to configure it first.'),
-            )
+            self._company_warning(_("The VAT of your company is not set, " "please make sure to configure it first."),)
         if len(decl_datas.year) != 4:
-            raise exceptions.Warning(_('Year must be 4 digits number (YYYY)'))
+            raise exceptions.Warning(_("Year must be 4 digits number (YYYY)"))
 
         # Create root declaration
-        if decl_datas.type == 'arrivals':
-            decl = ET.Element('InsNewArrival')
+        if decl_datas.type == "arrivals":
+            decl = ET.Element("InsNewArrival")
         else:
-            decl = ET.Element('InsNewDispatch')
+            decl = ET.Element("InsNewDispatch")
 
-        decl.set('SchemaVersion', '1.0')
-        decl.set('xmlns', INTRASTAT_XMLNS)
+        decl.set("SchemaVersion", "1.0")
+        decl.set("xmlns", INTRASTAT_XMLNS)
 
-        CodeVersion = ET.SubElement(decl, 'InsCodeVersions')
-        tag = ET.SubElement(CodeVersion, 'CountryVer')
-        tag.text = '2007'
-        tag = ET.SubElement(CodeVersion, 'EuCountryVer')
-        tag.text = '2007'
-        tag = ET.SubElement(CodeVersion, 'CnVer')
+        CodeVersion = ET.SubElement(decl, "InsCodeVersions")
+        tag = ET.SubElement(CodeVersion, "CountryVer")
+        tag.text = "2007"
+        tag = ET.SubElement(CodeVersion, "EuCountryVer")
+        tag.text = "2007"
+        tag = ET.SubElement(CodeVersion, "CnVer")
         tag.text = decl_datas.cn8
-        tag = ET.SubElement(CodeVersion, 'ModeOfTransportVer')
-        tag.text = '2005'
-        tag = ET.SubElement(CodeVersion, 'DeliveryTermsVer')
-        tag.text = '2011'
-        tag = ET.SubElement(CodeVersion, 'NatureOfTransactionAVer')
-        tag.text = '2010'
-        tag = ET.SubElement(CodeVersion, 'NatureOfTransactionBVer')
-        tag.text = '2010'
-        tag = ET.SubElement(CodeVersion, 'CountyVer')
-        tag.text = '1'
-        tag = ET.SubElement(CodeVersion, 'LocalityVer')
-        tag.text = '06/2006'
-        tag = ET.SubElement(CodeVersion, 'UnitVer')
-        tag.text = '1'
+        tag = ET.SubElement(CodeVersion, "ModeOfTransportVer")
+        tag.text = "2005"
+        tag = ET.SubElement(CodeVersion, "DeliveryTermsVer")
+        tag.text = "2011"
+        tag = ET.SubElement(CodeVersion, "NatureOfTransactionAVer")
+        tag.text = "2010"
+        tag = ET.SubElement(CodeVersion, "NatureOfTransactionBVer")
+        tag.text = "2010"
+        tag = ET.SubElement(CodeVersion, "CountyVer")
+        tag.text = "1"
+        tag = ET.SubElement(CodeVersion, "LocalityVer")
+        tag.text = "06/2006"
+        tag = ET.SubElement(CodeVersion, "UnitVer")
+        tag.text = "1"
 
         # Add Administration elements
-        header = ET.SubElement(decl, 'InsDeclarationHeader')
-        tag = ET.SubElement(header, 'VatNr')
+        header = ET.SubElement(decl, "InsDeclarationHeader")
+        tag = ET.SubElement(header, "VatNr")
         vat = company.vat
-        if vat[:2] == 'RO':
-            vat = '00' + vat[2:]
-        if vat[:2] != '00':
-            vat = '00' + vat
+        if vat[:2] == "RO":
+            vat = "00" + vat[2:]
+        if vat[:2] != "00":
+            vat = "00" + vat
 
         tag.text = vat
 
-        tag = ET.SubElement(header, 'FirmName')
+        tag = ET.SubElement(header, "FirmName")
         tag.text = company.partner_id.name
 
-        tag = ET.SubElement(header, 'RefPeriod')
-        tag.text = decl_datas.year + '-' + decl_datas.month
+        tag = ET.SubElement(header, "RefPeriod")
+        tag.text = decl_datas.year + "-" + decl_datas.month
 
-        last_name = decl_datas.contact_id.name.split(' ')[-1]
-        first_name = ' '.join(decl_datas.contact_id.name.split(' ')[:-1])
+        last_name = decl_datas.contact_id.name.split(" ")[-1]
+        first_name = " ".join(decl_datas.contact_id.name.split(" ")[:-1])
 
-        ContactPerson = ET.SubElement(header, 'ContactPerson')
-        tag = ET.SubElement(ContactPerson, 'LastName')
+        ContactPerson = ET.SubElement(header, "ContactPerson")
+        tag = ET.SubElement(ContactPerson, "LastName")
         tag.text = last_name
-        tag = ET.SubElement(ContactPerson, 'FirstName')
+        tag = ET.SubElement(ContactPerson, "FirstName")
         tag.text = first_name
-        tag = ET.SubElement(ContactPerson, 'Phone')
+        tag = ET.SubElement(ContactPerson, "Phone")
         tag.text = decl_datas.contact_id.phone
-        tag = ET.SubElement(ContactPerson, 'Position')
+        tag = ET.SubElement(ContactPerson, "Position")
         tag.text = decl_datas.contact_id.function
 
-        if decl_datas.type == 'arrivals':
+        if decl_datas.type == "arrivals":
             self.sudo()._get_lines(decl_datas, company, dispatchmode=False, decl=decl)
 
         else:
             self.sudo()._get_lines(decl_datas, company, dispatchmode=True, decl=decl)
 
         # Get xml string with declaration
-        data_file = ET.tostring(decl, encoding='utf-8', method='xml')
+        data_file = ET.tostring(decl, encoding="utf-8", method="xml")
 
         # change state of the wizard
         self.write(
-            {'name': 'intrastat_%s%s.xml' % (decl_datas.year, decl_datas.month),
-             'file_save': base64.encodebytes(data_file),
-             'state': 'download'}, )
+            {
+                "name": "intrastat_%s%s.xml" % (decl_datas.year, decl_datas.month),
+                "file_save": base64.encodebytes(data_file),
+                "state": "download",
+            },
+        )
         return {
-            'name': _('Save'),
-            'context': self.env.context,
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'l10n_ro_intrastat.intrastat_xml_declaration',
-
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'res_id': self.id,
+            "name": _("Save"),
+            "context": self.env.context,
+            "view_type": "form",
+            "view_mode": "form",
+            "res_model": "l10n_ro_intrastat.intrastat_xml_declaration",
+            "type": "ir.actions.act_window",
+            "target": "new",
+            "res_id": self.id,
         }
 
     def _get_lines(self, decl_datas, company, dispatchmode, decl):
-        intrastatcode_mod = self.env['account.intrastat.code']
-        invoiceline_mod = self.env['account.invoice.line']
-        product_mod = self.env['product.product']
-        currency_mod = self.env['res.currency']
+        intrastatcode_mod = self.env["account.intrastat.code"]
+        invoiceline_mod = self.env["account.invoice.line"]
+        product_mod = self.env["product.product"]
+        currency_mod = self.env["res.currency"]
 
         if dispatchmode:
-            mode1 = 'out_invoice'
-            mode2 = 'in_refund'
+            mode1 = "out_invoice"
+            mode2 = "in_refund"
 
         else:
-            mode1 = 'in_invoice'
-            mode2 = 'out_refund'
+            mode1 = "in_invoice"
+            mode2 = "out_refund"
 
-        intrastatkey = namedtuple("intrastatkey",
-                                  ['Cn8Code', 'SupplUnitCode', 'OriginCountry','Country',
-                                   'TrCodeA', 'TrCodeB', 'DeliveryTerms', 'ModeOfTransport'])
+        intrastatkey = namedtuple(
+            "intrastatkey",
+            [
+                "Cn8Code",
+                "SupplUnitCode",
+                "OriginCountry",
+                "Country",
+                "TrCodeA",
+                "TrCodeB",
+                "DeliveryTerms",
+                "ModeOfTransport",
+            ],
+        )
 
         entries = {}
 
@@ -205,7 +222,7 @@ class IntrastatDeclaration(models.TransientModel):
                 left join res_country countrypartner on countrypartner.id = res_partner.country_id
                 join product_product on inv_line.product_id=product_product.id
                 join product_template on product_product.product_tmpl_id=product_template.id
-                
+
             where
                 inv.state in ('open','paid')
                 and inv.company_id=%s
@@ -220,9 +237,18 @@ class IntrastatDeclaration(models.TransientModel):
                 and to_char(inv.date, 'MM')=%s
             """
 
-        self.env.cr.execute(sqlreq, (company.id, company.partner_id.country_id.code,
-                                     company.partner_id.country_id.code, mode1, mode2,
-                                     decl_datas.year, decl_datas.month))
+        self.env.cr.execute(
+            sqlreq,
+            (
+                company.id,
+                company.partner_id.country_id.code,
+                company.partner_id.country_id.code,
+                mode1,
+                mode2,
+                decl_datas.year,
+                decl_datas.month,
+            ),
+        )
         lines = self.env.cr.fetchall()
         invoicelines_ids = [rec[0] for rec in lines]
         invoicelines = invoiceline_mod.browse(invoicelines_ids)
@@ -239,7 +265,7 @@ class IntrastatDeclaration(models.TransientModel):
                 TrCodeB = intrastat_transaction.code
             else:
                 TrCodeA = intrastat_transaction.code
-                TrCodeB = ''
+                TrCodeB = ""
 
             if inv_line.invoice_id.transport_mode_id:
                 ModeOfTransport = inv_line.invoice_id.transport_mode_id.code
@@ -258,10 +284,9 @@ class IntrastatDeclaration(models.TransientModel):
                 Country = inv_line.invoice_id.partner_id.country_id.code
 
             if inv_line.product_id.country_id:
-                OriginCountry =inv_line.product_id.country_id.code
+                OriginCountry = inv_line.product_id.country_id.code
             else:
                 OriginCountry = Country
-
 
             # Check commodity codes
             intrastat_id = inv_line.product_id.get_intrastat_recursively()
@@ -271,17 +296,19 @@ class IntrastatDeclaration(models.TransientModel):
                 suppl_unit_code = intrastatcode.suppl_unit_code
             else:
                 raise exceptions.Warning(
-                    _('Product "%s" has no intrastat code, please configure it') %
-                    inv_line.product_id.display_name)
+                    _('Product "%s" has no intrastat code, please configure it') % inv_line.product_id.display_name
+                )
 
-            linekey = intrastatkey(Cn8Code=Cn8Code,
-                                   SupplUnitCode=suppl_unit_code,
-                                   OriginCountry=OriginCountry,
-                                   Country=Country,
-                                   TrCodeA=TrCodeA,
-                                   TrCodeB=TrCodeB,
-                                   DeliveryTerms=DeliveryTerms,
-                                   ModeOfTransport=ModeOfTransport)
+            linekey = intrastatkey(
+                Cn8Code=Cn8Code,
+                SupplUnitCode=suppl_unit_code,
+                OriginCountry=OriginCountry,
+                Country=Country,
+                TrCodeA=TrCodeA,
+                TrCodeB=TrCodeB,
+                DeliveryTerms=DeliveryTerms,
+                ModeOfTransport=ModeOfTransport,
+            )
 
             # We have the key
             # calculate amounts
@@ -291,19 +318,24 @@ class IntrastatDeclaration(models.TransientModel):
                 if inv_line.invoice_id.currency_id.id != company.currency_id.id:
                     # amount =  inv_line.invoice_id.currency_id.with_context(date=inv_line.invoice_id.date_invoice).compute(    company.currency_id,          amount)
                     amount = inv_line.invoice_id.currency_id.with_context(
-                        date=inv_line.invoice_id.date_invoice)._convert(
+                        date=inv_line.invoice_id.date_invoice
+                    )._convert(
                         from_amount=amount,
                         to_currency=company.currency_id,
                         company=company,
-                        date=inv_line.invoice_id.date_invoice
+                        date=inv_line.invoice_id.date_invoice,
                     )
             else:
                 amount = 0
             # product weight_net or weight
-            weight = (inv_line.product_id.weight or 0.0) * inv_line.uom_id._compute_quantity(inv_line.quantity,
-                                                                                             inv_line.product_id.uom_id)
-            if (not inv_line.uom_id.category_id or not inv_line.product_id.uom_id.category_id
-                    or inv_line.uom_id.category_id.id != inv_line.product_id.uom_id.category_id.id):
+            weight = (inv_line.product_id.weight or 0.0) * inv_line.uom_id._compute_quantity(
+                inv_line.quantity, inv_line.product_id.uom_id
+            )
+            if (
+                not inv_line.uom_id.category_id
+                or not inv_line.product_id.uom_id.category_id
+                or inv_line.uom_id.category_id.id != inv_line.product_id.uom_id.category_id.id
+            ):
                 supply_units = inv_line.quantity
             else:
                 supply_units = inv_line.quantity * inv_line.uom_id.factor
@@ -331,45 +363,45 @@ class IntrastatDeclaration(models.TransientModel):
             amounts = entries[linekey]
 
             if dispatchmode:
-                item = ET.SubElement(decl, 'InsDispatchItem')
+                item = ET.SubElement(decl, "InsDispatchItem")
             else:
-                item = ET.SubElement(decl, 'InsArrivalItem')
-            item.set('OrderNr', unicode(numlgn))
+                item = ET.SubElement(decl, "InsArrivalItem")
+            item.set("OrderNr", unicode(numlgn))
 
-            tag = ET.SubElement(item, 'Cn8Code')
+            tag = ET.SubElement(item, "Cn8Code")
             tag.text = unicode(linekey.Cn8Code)
 
-            tag = ET.SubElement(item, 'InvoiceValue')
+            tag = ET.SubElement(item, "InvoiceValue")
             tag.text = unicode(int(round(amounts[0], 0)))
 
-            tag = ET.SubElement(item, 'StatisticalValue')
+            tag = ET.SubElement(item, "StatisticalValue")
             tag.text = unicode(int(round(amounts[0], 0)))
 
-            tag = ET.SubElement(item, 'NetMass')
+            tag = ET.SubElement(item, "NetMass")
             tag.text = unicode(int(round(amounts[1], 0)))
 
             if linekey.SupplUnitCode:
-                SupplUnitsInfo = ET.SubElement(item, 'InsSupplUnitsInfo')
-                tag = ET.SubElement(SupplUnitsInfo, 'SupplUnitCode')
+                SupplUnitsInfo = ET.SubElement(item, "InsSupplUnitsInfo")
+                tag = ET.SubElement(SupplUnitsInfo, "SupplUnitCode")
                 tag.text = unicode(linekey.SupplUnitCode)
-                tag = ET.SubElement(SupplUnitsInfo, 'QtyInSupplUnits')
+                tag = ET.SubElement(SupplUnitsInfo, "QtyInSupplUnits")
                 tag.text = unicode(int(round(amounts[2], 0)))
 
-            tag = ET.SubElement(item, 'NatureOfTransactionACode')
+            tag = ET.SubElement(item, "NatureOfTransactionACode")
             tag.text = unicode(linekey.TrCodeA)
             if linekey.TrCodeB:
-                tag = ET.SubElement(item, 'NatureOfTransactionBCode')
+                tag = ET.SubElement(item, "NatureOfTransactionBCode")
                 tag.text = unicode(linekey.TrCodeB)
 
-            tag = ET.SubElement(item, 'DeliveryTermsCode')
+            tag = ET.SubElement(item, "DeliveryTermsCode")
             tag.text = unicode(linekey.DeliveryTerms)
 
-            tag = ET.SubElement(item, 'ModeOfTransportCode')
+            tag = ET.SubElement(item, "ModeOfTransportCode")
             tag.text = unicode(linekey.ModeOfTransport)
 
-            tag = ET.SubElement(item, 'CountryOfOrigin')
+            tag = ET.SubElement(item, "CountryOfOrigin")
             tag.text = unicode(linekey.OriginCountry)
 
-            tag = ET.SubElement(item, 'CountryOfConsignment')
+            tag = ET.SubElement(item, "CountryOfConsignment")
             tag.text = unicode(linekey.Country)
         return decl

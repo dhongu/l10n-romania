@@ -33,13 +33,19 @@ Countries where Storno accounting is mandatory or considered as best practice:
 * Slovenia
 * Ukraine
 
+
+Potrivit pct 63 alin (9) din OMFP 3055/2009 inregistrarea stornarii unei operatiuni contabile aferente exercitiului
+financiar curent se efectueaza fie prin corectarea cu semnul minus a operatiunii initiale (stornare in rosu),
+fie prin inregistrarea inversa a acesteia (stornare in negru),
+in functie de politica contabila si programele informatice utilizate.
+
 Configuration
 =============
 
 To configure this module:
 
 * Go to the menu Accounting/Invoicing > Configuration > Accounting > Journals
-* Open in form view the journals for which you want to allow storno 
+* Open in form view the journals for which you want to allow storno
 * Change the value of field Posting policy to "Storno"
 
 Usage

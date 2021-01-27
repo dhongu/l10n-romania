@@ -1,69 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
         <record id="view_location_form_inherit" model="ir.ui.view">
             <field name="name">stock.location.form.inherit</field>
             <field name="model">stock.location</field>
-            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="inherit_id" ref="stock.view_location_form" />
             <field name="arch" type="xml">
                 <field name="usage" position="after">
-                    <field name="merchandise_type"/>
+                    <field name="merchandise_type" />
                 </field>
                 <xpath expr="//group[@name='localization']" position="after">
-                    <group string="Accounting Information" >
-                        <field name="valuation_in_account_id"/>
-                        <field name="valuation_out_account_id"/>
-                        <field name="property_account_creditor_price_difference_location_id"/>
-                        <field name="property_account_income_location_id"/>
-                        <field name="property_account_expense_location_id"/>
-<!--                        <field name="property_stock_valuation_account_id"/-->
-
+                    <group string="Accounting Information">
+                        <field name="valuation_in_account_id" />
+                        <field name="valuation_out_account_id" />
+                        <field name="property_account_creditor_price_difference_location_id" />
+                        <field name="property_account_income_location_id" />
+                        <field name="property_account_expense_location_id" />
+                        <!--                        <field name="property_stock_valuation_account_id"/-->
                     </group>
                 </xpath>
             </field>
         </record>
-
         <record id="stock_account.view_location_form_inherit" model="ir.ui.view">
-            <field name="active" eval="False"/>
+            <field name="active" eval="False" />
         </record>
-
-
-
         <record id="view_picking_form_notice" model="ir.ui.view">
             <field name="name">stock.picking.form.notice</field>
             <field name="model">stock.picking</field>
-            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="inherit_id" ref="stock.view_picking_form" />
             <field name="arch" type="xml">
                 <field name="move_type" position="after">
-                    <field name="notice" attrs="{'invisible':[('picking_type_code', '=', 'internal')]}"/>
+                    <field name="notice" attrs="{'invisible':[('picking_type_code', '=', 'internal')]}" />
                 </field>
             </field>
         </record>
-
-
         <record id="view_picking_account_form" model="ir.ui.view">
             <field name="name">stock.picking.form.notice</field>
             <field name="model">stock.picking</field>
-            <field name="inherit_id" ref="stock.view_picking_form"/>
-            <field name="groups_id" eval="[ (4, ref('account.group_account_user'))]"/>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="groups_id" eval="[ (4, ref('account.group_account_user'))]" />
             <field name="arch" type="xml">
                 <page name="extra" position="after">
                     <page string="Accounting Entries">
-                        <field nolabel="1" name="acc_move_line_ids" readonly="1"/>
+                        <field nolabel="1" name="acc_move_line_ids" readonly="1" />
                     </page>
                 </page>
                 <xpath expr="//button[@name='action_show_details']" position="after">
-                    <field name="picking_type_code" invisible="1"/>
-                    <field name="price_unit" attrs="{'invisible': [('picking_type_code','!=','incoming')]}"/>
+                    <field name="picking_type_code" invisible="1" />
+                    <field name="price_unit" attrs="{'invisible': [('picking_type_code','!=','incoming')]}" />
                 </xpath>
             </field>
         </record>
-
-
-
-
         <!-- nu mai este necesar ca in 11 exista un buton pentru afisare note contabile -->
-<!--
+        <!--
         <record id="view_move_form" model="ir.ui.view">
             <field name="name">stock.move.form</field>
             <field name="model">stock.move</field>
@@ -78,22 +67,18 @@
             </field>
         </record>
 -->
-
-
         <record id="view_inventory_form_inherit" model="ir.ui.view">
             <field name="name">stock.inventory.form.inherit</field>
             <field name="model">stock.inventory</field>
-            <field name="inherit_id" ref="stock.view_inventory_form"/>
-            <field name="groups_id" eval="[ (4, ref('account.group_account_user'))]"/>
+            <field name="inherit_id" ref="stock.view_inventory_form" />
+            <field name="groups_id" eval="[ (4, ref('account.group_account_user'))]" />
             <field name="arch" type="xml">
                 <notebook position="inside">
                     <page string="Accounting Entries" attrs="{'invisible': [('state', '!=', 'done')]}">
-                        <field name="acc_move_line_ids" readonly="1"/>
+                        <field name="acc_move_line_ids" readonly="1" />
                     </page>
                 </notebook>
             </field>
         </record>
-
-
     </data>
 </odoo>

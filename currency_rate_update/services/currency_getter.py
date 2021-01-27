@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (c) 2009 CamptoCamp. All rights reserved.
@@ -21,45 +20,41 @@
 
 
 class AbstractClassError(Exception):
-
     def __str__(self):
-        return 'Abstract Class'
+        return "Abstract Class"
 
     def __repr__(self):
-        return 'Abstract Class'
+        return "Abstract Class"
 
 
 class AbstractMethodError(Exception):
-
     def __str__(self):
-        return 'Abstract Method'
+        return "Abstract Method"
 
     def __repr__(self):
-        return 'Abstract Method'
+        return "Abstract Method"
 
 
 class UnknowClassError(Exception):
-
     def __str__(self):
-        return 'Unknown Class'
+        return "Unknown Class"
 
     def __repr__(self):
-        return 'Unknown Class'
+        return "Unknown Class"
 
 
 class UnsuportedCurrencyError(Exception):
-
     def __init__(self, value):
         self.curr = value
 
     def __str__(self):
-        return 'Unsupported currency %s' % self.curr
+        return "Unsupported currency %s" % self.curr
 
     def __repr__(self):
-        return 'Unsupported currency %s' % self.curr
+        return "Unsupported currency %s" % self.curr
 
 
-class Currency_getter_factory():
+class Currency_getter_factory:
 
     """Factory pattern class that will return
     a currency getter class base on the name passed
@@ -69,23 +64,21 @@ class Currency_getter_factory():
 
     def register(self, class_name):
         allowed = [
-            'CH_ADMIN_getter',
-            'PL_NBP_getter',
-            'ECB_getter',
-            'GOOGLE_getter',
-            'YAHOO_getter',
-            'MX_BdM_getter',
-            'CA_BOC_getter',
-            'RO_BNR_getter',
+            "CH_ADMIN_getter",
+            "PL_NBP_getter",
+            "ECB_getter",
+            "GOOGLE_getter",
+            "YAHOO_getter",
+            "MX_BdM_getter",
+            "CA_BOC_getter",
+            "RO_BNR_getter",
         ]
         if class_name in allowed:
-            exec "from .update_service_%s import %s" % \
-                 (class_name.replace('_getter', ''), class_name)
+            exec "from .update_service_%s import %s" % (class_name.replace("_getter", ""), class_name)
             class_def = eval(class_name)
             return class_def()
         else:
             raise UnknowClassError
-
 
     def run_update_all_year(self):
         pass

@@ -1,23 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
         <record id="res_config_settings_view_form" model="ir.ui.view">
             <field name="name">res.config.settings.view.form.inherit.account</field>
             <field name="model">res.config.settings</field>
-            <field name="priority" eval="41"/>
-            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="priority" eval="41" />
+            <field name="inherit_id" ref="base.res_config_settings_view_form" />
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='module_currency_rate_live']" position="replace">
-                    <field name="module_currency_rate_update"/>
+                    <field name="module_currency_rate_update" />
                 </xpath>
-
                 <xpath expr="//div[hasclass('settings')]" position="inside">
-
-                    <div class="app_settings_block" data-string="Romania" string="Romania" data-key="l10n_ro_config"
-                         groups="account.group_account_manager">
-
+                    <div
+                        class="app_settings_block"
+                        data-string="Romania"
+                        string="Romania"
+                        data-key="l10n_ro_config"
+                        groups="account.group_account_manager"
+                    >
                         <h2>Accounting</h2>
-
                         <div class="row mt16 o_settings_container">
                             <!--
                             <div class="col-12 col-md-6 o_setting_box"
@@ -43,157 +44,182 @@
                                 </div>
                             </div>
                             -->
-
                             <div class="col-12 col-md-6 o_setting_box">
                                 <div class="o_setting_left_pane">
-                                    <field name="anglo_saxon_accounting"/>
+                                    <field name="anglo_saxon_accounting" />
                                 </div>
                                 <div class="o_setting_right_pane">
-                                    <label for="anglo_saxon_accounting"/>
+                                    <label for="anglo_saxon_accounting" />
                                 </div>
                             </div>
-
-
                             <div class="col-12 col-md-6 o_setting_box">
                                 <div class="o_setting_left_pane">
-                                    <field name="module_l10n_ro_invoice_report"/>
+                                    <field name="module_l10n_ro_invoice_report" />
                                 </div>
                                 <div class="o_setting_right_pane">
-                                    <label for="module_l10n_ro_invoice_report"/>
+                                    <label for="module_l10n_ro_invoice_report" />
                                 </div>
                             </div>
-
                             <div class="col-12 col-md-6 o_setting_box">
                                 <div class="o_setting_left_pane">
-                                    <field name="invoice_report_show_discount"/>
+                                    <field name="invoice_report_show_discount" />
                                 </div>
                                 <div class="o_setting_right_pane">
-                                    <label for="invoice_report_show_discount"/>
+                                    <label for="invoice_report_show_discount" />
                                 </div>
                             </div>
-
                             <div class="col-12 col-md-6 o_setting_box">
-                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_left_pane" />
                                 <div class="o_setting_right_pane">
-
                                     <div class="content-group">
                                         <div class="row mt16">
-                                            <label for="property_customer_advance_account_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_customer_advance_account_id"
-                                                   placeholder="Select 419"/>
+                                            <label
+                                                for="property_customer_advance_account_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field
+                                                name="property_customer_advance_account_id"
+                                                placeholder="Select 419"
+                                            />
                                         </div>
                                         <div class="row mt16">
-                                            <label for="property_supplier_advance_account_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_supplier_advance_account_id"
-                                                   placeholder="Select 4091"/>
+                                            <label
+                                                for="property_supplier_advance_account_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field
+                                                name="property_supplier_advance_account_id"
+                                                placeholder="Select 4091"
+                                            />
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-12 col-md-6 o_setting_box">
-                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_left_pane" />
                                 <div class="o_setting_right_pane">
                                     <span class="o_form_label">Special Fiscal position</span>
-                                    <span class="fa fa-lg fa-building-o" title="Values set here are company-specific."
-                                          aria-label="Values set here are company-specific."
-                                          groups="base.group_multi_company" role="img"/>
+                                    <span
+                                        class="fa fa-lg fa-building-o"
+                                        title="Values set here are company-specific."
+                                        aria-label="Values set here are company-specific."
+                                        groups="base.group_multi_company"
+                                        role="img"
+                                    />
                                     <div class="text-muted">
                                         Set the special fiscal position
                                     </div>
                                     <div class="content-group">
                                         <div class="row mt16">
-                                            <label for="property_vat_on_payment_position_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_vat_on_payment_position_id"/>
+                                            <label
+                                                for="property_vat_on_payment_position_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field name="property_vat_on_payment_position_id" />
                                         </div>
                                         <div class="row mt16">
-                                            <label for="property_inverse_taxation_position_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_inverse_taxation_position_id"/>
+                                            <label
+                                                for="property_inverse_taxation_position_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field name="property_inverse_taxation_position_id" />
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                         <h2>Stock Accounting</h2>
-
                         <div class="row mt16 o_settings_container">
                             <div class="col-12 col-lg-6 o_setting_box">
                                 <div class="o_setting_left_pane">
-                                    <field name="module_l10n_ro_stock"/>
+                                    <field name="module_l10n_ro_stock" />
                                 </div>
                                 <div class="o_setting_right_pane">
-                                    <label for="module_l10n_ro_stock"/>
-                                    <div class="content-group"
-                                         attrs="{'invisible': [('module_l10n_ro_stock', '=', False)]}">
+                                    <label for="module_l10n_ro_stock" />
+                                    <div
+                                        class="content-group"
+                                        attrs="{'invisible': [('module_l10n_ro_stock', '=', False)]}"
+                                    >
                                         <div class="row mt16">
-                                            <label for="property_stock_picking_receivable_account_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_stock_picking_receivable_account_id"
-                                                   placeholder="Select 418"/>
+                                            <label
+                                                for="property_stock_picking_receivable_account_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field
+                                                name="property_stock_picking_receivable_account_id"
+                                                placeholder="Select 418"
+                                            />
                                         </div>
                                         <div class="row mt16">
-                                            <label for="property_stock_picking_payable_account_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_stock_picking_payable_account_id"
-                                                   placeholder="Select 408"/>
+                                            <label
+                                                for="property_stock_picking_payable_account_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field
+                                                name="property_stock_picking_payable_account_id"
+                                                placeholder="Select 408"
+                                            />
                                         </div>
                                         <div class="row mt16">
-                                            <label for="property_stock_usage_giving_account_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_stock_usage_giving_account_id"
-                                                   placeholder="Select 8035"/>
+                                            <label
+                                                for="property_stock_usage_giving_account_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field
+                                                name="property_stock_usage_giving_account_id"
+                                                placeholder="Select 8035"
+                                            />
                                         </div>
                                         <div class="row mt16">
-                                            <label for="property_stock_picking_custody_account_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_stock_picking_custody_account_id" placeholder=""/>
+                                            <label
+                                                for="property_stock_picking_custody_account_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field name="property_stock_picking_custody_account_id" placeholder="" />
                                         </div>
                                         <div class="row mt16">
-                                            <label for="property_stock_transfer_account_id"
-                                                   class="col-lg-3 o_light_label"/>
-                                            <field name="property_stock_transfer_account_id" placeholder="Select 482"/>
+                                            <label
+                                                for="property_stock_transfer_account_id"
+                                                class="col-lg-3 o_light_label"
+                                            />
+                                            <field name="property_stock_transfer_account_id" placeholder="Select 482" />
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
-
                             <div class="col-12 col-lg-6 o_setting_box">
-                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_left_pane" />
                                 <div class="o_setting_right_pane">
-
                                     <div class="text-muted">
 
                                     </div>
                                     <div class="content-group">
                                         <div class="mt16">
                                             <div class="row mt16">
-                                                <label for="property_trade_discount_received_account_id"
-                                                       class="col-lg-3 o_light_label"/>
-                                                <field name="property_trade_discount_received_account_id"
-                                                       placeholder="Select 609"/>
+                                                <label
+                                                    for="property_trade_discount_received_account_id"
+                                                    class="col-lg-3 o_light_label"
+                                                />
+                                                <field
+                                                    name="property_trade_discount_received_account_id"
+                                                    placeholder="Select 609"
+                                                />
                                             </div>
                                             <div class="row mt16">
-                                                <label for="property_trade_discount_granted_account_id"
-                                                       class="col-lg-3 o_light_label"/>
-                                                <field name="property_trade_discount_granted_account_id"
-                                                       placeholder="Select 709"/>
+                                                <label
+                                                    for="property_trade_discount_granted_account_id"
+                                                    class="col-lg-3 o_light_label"
+                                                />
+                                                <field
+                                                    name="property_trade_discount_granted_account_id"
+                                                    placeholder="Select 709"
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <!--
                                                 <h2>Trade discounts</h2>
                                                 <div class="row mt16 o_settings_container">
@@ -222,12 +248,8 @@
                                                 </div>
                                         -->
                     </div>
-
                 </xpath>
-
             </field>
         </record>
-
-
     </data>
 </odoo>

@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record id="view_storage_sheet_report_form" model="ir.ui.view">
         <field name="name">l10n_ro.storage_sheet_report</field>
         <field name="model">l10n_ro.storage_sheet_report</field>
@@ -8,29 +7,29 @@
             <form string="Report Options">
                 <group name="filters">
                     <group>
-                        <field name="location_id"/>
-                        <field name="product_id"/>
+                        <field name="location_id" />
+                        <field name="product_id" />
                     </group>
                     <group name="date_range">
-                        <field name="date_range_id"
-                               domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
-                        <field name="date_from"/>
-                        <field name="date_to"/>
-                        <field name="company_id" invisible="1"/>
+                        <field
+                            name="date_range_id"
+                            domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="company_id" invisible="1" />
                     </group>
-
                 </group>
                 <footer>
-                    <button name="button_show" string="Show" type="object" default_focus="1" class="oe_highlight"/>
+                    <button name="button_show" string="Show" type="object" default_focus="1" class="oe_highlight" />
                     or
-                    <button name="button_print" string="Print" type="object"/>
+                    <button name="button_print" string="Print" type="object" />
                     or
-                    <button string="Cancel" class="oe_link" special="cancel"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
             </form>
         </field>
     </record>
-
     <record id="action_storage_sheet_report" model="ir.actions.act_window">
         <field name="name">Storage Sheet Report</field>
         <field name="res_model">l10n_ro.storage_sheet_report</field>
@@ -38,13 +37,13 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
-
-
-    <menuitem id="menu_storage_sheet_report" name="Storage Sheet Report"
-              action="action_storage_sheet_report"
-              parent="stock.menu_warehouse_report" groups="account.group_account_user"/>
-
-
+    <menuitem
+        id="menu_storage_sheet_report"
+        name="Storage Sheet Report"
+        action="action_storage_sheet_report"
+        parent="stock.menu_warehouse_report"
+        groups="account.group_account_user"
+    />
     <record id="action_storage_sheet_report_line" model="ir.actions.act_window">
         <field name="name">Storage Sheet Report</field>
         <field name="res_model">l10n_ro.storage_sheet_report.line</field>
@@ -52,37 +51,42 @@
         <field name="view_mode">tree,form</field>
         <field name="domain">[('report_id','=',active_id)]</field>
     </record>
-
     <record id="view_storage_sheet_report_line_tree" model="ir.ui.view">
         <field name="name">l10n_ro.storage_sheet_report.line</field>
         <field name="model">l10n_ro.storage_sheet_report.line</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="type"/>
-                <field name="product_id"/>
-                <field name="account_id"/>
-                <field name="ref"/>
-                <field name="date"/>
-                <field name="quantity" sum="1"/>
-                <field name="amount" sum="1"/>
-                <button name="action_valuation_at_date_details" aria-label="Valuation" title="Valuation" type="object" icon="fa-info-circle"/>
+                <field name="type" />
+                <field name="product_id" />
+                <field name="account_id" />
+                <field name="ref" />
+                <field name="date" />
+                <field name="quantity" sum="1" />
+                <field name="amount" sum="1" />
+                <button
+                    name="action_valuation_at_date_details"
+                    aria-label="Valuation"
+                    title="Valuation"
+                    type="object"
+                    icon="fa-info-circle"
+                />
             </tree>
         </field>
     </record>
-
     <record id="product_template_form_view" model="ir.ui.view">
-            <field name="name">product.template.common.form</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
-            <field name="arch" type="xml">
-                 <xpath expr="//div[@name='button_box']" position="inside">
-                    <button string="Storage Sheet"  name="%(action_storage_sheet_report)d" type="action" class="oe_stat_button" icon="fa-inbox"
-
-                    />
-                </xpath>
-            </field>
+        <field name="name">product.template.common.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    string="Storage Sheet"
+                    name="%(action_storage_sheet_report)d"
+                    type="action"
+                    class="oe_stat_button"
+                    icon="fa-inbox"
+                />
+            </xpath>
+        </field>
     </record>
-
-
-
 </odoo>

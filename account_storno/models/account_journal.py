@@ -8,11 +8,13 @@ from odoo import fields, models
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
-    posting_policy = fields.Selection(   [
-        ('contra', 'Contra (Standard Odoo)'),
-         ('storno', 'Storno (-)')
-    ],   default='contra',  string='Storno or Contra', required=True,
+    posting_policy = fields.Selection(
+        [("contra", "Contra (Standard Odoo)"), ("storno", "Storno (-)")],
+        default="contra",
+        string="Storno or Contra",
+        required=True,
         help="Storno allows minus postings, Refunds are posted on the "
-             "same journal with negative sign.\n"
-             "Contra doesn't allow negative posting. "
-             "Refunds are posted by swaping credit and debit side.")
+        "same journal with negative sign.\n"
+        "Contra doesn't allow negative posting. "
+        "Refunds are posted by swaping credit and debit side.",
+    )

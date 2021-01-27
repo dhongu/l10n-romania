@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-        <report
-            id="action_report_account_statement" 
-            model="account.bank.statement"
-            string="Cash / Bank Statement"
-            name="l10n_ro_account_report.report_statement"
-            file="l10n_ro_account_report.report_statement"
-            report_type="qweb-pdf"
-        />
-
-
-         <report
-            id="action_report_sale_purchase_journal"
-            model="account.invoice"
-            string="Report Sale/Purchase Journal"
-            name="l10n_ro_account_report.report_sale_purchase_journal"
-            file="l10n_ro_account_report.report_sale_purchase_journal"
-            report_type="qweb-pdf"
-            menu="False"
-        />
+    <report
+        id="action_report_account_statement"
+        model="account.bank.statement"
+        string="Cash / Bank Statement"
+        name="l10n_ro_account_report.report_statement"
+        file="l10n_ro_account_report.report_statement"
+        report_type="qweb-pdf"
+    />
+    <report
+        id="action_report_sale_purchase_journal"
+        model="account.invoice"
+        string="Report Sale/Purchase Journal"
+        name="l10n_ro_account_report.report_sale_purchase_journal"
+        file="l10n_ro_account_report.report_sale_purchase_journal"
+        report_type="qweb-pdf"
+        menu="False"
+    />
 </odoo>

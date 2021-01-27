@@ -5,18 +5,18 @@ from odoo import api, fields, models
 
 
 class AccountGroup(models.Model):
-    _inherit = 'account.group'
+    _inherit = "account.group"
 
-    group_child_ids = fields.One2many(comodel_name='account.group', inverse_name='parent_id', string='Child Groups')
-    level = fields.Integer(string='Level', compute='_compute_level', store=True)
+    group_child_ids = fields.One2many(comodel_name="account.group", inverse_name="parent_id", string="Child Groups")
+    level = fields.Integer(string="Level", compute="_compute_level", store=True)
     # path = fields.Char(compute='_compute_path', store=True)
-    account_ids = fields.One2many(comodel_name='account.account', inverse_name='group_id', string="Accounts")
-    compute_account_ids = fields.Many2many('account.account', compute='_compute_group_accounts',
-                                           string="Compute Accounts" )
-
+    account_ids = fields.One2many(comodel_name="account.account", inverse_name="group_id", string="Accounts")
+    compute_account_ids = fields.Many2many(
+        "account.account", compute="_compute_group_accounts", string="Compute Accounts"
+    )
 
     @api.multi
-    @api.depends('parent_id', 'parent_id.level')
+    @api.depends("parent_id", "parent_id.level")
     def _compute_level(self):
         for group in self:
             if not group.parent_id:
@@ -33,10 +33,10 @@ class AccountGroup(models.Model):
     #             rec.path = rec.code_prefix or '0'
 
     @api.multi
-    @api.depends('account_ids', 'group_child_ids', 'parent_id')
+    @api.depends("account_ids", "group_child_ids", "parent_id")
     def _compute_group_accounts(self):
-        account_obj = self.env['account.account']
-        #accounts = account_obj.search([])
+        account_obj = self.env["account.account"]
+        # accounts = account_obj.search([])
         for group in self:
             accounts = group.get_accounts()
             gr_acc = accounts.ids
@@ -53,13 +53,11 @@ class AccountGroup(models.Model):
 
             group.compute_account_ids = [(6, 0, gr_acc)]
 
-
     def get_accounts(self):
-        accounts = self.env['account.account']
+        accounts = self.env["account.account"]
         for group in self:
             if group.group_child_ids:
                 accounts |= group.group_child_ids.get_accounts()
             else:
                 accounts |= group.account_ids
-        return  accounts
-
+        return accounts

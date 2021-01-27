@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (c) 2009 CamptoCamp. All rights reserved.
@@ -25,4 +24,3 @@ from . import res_currency
 
 from . import currency_rate_update
 from . import company
-

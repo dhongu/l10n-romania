@@ -1,76 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <!-- TRIAL BALANCE -->
     <record id="trial_balance_wizard" model="ir.ui.view">
         <field name="name">Trial Balance</field>
         <field name="model">l10n.ro.report.trial.balance.wizard</field>
         <field name="arch" type="xml">
             <form>
-
-
                 <group name="filters">
                     <group name="date_range">
-                        <field name="date_range_id"
-                               domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
-                        <field name="date_from"/>
-                        <field name="date_to"/>
-                        <field name="refresh_report"/>
-
+                        <field
+                            name="date_range_id"
+                            domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="refresh_report" />
                     </group>
                     <group name="other_filters">
-                        <field name="target_move" widget="radio"/>
-                        <field name="hide_account_without_move"/>
-                        <field name="with_special_accounts"/>
+                        <field name="target_move" widget="radio" />
+                        <field name="hide_account_without_move" />
+                        <field name="with_special_accounts" />
                     </group>
                     <group>
-                        <field name="account_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="account_ids" widget="many2many_tags" options="{'no_create': True}" />
                     </group>
-
                 </group>
                 <group>
                     <group>
-                        <field name="col_opening_balance"/>
-                        <field name="col_opening"/>
-                        <field name="col_initial_balance"/>
-                        <field name="col_initial"/>
-                        <field name="col_period"/>
-                        <field name="col_cumulative"/>
-                        <field name="col_total"/>
-                        <field name="col_balance"/>
+                        <field name="col_opening_balance" />
+                        <field name="col_opening" />
+                        <field name="col_initial_balance" />
+                        <field name="col_initial" />
+                        <field name="col_period" />
+                        <field name="col_cumulative" />
+                        <field name="col_total" />
+                        <field name="col_balance" />
                     </group>
                     <group>
-                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" />
                     </group>
                 </group>
-
                 <footer>
                     <div>
-                        <button name="button_export_html" string="View"
-                                type="object" default_focus="1" class="oe_highlight"/>
+                        <button
+                            name="button_export_html"
+                            string="View"
+                            type="object"
+                            default_focus="1"
+                            class="oe_highlight"
+                        />
                         or
-                        <button name="button_export_pdf" string="Export PDF" type="object"/>
+                        <button name="button_export_pdf" string="Export PDF" type="object" />
                         or
-                        <button name="button_export_xlsx" string="Export XLSX" type="object"/>
+                        <button name="button_export_xlsx" string="Export XLSX" type="object" />
                         or
-                        <button string="Cancel" class="oe_link" special="cancel"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
                     </div>
                 </footer>
             </form>
         </field>
     </record>
-
-    <act_window id="action_trial_balance_wizard"
-                name="Trial Balance"
-                res_model="l10n.ro.report.trial.balance.wizard"
-                view_type="form"
-                view_mode="form"
-                view_id="l10n_ro_report_trial_balance"
-                target="new" />
-
-    <menuitem id="menu_action_l10n_ro_report_trial_balance" name="Trial Balance" action="action_trial_balance_wizard"
-              parent="l10n_ro.account_reports_ro_statements_menu"
-              groups="account.group_account_user"/>
-
-
+    <act_window
+        id="action_trial_balance_wizard"
+        name="Trial Balance"
+        res_model="l10n.ro.report.trial.balance.wizard"
+        view_type="form"
+        view_mode="form"
+        view_id="l10n_ro_report_trial_balance"
+        target="new"
+    />
+    <menuitem
+        id="menu_action_l10n_ro_report_trial_balance"
+        name="Trial Balance"
+        action="action_trial_balance_wizard"
+        parent="l10n_ro.account_reports_ro_statements_menu"
+        groups="account.group_account_user"
+    />
 </odoo>

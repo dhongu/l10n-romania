@@ -2,17 +2,14 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import random
-from odoo.tests import Form
-from odoo.tests.common import SavepointCase
+
+from odoo.tests import Form, tagged
+from odoo.tests.common import SavepointCase, TransactionCase
 
 # Generare note contabile la achizitie
 
-from odoo.tests.common import TransactionCase
 
-from odoo.tests import tagged
-
-
-@tagged('post_install', '-at_install')
+@tagged("post_install", "-at_install")
 class TestStockPurchase(SavepointCase):
     @classmethod
     def setUpClass(cls):
@@ -22,76 +19,42 @@ class TestStockPurchase(SavepointCase):
         account_type_exp = cls.env.ref("account.data_account_type_expenses")
         account_type_cur = cls.env.ref("account.data_account_type_current_assets")
 
-        cls.account_difference = cls.env["account.account"].search(
-            [("code", "=", "348000")], limit=1
-        )
+        cls.account_difference = cls.env["account.account"].search([("code", "=", "348000")], limit=1)
         if not cls.account_difference:
             cls.account_difference = cls.env["account.account"].create(
-                {
-                    "name": "Difference",
-                    "code": "348000",
-                    "user_type_id": account_type_cur.id,
-                    "reconcile": False,
-                }
+                {"name": "Difference", "code": "348000", "user_type_id": account_type_cur.id, "reconcile": False,}
             )
 
-        cls.account_expense = cls.env["account.account"].search(
-            [("code", "=", "607000")], limit=1
-        )
+        cls.account_expense = cls.env["account.account"].search([("code", "=", "607000")], limit=1)
         if not cls.account_expense:
             cls.account_expense = cls.env["account.account"].create(
-                {
-                    "name": "Expense",
-                    "code": "607000",
-                    "user_type_id": account_type_exp.id,
-                    "reconcile": False,
-                }
+                {"name": "Expense", "code": "607000", "user_type_id": account_type_exp.id, "reconcile": False,}
             )
 
         cls.account_income = cls.env["account.account"].search([("code", "=", "707000")])
         if not cls.account_income:
             cls.account_income = cls.env["account.account"].create(
-                {
-                    "name": "Income",
-                    "code": "707000",
-                    "user_type_id": account_type_inc.id,
-                    "reconcile": False,
-                }
+                {"name": "Income", "code": "707000", "user_type_id": account_type_inc.id, "reconcile": False,}
             )
 
         # se poate utiliza foarte bine si  408
         cls.account_input = cls.env["account.account"].search([("code", "=", "371000.i")])
         if not cls.account_input:
             cls.account_input = cls.env["account.account"].create(
-                {
-                    "name": "Income",
-                    "code": "371000.i",
-                    "user_type_id": account_type_cur.id,
-                    "reconcile": False,
-                }
+                {"name": "Income", "code": "371000.i", "user_type_id": account_type_cur.id, "reconcile": False,}
             )
 
         # se poate utiliza foarte bine si  418
         cls.account_output = cls.env["account.account"].search([("code", "=", "371000.o")])
         if not cls.account_output:
             cls.account_output = cls.env["account.account"].create(
-                {
-                    "name": "Output",
-                    "code": "371000.o",
-                    "user_type_id": account_type_cur.id,
-                    "reconcile": False,
-                }
+                {"name": "Output", "code": "371000.o", "user_type_id": account_type_cur.id, "reconcile": False,}
             )
 
         cls.account_valuation = cls.env["account.account"].search([("code", "=", "371000")])
         if not cls.account_valuation:
             cls.account_valuation = cls.env["account.account"].create(
-                {
-                    "name": "Valuation",
-                    "code": "371000",
-                    "user_type_id": account_type_cur.id,
-                    "reconcile": False,
-                }
+                {"name": "Valuation", "code": "371000", "user_type_id": account_type_cur.id, "reconcile": False,}
             )
 
         cls.uneligible_tax_account_id = cls.env.user.company_id.tax_cash_basis_journal_id.default_debit_account_id
@@ -141,15 +104,17 @@ class TestStockPurchase(SavepointCase):
             "property_stock_journal": stock_journal.id,
         }
 
-        domain = [('name', '=', 'l10n_ro_stock_account'), ('state', '=', 'installed')]
-        l10n_ro_stock_account_module = cls.env['ir.module.module'].search(domain)
+        domain = [("name", "=", "l10n_ro_stock_account"), ("state", "=", "installed")]
+        l10n_ro_stock_account_module = cls.env["ir.module.module"].search(domain)
         if l10n_ro_stock_account_module:
-            category_value.update({
-                "property_stock_account_input_categ_id": cls.account_valuation.id,
-                "property_stock_account_output_categ_id": cls.account_valuation.id,
-            })
+            category_value.update(
+                {
+                    "property_stock_account_input_categ_id": cls.account_valuation.id,
+                    "property_stock_account_output_categ_id": cls.account_valuation.id,
+                }
+            )
 
-        cls.category = cls.env["product.category"].search([('name', '=', 'TEST Marfa')])
+        cls.category = cls.env["product.category"].search([("name", "=", "TEST Marfa")])
         if not cls.category:
             cls.category = cls.env["product.category"].create(category_value)
         else:
@@ -166,7 +131,7 @@ class TestStockPurchase(SavepointCase):
                 "type": "product",
                 "categ_id": cls.category.id,
                 "invoice_policy": "delivery",
-                "list_price": cls.list_price_p1
+                "list_price": cls.list_price_p1,
             }
         )
         cls.product_2 = cls.env["product.product"].create(
@@ -175,7 +140,7 @@ class TestStockPurchase(SavepointCase):
                 "type": "product",
                 "categ_id": cls.category.id,
                 "invoice_policy": "delivery",
-                "list_price": cls.list_price_p2
+                "list_price": cls.list_price_p2,
             }
         )
 
@@ -207,26 +172,18 @@ class TestStockPurchase(SavepointCase):
         cls.adaos_p1_f = round(cls.val_p1_store - cls.val_p1_f, 2)
         cls.adaos_p2_f = round(cls.val_p2_store - cls.val_p2_f, 2)
 
-        picking_type_in = cls.env.ref('stock.picking_type_in')
+        picking_type_in = cls.env.ref("stock.picking_type_in")
         location = picking_type_in.default_location_dest_id
 
-        location_warehouse = location.copy({
-            'merchandise_type': 'warehouse',
-            'name':'TEST warehouse'
-        })
-        cls.picking_type_in_warehouse = picking_type_in.copy({
-            'default_location_dest_id': location_warehouse.id,
-            'name':'TEST Receptie in Depozit'
-        })
+        location_warehouse = location.copy({"merchandise_type": "warehouse", "name": "TEST warehouse"})
+        cls.picking_type_in_warehouse = picking_type_in.copy(
+            {"default_location_dest_id": location_warehouse.id, "name": "TEST Receptie in Depozit"}
+        )
 
-        location_store = location.copy({
-            'merchandise_type': 'store',
-            'name':'TEST store'
-        })
-        cls.picking_type_in_store = picking_type_in.copy({
-            'default_location_dest_id': location_store.id,
-            'name': 'TEST Receptie in magazin'
-        })
+        location_store = location.copy({"merchandise_type": "store", "name": "TEST store"})
+        cls.picking_type_in_store = picking_type_in.copy(
+            {"default_location_dest_id": location_store.id, "name": "TEST Receptie in magazin"}
+        )
 
     def create_po(self, notice=False, picking_type_in=None):
 
@@ -250,7 +207,7 @@ class TestStockPurchase(SavepointCase):
         po = po.save()
         po.button_confirm()
         self.picking = po.picking_ids[0]
-        self.picking.write({'notice': notice})
+        self.picking.write({"notice": notice})
         for move_line in self.picking.move_line_ids:
             if move_line.product_id == self.product_1:
                 move_line.write({"qty_done": self.qty_p1})
@@ -276,9 +233,7 @@ class TestStockPurchase(SavepointCase):
 
     def check_stock_valuation(self, val_p1, val_p2):
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
-        valuations = self.env["stock.move"].read_group(
-            domain, ["remaining_value:sum"], ["product_id"]
-        )
+        valuations = self.env["stock.move"].read_group(domain, ["remaining_value:sum"], ["product_id"])
         self.assertEqual(len(valuations), 2)
         for valuation in valuations:
             val = round(valuation["remaining_value"], 2)
@@ -293,10 +248,7 @@ class TestStockPurchase(SavepointCase):
         if not account:
             account = self.account_valuation
 
-        domain = [
-            ("product_id", "in", [self.product_1.id, self.product_2.id]),
-            ("account_id", '=', account.id)
-        ]
+        domain = [("product_id", "in", [self.product_1.id, self.product_2.id]), ("account_id", "=", account.id)]
         account_valuations = self.env["account.move.line"].read_group(
             domain, ["debit:sum", "credit:sum", "quantity:sum"], ["product_id"]
         )
@@ -417,7 +369,7 @@ class TestStockPurchase(SavepointCase):
 
         # in contabilitate valoarea este la pret de vanzare
         # todo: de corectat codul  pentru ca verificarea pica
-        #self.check_account_valuation(self.val_p1_store, self.val_p2_store)
+        # self.check_account_valuation(self.val_p1_store, self.val_p2_store)
 
         # verificare inregistrare diferenta de pret
         diff1 = round(self.tva_p1 - self.adaos_p1, 2)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
@@ -19,4 +18,4 @@
 #
 ##############################################################################
 
-#import stock_invoice_onshipping
+# import stock_invoice_onshipping

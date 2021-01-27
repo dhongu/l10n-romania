@@ -6,18 +6,18 @@
                 <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
                     <t t-call="web.internal_layout">
                         <div class="page">
-                            <div class="col-xs-3">
+                            <div class="col-3">
                                 <span t-field="o.company_id.name"/><br/>
                                 <span t-field="o.company_id.vat"/>
                                 <span t-field="o.company_id.partner_id.nrc"/><br/>
                                 <span t-field="o.company_id.street"/>
                                 <span t-field="o.company_id.city"/>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <h3>Borderou de achiziție</h3>
                                 <h4>nr. <span t-field="o.name"/><span> Data: </span><span t-field="o.date"/></h4>
                             </div>
-                            <div class="col-xs-3"></div>
+                            <div class="col-3"></div>
                             <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>
@@ -77,18 +77,18 @@
                         <!--<p>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</p>-->
                         <hr/>
                         <div class="page">
-                            <div class="col-xs-3">
+                            <div class="col-3">
                                 <span t-field="o.company_id.name"/><br/>
                                 <span t-field="o.company_id.vat"/>
                                 <span t-field="o.company_id.partner_id.nrc"/><br/>
                                 <span t-field="o.company_id.street"/>
                                 <span t-field="o.company_id.city"/>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <h3>Borderou de achiziție</h3>
                                 <h4>nr. <span t-field="o.name"/><span> Data: </span><span t-field="o.date"/></h4>
                             </div>
-                            <div class="col-xs-3"></div>
+                            <div class="col-3"></div>
                             <table class="table table-condensed table-bordered">
                                 <thead>
                                     <tr>

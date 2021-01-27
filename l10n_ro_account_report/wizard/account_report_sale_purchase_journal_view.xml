@@ -1,31 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record id="view_account_report_sale_purchase_journal_form" model="ir.ui.view">
         <field name="name">account.report.sale.purchase.journal.wizard</field>
         <field name="model">account.report.sale.purchase.journal</field>
         <field name="arch" type="xml">
-        <form string="Report Options">
-            <group name="main_info">
-                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
-                 <field name="journal"/>
-            </group>
-            <group name="filters">
-                <group name="date_range">
-                    <field name="date_range_id" domain="['|',('company_id','=',company_id), ('company_id','=',False)]"/>
-                    <field name="date_from"/>
-                    <field name="date_to"/>
+            <form string="Report Options">
+                <group name="main_info">
+                    <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" />
+                    <field name="journal" />
                 </group>
-            </group>
-            <footer>
-                 <button name="button_show" string="Show"  type="object" default_focus="1" class="oe_highlight"/>
+                <group name="filters">
+                    <group name="date_range">
+                        <field
+                            name="date_range_id"
+                            domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                    </group>
+                </group>
+                <footer>
+                 <button name="button_show" string="Show" type="object" default_focus="1" class="oe_highlight" />
                 or
                     <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
-        </form>
+            </form>
         </field>
     </record>
-
     <record id="action_account_report_sale_purchase_journal" model="ir.actions.act_window">
         <field name="name">Report Sale/Purchase Journal</field>
         <field name="res_model">account.report.sale.purchase.journal</field>
@@ -33,11 +34,10 @@
         <field name="view_mode">form</field>
         <field name="target">new</field>
     </record>
-
-
-    <menuitem id="menu_account_report_sale_purchase_journal" name="Report Sale/Purchase Journal"
-          action="action_account_report_sale_purchase_journal"
-           parent="l10n_ro.account_reports_ro_statements_menu" />
-
-
+    <menuitem
+        id="menu_account_report_sale_purchase_journal"
+        name="Report Sale/Purchase Journal"
+        action="action_account_report_sale_purchase_journal"
+        parent="l10n_ro.account_reports_ro_statements_menu"
+    />
 </odoo>

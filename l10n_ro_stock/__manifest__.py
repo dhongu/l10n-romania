@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
@@ -22,13 +21,13 @@
 ##############################################################################
 {
     "name": "Romania - Stock",
-    'version': '11.0.1.0.0',
-    'category': 'Localization',
+    "version": "11.0.1.0.0",
+    "category": "Localization",
     "author": "FOREST AND BIOMASS SERVICES ROMANIA	",
     "website": "http://www.forbiom.eu",
     "category": "Warehouse",
-    "depends": ['stock'],
-    'data': ['views/stock_view.xml', ],
-    'installable': True,
-    'active': False,
+    "depends": ["stock"],
+    "data": ["views/stock_view.xml",],
+    "installable": True,
+    "active": False,
 }

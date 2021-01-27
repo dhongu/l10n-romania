@@ -1,13 +1,16 @@
 <odoo>
-
-
-
-        <menuitem id="l10n_ro_declarations.menu_run_declaration" name="Run Declaration"
-              action="l10n_ro_declarations.action_run_declaration"
-              parent="l10n_ro.account_reports_ro_statements_menu" groups="account.group_account_user"/>
-
-        <menuitem id="l10n_ro_declarations.menu_action_declaration" name="Declarations"
-              action="l10n_ro_declarations.action_declaration_view_menu"
-              parent="l10n_ro.account_reports_ro_statements_menu" groups="account.group_account_user"/>
-
+    <menuitem
+        id="l10n_ro_declarations.menu_run_declaration"
+        name="Run Declaration"
+        action="l10n_ro_declarations.action_run_declaration"
+        parent="l10n_ro.account_reports_ro_statements_menu"
+        groups="account.group_account_user"
+    />
+    <menuitem
+        id="l10n_ro_declarations.menu_action_declaration"
+        name="Declarations"
+        action="l10n_ro_declarations.action_declaration_view_menu"
+        parent="l10n_ro.account_reports_ro_statements_menu"
+        groups="account.group_account_user"
+    />
 </odoo>

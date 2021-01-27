@@ -1,84 +1,80 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <template id="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_qweb">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="l10n_ro_report_trial_balance.internal_layout" t-lang='user.lang'>
-                    <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_base" t-lang='user.lang'/>
+                    <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_base" t-lang='user.lang' />
                 </t>
             </t>
         </t>
     </template>
-
     <template id="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_base">
         <!-- Defines global variables used by internal layout -->
         <t t-set="title">Trial Balance</t>
-        <t t-set="company_name" t-value="o.company_id.name"/>
+        <t t-set="company_name" t-value="o.company_id.name" />
         <div class="page data_table">
             <!-- Display filters -->
-            <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_filters"/>
-            <div class="page_break"/>
-
+            <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_filters" />
+            <div class="page_break" />
             <!-- Display account lines -->
             <table class="act_as_table data_table" style="width: 100% !important;">
                 <!-- Display account header -->
-                <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_lines_header"/>
+                <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_lines_header" />
                 <!-- Display each lines -->
-                <t t-set="padding" t-value="0"/>
-                <t t-set="firstdate" t-value="o.date_from.strftime('%Y-01-01')"/>
+                <t t-set="padding" t-value="0" />
+                <t t-set="firstdate" t-value="o.date_from.strftime('%Y-01-01')" />
                 <t t-if="o.line_account_ids">
-                    <t t-set="lines" t-value="o.line_account_ids"/>
+                    <t t-set="lines" t-value="o.line_account_ids" />
                     <t t-if="o.hide_account_without_move">
-                        <t t-set="lines"
-                           t-value="lines.filtered(lambda a: a.debit != 0 or a.credit != 0 or a.debit_total != 0 or a.credit_total != 0 )"/>
+                        <t
+                            t-set="lines"
+                            t-value="lines.filtered(lambda a: a.debit != 0 or a.credit != 0 or a.debit_total != 0 or a.credit_total != 0 )"
+                        />
                     </t>
                     <t t-foreach="lines" t-as="line">
-                        <t t-set="style" t-value="'font-size:10px; color: black;'"/>
-
+                        <t t-set="style" t-value="'font-size:10px; color: black;'" />
                         <t t-if="line.account_group_id and len(line.code) == 1">
-                            <t t-set="style" t-value="'font-size: 13px; font-weight: bold; color: blue;'"/>
-                            <t t-set="padding" t-value="0"/>
+                            <t t-set="style" t-value="'font-size: 13px; font-weight: bold; color: blue;'" />
+                            <t t-set="padding" t-value="0" />
                         </t>
                         <t t-if="line.account_group_id and len(line.code) == 2">
-                            <t t-set="style" t-value="'font-size: 12px; font-weight: bold; color: blue;'"/>
-                            <t t-set="padding" t-value="4"/>
+                            <t t-set="style" t-value="'font-size: 12px; font-weight: bold; color: blue;'" />
+                            <t t-set="padding" t-value="4" />
                         </t>
                         <t t-if="line.account_group_id and len(line.code) == 3">
-                            <t t-set="style" t-value="'font-size: 11px; font-weight: bold; color: blue;'"/>
-                            <t t-set="padding" t-value="8"/>
+                            <t t-set="style" t-value="'font-size: 11px; font-weight: bold; color: blue;'" />
+                            <t t-set="padding" t-value="8" />
                         </t>
                         <t t-if="line.account_group_id and len(line.code) == 4">
-                            <t t-set="style" t-value="'font-size: 11px; font-weight: bold; color: blue;'"/>
-                            <t t-set="padding" t-value="12"/>
+                            <t t-set="style" t-value="'font-size: 11px; font-weight: bold; color: blue;'" />
+                            <t t-set="padding" t-value="12" />
                         </t>
                         <t t-if="line.account_group_id and len(line.code) == 5">
-                            <t t-set="style" t-value="'font-size: 10px; font-weight: bold; color: blue;'"/>
-                            <t t-set="padding" t-value="16"/>
+                            <t t-set="style" t-value="'font-size: 10px; font-weight: bold; color: blue;'" />
+                            <t t-set="padding" t-value="16" />
                         </t>
                         <t t-if="line.account_group_id and ( not line.code or '-' in line.code)">
-                            <t t-set="style" t-value="'font-size: 14px; font-weight: bold; color: blue;'"/>
-                            <t t-set="padding" t-value="0"/>
+                            <t t-set="style" t-value="'font-size: 14px; font-weight: bold; color: blue;'" />
+                            <t t-set="padding" t-value="0" />
                         </t>
-
                         <t t-if="line.account_group_id">
-                            <t t-set="grcode" t-value="line.code"/>
+                            <t t-set="grcode" t-value="line.code" />
                         </t>
                         <t t-if="line.account_id and line.code and grcode and line.code.startswith(grcode)">
-                            <t t-set="padding" t-value="padding+4"/>
+                            <t t-set="padding" t-value="padding+4" />
                         </t>
-                        <t t-set="stylepading" t-value="'text-indent: ' + str(padding) + 'px;'"/>
+                        <t t-set="stylepading" t-value="'text-indent: ' + str(padding) + 'px;'" />
                         <!-- Display account group lines -->
-                        <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_line"/>
+                        <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_line" />
                         <t t-if="line.account_id and line.code and grcode and line.code.startswith(grcode)">
-                            <t t-set="padding" t-value="padding-4"/>
+                            <t t-set="padding" t-value="padding-4" />
                         </t>
                     </t>
                 </t>
             </table>
         </div>
     </template>
-
     <template id="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_filters">
         <table class="act_as_table data_table" style="width: 100% !important;">
             <tr class="act_as_row labels">
@@ -89,9 +85,9 @@
             <tr class="act_as_row">
                 <td class="act_as_cell">
                     From:
-                    <span t-field="o.date_from"/>
+                    <span t-field="o.date_from" />
                     To:
-                    <span t-field="o.date_to"/>
+                    <span t-field="o.date_to" />
                 </td>
                 <td class="act_as_cell">
                     <t t-if="o.only_posted_moves">All posted entries</t>
@@ -103,22 +99,15 @@
                 </td>
             </tr>
         </table>
-
     </template>
-
     <template id="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_lines_header">
         <!-- Display table headers for lines -->
-
         <thead class="act_as_thead">
-
-
             <tr class="act_as_row labels" style="font-size:12px; font-weight: bold;">
-
                 <!--## Code-->
                 <th class="act_as_cell" rowspan="2">Code</th>
                 <!--## Account-->
                 <th class="act_as_cell" rowspan="2">Account</th>
-
                 <t t-if="o.col_opening_balance">
                     <!--## Opening Balance-->
                     <th class="act_as_cell" colspan="2" style="width: 14%;">Opening Balance</th>
@@ -127,12 +116,10 @@
                     <!--## Opening-->
                     <th class="act_as_cell" colspan="2" style="width: 14%;">Opening</th>
                 </t>
-
                 <t t-if="o.col_initial_balance">
                     <!--## Initial balance-->
                     <th class="act_as_cell" colspan="2" style="width: 14%;">Initial Balance</th>
                 </t>
-
                 <t t-if="o.col_initial">
                     <!--## Initial -->
                     <th class="act_as_cell" colspan="2" style="width: 14%;">Initial</th>
@@ -154,8 +141,6 @@
                     <th class="act_as_cell" colspan="2" style="width: 14%;">Balance</th>
                 </t>
             </tr>
-
-
             <tr class="act_as_row labels" style="font-size:12px; font-weight: bold;">
                 <t t-if="o.col_opening_balance">
                     <!--## Opening Balance Debit-->
@@ -181,23 +166,18 @@
                     <!--## Initial balance-->
                     <th class="act_as_cell" style="width: 7%;">Credit</th>
                 </t>
-
                 <t t-if="o.col_period">
                     <!--## Current Debit-->
                     <th class="act_as_cell" style="width: 7%;">Debit</th>
                     <!--## Current Credit-->
                     <th class="act_as_cell" style="width: 7%;">Credit</th>
                 </t>
-
-
                 <t t-if="o.col_cumulative">
                     <!--## cumulative Debit-->
                     <th class="act_as_cell" style="width: 7%;">Debit</th>
                     <!--## cumulative Credit-->
                     <th class="act_as_cell" style="width: 7%;">Credit</th>
                 </t>
-
-
                 <t t-if="o.col_total">
                     <!--## Total Debit-->
                     <th class="act_as_cell" style="width: 7%;">Debit</th>
@@ -211,271 +191,329 @@
                     <th class="act_as_cell" style="width: 7%;">Credit</th>
                 </t>
             </tr>
-
         </thead>
     </template>
-
     <template id="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_line">
         <!-- # line -->
         <tr class="act_as_row lines">
             <t t-if="line.account_id">
-                <t t-set="res_model" t-value="'account.account'"/>
-                <t t-set="res_id" t-value="line.account_id.id"/>
-                <t t-set="accounts" t-value="line.account_id._ids"/>
+                <t t-set="res_model" t-value="'account.account'" />
+                <t t-set="res_id" t-value="line.account_id.id" />
+                <t t-set="accounts" t-value="line.account_id._ids" />
             </t>
             <t t-if="line.account_group_id">
-                <t t-set="res_model" t-value="'account.group'"/>
-                <t t-set="res_id" t-value="line.account_group_id.id"/>
-                <t t-set="accounts" t-value="line.account_group_id.compute_account_ids._ids"/>
+                <t t-set="res_model" t-value="'account.group'" />
+                <t t-set="res_id" t-value="line.account_group_id.id" />
+                <t t-set="accounts" t-value="line.account_group_id.compute_account_ids._ids" />
             </t>
             <!--## Code-->
             <td class="act_as_cell left">
                 <span>
-                    <a t-att-data-active-id="res_id"
-                       t-att-data-res-model="res_model"
-                       class="o_l10n_ro_report_trial_balance_web_action">
-                        <div t-att-style="style+stylepading" t-raw="line.code"/>
+                    <a
+                        t-att-data-active-id="res_id"
+                        t-att-data-res-model="res_model"
+                        class="o_l10n_ro_report_trial_balance_web_action"
+                    >
+                        <div t-att-style="style+stylepading" t-raw="line.code" />
                     </a>
                 </span>
             </td>
             <!--## Account-->
             <td class="act_as_cell left">
                 <span>
-                    <a t-att-data-active-id="res_id"
-                       t-att-data-res-model="res_model"
-                       class="o_l10n_ro_report_trial_balance_web_action">
-                        <div t-att-style="style+stylepading" t-raw="line.name"/>
+                    <a
+                        t-att-data-active-id="res_id"
+                        t-att-data-res-model="res_model"
+                        class="o_l10n_ro_report_trial_balance_web_action"
+                    >
+                        <div t-att-style="style+stylepading" t-raw="line.name" />
                     </a>
                 </span>
             </td>
             <t t-if="o.col_opening_balance">
                 <!--## Opening Debit-->
                 <td class="act_as_cell amount">
-
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                                 ('date', '&lt;', firstdate),
-                                                ('debit', '&lt;&gt;', 0)]"/>
+                                                ('debit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.debit_opening_balance"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.debit_opening_balance" />
                         </a>
                     </span>
-
                 </td>
                 <!--## Opening Credit-->
                 <td class="act_as_cell amount">
-
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                                 ('date', '&lt;', firstdate),
-                                                ('credit', '&lt;&gt;', 0)]"/>
+                                                ('credit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.credit_opening_balance"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.credit_opening_balance" />
                         </a>
                     </span>
-
                 </td>
             </t>
             <t t-if="o.col_opening">
                 <!--## Opening Debit-->
                 <td class="act_as_cell amount">
-
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&lt;', firstdate),
-                                            ('debit', '&lt;&gt;', 0)]"/>
+                                            ('debit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.debit_opening"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.debit_opening" />
                         </a>
                     </span>
-
                 </td>
                 <!--## Opening Credit-->
                 <td class="act_as_cell amount">
-
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&lt;', firstdate),
-                                            ('credit', '&lt;&gt;', 0)]"/>
+                                            ('credit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.credit_opening"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.credit_opening" />
                         </a>
                     </span>
-
                 </td>
             </t>
             <t t-if="o.col_initial_balance">
                 <!--## Initial balance debit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&gt;=', firstdate),
                                             ('date', '&lt;', line.report_id.date_from),
-                                            ('debit', '&lt;&gt;', 0)]"/>
+                                            ('debit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.debit_initial_balance"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.debit_initial_balance" />
                         </a>
                     </span>
                 </td>
                 <!--## Initial credit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&gt;=', firstdate),
                                             ('date', '&lt;', line.report_id.date_from),
-                                            ('credit', '&lt;&gt;', 0)]"/>
+                                            ('credit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.credit_initial_balance"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.credit_initial_balance" />
                         </a>
                     </span>
                 </td>
             </t>
-
             <t t-if="o.col_initial">
                 <!--## Initial debit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&gt;=', firstdate),
                                             ('date', '&lt;', str(line.report_id.date_from)),
-                                            ('debit', '&lt;&gt;', 0)]"/>
+                                            ('debit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.debit_initial"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.debit_initial" />
                         </a>
                     </span>
                 </td>
                 <!--## Initial credit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&gt;=', firstdate),
                                             ('date', '&lt;', str(line.report_id.date_from)),
-                                            ('credit', '&lt;&gt;', 0)]"/>
+                                            ('credit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.credit_initial"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.credit_initial" />
                         </a>
                     </span>
                 </td>
             </t>
-
             <t t-if="o.col_period">
                 <!--## Current Debit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&gt;=', str(line.report_id.date_from)),
                                             ('date', '&lt;=', str(line.report_id.date_to)),
-                                            ('debit', '&lt;&gt;', 0)]"/>
+                                            ('debit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.debit"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.debit" />
                         </a>
                     </span>
                 </td>
                 <!--## Current Credit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&gt;=', str(line.report_id.date_from)),
                                             ('date', '&lt;=', str(line.report_id.date_to)),
-                                            ('credit', '&lt;&gt;', 0)]"/>
+                                            ('credit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.credit"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.credit" />
                         </a>
                     </span>
                 </td>
             </t>
-
-
-
             <t t-if="o.col_cumulative">
                 <!--## cumulative Debit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&gt;=', firstdate),
                                             ('date', '&lt;=', str(line.report_id.date_to)),
-                                            ('debit', '&lt;&gt;', 0)]"/>
+                                            ('debit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.debit_cumulative"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.debit_cumulative" />
                         </a>
                     </span>
                 </td>
                 <!--## cumulative Credit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&gt;=', firstdate),
                                             ('date', '&lt;=', str(line.report_id.date_to)),
-                                            ('credit', '&lt;&gt;', 0)]"/>
+                                            ('credit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.credit_cumulative"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.credit_cumulative" />
                         </a>
                     </span>
                 </td>
             </t>
-
             <t t-if="o.col_total">
                 <!--## Total Debit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                             ('date', '&lt;=', str(line.report_id.date_to)),
-                                            ('debit', '&lt;&gt;', 0)]"/>
+                                            ('debit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.debit_total"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.debit_total" />
                         </a>
                     </span>
                 </td>
                 <!--## Total Credit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                              ('date', '&lt;=', str(line.report_id.date_to)),
-                                            ('credit', '&lt;&gt;', 0)]"/>
+                                            ('credit', '&lt;&gt;', 0)]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.credit_total"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.credit_total" />
                         </a>
                     </span>
                 </td>
@@ -483,28 +521,38 @@
             <t t-if="o.col_balance">
                 <!--## Balance Debit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                                  ('date', '&lt;=', str(line.report_id.date_to)),
-                                                ]"/>
+                                                ]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
-                            <span t-field="line.debit_balance"/>
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
+                            <span t-field="line.debit_balance" />
                         </a>
                     </span>
                 </td>
                 <!--## Balance Credit-->
                 <td class="act_as_cell amount">
-                    <t t-set="domain" t-value="[('account_id', 'in', accounts),
+                    <t
+                        t-set="domain"
+                        t-value="[('account_id', 'in', accounts),
                                                  ('date', '&lt;=', str(line.report_id.date_to)),
-                                                ]"/>
+                                                ]"
+                    />
                     <span>
-                        <a t-att-data-res-model="'account.move.line'"
-                           t-att-data-domain="domain"
-                           t-att-style="style"
-                           class="o_l10n_ro_report_trial_balance_web_action_multi">
+                        <a
+                            t-att-data-res-model="'account.move.line'"
+                            t-att-data-domain="domain"
+                            t-att-style="style"
+                            class="o_l10n_ro_report_trial_balance_web_action_multi"
+                        >
                             <span t-field="line.credit_balance" t-options='{"widget": "float", "precision": 2}' />
                         </a>
                     </span>
@@ -512,5 +560,4 @@
             </t>
         </tr>
     </template>
-
 </odoo>

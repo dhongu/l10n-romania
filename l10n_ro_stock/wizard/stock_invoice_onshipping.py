@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #     Author:  Fekete Mihai <mihai.fekete@forbiom.eu>
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import api, fields, models, _
+from odoo import _, api, fields, models
 
 
 class stock_invoice_onshipping(models.TransientModel):
@@ -30,15 +29,15 @@ class stock_invoice_onshipping(models.TransientModel):
     def _get_invoice_date(self, cr, uid, context=None):
         if context is None:
             context = {}
-        res_ids = context and context.get('active_ids', [])
-        pick_obj = self.pool.get('stock.picking')
+        res_ids = context and context.get("active_ids", [])
+        pick_obj = self.pool.get("stock.picking")
         pickings = pick_obj.browse(cr, uid, res_ids, context=context)
         vals = []
         pick = pickings and pickings[0]
         return pick.date
 
-    invoice_date = fields.Date('Invoice Date', default=_get_invoice_date)
-    
+    invoice_date = fields.Date("Invoice Date", default=_get_invoice_date)
+
     # metoda asta o fi buna pentru stornarea in rosu !
     """
     def _get_journal_type(self, cr, uid, context=None):
@@ -68,13 +67,8 @@ class stock_invoice_onshipping(models.TransientModel):
             journal_type = 'sale'
         return journal_type
     """
-    
 
-
-
-
-    
-    # metoda asta este identica cu cea standard 
+    # metoda asta este identica cu cea standard
     """
     def create_invoice(self, cr, uid, ids, context=None):
         context = dict(context or {})
