@@ -69,7 +69,7 @@ def handle_common_subfields(transaction, subfields):
     # REMI: Remitter information (text entered by other party on trans.):
     if not transaction.get("name"):
         transaction["name"] = ""
-    transaction["ref"] = ""
+    transaction["payment_ref"] = ""
     for counterpart_field in [
         "21",
         "23",
@@ -78,7 +78,7 @@ def handle_common_subfields(transaction, subfields):
             transaction["name"] += "".join(x for x in subfields[counterpart_field] if x)
     for counterpart_field in ["24", "25", "26", "27"]:
         if counterpart_field in subfields:
-            transaction["ref"] += "/".join(x for x in subfields[counterpart_field] if x)
+            transaction["payment_ref"] += "/".join(x for x in subfields[counterpart_field] if x)
     # Get transaction reference subfield (might vary):
     # if transaction.get('ref') in subfields:
     #     transaction['ref'] = ''.join(subfields[transaction['ref']])
@@ -171,6 +171,7 @@ class MT940Parser(MT940):
             "092": "Transfer ING Business ",
             "050": "Incasare ",
             "164": "Cumparare POS ",
+            '110': 'Diverse'
         }
         operation = data[:3]
         subfields = False
@@ -180,40 +181,16 @@ class MT940Parser(MT940):
 
         transaction = self.current_transaction
         if operation in operations:
-            transaction["name"] = operations[operation]
+             transaction["name"] = operations[operation] + ' ' + transaction['unique_import_id']
 
-        if operation == "110":
-            if len(data) >= 65:
-                transaction["payment_ref"] = data[4:65]
-            if len(data) >= 130:
-                transaction["partner_name"] = data[65:130]
-            if len(data) >= 195:
-                transaction["ref"] = data[130:195]
+        codewords = ["6", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "32", "33", "37", "50", "92"]
+        subfields = get_subfields(data, codewords)
+
+        # If we have no subfields, set message to whole of data passed:
+        if not subfields:
+            transaction["payment_ref"] = data
         else:
-            codewords = [
-                "6",
-                "20",
-                "21",
-                "22",
-                "23",
-                "24",
-                "25",
-                "26",
-                "27",
-                "28",
-                "29",
-                "32",
-                "33",
-                "37",
-                "50",
-                "92",
-            ]
-            subfields = get_subfields(data, codewords)
+            handle_common_subfields(transaction, subfields)
 
-            # If we have no subfields, set message to whole of data passed:
-            if not subfields:
-                transaction["payment_ref"] = data
-            else:
-                handle_common_subfields(transaction, subfields)
         # Prevent handling tag 86 later for non transaction details:
         self.current_transaction = None
