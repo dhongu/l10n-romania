@@ -18,7 +18,7 @@ class PosSession(models.Model):
     def _accumulate_amounts(self, data):
         data = super(PosSession, self)._accumulate_amounts(data)
 
-        amounts = {"amount": 0.0, "amount_converted": 0.0}
+        amounts = lambda: {"amount": 0.0, "amount_converted": 0.0}
 
         if self.company_id.romanian_accounting:
             # nu trebuie generate note contabile  pentru ca acestea sunt generate in miscarea de stoc
