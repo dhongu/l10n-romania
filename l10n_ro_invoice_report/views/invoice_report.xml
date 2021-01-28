@@ -176,7 +176,7 @@
                     <div name="invoice_address" />
                     <h2>
                         <span
-                            t-if="o.move_type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')"
+                            t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
                         >
                         Invoice
                         </span>
@@ -196,7 +196,7 @@
                         Factură Storno Anulată
                         </span>
                         <span
-                            t-if="o.move_type == 'out_refund' and (o.state == 'open' or o.state == 'paid')"
+                            t-if="o.move_type == 'out_refund' and o.state == 'posted'"
                         >
                         Factură Storno
                         </span>
