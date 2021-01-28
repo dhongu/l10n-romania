@@ -26,7 +26,8 @@
                         <strong>Address:</strong>
                         <address
                             t-field="res_company.partner_id"
-                            t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'
+                            t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true,
+                            "no_tag_br": true}'
                         />
                     </div>
                     <t t-set="partner_id" t-value="res_company.partner_id" />
@@ -50,7 +51,8 @@
                         <strong>Address:</strong>
                         <address
                             t-field="o.commercial_partner_id"
-                            t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true, "no_tag_br": true}'
+                            t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": true,
+                            "no_tag_br": true}'
                         />
                     </div>
                     <t t-set="partner_id" t-value="o.commercial_partner_id" />
@@ -171,24 +173,33 @@
             </xpath>
             <xpath expr="//div[hasclass('page')]" position="replace">
                 <div class="page">
-                    <!--                    <div name="invoice_address"/>-->
+                    <div name="invoice_address" />
                     <h2>
-
                         <span
-                            t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
-                        >Invoice</span>
+                            t-if="o.move_type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')"
+                        >
+                        Invoice
+                        </span>
                         <span
                             t-if="o.move_type == 'out_invoice' and o.state == 'draft'"
-                        >Draft Invoice</span>
+                        >
+                        Draft Invoice
+                        </span>
                         <span
                             t-if="o.move_type == 'out_invoice' and o.state == 'cancel'"
-                        >Cancelled Invoice</span>
+                        >
+                        Cancelled Invoice
+                        </span>
                         <span
                             t-if="o.move_type == 'out_refund' and o.state == 'cancel'"
-                        >Factură Storno Anulată</span>
+                        >
+                        Factură Storno Anulată
+                        </span>
                         <span
-                            t-if="o.move_type == 'out_refund' and (o.state == 'posted')"
-                        >Factură Storno</span>
+                            t-if="o.move_type == 'out_refund' and (o.state == 'open' or o.state == 'paid')"
+                        >
+                        Factură Storno
+                        </span>
                         <span t-if="o.move_type == 'in_refund'">Supplier Refund</span>
                         <span t-if="o.move_type == 'in_invoice'">Supplier Invoice</span>
                         <t t-if="o.name">
@@ -199,9 +210,13 @@
                         </t>
                         <span>/</span>
                         <span t-field="o.invoice_date" />
-
+                        <!--
+                        <div t-if="o.move_type == 'out_refund'">
+                            <span>Refunding invoice</span>
+                            <span t-field="o.origin"/>
+                        </div>
+                        -->
                     </h2>
-
                     <t t-set="nr_crt" t-value="1" />
                     <t t-if="not currency_id">
                         <t t-set="currency_id" t-value="o.currency_id" />
@@ -278,7 +293,8 @@
                                             t-if="quantity"
                                             id="quantity"
                                             t-esc="quantity"
-                                            t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'
+                                            t-options='{"widget": "float",
+                                            "decimal_precision": "Product Unit of Measure"}'
                                         />
                                         <span
                                             t-field="l.product_uom_id"
@@ -520,19 +536,11 @@
                         <small
                             t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'"
                         >
-                            <div
-                            >Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,
-                                with subsequent amendments and OMPF 2226/2006
+                            <div>
+                            Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance
+                                no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and
+                                subsequent amendments.
                             </div>
-                            <!--                            <t t-if="not res_company.stamp_image">-->
-                            <!--                                <div>Invoice valid without signature and stamp according to art.V, paragraph (2) of-->
-                            <!--                                    Ordinance no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal-->
-                            <!--                                    Code and subsequent amendments.-->
-                            <!--                                </div>-->
-                            <!--                            </t>-->
-                            <!--                            <img t-if="res_company.stamp_image"-->
-                            <!--                                 t-att-src="'data:image/png;base64,%s' % res_company.stamp_image"-->
-                            <!--                                 style="max-height: 150px; "/>-->
                         </small>
                         <div t-if="o.commercial_partner_id.info_for_invoice">
                             <span t-field="o.commercial_partner_id.info_for_invoice" />

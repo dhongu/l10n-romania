@@ -79,7 +79,9 @@
                             </h2>
                             <table class="table table-sm o_main_table">
                                 <tr>
-                                    <td t-if="o.payment_type=='inbound'">Received from:</td>
+                                    <td
+                                        t-if="o.payment_type=='inbound'"
+                                    >Received from:</td>
                                     <td t-if="o.payment_type=='outbound'">For:</td>
                                     <td t-if="o.payment_type=='transfer'">To:</td>
                                     <td>
