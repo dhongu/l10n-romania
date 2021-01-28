@@ -78,7 +78,9 @@ def handle_common_subfields(transaction, subfields):
             transaction["name"] += "".join(x for x in subfields[counterpart_field] if x)
     for counterpart_field in ["24", "25", "26", "27"]:
         if counterpart_field in subfields:
-            transaction["payment_ref"] += "/".join(x for x in subfields[counterpart_field] if x)
+            transaction["payment_ref"] += "/".join(
+                x for x in subfields[counterpart_field] if x
+            )
     # Get transaction reference subfield (might vary):
     # if transaction.get('ref') in subfields:
     #     transaction['ref'] = ''.join(subfields[transaction['ref']])
@@ -171,7 +173,7 @@ class MT940Parser(MT940):
             "092": "Transfer ING Business ",
             "050": "Incasare ",
             "164": "Cumparare POS ",
-            '110': 'Diverse'
+            "110": "Diverse",
         }
         operation = data[:3]
         subfields = False
@@ -181,9 +183,28 @@ class MT940Parser(MT940):
 
         transaction = self.current_transaction
         if operation in operations:
-             transaction["name"] = operations[operation] + ' ' + transaction['unique_import_id']
+            transaction["name"] = (
+                operations[operation] + " " + transaction["unique_import_id"]
+            )
 
-        codewords = ["6", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "32", "33", "37", "50", "92"]
+        codewords = [
+            "6",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "32",
+            "33",
+            "37",
+            "50",
+            "92",
+        ]
         subfields = get_subfields(data, codewords)
 
         # If we have no subfields, set message to whole of data passed:
