@@ -2,11 +2,7 @@
 <templates>
     <t t-name="trial_balance.buttons">
         <t t-foreach="buttons" t-as="button">
-            <button
-                type="button"
-                class="btn btn-primary btn-sm"
-                t-att-action="button.action"
-            >
+            <button type="button" class="btn btn-primary btn-sm" t-att-action="button.action">
                 <t t-esc="button.name" />
             </button>
         </t>

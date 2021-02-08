@@ -140,10 +140,7 @@
                                         <span t-field="o.partner_id.name" />
                                     </td>
                                 </tr>
-                                <t
-                                    t-set="currency"
-                                    t-value="o.currency_id or user.company_id.currency_id"
-                                />
+                                <t t-set="currency" t-value="o.currency_id or user.company_id.currency_id" />
                                 <tr>
                                     <td>Amount:</td>
                                     <td>
@@ -158,9 +155,7 @@
                                     <td>Amount (in words):</td>
                                     <td>
                                         <!--                                        <span t-esc="convert(abs(o.amount))"/>-->
-                                        <span
-                                            t-esc="currency.amount_to_text(o.amount)"
-                                        />
+                                        <span t-esc="currency.amount_to_text(o.amount)" />
                                     </td>
                                 </tr>
                                 <tr>

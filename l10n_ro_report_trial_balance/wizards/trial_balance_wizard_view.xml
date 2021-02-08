@@ -22,11 +22,7 @@
                         <field name="with_special_accounts" />
                     </group>
                     <group>
-                        <field
-                            name="account_ids"
-                            widget="many2many_tags"
-                            options="{'no_create': True}"
-                        />
+                        <field name="account_ids" widget="many2many_tags" options="{'no_create': True}" />
                     </group>
                 </group>
                 <group>
@@ -41,11 +37,7 @@
                         <field name="col_balance" />
                     </group>
                     <group>
-                        <field
-                            name="company_id"
-                            options="{'no_create': True}"
-                            groups="base.group_multi_company"
-                        />
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" />
                     </group>
                 </group>
                 <footer>
@@ -58,11 +50,7 @@
                             class="oe_highlight"
                         />
                         or
-                        <button
-                            name="button_export_pdf"
-                            string="Export PDF"
-                            type="object"
-                        />
+                        <button name="button_export_pdf" string="Export PDF" type="object" />
 <!--                        or
                         <button
                             name="button_export_xlsx"

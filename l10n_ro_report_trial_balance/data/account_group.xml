@@ -303,18 +303,14 @@
               </record>
       -->
         <record model="account.group" id="account_group_1_14">
-            <field
-                name="name"
-            >Castiguri sau pierderi legate de emiterea,rascumpararea,vânzarea,cedarea cu titlu
+            <field name="name">Castiguri sau pierderi legate de emiterea,rascumpararea,vânzarea,cedarea cu titlu
                 gratuit sau anularea instrum.de capitaluri proprii
             </field>
             <field name="code_prefix">14</field>
             <field name="parent_id" ref="account_group_1" />
         </record>
         <record model="account.group" id="account_group_1_141">
-            <field
-                name="name"
-            >Câstiguri legate de vânzarea sau anularea instrumentelor de capitaluri proprii.
+            <field name="name">Câstiguri legate de vânzarea sau anularea instrumentelor de capitaluri proprii.
             </field>
             <field name="code_prefix">141</field>
             <field name="parent_id" ref="account_group_1_14" />
@@ -555,9 +551,7 @@
             <field name="parent_id" ref="account_group_1_16" />
         </record>
         <record model="account.group" id="account_group_1_168">
-            <field
-                name="name"
-            >Dobanzi aferente imprumuturilor și datoriilor asimilate</field>
+            <field name="name">Dobanzi aferente imprumuturilor și datoriilor asimilate</field>
             <field name="code_prefix">168</field>
             <field name="parent_id" ref="account_group_1_16" />
         </record>
@@ -600,9 +594,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_1_169">
-            <field
-                name="name"
-            >Prime privind rambursarea obligatiunilor și a altor datorii</field>
+            <field name="name">Prime privind rambursarea obligatiunilor și a altor datorii</field>
             <field name="code_prefix">169</field>
             <field name="parent_id" ref="account_group_1_16" />
         </record>
@@ -641,16 +633,12 @@
             <field name="parent_id" ref="account_group_2_20" />
         </record>
         <record model="account.group" id="account_group_2_205">
-            <field
-                name="name"
-            >Concesiuni, brevete, licențe, mărci comerciale, drepturi și active similare</field>
+            <field name="name">Concesiuni, brevete, licențe, mărci comerciale, drepturi și active similare</field>
             <field name="code_prefix">205</field>
             <field name="parent_id" ref="account_group_2_20" />
         </record>
         <record model="account.group" id="account_group_2_206">
-            <field
-                name="name"
-            >Active necorporale de explorare și evaluare a resurselor minerale</field>
+            <field name="name">Active necorporale de explorare și evaluare a resurselor minerale</field>
             <field name="code_prefix">206</field>
             <field name="parent_id" ref="account_group_2_20" />
         </record>
@@ -740,9 +728,7 @@
         </record>
 -->
         <record model="account.group" id="account_group_2_214">
-            <field
-                name="name"
-            >Mobilier, aparatură birotică, echipamente de protecție a valorilor umane și materiale și
+            <field name="name">Mobilier, aparatură birotică, echipamente de protecție a valorilor umane și materiale și
                 alte active corporale
             </field>
             <field name="code_prefix">214</field>
@@ -754,9 +740,7 @@
             <field name="parent_id" ref="account_group_2_21" />
         </record>
         <record model="account.group" id="account_group_2_216">
-            <field
-                name="name"
-            >Active corporale de explorare și evaluare a resurselor minerale</field>
+            <field name="name">Active corporale de explorare și evaluare a resurselor minerale</field>
             <field name="code_prefix">216</field>
             <field name="parent_id" ref="account_group_2_21" />
         </record>
@@ -771,32 +755,24 @@
             <field name="parent_id" ref="account_group_2" />
         </record>
         <record model="account.group" id="account_group_2_223">
-            <field
-                name="name"
-            >Instalații tehnice și mijloace de transport în curs de aprovizionare</field>
+            <field name="name">Instalații tehnice și mijloace de transport în curs de aprovizionare</field>
             <field name="code_prefix">223</field>
             <field name="parent_id" ref="account_group_2_22" />
         </record>
         <record model="account.group" id="account_group_2_224">
-            <field
-                name="name"
-            >Mobilier, aparatură birotică, echipamente de protecție a valorilor umane și
+            <field name="name">Mobilier, aparatură birotică, echipamente de protecție a valorilor umane și
                 materiale și alte active corporale în curs de aprovizionare
             </field>
             <field name="code_prefix">224</field>
             <field name="parent_id" ref="account_group_2_22" />
         </record>
         <record model="account.group" id="account_group_2_227">
-            <field
-                name="name"
-            >Active biologice productive în curs de aprovizionare</field>
+            <field name="name">Active biologice productive în curs de aprovizionare</field>
             <field name="code_prefix">227</field>
             <field name="parent_id" ref="account_group_2_22" />
         </record>
         <record model="account.group" id="account_group_2_23">
-            <field
-                name="name"
-            >Imobilizari în curs și avansuri pentru imobilizari</field>
+            <field name="name">Imobilizari în curs și avansuri pentru imobilizari</field>
             <field name="code_prefix">23</field>
             <field name="parent_id" ref="account_group_2" />
         </record>
@@ -916,9 +892,7 @@
         </record>
 -->
         <record model="account.group" id="account_group_2_269">
-            <field
-                name="name"
-            >Vărsaminte de efectuat pentru imobilizari financiare</field>
+            <field name="name">Vărsaminte de efectuat pentru imobilizari financiare</field>
             <field name="code_prefix">269</field>
             <field name="parent_id" ref="account_group_2_26" />
         </record>
@@ -1067,16 +1041,12 @@
         </record>
 -->
         <record model="account.group" id="account_group_2_29">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea sau pierderea de valoare a imobilizarilor</field>
+            <field name="name">Ajustări pentru deprecierea sau pierderea de valoare a imobilizarilor</field>
             <field name="code_prefix">29</field>
             <field name="parent_id" ref="account_group_2" />
         </record>
         <record model="account.group" id="account_group_2_290">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea imobilizarilor necorporale</field>
+            <field name="name">Ajustări pentru deprecierea imobilizarilor necorporale</field>
             <field name="code_prefix">290</field>
             <field name="parent_id" ref="account_group_2_29" />
         </record>
@@ -1114,9 +1084,7 @@
         </record>
 -->
         <record model="account.group" id="account_group_2_291">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea imobilizarilor corporale</field>
+            <field name="name">Ajustări pentru deprecierea imobilizarilor corporale</field>
             <field name="code_prefix">291</field>
             <field name="parent_id" ref="account_group_2_29" />
         </record>
@@ -1173,9 +1141,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_2_293">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea imobilizarilor în curs de execuție</field>
+            <field name="name">Ajustări pentru deprecierea imobilizarilor în curs de execuție</field>
             <field name="code_prefix">293</field>
             <field name="parent_id" ref="account_group_2_29" />
         </record>
@@ -1195,9 +1161,7 @@
         </record>
 -->
         <record model="account.group" id="account_group_2_296">
-            <field
-                name="name"
-            >Ajustări pentru pierderea de valoare a imobilizarilor financiare</field>
+            <field name="name">Ajustări pentru pierderea de valoare a imobilizarilor financiare</field>
             <field name="code_prefix">296</field>
             <field name="parent_id" ref="account_group_2_29" />
         </record>
@@ -1261,9 +1225,7 @@
 
 -->
         <record model="account.group" id="account_group_3">
-            <field
-                name="name"
-            >Clasa 3. Conturi de stocuri și productie în curs de execuție</field>
+            <field name="name">Clasa 3. Conturi de stocuri și productie în curs de execuție</field>
             <field name="code_prefix">3</field>
             <field name="parent_id" ref="account_group_1__5" />
         </record>
@@ -1358,16 +1320,12 @@
             <field name="parent_id" ref="account_group_3_32" />
         </record>
         <record model="account.group" id="account_group_3_323">
-            <field
-                name="name"
-            >Materiale de natura obiectelor de inventar în curs de aprovizionare</field>
+            <field name="name">Materiale de natura obiectelor de inventar în curs de aprovizionare</field>
             <field name="code_prefix">323</field>
             <field name="parent_id" ref="account_group_3_32" />
         </record>
         <record model="account.group" id="account_group_3_326">
-            <field
-                name="name"
-            >Active biologice de natura stocurilor în curs de aprovizionare</field>
+            <field name="name">Active biologice de natura stocurilor în curs de aprovizionare</field>
             <field name="code_prefix">326</field>
             <field name="parent_id" ref="account_group_3_32" />
         </record>
@@ -1442,9 +1400,7 @@
             <field name="parent_id" ref="account_group_3_35" />
         </record>
         <record model="account.group" id="account_group_3_356">
-            <field
-                name="name"
-            >Active biologice de natura stocurilor aflate la terți</field>
+            <field name="name">Active biologice de natura stocurilor aflate la terți</field>
             <field name="code_prefix">356</field>
             <field name="parent_id" ref="account_group_3_35" />
         </record>
@@ -1469,9 +1425,7 @@
             <field name="parent_id" ref="account_group_3_36" />
         </record>
         <record model="account.group" id="account_group_3_368">
-            <field
-                name="name"
-            >Diferențe de preț la active biologice de natura stocurilor</field>
+            <field name="name">Diferențe de preț la active biologice de natura stocurilor</field>
             <field name="code_prefix">368</field>
             <field name="parent_id" ref="account_group_3_36" />
         </record>
@@ -1506,9 +1460,7 @@
             <field name="parent_id" ref="account_group_3_38" />
         </record>
         <record model="account.group" id="account_group_3_39">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea stocurilor și productiei în curs de execuție</field>
+            <field name="name">Ajustări pentru deprecierea stocurilor și productiei în curs de execuție</field>
             <field name="code_prefix">39</field>
             <field name="parent_id" ref="account_group_3" />
         </record>
@@ -1542,9 +1494,7 @@
                         </record>
         -->
         <record model="account.group" id="account_group_3_393">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea producției în curs de execuție</field>
+            <field name="name">Ajustări pentru deprecierea producției în curs de execuție</field>
             <field name="code_prefix">393</field>
             <field name="parent_id" ref="account_group_3_39" />
         </record>
@@ -1584,9 +1534,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_3_395">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea stocurilor aflate la terți</field>
+            <field name="name">Ajustări pentru deprecierea stocurilor aflate la terți</field>
             <field name="code_prefix">395</field>
             <field name="parent_id" ref="account_group_3_39" />
         </record>
@@ -1650,9 +1598,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_3_396">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea activelor biologice de natura stocurilor</field>
+            <field name="name">Ajustări pentru deprecierea activelor biologice de natura stocurilor</field>
             <field name="code_prefix">396</field>
             <field name="parent_id" ref="account_group_3_39" />
         </record>
@@ -1789,9 +1735,7 @@
             <field name="parent_id" ref="account_group_4_42" />
         </record>
         <record model="account.group" id="account_group_4_424">
-            <field
-                name="name"
-            >Prime reprezentând participarea personalului la profit</field>
+            <field name="name">Prime reprezentând participarea personalului la profit</field>
             <field name="code_prefix">424</field>
             <field name="parent_id" ref="account_group_4_42" />
         </record>
@@ -1828,9 +1772,7 @@
 
                 </record>-->
         <record model="account.group" id="account_group_4_43">
-            <field
-                name="name"
-            >Asigurări sociale, protectie sociala și conturi asimilate</field>
+            <field name="name">Asigurări sociale, protectie sociala și conturi asimilate</field>
             <field name="code_prefix">43</field>
             <field name="parent_id" ref="account_group_4" />
         </record>
@@ -1911,9 +1853,7 @@
                </record>
        -->
         <record model="account.group" id="account_group_4_44">
-            <field
-                name="name"
-            >Bugetul statului, fonduri speciale și conturi asimilate</field>
+            <field name="name">Bugetul statului, fonduri speciale și conturi asimilate</field>
             <field name="code_prefix">44</field>
             <field name="parent_id" ref="account_group_4" />
         </record>
@@ -2077,9 +2017,7 @@
                </record>
        -->
         <record model="account.group" id="account_group_4_453">
-            <field
-                name="name"
-            >Decontări cu entitatile asociate și entitatile controlate în comun</field>
+            <field name="name">Decontări cu entitatile asociate și entitatile controlate în comun</field>
             <field name="code_prefix">177</field>
             <field name="parent_id" ref="account_group_4_45" />
         </record>
@@ -2123,9 +2061,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_4_456">
-            <field
-                name="name"
-            >Decontări cu acționarii/asociații privind capitalul</field>
+            <field name="name">Decontări cu acționarii/asociații privind capitalul</field>
             <field name="code_prefix">456</field>
             <field name="parent_id" ref="account_group_4_45" />
         </record>
@@ -2254,9 +2190,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_4_478">
-            <field
-                name="name"
-            >Venituri în avans aferente activelor primite prin transfer de la clienți</field>
+            <field name="name">Venituri în avans aferente activelor primite prin transfer de la clienți</field>
             <field name="code_prefix">478</field>
             <field name="parent_id" ref="account_group_4_47" />
         </record>
@@ -2286,18 +2220,14 @@
             <field name="parent_id" ref="account_group_4_49" />
         </record>
         <record model="account.group" id="account_group_4_495">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea creanțelor - decontări în cadrul grupului și cu
+            <field name="name">Ajustări pentru deprecierea creanțelor - decontări în cadrul grupului și cu
                 acționarii/asociații
             </field>
             <field name="code_prefix">495</field>
             <field name="parent_id" ref="account_group_4_49" />
         </record>
         <record model="account.group" id="account_group_4_496">
-            <field
-                name="name"
-            >Ajustări pentru deprecierea creanțelor - debitori diverși</field>
+            <field name="name">Ajustări pentru deprecierea creanțelor - debitori diverși</field>
             <field name="code_prefix">496</field>
             <field name="parent_id" ref="account_group_4_49" />
         </record>
@@ -2332,9 +2262,7 @@
             <field name="parent_id" ref="account_group_5_50" />
         </record>
         <record model="account.group" id="account_group_5_508">
-            <field
-                name="name"
-            >Alte investiții pe termen scurt și creanțe asimilate</field>
+            <field name="name">Alte investiții pe termen scurt și creanțe asimilate</field>
             <field name="code_prefix">508</field>
             <field name="parent_id" ref="account_group_5_50" />
         </record>
@@ -2350,9 +2278,7 @@
                     <field name="parent_id" ref="account_group_5_508"/>
                 </record>-->
         <record model="account.group" id="account_group_5_509">
-            <field
-                name="name"
-            >Varsaminte de efctuat pentru investițiile pe termen scurt</field>
+            <field name="name">Varsaminte de efctuat pentru investițiile pe termen scurt</field>
             <field name="code_prefix">509</field>
             <field name="parent_id" ref="account_group_5_50" />
         </record>
@@ -2619,47 +2545,35 @@
             <field name="parent_id" ref="account_group_5_58" />
         </record>
         <record model="account.group" id="account_group_5_59">
-            <field
-                name="name"
-            >Ajustări pentru pierderea de valoare a conturilor de trezorerie</field>
+            <field name="name">Ajustări pentru pierderea de valoare a conturilor de trezorerie</field>
             <field name="code_prefix">59</field>
             <field name="parent_id" ref="account_group_5" />
         </record>
         <record model="account.group" id="account_group_5_591">
-            <field
-                name="name"
-            >Ajustări pentru pierderea de valoare a acțiunilor deținute la entitățile afiliate
+            <field name="name">Ajustări pentru pierderea de valoare a acțiunilor deținute la entitățile afiliate
             </field>
             <field name="code_prefix">591</field>
             <field name="parent_id" ref="account_group_5_59" />
         </record>
         <record model="account.group" id="account_group_5_595">
-            <field
-                name="name"
-            >Ajustări pentru pierderea de valoare a obligațiunilor emise și răscumpărate</field>
+            <field name="name">Ajustări pentru pierderea de valoare a obligațiunilor emise și răscumpărate</field>
             <field name="code_prefix">595</field>
             <field name="parent_id" ref="account_group_5_59" />
         </record>
         <record model="account.group" id="account_group_5_596">
-            <field
-                name="name"
-            >Ajustări pentru pierderea de valoare a obligațiunilor</field>
+            <field name="name">Ajustări pentru pierderea de valoare a obligațiunilor</field>
             <field name="code_prefix">596</field>
             <field name="parent_id" ref="account_group_5_59" />
         </record>
         <record model="account.group" id="account_group_5_598">
-            <field
-                name="name"
-            >Ajustări pentru pierderea de valoare a altor investiții pe termen scurt și creanțe
+            <field name="name">Ajustări pentru pierderea de valoare a altor investiții pe termen scurt și creanțe
                 asimilate
             </field>
             <field name="code_prefix">598</field>
             <field name="parent_id" ref="account_group_5_59" />
         </record>
         <record model="account.group" id="account_group_6__7">
-            <field
-                name="name"
-            >Clasele 6 și 7. Conturile de venituri și cheltuieli</field>
+            <field name="name">Clasele 6 și 7. Conturile de venituri și cheltuieli</field>
             <field name="code_prefix">6-7</field>
             <field name="parent_id" ref="account_group_1__7" />
         </record>
@@ -2734,9 +2648,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_6_603">
-            <field
-                name="name"
-            >Cheltuieli privind materialele de natura obiectelor de inventar</field>
+            <field name="name">Cheltuieli privind materialele de natura obiectelor de inventar</field>
             <field name="code_prefix">603</field>
             <field name="parent_id" ref="account_group_6_60" />
         </record>
@@ -2751,9 +2663,7 @@
             <field name="parent_id" ref="account_group_6_60" />
         </record>
         <record model="account.group" id="account_group_6_606">
-            <field
-                name="name"
-            >Cheltuieli privind activele biologice de natura stocurilor</field>
+            <field name="name">Cheltuieli privind activele biologice de natura stocurilor</field>
             <field name="code_prefix">606</field>
             <field name="parent_id" ref="account_group_6_60" />
         </record>
@@ -2783,9 +2693,7 @@
             <field name="parent_id" ref="account_group_6_61" />
         </record>
         <record model="account.group" id="account_group_6_612">
-            <field
-                name="name"
-            >Cheltuieli cu redevențele, locațiile de gestiune și chiriile</field>
+            <field name="name">Cheltuieli cu redevențele, locațiile de gestiune și chiriile</field>
             <field name="code_prefix">612</field>
             <field name="parent_id" ref="account_group_6_61" />
         </record>
@@ -2850,16 +2758,12 @@
             <field name="parent_id" ref="account_group_6_62" />
         </record>
         <record model="account.group" id="account_group_6_63">
-            <field
-                name="name"
-            >Cheltuieli cu alte impozite, taxe și varsaminte asimilate</field>
+            <field name="name">Cheltuieli cu alte impozite, taxe și varsaminte asimilate</field>
             <field name="code_prefix">63</field>
             <field name="parent_id" ref="account_group_6_0" />
         </record>
         <record model="account.group" id="account_group_6_635">
-            <field
-                name="name"
-            >Cheltuieli cu alte impozite, taxe și varsaminte asimilate</field>
+            <field name="name">Cheltuieli cu alte impozite, taxe și varsaminte asimilate</field>
             <field name="code_prefix">635</field>
             <field name="parent_id" ref="account_group_6_63" />
         </record>
@@ -2887,9 +2791,7 @@
             <field name="parent_id" ref="account_group_6_64" />
         </record>
         <record model="account.group" id="account_group_6_642">
-            <field
-                name="name"
-            >Cheltuieli cu avantajele în natura și tichetele acordate salariatilor</field>
+            <field name="name">Cheltuieli cu avantajele în natura și tichetele acordate salariatilor</field>
             <field name="code_prefix">642</field>
             <field name="parent_id" ref="account_group_6_64" />
         </record>
@@ -2907,23 +2809,17 @@
 
                 </record>-->
         <record model="account.group" id="account_group_6_643">
-            <field
-                name="name"
-            >Cheltuieli cu remunerarea în instrumente de capitaluri proprii</field>
+            <field name="name">Cheltuieli cu remunerarea în instrumente de capitaluri proprii</field>
             <field name="code_prefix">643</field>
             <field name="parent_id" ref="account_group_6_64" />
         </record>
         <record model="account.group" id="account_group_6_644">
-            <field
-                name="name"
-            >Cheltuieli cu primele reprezentând participarea personalului la profit</field>
+            <field name="name">Cheltuieli cu primele reprezentând participarea personalului la profit</field>
             <field name="code_prefix">644</field>
             <field name="parent_id" ref="account_group_6_64" />
         </record>
         <record model="account.group" id="account_group_6_645">
-            <field
-                name="name"
-            >Cheltuieli privind asigurarile și protectia sociala</field>
+            <field name="name">Cheltuieli privind asigurarile și protectia sociala</field>
             <field name="code_prefix">645</field>
             <field name="parent_id" ref="account_group_6_64" />
         </record>
@@ -3024,9 +2920,7 @@
             <field name="parent_id" ref="account_group_6_65" />
         </record>
         <record model="account.group" id="account_group_6_655">
-            <field
-                name="name"
-            >Cheltuieli din reevaluarea imobilizărilor corporale</field>
+            <field name="name">Cheltuieli din reevaluarea imobilizărilor corporale</field>
             <field name="code_prefix">655</field>
             <field name="parent_id" ref="account_group_6_65" />
         </record>
@@ -3158,18 +3052,14 @@
             <field name="parent_id" ref="account_group_6_66" />
         </record>
         <record model="account.group" id="account_group_6_68">
-            <field
-                name="name"
-            >Cheltuieli cu amortizarile,provizioanele și ajustările pentru depreciere sau pierdere
+            <field name="name">Cheltuieli cu amortizarile,provizioanele și ajustările pentru depreciere sau pierdere
                 de valoare
             </field>
             <field name="code_prefix">68</field>
             <field name="parent_id" ref="account_group_6_0" />
         </record>
         <record model="account.group" id="account_group_6_681">
-            <field
-                name="name"
-            >Cheltuieli de exploatare privind amortizarile, provizioanele și Ajustările pentru
+            <field name="name">Cheltuieli de exploatare privind amortizarile, provizioanele și Ajustările pentru
                 depreciere
             </field>
             <field name="code_prefix">681</field>
@@ -3215,9 +3105,7 @@
 
                 </record>-->
         <record model="account.group" id="account_group_6_686">
-            <field
-                name="name"
-            >Cheltuieli financiare privind amortizarile, provizioanele și Ajustările pentru
+            <field name="name">Cheltuieli financiare privind amortizarile, provizioanele și Ajustările pentru
                 pierdere de valoare
             </field>
             <field name="code_prefix">686</field>
@@ -3269,9 +3157,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_6_69">
-            <field
-                name="name"
-            >Cheltuieli cu impozitul pe profit și alte impozite</field>
+            <field name="name">Cheltuieli cu impozitul pe profit și alte impozite</field>
             <field name="code_prefix">69</field>
             <field name="parent_id" ref="account_group_6_0" />
         </record>
@@ -3281,9 +3167,7 @@
             <field name="parent_id" ref="account_group_6_69" />
         </record>
         <record model="account.group" id="account_group_6_698">
-            <field
-                name="name"
-            >Cheltuieli cu impozitul pe venit și cu alte impozite care nu apar în elementele de
+            <field name="name">Cheltuieli cu impozitul pe venit și cu alte impozite care nu apar în elementele de
                 mai sus
             </field>
             <field name="code_prefix">698</field>
@@ -3300,9 +3184,7 @@
             <field name="parent_id" ref="account_group_7" />
         </record>
         <record model="account.group" id="account_group_7_701">
-            <field
-                name="name"
-            >Venituri din vânzarea produselor finite, produselor agricole și a activelor
+            <field name="name">Venituri din vânzarea produselor finite, produselor agricole și a activelor
                 biologice de natura stocurilor
             </field>
             <field name="code_prefix">701</field>
@@ -3352,9 +3234,7 @@
             <field name="parent_id" ref="account_group_7_70" />
         </record>
         <record model="account.group" id="account_group_7_706">
-            <field
-                name="name"
-            >706. Venituri din redevențe, locații de gestiune și chirii</field>
+            <field name="name">706. Venituri din redevențe, locații de gestiune și chirii</field>
             <field name="code_prefix">706</field>
             <field name="parent_id" ref="account_group_7_70" />
         </record>
@@ -3374,23 +3254,17 @@
             <field name="parent_id" ref="account_group_7_70" />
         </record>
         <record model="account.group" id="account_group_7_71">
-            <field
-                name="name"
-            >Venituri aferente costului productiei în curs de execuție</field>
+            <field name="name">Venituri aferente costului productiei în curs de execuție</field>
             <field name="code_prefix">71</field>
             <field name="parent_id" ref="account_group_7" />
         </record>
         <record model="account.group" id="account_group_7_711">
-            <field
-                name="name"
-            >Venituri aferente costurilor stocurilor de produse</field>
+            <field name="name">Venituri aferente costurilor stocurilor de produse</field>
             <field name="code_prefix">711</field>
             <field name="parent_id" ref="account_group_7_71" />
         </record>
         <record model="account.group" id="account_group_7_712">
-            <field
-                name="name"
-            >Venituri aferente costurilor serviciilor în curs de execuție</field>
+            <field name="name">Venituri aferente costurilor serviciilor în curs de execuție</field>
             <field name="code_prefix">712</field>
             <field name="parent_id" ref="account_group_7_71" />
         </record>
@@ -3520,9 +3394,7 @@
 
                 </record>-->
         <record model="account.group" id="account_group_7_754">
-            <field
-                name="name"
-            >Venituri din creanțe reactivate și debitori diverși</field>
+            <field name="name">Venituri din creanțe reactivate și debitori diverși</field>
             <field name="code_prefix">754</field>
             <field name="parent_id" ref="account_group_7_75" />
         </record>
@@ -3612,9 +3484,7 @@
 
                 </record>-->
         <record model="account.group" id="account_group_7_762">
-            <field
-                name="name"
-            >Venituri din investiții financiare pe termen scurt</field>
+            <field name="name">Venituri din investiții financiare pe termen scurt</field>
             <field name="code_prefix">762</field>
             <field name="parent_id" ref="account_group_7_76" />
         </record>
@@ -3679,17 +3549,13 @@
             <field name="parent_id" ref="account_group_7_76" />
         </record>
         <record model="account.group" id="account_group_7_78">
-            <field
-                name="name"
-            >Venituri din provizioane și ajustări pentru depreciere sau pierdere de valoare
+            <field name="name">Venituri din provizioane și ajustări pentru depreciere sau pierdere de valoare
             </field>
             <field name="code_prefix">78</field>
             <field name="parent_id" ref="account_group_7" />
         </record>
         <record model="account.group" id="account_group_7_781">
-            <field
-                name="name"
-            >Venituri din provizioane și Ajustări pentru depreciere privind activitatea de
+            <field name="name">Venituri din provizioane și Ajustări pentru depreciere privind activitatea de
                 exploatare
             </field>
             <field name="code_prefix">781</field>
@@ -3725,9 +3591,7 @@
                 </record>
         -->
         <record model="account.group" id="account_group_7_786">
-            <field
-                name="name"
-            >Venituri financiare din Ajustări pentru pierdere de valoare</field>
+            <field name="name">Venituri financiare din Ajustări pentru pierdere de valoare</field>
             <field name="code_prefix">786</field>
             <field name="parent_id" ref="account_group_7_78" />
         </record>
@@ -3781,9 +3645,7 @@
             <field name="parent_id" ref="account_group_80" />
         </record>
         <record model="account.group" id="account_group_805">
-            <field
-                name="name"
-            >Amortizarea aferenta gradului de neutilizare a mijloacelor fixe</field>
+            <field name="name">Amortizarea aferenta gradului de neutilizare a mijloacelor fixe</field>
             <field name="code_prefix">805</field>
             <field name="parent_id" ref="account_group_80" />
         </record>

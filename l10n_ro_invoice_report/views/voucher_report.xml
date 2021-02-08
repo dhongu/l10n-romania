@@ -74,9 +74,7 @@
 </h2>
                             <table class="table table-sm">
                                 <tr>
-                                    <td
-                                        t-if="o.payment_type=='inbound'"
-                                    >Received from:</td>
+                                    <td t-if="o.payment_type=='inbound'">Received from:</td>
                                     <td t-if="o.payment_type=='outbound'">For:</td>
                                     <td t-if="o.payment_type=='transfer'">To:</td>
                                     <td>
@@ -94,9 +92,7 @@
                                     <td>Amount (in words):</td>
                                     <td>
                                         <!--  <span t-esc="convert(amount)" />-->
-                                        <span
-                                            t-esc="o.currency_id.amount_to_text(amount)"
-                                        />
+                                        <span t-esc="o.currency_id.amount_to_text(amount)" />
                                     </td>
                                 </tr>
                                 <tr>

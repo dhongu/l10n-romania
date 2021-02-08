@@ -4,10 +4,7 @@
         <t t-foreach="docs" t-as="o">
             <div class="container o_l10n_ro_report_trial_balance_page">
                 <!--                <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_buttons"/>-->
-                <t
-                    t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_base"
-                    t-lang='user.lang'
-                />
+                <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_base" t-lang='user.lang' />
             </div>
         </t>
     </template>

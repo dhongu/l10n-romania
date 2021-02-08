@@ -3,14 +3,8 @@
     <template id="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_qweb">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t
-                    t-call="l10n_ro_report_trial_balance.internal_layout"
-                    t-lang='user.lang'
-                >
-                    <t
-                        t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_base"
-                        t-lang='user.lang'
-                    />
+                <t t-call="l10n_ro_report_trial_balance.internal_layout" t-lang='user.lang'>
+                    <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_base" t-lang='user.lang' />
                 </t>
             </t>
         </t>
@@ -21,16 +15,12 @@
         <t t-set="company_name" t-value="o.company_id.name" />
         <div class="container-fluid page data_table">
             <!-- Display filters -->
-            <t
-                t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_filters"
-            />
+            <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_filters" />
             <div class="page_break" />
             <!-- Display account lines -->
             <table class="act_as_table data_table" style="width: 100% !important;">
                 <!-- Display account header -->
-                <t
-                    t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_lines_header"
-                />
+                <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_lines_header" />
                 <!-- Display each lines -->
                 <t t-set="padding" t-value="0" />
                 <t t-set="firstdate" t-value="o.date_from.strftime('%Y-01-01')" />
@@ -45,68 +35,39 @@
                     <t t-foreach="lines" t-as="line">
                         <t t-set="style" t-value="'font-size:10px; color: black;'" />
                         <t t-if="line.account_group_id and len(line.code) == 1">
-                            <t
-                                t-set="style"
-                                t-value="'font-size: 13px; font-weight: bold; color: black;'"
-                            />
+                            <t t-set="style" t-value="'font-size: 13px; font-weight: bold; color: black;'" />
                             <t t-set="padding" t-value="0" />
                         </t>
                         <t t-if="line.account_group_id and len(line.code) == 2">
-                            <t
-                                t-set="style"
-                                t-value="'font-size: 12px; font-weight: bold; color: black;'"
-                            />
+                            <t t-set="style" t-value="'font-size: 12px; font-weight: bold; color: black;'" />
                             <t t-set="padding" t-value="4" />
                         </t>
                         <t t-if="line.account_group_id and len(line.code) == 3">
-                            <t
-                                t-set="style"
-                                t-value="'font-size: 11px; font-weight: bold; color: black;'"
-                            />
+                            <t t-set="style" t-value="'font-size: 11px; font-weight: bold; color: black;'" />
                             <t t-set="padding" t-value="8" />
                         </t>
                         <t t-if="line.account_group_id and len(line.code) == 4">
-                            <t
-                                t-set="style"
-                                t-value="'font-size: 11px; font-weight: bold; color: black;'"
-                            />
+                            <t t-set="style" t-value="'font-size: 11px; font-weight: bold; color: black;'" />
                             <t t-set="padding" t-value="12" />
                         </t>
                         <t t-if="line.account_group_id and len(line.code) == 5">
-                            <t
-                                t-set="style"
-                                t-value="'font-size: 10px; font-weight: bold; color: black;'"
-                            />
+                            <t t-set="style" t-value="'font-size: 10px; font-weight: bold; color: black;'" />
                             <t t-set="padding" t-value="16" />
                         </t>
-                        <t
-                            t-if="line.account_group_id and ( not line.code or '-' in line.code)"
-                        >
-                            <t
-                                t-set="style"
-                                t-value="'font-size: 14px; font-weight: bold; color: black;'"
-                            />
+                        <t t-if="line.account_group_id and ( not line.code or '-' in line.code)">
+                            <t t-set="style" t-value="'font-size: 14px; font-weight: bold; color: black;'" />
                             <t t-set="padding" t-value="0" />
                         </t>
                         <t t-if="line.account_group_id">
                             <t t-set="grcode" t-value="line.code" />
                         </t>
-                        <t
-                            t-if="line.account_id and line.code and grcode and line.code.startswith(grcode)"
-                        >
+                        <t t-if="line.account_id and line.code and grcode and line.code.startswith(grcode)">
                             <t t-set="padding" t-value="padding+4" />
                         </t>
-                        <t
-                            t-set="stylepading"
-                            t-value="'text-indent: ' + str(padding) + 'px;'"
-                        />
+                        <t t-set="stylepading" t-value="'text-indent: ' + str(padding) + 'px;'" />
                         <!-- Display account group lines -->
-                        <t
-                            t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_line"
-                        />
-                        <t
-                            t-if="line.account_id and line.code and grcode and line.code.startswith(grcode)"
-                        >
+                        <t t-call="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_line" />
+                        <t t-if="line.account_id and line.code and grcode and line.code.startswith(grcode)">
                             <t t-set="padding" t-value="padding-4" />
                         </t>
                     </t>
@@ -139,9 +100,7 @@
             </tr>
         </table>
     </template>
-    <template
-        id="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_lines_header"
-    >
+    <template id="l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_lines_header">
         <!-- Display table headers for lines -->
         <thead class="act_as_thead">
             <tr class="act_as_row labels" style="font-size:12px; font-weight: bold;">
@@ -151,11 +110,7 @@
                 <th class="act_as_cell" rowspan="2">Account</th>
                 <t t-if="o.col_opening_balance">
                     <!--## Opening Balance-->
-                    <th
-                        class="act_as_cell"
-                        colspan="2"
-                        style="width: 14%;"
-                    >Opening Balance</th>
+                    <th class="act_as_cell" colspan="2" style="width: 14%;">Opening Balance</th>
                 </t>
                 <t t-if="o.col_opening">
                     <!--## Opening-->
@@ -163,11 +118,7 @@
                 </t>
                 <t t-if="o.col_initial_balance">
                     <!--## Initial balance-->
-                    <th
-                        class="act_as_cell"
-                        colspan="2"
-                        style="width: 14%;"
-                    >Initial Balance</th>
+                    <th class="act_as_cell" colspan="2" style="width: 14%;">Initial Balance</th>
                 </t>
                 <t t-if="o.col_initial">
                     <!--## Initial -->
@@ -179,11 +130,7 @@
                 </t>
                 <t t-if="o.col_cumulative">
                     <!--## Cumulative -->
-                    <th
-                        class="act_as_cell"
-                        colspan="2"
-                        style="width: 14%;"
-                    >Cumulative</th>
+                    <th class="act_as_cell" colspan="2" style="width: 14%;">Cumulative</th>
                 </t>
                 <t t-if="o.col_total">
                     <!--## Total -->
@@ -257,10 +204,7 @@
             <t t-if="line.account_group_id">
                 <t t-set="res_model" t-value="'account.group'" />
                 <t t-set="res_id" t-value="line.account_group_id.id" />
-                <t
-                    t-set="accounts"
-                    t-value="line.account_group_id.compute_account_ids._ids"
-                />
+                <t t-set="accounts" t-value="line.account_group_id.compute_account_ids._ids" />
             </t>
             <!--## Code-->
             <td class="act_as_cell left">
@@ -609,10 +553,7 @@
                             t-att-style="style"
                             class="o_l10n_ro_report_trial_balance_web_action_multi"
                         >
-                            <span
-                                t-field="line.credit_balance"
-                                t-options='{"widget": "float", "precision": 2}'
-                            />
+                            <span t-field="line.credit_balance" t-options='{"widget": "float", "precision": 2}' />
                         </a>
                     </span>
                 </td>
