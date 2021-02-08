@@ -47,12 +47,8 @@
                         </div>
                     </div>
                     <div>
-                        <div
-                            t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name"
-                        >
-                            <strong
-                                t-field="o.partner_id.commercial_partner_id.name"
-                            />,
+                        <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
+                            <strong t-field="o.partner_id.commercial_partner_id.name" />,
                         </div>
                         <strong t-field="o.partner_id.name" />
                     </div>
@@ -253,9 +249,7 @@
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <h2>
-                                <t
-                                    t-if="o.location_dest_id.usage == 'internal' and o.location_id.usage != 'internal'"
-                                >
+                                <t t-if="o.location_dest_id.usage == 'internal' and o.location_id.usage != 'internal'">
                                     <span>Reverse</span>
                                 </t>
                                 <span>Delivery:</span>
@@ -263,14 +257,10 @@
                             </h2>
                             <h4>
                                 <span t-if="o.state == 'drat'">Draft</span>
-                                <span
-                                    t-if="o.state == 'assigned'"
-                                >To be confirmed</span>
+                                <span t-if="o.state == 'assigned'">To be confirmed</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
                             </h4>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_delivery_info"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
@@ -286,30 +276,20 @@
                                     <tr t-foreach="o.move_lines" t-as="move">
                                         <td>
                                             <span t-field="move.product_id" />
-                                            <div
-                                                t-foreach="move.move_line_ids "
-                                                t-as="move_line"
-                                            >
+                                            <div t-foreach="move.move_line_ids " t-as="move_line">
                                                 <t t-if="move_line.lot_id">
-                                                    <span
-                                                        t-field="move_line.lot_id.name"
-                                                    />
+                                                    <span t-field="move_line.lot_id.name" />
                                                 </t>
                                             </div>
                                         </td>
                                         <td class="text-right">
                                             <span t-field="move.product_uom_qty" />
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
+                                            <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_delivery_sign"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
                             <div t-if="o.note">
                                 <span t-field="o.note" />
                             </div>
@@ -363,34 +343,20 @@
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
-                                            <div
-                                                t-foreach="move.move_line_ids "
-                                                t-as="move_line"
-                                            >
+                                            <div t-foreach="move.move_line_ids " t-as="move_line">
                                                 <t t-if="move_line.lot_id">
-                                                    <span
-                                                        t-field="move_line.lot_id.name"
-                                                    />
+                                                    <span t-field="move_line.lot_id.name" />
                                                 </t>
                                             </div>
                                         </td>
                                         <td class="text-right">
                                             <span t-field="move.product_uom_qty" />
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
+                                            <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
                                             <t t-set="line_value" t-value="0.0" />
-                                            <t
-                                                t-foreach="move.stock_valuation_layer_ids"
-                                                t-as="valuation_line"
-                                            >
-                                                <t
-                                                    t-set="line_value"
-                                                    t-value="line_value+valuation_line.value"
-                                                />
+                                            <t t-foreach="move.stock_valuation_layer_ids" t-as="valuation_line">
+                                                <t t-set="line_value" t-value="line_value+valuation_line.value" />
                                             </t>
                                             <span
                                                 t-esc="line_value/move.product_uom_qty"
@@ -399,14 +365,8 @@
 
                                         </td>
                                         <td class="text-right">
-                                            <span
-                                                t-esc="line_value"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                            <t
-                                                t-set="total_amount"
-                                                t-value="total_amount+line_value"
-                                            />
+                                            <span t-esc="line_value" t-options='{"widget": "float", "precision": 2}' />
+                                            <t t-set="total_amount" t-value="total_amount+line_value" />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -428,9 +388,7 @@
                                     </tr>
                                 </table>
                              </div>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_consume_sign"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_consume_sign" />
                             <div t-if="o.note">
                                 <span t-field="o.note" />
                             </div>
@@ -506,23 +464,15 @@
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
-                                            <div
-                                                t-foreach="move.move_line_ids "
-                                                t-as="move_line"
-                                            >
+                                            <div t-foreach="move.move_line_ids " t-as="move_line">
                                                 <t t-if="move_line.lot_id">
-                                                    <span
-                                                        t-field="move_line.lot_id.name"
-                                                    />
+                                                    <span t-field="move_line.lot_id.name" />
                                                 </t>
                                             </div>
                                         </td>
                                         <td class="text-right">
                                             <t t-if="move.product_qty">
-                                                <t
-                                                    t-set="product_qty"
-                                                    t-value="move.product_qty"
-                                                />
+                                                <t t-set="product_qty" t-value="move.product_qty" />
                                                 <t
                                                     t-set="product_uom_qty"
                                                     t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_uom, rounding_method='HALF-UP')"
@@ -540,10 +490,7 @@
                                                 />
                                                 <span t-esc="product_qty" />
                                             </t>
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
+                                            <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
                                             <t t-if="move.price_unit">
@@ -610,9 +557,7 @@
                                         <td>
                                             <span>Name:</span>
                                             <t f-if="o.location_id.user_id.name">
-                                                <span
-                                                    t-field="o.location_dest_id.user_id"
-                                                />
+                                                <span t-field="o.location_dest_id.user_id" />
                                             </t>
                                         </td>
                                     </tr>
@@ -634,9 +579,7 @@
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <h2>
-                                <t
-                                    t-if="o.location_dest_id.usage == 'internal' and o.location_id.usage != 'internal'"
-                                >
+                                <t t-if="o.location_dest_id.usage == 'internal' and o.location_id.usage != 'internal'">
                                     <span>Reverse</span>
                                 </t>
                                 <span>Delivery:</span>
@@ -646,9 +589,7 @@
                             </h2>
 
 
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_delivery_info"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
 
                             <table class="table table-sm ">
                                 <thead>
@@ -675,23 +616,15 @@
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
-                                            <div
-                                                t-foreach="move.move_line_ids "
-                                                t-as="move_line"
-                                            >
+                                            <div t-foreach="move.move_line_ids " t-as="move_line">
                                                 <t t-if="move_line.lot_id">
-                                                    <span
-                                                        t-field="move_line.lot_id.name"
-                                                    />
+                                                    <span t-field="move_line.lot_id.name" />
                                                 </t>
                                             </div>
                                         </td>
                                         <td class="text-right">
                                             <span t-field="move.product_uom_qty" />
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
+                                            <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
                                             <span
@@ -706,22 +639,15 @@
                                             />
                                         </td>
                                         <td class="text-right">
-                                            <span
-                                                t-esc="line['tax']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
+                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}' />
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div class="row">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)" />
-                                <t
-                                    t-call="l10n_ro_stock_picking_report.report_delivery_sign"
-                                />
-                                <t
-                                    t-call="l10n_ro_stock_picking_report.report_totals"
-                                />
+                                <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
+                                <t t-call="l10n_ro_stock_picking_report.report_totals" />
                             </div>
                             <div t-if="o.note">
                                 <span t-field="o.note" />
@@ -810,8 +736,7 @@
                 </div>
             </div>
             <div>
-                <span
-                >The undersigned, members of the reception, we proceeded to receive material values
+                <span>The undersigned, members of the reception, we proceeded to receive material values
                     supplied by
                 </span>
                 <strong>
@@ -842,25 +767,18 @@
         </template>
         <template id="report_reception">
             <t t-call="web.html_container">
-                <t
-                    t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')"
-                    t-as="o"
-                >
+                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <h2>
-                                <t
-                                    t-if="o.location_dest_id.usage != 'internal' and o.location_id.usage == 'internal'"
-                                >
+                                <t t-if="o.location_dest_id.usage != 'internal' and o.location_id.usage == 'internal'">
                                     <span>Reverse</span>
                                 </t>
                                 <span>Reception:</span>
                                 <span t-field="o.name" />
                             </h2>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_reception_text"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
@@ -889,23 +807,15 @@
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
-                                            <div
-                                                t-foreach="move.move_line_ids "
-                                                t-as="move_line"
-                                            >
+                                            <div t-foreach="move.move_line_ids " t-as="move_line">
                                                 <t t-if="move_line.lot_id">
-                                                    <span
-                                                        t-field="move_line.lot_id.name"
-                                                    />
+                                                    <span t-field="move_line.lot_id.name" />
                                                 </t>
                                             </div>
                                         </td>
                                         <td class="text-right">
                                             <span t-field="move.product_uom_qty" />
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
+                                            <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
                                             <span
@@ -920,10 +830,7 @@
                                             />
                                         </td>
                                         <td class="text-right">
-                                            <span
-                                                t-esc="line['tax']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
+                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}' />
                                         </td>
                                         <td class="text-right">
                                             <span
@@ -936,13 +843,9 @@
                             </table>
                             <div id="total" class="row justify-content-end">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)" />
-                                <t
-                                    t-call="l10n_ro_stock_picking_report.report_totals"
-                                />
+                                <t t-call="l10n_ro_stock_picking_report.report_totals" />
                             </div>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_reception_sign"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
                             <div t-if="o.note">
                                 <span t-field="o.note" />
                             </div>
@@ -954,10 +857,7 @@
         </template>
         <template id="report_reception_no_tax">
             <t t-call="web.html_container">
-                <t
-                    t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')"
-                    t-as="o"
-                >
+                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
@@ -965,9 +865,7 @@
                                 <span>Reception:</span>
                                 <span t-field="o.name" />
                             </h2>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_reception_text"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
@@ -990,23 +888,15 @@
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
-                                            <div
-                                                t-foreach="move.move_line_ids "
-                                                t-as="move_line"
-                                            >
+                                            <div t-foreach="move.move_line_ids " t-as="move_line">
                                                 <t t-if="move_line.lot_id">
-                                                    <span
-                                                        t-field="move_line.lot_id.name"
-                                                    />
+                                                    <span t-field="move_line.lot_id.name" />
                                                 </t>
                                             </div>
                                         </td>
                                         <td class="text-right">
                                             <span t-field="move.product_uom_qty" />
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
+                                            <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
                                             <span
@@ -1041,9 +931,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_reception_sign"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
                             <div t-if="o.note">
                                 <span t-field="o.note" />
                             </div>
@@ -1055,10 +943,7 @@
         </template>
         <template id="report_reception_sale_price">
             <t t-call="web.html_container">
-                <t
-                    t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')"
-                    t-as="o"
-                >
+                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
@@ -1066,9 +951,7 @@
                                 <span>Reception:</span>
                                 <span t-field="o.name" />
                             </h2>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_reception_text"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
@@ -1107,23 +990,15 @@
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
-                                            <div
-                                                t-foreach="move.move_line_ids "
-                                                t-as="move_line"
-                                            >
+                                            <div t-foreach="move.move_line_ids " t-as="move_line">
                                                 <t t-if="move_line.lot_id">
-                                                    <span
-                                                        t-field="move_line.lot_id.name"
-                                                    />
+                                                    <span t-field="move_line.lot_id.name" />
                                                 </t>
                                             </div>
                                         </td>
                                         <td class="text-right">
                                             <span t-field="move.product_uom_qty" />
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
+                                            <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
                                             <span
@@ -1138,10 +1013,7 @@
                                             />
                                         </td>
                                         <td class="text-right">
-                                            <span
-                                                t-esc="line['tax']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
+                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}' />
                                         </td>
                                         <td class="text-right">
                                             <span
@@ -1172,16 +1044,10 @@
                             </table>
                             <div id="total" class="row justify-content-end">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)" />
-                                <t
-                                    t-call="l10n_ro_stock_picking_report.report_totals"
-                                />
-                                <t
-                                    t-call="l10n_ro_stock_picking_report.report_totals_sale"
-                                />
+                                <t t-call="l10n_ro_stock_picking_report.report_totals" />
+                                <t t-call="l10n_ro_stock_picking_report.report_totals_sale" />
                             </div>
-                            <t
-                                t-call="l10n_ro_stock_picking_report.report_reception_sign"
-                            />
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
                             <div t-if="o.note">
                                 <span t-field="o.note" />
                             </div>
