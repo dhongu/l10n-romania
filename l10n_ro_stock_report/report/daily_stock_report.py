@@ -244,13 +244,11 @@ class DailyStockReport(models.TransientModel):
     def button_show(self):
         self.do_compute()
         if self.mode == "ref":
-            action = self.env.ref(
-                "l10n_ro_stock_report.action_daily_stock_report_ref"
-            ).read()[0]
+            action = self.env.ref("l10n_ro_stock_report.action_daily_stock_report_ref")
+            action = action.sudo().read()[0]
         else:
-            action = self.env.ref(
-                "l10n_ro_stock_report.action_daily_stock_report_line"
-            ).read()[0]
+            action = self.env.ref("l10n_ro_stock_report.action_daily_stock_report_line")
+            action = action.sudo().read()[0]
         action["domain"] = [("report_id", "=", self.id)]
         action["context"] = {"active_id": self.id}
         action["target"] = "main"

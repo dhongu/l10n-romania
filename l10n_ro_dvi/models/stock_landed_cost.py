@@ -19,11 +19,10 @@ class LandedCost(models.Model):
 
     def button_validate(self):
         res = super(LandedCost, self).button_validate()
-        product_id = (
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param("dvi.custom_duty_product_id")
-        )
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+
+        product_id = get_param("dvi.custom_duty_product_id")
+
         custom_duty_product = (
             self.env["product.product"].browse(int(product_id)).exists()
         )

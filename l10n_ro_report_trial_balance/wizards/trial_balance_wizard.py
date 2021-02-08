@@ -67,7 +67,7 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
         action = self.env.ref(
             "l10n_ro_report_trial_balance.action_l10n_ro_report_trial_balance"
         )
-        vals = action.read()[0]
+        vals = action.sudo().read()[0]
         context1 = vals.get("context", {})
         if isinstance(context1, str):
             context1 = safe_eval(context1)
