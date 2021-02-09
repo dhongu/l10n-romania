@@ -27,9 +27,14 @@ class LandedCost(models.Model):
             self.env["product.product"].browse(int(product_id)).exists()
         )
 
+        if not custom_duty_product:
+            wizard = self.env['account.invoice.dvi'].create({})
+            vals = wizard._prepare_custom_duty_product()
+            custom_duty_product = self.env["product.product"].create(vals)
+            set_param = self.env["ir.config_parameter"].sudo().set_param
+            set_param("dvi.custom_duty_product_id", custom_duty_product.id)
+
         for cost in self.filtered(lambda c: c.tax_value and c.tax_id):
-            if not custom_duty_product:
-                raise UserError(_("The product Custom Duty not found"))
 
             accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
             tax_values = cost.tax_id.compute_all(1)
