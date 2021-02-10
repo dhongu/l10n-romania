@@ -3,8 +3,12 @@
 # See README.rst file on addons root folder for license details
 
 
-from odoo import _, fields, models
+from odoo import api, fields, models, tools, _
 from odoo.exceptions import UserError
+
+from collections import defaultdict
+
+from odoo.tools.float_utils import float_is_zero
 
 
 class LandedCost(models.Model):
@@ -55,4 +59,23 @@ class LandedCost(models.Model):
                 },
             ]
             self.env["account.move.line"].create(aml)
+        return res
+
+    def _check_sum(self):
+        res = super(LandedCost, self)._check_sum()
+        if not res:
+            prec_digits = self.env.company.currency_id.decimal_places
+            for landed_cost in self:
+                total_amount = sum(landed_cost.valuation_adjustment_lines.mapped('additional_landed_cost'))
+                if not tools.float_is_zero(total_amount - landed_cost.amount_total, precision_digits=prec_digits):
+                    return False
+
+            res = True
+
+                # val_to_cost_lines = defaultdict(lambda: 0.0)
+                # for val_line in landed_cost.valuation_adjustment_lines:
+                #     val_to_cost_lines[val_line.cost_line_id] += val_line.additional_landed_cost
+                # if any(not tools.float_is_zero(cost_line.price_unit - val_amount, precision_digits=prec_digits)
+                #        for cost_line, val_amount in val_to_cost_lines.items()):
+                #     return False
         return res
