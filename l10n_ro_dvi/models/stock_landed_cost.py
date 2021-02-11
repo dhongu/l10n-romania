@@ -64,10 +64,10 @@ class LandedCost(models.Model):
     def _check_sum(self):
         res = super(LandedCost, self)._check_sum()
         if not res:
-            prec_digits = self.env.company.currency_id.decimal_places
+            # prec_digits = self.env.company.currency_id.decimal_places
             for landed_cost in self:
                 total_amount = sum(landed_cost.valuation_adjustment_lines.mapped('additional_landed_cost'))
-                if not tools.float_is_zero(total_amount - landed_cost.amount_total, precision_digits=prec_digits):
+                if abs(total_amount - landed_cost.amount_total) > 1:
                     return False
 
             res = True
