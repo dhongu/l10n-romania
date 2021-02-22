@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-28 13:27+0000\n"
-"PO-Revision-Date: 2021-01-28 13:27+0000\n"
+"POT-Creation-Date: 2021-02-22 08:29+0000\n"
+"PO-Revision-Date: 2021-02-22 08:29+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,11 @@ msgstr "<span>Dispoziție de încasare:</span>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>Delegate:</span>"
 msgstr "<span>Delegat:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>I received from</span>"
+msgstr "<span>Am primit de la</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -59,11 +64,17 @@ msgid "<span>Vat on payment</span>"
 msgstr "<span>TVA la încasare</span>"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<span>Voucher:</span>"
 msgstr "<span>Chitanță:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>amount</span>"
+msgstr "<span>suma de</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -87,11 +98,6 @@ msgid "<strong>Client:</strong><br/>"
 msgstr ""
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "<strong>Comment:</strong>"
-msgstr "<strong>Comentariu:</strong>"
-
-#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 msgid "<strong>Company</strong><br/>"
 msgstr "<strong>Companie</strong><br/>"
@@ -100,6 +106,11 @@ msgstr "<strong>Companie</strong><br/>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong>Deliveries:</strong>"
 msgstr "<strong>Livrări:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "<strong>Delivery address:</strong>"
+msgstr "<strong>Adresa livrare:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -120,22 +131,12 @@ msgid "<strong>Receptions:</strong>"
 msgstr "<strong>Recepții:</strong>"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "<strong>Reference:</strong>"
-msgstr "<strong>Referință:</strong>"
-
-#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>Share Capital:</strong>"
 msgstr "<strong>Capital social:</strong>"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "<strong>Source:</strong>"
-msgstr "<strong>Sursa:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -181,11 +182,6 @@ msgstr "Suma:"
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_bank_statement_line
 msgid "Bank Statement Line"
 msgstr "Linie extras bacă"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "Cancelled Invoice"
-msgstr "Factură anulată"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_collection
@@ -235,23 +231,8 @@ msgstr "Nume afișat"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "Draft Invoice"
-msgstr "Factură ciornă"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Elaborate:"
 msgstr "Întocmit:"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "Factură Storno"
-msgstr ""
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "Factură Storno Anulată"
-msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -281,18 +262,15 @@ msgstr "Informații privind livrarea:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "Invoice"
-msgstr "Factură"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid ""
 "Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance\n"
-"                                no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and\n"
-"                                subsequent amendments."
+"                        no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and\n"
+"                        subsequent amendments."
 msgstr ""
-"Factură valabilă fără semnatură şi ştampilă cf. art.V, alin (2) din Ordonanţa nr.17/2015, art. 319 alin (29) din"
-"Legea nr. 227/2015 privind Codul fiscal și modificările ulterioare."
+"Factură valabilă fără semnatură şi ştampilă cf. art.V, alin (2) din "
+"Ordonanţa nr.17/2015, art. 319 alin (29) dinLegea nr. 227/2015 privind Codul"
+" fiscal și modificările ulterioare."
+
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_move
 msgid "Journal Entry"
@@ -320,6 +298,11 @@ msgstr "Ultima modificare la"
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__mean_transp
 msgid "Mean transport"
 msgstr "Mijloc transport"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "NRC:"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -379,6 +362,11 @@ msgid "ReportVoucherPrint"
 msgstr ""
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Representing counter value of invoice"
+msgstr "Reprezentând contravaloarea facturii"
+
+#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
@@ -389,16 +377,6 @@ msgstr "Reprezentând c/v:"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Supplier"
 msgstr "Furnizor"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "Supplier Invoice"
-msgstr "Factura furnizor"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "Supplier Refund"
-msgstr "Restituire furnizor"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -417,6 +395,11 @@ msgid "Unit Price"
 msgstr "Preț"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "VAT:"
+msgstr "CUI"
+
+#. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_voucher
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_voucher
 msgid "Voucher"
@@ -426,3 +409,8 @@ msgstr "Chitanță"
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_payment
 msgid "Voucher / Payment"
 msgstr "Chitanță"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "from"
+msgstr "de la"
