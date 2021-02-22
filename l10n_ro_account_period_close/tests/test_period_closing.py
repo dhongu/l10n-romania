@@ -23,17 +23,13 @@ class TestCurrencyReevaluation(TransactionCase):
         # Load minimal account chart
         cls._load('account', 'test', 'account_minimal_test.xml')
 
-        cls.misc_journal = ref(
-            'l10n_ro_account_period_close.miscellaneous_journal')
-        cls.debit_acc = ref(
-            'l10n_ro_account_period_close.a_current_year_earnings')
-        cls.credit_acc = ref(
-            'l10n_ro_account_period_close.a_current_year_earnings')
+        cls.misc_journal = ref('l10n_ro_account_period_close.miscellaneous_journal')
+        cls.debit_acc = ref('l10n_ro_account_period_close.a_current_year_earnings')
+        cls.credit_acc = ref('l10n_ro_account_period_close.a_current_year_earnings')
         cls.vat_paid = ref('l10n_ro_account_period_close.ova')
         cls.vat_received = ref('l10n_ro_account_period_close.iva')
         cls.vat_close_debit = ref('l10n_ro_account_period_close.cas')
-        cls.vat_close_credit = ref(
-            'l10n_ro_account_period_close.current_liabilities')
+        cls.vat_close_credit = ref('l10n_ro_account_period_close.current_liabilities')
         cls.exp_closing = cls.per_close_model.create(
             {'name': 'Closing Expenses',
              'type': 'expense',
@@ -58,8 +54,8 @@ class TestCurrencyReevaluation(TransactionCase):
     def test_period_closing(self):
         self.exp_closing._onchange_type()
         self.inc_closing._onchange_type()
-        date_from = time.strftime('%Y-%m')+'-01'
-        date_to = time.strftime('%Y-%m')+'-28'
+        date_from = time.strftime('%Y-%m') + '-01'
+        date_to = time.strftime('%Y-%m') + '-28'
         self.exp_closing.close(date_from, date_to)
         self.assertEqual(len(self.exp_closing.move_ids), 1)
         self.inc_closing.close(date_from, date_to)
@@ -93,9 +89,7 @@ class TestCurrencyReevaluation(TransactionCase):
         today = fields.Date.from_string(fields.Date.today())
         date_from = today + relativedelta(day=1, months=-1)
         date_to = today + relativedelta(day=1, days=-1)
-        wizard = self.wiz_close_model.create(
-            {'closing_id': self.vat_closing.id})
-        self.assertEqual(wizard.company_id.id,
-                         self.env.ref('base.main_company').id)
+        wizard = self.wiz_close_model.create({'closing_id': self.vat_closing.id})
+        self.assertEqual(wizard.company_id.id, self.env.ref('base.main_company').id)
         self.assertEqual(wizard.date_from, fields.Date.to_string(date_from))
         self.assertEqual(wizard.date_to, fields.Date.to_string(date_to))
