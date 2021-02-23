@@ -20,7 +20,7 @@ from odoo.exceptions import Warning
 
 headers = {"User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)", "Content-Type": "application/json;"}
 
-ANAF_URL = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v4/ws/tva"
+ANAF_URL = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v5/ws/tva"
 
 
 def unaccent(text):
