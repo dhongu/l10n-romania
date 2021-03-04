@@ -33,7 +33,7 @@
                         <h4>
                             <span>From date:</span>
                             <span t-field="wizard.date_from" />
-                            <span> to date:</span>
+                            <span>to date:</span>
                             <span t-field="wizard.date_to" />
                         </h4>
                         <table class="table table-sm ">

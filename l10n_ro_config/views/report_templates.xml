@@ -24,7 +24,8 @@
                         <br />
                         <li t-if="company.vat" class="list-inline-item">
                             <i class="fa fa-building-o" role="img" aria-label="Fiscal number" />
-                            <t t-esc="company.country_id.vat_label or 'Tax ID'" />:
+                            <t t-esc="company.country_id.vat_label or 'Tax ID'" />
+                            :
                             <t t-if="company.partner_id.vat_subjected">
                                 <span t-field="company.partner_id.vat" />
                             </t>
@@ -33,7 +34,8 @@
                             </t>
                         </li>
                         <li t-if="company.partner_id.nrc" class="list-inline-item">
-                            <i class="fa fa-building-o" role="img" aria-label="NRC" title="NRC" />NRC:
+                            <i class="fa fa-building-o" role="img" aria-label="NRC" title="NRC" />
+                            NRC:
                             <span t-field="company.partner_id.nrc" />
                         </li>
                     </ul>
@@ -68,7 +70,8 @@
             </t>
         </span>
         <li t-if="company.vat" position="after">
-            <li t-if="company.partner_id.nrc">NRC:
+            <li t-if="company.partner_id.nrc">
+                NRC:
                 <span t-field="company.partner_id.nrc" />
             </li>
         </li>
@@ -83,7 +86,8 @@
             </t>
         </span>
         <li t-if="company.vat" position="after">
-            <li t-if="company.partner_id.nrc">NRC:
+            <li t-if="company.partner_id.nrc">
+                NRC:
                 <span t-field="company.partner_id.nrc" />
             </li>
             <li t-if="company.partner_id.bank_ids">
@@ -98,9 +102,9 @@
             <t t-call="l10n_ro_config.banks" />
         </div>
         <li t-if="company.vat" position="replace">
-            <li t-if="company.vat" class="list-inline-item d-inline"><t
-                    t-esc="company.country_id.vat_label or 'Tax ID'"
-                />:
+            <li t-if="company.vat" class="list-inline-item d-inline">
+                <t t-esc="company.country_id.vat_label or 'Tax ID'" />
+                :
                 <t t-if="company.partner_id.vat_subjected">
                     <span t-field="company.partner_id.vat" />
                 </t>
@@ -108,7 +112,8 @@
                     <span t-esc="company.partner_id.vat[2:20]" />
                 </t>
             </li>
-            <li t-if="company.partner_id.nrc" class="list-inline-item d-inline">NRC:
+            <li t-if="company.partner_id.nrc" class="list-inline-item d-inline">
+                NRC:
                 <span t-field="company.partner_id.nrc" />
             </li>
         </li>

@@ -10,7 +10,9 @@ class TestStockWarehouseCreation(TransactionCase):
         self.warehouse_obj = self.env["stock.warehouse"]
 
     def test_warehouse_creation(self):
-        warehouse = self.warehouse_obj.create({"name": "Warehouse Romania", "code": "ROW"})
+        warehouse = self.warehouse_obj.create(
+            {"name": "Warehouse Romania", "code": "ROW"}
+        )
         self.assertTrue(warehouse.wh_consume_loc_id)
         self.assertTrue(warehouse.wh_usage_loc_id)
         self.assertTrue(warehouse.consume_type_id)
@@ -35,5 +37,7 @@ class TestStockWarehouseCreation(TransactionCase):
         self.assertTrue(usage_type.default_location_dest_id, wh_usage_loc)
 
     def test_warehouse_rename(self):
-        warehouse = self.warehouse_obj.create({"name": "Warehouse Romania", "code": "ROW"})
+        warehouse = self.warehouse_obj.create(
+            {"name": "Warehouse Romania", "code": "ROW"}
+        )
         warehouse._update_name_and_code(new_name="Warehouse", new_code="WRO")

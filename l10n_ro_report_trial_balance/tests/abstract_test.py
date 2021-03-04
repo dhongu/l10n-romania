@@ -31,16 +31,30 @@ class AbstractTest(TransactionCase):
 
     def test_html(self):
         test_reports.try_report(
-            self.env.cr, self.env.uid, self.qweb_report_name, [self.report.id], report_type="qweb-html"
+            self.env.cr,
+            self.env.uid,
+            self.qweb_report_name,
+            [self.report.id],
+            report_type="qweb-html",
         )
 
     def test_qweb(self):
         test_reports.try_report(
-            self.env.cr, self.env.uid, self.qweb_report_name, [self.report.id], report_type="qweb-pdf"
+            self.env.cr,
+            self.env.uid,
+            self.qweb_report_name,
+            [self.report.id],
+            report_type="qweb-pdf",
         )
 
     def test_xlsx(self):
-        test_reports.try_report(self.env.cr, self.env.uid, self.xlsx_report_name, [self.report.id], report_type="xlsx")
+        test_reports.try_report(
+            self.env.cr,
+            self.env.uid,
+            self.xlsx_report_name,
+            [self.report.id],
+            report_type="xlsx",
+        )
 
     def test_print(self):
         self.report.print_report("qweb")
@@ -60,14 +74,22 @@ class AbstractTest(TransactionCase):
         self.assertEqual(
             dict(
                 report_action,
-                **{"type": "ir.actions.report", "report_name": self.qweb_report_name, "report_type": "qweb-html"}
+                **{
+                    "type": "ir.actions.report",
+                    "report_name": self.qweb_report_name,
+                    "report_type": "qweb-html",
+                }
             ),
             report_action,
         )
 
         # Check if report template is correct
         report = self.env["ir.actions.report"].search(
-            [("report_name", "=", self.qweb_report_name), ("report_type", "=", report_type)], limit=1
+            [
+                ("report_name", "=", self.qweb_report_name),
+                ("report_type", "=", report_type),
+            ],
+            limit=1,
         )
         self.assertEqual(report.report_type, "qweb-html")
 

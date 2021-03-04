@@ -30,15 +30,21 @@ class TestCreatePartner(TestCreatePartnerBase):
         self.mainpartner.vat = "RO30834857"
         self.mainpartner.ro_vat_change()
         self.assertEqual(self.mainpartner.name, "FOREST AND BIOMASS ROMÂNIA S.A.")
-        self.assertEqual(self.mainpartner.street, "Ciprian Porumbescu Nr.12 Zona Nr.3 Etaj 1")
+        self.assertEqual(
+            self.mainpartner.street, "Ciprian Porumbescu Nr.12 Zona Nr.3 Etaj 1"
+        )
         self.assertEqual(self.mainpartner.state_id, self.env.ref("base.RO_TM"))
         self.assertEqual(self.mainpartner.city, "Timișoara")
         self.assertEqual(self.mainpartner.country_id, self.env.ref("base.ro"))
         # Check inactive vatnumber
         self.mainpartner.vat = "RO27193515"
         self.mainpartner.ro_vat_change()
-        self.assertEqual(self.mainpartner.name, "FOREST AND BIOMASS SERVICES ROMANIA S.A.")
-        self.assertEqual(self.mainpartner.street, "Cal. Buziașului Nr.11 A Corp B Zona Nr.1 Etaj 3")
+        self.assertEqual(
+            self.mainpartner.name, "FOREST AND BIOMASS SERVICES ROMANIA S.A."
+        )
+        self.assertEqual(
+            self.mainpartner.street, "Cal. Buziașului Nr.11 A Corp B Zona Nr.1 Etaj 3"
+        )
         self.assertEqual(self.mainpartner.state_id, self.env.ref("base.RO_TM"))
         self.assertEqual(self.mainpartner.city, "Timișoara")
         self.assertEqual(self.mainpartner.country_id, self.env.ref("base.ro"))
@@ -59,7 +65,9 @@ class TestCreatePartner(TestCreatePartnerBase):
         self.mainpartner.country_id = self.env.ref("base.ro")
         self.mainpartner.ro_vat_change()
         self.assertEqual(self.mainpartner.name, "CUMPANA 1993 SRL")
-        self.assertEqual(self.mainpartner.street, "Alexander Von Humboldt Nr.10 Et.Parter")
+        self.assertEqual(
+            self.mainpartner.street, "Alexander Von Humboldt Nr.10 Et.Parter"
+        )
         self.assertEqual(self.mainpartner.state_id, self.env.ref("base.RO_B"))
         self.assertEqual(self.mainpartner.city, "Sector 3")
         self.assertEqual(self.mainpartner.country_id, self.env.ref("base.ro"))

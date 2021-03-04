@@ -13,7 +13,10 @@ class TestStockSale(TestStockCommon):
         self.make_puchase()
 
         inventory = self.env["stock.inventory"].create(
-            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, self.product_1.id)]}
+            {
+                "location_ids": [(4, self.location_warehouse.id)],
+                "product_ids": [(4, self.product_1.id)],
+            }
         )
         inventory.action_start()
 
@@ -36,7 +39,10 @@ class TestStockSale(TestStockCommon):
         self.make_puchase()
 
         inventory = self.env["stock.inventory"].create(
-            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, self.product_1.id)]}
+            {
+                "location_ids": [(4, self.location_warehouse.id)],
+                "product_ids": [(4, self.product_1.id)],
+            }
         )
         inventory.action_start()
 

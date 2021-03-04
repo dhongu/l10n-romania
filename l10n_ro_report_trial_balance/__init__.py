@@ -11,5 +11,7 @@ def _set_account_group(cr, registry):
 
     for group in account_group:
         if not group.group_child_ids and not group.account_ids:
-            account_ids = env["account.account"].search([("code", "=like", group.code_prefix + "%")])
+            account_ids = env["account.account"].search(
+                [("code", "=like", group.code_prefix + "%")]
+            )
             account_ids.write({"group_id": group.id})

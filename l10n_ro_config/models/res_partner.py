@@ -25,7 +25,9 @@ class ResPartner(models.Model):
         if vat and vat.isdigit():
             partner = self.search([("vat", "=", vat)], limit=1)
             if partner and partner.country_id:
-                vat_country = self._map_vat_country_code(partner.country_id.code.upper()).lower()
+                vat_country = self._map_vat_country_code(
+                    partner.country_id.code.upper()
+                ).lower()
                 vat_number = vat
         else:
             vat_country, vat_number = super(ResPartner, self)._split_vat(vat)

@@ -222,7 +222,6 @@ class MT940(object):
 
     def handle_tag_20(self, data):
         """Contains unique ? message ID"""
-        pass
 
     def handle_tag_25(self, data):
         """Handle tag 25: local bank account information."""
@@ -231,7 +230,6 @@ class MT940(object):
 
     def handle_tag_28C(self, data):
         """Sequence number within batch - normally only zeroes."""
-        pass
 
     def handle_tag_60F(self, data):
         """get start balance and currency"""
@@ -277,20 +275,17 @@ class MT940(object):
             test_empty_id = re.sub(r"[\s0]", "", statement_name)
             is_account_number = statement_name.startswith(self.account_number)
             if not test_empty_id or is_account_number:
-                self.current_statement["name"] = "%s-%s" % (
+                self.current_statement["name"] = "{}-{}".format(
                     self.account_number,
                     self.current_statement["date"].strftime("%Y-%m-%d"),
                 )
 
     def handle_tag_64(self, data):
         """get current balance in currency"""
-        pass
 
     def handle_tag_65(self, data):
         """get future balance in currency"""
-        pass
 
     def handle_tag_86(self, data):
         """details for previous transaction, here most differences between
         banks occur"""
-        pass

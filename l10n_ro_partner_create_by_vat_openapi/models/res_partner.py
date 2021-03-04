@@ -18,7 +18,11 @@ class ResPartner(models.Model):
     def _get_Openapi(self, cod):
 
         result = {}
-        openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default=False)
+        openapi_key = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param(key="openapi_key", default=False)
+        )
 
         if not openapi_key:
             UserError(_("Setati openapi_key in parametrii de sistem"))
@@ -28,7 +32,9 @@ class ResPartner(models.Model):
             "x-api-key": openapi_key,
         }
 
-        request = Request("https://api.openapi.ro/api/companies/%s" % cod, headers=headers)
+        request = Request(
+            "https://api.openapi.ro/api/companies/%s" % cod, headers=headers
+        )
         response = urlopen(request)
         status_code = response.getcode()
 
@@ -37,7 +43,9 @@ class ResPartner(models.Model):
             res = json.loads(response.read())
             state = False
             if res["judet"]:
-                state = self.env["res.country.state"].search([("name", "=", res["judet"].title())])
+                state = self.env["res.country.state"].search(
+                    [("name", "=", res["judet"].title())]
+                )
                 if state:
                     state = state[0].id
 

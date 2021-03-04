@@ -13,7 +13,8 @@
                             <h3>Extras de cont</h3>
                             <br />
                             <div>
-                                <span>Conform dispozițiilor în vigoare, vă înștiinățm că, în evidența noastră
+                                <span>
+                                    Conform dispozițiilor în vigoare, vă înștiinățm că, în evidența noastră
                                     contabilă
                                 </span>
                                 <t t-if="get_end_period(data)">
@@ -43,7 +44,6 @@
                                 suma acceptată, iar în cazul constătarii de diferențe să ne anexați nota explicativă
                                 cuprinzând obiecțiile dvs.
                                 Prezentul extras de cont ține loc de conciliere conform procedurii arbitrale.
-
                             </div>
                             <br />
                             <div>Conducătorul unității</div>

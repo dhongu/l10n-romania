@@ -14,11 +14,13 @@ class ResCompany(models.Model):
         "account.account",
         string="Picking Account Payable",
         domain="[('internal_type', 'in', ['payable','other'])]",
-        help="This account will be used as the payable account for the " "current partner on stock picking notice.",
+        help="This account will be used as the payable account for the "
+        "current partner on stock picking notice.",
     )
     property_stock_picking_receivable_account_id = fields.Many2one(
         "account.account",
         string="Picking Account Receivable",
         domain="[('internal_type', 'in', ['receivable','other'])]",
-        help="This account will be used as the receivable account for the " "current partner on stock picking notice.",
+        help="This account will be used as the receivable account for the "
+        "current partner on stock picking notice.",
     )

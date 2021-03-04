@@ -6,7 +6,7 @@
     "version": "13.0.1.0.0",
     "license": "AGPL-3",
     "author": "Forest and Biomass Romania, " "Odoo Community Association (OCA)",
-    "website": "https://www.forbiom.eu",
+    "website": "https://github.com/OCA/l10n-romania",
     "category": "Banking addons",
     "depends": ["account_bank_statement_import_mt940_base"],
     "data": ["views/account_bank_statement_import_sta_view.xml"],

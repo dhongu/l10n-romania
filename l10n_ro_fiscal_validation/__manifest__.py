@@ -8,7 +8,9 @@
     "data": ["data/res_partner_vat_cron.xml"],
     "license": "AGPL-3",
     "version": "13.0.1.0.0",
-    "author": "NextERP Romania," "Forest and Biomass Romania," "Odoo Community Association (OCA)",
+    "author": "NextERP Romania,"
+    "Forest and Biomass Romania,"
+    "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "installable": True,
     "development_status": "Mature",

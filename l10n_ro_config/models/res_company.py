@@ -21,19 +21,22 @@ class ResCompany(models.Model):
         "account.account",
         string="Picking Account Payable",
         domain="[('internal_type', 'in', ['payable','other'])]",
-        help="This account will be used as the payable account for the " "current partner on stock picking notice.",
+        help="This account will be used as the payable account for the "
+        "current partner on stock picking notice.",
     )
     property_stock_picking_receivable_account_id = fields.Many2one(
         "account.account",
         string="Picking Account Receivable",
         domain="[('internal_type', 'in', ['receivable','other'])]",
-        help="This account will be used as the receivable account for the " "current partner on stock picking notice.",
+        help="This account will be used as the receivable account for the "
+        "current partner on stock picking notice.",
     )
     property_stock_usage_giving_account_id = fields.Many2one(
         "account.account",
         string="Usage Giving Account",
         domain="[('internal_type', '=', 'other')]",
-        help="This account will be used as the usage giving " "account in account move line.",
+        help="This account will be used as the usage giving "
+        "account in account move line.",
     )
     property_stock_picking_custody_account_id = fields.Many2one(
         "account.account",
@@ -58,8 +61,12 @@ class ResCompany(models.Model):
         "stores.",
     )
 
-    property_trade_discount_received_account_id = fields.Many2one("account.account", string="Trade discounts received")
-    property_trade_discount_granted_account_id = fields.Many2one("account.account", string="Trade discounts granted")
+    property_trade_discount_received_account_id = fields.Many2one(
+        "account.account", string="Trade discounts received"
+    )
+    property_trade_discount_granted_account_id = fields.Many2one(
+        "account.account", string="Trade discounts granted"
+    )
 
     property_vat_on_payment_position_id = fields.Many2one(
         "account.fiscal.position", "Fiscal Position for VAT on Payment"

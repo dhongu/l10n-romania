@@ -14,14 +14,22 @@ class DailyStockReport(models.TransientModel):
     # Filters fields, used for data computation
 
     location_id = fields.Many2one(
-        "stock.location", domain="[('usage','=','internal'),('company_id','=',company_id)]", required=True,
+        "stock.location",
+        domain="[('usage','=','internal'),('company_id','=',company_id)]",
+        required=True,
     )
 
     date_range_id = fields.Many2one("date.range", string="Date range")
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
-    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.user.company_id)
-    mode = fields.Selection([("product", "Product"), ("ref", "Reference")], default="ref", string="Detail mode",)
+    company_id = fields.Many2one(
+        "res.company", string="Company", default=lambda self: self.env.user.company_id
+    )
+    mode = fields.Selection(
+        [("product", "Product"), ("ref", "Reference")],
+        default="ref",
+        string="Detail mode",
+    )
 
     line_product_ids = fields.One2many("stock.daily.stock.report.line", "report_id")
     line_ref_ids = fields.One2many("stock.daily.stock.report.ref", "report_id")
@@ -52,7 +60,9 @@ class DailyStockReport(models.TransientModel):
 
         self.env["account.move.line"].check_access_rights("read")
 
-        lines = self.env["stock.daily.stock.report.line"].search([("report_id", "=", self.id)])
+        lines = self.env["stock.daily.stock.report.line"].search(
+            [("report_id", "=", self.id)]
+        )
         lines.unlink()
         stock_init = []
         stock_in = []
@@ -234,9 +244,13 @@ class DailyStockReport(models.TransientModel):
     def button_show(self):
         self.do_compute()
         if self.mode == "ref":
-            action = self.env.ref("l10n_ro_stock_report.action_daily_stock_report_ref").read()[0]
+            action = self.env.ref(
+                "l10n_ro_stock_report.action_daily_stock_report_ref"
+            ).read()[0]
         else:
-            action = self.env.ref("l10n_ro_stock_report.action_daily_stock_report_line").read()[0]
+            action = self.env.ref(
+                "l10n_ro_stock_report.action_daily_stock_report_line"
+            ).read()[0]
         action["domain"] = [("report_id", "=", self.id)]
         action["context"] = {"active_id": self.id}
         action["target"] = "main"
@@ -261,7 +275,9 @@ class DailyStockReportRef(models.TransientModel):
     ref = fields.Char(string="Reference")
     quantity = fields.Float()
     amount = fields.Float()
-    type = fields.Selection([("balance", "Balance"), ("in", "Input"), ("out", "Output")])
+    type = fields.Selection(
+        [("balance", "Balance"), ("in", "Input"), ("out", "Output")]
+    )
     valuation_ids = fields.Many2many("stock.valuation.layer")
 
     def action_valuation_at_date_details(self):
@@ -288,7 +304,9 @@ class DailyStockReportLine(models.TransientModel):
     product_id = fields.Many2one("product.product")
     quantity = fields.Float()
     amount = fields.Float()
-    type = fields.Selection([("balance", "Balance"), ("in", "Input"), ("out", "Output")])
+    type = fields.Selection(
+        [("balance", "Balance"), ("in", "Input"), ("out", "Output")]
+    )
     valuation_ids = fields.Many2many("stock.valuation.layer")
 
     def action_valuation_at_date_details(self):

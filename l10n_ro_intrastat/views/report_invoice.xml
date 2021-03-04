@@ -57,7 +57,8 @@
                                         class="text-right"
                                         t-if="with_discount(o)"
                                         groups="sale.group_discount_per_so_line"
-                                    >Discount (%)
+                                    >
+                                        Discount (%)
                                     </th>
                                     <th class="text-right">Amount</th>
                                     <th class="text-right">VAT</th>
@@ -234,7 +235,6 @@
                                                             t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"
                                                         />
                                                     </t>
-
                                                     )
                                                 </div>
                                             </td>
@@ -247,11 +247,13 @@
                                 <span t-field="o.comment" />
                             </p>
                             <small t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
-                                <div>Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,
+                                <div>
+                                    Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,
                                     with subsequent amendments and OMPF 2226/2006
                                 </div>
                                 <t t-if="not res_company.stamp_image">
-                                    <div>Invoice circulate without signature and stamp according to the law 227/2015,
+                                    <div>
+                                        Invoice circulate without signature and stamp according to the law 227/2015,
                                         rule 319, paragraph 29
                                     </div>
                                 </t>

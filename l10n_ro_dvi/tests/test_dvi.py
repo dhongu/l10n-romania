@@ -15,48 +15,87 @@ class TestDVI(SavepointCase):
         account_type_exp = cls.env.ref("account.data_account_type_expenses")
         account_type_cur = cls.env.ref("account.data_account_type_current_assets")
 
-        account_expense = cls.env["account.account"].search([("code", "=", "607000")], limit=1)
+        account_expense = cls.env["account.account"].search(
+            [("code", "=", "607000")], limit=1
+        )
         if not account_expense:
             account_expense = cls.env["account.account"].create(
-                {"name": "Expense", "code": "607000", "user_type_id": account_type_exp.id, "reconcile": False}
+                {
+                    "name": "Expense",
+                    "code": "607000",
+                    "user_type_id": account_type_exp.id,
+                    "reconcile": False,
+                }
             )
 
         account_income = cls.env["account.account"].search([("code", "=", "707000")])
         if not account_income:
             account_income = cls.env["account.account"].create(
-                {"name": "Income", "code": "707000", "user_type_id": account_type_inc.id, "reconcile": False}
+                {
+                    "name": "Income",
+                    "code": "707000",
+                    "user_type_id": account_type_inc.id,
+                    "reconcile": False,
+                }
             )
 
         # se poate utiliza foarte bine si  408
         account_input = cls.env["account.account"].search([("code", "=", "371000.i")])
         if not account_input:
             account_input = cls.env["account.account"].create(
-                {"name": "Income", "code": "371000.i", "user_type_id": account_type_cur.id, "reconcile": False}
+                {
+                    "name": "Income",
+                    "code": "371000.i",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": False,
+                }
             )
 
         # se poate utiliza foarte bine si  418
         account_output = cls.env["account.account"].search([("code", "=", "371000.o")])
         if not account_output:
             account_output = cls.env["account.account"].create(
-                {"name": "Output", "code": "371000.o", "user_type_id": account_type_cur.id, "reconcile": False}
+                {
+                    "name": "Output",
+                    "code": "371000.o",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": False,
+                }
             )
 
         account_valuation = cls.env["account.account"].search([("code", "=", "371000")])
         if not account_valuation:
             account_valuation = cls.env["account.account"].create(
-                {"name": "Valuation", "code": "371000", "user_type_id": account_type_cur.id, "reconcile": False}
+                {
+                    "name": "Valuation",
+                    "code": "371000",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": False,
+                }
             )
 
         account_other_tax = cls.env["account.account"].search([("code", "=", "446000")])
         if not account_other_tax:
             account_other_tax = cls.env["account.account"].create(
-                {"name": "Valuation", "code": "446000", "user_type_id": account_type_cur.id, "reconcile": True}
+                {
+                    "name": "Valuation",
+                    "code": "446000",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": True,
+                }
             )
 
-        account_special_funds = cls.env["account.account"].search([("code", "=", "447000")])
+        account_special_funds = cls.env["account.account"].search(
+            [("code", "=", "447000")]
+        )
         if not account_special_funds:
             account_special_funds = cls.env["account.account"].create(
-                {"name": "Valuation", "code": "447000", "user_type_id": account_type_cur.id, "reconcile": False}
+                {
+                    "name": "Valuation",
+                    "code": "447000",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": False,
+                }
             )
 
         stock_journal = cls.env["account.journal"].search([("code", "=", "STJ")])
@@ -80,10 +119,20 @@ class TestDVI(SavepointCase):
         )
 
         cls.product_1 = cls.env["product.product"].create(
-            {"name": "Product A", "type": "product", "categ_id": cls.category.id, "invoice_policy": "delivery"}
+            {
+                "name": "Product A",
+                "type": "product",
+                "categ_id": cls.category.id,
+                "invoice_policy": "delivery",
+            }
         )
         cls.product_2 = cls.env["product.product"].create(
-            {"name": "Product B", "type": "product", "categ_id": cls.category.id, "invoice_policy": "delivery"}
+            {
+                "name": "Product B",
+                "type": "product",
+                "categ_id": cls.category.id,
+                "invoice_policy": "delivery",
+            }
         )
 
         cls.vendor = cls.env["res.partner"].search([("name", "=", "vendor1")], limit=1)
@@ -108,7 +157,9 @@ class TestDVI(SavepointCase):
         self.picking.button_validate()
 
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
-        valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
+        valuations = self.env["stock.valuation.layer"].read_group(
+            domain, ["value:sum", "quantity:sum"], ["product_id"]
+        )
         for valuation in valuations:
             if valuation["product_id"][0] == self.product_1.id:
                 self.assertEqual(valuation["value"], 10 * 100)
@@ -140,7 +191,9 @@ class TestDVI(SavepointCase):
         dvi.button_validate()
 
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
-        valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
+        valuations = self.env["stock.valuation.layer"].read_group(
+            domain, ["value:sum", "quantity:sum"], ["product_id"]
+        )
         for valuation in valuations:
             if valuation["product_id"][0] == self.product_1.id:
                 self.assertEqual(valuation["value"], 10 * 100 + 1.67 + 2)

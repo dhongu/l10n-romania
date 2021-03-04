@@ -7,7 +7,7 @@
     "category": "Localization",
     "license": "AGPL-3",
     "author": "Terrabit,Odoo Community Association (OCA)",
-    "website": "www.terrabit.ro",
+    "website": "https://github.com/OCA/l10n-romania",
     "depends": ["point_of_sale", "l10n_ro_stock"],
     "data": [],
     "maintainers": ["dhongu"],

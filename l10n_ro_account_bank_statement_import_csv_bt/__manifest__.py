@@ -6,7 +6,7 @@
     "version": "13.0.1.0.0",
     "license": "AGPL-3",
     "author": "Terrabit,Odoo Community Association (OCA)",
-    "website": "https://www.terrabit.ro",
+    "website": "https://github.com/OCA/l10n-romania",
     "category": "Banking addons",
     "depends": ["account_bank_statement_import"],
     "data": ["views/account_bank_statement_import_sta_view.xml"],

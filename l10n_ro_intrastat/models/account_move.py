@@ -8,9 +8,13 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     intrastat_transaction_id = fields.Many2one(
-        "l10n_ro_intrastat.transaction", "Intrastat Transaction Type", help="Intrastat nature of transaction",
+        "l10n_ro_intrastat.transaction",
+        "Intrastat Transaction Type",
+        help="Intrastat nature of transaction",
     )
-    transport_mode_id = fields.Many2one("l10n_ro_intrastat.transport_mode", "Intrastat Transport Mode")
+    transport_mode_id = fields.Many2one(
+        "l10n_ro_intrastat.transport_mode", "Intrastat Transport Mode"
+    )
     intrastat_country_id = fields.Many2one(
         "res.country",
         string="Intrastat Country",

@@ -25,12 +25,14 @@ class ResPartnerAnaf(models.Model):
     end_date = fields.Date("End Date", index=True)
     publish_date = fields.Date("Publish Date")
     operation_date = fields.Date("Operation Date")
-    operation_type = fields.Selection([("I", "Register"), ("E", "Fix error"), ("D", "Removal")], "Operation Type")
+    operation_type = fields.Selection(
+        [("I", "Register"), ("E", "Fix error"), ("D", "Removal")], "Operation Type"
+    )
 
     @api.model
     def download_anaf_data(self, file_date=None):
-        """ Download VAT on Payment data from ANAF if the file
-            was not modified in the same date
+        """Download VAT on Payment data from ANAF if the file
+        was not modified in the same date
         """
         data_dir = tools.config["data_dir"]
         istoric = os.path.join(data_dir, "istoric.txt")

@@ -1,4 +1,4 @@
-odoo.define("l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_widget", function(require) {
+odoo.define("l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_widget", function (require) {
     "use strict";
 
     var Widget = require("web.Widget");
@@ -8,13 +8,13 @@ odoo.define("l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_widget", 
             "click .o_l10n_ro_report_trial_balance_web_action": "boundLink",
             "click .o_l10n_ro_report_trial_balance_web_action_multi": "boundLinkmulti",
         },
-        init: function() {
+        init: function () {
             this._super.apply(this, arguments);
         },
-        start: function() {
+        start: function () {
             return this._super.apply(this, arguments);
         },
-        boundLink: function(e) {
+        boundLink: function (e) {
             var res_model = $(e.target).data("res-model");
             var res_id = $(e.target).data("active-id");
 
@@ -34,7 +34,7 @@ odoo.define("l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_widget", 
             }
         },
 
-        boundLinkmulti: function(e) {
+        boundLinkmulti: function (e) {
             var res_model = $(e.target).data("res-model");
             var domain = $(e.target).data("domain");
 

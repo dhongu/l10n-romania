@@ -19,6 +19,8 @@ class ReportReportStatement(models.AbstractModel):
             "doc_ids": docids,
             "doc_model": report.model,
             "time": time,
-            "wizard": self.env["account.report.sale.purchase.journal"].browse(data["wizard_id"]),
+            "wizard": self.env["account.report.sale.purchase.journal"].browse(
+                data["wizard_id"]
+            ),
             "docs": self.env[report.model].browse(docids),
         }

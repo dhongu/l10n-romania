@@ -7,7 +7,13 @@
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Warehouse",
-    "depends": ["stock_account", "account", "purchase_stock", "sale_stock", "date_range"],
+    "depends": [
+        "stock_account",
+        "account",
+        "purchase_stock",
+        "sale_stock",
+        "date_range",
+    ],
     "data": [
         "report/daily_stock_report_view.xml",
         "report/daily_stock_report_template.xml",

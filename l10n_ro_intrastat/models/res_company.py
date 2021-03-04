@@ -8,10 +8,14 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     intrastat_transaction_id = fields.Many2one(
-        "l10n_ro_intrastat.transaction", "Default Transaction Type", help="Intrastat nature of transaction",
+        "l10n_ro_intrastat.transaction",
+        "Default Transaction Type",
+        help="Intrastat nature of transaction",
     )
 
-    transport_mode_id = fields.Many2one("l10n_ro_intrastat.transport_mode", "Default Transport Mode")
+    transport_mode_id = fields.Many2one(
+        "l10n_ro_intrastat.transport_mode", "Default Transport Mode"
+    )
 
     incoterm_id = fields.Many2one(
         "account.incoterms",

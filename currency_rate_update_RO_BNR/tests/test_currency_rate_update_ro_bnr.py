@@ -37,7 +37,10 @@ class TestCurrencyRateUpdateRoBnr(SavepointCase):
         # on the first company.
         cls.env.user.company_id = cls.company
         cls.bnr_provider = cls.CurrencyRateProvider.create(
-            {"service": "RO_BNR", "currency_ids": [(4, cls.usd_currency.id), (4, cls.ron_currency.id)]}
+            {
+                "service": "RO_BNR",
+                "currency_ids": [(4, cls.usd_currency.id), (4, cls.ron_currency.id)],
+            }
         )
         cls.CurrencyRate.search([]).unlink()
 
@@ -56,7 +59,9 @@ class TestCurrencyRateUpdateRoBnr(SavepointCase):
     def test_update_RO_BNR_month(self):
         self.bnr_provider._update(self.today - relativedelta(months=1), self.today)
 
-        rates = self.CurrencyRate.search([("currency_id", "=", self.usd_currency.id)], limit=1)
+        rates = self.CurrencyRate.search(
+            [("currency_id", "=", self.usd_currency.id)], limit=1
+        )
         self.assertTrue(rates)
 
         self.CurrencyRate.search([("currency_id", "=", self.usd_currency.id)]).unlink()
@@ -72,7 +77,9 @@ class TestCurrencyRateUpdateRoBnr(SavepointCase):
         self.bnr_provider.next_run = next_run
         self.bnr_provider._scheduled_update()
 
-        rates = self.CurrencyRate.search([("currency_id", "=", self.usd_currency.id)], limit=1)
+        rates = self.CurrencyRate.search(
+            [("currency_id", "=", self.usd_currency.id)], limit=1
+        )
         self.assertTrue(rates)
 
         self.CurrencyRate.search([("currency_id", "=", self.usd_currency.id)]).unlink()

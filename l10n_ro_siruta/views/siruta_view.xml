@@ -72,6 +72,7 @@
                             <field name="country_id" />
                         </group>
                         <group>
+
                         </group>
                     </group>
                     <field name="city_ids" />
@@ -228,7 +229,8 @@
                             <field name="country_id" />
                         </group>
                         <group>
-                    </group>
+
+                        </group>
                     </group>
                     <field name="state_ids" />
                 </form>

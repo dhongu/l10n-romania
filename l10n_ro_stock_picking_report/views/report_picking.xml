@@ -48,7 +48,8 @@
                     </div>
                     <div>
                         <div t-if="o.partner_id.commercial_partner_id.name!=o.partner_id.name">
-                            <strong t-field="o.partner_id.commercial_partner_id.name" />,
+                            <strong t-field="o.partner_id.commercial_partner_id.name" />
+                            ,
                         </div>
                         <strong t-field="o.partner_id.name" />
                     </div>
@@ -750,7 +751,8 @@
                 </div>
             </div>
             <div>
-                <span>The undersigned, members of the reception, we proceeded to receive material values
+                <span>
+                    The undersigned, members of the reception, we proceeded to receive material values
                     supplied by
                 </span>
                 <strong>
@@ -758,7 +760,6 @@
                 </strong>
                 <span t-if="o.partner_id.city">
                     from the city
-
                     <strong>
                         <span t-field="o.partner_id.city" />
                     </strong>

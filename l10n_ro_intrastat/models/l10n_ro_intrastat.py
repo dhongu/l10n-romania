@@ -10,7 +10,9 @@ class IntrastatTransaction(models.Model):
     _rec_name = "description"
 
     code = fields.Char("Code", required=True, readonly=True)
-    parent_id = fields.Many2one("l10n_ro_intrastat.transaction", "Parent Code", readonly=True)
+    parent_id = fields.Many2one(
+        "l10n_ro_intrastat.transaction", "Parent Code", readonly=True
+    )
     description = fields.Text("Description", readonly=True)
 
     _sql_constraints = [

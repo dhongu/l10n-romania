@@ -9,4 +9,4 @@ class StockPicking(models.Model):
 
     def _get_report_base_filename(self):
         self.ensure_one()
-        return "%s %s" % (self.picking_type_id.name, self.name)
+        return "{} {}".format(self.picking_type_id.name, self.name)

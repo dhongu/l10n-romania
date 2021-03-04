@@ -8,20 +8,18 @@
             <field name="inherit_id" ref="account.invoice_form" />
             <field name="arch" type="xml">
                 <field name="name" position="after">
-                   <!--
+                    <!--
                       <field name="delegate_id"  />
                       <field name="mean_transp" colspan="2" />
                      -->
-               </field>
+                </field>
             </field>
         </record>
         <record id="action_invoice_set_origin_with_picking" model="ir.actions.server">
             <field name="name">Set Origin</field>
             <field name="model_id" ref="model_account_move" />
             <field name="state">code</field>
-            <field name="code">
-records.set_origin_with_picking()
-            </field>
+            <field name="code">records.set_origin_with_picking()</field>
         </record>
         <record id="account.menu_action_account_payments_receivable" model="ir.ui.menu">
             <field name="name">Incoming payments</field>

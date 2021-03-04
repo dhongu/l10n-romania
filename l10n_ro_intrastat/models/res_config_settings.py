@@ -10,7 +10,10 @@ class ResConfigSettings(models.TransientModel):
 
     module_l10n_ro_intrastat = fields.Boolean(string="Intrastat RO")
     company_country_id = fields.Many2one(
-        "res.country", string="Company country", readonly=True, related="company_id.country_id",
+        "res.country",
+        string="Company country",
+        readonly=True,
+        related="company_id.country_id",
     )
 
     incoterm_id = fields.Many2one(

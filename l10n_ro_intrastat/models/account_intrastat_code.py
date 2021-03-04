@@ -45,5 +45,9 @@ class AccountIntrastatCode(models.Model):
         return super(AccountIntrastatCode, self).search(domain, limit=limit).name_get()
 
     _sql_constraints = [
-        ("intrastat_region_nckey_unique", "UNIQUE (nckey)", "The NC key must be unique.",),
+        (
+            "intrastat_region_nckey_unique",
+            "UNIQUE (nckey)",
+            "The NC key must be unique.",
+        ),
     ]

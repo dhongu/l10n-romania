@@ -7,8 +7,12 @@ from odoo import api, fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    commune_id = fields.Many2one("res.country.commune", string="City/Commune", ondelete="set null", index=True)
-    zone_id = fields.Many2one("res.country.zone", string="Zone", ondelete="set null", index=True)
+    commune_id = fields.Many2one(
+        "res.country.commune", string="City/Commune", ondelete="set null", index=True
+    )
+    zone_id = fields.Many2one(
+        "res.country.zone", string="Zone", ondelete="set null", index=True
+    )
 
     @api.onchange("city_id")
     def _onchange_city_id(self):
@@ -19,9 +23,9 @@ class ResPartner(models.Model):
 
     @api.model
     def _address_fields(self):
-        """ Extends list of address fields with city_id, commune_id, zone_id
+        """Extends list of address fields with city_id, commune_id, zone_id
         to be synced from the parent when the `use_parent_address`
-        flag is set. """
+        flag is set."""
         new_list = ["city_id", "commune_id", "zone_id"]
         return super(ResPartner, self)._address_fields() + new_list
 

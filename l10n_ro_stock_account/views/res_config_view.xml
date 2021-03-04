@@ -62,9 +62,7 @@
                             aria-label="Values set here are company-specific."
                             groups="base.group_multi_company"
                         />
-                        <div class="text-muted">
-                            Record cost of goods sold in your journal entries
-                        </div>
+                        <div class="text-muted">Record cost of goods sold in your journal entries</div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6 o_setting_box" groups="base.group_no_one">
@@ -80,9 +78,7 @@
                             aria-label="Values set here are company-specific."
                             groups="base.group_multi_company"
                         />
-                        <div class="text-muted">
-                            Registration of accounting move according to Romanian legislation
-                        </div>
+                        <div class="text-muted">Registration of accounting move according to Romanian legislation</div>
                     </div>
                 </div>
             </xpath>

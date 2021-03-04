@@ -15,10 +15,18 @@ class TestStorageSheet(TransactionCase):
     def setUp(self):
         super(TestStorageSheet, self).setUp()
 
-        self.account_difference = self.env["account.account"].search([("code", "=", "348000")])
-        self.account_expense = self.env["account.account"].search([("code", "=", "607000")])
-        self.account_income = self.env["account.account"].search([("code", "=", "707000")])
-        self.account_valuation = self.env["account.account"].search([("code", "=", "371000")])
+        self.account_difference = self.env["account.account"].search(
+            [("code", "=", "348000")]
+        )
+        self.account_expense = self.env["account.account"].search(
+            [("code", "=", "607000")]
+        )
+        self.account_income = self.env["account.account"].search(
+            [("code", "=", "707000")]
+        )
+        self.account_valuation = self.env["account.account"].search(
+            [("code", "=", "371000")]
+        )
 
         stock_journal = self.env["account.journal"].search([("code", "=", "STJ")])
         if not stock_journal:
@@ -41,7 +49,9 @@ class TestStorageSheet(TransactionCase):
             "property_stock_journal": stock_journal.id,
         }
 
-        self.category = self.env["product.category"].search([("name", "=", "TEST Marfa")])
+        self.category = self.env["product.category"].search(
+            [("name", "=", "TEST Marfa")]
+        )
         if not self.category:
             self.category = self.env["product.category"].create(category_value)
         else:
@@ -76,7 +86,9 @@ class TestStorageSheet(TransactionCase):
         self.location = picking_type_in.default_location_dest_id
 
         date_range = self.env["date.range"]
-        self.type = self.env["date.range.type"].create({"name": "Month", "company_id": False, "allow_overlap": False})
+        self.type = self.env["date.range.type"].create(
+            {"name": "Month", "company_id": False, "allow_overlap": False}
+        )
         self.dt = date_range.create(
             {
                 "name": "FS2016",
@@ -131,21 +143,27 @@ class TestStorageSheet(TransactionCase):
         wizard.button_show()
         wizard.button_print()
 
-        line = self.env["stock.storage.sheet.report.line"].search([("report_id", "=", wizard.id)], limit=1)
+        line = self.env["stock.storage.sheet.report.line"].search(
+            [("report_id", "=", wizard.id)], limit=1
+        )
         line.action_valuation_at_date_details()
 
     def test_report_daily_stock(self):
         self.create_po()
         self.create_invoice()
 
-        wizard = Form(self.env["stock.daily.stock.report"].with_context(default_mode="product"))
+        wizard = Form(
+            self.env["stock.daily.stock.report"].with_context(default_mode="product")
+        )
 
         wizard.location_id = self.location
         wizard.mode = "product"
         wizard = wizard.save()
         wizard.button_show()
         wizard.button_print()
-        line = self.env["stock.daily.stock.report.line"].search([("report_id", "=", wizard.id)], limit=1)
+        line = self.env["stock.daily.stock.report.line"].search(
+            [("report_id", "=", wizard.id)], limit=1
+        )
         line.action_valuation_at_date_details()
 
         wizard = Form(self.env["stock.daily.stock.report"])
@@ -155,5 +173,7 @@ class TestStorageSheet(TransactionCase):
         wizard = wizard.save()
         wizard.button_show()
         wizard.button_print()
-        line = self.env["stock.daily.stock.report.ref"].search([("report_id", "=", wizard.id)], limit=1)
+        line = self.env["stock.daily.stock.report.ref"].search(
+            [("report_id", "=", wizard.id)], limit=1
+        )
         line.action_valuation_at_date_details()

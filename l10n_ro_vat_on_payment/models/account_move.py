@@ -10,16 +10,19 @@ class AccountMove(models.Model):
 
     @api.onchange("partner_id", "company_id")
     def _onchange_partner_id(self):
-        """ Check if invoice is with VAT on Payment.
-            Romanian law specify that the VAT on payment is applied only
-            for internal invoices (National or not specified fiscal position)
+        """Check if invoice is with VAT on Payment.
+        Romanian law specify that the VAT on payment is applied only
+        for internal invoices (National or not specified fiscal position)
         """
         result = super(AccountMove, self)._onchange_partner_id()
         fp_model = self.env["account.fiscal.position"]
         vatp = False
         ctx = dict(self._context)
         company = self.company_id
-        partner = self.env["res.partner"]._find_accounting_partner(self.partner_id) or self.partner_id
+        partner = (
+            self.env["res.partner"]._find_accounting_partner(self.partner_id)
+            or self.partner_id
+        )
         if self.invoice_date:
             ctx.update({"check_date": self.invoice_date})
         if "out" in self.type:

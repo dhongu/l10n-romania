@@ -129,7 +129,8 @@
                             class="text-right"
                             t-if="with_discount(o) and with_discount_distinct"
                             groups="sale.group_discount_per_so_line"
-                        >Discount (%)
+                        >
+                            Discount (%)
                         </th>
                         <th class="text-right">Amount</th>
                         <th class="text-right">Taxes</th>
@@ -316,7 +317,6 @@
                                         t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                     />
                                 </t>
-
                                 )
                             </div>
                         </td>
@@ -388,7 +388,6 @@
                     </span>
                     ,
                     <span>amount</span>
-
                     <span
                         t-esc="payment_vals['amount']"
                         t-options='{"widget": "monetary", "display_currency": o.currency_id}'

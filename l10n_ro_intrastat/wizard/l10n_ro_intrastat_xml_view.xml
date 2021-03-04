@@ -24,7 +24,8 @@
                     </group>
                     <div states="download">
                         <h2>Intrastat Declaration</h2>
-                        <p>Here is the XML file with your intrastat declaration:
+                        <p>
+                            Here is the XML file with your intrastat declaration:
                             <field name="file_save" filename="name" />
                         </p>
                     </div>

@@ -13,10 +13,14 @@
                 <div>
                     <strong t-field="company.partner_id.name" />
                 </div>
-                <t t-if="company.vat"><t t-esc="company.country_id.vat_label or 'TIN'" />:
+                <t t-if="company.vat">
+                    <t t-esc="company.country_id.vat_label or 'TIN'" />
+                    :
                     <span t-att-style="'font-size: 9px; font-weight: bold;'" t-field="company.vat" />
                 </t>
-                <t t-if="company.partner_id.nrc"><t t-att-style="'font-size: 9px; font-weight: bold;'" t-esc="'NRC'" />:
+                <t t-if="company.partner_id.nrc">
+                    <t t-att-style="'font-size: 9px; font-weight: bold;'" t-esc="'NRC'" />
+                    :
                     <span t-att-style="'font-size: 9px; font-weight: bold;'" t-field="company.partner_id.nrc" />
                 </t>
                 <span

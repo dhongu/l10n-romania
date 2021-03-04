@@ -10,7 +10,10 @@ from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
-CEDILLATRANS = bytes.maketrans(u"\u015f\u0163\u015e\u0162".encode("utf8"), u"\u0219\u021b\u0218\u021a".encode("utf8"),)
+CEDILLATRANS = bytes.maketrans(
+    u"\u015f\u0163\u015e\u0162".encode("utf8"),
+    u"\u0219\u021b\u0218\u021a".encode("utf8"),
+)
 
 headers = {
     "User-Agent": "Mozilla/5.0 (compatible; MSIE 7.01; Windows NT 5.0)",
@@ -30,7 +33,9 @@ class ResPartner(models.Model):
         # data = date of the interogation
         if not data:
             data = fields.Date.to_string(fields.Date.today())
-        res = requests.post(ANAF_URL, json=[{"cui": cod, "data": data}], headers=headers)
+        res = requests.post(
+            ANAF_URL, json=[{"cui": cod, "data": data}], headers=headers
+        )
         result = {}
         if res.status_code == 200:
             res = res.json()
@@ -94,7 +99,9 @@ class ResPartner(models.Model):
             vat = partner.vat.strip().upper()
             vat_country, vat_number = partner._split_vat(vat)
             if not vat_country and partner.country_id:
-                vat_country = self._map_vat_country_code(partner.country_id.code.upper()).lower()
+                vat_country = self._map_vat_country_code(
+                    partner.country_id.code.upper()
+                ).lower()
                 if not vat_number:
                     vat_number = partner.vat
             if vat_country == "ro":
@@ -105,5 +112,9 @@ class ResPartner(models.Model):
                 except Exception:
                     _logger.info("ANAF Webservice not working.")
                 if res:
-                    res["country_id"] = self.env["res.country"].search([("code", "ilike", vat_country)])[0].id
+                    res["country_id"] = (
+                        self.env["res.country"]
+                        .search([("code", "ilike", vat_country)])[0]
+                        .id
+                    )
                     partner.with_context(skip_ro_vat_change=True).update(res)

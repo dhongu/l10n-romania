@@ -114,11 +114,9 @@
                                         <t t-set="type" t-value="'payment'" />
                                     </t>
                                 </t>
-
-                                 <t t-if="type!='payment' and o.amount&lt;0">
+                                <t t-if="type!='payment' and o.amount&lt;0">
                                     <t t-set="type" t-value="'payment'" />
                                 </t>
-
                                 <t t-if="type=='collection'">
                                     <span>Cash collection:</span>
                                 </t>

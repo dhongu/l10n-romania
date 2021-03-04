@@ -5,6 +5,7 @@
         <field name="model">pos.session</field>
         <field name="inherit_id" ref="point_of_sale.view_pos_session_form" />
         <field name="arch" type="xml">
+
         </field>
     </record>
 </odoo>

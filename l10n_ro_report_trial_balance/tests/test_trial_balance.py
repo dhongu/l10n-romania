@@ -21,17 +21,28 @@ class TestTrialBalanceReport(common.TransactionCase):
             }
         )
         self.account110 = self.env["account.account"].search(
-            [("user_type_id", "=", self.env.ref("account.data_unaffected_earnings").id)], limit=1
+            [
+                (
+                    "user_type_id",
+                    "=",
+                    self.env.ref("account.data_unaffected_earnings").id,
+                )
+            ],
+            limit=1,
         )
         self.account200 = acc_obj.create(
             {
                 "code": "200",
                 "name": "Account 200",
-                "user_type_id": self.env.ref("account.data_account_type_other_income").id,
+                "user_type_id": self.env.ref(
+                    "account.data_account_type_other_income"
+                ).id,
             }
         )
         self.group1 = group_obj.create({"code_prefix": "1", "name": "Group 1"})
-        self.group11 = group_obj.create({"code_prefix": "11", "name": "Group 11", "parent_id": self.group1.id})
+        self.group11 = group_obj.create(
+            {"code_prefix": "11", "name": "Group 11", "parent_id": self.group1.id}
+        )
         self.group2 = group_obj.create({"code_prefix": "2", "name": "Group 2"})
         self.previous_fy_date_start = "2015-01-01"
         self.previous_fy_date_end = "2015-12-31"
@@ -41,7 +52,9 @@ class TestTrialBalanceReport(common.TransactionCase):
 
         misc_journal = self.env["account.journal"].search([("code", "=", "MISC")])
         if not misc_journal:
-            self.env["account.journal"].create({"name": "MISC Journal", "code": "MISC", "type": "general"})
+            self.env["account.journal"].create(
+                {"name": "MISC Journal", "code": "MISC", "type": "general"}
+            )
 
     def _add_move(
         self,
@@ -111,19 +124,34 @@ class TestTrialBalanceReport(common.TransactionCase):
         lines = {}
         report_account_model = self.env["l10n_ro_report_trial_balance_account"]
         lines["receivable"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_id", "=", self.account100.id)]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_id", "=", self.account100.id),
+            ]
         )
         lines["income"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_id", "=", self.account200.id)]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_id", "=", self.account200.id),
+            ]
         )
         lines["unaffected"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_id", "=", self.account110.id)]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_id", "=", self.account110.id),
+            ]
         )
         lines["group1"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_group_id", "=", self.group1.id)]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_group_id", "=", self.group1.id),
+            ]
         )
         lines["group2"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_group_id", "=", self.group2.id)]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_group_id", "=", self.group2.id),
+            ]
         )
         return lines
 
@@ -179,7 +207,11 @@ class TestTrialBalanceReport(common.TransactionCase):
         # to check the first day of fiscal year is not used
         # to compute the initial balance
         self._add_move(
-            date=self.fy_date_start, receivable_debit=0, receivable_credit=1000, income_debit=1000, income_credit=0
+            date=self.fy_date_start,
+            receivable_debit=0,
+            receivable_credit=1000,
+            income_debit=1000,
+            income_credit=0,
         )
 
         # Re Generate the trial balance line
@@ -235,7 +267,11 @@ class TestTrialBalanceReport(common.TransactionCase):
         # Add another move at the end day of fiscal year
         # to check that it correctly used on report
         self._add_move(
-            date=self.date_end, receivable_debit=0, receivable_credit=1000, income_debit=1000, income_credit=0
+            date=self.date_end,
+            receivable_debit=0,
+            receivable_credit=1000,
+            income_debit=1000,
+            income_credit=0,
         )
 
         # Re Generate the trial balance line

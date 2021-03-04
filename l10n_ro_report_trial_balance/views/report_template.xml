@@ -19,12 +19,14 @@
     </template>
     <template id="l10n_ro_report_trial_balance_buttons">
         <div class="button_row">
-            <button class="o_l10n_ro_report_trial_balance_print btn btn-sm oe_button"><span
-                    class="fa fa-print"
-                /> Print</button>
-            <button class="o_l10n_ro_report_trial_balance_export btn btn-sm oe_button"><span
-                    class="fa fa-download"
-                /> Export</button>
+            <button class="o_l10n_ro_report_trial_balance_print btn btn-sm oe_button">
+                <span class="fa fa-print" />
+                Print
+            </button>
+            <button class="o_l10n_ro_report_trial_balance_export btn btn-sm oe_button">
+                <span class="fa fa-download" />
+                Export
+            </button>
         </div>
     </template>
     <record id="action_l10n_ro_report_trial_balance" model="ir.actions.client">

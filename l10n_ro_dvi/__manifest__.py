@@ -5,7 +5,7 @@
     "license": "AGPL-3",
     "version": "13.0.1.0.0",
     "author": "Terrabit," "Odoo Community Association (OCA)",
-    "website": "http://www.terrabit.ro",
+    "website": "https://github.com/OCA/l10n-romania",
     "category": "Warehouse",
     "depends": [
         "stock_account",
@@ -15,6 +15,10 @@
         "purchase_stock",
         "stock_landed_costs",
     ],
-    "data": ["views/account_invoice_view.xml", "views/stock_landed_cost_view.xml", "wizard/account_dvi_view.xml"],
+    "data": [
+        "views/account_invoice_view.xml",
+        "views/stock_landed_cost_view.xml",
+        "wizard/account_dvi_view.xml",
+    ],
     "installable": True,
 }

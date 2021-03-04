@@ -14,16 +14,25 @@ class StorageSheetReport(models.TransientModel):
     # Filters fields, used for data computation
 
     location_id = fields.Many2one(
-        "stock.location", domain="[('usage','=','internal'),('company_id','=',company_id)]", required=True,
+        "stock.location",
+        domain="[('usage','=','internal'),('company_id','=',company_id)]",
+        required=True,
     )
 
     date_range_id = fields.Many2one("date.range", string="Date range")
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
 
-    product_id = fields.Many2one("product.product", string="Product", required=True, domain=[("type", "=", "product")],)
+    product_id = fields.Many2one(
+        "product.product",
+        string="Product",
+        required=True,
+        domain=[("type", "=", "product")],
+    )
 
-    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.user.company_id)
+    company_id = fields.Many2one(
+        "res.company", string="Company", default=lambda self: self.env.user.company_id
+    )
 
     line_product_ids = fields.One2many("stock.storage.sheet.report.line", "report_id")
 
@@ -35,7 +44,9 @@ class StorageSheetReport(models.TransientModel):
         active_ids = self.env.context.get("active_ids", False)
         active_id = self.env.context.get("active_id", False)
         if active_model == "product.template":
-            product = self.env["product.product"].search([("product_tmpl_id", "in", active_ids)], limit=1)
+            product = self.env["product.product"].search(
+                [("product_tmpl_id", "in", active_ids)], limit=1
+            )
             defaults["product_id"] = product.id
         elif active_model == "product.product":
             defaults["product_id"] = active_id
@@ -59,7 +70,9 @@ class StorageSheetReport(models.TransientModel):
     def do_compute(self):
         self.env["stock.move"].check_access_rights("read")
 
-        lines = self.env["stock.storage.sheet.report.line"].search([("report_id", "=", self.id)])
+        lines = self.env["stock.storage.sheet.report.line"].search(
+            [("report_id", "=", self.id)]
+        )
         lines.unlink()
 
         to_date = self.date_from
@@ -208,7 +221,9 @@ class StorageSheetReport(models.TransientModel):
 
     def button_show(self):
         self.do_compute()
-        action = self.env.ref("l10n_ro_stock_report.action_storage_sheet_report_line").read()[0]
+        action = self.env.ref(
+            "l10n_ro_stock_report.action_storage_sheet_report_line"
+        ).read()[0]
         action["domain"] = [("report_id", "=", self.id)]
         action["context"] = {"active_id": self.id}
         action["target"] = "main"
@@ -233,7 +248,9 @@ class DailyStockReportLine(models.TransientModel):
     amount = fields.Float()
     ref = fields.Char(string="Reference")
     date = fields.Date()
-    type = fields.Selection([("balance", "Balance"), ("in", "Input"), ("out", "Output")])
+    type = fields.Selection(
+        [("balance", "Balance"), ("in", "Input"), ("out", "Output")]
+    )
 
     valuation_ids = fields.Many2many("stock.valuation.layer")
 

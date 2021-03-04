@@ -62,14 +62,12 @@
                             </div>
                             <br />
                             <h2>
-
                                 <t t-if="o.payment_type=='inbound'">
                                     <span>Voucher:</span>
                                 </t>
                                 <t t-if="o.payment_type=='outbound'">
                                     <span>Payment disposal:</span>
                                 </t>
-
                                 <t t-if="o.payment_type=='transfer'">
                                     <span>Transfer:</span>
                                 </t>

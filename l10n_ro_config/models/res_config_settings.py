@@ -9,14 +9,18 @@ class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
     use_romanian_accounting = fields.Boolean(
-        string="Romanian Accounting", related="company_id.romanian_accounting", readonly=False,
+        string="Romanian Accounting",
+        related="company_id.romanian_accounting",
+        readonly=False,
     )
     module_currency_rate_update_RO_BNR = fields.Boolean(
         "Currency Rate Update BNR",
-        help="This option allows you to manage the update of currency " "rate based from BNR site.",
+        help="This option allows you to manage the update of currency "
+        "rate based from BNR site.",
     )
     module_l10n_ro_address_extended = fields.Boolean(
-        "Romanian Extended Address", help="Extend the  partner addres field with flat number, staircase..",
+        "Romanian Extended Address",
+        help="Extend the  partner addres field with flat number, staircase..",
     )
     module_l10n_ro_city = fields.Boolean(
         "Romanian Cities",
@@ -58,33 +62,41 @@ class ResConfigSettings(models.TransientModel):
     )
     module_l10n_ro_account_period_close = fields.Boolean(
         "Romania Account Period Close",
-        help="This allows you to close accounts on periods based on " "templates: Income, Expense, VAT...",
+        help="This allows you to close accounts on periods based on "
+        "templates: Income, Expense, VAT...",
     )
 
     # Accounting Reports
     module_l10n_ro_account_report_invoice = fields.Boolean(
-        "Invoice Report", help="This allows you to print invoice report based on " "romanian layout.\n",
+        "Invoice Report",
+        help="This allows you to print invoice report based on " "romanian layout.\n",
     )
     module_l10n_ro_account_report_trial_balance = fields.Boolean(
-        "Account Trial Balance Report", help="This module will add the Trial Balance report " "with multiple columns.",
+        "Account Trial Balance Report",
+        help="This module will add the Trial Balance report " "with multiple columns.",
     )
     module_l10n_ro_account_report_journal = fields.Boolean(
-        "Account Journal Reports", help="This module will add the Sale and Purchase Reports.",
+        "Account Journal Reports",
+        help="This module will add the Sale and Purchase Reports.",
     )
     module_l10n_ro_account_report_pl = fields.Boolean(
-        "Account Profit and Loss Report", help="This module will add the Profit and Loss report.",
+        "Account Profit and Loss Report",
+        help="This module will add the Profit and Loss report.",
     )
     module_l10n_ro_account_report_balance_sheet = fields.Boolean(
-        "Account Balance Sheet Report", help="This module will add the Balance Sheet report " "fetched from ANAF.",
+        "Account Balance Sheet Report",
+        help="This module will add the Balance Sheet report " "fetched from ANAF.",
     )
     module_l10n_ro_account_report_sheet = fields.Boolean(
         "Account Sheet Report", help="This module will add the Account Sheet report."
     )
     module_l10n_ro_account_report_journal_sheet = fields.Boolean(
-        "Account Journal Sheet Report", help="This module will add the Journal Sheet report.",
+        "Account Journal Sheet Report",
+        help="This module will add the Journal Sheet report.",
     )
     module_l10n_ro_account_report_inventory_sheet = fields.Boolean(
-        "Account Inventory Sheet Report", help="This module will add the Inventory Sheet report.",
+        "Account Inventory Sheet Report",
+        help="This module will add the Inventory Sheet report.",
     )
     module_l10n_ro_account_report_D300 = fields.Boolean(
         "Account D300 Report", help="This module will add the D300 report."
@@ -101,14 +113,22 @@ class ResConfigSettings(models.TransientModel):
 
     # stock section
     use_anglo_saxon = fields.Boolean(
-        string="Anglo-Saxon Accounting", related="company_id.anglo_saxon_accounting", readonly=False,
+        string="Anglo-Saxon Accounting",
+        related="company_id.anglo_saxon_accounting",
+        readonly=False,
     )
     use_romanian_accounting = fields.Boolean(
-        string="Use Romanian Accounting", related="company_id.romanian_accounting", readonly=False,
+        string="Use Romanian Accounting",
+        related="company_id.romanian_accounting",
+        readonly=False,
     )
-    stock_acc_price_diff = fields.Boolean(related="company_id.stock_acc_price_diff", readonly=False)
+    stock_acc_price_diff = fields.Boolean(
+        related="company_id.stock_acc_price_diff", readonly=False
+    )
     module_l10n_ro_stock = fields.Boolean(
-        "Romanian Stock", help="This module add on each warehouse methods of usage " "giving and consumption",
+        "Romanian Stock",
+        help="This module add on each warehouse methods of usage "
+        "giving and consumption",
     )
     module_l10n_ro_stock_account = fields.Boolean(
         "Romanian Stock Accounting",
@@ -123,34 +143,50 @@ class ResConfigSettings(models.TransientModel):
     )
     module_l10n_ro_stock_account_store = fields.Boolean(
         "Romanian Stock Accounting - Store",
-        help="This allows you to manage the Romanian Stock Accounting, " "for locations with store merchandise",
+        help="This allows you to manage the Romanian Stock Accounting, "
+        "for locations with store merchandise",
     )
     module_l10n_ro_stock_picking_report = fields.Boolean(
-        "Stock Picking Report", help="This allows you to print Reports for Reception and Delivery",
+        "Stock Picking Report",
+        help="This allows you to print Reports for Reception and Delivery",
     )
     module_l10n_ro_stock_picking_report_store = fields.Boolean(
-        "Stock Picking Report - Store", help="This allows you to print Reports for Reception and Delivery",
+        "Stock Picking Report - Store",
+        help="This allows you to print Reports for Reception and Delivery",
     )
     module_l10n_ro_dvi = fields.Boolean(
-        "Romanian Customs Tax Declaration", help="This module add possibility to register tax declaration on imports",
+        "Romanian Customs Tax Declaration",
+        help="This module add possibility to register tax declaration on imports",
     )
     property_stock_picking_payable_account_id = fields.Many2one(
-        "account.account", related="company_id.property_stock_picking_payable_account_id", readonly=False,
+        "account.account",
+        related="company_id.property_stock_picking_payable_account_id",
+        readonly=False,
     )
     property_stock_picking_receivable_account_id = fields.Many2one(
-        "account.account", related="company_id.property_stock_picking_receivable_account_id", readonly=False,
+        "account.account",
+        related="company_id.property_stock_picking_receivable_account_id",
+        readonly=False,
     )
     property_stock_usage_giving_account_id = fields.Many2one(
-        "account.account", related="company_id.property_stock_usage_giving_account_id", readonly=False,
+        "account.account",
+        related="company_id.property_stock_usage_giving_account_id",
+        readonly=False,
     )
     property_stock_picking_custody_account_id = fields.Many2one(
-        "account.account", related="company_id.property_stock_picking_custody_account_id", readonly=False,
+        "account.account",
+        related="company_id.property_stock_picking_custody_account_id",
+        readonly=False,
     )
     property_uneligible_tax_account_id = fields.Many2one(
-        "account.account", related="company_id.property_uneligible_tax_account_id", readonly=False,
+        "account.account",
+        related="company_id.property_uneligible_tax_account_id",
+        readonly=False,
     )
     property_stock_transfer_account_id = fields.Many2one(
-        "account.account", related="company_id.property_stock_transfer_account_id", readonly=False,
+        "account.account",
+        related="company_id.property_stock_transfer_account_id",
+        readonly=False,
     )
 
     property_trade_discount_received_account_id = fields.Many2one(

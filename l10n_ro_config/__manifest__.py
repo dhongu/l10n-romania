@@ -7,7 +7,9 @@
     "summary": "Romania - Localization Install and Config Applications",
     "license": "AGPL-3",
     "version": "13.0.1.0.0",
-    "author": "NextERP Romania," "Forest and Biomass Romania," "Odoo Community Association (OCA)",
+    "author": "NextERP Romania,"
+    "Forest and Biomass Romania,"
+    "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "depends": ["l10n_ro", "base_vat"],
     "data": [

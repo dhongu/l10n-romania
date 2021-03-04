@@ -18,11 +18,15 @@ class TestBRDImport(TransactionCase):
     def test_statement_import(self):
         """Test correct creation of single statement."""
         brd_file_path = get_module_resource(
-            "l10n_ro_account_bank_statement_import_mt940_brd", "test_files", "test_bt_940.txt"
+            "l10n_ro_account_bank_statement_import_mt940_brd",
+            "test_files",
+            "test_bt_940.txt",
         )
         brd_file = open(brd_file_path, "rb").read()
         brd_data_file = base64.b64encode(brd_file)
-        bank_statement = self.statement_import_model.create(dict(data_file=brd_data_file))
+        bank_statement = self.statement_import_model.create(
+            dict(data_file=brd_data_file)
+        )
         bank_statement.import_file()
         bank_st_record = self.bank_statement_model.search([("name", "=", "00138/1")])[0]
         self.assertEquals(bank_st_record.balance_start, 3885.24)

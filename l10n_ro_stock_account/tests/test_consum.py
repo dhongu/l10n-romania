@@ -14,7 +14,10 @@ _logger = logging.getLogger(__name__)
 class TestStockConsumn(TestStockCommon):
     def set_stock(self, product, qty):
         inventory = self.env["stock.inventory"].create(
-            {"location_ids": [(4, self.location_warehouse.id)], "product_ids": [(4, product.id)]}
+            {
+                "location_ids": [(4, self.location_warehouse.id)],
+                "product_ids": [(4, product.id)],
+            }
         )
         inventory.action_start()
 
@@ -111,7 +114,9 @@ class TestStockConsumn(TestStockCommon):
 
         location_id = self.picking_type_transfer.default_location_src_id
 
-        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy({"usage": "usage_giving"})
+        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy(
+            {"usage": "usage_giving"}
+        )
 
         picking = self.trasfer(location_id, location_dest_id)
         _logger.info("Dare in folosinta facuta")
@@ -126,7 +131,9 @@ class TestStockConsumn(TestStockCommon):
 
         location_id = self.picking_type_transfer.default_location_src_id
 
-        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy({"usage": "consume"})
+        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy(
+            {"usage": "consume"}
+        )
 
         picking = self.trasfer(location_id, location_dest_id)
         _logger.info("Consum facuta")

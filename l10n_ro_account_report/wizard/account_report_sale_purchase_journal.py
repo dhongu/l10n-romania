@@ -11,13 +11,20 @@ class SalePurchaseJournalReport(models.TransientModel):
     _description = "SalePurchaseJournalReport"
 
     company_id = fields.Many2one(
-        "res.company", string="Company", required=True, default=lambda self: self.env.user.company_id
+        "res.company",
+        string="Company",
+        required=True,
+        default=lambda self: self.env.user.company_id,
     )
 
     date_range_id = fields.Many2one("date.range", string="Date range")
     date_from = fields.Date("Start Date", required=True)
     date_to = fields.Date("End Date", required=True)
-    journal = fields.Selection([("purchase", "Purchase"), ("sale", "Sale")], string="Journal type", required=True)
+    journal = fields.Selection(
+        [("purchase", "Purchase"), ("sale", "Sale")],
+        string="Journal type",
+        required=True,
+    )
 
     @api.model
     def default_get(self, fields_list):
@@ -48,7 +55,9 @@ class SalePurchaseJournalReport(models.TransientModel):
         data = {"wizard_id": self.id}
         data["docids"] = invoices.ids
 
-        report = self.env.ref("l10n_ro_account_report.action_report_sale_purchase_journal")
+        report = self.env.ref(
+            "l10n_ro_account_report.action_report_sale_purchase_journal"
+        )
         res = report.report_action(invoices, data=data)
         res["close_on_report_download"] = True
         return res

@@ -56,7 +56,9 @@ class ResCurrencyRateProviderROBNR(models.Model):
     def _obtain_rates(self, base_currency, currencies, date_from, date_to):
         self.ensure_one()
         if self.service != "RO_BNR":
-            return super()._obtain_rates(base_currency, currencies, date_from, date_to)  # pragma: no cover
+            return super()._obtain_rates(
+                base_currency, currencies, date_from, date_to
+            )  # pragma: no cover
 
         if date_from == date_to:
             url = "https://www.bnr.ro/nbrfxrates.xml"
@@ -101,7 +103,9 @@ class ROBNRRatesHandler(xml.sax.ContentHandler):
                 and (self.date_to is None or self.date <= self.date_to)
                 and self.currency in self.currencies
             ):
-                self.content[self.date.isoformat()][self.currency] = 1 / (self.rate / self.multiplier)
+                self.content[self.date.isoformat()][self.currency] = 1 / (
+                    self.rate / self.multiplier
+                )
             self.currency = None
             self.rate = None
             self.multiplier = 1

@@ -17,7 +17,9 @@ class ActivityStatement(models.AbstractModel):
         inv_addr_id = part.address_get(["invoice"]).get("invoice", part.id)
         return self.env["res.partner"].browse(inv_addr_id)
 
-    def _format_date_to_partner_lang(self, date, date_format=DEFAULT_SERVER_DATE_FORMAT):
+    def _format_date_to_partner_lang(
+        self, date, date_format=DEFAULT_SERVER_DATE_FORMAT
+    ):
         if isinstance(date, str):
             date = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
         return date.strftime(date_format) if date else ""
@@ -26,7 +28,14 @@ class ActivityStatement(models.AbstractModel):
         if currency_id not in currencies:
             # This will only happen if currency is inactive
             currencies[currency_id] = self.env["res.currency"].browse(currency_id)
-        return ({"lines": [], "balance_forward": balance_forward, "amount_due": balance_forward}, currencies)
+        return (
+            {
+                "lines": [],
+                "balance_forward": balance_forward,
+                "amount_due": balance_forward,
+            },
+            currencies,
+        )
 
     def _prepare_data(self, data):
         if not data:
@@ -64,7 +73,9 @@ class ActivityStatement(models.AbstractModel):
         self._prepare_data(data)
 
         if "company_id" not in data:
-            wiz = self.env["l10n_ro.activity.statement.wizard"].with_context(active_ids=docids, model="res.partner")
+            wiz = self.env["l10n_ro.activity.statement.wizard"].with_context(
+                active_ids=docids, model="res.partner"
+            )
             data.update(wiz.create({})._prepare_statement())
 
         company_id = data["company_id"]
@@ -112,28 +123,40 @@ class ActivityStatement(models.AbstractModel):
         for partner_id in partner_ids:
             res[partner_id] = {
                 "today": format_date(today, date_formats.get(partner_id, default_fmt)),
-                "start": format_date(date_start, date_formats.get(partner_id, default_fmt)),
+                "start": format_date(
+                    date_start, date_formats.get(partner_id, default_fmt)
+                ),
                 "end": format_date(date_end, date_formats.get(partner_id, default_fmt)),
                 "currencies": {},
             }
             currency_dict = res[partner_id]["currencies"]
 
             for line in balances_forward.get(partner_id, []):
-                currency_dict[line["currency_id"]], currencies = self._get_line_currency_defaults(
+                (
+                    currency_dict[line["currency_id"]],
+                    currencies,
+                ) = self._get_line_currency_defaults(
                     line["currency_id"], currencies, line["balance"]
                 )
 
             for line in lines[partner_id]:
                 if line["currency_id"] not in currency_dict:
-                    currency_dict[line["currency_id"]], currencies = self._get_line_currency_defaults(
+                    (
+                        currency_dict[line["currency_id"]],
+                        currencies,
+                    ) = self._get_line_currency_defaults(
                         line["currency_id"], currencies, 0.0
                     )
                 line_currency = currency_dict[line["currency_id"]]
                 if not line["blocked"]:
                     line_currency["amount_due"] += line[amount_field]
                 line["balance"] = line_currency["amount_due"]
-                line["date"] = format_date(line["date"], date_formats.get(partner_id, default_fmt))
-                line["date_maturity"] = format_date(line["date_maturity"], date_formats.get(partner_id, default_fmt))
+                line["date"] = format_date(
+                    line["date"], date_formats.get(partner_id, default_fmt)
+                )
+                line["date_maturity"] = format_date(
+                    line["date_maturity"], date_formats.get(partner_id, default_fmt)
+                )
                 line_currency["lines"].append(line)
 
             if len(partner_ids) > 1:
@@ -144,7 +167,9 @@ class ActivityStatement(models.AbstractModel):
                         continue
                     else:
                         res[partner_id]["no_entries"] = True
-                if data["filter_negative_balances"] and not all([v["amount_due"] >= 0.0 for v in values]):
+                if data["filter_negative_balances"] and not all(
+                    [v["amount_due"] >= 0.0 for v in values]
+                ):
                     partners_to_remove.add(partner_id)
 
         for partner in partners_to_remove:
@@ -205,7 +230,9 @@ class ActivityStatement(models.AbstractModel):
             "utf-8",
         )
 
-    def _get_account_initial_balance(self, company_id, partner_ids, date_start, account_type, target_move):
+    def _get_account_initial_balance(
+        self, company_id, partner_ids, date_start, account_type, target_move
+    ):
         balance_start = defaultdict(list)
         partners = tuple(partner_ids)
         # pylint: disable=E8103
@@ -214,7 +241,9 @@ class ActivityStatement(models.AbstractModel):
         SELECT partner_id, currency_id, balance
         FROM Q2"""
             % (
-                self._initial_balance_sql_q1(partners, date_start, account_type, target_move),
+                self._initial_balance_sql_q1(
+                    partners, date_start, account_type, target_move
+                ),
                 self._initial_balance_sql_q2(company_id),
             )
         )
@@ -222,7 +251,9 @@ class ActivityStatement(models.AbstractModel):
             balance_start[row.pop("partner_id")].append(row)
         return balance_start
 
-    def _display_lines_sql_q1(self, partners, date_start, date_end, account_type, target_move):
+    def _display_lines_sql_q1(
+        self, partners, date_start, date_end, account_type, target_move
+    ):
         return str(
             self._cr.mogrify(
                 """
@@ -294,12 +325,16 @@ class ActivityStatement(models.AbstractModel):
             "utf-8",
         )
 
-    def _get_account_display_lines(self, company_id, partner_ids, date_start, date_end, account_type, target_move):
+    def _get_account_display_lines(
+        self, company_id, partner_ids, date_start, date_end, account_type, target_move
+    ):
         res = dict(map(lambda x: (x, []), partner_ids))
         partners = tuple(partner_ids)
 
         # pylint: disable=E8103
-        lines_sql_q1 = self._display_lines_sql_q1(partners, date_start, date_end, account_type, target_move)
+        lines_sql_q1 = self._display_lines_sql_q1(
+            partners, date_start, date_end, account_type, target_move
+        )
         lines_sql_q2 = self._display_lines_sql_q2(company_id)
 
         self.env.cr.execute(

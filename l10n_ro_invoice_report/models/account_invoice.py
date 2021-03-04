@@ -23,7 +23,11 @@ class AccountInvoice(models.Model):
         domain=[("is_company", "=", False)],
     )
 
-    mean_transp = fields.Char(string="Mean transport", readonly=True, states={"draft": [("readonly", False)]},)
+    mean_transp = fields.Char(
+        string="Mean transport",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
 
     @api.model
     def default_get(self, fields_list):

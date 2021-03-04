@@ -195,7 +195,11 @@ class StockMove(models.Model):
 
     def _is_production(self):
         """ Este inregistrare intrare produse finite prin productie"""
-        it_is = self.company_id.romanian_accounting and self._is_in() and self.location_id.usage == "production"
+        it_is = (
+            self.company_id.romanian_accounting
+            and self._is_in()
+            and self.location_id.usage == "production"
+        )
         return it_is
 
     def _create_production_svl(self, forced_quantity=None):
@@ -204,7 +208,11 @@ class StockMove(models.Model):
 
     def _is_production_return(self):
         """ Este retur inregistrare produse finite prin productie"""
-        it_is = self.company_id.romanian_accounting and self._is_out() and self.location_dest_id.usage == "production"
+        it_is = (
+            self.company_id.romanian_accounting
+            and self._is_out()
+            and self.location_dest_id.usage == "production"
+        )
         return it_is
 
     def _create_production_return_svl(self, forced_quantity=None):
@@ -260,13 +268,20 @@ class StockMove(models.Model):
                 valued_quantity += valued_move_line.product_uom_id._compute_quantity(
                     valued_move_line.qty_done, move.product_id.uom_id
                 )
-            if float_is_zero(forced_quantity or valued_quantity, precision_rounding=move.product_id.uom_id.rounding,):
+            if float_is_zero(
+                forced_quantity or valued_quantity,
+                precision_rounding=move.product_id.uom_id.rounding,
+            ):
                 continue
-            svl_vals = move.product_id._prepare_out_svl_vals(forced_quantity or valued_quantity, move.company_id)
+            svl_vals = move.product_id._prepare_out_svl_vals(
+                forced_quantity or valued_quantity, move.company_id
+            )
             svl_vals.update(move._prepare_common_svl_vals())
             if forced_quantity:
                 svl_vals["description"] = (
-                    "Correction of %s (modification of past move)" % move.picking_id.name or move.name
+                    "Correction of %s (modification of past move)"
+                    % move.picking_id.name
+                    or move.name
                 )
             svl_vals_list.append(svl_vals)
 
@@ -278,14 +293,20 @@ class StockMove(models.Model):
                 valued_quantity += valued_move_line.product_uom_id._compute_quantity(
                     valued_move_line.qty_done, move.product_id.uom_id
                 )
-            unit_cost = abs(move._get_price_unit())  # May be negative (i.e. decrease an out move).
+            unit_cost = abs(
+                move._get_price_unit()
+            )  # May be negative (i.e. decrease an out move).
             if move.product_id.cost_method == "standard":
                 unit_cost = move.product_id.standard_price
-            svl_vals = move.product_id._prepare_in_svl_vals(forced_quantity or valued_quantity, unit_cost)
+            svl_vals = move.product_id._prepare_in_svl_vals(
+                forced_quantity or valued_quantity, unit_cost
+            )
             svl_vals.update(move._prepare_common_svl_vals())
             if forced_quantity:
                 svl_vals["description"] = (
-                    "Correction of %s (modification of past move)" % move.picking_id.name or move.name
+                    "Correction of %s (modification of past move)"
+                    % move.picking_id.name
+                    or move.name
                 )
             svl_vals_list.append(svl_vals)
 
@@ -293,7 +314,11 @@ class StockMove(models.Model):
 
     def _is_usage_giving(self):
         """ Este dare in folosinta"""
-        it_is = self.company_id.romanian_accounting and self.location_dest_id.usage == "usage_giving" and self._is_out()
+        it_is = (
+            self.company_id.romanian_accounting
+            and self.location_dest_id.usage == "usage_giving"
+            and self._is_out()
+        )
 
         return it_is
 
@@ -303,7 +328,11 @@ class StockMove(models.Model):
 
     def _is_usage_giving_return(self):
         """ Este return dare in folosinta"""
-        it_is = self.company_id.romanian_accounting and self.location_id.usage == "usage_giving" and self._is_in()
+        it_is = (
+            self.company_id.romanian_accounting
+            and self.location_id.usage == "usage_giving"
+            and self._is_in()
+        )
         return it_is
 
     def _create_usage_giving_return_svl(self, forced_quantity=None):
@@ -319,8 +348,16 @@ class StockMove(models.Model):
 
     def _get_company(self, svl):
         self.ensure_one()
-        company_from = self._is_out() and self.mapped("move_line_ids.location_id.company_id") or False
-        company_to = self._is_in() and self.mapped("move_line_ids.location_dest_id.company_id") or False
+        company_from = (
+            self._is_out()
+            and self.mapped("move_line_ids.location_id.company_id")
+            or False
+        )
+        company_to = (
+            self._is_in()
+            and self.mapped("move_line_ids.location_dest_id.company_id")
+            or False
+        )
 
         if self._is_in():
             return company_to
@@ -336,7 +373,9 @@ class StockMove(models.Model):
         company = self._get_company(svl)
         self = company and self.with_context(force_company=company.id) or self
         if company and company.romanian_accounting:
-            self = self.with_context(valued_type=svl.valued_type, is_romanian_accounting=True)
+            self = self.with_context(
+                valued_type=svl.valued_type, is_romanian_accounting=True
+            )
 
         res = super(StockMove, self)._account_entry_move(qty, description, svl_id, cost)
 
@@ -354,37 +393,69 @@ class StockMove(models.Model):
             sale_cost = self._get_sale_amount()
             move = self.with_context(valued_type="invoice_out_notice")
 
-            (journal_id, acc_src, acc_dest, acc_valuation,) = move._get_accounting_data_for_valuation()
-            move._create_account_move_line(acc_valuation, acc_dest, journal_id, qty, description, svl, sale_cost)
+            (
+                journal_id,
+                acc_src,
+                acc_dest,
+                acc_valuation,
+            ) = move._get_accounting_data_for_valuation()
+            move._create_account_move_line(
+                acc_valuation, acc_dest, journal_id, qty, description, svl, sale_cost
+            )
 
         if self._is_delivery_notice_return():
             # inregistrare valoare vanzare
             sale_cost = -1 * self._get_sale_amount()
             move = self.with_context(valued_type="invoice_out_notice")
 
-            (journal_id, acc_src, acc_dest, acc_valuation,) = move._get_accounting_data_for_valuation()
-            move._create_account_move_line(acc_dest, acc_valuation, journal_id, qty, description, svl_id, sale_cost)
+            (
+                journal_id,
+                acc_src,
+                acc_dest,
+                acc_valuation,
+            ) = move._get_accounting_data_for_valuation()
+            move._create_account_move_line(
+                acc_dest, acc_valuation, journal_id, qty, description, svl_id, sale_cost
+            )
 
         if self._is_usage_giving() or self._is_usage_giving_return():
             # inregistrare dare in folosinta 8035
             move = self.with_context(valued_type="usage_giving_secondary")
-            (journal_id, acc_src, acc_dest, acc_valuation,) = move._get_accounting_data_for_valuation()
-            move._create_account_move_line(acc_src, acc_dest, journal_id, qty, description, svl, cost)
+            (
+                journal_id,
+                acc_src,
+                acc_dest,
+                acc_valuation,
+            ) = move._get_accounting_data_for_valuation()
+            move._create_account_move_line(
+                acc_src, acc_dest, journal_id, qty, description, svl, cost
+            )
 
         if self._is_internal_transfer():
             move = self.with_context(valued_type="internal_transfer")
-            (journal_id, acc_src, acc_dest, acc_valuation,) = move._get_accounting_data_for_valuation()
+            (
+                journal_id,
+                acc_src,
+                acc_dest,
+                acc_valuation,
+            ) = move._get_accounting_data_for_valuation()
             if location_to.property_stock_valuation_account_id and cost < 0:
-                move._create_account_move_line(acc_dest, acc_valuation, journal_id, qty, description, svl_id, cost)
+                move._create_account_move_line(
+                    acc_dest, acc_valuation, journal_id, qty, description, svl_id, cost
+                )
             if location_from.property_stock_valuation_account_id and cost > 0:
-                move._create_account_move_line(acc_src, acc_valuation, journal_id, qty, description, svl_id, cost)
+                move._create_account_move_line(
+                    acc_src, acc_valuation, journal_id, qty, description, svl_id, cost
+                )
 
     def _get_sale_amount(self):
         valuation_amount = 0
         sale_line = self.sale_line_id
         if sale_line:
             price_invoice = sale_line.price_subtotal / sale_line.product_uom_qty
-            price_invoice = sale_line.product_uom._compute_price(price_invoice, self.product_uom)
+            price_invoice = sale_line.product_uom._compute_price(
+                price_invoice, self.product_uom
+            )
             valuation_amount = price_invoice * abs(self.product_qty)
             company = self.location_id.company_id or self.env.user.company_id
             valuation_amount = sale_line.order_id.currency_id._convert(
@@ -393,7 +464,14 @@ class StockMove(models.Model):
         return valuation_amount
 
     def _create_account_move_line(
-        self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost,
+        self,
+        credit_account_id,
+        debit_account_id,
+        journal_id,
+        qty,
+        description,
+        svl_id,
+        cost,
     ):
         # nu mai trebuie generate notele contabile de la cont de stoc la cont de stoc
         # valabil doar pentru dare in folosinta
@@ -405,12 +483,23 @@ class StockMove(models.Model):
         ):
             return
         return super(StockMove, self)._create_account_move_line(
-            credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost,
+            credit_account_id,
+            debit_account_id,
+            journal_id,
+            qty,
+            description,
+            svl_id,
+            cost,
         )
 
     def _get_accounting_data_for_valuation(self):
-        journal_id, acc_src, acc_dest, acc_valuation = super(StockMove, self)._get_accounting_data_for_valuation()
-        if self.company_id.romanian_accounting and self.product_id.categ_id.stock_account_change:
+        journal_id, acc_src, acc_dest, acc_valuation = super(
+            StockMove, self
+        )._get_accounting_data_for_valuation()
+        if (
+            self.company_id.romanian_accounting
+            and self.product_id.categ_id.stock_account_change
+        ):
             location_from = self.location_id
             location_to = self.location_dest_id
             valued_type = self.env.context.get("valued_type", "indefinite")
@@ -437,7 +526,9 @@ class StockMove(models.Model):
             # in nir si factura se ca utiliza 408
             if valued_type == "invoice_in_notice":
                 if location_to.property_account_expense_location_id:
-                    acc_dest = acc_valuation = location_to.property_account_expense_location_id.id
+                    acc_dest = (
+                        acc_valuation
+                    ) = location_to.property_account_expense_location_id.id
                 # if location_to.property_account_expense_location_id:
                 #     acc_dest = (
                 #         acc_valuation
@@ -458,7 +549,9 @@ class StockMove(models.Model):
                 "production_return",
                 "minus_inventory",
             ]:
-                acc_dest = location_from.property_account_expense_location_id.id or acc_dest
+                acc_dest = (
+                    location_from.property_account_expense_location_id.id or acc_dest
+                )
             elif valued_type in [
                 "production",
                 "delivery_return",

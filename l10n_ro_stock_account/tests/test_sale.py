@@ -91,7 +91,9 @@ class TestStockSale(TestStockCommon):
         self.check_account_valuation(val_stock_p1, val_stock_p2)
 
         _logger.info("Verifcare valoare vanduta")
-        self.check_account_valuation(-self.val_so_p1, -self.val_so_p2, self.account_income)
+        self.check_account_valuation(
+            -self.val_so_p1, -self.val_so_p2, self.account_income
+        )
 
     def test_sale_and_invoice(self):
         """
@@ -126,7 +128,9 @@ class TestStockSale(TestStockCommon):
         self.check_account_valuation(val_stock_p1, val_stock_p2)
 
         _logger.info("Verifcare valoare vanduta")
-        self.check_account_valuation(-self.val_so_p1, -self.val_so_p2, self.account_income)
+        self.check_account_valuation(
+            -self.val_so_p1, -self.val_so_p2, self.account_income
+        )
 
     def test_sale_and_invoice_location_valuation(self):
         """
@@ -156,24 +160,30 @@ class TestStockSale(TestStockCommon):
         val_stock_p2 = round(self.val_p2_i - self.val_stock_out_so_p2, 2)
 
         self.check_stock_valuation(val_stock_p1, val_stock_p2)
-        self.check_account_valuation(val_stock_p1, val_stock_p2, self.account_valuation_mp)
+        self.check_account_valuation(
+            val_stock_p1, val_stock_p2, self.account_valuation_mp
+        )
 
         self.create_sale_invoice()
 
         _logger.info("Verifcare valoare ramas in stoc")
         self.check_stock_valuation(val_stock_p1, val_stock_p2)
-        self.check_account_valuation(val_stock_p1, val_stock_p2, self.account_valuation_mp)
+        self.check_account_valuation(
+            val_stock_p1, val_stock_p2, self.account_valuation_mp
+        )
 
         _logger.info("Verifcare valoare vanduta")
-        self.check_account_valuation(-self.val_so_p1, -self.val_so_p2, self.account_income)
+        self.check_account_valuation(
+            -self.val_so_p1, -self.val_so_p2, self.account_income
+        )
 
     def test_sale_notice_and_invoice(self):
         """
-             - initial in stoc si contabilitate este valoarea din achizitie
-             - dupa vanzare valoarea stocului trebuie sa scada cu valoarea stocului
-             vandut
-             - valoarea din stoc trebuie sa fie egala cu valoarea din contabilitate
-             - in contul de venituri trebuie sa fie inregistrata valoarea de vanzare
+        - initial in stoc si contabilitate este valoarea din achizitie
+        - dupa vanzare valoarea stocului trebuie sa scada cu valoarea stocului
+        vandut
+        - valoarea din stoc trebuie sa fie egala cu valoarea din contabilitate
+        - in contul de venituri trebuie sa fie inregistrata valoarea de vanzare
         """
 
         self.make_puchase()
@@ -199,7 +209,9 @@ class TestStockSale(TestStockCommon):
         self.check_account_valuation(val_stock_p1, val_stock_p2)
 
         _logger.info("Verifcare valoare vanduta")
-        self.check_account_valuation(-self.val_so_p1, -self.val_so_p2, self.account_income)
+        self.check_account_valuation(
+            -self.val_so_p1, -self.val_so_p2, self.account_income
+        )
 
     def test_sale_and_invoice_and_retur(self):
         """
@@ -223,7 +235,9 @@ class TestStockSale(TestStockCommon):
             )
         )
         return_wiz = stock_return_picking_form.save()
-        return_wiz.product_return_moves.write({"quantity": 2.0, "to_refund": True})  # Return only 2
+        return_wiz.product_return_moves.write(
+            {"quantity": 2.0, "to_refund": True}
+        )  # Return only 2
         res = return_wiz.create_returns()
         return_pick = self.env["stock.picking"].browse(res["res_id"])
 
@@ -258,7 +272,9 @@ class TestStockSale(TestStockCommon):
             )
         )
         return_wiz = stock_return_picking_form.save()
-        return_wiz.product_return_moves.write({"quantity": 2.0, "to_refund": True})  # Return only 2
+        return_wiz.product_return_moves.write(
+            {"quantity": 2.0, "to_refund": True}
+        )  # Return only 2
         res = return_wiz.create_returns()
         return_pick = self.env["stock.picking"].browse(res["res_id"])
 

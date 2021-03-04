@@ -7,7 +7,7 @@
     "version": "13.0.1.0.0",
     "category": "Localization",
     "author": "Forest and Biomass Romania, " "Odoo Community Association (OCA)",
-    "website": "https://www.forbiom.eu",
+    "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",
     "installable": True,
     "depends": [
