@@ -3,12 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 
-from odoo import api, fields, models, tools, _
-from odoo.exceptions import UserError
-
-from collections import defaultdict
-
-from odoo.tools.float_utils import float_is_zero
+from odoo import _, fields, models
 
 
 class LandedCost(models.Model):
@@ -32,7 +27,7 @@ class LandedCost(models.Model):
         )
 
         if not custom_duty_product:
-            wizard = self.env['account.invoice.dvi'].create({})
+            wizard = self.env["account.invoice.dvi"].create({})
             vals = wizard._prepare_custom_duty_product()
             custom_duty_product = self.env["product.product"].create(vals)
             set_param = self.env["ir.config_parameter"].sudo().set_param
@@ -66,16 +61,20 @@ class LandedCost(models.Model):
         if not res:
             # prec_digits = self.env.company.currency_id.decimal_places
             for landed_cost in self:
-                total_amount = sum(landed_cost.valuation_adjustment_lines.mapped('additional_landed_cost'))
+                total_amount = sum(
+                    landed_cost.valuation_adjustment_lines.mapped(
+                        "additional_landed_cost"
+                    )
+                )
                 if abs(total_amount - landed_cost.amount_total) > 1:
                     return False
 
             res = True
 
-                # val_to_cost_lines = defaultdict(lambda: 0.0)
-                # for val_line in landed_cost.valuation_adjustment_lines:
-                #     val_to_cost_lines[val_line.cost_line_id] += val_line.additional_landed_cost
-                # if any(not tools.float_is_zero(cost_line.price_unit - val_amount, precision_digits=prec_digits)
-                #        for cost_line, val_amount in val_to_cost_lines.items()):
-                #     return False
+            # val_to_cost_lines = defaultdict(lambda: 0.0)
+            # for val_line in landed_cost.valuation_adjustment_lines:
+            #     val_to_cost_lines[val_line.cost_line_id] += val_line.additional_landed_cost
+            # if any(not tools.float_is_zero(cost_line.price_unit - val_amount, precision_digits=prec_digits)
+            #        for cost_line, val_amount in val_to_cost_lines.items()):
+            #     return False
         return res

@@ -6,8 +6,8 @@
             string="Daily stock report"
             model='stock.storage.sheet.report'
             report_type="qweb-pdf"
-            file="l10n_ro_stock_report.document_storage_sheet_report"
-            name="l10n_ro_stock_report.document_storage_sheet_report"
+            file="l10n_ro_stock_report_old.document_storage_sheet_report"
+            name="l10n_ro_stock_report_old.document_storage_sheet_report"
         />
         <template id="document_storage_sheet_report">
             <t t-call="web.html_container">

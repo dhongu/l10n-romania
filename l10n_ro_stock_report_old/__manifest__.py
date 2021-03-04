@@ -19,5 +19,6 @@
         "report/daily_stock_report_template.xml",
         "report/storage_sheet_report_view.xml",
         "report/storage_sheet_report_template.xml",
+        "security/ir.model.access.csv",
     ],
 }

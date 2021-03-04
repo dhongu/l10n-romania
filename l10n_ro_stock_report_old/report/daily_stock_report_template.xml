@@ -6,8 +6,8 @@
             string="Daily stock report"
             model='stock.daily.stock.report'
             report_type="qweb-pdf"
-            file="l10n_ro_stock_report.document_daily_stock_report"
-            name="l10n_ro_stock_report.document_daily_stock_report"
+            file="l10n_ro_stock_report_old.document_daily_stock_report"
+            name="l10n_ro_stock_report_old.document_daily_stock_report"
         />
         <template id="document_daily_stock_report">
             <t t-call="web.html_container">

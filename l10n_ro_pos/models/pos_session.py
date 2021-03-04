@@ -1,4 +1,4 @@
-# ©  2015-2018 Deltatech
+# ©  2015-2021 Deltatech
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
@@ -16,9 +16,13 @@ class PosSession(models.Model):
         return super(PosSession, self)._reconcile_account_move_lines(data)
 
     def _accumulate_amounts(self, data):
+        def get_amounts():
+            res = {"amount": 0.0, "amount_converted": 0.0}
+            return res
+
         data = super(PosSession, self)._accumulate_amounts(data)
 
-        amounts = lambda: {"amount": 0.0, "amount_converted": 0.0}
+        amounts = get_amounts
 
         if self.company_id.romanian_accounting:
             # nu trebuie generate note contabile  pentru ca acestea sunt generate in miscarea de stoc

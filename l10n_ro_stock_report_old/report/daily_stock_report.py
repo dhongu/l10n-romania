@@ -70,7 +70,7 @@ class DailyStockReport(models.TransientModel):
         if self.mode == "ref":
             query = """
 
-    SELECT 'initial',  sum(value), sum(svl.quantity), array_agg(svl.id)
+    SELECT 'initial',  sum(svl.value), sum(svl.quantity), array_agg(svl.id)
         from stock_move as sm
         left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
         where sm.state = 'done' AND
@@ -82,7 +82,7 @@ class DailyStockReport(models.TransientModel):
             """
         else:
             query = """
-    SELECT svl.product_id,  sum(value), sum(svl.quantity), array_agg(svl.id)
+    SELECT svl.product_id,  sum(svl.value), sum(svl.quantity), array_agg(svl.id)
         from stock_move as sm
         left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
         where sm.state = 'done' AND
@@ -121,7 +121,7 @@ class DailyStockReport(models.TransientModel):
 
         if self.mode == "ref":
             query = """
-    SELECT sm.origin, sum(value), sum(svl.quantity), array_agg(svl.id)
+    SELECT sm.origin, sum(svl.value), sum(svl.quantity), array_agg(svl.id)
 
         from stock_move as sm
         left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
@@ -138,7 +138,7 @@ class DailyStockReport(models.TransientModel):
             """
         else:
             query = """
-    SELECT svl.product_id,  sum(value), sum(svl.quantity) , array_agg(svl.id)
+    SELECT svl.product_id,  sum(svl.value), sum(svl.quantity) , array_agg(svl.id)
 
         from stock_move as sm
         left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
@@ -178,7 +178,7 @@ class DailyStockReport(models.TransientModel):
 
         if self.mode == "ref":
             query = """
-    SELECT sm.origin,  sum(value), sum(svl.quantity) , array_agg(svl.id)
+    SELECT sm.origin,  sum(svl.value), sum(svl.quantity) , array_agg(svl.id)
 
         from stock_move as sm
         left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
@@ -195,7 +195,7 @@ class DailyStockReport(models.TransientModel):
             """
         else:
             query = """
-    SELECT svl.product_id,  sum(value), sum(svl.quantity) , array_agg(svl.id)
+    SELECT svl.product_id,  sum(svl.value), sum(svl.quantity) , array_agg(svl.id)
 
         from stock_move as sm
         left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
@@ -244,10 +244,14 @@ class DailyStockReport(models.TransientModel):
     def button_show(self):
         self.do_compute()
         if self.mode == "ref":
-            action = self.env.ref("l10n_ro_stock_report.action_daily_stock_report_ref")
+            action = self.env.ref(
+                "l10n_ro_stock_report_old.action_daily_stock_report_ref"
+            )
             action = action.sudo().read()[0]
         else:
-            action = self.env.ref("l10n_ro_stock_report.action_daily_stock_report_line")
+            action = self.env.ref(
+                "l10n_ro_stock_report_old.action_daily_stock_report_line"
+            )
             action = action.sudo().read()[0]
         action["domain"] = [("report_id", "=", self.id)]
         action["context"] = {"active_id": self.id}
@@ -257,7 +261,7 @@ class DailyStockReport(models.TransientModel):
     def button_print(self):
         self.do_compute()
         records = self
-        report_name = "l10n_ro_stock_report.action_report_daily_stock_report"
+        report_name = "l10n_ro_stock_report_old.action_report_daily_stock_report"
         report = self.env.ref(report_name).report_action(records)
 
         report["close_on_report_download"] = True

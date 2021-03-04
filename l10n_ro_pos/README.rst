@@ -20,7 +20,9 @@ Romania - Point of Sale
 |badge1| |badge2| |badge3| 
 
 Functionalitati
- - tiparire factura
+
+Daca este instalat modulul l10n_ro_stock_account se genereaza note contabile la fiecare miscare iesire stoc.
+Acest modul nu mai genereaza in nota contabla de inchiderea a sesiunii POS liniile aferente iesirii din gestiune.
 
 **Table of contents**
 
