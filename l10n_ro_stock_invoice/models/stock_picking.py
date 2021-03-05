@@ -15,10 +15,14 @@ class StockPicking(models.Model):
         for picking in self:
             if (
                 picking.sale_id
-                and picking.location_dest_id.usage == "customer"
                 and not picking.notice
+                and picking.location_dest_id.usage == "customer"
+                and picking.location_id.usage == "internal"
             ):
                 sale_orders |= picking.sale_id
+            # for move in picking.move_lines:
+            #     if move.origin_returned_move_id:
+            #         sale_orders -= picking.sale_id
 
         if sale_orders:
             invoices = sale_orders.sudo()._create_invoices()
