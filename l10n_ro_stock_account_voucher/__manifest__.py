@@ -23,7 +23,9 @@
     'author': 'dataERP, Vlad Nafureanu',
     'website': 'http://www.forbiom.eu',
     'category': 'Purchase, Warehouse, Accounting',
-    'depends': ['l10n_ro_stock_account'],
+    'depends': [
+        'account_voucher',
+        'l10n_ro_stock_account'],
     'data': [
         'views/account_voucher.xml',
         'views/purchase_order.xml'
