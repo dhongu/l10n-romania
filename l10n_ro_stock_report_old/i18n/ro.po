@@ -16,6 +16,14 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_stock_report
+#: code:addons/l10n_ro_stock_report/models/account_invoice.py:98
+#, python-format
+msgid "Price difference"
+msgstr "Diferență preț"
+
+
+
+#. module: l10n_ro_stock_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_report.document_storage_sheet_report
 msgid "<span style=\"font-weight:bold;\">Total</span>"
 msgstr ""
@@ -106,7 +114,7 @@ msgstr "<strong>Total ieșiri</strong>"
 #. module: l10n_ro_stock_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_report.document_daily_stock_report
 msgid "<strong>Total</strong>"
-msgstr "strong>Total</strong>"
+msgstr "<strong>Total</strong>"
 
 #. module: l10n_ro_stock_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_report.document_daily_stock_report
