@@ -245,12 +245,14 @@ class DailyStockReport(models.TransientModel):
         self.do_compute()
         if self.mode == "ref":
             action = self.env.ref(
-                "l10n_ro_stock_report.action_daily_stock_report_ref"
-            ).read()[0]
+                "l10n_ro_stock_report_old.action_daily_stock_report_ref"
+            )
+            action = action.sudo().read()[0]
         else:
             action = self.env.ref(
-                "l10n_ro_stock_report.action_daily_stock_report_line"
-            ).read()[0]
+                "l10n_ro_stock_report_old.action_daily_stock_report_line"
+            )
+            action = action.sudo().read()[0]
         action["domain"] = [("report_id", "=", self.id)]
         action["context"] = {"active_id": self.id}
         action["target"] = "main"
@@ -259,7 +261,7 @@ class DailyStockReport(models.TransientModel):
     def button_print(self):
         self.do_compute()
         records = self
-        report_name = "l10n_ro_stock_report.action_report_daily_stock_report"
+        report_name = "l10n_ro_stock_report_old.action_report_daily_stock_report"
         report = self.env.ref(report_name).report_action(records)
 
         report["close_on_report_download"] = True

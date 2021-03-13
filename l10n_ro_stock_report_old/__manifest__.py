@@ -1,7 +1,7 @@
 # ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 {
-    "name": "Romania - Stock Report",
+    "name": "Romania - Stock Report OLD",
     "license": "AGPL-3",
     "version": "13.0.1.0.0",
     "author": "Terrabit,Odoo Community Association (OCA)",
