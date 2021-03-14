@@ -186,9 +186,4 @@ class TestStockPurchase(TestStockCommon):
 
         self.check_account_valuation(self.val_p1_i, self.val_p2_i)
 
-        # consum in productie
-        location_id = self.location_warehouse
-        location_dest_id = self.location_production
-        self.trasfer(location_id, location_dest_id, self.product_1)
-
         self.create_invoice(self.diff_p1, self.diff_p2)

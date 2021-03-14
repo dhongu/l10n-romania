@@ -183,10 +183,14 @@ class AccountMoveLine(models.Model):
                 ("product_qty", "!=", 0.0),
             ]
         )
-
-        valuation_stock_moves = valuation_stock_moves.filtered(
-            lambda stock_move: stock_move._is_in()
-        )
+        if move.type == "in_refund":
+            valuation_stock_moves = valuation_stock_moves.filtered(
+                lambda stock_move: stock_move._is_out()
+            )
+        else:
+            valuation_stock_moves = valuation_stock_moves.filtered(
+                lambda stock_move: stock_move._is_in()
+            )
 
         if not valuation_stock_moves:
             return 0.0

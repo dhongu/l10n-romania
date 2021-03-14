@@ -23,7 +23,6 @@ class TestStockCommon(SavepointCase):
         cls.account_expense = get_account("607000")
         cls.account_expense_mp = get_account("601000")
         cls.account_income = get_account("707000")
-        cls.account_income_mp = get_account("703000")
         cls.account_valuation = get_account("371000")
         cls.account_valuation_mp = get_account("301000")
 
@@ -242,7 +241,6 @@ class TestStockCommon(SavepointCase):
             {
                 "property_stock_valuation_account_id": self.account_valuation_mp.id,
                 "property_account_expense_location_id": self.account_expense_mp.id,
-                "property_account_income_location_id": self.account_income_mp.id,
                 "valuation_in_account_id": self.account_valuation_mp.id,
                 "valuation_out_account_id": self.account_valuation_mp.id,
             }
@@ -371,10 +369,10 @@ class TestStockCommon(SavepointCase):
             val = round(valuation["value"], 2)
             if valuation["product_id"][0] == self.product_1.id:
                 _logger.info("Check stoc P1 {} = {}".format(val, val_p1))
-                self.assertEqual(val, val_p1)
+                self.assertAlmostEqual(val, val_p1)
             if valuation["product_id"][0] == self.product_2.id:
                 _logger.info("Check SVL P2 {} = {}".format(val, val_p2))
-                self.assertEqual(val, val_p2)
+                self.assertAlmostEqual(val, val_p2)
 
     def check_account_valuation(self, val_p1, val_p2, account=None):
         val_p1 = round(val_p1, 2)
@@ -393,10 +391,10 @@ class TestStockCommon(SavepointCase):
             val = round(valuation["debit"] - valuation["credit"], 2)
             if valuation["product_id"][0] == self.product_1.id:
                 _logger.info("Check account P1 {} = {}".format(val, val_p1))
-                self.assertEqual(val, val_p1)
+                self.assertAlmostEqual(val, val_p1)
             if valuation["product_id"][0] == self.product_2.id:
                 _logger.info("Check account P2 {} = {}".format(val, val_p2))
-                self.assertEqual(val, val_p2)
+                self.assertAlmostEqual(val, val_p2)
 
     def check_account_diff(self, val_p1, val_p2):
         self.check_account_valuation(val_p1, val_p2, self.account_difference)
