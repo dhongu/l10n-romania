@@ -70,3 +70,6 @@ class StockAccountingCheckLine(models.TransientModel):
         string="Currency",
         default=lambda self: self.env.company.currency_id,
     )
+
+    def get_general_buttons(self):
+        return []
