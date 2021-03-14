@@ -60,8 +60,8 @@
                 <field name="amount_in" />
                 <field name="quantity_out" />
                 <field name="amount_out" />
-                <field name="quantity_final" decoration-danger="quantity_final &lt; 0" />
-                <field name="amount_final" decoration-danger="amount_final &lt; 0" />
+                <field name="quantity_final" />
+                <field name="amount_final" />
             </tree>
         </field>
     </record>
@@ -106,7 +106,7 @@
         <field name="model">stock.storage.sheet.line</field>
         <field name="arch" type="xml">
             <pivot string="Stock Analysis" disable_linking="True">
-                <field name="product_id" type="row" />
+                <field name="account_id" type="row" />
                 <field name="quantity_initial" type="measure" />
                 <field name="amount_initial" type="measure" />
                 <field name="quantity_in" type="measure" />

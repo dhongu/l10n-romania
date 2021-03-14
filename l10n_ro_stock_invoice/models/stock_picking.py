@@ -15,8 +15,9 @@ class StockPicking(models.Model):
         for picking in self:
             if (
                 picking.sale_id
-                and picking.location_dest_id.usage == "customer"
                 and not picking.notice
+                and picking.location_dest_id.usage == "customer"
+                and picking.location_id.usage == "internal"
             ):
                 sale_orders |= picking.sale_id
 
