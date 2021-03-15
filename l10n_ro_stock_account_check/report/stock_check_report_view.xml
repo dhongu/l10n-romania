@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_stock_accounting_check_form" model="ir.ui.view">
+        <field name="name">stock.accounting.check.form</field>
+        <field name="model">stock.accounting.check</field>
+        <field name="arch" type="xml">
+            <form string="Report Options">
+                <group name="filters">
+                    <group>
+                        <field name="account_id" />
+                    </group>
+                    <group />
+                </group>
+                <footer>
+                    <button
+                        name="button_show_report"
+                        string="Show"
+                        type="object"
+                        default_focus="1"
+                        class="oe_highlight"
+                    />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="view_stock_accounting_check_line_tree" model="ir.ui.view">
+        <field name="name">stock.accounting.check.line</field>
+        <field name="model">stock.accounting.check.line</field>
+        <field name="arch" type="xml">
+            <tree edit="0" create="0" import="0">
+                <field name="product_id" />
+                <field name="amount_svl" />
+                <field name="amount_aml" />
+            </tree>
+        </field>
+    </record>
+    <record id="view_stock_accounting_check_line_form" model="ir.ui.view">
+        <field name="name">stock.accounting.check.report.line</field>
+        <field name="model">stock.accounting.check.line</field>
+        <field name="arch" type="xml">
+            <form edit="0" create="0" import="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id" />
+                        </group>
+                        <group>
+                            <field name="amount_svl" />
+                            <field name="amount_aml" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_stock_accounting_check_line_pivot" model="ir.ui.view">
+        <field name="name">stock.accounting.check.line.pivot</field>
+        <field name="model">stock.accounting.check.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Stock Analysis" disable_linking="True">
+                <field name="product_id" type="row" />
+                <field name="amount_svl" type="measure" />
+                <field name="amount_aml" type="measure" />
+            </pivot>
+        </field>
+    </record>
+    <record id="view_stock_accounting_check_line_search" model="ir.ui.view">
+        <field name="name">stock.accounting.check.line.search</field>
+        <field name="model">stock.accounting.check.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id" />
+                <group expand="1" string="Group by">
+                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_stock_accounting_check" model="ir.actions.act_window">
+        <field name="name">Stock accounting check</field>
+        <field name="res_model">stock.accounting.check</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem
+        id="menu_stock_accounting_check"
+        name="Stock accounting check"
+        action="action_stock_accounting_check"
+        parent="stock.menu_warehouse_report"
+        groups="stock.group_stock_user"
+    />
+    <record id="action_stock_accounting_check_line" model="ir.actions.act_window">
+        <field name="name">Stock Sheet Report</field>
+        <field name="res_model">stock.accounting.check.line</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('report_id','=',active_id)]</field>
+    </record>
+</odoo>
