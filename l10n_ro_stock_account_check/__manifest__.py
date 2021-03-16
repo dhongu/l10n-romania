@@ -8,6 +8,7 @@
     "category": "Warehouse",
     "depends": [
         "l10n_ro_stock_account",
+        "date_range",
     ],
     "data": [
         "report/stock_check_report_view.xml",
