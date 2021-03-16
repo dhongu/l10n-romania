@@ -9,7 +9,15 @@
                     <group>
                         <field name="account_id" />
                     </group>
-                    <group />
+                    <group name="date_range">
+                        <field
+                            name="date_range_id"
+                            domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="company_id" invisible="1" />
+                    </group>
                 </group>
                 <footer>
                     <button
@@ -32,7 +40,21 @@
             <tree edit="0" create="0" import="0">
                 <field name="product_id" />
                 <field name="amount_svl" />
+                <button
+                    name="action_slv_details"
+                    aria-label="Valuation"
+                    title="Valuation"
+                    type="object"
+                    icon="fa-info-circle"
+                />
                 <field name="amount_aml" />
+                <button
+                    name="action_aml_details"
+                    aria-label="Account Move Line"
+                    title="Account Move Line"
+                    type="object"
+                    icon="fa-info-circle"
+                />
             </tree>
         </field>
     </record>
@@ -96,5 +118,6 @@
         <field name="res_model">stock.accounting.check.line</field>
         <field name="view_mode">tree,form,pivot</field>
         <field name="domain">[('report_id','=',active_id)]</field>
+        <field name="context">{}</field>
     </record>
 </odoo>
