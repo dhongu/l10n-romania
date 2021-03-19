@@ -19,10 +19,27 @@ class StockPicking(models.Model):
                 and picking.location_dest_id.usage == "customer"
                 and picking.location_id.usage == "internal"
             ):
-                sale_orders |= picking.sale_id
-            # for move in picking.move_lines:
-            #     if move.origin_returned_move_id:
-            #         sale_orders -= picking.sale_id
+                sale_order = picking.sale_id
+                is_downpayment = sale_order.order_line.filtered(
+                    lambda sale_order_line: sale_order_line.is_downpayment
+                )
+                if not is_downpayment:
+                    sale_orders |= picking.sale_id
+
+        # if len(sale_orders) == 1:
+        #     sale_order = sale_orders
+        #     is_downpayment = sale_order.order_line.filtered(
+        #         lambda sale_order_line: sale_order_line.is_downpayment
+        #     )
+        #     if is_downpayment:
+        #         action_obj = self.env.ref("sale.action_view_sale_advance_payment_inv")
+        #         action = action_obj.read()[0]
+        #         action["context"] = {
+        #             "force_period_date": picking.date,
+        #             "active_model": "sale.order",
+        #             "active_id": sale_orders.id,
+        #         }
+        #         return action
 
         if sale_orders:
             invoices = sale_orders.sudo()._create_invoices()
