@@ -73,8 +73,9 @@ class AccountMove(models.Model):
         for move in self:
             for line in move.line_ids:
                 _logger.info(
-                    "%s\t\t%s\t\t%s"
-                    % (line.debit, line.credit, line.account_id.display_name)
+                    "{}\t\t{}\t\t{}".format(
+                        line.debit, line.credit, line.account_id.display_name
+                    )
                 )
         return res
 

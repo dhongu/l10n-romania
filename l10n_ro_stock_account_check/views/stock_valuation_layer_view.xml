@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="action_svl_reevaluation" model="ir.actions.server">
+        <field name="name">Reevaluation</field>
+        <field name="model_id" ref="stock_account.model_stock_valuation_layer" />
+        <field name="binding_model_id" ref="stock_account.model_stock_valuation_layer" />
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                records.correction_valuation()
+        </field>
+    </record>
+    <!--
+    <record id="stock_valuation_layer_form" model="ir.ui.view">
+        <field name="name">stock.valuation.layer.form</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.stock_valuation_layer_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='account_move_id']" position="after">
+                <button name="correction_valuation" type="object"  class="oe_link" string="Reevaluation"/>
+            </xpath>
+        </field>
+    </record>
+-->
+    <record id="stock_valuation_layer_tree" model="ir.ui.view">
+        <field name="name">stock.valuation.layer.tree</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.stock_valuation_layer_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="before">
+                <field name="date" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

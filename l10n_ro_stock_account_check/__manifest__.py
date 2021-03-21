@@ -8,10 +8,13 @@
     "category": "Warehouse",
     "depends": [
         "l10n_ro_stock_account",
+        "purchase_stock",
+        "sale_stock",
         "date_range",
     ],
     "data": [
         "report/stock_check_report_view.xml",
+        "views/stock_valuation_layer_view.xml",
         "security/ir.model.access.csv",
     ],
     "installable": True,
