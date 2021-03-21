@@ -1,11 +1,11 @@
-# Copyright (C) 2020 NextERP Romania
-# Copyright (C) 2020 Terrabit
+# Copyright (C) 2021 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import logging
 
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
+from odoo.tools.misc import format_date
 
 _logger = logging.getLogger(__name__)
 
@@ -29,7 +29,13 @@ class StockAccountingCheck(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         res = super(StockAccountingCheck, self).default_get(fields_list)
-
+        domain = [
+            ("code", "=", "371000"),
+            ("company_id", "=", self.env.company.id),
+        ]
+        account = self.env["account.account"].search(domain, limit=1)
+        if account:
+            res["account_id"] = account.id
         today = fields.Date.context_today(self)
         today = fields.Date.from_string(today)
 
@@ -51,7 +57,8 @@ class StockAccountingCheck(models.TransientModel):
         self.line_ids.unlink()
 
         query = """
-        SELECT %(report)s as report_id, product_id, sum(svl_value) as amount_svl , sum(aml_value) as amount_aml,
+        SELECT %(report)s as report_id, product_id, sum(svl_value) as amount_svl ,
+                sum(aml_value) as amount_aml,
                 jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids
 
             FROM
@@ -106,11 +113,140 @@ class StockAccountingCheck(models.TransientModel):
 
         self.line_ids.create(lines)
 
+    def do_check_purchases(self):
+        products = self.line_ids.mapped("product_id")
+        purchase_lines = self.env["purchase.order.line"].search(
+            [("product_id", "in", products.ids)]
+        )
+        purchases = purchase_lines.mapped("order_id")
+        ok = True
+        for purchase in purchases:
+            if purchase.invoice_count == 1:
+                invoice_date = purchase.invoice_ids.invoice_date
+                for picking in purchase.picking_ids:
+                    if invoice_date != picking.date.date() and not picking.notice:
+                        new_date = picking.date.replace(
+                            year=invoice_date.year,
+                            month=invoice_date.month,
+                            day=invoice_date.day,
+                        )
+                        if new_date.hour < 3:
+                            new_date = new_date.replace(hour=12)
+                        picking.write({"date": new_date})
+                        picking.move_lines.write({"date": new_date})
+                        ok = False
+            if (
+                purchase.invoice_status == "to invoice"
+                and purchase.picking_count > 0
+                and purchase.state not in ["done", "cancel"]
+            ):
+                if not purchase.activity_ids:
+                    note = _("Receptie fara factura")
+                    summary = _("Factura lipsa")
+                    purchase.activity_schedule(
+                        "mail.mail_activity_data_warning",
+                        note=note,
+                        summary=summary,
+                        user_id=purchase.user_id.id,
+                    )
+        return ok
+
+    def do_check_sale_order(self):
+        products = self.line_ids.mapped("product_id")
+        sale_lines = self.env["sale.order.line"].search(
+            [("product_id", "in", products.ids)]
+        )
+        sale_oreders = sale_lines.mapped("order_id")
+        ok = True
+        for sale_oreder in sale_oreders:
+            if sale_oreder.invoice_count == 1:
+                invoice_date = sale_oreder.invoice_ids.invoice_date
+                for picking in sale_oreder.picking_ids:
+                    if invoice_date != picking.date.date() and not picking.notice:
+                        new_date = picking.date.replace(
+                            year=invoice_date.year,
+                            month=invoice_date.month,
+                            day=invoice_date.day,
+                        )
+                        if new_date.hour < 3:
+                            new_date = new_date.replace(hour=12)
+                        picking.write({"date": new_date})
+                        # picking.move_lines.write({"date": new_date})
+                        # account_move = picking.mapped('move_lines.stock_valuation_layer_ids.account_move_id')
+                        # account_move.write({'date': invoice_date})
+                        ok = False
+            if (
+                sale_oreder.invoice_status == "to invoice"
+                and sale_oreder.delivery_count > 0
+                and sale_oreder.state not in ["done", "cancel"]
+            ):
+                if not sale_oreder.activity_ids:
+                    note = _("Livrare fara factura")
+                    summary = _("Factura lipsa")
+                    sale_oreder.activity_schedule(
+                        "mail.mail_activity_data_warning",
+                        note=note,
+                        summary=summary,
+                        user_id=sale_oreder.user_id.id,
+                    )
+        return ok
+
+    def do_check_move(self):
+        products = self.line_ids.mapped("product_id")
+        stock_moves = self.env["stock.move"].search(
+            [("product_id", "in", products.ids)]
+        )
+        for stock_move in stock_moves:
+            stock_move_date = stock_move.date.date()
+            account_moves = stock_move.mapped(
+                "stock_valuation_layer_ids.account_move_id"
+            )
+            for account_move in account_moves:
+                if (
+                    account_move.date != stock_move_date
+                    and not account_move.activity_ids
+                ):
+                    note = _(
+                        " Nota contabila cu data diferita fata de data %s din miscarea de stoc"
+                    ) % (stock_move_date)
+
+                    if not stock_move.picking_id:
+                        note += " <a href='#' data-oe-model='{}' data-oe-id='{}'>{}</a>".format(
+                            "stock.move",
+                            stock_move.id,
+                            stock_move.name,
+                        )
+                    else:
+                        note += " <a href='#' data-oe-model='{}' data-oe-id='{}'>{}</a>".format(
+                            "stock.picking",
+                            stock_move.picking_id.id,
+                            stock_move.picking_id.name,
+                        )
+
+                    summary = _("Data gresit")
+                    account_move.activity_schedule(
+                        "mail.mail_activity_data_warning",
+                        note=note,
+                        summary=summary,
+                        user_id=account_move.create_uid.id,
+                    )
+
     def button_show_report(self):
         self.do_compute_product()
-        action = self.env.ref(
+        if not self.do_check_purchases():
+            self.do_compute_product()
+        if not self.do_check_sale_order():
+            self.do_compute_product()
+        self.do_check_move()
+
+        action = self.env["ir.actions.actions"]._for_xml_id(
             "l10n_ro_stock_account_check.action_stock_accounting_check_line"
-        ).read()[0]
+        )
+        action["display_name"] = "{} ({}-{})".format(
+            action["name"],
+            format_date(self.env, self.date_from),
+            format_date(self.env, self.date_to),
+        )
         return action
 
 
@@ -167,3 +303,40 @@ class StockAccountingCheckLine(models.TransientModel):
 
     def get_general_buttons(self):
         return []
+
+    def action_purchase(self):
+
+        stock_moves = self.env["stock.move"]
+        purchases = self.env["purchase.order"]
+        for svl in self.svl_ids:
+            stock_moves |= svl.stock_move_id
+            purchases |= svl.stock_move_id.purchase_line_id.order_id
+
+        action = {
+            "name": _("Purchase"),
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "tree,form",
+            "context": self.env.context,
+            "res_model": "purchase.order",
+            "domain": [("id", "in", purchases.ids)],
+        }
+        return action
+
+    def action_sale(self):
+        stock_moves = self.env["stock.move"]
+        sales = self.env["sale.order"]
+        for svl in self.svl_ids:
+            stock_moves |= svl.stock_move_id
+            sales |= svl.stock_move_id.sale_line_id.order_id
+
+        action = {
+            "name": _("Sale"),
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "tree,form",
+            "context": self.env.context,
+            "res_model": "sale.order",
+            "domain": [("id", "in", sales.ids)],
+        }
+        return action
