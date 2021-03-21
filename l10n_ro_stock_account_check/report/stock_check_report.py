@@ -67,7 +67,9 @@ class StockAccountingCheck(models.TransientModel):
                     array[]::integer[] as aml_ids
                  from stock_valuation_layer as svl
                       left join stock_move as sm on svl.stock_move_id = sm.id
-                  where svl.company_id = %(company)s and
+                  where
+                      account_id = %(account)s and
+                      svl.company_id = %(company)s and
                       date_trunc('day',sm.date) >= %(date_from)s  AND
                       date_trunc('day',sm.date) <= %(date_to)s
                   group by sm.product_id)
