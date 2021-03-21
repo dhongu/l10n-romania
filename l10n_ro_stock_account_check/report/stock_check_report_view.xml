@@ -38,7 +38,12 @@
         <field name="model">stock.accounting.check.line</field>
         <field name="arch" type="xml">
             <tree edit="0" create="0" import="0">
+                <header>
+
+                </header>
                 <field name="product_id" />
+                <button name="action_purchase" aria-label="Purchase" title="Purchase" type="object" icon="fa-sign-in" />
+                <button name="action_sale" aria-label="Sale" title="Sale" type="object" icon="fa-sign-out" />
                 <field name="amount_svl" />
                 <button
                     name="action_slv_details"
@@ -47,6 +52,7 @@
                     type="object"
                     icon="fa-info-circle"
                 />
+
                 <field name="amount_aml" />
                 <button
                     name="action_aml_details"
@@ -55,6 +61,7 @@
                     type="object"
                     icon="fa-info-circle"
                 />
+
             </tree>
         </field>
     </record>
@@ -69,8 +76,8 @@
                             <field name="product_id" />
                         </group>
                         <group>
-                            <field name="amount_svl" />
-                            <field name="amount_aml" />
+                            <field name="amount_svl" sum="1" />
+                            <field name="amount_aml" sum="1" />
                         </group>
                     </group>
                 </sheet>
