@@ -125,6 +125,7 @@ class StorageSheet(models.TransientModel):
             SELECT %(report)s as report_id, sm.product_id as product_id,
                 COALESCE(sum(svl.value),0)  as amount_initial,
                 COALESCE(sum(svl.quantity),0)  as quantity_initial,
+                svl.account_id,
                 %(date_from)s as date,
                 %(reference)s as reference
             from stock_move as sm
@@ -139,18 +140,19 @@ class StorageSheet(models.TransientModel):
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 date_trunc('day',sm.date) <  %(date_from)s AND
                 (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
-            GROUP BY sm.product_id
+            GROUP BY sm.product_id, svl.account_id
         """
 
         params.update({"reference": "INITIALA"})
         self.env.cr.execute(query_select_sold_init, params=params)
         res = self.env.cr.dictfetchall()
-        initial = self.line_product_ids.create(res)
+        self.line_product_ids.create(res)
 
         query_select_sold_final = """
             SELECT %(report)s as report_id, sm.product_id as product_id,
                 COALESCE(sum(svl.value),0)  as amount_final,
                 COALESCE(sum(svl.quantity),0)  as quantity_final,
+                svl.account_id,
                 %(date_to)s as date,
                 %(reference)s as reference
             from stock_move as sm
@@ -163,25 +165,22 @@ class StorageSheet(models.TransientModel):
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 date_trunc('day',sm.date) <=  %(date_to)s AND
                 (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
-            GROUP BY sm.product_id
+            GROUP BY sm.product_id, svl.account_id
         """
 
         params.update({"reference": "FINALA"})
         self.env.cr.execute(query_select_sold_final, params=params)
         res = self.env.cr.dictfetchall()
-        final = self.line_product_ids.create(res)
+        self.line_product_ids.create(res)
 
-        query = """
+        query_in = """
 
 
         SELECT  %(report)s as report_id, sm.product_id as product_id,
                 COALESCE(sum(svl_in.value),0)   as amount_in,
                 COALESCE(sum(svl_in.quantity), 0)   as quantity_in,
-
-                -1*COALESCE(sum(svl_out.value),0)   as amount_out,
-                -1*COALESCE(sum(svl_out.quantity),0)   as quantity_out,
-
                 date_trunc('day',sm.date) as date,
+                 svl_in.account_id,
                 sm.reference as reference,
                 sp.partner_id
             from stock_move as sm
@@ -193,6 +192,32 @@ class StorageSheet(models.TransientModel):
                     ( svl_in.valued_type ='internal_transfer' and svl_in.quantity>0 and sm.location_dest_id=%(location)s) or
                     ( svl_in.valued_type  like '%%return' and sm.location_id=%(location)s)
                     )
+                left join stock_picking as sp on sm.picking_id = sp.id
+            where
+                sm.state = 'done' AND
+                sm.company_id = %(company)s AND
+                ( %(all_products)s  or sm.product_id in %(product)s ) AND
+                date_trunc('day',sm.date) >= %(date_from)s  AND
+                date_trunc('day',sm.date) <= %(date_to)s  AND
+                (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
+            GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id
+            """
+
+        self.env.cr.execute(query_in, params=params)
+        res = self.env.cr.dictfetchall()
+        self.line_product_ids.create(res)
+
+        query_out = """
+
+        SELECT  %(report)s as report_id, sm.product_id as product_id,
+
+                -1*COALESCE(sum(svl_out.value),0)   as amount_out,
+                -1*COALESCE(sum(svl_out.quantity),0)   as quantity_out,
+                svl_out.account_id,
+                date_trunc('day',sm.date) as date,
+                sm.reference as reference,
+                sp.partner_id
+            from stock_move as sm
 
                 left join stock_valuation_layer as svl_out on svl_out.stock_move_id = sm.id and
                     (
@@ -211,28 +236,12 @@ class StorageSheet(models.TransientModel):
                 date_trunc('day',sm.date) >= %(date_from)s  AND
                 date_trunc('day',sm.date) <= %(date_to)s  AND
                 (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
-            GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id
+            GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id
             """
 
-        self.env.cr.execute(query, params=params)
+        self.env.cr.execute(query_out, params=params)
         res = self.env.cr.dictfetchall()
-        current = self.line_product_ids.create(res)
-
-        line_product_ids = initial + current + final
-
-        if self.location_id.property_stock_valuation_account_id:
-            line_product_ids.write(
-                {"account_id": self.location_id.property_stock_valuation_account_id.id}
-            )
-        else:
-            categories = self.env["product.category"].search([])
-            for category in categories:
-                lines = self.env["stock.storage.sheet.line"].search(
-                    [("categ_id", "=", category.id)]
-                )
-                lines.write(
-                    {"account_id": category.property_stock_valuation_account_id.id}
-                )
+        self.line_product_ids.create(res)
 
     def get_found_products(self):
         found_products = self.product_ids
