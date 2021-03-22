@@ -27,26 +27,6 @@ They report is accessible under Accounting / Reporting / Romania / Trial Balance
 .. contents::
    :local:
 
-Installation
-============
-
-To install this module, you need to:
-
-* clone the branch 14.0 of the repository https://github.com/OCA/l10n-romania
-* add the path to this repository in your configuration (addons-path)
-* update the module list
-* search for "Romania - Account Trial Balance Report" in your addons
-* install the module
-
-Usage
-=====
-
-To use this module, you need to be an account adviser and go to:
-
-Accounting -> Reporting -> Romania -> Trial Balance
-* Select the options that you want to be printed: dates, hierarchy, hide accounts
-* Click on the button in which format you want to export.
-
 Bug Tracker
 ===========
 

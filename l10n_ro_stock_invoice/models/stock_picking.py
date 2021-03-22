@@ -20,9 +20,7 @@ class StockPicking(models.Model):
                 and picking.location_id.usage == "internal"
             ):
                 sale_order = picking.sale_id
-                is_downpayment = sale_order.order_line.filtered(
-                    lambda sale_order_line: sale_order_line.is_downpayment
-                )
+                is_downpayment = sale_order.order_line.filtered(lambda sale_order_line: sale_order_line.is_downpayment)
                 if not is_downpayment:
                     sale_orders |= picking.sale_id
 
