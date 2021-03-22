@@ -123,24 +123,17 @@ class StorageSheet(models.TransientModel):
 
         query_select_sold_init = """
             SELECT %(report)s as report_id, sm.product_id as product_id,
-                COALESCE(sum(svl.value),0) +
-                COALESCE(sum(svl2.value),0)+
-                COALESCE(sum(svl3.value),0) as amount_initial,
-                COALESCE(sum(svl.quantity),0) +
-                COALESCE(sum(svl2.quantity),0) +
-                COALESCE(sum(svl3.quantity), 0) as quantity_initial,
+                COALESCE(sum(svl.value),0)  as amount_initial,
+                COALESCE(sum(svl.quantity),0)  as quantity_initial,
                 %(date_from)s as date,
                 %(reference)s as reference
             from stock_move as sm
-                left join (select * from stock_valuation_layer
-                            where valued_type !='internal_transfer' or valued_type is Null)
-                            as svl on svl.stock_move_id = sm.id
-                left join (select * from stock_valuation_layer
-                            where valued_type ='internal_transfer' and quantity<0) as svl2
-                            on svl2.stock_move_id = sm.id and sm.location_id=%(location)s
-                left join (select * from stock_valuation_layer
-                            where valued_type ='internal_transfer' and quantity>0) as svl3
-                            on svl3.stock_move_id = sm.id and sm.location_dest_id=%(location)s
+
+            left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
+                    and ((valued_type !='internal_transfer' or valued_type is Null) or
+                    (valued_type ='internal_transfer' and quantity<0 and sm.location_id=%(location)s) or
+                    (valued_type ='internal_transfer' and quantity>0 and sm.location_dest_id=%(location)s) )
+
             where sm.state = 'done' AND
                 sm.company_id = %(company)s AND
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
@@ -156,24 +149,15 @@ class StorageSheet(models.TransientModel):
 
         query_select_sold_final = """
             SELECT %(report)s as report_id, sm.product_id as product_id,
-                COALESCE(sum(svl.value),0) +
-               COALESCE(sum(svl2.value),0) +
-                COALESCE(sum(svl3.value), 0) as amount_final,
-                COALESCE(sum(svl.quantity),0) +
-                COALESCE(sum(svl2.quantity),0) +
-                COALESCE(sum(svl3.quantity),0) as quantity_final,
+                COALESCE(sum(svl.value),0)  as amount_final,
+                COALESCE(sum(svl.quantity),0)  as quantity_final,
                 %(date_to)s as date,
                 %(reference)s as reference
             from stock_move as sm
-                left join (select * from stock_valuation_layer
-                            where valued_type !='internal_transfer' or valued_type is Null)
-                            as svl on svl.stock_move_id = sm.id
-                left join (select * from stock_valuation_layer
-                            where valued_type ='internal_transfer' and quantity<0) as svl2
-                            on svl2.stock_move_id = sm.id and sm.location_id=%(location)s
-                left join (select * from stock_valuation_layer
-                            where valued_type ='internal_transfer' and quantity>0) as svl3
-                            on svl3.stock_move_id = sm.id and sm.location_dest_id=%(location)s
+            left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
+                    and ((valued_type !='internal_transfer' or valued_type is Null) or
+                    (valued_type ='internal_transfer' and quantity<0 and sm.location_id=%(location)s) or
+                    (valued_type ='internal_transfer' and quantity>0 and sm.location_dest_id=%(location)s) )
             where sm.state = 'done' AND
                 sm.company_id = %(company)s AND
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
@@ -191,62 +175,34 @@ class StorageSheet(models.TransientModel):
 
 
         SELECT  %(report)s as report_id, sm.product_id as product_id,
-                COALESCE(sum(svl_in.value),0) +
-                COALESCE(sum(svl_tr_in.value), 0) +
-                COALESCE(sum(svl_in_r.value), 0) as amount_in,
+                COALESCE(sum(svl_in.value),0)   as amount_in,
+                COALESCE(sum(svl_in.quantity), 0)   as quantity_in,
 
-                COALESCE(sum(svl_in.quantity), 0) +
-                COALESCE(sum(svl_tr_in.quantity), 0) +
-                COALESCE(sum(svl_in_r.quantity), 0) as quantity_in,
-
-                -1*(  COALESCE(sum(svl_out.value),0) +
-                COALESCE(sum(svl_tr_out.value),0) +
-                COALESCE(sum(svl_out_r.value), 0)) as amount_out,
-
-                -1*(  COALESCE(sum(svl_out.quantity),0) +
-                 COALESCE(sum(svl_tr_out.quantity),0) +
-                 COALESCE(sum(svl_out_r.quantity),  0)) as quantity_out,
+                -1*COALESCE(sum(svl_out.value),0)   as amount_out,
+                -1*COALESCE(sum(svl_out.quantity),0)   as quantity_out,
 
                 date_trunc('day',sm.date) as date,
                 sm.reference as reference,
                 sp.partner_id
             from stock_move as sm
-                -- intrare in stoc
-                left join (select * from stock_valuation_layer
-                            where (valued_type !='internal_transfer'and valued_type not like '%%return')
-                            or valued_type is Null)
-                            as svl_in on svl_in.stock_move_id = sm.id and
-                            sm.location_dest_id=%(location)s
-                -- iesire din stoc
-                left join (select * from stock_valuation_layer
-                            where (valued_type !='internal_transfer' and valued_type not like '%%return')
-                            or valued_type is Null)
-                            as svl_out on svl_out.stock_move_id = sm.id and
-                            sm.location_id=%(location)s
+
+                left join stock_valuation_layer as svl_in on svl_in.stock_move_id = sm.id and
+                    (
+                    ( ((svl_in.valued_type !='internal_transfer' and svl_in.valued_type not like '%%return' )
+                       or svl_in.valued_type is Null)  and  sm.location_dest_id=%(location)s) or
+                    ( svl_in.valued_type ='internal_transfer' and svl_in.quantity>0 and sm.location_dest_id=%(location)s) or
+                    ( svl_in.valued_type  like '%%return' and sm.location_id=%(location)s)
+                    )
+
+                left join stock_valuation_layer as svl_out on svl_out.stock_move_id = sm.id and
+                    (
+                    ( ((svl_out.valued_type !='internal_transfer' and svl_out.valued_type not like '%%return' )
+                       or svl_out.valued_type is Null)   and  sm.location_id=%(location)s) or
+                    ( svl_out.valued_type ='internal_transfer' and svl_out.quantity<0 and sm.location_id=%(location)s) or
+                    ( svl_out.valued_type  like '%%return' and sm.location_dest_id=%(location)s)
+                    )
 
 
-                -- retur intrare in stoc
-                left join (select * from stock_valuation_layer
-                            where valued_type  like '%%return')
-                            as svl_in_r on svl_in_r.stock_move_id = sm.id and
-                            sm.location_id=%(location)s
-
-                -- return iesire din stoc
-                left join (select * from stock_valuation_layer
-                            where  valued_type  like '%%return')
-                            as svl_out_r on svl_out_r.stock_move_id = sm.id and
-                            sm.location_dest_id=%(location)s
-
-                -- iesire din transfer
-                left join (select * from stock_valuation_layer
-                            where valued_type ='internal_transfer' and quantity<0) as svl_tr_out
-                            on svl_tr_out.stock_move_id = sm.id and
-                            sm.location_id=%(location)s
-                -- intrare din transfer
-                left join (select * from stock_valuation_layer
-                            where valued_type ='internal_transfer' and quantity>0) as svl_tr_in
-                            on svl_tr_in.stock_move_id = sm.id and
-                            sm.location_dest_id=%(location)s
                 left join stock_picking as sp on sm.picking_id = sp.id
             where
                 sm.state = 'done' AND
