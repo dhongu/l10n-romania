@@ -113,9 +113,7 @@ class StockAccountingCheck(models.TransientModel):
 
     def do_check_purchases(self):
         products = self.line_ids.mapped("product_id")
-        purchase_lines = self.env["purchase.order.line"].search(
-            [("product_id", "in", products.ids)]
-        )
+        purchase_lines = self.env["purchase.order.line"].search([("product_id", "in", products.ids)])
         purchases = purchase_lines.mapped("order_id")
         ok = True
         for purchase in purchases:
@@ -151,9 +149,7 @@ class StockAccountingCheck(models.TransientModel):
 
     def do_check_sale_order(self):
         products = self.line_ids.mapped("product_id")
-        sale_lines = self.env["sale.order.line"].search(
-            [("product_id", "in", products.ids)]
-        )
+        sale_lines = self.env["sale.order.line"].search([("product_id", "in", products.ids)])
         sale_oreders = sale_lines.mapped("order_id")
         ok = True
         for sale_oreder in sale_oreders:
@@ -191,22 +187,15 @@ class StockAccountingCheck(models.TransientModel):
 
     def do_check_move(self):
         products = self.line_ids.mapped("product_id")
-        stock_moves = self.env["stock.move"].search(
-            [("product_id", "in", products.ids)]
-        )
+        stock_moves = self.env["stock.move"].search([("product_id", "in", products.ids)])
         for stock_move in stock_moves:
             stock_move_date = stock_move.date.date()
-            account_moves = stock_move.mapped(
-                "stock_valuation_layer_ids.account_move_id"
-            )
+            account_moves = stock_move.mapped("stock_valuation_layer_ids.account_move_id")
             for account_move in account_moves:
-                if (
-                    account_move.date != stock_move_date
-                    and not account_move.activity_ids
-                ):
-                    note = _(
-                        " Nota contabila cu data diferita fata de data %s din miscarea de stoc"
-                    ) % (stock_move_date)
+                if account_move.date != stock_move_date and not account_move.activity_ids:
+                    note = _(" Nota contabila cu data diferita fata de data %s din miscarea de stoc") % (
+                        stock_move_date
+                    )
 
                     if not stock_move.picking_id:
                         note += " <a href='#' data-oe-model='{}' data-oe-id='{}'>{}</a>".format(
