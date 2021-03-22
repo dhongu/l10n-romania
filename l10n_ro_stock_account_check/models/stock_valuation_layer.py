@@ -14,11 +14,7 @@ class StockValuationLayer(models.Model):
             svl.account_move_id.write({"state": "draft"})
             name = svl.account_move_id.name
             svl.account_move_id.with_context(force_delete=True).unlink()
-            stock_move = svl.stock_move_id.with_context(
-                force_period_date=svl.stock_move_id.date
-            )
-            stock_move._account_entry_move(
-                svl.quantity, svl.description, svl.id, svl.value
-            )
+            stock_move = svl.stock_move_id.with_context(force_period_date=svl.stock_move_id.date)
+            stock_move._account_entry_move(svl.quantity, svl.description, svl.id, svl.value)
             if name and svl.account_move_id:
                 svl.account_move_id.write({"name": name})
