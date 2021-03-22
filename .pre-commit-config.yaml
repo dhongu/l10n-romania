@@ -63,6 +63,7 @@ repos:
     rev: 20.8b1
     hooks:
       - id: black
+        args: [-l 120]
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v2.2.1
     hooks:

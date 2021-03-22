@@ -8,9 +8,7 @@ from odoo import fields, models
 class PosConfig(models.Model):
     _inherit = "pos.config"
 
-    is_installed_account_accountant = fields.Boolean(
-        compute="_compute_is_installed_account_accountant"
-    )
+    is_installed_account_accountant = fields.Boolean(compute="_compute_is_installed_account_accountant")
 
     def _compute_is_installed_account_accountant(self):
         for pos_config in self:

@@ -17,9 +17,7 @@ class StockAccountingCheck(models.TransientModel):
     # Filters fields, used for data computation
 
     account_id = fields.Many2one("account.account", required=True)
-    company_id = fields.Many2one(
-        "res.company", string="Company", default=lambda self: self.env.company
-    )
+    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
     date_range_id = fields.Many2one("date.range", string="Date range")
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
@@ -108,9 +106,7 @@ class StockAccountingCheck(models.TransientModel):
 
     def button_show_report(self):
         self.do_compute_product()
-        action = self.env.ref(
-            "l10n_ro_stock_account_check.action_stock_accounting_check_line"
-        ).read()[0]
+        action = self.env.ref("l10n_ro_stock_account_check.action_stock_accounting_check_line").read()[0]
         return action
 
 

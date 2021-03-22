@@ -9,9 +9,7 @@ from odoo import _, fields, models
 class LandedCost(models.Model):
     _inherit = "stock.landed.cost"
 
-    landed_type = fields.Selection(
-        [("standard", "Standard"), ("dvi", "DVI")], default="standard"
-    )
+    landed_type = fields.Selection([("standard", "Standard"), ("dvi", "DVI")], default="standard")
 
     tax_value = fields.Float("VAT paid at customs")
     tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
@@ -22,9 +20,7 @@ class LandedCost(models.Model):
 
         product_id = get_param("dvi.custom_duty_product_id")
 
-        custom_duty_product = (
-            self.env["product.product"].browse(int(product_id)).exists()
-        )
+        custom_duty_product = self.env["product.product"].browse(int(product_id)).exists()
 
         if not custom_duty_product:
             wizard = self.env["account.invoice.dvi"].create({})
@@ -61,11 +57,7 @@ class LandedCost(models.Model):
         if not res:
             # prec_digits = self.env.company.currency_id.decimal_places
             for landed_cost in self:
-                total_amount = sum(
-                    landed_cost.valuation_adjustment_lines.mapped(
-                        "additional_landed_cost"
-                    )
-                )
+                total_amount = sum(landed_cost.valuation_adjustment_lines.mapped("additional_landed_cost"))
                 if abs(total_amount - landed_cost.amount_total) > 1:
                     return False
 

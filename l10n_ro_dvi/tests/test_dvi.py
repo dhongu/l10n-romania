@@ -15,9 +15,7 @@ class TestDVI(SavepointCase):
         account_type_exp = cls.env.ref("account.data_account_type_expenses")
         account_type_cur = cls.env.ref("account.data_account_type_current_assets")
 
-        account_expense = cls.env["account.account"].search(
-            [("code", "=", "607000")], limit=1
-        )
+        account_expense = cls.env["account.account"].search([("code", "=", "607000")], limit=1)
         if not account_expense:
             account_expense = cls.env["account.account"].create(
                 {
@@ -85,9 +83,7 @@ class TestDVI(SavepointCase):
                 }
             )
 
-        account_special_funds = cls.env["account.account"].search(
-            [("code", "=", "447000")]
-        )
+        account_special_funds = cls.env["account.account"].search([("code", "=", "447000")])
         if not account_special_funds:
             account_special_funds = cls.env["account.account"].create(
                 {
@@ -157,9 +153,7 @@ class TestDVI(SavepointCase):
         self.picking.button_validate()
 
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
-        valuations = self.env["stock.valuation.layer"].read_group(
-            domain, ["value:sum", "quantity:sum"], ["product_id"]
-        )
+        valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
         for valuation in valuations:
             if valuation["product_id"][0] == self.product_1.id:
                 self.assertEqual(valuation["value"], 10 * 100)
@@ -191,9 +185,7 @@ class TestDVI(SavepointCase):
         dvi.button_validate()
 
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
-        valuations = self.env["stock.valuation.layer"].read_group(
-            domain, ["value:sum", "quantity:sum"], ["product_id"]
-        )
+        valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
         for valuation in valuations:
             if valuation["product_id"][0] == self.product_1.id:
                 self.assertEqual(valuation["value"], 10 * 100 + 1.67 + 2)

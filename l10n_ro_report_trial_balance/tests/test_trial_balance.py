@@ -34,15 +34,11 @@ class TestTrialBalanceReport(common.TransactionCase):
             {
                 "code": "200",
                 "name": "Account 200",
-                "user_type_id": self.env.ref(
-                    "account.data_account_type_other_income"
-                ).id,
+                "user_type_id": self.env.ref("account.data_account_type_other_income").id,
             }
         )
         self.group1 = group_obj.create({"code_prefix": "1", "name": "Group 1"})
-        self.group11 = group_obj.create(
-            {"code_prefix": "11", "name": "Group 11", "parent_id": self.group1.id}
-        )
+        self.group11 = group_obj.create({"code_prefix": "11", "name": "Group 11", "parent_id": self.group1.id})
         self.group2 = group_obj.create({"code_prefix": "2", "name": "Group 2"})
         self.previous_fy_date_start = "2015-01-01"
         self.previous_fy_date_end = "2015-12-31"
@@ -52,9 +48,7 @@ class TestTrialBalanceReport(common.TransactionCase):
 
         misc_journal = self.env["account.journal"].search([("code", "=", "MISC")])
         if not misc_journal:
-            self.env["account.journal"].create(
-                {"name": "MISC Journal", "code": "MISC", "type": "general"}
-            )
+            self.env["account.journal"].create({"name": "MISC Journal", "code": "MISC", "type": "general"})
 
     def _add_move(
         self,

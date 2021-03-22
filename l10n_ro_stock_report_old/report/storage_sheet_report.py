@@ -30,9 +30,7 @@ class StorageSheetReport(models.TransientModel):
         domain=[("type", "=", "product")],
     )
 
-    company_id = fields.Many2one(
-        "res.company", string="Company", default=lambda self: self.env.user.company_id
-    )
+    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.user.company_id)
 
     line_product_ids = fields.One2many("stock.storage.sheet.report.line", "report_id")
 
@@ -44,9 +42,7 @@ class StorageSheetReport(models.TransientModel):
         active_ids = self.env.context.get("active_ids", False)
         active_id = self.env.context.get("active_id", False)
         if active_model == "product.template":
-            product = self.env["product.product"].search(
-                [("product_tmpl_id", "in", active_ids)], limit=1
-            )
+            product = self.env["product.product"].search([("product_tmpl_id", "in", active_ids)], limit=1)
             defaults["product_id"] = product.id
         elif active_model == "product.product":
             defaults["product_id"] = active_id
@@ -70,9 +66,7 @@ class StorageSheetReport(models.TransientModel):
     def do_compute(self):
         self.env["stock.move"].check_access_rights("read")
 
-        lines = self.env["stock.storage.sheet.report.line"].search(
-            [("report_id", "=", self.id)]
-        )
+        lines = self.env["stock.storage.sheet.report.line"].search([("report_id", "=", self.id)])
         lines.unlink()
 
         to_date = self.date_from
@@ -221,9 +215,7 @@ class StorageSheetReport(models.TransientModel):
 
     def button_show(self):
         self.do_compute()
-        action = self.env.ref(
-            "l10n_ro_stock_report_old.action_storage_sheet_report_line"
-        )
+        action = self.env.ref("l10n_ro_stock_report_old.action_storage_sheet_report_line")
         action = action.sudo().read()[0]
         action["domain"] = [("report_id", "=", self.id)]
         action["context"] = {"active_id": self.id}
@@ -249,9 +241,7 @@ class DailyStockReportLine(models.TransientModel):
     amount = fields.Float()
     ref = fields.Char(string="Reference")
     date = fields.Date()
-    type = fields.Selection(
-        [("balance", "Balance"), ("in", "Input"), ("out", "Output")]
-    )
+    type = fields.Selection([("balance", "Balance"), ("in", "Input"), ("out", "Output")])
 
     valuation_ids = fields.Many2many("stock.valuation.layer")
 

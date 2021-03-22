@@ -12,9 +12,7 @@ class AccountInvoiceDVI(models.TransientModel):
     date = fields.Date("Date")
     custom_duty = fields.Monetary(string="Custom Duty")  # costuri vamale
     customs_commission = fields.Monetary(string="Customs Commission")  # comision vamal
-    currency_id = fields.Many2one(
-        "res.currency", default=lambda self: self.env.company.currency_id
-    )
+    currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
     tax_value = fields.Monetary()
     tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
@@ -68,9 +66,7 @@ class AccountInvoiceDVI(models.TransientModel):
         tax_id = self.env.company.account_purchase_tax_id
         defaults["tax_id"] = tax_id.id
         tax_values = tax_id.compute_all(abs(invoice.amount_untaxed_signed))
-        defaults["tax_value"] = (
-            tax_values["total_included"] - tax_values["total_excluded"]
-        )
+        defaults["tax_value"] = tax_values["total_included"] - tax_values["total_excluded"]
 
         return defaults
 
@@ -123,12 +119,8 @@ class AccountInvoiceDVI(models.TransientModel):
             if not customs_commission_product:
                 vals = self._prepare_customs_commission_product()
                 customs_commission_product = self.env["product.product"].create(vals)
-                set_param(
-                    "dvi.customs_commission_product_id", customs_commission_product.id
-                )
-            accounts_data = (
-                customs_commission_product.product_tmpl_id.get_product_accounts()
-            )
+                set_param("dvi.customs_commission_product_id", customs_commission_product.id)
+            accounts_data = customs_commission_product.product_tmpl_id.get_product_accounts()
 
             values["cost_lines"] += [
                 (
