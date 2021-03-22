@@ -17,9 +17,7 @@ class StockAccountingCheck(models.TransientModel):
     # Filters fields, used for data computation
 
     account_id = fields.Many2one("account.account", required=True)
-    company_id = fields.Many2one(
-        "res.company", string="Company", default=lambda self: self.env.company
-    )
+    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
     date_range_id = fields.Many2one("date.range", string="Date range")
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)

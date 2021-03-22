@@ -78,9 +78,7 @@ def handle_common_subfields(transaction, subfields):
             transaction["name"] += "".join(x for x in subfields[counterpart_field] if x)
     for counterpart_field in ["24", "25", "26", "27"]:
         if counterpart_field in subfields:
-            transaction["payment_ref"] += "/".join(
-                x for x in subfields[counterpart_field] if x
-            )
+            transaction["payment_ref"] += "/".join(x for x in subfields[counterpart_field] if x)
     # Get transaction reference subfield (might vary):
     # if transaction.get('ref') in subfields:
     #     transaction['ref'] = ''.join(subfields[transaction['ref']])
@@ -151,9 +149,7 @@ class MT940Parser(MT940):
 
         self.last_unique_import_id = data
 
-        self.current_transaction["amount"] = str2amount(
-            parsed_data["sign"], parsed_data["amount"]
-        )
+        self.current_transaction["amount"] = str2amount(parsed_data["sign"], parsed_data["amount"])
         # self.current_transaction['note'] = parsed_data['reference']
         # self.current_transaction['name'] = parsed_data['ingid'] + parsed_data['ingtranscode']
 
@@ -183,9 +179,7 @@ class MT940Parser(MT940):
 
         transaction = self.current_transaction
         if operation in operations:
-            transaction["name"] = (
-                operations[operation] + " " + transaction["unique_import_id"]
-            )
+            transaction["name"] = operations[operation] + " " + transaction["unique_import_id"]
 
         codewords = [
             "6",

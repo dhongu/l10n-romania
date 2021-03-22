@@ -24,9 +24,7 @@ class TestINGImport(TransactionCase):
         )
         brd_file = open(brd_file_path, "rb").read()
         brd_data_file = base64.b64encode(brd_file)
-        bank_statement = self.statement_import_model.create(
-            dict(data_file=brd_data_file)
-        )
+        bank_statement = self.statement_import_model.create(dict(data_file=brd_data_file))
         bank_statement.import_file()
         bank_st_record = self.bank_statement_model.search([("name", "=", "00138/1")])[0]
         self.assertEquals(bank_st_record.balance_start, 3885.24)
