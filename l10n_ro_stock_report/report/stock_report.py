@@ -130,7 +130,7 @@ class StorageSheet(models.TransientModel):
                 %(reference)s as reference
             from stock_move as sm
 
-            left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
+            inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
                     and ((valued_type !='internal_transfer' or valued_type is Null) or
                     (valued_type ='internal_transfer' and quantity<0 and sm.location_id=%(location)s) or
                     (valued_type ='internal_transfer' and quantity>0 and sm.location_dest_id=%(location)s) )
@@ -156,7 +156,7 @@ class StorageSheet(models.TransientModel):
                 %(date_to)s as date,
                 %(reference)s as reference
             from stock_move as sm
-            left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
+            inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
                     and ((valued_type !='internal_transfer' or valued_type is Null) or
                     (valued_type ='internal_transfer' and quantity<0 and sm.location_id=%(location)s) or
                     (valued_type ='internal_transfer' and quantity>0 and sm.location_dest_id=%(location)s) )
@@ -185,7 +185,7 @@ class StorageSheet(models.TransientModel):
                 sp.partner_id
             from stock_move as sm
 
-                left join stock_valuation_layer as svl_in on svl_in.stock_move_id = sm.id and
+                inner join stock_valuation_layer as svl_in on svl_in.stock_move_id = sm.id and
                     (
                     ( ((svl_in.valued_type !='internal_transfer' and svl_in.valued_type not like '%%return' )
                        or svl_in.valued_type is Null)  and  sm.location_dest_id=%(location)s) or
@@ -219,7 +219,7 @@ class StorageSheet(models.TransientModel):
                 sp.partner_id
             from stock_move as sm
 
-                left join stock_valuation_layer as svl_out on svl_out.stock_move_id = sm.id and
+                inner join stock_valuation_layer as svl_out on svl_out.stock_move_id = sm.id and
                     (
                     ( ((svl_out.valued_type !='internal_transfer' and svl_out.valued_type not like '%%return' )
                        or svl_out.valued_type is Null)   and  sm.location_id=%(location)s) or
@@ -255,7 +255,7 @@ class StorageSheet(models.TransientModel):
         action = self.env.ref(
             "l10n_ro_stock_report.action_sheet_stock_report_line"
         ).read()[0]
-        action["name"] = "{} {} ({}-{})".format(
+        action["display_name"] = "{} {} ({}-{})".format(
             action["name"],
             self.location_id.name,
             self.date_from,
