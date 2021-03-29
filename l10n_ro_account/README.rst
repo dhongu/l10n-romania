@@ -19,7 +19,10 @@ Romania - Account
 
 |badge1| |badge2| |badge3| 
 
-limitare incasare numerar
+Funcționalități:
+ - limitare încasare numerar
+ - afișare contrui în format scurt
+ - corecție traducere încasare
 
 **Table of contents**
 
