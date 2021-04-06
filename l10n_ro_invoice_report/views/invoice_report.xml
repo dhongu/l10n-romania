@@ -229,7 +229,7 @@
         <!--                <attribute name="class" add="col-4"  separator=" "/>-->
         <!--            </xpath>-->
         <xpath expr="//div[@id='total']/div" position="replace">
-            <div class="col-8" t-if="o.type == 'out_invoice' or o.type == 'out_refund' ">
+            <div id="" class="col-8" t-if="o.type == 'out_invoice' or o.type == 'out_refund' ">
                 <table id="signature" class="table table-sm">
                     <tr class="border-black">
                         <td>Elaborate:</td>
@@ -327,16 +327,16 @@
         </xpath>
         <xpath expr="//p[@name='note']" position="after">
             <small t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
-                <div>
+                <div id="numbering_info">
                     Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance
                     no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and
                     subsequent amendments.
                 </div>
             </small>
-            <div t-if="o.commercial_partner_id.info_for_invoice">
+            <div id="partner_info" t-if="o.commercial_partner_id.info_for_invoice">
                 <span t-field="o.commercial_partner_id.info_for_invoice" />
             </div>
-            <div t-if="o.transaction_ids">
+            <div id="payment_info" t-if="o.transaction_ids">
                 <strong>Payment Method:</strong>
                 <div t-foreach="o.transaction_ids" t-as="t">
                     <p t-field="t.acquirer_id.name" />
@@ -353,54 +353,74 @@
             <t t-set="payments_vals" t-value="[]" />
         </xpath>
         <xpath expr="//div[hasclass('page')]" position="after">
+            <hr style="border-top: 1px dashed;"/>
             <t t-set="payments_vals" t-value="o.sudo()._get_reconciled_info_JSON_values()" />
-            <br />
-            <br />
-            <div t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
-                <div>
-                    <strong t-field="res_company.partner_id.name" />
-                </div>
-                <div>
-                    VAT:
-                    <span t-field="res_company.partner_id.vat" />
-                </div>
-                <div>
-                    NRC:
-                    <span t-field="res_company.partner_id.nrc" />
-                </div>
-                <address
-                    t-field="res_company.partner_id"
-                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
-                />
-                <h4>
-                    <span>Voucher:</span>
-                    <span t-esc="payment_vals['ref']" />
-                    <span>/</span>
-                    <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
-                </h4>
-                <div>
-                    <span>I received from</span>
-                    <strong t-field="o.partner_id.name" />
-                    <span t-if="o.partner_id.city">
-                        from
-                        <span t-field="o.partner_id.city" />
-                        <span t-field="o.partner_id.street" />
-                        <span t-field="o.partner_id.street2" />
-                    </span>
-                    ,
-                    <span>amount</span>
-                    <span
-                        t-esc="payment_vals['amount']"
-                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'
-                    />
-                    (
-                    <!--                                <span t-esc="convert(payment.amount)"/>-->
-                    <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])" />
-                    )
-                </div>
-                <div>
-                    Representing counter value of invoice
-                    <span t-field="o.name" />
+            <div id="payments" t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
+<!--                <span t-esc="payment_vals"/>-->
+                <t t-set="payment_type" t-value="o.get_payment_type(payment_vals['account_payment_id'])"/>
+                <div id="container" t-if="payment_type == 'cash'" style="width: 100%; border: 1px solid gray; padding: 5px 10px;">
+                    <div>
+                        <strong t-field="res_company.partner_id.name" />
+                    </div>
+                    <div>
+                        VAT:
+                        <span t-field="res_company.partner_id.vat" />
+                    </div>
+                    <div>
+                        NRC:
+                        <span t-field="res_company.partner_id.nrc" />
+                    </div>
+                    <div style="float:left;margin-right:3px;">Address:</div>
+                    <div>
+                        <address name="company_address"
+                            t-field="res_company.partner_id"
+                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
+                        />
+                    </div>
+                    <h4>
+                        <span>Voucher:</span>
+                        <t t-set="payment_name" t-value="o.get_payment_name(payment_vals['account_payment_id'])" />
+                        <span t-esc="payment_name" />
+                        <span>/</span>
+                        <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
+                    </h4>
+                    <div>
+                        <div>
+                            <span>I received from: </span>
+                            <strong t-field="o.partner_id.name" />
+                            <t t-if="o.partner_id.vat">
+                                <span>, VAT: </span>
+                                <span t-field="o.partner_id.vat"/>
+                            </t>
+                            <t t-if="o.partner_id.nrc">
+                                <span>, NRC: </span>
+                                <span t-field="o.partner_id.nrc"/>
+                            </t>
+                        </div>
+                        <div>
+                            <span t-if="o.partner_id.city">
+                                Address:
+                                <span t-field="o.partner_id.city" />,
+                                <span t-field="o.partner_id.street" />
+                                <span t-field="o.partner_id.street2" />
+                            </span>,
+                        </div>
+
+                        <div>
+                            <span>amount</span>
+                            <span
+                                t-esc="payment_vals['amount']"
+                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                            />
+                            , meaning
+                            <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])" />
+
+                        </div>
+                    </div>
+                    <div>
+                        Representing counter value of invoice
+                        <span t-field="o.name" />
+                    </div>
                 </div>
             </div>
         </xpath>

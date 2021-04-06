@@ -52,6 +52,20 @@ class AccountInvoice(models.Model):
 
         return super(AccountInvoice, self).action_invoice_cancel()
 
+    def get_payment_name(self, payment_id):
+        payment = self.env["account.payment"].browse(payment_id)
+        if payment:
+            return payment.name
+        else:
+            return ""
+
+    def get_payment_type(self, payment_id):
+        payment = self.env["account.payment"].browse(payment_id)
+        if payment:
+            return payment.journal_id.type
+        else:
+            return ""
+
 
 #
 # class account_invoice_line(models.Model):
