@@ -358,7 +358,10 @@
             <div id="payments" t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
 <!--                <span t-esc="payment_vals"/>-->
                 <t t-set="payment_type" t-value="o.get_payment_type(payment_vals['account_payment_id'])"/>
-                <div id="container" t-if="payment_type == 'cash'" style="width: 100%; border: 1px solid gray; padding: 5px 10px;">
+                <div id="container" t-if="payment_type == 'cash'" style="width: 100%; border: 1px solid gray; padding: 15px 20px;">
+                    <div id="voucher_logo" style="float:right;">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 85px;" alt="Logo"/>
+                    </div>
                     <div>
                         <strong t-field="res_company.partner_id.name" />
                     </div>
@@ -377,7 +380,7 @@
                             t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
                         />
                     </div>
-                    <h4>
+                    <h4 style="text-align:center; font-weight:bold; margin-bottom: 15px;">
                         <span>Voucher:</span>
                         <t t-set="payment_name" t-value="o.get_payment_name(payment_vals['account_payment_id'])" />
                         <span t-esc="payment_name" />
