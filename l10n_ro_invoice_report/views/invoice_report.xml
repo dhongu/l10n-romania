@@ -353,14 +353,23 @@
             <t t-set="payments_vals" t-value="[]" />
         </xpath>
         <xpath expr="//div[hasclass('page')]" position="after">
-            <hr style="border-top: 1px dashed;"/>
+            <hr style="border-top: 1px dashed;" />
             <t t-set="payments_vals" t-value="o.sudo()._get_reconciled_info_JSON_values()" />
             <div id="payments" t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
-<!--                <span t-esc="payment_vals"/>-->
-                <t t-set="payment_type" t-value="o.get_payment_type(payment_vals['account_payment_id'])"/>
-                <div id="container" t-if="payment_type == 'cash'" style="width: 100%; border: 1px solid gray; padding: 15px 20px;">
+                <!--                <span t-esc="payment_vals"/>-->
+                <t t-set="payment_type" t-value="o.get_payment_type(payment_vals['account_payment_id'])" />
+                <div
+                    id="container"
+                    t-if="payment_type == 'cash'"
+                    style="width: 100%; border: 1px solid gray; padding: 15px 20px;"
+                >
                     <div id="voucher_logo" style="float:right;">
-                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 85px;" alt="Logo"/>
+                        <img
+                            t-if="o.company_id.logo"
+                            t-att-src="image_data_uri(o.company_id.logo)"
+                            style="max-height: 85px;"
+                            alt="Logo"
+                        />
                     </div>
                     <div>
                         <strong t-field="res_company.partner_id.name" />
@@ -375,7 +384,8 @@
                     </div>
                     <div style="float:left;margin-right:3px;">Address:</div>
                     <div>
-                        <address name="company_address"
+                        <address
+                            name="company_address"
                             t-field="res_company.partner_id"
                             t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
                         />
@@ -389,26 +399,27 @@
                     </h4>
                     <div>
                         <div>
-                            <span>I received from: </span>
+                            <span>I received from:</span>
                             <strong t-field="o.partner_id.name" />
                             <t t-if="o.partner_id.vat">
-                                <span>, VAT: </span>
-                                <span t-field="o.partner_id.vat"/>
+                                <span>, VAT:</span>
+                                <span t-field="o.partner_id.vat" />
                             </t>
                             <t t-if="o.partner_id.nrc">
-                                <span>, NRC: </span>
-                                <span t-field="o.partner_id.nrc"/>
+                                <span>, NRC:</span>
+                                <span t-field="o.partner_id.nrc" />
                             </t>
                         </div>
                         <div>
                             <span t-if="o.partner_id.city">
                                 Address:
-                                <span t-field="o.partner_id.city" />,
+                                <span t-field="o.partner_id.city" />
+                                ,
                                 <span t-field="o.partner_id.street" />
                                 <span t-field="o.partner_id.street2" />
-                            </span>,
+                            </span>
+                            ,
                         </div>
-
                         <div>
                             <span>amount</span>
                             <span
@@ -417,7 +428,6 @@
                             />
                             , meaning
                             <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])" />
-
                         </div>
                     </div>
                     <div>
