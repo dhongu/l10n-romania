@@ -98,6 +98,14 @@ class ReportPickingReception(models.AbstractModel):
             "margin": 0.0,
         }
 
+        value = 0
+        quantity = 0
+        for valuation in move.stock_valuation_layer_ids:
+            value += valuation.value
+            quantity += valuation.quantity
+        if move.stock_valuation_layer_ids:
+            res["price"] = value / (quantity or 1)
+
         currency = move.company_id.currency_id
 
         if move.purchase_line_id:
@@ -109,14 +117,8 @@ class ReportPickingReception(models.AbstractModel):
             #  confirmarea transferului pentru a se actualiza cursul valutar !!
             res["price"] = move.price_unit  # pretul caculat la genereare miscarii
 
-            value = 0
-            quantity = 0
-            for valuation in move.stock_valuation_layer_ids:
-                value += valuation.value
-                quantity += valuation.quantity
-            if move.stock_valuation_layer_ids:
-                res["price"] = value / (quantity or 1)
-
+            if not res["price"]:
+                res["price"] = move.price_unit
             # la loturi nu este completat move_line.price_unit
             # if move_line.price_unit == 0:
             #     if move_line.remaining_qty != 0:
@@ -170,8 +172,8 @@ class ReportPickingReception(models.AbstractModel):
         else:
             # receptie fara comanda de aprovizionare
 
-            value = move.value
-            res["price"] = abs(move.price_unit)
+            if not res["price"]:
+                res["price"] = abs(move.price_unit)
 
             # res['amount'] = currency.round(value)
             # if move_line.product_uom_qty != 0:

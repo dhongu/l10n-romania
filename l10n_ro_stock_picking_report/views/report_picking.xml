@@ -82,7 +82,7 @@
             <br />
         </template>
         <template id="report_totals">
-            <div class="col-4  col-sm-4 col-md-4">
+            <div class="col-4  col-sm-4 col-md-4  pull-right">
                 <table class="table table-sm">
                     <tr class="border-black">
                         <td>
@@ -119,9 +119,9 @@
             </div>
         </template>
         <template id="report_totals_sale">
-            <div class="col-4  col-sm-4 col-md-4">
-                <table class="table table-sm">
-                    <tr class="border-black">
+            <div class="col-4  col-sm-4 col-md-4    ">
+                <table class="table table-sm" style="page-break-inside: avoid;">
+                    <tr class="border-black o_subtotal" style="">
                         <td>
                             <strong>Total Sale Without Taxes</strong>
                         </td>
@@ -141,7 +141,7 @@
                             />
                         </td>
                     </tr>
-                    <tr class="border-black">
+                    <tr class="border-black o_total">
                         <td>
                             <strong>Total Sale</strong>
                         </td>
@@ -155,8 +155,47 @@
                 </table>
             </div>
         </template>
+        <template id="report_delivery_info">
+            <div id="information" class="row mt32 mb32">
+                <div class="col-3 bm-2">
+                    <strong>Source</strong>
+                    <p>
+                        <span t-field="o.origin" />
+                        <t t-if="not  o.origin">
+                            <span t-field="o.group_id" />
+                        </t>
+                    </p>
+                </div>
+                <div class="col-3 bm-2">
+                    <strong>Date</strong>
+                    <p>
+                        <span t-field="o.date" t-options='{"widget": "date"}' />
+                    </p>
+                </div>
+                <div class="col-3 bm-2" t-if="o.location_id.usage == 'internal'">
+                    <strong>From location</strong>
+                    <p>
+                        <span t-field="o.location_id" />
+                    </p>
+                </div>
+                <div class="col-3 bm-2" t-if="o.location_id.usage == 'supplier' ">
+                    <strong>To location</strong>
+                    <address
+                        t-field="o.sale_id.partner_shipping_id"
+                        t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
+                    />
+                </div>
+                <div class="col-3 bm-2">
+                    <strong>Customer reference</strong>
+                    <p>
+                        <t t-set="sale" t-value="o.sale_id" />
+                        <span t-field="sale.client_order_ref" />
+                    </p>
+                </div>
+            </div>
+        </template>
         <template id="report_delivery_sign">
-            <div class="col-6  col-sm-6 col-md-6 ml-auto">
+            <div class="col-8  col-sm-8 col-md-8">
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -202,12 +241,12 @@
         </template>
         <template id="report_delivery">
             <t t-call="web.html_container">
-                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'outgoing')" t-as="o">
+                <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <h2>
-                                <t t-if="o.location_id.usage != 'internal'">
+                                <t t-if="o.location_dest_id.usage == 'internal' and o.location_id.usage != 'internal'">
                                     <span>Reverse</span>
                                 </t>
                                 <span>Delivery:</span>
@@ -218,36 +257,7 @@
                                 <span t-if="o.state == 'assigned'">To be confirmed</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
                             </h4>
-                            <div id="information" class="row mt32 mb32">
-                                <div class="col-3 bm-2">
-                                    <strong>Source</strong>
-                                    <p>
-                                        <span t-field="o.origin" />
-                                        <t t-if="not  o.origin">
-                                            <span t-field="o.group_id" />
-                                        </t>
-                                    </p>
-                                </div>
-                                <div class="col-3 bm-2">
-                                    <strong>Date</strong>
-                                    <p>
-                                        <span t-field="o.date" t-options='{"widget": "date"}' />
-                                    </p>
-                                </div>
-                                <div class="col-3 bm-2">
-                                    <strong>From location</strong>
-                                    <p>
-                                        <span t-field="o.location_id" />
-                                    </p>
-                                </div>
-                                <div class="col-3 bm-2">
-                                    <strong>Customer reference</strong>
-                                    <p>
-                                        <t t-set="sale" t-value="o.sale_id" />
-                                        <span t-field="sale.client_order_ref" />
-                                    </p>
-                                </div>
-                            </div>
+                            <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
@@ -341,41 +351,39 @@
                                             <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
+                                            <t t-set="line_value" t-value="0.0" />
+                                            <t t-foreach="move.stock_valuation_layer_ids" t-as="valuation_line">
+                                                <t t-set="line_value" t-value="line_value+valuation_line.value" />
+                                            </t>
                                             <span
-                                                t-esc="move.price_unit"
-                                                t-options='{"widget": "float", "precision": 2}'
+                                                t-esc="line_value/move.product_uom_qty"
+                                                t-options='{"widget": "float", "precision": 4}'
                                             />
                                         </td>
                                         <td class="text-right">
-                                            <span
-                                                t-esc=" move.price_unit * move.product_uom_qty"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                            <t
-                                                t-set="total_amount"
-                                                t-value="total_amount+(move.price_unit * move.product_uom_qty)"
-                                            />
+                                            <span t-esc="line_value" t-options='{"widget": "float", "precision": 2}' />
+                                            <t t-set="total_amount" t-value="total_amount+line_value" />
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <!--Se inlocuiesc totalurile de la celelalte pickinguri, nu are sale order, nu se calculeaza corect-->
-                            <div id="total" class="row justify-content-end">
-                                <div class="col-4">
-                                    <table class="table table-sm">
-                                        <tr class="border-black">
-                                            <td>
-                                                <strong>Total</strong>
-                                            </td>
-                                            <td class="text-right">
-                                                <span
-                                                    t-esc="total_amount"
-                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
-                                                />
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+                            <div class="col-4  col-sm-4 col-md-4  pull-right">
+                                <table class="table table-sm">
+                                    <tr class="border-black">
+                                        <td>
+                                            <strong>Total Without Taxes</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <span
+                                                t-esc="total_amount"
+                                                t-options='{"widget": "float", "precision": 2}'
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+                                    </tr>
+                                </table>
                             </div>
                             <t t-call="l10n_ro_stock_picking_report.report_consume_sign" />
                             <div t-if="o.note">
@@ -563,12 +571,12 @@
         </template>
         <template id="report_delivery_price">
             <t t-call="web.html_container">
-                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'outgoing')" t-as="o">
+                <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <h2>
-                                <t t-if="o.location_id.usage != 'internal'">
+                                <t t-if="o.location_dest_id.usage == 'internal' and o.location_id.usage != 'internal'">
                                     <span>Reverse</span>
                                 </t>
                                 <span>Delivery:</span>
@@ -576,36 +584,7 @@
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
                             </h2>
-                            <div id="information" class="row mt32 mb32">
-                                <div class="col-3 bm-2">
-                                    <strong>Source</strong>
-                                    <p>
-                                        <span t-field="o.origin" />
-                                        <t t-if="not  o.origin">
-                                            <span t-field="o.group_id" />
-                                        </t>
-                                    </p>
-                                </div>
-                                <div class="col-3 bm-2">
-                                    <strong>Date</strong>
-                                    <p>
-                                        <span t-field="o.date" t-options='{"widget": "date"}' />
-                                    </p>
-                                </div>
-                                <div class="col-3 bm-2">
-                                    <strong>From location</strong>
-                                    <p>
-                                        <span t-field="o.location_id" />
-                                    </p>
-                                </div>
-                                <div class="col-3 bm-2">
-                                    <strong>Customer reference</strong>
-                                    <p>
-                                        <t t-set="sale" t-value="o.sale_id" />
-                                        <span t-field="sale.client_order_ref" />
-                                    </p>
-                                </div>
-                            </div>
+                            <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
                             <table class="table table-sm ">
                                 <thead>
                                     <tr>
@@ -661,9 +640,9 @@
                             </table>
                             <div class="row">
                                 <t t-set="totals" t-value="get_totals(o.move_lines)" />
+                                <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
                                 <t t-call="l10n_ro_stock_picking_report.report_totals" />
                             </div>
-                            <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
                             <div t-if="o.note">
                                 <span t-field="o.note" />
                             </div>
@@ -768,7 +747,7 @@
                     <span>under the delivery note no.</span>
                 </t>
                 <t t-if="not o.notice">
-                    <span>under the invoice no.</span>
+                    <span>under the document no.</span>
                 </t>
                 <strong>
                     <span t-field="o.origin" />
@@ -787,7 +766,7 @@
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <h2>
-                                <t t-if="o.location_dest_id.usage != 'internal'">
+                                <t t-if="o.location_dest_id.usage != 'internal' and o.location_id.usage == 'internal'">
                                     <span>Reverse</span>
                                 </t>
                                 <span>Reception:</span>
@@ -872,7 +851,7 @@
         </template>
         <template id="report_reception_no_tax">
             <t t-call="web.html_container">
-                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
+                <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
@@ -958,7 +937,7 @@
         </template>
         <template id="report_reception_sale_price">
             <t t-call="web.html_container">
-                <t t-foreach="docs.filtered(lambda record: record.picking_type_code == 'incoming')" t-as="o">
+                <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />

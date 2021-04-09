@@ -13,7 +13,9 @@
         "base",
         "stock",
         "l10n_ro_config",
-        "purchase",
+        "purchase_stock",
+        "sale_stock",
+        "l10n_ro_stock",
         # 'l10n_ro_stock_account'
     ],
     "data": [
