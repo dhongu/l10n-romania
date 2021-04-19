@@ -277,7 +277,7 @@ class ReportConsumeVoucher(models.AbstractModel):
 class ReportInternalTransfer(models.AbstractModel):
     _name = "report.l10n_ro_stock_picking_report.report_internal_transfer"
     _description = "Report transfer"
-    _inherit = "report.abstract_report.delivery_report"
+    _inherit = "report.abstract_report.reception_report"
     _template = "l10n_ro_stock_picking_report.report_internal_transfer"
     # _wrapped_report_class = picking_delivery
 

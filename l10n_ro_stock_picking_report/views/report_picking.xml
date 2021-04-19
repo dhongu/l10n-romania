@@ -536,6 +536,24 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div id="total" class="row justify-content-end">
+                                <t t-set="totals" t-value="get_totals(o.move_lines)" />
+                                <div class="col-4 ml-auto">
+                                    <table class="table table-condensed">
+                                        <tr class="border-black">
+                                            <td>
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                    t-esc="totals['amount']"
+                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                                />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                             <table class="table table-sm">
                                 <thead>
                                     <tr>

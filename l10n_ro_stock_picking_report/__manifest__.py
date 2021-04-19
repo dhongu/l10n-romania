@@ -3,7 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Romania - Picking Reports",
+    "name": "Romania - Terrabit - Picking Reports",
     "license": "AGPL-3",
     "version": "13.0.1.0.0",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
