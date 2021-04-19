@@ -345,7 +345,15 @@ class StockMove(models.Model):
         valued_type = self.env.context.get("valued_type")
         if valued_type:
             vals["valued_type"] = valued_type
+        vals[
+            "account_id"
+        ] = self.product_id.categ_id.property_stock_valuation_account_id.id
         return vals
+
+    def _create_dropshipped_svl(self, forced_quantity=None):
+        valued_type = "dropshipped"
+        self = self.with_context(valued_type=valued_type)
+        return super(StockMove, self)._create_dropshipped_svl(forced_quantity)
 
     def _get_company(self, svl):
         self.ensure_one()
