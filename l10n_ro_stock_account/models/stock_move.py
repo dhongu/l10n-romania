@@ -40,7 +40,7 @@ class StockMove(models.Model):
 
     # nu se mai face in mod automat evaluarea la intrare in stoc
     def _create_in_svl(self, forced_quantity=None):
-        _logger.debug("SVL:%s" % self.env.context.get("valued_type", ""))
+        _logger.info("SVL:%s" % self.env.context.get("valued_type", ""))
         if self.env.context.get("standard") or not self.company_id.romanian_accounting:
             svl = super(StockMove, self)._create_in_svl(forced_quantity)
         else:
@@ -49,7 +49,7 @@ class StockMove(models.Model):
 
     # nu se mai face in mod automat evaluarea la iserirea din stoc
     def _create_out_svl(self, forced_quantity=None):
-        _logger.debug("SVL:%s" % self.env.context.get("valued_type", ""))
+        _logger.info("SVL:%s" % self.env.context.get("valued_type", ""))
         if self.env.context.get("standard") or not self.company_id.romanian_accounting:
             svl = super(StockMove, self)._create_out_svl(forced_quantity)
         else:
@@ -212,6 +212,7 @@ class StockMove(models.Model):
             self.company_id.romanian_accounting
             and self._is_out()
             and self.location_dest_id.usage == "production"
+            and self.origin_returned_move_id
         )
         return it_is
 
@@ -224,7 +225,7 @@ class StockMove(models.Model):
         it_is = (
             self.company_id.romanian_accounting
             and self._is_out()
-            and self.location_dest_id.usage == "consume"
+            and self.location_dest_id.usage in ["consume", "production"]
             and not self.origin_returned_move_id
         )
         return it_is
@@ -238,7 +239,7 @@ class StockMove(models.Model):
         it_is = (
             self.company_id.romanian_accounting
             and self._is_in()
-            and self.location_id.usage == "consume"
+            and self.location_id.usage in ["consume", "production"]
             and self.origin_returned_move_id
         )
         return it_is
@@ -344,15 +345,7 @@ class StockMove(models.Model):
         valued_type = self.env.context.get("valued_type")
         if valued_type:
             vals["valued_type"] = valued_type
-        vals[
-            "account_id"
-        ] = self.product_id.categ_id.property_stock_valuation_account_id.id
         return vals
-
-    def _create_dropshipped_svl(self, forced_quantity=None):
-        valued_type = "dropshipped"
-        self = self.with_context(valued_type=valued_type)
-        return super(StockMove, self)._create_dropshipped_svl(forced_quantity)
 
     def _get_company(self, svl):
         self.ensure_one()
