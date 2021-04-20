@@ -163,10 +163,12 @@ class StockAccountingCheck(models.TransientModel):
             [("invoice_status", "=", "to invoice")]
         )
         ok = True
-        for sale_oreder in sale_oreders:
-            if sale_oreder.invoice_count == 1:
-                invoice_date = sale_oreder.invoice_ids.invoice_date
-                for picking in sale_oreder.picking_ids:
+        for sale_order in sale_oreders:
+            if sale_order.invoice_count == 1:
+                invoice_date = (
+                    sale_order.invoice_ids.invoice_date or fields.Date.today()
+                )
+                for picking in sale_order.picking_ids:
                     if invoice_date != picking.date.date() and not picking.notice:
                         new_date = picking.date.replace(
                             year=invoice_date.year,
@@ -181,18 +183,18 @@ class StockAccountingCheck(models.TransientModel):
                         # account_move.write({'date': invoice_date})
                         ok = False
             if (
-                sale_oreder.invoice_status == "to invoice"
-                and sale_oreder.delivery_count > 0
-                and sale_oreder.state not in ["done", "cancel"]
+                sale_order.invoice_status == "to invoice"
+                and sale_order.delivery_count > 0
+                and sale_order.state not in ["done", "cancel"]
             ):
-                if not sale_oreder.activity_ids:
+                if not sale_order.activity_ids:
                     note = _("Livrare fara factura")
                     summary = _("Factura lipsa")
-                    sale_oreder.activity_schedule(
+                    sale_order.activity_schedule(
                         "mail.mail_activity_data_warning",
                         note=note,
                         summary=summary,
-                        user_id=sale_oreder.user_id.id,
+                        user_id=sale_order.user_id.id,
                     )
         return ok
 
