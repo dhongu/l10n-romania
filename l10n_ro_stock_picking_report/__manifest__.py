@@ -12,6 +12,7 @@
     "depends": [
         "base",
         "stock",
+        "date_range",
         "l10n_ro_config",
         "purchase_stock",
         "sale_stock",
@@ -22,5 +23,6 @@
         "views/l10n_ro_stock_picking_report.xml",
         "views/report_picking.xml",
         "views/stock_view.xml",
+        "report/stock_picking_cumulative_view.xml",
     ],
 }
