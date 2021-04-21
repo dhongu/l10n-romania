@@ -42,7 +42,7 @@ class StorageSheet(models.TransientModel):
     )
 
     one_product = fields.Boolean("One product per page")
-    line_product_ids = fields.Many2many(comodel_name="stock.storage.sheet.line")
+    line_product_ids = fields.One2many("stock.storage.sheet.line", "report_id")
 
     def _get_report_base_filename(self):
         self.ensure_one()
@@ -141,7 +141,8 @@ class StorageSheet(models.TransientModel):
                 COALESCE(sum(svl.quantity),0)  as quantity_initial,
                 svl.account_id,
                 %(date_from)s as date,
-                %(reference)s as reference
+                %(reference)s as reference,
+                %(location)s as location_id
             from stock_move as sm
 
             inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
@@ -168,7 +169,8 @@ class StorageSheet(models.TransientModel):
                 COALESCE(sum(svl.quantity),0)  as quantity_final,
                 svl.account_id,
                 %(date_to)s as date,
-                %(reference)s as reference
+                %(reference)s as reference,
+                %(location)s as location_id
             from stock_move as sm
             inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
                     and ((valued_type !='internal_transfer' or valued_type is Null) or
@@ -196,7 +198,8 @@ class StorageSheet(models.TransientModel):
                 date_trunc('day',sm.date at time zone 'utc' at time zone %(tz)s) as date,
                  svl_in.account_id,
                 sm.reference as reference,
-                sp.partner_id
+                sp.partner_id,
+                sm.location_id
             from stock_move as sm
 
                 inner join stock_valuation_layer as svl_in on svl_in.stock_move_id = sm.id and
@@ -214,7 +217,7 @@ class StorageSheet(models.TransientModel):
                 sm.date >= %(datetime_from)s  AND  sm.date <= %(datetime_to)s  AND
                 (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
             GROUP BY sm.product_id, date_trunc('day',sm.date at time zone 'utc' at time zone %(tz)s),
-             sm.reference, sp.partner_id, account_id
+             sm.reference, sp.partner_id, account_id, sm.location_id
             """
 
         self.env.cr.execute(query_in, params=params)
@@ -230,7 +233,8 @@ class StorageSheet(models.TransientModel):
                 svl_out.account_id,
                 date_trunc('day',sm.date) as date,
                 sm.reference as reference,
-                sp.partner_id
+                sp.partner_id,
+                sm.location_dest_id as location_id
             from stock_move as sm
 
                 inner join stock_valuation_layer as svl_out on svl_out.stock_move_id = sm.id and
@@ -249,7 +253,7 @@ class StorageSheet(models.TransientModel):
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 sm.date >= %(datetime_from)s  AND  sm.date <= %(datetime_to)s  AND
                 (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
-            GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id
+            GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id, sm.location_dest_id
             """
 
         self.env.cr.execute(query_out, params=params)
@@ -296,6 +300,35 @@ class StorageSheet(models.TransientModel):
             )
         return action_report_storage_sheet.report_action(self, config=False)
 
+    def print_by_ref_pdf(self):
+        self.do_compute_product()
+        action = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet_ref")
+        return action.report_action(self, config=False)
+
+    def get_lines_by_ref(self):
+        lines = {}
+        line_products = self.line_product_ids.sorted(lambda l: (l.date, l.reference))
+        for line_product in line_products:
+            line = lines.get(line_product.reference)
+            amount = (
+                line_product.amount_initial
+                + line_product.amount_in
+                - line_product.amount_out
+            )
+            if not line:
+                lines[line_product.reference] = {
+                    "reference": line_product.reference,
+                    "date": line_product.date,
+                    "amount": amount,
+                    "amount_in": line_product.amount_in,
+                    "amount_out": line_product.amount_out,
+                }
+            else:
+                line["amount"] += amount
+                line["amount_in"] += line_product.amount_in
+                line["amount_out"] += line_product.amount_out
+        return lines
+
 
 class StorageSheetLine(models.TransientModel):
     _name = "stock.storage.sheet.line"
@@ -335,12 +368,18 @@ class StorageSheetLine(models.TransientModel):
         "product.category", related="product_id.categ_id", index=True, store=True
     )
     account_id = fields.Many2one("account.account")
+    location_id = fields.Many2one("stock.location")
 
     def get_general_buttons(self):
         return [
             {
                 "action": "print_pdf",
-                "name": _("Print Preview"),
+                "name": _("Print by Product"),
                 "model": "stock.storage.sheet",
-            }
+            },
+            {
+                "action": "print_by_ref_pdf",
+                "name": _("Print by Ref"),
+                "model": "stock.storage.sheet",
+            },
         ]

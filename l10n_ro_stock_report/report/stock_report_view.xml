@@ -105,7 +105,7 @@
         <field name="name">stock.sheet.stock.report.line.pivot</field>
         <field name="model">stock.storage.sheet.line</field>
         <field name="arch" type="xml">
-            <pivot string="Stock Analysis" disable_linking="True">
+            <pivot string="Stock Analysis">
                 <field name="account_id" type="row" />
                 <field name="quantity_initial" type="measure" />
                 <field name="amount_initial" type="measure" />
