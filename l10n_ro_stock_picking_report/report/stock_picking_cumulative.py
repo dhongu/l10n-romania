@@ -2,6 +2,7 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
+import pytz
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
@@ -59,9 +60,21 @@ class StockPickingCumulative(models.TransientModel):
             self.date_to = self.date_range_id.date_end
 
     def button_show(self):
+
+        datetime_from = fields.Datetime.to_datetime(self.date_from)
+        datetime_from = fields.Datetime.context_timestamp(self, datetime_from)
+        datetime_from = datetime_from.replace(hour=0)
+        datetime_from = datetime_from.astimezone(pytz.utc)
+
+        datetime_to = fields.Datetime.to_datetime(self.date_to)
+        datetime_to = fields.Datetime.context_timestamp(self, datetime_to)
+        datetime_to = datetime_to.replace(hour=23, minute=59, second=59)
+        datetime_to = datetime_to.astimezone(pytz.utc)
+
         domain = [
-            ("date", ">=", self.date_from),
-            ("date", "<=", self.date_to),
+            ("date", ">=", datetime_from),
+            ("date", "<=", datetime_to),
+            ("state", "=", "done"),
             ("picking_type_id", "=", self.picking_type_id.id),
         ]
         move_lines = self.env["stock.move"].search(domain)
