@@ -10,6 +10,7 @@ class AccountPayment(models.Model):
 
     @api.constrains("amount")
     def _check_amount(self):
+        # in 14.0 este facut _sql_constraints  check_amount_not_negative
         # super(AccountPayment, self)._check_amount()
         # todo: de adaugat in configurare suma limita
         for payment in self:
