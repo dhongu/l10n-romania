@@ -12,6 +12,7 @@ class AccountPayment(models.Model):
     def _check_amount(self):
         super(AccountPayment, self)._check_amount()
         # todo: de adaugat in configurare suma limita
+        tolerance = 0.000001
         for payment in self:
             if (
                 payment.payment_type == "inbound"
@@ -19,12 +20,12 @@ class AccountPayment(models.Model):
                 and payment.journal_id.type == "cash"
             ):
                 if payment.partner_id.is_company:
-                    if payment.amount >= 5000:
+                    if abs(payment.amount-5000.0) >= tolerance:
                         raise ValidationError(
                             _("The payment amount cannot be greater than 5000")
                         )
                 else:
-                    if payment.amount >= 10000:
+                    if abs(payment.amount-10000.0) >= tolerance:
                         raise ValidationError(
                             _("The payment amount cannot be greater than 10000")
                         )
