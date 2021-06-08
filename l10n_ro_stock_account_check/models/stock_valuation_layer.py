@@ -8,7 +8,7 @@ class StockValuationLayer(models.Model):
     _inherit = "stock.valuation.layer"
 
     date = fields.Datetime(related="stock_move_id.date")
-    rounding_adjustment = fields.Char('Rounding Adjustment')
+    rounding_adjustment = fields.Char("Rounding Adjustment")
 
     def correction_valuation(self):
         for svl in self:
