@@ -30,7 +30,10 @@ class Account(models.Model):
         cont = self.code[:4]
         while cont[-1] == "0":
             cont = cont[:-1]
-        analitic = int(self.code[4:])
+        try:
+            analitic = int(self.code[4:])
+        except Exception:
+            analitic = self.code[4:]
         if analitic:
             cont += "." + str(analitic)
         return cont
