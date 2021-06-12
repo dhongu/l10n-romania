@@ -54,6 +54,7 @@
                 <field name="account_id" optional="hide" />
                 <field name="partner_id" optional="hide" />
                 <field name="categ_id" optional="hide" />
+                <field name="invoice_id" optional="hide" />
                 <field name="quantity_initial" />
                 <field name="amount_initial" />
                 <field name="quantity_in" />
@@ -79,6 +80,7 @@
                         <group>
                             <field name="reference" />
                             <field name="partner_id" />
+                            <field name="invoice_id" />
                         </group>
                         <group>
                             <field name="quantity_initial" />
@@ -126,6 +128,7 @@
                 <field name="product_id" />
                 <group expand="1" string="Group by">
                     <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}" />
+                    <filter string="Invoice" name="group_by_invoice" context="{'group_by': 'invoice_id'}" />
                 </group>
             </search>
         </field>

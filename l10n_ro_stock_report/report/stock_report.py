@@ -42,7 +42,9 @@ class StorageSheet(models.TransientModel):
     )
 
     one_product = fields.Boolean("One product per page")
-    line_product_ids = fields.One2many("stock.storage.sheet.line", "report_id")
+    line_product_ids = fields.One2many(
+        comodel_name="stock.storage.sheet.line", inverse_name="report_id"
+    )
 
     def _get_report_base_filename(self):
         self.ensure_one()
@@ -199,7 +201,8 @@ class StorageSheet(models.TransientModel):
                  svl_in.account_id,
                 sm.reference as reference,
                 sp.partner_id,
-                sm.location_id
+                sm.location_id,
+                svl_in.invoice_id
             from stock_move as sm
 
                 inner join stock_valuation_layer as svl_in on svl_in.stock_move_id = sm.id and
@@ -217,7 +220,9 @@ class StorageSheet(models.TransientModel):
                 sm.date >= %(datetime_from)s  AND  sm.date <= %(datetime_to)s  AND
                 (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
             GROUP BY sm.product_id, date_trunc('day',sm.date at time zone 'utc' at time zone %(tz)s),
-             sm.reference, sp.partner_id, account_id, sm.location_id
+             sm.reference, sp.partner_id, account_id,
+             sm.location_id,
+             svl_in.invoice_id
             """
 
         self.env.cr.execute(query_in, params=params)
@@ -234,7 +239,8 @@ class StorageSheet(models.TransientModel):
                 date_trunc('day',sm.date) as date,
                 sm.reference as reference,
                 sp.partner_id,
-                sm.location_dest_id as location_id
+                sm.location_dest_id as location_id,
+                svl_out.invoice_id
             from stock_move as sm
 
                 inner join stock_valuation_layer as svl_out on svl_out.stock_move_id = sm.id and
@@ -253,7 +259,9 @@ class StorageSheet(models.TransientModel):
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 sm.date >= %(datetime_from)s  AND  sm.date <= %(datetime_to)s  AND
                 (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
-            GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id, sm.location_dest_id
+            GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id,
+             sm.location_dest_id,
+             svl_out.invoice_id
             """
 
         self.env.cr.execute(query_out, params=params)
@@ -307,26 +315,47 @@ class StorageSheet(models.TransientModel):
 
     def get_lines_by_ref(self):
         lines = {}
-        line_products = self.line_product_ids.sorted(lambda l: (l.date, l.reference))
-        for line_product in line_products:
-            line = lines.get(line_product.reference)
-            amount = (
-                line_product.amount_initial
-                + line_product.amount_in
-                - line_product.amount_out
-            )
-            if not line:
-                lines[line_product.reference] = {
-                    "reference": line_product.reference,
-                    "date": line_product.date,
-                    "amount": amount,
-                    "amount_in": line_product.amount_in,
-                    "amount_out": line_product.amount_out,
-                }
-            else:
-                line["amount"] += amount
-                line["amount_in"] += line_product.amount_in
-                line["amount_out"] += line_product.amount_out
+        # line_products = self.line_product_ids.sorted(lambda l: (l.date, l.reference))
+        # for line_product in line_products:
+        #     line = lines.get(line_product.reference)
+        #     amount = (
+        #         line_product.amount_initial
+        #         + line_product.amount_in
+        #         - line_product.amount_out
+        #     )
+        #     if not line:
+        #         lines[line_product.reference] = {
+        #             "reference": line_product.reference,
+        #             "date": line_product.date,
+        #             "amount": amount,
+        #             "amount_in": line_product.amount_in,
+        #             "amount_out": line_product.amount_out,
+        #         }
+        #     else:
+        #         line["amount"] += amount
+        #         line["amount_in"] += line_product.amount_in
+        #         line["amount_out"] += line_product.amount_out
+        query = """
+            SELECT %(report)s as report_id, account_id, reference, invoice_id, date, partner_id, currency_id,
+                COALESCE(sum(amount_initial),0)  +
+                    COALESCE(sum(amount_in),0) -
+                    COALESCE(sum(amount_out),0) +
+                    COALESCE(sum(amount_final),0)  as amount,
+                COALESCE(sum(amount_initial),0) as amount_initial,
+                COALESCE(sum(amount_in),0) as amount_in,
+                COALESCE(sum(amount_out),0) as amount_out,
+                COALESCE(sum(amount_final),0) as amount_final
+
+            FROM stock_storage_sheet_line
+            WHERE  report_id = %(report)s
+            GROUP BY account_id, reference, invoice_id, date, partner_id,currency_id
+            ORDER BY account_id, date, invoice_id,   reference
+        """
+        params = {"report": self.id}
+        self.env.cr.execute(query, params=params)
+        lines = self.env.cr.dictfetchall()
+        lines = self.env["stock.storage.sheet.line.ref"].create(lines)
+
         return lines
 
 
@@ -369,6 +398,7 @@ class StorageSheetLine(models.TransientModel):
     )
     account_id = fields.Many2one("account.account")
     location_id = fields.Many2one("stock.location")
+    invoice_id = fields.Many2one("account.move")
 
     def get_general_buttons(self):
         return [
@@ -383,3 +413,30 @@ class StorageSheetLine(models.TransientModel):
                 "model": "stock.storage.sheet",
             },
         ]
+
+
+class StorageSheetLineRef(models.TransientModel):
+    _name = "stock.storage.sheet.line.ref"
+    _description = "StorageSheetLineRef"
+    _order = "report_id,  date"
+    _rec_name = "reference"
+
+    report_id = fields.Many2one("stock.storage.sheet")
+    amount_initial = fields.Monetary(
+        currency_field="currency_id", string="Initial Amount"
+    )
+    amount_in = fields.Monetary(currency_field="currency_id", string="Input Amount")
+    amount_out = fields.Monetary(currency_field="currency_id", string="Output Amount")
+    amount_final = fields.Monetary(currency_field="currency_id", string="Final Amount")
+    amount = fields.Monetary(currency_field="currency_id", string="Amount")
+    date = fields.Date(string="Date")
+    reference = fields.Char()
+    partner_id = fields.Many2one("res.partner")
+    currency_id = fields.Many2one(
+        "res.currency",
+        string="Currency",
+        default=lambda self: self.env.company.currency_id,
+    )
+
+    account_id = fields.Many2one("account.account")
+    invoice_id = fields.Many2one("account.move")
