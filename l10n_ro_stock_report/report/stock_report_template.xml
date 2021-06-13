@@ -301,14 +301,23 @@
                     <tbody>
                         <t t-set="line_products" t-value="o.get_lines_by_ref()" />
                         <t t-set="account" t-value="False" />
+                        <t t-set="valued_type" t-value="False" />
                         <t t-foreach="line_products" t-as="line_product">
                             <t t-if="line_product.account_id!=account">
                                 <tr>
                                     <td colspan="99">
-                                        <span t-field="line_product.account_id" />
+                                        <strong t-field="line_product.account_id" />
                                     </td>
                                 </tr>
                                 <t t-set="account" t-value="line_product.account_id" />
+                            </t>
+                            <t t-if="line_product.valued_type!=valued_type">
+                                <tr>
+                                    <td colspan="99">
+                                        <strong t-field="line_product.valued_type" />
+                                    </td>
+                                </tr>
+                                <t t-set="valued_type" t-value="line_product.valued_type" />
                             </t>
                             <tr>
                                 <td>

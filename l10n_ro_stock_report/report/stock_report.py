@@ -11,6 +11,26 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
+VALUED_TYPE = [
+    ("reception", "Reception"),
+    ("reception_return", "Return reception"),
+    ("reception_notice", "Reception with notice"),
+    ("reception_notice_return", "Return reception with notice"),
+    ("delivery", "Delivery"),
+    ("delivery_return", "Return delivery"),
+    ("delivery_notice", "Delivery with notice"),
+    ("delivery_notice_return", "Return delivery with notice"),
+    ("plus_inventory", "Plus inventory"),
+    ("minus_inventory", "Minus inventory"),
+    ("consumption", "Consumption"),
+    ("consumption_return", "Return Consumption"),
+    ("production", "Production"),
+    ("production_return", "Return Production"),
+    ("internal_transfer", "Internal Transfer"),
+    ("usage_giving", "Usage Giving"),
+    ("usage_giving_return", "Return Usage Giving"),
+]
+
 
 class StorageSheet(models.TransientModel):
     _name = "stock.storage.sheet"
@@ -144,7 +164,8 @@ class StorageSheet(models.TransientModel):
                 svl.account_id,
                 %(date_from)s as date,
                 %(reference)s as reference,
-                %(location)s as location_id
+                %(location)s as location_id,
+                1 as sequence
             from stock_move as sm
 
             inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
@@ -172,7 +193,8 @@ class StorageSheet(models.TransientModel):
                 svl.account_id,
                 %(date_to)s as date,
                 %(reference)s as reference,
-                %(location)s as location_id
+                %(location)s as location_id,
+                4 as sequence
             from stock_move as sm
             inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
                     and ((valued_type !='internal_transfer' or valued_type is Null) or
@@ -202,7 +224,9 @@ class StorageSheet(models.TransientModel):
                 sm.reference as reference,
                 sp.partner_id,
                 sm.location_id,
-                svl_in.invoice_id
+                svl_in.invoice_id,
+                2 as sequence,
+                svl_in.valued_type
             from stock_move as sm
 
                 inner join stock_valuation_layer as svl_in on svl_in.stock_move_id = sm.id and
@@ -222,7 +246,8 @@ class StorageSheet(models.TransientModel):
             GROUP BY sm.product_id, date_trunc('day',sm.date at time zone 'utc' at time zone %(tz)s),
              sm.reference, sp.partner_id, account_id,
              sm.location_id,
-             svl_in.invoice_id
+             svl_in.invoice_id,
+             svl_in.valued_type
             """
 
         self.env.cr.execute(query_in, params=params)
@@ -240,7 +265,9 @@ class StorageSheet(models.TransientModel):
                 sm.reference as reference,
                 sp.partner_id,
                 sm.location_dest_id as location_id,
-                svl_out.invoice_id
+                svl_out.invoice_id,
+                3 as sequence,
+                svl_out.valued_type
             from stock_move as sm
 
                 inner join stock_valuation_layer as svl_out on svl_out.stock_move_id = sm.id and
@@ -261,7 +288,8 @@ class StorageSheet(models.TransientModel):
                 (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
             GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id,
              sm.location_dest_id,
-             svl_out.invoice_id
+             svl_out.invoice_id,
+             svl_out.valued_type
             """
 
         self.env.cr.execute(query_out, params=params)
@@ -336,7 +364,7 @@ class StorageSheet(models.TransientModel):
         #         line["amount_in"] += line_product.amount_in
         #         line["amount_out"] += line_product.amount_out
         query = """
-            SELECT %(report)s as report_id, account_id, reference, invoice_id, date, partner_id, currency_id,
+            SELECT %(report)s as report_id, account_id, sequence, valued_type, reference, invoice_id, date, partner_id, currency_id,
                 COALESCE(sum(amount_initial),0)  +
                     COALESCE(sum(amount_in),0) -
                     COALESCE(sum(amount_out),0) +
@@ -348,8 +376,8 @@ class StorageSheet(models.TransientModel):
 
             FROM stock_storage_sheet_line
             WHERE  report_id = %(report)s
-            GROUP BY account_id, reference, invoice_id, date, partner_id,currency_id
-            ORDER BY account_id, date, invoice_id,   reference
+            GROUP BY account_id, sequence, valued_type, reference, invoice_id, date, partner_id,currency_id
+            ORDER BY account_id, sequence, valued_type, date, invoice_id,  reference
         """
         params = {"report": self.id}
         self.env.cr.execute(query, params=params)
@@ -362,7 +390,7 @@ class StorageSheet(models.TransientModel):
 class StorageSheetLine(models.TransientModel):
     _name = "stock.storage.sheet.line"
     _description = "StorageSheetLine"
-    _order = "report_id, product_id, date"
+    _order = "report_id, sequence, product_id, date"
     _rec_name = "product_id"
 
     report_id = fields.Many2one("stock.storage.sheet")
@@ -399,6 +427,8 @@ class StorageSheetLine(models.TransientModel):
     account_id = fields.Many2one("account.account")
     location_id = fields.Many2one("stock.location")
     invoice_id = fields.Many2one("account.move")
+    valued_type = fields.Selection(VALUED_TYPE, "Valued Type")
+    sequence = fields.Integer()
 
     def get_general_buttons(self):
         return [
@@ -418,10 +448,11 @@ class StorageSheetLine(models.TransientModel):
 class StorageSheetLineRef(models.TransientModel):
     _name = "stock.storage.sheet.line.ref"
     _description = "StorageSheetLineRef"
-    _order = "report_id,  date"
+    _order = "report_id, account_id, sequence, valued_type,  date"
     _rec_name = "reference"
 
     report_id = fields.Many2one("stock.storage.sheet")
+    sequence = fields.Integer()
     amount_initial = fields.Monetary(
         currency_field="currency_id", string="Initial Amount"
     )
@@ -440,3 +471,4 @@ class StorageSheetLineRef(models.TransientModel):
 
     account_id = fields.Many2one("account.account")
     invoice_id = fields.Many2one("account.move")
+    valued_type = fields.Selection(VALUED_TYPE, "Valued Type")
