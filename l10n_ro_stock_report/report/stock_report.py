@@ -295,6 +295,19 @@ class StorageSheet(models.TransientModel):
         self.env.cr.execute(query_out, params=params)
         res = self.env.cr.dictfetchall()
         self.line_product_ids.create(res)
+        domain = [
+            ("report_id", "=", self.id),
+            ("quantity_initial", "=", 0),
+            ("quantity_in", "=", 0),
+            ("quantity_out", "=", 0),
+            ("quantity_final", "=", 0),
+            ("amount_initial", "=", 0),
+            ("amount_in", "=", 0),
+            ("amount_out", "=", 0),
+            ("amount_final", "=", 0),
+        ]
+        lines_zero = self.env["stock.storage.sheet.line"].search(domain)
+        lines_zero.unlink()
 
     def get_found_products(self):
         found_products = self.product_ids
@@ -342,27 +355,7 @@ class StorageSheet(models.TransientModel):
         return action.report_action(self, config=False)
 
     def get_lines_by_ref(self):
-        lines = {}
-        # line_products = self.line_product_ids.sorted(lambda l: (l.date, l.reference))
-        # for line_product in line_products:
-        #     line = lines.get(line_product.reference)
-        #     amount = (
-        #         line_product.amount_initial
-        #         + line_product.amount_in
-        #         - line_product.amount_out
-        #     )
-        #     if not line:
-        #         lines[line_product.reference] = {
-        #             "reference": line_product.reference,
-        #             "date": line_product.date,
-        #             "amount": amount,
-        #             "amount_in": line_product.amount_in,
-        #             "amount_out": line_product.amount_out,
-        #         }
-        #     else:
-        #         line["amount"] += amount
-        #         line["amount_in"] += line_product.amount_in
-        #         line["amount_out"] += line_product.amount_out
+
         query = """
             SELECT %(report)s as report_id, account_id, sequence, valued_type, reference, invoice_id, date, partner_id, currency_id,
                 COALESCE(sum(amount_initial),0)  +
