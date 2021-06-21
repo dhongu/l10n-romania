@@ -102,11 +102,18 @@ class PosSession(models.Model):
             split_bank_receivable_lines[statement] = MoveLine.create(split_bank_receivable_vals[statement])
             combine_bank_receivable_lines[statement] = MoveLine.create(combine_bank_receivable_vals[statement])
 
+        for payment in split_receivables_bank:
+            statement = statements_by_journal_id[payment.payment_method_id.bank_journal_id.id]
+            statement.write({"balance_end_real": statement.balance_end})
 
-        # data["split_cash_statement_lines"].update(split_bank_statement_lines)
-        # data["combine_cash_statement_lines"].update(combine_bank_statement_lines)
-        # data["split_cash_receivable_lines"].update(split_bank_receivable_lines)
-        # data["combine_cash_receivable_lines"].update(combine_bank_receivable_lines)
+        for payment_method in combine_receivables_bank:
+            statement = statements_by_journal_id[payment_method.bank_journal_id.id]
+            statement.write({"balance_end_real": statement.balance_end})
+
+        data["split_cash_statement_lines"].update(split_bank_statement_lines)
+        data["combine_cash_statement_lines"].update(combine_bank_statement_lines)
+        data["split_cash_receivable_lines"].update(split_bank_receivable_lines)
+        data["combine_cash_receivable_lines"].update(combine_bank_receivable_lines)
 
         return data
 
