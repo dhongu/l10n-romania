@@ -102,19 +102,11 @@ class PosSession(models.Model):
             split_bank_receivable_lines[statement] = MoveLine.create(split_bank_receivable_vals[statement])
             combine_bank_receivable_lines[statement] = MoveLine.create(combine_bank_receivable_vals[statement])
 
-        # data.update(
-        #     {
-        #         "split_bank_statement_lines": split_bank_statement_lines,
-        #         "combine_bank_statement_lines": combine_bank_statement_lines,
-        #         "split_bank_receivable_lines": split_bank_receivable_lines,
-        #         "combine_bank_receivable_lines": combine_bank_receivable_lines,
-        #     }
-        # )
 
-        data["split_cash_statement_lines"].update(split_bank_statement_lines)
-        data["combine_cash_statement_lines"].update(combine_bank_statement_lines)
-        data["split_cash_receivable_lines"].update(split_bank_receivable_lines)
-        data["combine_cash_receivable_lines"].update(combine_bank_receivable_lines)
+        # data["split_cash_statement_lines"].update(split_bank_statement_lines)
+        # data["combine_cash_statement_lines"].update(combine_bank_statement_lines)
+        # data["split_cash_receivable_lines"].update(split_bank_receivable_lines)
+        # data["combine_cash_receivable_lines"].update(combine_bank_receivable_lines)
 
         return data
 

@@ -8,7 +8,7 @@
             <field name="cash_journal_id" position="after">
                  <field
                     name="bank_journal_id"
-                    attrs="{'invisible': [('is_cash_count', '=', True)], 'required': [('is_cash_count', '=', False)]}"
+                    attrs="{'invisible': [('is_cash_count', '=', True)]}"
                 />
             </field>
         </field>
