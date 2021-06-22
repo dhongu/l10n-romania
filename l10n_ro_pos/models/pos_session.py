@@ -99,8 +99,8 @@ class PosSession(models.Model):
             combine_bank_statement_lines[statement] = BankStatementLine.create(
                 combine_bank_statement_line_vals[statement]
             )
-            split_bank_receivable_lines[statement] = MoveLine.create(split_bank_receivable_vals[statement])
-            combine_bank_receivable_lines[statement] = MoveLine.create(combine_bank_receivable_vals[statement])
+            # split_bank_receivable_lines[statement] = MoveLine.create(split_bank_receivable_vals[statement])
+            # combine_bank_receivable_lines[statement] = MoveLine.create(combine_bank_receivable_vals[statement])
 
         for payment in split_receivables_bank:
             statement = statements_by_journal_id[payment.payment_method_id.bank_journal_id.id]
