@@ -22,8 +22,8 @@ class AccountBankStatementImport(models.TransientModel):
             cont = data_file[6]
             data_file = "\n".join(data_file[16:])
             data_file = StringIO(data_file)
-            dict = csv.DictReader(data_file, delimiter=",", quotechar='"')
-            res = {"csv": dict, "cont": cont.split(",")[1]}
+            dict_data = csv.DictReader(data_file, delimiter=",", quotechar='"')
+            res = {"csv": dict_data, "cont": cont.split(",")[1]}
         except BaseException:
             return False
         return res
