@@ -52,7 +52,7 @@ class PosSession(models.Model):
 
     def _create_bank_statement_lines_and_bank_move_lines(self, data):
 
-        MoveLine = data.get("MoveLine")
+        # MoveLine = data.get("MoveLine")
         split_receivables_bank = data.get("split_receivables")
         combine_receivables_bank = data.get("combine_receivables")
 
@@ -89,14 +89,16 @@ class PosSession(models.Model):
                 )
 
         # create the statement lines and account move lines
-        BankStatementLine = self.env["account.bank.statement.line"]
+        bank_statement_line = self.env["account.bank.statement.line"]
         split_bank_statement_lines = {}
         combine_bank_statement_lines = {}
         split_bank_receivable_lines = {}
         combine_bank_receivable_lines = {}
         for statement in self.statement_ids:
-            split_bank_statement_lines[statement] = BankStatementLine.create(split_bank_statement_line_vals[statement])
-            combine_bank_statement_lines[statement] = BankStatementLine.create(
+            split_bank_statement_lines[statement] = bank_statement_line.create(
+                split_bank_statement_line_vals[statement]
+            )
+            combine_bank_statement_lines[statement] = bank_statement_line.create(
                 combine_bank_statement_line_vals[statement]
             )
             # split_bank_receivable_lines[statement] = MoveLine.create(split_bank_receivable_vals[statement])
