@@ -24,7 +24,7 @@ class AccountMove(models.Model):
     def _onchange_partner_id(self):
         res = super(AccountMove, self)._onchange_partner_id()
         if self.partner_id.country_id.intrastat:
-            self.intrastat_country_id = self._get_invoice_intrastat_country_id()
+            self.intrastat_country_id = self.partner_id.country_id
         else:
             self.intrastat_country_id = False
         return res

@@ -203,9 +203,9 @@ class IntrastatDeclaration(models.TransientModel):
         and ((res_country.code is not null and not res_country.code=%(country)s)
              or (res_country.code is null and countrypartner.code is not null
              and not countrypartner.code=%(country)s))
-        and inv.type in (%(mode1)s, %(mode2)s)
-        and to_char(inv.date, 'YYYY')=%(year)s
-        and to_char(inv.date, 'MM')=%(month)s
+        and inv.move_type in (%(mode1)s, %(mode2)s)
+        and to_char(inv.invoice_date, 'YYYY')=%(year)s
+        and to_char(inv.invoice_date, 'MM')=%(month)s
             """
 
         self.env.cr.execute(
