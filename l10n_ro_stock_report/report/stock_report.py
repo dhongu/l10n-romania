@@ -66,6 +66,34 @@ class StorageSheet(models.TransientModel):
         comodel_name="stock.storage.sheet.line", inverse_name="report_id"
     )
 
+    filter_reception = fields.Boolean("Reception")
+    filter_reception_return = fields.Boolean("Return reception")
+    filter_reception_notice = fields.Boolean("Reception with notice")
+    filter_reception_notice_return = fields.Boolean("Return reception with notice")
+    filter_delivery = fields.Boolean("Delivery")
+    filter_delivery_return = fields.Boolean("Return delivery")
+    filter_delivery_notice = fields.Boolean("Delivery with notice")
+    filter_delivery_notice_return = fields.Boolean("Return delivery with notice")
+    filter_plus_inventory = fields.Boolean("Plus inventory")
+    filter_minus_inventory = fields.Boolean("Minus inventory")
+    filter_consumption = fields.Boolean("Consumption")
+    filter_consumption_return = fields.Boolean("Return Consumption")
+    filter_production = fields.Boolean("Production")
+    filter_production_return = fields.Boolean("Return Production")
+    filter_internal_transfer = fields.Boolean("Internal Transfer")
+    filter_usage_giving = fields.Boolean("Usage Giving")
+    filter_usage_giving_return = fields.Boolean("Return Usage Giving")
+
+    def get_filter(self):
+        res = []
+        for field in self._fields:
+            if "filter_" in field:
+                f_value = getattr(self, field)
+                if f_value:
+                    res.append(field)
+        res = list(map(lambda x: x.replace("filter_", ""), res))
+        return res
+
     def _get_report_base_filename(self):
         self.ensure_one()
         return "Stock Sheet %s" % (self.location_id.name)
@@ -368,11 +396,13 @@ class StorageSheet(models.TransientModel):
                 COALESCE(sum(amount_final),0) as amount_final
 
             FROM stock_storage_sheet_line
-            WHERE  report_id = %(report)s
+            WHERE report_id = %(report)s
+            AND valued_type IN %(type)s
             GROUP BY account_id, sequence, valued_type, reference, invoice_id, date, partner_id,currency_id
             ORDER BY account_id, sequence, valued_type, date, invoice_id,  reference
         """
-        params = {"report": self.id}
+        v_types = self.get_filter()
+        params = {"report": self.id, "type": tuple(v_types)}
         self.env.cr.execute(query, params=params)
         lines = self.env.cr.dictfetchall()
         lines = self.env["stock.storage.sheet.line.ref"].create(lines)

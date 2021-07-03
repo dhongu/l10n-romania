@@ -302,7 +302,28 @@
                         <t t-set="line_products" t-value="o.get_lines_by_ref()" />
                         <t t-set="account" t-value="False" />
                         <t t-set="valued_type" t-value="False" />
+                        <t t-set="total_value" t-value="0" />
                         <t t-foreach="line_products" t-as="line_product">
+                            <t t-if="line_product.valued_type!=valued_type">
+                                <t t-if="valued_type">
+                                    <tr>
+                                        <td colspan="11">
+                                            <strong>
+                                                Total
+                                                <span t-esc="valued_type" />
+                                                :
+                                                <span t-esc="round(total_value,2)" />
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="11">
+                                            <hr />
+                                        </td>
+                                    </tr>
+                                    <t t-set="total_value" t-value="0" />
+                                </t>
+                            </t>
                             <t t-if="line_product.account_id!=account">
                                 <tr>
                                     <td colspan="99">
@@ -315,6 +336,7 @@
                                 <tr>
                                     <td colspan="99">
                                         <strong t-field="line_product.valued_type" />
+                                        :
                                     </td>
                                 </tr>
                                 <t t-set="valued_type" t-value="line_product.valued_type" />
@@ -352,8 +374,128 @@
                                         t-options='{"widget": "float", "precision": 2}'
                                     />
                                 </td>
+                                <t t-set="total_value" t-value="total_value+line_product.amount" />
                             </tr>
                         </t>
+                        <tr>
+                            <td colspan="11">
+                                <strong>
+                                    Total
+                                    <span t-esc="valued_type" />
+                                    :
+                                    <span t-esc="total_value" />
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- table for totals only -->
+                <h2 style="page-break-before: always;">Stock Sheet</h2>
+                <h2>Total</h2>
+                <div id="informations" class="row mt32 mb32">
+                    <div class="col-auto col-3 mw-100 mb-2">
+                        <strong>Location</strong>
+                        <p>
+                            <span t-field="o.location_id" />
+                        </p>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2">
+                        <strong>Date From</strong>
+                        <p>
+                            <span t-field="o.date_from" />
+                        </p>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2">
+                        <strong>Date To</strong>
+                        <p>
+                            <span t-field="o.date_to" />
+                        </p>
+                    </div>
+                </div>
+                <table class="table table-sm">
+                    <tbody>
+                        <t t-set="line_products" t-value="o.get_lines_by_ref()" />
+                        <t t-set="account" t-value="False" />
+                        <t t-set="valued_type" t-value="False" />
+                        <t t-set="total_value" t-value="0" />
+                        <t t-set="total_value_account" t-value="0" />
+                        <t t-foreach="line_products" t-as="line_product">
+                            <t t-if="line_product.valued_type!=valued_type">
+                                <t t-if="valued_type">
+                                    <tr>
+                                        <td colspan="11">
+                                            <strong>
+                                                Total
+                                                <span t-esc="valued_type" />
+                                                :
+                                                <span t-esc="round(total_value,2)" />
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <!--                                    <tr>-->
+                                    <!--                                        <td colspan="11">-->
+                                    <!--                                            <hr />-->
+                                    <!--                                        </td>-->
+                                    <!--                                    </tr>-->
+                                    <t t-set="total_value" t-value="0" />
+                                </t>
+                            </t>
+                            <t t-if="line_product.account_id!=account">
+                                <t t-if="account">
+                                    <tr>
+                                        <td colspan="11">
+                                            <strong>
+                                                Total
+                                                <span t-esc="account.code.strip('0')" />
+                                                <span t-esc="account.name" />
+                                                :
+                                                <span t-esc="round(total_value_account,2)" />
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="11">
+                                            <hr />
+                                        </td>
+                                    </tr>
+                                    <t t-set="total_value_account" t-value="0" />
+                                </t>
+                            </t>
+                            <t t-if="line_product.account_id!=account">
+                                <tr>
+                                    <td colspan="99">
+                                        <strong t-field="line_product.account_id" />
+                                    </td>
+                                </tr>
+                                <t t-set="account" t-value="line_product.account_id" />
+                            </t>
+                            <t t-if="line_product.valued_type!=valued_type">
+                                <t t-set="valued_type" t-value="line_product.valued_type" />
+                            </t>
+                            <t t-set="total_value" t-value="total_value+line_product.amount" />
+                            <t t-set="total_value_account" t-value="total_value_account+line_product.amount" />
+                        </t>
+                        <tr>
+                            <td colspan="11">
+                                <strong>
+                                    Total
+                                    <span t-esc="valued_type" />
+                                    :
+                                    <span t-esc="total_value" />
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="11">
+                                <strong>
+                                    Total
+                                    <span t-esc="account.code.strip('0')" />
+                                    <span t-esc="account.name" />
+                                    :
+                                    <span t-esc="round(total_value_account,2)" />
+                                </strong>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
