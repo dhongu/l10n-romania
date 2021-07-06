@@ -139,7 +139,6 @@ class StorageSheet(models.TransientModel):
             self.filter_usage_giving_return = False
             self.filter_internal_transfer = False
 
-
     def _get_report_base_filename(self):
         self.ensure_one()
         return "Stock Sheet %s" % (self.location_id.name)
