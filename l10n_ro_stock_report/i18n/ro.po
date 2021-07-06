@@ -260,7 +260,7 @@ msgstr "Cantitate intrată"
 #: model:ir.model.fields.selection,name:l10n_ro_stock_report.selection__stock_storage_sheet_line__valued_type__internal_transfer
 #: model:ir.model.fields.selection,name:l10n_ro_stock_report.selection__stock_storage_sheet_line_ref__valued_type__internal_transfer
 msgid "Internal Transfer"
-msgstr "transfer intern"
+msgstr "Transfer intern"
 
 #. module: l10n_ro_stock_report
 #: model:ir.model.fields,field_description:l10n_ro_stock_report.field_stock_storage_sheet_line__invoice_id

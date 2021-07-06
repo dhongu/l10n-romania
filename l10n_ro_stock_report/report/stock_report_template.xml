@@ -302,6 +302,7 @@
                         <t t-set="line_products" t-value="o.get_lines_by_ref()" />
                         <t t-set="account" t-value="False" />
                         <t t-set="valued_type" t-value="False" />
+                        <t t-set="last_line" t-value="False" />
                         <t t-set="total_value" t-value="0" />
                         <t t-foreach="line_products" t-as="line_product">
                             <t t-if="line_product.valued_type!=valued_type">
@@ -310,7 +311,7 @@
                                         <td colspan="11">
                                             <strong>
                                                 Total
-                                                <span t-esc="valued_type" />
+                                                <span t-field="last_line.valued_type" />
                                                 :
                                                 <span t-esc="round(total_value,2)" />
                                             </strong>
@@ -340,6 +341,7 @@
                                     </td>
                                 </tr>
                                 <t t-set="valued_type" t-value="line_product.valued_type" />
+                                <t t-set="last_line" t-value="line_product" />
                             </t>
                             <tr>
                                 <td>
@@ -381,7 +383,7 @@
                             <td colspan="11">
                                 <strong>
                                     Total
-                                    <span t-esc="valued_type" />
+                                    <span t-field="last_line.valued_type" />
                                     :
                                     <span t-esc="total_value" />
                                 </strong>
@@ -417,6 +419,7 @@
                         <t t-set="line_products" t-value="o.get_lines_by_ref()" />
                         <t t-set="account" t-value="False" />
                         <t t-set="valued_type" t-value="False" />
+                        <t t-set="last_line" t-value="False" />
                         <t t-set="total_value" t-value="0" />
                         <t t-set="total_value_account" t-value="0" />
                         <t t-foreach="line_products" t-as="line_product">
@@ -426,17 +429,12 @@
                                         <td colspan="11">
                                             <strong>
                                                 Total
-                                                <span t-esc="valued_type" />
+                                                <span t-field="last_line.valued_type" />
                                                 :
                                                 <span t-esc="round(total_value,2)" />
                                             </strong>
                                         </td>
                                     </tr>
-                                    <!--                                    <tr>-->
-                                    <!--                                        <td colspan="11">-->
-                                    <!--                                            <hr />-->
-                                    <!--                                        </td>-->
-                                    <!--                                    </tr>-->
                                     <t t-set="total_value" t-value="0" />
                                 </t>
                             </t>
@@ -446,8 +444,7 @@
                                         <td colspan="11">
                                             <strong>
                                                 Total
-                                                <span t-esc="account.code.strip('0')" />
-                                                <span t-esc="account.name" />
+                                                <span t-field="account.display_name" />
                                                 :
                                                 <span t-esc="round(total_value_account,2)" />
                                             </strong>
@@ -471,6 +468,7 @@
                             </t>
                             <t t-if="line_product.valued_type!=valued_type">
                                 <t t-set="valued_type" t-value="line_product.valued_type" />
+                                <t t-set="last_line" t-value="line_product" />
                             </t>
                             <t t-set="total_value" t-value="total_value+line_product.amount" />
                             <t t-set="total_value_account" t-value="total_value_account+line_product.amount" />
@@ -479,7 +477,7 @@
                             <td colspan="11">
                                 <strong>
                                     Total
-                                    <span t-esc="valued_type" />
+                                    <span t-field="last_line.valued_type" />
                                     :
                                     <span t-esc="total_value" />
                                 </strong>
@@ -487,13 +485,14 @@
                         </tr>
                         <tr>
                             <td colspan="11">
-                                <strong>
-                                    Total
-                                    <span t-esc="account.code.strip('0')" />
-                                    <span t-esc="account.name" />
-                                    :
-                                    <span t-esc="round(total_value_account,2)" />
-                                </strong>
+                                <t t-if="account">
+                                    <strong>
+                                        Total
+                                        <span t-field="account.display_name" />
+                                        :
+                                        <span t-esc="round(total_value_account,2)" />
+                                    </strong>
+                                </t>
                             </td>
                         </tr>
                     </tbody>

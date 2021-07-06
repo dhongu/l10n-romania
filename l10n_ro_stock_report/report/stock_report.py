@@ -447,6 +447,10 @@ class StorageSheet(models.TransientModel):
             ORDER BY account_id, sequence, valued_type, date, invoice_id,  reference
         """
         v_types = self.get_filter()
+        if not v_types:
+            v_types = [
+                "none",
+            ]
         params = {"report": self.id, "type": tuple(v_types)}
         self.env.cr.execute(query, params=params)
         lines = self.env.cr.dictfetchall()
