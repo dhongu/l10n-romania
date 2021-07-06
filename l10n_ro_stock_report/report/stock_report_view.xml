@@ -21,6 +21,31 @@
                         <field name="date_to" />
                         <field name="company_id" invisible="1" />
                     </group>
+                    <group name="group_filters" colspan="2">
+                        <field name="all_in" />
+                        <field name="all_out" />
+                    </group>
+                    <group name="in_types">
+                        <field name="filter_reception" />
+                        <field name="filter_reception_return" />
+                        <field name="filter_reception_notice" />
+                        <field name="filter_reception_notice_return" />
+                        <field name="filter_plus_inventory" />
+                        <field name="filter_production" />
+                        <field name="filter_production_return" />
+                        <field name="filter_internal_transfer" />
+                    </group>
+                    <group name="out_types">
+                        <field name="filter_delivery" />
+                        <field name="filter_delivery_return" />
+                        <field name="filter_delivery_notice" />
+                        <field name="filter_delivery_notice_return" />
+                        <field name="filter_minus_inventory" />
+                        <field name="filter_consumption" />
+                        <field name="filter_consumption_return" />
+                        <field name="filter_usage_giving" />
+                        <field name="filter_usage_giving_return" />
+                    </group>
                 </group>
                 <footer>
                     <button
@@ -155,4 +180,28 @@
         <field name="context">{'general_buttons':'get_general_buttons'}</field>
         <field name="view_id" ref="l10n_ro_stock_report.view_sheet_stock_report_line_tree" />
     </record>
+    <!--    <record id="view_stock_sheet_report_filter_form" model="ir.ui.view">-->
+    <!--        <field name="name">stock.storage.sheet.filter.form</field>-->
+    <!--        <field name="model">stock.storage.sheet.line.filter</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <form string="Report Options">-->
+    <!--                <group name="filters">-->
+    <!--                    <group>-->
+    <!--                        <field name="reception" />-->
+    <!--                    </group>-->
+    <!--                </group>-->
+    <!--                <footer>-->
+    <!--                    <button-->
+    <!--                        name="get_filter"-->
+    <!--                        string="Filter"-->
+    <!--                        type="object"-->
+    <!--                        default_focus="1"-->
+    <!--                        class="oe_highlight"-->
+    <!--                    />-->
+    <!--                    or-->
+    <!--                    <button string="Cancel" class="oe_link" special="cancel" />-->
+    <!--                </footer>-->
+    <!--            </form>-->
+    <!--        </field>-->
+    <!--    </record>-->
 </odoo>
