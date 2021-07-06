@@ -21,6 +21,10 @@
                         <field name="date_to" />
                         <field name="company_id" invisible="1" />
                     </group>
+                    <group name="group_filters" colspan="2">
+                        <field name="all_in" />
+                        <field name="all_out" />
+                    </group>
                     <group name="in_types">
                         <field name="filter_reception" />
                         <field name="filter_reception_return" />
