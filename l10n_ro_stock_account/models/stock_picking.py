@@ -22,14 +22,8 @@ class StockPicking(models.Model):
 
     def _is_dropshipped(self):
         self.ensure_one()
-        return (
-            self.location_id.usage == "supplier"
-            and self.location_dest_id.usage == "customer"
-        )
+        return self.location_id.usage == "supplier" and self.location_dest_id.usage == "customer"
 
     def _is_dropshipped_returned(self):
         self.ensure_one()
-        return (
-            self.location_id.usage == "customer"
-            and self.location_dest_id.usage == "supplier"
-        )
+        return self.location_id.usage == "customer" and self.location_dest_id.usage == "supplier"

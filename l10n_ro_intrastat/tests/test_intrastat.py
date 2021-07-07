@@ -23,9 +23,7 @@ class TestIntrastat(TransactionCase):
             }
         )
 
-        self.product_2 = self.env["product.product"].create(
-            {"name": "Test intrastat", "invoice_policy": "order"}
-        )
+        self.product_2 = self.env["product.product"].create({"name": "Test intrastat", "invoice_policy": "order"})
 
     def test_name(self):
         intrastat = self.env["account.intrastat.code"]._name_search("84221100")
@@ -35,15 +33,11 @@ class TestIntrastat(TransactionCase):
 
     def test_invoice_purchase(self):
         country = self.env.ref("base.de")
-        partner_de = self.env["res.partner"].create(
-            {"name": "TEST Vendor", "country_id": country.id}
-        )
+        partner_de = self.env["res.partner"].create({"name": "TEST Vendor", "country_id": country.id})
 
         invoice = Form(self.env["account.move"].with_context(default_type="in_invoice"))
         invoice.partner_id = partner_de
-        invoice.intrastat_transaction_id = self.env.ref(
-            "l10n_ro_intrastat.intrastat_transaction_1_1"
-        )
+        invoice.intrastat_transaction_id = self.env.ref("l10n_ro_intrastat.intrastat_transaction_1_1")
         invoice.transport_mode_id = self.env.ref("l10n_ro_intrastat.intrastat_trmode_3")
         invoice.invoice_incoterm_id = self.env.ref("account.incoterm_EXW")
 
@@ -65,9 +59,7 @@ class TestIntrastat(TransactionCase):
 
     def test_invoice_sale(self):
         country = self.env.ref("base.de")
-        partner_de = self.env["res.partner"].create(
-            {"name": "TEST Customer", "country_id": country.id}
-        )
+        partner_de = self.env["res.partner"].create({"name": "TEST Customer", "country_id": country.id})
 
         so = Form(self.env["sale.order"])
         so.partner_id = partner_de
@@ -81,9 +73,7 @@ class TestIntrastat(TransactionCase):
         so.action_confirm()
         invoice = so._create_invoices(final=True)
         invoice = Form(invoice)
-        invoice.intrastat_transaction_id = self.env.ref(
-            "l10n_ro_intrastat.intrastat_transaction_1_1"
-        )
+        invoice.intrastat_transaction_id = self.env.ref("l10n_ro_intrastat.intrastat_transaction_1_1")
         invoice.transport_mode_id = self.env.ref("l10n_ro_intrastat.intrastat_trmode_3")
         invoice.invoice_incoterm_id = self.env.ref("account.incoterm_EXW")
 
@@ -98,9 +88,7 @@ class TestIntrastat(TransactionCase):
 
     def test_error(self):
         country = self.env.ref("base.de")
-        partner_de = self.env["res.partner"].create(
-            {"name": "TEST Vendor", "country_id": country.id}
-        )
+        partner_de = self.env["res.partner"].create({"name": "TEST Vendor", "country_id": country.id})
 
         invoice = Form(self.env["account.move"].with_context(default_type="in_invoice"))
         invoice.partner_id = partner_de
@@ -120,9 +108,7 @@ class TestIntrastat(TransactionCase):
         with self.assertRaises(UserError):
             wizard.create_xml()
 
-        intrastat_transaction = self.env.ref(
-            "l10n_ro_intrastat.intrastat_transaction_1_1"
-        )
+        intrastat_transaction = self.env.ref("l10n_ro_intrastat.intrastat_transaction_1_1")
         invoice.write({"intrastat_transaction_id": intrastat_transaction.id})
         with self.assertRaises(UserError):
             wizard.create_xml()

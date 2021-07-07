@@ -15,8 +15,7 @@ class ResConfigSettings(models.TransientModel):
     )
     module_currency_rate_update_RO_BNR = fields.Boolean(
         "Currency Rate Update BNR",
-        help="This option allows you to manage the update of currency "
-        "rate based from BNR site.",
+        help="This option allows you to manage the update of currency " "rate based from BNR site.",
     )
     module_l10n_ro_address_extended = fields.Boolean(
         "Romanian Extended Address",
@@ -62,8 +61,7 @@ class ResConfigSettings(models.TransientModel):
     )
     module_l10n_ro_account_period_close = fields.Boolean(
         "Romania Account Period Close",
-        help="This allows you to close accounts on periods based on "
-        "templates: Income, Expense, VAT...",
+        help="This allows you to close accounts on periods based on " "templates: Income, Expense, VAT...",
     )
 
     # Accounting Reports
@@ -122,13 +120,10 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.romanian_accounting",
         readonly=False,
     )
-    stock_acc_price_diff = fields.Boolean(
-        related="company_id.stock_acc_price_diff", readonly=False
-    )
+    stock_acc_price_diff = fields.Boolean(related="company_id.stock_acc_price_diff", readonly=False)
     module_l10n_ro_stock = fields.Boolean(
         "Romanian Stock",
-        help="This module add on each warehouse methods of usage "
-        "giving and consumption",
+        help="This module add on each warehouse methods of usage " "giving and consumption",
     )
     module_l10n_ro_stock_account = fields.Boolean(
         "Romanian Stock Accounting",
@@ -143,8 +138,7 @@ class ResConfigSettings(models.TransientModel):
     )
     module_l10n_ro_stock_account_store = fields.Boolean(
         "Romanian Stock Accounting - Store",
-        help="This allows you to manage the Romanian Stock Accounting, "
-        "for locations with store merchandise",
+        help="This allows you to manage the Romanian Stock Accounting, " "for locations with store merchandise",
     )
     module_l10n_ro_stock_picking_report = fields.Boolean(
         "Stock Picking Report",

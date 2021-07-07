@@ -25,9 +25,7 @@ class ResPartnerAnaf(models.Model):
     end_date = fields.Date("End Date", index=True)
     publish_date = fields.Date("Publish Date")
     operation_date = fields.Date("Operation Date")
-    operation_type = fields.Selection(
-        [("I", "Register"), ("E", "Fix error"), ("D", "Removal")], "Operation Type"
-    )
+    operation_type = fields.Selection([("I", "Register"), ("E", "Fix error"), ("D", "Removal")], "Operation Type")
 
     @api.model
     def download_anaf_data(self, file_date=None):

@@ -59,13 +59,9 @@ class IntrastatDeclaration(models.TransientModel):
         required=True,
     )
 
-    contact_id = fields.Many2one(
-        "res.partner", "Contact", domain=[("is_company", "=", False)], required=True
-    )
+    contact_id = fields.Many2one("res.partner", "Contact", domain=[("is_company", "=", False)], required=True)
     file_save = fields.Binary("Intrastat Report File", readonly=True)
-    state = fields.Selection(
-        [("draft", "Draft"), ("download", "Download")], string="State", default="draft"
-    )
+    state = fields.Selection([("draft", "Draft"), ("download", "Download")], string="State", default="draft")
     cn8 = fields.Char("CN8", size=4, required=True, default="2020")
 
     def _company_warning(self, translated_msg):
@@ -74,9 +70,7 @@ class IntrastatDeclaration(models.TransientModel):
         asking user to configure company settings
         """
         action = self.env.ref("base.action_res_company_form")
-        raise RedirectWarning(
-            translated_msg, action.id, _("Go to company configuration screen")
-        )
+        raise RedirectWarning(translated_msg, action.id, _("Go to company configuration screen"))
 
     def create_xml(self):
         """
@@ -86,35 +80,21 @@ class IntrastatDeclaration(models.TransientModel):
         """
         decl_datas = self
         company = self.env.user.company_id
-        if not (
-            company.partner_id
-            and company.partner_id.country_id
-            and company.partner_id.country_id.id
-        ):
+        if not (company.partner_id and company.partner_id.country_id and company.partner_id.country_id.id):
             self._company_warning(
-                _(
-                    "The country of your company is not set, "
-                    "please make sure to configure it first."
-                ),
+                _("The country of your company is not set, " "please make sure to configure it first."),
             )
 
         if not company.vat:
             self._company_warning(
-                _(
-                    "The VAT of your company is not set, "
-                    "please make sure to configure it first."
-                ),
+                _("The VAT of your company is not set, " "please make sure to configure it first."),
             )
         if len(decl_datas.year) != 4:
             raise UserError(_("Year must be 4 digits number (YYYY)"))
 
         # Create root declaration
 
-        decl = (
-            ET.Element("InsNewArrival")
-            if decl_datas.type == "arrivals"
-            else ET.Element("InsNewDispatch")
-        )
+        decl = ET.Element("InsNewArrival") if decl_datas.type == "arrivals" else ET.Element("InsNewDispatch")
 
         decl.set("SchemaVersion", "1.0")
         decl.set("xmlns", INTRASTAT_XMLNS)
@@ -171,9 +151,7 @@ class IntrastatDeclaration(models.TransientModel):
         tag = ET.SubElement(ContactPerson, "Position")
         tag.text = decl_datas.contact_id.function
 
-        self._get_lines(
-            decl_datas, dispatchmode=(decl_datas.type != "arrivals"), decl=decl
-        )
+        self._get_lines(decl_datas, dispatchmode=(decl_datas.type != "arrivals"), decl=decl)
 
         # Get xml string with declaration
         data_file = ET.tostring(decl, encoding="UTF-8", method="xml")
@@ -255,9 +233,7 @@ class IntrastatDeclaration(models.TransientModel):
                 intrastat_transaction = company.intrastat_transaction_id
 
             if not intrastat_transaction:
-                raise UserError(
-                    _("Invoice %s without Intrastat Trasaction") % invoice.name
-                )
+                raise UserError(_("Invoice %s without Intrastat Trasaction") % invoice.name)
 
             if intrastat_transaction.parent_id:
                 TrCodeA = intrastat_transaction.parent_id.code
@@ -266,32 +242,20 @@ class IntrastatDeclaration(models.TransientModel):
                 TrCodeA = intrastat_transaction.code
                 TrCodeB = ""
 
-            ModeOfTransport = (
-                invoice.transport_mode_id.code
-                or company.transport_mode_id.code
-                or False
-            )
+            ModeOfTransport = invoice.transport_mode_id.code or company.transport_mode_id.code or False
 
             if not ModeOfTransport:
                 raise UserError(_("Invoice %s without Transport Mode") % invoice.name)
 
-            DeliveryTerms = (
-                invoice.invoice_incoterm_id.code or company.incoterm_id.code or False
-            )
+            DeliveryTerms = invoice.invoice_incoterm_id.code or company.incoterm_id.code or False
 
             if not DeliveryTerms:
                 raise UserError(_("Invoice %s without incoterm") % invoice.name)
 
-            Country = (
-                invoice.intrastat_country_id.code
-                or invoice.partner_id.country_id.code
-                or False
-            )
+            Country = invoice.intrastat_country_id.code or invoice.partner_id.country_id.code or False
 
             if not Country:
-                raise UserError(
-                    _("Invoice %s without intrastat country") % invoice.name
-                )
+                raise UserError(_("Invoice %s without intrastat country") % invoice.name)
 
             # Check commodity codes
             intrastat_id = inv_line.product_id.search_intrastat_code()
@@ -300,8 +264,7 @@ class IntrastatDeclaration(models.TransientModel):
                 suppl_unit_code = intrastat_id.suppl_unit_code
             else:
                 raise UserError(
-                    _('Product "%s" has no intrastat code, please configure it')
-                    % inv_line.product_id.display_name
+                    _('Product "%s" has no intrastat code, please configure it') % inv_line.product_id.display_name
                 )
 
             amount = inv_line.price_subtotal
@@ -312,9 +275,7 @@ class IntrastatDeclaration(models.TransientModel):
                 date=invoice.invoice_date,
             )
 
-            supply_units = inv_line.product_uom_id._compute_quantity(
-                inv_line.quantity, inv_line.product_id.uom_id
-            )
+            supply_units = inv_line.product_uom_id._compute_quantity(inv_line.quantity, inv_line.product_id.uom_id)
             weight = (inv_line.product_id.weight or 0.0) * supply_units
 
             entries += [

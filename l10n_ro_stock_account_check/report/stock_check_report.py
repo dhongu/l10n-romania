@@ -17,9 +17,7 @@ class StockAccountingCheck(models.TransientModel):
     # Filters fields, used for data computation
 
     account_id = fields.Many2one("account.account", required=True)
-    company_id = fields.Many2one(
-        "res.company", string="Company", default=lambda self: self.env.company
-    )
+    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
     date_range_id = fields.Many2one("date.range", string="Date range")
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
@@ -117,9 +115,7 @@ class StockAccountingCheck(models.TransientModel):
 
     def do_check_purchases(self):
         products = self.line_ids.mapped("product_id")
-        purchase_lines = self.env["purchase.order.line"].search(
-            [("product_id", "in", products.ids)]
-        )
+        purchase_lines = self.env["purchase.order.line"].search([("product_id", "in", products.ids)])
         purchases = purchase_lines.mapped("order_id")
         ok = True
         for purchase in purchases:
@@ -155,19 +151,13 @@ class StockAccountingCheck(models.TransientModel):
 
     def do_check_sale_order(self):
         products = self.line_ids.mapped("product_id")
-        sale_lines = self.env["sale.order.line"].search(
-            [("product_id", "in", products.ids)]
-        )
+        sale_lines = self.env["sale.order.line"].search([("product_id", "in", products.ids)])
         sale_oreders = sale_lines.mapped("order_id")
-        sale_oreders |= self.env["sale.order"].search(
-            [("invoice_status", "=", "to invoice")]
-        )
+        sale_oreders |= self.env["sale.order"].search([("invoice_status", "=", "to invoice")])
         ok = True
         for sale_order in sale_oreders:
             if sale_order.invoice_count == 1:
-                invoice_date = (
-                    sale_order.invoice_ids.invoice_date or fields.Date.today()
-                )
+                invoice_date = sale_order.invoice_ids.invoice_date or fields.Date.today()
                 for picking in sale_order.picking_ids:
                     if invoice_date != picking.date.date() and not picking.notice:
                         new_date = picking.date.replace(
@@ -200,22 +190,15 @@ class StockAccountingCheck(models.TransientModel):
 
     def do_check_move(self):
         products = self.line_ids.mapped("product_id")
-        stock_moves = self.env["stock.move"].search(
-            [("product_id", "in", products.ids)]
-        )
+        stock_moves = self.env["stock.move"].search([("product_id", "in", products.ids)])
         for stock_move in stock_moves:
             stock_move_date = stock_move.date.date()
-            account_moves = stock_move.mapped(
-                "stock_valuation_layer_ids.account_move_id"
-            )
+            account_moves = stock_move.mapped("stock_valuation_layer_ids.account_move_id")
             for account_move in account_moves:
-                if (
-                    account_move.date != stock_move_date
-                    and not account_move.activity_ids
-                ):
-                    note = _(
-                        " Nota contabila cu data diferita fata de data %s din miscarea de stoc"
-                    ) % (stock_move_date)
+                if account_move.date != stock_move_date and not account_move.activity_ids:
+                    note = _(" Nota contabila cu data diferita fata de data %s din miscarea de stoc") % (
+                        stock_move_date
+                    )
 
                     if not stock_move.picking_id:
                         note += " <a href='#' data-oe-model='{}' data-oe-id='{}'>{}</a>".format(
@@ -246,9 +229,7 @@ class StockAccountingCheck(models.TransientModel):
             self.do_compute_product()
         self.do_check_move()
 
-        action = self.env.ref(
-            "l10n_ro_stock_account_check.action_stock_accounting_check_line"
-        ).read()[0]
+        action = self.env.ref("l10n_ro_stock_account_check.action_stock_accounting_check_line").read()[0]
 
         action["display_name"] = "{} ({}-{})".format(
             action["name"],

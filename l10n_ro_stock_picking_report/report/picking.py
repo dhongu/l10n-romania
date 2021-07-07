@@ -49,9 +49,7 @@ class ReportPickingDelivery(models.AbstractModel):
                 res["price"] = 0.0
                 list_price = 0.0
 
-            taxes_sale = taxes_ids.compute_all(
-                list_price, quantity=move_line.product_qty, product=line.product_id
-            )
+            taxes_sale = taxes_ids.compute_all(list_price, quantity=move_line.product_qty, product=line.product_id)
 
             res["tax"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
             res["amount"] = taxes_sale["total_excluded"]
@@ -101,10 +99,7 @@ class ReportPickingReception(models.AbstractModel):
         value = 0
         quantity = 0
         for valuation in move.stock_valuation_layer_ids:
-            if (
-                valuation.valued_type == "internal_transfer"
-                and not valuation.account_move_id
-            ):
+            if valuation.valued_type == "internal_transfer" and not valuation.account_move_id:
                 continue
             value += valuation.value
             quantity += valuation.quantity
@@ -140,9 +135,7 @@ class ReportPickingReception(models.AbstractModel):
             res["amount"] = taxes["total_excluded"]
             res["amount_tax"] = taxes["total_included"]
 
-            taxes_ids = line.product_id.taxes_id.filtered(
-                lambda r: r.company_id == move.company_id
-            )
+            taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
             list_price = move.product_id.list_price
             # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
             # if incl_tax:
@@ -158,20 +151,12 @@ class ReportPickingReception(models.AbstractModel):
             )
 
             res["amount_sale"] = taxes_sale["total_excluded"]
-            res["tax_sale"] = (
-                taxes_sale["total_included"] - taxes_sale["total_excluded"]
-            )
+            res["tax_sale"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
             res["amount_tax_sale"] = taxes_sale["total_included"]
             #  conversie pret din pretul din unitatea de masura de baza in pret in unitatea de masura din document
-            res["price"] = res["price"] * line.product_uom._compute_quantity(
-                1, line.product_id.uom_id
-            )
+            res["price"] = res["price"] * line.product_uom._compute_quantity(1, line.product_id.uom_id)
             if res["amount_tax"] != 0.0:
-                res["margin"] = (
-                    100
-                    * (taxes_sale["total_included"] - res["amount_tax"])
-                    / res["amount_tax"]
-                )
+                res["margin"] = 100 * (taxes_sale["total_included"] - res["amount_tax"]) / res["amount_tax"]
             else:
                 res["margin"] = 0.0
         else:
@@ -186,9 +171,7 @@ class ReportPickingReception(models.AbstractModel):
             # else:
             #     res['price'] = 0.0
 
-            taxes_ids = move.product_id.supplier_taxes_id.filtered(
-                lambda r: r.company_id == move.company_id
-            )
+            taxes_ids = move.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move.company_id)
             taxes = taxes_ids.compute_all(
                 res["price"],
                 currency=currency,
@@ -200,9 +183,7 @@ class ReportPickingReception(models.AbstractModel):
             res["tax"] = taxes["total_included"] - taxes["total_excluded"]
             res["amount_tax"] = taxes["total_included"]
 
-            taxes_ids = move.product_id.taxes_id.filtered(
-                lambda r: r.company_id == move.company_id
-            )
+            taxes_ids = move.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
             # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
             # if incl_tax:
             #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
@@ -218,17 +199,11 @@ class ReportPickingReception(models.AbstractModel):
             )
 
             res["amount_sale"] = taxes_sale["total_excluded"]
-            res["tax_sale"] = (
-                taxes_sale["total_included"] - taxes_sale["total_excluded"]
-            )
+            res["tax_sale"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
             res["amount_tax_sale"] = taxes_sale["total_included"]
 
             if taxes["total_included"] != 0.0:
-                res["margin"] = (
-                    100
-                    * (taxes_sale["total_included"] - taxes["total_included"])
-                    / taxes["total_included"]
-                )
+                res["margin"] = 100 * (taxes_sale["total_included"] - taxes["total_included"]) / taxes["total_included"]
             else:
                 res["margin"] = 0.0
 

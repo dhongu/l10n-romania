@@ -27,7 +27,4 @@ class ResPartner(models.Model):
                 domain = record._get_vat_nrc_constrain_domain()
                 results = self.env["res.partner"].search(domain)
                 if len(results) > 1:
-                    raise ValidationError(
-                        _("The VAT and NRC pair (%s, %s) must be unique!")
-                        % (record.vat, record.nrc)
-                    )
+                    raise ValidationError(_("The VAT and NRC pair (%s, %s) must be unique!") % (record.vat, record.nrc))

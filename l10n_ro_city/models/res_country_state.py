@@ -18,13 +18,9 @@ class CountryCity(models.Model):
                 result.append(
                     (
                         record.id,
-                        "{} ({}) ({})".format(
-                            record.name, record.municipality, record.state_id.code
-                        ),
+                        "{} ({}) ({})".format(record.name, record.municipality, record.state_id.code),
                     )
                 )
             else:
-                result.append(
-                    (record.id, "{} ({})".format(record.name, record.state_id.code))
-                )
+                result.append((record.id, "{} ({})".format(record.name, record.state_id.code)))
         return result

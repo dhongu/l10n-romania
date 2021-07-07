@@ -21,8 +21,7 @@ class ProductCategory(models.Model):
     )
     stock_account_change = fields.Boolean(
         string="Allow stock account change from locations",
-        help="Only for Romania, to change the accounts to the ones defined "
-        "on stock locations",
+        help="Only for Romania, to change the accounts to the ones defined " "on stock locations",
     )
 
     @api.depends("name")
@@ -67,12 +66,8 @@ class ProductCategory(models.Model):
         for record in self:
             if record.hide_stock_in_out_account:
                 # is a romanian company:
-                record.property_stock_account_input_categ_id = (
-                    record.property_stock_valuation_account_id
-                )
-                record.property_stock_account_output_categ_id = (
-                    record.property_stock_valuation_account_id
-                )
+                record.property_stock_account_input_categ_id = record.property_stock_valuation_account_id
+                record.property_stock_account_output_categ_id = record.property_stock_valuation_account_id
 
 
 class ProductTemplate(models.Model):
@@ -82,8 +77,7 @@ class ProductTemplate(models.Model):
         "account.account",
         "Stock Valuation Account",
         company_dependent=True,
-        domain="[('company_id', '=', allowed_company_ids[0]),"
-        "('deprecated', '=', False)]",
+        domain="[('company_id', '=', allowed_company_ids[0])," "('deprecated', '=', False)]",
         check_company=True,
         help="In Romania accounting is only one account for valuation/input/"
         "output. If this value is set, we will use it, otherwise will "
@@ -93,26 +87,16 @@ class ProductTemplate(models.Model):
     def _get_product_accounts(self):
         accounts = super(ProductTemplate, self)._get_product_accounts()
 
-        company = (
-            self.env["res.company"].browse(self._context.get("force_company"))
-            or self.env.company
-        )
+        company = self.env["res.company"].browse(self._context.get("force_company")) or self.env.company
         if not company.romanian_accounting:
             return accounts
 
         property_stock_valuation_account_id = (
-            self.property_stock_valuation_account_id
-            or self.categ_id.property_stock_valuation_account_id
+            self.property_stock_valuation_account_id or self.categ_id.property_stock_valuation_account_id
         )
-        stock_picking_payable_account_id = (
-            company.property_stock_picking_payable_account_id
-        )
-        stock_picking_receivable_account_id = (
-            company.property_stock_picking_receivable_account_id
-        )
-        property_stock_usage_giving_account_id = (
-            company.property_stock_usage_giving_account_id
-        )
+        stock_picking_payable_account_id = company.property_stock_picking_payable_account_id
+        stock_picking_receivable_account_id = company.property_stock_picking_receivable_account_id
+        property_stock_usage_giving_account_id = company.property_stock_usage_giving_account_id
         if property_stock_valuation_account_id:
             accounts.update(
                 {

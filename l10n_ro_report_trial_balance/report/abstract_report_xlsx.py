@@ -62,27 +62,19 @@ class AbstractReportXslx(models.AbstractModel):
         """
         self.format_bold = workbook.add_format({"bold": True})
         self.format_right = workbook.add_format({"align": "right"})
-        self.format_right_bold_italic = workbook.add_format(
-            {"align": "right", "bold": True, "italic": True}
-        )
-        self.format_header_left = workbook.add_format(
-            {"bold": True, "border": True, "bg_color": "#FFFFCC"}
-        )
+        self.format_right_bold_italic = workbook.add_format({"align": "right", "bold": True, "italic": True})
+        self.format_header_left = workbook.add_format({"bold": True, "border": True, "bg_color": "#FFFFCC"})
         self.format_header_center = workbook.add_format(
             {"bold": True, "align": "center", "border": True, "bg_color": "#FFFFCC"}
         )
         self.format_header_right = workbook.add_format(
             {"bold": True, "align": "right", "border": True, "bg_color": "#FFFFCC"}
         )
-        self.format_header_amount = workbook.add_format(
-            {"bold": True, "border": True, "bg_color": "#FFFFCC"}
-        )
+        self.format_header_amount = workbook.add_format({"bold": True, "border": True, "bg_color": "#FFFFCC"})
         self.format_header_amount.set_num_format("#,##0.00")
         self.format_amount = workbook.add_format()
         self.format_amount.set_num_format("#,##0.00")
-        self.format_percent_bold_italic = workbook.add_format(
-            {"bold": True, "italic": True}
-        )
+        self.format_percent_bold_italic = workbook.add_format({"bold": True, "italic": True})
         self.format_percent_bold_italic.set_num_format("#,##0.00%")
 
     def _set_column_width(self):
@@ -140,9 +132,7 @@ class AbstractReportXslx(models.AbstractModel):
                 self.row_pos,
                 col_name + col_count_filter_name - 1,
                 title,
-                workbook.add_format(
-                    {"bold": True, "border": True, "bg_color": "#FFFFCC"}
-                ),
+                workbook.add_format({"bold": True, "border": True, "bg_color": "#FFFFCC"}),
             )
             self.sheet.merge_range(
                 self.row_pos,
@@ -196,13 +186,9 @@ class AbstractReportXslx(models.AbstractModel):
             value = getattr(line_object, column["field"])
             cell_type = column.get("type", "string")
             if cell_type == "string":
-                self.sheet.write_string(
-                    self.row_pos, col_pos, value or "", workbook.add_format(formats)
-                )
+                self.sheet.write_string(self.row_pos, col_pos, value or "", workbook.add_format(formats))
             elif cell_type == "amount":
-                self.sheet.write_number(
-                    self.row_pos, col_pos, float(value), workbook.add_format(formats)
-                )
+                self.sheet.write_number(self.row_pos, col_pos, float(value), workbook.add_format(formats))
         self.row_pos += 1
 
     def _generate_report_content(self, workbook, report):

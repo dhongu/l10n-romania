@@ -12,9 +12,7 @@ class AccountInvoiceDVI(models.TransientModel):
     date = fields.Date("Date")
     custom_duty = fields.Monetary(string="Custom Duty")  # costuri vamale
     customs_commission = fields.Monetary(string="Customs Commission")  # comision vamal
-    currency_id = fields.Many2one(
-        "res.currency", default=lambda self: self.env.company.currency_id
-    )
+    currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
     tax_value = fields.Monetary()
     tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
@@ -47,20 +45,12 @@ class AccountInvoiceDVI(models.TransientModel):
 
     @api.model
     def get_custom_duty_product(self):
-        product_id = (
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param("dvi.custom_duty_product_id")
-        )
+        product_id = self.env["ir.config_parameter"].sudo().get_param("dvi.custom_duty_product_id")
         return self.env["product.product"].browse(int(product_id)).exists()
 
     @api.model
     def get_customs_commission_product(self):
-        product_id = (
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param("dvi.customs_commission_product_id")
-        )
+        product_id = self.env["ir.config_parameter"].sudo().get_param("dvi.customs_commission_product_id")
         return self.env["product.product"].browse(int(product_id)).exists()
 
     @api.model
@@ -72,9 +62,7 @@ class AccountInvoiceDVI(models.TransientModel):
         tax_id = self.env.company.account_purchase_tax_id
         defaults["tax_id"] = tax_id.id
         tax_values = tax_id.compute_all(abs(invoice.amount_untaxed_signed))
-        defaults["tax_value"] = (
-            tax_values["total_included"] - tax_values["total_excluded"]
-        )
+        defaults["tax_value"] = tax_values["total_included"] - tax_values["total_excluded"]
         return defaults
 
     def do_create_dvi(self):
@@ -103,9 +91,7 @@ class AccountInvoiceDVI(models.TransientModel):
             if not custom_duty_product:
                 vals = self._prepare_custom_duty_product()
                 custom_duty_product = self.env["product.product"].create(vals)
-                config_parameter.set_param(
-                    "dvi.custom_duty_product_id", custom_duty_product.id
-                )
+                config_parameter.set_param("dvi.custom_duty_product_id", custom_duty_product.id)
             accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
 
             values["cost_lines"] += [
@@ -128,12 +114,8 @@ class AccountInvoiceDVI(models.TransientModel):
             if not customs_commission_product:
                 vals = self._prepare_customs_commission_product()
                 customs_commission_product = self.env["product.product"].create(vals)
-                config_parameter.set_param(
-                    "dvi.customs_commission_product_id", customs_commission_product.id
-                )
-            accounts_data = (
-                customs_commission_product.product_tmpl_id.get_product_accounts()
-            )
+                config_parameter.set_param("dvi.customs_commission_product_id", customs_commission_product.id)
+            accounts_data = customs_commission_product.product_tmpl_id.get_product_accounts()
 
             values["cost_lines"] += [
                 (

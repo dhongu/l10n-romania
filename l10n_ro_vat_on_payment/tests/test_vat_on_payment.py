@@ -17,12 +17,8 @@ class TestVATonpayment(TransactionCase):
         self.partner_anaf_model = self.env["res.partner.anaf"]
         self.partner_model = self.env["res.partner"]
         self.invoice_model = self.env["account.move"]
-        self.fbr_partner = self.partner_model.create(
-            {"name": "FBR", "vat": "RO30834857"}
-        )
-        self.lxt_partner = self.partner_model.create(
-            {"name": "Luxmet", "vat": "RO16507426"}
-        )
+        self.fbr_partner = self.partner_model.create({"name": "FBR", "vat": "RO30834857"})
+        self.lxt_partner = self.partner_model.create({"name": "Luxmet", "vat": "RO16507426"})
         default_line_account = self.env["account.account"].search(
             [
                 ("internal_type", "=", "other"),
@@ -52,9 +48,7 @@ class TestVATonpayment(TransactionCase):
             }
         )
         self.fp_model = self.env["account.fiscal.position"]
-        self.fptvainc = self.fp_model.search(
-            [("name", "ilike", "Regim TVA la Incasare")]
-        )
+        self.fptvainc = self.fp_model.search([("name", "ilike", "Regim TVA la Incasare")])
 
     def test_download_data(self):
         """Test download file and partner link."""

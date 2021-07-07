@@ -4,10 +4,7 @@
     "version": "13.0.1.2.0",
     "category": "Localization",
     "summary": "Romania - Stock Accounting",
-    "author": "NextERP Romania,"
-    "Dorin Hongu,"
-    "Forest and Biomass Romania,"
-    "Odoo Community Association (OCA)",
+    "author": "NextERP Romania," "Dorin Hongu," "Forest and Biomass Romania," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "depends": [
         "stock_account",

@@ -9,9 +9,7 @@ from odoo import _, fields, models
 class StockLocation(models.Model):
     _inherit = "stock.location"
 
-    usage = fields.Selection(
-        selection_add=[("usage_giving", "Usage Giving"), ("consume", "Consume")]
-    )
+    usage = fields.Selection(selection_add=[("usage_giving", "Usage Giving"), ("consume", "Consume")])
     merchandise_type = fields.Selection(
         [("store", _("Store")), ("warehouse", _("Warehouse"))],
         string="Merchandise type",

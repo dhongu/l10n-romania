@@ -19,10 +19,7 @@ class AccountMove(models.Model):
         vatp = False
         ctx = dict(self._context)
         company = self.company_id
-        partner = (
-            self.env["res.partner"]._find_accounting_partner(self.partner_id)
-            or self.partner_id
-        )
+        partner = self.env["res.partner"]._find_accounting_partner(self.partner_id) or self.partner_id
         if self.invoice_date:
             ctx.update({"check_date": self.invoice_date})
         if "out" in self.type:

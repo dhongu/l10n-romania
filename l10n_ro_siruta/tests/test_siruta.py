@@ -10,9 +10,7 @@ class TestSirutaBase(common.SavepointCase):
         super(TestSirutaBase, cls).setUpClass()
         cls.mainpartner = cls.env["res.partner"].create({"name": "TEST mainpartner"})
 
-        cls.partner1 = cls.env["res.partner"].create(
-            {"name": "TEST res_partner_address_1"}
-        )
+        cls.partner1 = cls.env["res.partner"].create({"name": "TEST res_partner_address_1"})
 
         cls.city1 = cls.env.ref("base.RO_155252")
         cls.city2 = cls.env.ref("base.RO_54984")

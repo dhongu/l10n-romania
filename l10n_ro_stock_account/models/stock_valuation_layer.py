@@ -11,9 +11,7 @@ class StockValuationLayer(models.Model):
     valued_type = fields.Char()
     invoice_line_id = fields.Many2one("account.move.line", string="Invoice Line")
     invoice_id = fields.Many2one("account.move", string="Invoice")
-    account_id = fields.Many2one(
-        "account.account", compute="_compute_account", store=True
-    )
+    account_id = fields.Many2one("account.account", compute="_compute_account", store=True)
 
     @api.depends("product_id", "account_move_id")
     def _compute_account(self):
@@ -38,15 +36,9 @@ class StockValuationLayer(models.Model):
 
     def init(self):
         """ This method will compute values for valuation layer valued_type"""
-        val_layers = self.search(
-            ["|", ("valued_type", "=", False), ("valued_type", "=", "")]
-        )
+        val_layers = self.search(["|", ("valued_type", "=", False), ("valued_type", "=", "")])
         val_types = self.env["stock.move"]._get_valued_types()
-        val_types = [
-            val
-            for val in val_types
-            if val not in ["in", "out", "dropshipped", "dropshipped_returned"]
-        ]
+        val_types = [val for val in val_types if val not in ["in", "out", "dropshipped", "dropshipped_returned"]]
         for layer in val_layers:
             if layer.stock_move_id:
                 for valued_type in val_types:
@@ -58,9 +50,7 @@ class StockValuationLayer(models.Model):
     def create(self, vals_list):
         for values in vals_list:
             if "valued_type" not in values and "stock_valuation_layer_id" in values:
-                svl = self.env["stock.valuation.layer"].browse(
-                    values["stock_valuation_layer_id"]
-                )
+                svl = self.env["stock.valuation.layer"].browse(values["stock_valuation_layer_id"])
                 if svl:
                     values["valued_type"] = svl.valued_type
         return super(StockValuationLayer, self).create(vals_list)

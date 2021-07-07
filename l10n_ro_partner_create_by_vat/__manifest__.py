@@ -8,9 +8,7 @@
     "data": [],
     "license": "AGPL-3",
     "version": "13.0.3.0.1",
-    "author": "NextERP Romania,"
-    "Forest and Biomass Romania,"
-    "Odoo Community Association (OCA)",
+    "author": "NextERP Romania," "Forest and Biomass Romania," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "installable": True,
     "development_status": "Mature",

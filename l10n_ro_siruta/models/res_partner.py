@@ -7,12 +7,8 @@ from odoo import api, fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    commune_id = fields.Many2one(
-        "res.country.commune", string="City/Commune", ondelete="set null", index=True
-    )
-    zone_id = fields.Many2one(
-        "res.country.zone", string="Zone", ondelete="set null", index=True
-    )
+    commune_id = fields.Many2one("res.country.commune", string="City/Commune", ondelete="set null", index=True)
+    zone_id = fields.Many2one("res.country.zone", string="Zone", ondelete="set null", index=True)
 
     @api.onchange("city_id")
     def _onchange_city_id(self):

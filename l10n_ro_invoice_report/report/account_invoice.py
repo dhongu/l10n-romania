@@ -46,11 +46,7 @@ class ReportInvoiceWithPaymentsPrint(models.AbstractModel):
 
     def _get_pickings(self, invoice):
 
-        if (
-            not self.env["ir.module.module"]
-            .sudo()
-            .search([("name", "=", "stock"), ("state", "=", "installed")])
-        ):
+        if not self.env["ir.module.module"].sudo().search([("name", "=", "stock"), ("state", "=", "installed")]):
             return False
 
         pickings = self.env["stock.picking"]
@@ -66,11 +62,7 @@ class ReportInvoiceWithPaymentsPrint(models.AbstractModel):
         return pickings
 
     def _get_discount(self):
-        config_parameter = (
-            self.env["ir.config_parameter"]
-            .sudo()
-            .search([("key", "=", "l10n_ro_config.show_discount")])
-        )
+        config_parameter = self.env["ir.config_parameter"].sudo().search([("key", "=", "l10n_ro_config.show_discount")])
         return config_parameter.value
 
 

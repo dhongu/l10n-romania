@@ -15,18 +15,12 @@ class TestPartnerUpdateVatSubjectedBase(common.SavepointCase):
     def setUpClass(cls):
         super(TestPartnerUpdateVatSubjectedBase, cls).setUpClass()
         cls.partner_model = cls.env["res.partner"]
-        parts = cls.partner_model.search(
-            [("country_id", "=", cls.env.ref("base.ro").id)]
-        )
+        parts = cls.partner_model.search([("country_id", "=", cls.env.ref("base.ro").id)])
         parts.write({"country_id": False})
-        data_dir = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "examples/"
-        )
+        data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "examples/")
         context = {"tracking_disable": True}
         fdata = tools.file_open(data_dir + "res.partner.csv")
-        csvdata = pycompat.csv_reader(
-            io.BytesIO(bytes(fdata.read(), "utf-8")), quotechar='"', delimiter=","
-        )
+        csvdata = pycompat.csv_reader(io.BytesIO(bytes(fdata.read(), "utf-8")), quotechar='"', delimiter=",")
         lines = [line for line in csvdata if any(line)]
         cls.env.user.company_id.write({"vat_check_vies": False})
         for line in lines:

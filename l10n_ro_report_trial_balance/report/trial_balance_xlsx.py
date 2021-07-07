@@ -11,15 +11,9 @@ class RomaniaReportTrialBalanceXslx(models.AbstractModel):
 
     def _get_report_company_name(self, report):
         comp_data = report.company_id.name.upper() + "\n"
-        comp_data += (
-            report.company_id.partner_id._display_address(without_company=True) + "\n"
-        )
+        comp_data += report.company_id.partner_id._display_address(without_company=True) + "\n"
         comp_data += report.company_id.vat + "\n" if report.company_id.vat else ""
-        comp_data += (
-            report.company_id.partner_id.nrc + "\n"
-            if report.company_id.partner_id.nrc
-            else ""
-        )
+        comp_data += report.company_id.partner_id.nrc + "\n" if report.company_id.partner_id.nrc else ""
         return comp_data
 
     def _get_report_name(self):

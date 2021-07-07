@@ -10,9 +10,7 @@ class ResCompany(models.Model):
 
     def init(self):
         """ This method will set romanian companies correctly"""
-        ro_comp = self.sudo().search(
-            [("partner_id.country_id", "=", self.env.ref("base.ro").id)]
-        )
+        ro_comp = self.sudo().search([("partner_id.country_id", "=", self.env.ref("base.ro").id)])
         ro_comp.write(
             {
                 "romanian_accounting": True,

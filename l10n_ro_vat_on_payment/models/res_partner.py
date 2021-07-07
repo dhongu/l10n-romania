@@ -25,9 +25,7 @@ class ResPartner(models.Model):
     def _compute_anaf_history(self):
         for partner in self:
             if partner.vat_number:
-                history = self.env["res.partner.anaf"].search(
-                    [("vat", "=", partner.vat_number)]
-                )
+                history = self.env["res.partner.anaf"].search([("vat", "=", partner.vat_number)])
                 partner.anaf_history = [(6, 0, [line.id for line in history])]
             else:
                 partner.anaf_history = [(6, 0, [])]
@@ -54,11 +52,7 @@ class ResPartner(models.Model):
             if strdate != "":
                 return datetime.strptime(str(strdate), "%Y%m%d").strftime(DATE_FORMAT)
 
-        vat_numbers = [
-            p.vat_number
-            for p in self
-            if p.vat and p.vat.lower().startswith("ro") and p.vat[2:].isnumeric()
-        ]
+        vat_numbers = [p.vat_number for p in self if p.vat and p.vat.lower().startswith("ro") and p.vat[2:].isnumeric()]
         if vat_numbers == []:
             return
         anaf_obj = self.env["res.partner.anaf"]
@@ -68,9 +62,7 @@ class ResPartner(models.Model):
         anaf_data = Popen(["egrep", vat_regex, istoric], stdout=PIPE)
         (process_lines, _) = anaf_data.communicate()
         process_lines = [x.split("#") for x in process_lines.decode().strip().split()]
-        lines = self.env["res.partner.anaf"].search(
-            [("anaf_id", "in", [x[0] for x in process_lines])]
-        )
+        lines = self.env["res.partner.anaf"].search([("anaf_id", "in", [x[0] for x in process_lines])])
         line_ids = [newline.anaf_id for newline in lines]
         for line in process_lines:
             if line[0] not in line_ids:

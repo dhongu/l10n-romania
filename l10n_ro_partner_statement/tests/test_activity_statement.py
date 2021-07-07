@@ -13,9 +13,7 @@ class TestActivityStatement(TransactionCase):
 
         self.res_users_model = self.env["res.users"]
         self.company = self.env.ref("base.main_company")
-        self.company.external_report_layout_id = self.env.ref(
-            "web.external_layout_standard"
-        )
+        self.company.external_report_layout_id = self.env.ref("web.external_layout_standard")
         self.partner1 = self.env["res.partner"].create({"name": "TEST partner 1"})
         self.partner2 = self.env["res.partner"].create({"name": "TEST partner 2"})
 
@@ -45,9 +43,7 @@ class TestActivityStatement(TransactionCase):
 
     def test_customer_activity_statement(self):
 
-        wiz_id = self.wiz.with_context(
-            active_ids=[self.partner1.id, self.partner2.id]
-        ).create({})
+        wiz_id = self.wiz.with_context(active_ids=[self.partner1.id, self.partner2.id]).create({})
 
         wiz_id.aging_type = "months"
         wiz_id.show_aging_buckets = False
@@ -58,9 +54,5 @@ class TestActivityStatement(TransactionCase):
         data = wiz_id._prepare_statement()
         docids = data["partner_ids"]
         report = self.statement_model._get_report_values(docids, data)
-        self.assertIsInstance(
-            report, dict, "There was an error while compiling the report."
-        )
-        self.assertIn(
-            "bucket_labels", report, "There was an error while compiling the report."
-        )
+        self.assertIsInstance(report, dict, "There was an error while compiling the report.")
+        self.assertIn("bucket_labels", report, "There was an error while compiling the report.")

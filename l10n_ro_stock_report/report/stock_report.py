@@ -57,14 +57,10 @@ class StorageSheet(models.TransientModel):
     date_range_id = fields.Many2one("date.range", string="Date range")
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
-    company_id = fields.Many2one(
-        "res.company", string="Company", default=lambda self: self.env.company
-    )
+    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
 
     one_product = fields.Boolean("One product per page")
-    line_product_ids = fields.One2many(
-        comodel_name="stock.storage.sheet.line", inverse_name="report_id"
-    )
+    line_product_ids = fields.One2many(comodel_name="stock.storage.sheet.line", inverse_name="report_id")
 
     filter_reception = fields.Boolean("Reception")
     filter_reception_return = fields.Boolean("Return reception")
@@ -193,18 +189,14 @@ class StorageSheet(models.TransientModel):
                 product_list = self.get_products_with_move()
                 all_products = False
                 if not product_list:
-                    raise UserError(
-                        _("There are no stock movements in the selected period")
-                    )
+                    raise UserError(_("There are no stock movements in the selected period"))
             else:
                 product_list = [-1]  # dummy list
                 all_products = True
 
         self.env["account.move.line"].check_access_rights("read")
 
-        lines = self.env["stock.storage.sheet.line"].search(
-            [("report_id", "=", self.id)]
-        )
+        lines = self.env["stock.storage.sheet.line"].search([("report_id", "=", self.id)])
         lines.unlink()
 
         datetime_from = fields.Datetime.to_datetime(self.date_from)
@@ -391,18 +383,14 @@ class StorageSheet(models.TransientModel):
 
     def button_show_sheet(self):
         self.do_compute_product()
-        action = self.env.ref(
-            "l10n_ro_stock_report.action_sheet_stock_report_line"
-        ).read()[0]
+        action = self.env.ref("l10n_ro_stock_report.action_sheet_stock_report_line").read()[0]
         action["display_name"] = "{} {} ({}-{})".format(
             action["name"], self.location_id.name, self.date_from, self.date_to
         )
         action["domain"] = [("report_id", "=", self.id)]
         action["context"] = {
             "active_id": self.id,
-            "general_buttons": self.env[
-                "stock.storage.sheet.line"
-            ].get_general_buttons(),
+            "general_buttons": self.env["stock.storage.sheet.line"].get_general_buttons(),
         }
         action["target"] = "main"
         return action
@@ -413,13 +401,9 @@ class StorageSheet(models.TransientModel):
 
     def print_pdf(self):
         if self.one_product:
-            action_report_storage_sheet = self.env.ref(
-                "l10n_ro_stock_report.action_report_storage_sheet"
-            )
+            action_report_storage_sheet = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet")
         else:
-            action_report_storage_sheet = self.env.ref(
-                "l10n_ro_stock_report.action_report_storage_sheet_all"
-            )
+            action_report_storage_sheet = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet_all")
         return action_report_storage_sheet.report_action(self, config=False)
 
     def print_by_ref_pdf(self):
@@ -467,24 +451,14 @@ class StorageSheetLine(models.TransientModel):
 
     report_id = fields.Many2one("stock.storage.sheet")
     product_id = fields.Many2one("product.product", string="Product")
-    amount_initial = fields.Monetary(
-        currency_field="currency_id", string="Initial Amount"
-    )
-    quantity_initial = fields.Float(
-        digits="Product Unit of Measure", string="Initial Quantity"
-    )
+    amount_initial = fields.Monetary(currency_field="currency_id", string="Initial Amount")
+    quantity_initial = fields.Float(digits="Product Unit of Measure", string="Initial Quantity")
     amount_in = fields.Monetary(currency_field="currency_id", string="Input Amount")
-    quantity_in = fields.Float(
-        digits="Product Unit of Measure", string="Input Quantity"
-    )
+    quantity_in = fields.Float(digits="Product Unit of Measure", string="Input Quantity")
     amount_out = fields.Monetary(currency_field="currency_id", string="Output Amount")
-    quantity_out = fields.Float(
-        digits="Product Unit of Measure", string="Output Quantity"
-    )
+    quantity_out = fields.Float(digits="Product Unit of Measure", string="Output Quantity")
     amount_final = fields.Monetary(currency_field="currency_id", string="Final Amount")
-    quantity_final = fields.Float(
-        digits="Product Unit of Measure", string="Final Quantity"
-    )
+    quantity_final = fields.Float(digits="Product Unit of Measure", string="Final Quantity")
     date = fields.Date(string="Date")
     reference = fields.Char()
     partner_id = fields.Many2one("res.partner")
@@ -493,9 +467,7 @@ class StorageSheetLine(models.TransientModel):
         string="Currency",
         default=lambda self: self.env.company.currency_id,
     )
-    categ_id = fields.Many2one(
-        "product.category", related="product_id.categ_id", index=True, store=True
-    )
+    categ_id = fields.Many2one("product.category", related="product_id.categ_id", index=True, store=True)
     account_id = fields.Many2one("account.account")
     location_id = fields.Many2one("stock.location")
     invoice_id = fields.Many2one("account.move")
@@ -525,9 +497,7 @@ class StorageSheetLineRef(models.TransientModel):
 
     report_id = fields.Many2one("stock.storage.sheet")
     sequence = fields.Integer()
-    amount_initial = fields.Monetary(
-        currency_field="currency_id", string="Initial Amount"
-    )
+    amount_initial = fields.Monetary(currency_field="currency_id", string="Initial Amount")
     amount_in = fields.Monetary(currency_field="currency_id", string="Input Amount")
     amount_out = fields.Monetary(currency_field="currency_id", string="Output Amount")
     amount_final = fields.Monetary(currency_field="currency_id", string="Final Amount")

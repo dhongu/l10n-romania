@@ -82,9 +82,7 @@ def handle_common_subfields(transaction, subfields):
         transaction["name"] = ""
     for counterpart_field in ["23", "24", "25", "26", "27"]:
         if counterpart_field in subfields:
-            transaction["name"] += "/".join(
-                x for x in subfields[counterpart_field] if x
-            )
+            transaction["name"] += "/".join(x for x in subfields[counterpart_field] if x)
     # Get transaction reference subfield (might vary):
     if transaction.get("ref") in subfields:
         transaction["ref"] = "".join(subfields[transaction["ref"]])
@@ -124,9 +122,7 @@ class MT940Parser(MT940):
         if not re_61:
             raise ValueError("Cannot parse %s" % data)
         parsed_data = re_61.groupdict()
-        self.current_transaction["amount"] = str2amount(
-            parsed_data["sign"], parsed_data["amount"]
-        )
+        self.current_transaction["amount"] = str2amount(parsed_data["sign"], parsed_data["amount"])
         self.current_transaction["note"] = parsed_data["reference"]
 
     def handle_tag_86(self, data):

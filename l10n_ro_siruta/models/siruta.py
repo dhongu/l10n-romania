@@ -10,9 +10,7 @@ class ResCountryZone(models.Model):
     _description = "Country Zones"
 
     @api.model
-    def _name_search(
-        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
-    ):
+    def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
         args = args or []
         if operator == "ilike" and not (name or "").strip():
             domain = []
@@ -22,9 +20,7 @@ class ResCountryZone(models.Model):
                 ("name", operator, name),
                 ("country_id.code", operator, name),
             ]
-        rec = self._search(
-            expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid
-        )
+        rec = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
         return models.lazy_name_get(self.browse(rec).with_user(name_get_uid))
 
     name = fields.Char("Name", required=True, index=True)
@@ -38,17 +34,13 @@ class ResCountryState(models.Model):
     _inherit = "res.country.state"
 
     @api.model
-    def _name_search(
-        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
-    ):
+    def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
         args = args or []
         if operator == "ilike" and not (name or "").strip():
             domain = []
         else:
             domain = ["|", ("name", operator, name), ("zone_id.name", operator, name)]
-        rec = self._search(
-            expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid
-        )
+        rec = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
         return models.lazy_name_get(self.browse(rec).with_user(name_get_uid))
 
     @api.onchange("zone_id")
@@ -57,9 +49,7 @@ class ResCountryState(models.Model):
             self.country_id = self.zone_id.country_id.id
 
     zone_id = fields.Many2one("res.country.zone", string="Zone")
-    commune_ids = fields.One2many(
-        "res.country.commune", "state_id", string="Cities/Communes"
-    )
+    commune_ids = fields.One2many("res.country.commune", "state_id", string="Cities/Communes")
     city_ids = fields.One2many("res.city", "state_id", string="Cities")
     siruta = fields.Char("Siruta")
 
@@ -72,17 +62,13 @@ class ResCountryCommune(models.Model):
     _description = "Country Cities/Communes"
 
     @api.model
-    def _name_search(
-        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
-    ):
+    def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
         args = args or []
         if operator == "ilike" and not (name or "").strip():
             domain = []
         else:
             domain = ["|", ("name", operator, name), ("state_id.code", operator, name)]
-        rec = self._search(
-            expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid
-        )
+        rec = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
         return models.lazy_name_get(self.browse(rec).with_user(name_get_uid))
 
     @api.onchange("state_id")
@@ -112,9 +98,7 @@ class ResCountryCity(models.Model):
     zone_id = fields.Many2one("res.country.zone", string="Zone")
 
     @api.model
-    def _name_search(
-        self, name, args=None, operator="ilike", limit=100, name_get_uid=None
-    ):
+    def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
         args = args or []
         if operator == "ilike" and not (name or "").strip():
             domain = []
@@ -124,9 +108,7 @@ class ResCountryCity(models.Model):
                 ("name", operator, name),
                 ("commune_id.name", operator, name),
             ]
-        rec = self._search(
-            expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid
-        )
+        rec = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
 
         return models.lazy_name_get(self.browse(rec).with_user(name_get_uid))
 

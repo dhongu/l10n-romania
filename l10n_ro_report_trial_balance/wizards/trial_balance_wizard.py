@@ -11,9 +11,7 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
     _name = "l10n.ro.report.trial.balance.wizard"
     _description = "Romania Trial Balance Report Wizard"
 
-    company_id = fields.Many2one(
-        "res.company", default=lambda self: self.env.user.company_id, string="Company"
-    )
+    company_id = fields.Many2one("res.company", default=lambda self: self.env.user.company_id, string="Company")
     date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     date_from = fields.Date(required=True)
     date_to = fields.Date(required=True)
@@ -23,9 +21,7 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
         required=True,
         default="posted",
     )
-    hide_account_without_move = fields.Boolean(
-        string="Hide account without move", default=True
-    )
+    hide_account_without_move = fields.Boolean(string="Hide account without move", default=True)
     with_special_accounts = fields.Boolean(
         "With Special Accounts",
         help="Check this if you want to print classes 8 and 9 of accounts.",
@@ -35,21 +31,13 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
         string="Filter accounts",
     )
 
-    col_opening_balance = fields.Boolean(
-        "Balance Opening Year", default=True
-    )  # solduri initiale an
-    col_opening = fields.Boolean(
-        "Opening Year", default=False
-    )  # rulaje la inceput de an
-    col_initial_balance = fields.Boolean(
-        "Balance Initial period", default=False
-    )  # solduri initiale perioada
+    col_opening_balance = fields.Boolean("Balance Opening Year", default=True)  # solduri initiale an
+    col_opening = fields.Boolean("Opening Year", default=False)  # rulaje la inceput de an
+    col_initial_balance = fields.Boolean("Balance Initial period", default=False)  # solduri initiale perioada
     col_initial = fields.Boolean("Initial period", default=False)  # sume perecente
     col_period = fields.Boolean("Period", default=True)  # rulaje perioada
 
-    col_cumulative = fields.Boolean(
-        "Cumulative", default=True
-    )  # total rulaje (de la inceputul anului)
+    col_cumulative = fields.Boolean("Cumulative", default=True)  # total rulaje (de la inceputul anului)
 
     col_total = fields.Boolean("Total amount", default=True)  # sume totale
     col_balance = fields.Boolean("Balance", default=True)  # solduri finale
@@ -64,9 +52,7 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
 
     def button_export_html(self):
         self.ensure_one()
-        action = self.env.ref(
-            "l10n_ro_report_trial_balance.action_l10n_ro_report_trial_balance"
-        )
+        action = self.env.ref("l10n_ro_report_trial_balance.action_l10n_ro_report_trial_balance")
         vals = action.read()[0]
         context1 = vals.get("context", {})
         if isinstance(context1, str):

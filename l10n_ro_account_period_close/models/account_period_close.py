@@ -121,11 +121,7 @@ class AccountPeriodClosing(models.Model):
         account_res = []
         for account in accounts:
             res = {fn: 0.0 for fn in ["credit", "debit", "balance"]}
-            currency = (
-                account.currency_id
-                if account.currency_id
-                else account.company_id.currency_id
-            )
+            currency = account.currency_id if account.currency_id else account.company_id.currency_id
             res["id"] = account.id
             res["code"] = account.code
             res["name"] = account.name
@@ -138,8 +134,7 @@ class AccountPeriodClosing(models.Model):
             if display_account == "not_zero" and not currency.is_zero(res["balance"]):
                 account_res.append(res)
             if display_account == "movement" and (
-                not currency.is_zero(res["debit"])
-                or not currency.is_zero(res["credit"])
+                not currency.is_zero(res["debit"]) or not currency.is_zero(res["credit"])
             ):
                 account_res.append(res)
         return account_res
@@ -159,9 +154,7 @@ class AccountPeriodClosing(models.Model):
                     "date_to": date_to,
                 }
             )
-            account_res = self.with_context(ctx)._get_accounts(
-                closing.account_ids, "not_zero"
-            )
+            account_res = self.with_context(ctx)._get_accounts(closing.account_ids, "not_zero")
             move = self.env["account.move"].create(
                 {
                     "date": date_to,
@@ -206,9 +199,7 @@ class AccountPeriodClosing(models.Model):
             diff_line = {
                 "name": "Closing " + closing.name,
                 "move_id": move.id,
-                "account_id": closing.debit_account_id.id
-                if amount >= 0
-                else closing.credit_account_id.id,
+                "account_id": closing.debit_account_id.id if amount >= 0 else closing.credit_account_id.id,
                 "credit": -amount if amount <= 0.0 else 0.0,
                 "debit": amount if amount >= 0.0 else 0.0,
             }
@@ -221,9 +212,7 @@ class AccountPeriodClosing(models.Model):
                 debit = credit = new_amount = 0.0
                 ctx1 = dict(self._context)
                 ctx1.update({"date_from": False, "date_to": date_to})
-                accounts = account_obj.browse(
-                    [closing.debit_account_id.id, closing.credit_account_id.id]
-                )
+                accounts = account_obj.browse([closing.debit_account_id.id, closing.credit_account_id.id])
                 account_res = self.with_context(ctx1)._get_accounts(accounts, "all")
                 for acc in account_res:
                     if acc["id"] == closing.debit_account_id.id:
@@ -263,7 +252,5 @@ class AccountPeriodClosing(models.Model):
                 line_values += [diff_line]
 
             # se genereaza toate liniile
-            self.env["account.move.line"].with_context(
-                check_move_validity=False
-            ).create(line_values)
+            self.env["account.move.line"].with_context(check_move_validity=False).create(line_values)
             move.post()

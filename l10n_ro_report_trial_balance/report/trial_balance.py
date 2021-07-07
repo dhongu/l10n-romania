@@ -29,25 +29,15 @@ class RomaniaTrialBalanceReport(models.TransientModel):
     account_ids = fields.Many2many("account.account")
 
     # Data fields, used to browse report data
-    line_account_ids = fields.One2many(
-        "l10n_ro_report_trial_balance_account", inverse_name="report_id"
-    )
+    line_account_ids = fields.One2many("l10n_ro_report_trial_balance_account", inverse_name="report_id")
 
-    col_opening_balance = fields.Boolean(
-        "Balance Opening Year", default=True
-    )  # solduri initiale an
-    col_opening = fields.Boolean(
-        "Opening Year", default=False
-    )  # rulaje la inceput de an
-    col_initial_balance = fields.Boolean(
-        "Balance Initial period", default=False
-    )  # solduri initiale perioada
+    col_opening_balance = fields.Boolean("Balance Opening Year", default=True)  # solduri initiale an
+    col_opening = fields.Boolean("Opening Year", default=False)  # rulaje la inceput de an
+    col_initial_balance = fields.Boolean("Balance Initial period", default=False)  # solduri initiale perioada
     col_initial = fields.Boolean("Initial period", default=False)  # sume perecente
     col_period = fields.Boolean("Period", default=True)  # rulaje perioada
 
-    col_cumulative = fields.Boolean(
-        "Cumulative", default=True
-    )  # total rulaje (de la inceputul anului)
+    col_cumulative = fields.Boolean("Cumulative", default=True)  # total rulaje (de la inceputul anului)
 
     col_total = fields.Boolean("Total amount", default=True)  # sume totale
     col_balance = fields.Boolean("Balance", default=True)  # solduri finale
@@ -60,9 +50,7 @@ class RomaniaTrialBalanceAccountReport(models.TransientModel):
     _order = "path, code ASC, name ASC"
     _description = "Romania Trial Balance Report"
 
-    report_id = fields.Many2one(
-        "l10n_ro_report_trial_balance", ondelete="cascade", index=True
-    )
+    report_id = fields.Many2one("l10n_ro_report_trial_balance", ondelete="cascade", index=True)
 
     # Data fields, used to keep link with real object
     account_id = fields.Many2one("account.account", index=True, string="Account")
@@ -141,9 +129,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         if report_type == "xlsx":
             report_name = "l10n_ro_report_trial_balance_xlsx"
         else:
-            report_name = (
-                "l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_qweb"
-            )
+            report_name = "l10n_ro_report_trial_balance.l10n_ro_report_trial_balance_qweb"
         action = self.env["ir.actions.report"].search(
             [("report_name", "=", report_name), ("report_type", "=", report_type)],
             limit=1,
@@ -156,9 +142,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         context = dict(self.env.context)
         report = self.browse(context.get("active_id"))
         if report:
-            action = self.env.ref(
-                "l10n_ro_report_trial_balance.action_l10n_ro_report_trial_balance_control"
-            )
+            action = self.env.ref("l10n_ro_report_trial_balance.action_l10n_ro_report_trial_balance_control")
             html = action.render_qweb_html(report.ids)
             result["html"] = html[0]
 
@@ -226,16 +210,12 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         if self.account_ids:
             accounts = self.account_ids
         else:
-            accounts = self.env["account.account"].search(
-                [("company_id", "=", self.company_id.id)]
-            )
+            accounts = self.env["account.account"].search([("company_id", "=", self.company_id.id)])
 
         if not self.with_special_accounts:
             sp_acc_type = self.env.ref("account.data_account_off_sheet")
             if sp_acc_type:
-                accounts = accounts.filtered(
-                    lambda a: a.user_type_id.id != sp_acc_type.id
-                )
+                accounts = accounts.filtered(lambda a: a.user_type_id.id != sp_acc_type.id)
         query_inject_account = """
 
 
@@ -405,9 +385,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
     def _compute_account_group_values(self):
         if not self.account_ids:
             acc_res = self.line_account_ids
-            groups = self.env["account.group"].search(
-                []
-            )  # ('code_prefix', '!=', False)])
+            groups = self.env["account.group"].search([])  # ('code_prefix', '!=', False)])
 
             # if self.account_ids:
             #     all_accounts = self.account_ids
@@ -422,9 +400,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
 
             for group in groups:
 
-                accounts = acc_res.filtered(
-                    lambda a: a.account_id.id in group.compute_account_ids.ids
-                )
+                accounts = acc_res.filtered(lambda a: a.account_id.id in group.compute_account_ids.ids)
                 # if self.hide_account_without_move:
                 #     accounts = accounts.filtered(lambda a: a.debit_balance != 0 or a.credit_balance != 0)
                 if accounts:

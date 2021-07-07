@@ -13,10 +13,7 @@ class ActivityStatementWizard(models.TransientModel):
     _description = "Activity Statement Wizard"
 
     def _get_company(self):
-        return (
-            self.env["res.company"].browse(self.env.context.get("force_company"))
-            or self.env.user.company_id
-        )
+        return self.env["res.company"].browse(self.env.context.get("force_company")) or self.env.user.company_id
 
     @api.model
     def _get_date_start(self):
@@ -42,12 +39,8 @@ class ActivityStatementWizard(models.TransientModel):
     date_start = fields.Date(required=True, default=_get_date_start)
     date_end = fields.Date(required=True, default=fields.Date.context_today)
 
-    number_partner_ids = fields.Integer(
-        default=lambda self: len(self._context["active_ids"])
-    )
-    filter_partners_non_due = fields.Boolean(
-        string="Don't show partners with no due entries", default=True
-    )
+    number_partner_ids = fields.Integer(default=lambda self: len(self._context["active_ids"]))
+    filter_partners_non_due = fields.Boolean(string="Don't show partners with no due entries", default=True)
     filter_negative_balances = fields.Boolean("Exclude Negative Balances", default=True)
 
     col_credit_debit = fields.Boolean("Show colums Debit Credit")
@@ -75,9 +68,7 @@ class ActivityStatementWizard(models.TransientModel):
         """Export to PDF."""
         data = self._prepare_statement()
         report = self.env.ref("l10n_ro_account_report.action_print_activity_statement")
-        return report.with_context(from_transient_model=True).report_action(
-            self, data=data
-        )
+        return report.with_context(from_transient_model=True).report_action(self, data=data)
 
     def button_show(self):
         self.ensure_one()

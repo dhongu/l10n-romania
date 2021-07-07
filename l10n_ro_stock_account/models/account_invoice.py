@@ -26,18 +26,14 @@ class AccountMove(models.Model):
                 # will be changes with the first one available in the reception
                 # notice move lines
                 if invoice.is_reception_notice():
-                    lines_vals_list = super(
-                        AccountMove, invoice
-                    )._stock_account_prepare_anglo_saxon_in_lines_vals()
+                    lines_vals_list = super(AccountMove, invoice)._stock_account_prepare_anglo_saxon_in_lines_vals()
                     rec_account = invoice.get_reception_account()
                     if rec_account:
                         for line_vals in lines_vals_list:
                             if line_vals["account_id"] != account_id.id:
                                 line_vals["account_id"] = rec_account.id
 
-                invoice_lines = invoice.invoice_line_ids.filtered(
-                    lambda l: not l.display_type
-                )
+                invoice_lines = invoice.invoice_line_ids.filtered(lambda l: not l.display_type)
                 for line in invoice_lines:
                     add_diff = False
                     if line.product_id.cost_method != "standard":
@@ -57,9 +53,7 @@ class AccountMove(models.Model):
                             line.modify_stock_valuation(price_diff)
 
                 if not invoice.is_reception_notice():
-                    lines_vals_list = super(
-                        AccountMove, invoice
-                    )._stock_account_prepare_anglo_saxon_in_lines_vals()
+                    lines_vals_list = super(AccountMove, invoice)._stock_account_prepare_anglo_saxon_in_lines_vals()
         return lines_vals_list
 
     def _stock_account_prepare_anglo_saxon_out_lines_vals(self):
@@ -68,27 +62,20 @@ class AccountMove(models.Model):
         for move in self:
             if self.company_id.romanian_accounting:
                 invoices -= move
-        return super(
-            AccountMove, invoices
-        )._stock_account_prepare_anglo_saxon_out_lines_vals()
+        return super(AccountMove, invoices)._stock_account_prepare_anglo_saxon_out_lines_vals()
 
     def post(self):
         res = super(AccountMove, self).post()
         for move in self:
             for line in move.line_ids:
-                _logger.debug(
-                    "%s\t\t%s\t\t%s"
-                    % (line.debit, line.credit, line.account_id.display_name)
-                )
+                _logger.debug("{}\t\t{}\t\t{}".format(line.debit, line.credit, line.account_id.display_name))
             invoice_lines = move.invoice_line_ids.filtered(lambda l: not l.display_type)
             for line in invoice_lines:
                 valuation_stock_moves = line._get_valuation_stock_moves()
                 if valuation_stock_moves:
                     svls = valuation_stock_moves.mapped("stock_valuation_layer_ids")
                     svls = svls.filtered(lambda l: not l.invoice_line_id)
-                    svls.write(
-                        {"invoice_line_id": line.id, "invoice_id": line.move_id.id}
-                    )
+                    svls.write({"invoice_line_id": line.id, "invoice_id": line.move_id.id})
 
         return res
 
@@ -124,12 +111,8 @@ class AccountMove(models.Model):
         )
         if valuation_stock_moves:
             acc_moves = valuation_stock_moves.mapped("account_move_ids")
-            lines = self.env["account.move.line"].search(
-                [("move_id", "in", acc_moves.ids)]
-            )
-            lines_diff_acc = lines.mapped("account_id").filtered(
-                lambda a: a != acc_payable
-            )
+            lines = self.env["account.move.line"].search([("move_id", "in", acc_moves.ids)])
+            lines_diff_acc = lines.mapped("account_id").filtered(lambda a: a != acc_payable)
             if lines_diff_acc:
                 account = lines_diff_acc[0]
         return account
@@ -152,37 +135,26 @@ class AccountMoveLine(models.Model):
 
             valuation_stock_moves = self.env["stock.move"].search(domain)
             if self.move_id.type in ("in_refund", "out_invoice"):
-                valuation_stock_moves = valuation_stock_moves.filtered(
-                    lambda sm: sm._is_out()
-                )
+                valuation_stock_moves = valuation_stock_moves.filtered(lambda sm: sm._is_out())
             else:
-                valuation_stock_moves = valuation_stock_moves.filtered(
-                    lambda sm: sm._is_in()
-                )
+                valuation_stock_moves = valuation_stock_moves.filtered(lambda sm: sm._is_in())
 
         return valuation_stock_moves
 
     def _get_computed_account(self):
-        if (
-            self.product_id.type == "product"
-            and self.move_id.company_id.anglo_saxon_accounting
-        ):
+        if self.product_id.type == "product" and self.move_id.company_id.anglo_saxon_accounting:
             if self.move_id.is_purchase_document():
                 purchase = self.move_id.purchase_id
                 if purchase and self.product_id.purchase_method == "receive":
                     # Control bills based on received quantities
-                    if any(
-                        [p.notice or p._is_dropshipped() for p in purchase.picking_ids]
-                    ):
+                    if any([p.notice or p._is_dropshipped() for p in purchase.picking_ids]):
                         self = self.with_context(valued_type="invoice_in_notice")
             if self.move_id.is_sale_document():
                 sales = self.sale_line_ids
                 if sales and self.product_id.invoice_policy == "delivery":
                     # Control bills based on received quantities
                     sale = self.sale_line_ids[0].order_id
-                    if any(
-                        [p.notice and not p._is_dropshipped() for p in sale.picking_ids]
-                    ):
+                    if any([p.notice and not p._is_dropshipped() for p in sale.picking_ids]):
                         self = self.with_context(valued_type="invoice_out_notice")
         res = super(AccountMoveLine, self)._get_computed_account()
         # Take accounts from stock location in case the category allow changinc
@@ -194,9 +166,7 @@ class AccountMoveLine(models.Model):
         ):
             fiscal_position = self.move_id.fiscal_position_id
             if self.move_id.is_purchase_document():
-                stock_moves = self.purchase_line_id.move_ids.filtered(
-                    lambda sm: not sm.picking_id.notice
-                )
+                stock_moves = self.purchase_line_id.move_ids.filtered(lambda sm: not sm.picking_id.notice)
                 for stock_move in stock_moves.filtered(lambda m: m.state == "done"):
                     if stock_move.location_dest_id.property_stock_valuation_account_id:
                         location = stock_move.location_dest_id
@@ -204,9 +174,7 @@ class AccountMoveLine(models.Model):
             if self.move_id.is_sale_document():
                 sales = self.sale_line_ids.filtered(lambda s: s.move_ids)
                 for sale in sales:
-                    for stock_move in sale.move_ids.filtered(
-                        lambda m: not m.picking_id.notice and m.state == "done"
-                    ):
+                    for stock_move in sale.move_ids.filtered(lambda m: not m.picking_id.notice and m.state == "done"):
                         location = stock_move.location_id
                         res = location.property_account_income_location_id
             if fiscal_position:
@@ -228,9 +196,7 @@ class AccountMoveLine(models.Model):
         valuation_price_unit_total = 0
         valuation_total_qty = 0
         for val_stock_move in valuation_stock_moves:
-            svl = val_stock_move.mapped("stock_valuation_layer_ids").filtered(
-                lambda l: l.quantity
-            )
+            svl = val_stock_move.mapped("stock_valuation_layer_ids").filtered(lambda l: l.quantity)
             layers_qty = sum(svl.mapped("quantity"))
             layers_values = sum(svl.mapped("value"))
 

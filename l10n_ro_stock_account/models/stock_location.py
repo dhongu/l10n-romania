@@ -13,19 +13,15 @@ class StockLocation(models.Model):
         "account.account",
         company_dependent=True,
         string="Income Account",
-        domain="['&', ('deprecated', '=', False),"
-        "('company_id', '=', current_company_id)]",
-        help="This account will overwrite the income accounts from product "
-        "or category.",
+        domain="['&', ('deprecated', '=', False)," "('company_id', '=', current_company_id)]",
+        help="This account will overwrite the income accounts from product " "or category.",
     )
     property_account_expense_location_id = fields.Many2one(
         "account.account",
         company_dependent=True,
         string="Expense Account",
-        domain="['&', ('deprecated', '=', False),"
-        "('company_id', '=', current_company_id)]",
-        help="This account will overwrite the expense accounts from product "
-        "or category.",
+        domain="['&', ('deprecated', '=', False)," "('company_id', '=', current_company_id)]",
+        help="This account will overwrite the expense accounts from product " "or category.",
     )
 
     # se va folosi   pentru a evalua diferit un produs care se
@@ -35,6 +31,5 @@ class StockLocation(models.Model):
         "account.account",
         string="Stock Valuation Account",
         company_dependent=True,
-        domain="[('company_id', '=', current_company_id),"
-        "('deprecated', '=', False)]",
+        domain="[('company_id', '=', current_company_id)," "('deprecated', '=', False)]",
     )

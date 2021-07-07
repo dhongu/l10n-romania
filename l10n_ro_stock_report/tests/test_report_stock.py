@@ -56,9 +56,7 @@ class TestStockReport(TransactionCase):
             "property_stock_journal": stock_journal.id,
         }
 
-        self.category = self.env["product.category"].search(
-            [("name", "=", "TEST Marfa")]
-        )
+        self.category = self.env["product.category"].search([("name", "=", "TEST Marfa")])
         if not self.category:
             self.category = self.env["product.category"].create(category_value)
         else:
@@ -93,9 +91,7 @@ class TestStockReport(TransactionCase):
         self.location = picking_type_in.default_location_dest_id
 
         date_range = self.env["date.range"]
-        self.type = self.env["date.range.type"].create(
-            {"name": "Month", "company_id": False, "allow_overlap": False}
-        )
+        self.type = self.env["date.range.type"].create({"name": "Month", "company_id": False, "allow_overlap": False})
         self.dt = date_range.create(
             {
                 "name": "FS2016",
@@ -147,7 +143,5 @@ class TestStockReport(TransactionCase):
 
         wizard = wizard.save()
         wizard.button_show_sheet_pdf()
-        line = self.env["stock.storage.sheet.line"].search(
-            [("report_id", "=", wizard.id)], limit=1
-        )
+        line = self.env["stock.storage.sheet.line"].search([("report_id", "=", wizard.id)], limit=1)
         self.assertTrue(line)

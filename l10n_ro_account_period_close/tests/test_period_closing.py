@@ -52,13 +52,9 @@ class TestCurrencyReevaluation(TransactionCase):
             limit=1,
         )
 
-        default_account_tax_sale = company.account_sale_tax_id.mapped(
-            "invoice_repartition_line_ids.account_id"
-        )
+        default_account_tax_sale = company.account_sale_tax_id.mapped("invoice_repartition_line_ids.account_id")
 
-        default_account_tax_purchase = company.account_purchase_tax_id.mapped(
-            "invoice_repartition_line_ids.account_id"
-        )
+        default_account_tax_purchase = company.account_purchase_tax_id.mapped("invoice_repartition_line_ids.account_id")
 
         self.test_move = self.env["account.move"].create(
             {
@@ -193,9 +189,7 @@ class TestCurrencyReevaluation(TransactionCase):
         self.exp_closing._onchange_type()
         self.inc_closing._onchange_type()
         date_range = self.env["date.range"]
-        self.type = self.env["date.range.type"].create(
-            {"name": "Month", "company_id": False, "allow_overlap": False}
-        )
+        self.type = self.env["date.range.type"].create({"name": "Month", "company_id": False, "allow_overlap": False})
         dt = date_range.create(
             {
                 "name": "FS2016",
@@ -213,9 +207,7 @@ class TestCurrencyReevaluation(TransactionCase):
             }
         )
         wizard.onchange_date_range_id()
-        self.assertEqual(
-            wizard.date_from.strftime("%Y-%m-%d"), time.strftime("%Y-%m-01")
-        )
+        self.assertEqual(wizard.date_from.strftime("%Y-%m-%d"), time.strftime("%Y-%m-01"))
         self.assertEqual(wizard.date_to.strftime("%Y-%m-%d"), time.strftime("%Y-%m-28"))
         wizard.do_close()
         # self.env.cr.commit()
@@ -226,10 +218,6 @@ class TestCurrencyReevaluation(TransactionCase):
         date_to = today + relativedelta(day=1, days=-1)
         wizard = self.wiz_close_model.create({"closing_id": self.vat_closing.id})
         self.assertEqual(wizard.company_id.id, self.env.ref("base.main_company").id)
-        self.assertEqual(
-            wizard.date_from.strftime("%Y-%m-%d"), fields.Date.to_string(date_from)
-        )
-        self.assertEqual(
-            wizard.date_to.strftime("%Y-%m-%d"), fields.Date.to_string(date_to)
-        )
+        self.assertEqual(wizard.date_from.strftime("%Y-%m-%d"), fields.Date.to_string(date_from))
+        self.assertEqual(wizard.date_to.strftime("%Y-%m-%d"), fields.Date.to_string(date_to))
         # self.env.cr.commit()

@@ -55,9 +55,7 @@ class SalePurchaseJournalReport(models.TransientModel):
         data = {"wizard_id": self.id}
         data["docids"] = invoices.ids
 
-        report = self.env.ref(
-            "l10n_ro_account_report.action_report_sale_purchase_journal"
-        )
+        report = self.env.ref("l10n_ro_account_report.action_report_sale_purchase_journal")
         res = report.report_action(invoices, data=data)
         res["close_on_report_download"] = True
         return res

@@ -31,9 +31,7 @@ class TestStockPurchaseReturn(TestStockCommon):
             )
         )
         return_wiz = stock_return_picking_form.save()
-        return_wiz.product_return_moves.write(
-            {"quantity": 2.0, "to_refund": True}
-        )  # Return only 2
+        return_wiz.product_return_moves.write({"quantity": 2.0, "to_refund": True})  # Return only 2
         res = return_wiz.create_returns()
         return_pick = self.env["stock.picking"].browse(res["res_id"])
 

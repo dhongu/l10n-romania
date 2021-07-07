@@ -26,44 +26,28 @@ class TestStockCommon(SavepointCase):
         cls.account_valuation = get_account("371000")
         cls.account_valuation_mp = get_account("301000")
 
-        cls.uneligible_tax_account_id = (
-            cls.env.user.company_id.tax_cash_basis_journal_id.default_debit_account_id
-        )
+        cls.uneligible_tax_account_id = cls.env.user.company_id.tax_cash_basis_journal_id.default_debit_account_id
         if not cls.uneligible_tax_account_id:
             cls.uneligible_tax_account_id = get_account("442810")
 
-        cls.env.user.company_id.tax_cash_basis_journal_id.default_debit_account_id = (
-            cls.uneligible_tax_account_id
-        )
+        cls.env.user.company_id.tax_cash_basis_journal_id.default_debit_account_id = cls.uneligible_tax_account_id
 
-        cls.stock_picking_payable_account_id = (
-            cls.env.user.company_id.property_stock_picking_payable_account_id
-        )
+        cls.stock_picking_payable_account_id = cls.env.user.company_id.property_stock_picking_payable_account_id
         if not cls.stock_picking_payable_account_id:
             cls.stock_picking_payable_account_id = get_account("408000")
 
-        cls.env.user.company_id.property_stock_picking_payable_account_id = (
-            cls.stock_picking_payable_account_id
-        )
+        cls.env.user.company_id.property_stock_picking_payable_account_id = cls.stock_picking_payable_account_id
 
-        cls.stock_picking_receivable_account_id = (
-            cls.env.user.company_id.property_stock_picking_receivable_account_id
-        )
+        cls.stock_picking_receivable_account_id = cls.env.user.company_id.property_stock_picking_receivable_account_id
         if not cls.stock_picking_receivable_account_id:
             cls.stock_picking_receivable_account_id = get_account("418000")
 
-        cls.env.user.company_id.property_stock_picking_receivable_account_id = (
-            cls.stock_picking_receivable_account_id
-        )
+        cls.env.user.company_id.property_stock_picking_receivable_account_id = cls.stock_picking_receivable_account_id
 
-        cls.stock_usage_giving_account_id = (
-            cls.env.user.company_id.property_stock_usage_giving_account_id
-        )
+        cls.stock_usage_giving_account_id = cls.env.user.company_id.property_stock_usage_giving_account_id
         if not cls.stock_usage_giving_account_id:
             cls.stock_usage_giving_account_id = get_account("803500")
-            cls.env.user.company_id.property_stock_usage_giving_account_id = (
-                cls.stock_usage_giving_account_id
-            )
+            cls.env.user.company_id.property_stock_usage_giving_account_id = cls.stock_usage_giving_account_id
 
     @classmethod
     def setUpClass(cls):
@@ -100,9 +84,7 @@ class TestStockCommon(SavepointCase):
             "stock_account_change": True,
         }
 
-        cls.category = cls.env["product.category"].search(
-            [("name", "=", "TEST Marfa")], limit=1
-        )
+        cls.category = cls.env["product.category"].search([("name", "=", "TEST Marfa")], limit=1)
         if not cls.category:
             cls.category = cls.env["product.category"].create(category_value)
         else:
@@ -157,15 +139,11 @@ class TestStockCommon(SavepointCase):
             }
         )
 
-        cls.vendor = cls.env["res.partner"].search(
-            [("name", "=", "TEST Vendor")], limit=1
-        )
+        cls.vendor = cls.env["res.partner"].search([("name", "=", "TEST Vendor")], limit=1)
         if not cls.vendor:
             cls.vendor = cls.env["res.partner"].create({"name": "TEST Vendor"})
 
-        cls.client = cls.env["res.partner"].search(
-            [("name", "=", "TEST Client")], limit=1
-        )
+        cls.client = cls.env["res.partner"].search([("name", "=", "TEST Client")], limit=1)
         if not cls.client:
             cls.client = cls.env["res.partner"].create({"name": "TEST Client"})
 
@@ -210,9 +188,7 @@ class TestStockCommon(SavepointCase):
         picking_type_in = cls.env.ref("stock.picking_type_in")
         location = picking_type_in.default_location_dest_id
 
-        cls.location_warehouse = location.copy(
-            {"merchandise_type": "warehouse", "name": "TEST warehouse"}
-        )
+        cls.location_warehouse = location.copy({"merchandise_type": "warehouse", "name": "TEST warehouse"})
         cls.picking_type_in_warehouse = picking_type_in.copy(
             {
                 "default_location_dest_id": cls.location_warehouse.id,
@@ -361,9 +337,7 @@ class TestStockCommon(SavepointCase):
         val_p1 = round(val_p1, 2)
         val_p2 = round(val_p2, 2)
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
-        valuations = self.env["stock.valuation.layer"].read_group(
-            domain, ["value:sum", "quantity:sum"], ["product_id"]
-        )
+        valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
 
         for valuation in valuations:
             val = round(valuation["value"], 2)
