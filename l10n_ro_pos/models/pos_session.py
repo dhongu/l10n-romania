@@ -109,10 +109,14 @@ class PosSession(models.Model):
             # combine_bank_receivable_lines[statement] = MoveLine.create(combine_bank_receivable_vals[statement])
 
         for payment in split_receivables_bank:
+            if not payment.payment_method_id.bank_journal_id:
+                continue
             statement = statements_by_journal_id[payment.payment_method_id.bank_journal_id.id]
             statement.write({"balance_end_real": statement.balance_end})
 
         for payment_method in combine_receivables_bank:
+            if not payment_method.bank_journal_id:
+                continue
             statement = statements_by_journal_id[payment_method.bank_journal_id.id]
             statement.write({"balance_end_real": statement.balance_end})
 
