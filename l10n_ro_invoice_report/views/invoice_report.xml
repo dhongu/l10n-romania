@@ -203,7 +203,7 @@
                             <th
                                 class="text-right"
                                 t-if="with_discount(o) and with_discount_distinct"
-                                groups="sale.group_discount_per_so_line"
+                                groups="product.group_discount_per_so_line"
                             >Discount (%)
                             </th>
                             <th class="text-right">Amount</th>
@@ -256,7 +256,7 @@
                                 <td
                                     class="text-right"
                                     t-if="with_discount(o) and with_discount_distinct"
-                                    groups="sale.group_discount_per_so_line"
+                                    groups="product.group_discount_per_so_line"
                                 >
                                     <span t-field="l.discount" />
                                 </td>
