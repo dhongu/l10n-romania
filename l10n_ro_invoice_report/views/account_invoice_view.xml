@@ -3,15 +3,13 @@
     <data>
         <record id="l10n_ro_invoice_form_view" model="ir.ui.view">
             <field name="name">l10n_ro.account.invoice.form</field>
-            <field name="model">account.invoice</field>
+            <field name="model">account.move</field>
             <field name="type">form</field>
-            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="inherit_id" ref="account.view_move_form" />
             <field name="arch" type="xml">
-                <field name="name" position="after">
-                    <!--
-                      <field name="delegate_id"  />
-                      <field name="mean_transp" colspan="2" />
-                     -->
+                <field name="currency_id" position="after">
+                    <field name="delegate_id" />
+                    <field name="mean_transp" />
                 </field>
             </field>
         </record>
