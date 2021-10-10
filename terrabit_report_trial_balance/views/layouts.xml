@@ -28,7 +28,7 @@
         </div>
         <div class="article">
             <link href="/l10n_ro_report_trial_balance/static/src/css/report.css" rel="stylesheet" />
-            <t t-raw="0" />
+            <t t-out="0" />
         </div>
         <div class="footer o_background_footer">
             <div class="col-6 custom_footer">

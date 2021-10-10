@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Invoicing",
-    "version": "14.0.2.0.0",
+    "version": "15.0.2.0.0",
     "category": "Localization",
     "summary": "Romania - Stock Invoicing",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
