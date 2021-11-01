@@ -21,6 +21,7 @@ class ResPartner(models.Model):
                 vat_number = vat_number.replace("ro", "")
             if vat_number.isdigit():
                 try:
+                    vals['vat'] =  vals["name"]
                     result = self._get_Anaf(vat_number)
                     if result:
                         res = self._Anaf_to_Odoo(result)
@@ -32,4 +33,6 @@ class ResPartner(models.Model):
         return partner
 
     def button_get_partner_data(self):
+        if self.name and not self.vat:
+            self.vat = self.name
         self.ro_vat_change()
