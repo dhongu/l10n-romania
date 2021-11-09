@@ -14,8 +14,8 @@ class AccountAccount(models.Model):
         accounts = self.env["account.account"]
         for account in self:
             if (
-                account != self.company_id.property_stock_picking_payable_account_id
-                and account != self.company_id.property_stock_picking_receivable_account_id
+                account != account.company_id.property_stock_picking_payable_account_id
+                and account != account.company_id.property_stock_picking_receivable_account_id
             ):
                 accounts |= account
 
