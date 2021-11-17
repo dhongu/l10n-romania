@@ -21,13 +21,16 @@ class ResPartner(models.Model):
                 vat_number = vat_number.replace("ro", "")
             if vat_number.isdigit():
                 try:
-                    vals['vat'] =  vals["name"]
+                    vals['vat'] = vals["name"]
                     result = self._get_Anaf(vat_number)
                     if result:
                         res = self._Anaf_to_Odoo(result)
                         vals.update(res)
                 except Exception:
                     _logger.info("ANAF Webservice not working.")
+        if vals.get('state_id') and  not isinstance(vals['state_id'],int):
+            vals['state_id'] = vals['state_id'].id
+
 
         partner = super(ResPartner, self).create(vals)
         return partner
