@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import re
+
 from odoo.addons.account_bank_statement_import_mt940_base.mt940 import MT940, str2amount
 
 
@@ -102,6 +103,22 @@ class MT940Parser(MT940):
         self.mt940_type = "BRD"
         self.header_lines = 1
         self.header_regex = "^:20:"  # Start of relevant data
+
+    def pre_process_data(self, data):
+        matches = []
+        if "\r\n" == data[:2]:
+            data = data[2:]
+        self.is_mt940(line=data)
+        data = data.replace("-}", "}").replace("}{", "}\r\n{").replace("\r\n", "\n")
+        if data.startswith(":20:"):
+            for statement in data.split(":20:"):
+                if statement:
+                    match = "{4:\n:20:" + statement + "}"
+                    matches.append(match)
+        else:
+            tag_re = re.compile(r"(\{4:[^{}]+\})", re.MULTILINE)
+            matches = tag_re.findall(data)
+        return matches
 
     def handle_tag_25(self, data):
         """Local bank account information."""

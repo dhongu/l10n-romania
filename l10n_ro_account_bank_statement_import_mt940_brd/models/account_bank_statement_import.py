@@ -2,7 +2,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import logging
+
 from odoo import models
+
 from .mt940 import MT940Parser as Parser
 
 _logger = logging.getLogger(__name__)
