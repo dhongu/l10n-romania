@@ -5,7 +5,7 @@
 {
     "name": "Romania - Picking Reports",
     "license": "AGPL-3",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Generic Modules",
@@ -22,5 +22,6 @@
         "views/l10n_ro_stock_picking_report.xml",
         "views/report_picking.xml",
         "views/stock_view.xml",
+        "views/res_config_view.xml",
     ],
 }
