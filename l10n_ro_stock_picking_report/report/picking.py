@@ -163,11 +163,9 @@ class ReportPickingReception(models.AbstractModel):
             value = move.value
             res["price"] = abs(move.price_unit)
 
-            # res['amount'] = currency.round(value)
-            # if move_line.product_uom_qty != 0:
-            #     res['price'] = currency.round(value) / move_line.product_uom_qty
-            # else:
-            #     res['price'] = 0.0
+            # obtinere valoare pentru transferuri interne
+            if not res["price"] and move.picking_id.picking_type_code == "internal":
+                res["price"] = move._get_price_unit()
 
             taxes_ids = move.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move.company_id)
             taxes = taxes_ids.compute_all(
