@@ -38,3 +38,6 @@ class ResPartner(models.Model):
         if self.name and not self.vat:
             self.vat = self.name
         self.ro_vat_change()
+        self.onchange_vat_subjected()  # fortare compltare ro
+
+
