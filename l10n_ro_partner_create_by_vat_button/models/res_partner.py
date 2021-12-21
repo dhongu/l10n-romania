@@ -39,5 +39,3 @@ class ResPartner(models.Model):
             self.vat = self.name
         self.ro_vat_change()
         self.onchange_vat_subjected()  # fortare compltare ro
-
-
