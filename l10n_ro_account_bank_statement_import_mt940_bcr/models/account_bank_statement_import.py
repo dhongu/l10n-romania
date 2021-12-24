@@ -21,8 +21,22 @@ class AccountBankStatementImport(models.TransientModel):
 
         try:
             _logger.debug("Try parsing with MT940 IBAN BCR.")
-            return parser.parse(data_file)
+            data = parser.parse(data_file)
+            return self._post_parse_file(data)
         except ValueError:
             # Returning super will call next candidate:
             _logger.debug("Statement file was not a MT940 IBAN BCR file.", exc_info=True)
             return super(AccountBankStatementImport, self)._parse_file(data_file)
+
+    def _post_parse_file(self, data):
+        currency, account_num, all_statements = data
+        for statements in all_statements:
+            for transaction in statements["transactions"]:
+                vat = transaction.pop("vat", False)
+                if vat:
+                    domain = [("vat", "like", vat), ("is_company", "=", True)]
+                    partner = self.env["res.partner"].search(domain, limit=1)
+                    if partner:
+                        transaction["partner_name"] = partner.name
+                        transaction["partner_id"] = partner.id
+        return data

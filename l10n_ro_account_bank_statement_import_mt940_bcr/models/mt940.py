@@ -61,11 +61,15 @@ class MT940Parser(MT940):
     regec_p = r".*Platitor(?P<platitor>.*)(?P<iban_p>\w{24})"
     regec_b = r".*Beneficiar(?P<beneficiar>.*)(?P<iban_b>\w{24})"
     regec_d = r".*Detalii(?P<detalii>.*)"
+    regec_cfp = r".*CODFISC (?P<codfis_p>\w+)"
+    regec_cfb = r".*CODFISC (?P<codfis_b>\w+)"
 
-    tag_86_regex_v1 = re.compile(regec_ref + regec_p + regec_b + regec_d)
-    tag_86_regex_v2 = re.compile(regec_ref + regec_b + regec_p + regec_d)
-    tag_86_regex_v3 = re.compile(regec_ref + regec_b + regec_p)
-    tag_86_regex_v4 = re.compile(regec_ref + regec_b + regec_p)
+    tag_86_regex_v1 = re.compile(regec_ref + regec_p + regec_cfp + regec_b + regec_cfb + regec_d)
+    tag_86_regex_v2 = re.compile(regec_ref + regec_b + regec_cfb + regec_p + regec_cfp + regec_d)
+    tag_86_regex_v3 = re.compile(regec_ref + regec_p + regec_b + regec_d)
+    tag_86_regex_v4 = re.compile(regec_ref + regec_b + regec_p + regec_d)
+    tag_86_regex_v5 = re.compile(regec_ref + regec_b + regec_p)
+    tag_86_regex_v6 = re.compile(regec_ref + regec_b + regec_p)
 
     def __init__(self):
         """Initialize parser - override at least header_regex."""
@@ -124,16 +128,22 @@ class MT940Parser(MT940):
                 re_86 = self.tag_86_regex_v3.match(data)
             if not re_86:
                 re_86 = self.tag_86_regex_v4.match(data)
+            if not re_86:
+                re_86 = self.tag_86_regex_v5.match(data)
+            if not re_86:
+                re_86 = self.tag_86_regex_v6.match(data)
 
             if re_86:
                 parsed_data = re_86.groupdict()
                 if transaction["amount"] > 0:
                     transaction["partner_name"] = parsed_data.get("platitor", "").strip()
                     transaction["account_number"] = parsed_data.get("iban_p")
+                    transaction["vat"] = parsed_data.get("codfis_p")
+
                 else:
                     transaction["partner_name"] = parsed_data.get("beneficiar", "").strip()
                     transaction["account_number"] = parsed_data.get("iban_b")
-
+                    transaction["vat"] = parsed_data.get("codfis_b")
                 if parsed_data.get("detalii"):
                     transaction["payment_ref"] = parsed_data.get("detalii")
 
