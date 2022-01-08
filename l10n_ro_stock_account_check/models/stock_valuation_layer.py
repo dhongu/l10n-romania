@@ -11,7 +11,22 @@ class StockValuationLayer(models.Model):
     rounding_adjustment = fields.Char("Rounding Adjustment")
 
     def correction_valuation(self):
+        val_types = self.env["stock.move"]._get_valued_types()
+        val_types = [
+            val
+            for val in val_types
+            if val not in ["in", "out", "dropshipped", "dropshipped_returned"]
+        ]
+
         for svl in self:
+            if not svl.stock_move_id:
+                continue
+
+            for valued_type in val_types:
+                if getattr(svl.stock_move_id, "_is_%s" % valued_type)():
+                    svl.valued_type = valued_type
+                    continue
+
             svl.account_move_id.write({"state": "draft"})
             name = svl.account_move_id.name
             svl.account_move_id.with_context(force_delete=True).unlink()
