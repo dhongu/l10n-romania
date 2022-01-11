@@ -141,11 +141,12 @@ class StockAccountingCheck(models.TransientModel):
                 if not purchase.activity_ids:
                     note = _("Receptie fara factura")
                     summary = _("Factura lipsa")
+
                     purchase.activity_schedule(
                         "mail.mail_activity_data_warning",
                         note=note,
                         summary=summary,
-                        user_id=purchase.user_id.id,
+                        user_id=purchase.user_id.id or purchase.create_uid.id,
                     )
         return ok
 
@@ -180,11 +181,12 @@ class StockAccountingCheck(models.TransientModel):
                 if not sale_order.activity_ids:
                     note = _("Livrare fara factura")
                     summary = _("Factura lipsa")
+
                     sale_order.activity_schedule(
                         "mail.mail_activity_data_warning",
                         note=note,
                         summary=summary,
-                        user_id=sale_order.user_id.id,
+                        user_id=sale_order.user_id.id or sale_order.create_uid.id,
                     )
         return ok
 
