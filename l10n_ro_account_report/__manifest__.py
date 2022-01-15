@@ -2,7 +2,7 @@
 {
     "name": "Romania - Account Reports",
     "version": "14.0.1.0.0",
-    "author": "Dorin Hongu",
+    "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Romania Adaptation",
     "depends": ["account", "date_range"],
@@ -10,4 +10,5 @@
         "views/account_report.xml",
         "views/report_bank_statement.xml",
     ],
+    "license": "AGPL-3",
 }

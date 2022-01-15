@@ -10,11 +10,14 @@ Romania - Account Reports
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
+    :alt: License: AGPL-3
+.. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/14.0/l10n_ro_account_report
     :alt: dhongu/l10n-romania
 
-|badge1| |badge2| 
+|badge1| |badge2| |badge3| 
 
 Functionalitati
  - registrul de casa
@@ -40,7 +43,7 @@ Credits
 Authors
 ~~~~~~~
 
-* Dorin Hongu
+* Terrabit
 
 Contributors
 ~~~~~~~~~~~~
