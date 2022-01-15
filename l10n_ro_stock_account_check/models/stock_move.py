@@ -16,6 +16,3 @@ class StockMove(models.Model):
                 svl.account_move_id.with_context(force_delete=True).unlink()
                 stock_move = svl.stock_move_id.with_context(force_period_date=move.date)
                 stock_move._account_entry_move(svl.quantity, svl.description, svl.id, svl.value)
-
-
-

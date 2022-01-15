@@ -12,11 +12,7 @@ class StockValuationLayer(models.Model):
 
     def correction_valuation(self):
         val_types = self.env["stock.move"]._get_valued_types()
-        val_types = [
-            val
-            for val in val_types
-            if val not in ["in", "out", "dropshipped", "dropshipped_returned"]
-        ]
+        val_types = [val for val in val_types if val not in ["in", "out", "dropshipped", "dropshipped_returned"]]
 
         for svl in self:
             if not svl.stock_move_id:

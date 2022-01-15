@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <report
+        id="action_report_account_statement"
+        model="account.bank.statement"
+        string="Cash / Bank Statement"
+        name="l10n_ro_account_report.report_statement"
+        file="l10n_ro_account_report.report_statement"
+        report_type="qweb-pdf"
+    />
+
+</odoo>
