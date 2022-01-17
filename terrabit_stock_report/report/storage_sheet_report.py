@@ -72,7 +72,7 @@ class StorageSheetReport(models.TransientModel):
         to_date = self.date_from
 
         query = """
-    SELECT svl.product_id,  sum(value), sum(svl.quantity), array_agg(svl.id)
+    SELECT svl.product_id,  sum(svl.value), sum(svl.quantity), array_agg(svl.id)
 
         from stock_move as sm
         left join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
