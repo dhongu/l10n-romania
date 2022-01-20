@@ -1,4 +1,4 @@
-# ©  2008-20209 Deltatech
+# ©  2008-2022 Deltatech
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
@@ -96,6 +96,16 @@ class ReportPickingReception(models.AbstractModel):
             "margin": 0.0,
         }
 
+        value = 0
+        quantity = 0
+        for valuation in move.stock_valuation_layer_ids:
+            if valuation.valued_type == "internal_transfer" and not valuation.account_move_id:
+                continue
+            value += valuation.value
+            quantity += valuation.quantity
+        if move.stock_valuation_layer_ids:
+            res["price"] = value / (quantity or 1)
+
         currency = move.company_id.currency_id
 
         if move.purchase_line_id:
@@ -106,14 +116,6 @@ class ReportPickingReception(models.AbstractModel):
             #  de verificat daca pretul din miscare este actualizat inainte de
             #  confirmarea transferului pentru a se actualiza cursul valutar !!
             res["price"] = move.price_unit  # pretul caculat la genereare miscarii
-
-            value = 0
-            quantity = 0
-            for valuation in move.stock_valuation_layer_ids:
-                value += valuation.value
-                quantity += valuation.quantity
-            if move.stock_valuation_layer_ids:
-                res["price"] = value / (quantity or 1)
 
             if not res["price"]:
                 res["price"] = move.price_unit
@@ -160,8 +162,8 @@ class ReportPickingReception(models.AbstractModel):
         else:
             # receptie fara comanda de aprovizionare
 
-            value = move.value
-            res["price"] = abs(move.price_unit)
+            if not res["price"]:
+                res["price"] = abs(move.price_unit)
 
             # obtinere valoare pentru transferuri interne
             if not res["price"] and move.picking_id.picking_type_code == "internal":
@@ -236,7 +238,7 @@ class ReportDelivery(models.AbstractModel):
 
 class ReportDeliveryPrice(models.AbstractModel):
     _name = "report.l10n_ro_stock_picking_report.report_delivery_price"
-    _description = "Report delivery in store"
+    _description = "Report delivery from store"
     _inherit = "report.abstract_report.delivery_report"
     _template = "l10n_ro_stock_picking_report.report_delivery_price"
     # _wrapped_report_class = picking_delivery
@@ -253,7 +255,7 @@ class ReportConsumeVoucher(models.AbstractModel):
 class ReportInternalTransfer(models.AbstractModel):
     _name = "report.l10n_ro_stock_picking_report.report_internal_transfer"
     _description = "Report transfer"
-    _inherit = "report.abstract_report.delivery_report"
+    _inherit = "report.abstract_report.reception_report"
     _template = "l10n_ro_stock_picking_report.report_internal_transfer"
     # _wrapped_report_class = picking_delivery
 
