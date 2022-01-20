@@ -2,11 +2,14 @@
 # See README.rst file on addons root folder for license details
 {
     "name": "Romania - City",
-    "version": "1.0",
-    "author": "Terrabit",
+    "summary": "Romania - City",
+    "license": "AGPL-3",
+    "version": "12.0.2.0.0",
+    "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "http://www.terrabit.ro",
-    "category": "Tools",
+    "category": "Localization",
     "depends": ["base_address_city"],
-    "data": ["data/res.city.csv", "views/res_city_view.xml"],
+    "data": ["data/res_city.xml", "views/res_city_view.xml"],
     "installable": True,
+    "maintainers": ["dhongu"],
 }
