@@ -5,7 +5,7 @@
 {
     "name": "Romania - Terrabit - Picking Reports",
     "license": "AGPL-3",
-    "version": "14.0.1.0.2",
+    "version": "14.0.1.0.3",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Generic Modules",
@@ -24,7 +24,7 @@
         "views/report_picking.xml",
         "views/stock_view.xml",
         "views/res_config_view.xml",
-        "report/stock_picking_cumulative_view.xml",
-        "security/ir.model.access.csv",
+        # "report/stock_picking_cumulative_view.xml",
+        # "security/ir.model.access.csv",
     ],
 }
