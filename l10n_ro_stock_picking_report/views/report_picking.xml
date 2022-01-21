@@ -302,7 +302,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <t t-call="l10n_ro_config.report_address_company" />
+                            <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <h2 id="title">
                                 <span t-if="o.state == 'drat'">Draft</span>
                                 <span t-if="o.state == 'cancel'">Cancelled</span>
@@ -429,7 +429,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
                         <div class="page">
-                            <t t-call="l10n_ro_config.report_address_company" />
+                            <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <t t-call="l10n_ro_stock_picking_report.report_title" />
 
                             <div id="informations" class="row mt32 mb32">
