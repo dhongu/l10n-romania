@@ -115,7 +115,7 @@ class StorageSheetReport(models.TransientModel):
             self.env["stock.storage.sheet.report.line"].create(values)
 
         query = """
-    SELECT svl.product_id,  sum(value), sum(svl.quantity),
+    SELECT svl.product_id,  sum(svl.value), sum(svl.quantity),
     date_trunc('day',date), array_agg(svl.id), sm.name
 
         from stock_move as sm
