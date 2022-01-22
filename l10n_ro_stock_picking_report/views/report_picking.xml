@@ -20,7 +20,9 @@
                     </div>
                     <div>
                         <t t-set="partner_id" t-value="res_company.partner_id" />
-                        <t t-call="l10n_ro_config.banks" />
+                        <t t-if="res_company.banks_on_pickings">
+                            <t t-call="l10n_ro_config.banks" />
+                        </t>
                     </div>
                     <div>
                         <div t-if="res_company.partner_id.vat">
@@ -56,7 +58,7 @@
                         <t t-if="o.partner_id.commercial_partner_id != o.partner_id">
                             <strong>Delivery</strong>
                         </t>
-                        <strong>Address:</strong>
+                        <strong t-if="o.partner_id">Address:</strong>
                         <address
                             t-field="o.partner_id"
                             t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'
@@ -64,7 +66,9 @@
                     </div>
                     <div>
                         <t t-set="partner_id" t-value="o.partner_id" />
-                        <t t-call="l10n_ro_config.banks" />
+                        <t t-if="res_company.banks_on_pickings">
+                            <t t-call="l10n_ro_config.banks" />
+                        </t>
                     </div>
                     <div>
                         <div t-if="o.partner_id.vat">
