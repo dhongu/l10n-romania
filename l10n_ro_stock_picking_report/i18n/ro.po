@@ -24,7 +24,7 @@ msgstr "<span>Bon de consum:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_internal_transfer
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_title
 msgid "<span>Date:</span>"
 msgstr "<span>Data:</span>"
 
@@ -35,7 +35,7 @@ msgstr "<span>Delegat:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_title
 msgid "<span>Delivery:</span>"
 msgstr "<span>Aviz:</span>"
 
@@ -56,16 +56,13 @@ msgid "<span>Name</span>"
 msgstr "<span>Nume</span>"
 
 #. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_sale_price
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_title
 msgid "<span>Reception:</span>"
 msgstr "<span>NIR:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_title
 msgid "<span>Reverse</span>"
 msgstr "<span>Storno</span>"
 
@@ -97,8 +94,8 @@ msgstr "<span>conform aviz expediție nr.</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
-msgid "<span>under the invoice no.</span>"
-msgstr "<span>conform facturii nr.</span>"
+msgid "<span>under the document no.</span>"
+msgstr "<span>conform documentului nr.</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
@@ -154,6 +151,7 @@ msgstr "<strong>Livrare</strong>"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_info
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
 msgid "<strong>From location</strong>"
 msgstr "<strong>Sursa</strong>"
 

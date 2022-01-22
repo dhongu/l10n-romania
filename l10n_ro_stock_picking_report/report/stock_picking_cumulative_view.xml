@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_stock_picking_cumulative_form" model="ir.ui.view">
+        <field name="name">stock.picking.cumulative.form</field>
+        <field name="model">stock.picking.cumulative</field>
+        <field name="arch" type="xml">
+            <form string="Report Options">
+                <group name="filters">
+                    <group>
+                        <field name="picking_type_id" />
+                        <field name="report_id" />
+                    </group>
+                    <group name="date_range">
+                        <field
+                            name="date_range_id"
+                            domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="company_id" />
+                    </group>
+                </group>
+                <footer>
+                    <button name="button_show" string="Show" type="object" default_focus="1" class="oe_highlight" />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_stock_picking_cumulative" model="ir.actions.act_window">
+        <field name="name">Picking cumulative Report</field>
+        <field name="res_model">stock.picking.cumulative</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem
+        id="menu_stock_picking_cumulative"
+        name="Picking cumulative Report"
+        action="action_stock_picking_cumulative"
+        parent="stock.menu_warehouse_report"
+        groups="stock.group_stock_user"
+    />
+</odoo>
