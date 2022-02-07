@@ -436,7 +436,12 @@
             </h2>
             <h4>
                 <span>Date:</span>
-                <span t-field="o.date" t-options='{"widget": "date"}' />
+                <t t-if="o.date_done">
+                        <span t-field="o.date_done" t-options='{"widget": "date"}' />
+                </t>
+                 <t t-else="">
+                    <span t-field="o.date" t-options='{"widget": "date"}' />
+                </t>
             </h4>
         </template>
 
