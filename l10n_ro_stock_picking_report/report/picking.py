@@ -117,7 +117,7 @@ class ReportPickingReception(models.AbstractModel):
             # todo:
             #  de verificat daca pretul din miscare este actualizat inainte de
             #  confirmarea transferului pentru a se actualiza cursul valutar !!
-            res["price"] = move.price_unit  # pretul caculat la genereare miscarii
+            # res["price"] = move.price_unit  # pretul caculat la genereare miscarii
 
             if not res["price"]:
                 res["price"] = move.price_unit

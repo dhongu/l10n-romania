@@ -172,7 +172,10 @@
                 </div>
                 <div class="col-3 bm-2">
                     <strong>Date</strong>
-                    <p>
+                    <p t-if="o.date_done">
+                        <span t-field="o.date_done" t-options='{"widget": "date"}' />
+                    </p>
+                     <p t-else="">
                         <span t-field="o.date" t-options='{"widget": "date"}' />
                     </p>
                 </div>
