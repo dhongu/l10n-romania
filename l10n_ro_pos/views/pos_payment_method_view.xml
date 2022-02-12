@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="point_of_sale.pos_payment_method_view_form" />
         <field name="arch" type="xml">
             <field name="journal_id" position="after">
-                 <field name="bank_journal_id" attrs="{'invisible': [('is_cash_count', '=', True)]}" />
+                 <field name="bank_journal_id" />
             </field>
         </field>
     </record>
