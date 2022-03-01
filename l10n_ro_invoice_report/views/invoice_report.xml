@@ -386,13 +386,13 @@
                                 <div t-if="currency_id!=res_company.currency_id">
                                     (
                                     <t t-if="o.move_type == 'out_refund'">
-                                        <t t-set="amount_total" t-value="-1*o.move_id.amount" />
+                                        <t t-set="amount_total" t-value="-1*o.amount" />
                                         <t t-esc="amount_total" />
                                         <span t-field="res_company.currency_id.symbol" />
                                     </t>
                                     <t t-if="not o.move_type == 'out_refund'">
                                         <span
-                                            t-field="o.move_id.amount"
+                                            t-field="o.amount"
                                             t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                         />
                                     </t>
