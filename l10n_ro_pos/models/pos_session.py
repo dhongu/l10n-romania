@@ -46,7 +46,7 @@ class PosSession(models.Model):
     def _create_cash_statement_lines_and_cash_move_lines(self, data):
 
         data = super(PosSession, self)._create_cash_statement_lines_and_cash_move_lines(data)
-        data = self._create_bank_statement_lines_and_bank_move_lines(data)
+        # data = self._create_bank_statement_lines_and_bank_move_lines(data)
 
         return data
 
