@@ -5,7 +5,7 @@
 {
     "name": "Romania - Terrabit - Picking Reports",
     "license": "AGPL-3",
-    "version": "14.0.1.0.5",
+    "version": "14.0.1.0.6",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Generic Modules",

@@ -571,14 +571,15 @@
                                             t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'"
                                         >
                                             <th class="text-right">
-                                                <span
-                                                    t-esc="move.product_id.list_price"
-                                                    t-options='{"widget": "float", "precision": 2}'
-                                                />
+                                                <span t-esc="line['list_price']"  t-options='{"widget": "float", "precision": 2}'/>
+<!--                                                <span-->
+<!--                                                    t-esc="move.product_id.list_price"-->
+<!--                                                    t-options='{"widget": "float", "precision": 2}'-->
+<!--                                                />-->
                                             </th>
                                             <th class="text-right">
                                                 <span
-                                                    t-esc="move.product_id.list_price * product_uom_qty "
+                                                    t-esc="line['list_price'] * product_uom_qty "
                                                     t-options='{"widget": "float", "precision": 2}'
                                                 />
                                             </th>
@@ -1099,7 +1100,7 @@
                                         </td>
                                         <td class="text-right">
                                             <span
-                                                t-field="move.product_id.list_price"
+                                                t-esc="line['list_price']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </td>
