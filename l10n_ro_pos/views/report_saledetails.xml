@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="report_saledetails" inherit_id="point_of_sale.report_saledetails">
+        <xpath expr="//thead/tr" position="inside">
+            <th>Stock Price Unit</th>
+        </xpath>
+        <xpath expr="//tbody/tr" position="inside">
+            <td><t t-esc="line['stock_price']" /></td>
+        </xpath>
+
+    </template>
+</odoo>
