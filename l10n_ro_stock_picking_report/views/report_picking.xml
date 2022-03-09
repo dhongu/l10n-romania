@@ -255,7 +255,7 @@
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
-                            <t t-set="doc_type" t-value="'delivery'"/>
+                            <t t-set="doc_type" t-value="'delivery'" />
                             <t t-call="l10n_ro_stock_picking_report.report_title" />
                             <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
                             <table class="table table-sm">
@@ -571,7 +571,10 @@
                                             t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'"
                                         >
                                             <th class="text-right">
-                                                <span t-esc="line['list_price']"  t-options='{"widget": "float", "precision": 2}'/>
+                                                <span
+                                                    t-esc="line['list_price']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
 <!--                                                <span-->
 <!--                                                    t-esc="move.product_id.list_price"-->
 <!--                                                    t-options='{"widget": "float", "precision": 2}'-->
@@ -644,7 +647,7 @@
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
-                            <t t-set="doc_type" t-value="'delivery'"/>
+                            <t t-set="doc_type" t-value="'delivery'" />
                             <t t-call="l10n_ro_stock_picking_report.report_title" />
 
                             <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
@@ -837,7 +840,7 @@
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
-                            <t t-set="doc_type" t-value="'reception'"/>
+                            <t t-set="doc_type" t-value="'reception'" />
                             <t t-call="l10n_ro_stock_picking_report.report_title" />
                             <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
                             <table class="table table-sm">
@@ -942,7 +945,7 @@
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
-                            <t t-set="doc_type" t-value="'reception'"/>
+                            <t t-set="doc_type" t-value="'reception'" />
                             <t t-call="l10n_ro_stock_picking_report.report_title" />
                             <t t-call="report_title.report_reception_text" />
                             <table class="table table-sm">
@@ -1026,7 +1029,7 @@
                     <t t-call="web.external_layout">
                         <div class="page">
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
-                            <t t-set="doc_type" t-value="'reception'"/>
+                            <t t-set="doc_type" t-value="'reception'" />
                             <t t-call="l10n_ro_stock_picking_report.report_title" />
                             <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
                             <table class="table table-sm">

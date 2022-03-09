@@ -73,15 +73,15 @@ class AccountBankStmtImportXLSX(models.TransientModel):
                 if partner:
                     item[index_partner_id] = partner.id
 
-        if 'payment_ref' in import_fields:
+        if "payment_ref" in import_fields:
             index_payment_ref = import_fields.index("payment_ref")
             for item in data:
                 if not item[index_partner_id] and item[index_payment_ref]:
-                    domain = [('name', '=', item[index_payment_ref])]
-                    invoice = self.env['sale.order'].search(domain, limit=1)
+                    domain = [("name", "=", item[index_payment_ref])]
+                    invoice = self.env["sale.order"].search(domain, limit=1)
                     if invoice:
                         item[index_partner_id] = invoice.partner_id.id
                 if not item[index_payment_ref]:
-                    item[index_payment_ref] = 'N/A'
+                    item[index_payment_ref] = "N/A"
 
         return data

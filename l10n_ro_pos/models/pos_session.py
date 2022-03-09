@@ -12,7 +12,8 @@ class PosPaymentMethod(models.Model):
     _inherit = "pos.payment.method"
 
     bank_journal_id = fields.Many2one("account.journal", domain=[("type", "in", ["bank"])])
-    receivable_account_id = fields.Many2one('account.account',  domain=[])
+    receivable_account_id = fields.Many2one("account.account", domain=[])
+
 
 class PosSession(models.Model):
     _inherit = "pos.session"

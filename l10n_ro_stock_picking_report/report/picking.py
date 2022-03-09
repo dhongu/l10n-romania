@@ -101,7 +101,7 @@ class ReportPickingReception(models.AbstractModel):
         for valuation in move.stock_valuation_layer_ids:
             if valuation.valued_type == "internal_transfer" and not valuation.account_move_id:
                 continue
-            if valuation.valued_type == 'dropshipped' and valuation.value < 0:
+            if valuation.valued_type == "dropshipped" and valuation.value < 0:
                 continue
             value += valuation.value
             quantity += valuation.quantity
@@ -142,7 +142,7 @@ class ReportPickingReception(models.AbstractModel):
             if move.location_dest_id.store_pricelist_id:
                 list_price = move.location_dest_id.store_pricelist_id.get_product_price(move.product_id, 1, False)
 
-            res['list_price'] = list_price
+            res["list_price"] = list_price
             # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
             # if incl_tax:
             #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
@@ -197,7 +197,7 @@ class ReportPickingReception(models.AbstractModel):
             if move.location_dest_id.store_pricelist_id:
                 list_price = move.location_dest_id.store_pricelist_id.get_product_price(move.product_id, 1, False)
 
-            res['list_price'] = list_price
+            res["list_price"] = list_price
 
             taxes_sale = taxes_ids.compute_all(
                 list_price,
