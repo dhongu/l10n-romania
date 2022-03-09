@@ -101,6 +101,8 @@ class ReportPickingReception(models.AbstractModel):
         for valuation in move.stock_valuation_layer_ids:
             if valuation.valued_type == "internal_transfer" and not valuation.account_move_id:
                 continue
+            if valuation.valued_type == "dropshipped" and valuation.value < 0:
+                continue
             value += valuation.value
             quantity += valuation.quantity
         if move.stock_valuation_layer_ids:
@@ -115,7 +117,7 @@ class ReportPickingReception(models.AbstractModel):
             # todo:
             #  de verificat daca pretul din miscare este actualizat inainte de
             #  confirmarea transferului pentru a se actualiza cursul valutar !!
-            res["price"] = move.price_unit  # pretul caculat la genereare miscarii
+            # res["price"] = move.price_unit  # pretul caculat la genereare miscarii
 
             if not res["price"]:
                 res["price"] = move.price_unit
@@ -165,11 +167,9 @@ class ReportPickingReception(models.AbstractModel):
             if not res["price"]:
                 res["price"] = abs(move.price_unit)
 
-            # res['amount'] = currency.round(value)
-            # if move_line.product_uom_qty != 0:
-            #     res['price'] = currency.round(value) / move_line.product_uom_qty
-            # else:
-            #     res['price'] = 0.0
+            # obtinere valoare pentru transferuri interne
+            if not res["price"] and move.picking_id.picking_type_code == "internal":
+                res["price"] = move._get_price_unit()
 
             taxes_ids = move.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move.company_id)
             taxes = taxes_ids.compute_all(
@@ -240,7 +240,7 @@ class ReportDelivery(models.AbstractModel):
 
 class ReportDeliveryPrice(models.AbstractModel):
     _name = "report.l10n_ro_stock_picking_report.report_delivery_price"
-    _description = "Report delivery in store"
+    _description = "Report delivery from store"
     _inherit = "report.abstract_report.delivery_report"
     _template = "l10n_ro_stock_picking_report.report_delivery_price"
     # _wrapped_report_class = picking_delivery
