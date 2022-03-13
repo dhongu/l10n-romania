@@ -235,7 +235,12 @@ class StorageSheet(models.TransientModel):
                 svl.account_id,
                 %(date_from)s as date,
                 %(reference)s as reference,
-                %(location)s as location_id,
+
+                CASE WHEN sm.location_id in %(locations)s
+                    THEN sm.location_id
+                    ELSE sm.location_dest_id
+                END as location_id,
+
                 1 as sequence
             from stock_move as sm
 
@@ -249,7 +254,7 @@ class StorageSheet(models.TransientModel):
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                  sm.date <  %(datetime_from)s AND
                 (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
-            GROUP BY sm.product_id, svl.account_id
+            GROUP BY sm.product_id, svl.account_id, sm.location_id, sm.location_dest_id
         """
 
         params.update({"reference": "INITIALA"})
@@ -264,7 +269,13 @@ class StorageSheet(models.TransientModel):
                 svl.account_id,
                 %(date_to)s as date,
                 %(reference)s as reference,
-                %(location)s as location_id,
+
+                CASE WHEN sm.location_id in %(locations)s
+                    THEN sm.location_id
+                    ELSE sm.location_dest_id
+                END as location_id,
+
+
                 4 as sequence
             from stock_move as sm
             inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
@@ -276,7 +287,7 @@ class StorageSheet(models.TransientModel):
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 sm.date <=  %(datetime_to)s AND
                 (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
-            GROUP BY sm.product_id, svl.account_id
+            GROUP BY sm.product_id, svl.account_id,sm.location_id, sm.location_dest_id
         """
 
         params.update({"reference": "FINALA"})
@@ -294,7 +305,7 @@ class StorageSheet(models.TransientModel):
                  svl_in.account_id,
                 sm.reference as reference,
                 sp.partner_id,
-                sm.location_id,
+                sm.location_dest_id as location_id,
                 svl_in.invoice_id,
                 2 as sequence,
                 svl_in.valued_type
@@ -316,7 +327,7 @@ class StorageSheet(models.TransientModel):
                 (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
             GROUP BY sm.product_id, date_trunc('day',sm.date at time zone 'utc' at time zone %(tz)s),
              sm.reference, sp.partner_id, account_id,
-             sm.location_id,
+             sm.location_dest_id,
              svl_in.invoice_id,
              svl_in.valued_type
             """
@@ -335,7 +346,7 @@ class StorageSheet(models.TransientModel):
                 date_trunc('day',sm.date) as date,
                 sm.reference as reference,
                 sp.partner_id,
-                sm.location_dest_id as location_id,
+                sm.location_id as location_id,
                 svl_out.invoice_id,
                 3 as sequence,
                 svl_out.valued_type
@@ -361,7 +372,7 @@ class StorageSheet(models.TransientModel):
                 sm.date >= %(datetime_from)s  AND  sm.date <= %(datetime_to)s  AND
                 (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
             GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id,
-             sm.location_dest_id,
+             sm.location_id,
              svl_out.invoice_id,
              svl_out.valued_type
             """
