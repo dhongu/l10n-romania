@@ -161,11 +161,14 @@ class StorageSheet(models.TransientModel):
             self.date_to = self.date_range_id.date_end
 
     def get_products_with_move(self):
+
+        locations = self.env["stock.location"].search([("id", "child_of", self.location_id.ids)])
+
         query = """
             SELECT product_id
             FROM stock_move as sm
             WHERE sm.company_id = %(company)s AND
-                  (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s) AND
+                  (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s) AND
                   date_trunc('day',sm.date) >= %(date_from)s  AND
                   date_trunc('day',sm.date) <= %(date_to)s
             GROUP BY  product_id
@@ -173,7 +176,7 @@ class StorageSheet(models.TransientModel):
         params = {
             "date_from": fields.Date.to_string(self.date_from),
             "date_to": fields.Date.to_string(self.date_to),
-            "location": self.location_id.id,
+            "locations": tuple(locations.ids),
             "company": self.company_id.id,
         }
         self.env.cr.execute(query, params=params)
@@ -209,9 +212,12 @@ class StorageSheet(models.TransientModel):
         datetime_to = datetime_to.replace(hour=23, minute=59, second=59)
         datetime_to = datetime_to.astimezone(pytz.utc)
 
+        locations = self.env["stock.location"].search([("id", "child_of", self.location_id.ids)])
+
         params = {
             "report": self.id,
             "location": self.location_id.id,
+            "locations": tuple(locations.ids),
             "product": tuple(product_list),
             "all_products": all_products,
             "company": self.company_id.id,
@@ -235,14 +241,14 @@ class StorageSheet(models.TransientModel):
 
             inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
                     and ((valued_type !='internal_transfer' or valued_type is Null) or
-                    (valued_type ='internal_transfer' and quantity<0 and sm.location_id=%(location)s) or
-                    (valued_type ='internal_transfer' and quantity>0 and sm.location_dest_id=%(location)s) )
+                    (valued_type ='internal_transfer' and quantity<0 and sm.location_id in %(locations)s) or
+                    (valued_type ='internal_transfer' and quantity>0 and sm.location_dest_id in %(locations)s) )
 
             where sm.state = 'done' AND
                 sm.company_id = %(company)s AND
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                  sm.date <  %(datetime_from)s AND
-                (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
+                (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
             GROUP BY sm.product_id, svl.account_id
         """
 
@@ -263,13 +269,13 @@ class StorageSheet(models.TransientModel):
             from stock_move as sm
             inner join  stock_valuation_layer as svl on svl.stock_move_id = sm.id
                     and ((valued_type !='internal_transfer' or valued_type is Null) or
-                    (valued_type ='internal_transfer' and quantity<0 and sm.location_id=%(location)s) or
-                    (valued_type ='internal_transfer' and quantity>0 and sm.location_dest_id=%(location)s) )
+                    (valued_type ='internal_transfer' and quantity<0 and sm.location_id in %(locations)s) or
+                    (valued_type ='internal_transfer' and quantity>0 and sm.location_dest_id in %(locations)s) )
             where sm.state = 'done' AND
                 sm.company_id = %(company)s AND
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 sm.date <=  %(datetime_to)s AND
-                (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
+                (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
             GROUP BY sm.product_id, svl.account_id
         """
 
@@ -297,9 +303,9 @@ class StorageSheet(models.TransientModel):
                 inner join stock_valuation_layer as svl_in on svl_in.stock_move_id = sm.id and
                     (
                     ( ((svl_in.valued_type !='internal_transfer' and svl_in.valued_type not like '%%return' )
-                       or svl_in.valued_type is Null)  and  sm.location_dest_id=%(location)s) or
-                    ( svl_in.valued_type ='internal_transfer' and svl_in.quantity>0 and sm.location_dest_id=%(location)s) or
-                    ( svl_in.valued_type  like '%%return' and sm.location_id=%(location)s)
+                       or svl_in.valued_type is Null)  and  sm.location_dest_id in %(locations)s) or
+                    ( svl_in.valued_type ='internal_transfer' and svl_in.quantity>0 and sm.location_dest_id in %(locations)s) or
+                    ( svl_in.valued_type  like '%%return' and sm.location_id in %(locations)s)
                     )
                 left join stock_picking as sp on sm.picking_id = sp.id
             where
@@ -307,7 +313,7 @@ class StorageSheet(models.TransientModel):
                 sm.company_id = %(company)s AND
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 sm.date >= %(datetime_from)s  AND  sm.date <= %(datetime_to)s  AND
-                (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
+                (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
             GROUP BY sm.product_id, date_trunc('day',sm.date at time zone 'utc' at time zone %(tz)s),
              sm.reference, sp.partner_id, account_id,
              sm.location_id,
@@ -338,9 +344,12 @@ class StorageSheet(models.TransientModel):
                 inner join stock_valuation_layer as svl_out on svl_out.stock_move_id = sm.id and
                     (
                     ( ((svl_out.valued_type !='internal_transfer' and svl_out.valued_type not like '%%return' )
-                       or svl_out.valued_type is Null)   and  sm.location_id=%(location)s) or
-                    ( svl_out.valued_type ='internal_transfer' and svl_out.quantity<0 and sm.location_id=%(location)s) or
-                    ( svl_out.valued_type  like '%%return' and sm.location_dest_id=%(location)s)
+                       or svl_out.valued_type is Null)   and
+                       sm.location_id in %(locations)s) or
+                    ( svl_out.valued_type ='internal_transfer' and svl_out.quantity<0 and
+                     sm.location_id in %(locations)s) or
+                    ( svl_out.valued_type  like '%%return' and
+                    sm.location_dest_id in %(locations)s)
                     )
 
 
@@ -350,7 +359,7 @@ class StorageSheet(models.TransientModel):
                 sm.company_id = %(company)s AND
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 sm.date >= %(datetime_from)s  AND  sm.date <= %(datetime_to)s  AND
-                (sm.location_id = %(location)s OR sm.location_dest_id = %(location)s)
+                (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
             GROUP BY sm.product_id, date_trunc('day',sm.date),  sm.reference, sp.partner_id, account_id,
              sm.location_dest_id,
              svl_out.invoice_id,
