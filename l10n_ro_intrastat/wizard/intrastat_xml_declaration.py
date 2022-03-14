@@ -68,7 +68,7 @@ class IntrastatDeclaration(models.TransientModel):
     contact_id = fields.Many2one("res.partner", "Contact", domain=[("is_company", "=", False)], required=True)
     file_save = fields.Binary("Intrastat Report File", readonly=True)
     state = fields.Selection([("draft", "Draft"), ("download", "Download")], string="State", default="draft")
-    cn8 = fields.Char("CN8", size=4, required=True, default="2018")
+    cn8 = fields.Char("CN8", size=4, required=True, default="2022")
 
     def _company_warning(self, translated_msg):
         """ Raise a error with custom message, asking user to configure company settings """
@@ -103,15 +103,15 @@ class IntrastatDeclaration(models.TransientModel):
 
         CodeVersion = ET.SubElement(decl, "InsCodeVersions")
         tag = ET.SubElement(CodeVersion, "CountryVer")
-        tag.text = "2007"
+        tag.text = "2021"
         tag = ET.SubElement(CodeVersion, "EuCountryVer")
-        tag.text = "2007"
+        tag.text = "2021"
         tag = ET.SubElement(CodeVersion, "CnVer")
         tag.text = decl_datas.cn8
         tag = ET.SubElement(CodeVersion, "ModeOfTransportVer")
         tag.text = "2005"
         tag = ET.SubElement(CodeVersion, "DeliveryTermsVer")
-        tag.text = "2011"
+        tag.text = "2021"
         tag = ET.SubElement(CodeVersion, "NatureOfTransactionAVer")
         tag.text = "2010"
         tag = ET.SubElement(CodeVersion, "NatureOfTransactionBVer")
