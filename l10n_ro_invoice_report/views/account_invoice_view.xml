@@ -11,10 +11,11 @@
                     <field name="price_unit_without_taxes" groups="account.group_show_line_subtotals_tax_included" />
                 </field>
                 <field name="reference" position="after">
+                    <field name="commercial_partner_id" invisible="1"/>
                     <field
                         name="delegate_id"
-                        domain="[('type','=','contact'),('is_company','=',False),('parent_id','=',partner_id)]"
-                        context="{'simple_form':True, 'default_parent_id':partner_id, 'default_type':'contact' } "
+                        domain="[('type','=','contact'),('is_company','=',False),('parent_id','=',commercial_partner_id)]"
+                        context="{'simple_form':True, 'default_parent_id':commercial_partner_id, 'default_type':'contact' } "
                     />
                     <field name="mean_transp" />
                 </field>
