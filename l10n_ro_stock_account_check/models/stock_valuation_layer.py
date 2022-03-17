@@ -3,6 +3,7 @@
 
 from odoo import fields, models
 
+
 class StockValuationLayer(models.Model):
     _inherit = "stock.valuation.layer"
 
@@ -22,15 +23,12 @@ class StockValuationLayer(models.Model):
                     svl.valued_type = valued_type
                     continue
 
-            if svl.valued_type == 'delivery':
+            if svl.valued_type == "delivery":
                 product = svl.product_id
                 if svl.stock_move_id.lot_ids:
                     product = svl.product_id.with_context(lot_ids=svl.stock_move_id.lot_ids)
                 svsl_vals = product._prepare_out_svl_vals(abs(svl.quantity), svl.company_id)
-                svl.write({
-                    'unit_cost': svsl_vals['unit_cost'],
-                    'value':  svsl_vals['unit_cost'] * svl.quantity
-                })
+                svl.write({"unit_cost": svsl_vals["unit_cost"], "value": svsl_vals["unit_cost"] * svl.quantity})
 
             svl.account_move_id.write({"state": "draft"})
             name = svl.account_move_id.name

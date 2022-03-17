@@ -57,6 +57,7 @@ class ReportSaleDetails(models.AbstractModel):
         orders = self.env["pos.order"].search(domain)
 
         products_stock = {}
+        products_stock_qty = {}
         products_sold = {}
 
         for order in orders:
@@ -73,16 +74,16 @@ class ReportSaleDetails(models.AbstractModel):
                             continue
                         if valuation.valued_type == "dropshipped" and valuation.value < 0:
                             continue
-                        value += valuation.value
-                        quantity += valuation.quantity
-                    if quantity:
-                        stock_price = value / (quantity or 1)
-                    else:
-                        stock_price = move.product_id.standard_price
+                        value += abs(valuation.value)
+                        quantity += abs(valuation.quantity)
+
                     products_stock.setdefault(move.product_id.id, 0.0)
-                    products_stock[move.product_id.id] += -value
+                    products_stock_qty.setdefault(move.product_id.id, 0.0)
+                    products_stock[move.product_id.id] += value
+                    products_stock_qty[move.product_id.id] += quantity
 
         products = []
+        total_stock_amount = 0
         for (product, price_unit, discount), qty in products_sold.items():
             values = {
                 "product_id": product.id,
@@ -93,14 +94,15 @@ class ReportSaleDetails(models.AbstractModel):
                 "discount": discount,
                 "uom": product.uom_id.name,
             }
+            stock_price = 0
             if product.id in products_stock:
-                stock_price = products_stock[product.id] / qty if qty else 0
-            else:
-                stock_price = 0
+                if products_stock_qty[product.id]:
+                    stock_price = products_stock[product.id] / products_stock_qty[product.id]
             values["stock_price"] = stock_price
-
+            values["stock_amount"] = stock_price * qty
             products += [values]
+            total_stock_amount += stock_price * qty
 
         res["products"] = sorted(products, key=lambda l: l["product_name"])
-
+        res["total_stock_amount"] = total_stock_amount
         return res
