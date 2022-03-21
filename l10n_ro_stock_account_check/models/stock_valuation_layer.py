@@ -10,7 +10,7 @@ class StockValuationLayer(models.Model):
     date = fields.Datetime(related="stock_move_id.date")
     rounding_adjustment = fields.Char("Rounding Adjustment")
 
-    def correction_valuation(self):
+    def correction_valuation_type(self):
         val_types = self.env["stock.move"]._get_valued_types()
         val_types = [val for val in val_types if val not in ["in", "out", "dropshipped", "dropshipped_returned"]]
 
@@ -22,6 +22,12 @@ class StockValuationLayer(models.Model):
                 if getattr(svl.stock_move_id, "_is_%s" % valued_type)():
                     svl.valued_type = valued_type
                     continue
+
+
+    def correction_valuation(self):
+        for svl in self:
+            if not svl.stock_move_id:
+                continue
 
             if svl.valued_type == "delivery":
                 product = svl.product_id
