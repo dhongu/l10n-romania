@@ -17,7 +17,7 @@
     "maintainers": ["dhongu"],
     "assets":{
         'point_of_sale.assets':[
-            "/l10n_ro_pos/static/src/js/PaymentScreenStatus.js"
+            "l10n_ro_pos/static/src/js/PaymentScreenStatus.js"
         ]
     }
 }
