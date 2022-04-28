@@ -23,7 +23,6 @@ class StockValuationLayer(models.Model):
                     svl.valued_type = valued_type
                     continue
 
-
     def correction_valuation(self, unlink_account_move=True):
         for svl in self:
             if not svl.stock_move_id:
@@ -33,8 +32,7 @@ class StockValuationLayer(models.Model):
                 product = svl.product_id
                 if svl.stock_move_id.lot_ids:
                     product = svl.product_id.with_context(
-                        lot_ids=svl.stock_move_id.lot_ids,
-                        move_lines=svl.stock_move_id.move_line_ids
+                        lot_ids=svl.stock_move_id.lot_ids, move_lines=svl.stock_move_id.move_line_ids
                     )
                 svsl_vals = product._prepare_out_svl_vals(abs(svl.quantity), svl.company_id)
                 svl.write({"unit_cost": svsl_vals["unit_cost"], "value": svsl_vals["unit_cost"] * svl.quantity})
@@ -51,6 +49,6 @@ class StockValuationLayer(models.Model):
                 value = abs(svl.value)
                 for line in svl.account_move_id.line_ids:
                     if line.debit:
-                        line.with_context(check_move_validity=False).write({'debit':value})
+                        line.with_context(check_move_validity=False).write({"debit": value})
                     else:
-                        line.with_context(check_move_validity=False).write({'credit':value})
+                        line.with_context(check_move_validity=False).write({"credit": value})
