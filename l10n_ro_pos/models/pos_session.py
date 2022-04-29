@@ -61,37 +61,39 @@ class PosSession(models.Model):
         # handle split bank payments
         split_bank_statement_line_vals = defaultdict(list)
         split_bank_receivable_vals = defaultdict(list)
-        for payment, amounts in split_receivables_bank.items():
-            if not payment.payment_method_id.bank_journal_id:
-                continue
-            statement = statements_by_journal_id[payment.payment_method_id.bank_journal_id.id]
-            split_bank_statement_line_vals[statement].append(
-                self._get_statement_line_vals(
-                    statement,
-                    payment.payment_method_id.receivable_account_id,
-                    amounts["amount"],
-                    date=payment.payment_date,
-                    partner=payment.pos_order_id.partner_id,
+        if split_receivables_bank:
+            for payment, amounts in split_receivables_bank.items():
+                if not payment.payment_method_id.bank_journal_id:
+                    continue
+                statement = statements_by_journal_id[payment.payment_method_id.bank_journal_id.id]
+                split_bank_statement_line_vals[statement].append(
+                    self._get_statement_line_vals(
+                        statement,
+                        payment.payment_method_id.receivable_account_id,
+                        amounts["amount"],
+                        date=payment.payment_date,
+                        partner=payment.pos_order_id.partner_id,
+                    )
                 )
-            )
-            split_bank_receivable_vals[statement].append(
-                self._get_split_receivable_vals(payment, amounts["amount"], amounts["amount_converted"])
-            )
+                split_bank_receivable_vals[statement].append(
+                    self._get_split_receivable_vals(payment, amounts["amount"], amounts["amount_converted"])
+                )
 
         # handle combine bank payments
         combine_bank_statement_line_vals = defaultdict(list)
         combine_bank_receivable_vals = defaultdict(list)
-        for payment_method, amounts in combine_receivables_bank.items():
-            if not payment_method.bank_journal_id:
-                continue
-            if not float_is_zero(amounts["amount"], precision_rounding=self.currency_id.rounding):
-                statement = statements_by_journal_id[payment_method.bank_journal_id.id]
-                combine_bank_statement_line_vals[statement].append(
-                    self._get_statement_line_vals(statement, payment_method.receivable_account_id, amounts["amount"])
-                )
-                combine_bank_receivable_vals[statement].append(
-                    self._get_combine_receivable_vals(payment_method, amounts["amount"], amounts["amount_converted"])
-                )
+        if combine_receivables_bank:
+            for payment_method, amounts in combine_receivables_bank.items():
+                if not payment_method.bank_journal_id:
+                    continue
+                if not float_is_zero(amounts["amount"], precision_rounding=self.currency_id.rounding):
+                    statement = statements_by_journal_id[payment_method.bank_journal_id.id]
+                    combine_bank_statement_line_vals[statement].append(
+                        self._get_statement_line_vals(statement, payment_method.receivable_account_id, amounts["amount"])
+                    )
+                    combine_bank_receivable_vals[statement].append(
+                        self._get_combine_receivable_vals(payment_method, amounts["amount"], amounts["amount_converted"])
+                    )
 
         # create the statement lines and account move lines
         bank_statement_line = self.env["account.bank.statement.line"]
