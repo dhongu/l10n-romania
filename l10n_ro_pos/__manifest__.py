@@ -8,7 +8,7 @@
     "license": "AGPL-3",
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
-    "depends": ["point_of_sale", "l10n_ro_stock"],
+    "depends": ["point_of_sale", "l10n_ro_stock", "l10n_ro_config"],
     "data": [
         # "views/assets.xml",
         "views/pos_payment_method_view.xml",
