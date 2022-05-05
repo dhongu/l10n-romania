@@ -13,6 +13,10 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    def check_vat(self):
+        partners = self.filtered(lambda p: not p.vat_subjected)
+        return super(ResPartner, partners).check_vat()
+
     @api.model
     def create(self, vals):
         if "name" in vals:

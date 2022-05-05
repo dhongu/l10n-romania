@@ -3,9 +3,9 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Romania - Partner Create by VAT",
+    "name": "Romania - Partner Create by VAT Button",
     "license": "AGPL-3",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
