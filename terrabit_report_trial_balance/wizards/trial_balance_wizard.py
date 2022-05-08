@@ -11,7 +11,7 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
     _name = "l10n.ro.report.trial.balance.wizard"
     _description = "Romania Trial Balance Report Wizard"
 
-    company_id = fields.Many2one("res.company", default=lambda self: self.env.user.company_id, string="Company")
+    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company, required=True)
     # date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
     date_from = fields.Date(required=True)
     date_to = fields.Date(required=True)
