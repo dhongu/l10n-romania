@@ -96,6 +96,18 @@ class ReportPickingReception(models.AbstractModel):
             "margin": 0.0,
         }
 
+        value = 0
+        quantity = 0
+        for valuation in move.stock_valuation_layer_ids:
+            if valuation.valued_type == "internal_transfer" and not valuation.account_move_id:
+                continue
+            if valuation.valued_type == "dropshipped" and valuation.value < 0:
+                continue
+            value += valuation.value
+            quantity += valuation.quantity
+        if move.stock_valuation_layer_ids:
+            res["price"] = value / (quantity or 1)
+
         currency = move.company_id.currency_id
 
         if move.purchase_line_id:
@@ -105,15 +117,7 @@ class ReportPickingReception(models.AbstractModel):
             # todo:
             #  de verificat daca pretul din miscare este actualizat inainte de
             #  confirmarea transferului pentru a se actualiza cursul valutar !!
-            res["price"] = move.price_unit  # pretul caculat la genereare miscarii
-
-            value = 0
-            quantity = 0
-            for valuation in move.stock_valuation_layer_ids:
-                value += valuation.value
-                quantity += valuation.quantity
-            if move.stock_valuation_layer_ids:
-                res["price"] = value / (quantity or 1)
+            # res["price"] = move.price_unit  # pretul caculat la genereare miscarii
 
             if not res["price"]:
                 res["price"] = move.price_unit
@@ -135,6 +139,10 @@ class ReportPickingReception(models.AbstractModel):
 
             taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
             list_price = move.product_id.list_price
+            if move.location_dest_id.store_pricelist_id:
+                list_price = move.location_dest_id.store_pricelist_id.get_product_price(move.product_id, 1, False)
+
+            res["list_price"] = list_price
             # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
             # if incl_tax:
             #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
@@ -160,8 +168,8 @@ class ReportPickingReception(models.AbstractModel):
         else:
             # receptie fara comanda de aprovizionare
 
-            value = move.value
-            res["price"] = abs(move.price_unit)
+            if not res["price"]:
+                res["price"] = abs(move.price_unit)
 
             # obtinere valoare pentru transferuri interne
             if not res["price"] and move.picking_id.picking_type_code == "internal":
@@ -186,6 +194,10 @@ class ReportPickingReception(models.AbstractModel):
             # else:
 
             list_price = move.product_id.list_price
+            if move.location_dest_id.store_pricelist_id:
+                list_price = move.location_dest_id.store_pricelist_id.get_product_price(move.product_id, 1, False)
+
+            res["list_price"] = list_price
 
             taxes_sale = taxes_ids.compute_all(
                 list_price,
@@ -236,7 +248,7 @@ class ReportDelivery(models.AbstractModel):
 
 class ReportDeliveryPrice(models.AbstractModel):
     _name = "report.l10n_ro_stock_picking_report.report_delivery_price"
-    _description = "Report delivery in store"
+    _description = "Report delivery from store"
     _inherit = "report.abstract_report.delivery_report"
     _template = "l10n_ro_stock_picking_report.report_delivery_price"
     # _wrapped_report_class = picking_delivery
@@ -253,7 +265,7 @@ class ReportConsumeVoucher(models.AbstractModel):
 class ReportInternalTransfer(models.AbstractModel):
     _name = "report.l10n_ro_stock_picking_report.report_internal_transfer"
     _description = "Report transfer"
-    _inherit = "report.abstract_report.delivery_report"
+    _inherit = "report.abstract_report.reception_report"
     _template = "l10n_ro_stock_picking_report.report_internal_transfer"
     # _wrapped_report_class = picking_delivery
 
