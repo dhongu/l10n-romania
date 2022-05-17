@@ -14,7 +14,7 @@ Romania - Invoice Report
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/14.0/l10n_ro_invoice_report
+    :target: https://github.com/dhongu/l10n-romania/tree/15.0/l10n_ro_invoice_report
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3| 
@@ -42,7 +42,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/dhongu/l10n-romania/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/dhongu/l10n-romania/issues/new?body=module:%20l10n_ro_invoice_report%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/dhongu/l10n-romania/issues/new?body=module:%20l10n_ro_invoice_report%0Aversion:%2015.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -68,6 +68,6 @@ Do not contact contributors directly about support or help with technical issues
 Maintainers
 ~~~~~~~~~~~
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/14.0/l10n_ro_invoice_report>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/15.0/l10n_ro_invoice_report>`_ project on GitHub.
 
 You are welcome to contribute.

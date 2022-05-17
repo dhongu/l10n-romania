@@ -7,3 +7,4 @@ from . import purchase
 from . import account_invoice
 from . import picking
 from . import res_config
+from . import stock_location

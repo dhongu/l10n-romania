@@ -4,7 +4,7 @@
 {
     "name": "Romania - Account Trial Balance Report",
     "summary": "Romania - Account Trial Balance Report",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "category": "Localization",
     "author": "NextERP,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",

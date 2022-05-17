@@ -89,10 +89,14 @@ class PosSession(models.Model):
                 if not float_is_zero(amounts["amount"], precision_rounding=self.currency_id.rounding):
                     statement = statements_by_journal_id[payment_method.bank_journal_id.id]
                     combine_bank_statement_line_vals[statement].append(
-                        self._get_statement_line_vals(statement, payment_method.receivable_account_id, amounts["amount"])
+                        self._get_statement_line_vals(
+                            statement, payment_method.receivable_account_id, amounts["amount"]
+                        )
                     )
                     combine_bank_receivable_vals[statement].append(
-                        self._get_combine_receivable_vals(payment_method, amounts["amount"], amounts["amount_converted"])
+                        self._get_combine_receivable_vals(
+                            payment_method, amounts["amount"], amounts["amount_converted"]
+                        )
                     )
 
         # create the statement lines and account move lines
