@@ -271,15 +271,22 @@ msgid "<strong>Total Sale</strong>"
 msgstr "<strong>Total vânzare</strong>"
 
 #. module: l10n_ro_stock_picking_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals
 msgid "<strong>Total Without Taxes</strong>"
 msgstr "<strong>Total fără TVA</strong>"
 
 #. module: l10n_ro_stock_picking_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals
 msgid "<strong>Total</strong>"
 msgstr ""
+
+#. module: l10n_ro_stock_picking_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
+msgid "Address:"
+msgstr "Adresa:"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
@@ -290,9 +297,19 @@ msgid "Cancelled"
 msgstr "Anulat"
 
 #. module: l10n_ro_stock_picking_report
+#: model:ir.model,name:l10n_ro_stock_picking_report.model_res_company
+msgid "Companies"
+msgstr "Companii"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.model,name:l10n_ro_stock_picking_report.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report,name:l10n_ro_stock_picking_report.action_report_consume_voucher
 msgid "Consume Voucher"
-msgstr "Bon de consum"
+msgstr "Bon de Consum"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.model,name:l10n_ro_stock_picking_report.model_res_partner
@@ -379,7 +396,7 @@ msgstr "Informații privind livrarea:"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report,name:l10n_ro_stock_picking_report.action_report_internal_transfer
 msgid "Internal transfer"
-msgstr "Transfer intern"
+msgstr "Notă de Transfer"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.model,name:l10n_ro_stock_picking_report.model_stock_location
@@ -456,7 +473,7 @@ msgstr "Primit în gestiune:"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report,name:l10n_ro_stock_picking_report.action_report_reception
 msgid "Reception"
-msgstr "Recepție"
+msgstr "Recepție (NIR)"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_sign
@@ -491,8 +508,8 @@ msgstr "Report livrare"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_delivery_price
-msgid "Report delivery in store"
-msgstr ""
+msgid "Report delivery from store"
+msgstr "Raport livrare din magaazin"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.model,name:l10n_ro_stock_picking_report.model_report_l10n_ro_stock_picking_report_report_reception
@@ -528,6 +545,26 @@ msgstr "ReportPickingReception"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals_sale
 msgid "Sale Taxes"
 msgstr "TVA vânzare"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.model.fields,field_description:l10n_ro_stock_picking_report.field_res_company__banks_on_pickings
+#: model:ir.model.fields,field_description:l10n_ro_stock_picking_report.field_res_config_settings__banks_on_pickings
+#: model:ir.model.fields,help:l10n_ro_stock_picking_report.field_res_company__banks_on_pickings
+#: model:ir.model.fields,help:l10n_ro_stock_picking_report.field_res_config_settings__banks_on_pickings
+msgid "Show banks on picking report"
+msgstr "Afișare banci în rapoarte stoc"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.model.fields,field_description:l10n_ro_stock_picking_report.field_res_company__taxes_on_reception
+#: model:ir.model.fields,field_description:l10n_ro_stock_picking_report.field_res_config_settings__taxes_on_reception
+msgid "Show taxes on reception report"
+msgstr "Afișare TVA in NIR"
+
+#. module: l10n_ro_stock_picking_report
+#: model:ir.model.fields,help:l10n_ro_stock_picking_report.field_res_company__taxes_on_reception
+#: model:ir.model.fields,help:l10n_ro_stock_picking_report.field_res_config_settings__taxes_on_reception
+msgid "Show taxes values on reception report"
+msgstr "Afișare valoare TVA in NIR"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_sign
@@ -583,8 +620,8 @@ msgid ""
 "With this field the reception/delivery is set as a notice. The generated "
 "account move will contain accounts 408/418."
 msgstr ""
-"Cu acest câmp se indică ca recepția/livrare este facuta cu aviz."
-" Astfel nota contabiă generată se va conține 408/418."
+"Cu acest câmp se indică ca recepția/livrare este facuta cu aviz. Astfel nota"
+" contabiă generată se va conține 408/418."
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
