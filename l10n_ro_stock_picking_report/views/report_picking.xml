@@ -348,8 +348,6 @@
                                     <p>
                                         <span t-field="o.location_dest_id" />
                                     </p>
-
-
                                 </div>
 
                             </div>
@@ -391,7 +389,7 @@
                                         <td class="text-right">
                                             <t t-set="line_value" t-value="0.0" />
                                             <t t-foreach="move.stock_valuation_layer_ids" t-as="valuation_line">
-                                                <t t-set="line_value" t-value="line_value+valuation_line.value" />
+                                                <t t-set="line_value" t-value="line_value-valuation_line.value" />
                                             </t>
                                             <span
                                                 t-esc="line_value/move.product_uom_qty"
@@ -436,6 +434,7 @@
         <template id="report_title">
             <h2>
 
+
                 <t t-if="o.picking_type_code == 'incoming'">
                     <t t-if="o.location_dest_id.usage != 'internal' and o.location_id.usage == 'internal'">
                         <span>Reverse</span>
@@ -463,8 +462,13 @@
                 </t>
 
                 <t t-if="o.picking_type_code == 'internal'">
-                    <span t-field="o.picking_type_id.name" />
-                    <span>:</span>
+                    <t t-if="doc_type == 'delivery'">
+                        <span>Delivery:</span>
+                    </t>
+                    <t t-else="">
+                        <span t-field="o.picking_type_id.name" />
+                        <span>:</span>
+                    </t>
                 </t>
 
 
