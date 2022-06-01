@@ -416,10 +416,11 @@
                 <div t-if="o.commercial_partner_id.info_for_invoice">
                     <span t-field="o.commercial_partner_id.info_for_invoice" />
                 </div>
-                <p id="payment-term" t-if="o.invoice_payment_term_id.note">
-                    <strong>Payment Term:</strong>
-                    <span t-field="o.invoice_payment_term_id.note" />
-                </p>
+
+            </xpath>
+
+            <xpath expr="//p[@name='payment_term']/span" position="before">
+                <strong>Payment Term:</strong>
             </xpath>
 
             <xpath expr="//div[hasclass('page')]" position="after">
