@@ -16,6 +16,7 @@
         "report/stock_check_report_view.xml",
         "views/stock_valuation_layer_view.xml",
         "security/ir.model.access.csv",
+        "views/stock_view.xml",
     ],
     "installable": True,
     "maintainers": ["dhongu"],
