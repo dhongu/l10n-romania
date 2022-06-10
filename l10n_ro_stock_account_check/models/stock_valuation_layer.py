@@ -1,7 +1,7 @@
 # Copyright (C) 2021 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class StockValuationLayer(models.Model):
@@ -9,6 +9,10 @@ class StockValuationLayer(models.Model):
 
     date = fields.Datetime(related="stock_move_id.date")
     rounding_adjustment = fields.Char("Rounding Adjustment")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        return super(StockValuationLayer, self).create(vals_list)
 
     def correction_valuation_type(self):
         val_types = self.env["stock.move"]._get_valued_types()
@@ -30,10 +34,10 @@ class StockValuationLayer(models.Model):
 
             if svl.valued_type == "delivery":
                 product = svl.product_id
-                if svl.stock_move_id.lot_ids:
-                    product = svl.product_id.with_context(
-                        lot_ids=svl.stock_move_id.lot_ids, move_lines=svl.stock_move_id.move_line_ids
-                    )
+                # if svl.stock_move_id.lot_ids:
+                #     product = svl.product_id.with_context(
+                #         lot_ids=svl.stock_move_id.lot_ids, move_lines=svl.stock_move_id.move_line_ids
+                #     )
                 svsl_vals = product._prepare_out_svl_vals(abs(svl.quantity), svl.company_id)
                 svl.write({"unit_cost": svsl_vals["unit_cost"], "value": svsl_vals["unit_cost"] * svl.quantity})
 
