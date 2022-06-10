@@ -26,7 +26,7 @@ class ProductProduct(models.Model):
         vals = super(ProductProduct, self)._prepare_out_svl_vals(quantity, company)
         if self.env.context.get("use_move_price_unit", False):
             move = self.env.context["move"]
-            price = -1 * move._get_price_unit_from_svl()
+            price = move._get_price_unit_from_svl()
             vals["value"] = vals["quantity"] * price
             vals["unit_cost"] = price
         return vals
