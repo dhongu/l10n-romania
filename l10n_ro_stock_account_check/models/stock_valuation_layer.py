@@ -32,14 +32,14 @@ class StockValuationLayer(models.Model):
             if not svl.stock_move_id:
                 continue
 
-            if svl.valued_type == "delivery":
-                product = svl.product_id
-                # if svl.stock_move_id.lot_ids:
-                #     product = svl.product_id.with_context(
-                #         lot_ids=svl.stock_move_id.lot_ids, move_lines=svl.stock_move_id.move_line_ids
-                #     )
-                svsl_vals = product._prepare_out_svl_vals(abs(svl.quantity), svl.company_id)
-                svl.write({"unit_cost": svsl_vals["unit_cost"], "value": svsl_vals["unit_cost"] * svl.quantity})
+            # if svl.valued_type == "delivery":
+            #     product = svl.product_id
+            #     # if svl.stock_move_id.lot_ids:
+            #     #     product = svl.product_id.with_context(
+            #     #         lot_ids=svl.stock_move_id.lot_ids, move_lines=svl.stock_move_id.move_line_ids
+            #     #     )
+            #     svsl_vals = product._prepare_out_svl_vals(abs(svl.quantity), svl.company_id)
+            #     svl.write({"unit_cost": svsl_vals["unit_cost"], "value": svsl_vals["unit_cost"] * svl.quantity})
 
             if unlink_account_move:
                 svl.account_move_id.write({"state": "draft"})
