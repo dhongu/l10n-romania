@@ -223,7 +223,8 @@ class ProductProduct(models.Model):
     # se apeleaza la modificarea categoriei si se genereaza 3xx - 3xx
     @api.model
     def _svl_empty_stock(self, description, product_category=None, product_template=None):
-        if not self.company_id.romanian_accounting:
+        company = self.company_id or self.env.company
+        if not company.romanian_accounting:
             return super(ProductProduct, self)._svl_empty_stock(description, product_category, product_template)
         empty_stock_svl_list = []
         products_orig_quantity_svl = {}
