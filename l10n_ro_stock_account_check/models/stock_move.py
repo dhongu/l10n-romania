@@ -49,6 +49,7 @@ class StockMove(models.Model):
         for valued_type in val_types:
             todo_valued_moves = valued_moves[valued_type]
             for move in todo_valued_moves:
+                _logger.info(move.product_id.name)
                 move = move.with_context(force_period_date=move.date, use_move_price_unit=True, move=move)
                 stock_valuation_layers |= getattr(move, "_create_%s_svl" % valued_type)()
 
