@@ -317,6 +317,7 @@
                             <td>
                                 <span>Name:</span>
                                 <span t-field="o.user_id" />
+                                <span id="signature"/>
                             </td>
                             <td>
                                 <div>
