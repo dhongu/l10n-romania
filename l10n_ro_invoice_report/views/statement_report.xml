@@ -155,13 +155,15 @@
                                     <td>Amount (in words):</td>
                                     <td>
                                         <!--                                        <span t-esc="convert(abs(o.amount))"/>-->
-                                        <span t-esc="currency.amount_to_text(o.amount)" />
+                                        <span t-esc="currency.amount_to_text(abs(o.amount))" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Representing:</td>
                                     <td>
-                                        <span t-field="o.ref" />
+                                         <span t-field="o.ref" />
+                                         <span t-field="o.payment_ref" />
+
                                     </td>
                                 </tr>
                             </table>
