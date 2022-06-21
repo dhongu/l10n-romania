@@ -16,14 +16,10 @@
     ],
     "qweb": ["static/src/xml/pos.xml"],
     "maintainers": ["dhongu"],
-
     "assets": {
         "point_of_sale.assets": [
             "l10n_ro_pos/static/src/css/pos.css",
             "l10n_ro_pos/static/src/js/PaymentScreenStatus.js",
         ],
-
     },
-
-
 }

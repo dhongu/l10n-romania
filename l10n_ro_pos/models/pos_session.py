@@ -4,8 +4,7 @@
 
 from collections import defaultdict
 
-from odoo import api, fields, models
-from odoo.tools import float_is_zero
+from odoo import fields, models
 
 
 class PosPaymentMethod(models.Model):

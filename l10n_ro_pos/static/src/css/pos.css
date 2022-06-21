@@ -6,7 +6,6 @@
     font-family: "Roboto", "Lucida Grande", Helvetica, Verdana, Arial;
 }
 
-
 .pos .limit-error {
     background-color: #f3bbbb;
     color: rgb(168, 89, 89);
@@ -24,4 +23,3 @@
     padding: 10px;
     margin: 10px;
 }
-

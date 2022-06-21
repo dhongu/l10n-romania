@@ -26,8 +26,7 @@
                             "no_tag_br": true}'
                         />
                     </div>
-                    <t t-set="partner_id" t-value="res_company.partner_id" />
-                    <t t-call="l10n_ro_config.banks" />
+
                 </div>
                 <div class="col-5 offset-1">
                     <div>
@@ -57,8 +56,7 @@
                             />
                         </div>
                     </t>
-                    <t t-set="partner_id" t-value="o.commercial_partner_id" />
-                    <t t-call="l10n_ro_config.banks" />
+
                 </div>
             </div>
             <div class="row">
@@ -81,7 +79,7 @@
                         </div>
                     </div>
                     <div>
-<!--                        <span t-esc="', '.join(map(lambda x: (x[0]), o.amount_by_group))" />-->
+                        <!--                        <span t-esc="', '.join(map(lambda x: (x[0]), o.amount_by_group))" />-->
                     </div>
                 </div>
                 <div id="partner_cui" class="col-5 offset-1">
@@ -93,6 +91,16 @@
                         <strong>NRC:</strong>
                         <span t-field="o.commercial_partner_id.nrc" />
                     </div>
+                </div>
+            </div>
+            <div id="banks" class="row">
+                <div class="col-6">
+                    <t t-set="partner_id" t-value="res_company.partner_id" />
+                    <t t-call="l10n_ro_config.banks" />
+                </div>
+                <div class="col-5 offset-1">
+                    <t t-set="partner_id" t-value="o.commercial_partner_id" />
+                    <t t-call="l10n_ro_config.banks" />
                 </div>
             </div>
         </template>
@@ -317,7 +325,7 @@
                             <td>
                                 <span>Name:</span>
                                 <span t-field="o.user_id" />
-                                <span id="signature"/>
+                                <span id="signature" />
                             </td>
                             <td>
                                 <div>

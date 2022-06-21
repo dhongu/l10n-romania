@@ -2,9 +2,9 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Romania - Invoice Report ",
+    "name": "Romania - Invoice Report Terrabit",
     "summary": "Localizare Terrabit",
-    "version": "15.0.3.0.6",
+    "version": "15.0.3.0.7",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",
