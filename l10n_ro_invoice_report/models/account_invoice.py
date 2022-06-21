@@ -69,7 +69,7 @@ class AccountInvoice(models.Model):
                 origin += " " + picking.name
 
             if origin:
-                invoice.write({"origin": origin})
+                invoice.write({"invoice_origin": origin})
 
 
 #
