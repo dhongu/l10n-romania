@@ -52,6 +52,25 @@ class AccountInvoice(models.Model):
 
         return super(AccountInvoice, self).action_invoice_cancel()
 
+    def set_origin_with_picking(self):
+        for invoice in self:
+            pickings = self.env["stock.picking"]
+            for line in invoice.invoice_line_ids:
+                for sale_line in line.sale_line_ids:
+                    for move in sale_line.move_ids:
+                        if move.picking_id.state == "done":
+                            pickings |= move.picking_id
+                if line.purchase_line_id:
+                    for move in line.purchase_line_id.move_ids:
+                        if move.picking_id.state == "done":
+                            pickings |= move.picking_id
+            origin = ""
+            for picking in pickings:
+                origin += " " + picking.name
+
+            if origin:
+                invoice.write({"origin": origin})
+
 
 #
 # class account_invoice_line(models.Model):
