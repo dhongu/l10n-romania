@@ -20,7 +20,6 @@ Romania - Picking Reports -Product Expiry
 |badge1| |badge2| |badge3| 
 
 
-
 **Table of contents**
 
 .. contents::
