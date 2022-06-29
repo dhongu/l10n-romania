@@ -8,13 +8,13 @@
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",
     "depends": [
-        'l10n_ro',
-        'account_edi_ubl',
-      #  'account_edi_ubl_bis3',
+        "l10n_ro",
+        "account_edi_ubl",
+        #  'account_edi_ubl_bis3',
     ],
     "data": [
-        'data/account_edi_data.xml',
-        'data/ubl_templates.xml',
+        "data/account_edi_data.xml",
+        "data/ubl_templates.xml",
     ],
     "installable": True,
 }

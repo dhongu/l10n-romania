@@ -1,12 +1,9 @@
 # ©  2008-2022 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import models
-
 from lxml import etree
-import base64
-from xml.sax.saxutils import escape, quoteattr
 
+from odoo import models
 
 # class IrActionsReport(models.Model):
 #     _inherit = 'ir.actions.report'
