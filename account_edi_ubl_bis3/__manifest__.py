@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
 {
-    'name': 'Import/Export invoices with UBL (BIS3)',
-    'description': '''
-    Support for Export/Import in UBL format (BIS3).
-    ''',
-    'version': '1.0',
-    'category': 'Accounting/Accounting',
-    'depends': ['account_edi_ubl'],
-    'data': [
-        'data/bis3_templates.xml',
+    "name": "Import/Export invoices with UBL (BIS3)",
+    "author": "Odoo," "Terrabit," "Odoo Community Association (OCA)",
+    "version": "14.0.1.0.0",
+    "category": "Accounting/Accounting",
+    "website": "https://github.com/OCA/l10n-romania",
+    "depends": ["account_edi_ubl"],
+    "data": [
+        "data/bis3_templates.xml",
     ],
-    'installable': True,
-    'application': False,
-    'license': 'LGPL-3',
+    "license": "AGPL-3",
+    "installable": True,
+    "application": False,
+    "development_status": "Mature",
 }

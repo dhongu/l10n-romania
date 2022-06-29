@@ -16,8 +16,7 @@ class AccountEdiFormat(models.Model):
         values = super()._get_bis3_values(invoice)
         values.update(
             {
-                "customization_id": "urn:cen.eu:en16931:2017"
-                "#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0",
+                "customization_id": "urn:cen.eu:en16931:2017" "#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0",
             }
         )
 
@@ -48,21 +47,13 @@ class AccountEdiFormat(models.Model):
     #
     def _create_invoice_from_xml_tree(self, filename, tree, journal=None):
         self.ensure_one()
-        if (
-            self.code == "cirus_ro"
-            and self._is_ubl(filename, tree)
-            and not self._is_account_edi_ubl_cii_available()
-        ):
+        if self.code == "cirus_ro" and self._is_ubl(filename, tree) and not self._is_account_edi_ubl_cii_available():
             return self._create_invoice_from_ubl(tree)
         return super()._create_invoice_from_xml_tree(filename, tree, journal=journal)
 
     def _update_invoice_from_xml_tree(self, filename, tree, invoice):
         self.ensure_one()
-        if (
-            self.code == "cirus_ro"
-            and self._is_ubl(filename, tree)
-            and not self._is_account_edi_ubl_cii_available()
-        ):
+        if self.code == "cirus_ro" and self._is_ubl(filename, tree) and not self._is_account_edi_ubl_cii_available():
             return self._update_invoice_from_ubl(tree, invoice)
         return super()._update_invoice_from_xml_tree(filename, tree, invoice)
 
