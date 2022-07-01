@@ -43,6 +43,7 @@ class Account(models.Model):
     def name_get(self):
         result = []
         for account in self:
-            name = account.external_code + " " + account.name
+            code = account.external_code or account.code
+            name = code + " " + account.name
             result.append((account.id, name))
         return result
