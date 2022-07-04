@@ -191,7 +191,8 @@ class AccountInvoiceLine(models.Model):
                 'price_unit': current_move_value / current_move_received_quantity,
                 'invoice_line_evaluated_by': self.id})
 
-        self._update_quant_value(stock_moves)
+        if stock_moves:
+            self._update_quant_value(stock_moves)
 
         self.product_id.update_fifo_cost(self.company_id)
         return stock_moves
