@@ -191,9 +191,6 @@ class AccountInvoiceLine(models.Model):
                 'price_unit': current_move_value / current_move_received_quantity,
                 'invoice_line_evaluated_by': self.id})
 
-        if stock_moves:
-            self._update_quant_value(stock_moves)
-
         self.product_id.update_fifo_cost(self.company_id)
         return stock_moves
 
@@ -232,14 +229,6 @@ class AccountInvoiceLine(models.Model):
             return solution_stock_moves
         else:
             raise UserError(_('No combination of incoming stock moves to sum quantity: %s') %str(searched_sum))
-
-    def _update_quant_value(self, stock_moves):
-        StockQuant = self.env['stock.quant']
-        quants = StockQuant.search([
-            ('product_id', '=', stock_moves.mapped('product_id.id')),
-            ('location_id', '=', stock_moves.mapped('location_dest_id.id'))])
-        if quants and hasattr(quants, '_compute_value'):
-            quants.sudo()._compute_value()
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
