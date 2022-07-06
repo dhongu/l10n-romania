@@ -296,7 +296,7 @@ class DailyStockReportRef(models.TransientModel):
     aml_ids = fields.Many2many("account.move.line")
 
     def action_valuation_at_date_details(self):
-        """ Returns an action with either a list view of all the valued stock moves of `self` if the
+        """Returns an action with either a list view of all the valued stock moves of `self` if the
         valuation is set as manual or a list view of all the account move lines if the valuation is
         set as automated.
         """
@@ -331,7 +331,7 @@ class DailyStockReportLine(models.TransientModel):
     aml_ids = fields.Many2many("account.move.line")
 
     def action_valuation_at_date_details(self):
-        """ Returns an action with either a list view of all the valued stock moves of `self` if the
+        """Returns an action with either a list view of all the valued stock moves of `self` if the
         valuation is set as manual or a list view of all the account move lines if the valuation is
         set as automated.
         """

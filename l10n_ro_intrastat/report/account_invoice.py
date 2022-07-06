@@ -6,9 +6,7 @@ import time
 from odoo.osv import osv
 from odoo.report import report_sxw
 
-from odoo.addons.l10n_ro_invoice_report.report.account_invoice import (
-    report_invoice_print,
-)
+from odoo.addons.l10n_ro_invoice_report.report.account_invoice import report_invoice_print
 
 # from odoo.addons.l10n_ro_invoice_report.report.amount_to_text_ro  import *
 

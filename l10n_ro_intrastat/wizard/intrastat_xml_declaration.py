@@ -71,7 +71,7 @@ class IntrastatDeclaration(models.TransientModel):
     cn8 = fields.Char("CN8", size=4, required=True, default="2022")
 
     def _company_warning(self, translated_msg):
-        """ Raise a error with custom message, asking user to configure company settings """
+        """Raise a error with custom message, asking user to configure company settings"""
         action_id = self.env("ir.model.data").xmlid_to_res_id("base.action_res_company_form")
         raise exceptions.RedirectWarning(translated_msg, action_id, _("Go to company configuration screen"))
 
@@ -88,7 +88,9 @@ class IntrastatDeclaration(models.TransientModel):
             )
 
         if not company.vat:
-            self._company_warning(_("The VAT of your company is not set, " "please make sure to configure it first."),)
+            self._company_warning(
+                _("The VAT of your company is not set, " "please make sure to configure it first."),
+            )
         if len(decl_datas.year) != 4:
             raise exceptions.Warning(_("Year must be 4 digits number (YYYY)"))
 

@@ -52,7 +52,7 @@ class RO_BNRGetter(CurrencyGetterInterface):
     ]
 
     def rate_retrieve(self, dom, ns, curr, rate_date):
-        """ Parse a dom node to retrieve-
+        """Parse a dom node to retrieve-
         currencies data"""
         res = {}
         xpath_rate_currency = "/def:DataSet/def:Body/def:Cube[@date='%s']/def:Rate[@currency='%s']/text()" % (

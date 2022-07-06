@@ -22,39 +22,69 @@ class TestStockPurchase(SavepointCase):
         cls.account_difference = cls.env["account.account"].search([("code", "=", "348000")], limit=1)
         if not cls.account_difference:
             cls.account_difference = cls.env["account.account"].create(
-                {"name": "Difference", "code": "348000", "user_type_id": account_type_cur.id, "reconcile": False,}
+                {
+                    "name": "Difference",
+                    "code": "348000",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": False,
+                }
             )
 
         cls.account_expense = cls.env["account.account"].search([("code", "=", "607000")], limit=1)
         if not cls.account_expense:
             cls.account_expense = cls.env["account.account"].create(
-                {"name": "Expense", "code": "607000", "user_type_id": account_type_exp.id, "reconcile": False,}
+                {
+                    "name": "Expense",
+                    "code": "607000",
+                    "user_type_id": account_type_exp.id,
+                    "reconcile": False,
+                }
             )
 
         cls.account_income = cls.env["account.account"].search([("code", "=", "707000")])
         if not cls.account_income:
             cls.account_income = cls.env["account.account"].create(
-                {"name": "Income", "code": "707000", "user_type_id": account_type_inc.id, "reconcile": False,}
+                {
+                    "name": "Income",
+                    "code": "707000",
+                    "user_type_id": account_type_inc.id,
+                    "reconcile": False,
+                }
             )
 
         # se poate utiliza foarte bine si  408
         cls.account_input = cls.env["account.account"].search([("code", "=", "371000.i")])
         if not cls.account_input:
             cls.account_input = cls.env["account.account"].create(
-                {"name": "Income", "code": "371000.i", "user_type_id": account_type_cur.id, "reconcile": False,}
+                {
+                    "name": "Income",
+                    "code": "371000.i",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": False,
+                }
             )
 
         # se poate utiliza foarte bine si  418
         cls.account_output = cls.env["account.account"].search([("code", "=", "371000.o")])
         if not cls.account_output:
             cls.account_output = cls.env["account.account"].create(
-                {"name": "Output", "code": "371000.o", "user_type_id": account_type_cur.id, "reconcile": False,}
+                {
+                    "name": "Output",
+                    "code": "371000.o",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": False,
+                }
             )
 
         cls.account_valuation = cls.env["account.account"].search([("code", "=", "371000")])
         if not cls.account_valuation:
             cls.account_valuation = cls.env["account.account"].create(
-                {"name": "Valuation", "code": "371000", "user_type_id": account_type_cur.id, "reconcile": False,}
+                {
+                    "name": "Valuation",
+                    "code": "371000",
+                    "user_type_id": account_type_cur.id,
+                    "reconcile": False,
+                }
             )
 
         cls.uneligible_tax_account_id = cls.env.user.company_id.tax_cash_basis_journal_id.default_debit_account_id
@@ -267,11 +297,11 @@ class TestStockPurchase(SavepointCase):
 
     def test_nir_with_invoice(self):
         """
-            Receptie produse in depozit in baza facturii
-             - in stoc valoarea de achiztie
-             - in contabilitate valoarea de achiztie
-             - in diferente de pret zero
-             - in TVA neexigibilă zero
+        Receptie produse in depozit in baza facturii
+         - in stoc valoarea de achiztie
+         - in contabilitate valoarea de achiztie
+         - in diferente de pret zero
+         - in TVA neexigibilă zero
         """
         po = self.create_po()
 
@@ -291,11 +321,11 @@ class TestStockPurchase(SavepointCase):
 
     def test_nir_with_invoice_in_store(self):
         """
-            Receptie produse in magazin in baza facturii
-             - in stoc valoarea de achiztie
-             - in contabilitate valoarea de vanzare
-             - in diferente de pret difertnea dintre valoarea  de achiztie si valoarea de vanzare fara tva
-             - in TVA neexigibilă valoarea de tva
+        Receptie produse in magazin in baza facturii
+         - in stoc valoarea de achiztie
+         - in contabilitate valoarea de vanzare
+         - in diferente de pret difertnea dintre valoarea  de achiztie si valoarea de vanzare fara tva
+         - in TVA neexigibilă valoarea de tva
         """
         po = self.create_po(picking_type_in=self.picking_type_in_store)
 
@@ -320,12 +350,12 @@ class TestStockPurchase(SavepointCase):
 
     def test_nir_with_invoice_and_diff(self):
         """
-         Receptie produse in baza facturii cu inregistrare diferente dintre comanda de achizitie si factura
-         Diferentele trebuie sa fie inregitrate in contul de stoc
-             - in stoc valoarea de achiztie din factura
-             - in contabilitate valoarea de achiztie din factura
-             - in diferente de pret zero
-             - in TVA neexigibilă zero
+        Receptie produse in baza facturii cu inregistrare diferente dintre comanda de achizitie si factura
+        Diferentele trebuie sa fie inregitrate in contul de stoc
+            - in stoc valoarea de achiztie din factura
+            - in contabilitate valoarea de achiztie din factura
+            - in diferente de pret zero
+            - in TVA neexigibilă zero
         """
         po = self.create_po()
 
@@ -346,13 +376,13 @@ class TestStockPurchase(SavepointCase):
 
     def test_nir_with_invoice_and_diff_in_store(self):
         """
-         Receptie produse  in magazin in baza facturii cu inregistrare diferente dintre comanda de achizitie si factura
-         Diferentele trebuie sa fie inregitrate in contul de  ....
+        Receptie produse  in magazin in baza facturii cu inregistrare diferente dintre comanda de achizitie si factura
+        Diferentele trebuie sa fie inregitrate in contul de  ....
 
-             - in stoc valoarea de achiztie din factura
-             - in contabilitate valoarea de vanzare
-             - in diferente de pret difertnea dintre valoarea de achiztie finala si valoarea de vanzare fara tva
-             - in TVA neexigibilă valoarea de tva avand ca baza valoarea de vanzare
+            - in stoc valoarea de achiztie din factura
+            - in contabilitate valoarea de vanzare
+            - in diferente de pret difertnea dintre valoarea de achiztie finala si valoarea de vanzare fara tva
+            - in TVA neexigibilă valoarea de tva avand ca baza valoarea de vanzare
         """
         po = self.create_po(picking_type_in=self.picking_type_in_store)
 
@@ -378,7 +408,7 @@ class TestStockPurchase(SavepointCase):
 
     def test_nir_with_notice_and_invoice(self):
         """
-            Receptie produse pe baza de aviz si inregistare ulterioara a facturii
+        Receptie produse pe baza de aviz si inregistare ulterioara a facturii
         """
         po = self.create_po(notice=True)
 
@@ -392,7 +422,7 @@ class TestStockPurchase(SavepointCase):
 
     def test_nir_with_notice_and_invoice_in_store(self):
         """
-            Receptie produse in magazin pe baza de aviz si inregistare ulterioara a facturii
+        Receptie produse in magazin pe baza de aviz si inregistare ulterioara a facturii
         """
         po = self.create_po(notice=True, picking_type_in=self.picking_type_in_store)
         #  in stoc produsele sunt la valoarea de achizitie
@@ -410,9 +440,9 @@ class TestStockPurchase(SavepointCase):
 
     def test_nir_with_notice_invoice_and_diff(self):
         """
-         Receptie produse pe baza de aviz si inregistare ulterioara a facturii
-         cu inregistrare diferente dintre comanda de achzitie si factura
-         Diferentele trebuie sa fie inregitrate in contul de diferente de stoc
+        Receptie produse pe baza de aviz si inregistare ulterioara a facturii
+        cu inregistrare diferente dintre comanda de achzitie si factura
+        Diferentele trebuie sa fie inregitrate in contul de diferente de stoc
         """
         po = self.create_po(notice=True)
 
@@ -434,9 +464,9 @@ class TestStockPurchase(SavepointCase):
 
     def test_nir_with_notice_invoice_and_diff_in_store(self):
         """
-         Receptie produse in magazin pe baza de aviz si inregistare ulterioara a facturii
-         cu inregistrare diferente dintre comanda de achzitie si factura
-         Diferentele trebuie sa fie inregitrate in contul de diferente de stoc
+        Receptie produse in magazin pe baza de aviz si inregistare ulterioara a facturii
+        cu inregistrare diferente dintre comanda de achzitie si factura
+        Diferentele trebuie sa fie inregitrate in contul de diferente de stoc
         """
         po = self.create_po(notice=True, picking_type_in=self.picking_type_in_store)
 

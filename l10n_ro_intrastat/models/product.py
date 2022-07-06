@@ -20,7 +20,7 @@ class Product(models.Model):
         return self.intrastat_id or self.categ_id.search_intrastat_code()
 
     def get_intrastat_recursively(self):
-        """ Recursively search in product to find an intrastat code id """
+        """Recursively search in product to find an intrastat code id"""
         return self.intrastat_id.id or self.categ_id.get_intrastat_recursively()
 
 
@@ -35,8 +35,7 @@ class ProductCategory(models.Model):
         return self.intrastat_id or (self.parent_id and self.parent_id.search_intrastat_code())
 
     def get_intrastat_recursively(self):
-        """ Recursively search in categories to find an intrastat code id
-        """
+        """Recursively search in categories to find an intrastat code id"""
         if self.intrastat_id:
             res = self.intrastat_id.id
         elif self.parent_id:

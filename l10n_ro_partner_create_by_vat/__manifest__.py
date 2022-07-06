@@ -12,7 +12,9 @@
         #'l10n_ro',
         "base_vat"
     ],
-    "data": ["views/res_partner_view.xml",],
+    "data": [
+        "views/res_partner_view.xml",
+    ],
     "installable": True,
     "license": "AGPL-3",
     "application": False,

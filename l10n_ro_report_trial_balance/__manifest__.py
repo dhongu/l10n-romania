@@ -26,6 +26,8 @@
         "wizards/trial_balance_wizard_view.xml",
         "data/account_group.xml",
     ],
-    "qweb": ["static/src/xml/trial_balance_report_template.xml",],
+    "qweb": [
+        "static/src/xml/trial_balance_report_template.xml",
+    ],
     "post_init_hook": "_set_account_group",
 }

@@ -8,7 +8,7 @@ from . import abstract_test
 
 class TestTrialBalance(abstract_test.AbstractTest):
     """
-        Technical tests for Trial Balance Report.
+    Technical tests for Trial Balance Report.
     """
 
     def _getReportModel(self):

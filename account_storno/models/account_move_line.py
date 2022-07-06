@@ -23,8 +23,8 @@ class AccountMoveLine(models.Model):
     @api.multi
     @api.constrains("debit", "credit")
     def _check_contra_minus(self):
-        """ This is to restore credit_debit2 check functionality,
-            for contra journals.
+        """This is to restore credit_debit2 check functionality,
+        for contra journals.
         """
         contra_lines = self.filtered(lambda line: line.move_id.journal_id.posting_policy == "contra")
         for line in contra_lines:

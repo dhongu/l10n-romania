@@ -3,7 +3,9 @@
 
 import base64
 import logging
+
 import psycopg2
+
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
@@ -26,8 +28,8 @@ class AccountBankStatementImport(models.TransientModel):
         import_wizard = self.env["base_import.import"].create(
             {
                 "res_model": "account.bank.statement.line",
-                'file': base64.b64decode(self.data_file),
-                'file_name': self.filename,
+                "file": base64.b64decode(self.data_file),
+                "file_name": self.filename,
                 "file_type": "xlsx",
             }
         )
@@ -80,34 +82,28 @@ class AccountBankStmtImportXLSX(models.TransientModel):
 
         return data
 
-
-
     @api.multi
     def parse_preview(self, options, count=10):
-        if options.get('bank_stmt_import', False):
+        if options.get("bank_stmt_import", False):
             self = self.with_context(bank_stmt_import=True)
         return super(AccountBankStmtImportXLSX, self).parse_preview(options, count=count)
 
     @api.multi
     def do(self, fields, columns, options, dryrun=False):
-        if options.get('bank_stmt_import', False):
-            self._cr.execute('SAVEPOINT import_bank_stmt')
-            vals = {
-                'journal_id': self._context.get('journal_id', False),
-                'reference': self.file_name
-            }
-            statement = self.env['account.bank.statement'].create(vals)
-            res = super(AccountBankStmtImportXLSX, self.with_context(bank_statement_id=statement.id)).do(fields, columns, options, dryrun=dryrun)
+        if options.get("bank_stmt_import", False):
+            self._cr.execute("SAVEPOINT import_bank_stmt")
+            vals = {"journal_id": self._context.get("journal_id", False), "reference": self.file_name}
+            statement = self.env["account.bank.statement"].create(vals)
+            res = super(AccountBankStmtImportXLSX, self.with_context(bank_statement_id=statement.id)).do(
+                fields, columns, options, dryrun=dryrun
+            )
 
             try:
                 if dryrun:
-                    self._cr.execute('ROLLBACK TO SAVEPOINT import_bank_stmt')
+                    self._cr.execute("ROLLBACK TO SAVEPOINT import_bank_stmt")
                 else:
-                    self._cr.execute('RELEASE SAVEPOINT import_bank_stmt')
-                    res['messages'].append({
-                        'statement_id': statement.id,
-                        'type': 'bank_statement'
-                        })
+                    self._cr.execute("RELEASE SAVEPOINT import_bank_stmt")
+                    res["messages"].append({"statement_id": statement.id, "type": "bank_statement"})
             except psycopg2.InternalError:
                 pass
             return res

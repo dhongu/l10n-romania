@@ -28,7 +28,14 @@ class ActivityStatement(models.AbstractModel):
         if currency_id not in currencies:
             # This will only happen if currency is inactive
             currencies[currency_id] = self.env["res.currency"].browse(currency_id)
-        return ({"lines": [], "balance_forward": balance_forward, "amount_due": balance_forward,}, currencies)
+        return (
+            {
+                "lines": [],
+                "balance_forward": balance_forward,
+                "amount_due": balance_forward,
+            },
+            currencies,
+        )
 
     @api.multi
     def _get_report_values(self, docids, data):

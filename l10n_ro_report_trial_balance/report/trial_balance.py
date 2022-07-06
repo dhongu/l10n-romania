@@ -7,7 +7,7 @@ from odoo import _, api, fields, models
 
 
 class RomaniaTrialBalanceReport(models.TransientModel):
-    """ Here, we just define class fields.
+    """Here, we just define class fields.
     For methods, go more bottom at this file.
 
     The class hierarchy is :
@@ -106,7 +106,7 @@ class RomaniaTrialBalanceAccountReport(models.TransientModel):
 
 
 class RomaniaTrialBalanceComputeReport(models.TransientModel):
-    """ Here, we just define methods.
+    """Here, we just define methods.
     For class fields, go more top at this file.
     """
 

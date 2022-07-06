@@ -26,7 +26,10 @@ class RomaniaTrialBalanceReportWizard(models.TransientModel):
     with_special_accounts = fields.Boolean(
         "With Special Accounts", help="Check this if you want to print classes 8 and 9 of accounts."
     )
-    account_ids = fields.Many2many(comodel_name="account.account", string="Filter accounts",)
+    account_ids = fields.Many2many(
+        comodel_name="account.account",
+        string="Filter accounts",
+    )
 
     col_opening_balance = fields.Boolean("Balance Opening Year", default=True)  # solduri initiale an
     col_opening = fields.Boolean("Opening Year", default=False)  # rulaje la inceput de an

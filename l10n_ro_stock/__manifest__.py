@@ -27,7 +27,9 @@
     "website": "http://www.forbiom.eu",
     "category": "Warehouse",
     "depends": ["stock"],
-    "data": ["views/stock_view.xml",],
+    "data": [
+        "views/stock_view.xml",
+    ],
     "installable": True,
     "active": False,
 }

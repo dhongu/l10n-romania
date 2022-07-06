@@ -5,7 +5,10 @@
     "author": "Dorin Hongu",
     "website": "",
     "category": "Romania Adaptation",
-    "depends": ["account", "date_range",],
+    "depends": [
+        "account",
+        "date_range",
+    ],
     "description": """
 Romania  - Accounting Reports
 ------------------------------------------

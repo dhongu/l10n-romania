@@ -53,7 +53,11 @@ class AbstractTest(TransactionCase):
         report_type = "qweb-html"
         report_action = self.report.print_report(report_type)
         self.assertDictContainsSubset(
-            {"type": "ir.actions.report", "report_name": self.qweb_report_name, "report_type": "qweb-html",},
+            {
+                "type": "ir.actions.report",
+                "report_name": self.qweb_report_name,
+                "report_type": "qweb-html",
+            },
             report_action,
         )
 

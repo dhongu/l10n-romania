@@ -46,7 +46,7 @@ class AbstractReportXslx(models.AbstractModel):
         self._generate_report_content(workbook, report)
 
     def _define_formats(self, workbook):
-        """ Add cell formats to current workbook.
+        """Add cell formats to current workbook.
         Those formats can be used on all cell.
 
         Available formats are :
@@ -168,64 +168,64 @@ class AbstractReportXslx(models.AbstractModel):
 
     def _get_report_company_name(self, report):
         """
-            Allow to define the report company data.
-            Company data will be printed in columns A1.
+        Allow to define the report company data.
+        Company data will be printed in columns A1.
 
-            :return: the company data
+        :return: the company data
         """
         raise NotImplementedError()
 
     def _get_report_name(self):
         """
-            Allow to define the report name.
-            Report name will be used as sheet name and as report title.
+        Allow to define the report name.
+        Report name will be used as sheet name and as report title.
 
-            :return: the report name
+        :return: the report name
         """
         raise NotImplementedError()
 
     def _get_report_columns(self, report):
         """
-            Allow to define the report columns
-            which will be used to generate report.
+        Allow to define the report columns
+        which will be used to generate report.
 
-            :return: the report columns as dict
+        :return: the report columns as dict
 
-            :Example:
+        :Example:
 
-            {
-                0: {'header': 'Simple column',
-                    'field': 'field_name_on_my_object',
-                    'width': 11},
-                1: {'header': 'Amount column',
-                     'field': 'field_name_on_my_object',
-                     'type': 'amount',
-                     'width': 14},
-            }
+        {
+            0: {'header': 'Simple column',
+                'field': 'field_name_on_my_object',
+                'width': 11},
+            1: {'header': 'Amount column',
+                 'field': 'field_name_on_my_object',
+                 'type': 'amount',
+                 'width': 14},
+        }
         """
         raise NotImplementedError()
 
     def _get_report_filters(self, report):
         """
-            :return: the report filters as list
+        :return: the report filters as list
 
-            :Example:
+        :Example:
 
-            [
-                ['first_filter_name', 'first_filter_value'],
-                ['second_filter_name', 'second_filter_value']
-            ]
+        [
+            ['first_filter_name', 'first_filter_value'],
+            ['second_filter_name', 'second_filter_value']
+        ]
         """
         raise NotImplementedError()
 
     def _get_col_count_filter_name(self):
         """
-            :return: the columns number used for filter names.
+        :return: the columns number used for filter names.
         """
         raise NotImplementedError()
 
     def _get_col_count_filter_value(self):
         """
-            :return: the columns number used for filter values.
+        :return: the columns number used for filter values.
         """
         raise NotImplementedError()

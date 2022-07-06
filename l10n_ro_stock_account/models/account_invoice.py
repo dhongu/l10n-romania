@@ -248,7 +248,7 @@ class AccountInvoiceLine(models.Model):
                         # todo: de actualizat pretul standard cu noua valoare de stoc
 
                 stock_value = product.stock_value  # + line_diff_value
-                if product.qty_at_date: # se pare ca poate fi si 0
+                if product.qty_at_date:  # se pare ca poate fi si 0
                     new_price = stock_value / product.qty_at_date
                 else:
                     new_price = 0

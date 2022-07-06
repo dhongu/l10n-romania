@@ -62,7 +62,7 @@ class PL_NBPGetter(CurrencyGetterInterface):
     ]
 
     def rate_retrieve(self, dom, ns, curr):
-        """ Parse a dom node to retrieve
+        """Parse a dom node to retrieve
         currencies data"""
         res = {}
         xpath_rate_currency = ("/tabela_kursow/pozycja[kod_waluty='%s']/" "kurs_sredni/text()") % (curr.upper())

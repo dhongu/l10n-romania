@@ -11,7 +11,12 @@
 
     """,
     "category": "Generic Modules",
-    "depends": ["account", "l10n_ro", "l10n_ro_config", "l10n_ro_declarations",],
+    "depends": [
+        "account",
+        "l10n_ro",
+        "l10n_ro_config",
+        "l10n_ro_declarations",
+    ],
     "data": ["views/d394_view.xml", "views/declaration_view.xml"],
     "active": False,
     "installable": True,

@@ -249,7 +249,7 @@ class AccountInvoice(models.Model):
 
     def group_lines(self, iml, line):
         """Merge account move lines (and hence analytic lines) if invoice
-           line hashcodes are equals"""
+        line hashcodes are equals"""
         if self.journal_id.posting_policy == "storno":
             if self.journal_id.group_invoice_lines:
                 line2 = {}

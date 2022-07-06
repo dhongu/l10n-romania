@@ -55,7 +55,11 @@ class CurrencyRateUpdateService(models.Model):
     @api.onchange("service")
     def _onchange_service(self):
         currency_list = ""
-        res = {"domain": {"currency_to_update": "[('id', '=', False)]",}}
+        res = {
+            "domain": {
+                "currency_to_update": "[('id', '=', False)]",
+            }
+        }
         if self.service:
             currencies = []
             getter = CurrencyGetterType.get(self.service)
@@ -223,7 +227,10 @@ class CurrencyRateUpdateService(models.Model):
 
                     vals = {"currency_id": curr.id, "rate": res[curr.name], "name": rate_name}
                     rate = self.env["res.currency.rate"].search(
-                        [("name", "=", rate_name), ("currency_id", "=", curr.id),]
+                        [
+                            ("name", "=", rate_name),
+                            ("currency_id", "=", curr.id),
+                        ]
                     )
                     if rate:
                         rate.unlink()

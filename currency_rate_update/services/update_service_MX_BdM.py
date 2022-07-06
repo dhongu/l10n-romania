@@ -88,13 +88,13 @@ class MX_BdMGetter(CurrencyGetterInterface):
     ]
 
     def rate_retrieve(self):
-        """ Get currency exchange from Banxico.xml and proccess it
+        """Get currency exchange from Banxico.xml and proccess it
         TODO: Get correct data from xml instead of process string
         """
         url = "http://www.banxico.org.mx/rsscb/rss?" "BMXC_canal=pagos&BMXC_idioma=es"
 
-        from xml.dom.minidom import parse
         from io import BytesIO
+        from xml.dom.minidom import parse
 
         logger = logging.getLogger(__name__)
         logger.debug("Banxico currency rate service : connecting...")

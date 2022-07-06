@@ -24,10 +24,10 @@ ANAF_URL = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v6/ws/tva"
 
 
 def unaccent(text):
-    text = text.replace(u"\u015f", u"\u0219")
-    text = text.replace(u"\u0163", u"\u021b")
-    text = text.replace(u"\u015e", u"\u0218")
-    text = text.replace(u"\u0162", u"\u021a")
+    text = text.replace("\u015f", "\u0219")
+    text = text.replace("\u0163", "\u021b")
+    text = text.replace("\u015e", "\u0218")
+    text = text.replace("\u0162", "\u021a")
     text = unicodedata.normalize("NFD", text)
     text = text.encode("ascii", "ignore")
     text = text.decode("utf-8")
@@ -139,8 +139,8 @@ class ResPartner(models.Model):
         city = ""
         if result["adresa"]:
             result["adresa"] = result["adresa"].replace("MUNICIPIUL", "MUN.")
-            result["adresa"] = result["adresa"].replace(u"ORȘ.", "ORS.")
-            result["adresa"] = result["adresa"].replace(u"ORŞ.", "ORS.")
+            result["adresa"] = result["adresa"].replace("ORȘ.", "ORS.")
+            result["adresa"] = result["adresa"].replace("ORŞ.", "ORS.")
             lines = [x for x in result["adresa"].split(",") if x]
             nostreet = True
             # listabr = ['JUD.', 'MUN.', 'ORS.', 'COM.',

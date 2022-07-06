@@ -53,8 +53,8 @@ class UnsuportedCurrencyError(Exception):
 
 
 class CurrencyGetterType(type):
-    """ Meta class for currency getters.
-        Automaticaly registers new curency getter on class definition
+    """Meta class for currency getters.
+    Automaticaly registers new curency getter on class definition
     """
 
     getters = {}
@@ -67,8 +67,7 @@ class CurrencyGetterType(type):
 
     @classmethod
     def get(mcs, code, *args, **kwargs):
-        """ Get getter by code
-        """
+        """Get getter by code"""
         return mcs.getters[code](*args, **kwargs)
 
 
@@ -285,7 +284,7 @@ class CurrencyGetterInterface(with_metaclass(CurrencyGetterType, object)):
 
     def get_updated_currency(self, currency_array, main_currency, max_delta_days):
         """Interface method that will retrieve the currency
-           This function has to be reinplemented in child
+        This function has to be reinplemented in child
         """
         raise AbstractMethodError
 
@@ -302,9 +301,9 @@ class CurrencyGetterInterface(with_metaclass(CurrencyGetterType, object)):
 
                 objfile = urlopen(url)
             else:
-                import urllib.request
-                import urllib.parse
                 import urllib.error
+                import urllib.parse
+                import urllib.request
 
                 objfile = urllib.request.urlopen(url)
 

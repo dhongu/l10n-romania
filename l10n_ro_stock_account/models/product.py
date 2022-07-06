@@ -69,7 +69,7 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def do_change_list_price(self, new_price):
-        """ Changes the Standard Price of Product and creates an account move accordingly."""
+        """Changes the Standard Price of Product and creates an account move accordingly."""
         AccountMove = self.env["account.move"]
 
         products = self.env["product.product"]

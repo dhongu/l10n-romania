@@ -108,19 +108,34 @@ class TestTrialBalanceReport(common.TransactionCase):
         lines = {}
         report_account_model = self.env["l10n_ro_report_trial_balance_account"]
         lines["receivable"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_id", "=", self.account100.id),]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_id", "=", self.account100.id),
+            ]
         )
         lines["income"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_id", "=", self.account200.id),]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_id", "=", self.account200.id),
+            ]
         )
         lines["unaffected"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_id", "=", self.account110.id),]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_id", "=", self.account110.id),
+            ]
         )
         lines["group1"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_group_id", "=", self.group1.id),]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_group_id", "=", self.group1.id),
+            ]
         )
         lines["group2"] = report_account_model.search(
-            [("report_id", "=", trial_balance.id), ("account_group_id", "=", self.group2.id),]
+            [
+                ("report_id", "=", trial_balance.id),
+                ("account_group_id", "=", self.group2.id),
+            ]
         )
         return lines
 

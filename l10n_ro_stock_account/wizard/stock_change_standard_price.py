@@ -23,7 +23,7 @@ class StockChangeStandardPrice(models.TransientModel):
     # in metoda standard se foloseste active_id si se aduce un id gresit
     @api.multi
     def change_price(self):
-        """ Changes the Standard Price of Product and creates an account move accordingly. """
+        """Changes the Standard Price of Product and creates an account move accordingly."""
         self.ensure_one()
         if self._context["active_model"] == "product.template":
             products = self.env["product.template"].browse(self._context["active_ids"]).product_variant_ids
