@@ -4,16 +4,22 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-22 08:29+0000\n"
-"PO-Revision-Date: 2021-02-22 08:29+0000\n"
+"POT-Creation-Date: 2022-07-06 08:36+0000\n"
+"PO-Revision-Date: 2022-07-06 08:36+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<span>/</span>"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
@@ -184,6 +190,11 @@ msgid "Bank Statement Line"
 msgstr "Linie extras bacă"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Cancelled"
+msgstr "anulată"
+
+#. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_collection
 msgid "Cash collection"
 msgstr "Dispozitie încasare"
@@ -216,20 +227,6 @@ msgid "Discount (%)"
 msgstr "Reducere (%)"
 
 #. module: l10n_ro_invoice_report
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_account_report_invoice__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_payment__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_collection__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_line__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_payment__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_voucher__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_voucher__display_name
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__display_name
-msgid "Display Name"
-msgstr "Nume afișat"
-
-#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Elaborate:"
 msgstr "Întocmit:"
@@ -240,20 +237,6 @@ msgstr "Întocmit:"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "For:"
 msgstr "Pentru:"
-
-#. module: l10n_ro_invoice_report
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_account_report_invoice__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_payment__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_collection__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_line__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_payment__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_voucher__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_voucher__id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__id
-msgid "ID"
-msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -275,20 +258,6 @@ msgstr ""
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_move
 msgid "Journal Entry"
 msgstr "Notă contabilă"
-
-#. module: l10n_ro_invoice_report
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_account_report_invoice____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_payment____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_collection____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_line____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_payment____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_statement_voucher____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_report_l10n_ro_invoice_report_report_voucher____last_update
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner____last_update
-msgid "Last Modified on"
-msgstr "Ultima modificare la"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__mean_transp
