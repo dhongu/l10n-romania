@@ -441,7 +441,10 @@
                     <t t-set="payments_vals" t-value="o.sudo()._get_reconciled_info_JSON_values()" />
                     <br />
                     <br />
+
                     <div t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
+
+                        <t t-if="payment_vals['journal_type']=='cash'">
                         <div>
                             <strong t-field="res_company.partner_id.name" />
                         </div>
@@ -488,6 +491,7 @@
                             Representing counter value of invoice
                             <span t-field="o.name" />
                         </div>
+                        </t>
                     </div>
                 </t>
 
