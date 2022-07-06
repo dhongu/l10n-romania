@@ -192,6 +192,10 @@
                 </div>
             </xpath>
 
+            <xpath expr="//h2/span[4]" position="after">
+                <span t-if="o.move_type == 'out_refund' and o.state == 'cancel'">Cancelled</span>
+            </xpath>
+
 
             <xpath expr="//table[@name='invoice_line_table']" position="replace">
                 <t t-set="with_discount_distinct" t-value="get_discount" />
