@@ -93,20 +93,20 @@ class AccountEdiFormat(models.Model):
         attachment = self._export_cirus_ro(invoice)
         access_token = invoice.company_id.l10n_ro_edi_access_token
         if invoice.company_id.l10n_ro_edi_test_mode:
-            url = "https://api.anaf.ro/test/FCTEL/rest/upload?standard=UBL"
+            url = "https://api.anaf.ro/test/FCTEL/rest/upload"
         else:
-            url = "https://api.anaf.ro/prod/FCTEL/rest/upload?standard=UBL"
+            url = "https://api.anaf.ro/prod/FCTEL/rest/upload"
 
         headers = {
             "Content-Type": "application/xml",
             "Authorization": f"Bearer {access_token}",
         }
-
-        response = requests.post(url, data=attachment.raw, headers=headers, timeout=80)
+        params = {"standard": 'UBL', "cif": invoice.company_id.partner_id.vat.replace('RO', '')}
+        response = requests.post(url, params=params, data=attachment.raw, headers=headers, timeout=80)
 
         _logger.info(response.content)
 
-        if response.status_code == "200":
+        if response.status_code == 200:
             res = {"attachment": attachment}
             doc = etree.fromstring(response.content)
             # header_element = doc.find('header')
@@ -119,8 +119,23 @@ class AccountEdiFormat(models.Model):
 
     def _l10n_ro_post_invoice_step_2(self, invoice):
 
-        access_token = invoice.company_id.l10n_ro_edi_token
-        if invoice.company_id.l10n_ro_edi_access_token:
+        access_token = invoice.company_id.l10n_ro_edi_access_token
+        if invoice.company_id.l10n_ro_edi_test_mode:
+            url = "https://api.anaf.ro/test/FCTEL/rest/listaMesajeFactura"
+        else:
+            url = "https://api.anaf.ro/prod/FCTEL/rest/listaMesajeFactura"
+
+        headers = {
+            "Content-Type": "application/xml",
+            "Authorization": f"Bearer {access_token}",
+        }
+        params = {"zile": 50, "cif": invoice.company_id.partner_id.vat.replace('RO', '')}
+        response = requests.get(url, params=params, headers=headers)
+
+        _logger.info(response.content)
+
+        access_token = invoice.company_id.l10n_ro_edi_access_token
+        if invoice.company_id.l10n_ro_edi_test_mode:
             url = "https://api.anaf.ro/test/FCTEL/rest/stareMesaj"
         else:
             url = "https://api.anaf.ro/prod/FCTEL/rest/stareMesaj"
@@ -134,7 +149,7 @@ class AccountEdiFormat(models.Model):
 
         _logger.info(response.content)
 
-        if response.status_code == "200":
+        if response.status_code == 200:
             res = {"success": True}
             doc = etree.fromstring(response.content)
             stare = doc.get("stare")
