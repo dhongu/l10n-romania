@@ -1,12 +1,12 @@
 # ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 import base64
+import json
 import logging
 import os
 import resource
 import subprocess
 import tempfile
-import json
 from contextlib import closing
 
 from odoo import fields, models
@@ -36,7 +36,7 @@ class DUKIntegrator(models.TransientModel):
 
     state = fields.Selection([("choose", "choose"), ("get", "get")], default="choose")  # choose period  # get the file
     xml_file_id = fields.Many2one("ir.attachment", string="XML File", domain=[("name", "=ilike", "%.xml")])
-
+    usage = fields.Selection([("v", "Validare"), ("p", "Validare + PDF"), ("s", "Semnare")], default="v")
     file_name = fields.Char()
     data_file = fields.Binary()
     file_type = fields.Selection(
@@ -67,18 +67,17 @@ class DUKIntegrator(models.TransientModel):
 
     def do_check_remote_xml(self):
         import requests
+
         xml_content = self.xml_file_id.raw or base64.b64decode(self.data_file)
         headers = {
             "Content-Type": "application/xml",
         }
-        url = self.remote_url or 'http://localhost:8069/duk_integrator'
-        params = {
-            'file_type': self.file_type
-        }
+        url = self.remote_url or "http://localhost:8069/duk_integrator"
+        params = {"file_type": self.file_type, "usage": self.usage}
         response = requests.post(url, params=params, data=base64.b64encode(xml_content), headers=headers)
         _logger.info(response.content)
         data = json.loads(response.content)
-        self.write({"state": "get", "error": data.get('error'), "output": data.get('output')})
+        self.write({"state": "get", "error": data.get("error"), "output": data.get("output")})
 
     def do_check_local_xml(self):
 
@@ -104,8 +103,8 @@ class DUKIntegrator(models.TransientModel):
                 xml_file.write(xml_content)
 
             command_args = [
-                "-v",  # validare declaratie
-                self.file_type,
+                "-%s" % self.usage,
+                self.file_type.upper(),
                 xml_file_path,
             ]
             duk_integrator = [_get_java_bin()] + ["-Xmx2048m", "-Xms2048m", "-jar", duk_jar] + command_args

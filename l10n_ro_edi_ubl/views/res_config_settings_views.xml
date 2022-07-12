@@ -8,8 +8,11 @@
         <field name="arch" type="xml">
             <xpath expr="//div[@id='invoicing_settings']" position="after">
                 <h2 attrs="{'invisible': [('country_code', '!=', 'RO')]}">Romanian Electronic Invoicing</h2>
-                <div class="row mt16 o_settings_container" id="l10n_ro_edi_settings"
-                     attrs="{'invisible': [('country_code', '!=', 'RO')]}">
+                <div
+                    class="row mt16 o_settings_container"
+                    id="l10n_ro_edi_settings"
+                    attrs="{'invisible': [('country_code', '!=', 'RO')]}"
+                >
                     <div class="col-12 col-lg-6 o_setting_box" title="Configure your ANAF credentials here.">
                         <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">

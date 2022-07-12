@@ -2,9 +2,11 @@
 # See README.rst file on addons root folder for license details
 
 import logging
+
 import requests
 from lxml import etree
-from odoo import models
+
+from odoo import _, models
 
 _logger = logging.getLogger(__name__)
 
@@ -98,7 +100,7 @@ class AccountEdiFormat(models.Model):
             "Content-Type": "application/xml",
             "Authorization": f"Bearer {access_token}",
         }
-        params = {"standard": 'UBL', "cif": invoice.company_id.partner_id.vat.replace('RO', '')}
+        params = {"standard": "UBL", "cif": invoice.company_id.partner_id.vat.replace("RO", "")}
         response = requests.post(url, params=params, data=attachment.raw, headers=headers, timeout=80)
 
         _logger.info(response.content)
@@ -126,7 +128,7 @@ class AccountEdiFormat(models.Model):
             "Content-Type": "application/xml",
             "Authorization": f"Bearer {access_token}",
         }
-        params = {"zile": 50, "cif": invoice.company_id.partner_id.vat.replace('RO', '')}
+        params = {"zile": 50, "cif": invoice.company_id.partner_id.vat.replace("RO", "")}
         response = requests.get(url, params=params, headers=headers)
 
         _logger.info(response.content)
