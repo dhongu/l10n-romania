@@ -13,4 +13,3 @@ class ResConfigSettings(models.TransientModel):
     l10n_ro_edi_manual = fields.Boolean(
         related="company_id.l10n_ro_edi_manual", readonly=False, string="Manual submission"
     )
-
