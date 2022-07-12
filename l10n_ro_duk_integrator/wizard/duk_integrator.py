@@ -6,6 +6,7 @@ import os
 import resource
 import subprocess
 import tempfile
+import json
 from contextlib import closing
 
 from odoo import fields, models
@@ -45,8 +46,41 @@ class DUKIntegrator(models.TransientModel):
 
     error = fields.Text()
     output = fields.Text()
+    local = fields.Boolean(default=True)
+    remote_url = fields.Char()
 
     def do_check_xml(self):
+        if self.local:
+            self.do_check_local_xml()
+        else:
+            self.do_check_remote_xml()
+
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "duk.integrator",
+            "view_mode": "form",
+            "view_type": "form",
+            "res_id": self.id,
+            "views": [(False, "form")],
+            "target": "new",
+        }
+
+    def do_check_remote_xml(self):
+        import requests
+        xml_content = self.xml_file_id.raw or base64.b64decode(self.data_file)
+        headers = {
+            "Content-Type": "application/xml",
+        }
+        url = self.remote_url or 'http://localhost:8069/duk_integrator'
+        params = {
+            'file_type': self.file_type
+        }
+        response = requests.post(url, params=params, data=base64.b64encode(xml_content), headers=headers)
+        _logger.info(response.content)
+        data = json.loads(response.content)
+        self.write({"state": "get", "error": data.get('error'), "output": data.get('output')})
+
+    def do_check_local_xml(self):
 
         try:
             subprocess.Popen(
@@ -95,6 +129,8 @@ class DUKIntegrator(models.TransientModel):
 
         self.write({"state": "get", "error": err, "output": out})
 
+    def do_back(self):
+        self.write({"state": "choose", "error": False, "output": False})
         return {
             "type": "ir.actions.act_window",
             "res_model": "duk.integrator",
