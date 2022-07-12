@@ -70,28 +70,46 @@ class AccountEdiFormat(models.Model):
             return super()._is_compatible_with_journal(journal)
         return journal.type == "sale" and journal.country_code == "RO"
 
-    #
+    def _is_required_for_invoice(self, invoice):
+        if self.code != "cirus_ro" or self._is_account_edi_ubl_cii_available():
+            return super()._is_required_for_invoice(invoice)
+        return invoice.commercial_partner_id.l10n_ro_e_invoice
+
     def _post_invoice_edi(self, invoices, test_mode=False):
         self.ensure_one()
         if self.code != "cirus_ro" or self._is_account_edi_ubl_cii_available():
             return super()._post_invoice_edi(invoices, test_mode)
         res = {}
         for invoice in invoices:
-            if not invoice.l10n_ro_edi_transaction:
-                res[invoice] = self._l10n_ro_post_invoice_step_1(invoice)
+            attachment = invoice._get_edi_attachment(self)
+            if not attachment:
+                attachment = self._export_cirus_ro(invoice)
+            res[invoice] = {"attachment": attachment}
+            if invoice.company_id.l10n_ro_edi_manual and not self.env.context.get('edi_manual_action', False):
+                res[invoice]['error'] = _('Automatic transmission is disabled')
             else:
-                res[invoice] = self._l10n_ro_post_invoice_step_2(invoice)
+                if not invoice.l10n_ro_edi_transaction:
+                    res[invoice] = self._l10n_ro_post_invoice_step_1(invoice, attachment, test_mode)
+                else:
+                    res[invoice] = self._l10n_ro_post_invoice_step_2(invoice, test_mode)
 
         return res
+
+    def _cancel_invoice_edi(self, invoices, test_mode=False):
+        self.ensure_one()
+        if self.code != "cirus_ro" or self._is_account_edi_ubl_cii_available():
+            return super()._post_invoice_edi(invoices, test_mode)
+
+        return {invoice: {'success': False} for invoice in invoices}
 
     def _needs_web_services(self):
         self.ensure_one()
         return self.code == "cirus_ro" or super()._needs_web_services()
 
-    def _l10n_ro_post_invoice_step_1(self, invoice):
-        attachment = self._export_cirus_ro(invoice)
+    def _l10n_ro_post_invoice_step_1(self, invoice, attachment, test_mode=False):
+
         access_token = invoice.company_id.l10n_ro_edi_access_token
-        if invoice.company_id.l10n_ro_edi_test_mode:
+        if invoice.company_id.l10n_ro_edi_test_mode or test_mode:
             url = "https://api.anaf.ro/test/FCTEL/rest/upload"
         else:
             url = "https://api.anaf.ro/prod/FCTEL/rest/upload"
@@ -116,10 +134,10 @@ class AccountEdiFormat(models.Model):
 
         return res
 
-    def _l10n_ro_post_invoice_step_2(self, invoice):
+    def _l10n_ro_post_invoice_step_2(self, invoice, test_mode=False):
 
         access_token = invoice.company_id.l10n_ro_edi_access_token
-        if invoice.company_id.l10n_ro_edi_test_mode:
+        if invoice.company_id.l10n_ro_edi_test_mode or test_mode:
             url = "https://api.anaf.ro/test/FCTEL/rest/listaMesajeFactura"
         else:
             url = "https://api.anaf.ro/prod/FCTEL/rest/listaMesajeFactura"

@@ -12,6 +12,11 @@
         "account_edi_ubl",
         "account_edi_ubl_bis3",
     ],
-    "data": ["data/account_edi_data.xml", "data/ubl_templates.xml", "views/res_config_settings_views.xml"],
+    "data": [
+        "data/account_edi_data.xml",
+        "data/ubl_templates.xml",
+        "views/res_config_settings_views.xml",
+        "views/res_partner_view.xml",
+    ],
     "installable": True,
 }

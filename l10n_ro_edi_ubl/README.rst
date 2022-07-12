@@ -17,12 +17,15 @@ Romania - EDI UBL
     :target: https://github.com/dhongu/l10n-romania/tree/14.0/l10n_ro_edi_ubl
     :alt: dhongu/l10n-romania
 
-|badge1| |badge2| |badge3| 
+|badge1| |badge2| |badge3|
 
 Ro E Invoice UBL
 
 
-Nu functionaza daca este instalat modulul
+- Generare XML - Done
+- Transmitere automata XML - OK
+- Citire raspuns XML - OK
+- Transmitere manaula XML -
 
 **Table of contents**
 
