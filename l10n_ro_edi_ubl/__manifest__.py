@@ -3,7 +3,7 @@
 {
     "name": "Romania - EDI UBL",
     "license": "AGPL-3",
-    "version": "15.0.0.0.0",
+    "version": "14.0.0.0.0",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",
@@ -15,6 +15,8 @@
     "data": [
         "data/account_edi_data.xml",
         "data/ubl_templates.xml",
+        "views/res_config_settings_views.xml",
+        "views/res_partner_view.xml",
     ],
     "installable": True,
 }

@@ -16,6 +16,11 @@
                         </group>
                         <group>
                             <field name="file_type" />
+                            <field name="usage" />
+                        </group>
+                        <group>
+                            <field name="local" />
+                            <field name="remote_url" />
                         </group>
                     </group>
                      <group states="get">
@@ -28,6 +33,8 @@
                         <button string="Cancel" class="oe_link" special="cancel" />
                     </footer>
                     <footer states="get">
+                        <button name="do_back" string="_Back" type="object" class="oe_highlight" />
+                        or
                         <button string="Close" class="oe_link" special="cancel" />
                     </footer>
                 </form>

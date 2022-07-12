@@ -27,10 +27,7 @@
         priority="100"
     >
 
-            <xpath
-            expr="//*[local-name()='AccountingSupplierParty']"
-            position="replace"
-        >
+            <xpath expr="//*[local-name()='AccountingSupplierParty']" position="replace">
                 <cac:AccountingSupplierParty
                 t-call="l10n_ro_edi_ubl.export_ubl_invoice_partner"
                 xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
@@ -39,10 +36,7 @@
                     <t t-set="partner_vals" t-value="supplier_vals" />
                 </cac:AccountingSupplierParty>
             </xpath>
-            <xpath
-            expr="//*[local-name()='AccountingCustomerParty']"
-            position="replace"
-        >
+            <xpath expr="//*[local-name()='AccountingCustomerParty']" position="replace">
                 <cac:AccountingCustomerParty
                 t-call="l10n_ro_edi_ubl.export_ubl_invoice_partner"
                 xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
