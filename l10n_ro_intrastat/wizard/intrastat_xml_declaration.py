@@ -286,8 +286,11 @@ class IntrastatDeclaration(models.TransientModel):
             else:
                 Country = inv_line.invoice_id.partner_id.country_id.code
 
-            PartnerVatNr = inv_line.invoice_id.partner_id.vat.replace(inv_line.invoice_id.partner_id.country_id.code,
-                                                                      '')
+            if not inv_line.invoice_id.partner_id.vat:
+                raise exceptions.Warning(
+                    _('Partner "%s" has no VAT code, please configure it') % inv_line.invoice_id.partner_id.display_name
+                )
+            PartnerVatNr = inv_line.invoice_id.partner_id.vat.replace(Country, '')
 
             if inv_line.product_id.country_id:
                 OriginCountry = inv_line.product_id.country_id.code
