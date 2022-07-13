@@ -85,8 +85,12 @@ class AccountEdiFormat(models.Model):
             if not attachment:
                 attachment = self._export_cirus_ro(invoice)
             res[invoice] = {"attachment": attachment}
-            if invoice.company_id.l10n_ro_edi_manual and not self.env.context.get('edi_manual_action', False):
-                res[invoice]['error'] = _('Automatic transmission is disabled')
+            if invoice.company_id.l10n_ro_edi_manual and not self.env.context.get("edi_manual_action", False):
+                res[invoice] = {
+                    "error": _("Automatic transmission is disabled"),
+                    "blocking_level": "info",
+                    "attachment": attachment,
+                }
             else:
                 if not invoice.l10n_ro_edi_transaction:
                     res[invoice] = self._l10n_ro_post_invoice_step_1(invoice, attachment, test_mode)
@@ -98,9 +102,8 @@ class AccountEdiFormat(models.Model):
     def _cancel_invoice_edi(self, invoices, test_mode=False):
         self.ensure_one()
         if self.code != "cirus_ro" or self._is_account_edi_ubl_cii_available():
-            return super()._post_invoice_edi(invoices, test_mode)
-
-        return {invoice: {'success': False} for invoice in invoices}
+            return super()._cancel_invoice_edi(invoices, test_mode)
+        return {invoice: {"success": False} for invoice in invoices}
 
     def _needs_web_services(self):
         self.ensure_one()
