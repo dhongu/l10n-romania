@@ -285,6 +285,9 @@ class IntrastatDeclaration(models.TransientModel):
             else:
                 Country = inv_line.invoice_id.partner_id.country_id.code
 
+            PartnerVatNr = inv_line.invoice_id.partner_id.vat.replace(inv_line.invoice_id.partner_id.country_id.code,
+                                                                      '')
+
             if inv_line.product_id.country_id:
                 OriginCountry = inv_line.product_id.country_id.code
             else:
@@ -310,6 +313,7 @@ class IntrastatDeclaration(models.TransientModel):
                 TrCodeB=TrCodeB,
                 DeliveryTerms=DeliveryTerms,
                 ModeOfTransport=ModeOfTransport,
+                PartnerVatNr=PartnerVatNr,
             )
 
             # We have the key
@@ -319,9 +323,10 @@ class IntrastatDeclaration(models.TransientModel):
                 amount = inv_line.price_unit * inv_line.quantity
                 if inv_line.invoice_id.currency_id.id != company.currency_id.id:
                     # amount =  inv_line.invoice_id.currency_id.with_context(date=inv_line.invoice_id.date_invoice).compute(    company.currency_id,          amount)
-                    amount = inv_line.invoice_id.currency_id.with_context(
+                    from_currency = inv_line.invoice_id.currency_id.with_context(
                         date=inv_line.invoice_id.date_invoice
-                    )._convert(
+                    )
+                    amount = from_currency._convert(
                         from_amount=amount,
                         to_currency=company.currency_id,
                         company=company,
@@ -357,6 +362,23 @@ class IntrastatDeclaration(models.TransientModel):
         <CountryOfOrigin>PL</CountryOfOrigin>
         <CountryOfConsignment>PL</CountryOfConsignment>
     </InsArrivalItem>
+
+    <InsDispatchItem OrderNr="1">
+        <Cn8Code>84339000</Cn8Code>
+        <InvoiceValue>43164</InvoiceValue>
+        <NetMass>864</NetMass>
+        <NatureOfTransactionACode>1</NatureOfTransactionACode>
+        <NatureOfTransactionBCode>1.1</NatureOfTransactionBCode>
+        <DeliveryTermsCode>DAP</DeliveryTermsCode>
+        <ModeOfTransportCode>5</ModeOfTransportCode>
+        <CountryOfOrigin>RO</CountryOfOrigin>
+        <CountryOfDestination>PL</CountryOfDestination>
+        <PartnerCountryCode>PL</PartnerCountryCode>
+        <PartnerVatNr>6772384564</PartnerVatNr>
+    </InsDispatchItem>
+
+
+
         """
 
         numlgn = 0
@@ -406,4 +428,12 @@ class IntrastatDeclaration(models.TransientModel):
 
             tag = ET.SubElement(item, "CountryOfConsignment")
             tag.text = unicode(linekey.Country)
+
+            if dispatchmode:
+                tag = ET.SubElement(item, "CountryOfDestination")
+                tag.text = unicode(linekey.Country)
+                tag = ET.SubElement(item, "PartnerCountryCode")
+                tag.text = unicode(linekey.Country)
+                tag = ET.SubElement(item, "PartnerVatNr")
+                tag.text = unicode(linekey.PartnerVatNr)
         return decl
