@@ -208,6 +208,7 @@ class IntrastatDeclaration(models.TransientModel):
                 "TrCodeB",
                 "DeliveryTerms",
                 "ModeOfTransport",
+                "PartnerVatNr",
             ],
         )
 
