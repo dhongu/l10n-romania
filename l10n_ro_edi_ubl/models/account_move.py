@@ -28,7 +28,7 @@ class AccountMove(models.Model):
         string="Invoice XML Send State",
     )
 
-    def _get_cirus_ro_name(self):
+    def _get_cius_ro_name(self):
         self.ensure_one()
         vat = self.company_id.partner_id.commercial_partner_id.vat
         return "ubl_b2g_{}{}{}".format(vat or "", "_" if vat else "", re.sub(r"[\W_]", "", self.name))
@@ -70,8 +70,8 @@ class AccountMove(models.Model):
     def _retry_edi_documents_error_hook(self):
         # OVERRIDE
         # For RO, remove the l10n_ro_edi_transaction to force re-send (otherwise this only triggers a check_status)
-        cirus_ro = self.env.ref("l10n_ro_edi_ubl.edi_ubl_cirus_ro")
-        self.filtered(lambda m: m._get_edi_document(cirus_ro).blocking_level == "error").l10n_ro_edi_transaction = None
+        cius_ro = self.env.ref("l10n_ro_edi_ubl.edi_ubl_cius_ro")
+        self.filtered(lambda m: m._get_edi_document(cius_ro).blocking_level == "error").l10n_ro_edi_transaction = None
 
     def action_process_edi_web_services(self):
         return super(AccountMove, self.with_context(edi_manual_action=True)).action_process_edi_web_services()

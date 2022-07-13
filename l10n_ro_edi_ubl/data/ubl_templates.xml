@@ -37,7 +37,7 @@
 
 
         <template
-        id="export_cirus_ro_invoice"
+        id="export_cius_ro_invoice"
         inherit_id="account_edi_ubl_bis3.export_bis3_invoice"
         primary="True"
         priority="100"
