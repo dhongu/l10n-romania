@@ -11,7 +11,6 @@ from odoo.exceptions import UserError
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-
     l10n_ro_edi_transaction = fields.Char(
         "Transaction ID (RO)", help="Technical field used to track the status of a submission.", copy=False
     )
@@ -29,7 +28,7 @@ class AccountMove(models.Model):
         string="Invoice XML Send State",
     )
 
-    def _get_cirus_ro_name(self):
+    def _get_cius_ro_name(self):
         self.ensure_one()
         vat = self.company_id.partner_id.commercial_partner_id.vat
         return "ubl_b2g_{}{}{}".format(vat or "", "_" if vat else "", re.sub(r"[\W_]", "", self.name))
@@ -54,23 +53,25 @@ class AccountMove(models.Model):
 
         return super().button_draft()
 
-
     def button_cancel_posted_moves(self):
         # OVERRIDE
-        ro_edi_format = self.env.ref('l10n_ro_edi_ubl.edi_ubl_cirus_ro')
+        ro_edi_format = self.env.ref("l10n_ro_edi_ubl.edi_ubl_cirus_ro")
         ro_invoices = self.filtered(lambda move: ro_edi_format._is_required_for_invoice(move))
         if ro_invoices:
-            raise UserError(_("Invoices with this document type always need to be cancelled through a credit note. "
-                              "There is no possibility to cancel."))
+            raise UserError(
+                _(
+                    "Invoices with this document type always need to be cancelled through a credit note. "
+                    "There is no possibility to cancel."
+                )
+            )
 
         return super().button_cancel_posted_moves()
 
     def _retry_edi_documents_error_hook(self):
         # OVERRIDE
         # For RO, remove the l10n_ro_edi_transaction to force re-send (otherwise this only triggers a check_status)
-        cirus_ro = self.env.ref("l10n_ro_edi_ubl.edi_ubl_cirus_ro")
-        self.filtered(lambda m: m._get_edi_document(cirus_ro).blocking_level == "error").l10n_ro_edi_transaction = None
-
+        cius_ro = self.env.ref("l10n_ro_edi_ubl.edi_ubl_cius_ro")
+        self.filtered(lambda m: m._get_edi_document(cius_ro).blocking_level == "error").l10n_ro_edi_transaction = None
 
     def action_process_edi_web_services(self):
         return super(AccountMove, self.with_context(edi_manual_action=True)).action_process_edi_web_services()
@@ -78,5 +79,3 @@ class AccountMove(models.Model):
     def send_to_anaf_e_invoice(self):
         for move in self:
             move.with_context(edi_manual_action=True).action_process_edi_web_services()
-
-
