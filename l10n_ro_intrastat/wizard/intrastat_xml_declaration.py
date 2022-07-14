@@ -228,6 +228,7 @@ class IntrastatDeclaration(models.TransientModel):
 
             where
                 inv.state in ('open','paid')
+                and res_partner.is_company = true
                 and inv.company_id=%s
                 and not product_template.type='service'
                 and (res_country.intrastat=true or (inv.intrastat_country_id is null
