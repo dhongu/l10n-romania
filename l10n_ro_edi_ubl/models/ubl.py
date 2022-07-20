@@ -343,12 +343,12 @@ class BaseUbl(models.AbstractModel):
             seller_identification_id = etree.SubElement(seller_identification, ns["cbc"] + "ID")
             seller_identification_id.text = seller_code
         if product:
-            if product.barcode:
-                std_identification = etree.SubElement(item, ns["cac"] + "StandardItemIdentification")
-                std_identification_id = etree.SubElement(
-                    std_identification, ns["cbc"] + "ID", schemeAgencyID="6", schemeID="GTIN"
-                )
-                std_identification_id.text = product.barcode
+            # if product.barcode:
+            #     std_identification = etree.SubElement(item, ns["cac"] + "StandardItemIdentification")
+            #     std_identification_id = etree.SubElement(
+            #         std_identification, ns["cbc"] + "ID", schemeAgencyID="6", schemeID="GTIN"
+            #     )
+            #     std_identification_id.text = product.barcode
             # I'm not 100% sure, but it seems that ClassifiedTaxCategory
             # contains the taxes of the product without taking into
             # account the fiscal position
@@ -365,12 +365,12 @@ class BaseUbl(models.AbstractModel):
                         node_name="ClassifiedTaxCategory",
                         version=version,
                     )
-            for attribute_value in product.attribute_line_ids.mapped("value_ids"):
-                item_property = etree.SubElement(item, ns["cac"] + "AdditionalItemProperty")
-                property_name = etree.SubElement(item_property, ns["cbc"] + "Name")
-                property_name.text = attribute_value.attribute_id.name
-                property_value = etree.SubElement(item_property, ns["cbc"] + "Value")
-                property_value.text = attribute_value.name
+            # for attribute_value in product.attribute_line_ids.mapped("value_ids"):
+            #     item_property = etree.SubElement(item, ns["cac"] + "AdditionalItemProperty")
+            #     property_name = etree.SubElement(item_property, ns["cbc"] + "Name")
+            #     property_name.text = attribute_value.attribute_id.name
+            #     property_value = etree.SubElement(item_property, ns["cbc"] + "Value")
+            #     property_value.text = attribute_value.name
 
     @api.model
     def _ubl_add_tax_subtotal(
