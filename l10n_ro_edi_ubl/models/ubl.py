@@ -239,7 +239,7 @@ class BaseUbl(models.AbstractModel):
     @api.model
     def _ubl_add_delivery_terms(self, incoterm, parent_node, ns, version="2.1"):
         delivery_term = etree.SubElement(parent_node, ns["cac"] + "DeliveryTerms")
-        delivery_term_id = etree.SubElement(delivery_term, ns["cbc"] + "ID", schemeAgencyID="6", schemeID="INCOTERM")
+        delivery_term_id = etree.SubElement(delivery_term, ns["cbc"] + "ID", schemeID="INCOTERM")
         delivery_term_id.text = incoterm.code
 
     @api.model
