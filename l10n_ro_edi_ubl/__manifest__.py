@@ -7,9 +7,7 @@
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",
-    "depends": [
-        "l10n_ro",
-    ],
-    "data": [],
+    "depends": ["l10n_ro", "account"],
+    "data": ["views/account_invoice.xml"],
     "installable": True,
 }
