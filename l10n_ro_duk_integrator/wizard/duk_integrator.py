@@ -92,7 +92,7 @@ class DUKIntegrator(models.TransientModel):
         else:
             _logger.info("Will use the Java binary at %s" % _get_java_bin())
 
-        xml_content = self.xml_file_id.datas or base64.b64decode(self.data_file)
+        xml_content = base64.b64decode(self.xml_file_id.datas or self.data_file)
 
         try:
             module_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
