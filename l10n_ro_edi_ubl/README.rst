@@ -21,7 +21,6 @@ Romania - EDI UBL
 
 Ro E Invoice UBL
 
-
 Nu functionaza daca este instalat modulul
 
 **Table of contents**
