@@ -15,14 +15,14 @@ logger = logging.getLogger(__name__)
 
 class AccountInvoice(models.Model):
     _name = "account.invoice"
-    _inherit = ["account.invoice", "base.ubl"]
+    _inherit = ["account.invoice", "base.ro.ubl"]
 
     @api.multi
     def _ubl_add_header(self, parent_node, ns, version="2.1"):
         ubl_version = etree.SubElement(parent_node, ns["cbc"] + "UBLVersionID")
         ubl_version.text = version
 
-        elem = etree.SubElement(parent_node, "CustomizationID")
+        elem = etree.SubElement(parent_node, ns["cbc"] + "CustomizationID")
         elem.text = "urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0"
 
         doc_id = etree.SubElement(parent_node, ns["cbc"] + "ID")
@@ -45,15 +45,15 @@ class AccountInvoice(models.Model):
         doc_currency.text = self.currency_id.name
         doc_currency = etree.SubElement(parent_node, ns["cbc"] + "TaxCurrencyCode")
         doc_currency.text = self.currency_id.name
-        doc_currency = etree.SubElement(parent_node, ns["cbc"] + "PricingCurrencyCode")
-        doc_currency.text = self.currency_id.name
-        doc_currency = etree.SubElement(parent_node, ns["cbc"] + "PaymentCurrencyCode")
-        doc_currency.text = self.currency_id.name
-        doc_currency = etree.SubElement(parent_node, ns["cbc"] + "PaymentAlternativeCurrencyCode")
-        doc_currency.text = self.currency_id.name
+        # doc_currency = etree.SubElement(parent_node, ns["cbc"] + "PricingCurrencyCode")
+        # doc_currency.text = self.currency_id.name
+        # doc_currency = etree.SubElement(parent_node, ns["cbc"] + "PaymentCurrencyCode")
+        # doc_currency.text = self.currency_id.name
+        # doc_currency = etree.SubElement(parent_node, ns["cbc"] + "PaymentAlternativeCurrencyCode")
+        # doc_currency.text = self.currency_id.name
 
-        line_count = etree.SubElement(parent_node, ns["cbc"] + "LineCountNumeric")
-        line_count.text = str(len(self.invoice_line_ids))
+        # line_count = etree.SubElement(parent_node, ns["cbc"] + "LineCountNumeric")
+        # line_count.text = str(len(self.invoice_line_ids))
 
     @api.multi
     def _ubl_add_order_reference(self, parent_node, ns, version="2.1"):
@@ -101,7 +101,7 @@ class AccountInvoice(models.Model):
         monetary_total = etree.SubElement(parent_node, ns["cac"] + "LegalMonetaryTotal")
         cur_name = self.currency_id.name
         prec = self.currency_id.decimal_places
-        line_total = etree.SubElement(monetary_total, ns["cbc"] + "LineExtensionAmount")
+        line_total = etree.SubElement(monetary_total, ns["cbc"] + "LineExtensionAmount", currencyID=cur_name)
         line_total.text = "%0.*f" % (prec, self.amount_untaxed)
         tax_excl_total = etree.SubElement(monetary_total, ns["cbc"] + "TaxExclusiveAmount", currencyID=cur_name)
         tax_excl_total.text = "%0.*f" % (prec, self.amount_untaxed)
@@ -136,14 +136,14 @@ class AccountInvoice(models.Model):
         qty = iline.quantity
         quantity.text = "%0.*f" % (qty_precision, qty)
 
-        line_amount = etree.SubElement(line_root, ns["cbc"] + "LineExtensionAmount")
-        line_amount.text = "%0.*f" % (account_precision, iline.price_total)
-        line_amount = etree.SubElement(line_root, ns["cbc"] + "TaxInclusiveAmount")
+        line_amount = etree.SubElement(line_root, ns["cbc"] + "LineExtensionAmount", currencyID=cur_name)
         line_amount.text = "%0.*f" % (account_precision, iline.price_subtotal)
-        elem = etree.SubElement(line_root, ns["cbc"] + "AccountingCostCode")
-        elem.text = "MCH"
+        # line_amount = etree.SubElement(line_root, ns["cbc"] + "TaxInclusiveAmount")
+        # line_amount.text = "%0.*f" % (account_precision, iline.price_subtotal)
+        # elem = etree.SubElement(line_root, ns["cbc"] + "AccountingCostCode")
+        # elem.text = "MCH"
 
-        self._ubl_add_invoice_line_tax_total(iline, line_root, ns, version=version)
+        self._ubl_add_invoice_line_tax_total(cur_name, iline, line_root, ns, version=version)
         self._ubl_add_item(
             iline.name,
             iline.product_id,
@@ -154,7 +154,7 @@ class AccountInvoice(models.Model):
             version=version,
         )
         price_node = etree.SubElement(line_root, ns["cac"] + "Price")
-        price_amount = etree.SubElement(price_node, ns["cbc"] + "PriceAmount")
+        price_amount = etree.SubElement(price_node, ns["cbc"] + "PriceAmount", currencyID=cur_name)
         price_unit = 0.0
         # Use price_subtotal/qty to compute price_unit to be sure
         # to get a *tax_excluded* price unit
@@ -167,31 +167,31 @@ class AccountInvoice(models.Model):
             base_qty = etree.SubElement(price_node, ns["cbc"] + "BaseQuantity")
         base_qty.text = "%0.*f" % (qty_precision, 1)
 
-        elem = etree.SubElement(price_node, ns["cbc"] + "PriceTypeCode")
-        elem.text = "AAB"
+        # elem = etree.SubElement(price_node, ns["cbc"] + "PriceTypeCode")
+        # elem.text = "AAB"
 
-    def _ubl_add_invoice_line_tax_total(self, iline, parent_node, ns, version="2.1"):
+    def _ubl_add_invoice_line_tax_total(self, currency_code, iline, parent_node, ns, version="2.1"):
         cur_name = self.currency_id.name
         prec = self.currency_id.decimal_places
-        tax_total_node = etree.SubElement(parent_node, ns["cac"] + "TaxTotal")
+        # tax_total_node = etree.SubElement(parent_node, ns["cac"] + "TaxTotal")
         price = iline.price_unit * (1 - (iline.discount or 0.0) / 100.0)
         res_taxes = iline.invoice_line_tax_ids.compute_all(
             price, quantity=iline.quantity, product=iline.product_id, partner=self.partner_id
         )
         tax_total = float_round(res_taxes["total_included"] - res_taxes["total_excluded"], precision_digits=prec)
-        tax_amount_node = etree.SubElement(tax_total_node, ns["cbc"] + "TaxAmount")
-        tax_amount_node.text = "%0.*f" % (prec, tax_total)
-        if not float_is_zero(tax_total, precision_digits=prec):
-            for res_tax in res_taxes["taxes"]:
-                tax = self.env["account.tax"].browse(res_tax["id"])
-                # we don't have the base amount in res_tax :-(
-                self._ubl_add_tax_subtotal(False, res_tax["amount"], tax, cur_name, tax_total_node, ns, version=version)
+        # tax_amount_node = etree.SubElement(tax_total_node, ns["cbc"] + "TaxAmount", currencyID=currency_code)
+        # tax_amount_node.text = "%0.*f" % (prec, tax_total)
+        # if not float_is_zero(tax_total, precision_digits=prec):
+        #     for res_tax in res_taxes["taxes"]:
+        #         tax = self.env["account.tax"].browse(res_tax["id"])
+        #         # we don't have the base amount in res_tax :-(
+        #         self._ubl_add_tax_subtotal(False, res_tax["amount"], tax, cur_name, tax_total_node, ns, version=version)
 
-    def _ubl_add_tax_total(self, xml_root, ns, version="2.1"):
+    def _ubl_add_tax_total(self, currency_code, xml_root, ns, version="2.1"):
         self.ensure_one()
         cur_name = self.currency_id.name
         tax_total_node = etree.SubElement(xml_root, ns["cac"] + "TaxTotal")
-        tax_amount_node = etree.SubElement(tax_total_node, ns["cbc"] + "TaxAmount")
+        tax_amount_node = etree.SubElement(tax_total_node, ns["cbc"] + "TaxAmount", currencyID=currency_code)
         prec = self.currency_id.decimal_places
         tax_amount_node.text = "%0.*f" % (prec, self.amount_tax)
         if not float_is_zero(self.amount_tax, precision_digits=prec):
@@ -235,25 +235,23 @@ class AccountInvoice(models.Model):
             financial_name.text = partner_bank.bank_id.name
             break
 
-
-
     @api.model
     def _ubl_get_nsmap_namespace(self, doc_name, version="2.1"):
         nsmap, ns = super(AccountInvoice, self)._ubl_get_nsmap_namespace(doc_name, version)
-        nsmap.update({
-            'qdt': "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDataTypes-2",
-            'udt': "urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2",
-            'ccts': "urn:un:unece:uncefact:documentation:2",
-            'xsi': "http://www.w3.org/2001/XMLSchema-instance",
-        })
+        nsmap.update(
+            {
+                "qdt": "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDataTypes-2",
+                "udt": "urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2",
+                "ccts": "urn:un:unece:uncefact:documentation:2",
+                "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+            }
+        )
         return nsmap, ns
 
     @api.multi
     def generate_invoice_ubl_xml_etree(self, version="2.1"):
         nsmap, ns = self._ubl_get_nsmap_namespace("Invoice-2", version=version)
         xml_root = etree.Element("Invoice", nsmap=nsmap)
-
-
 
         self._ubl_add_header(xml_root, ns, version=version)
         self._ubl_add_order_reference(xml_root, ns, version=version)
@@ -272,7 +270,7 @@ class AccountInvoice(models.Model):
         #                             xml_root, ns, payment_identifier=payment_identifier, version=version)
         if self.payment_term_id:
             self._ubl_add_payment_terms(self.payment_term_id, xml_root, ns, version=version)
-        self._ubl_add_tax_total(xml_root, ns, version=version)
+        self._ubl_add_tax_total(self.currency_id.name, xml_root, ns, version=version)
         self._ubl_add_legal_monetary_total(xml_root, ns, version=version)
 
         line_number = 0
@@ -305,7 +303,7 @@ class AccountInvoice(models.Model):
     @api.multi
     def get_ubl_filename(self, version="2.1"):
         """This method is designed to be inherited"""
-        return "UBL-Invoice-%s.xml" % version
+        return "UBL-Invoice-%s-%s.xml" % (version, self.number)
 
     @api.multi
     def get_ubl_version(self):
