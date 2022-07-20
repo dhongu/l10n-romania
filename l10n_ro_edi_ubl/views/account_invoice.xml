@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="invoice_form" model="ir.ui.view">
+        <field name="name">account_invoice.customer.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form" />
+        <field name="arch" type="xml">
+            <button name="action_invoice_draft" position="before">
+                <button type="object" name="attach_ubl_xml_file_button" string="Generate XML File" states="open,paid" />
+            </button>
+        </field>
+    </record>
+</odoo>
