@@ -121,7 +121,7 @@ class BaseUbl(models.AbstractModel):
         tax_scheme_dict = {
             "id": "VAT",
             "name": False,
-            "type_code": False,
+            "type_code": False
         }
         return tax_scheme_dict
 
@@ -132,7 +132,10 @@ class BaseUbl(models.AbstractModel):
             # registration_name = etree.SubElement(party_tax_scheme, ns["cbc"] + "RegistrationName")
             # registration_name.text = commercial_partner.name
             company_id = etree.SubElement(party_tax_scheme, ns["cbc"] + "CompanyID")
-            company_id.text = commercial_partner.vat
+            # company_id.text = commercial_partner.vat
+            company_id.text = commercial_partner.country_id.code + commercial_partner.vat.replace(
+                commercial_partner.country_id.code, ""
+            )
             tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_partner(commercial_partner)
             self._ubl_add_tax_scheme(tax_scheme_dict, party_tax_scheme, ns, version=version)
 
