@@ -299,12 +299,12 @@ class BaseUbl(models.AbstractModel):
             seller_identification_id = etree.SubElement(seller_identification, ns["cbc"] + "ID")
             seller_identification_id.text = seller_code
         if product:
-            if product.barcode:
-                std_identification = etree.SubElement(item, ns["cac"] + "StandardItemIdentification")
-                std_identification_id = etree.SubElement(
-                    std_identification, ns["cbc"] + "ID", schemeAgencyID="6", schemeID="GTIN"
-                )
-                std_identification_id.text = product.barcode
+            # if product.barcode:
+            #     std_identification = etree.SubElement(item, ns["cac"] + "StandardItemIdentification")
+            #     std_identification_id = etree.SubElement(
+            #         std_identification, ns["cbc"] + "ID", schemeAgencyID="6", schemeID="GTIN"
+            #     )
+            #     std_identification_id.text = product.barcode
             # I'm not 100% sure, but it seems that ClassifiedTaxCategory
             # contains the taxes of the product without taking into
             # account the fiscal position
