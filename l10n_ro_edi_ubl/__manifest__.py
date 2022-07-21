@@ -17,6 +17,7 @@
         "data/ubl_templates.xml",
         "views/res_config_settings_views.xml",
         "views/res_partner_view.xml",
+        "views/account_invoice.xml",
     ],
     "installable": True,
 }

@@ -79,3 +79,20 @@ class AccountMove(models.Model):
     def send_to_anaf_e_invoice(self):
         for move in self:
             move.with_context(edi_manual_action=True).action_process_edi_web_services()
+
+
+    def attach_ubl_xml_file_button(self):
+        self.ensure_one()
+        assert self.move_type in ("out_invoice", "out_refund")
+        assert self.state == "posted"
+
+        attachment = self._get_edi_attachment(self)
+        if not attachment:
+            cius_ro = self.env.ref("l10n_ro_edi_ubl.edi_ubl_cius_ro")
+            attachment = cius_ro._export_cius_ro(self)
+            doc = self._get_edi_document(cius_ro)
+            doc.write({'attachment_id': attachment.id})
+
+        action = self.env["ir.attachment"].action_get()
+        action.update({"res_id": attachment.id, "views": False, "view_mode": "form,tree"})
+        return action
