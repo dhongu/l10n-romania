@@ -3,7 +3,7 @@
 {
     "name": "Romania - DUK Integrator",
     "license": "AGPL-3",
-    "version": "13.0.8.0.1",
+    "version": "13.0.9.0.2",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",
