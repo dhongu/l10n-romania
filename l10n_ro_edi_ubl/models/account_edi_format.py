@@ -189,10 +189,10 @@ class AccountEdiFormat(models.Model):
         if not partner.street:
             errors += [_("Partenerul %s nu are completata strada") % partner.name]
 
-        stare_b = self.env.ref("base.RO_B")
-        if partner.state_id == stare_b:
+        state_bucuresti = self.env.ref("base.RO_B")
+        if partner.state_id == state_bucuresti:
             if "sector" not in partner.city.lower():
-                errors += [_("Loclitatea pertenerului %s trebuie sa fie de forma Sector X ") % partner.name]
+                errors += [_("localitatea pertenerului %s trebuie sa fie de forma SectorX ") % partner.name]
         return errors
 
 

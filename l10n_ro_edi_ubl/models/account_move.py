@@ -86,12 +86,15 @@ class AccountMove(models.Model):
         assert self.move_type in ("out_invoice", "out_refund")
         assert self.state == "posted"
 
-        attachment = self._get_edi_attachment(self)
-        if not attachment:
-            cius_ro = self.env.ref("l10n_ro_edi_ubl.edi_ubl_cius_ro")
-            attachment = cius_ro._export_cius_ro(self)
-            doc = self._get_edi_document(cius_ro)
-            doc.write({'attachment_id': attachment.id})
+
+        cius_ro = self.env.ref("l10n_ro_edi_ubl.edi_ubl_cius_ro")
+
+        errors = cius_ro._check_move_configuration(self)
+        if errors:
+            raise UserError('\n'.join(errors))
+        attachment = cius_ro._export_cius_ro(self)
+        doc = self._get_edi_document(cius_ro)
+        doc.write({'attachment_id': attachment.id})
 
         action = self.env["ir.attachment"].action_get()
         action.update({"res_id": attachment.id, "views": False, "view_mode": "form,tree"})
