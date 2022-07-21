@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 class DUKController(http.Controller):
     @http.route("/duk_integrator", methods=["POST"], auth="none", csrf=False)
-    def MarketplaceImport(self, **post):
+    def DUKIntegrator(self, **post):
         _logger.info("Beginning DUK integrator")
         _logger.info(post)
 
