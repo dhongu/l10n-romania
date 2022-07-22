@@ -21,7 +21,14 @@ class DUKController(http.Controller):
 
         data_file = request.httprequest.data
 
-        duk = duk.create({"data_file": data_file, "file_type": post.get("file_type"), "usage": post.get("usage", "v")})
+        duk = duk.create(
+            {
+                "data_file": data_file,
+                "file_type": post.get("file_type"),
+                "usage": post.get("usage", "v"),
+                "local": True,
+            }
+        )
 
         duk.do_check_xml()
 
