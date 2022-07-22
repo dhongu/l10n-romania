@@ -19,7 +19,7 @@ def _get_java_bin():
     return find_in_path("java")
 
 
-MAX_VIRTUAL_MEMORY = 5024 * 1024 * 1024
+MAX_VIRTUAL_MEMORY = 6 * 1024 * 1024 * 1024
 
 
 def limit_virtual_memory():
