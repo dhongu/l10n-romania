@@ -46,8 +46,8 @@ class DUKIntegrator(models.TransientModel):
 
     error = fields.Text()
     output = fields.Text()
-    local = fields.Boolean(default=True)
-    remote_url = fields.Char()
+    local = fields.Boolean(default=False)
+    remote_url = fields.Char(default="https://java.odoo365.ro/duk_integrator")
 
     def do_check_xml(self):
         if self.local:
