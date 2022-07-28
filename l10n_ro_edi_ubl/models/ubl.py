@@ -167,7 +167,7 @@ class BaseUbl(models.AbstractModel):
         #     self._ubl_add_language(partner.lang, party, ns, version=version)
         self._ubl_add_address(commercial_partner, "PostalAddress", party, ns, version=version)
         self._ubl_add_party_tax_scheme(commercial_partner, party, ns, version=version)
-        if company:
+        if commercial_partner.is_company:
             self._ubl_add_party_legal_entity(commercial_partner, party, ns, version="2.1")
         self._ubl_add_contact(partner, party, ns, version=version)
 
@@ -188,6 +188,7 @@ class BaseUbl(models.AbstractModel):
             customer_ref = etree.SubElement(customer_party_root, ns["cbc"] + "SupplierAssignedAccountID")
             customer_ref.text = partner_ref
         self._ubl_add_party(partner, company, "Party", customer_party_root, ns, version=version)
+
         # TODO: rewrite support for AccountingContact + add DeliveryContact
         # Additional optional args
         # if partner and not company and partner.parent_id:

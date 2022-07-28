@@ -224,22 +224,8 @@ class AccountMove(models.Model):
         self._ubl_add_order_reference(xml_root, ns, version=version)
         self._ubl_add_contract_document_reference(xml_root, ns, version=version)
         self._ubl_add_attachments(xml_root, ns, version=version)
-        self._ubl_add_supplier_party(
-            False,
-            self.company_id,
-            "AccountingSupplierParty",
-            xml_root,
-            ns,
-            version=version,
-        )
-        self._ubl_add_customer_party(
-            self.partner_id,
-            False,
-            "AccountingCustomerParty",
-            xml_root,
-            ns,
-            version=version,
-        )
+        self._ubl_add_supplier_party(False, self.company_id, "AccountingSupplierParty", xml_root, ns, version=version)
+        self._ubl_add_customer_party(self.partner_id, False, "AccountingCustomerParty", xml_root, ns, version=version)
         # the field 'partner_shipping_id' is defined in the 'sale' module
         if hasattr(self, "partner_shipping_id") and self.partner_shipping_id:
             self._ubl_add_delivery(self.partner_shipping_id, xml_root, ns)
