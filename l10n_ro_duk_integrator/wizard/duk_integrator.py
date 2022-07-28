@@ -68,7 +68,7 @@ class DUKIntegrator(models.TransientModel):
     def do_check_remote_xml(self):
         import requests
 
-        xml_content = self.xml_file_id.datas or base64.b64decode(self.data_file)
+        xml_content = base64.b64decode(self.xml_file_id.datas or self.data_file)
         headers = {
             "Content-Type": "application/xml",
         }

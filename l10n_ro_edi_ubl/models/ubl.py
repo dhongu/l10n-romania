@@ -131,6 +131,8 @@ class BaseUbl(models.AbstractModel):
             # registration_name.text = commercial_partner.name
             company_id = etree.SubElement(party_tax_scheme, ns["cbc"] + "CompanyID")
             # company_id.text = commercial_partner.vat
+            if not commercial_partner.country_id:
+                raise UserError(_("Partner %s without country") % commercial_partner.name)
             company_id.text = commercial_partner.country_id.code + commercial_partner.vat.replace(
                 commercial_partner.country_id.code, ""
             )
@@ -139,10 +141,9 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def _ubl_add_party_legal_entity(self, commercial_partner, parent_node, ns, version="2.1"):
-        pass
-        # party_legal_entity = etree.SubElement(parent_node, ns["cac"] + "PartyLegalEntity")
-        # registration_name = etree.SubElement(party_legal_entity, ns["cbc"] + "RegistrationName")
-        # registration_name.text = commercial_partner.name
+        party_legal_entity = etree.SubElement(parent_node, ns["cac"] + "PartyLegalEntity")
+        registration_name = etree.SubElement(party_legal_entity, ns["cbc"] + "RegistrationName")
+        registration_name.text = commercial_partner.name
         # self._ubl_add_address(
         #     commercial_partner,
         #     "RegistrationAddress",
