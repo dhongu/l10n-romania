@@ -30,6 +30,10 @@ class AccountMove(models.Model):
         doc_id.text = self.name
         issue_date = etree.SubElement(parent_node, ns["cbc"] + "IssueDate")
         issue_date.text = self.invoice_date.strftime("%Y-%m-%d")
+        if self.invoice_date_due:
+            invoice_date_due = etree.SubElement(parent_node, ns["cbc"] + "DueDate")
+            invoice_date_due.text = self.invoice_date_due.strftime("%Y-%m-%d")
+
         type_code = etree.SubElement(parent_node, ns["cbc"] + "InvoiceTypeCode")
         type_code.text = self._ubl_get_invoice_type_code()
         if self.narration:
