@@ -46,6 +46,22 @@
             </xpath>
         </template>
 
+        <template
+            id="export_bis3_invoice_line"
+            inherit_id="account_edi_ubl_bis3.export_bis3_invoice_line"
+            primary="True"
+            priority="100">
+
+            <xpath expr="//*[local-name()='Name']" position="replace">
+                    <cbc:Name
+                         xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+                        xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+                        xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+                        t-esc="(line.name[:100] or '').replace('\n', ', ')" />
+            </xpath>
+
+        </template>
+
 
 
         <template
@@ -73,6 +89,9 @@
                     <t t-set="partner_vals" t-value="customer_vals" />
                 </cac:AccountingCustomerParty>
             </xpath>
+
+
+
 
 
         </template>

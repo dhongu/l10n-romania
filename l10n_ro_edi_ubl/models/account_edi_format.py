@@ -186,6 +186,10 @@ class AccountEdiFormat(models.Model):
             return super()._check_move_configuration(move)
         partner = move.commercial_partner_id
         errors = []
+
+        if not partner.country_id:
+            errors += [_("Partenerul %s nu are completata tara") % partner.name]
+
         if not partner.street:
             errors += [_("Partenerul %s nu are completata strada") % partner.name]
 
