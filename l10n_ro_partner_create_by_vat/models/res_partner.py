@@ -92,6 +92,7 @@ class ResPartner(models.Model):
 
     @api.model
     def _get_Anaf(self, cod):
+        result = False
         res = requests.post(
             ANAF_URL, json=[{"cui": cod, "data": fields.Date.today().strftime("%Y-%m-%d")}], headers=headers
         )
