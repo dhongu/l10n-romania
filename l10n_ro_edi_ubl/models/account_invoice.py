@@ -13,6 +13,32 @@ from odoo.tools import float_is_zero, float_round
 logger = logging.getLogger(__name__)
 
 
+UOM_TO_UNECE_CODE = {
+    'uom.product_uom_unit': 'C62',
+    'uom.product_uom_dozen': 'DZN',
+    'uom.product_uom_kgm': 'KGM',
+    'uom.product_uom_gram': 'GRM',
+    'uom.product_uom_day': 'DAY',
+    'uom.product_uom_hour': 'HUR',
+    'uom.product_uom_ton': 'TNE',
+    'uom.product_uom_meter': 'MTR',
+    'uom.product_uom_km': 'KTM',
+    'uom.product_uom_cm': 'CMT',
+    'uom.product_uom_litre': 'LTR',
+    'uom.product_uom_cubic_meter': 'MTQ',
+    'uom.product_uom_lb': 'LBR',
+    'uom.product_uom_oz': 'ONZ',
+    'uom.product_uom_inch': 'INH',
+    'uom.product_uom_foot': 'FOT',
+    'uom.product_uom_mile': 'SMI',
+    'uom.product_uom_floz': 'OZA',
+    'uom.product_uom_qt': 'QT',
+    'uom.product_uom_gal': 'GLL',
+    'uom.product_uom_cubic_inch': 'INQ',
+    'uom.product_uom_cubic_foot': 'FTQ',
+}
+
+
 class AccountInvoice(models.Model):
     _name = "account.invoice"
     _inherit = ["account.invoice", "base.ro.ubl"]
@@ -113,6 +139,17 @@ class AccountInvoice(models.Model):
         payable_amount = etree.SubElement(monetary_total, ns["cbc"] + "PayableAmount", currencyID=cur_name)
         payable_amount.text = "%0.*f" % (prec, self.residual)
 
+
+    def _get_uom_unece_code(self, line):
+        """
+        list of codes: https://docs.peppol.eu/poacc/billing/3.0/codelist/UNECERec20/
+        or https://unece.org/fileadmin/DAM/cefact/recommendations/bkup_htm/add2c.htm (sorted by letter)
+        """
+        xmlid = line.uom_id.get_external_id()
+        if xmlid and line.uom_id.id in xmlid:
+            return UOM_TO_UNECE_CODE.get(xmlid[line.uom_id.id], 'C62')
+        return 'C62'
+
     @api.multi
     def _ubl_add_invoice_line(self, parent_node, iline, line_number, ns, version="2.1"):
         cur_name = self.currency_id.name
@@ -123,12 +160,15 @@ class AccountInvoice(models.Model):
         account_precision = self.currency_id.decimal_places
         line_id = etree.SubElement(line_root, ns["cbc"] + "ID")
         line_id.text = str(line_number)
-        uom_unece_code = False
+
+        uom_unece_code = self._get_uom_unece_code(iline)
+
+        # uom_unece_code = False
         # uom_id is not a required field on account.invoice.line
-        if iline.uom_id and iline.uom_id.name:  # iline.uom_id.unece_code:
-            uom_unece_code = iline.uom_id.name[:3]  # iline.uom_id.unece_code
-            if uom_unece_code == "Uni":
-                uom_unece_code = "C62"  # asta este cosul pentru bucata
+        # if iline.uom_id and iline.uom_id.name:  # iline.uom_id.unece_code:
+        #     uom_unece_code = iline.uom_id.name[:3]  # iline.uom_id.unece_code
+        #     if uom_unece_code == "Uni":
+        #         uom_unece_code = "C62"  # asta este cosul pentru bucata
         if uom_unece_code:
             quantity = etree.SubElement(line_root, ns["cbc"] + "InvoicedQuantity", unitCode=uom_unece_code)
         else:
