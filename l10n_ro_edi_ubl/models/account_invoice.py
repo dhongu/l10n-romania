@@ -189,7 +189,7 @@ class AccountInvoice(models.Model):
             iline.product_id,
             line_root,
             ns,
-            type="sale",
+            type_="sale",
             seller=iline.invoice_id.partner_id,
             version=version,
         )
