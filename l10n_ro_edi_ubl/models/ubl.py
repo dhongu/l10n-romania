@@ -295,9 +295,11 @@ class BaseUbl(models.AbstractModel):
                 variant = ", ".join([v.name for v in product.attribute_value_ids])
                 product_name = variant and "%s (%s)" % (product.name, variant) or product.name
         description = etree.SubElement(item, ns["cbc"] + "Description")
-        description.text = name
+        description.text = name[:200]
         name_node = etree.SubElement(item, ns["cbc"] + "Name")
         name_node.text = product_name or name.split("\n")[0]
+        name_node.text =  name_node.text[:100]
+
         if seller_code:
             seller_identification = etree.SubElement(item, ns["cac"] + "SellersItemIdentification")
             seller_identification_id = etree.SubElement(seller_identification, ns["cbc"] + "ID")
