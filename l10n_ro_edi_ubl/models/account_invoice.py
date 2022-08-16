@@ -315,8 +315,9 @@ class AccountInvoice(models.Model):
 
         line_number = 0
         for iline in self.invoice_line_ids:
-            line_number += 1
-            self._ubl_add_invoice_line(xml_root, iline, line_number, ns, version=version)
+            if not iline.display_type:
+                line_number += 1
+                self._ubl_add_invoice_line(xml_root, iline, line_number, ns, version=version)
 
         return xml_root
 
