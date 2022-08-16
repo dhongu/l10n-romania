@@ -334,6 +334,7 @@ class BaseUbl(models.AbstractModel):
         description.text = name
         name_node = etree.SubElement(item, ns["cbc"] + "Name")
         name_node.text = product_name or name.split("\n")[0]
+        name_node.text = name_node.text[:100]  # trunchere automata la 100 de caractere
 
         customer_code = self._ubl_get_customer_product_code(product, customer)
         if customer_code:
