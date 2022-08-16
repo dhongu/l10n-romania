@@ -61,79 +61,15 @@ class StorageSheet(models.TransientModel):
 
     one_product = fields.Boolean("One product per page")
     line_product_ids = fields.One2many(comodel_name="stock.storage.sheet.line", inverse_name="report_id")
+    sublocation = fields.Boolean("Sublocation")
+    location_ids = fields.Many2many("stock.location", string="Only for locations", compute="_compute_location_ids")
 
-    filter_reception = fields.Boolean("Reception")
-    filter_reception_return = fields.Boolean("Return reception")
-    filter_reception_notice = fields.Boolean("Reception with notice")
-    filter_reception_notice_return = fields.Boolean("Return reception with notice")
-    filter_delivery = fields.Boolean("Delivery")
-    filter_delivery_return = fields.Boolean("Return delivery")
-    filter_delivery_notice = fields.Boolean("Delivery with notice")
-    filter_delivery_notice_return = fields.Boolean("Return delivery with notice")
-    filter_plus_inventory = fields.Boolean("Plus inventory")
-    filter_minus_inventory = fields.Boolean("Minus inventory")
-    filter_consumption = fields.Boolean("Consumption")
-    filter_consumption_return = fields.Boolean("Return Consumption")
-    filter_production = fields.Boolean("Production")
-    filter_production_return = fields.Boolean("Return Production")
-    filter_internal_transfer = fields.Boolean("Internal Transfer")
-    filter_usage_giving = fields.Boolean("Usage Giving")
-    filter_usage_giving_return = fields.Boolean("Return Usage Giving")
-
-    all_in = fields.Boolean("All inputs")
-    all_out = fields.Boolean("All outputs")
-
-    def get_filter(self):
-        res = []
-        for field in self._fields:
-            if "filter_" in field:
-                f_value = getattr(self, field)
-                if f_value:
-                    res.append(field)
-        res = list(map(lambda x: x.replace("filter_", ""), res))
-        return res
-
-    @api.onchange("all_in", "all_out")
-    def group_filters(self):
-        if self.all_in:
-            self.filter_reception = True
-            self.filter_reception_return = True
-            self.filter_reception_notice = True
-            self.filter_reception_notice_return = True
-            self.filter_plus_inventory = True
-            self.filter_production = True
-            self.filter_production_return = True
+    @api.depends("sublocation", "location_id")
+    def _compute_location_ids(self):
+        if self.sublocation:
+            self.location_ids = self.location_id + self.location_id.child_ids
         else:
-            self.filter_reception = False
-            self.filter_reception_return = False
-            self.filter_reception_notice = False
-            self.filter_reception_notice_return = False
-            self.filter_plus_inventory = False
-            self.filter_production = False
-            self.filter_production_return = False
-
-        if self.all_out:
-            self.filter_delivery = True
-            self.filter_delivery_return = True
-            self.filter_delivery_notice = True
-            self.filter_delivery_notice_return = True
-            self.filter_minus_inventory = True
-            self.filter_consumption = True
-            self.filter_consumption_return = True
-            self.filter_usage_giving = True
-            self.filter_usage_giving_return = True
-            self.filter_internal_transfer = True
-        else:
-            self.filter_delivery = False
-            self.filter_delivery_return = False
-            self.filter_delivery_notice = False
-            self.filter_delivery_notice_return = False
-            self.filter_minus_inventory = False
-            self.filter_consumption = False
-            self.filter_consumption_return = False
-            self.filter_usage_giving = False
-            self.filter_usage_giving_return = False
-            self.filter_internal_transfer = False
+            self.location_ids = self.location_id
 
     def _get_report_base_filename(self):
         self.ensure_one()
@@ -184,18 +120,7 @@ class StorageSheet(models.TransientModel):
         return product_list
 
     def do_compute_product(self):
-        if self.product_ids:
-            product_list = self.product_ids.ids
-            all_products = False
-        else:
-            if self.products_with_move:
-                product_list = self.get_products_with_move()
-                all_products = False
-                if not product_list:
-                    raise UserError(_("There are no stock movements in the selected period"))
-            else:
-                product_list = [-1]  # dummy list
-                all_products = True
+        product_list, all_products = self.get_report_products()
 
         self.env["account.move.line"].check_access_rights("read")
 
@@ -394,12 +319,36 @@ class StorageSheet(models.TransientModel):
         lines_zero = self.env["stock.storage.sheet.line"].search(domain)
         lines_zero.unlink()
 
-    def get_found_products(self):
-        found_products = self.product_ids
-        product_list = self.get_products_with_move()
-        found_products |= self.env["product.product"].browse(product_list)
+    def get_report_products(self):
+        self.ensure_one()
+        if self.product_ids:
+            product_list = self.product_ids.ids
+            all_products = False
+        else:
+            product_list = (
+                self.env["product.product"]
+                .search(
+                    [
+                        ("type", "=", "product"),
+                        "|",
+                        ("company_id", "=", self.company_id.id),
+                        ("company_id", "=", False),
+                    ]
+                )
+                .ids
+            )
+            all_products = True
+        if self.products_with_move:
+            product_list = self.get_products_with_move()
+            all_products = False
+            if not product_list:
+                raise UserError(_("There are no stock movements in the selected period"))
+        return product_list, all_products
 
-        return found_products
+    def get_found_products(self):
+        self.ensure_one()
+        product_list, _all_products = self.get_report_products()
+        return self.env["product.product"].browse(product_list)
 
     def button_show_sheet(self):
         self.do_compute_product()
@@ -469,8 +418,8 @@ class StorageSheetLine(models.TransientModel):
     _order = "report_id, sequence, product_id, date"
     _rec_name = "product_id"
 
-    report_id = fields.Many2one("stock.storage.sheet")
-    product_id = fields.Many2one("product.product", string="Product")
+    report_id = fields.Many2one("stock.storage.sheet", index=True)
+    product_id = fields.Many2one("product.product", string="Product", index=True)
     amount_initial = fields.Monetary(currency_field="currency_id", string="Initial Amount")
     quantity_initial = fields.Float(digits="Product Unit of Measure", string="Initial Quantity")
     amount_in = fields.Monetary(currency_field="currency_id", string="Input Amount")
@@ -481,16 +430,17 @@ class StorageSheetLine(models.TransientModel):
     quantity_final = fields.Float(digits="Product Unit of Measure", string="Final Quantity")
     date = fields.Date(string="Date")
     reference = fields.Char()
-    partner_id = fields.Many2one("res.partner")
+    partner_id = fields.Many2one("res.partner", index=True)
     currency_id = fields.Many2one(
         "res.currency",
         string="Currency",
         default=lambda self: self.env.company.currency_id,
+        index=True,
     )
     categ_id = fields.Many2one("product.category", related="product_id.categ_id", index=True, store=True)
-    account_id = fields.Many2one("account.account")
-    location_id = fields.Many2one("stock.location")
-    invoice_id = fields.Many2one("account.move")
+    account_id = fields.Many2one("account.account", index=True)
+    location_id = fields.Many2one("stock.location", index=True)
+    invoice_id = fields.Many2one("account.move", index=True)
     valued_type = fields.Selection(VALUED_TYPE, "Valued Type")
     sequence = fields.Integer()
 
