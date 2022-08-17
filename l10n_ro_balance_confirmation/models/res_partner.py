@@ -6,7 +6,6 @@ from odoo import models
 
 
 class ResPartner(models.Model):
-    _name = "res.partner"
     _inherit = "res.partner"
 
     def get_debit_credit(self):
