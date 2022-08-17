@@ -197,7 +197,6 @@ class AccountEdiFormat(models.Model):
                 errors += [_("localitatea pertenerului %s trebuie sa fie de forma SectorX ") % partner.name]
         return errors
 
-
     def _get_invoice_edi_content(self, move):
 
         if self.code != "cius_ro":
@@ -207,5 +206,5 @@ class AccountEdiFormat(models.Model):
         if not attachment:
             attachment = self._export_cius_ro(move)
             doc = move._get_edi_document(self)
-            doc.write({'attachment_id':attachment.id})
+            doc.write({"attachment_id": attachment.id})
         return attachment.raw

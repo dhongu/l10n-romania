@@ -36,8 +36,7 @@ class ResPartner(models.Model):
         )
         debit = 0.0
         credit = 0.0
-        for pid, type, val in self._cr.fetchall():
-            partner = self.browse(pid)
+        for type, val in self._cr.fetchall():
             if type == "receivable":
                 credit = val
             elif type == "payable":

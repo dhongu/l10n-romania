@@ -19,14 +19,16 @@
 
 
             <xpath expr="//*[local-name()='CityName']" position="replace">
-                <t t-set="city" t-value="partner.city"/>
+                <t t-set="city" t-value="partner.city" />
                 <t t-if="partner.state_id.code == 'B'">
-                     <t t-set="city" t-value="partner.city.upper().replace(' ','')"/>
+                     <t t-set="city" t-value="partner.city.upper().replace(' ','')" />
                 </t>
                <cbc:CityName
-                   xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
-                    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
-                       t-if="city" t-esc="city" />
+                xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+                xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+                t-if="city"
+                t-esc="city"
+            />
             </xpath>
 
             <xpath expr="//*[local-name()='PartyTaxScheme']" position="replace">
