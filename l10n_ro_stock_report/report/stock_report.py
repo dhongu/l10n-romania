@@ -154,6 +154,11 @@ class StorageSheet(models.TransientModel):
         }
 
         query_select_sold_init = """
+        select report_id, product_id,
+            sum(amount_initial) as amount_initial,
+            sum(quantity_initial) as quantity_initial,
+            account_id, date, reference, location_id, sequence
+        from (
             SELECT %(report)s as report_id, sm.product_id as product_id,
                 COALESCE(sum(svl.value),0)  as amount_initial,
                 COALESCE(sum(svl.quantity),0)  as quantity_initial,
@@ -180,6 +185,8 @@ class StorageSheet(models.TransientModel):
                  sm.date <  %(datetime_from)s AND
                 (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
             GROUP BY sm.product_id, svl.account_id, sm.location_id, sm.location_dest_id
+            ) as sub
+        group by report_id, product_id, account_id, date, reference, location_id, sequence
         """
 
         params.update({"reference": "INITIALA"})
@@ -188,6 +195,11 @@ class StorageSheet(models.TransientModel):
         self.line_product_ids.create(res)
 
         query_select_sold_final = """
+        select report_id, product_id,
+            sum(amount_final) as amount_final,
+            sum(quantity_final) as quantity_final,
+            account_id, date, reference, location_id, sequence
+        from (
             SELECT %(report)s as report_id, sm.product_id as product_id,
                 COALESCE(sum(svl.value),0)  as amount_final,
                 COALESCE(sum(svl.quantity),0)  as quantity_final,
@@ -212,7 +224,8 @@ class StorageSheet(models.TransientModel):
                 ( %(all_products)s  or sm.product_id in %(product)s ) AND
                 sm.date <=  %(datetime_to)s AND
                 (sm.location_id in %(locations)s OR sm.location_dest_id in %(locations)s)
-            GROUP BY sm.product_id, svl.account_id,sm.location_id, sm.location_dest_id
+            GROUP BY sm.product_id, svl.account_id,sm.location_id, sm.location_dest_id) as sub
+        group by report_id, product_id, account_id, date, reference, location_id, sequence
         """
 
         params.update({"reference": "FINALA"})
@@ -307,16 +320,17 @@ class StorageSheet(models.TransientModel):
         self.line_product_ids.create(res)
         domain = [
             ("report_id", "=", self.id),
-            ("quantity_initial", "=", 0),
-            ("quantity_in", "=", 0),
-            ("quantity_out", "=", 0),
-            ("quantity_final", "=", 0),
-            ("amount_initial", "=", 0),
-            ("amount_in", "=", 0),
-            ("amount_out", "=", 0),
-            ("amount_final", "=", 0),
+            ("quantity_initial", "=", 0.0),
+            ("quantity_in", "=", 0.0),
+            ("quantity_out", "=", 0.0),
+            ("quantity_final", "=", 0.0),
+            ("amount_initial", "=", 0.0),
+            ("amount_in", "=", 0.0),
+            ("amount_out", "=", 0.0),
+            ("amount_final", "=", 0.0),
         ]
         lines_zero = self.env["stock.storage.sheet.line"].search(domain)
+        _logger.info("Linii cu zero %s" % len(lines_zero))
         lines_zero.unlink()
 
     def get_report_products(self):
@@ -418,16 +432,16 @@ class StorageSheetLine(models.TransientModel):
     _order = "report_id, sequence, product_id, date"
     _rec_name = "product_id"
 
-    report_id = fields.Many2one("stock.storage.sheet", index=True)
+    report_id = fields.Many2one("stock.storage.sheet", index=True, ondelete="cascade")
     product_id = fields.Many2one("product.product", string="Product", index=True)
-    amount_initial = fields.Monetary(currency_field="currency_id", string="Initial Amount")
-    quantity_initial = fields.Float(digits="Product Unit of Measure", string="Initial Quantity")
-    amount_in = fields.Monetary(currency_field="currency_id", string="Input Amount")
-    quantity_in = fields.Float(digits="Product Unit of Measure", string="Input Quantity")
-    amount_out = fields.Monetary(currency_field="currency_id", string="Output Amount")
-    quantity_out = fields.Float(digits="Product Unit of Measure", string="Output Quantity")
-    amount_final = fields.Monetary(currency_field="currency_id", string="Final Amount")
-    quantity_final = fields.Float(digits="Product Unit of Measure", string="Final Quantity")
+    amount_initial = fields.Monetary(currency_field="currency_id", string="Initial Amount", default=0.0)
+    quantity_initial = fields.Float(digits="Product Unit of Measure", string="Initial Quantity", default=0.0)
+    amount_in = fields.Monetary(currency_field="currency_id", string="Input Amount", default=0.0)
+    quantity_in = fields.Float(digits="Product Unit of Measure", string="Input Quantity", default=0.0)
+    amount_out = fields.Monetary(currency_field="currency_id", string="Output Amount", default=0.0)
+    quantity_out = fields.Float(digits="Product Unit of Measure", string="Output Quantity", default=0.0)
+    amount_final = fields.Monetary(currency_field="currency_id", string="Final Amount", default=0.0)
+    quantity_final = fields.Float(digits="Product Unit of Measure", string="Final Quantity", default=0.0)
     date = fields.Date(string="Date")
     reference = fields.Char()
     partner_id = fields.Many2one("res.partner", index=True)

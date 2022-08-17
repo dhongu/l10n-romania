@@ -63,6 +63,7 @@
                 <field name="amount_out" />
                 <field name="quantity_final" />
                 <field name="amount_final" />
+                <field name="location_id" optional="hide" />
             </tree>
         </field>
     </record>
