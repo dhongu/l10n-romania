@@ -22,7 +22,7 @@ class ResPartner(models.Model):
             if vat_number.isdigit():
                 try:
                     vals["vat"] = vals["name"]
-                    result = self._get_Anaf(vat_number)
+                    error, result = self._get_Anaf(vat_number)
                     if result:
                         res = self._Anaf_to_Odoo(result)
                         vals.update(res)
@@ -32,10 +32,11 @@ class ResPartner(models.Model):
             vals["state_id"] = vals["state_id"].id
 
         partner = super(ResPartner, self).create(vals)
+        partner._compute_same_vat_partner_id()
         return partner
 
     def button_get_partner_data(self):
         if self.name and not self.vat:
             self.vat = self.name
         self.ro_vat_change()
-        # self.onchange_vat_subjected()  # fortare compltare ro
+        self._compute_same_vat_partner_id()
