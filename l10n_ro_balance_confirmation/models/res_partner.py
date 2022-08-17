@@ -17,7 +17,7 @@ class ResPartner(models.Model):
         if where_clause:
             where_clause = "AND " + where_clause
         self._cr.execute(
-            """SELECT account_move_line.partner_id, act.type, SUM(account_move_line.amount_residual)
+            """SELECT act.type, SUM(account_move_line.amount_residual)
                       FROM """
             + tables
             + """
