@@ -507,7 +507,10 @@
                         <div class="page">
                             <div class="row justify-content-end mb16">
                                 <div class="col-4" name="right_box">
-                                    <div t-field="o.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:300px;height:50px;'}"/>
+                                    <div
+                                        t-field="o.name"
+                                        t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:300px;height:50px;'}"
+                                    />
                                 </div>
                             </div>
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
@@ -901,7 +904,10 @@
                         <div class="page">
                             <div class="row justify-content-end mb16">
                                 <div class="col-4" name="right_box">
-                                    <div t-field="o.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:300px;height:50px;'}"/>
+                                    <div
+                                        t-field="o.name"
+                                        t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:300px;height:50px;'}"
+                                    />
                                 </div>
                             </div>
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
