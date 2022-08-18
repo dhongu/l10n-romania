@@ -2,7 +2,7 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import fields, models
+from odoo import models
 
 
 class StockPicking(models.Model):
@@ -11,5 +11,3 @@ class StockPicking(models.Model):
     def correction_valuation(self):
         for picking in self:
             picking.move_lines.correction_valuation()
-
-
