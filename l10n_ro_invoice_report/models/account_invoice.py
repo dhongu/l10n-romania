@@ -73,10 +73,13 @@ class AccountInvoice(models.Model):
 
     def _get_reconciled_vals(self, partial, amount, counterpart_line):
         values = super(AccountInvoice, self)._get_reconciled_vals(partial, amount, counterpart_line)
-        values.update({
-            'journal_type': counterpart_line.journal_id.type,
-        })
+        values.update(
+            {
+                "journal_type": counterpart_line.journal_id.type,
+            }
+        )
         return values
+
 
 #
 # class account_invoice_line(models.Model):
