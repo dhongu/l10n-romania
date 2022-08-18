@@ -64,9 +64,7 @@
                 </div>
                 <br />
                 <div id="sold" style="font-weight: bold">
-                    <t t-set="dc" t-value="o.get_debit_credit()" />
-                    <span>Partner balance: </span><t t-esc="dc[1]" t-options='{"widget": "float", "precision": 2}' />
-                    <span t-field="res_company.currency_id.currency_unit_label" />
+                    <span>Partner balance: </span><span t-field="o.credit" />
                 </div>
                 <div id="text2" style="font-size: 0.85rem;">
                     În termen de 5 zile de la primire urmează să ne restituiți acest extras confirmat pentru suma
