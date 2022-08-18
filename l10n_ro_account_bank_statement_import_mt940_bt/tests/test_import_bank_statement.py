@@ -27,9 +27,9 @@ class TestBRDImport(TransactionCase):
         bank_statement = self.statement_import_model.create(dict(data_file=brd_data_file))
         bank_statement.import_file()
         bank_st_record = self.bank_statement_model.search([("name", "=", "00138/1")])[0]
-        self.assertEquals(bank_st_record.balance_start, 3885.24)
-        self.assertEquals(bank_st_record.balance_end_real, 3671.88)
+        self.assertEqual(bank_st_record.balance_start, 3885.24)
+        self.assertEqual(bank_st_record.balance_end_real, 3671.88)
 
         line = bank_st_record.line_ids[-1]
-        self.assertEquals(line.name, "PLATA FACT 4603309")
-        self.assertEquals(line.amount, -210.60)
+        self.assertEqual(line.name, "PLATA FACT 4603309")
+        self.assertEqual(line.amount, -210.60)
