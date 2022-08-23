@@ -193,12 +193,14 @@ class AccountEdiFormat(models.Model):
         if not partner.street:
             errors += [_("Partenerul %s nu are completata strada") % partner.name]
 
+        if not partner.city:
+            errors += [_("Partenerul %s nu are completata localitatea") % partner.name]
+
         state_bucuresti = self.env.ref("base.RO_B")
-        if partner.state_id == state_bucuresti:
+        if partner.state_id == state_bucuresti and partner.city:
             if "sector" not in partner.city.lower():
                 errors += [_("localitatea pertenerului %s trebuie sa fie de forma SectorX ") % partner.name]
         return errors
-
 
     def _get_invoice_edi_content(self, move):
 
@@ -209,5 +211,5 @@ class AccountEdiFormat(models.Model):
         if not attachment:
             attachment = self._export_cius_ro(move)
             doc = move._get_edi_document(self)
-            doc.write({'attachment_id':attachment.id})
+            doc.write({"attachment_id": attachment.id})
         return attachment.raw
