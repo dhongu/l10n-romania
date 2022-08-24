@@ -147,9 +147,9 @@ class AccountMove(models.Model):
         list of codes: https://docs.peppol.eu/poacc/billing/3.0/codelist/UNECERec20/
         or https://unece.org/fileadmin/DAM/cefact/recommendations/bkup_htm/add2c.htm (sorted by letter)
         """
-        xmlid = line.uom_id.get_external_id()
-        if xmlid and line.uom_id.id in xmlid:
-            return UOM_TO_UNECE_CODE.get(xmlid[line.uom_id.id], "C62")
+        xmlid = line.product_uom_id.get_external_id()
+        if xmlid and line.product_uom_id.id in xmlid:
+            return UOM_TO_UNECE_CODE.get(xmlid[line.product_uom_id.id], "C62")
         return "C62"
 
     def _ubl_add_invoice_line(self, parent_node, iline, line_number, ns, version="2.1"):
