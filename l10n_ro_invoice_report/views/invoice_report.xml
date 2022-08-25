@@ -219,6 +219,7 @@
                             >Discount (%)
                             </th>
                             <th class="text-right">Amount</th>
+                            <th class="text-right">Tax</th>
                             <th class="text-right">Taxes</th>
                         </tr>
                     </thead>
@@ -286,6 +287,11 @@
                                         t-esc="price_subtotal"
                                         t-options='{"widget": "float", "precision": 2}'
                                     />
+                                </td>
+                                <td class="text-right">
+                                    <t t-foreach="l.tax_ids" t-as="tax">
+                                        <span t-field="tax.description" />
+                                    </t>
                                 </td>
                                 <td class="text-right">
                                     <t t-set="price_taxes" t-value="(l.price_total - l.price_subtotal )" />
