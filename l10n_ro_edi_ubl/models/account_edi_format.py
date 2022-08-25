@@ -20,7 +20,7 @@ class AccountEdiFormat(models.Model):
 
     def _get_ubl_values(self, invoice):
         values = super(AccountEdiFormat, self)._get_ubl_values(invoice)
-        values["payment_means_code"] = (42 if invoice.partner_bank_id else 31,)
+        values["payment_means_code"] = 42 if invoice.partner_bank_id else 31
         return values
 
     def _get_cius_ro_values(self, invoice):
