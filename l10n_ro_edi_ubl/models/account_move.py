@@ -35,7 +35,7 @@ class AccountMove(models.Model):
             if move.commercial_partner_id.l10n_ro_e_invoice:
                 bank_ids = move.bank_partner_id.bank_ids.filtered(
                     lambda bank: bank.company_id is False or bank.company_id == move.company_id)
-                bank_ids = bank_ids.filtered(lambda bank: bank.bic == 'TREZROBU')
+                bank_ids = bank_ids.filtered(lambda bank: bank.bank_bic == 'TREZROBU')
                 if bank_ids:
                     move.partner_bank_id = bank_ids and bank_ids[0]
 
