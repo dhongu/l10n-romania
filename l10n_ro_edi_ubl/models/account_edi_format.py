@@ -19,6 +19,11 @@ class AccountEdiFormat(models.Model):
     # Export
     ####################################################
 
+    def _get_ubl_values(self, invoice):
+        values = super(AccountEdiFormat, self)._get_ubl_values(invoice)
+        values["payment_means_code"] = 42 if invoice.partner_bank_id else 31
+        return values
+
     def _get_cius_ro_values(self, invoice):
         values = super()._get_bis3_values(invoice)
         values.update(
@@ -71,7 +76,7 @@ class AccountEdiFormat(models.Model):
         return journal.type == "sale" and journal.country_code == "RO"
 
     def _is_required_for_invoice(self, invoice):
-        if self.code != "cus_ro" or self._is_account_edi_ubl_cii_available():
+        if self.code != "cius_ro" or self._is_account_edi_ubl_cii_available():
             return super()._is_required_for_invoice(invoice)
         return invoice.commercial_partner_id.l10n_ro_e_invoice
 
@@ -195,8 +200,11 @@ class AccountEdiFormat(models.Model):
         if not partner.street:
             errors += [_("Partenerul %s nu are completata strada") % partner.name]
 
+        if not partner.city:
+            errors += [_("Partenerul %s nu are completata localitatea") % partner.name]
+
         state_bucuresti = self.env.ref("base.RO_B")
-        if partner.state_id == state_bucuresti:
+        if partner.state_id == state_bucuresti and partner.city:
             if "sector" not in partner.city.lower():
                 errors += [_("localitatea pertenerului %s trebuie sa fie de forma SectorX ") % partner.name]
         return errors
