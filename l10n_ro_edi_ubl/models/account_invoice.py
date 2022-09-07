@@ -79,7 +79,7 @@ class AccountMove(models.Model):
 
     def _ubl_get_order_reference(self):
         """This method is designed to be inherited"""
-        return self.invoice_origin
+        return self.invoice_origin and self.invoice_origin[:30]
 
     def _ubl_add_order_reference(self, parent_node, ns, version="2.1"):
         self.ensure_one()
