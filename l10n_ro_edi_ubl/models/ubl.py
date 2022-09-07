@@ -272,7 +272,7 @@ class BaseUbl(models.AbstractModel):
             price_amount.text = str(price_unit)
             base_qty = etree.SubElement(price, ns["cbc"] + "BaseQuantity", unitCode=uom.unece_code)
             base_qty.text = "1"  # What else could it be ?
-        self._ubl_add_item(name, product, line_item, ns, type=type_, seller=seller, version=version)
+        self._ubl_add_item(name, product, line_item, ns, type_=type_, seller=seller, version=version)
 
     @api.model
     def _ubl_add_item(self, name, product, parent_node, ns, type_="purchase", seller=False, version="2.1"):
