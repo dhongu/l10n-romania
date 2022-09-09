@@ -64,6 +64,79 @@ class StorageSheet(models.TransientModel):
     sublocation = fields.Boolean("Sublocation")
     location_ids = fields.Many2many("stock.location", string="Only for locations", compute="_compute_location_ids")
 
+    filter_reception = fields.Boolean("Reception")
+    filter_reception_return = fields.Boolean("Return reception")
+    filter_reception_notice = fields.Boolean("Reception with notice")
+    filter_reception_notice_return = fields.Boolean("Return reception with notice")
+    filter_delivery = fields.Boolean("Delivery")
+    filter_delivery_return = fields.Boolean("Return delivery")
+    filter_delivery_notice = fields.Boolean("Delivery with notice")
+    filter_delivery_notice_return = fields.Boolean("Return delivery with notice")
+    filter_plus_inventory = fields.Boolean("Plus inventory")
+    filter_minus_inventory = fields.Boolean("Minus inventory")
+    filter_consumption = fields.Boolean("Consumption")
+    filter_consumption_return = fields.Boolean("Return Consumption")
+    filter_production = fields.Boolean("Production")
+    filter_production_return = fields.Boolean("Return Production")
+    filter_internal_transfer = fields.Boolean("Internal Transfer")
+    filter_usage_giving = fields.Boolean("Usage Giving")
+    filter_usage_giving_return = fields.Boolean("Return Usage Giving")
+
+    all_in = fields.Boolean("All inputs")
+    all_out = fields.Boolean("All outputs")
+
+    def get_filter(self):
+        res = []
+        for field in self._fields:
+            if "filter_" in field:
+                f_value = getattr(self, field)
+                if f_value:
+                    res.append(field)
+        res = list(map(lambda x: x.replace("filter_", ""), res))
+        return res
+
+    @api.onchange("all_in", "all_out")
+    def group_filters(self):
+        if self.all_in:
+            self.filter_reception = True
+            self.filter_reception_return = True
+            self.filter_reception_notice = True
+            self.filter_reception_notice_return = True
+            self.filter_plus_inventory = True
+            self.filter_production = True
+            self.filter_production_return = True
+        else:
+            self.filter_reception = False
+            self.filter_reception_return = False
+            self.filter_reception_notice = False
+            self.filter_reception_notice_return = False
+            self.filter_plus_inventory = False
+            self.filter_production = False
+            self.filter_production_return = False
+
+        if self.all_out:
+            self.filter_delivery = True
+            self.filter_delivery_return = True
+            self.filter_delivery_notice = True
+            self.filter_delivery_notice_return = True
+            self.filter_minus_inventory = True
+            self.filter_consumption = True
+            self.filter_consumption_return = True
+            self.filter_usage_giving = True
+            self.filter_usage_giving_return = True
+            self.filter_internal_transfer = True
+        else:
+            self.filter_delivery = False
+            self.filter_delivery_return = False
+            self.filter_delivery_notice = False
+            self.filter_delivery_notice_return = False
+            self.filter_minus_inventory = False
+            self.filter_consumption = False
+            self.filter_consumption_return = False
+            self.filter_usage_giving = False
+            self.filter_usage_giving_return = False
+            self.filter_internal_transfer = False
+
     @api.depends("sublocation", "location_id")
     def _compute_location_ids(self):
         if self.sublocation:

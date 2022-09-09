@@ -1,9 +1,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Report",
-    "summary": "Balanta stocuri",
+    "summary": "Balanta stocuri / fisa de magazie",
     "license": "AGPL-3",
-    "version": "13.0.1.3.3",
+    "version": "13.0.1.3.4",
     "author": "Terrabit,NextERP Romania,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Warehouse",

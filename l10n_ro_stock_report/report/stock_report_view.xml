@@ -21,6 +21,31 @@
                         <field name="date_to" />
                         <field name="company_id" invisible="1" />
                     </group>
+                    <group name="group_filters" colspan="2">
+                        <field name="all_in" />
+                        <field name="all_out" />
+                    </group>
+                    <group name="in_types">
+                        <field name="filter_reception" />
+                        <field name="filter_reception_return" />
+                        <field name="filter_reception_notice" />
+                        <field name="filter_reception_notice_return" />
+                        <field name="filter_plus_inventory" />
+                        <field name="filter_production" />
+                        <field name="filter_production_return" />
+                        <field name="filter_internal_transfer" />
+                    </group>
+                    <group name="out_types">
+                        <field name="filter_delivery" />
+                        <field name="filter_delivery_return" />
+                        <field name="filter_delivery_notice" />
+                        <field name="filter_delivery_notice_return" />
+                        <field name="filter_minus_inventory" />
+                        <field name="filter_consumption" />
+                        <field name="filter_consumption_return" />
+                        <field name="filter_usage_giving" />
+                        <field name="filter_usage_giving_return" />
+                    </group>
                 </group>
                 <footer>
                     <button
