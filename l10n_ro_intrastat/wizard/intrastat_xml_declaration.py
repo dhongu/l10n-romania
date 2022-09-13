@@ -429,10 +429,6 @@ class IntrastatDeclaration(models.TransientModel):
             tag.text = unicode(linekey.ModeOfTransport)
 
 
-
-            tag = ET.SubElement(item, "CountryOfConsignment")
-            tag.text = unicode(linekey.Country)
-
             if dispatchmode:
                 tag = ET.SubElement(item, "CountryOfDestination")
                 tag.text = unicode(linekey.Country)
@@ -447,6 +443,8 @@ class IntrastatDeclaration(models.TransientModel):
                 tag.text = 'RO'
 
             else:
+                tag = ET.SubElement(item, "CountryOfConsignment")
+                tag.text = unicode(linekey.Country)
                 tag = ET.SubElement(item, "CountryOfOrigin")
                 tag.text = unicode(linekey.OriginCountry)
 
