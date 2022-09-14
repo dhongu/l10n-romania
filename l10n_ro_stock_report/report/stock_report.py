@@ -223,7 +223,7 @@ class StorageSheet(models.TransientModel):
             "date_to": fields.Date.to_string(self.date_to),
             "datetime_from": fields.Datetime.to_string(datetime_from),
             "datetime_to": fields.Datetime.to_string(datetime_to),
-            "tz": self._context.get("tz") or self.env.user.tz,
+            "tz": self._context.get("tz") or self.env.user.tz or 'Europe/Bucharest',
         }
 
         query_select_sold_init = """
@@ -453,6 +453,11 @@ class StorageSheet(models.TransientModel):
 
     def button_show_sheet_pdf(self):
         self.do_compute_product()
+        domain = [("report_id", "=", self.id)]
+        number = self.env["stock.storage.sheet.line"].search_count(domain)
+        if number > 100:
+            return self.button_show_sheet()
+
         return self.print_pdf()
 
     def print_pdf(self):
