@@ -3,7 +3,7 @@
     "name": "Romania - Stock Report",
     "summary": "Balanta stocuri / fisa de magazie",
     "license": "AGPL-3",
-    "version": "13.0.1.3.4",
+    "version": "13.0.1.3.5",
     "author": "Terrabit,NextERP Romania,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Warehouse",

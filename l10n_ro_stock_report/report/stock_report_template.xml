@@ -319,7 +319,7 @@
                                         <td colspan="11">
                                             <strong>
                                                 Total
-                                                <span t-field="last_line.valued_type" />
+                                                <span t-esc="valued_type" />
                                                 :
                                                 <span t-esc="round(total_value,2)" />
                                             </strong>
@@ -387,7 +387,7 @@
                                 <t t-set="total_value" t-value="total_value+line_product.amount" />
                             </tr>
                         </t>
-                        <tr>
+                        <tr t-if="last_line">
                             <td colspan="11">
                                 <strong>
                                     Total
@@ -437,7 +437,7 @@
                                         <td colspan="11">
                                             <strong>
                                                 Total
-                                                <span t-field="last_line.valued_type" />
+                                                <span t-field="valued_type" />
                                                 :
                                                 <span t-esc="round(total_value,2)" />
                                             </strong>
@@ -481,7 +481,7 @@
                             <t t-set="total_value" t-value="total_value+line_product.amount" />
                             <t t-set="total_value_account" t-value="total_value_account+line_product.amount" />
                         </t>
-                        <tr>
+                        <tr t-if="last_line">
                             <td colspan="11">
                                 <strong>
                                     Total
