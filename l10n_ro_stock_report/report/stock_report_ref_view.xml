@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_sheet_stock_report_line_ref_tree" model="ir.ui.view">
+        <field name="name">stock.sheet.stock.report.line.ref</field>
+        <field name="model">stock.storage.sheet.line.ref</field>
+        <field name="arch" type="xml">
+            <tree edit="0" create="0" import="0">
+                <field name="date" />
+                <field name="reference" />
+                <field name="account_id" optional="hide" />
+                <field name="partner_id" optional="hide" />
+                <field name="invoice_id" optional="hide" />
+                <field name="amount_initial" />
+                <field name="amount_in" />
+                <field name="amount_out" />
+                <field name="amount_final" />
+            </tree>
+        </field>
+    </record>
+    <record id="view_sheet_stock_report_line_ref_form" model="ir.ui.view">
+        <field name="name">stock.sheet.stock.report.line</field>
+        <field name="model">stock.storage.sheet.line.ref</field>
+        <field name="arch" type="xml">
+            <form edit="0" create="0" import="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date" />
+                        </group>
+                        <group>
+                            <field name="reference" />
+                            <field name="partner_id" />
+                            <field name="invoice_id" />
+                        </group>
+                        <group>
+                            <field name="amount_initial" />
+                            <field name="amount_in" />
+                            <field name="amount_out" />
+                            <field name="amount_final" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_sheet_stock_report_line_ref_pivot" model="ir.ui.view">
+        <field name="name">stock.sheet.stock.report.line.ref.pivot</field>
+        <field name="model">stock.storage.sheet.line.ref</field>
+        <field name="arch" type="xml">
+            <pivot string="Stock Analysis" disable_linking="True">
+                <field name="account_id" type="row" />
+                <field name="amount_initial" type="measure" />
+                <field name="amount_in" type="measure" />
+                <field name="amount_out" type="measure" />
+                <field name="amount_final" type="measure" />
+            </pivot>
+        </field>
+    </record>
+    <record id="view_sheet_stock_report_line_ref_search" model="ir.ui.view">
+        <field name="name">stock.sheet.stock.report.ref.line</field>
+        <field name="model">stock.storage.sheet.line.ref</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="reference" />
+                <field name="partner_id" />
+                <field name="invoice_id" />
+                <group expand="1" string="Group by">
+                    <filter string="Invoice" name="group_by_invoice" context="{'group_by': 'invoice_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_sheet_stock_report_line_ref" model="ir.actions.act_window">
+        <field name="name">Stock Sheet Report</field>
+        <field name="res_model">stock.storage.sheet.line.ref</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('report_id','=',active_id)]</field>
+        <field name="context">{'general_buttons':'get_general_buttons'}</field>
+        <field name="view_id" ref="l10n_ro_stock_report.view_sheet_stock_report_line_ref_tree" />
+    </record>
+</odoo>

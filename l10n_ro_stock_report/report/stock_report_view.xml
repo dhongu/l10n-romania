@@ -46,18 +46,14 @@
                         <field name="filter_usage_giving" />
                         <field name="filter_usage_giving_return" />
                     </group>
+                    <group>
+                        <field name="show_by_ref" />
+                    </group>
                 </group>
                 <footer>
                     <button
                         name="button_show_sheet"
                         string="Show Sheet"
-                        type="object"
-                        default_focus="1"
-                        class="oe_highlight"
-                    />
-                    <button
-                        name="button_show_sheet_pdf"
-                        string="Show Sheet Pdf"
                         type="object"
                         default_focus="1"
                         class="oe_highlight"

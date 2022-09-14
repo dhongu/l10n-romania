@@ -85,6 +85,8 @@ class StorageSheet(models.TransientModel):
     all_in = fields.Boolean("All inputs")
     all_out = fields.Boolean("All outputs")
 
+    show_by_ref = fields.Boolean(default=True)
+
     def get_filter(self):
         res = []
         for field in self._fields:
@@ -439,17 +441,28 @@ class StorageSheet(models.TransientModel):
 
     def button_show_sheet(self):
         self.do_compute_product()
-        action = self.env.ref("l10n_ro_stock_report.action_sheet_stock_report_line").read()[0]
+        if not self.show_by_ref:
+            line_model = "stock.storage.sheet.line"
+            action = self.env.ref("l10n_ro_stock_report.action_sheet_stock_report_line").read()[0]
+        else:
+            line_model = "stock.storage.sheet.line.ref"
+            action = self.env.ref("l10n_ro_stock_report.action_sheet_stock_report_line_ref").read()[0]
+
         action["display_name"] = "{} {} ({}-{})".format(
             action["name"], self.location_id.name, self.date_from, self.date_to
         )
         action["domain"] = [("report_id", "=", self.id)]
         action["context"] = {
             "active_id": self.id,
-            "general_buttons": self.env["stock.storage.sheet.line"].get_general_buttons(),
+            "general_buttons": self.env[line_model].get_general_buttons(),
         }
         action["target"] = "main"
+
+        if self.show_by_ref:
+            self.get_lines_by_ref()
         return action
+
+
 
     def button_show_sheet_pdf(self):
         self.do_compute_product()
@@ -468,12 +481,19 @@ class StorageSheet(models.TransientModel):
         return action_report_storage_sheet.report_action(self, config=False)
 
     def print_by_ref_pdf(self):
-        self.do_compute_product()
+        if not self.show_by_ref:
+            self.get_lines_by_ref()
         action = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet_ref")
         return action.report_action(self, config=False)
 
-    def get_lines_by_ref(self):
 
+    def select_lines_by_ref(self):
+        domain = [('report_id','=',self.id)]
+        lines = self.env["stock.storage.sheet.line.ref"].search(domain)
+        return lines
+
+
+    def get_lines_by_ref(self):
         query = """
             SELECT %(report)s as report_id, account_id, sequence, valued_type, reference, invoice_id, date, partner_id, currency_id,
                 COALESCE(sum(amount_initial),0)  +
@@ -576,3 +596,13 @@ class StorageSheetLineRef(models.TransientModel):
     account_id = fields.Many2one("account.account")
     invoice_id = fields.Many2one("account.move")
     valued_type = fields.Selection(VALUED_TYPE, "Valued Type")
+
+
+    def get_general_buttons(self):
+        return [
+            {
+                "action": "print_by_ref_pdf",
+                "name": _("Print by Ref"),
+                "model": "stock.storage.sheet",
+            }
+        ]

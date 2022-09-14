@@ -283,6 +283,7 @@
                         </p>
                     </div>
                 </div>
+                <t t-set="line_products" t-value="o.select_lines_by_ref()" />
                 <table class="table table-sm">
                     <thead>
                         <tr>
@@ -307,7 +308,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-set="line_products" t-value="o.get_lines_by_ref()" />
                         <t t-set="account" t-value="False" />
                         <t t-set="valued_type" t-value="False" />
                         <t t-set="last_line" t-value="False" />
@@ -424,7 +424,6 @@
                 </div>
                 <table class="table table-sm">
                     <tbody>
-                        <t t-set="line_products" t-value="o.get_lines_by_ref()" />
                         <t t-set="account" t-value="False" />
                         <t t-set="valued_type" t-value="False" />
                         <t t-set="last_line" t-value="False" />
