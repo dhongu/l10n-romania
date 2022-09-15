@@ -736,36 +736,80 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="o.move_lines" t-as="move">
-                                        <t t-set="line" t-value="get_line(move)" />
-                                        <td>
-                                            <span t-field="move.product_id" />
-                                            <div t-foreach="move.move_line_ids " t-as="move_line">
-                                                <t t-if="move_line.lot_id">
-                                                    <span t-field="move_line.lot_id.name" />
-                                                </t>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-field="move.product_uom_qty" />
-                                            <span t-field="move.product_uom" groups="uom.group_uom" />
-                                        </td>
-                                        <td class="text-right">
-                                            <span
-                                                t-esc="line['price']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                        </td>
-                                        <td class="text-right">
-                                            <span
-                                                t-esc="line['amount']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}' />
-                                        </td>
-                                    </tr>
+                                    <t t-if="o.state == 'done'">
+                                        <t t-foreach="o.move_lines" t-as="move">
+                                            <t t-set="line" t-value="get_line(move)" />
+                                            <t t-if="move.quantity_done > 0.0">
+                                                <tr>
+                                                    <td>
+                                                        <span t-field="move.product_id" />
+                                                        <div t-foreach="move.move_line_ids " t-as="move_line">
+                                                            <t t-if="move_line.lot_id">
+                                                                <span t-field="move_line.lot_id.name" />
+                                                            </t>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span t-field="move.quantity_done" />
+                                                        <span t-field="move.product_uom" groups="uom.group_uom" />
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span
+                                                            t-esc="line['price']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span
+                                                            t-esc="line['amount']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span
+                                                            t-esc="line['tax']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="o.move_lines" t-as="move">
+                                            <t t-set="line" t-value="get_line(move)" />
+                                            <td>
+                                                <span t-field="move.product_id" />
+                                                <div t-foreach="move.move_line_ids " t-as="move_line">
+                                                    <t t-if="move_line.lot_id">
+                                                        <span t-field="move_line.lot_id.name" />
+                                                    </t>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="move.product_uom_qty" />
+                                                <span t-field="move.product_uom" groups="uom.group_uom" />
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                    t-esc="line['price']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                    t-esc="line['amount']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                    t-esc="line['tax']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                        </tr>
+                                    </t>
                                 </tbody>
                             </table>
                             <div class="row">
@@ -938,42 +982,92 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="o.move_lines" t-as="move">
-                                        <t t-set="line" t-value="get_line(move)" />
-                                        <td>
-                                            <span t-field="move.product_id" />
-                                            <div t-foreach="move.move_line_ids " t-as="move_line">
-                                                <t t-if="move_line.lot_id">
-                                                    <span t-field="move_line.lot_id.name" />
-                                                </t>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-field="move.product_uom_qty" />
-                                            <span t-field="move.product_uom" groups="uom.group_uom" />
-                                        </td>
-                                        <td class="text-right">
-                                            <span
-                                                t-esc="line['price']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                        </td>
-                                        <td class="text-right">
-                                            <span
-                                                t-esc="line['amount']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                        </td>
-                                        <td t-if="res_company.taxes_on_reception" class="text-right">
-                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}' />
-                                        </td>
-                                        <td t-if="res_company.taxes_on_reception" class="text-right">
-                                            <span
-                                                t-esc="line['amount_tax']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                        </td>
-                                    </tr>
+                                    <t t-if="o.state == 'done'">
+                                        <t t-foreach="o.move_lines" t-as="move">
+                                            <t t-if="move.quantity_done > 0.0">
+                                                <tr>
+                                                    <t t-set="line" t-value="get_line(move)" />
+                                                    <td>
+                                                        <span t-field="move.product_id" />
+                                                        <div t-foreach="move.move_line_ids " t-as="move_line">
+                                                            <t t-if="move_line.lot_id">
+                                                                <span t-field="move_line.lot_id.name" />
+                                                            </t>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span t-field="move.quantity_done" />
+                                                        <span t-field="move.product_uom" groups="uom.group_uom" />
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span
+                                                            t-esc="line['price']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span
+                                                            t-esc="line['amount']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                    <td t-if="res_company.taxes_on_reception" class="text-right">
+                                                        <span
+                                                            t-esc="line['tax']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                    <td t-if="res_company.taxes_on_reception" class="text-right">
+                                                        <span
+                                                            t-esc="line['amount_tax']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="o.move_lines" t-as="move">
+                                            <t t-set="line" t-value="get_line(move)" />
+                                            <td>
+                                                <span t-field="move.product_id" />
+                                                <div t-foreach="move.move_line_ids " t-as="move_line">
+                                                    <t t-if="move_line.lot_id">
+                                                        <span t-field="move_line.lot_id.name" />
+                                                    </t>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                    <span t-field="move.product_uom_qty" />
+                                                <span t-field="move.product_uom" groups="uom.group_uom" />
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                    t-esc="line['price']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                    t-esc="line['amount']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                            <td t-if="res_company.taxes_on_reception" class="text-right">
+                                                <span
+                                                    t-esc="line['tax']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                            <td t-if="res_company.taxes_on_reception" class="text-right">
+                                                <span
+                                                    t-esc="line['amount_tax']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                        </tr>
+                                    </t>
                                 </tbody>
                             </table>
                             <div id="total" class="row justify-content-end">
@@ -1018,7 +1112,7 @@
                             <t t-call="l10n_ro_stock_picking_report.report_address" />
                             <t t-set="doc_type" t-value="'reception'" />
                             <t t-call="l10n_ro_stock_picking_report.report_title" />
-                            <t t-call="report_title.report_reception_text" />
+                            <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
@@ -1037,33 +1131,68 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="o.move_lines" t-as="move">
-                                        <t t-set="line" t-value="get_line(move)" />
-                                        <td>
-                                            <span t-field="move.product_id" />
-                                            <div t-foreach="move.move_line_ids " t-as="move_line">
-                                                <t t-if="move_line.lot_id">
-                                                    <span t-field="move_line.lot_id.name" />
-                                                </t>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <span t-field="move.product_uom_qty" />
-                                            <span t-field="move.product_uom" groups="uom.group_uom" />
-                                        </td>
-                                        <td class="text-right">
-                                            <span
-                                                t-esc="line['price']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                        </td>
-                                        <td class="text-right">
-                                            <span
-                                                t-esc="line['amount']"
-                                                t-options='{"widget": "float", "precision": 2}'
-                                            />
-                                        </td>
-                                    </tr>
+                                    <t t-if="o.state == 'done'">
+                                        <t t-foreach="o.move_lines" t-as="move">
+                                            <t t-if="move.quantity_done > 0.0">
+                                                <tr>
+                                                    <t t-set="line" t-value="get_line(move)" />
+                                                    <td>
+                                                        <span t-field="move.product_id" />
+                                                        <div t-foreach="move.move_line_ids " t-as="move_line">
+                                                            <t t-if="move_line.lot_id">
+                                                                <span t-field="move_line.lot_id.name" />
+                                                            </t>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span t-field="move.quantity_done" />
+                                                        <span t-field="move.product_uom" groups="uom.group_uom" />
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span
+                                                            t-esc="line['price']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span
+                                                            t-esc="line['amount']"
+                                                            t-options='{"widget": "float", "precision": 2}'
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="o.move_lines" t-as="move">
+                                            <t t-set="line" t-value="get_line(move)" />
+                                            <td>
+                                                <span t-field="move.product_id" />
+                                                <div t-foreach="move.move_line_ids " t-as="move_line">
+                                                    <t t-if="move_line.lot_id">
+                                                        <span t-field="move_line.lot_id.name" />
+                                                    </t>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="move.product_uom_qty" />
+                                                <span t-field="move.product_uom" groups="uom.group_uom" />
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                    t-esc="line['price']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                    t-esc="line['amount']"
+                                                    t-options='{"widget": "float", "precision": 2}'
+                                                />
+                                            </td>
+                                        </tr>
+                                    </t>
                                 </tbody>
                             </table>
                             <div id="total" class="row justify-content-end">
