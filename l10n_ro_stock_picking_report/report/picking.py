@@ -61,9 +61,15 @@ class ReportPickingDelivery(models.AbstractModel):
         res = {"amount": 0.0, "tax": 0.0, "amount_tax": 0.0}
         for move in move_lines:
             line = self._get_line(move)
-            res["amount"] += line["amount"]
-            res["tax"] += line["tax"]
-            res["amount_tax"] += line["amount_tax"]
+            if move.picking_id.state == "done":
+                if move.quantity_done > 0.0:
+                    res["amount"] += line["amount"]
+                    res["tax"] += line["tax"]
+                    res["amount_tax"] += line["amount_tax"]
+            else:
+                res["amount"] += line["amount"]
+                res["tax"] += line["tax"]
+                res["amount_tax"] += line["amount_tax"]
         return res
 
 
@@ -228,13 +234,23 @@ class ReportPickingReception(models.AbstractModel):
         }
         for move in move_lines:
             line = self._get_line(move)
-            res["amount"] += line["amount"]
-            res["tax"] += line["tax"]
-            res["amount_tax"] += line["amount_tax"]
+            if move.picking_id.state == "done":
+                if move.state == "done" and move.quantity_done:
+                    res["amount"] += line["amount"]
+                    res["tax"] += line["tax"]
+                    res["amount_tax"] += line["amount_tax"]
 
-            res["amount_sale"] += line["amount_sale"]
-            res["tax_sale"] += line["tax_sale"]
-            res["amount_tax_sale"] += line["amount_tax_sale"]
+                    res["amount_sale"] += line["amount_sale"]
+                    res["tax_sale"] += line["tax_sale"]
+                    res["amount_tax_sale"] += line["amount_tax_sale"]
+            else:
+                res["amount"] += line["amount"]
+                res["tax"] += line["tax"]
+                res["amount_tax"] += line["amount_tax"]
+
+                res["amount_sale"] += line["amount_sale"]
+                res["tax_sale"] += line["tax_sale"]
+                res["amount_tax_sale"] += line["amount_tax_sale"]
         return res
 
 
