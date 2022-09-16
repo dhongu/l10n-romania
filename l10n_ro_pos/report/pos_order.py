@@ -70,9 +70,9 @@ class ReportSaleDetails(models.AbstractModel):
                     value = 0
                     quantity = 0
                     for valuation in move.stock_valuation_layer_ids:
-                        if valuation.valued_type == "internal_transfer" and not valuation.account_move_id:
+                        if valuation.l10n_ro_valued_type == "internal_transfer" and not valuation.account_move_id:
                             continue
-                        if valuation.valued_type == "dropshipped" and valuation.value < 0:
+                        if valuation.l10n_ro_valued_type == "dropshipped" and valuation.value < 0:
                             continue
                         value += abs(valuation.value)
                         quantity += abs(valuation.quantity)

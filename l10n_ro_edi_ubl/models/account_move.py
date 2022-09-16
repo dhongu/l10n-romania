@@ -28,17 +28,17 @@ class AccountMove(models.Model):
         string="Invoice XML Send State",
     )
 
-    @api.depends('bank_partner_id')
+    @api.depends("bank_partner_id")
     def _compute_partner_bank_id(self):
         super(AccountMove, self)._compute_partner_bank_id()
         for move in self:
             if move.commercial_partner_id.l10n_ro_e_invoice:
                 bank_ids = move.bank_partner_id.bank_ids.filtered(
-                    lambda bank: bank.company_id is False or bank.company_id == move.company_id)
-                bank_ids = bank_ids.filtered(lambda bank: bank.bank_bic == 'TREZROBU')
+                    lambda bank: bank.company_id is False or bank.company_id == move.company_id
+                )
+                bank_ids = bank_ids.filtered(lambda bank: bank.bank_bic == "TREZROBU")
                 if bank_ids:
                     move.partner_bank_id = bank_ids and bank_ids[0]
-
 
     def _get_cius_ro_name(self):
         self.ensure_one()
