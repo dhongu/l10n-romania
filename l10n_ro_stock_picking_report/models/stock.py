@@ -34,7 +34,7 @@ class StockPicking(models.Model):
     delegate_id = fields.Many2one("res.partner", string="Delegate")
     mean_transp = fields.Char(string="Mean transport")
 
-    notice = fields.Boolean(
+    l10n_ro_notice = fields.Boolean(
         "Is a notice",
         states={"done": [("readonly", True)], "cancel": [("readonly", True)]},
         default=False,

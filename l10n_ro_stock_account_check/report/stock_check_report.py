@@ -120,7 +120,7 @@ class StockAccountingCheck(models.TransientModel):
             if purchase.invoice_count == 1:
                 invoice_date = purchase.invoice_ids.invoice_date
                 for picking in purchase.picking_ids:
-                    if invoice_date != picking.date.date() and not picking.notice:
+                    if invoice_date != picking.date.date() and not picking.l10n_ro_notice:
                         new_date = picking.date.replace(
                             year=invoice_date.year,
                             month=invoice_date.month,
@@ -156,7 +156,7 @@ class StockAccountingCheck(models.TransientModel):
             if sale_oreder.invoice_count == 1:
                 invoice_date = sale_oreder.invoice_ids.invoice_date
                 for picking in sale_oreder.picking_ids:
-                    if invoice_date != picking.date.date() and not picking.notice:
+                    if invoice_date != picking.date.date() and not picking.l10n_ro_notice:
                         new_date = picking.date.replace(
                             year=invoice_date.year,
                             month=invoice_date.month,
