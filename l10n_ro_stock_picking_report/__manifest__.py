@@ -19,6 +19,7 @@
         "sale_stock",
         "l10n_ro_stock",
         "l10n_ro_stock_account",
+        "l10n_ro_stock_account_notice",
     ],
     "data": [
         "views/l10n_ro_stock_picking_report.xml",
