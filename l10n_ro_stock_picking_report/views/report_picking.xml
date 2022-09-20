@@ -838,10 +838,10 @@
                         <span t-field="o.partner_id.city" />
                     </strong>
                 </span>
-                <t t-if="o.notice">
+                <t t-if="o.l10n_ro_notice">
                     <span>under the delivery note no.</span>
                 </t>
-                <t t-if="not o.notice">
+                <t t-if="not o.l10n_ro_notice">
                     <span>under the document no.</span>
                 </t>
                 <strong>
