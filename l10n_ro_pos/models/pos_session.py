@@ -19,7 +19,7 @@ class PosSession(models.Model):
     _inherit = "pos.session"
 
     def _reconcile_account_move_lines(self, data):
-        if self.company_id.romanian_accounting:
+        if self.company_id.l10n_ro_accounting:
             data["stock_output_lines"] = {}
         return super(PosSession, self)._reconcile_account_move_lines(data)
 
@@ -32,7 +32,7 @@ class PosSession(models.Model):
 
         amounts = get_amounts
 
-        if self.company_id.romanian_accounting:
+        if self.company_id.l10n_ro_accounting:
             # nu trebuie generate note contabile  pentru ca acestea sunt generate in miscarea de stoc
             data.update(
                 {

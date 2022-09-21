@@ -3,7 +3,7 @@
 # See README.rst file on addons root folder for license details
 {
     "name": "Romania - Point of Sale",
-    "version": "14.0.2.0.1",
+    "version": "14.0.2.0.3",
     "category": "Localization",
     "license": "AGPL-3",
     "author": "Terrabit,Odoo Community Association (OCA)",
