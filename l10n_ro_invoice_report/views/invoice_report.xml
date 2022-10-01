@@ -315,6 +315,22 @@
                                 </td>
                             </tr>
                         </t>
+
+                         <t t-foreach="range(nr_crt,5)" t-as="l">
+                             <tr>
+                                 <td><br/></td>
+                            <td/>
+                            <td class="text-right"/>
+                            <td class="text-right"/>
+                            <td
+                                class="text-right"
+                                t-if="with_discount(o) and with_discount_distinct"
+                                groups="product.group_discount_per_so_line"
+                            />
+                            <td class="text-right"/>
+                            <td class="text-right"/>
+                            <td class="text-right"/></tr>
+                         </t>
                     </tbody>
                 </table>
             </xpath>
