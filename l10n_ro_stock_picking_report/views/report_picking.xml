@@ -164,7 +164,7 @@
                 <div class="col-3 bm-2">
                     <strong>Source</strong>
                     <p>
-                        <span t-field="o.origin" />
+                        <span t-esc="o.origin and o.origin[:30]" />
                         <t t-if="not  o.origin">
                             <span t-field="o.group_id" />
                         </t>
@@ -797,7 +797,7 @@
                 <div class="col-3 bm-2" t-if="o.origin or o.group_id">
                     <strong>Origin</strong>
                     <p>
-                        <span t-field="o.origin" />
+                        <span t-esc="o.origin and o.origin[:30]" />
                         <t t-if="not  o.origin">
                             <span t-field="o.group_id" />
                         </t>
