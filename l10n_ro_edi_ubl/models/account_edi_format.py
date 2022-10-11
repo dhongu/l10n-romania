@@ -104,10 +104,10 @@ class AccountEdiFormat(models.Model):
 
         return res
 
-    def _cancel_invoice_edi(self, invoices, test_mode=False):
+    def _cancel_invoice_edi(self, invoices):
         self.ensure_one()
         if self.code != "cius_ro" or self._is_account_edi_ubl_cii_available():
-            return super()._cancel_invoice_edi(invoices, test_mode)
+            return super()._cancel_invoice_edi(invoices)
         return {invoice: {"success": False} for invoice in invoices}
 
     def _needs_web_services(self):
