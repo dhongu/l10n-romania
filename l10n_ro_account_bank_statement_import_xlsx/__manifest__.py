@@ -9,7 +9,7 @@
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Banking addons",
     "depends": ["account_bank_statement_import"],
-    "data": ["views/account_bank_statement_import_sta_view.xml"],
+    "data": ["views/account_bank_statement_import_sta_view.xml", "views/account_bank_statement_import_templates.xml"],
     "maintainers": ["dhongu"],
     "development_status": "Alpha",
 }
