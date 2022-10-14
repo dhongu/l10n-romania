@@ -282,7 +282,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <t t-foreach="o.move_lines" t-as="move">
+                                    <t t-foreach="o.move_ids" t-as="move">
                                         <tr t-foreach="move.move_line_ids" t-as="move_line">
                                             <td>
                                                 <span t-field="move.product_id" />
@@ -384,7 +384,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="o.move_lines" t-as="move">
+                                    <tr t-foreach="o.move_ids" t-as="move">
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
@@ -558,7 +558,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="o.move_lines" t-as="move">
+                                    <tr t-foreach="o.move_ids" t-as="move">
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
@@ -654,7 +654,7 @@
                                 </tbody>
                             </table>
                             <div id="total" class="row justify-content-end">
-                                <t t-set="totals" t-value="get_totals(o.move_lines)" />
+                                <t t-set="totals" t-value="get_totals(o.move_ids)" />
                                 <div class="col-4 ml-auto">
                                     <table class="table table-condensed">
                                         <tr class="border-black">
@@ -737,7 +737,7 @@
                                 </thead>
                                 <tbody>
                                     <t t-if="o.state == 'done'">
-                                        <t t-foreach="o.move_lines" t-as="move">
+                                        <t t-foreach="o.move_ids" t-as="move">
                                             <t t-set="line" t-value="get_line(move)" />
                                             <t t-if="move.quantity_done > 0.0">
                                                 <tr>
@@ -776,7 +776,7 @@
                                         </t>
                                     </t>
                                     <t t-else="">
-                                        <tr t-foreach="o.move_lines" t-as="move">
+                                        <tr t-foreach="o.move_ids" t-as="move">
                                             <t t-set="line" t-value="get_line(move)" />
                                             <td>
                                                 <span t-field="move.product_id" />
@@ -813,7 +813,7 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <t t-set="totals" t-value="get_totals(o.move_lines)" />
+                                <t t-set="totals" t-value="get_totals(o.move_ids)" />
                                 <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
                                 <t t-call="l10n_ro_stock_picking_report.report_totals" />
                             </div>
@@ -983,7 +983,7 @@
                                 </thead>
                                 <tbody>
                                     <t t-if="o.state == 'done'">
-                                        <t t-foreach="o.move_lines" t-as="move">
+                                        <t t-foreach="o.move_ids" t-as="move">
                                             <t t-if="move.quantity_done > 0.0">
                                                 <tr>
                                                     <t t-set="line" t-value="get_line(move)" />
@@ -1028,7 +1028,7 @@
                                         </t>
                                     </t>
                                     <t t-else="">
-                                        <tr t-foreach="o.move_lines" t-as="move">
+                                        <tr t-foreach="o.move_ids" t-as="move">
                                             <t t-set="line" t-value="get_line(move)" />
                                             <td>
                                                 <span t-field="move.product_id" />
@@ -1071,7 +1071,7 @@
                                 </tbody>
                             </table>
                             <div id="total" class="row justify-content-end">
-                                <t t-set="totals" t-value="get_totals(o.move_lines)" />
+                                <t t-set="totals" t-value="get_totals(o.move_ids)" />
                                 <t
                                     t-if="res_company.taxes_on_reception"
                                     t-call="l10n_ro_stock_picking_report.report_totals"
@@ -1132,7 +1132,7 @@
                                 </thead>
                                 <tbody>
                                     <t t-if="o.state == 'done'">
-                                        <t t-foreach="o.move_lines" t-as="move">
+                                        <t t-foreach="o.move_ids" t-as="move">
                                             <t t-if="move.quantity_done > 0.0">
                                                 <tr>
                                                     <t t-set="line" t-value="get_line(move)" />
@@ -1165,7 +1165,7 @@
                                         </t>
                                     </t>
                                     <t t-else="">
-                                        <tr t-foreach="o.move_lines" t-as="move">
+                                        <tr t-foreach="o.move_ids" t-as="move">
                                             <t t-set="line" t-value="get_line(move)" />
                                             <td>
                                                 <span t-field="move.product_id" />
@@ -1196,7 +1196,7 @@
                                 </tbody>
                             </table>
                             <div id="total" class="row justify-content-end">
-                                <t t-set="totals" t-value="get_totals(o.move_lines)" />
+                                <t t-set="totals" t-value="get_totals(o.move_ids)" />
                                 <div class="col-4 ml-auto">
                                     <table class="table table-condensed">
                                         <tr class="border-black">
@@ -1266,7 +1266,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="o.move_lines" t-as="move">
+                                    <tr t-foreach="o.move_ids" t-as="move">
                                         <t t-set="line" t-value="get_line(move)" />
                                         <td>
                                             <span t-field="move.product_id" />
@@ -1323,7 +1323,7 @@
                                 </tbody>
                             </table>
                             <div id="total" class="row justify-content-end">
-                                <t t-set="totals" t-value="get_totals(o.move_lines)" />
+                                <t t-set="totals" t-value="get_totals(o.move_ids)" />
                                 <t t-call="l10n_ro_stock_picking_report.report_totals" />
                                 <t t-call="l10n_ro_stock_picking_report.report_totals_sale" />
                             </div>
