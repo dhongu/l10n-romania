@@ -6,7 +6,7 @@ import logging
 
 import psycopg2
 
-from odoo import _, api, models
+from odoo import _, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -85,13 +85,13 @@ class AccountBankStmtImportXLSX(models.TransientModel):
                         item[index_partner_id] = sale_order.partner_id.id
 
                 if not item[index_partner_id] and item[index_payment_ref]:
-                    domain = [('type', '=', 'out_invoice'), ("name", "=", item[index_payment_ref])]
+                    domain = [("type", "=", "out_invoice"), ("name", "=", item[index_payment_ref])]
                     invoice = self.env["account.move"].search(domain, limit=1)
                     if invoice:
                         item[index_partner_id] = invoice.partner_id.id
 
                 if not item[index_partner_id] and item[index_payment_ref]:
-                    domain = [('type', '=', 'out_invoice'), ("ref", "=", item[index_payment_ref])]
+                    domain = [("type", "=", "out_invoice"), ("ref", "=", item[index_payment_ref])]
                     invoice = self.env["account.move"].search(domain, limit=1)
                     if invoice:
                         item[index_partner_id] = invoice.partner_id.id
@@ -100,33 +100,32 @@ class AccountBankStmtImportXLSX(models.TransientModel):
                 if not item[index_payment_ref]:
                     item[index_payment_ref] = "N/A"
 
+        import_fields.append("statement_id/.id")
+        import_fields.append("sequence")
+        for index, line in enumerate(data):
+            line.append(statement_id)
+            line.append(index)
         return data
 
     def parse_preview(self, options, count=10):
-        if options.get('bank_stmt_import', False):
+        if options.get("bank_stmt_import", False):
             self = self.with_context(bank_stmt_import=True)
         return super(AccountBankStmtImportXLSX, self).parse_preview(options, count=count)
 
     def do(self, fields, columns, options, dryrun=False):
-        if options.get('bank_stmt_import', False):
-            self._cr.execute('SAVEPOINT import_bank_stmt')
-            vals = {
-                'journal_id': self._context.get('journal_id', False),
-                'reference': self.file_name
-            }
-            statement = self.env['account.bank.statement'].create(vals)
+        if options.get("bank_stmt_import", False):
+            self._cr.execute("SAVEPOINT import_bank_stmt")
+            vals = {"journal_id": self._context.get("journal_id", False), "reference": self.file_name}
+            statement = self.env["account.bank.statement"].create(vals)
             self = self.with_context(bank_statement_id=statement.id)
             res = super(AccountBankStmtImportXLSX, self).do(fields, columns, options, dryrun=dryrun)
 
             try:
                 if dryrun:
-                    self._cr.execute('ROLLBACK TO SAVEPOINT import_bank_stmt')
+                    self._cr.execute("ROLLBACK TO SAVEPOINT import_bank_stmt")
                 else:
-                    self._cr.execute('RELEASE SAVEPOINT import_bank_stmt')
-                    res['messages'].append({
-                        'statement_id': statement.id,
-                        'type': 'bank_statement'
-                    })
+                    self._cr.execute("RELEASE SAVEPOINT import_bank_stmt")
+                    res["messages"].append({"statement_id": statement.id, "type": "bank_statement"})
             except psycopg2.InternalError:
                 pass
             return res

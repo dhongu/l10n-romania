@@ -35,7 +35,7 @@ class StockValuationLayer(models.Model):
                         break
 
     def init(self):
-        """ This method will compute values for valuation layer valued_type"""
+        """This method will compute values for valuation layer valued_type"""
         val_layers = self.search(["|", ("valued_type", "=", False), ("valued_type", "=", "")])
         val_types = self.env["stock.move"]._get_valued_types()
         val_types = [val for val in val_types if val not in ["in", "out", "dropshipped", "dropshipped_returned"]]

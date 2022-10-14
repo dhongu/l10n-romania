@@ -225,7 +225,7 @@ class StorageSheet(models.TransientModel):
             "date_to": fields.Date.to_string(self.date_to),
             "datetime_from": fields.Datetime.to_string(datetime_from),
             "datetime_to": fields.Datetime.to_string(datetime_to),
-            "tz": self._context.get("tz") or self.env.user.tz or 'Europe/Bucharest',
+            "tz": self._context.get("tz") or self.env.user.tz or "Europe/Bucharest",
         }
 
         query_select_sold_init = """
@@ -462,8 +462,6 @@ class StorageSheet(models.TransientModel):
             self.get_lines_by_ref()
         return action
 
-
-
     def button_show_sheet_pdf(self):
         self.do_compute_product()
         domain = [("report_id", "=", self.id)]
@@ -486,12 +484,10 @@ class StorageSheet(models.TransientModel):
         action = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet_ref")
         return action.report_action(self, config=False)
 
-
     def select_lines_by_ref(self):
-        domain = [('report_id','=',self.id)]
+        domain = [("report_id", "=", self.id)]
         lines = self.env["stock.storage.sheet.line.ref"].search(domain)
         return lines
-
 
     def get_lines_by_ref(self):
         query = """
@@ -596,7 +592,6 @@ class StorageSheetLineRef(models.TransientModel):
     account_id = fields.Many2one("account.account")
     invoice_id = fields.Many2one("account.move")
     valued_type = fields.Selection(VALUED_TYPE, "Valued Type")
-
 
     def get_general_buttons(self):
         return [

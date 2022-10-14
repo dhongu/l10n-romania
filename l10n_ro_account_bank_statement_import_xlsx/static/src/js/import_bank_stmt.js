@@ -4,9 +4,9 @@ odoo.define("bank_stmt_import_xlsx.import", function (require) {
     var core = require("web.core");
     var BaseImport = require("base_import.import");
 
-
+    var QWeb = core.qweb;
     var _t = core._t;
-
+    var _lt = core._lt;
 
     var DataImportStmt = BaseImport.DataImport.extend({
         init: function (parent, action) {
@@ -24,7 +24,7 @@ odoo.define("bank_stmt_import_xlsx.import", function (require) {
             });
         },
         create_model: function () {
-            return new $.Deferred().resolve();
+            return Promise.resolve();
         },
         import_options: function () {
             var options = this._super();
@@ -45,18 +45,19 @@ odoo.define("bank_stmt_import_xlsx.import", function (require) {
         },
         call_import: function (kwargs) {
             var self = this;
-            return self._super.apply(this, arguments).done(function (message) {
-                message = message.messages;
-                if (message.length && message[0].type === "bank_statement") {
-                    self.statement_id = message[0].statement_id;
+            var superProm = self._super.apply(this, arguments);
+            superProm.then(function (message) {
+                if (message.ids) {
+                    self.statement_line_ids = message.ids;
                 }
             });
+            return superProm;
         },
         exit: function () {
             this.do_action({
                 name: _t("Reconciliation on Bank Statements"),
                 context: {
-                    statement_ids: this.statement_id,
+                    statement_line_ids: this.statement_line_ids,
                 },
                 type: "ir.actions.client",
                 tag: "bank_statement_reconciliation_view",
