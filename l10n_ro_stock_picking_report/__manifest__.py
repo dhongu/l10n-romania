@@ -23,7 +23,7 @@
         "views/l10n_ro_stock_picking_report.xml",
         "views/report_picking.xml",
         "views/stock_view.xml",
-        "views/res_config_view.xml",
+        # "views/res_config_view.xml",
         "views/stock_location_view.xml",
         # "report/stock_picking_cumulative_view.xml",
         # "security/ir.model.access.csv",
