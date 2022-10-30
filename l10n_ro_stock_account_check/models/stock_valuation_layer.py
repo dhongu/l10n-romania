@@ -20,7 +20,7 @@ class StockValuationLayer(models.Model):
 
             for valued_type in val_types:
                 if getattr(svl.stock_move_id, "_is_%s" % valued_type)():
-                    svl.valued_type = valued_type
+                    svl.l10n_ro_valued_type = valued_type
                     continue
 
     def correction_valuation(self, unlink_account_move=True):
@@ -28,7 +28,7 @@ class StockValuationLayer(models.Model):
             if not svl.stock_move_id:
                 continue
 
-            if svl.valued_type == "delivery":
+            if svl.l10n_ro_valued_type == "delivery":
                 product = svl.product_id
                 if svl.stock_move_id.lot_ids:
                     product = svl.product_id.with_context(

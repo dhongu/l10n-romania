@@ -3,8 +3,8 @@
 
 {
     "name": "Romania - Invoice Report Terrabit",
-    "summary": "Localizare Terrabit",
-    "version": "15.0.3.0.9",
+    "summary": "Localizare Terrabit - Invoice",
+    "version": "15.0.3.1.0",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",

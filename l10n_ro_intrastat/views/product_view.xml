@@ -9,6 +9,7 @@
                 <xpath expr="//page[@name='invoicing']//group[@name='accounting']" position="inside">
                     <group name="intrastat" string="Intrastat">
                         <field name="intrastat_id" />
+                        <field name="country_id" />
                     </group>
                 </xpath>
             </field>

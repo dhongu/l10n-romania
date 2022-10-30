@@ -14,7 +14,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     def check_vat(self):
-        partners = self.filtered(lambda p: not p.vat_subjected)
+        partners = self.filtered(lambda p: not p.l10n_ro_vat_subjected)
         return super(ResPartner, partners).check_vat()
 
     @api.model
@@ -42,4 +42,4 @@ class ResPartner(models.Model):
         if self.name and not self.vat:
             self.vat = self.name
         self.ro_vat_change()
-        self.onchange_vat_subjected()  # fortare compltare ro
+        # self.onchange_vat_subjected()  # fortare compltare ro
