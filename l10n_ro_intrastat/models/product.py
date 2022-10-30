@@ -8,6 +8,7 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     intrastat_id = fields.Many2one("account.intrastat.code", string="Commodity Code")
+    country_id = fields.Many2one("res.country", string="Country Of Origin")
 
 
 class Product(models.Model):

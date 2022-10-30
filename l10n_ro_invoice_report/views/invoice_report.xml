@@ -69,9 +69,9 @@
                         <strong>NRC:</strong>
                         <span t-field="res_company.partner_id.nrc" />
                     </div>
-                    <div t-if="res_company.share_capital">
+                    <div t-if="res_company.l10n_ro_share_capital">
                         <strong>Share Capital:</strong>
-                        <span t-esc="int(res_company.share_capital)" />
+                        <span t-esc="int(res_company.l10n_ro_share_capital)" />
                     </div>
                     <div t-if="'vat_on_payment' in res_company._fields">
                         <div t-if="res_company.vat_on_payment">
