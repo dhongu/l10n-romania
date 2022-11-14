@@ -91,14 +91,12 @@
                 <cac:Price>
                     <t t-if="line.quantity">
                        <cbc:PriceAmount
-                        t-att-currencyID="record.currency_id.name"
-                        t-esc="format_monetary(line_vals['price_subtotal_with_no_tax_closing'] / line.quantity)"
-                    />
+                            t-att-currencyID="record.currency_id.name"
+                            t-esc="format_monetary(line_vals['price_subtotal_with_no_tax_closing'] / line.quantity)"
+                        />
                     </t>
                     <t t-else="">
-                        <cbc:PriceAmount
-                        t-att-currencyID="record.currency_id.name"
-                        t-esc="format_monetary(0.0)"  />
+                        <cbc:PriceAmount t-att-currencyID="record.currency_id.name" t-esc="format_monetary(0.0)" />
                     </t>
 
                     <cbc:BaseQuantity t-esc="line.quantity" />
