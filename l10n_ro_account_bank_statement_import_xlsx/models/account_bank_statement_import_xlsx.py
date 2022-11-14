@@ -17,7 +17,7 @@ class AccountBankStatementImport(models.TransientModel):
         return filename and filename.lower().strip().endswith(".xlsx")
 
     def import_file(self):
-        # In case of CSV files, only one file can be imported at a time.
+        # In case of XLSX files, only one file can be imported at a time.
         if len(self.attachment_ids) > 1:
             xlsx = [bool(self._check_xlsx(att.name)) for att in self.attachment_ids]
             if True in xlsx and False in xlsx:
@@ -73,15 +73,31 @@ class AccountBankStmtImportXLSX(models.TransientModel):
                 if partner:
                     item[index_partner_id] = partner.id
 
-        if "payment_ref" in import_fields:
-            index_payment_ref = import_fields.index("payment_ref")
-            for item in data:
-                if not item[index_partner_id] and item[index_payment_ref]:
-                    domain = [("name", "=", item[index_payment_ref])]
-                    invoice = self.env["sale.order"].search(domain, limit=1)
-                    if invoice:
-                        item[index_partner_id] = invoice.partner_id.id
-                if not item[index_payment_ref]:
-                    item[index_payment_ref] = "N/A"
+        search_fields = ["name", "ref", "payment_ref"]
+        for search_field in search_fields:
+            if search_field in import_fields:
+                index_field = import_fields.index(search_field)
+                for item in data:
+                    if not item[index_partner_id] and item[index_field]:
+                        domain = [("name", "=", item[index_field])]
+                        sale_order = self.env["sale.order"].search(domain, limit=1)
+                        if sale_order:
+                            item[index_partner_id] = sale_order.partner_id.id
+
+                    if not item[index_partner_id] and item[index_field]:
+                        domain = [("type", "=", "out_invoice"), ("name", "=", item[index_field])]
+                        invoice = self.env["account.move"].search(domain, limit=1)
+                        if invoice:
+                            item[index_partner_id] = invoice.partner_id.id
+
+                    if not item[index_partner_id] and item[index_field]:
+                        domain = [("type", "=", "out_invoice"), ("ref", "=", item[index_field])]
+                        invoice = self.env["account.move"].search(domain, limit=1)
+                        if invoice:
+                            item[index_partner_id] = invoice.partner_id.id
+                            item[index_field] = invoice.name
+
+                    if not item[index_field] and search_field == "index_payment_ref":
+                        item[index_field] = "N/A"
 
         return data
