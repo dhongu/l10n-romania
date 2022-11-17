@@ -1,0 +1,1 @@
+jre8\bin\java.exe -jar DUKIntegrator.jar

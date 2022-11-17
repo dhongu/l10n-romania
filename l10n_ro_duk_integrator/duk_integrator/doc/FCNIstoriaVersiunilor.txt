@@ -1,0 +1,11 @@
+20-OCT-2022
+	- publicat versiunea J1.0.0 de validator
+
+25-OCT-2022
+        -versiune J1.0.1 0 0 de validator
+		-modificare BaseAmount si PriceAmount la 25,8 ;   DeliveryLocation/ID optional
+
+08-NOV-2022
+         -versiune J1.0.2 0 0 de validator  
+                -modificare structura ordine EmbeddedDocumentBinaryObject, ExternalReference
+
