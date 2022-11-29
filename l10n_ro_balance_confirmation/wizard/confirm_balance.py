@@ -2,6 +2,7 @@
 # See README.rst file on addons root folder for license details
 
 from odoo import fields, models
+
 # from odoo.exceptions import UserError
 
 
@@ -12,7 +13,7 @@ class BalanceConfirm(models.TransientModel):
     l10n_ro_balance_date = fields.Date(string="Balance confirmation at")
 
     def action_print_balance(self):
-        partners = self.env["res.partner"].browse(self.env.context.get('active_ids'))
+        partners = self.env["res.partner"].browse(self.env.context.get("active_ids"))
         if partners:
             self = self.with_context(date_to=self.l10n_ro_balance_date)
             partners = partners.with_context(date_to=self.l10n_ro_balance_date)

@@ -10,12 +10,7 @@
                     <field name="l10n_ro_balance_date" required="1" />
                 </group>
                 <footer>
-                    <button
-                        name="action_print_balance"
-                        string="Print"
-                        type="object"
-                        class="btn-primary"
-                    />
+                    <button name="action_print_balance" string="Print" type="object" class="btn-primary" />
                     <button string="Cancel" class="btn-secondary" special="cancel" />
                 </footer>
             </form>
@@ -26,7 +21,7 @@
         <field name="name">Print balance</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">l10n_ro.balance_confirm_dialog</field>
-        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner" />
         <field name="view_mode">form</field>
         <field name="target">new</field>
         <field name="binding_type">report</field>

@@ -7,7 +7,7 @@
         </record>
 
         <record id="base.group_system" model="res.groups">
-            <field name="implied_ids" eval="[(4, ref('l10n_ro_balance_confirmation.group_print_balance'))]"/>
+            <field name="implied_ids" eval="[(4, ref('l10n_ro_balance_confirmation.group_print_balance'))]" />
         </record>
     </data>
 </odoo>
