@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_ballance_confirmation_form" model="ir.ui.view">
+        <field name="name">Balance confirmation</field>
+<!--        <field name="model">l10n_ro_balance_confirmation.model_l10n_ro_balance_confirm_dialog</field>-->
+        <field name="model">l10n_ro.balance_confirm_dialog</field>
+        <field name="arch" type="xml">
+            <form string="Balance Confirmation">
+                <group>
+                    <field name="l10n_ro_balance_date" required="1" />
+                </group>
+                <footer>
+                    <button name="action_print_balance" string="Print" type="object" class="btn-primary" />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_balance_confirmation" model="ir.actions.act_window">
+        <field name="name">Print balance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">l10n_ro.balance_confirm_dialog</field>
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

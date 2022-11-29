@@ -19,7 +19,7 @@ Romania - balance confirmation
 
 |badge1| |badge2| |badge3| 
 
-Generare formular de confirmare de sold
+Generare formular de confirmare de sold la data (Tipariti->Confirmare sold)
 
 **Table of contents**
 
