@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_partner_form_balance_confirmation" model="ir.ui.view">
+        <field name="name">res.partner.balance.confirmation</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button
+                        name="button_print_balance_data"
+                        string="Print balance at date"
+                        context="{'active_id': active_id}"
+                        type="object"
+                    />
+                </header>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
