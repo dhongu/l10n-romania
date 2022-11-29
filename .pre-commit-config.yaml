@@ -14,6 +14,9 @@ exclude: |
   ^docs/_templates/.*\.html$|
   # You don't usually want a bot to modify your legal texts
   (LICENSE.*|COPYING.*)
+  __unported__|
+  /duk_integrator/
+
 default_language_version:
   python: python3
   node: "14.13.0"
@@ -129,17 +132,11 @@ repos:
   #          - --header
   #          - "# generated from manifests external_dependencies"
 
-  - repo: https://gitlab.com/PyCQA/flake8
+  - repo: https://github.com/PyCQA/flake8
     rev: 3.9.2
     hooks:
       - id: flake8
-        name: flake8 except __init__.py
-        exclude: /__init__\.py$
-        additional_dependencies: ["flake8-bugbear==21.9.2"]
-      - id: flake8
-        name: flake8 only __init__.py
-        args: ["--extend-ignore=F401"] # ignore unused imports in __init__.py
-        files: /__init__\.py$
+        name: flake8
         additional_dependencies: ["flake8-bugbear==21.9.2"]
 
   - repo: https://github.com/PyCQA/pylint
