@@ -5,5 +5,9 @@
             <field name="name">Can print partner balance confirmation</field>
             <field name="category_id" ref="base.module_category_hidden" />
         </record>
+
+        <record id="base.group_system" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('l10n_ro_balance_confirmation.group_print_balance'))]"/>
+        </record>
     </data>
 </odoo>

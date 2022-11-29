@@ -18,11 +18,4 @@ class BalanceConfirm(models.TransientModel):
             partners = partners.with_context(date_to=self.l10n_ro_balance_date)
             action = self.env.ref("l10n_ro_balance_confirmation.action_report_partner_balance")
             action = action.with_context(date_to=self.l10n_ro_balance_date)
-            # data = {
-            #     'active_model': 'res.partner',
-            #     "date_to": self.l10n_ro_balance_date,
-            #     "active_ids": partners.ids,
-            #     "docs": partners,
-            # }
             return action.report_action(partners, data={"date_to": self.l10n_ro_balance_date})
-            # return action.report_action(partners, data=data)
