@@ -17,9 +17,9 @@ Romania - balance confirmation
     :target: https://github.com/dhongu/l10n-romania/tree/15.0/l10n_ro_balance_confirmation
     :alt: dhongu/l10n-romania
 
-|badge1| |badge2| |badge3| 
+|badge1| |badge2| |badge3|
 
-Generare formular de confirmare de sold
+Generare formular de confirmare de sold la data (Tipariti->Confirmare sold)
 
 **Table of contents**
 
@@ -65,7 +65,7 @@ Maintainers
 
 Current maintainer:
 
-|maintainer-danila12| 
+|maintainer-danila12|
 
 This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/15.0/l10n_ro_balance_confirmation>`_ project on GitHub.
 

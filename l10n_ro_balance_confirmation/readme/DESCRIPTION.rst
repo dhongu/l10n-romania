@@ -1,1 +1,1 @@
-Generare formular de confirmare de sold la data (Actiune->Confirmare sold)
+Generare formular de confirmare de sold la data (Tipariti->Confirmare sold)
