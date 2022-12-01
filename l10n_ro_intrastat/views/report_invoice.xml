@@ -79,7 +79,7 @@
                                     </td>
                                     <td class="text-right">
                                         <t t-set="quantity" t-value="l.quantity" />
-                                        <t t-if="o.type == 'out_refund'">
+                                        <t t-if="o.move_type == 'out_refund'">
                                             <t t-set="quantity" t-value="-1*l.quantity" />
                                         </t>
                                         <span t-if="quantity" id="quantity" t-esc="formatLang(quantity)" />
@@ -110,7 +110,7 @@
                                     </td>
                                     <td class="text-right">
                                         <t t-set="price_subtotal" t-value="l.price_subtotal" />
-                                        <t t-if="o.type == 'out_refund'">
+                                        <t t-if="o.move_type == 'out_refund'">
                                             <t t-set="price_subtotal" t-value="-1*l.price_subtotal" />
                                         </t>
                                         <t
@@ -125,7 +125,7 @@
                                     </td>
                                     <td class="text-right">
                                         <t t-set="price_tax" t-value="l.price_tax" />
-                                        <t t-if="o.type == 'out_refund'">
+                                        <t t-if="o.move_type == 'out_refund'">
                                             <t t-set="price_tax" t-value="-1*l.price_tax" />
                                         </t>
                                         <t
@@ -146,7 +146,7 @@
                         </table>
                         <div style="page-break-inside: avoid !important;">
                             <div class="row">
-                                <div class="col-xs-8" t-if="o.type == 'out_invoice' or o.type == 'out_refund' ">
+                                <div class="col-xs-8" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
                                     <table class="table table-sm">
                                         <tr class="border-black">
                                             <td>Elaborate:</td>
@@ -181,7 +181,7 @@
                                             </td>
                                             <td class="text-right">
                                                 <t t-set="amount_untaxeds" t-value="o.amount_untaxed" />
-                                                <t t-if="o.type == 'out_refund'">
+                                                <t t-if="o.move_type == 'out_refund'">
                                                     <t t-set="amount_untaxeds" t-value="-1*o.amount_untaxed" />
                                                 </t>
                                                 <span id="amount_untaxeds">
@@ -194,7 +194,7 @@
                                             <td>Taxes</td>
                                             <td class="text-right">
                                                 <t t-set="amount_tax" t-value="o.amount_tax" />
-                                                <t t-if="o.type == 'out_refund'">
+                                                <t t-if="o.move_type == 'out_refund'">
                                                     <t t-set="amount_tax" t-value="-1*o.amount_tax" />
                                                 </t>
                                                 <span id="amount_tax">
@@ -212,7 +212,7 @@
                                             </td>
                                             <td class="text-right">
                                                 <t t-set="amount_total" t-value="o.amount_total" />
-                                                <t t-if="o.type == 'out_refund'">
+                                                <t t-if="o.move_type == 'out_refund'">
                                                     <t t-set="amount_total" t-value="-1*o.amount_total" />
                                                 </t>
                                                 <span id="amount_total">
@@ -224,7 +224,7 @@
                                                 </span>
                                                 <div t-if="currency_id!=res_company.currency_id">
                                                     (
-                                                    <t t-if="o.type == 'out_refund'">
+                                                    <t t-if="o.move_type == 'out_refund'">
                                                         <t
                                                             t-set="amount_total_signed"
                                                             t-value="-1*o.amount_total_signed"
@@ -232,7 +232,7 @@
                                                         <t t-esc="amount_total_signed" />
                                                         <span t-field="res_company.currency_id.symbol" />
                                                     </t>
-                                                    <t t-if="not o.type == 'out_refund'">
+                                                    <t t-if="not o.move_type == 'out_refund'">
                                                         <span
                                                             t-field="o.amount_total_signed"
                                                             t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;res_company.currency_id&quot;}"
@@ -249,7 +249,7 @@
                                 <strong>Comment:</strong>
                                 <span t-field="o.comment" />
                             </p>
-                            <small t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                            <small t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'">
                                 <div>
                                     Printing and numbering system of its own under Law 571/2003 on the Fiscal Code,
                                     with subsequent amendments and OMPF 2226/2006
