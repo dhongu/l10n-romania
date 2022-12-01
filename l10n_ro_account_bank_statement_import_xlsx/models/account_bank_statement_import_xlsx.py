@@ -87,13 +87,13 @@ class AccountBankStmtImportXLSX(models.TransientModel):
                             item[index_partner_id] = sale_order.partner_id.id
 
                     if not item[index_partner_id] and item[index_field]:
-                        domain = [("type", "=", "out_invoice"), ("name", "=", item[index_field])]
+                        domain = [("move_type", "=", "out_invoice"), ("name", "=", item[index_field])]
                         invoice = self.env["account.move"].search(domain, limit=1)
                         if invoice:
                             item[index_partner_id] = invoice.partner_id.id
 
                     if not item[index_partner_id] and item[index_field]:
-                        domain = [("type", "=", "out_invoice"), ("ref", "=", item[index_field])]
+                        domain = [("move_type", "=", "out_invoice"), ("ref", "=", item[index_field])]
                         invoice = self.env["account.move"].search(domain, limit=1)
                         if invoice:
                             item[index_partner_id] = invoice.partner_id.id
