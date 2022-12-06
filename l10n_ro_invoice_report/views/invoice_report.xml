@@ -231,7 +231,7 @@
                                     <t t-esc="nr_crt" />
                                     <t t-set="nr_crt" t-value="nr_crt + 1" />
                                 </td>
-                                <td>
+                                <td id="product_name">
                                     <span t-field="l.name" />
                                 </td>
                                 <td class="text-right">
