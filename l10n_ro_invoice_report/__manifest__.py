@@ -21,7 +21,7 @@
         "views/invoice_report.xml",
         "views/voucher_report.xml",
         "views/payment_report.xml",
-        'views/account_invoice_view.xml',
+        "views/account_invoice_view.xml",
         "views/account_voucher_report.xml",
         "views/account_bank_statement_view.xml",
         "views/statement_report.xml",
