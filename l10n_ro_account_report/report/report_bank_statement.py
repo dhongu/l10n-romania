@@ -9,6 +9,7 @@ from odoo.tools import formatLang
 
 class ReportReportStatement(models.AbstractModel):
     _name = "report.l10n_ro_account_report.report_statement"
+    _description = "l10n_ro_account_report.report_statement"
     _template = "l10n_ro_account_report.report_statement"
 
     @api.model
