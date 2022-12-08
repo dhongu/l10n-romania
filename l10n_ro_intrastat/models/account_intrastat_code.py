@@ -27,27 +27,30 @@ class AccountIntrastatCode(models.Model):
     def name_get(self):
         result = []
         for r in self:
-            text = r.name or r.description
+            if r.name == r.code:
+                text = r.description
+            else:
+                text = r.name
             result.append((r.id, text and "{} {}".format(r.code, text) or r.code))
         return result
 
-    @api.model
-    def _name_search(self, name="", args=None, operator="ilike", limit=100):
-        if args is None:
-            args = []
-        domain = args + [
-            "|",
-            "|",
-            ("code", operator, name),
-            ("name", operator, name),
-            ("description", operator, name),
-        ]
-        return super(AccountIntrastatCode, self).search(domain, limit=limit).name_get()
-
-    _sql_constraints = [
-        (
-            "intrastat_region_nckey_unique",
-            "UNIQUE (nckey)",
-            "The NC key must be unique.",
-        ),
-    ]
+    # @api.model
+    # def _name_search(self, name="", args=None, operator="ilike", limit=100):
+    #     if args is None:
+    #         args = []
+    #     domain = args + [
+    #         "|",
+    #         "|",
+    #         ("code", operator, name),
+    #         ("name", operator, name),
+    #         ("description", operator, name),
+    #     ]
+    #     return super(AccountIntrastatCode, self).search(domain, limit=limit).name_get()
+    #
+    # _sql_constraints = [
+    #     (
+    #         "intrastat_region_nckey_unique",
+    #         "UNIQUE (nckey)",
+    #         "The NC key must be unique.",
+    #     ),
+    # ]
