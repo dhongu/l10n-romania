@@ -14,7 +14,7 @@ class AccountBankStatementImport(models.TransientModel):
     _inherit = "account.bank.statement.import"
 
     def _check_xlsx(self, filename):
-        return filename and filename.lower().strip().endswith(".xlsx")
+        return filename and filename.lower().strip().endswith(".xlsx") or filename.lower().strip().endswith(".xls")
 
     def import_file(self):
         # In case of XLSX files, only one file can be imported at a time.
