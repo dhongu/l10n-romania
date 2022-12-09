@@ -20,8 +20,8 @@ class AccountPayment(models.Model):
                 and payment.journal_id.type == "cash"
             ):
                 if payment.partner_id.is_company:
-                    if payment.amount >= 5000:
+                    if payment.amount > 5000:
                         raise ValidationError(_("The payment amount cannot be greater than 5000"))
                 else:
-                    if payment.amount >= 10000:
+                    if payment.amount > 10000:
                         raise ValidationError(_("The payment amount cannot be greater than 10000"))
