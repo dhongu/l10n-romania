@@ -206,6 +206,7 @@ class IntrastatDeclaration(models.TransientModel):
         and inv.move_type in (%(mode1)s, %(mode2)s)
         and to_char(inv.invoice_date, 'YYYY')=%(year)s
         and to_char(inv.invoice_date, 'MM')=%(month)s
+        and exclude_from_invoice_tab = false
             """
 
         self.env.cr.execute(
@@ -225,6 +226,7 @@ class IntrastatDeclaration(models.TransientModel):
         invoice_lines = self.env["account.move.line"].browse(invoice_lines_ids)
 
         for inv_line in invoice_lines:
+
             invoice = inv_line.move_id
             # Check type of transaction
             if invoice.intrastat_transaction_id:
