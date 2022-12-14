@@ -259,12 +259,15 @@ class IntrastatDeclaration(models.TransientModel):
             if not Country:
                 raise UserError(_("Invoice %s without intrastat country") % invoice.name)
 
-            if not inv_line.move_id.partner_id.vat:
+            if not inv_line.move_id.partner_id.vat and inv_line.move_id.partner_id.is_company:
                 raise UserError(
                     _('Partner "%s" has no VAT code, please configure it') % inv_line.move_id.partner_id.display_name
                 )
-            PartnerVatNr = inv_line.move_id.partner_id.vat.replace(Country, '')
-            PartnerVatNr = PartnerVatNr.replace('EL','')
+            if inv_line.move_id.partner_id.vat:
+                PartnerVatNr = inv_line.move_id.partner_id.vat.replace(Country, '')
+                PartnerVatNr = PartnerVatNr.replace('EL','')
+            else:
+                PartnerVatNr = ''
 
             if inv_line.product_id.country_id:
                 OriginCountry = inv_line.product_id.country_id.code
@@ -362,8 +365,9 @@ class IntrastatDeclaration(models.TransientModel):
                 if country == 'NL':
                     country = 'QV'
                 tag.text = unicode(country)
-                tag = ET.SubElement(item, "PartnerVatNr")
-                tag.text = unicode(entry["PartnerVatNr"])
+                if entry["PartnerVatNr"]:
+                    tag = ET.SubElement(item, "PartnerVatNr")
+                    tag.text = unicode(entry["PartnerVatNr"])
 
             else:
                 tag = ET.SubElement(item, "CountryOfConsignment")
