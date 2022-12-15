@@ -207,6 +207,7 @@ class IntrastatDeclaration(models.TransientModel):
         and to_char(inv.invoice_date, 'YYYY')=%(year)s
         and to_char(inv.invoice_date, 'MM')=%(month)s
         and exclude_from_invoice_tab = false
+
             """
 
         self.env.cr.execute(
@@ -259,17 +260,20 @@ class IntrastatDeclaration(models.TransientModel):
             if not Country:
                 raise UserError(_("Invoice %s without intrastat country") % invoice.name)
 
-            if not inv_line.move_id.partner_id.vat and inv_line.move_id.partner_id.is_company:
+            if not inv_line.move_id.commercial_partner_id.is_company:
+                continue
+
+            if not inv_line.move_id.commercial_partner_id.vat:
                 raise UserError(
                     _('Partner "%s" has no VAT code, please configure it') % inv_line.move_id.partner_id.display_name
                 )
-            if inv_line.move_id.partner_id.vat:
+            if inv_line.move_id.commercial_partner_id.vat:
                 VatPrefix = Country
                 if VatPrefix == "AT":
                     VatPrefix = "ATU"
                 if VatPrefix == "GR":
                     VatPrefix = "EL"
-                PartnerVatNr = inv_line.move_id.partner_id.vat.replace(VatPrefix, "")
+                PartnerVatNr = inv_line.move_id.commercial_partner_id.vat.replace(VatPrefix, "")
                 PartnerVatNr = PartnerVatNr.replace("EL", "")
             else:
                 PartnerVatNr = ""
