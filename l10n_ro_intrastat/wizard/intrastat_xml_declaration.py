@@ -269,10 +269,6 @@ class IntrastatDeclaration(models.TransientModel):
                 )
             if inv_line.move_id.commercial_partner_id.vat:
                 VatPrefix = Country
-                if VatPrefix == "AT":
-                    VatPrefix = "ATU"
-                if VatPrefix == "GR":
-                    VatPrefix = "EL"
                 PartnerVatNr = inv_line.move_id.commercial_partner_id.vat.replace(VatPrefix, "")
                 PartnerVatNr = PartnerVatNr.replace("EL", "")
             else:
