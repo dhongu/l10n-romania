@@ -20,9 +20,40 @@ class AccountIntrastatCode(models.Model):
     name = fields.Char(string="Name")
     nckey = fields.Char(string="NC Key")
     code = fields.Char(string="NC Code", required=True)
-
+    country_id = fields.Many2one(
+        "res.country",
+        string="Country",
+        help="Restrict the applicability of code to a country.",
+        domain="[('intrastat', '=', True)]",
+    )
     description = fields.Char(string="Description")
     suppl_unit_code = fields.Char("SupplUnitCode")
+    type = fields.Selection(
+        string="Type",
+        required=True,
+        selection=[
+            ("commodity", "Commodity"),
+            ("transport", "Transport"),
+            ("transaction", "Transaction"),
+            ("region", "Region"),
+        ],
+        default="commodity",
+        help="""Type of intrastat code used to filter codes by usage.
+            * commodity: Code to be set on invoice lines for European Union statistical purposes.
+            * transport: The active vehicle that moves the goods across the border.
+            * transaction: A movement of goods.
+            * region: A sub-part of the country.
+        """,
+    )
+
+    expiry_date = fields.Date(
+        string="Expiry Date",
+        help="Date at which a code must not be used anymore.",
+    )
+    start_date = fields.Date(
+        string="Usage start date",
+        help="Date from which a code may be used.",
+    )
 
     def name_get(self):
         result = []

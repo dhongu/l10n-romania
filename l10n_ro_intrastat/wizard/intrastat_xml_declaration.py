@@ -264,10 +264,15 @@ class IntrastatDeclaration(models.TransientModel):
                     _('Partner "%s" has no VAT code, please configure it') % inv_line.move_id.partner_id.display_name
                 )
             if inv_line.move_id.partner_id.vat:
-                PartnerVatNr = inv_line.move_id.partner_id.vat.replace(Country, '')
-                PartnerVatNr = PartnerVatNr.replace('EL','')
+                VatPrefix = Country
+                if VatPrefix == "AT":
+                    VatPrefix = "ATU"
+                if VatPrefix == "GR":
+                    VatPrefix = "EL"
+                PartnerVatNr = inv_line.move_id.partner_id.vat.replace(VatPrefix, "")
+                PartnerVatNr = PartnerVatNr.replace("EL", "")
             else:
-                PartnerVatNr = ''
+                PartnerVatNr = ""
 
             if inv_line.product_id.country_id:
                 OriginCountry = inv_line.product_id.country_id.code
@@ -362,12 +367,11 @@ class IntrastatDeclaration(models.TransientModel):
                 tag.text = unicode(entry["Country"])
                 tag = ET.SubElement(item, "PartnerCountryCode")
                 country = entry["Country"]
-                if country == 'NL':
-                    country = 'QV'
+                if country == "NL":
+                    country = "QV"
                 tag.text = unicode(country)
-                if entry["PartnerVatNr"]:
-                    tag = ET.SubElement(item, "PartnerVatNr")
-                    tag.text = unicode(entry["PartnerVatNr"])
+                tag = ET.SubElement(item, "PartnerVatNr")
+                tag.text = unicode(entry["PartnerVatNr"])
 
             else:
                 tag = ET.SubElement(item, "CountryOfConsignment")
