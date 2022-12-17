@@ -177,10 +177,13 @@
         <template id="l10n_ro_report_statement" inherit_id="account.report_statement">
             <xpath expr="//tr[@t-as='line']//table//td[last()]" position="before">
                 <td class="p-0 w-25 ">
-                    <t t-set="invoice_name" t-value="', '.join(line.line_ids.full_reconcile_id.reconciled_line_ids.filtered(
-                    lambda m: m.id not in line.line_ids.ids).move_id.mapped('name'))"></t>
+                    <t
+                        t-set="invoice_name"
+                        t-value="', '.join(line.line_ids.full_reconcile_id.reconciled_line_ids.filtered(
+                    lambda m: m.id not in line.line_ids.ids).move_id.mapped('name'))"
+                    />
 
-                     <span t-if="invoice_name" t-esc="invoice_name"/>
+                     <span t-if="invoice_name" t-esc="invoice_name" />
                 </td>
             </xpath>
         </template>
