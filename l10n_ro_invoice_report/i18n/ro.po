@@ -101,7 +101,7 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 msgid "<strong>Client:</strong><br/>"
-msgstr ""
+msgstr "<strong>Client:</strong><br/>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -206,8 +206,8 @@ msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
-msgid "Customer"
-msgstr "Client"
+msgid "Customer:"
+msgstr "Client:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__delegate_id
@@ -344,8 +344,8 @@ msgstr "Reprezentând c/v:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
-msgid "Supplier"
-msgstr "Furnizor"
+msgid "Supplier:"
+msgstr "Furnizor:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
