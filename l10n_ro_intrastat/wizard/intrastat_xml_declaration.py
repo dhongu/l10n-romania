@@ -62,7 +62,7 @@ class IntrastatDeclaration(models.TransientModel):
     contact_id = fields.Many2one("res.partner", "Contact", domain=[("is_company", "=", False)], required=True)
     file_save = fields.Binary("Intrastat Report File", readonly=True)
     state = fields.Selection([("draft", "Draft"), ("download", "Download")], string="State", default="draft")
-    cn8 = fields.Char("CN8", size=4, required=True, default="2020")
+    cn8 = fields.Char("CN8", size=4, required=True, default="2022")
 
     def _company_warning(self, translated_msg):
         """
@@ -101,15 +101,15 @@ class IntrastatDeclaration(models.TransientModel):
 
         CodeVersion = ET.SubElement(decl, "InsCodeVersions")
         tag = ET.SubElement(CodeVersion, "CountryVer")
-        tag.text = "2007"
+        tag.text = "2021"
         tag = ET.SubElement(CodeVersion, "EuCountryVer")
-        tag.text = "2007"
+        tag.text = "2021"
         tag = ET.SubElement(CodeVersion, "CnVer")
         tag.text = decl_datas.cn8
         tag = ET.SubElement(CodeVersion, "ModeOfTransportVer")
         tag.text = "2005"
         tag = ET.SubElement(CodeVersion, "DeliveryTermsVer")
-        tag.text = "2011"
+        tag.text = "2021"
         tag = ET.SubElement(CodeVersion, "NatureOfTransactionAVer")
         tag.text = "2010"
         tag = ET.SubElement(CodeVersion, "NatureOfTransactionBVer")
@@ -206,6 +206,8 @@ class IntrastatDeclaration(models.TransientModel):
         and inv.move_type in (%(mode1)s, %(mode2)s)
         and to_char(inv.invoice_date, 'YYYY')=%(year)s
         and to_char(inv.invoice_date, 'MM')=%(month)s
+        and exclude_from_invoice_tab = false
+
             """
 
         self.env.cr.execute(
@@ -225,6 +227,7 @@ class IntrastatDeclaration(models.TransientModel):
         invoice_lines = self.env["account.move.line"].browse(invoice_lines_ids)
 
         for inv_line in invoice_lines:
+
             invoice = inv_line.move_id
             # Check type of transaction
             if invoice.intrastat_transaction_id:
@@ -257,6 +260,25 @@ class IntrastatDeclaration(models.TransientModel):
             if not Country:
                 raise UserError(_("Invoice %s without intrastat country") % invoice.name)
 
+            if not inv_line.move_id.commercial_partner_id.is_company:
+                continue
+
+            if not inv_line.move_id.commercial_partner_id.vat:
+                raise UserError(
+                    _('Partner "%s" has no VAT code, please configure it') % inv_line.move_id.partner_id.display_name
+                )
+            if inv_line.move_id.commercial_partner_id.vat:
+                VatPrefix = Country
+                PartnerVatNr = inv_line.move_id.commercial_partner_id.vat.replace(VatPrefix, "")
+                PartnerVatNr = PartnerVatNr.replace("EL", "")
+            else:
+                PartnerVatNr = ""
+
+            if inv_line.product_id.country_id:
+                OriginCountry = inv_line.product_id.country_id.code
+            else:
+                OriginCountry = Country
+
             # Check commodity codes
             intrastat_id = inv_line.product_id.search_intrastat_code()
             if intrastat_id and intrastat_id.code:
@@ -282,6 +304,7 @@ class IntrastatDeclaration(models.TransientModel):
                 {
                     "Cn8Code": Cn8Code,
                     "SupplUnitCode": suppl_unit_code,
+                    "OriginCountry": OriginCountry,
                     "Country": Country,
                     "TrCodeA": TrCodeA,
                     "TrCodeB": TrCodeB,
@@ -290,6 +313,7 @@ class IntrastatDeclaration(models.TransientModel):
                     "amount": amount,
                     "weight": weight,
                     "supply_units": supply_units,
+                    "PartnerVatNr": PartnerVatNr,
                 }
             ]
 
@@ -338,6 +362,19 @@ class IntrastatDeclaration(models.TransientModel):
             tag = ET.SubElement(item, "CountryOfOrigin")
             tag.text = unicode(entry["Country"])
 
-            tag = ET.SubElement(item, "CountryOfConsignment")
-            tag.text = unicode(entry["Country"])
+            if dispatchmode:
+                tag = ET.SubElement(item, "CountryOfDestination")
+                tag.text = unicode(entry["Country"])
+                tag = ET.SubElement(item, "PartnerCountryCode")
+                country = entry["Country"]
+                if country == "NL":
+                    country = "QV"
+                tag.text = unicode(country)
+                tag = ET.SubElement(item, "PartnerVatNr")
+                tag.text = unicode(entry["PartnerVatNr"])
+
+            else:
+                tag = ET.SubElement(item, "CountryOfConsignment")
+                tag.text = unicode(entry["Country"])
+
         return decl

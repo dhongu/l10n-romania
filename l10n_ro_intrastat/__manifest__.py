@@ -15,6 +15,7 @@
         "security/groups.xml",
         "security/ir.model.access.csv",
         "views/l10n_ro_intrastat_view.xml",
+        "views/account_intrastat_report_view.xml",
         "views/account_move_view.xml",
         "views/product_view.xml",
         "views/res_country_view.xml",
