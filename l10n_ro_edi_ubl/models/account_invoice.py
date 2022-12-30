@@ -50,7 +50,7 @@ class AccountMove(models.Model):
         ubl_version.text = version
 
         elem = etree.SubElement(parent_node, ns["cbc"] + "CustomizationID")
-        elem.text = "urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.0"
+        elem.text = "urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.1"
 
         doc_id = etree.SubElement(parent_node, ns["cbc"] + "ID")
         doc_id.text = self.name
