@@ -16,6 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<span>/</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 msgid "<span>Cash collection:</span>"
 msgstr "<span>Dispoziție de încasare:</span>"
@@ -95,7 +101,7 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 msgid "<strong>Client:</strong><br/>"
-msgstr ""
+msgstr "<strong>Client:</strong><br/>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -184,6 +190,11 @@ msgid "Bank Statement Line"
 msgstr "Linie extras bacă"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Cancelled"
+msgstr "Anulată"
+
+#. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_collection
 msgid "Cash collection"
 msgstr "Dispozitie încasare"
@@ -195,8 +206,8 @@ msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
-msgid "Customer"
-msgstr "Client"
+msgid "Customer:"
+msgstr "Client:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__delegate_id
@@ -375,13 +386,18 @@ msgstr "Reprezentând c/v:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
-msgid "Supplier"
-msgstr "Furnizor"
+msgid "Supplier:"
+msgstr "Furnizor:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Tax"
+msgstr "TVA"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Taxes"
-msgstr "TVA"
+msgstr "Val. TVA"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment

@@ -14,6 +14,7 @@
         "account",
         "l10n_ro_config",
         "purchase",
+        "sale",
         # "deltatech_watermark"
     ],
     "data": [
