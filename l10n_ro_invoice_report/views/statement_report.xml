@@ -1,38 +1,88 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
-        <report
+
+        <record id="action_report_statement_line" model="ir.actions.report">
+            <field name="name">Payment</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_statement_line</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_line</field>
+            <field name="binding_model_id" ref="account.model_account_bank_statement_line" />
+            <field name="binding_type">report</field>
+        </record>
+
+<!--        <report
             string="Payment"
             id="action_report_statement_line"
             model="account.bank.statement.line"
             report_type="qweb-pdf"
             name="l10n_ro_invoice_report.report_statement_line"
             file="l10n_ro_invoice_report.report_statement_line"
-        />
-        <report
+        />-->
+
+        <record id="action_report_statement_voucher" model="ir.actions.report">
+            <field name="name">Voucher</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_statement_voucher</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_voucher</field>
+            <field name="binding_model_id" ref="account.model_account_bank_statement_line" />
+            <field name="binding_type">report</field>
+        </record>
+
+
+<!--        <report
             string="Voucher"
             id="action_report_statement_voucher"
             model="account.bank.statement.line"
             report_type="qweb-pdf"
             name="l10n_ro_invoice_report.report_statement_voucher"
             file="l10n_ro_invoice_report.report_statement_voucher"
-        />
-        <report
+        />-->
+
+
+        <record id="action_report_statement_collection" model="ir.actions.report">
+            <field name="name">Cash collection</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_statement_collection</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_collection</field>
+            <field name="binding_model_id" ref="account.model_account_bank_statement_line" />
+            <field name="binding_type">report</field>
+        </record>
+
+
+<!--        <report
             string="Cash collection"
             id="action_report_statement_collection"
             model="account.bank.statement.line"
             report_type="qweb-pdf"
             name="l10n_ro_invoice_report.report_statement_collection"
             file="l10n_ro_invoice_report.report_statement_collection"
-        />
-        <report
+        />-->
+
+
+        <record id="action_report_statement_payment_disposal" model="ir.actions.report">
+            <field name="name">Payment disposal</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_statement_payment</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_payment</field>
+            <field name="binding_model_id" ref="account.model_account_bank_statement_line" />
+            <field name="binding_type">report</field>
+        </record>
+
+
+<!--        <report
             string="Payment disposal"
             id="action_report_statement_payment"
             model="account.bank.statement.line"
             report_type="qweb-pdf"
             name="l10n_ro_invoice_report.report_statement_payment"
             file="l10n_ro_invoice_report.report_statement_payment"
-        />
+        />-->
+
         <template id="report_statement_voucher">
             <t t-set="type" t-value="'voucher'" />
             <t t-call="l10n_ro_invoice_report.report_statement_print" />
@@ -172,5 +222,21 @@
                 </t>
             </t>
         </template>
+
+
+        <template id="l10n_ro_report_statement" inherit_id="account.report_statement">
+            <xpath expr="//tr[@t-as='line']//table//td[last()]" position="before">
+                <td class="p-0 w-25 ">
+                    <t
+                        t-set="invoice_name"
+                        t-value="', '.join(line.line_ids.full_reconcile_id.reconciled_line_ids.filtered(
+                    lambda m: m.id not in line.line_ids.ids).move_id.mapped('name'))"
+                    />
+
+                     <span t-if="invoice_name" t-esc="invoice_name" />
+                </td>
+            </xpath>
+        </template>
+
     </data>
 </odoo>
