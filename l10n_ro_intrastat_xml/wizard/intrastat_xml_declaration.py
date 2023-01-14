@@ -21,7 +21,6 @@ class IntrastatDeclaration(models.TransientModel):
     _name = "l10n.ro.intrastat.xml.declaration"
     _description = "Intrastat XML Declaration"
 
-
     def _get_def_monthyear(self):
         td = fields.Date.context_today(self)
         return td.strftime("%Y"), td.strftime("%m")
@@ -237,7 +236,7 @@ class IntrastatDeclaration(models.TransientModel):
                     intrastat_transaction = invoice.intrastat_transaction_id
                 else:
                     intrastat_transaction = company.intrastat_transaction_id
-            else: # enterprise
+            else:  # enterprise
                 intrastat_transaction = inv_line.intrastat_transaction_id
 
             if not intrastat_transaction:

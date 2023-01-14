@@ -61,11 +61,11 @@
 <!--            target="new"-->
 <!--        />-->
             <menuitem
-                id="menu_intrastat"
-                name="Intrastat"
-                parent="account.menu_finance_reports"
-                groups="account.group_account_manager"
-            />
+            id="menu_intrastat"
+            name="Intrastat"
+            parent="account.menu_finance_reports"
+            groups="account.group_account_manager"
+        />
 
         <menuitem
             name="Intrastat Declaration"
