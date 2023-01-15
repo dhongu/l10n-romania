@@ -20,7 +20,6 @@
         "views/product_view.xml",
         "views/res_country_view.xml",
         "views/account_intrastat_code_view.xml",
-        "wizard/l10n_ro_intrastat_xml_view.xml",
         "views/res_config_settings.xml",
     ],
     "maintainers": ["dhongu"],
