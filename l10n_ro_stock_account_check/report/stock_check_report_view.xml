@@ -6,18 +6,41 @@
         <field name="arch" type="xml">
             <form string="Report Options">
                 <group name="filters">
-                    <group>
+                    <group string="Account">
                         <field name="account_id" />
                     </group>
-                    <group name="date_range">
-                        <field
-                            name="date_range_id"
-                            domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
-                        />
-                        <field name="date_from" />
-                        <field name="date_to" />
+                    <group string="Date range" name="date_range">
+                        <label for="date_from" string="Date" />
+                        <div class="o_row">
+                            <field
+                                name="date_from"
+                                widget="daterange"
+                                nolabel="1"
+                                class="oe_inline"
+                                options="{'related_end_date': 'date_to'}"
+                            />
+                            <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow" />
+                            <field
+                                name="date_to"
+                                widget="daterange"
+                                nolabel="1"
+                                class="oe_inline"
+                                options="{'related_start_date': 'date_from'}"
+                            />
+                        </div>
+                    </group>
+
+                    <group string="Checks">
+                        <field name="check_purchases" />
+                        <field name="check_sales" />
+                        <field name="check_account_moves" />
+                    </group>
+                    <group string="Options">
+                        <field name="svl_aml_details" />
+                        <field name="make_activities" />
                         <field name="company_id" invisible="1" />
                     </group>
+
                 </group>
                 <footer>
                     <button

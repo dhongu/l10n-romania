@@ -24,6 +24,12 @@ class StockAccountingCheck(models.TransientModel):
 
     line_ids = fields.One2many("stock.accounting.check.line", "report_id")
 
+    check_purchases = fields.Boolean("Check purchases", default=True)
+    check_sales = fields.Boolean("Check sales", default=True)
+    check_account_moves = fields.Boolean("Check accounting moves", default=True)
+    make_activities = fields.Boolean("Make activities", default=True)
+    svl_aml_details = fields.Boolean("SVL & AML details", default=True)
+
     @api.model
     def default_get(self, fields_list):
         res = super(StockAccountingCheck, self).default_get(fields_list)
@@ -53,8 +59,14 @@ class StockAccountingCheck(models.TransientModel):
 
     def do_compute_product(self):
         self.line_ids.unlink()
+        if self.svl_aml_details:
+            self.do_compute_product_aml_details()
+        else:
+            self.do_compute_product_no_aml_details()
 
+    def do_compute_product_aml_details(self):
         query = """
+
         SELECT %(report)s as report_id, product_id, sum(svl_value) as amount_svl ,
                 sum(aml_value) as amount_aml,
                 jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids
@@ -96,20 +108,67 @@ class StockAccountingCheck(models.TransientModel):
         }
         self.env.cr.execute(query, params=params)
         lines = self.env.cr.dictfetchall()
-        for line in lines:
-            svl_ids = list(sum(line["svl_ids"], []))
-            if svl_ids:
-                line["svl_ids"] = [(6, 0, svl_ids)]
-            else:
-                line["svl_ids"] = False
+        if self.aml_details:
+            for line in lines:
+                svl_ids = list(sum(line["svl_ids"], []))
+                if svl_ids:
+                    line["svl_ids"] = [(6, 0, svl_ids)]
+                else:
+                    line["svl_ids"] = False
 
-            aml_ids = list(sum(line["aml_ids"], []))
-            if aml_ids:
-                line["aml_ids"] = [(6, 0, aml_ids)]
-            else:
-                line["aml_ids"] = False
+                aml_ids = list(sum(line["aml_ids"], []))
+                if aml_ids:
+                    line["aml_ids"] = [(6, 0, aml_ids)]
+                else:
+                    line["aml_ids"] = False
 
         self.line_ids.create(lines)
+
+    def do_compute_product_no_aml_details(self):
+        query = """
+            insert into stock_accounting_check_line
+              (report_id, product_id, amount_svl, amount_aml )
+
+
+        SELECT %(report)s as report_id, product_id, sum(svl_value) as amount_svl ,
+                sum(aml_value) as amount_aml
+
+            FROM
+             (  ( select sm.product_id, sum(svl.value) as svl_value , 0 as aml_value,
+                    array_agg(svl.id) as svl_ids,
+                    array[]::integer[] as aml_ids
+                 from stock_valuation_layer as svl
+                      left join stock_move as sm on svl.stock_move_id = sm.id
+                  where svl.company_id = %(company)s and
+                      date_trunc('day',sm.date) >= %(date_from)s  AND
+                      date_trunc('day',sm.date) <= %(date_to)s
+                  group by sm.product_id)
+            union
+            select product_id, 0 as svl_value, sum(aml.balance) as aml_value,
+                    array[]::integer[] as svl_ids,
+                    array_agg(aml.id) as aml_ids
+             from account_move_line as aml
+                where
+                        account_id = %(account)s and
+                        parent_state = 'posted' and company_id = %(company)s and
+                        date_trunc('day',aml.date) >= %(date_from)s  AND
+                        date_trunc('day',aml.date) <= %(date_to)s
+             group by product_id
+             ) as subq
+
+
+             group by product_id
+             having abs( sum(svl_value) - sum(aml_value) ) > 1
+
+        """
+        params = {
+            "report": self.id,
+            "company": self.company_id.id,
+            "account": self.account_id.id,
+            "date_from": fields.Date.to_string(self.date_from),
+            "date_to": fields.Date.to_string(self.date_to),
+        }
+        self.env.cr.execute(query, params=params)
 
     def do_check_purchases(self):
         products = self.line_ids.mapped("product_id")
@@ -119,24 +178,25 @@ class StockAccountingCheck(models.TransientModel):
         for purchase in purchases:
             if purchase.invoice_count == 1:
                 invoice_date = purchase.invoice_ids.invoice_date
-                for picking in purchase.picking_ids:
-                    if invoice_date != picking.date.date() and not picking.l10n_ro_notice:
-                        new_date = picking.date.replace(
-                            year=invoice_date.year,
-                            month=invoice_date.month,
-                            day=invoice_date.day,
-                        )
-                        if new_date.hour < 3:
-                            new_date = new_date.replace(hour=12)
-                        picking.write({"date": new_date})
-                        picking.move_lines.write({"date": new_date})
-                        ok = False
+                if invoice_date:
+                    for picking in purchase.picking_ids:
+                        if invoice_date != picking.date.date() and not picking.l10n_ro_notice:
+                            new_date = picking.date.replace(
+                                year=invoice_date.year,
+                                month=invoice_date.month,
+                                day=invoice_date.day,
+                            )
+                            if new_date.hour < 3:
+                                new_date = new_date.replace(hour=12)
+                            picking.write({"date": new_date})
+                            picking.move_lines.write({"date": new_date})
+                            ok = False
             if (
                 purchase.invoice_status == "to invoice"
-                and purchase.picking_count > 0
+                and len(purchase.picking_ids) > 0
                 and purchase.state not in ["done", "cancel"]
             ):
-                if not purchase.activity_ids:
+                if not purchase.activity_ids and self.make_activities:
                     note = _("Receptie fara factura")
                     summary = _("Factura lipsa")
                     purchase.activity_schedule(
@@ -152,10 +212,10 @@ class StockAccountingCheck(models.TransientModel):
         sale_lines = self.env["sale.order.line"].search([("product_id", "in", products.ids)])
         sale_oreders = sale_lines.mapped("order_id")
         ok = True
-        for sale_oreder in sale_oreders:
-            if sale_oreder.invoice_count == 1:
-                invoice_date = sale_oreder.invoice_ids.invoice_date
-                for picking in sale_oreder.picking_ids:
+        for sale_order in sale_oreders:
+            if sale_order.invoice_count == 1:
+                invoice_date = sale_order.invoice_ids.invoice_date
+                for picking in sale_order.picking_ids:
                     if invoice_date != picking.date.date() and not picking.l10n_ro_notice:
                         new_date = picking.date.replace(
                             year=invoice_date.year,
@@ -170,18 +230,18 @@ class StockAccountingCheck(models.TransientModel):
                         # account_move.write({'date': invoice_date})
                         ok = False
             if (
-                sale_oreder.invoice_status == "to invoice"
-                and sale_oreder.delivery_count > 0
-                and sale_oreder.state not in ["done", "cancel"]
+                sale_order.invoice_status == "to invoice"
+                and sale_order.delivery_count > 0
+                and sale_order.state not in ["done", "cancel"]
             ):
-                if not sale_oreder.activity_ids:
+                if not sale_order.activity_ids and self.make_activities:
                     note = _("Livrare fara factura")
                     summary = _("Factura lipsa")
-                    sale_oreder.activity_schedule(
+                    sale_order.activity_schedule(
                         "mail.mail_activity_data_warning",
                         note=note,
                         summary=summary,
-                        user_id=sale_oreder.user_id.id,
+                        user_id=sale_order.user_id.id,
                     )
         return ok
 
@@ -209,22 +269,25 @@ class StockAccountingCheck(models.TransientModel):
                             stock_move.picking_id.id,
                             stock_move.picking_id.name,
                         )
-
-                    summary = _("Data gresit")
-                    account_move.activity_schedule(
-                        "mail.mail_activity_data_warning",
-                        note=note,
-                        summary=summary,
-                        user_id=account_move.create_uid.id,
-                    )
+                    if self.make_activities:
+                        summary = _("Data gresit")
+                        account_move.activity_schedule(
+                            "mail.mail_activity_data_warning",
+                            note=note,
+                            summary=summary,
+                            user_id=account_move.create_uid.id,
+                        )
 
     def button_show_report(self):
         self.do_compute_product()
-        if not self.do_check_purchases():
-            self.do_compute_product()
-        if not self.do_check_sale_order():
-            self.do_compute_product()
-        self.do_check_move()
+        if self.check_purchases:
+            if not self.do_check_purchases():
+                self.do_compute_product()
+        if self.check_sales:
+            if not self.do_check_sale_order():
+                self.do_compute_product()
+        if self.check_account_moves:
+            self.do_check_move()
 
         action = self.env["ir.actions.actions"]._for_xml_id(
             "l10n_ro_stock_account_check.action_stock_accounting_check_line"
