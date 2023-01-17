@@ -24,6 +24,8 @@ class StockAccountingCheck(models.TransientModel):
 
     line_ids = fields.One2many("stock.accounting.check.line", "report_id")
 
+    product_ids = fields.Many2many("product.product", string="Only for products", domain=[("type", "=", "product")])
+
     check_purchases = fields.Boolean("Check purchases", default=True)
     check_sales = fields.Boolean("Check sales", default=True)
     check_account_moves = fields.Boolean("Check accounting moves", default=True)
@@ -78,8 +80,10 @@ class StockAccountingCheck(models.TransientModel):
                  from stock_valuation_layer as svl
                       left join stock_move as sm on svl.stock_move_id = sm.id
                   where svl.company_id = %(company)s and
+                        svl.l10n_ro_account_id = %(account)s and
                       date_trunc('day',sm.date) >= %(date_from)s  AND
-                      date_trunc('day',sm.date) <= %(date_to)s
+                      date_trunc('day',sm.date) <= %(date_to)s AND
+                        ( %(all_products)s  or sm.product_id in %(products)s )
                   group by sm.product_id)
             union
             select product_id, 0 as svl_value, sum(aml.balance) as aml_value,
@@ -90,7 +94,8 @@ class StockAccountingCheck(models.TransientModel):
                         account_id = %(account)s and
                         parent_state = 'posted' and company_id = %(company)s and
                         date_trunc('day',aml.date) >= %(date_from)s  AND
-                        date_trunc('day',aml.date) <= %(date_to)s
+                        date_trunc('day',aml.date) <= %(date_to)s AND
+                          ( %(all_products)s  or aml.product_id in %(products)s )
              group by product_id
              ) as subq
 
@@ -103,24 +108,25 @@ class StockAccountingCheck(models.TransientModel):
             "report": self.id,
             "company": self.company_id.id,
             "account": self.account_id.id,
+            "all_products": True if not self.product_ids else False,
+            "products": tuple(self.product_ids.ids or [-1]),
             "date_from": fields.Date.to_string(self.date_from),
             "date_to": fields.Date.to_string(self.date_to),
         }
         self.env.cr.execute(query, params=params)
         lines = self.env.cr.dictfetchall()
-        if self.aml_details:
-            for line in lines:
-                svl_ids = list(sum(line["svl_ids"], []))
-                if svl_ids:
-                    line["svl_ids"] = [(6, 0, svl_ids)]
-                else:
-                    line["svl_ids"] = False
+        for line in lines:
+            svl_ids = list(sum(line["svl_ids"], []))
+            if svl_ids:
+                line["svl_ids"] = [(6, 0, svl_ids)]
+            else:
+                line["svl_ids"] = False
 
-                aml_ids = list(sum(line["aml_ids"], []))
-                if aml_ids:
-                    line["aml_ids"] = [(6, 0, aml_ids)]
-                else:
-                    line["aml_ids"] = False
+            aml_ids = list(sum(line["aml_ids"], []))
+            if aml_ids:
+                line["aml_ids"] = [(6, 0, aml_ids)]
+            else:
+                line["aml_ids"] = False
 
         self.line_ids.create(lines)
 
@@ -140,8 +146,10 @@ class StockAccountingCheck(models.TransientModel):
                  from stock_valuation_layer as svl
                       left join stock_move as sm on svl.stock_move_id = sm.id
                   where svl.company_id = %(company)s and
+                   svl.l10n_ro_account_id = %(account)s and
                       date_trunc('day',sm.date) >= %(date_from)s  AND
-                      date_trunc('day',sm.date) <= %(date_to)s
+                      date_trunc('day',sm.date) <= %(date_to)s AND
+                      ( %(all_products)s  or sm.product_id in %(products)s )
                   group by sm.product_id)
             union
             select product_id, 0 as svl_value, sum(aml.balance) as aml_value,
@@ -152,7 +160,8 @@ class StockAccountingCheck(models.TransientModel):
                         account_id = %(account)s and
                         parent_state = 'posted' and company_id = %(company)s and
                         date_trunc('day',aml.date) >= %(date_from)s  AND
-                        date_trunc('day',aml.date) <= %(date_to)s
+                        date_trunc('day',aml.date) <= %(date_to)s AND
+                          ( %(all_products)s  or aml.product_id in %(products)s )
              group by product_id
              ) as subq
 
@@ -165,6 +174,8 @@ class StockAccountingCheck(models.TransientModel):
             "report": self.id,
             "company": self.company_id.id,
             "account": self.account_id.id,
+            "all_products": True if not self.product_ids else False,
+            "products": tuple(self.product_ids.ids or [-1]),
             "date_from": fields.Date.to_string(self.date_from),
             "date_to": fields.Date.to_string(self.date_to),
         }

@@ -8,6 +8,7 @@
                 <group name="filters">
                     <group string="Account">
                         <field name="account_id" />
+                        <field name="product_ids" widget="many2many_tags" />
                     </group>
                     <group string="Date range" name="date_range">
                         <label for="date_from" string="Date" />
