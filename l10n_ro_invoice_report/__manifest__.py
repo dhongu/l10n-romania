@@ -4,7 +4,7 @@
 {
     "name": "Romania - Invoice Report Terrabit",
     "summary": "Localizare Terrabit - Facturi, Chitanta",
-    "version": "15.0.3.1.6",
+    "version": "15.0.3.1.7",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",
@@ -25,6 +25,7 @@
         "views/account_voucher_report.xml",
         "views/account_bank_statement_view.xml",
         "views/statement_report.xml",
+        "views/res_config_view.xml",
         # 'views/res_partner_view.xml',
     ],
 }
