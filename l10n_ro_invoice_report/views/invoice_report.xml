@@ -10,6 +10,16 @@
         </template>
         <template id="header_invoice">
             <div id="address" class="address row">
+                <t t-set="address_fields" t-value="['address']" />
+
+                <t t-if="res_company.email_on_invoice_address">
+                    <t t-set="address_fields" t-value="address_fields + ['email']" />
+                </t>
+                <t t-if="res_company.phone_on_invoice_address">
+                    <t t-set="address_fields" t-value="address_fields + ['phone']" />
+                </t>
+                <t t-set="no_marker" t-value="not res_company.marker_on_invoice_address" />
+
                 <div name="information_block" class="col-6">
                     <div>
                         <strong t-if="o.move_type in ['out_invoice', 'out_refund']">Supplier:
@@ -24,7 +34,7 @@
                         </div>
                         <address
                             t-field="res_company.partner_id"
-                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": true,
+                            t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker,
                             "no_tag_br": true}'
                         />
                     </div>
@@ -53,7 +63,7 @@
                             </div>
                         </div>
                         <div>
-                            <!--                        <span t-esc="', '.join(map(lambda x: (x[0]), o.amount_by_group))" />-->
+
                         </div>
                     </div>
 
@@ -66,13 +76,15 @@
                         </strong>
                         <strong id="partner_name" t-field="o.commercial_partner_id.name" />
                     </div>
+
+
                     <div id="partner_address">
                         <div id="address_label" class="float-left mr-1">
                             <strong>Address:</strong>
                         </div>
                         <address
                             t-field="o.commercial_partner_id"
-                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": true,
+                            t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker,
                             "no_tag_br": true}'
                         />
                     </div>
@@ -82,7 +94,7 @@
                             <strong>Delivery address:</strong>
                             <address
                                 t-field="o.partner_shipping_id"
-                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
+                                t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker, "no_tag_br": true}'
                             />
                         </div>
                     </t>
