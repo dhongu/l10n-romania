@@ -380,21 +380,21 @@
             </xpath>
 
             <xpath expr="//p[@name='note']" position="after">
-                <small t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'">
+                <small t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'" name="legal_text">
                     <div>
                         Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance
                         no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and
                         subsequent amendments.
                     </div>
                 </small>
-                <div t-if="o.commercial_partner_id.info_for_invoice">
+                <div t-if="o.commercial_partner_id.info_for_invoice" name="info_text">
                     <span t-field="o.commercial_partner_id.info_for_invoice" />
                 </div>
 
             </xpath>
 
             <xpath expr="//p[@name='payment_term']/span" position="before">
-                <strong>Payment Term:</strong>
+                <strong name="payment_term_label">Payment Term:</strong>
             </xpath>
 
             <xpath expr="//div[hasclass('page')]" position="after">
