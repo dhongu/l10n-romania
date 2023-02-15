@@ -24,7 +24,7 @@ class PosSession(models.Model):
             location = order_line.order_id.config_id.picking_type_id.default_location_src_id
             account_income = location.l10n_ro_property_account_income_location_id
             if account_income:
-                values['income_account_id'] = account_income.id
+                values["income_account_id"] = account_income.id
         return values
 
     def _reconcile_account_move_lines(self, data):
