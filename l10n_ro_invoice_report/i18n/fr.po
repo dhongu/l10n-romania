@@ -15,6 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Bank:</strong>"
+msgstr "<strong>Banque:</strong>"
+
+
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.document_tax_totals
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.tax_groups_totals
@@ -122,7 +128,7 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong>Deliveries:</strong>"
-msgstr ""
+msgstr "<strong>Livraisons:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice

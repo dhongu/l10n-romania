@@ -57,23 +57,23 @@ msgstr "<span>Nombre:</span>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<span>Payment disposal:</span>"
-msgstr ""
+msgstr "<span>Disposición de pago:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>Signature for receive</span>"
-msgstr ""
+msgstr "<span>Firma para recibir</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<span>Transfer:</span>"
-msgstr ""
+msgstr "<span>Transferencia:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "<span>Vat on payment</span>"
-msgstr ""
+msgstr "<span>IVA en el pago</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -81,7 +81,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<span>Voucher:</span>"
-msgstr ""
+msgstr "<span>Comprobante:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -91,7 +91,7 @@ msgstr "<span>valor</span>"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong name=\"payment_term_label\">Payment Term:</strong>"
-msgstr ""
+msgstr "<strong name=\"payment_term_label\">Término de pago:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -107,7 +107,7 @@ msgstr "<strong>Dirección:</strong>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>CIF:</strong>"
-msgstr ""
+msgstr "<strong>CIF:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -122,7 +122,7 @@ msgstr "<strong>Empresa</strong><br/>"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong>Deliveries:</strong>"
-msgstr ""
+msgstr "<strong>Entregas:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -140,7 +140,7 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong>Receptions:</strong>"
-msgstr ""
+msgstr "<strong>Recepciones:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -160,7 +160,7 @@ msgstr "Informe de cuenta sin líneas de pago"
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__info_for_invoice
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__info_for_invoice
 msgid "Additional info for invoice"
-msgstr ""
+msgstr "Información adicional para la factura"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -172,7 +172,7 @@ msgstr "Valor"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Amount (in words):"
-msgstr ""
+msgstr "Valor (en palabras):"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -189,12 +189,12 @@ msgstr "Línea de estado bancario"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Cancelled"
-msgstr ""
+msgstr "Cancelado"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_collection
 msgid "Cash collection"
-msgstr ""
+msgstr "Cobro en efectivo"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_company
@@ -231,24 +231,24 @@ msgstr "Descripción"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Discount (%)"
-msgstr ""
+msgstr "Descuento (%)"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Elaborate:"
-msgstr ""
+msgstr "Elaborar:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "For:"
-msgstr ""
+msgstr "Para:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Information for delivery:"
-msgstr ""
+msgstr "Información para la entrega:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -287,12 +287,12 @@ msgstr "Crt."
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_line
 msgid "Payment"
-msgstr ""
+msgstr "Pago"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_payment_disposal
 msgid "Payment disposal"
-msgstr ""
+msgstr "Disposición de pago"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -304,7 +304,7 @@ msgstr "Cantidad"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Received from:"
-msgstr ""
+msgstr "Recibido de:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_payment
@@ -346,7 +346,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Representing:"
-msgstr ""
+msgstr "Representando:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__email_on_invoice_address
@@ -414,7 +414,7 @@ msgstr "Val. IVA"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "To:"
-msgstr ""
+msgstr "Para:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -424,7 +424,7 @@ msgstr "Precio"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "VAT:"
-msgstr ""
+msgstr "IVA:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_voucher
@@ -439,4 +439,5 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "from"
-msgstr ""
+msgstr "de"
+
