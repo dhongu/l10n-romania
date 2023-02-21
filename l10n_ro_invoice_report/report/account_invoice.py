@@ -62,4 +62,3 @@ class ReportInvoicePrintInCompanyLanguage(models.AbstractModel):
     _description = "Report Invoice in Company Language"
     _inherit = "report.account.report_invoice"
     _template = "l10n_ro_invoice_report.report_invoice_company_language"
-
