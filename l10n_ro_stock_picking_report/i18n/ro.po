@@ -87,7 +87,7 @@ msgstr "<span>după cum urmează:</span>"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
 msgid "<span>supplied by</span>"
-msgstr "\"<span> furnizate de </span>"
+msgstr "<span> furnizate de </span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_text
