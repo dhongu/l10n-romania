@@ -120,6 +120,10 @@
                                 </table>
                             </div>
                         </div>
+                        <div>
+                            <strong>Finished Product:</strong>
+                            <span t-field="o.product_id.name"/>
+                        </div>
                         <div class="oe_structure"/>
                     </div>
                 </t>
