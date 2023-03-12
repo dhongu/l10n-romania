@@ -64,7 +64,7 @@
                             <span>Consume report:</span>
                             <span t-field="o.name"/>
                             <span>from</span>
-                            <span t-field="o.create_date"/>
+                            <span t-field="o.date_finished"/>
                         </h3>
                         <table class="table table-condensed table-bordered">
                             <thead>
