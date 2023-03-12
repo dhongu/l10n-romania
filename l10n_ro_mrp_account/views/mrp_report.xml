@@ -56,6 +56,58 @@
 
     <template id="mrp_consume_view">
         <t t-call="web.html_container">
+            <!--Print Summary if more than one production-->
+            <t t-if="len(docs) &gt; 1">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h3>Production Report
+                            <span t-field="docs[0].date_finished" t-options="{'format': 'MM-YYYY'}"/>
+                        </h3>
+                    </div>
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <strong>Consume number</strong>
+                                </th>
+                                <th>
+                                    <strong>Materials value</strong>
+                                </th>
+                                <th>
+                                    <strong>Finished product</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="o">
+                                <td>
+                                    <span t-field="o.name"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="abs(sum(move.value for move in o.move_raw_ids))" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.product_id.name"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-4 pull-right">
+                            <table class="table table-condensed">
+                                <tr class="border-black">
+                                    <td>
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="abs(sum(sum(move.value for move in o.move_raw_ids) for o in docs))" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
