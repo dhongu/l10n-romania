@@ -2,13 +2,7 @@
 # ©  2015-2017 Deltatech
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
-
-
-
-
 from odoo import api, models, fields, _
-from odoo.exceptions import UserError
-
 
 
 class AccountMoveLine(models.Model):
@@ -20,10 +14,7 @@ class AccountMoveLine(models.Model):
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
-
     acc_move_line_ids = fields.One2many('account.move.line', 'production_id', string='Account move lines')
-
-
 
     @api.multi
     def post_inventory(self):
