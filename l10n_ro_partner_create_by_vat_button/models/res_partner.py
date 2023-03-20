@@ -13,8 +13,9 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    @api.constrains("vat", "country_id")
     def check_vat(self):
-        partners = self.filtered(lambda p: not p.l10n_ro_vat_subjected)
+        partners = self.filtered(lambda p:  p.country_id.code != "RO")
         return super(ResPartner, partners).check_vat()
 
     @api.model
