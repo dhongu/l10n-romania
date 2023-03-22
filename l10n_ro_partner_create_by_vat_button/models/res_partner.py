@@ -40,6 +40,8 @@ class ResPartner(models.Model):
         return partner
 
     def button_get_partner_data(self):
+        if self.country_id and self.country_id.code != "RO":
+            return False
         if self.name and not self.vat:
             self.vat = self.name
         self.ro_vat_change()
