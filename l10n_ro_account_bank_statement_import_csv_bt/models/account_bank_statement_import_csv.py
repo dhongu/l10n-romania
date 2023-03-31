@@ -71,5 +71,5 @@ class AccountBankStatementImport(models.TransientModel):
         except Exception as e:
             raise UserError(
                 _("The following problem occurred during import." " The file might not be valid.\n\n %s" % str(e))
-            )
+            ) from e
         return currency, account_num, all_statements[currency, account_num]

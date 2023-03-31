@@ -4,8 +4,6 @@
 import base64
 import logging
 
-import psycopg2
-
 from odoo import _, models
 from odoo.exceptions import UserError
 
