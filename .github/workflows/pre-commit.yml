@@ -34,4 +34,3 @@ jobs:
               echo "$newfiles"
               exit 1
           fi
-
