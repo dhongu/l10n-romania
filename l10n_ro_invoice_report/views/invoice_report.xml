@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
+
+        <record id="account_invoices_in_company_language" model="ir.actions.report">
+            <field name="name">Invoices in company language</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_invoice_company_language</field>
+            <field name="report_file">l10n_ro_invoice_report.report_invoice_company_language</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field
+                name="attachment"
+            >(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')</field>
+            <field name="binding_model_id" ref="model_account_move" />
+            <field name="binding_type">report</field>
+        </record>
+
+
+        <template id="report_invoice_company_language">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="res_company.partner_id.lang" />
+                    <t
+                        t-if="o._get_name_invoice_report() == 'account.report_invoice_document'"
+                        t-call="account.report_invoice_document"
+                        t-lang="lang"
+                    />
+                </t>
+            </t>
+        </template>
+
         <template id="l10n_ro_report_invoice" inherit_id="account.report_invoice">
             <xpath expr="." position="inside">
                 <t t-if="False">
@@ -218,7 +247,7 @@
                                     <t t-esc="nr_crt" />
                                     <t t-set="nr_crt" t-value="nr_crt + 1" />
                                 </td>
-                                <td>
+                                <td id="product_name">
                                     <span t-field="l.name" />
                                 </td>
                                 <td class="text-right">
@@ -317,6 +346,7 @@
                             <td>
                                 <span>Name:</span>
                                 <span t-field="o.user_id" />
+                                <span id="signature" />
                             </td>
                             <td>
                                 <div>
@@ -406,14 +436,14 @@
             </xpath>
 
             <xpath expr="//p[@name='note']" position="after">
-                <small t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'">
+                <small t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'" name="legal_text">
                     <div>
                         Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance
                         no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and
                         subsequent amendments.
                     </div>
                 </small>
-                <div t-if="o.commercial_partner_id.info_for_invoice">
+                <div t-if="o.commercial_partner_id.info_for_invoice" name="info_text">
                     <span t-field="o.commercial_partner_id.info_for_invoice" />
                 </div>
                 <p id="payment-term" t-if="o.invoice_payment_term_id.note">
@@ -428,52 +458,54 @@
                     <br />
                     <br />
                     <div t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
-                        <div>
-                            <strong t-field="res_company.partner_id.name" />
-                        </div>
-                        <div>
-                            VAT:
-                            <span t-field="res_company.partner_id.vat" />
-                        </div>
-                        <div>
-                            NRC:
-                            <span t-field="res_company.partner_id.nrc" />
-                        </div>
-                        <address
-                            t-field="res_company.partner_id"
-                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
-                        />
-                        <h4>
-                            <span>Voucher:</span>
-                            <span t-esc="payment_vals['ref']" />
-                            <span>/</span>
-                            <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
-                        </h4>
-                        <div>
-                            <span>I received from</span>
-                            <strong t-field="o.partner_id.name" />
-                            <span t-if="o.partner_id.city">
-                                from
-                                <span t-field="o.partner_id.city" />
-                                <span t-field="o.partner_id.street" />
-                                <span t-field="o.partner_id.street2" />
-                            </span>
-
-                            <span>amount</span>
-
-                            <span
-                                t-esc="payment_vals['amount']"
-                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                        <t t-if="payment_vals['journal_type']=='cash'">
+                            <div>
+                                <strong t-field="res_company.partner_id.name" />
+                            </div>
+                            <div>
+                                VAT:
+                                <span t-field="res_company.partner_id.vat" />
+                            </div>
+                            <div>
+                                NRC:
+                                <span t-field="res_company.partner_id.nrc" />
+                            </div>
+                            <address
+                                t-field="res_company.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
                             />
-                            (
-                            <!--                                <span t-esc="convert(payment.amount)"/>-->
-                            <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])" />
-                            )
-                        </div>
-                        <div>
-                            Representing counter value of invoice
-                            <span t-field="o.name" />
-                        </div>
+                            <h4>
+                                <span>Voucher:</span>
+                                <span t-esc="payment_vals['ref']" />
+                                <span>/</span>
+                                <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
+                            </h4>
+                            <div>
+                                <span>I received from</span>
+                                <strong t-field="o.partner_id.name" />
+                                <span t-if="o.partner_id.city">
+                                    from
+                                    <span t-field="o.partner_id.city" />
+                                    <span t-field="o.partner_id.street" />
+                                    <span t-field="o.partner_id.street2" />
+                                </span>
+
+                                <span>amount</span>
+
+                                <span
+                                    t-esc="payment_vals['amount']"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                />
+                                (
+                                <!--                                <span t-esc="convert(payment.amount)"/>-->
+                                <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])" />
+                                )
+                            </div>
+                            <div>
+                                Representing counter value of invoice
+                                <span t-field="o.name" />
+                            </div>
+                        </t>
                     </div>
                 </t>
 

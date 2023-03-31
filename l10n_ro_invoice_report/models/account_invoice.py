@@ -80,6 +80,13 @@ class AccountInvoice(models.Model):
         )
         return values
 
+    def _get_reconciled_info_JSON_values(self):
+        reconciled_vals = super(AccountInvoice, self)._get_reconciled_info_JSON_values()
+        for reconciled_val in reconciled_vals:
+            payment = self.env["account.payment"].browse(reconciled_val["account_payment_id"])
+            reconciled_val["journal_type"] = payment.journal_id.type
+        return reconciled_vals
+
 
 #
 # class account_invoice_line(models.Model):
