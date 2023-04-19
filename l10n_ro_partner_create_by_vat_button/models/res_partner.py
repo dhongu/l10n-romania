@@ -15,6 +15,8 @@ class ResPartner(models.Model):
 
     @api.constrains("vat", "country_id")
     def check_vat(self):
+        if self.env.context.get('no_vat_validation'):
+            return
         partners = self.filtered(lambda p:  p.country_id.code != "RO")
         return super(ResPartner, partners).check_vat()
 
