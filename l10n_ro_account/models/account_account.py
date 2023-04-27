@@ -7,12 +7,12 @@ from odoo import api, fields, models
 class Account(models.Model):
     _inherit = "account.account"
 
-    external_code = fields.Char(compute="_compute_external_code", store=True)
+    l10n_ro_external_code = fields.Char(compute="_compute_external_code", store=True)
 
     @api.depends("code")
     def _compute_external_code(self):
         for account in self:
-            account.external_code = account.internal_to_external()
+            account.l10n_ro_external_code = account.internal_to_external()
 
     def external_code_to_internal(self, code):
         account_id = False
@@ -43,6 +43,6 @@ class Account(models.Model):
     def name_get(self):
         result = []
         for account in self:
-            name = account.external_code + " " + account.name
+            name = account.l10n_ro_external_code + " " + account.name
             result.append((account.id, name))
         return result
