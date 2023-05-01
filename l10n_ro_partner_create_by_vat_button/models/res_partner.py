@@ -13,12 +13,11 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-
     @api.constrains("vat", "country_id")
     def check_vat(self):
-        if self.env.context.get('no_vat_validation'):
+        if self.env.context.get("no_vat_validation"):
             return
-        partners = self.filtered(lambda p:  p.country_id.code != "RO")
+        partners = self.filtered(lambda p: p.country_id.code != "RO")
         return super(ResPartner, partners).check_vat()
 
     @api.model

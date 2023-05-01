@@ -25,6 +25,7 @@ class PosOrder(models.Model):
         # se va determina contul de venituri in functie de produs si de locatie
         return res
 
+
 # class PosOrderLine(models.Model):
 # _inherit = "pos.order.line"
 #
