@@ -5,14 +5,13 @@
 {
     "name": "Romania - Picking Reports",
     "license": "AGPL-3",
-    "version": "15.0.1.1.1",
+    "version": "15.0.1.1.2",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Generic Modules",
     "depends": [
         "base",
         "stock",
-        "date_range",
         "l10n_ro_config",
         "purchase_stock",
         "sale_stock",
