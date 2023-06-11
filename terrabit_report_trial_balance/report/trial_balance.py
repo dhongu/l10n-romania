@@ -194,7 +194,7 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         self._compute_path()
         self._compute_account_group_values()
         # Refresh cache because all data are computed with SQL requests
-        self.refresh()
+        self.invalidate_model()
 
     def _compute_path(self):
         self.line_account_ids.compute_path()
