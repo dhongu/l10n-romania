@@ -10,4 +10,4 @@ class StockPicking(models.Model):
 
     def correction_valuation(self):
         for picking in self:
-            picking.move_lines.correction_valuation()
+            picking.move_line_ids.correction_valuation()
