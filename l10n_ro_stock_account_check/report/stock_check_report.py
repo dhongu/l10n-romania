@@ -129,7 +129,7 @@ class StockAccountingCheck(models.TransientModel):
                         if new_date.hour < 3:
                             new_date = new_date.replace(hour=12)
                         picking.write({"date": new_date})
-                        picking.move_lines.write({"date": new_date})
+                        picking.move_line_ids.write({"date": new_date})
                         ok = False
             if (
                 purchase.invoice_status == "to invoice"
@@ -166,7 +166,7 @@ class StockAccountingCheck(models.TransientModel):
                             new_date = new_date.replace(hour=12)
                         picking.write({"date": new_date})
                         # picking.move_lines.write({"date": new_date})
-                        # account_move = picking.mapped('move_lines.stock_valuation_layer_ids.account_move_id')
+                        # account_move = picking.mapped('move_line_ids.stock_valuation_layer_ids.account_move_id')
                         # account_move.write({'date': invoice_date})
                         ok = False
             if (

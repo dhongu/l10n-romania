@@ -76,8 +76,8 @@ class StockPickingCumulative(models.TransientModel):
             ("state", "=", "done"),
             ("picking_type_id", "=", self.picking_type_id.id),
         ]
-        move_lines = self.env["stock.move"].search(domain)
+        move_line_ids = self.env["stock.move"].search(domain)
 
-        self.write({"move_lines": [(6, 0, move_lines.ids)]})
+        self.write({"move_line_ids": [(6, 0, move_line_ids.ids)]})
 
         return self.report_id.report_action(self, config=False)
