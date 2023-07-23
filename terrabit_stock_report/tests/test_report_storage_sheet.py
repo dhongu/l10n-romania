@@ -104,7 +104,7 @@ class TestStorageSheet(TransactionCase):
                 move_line.write({"qty_done": self.qty_po_p1})
 
         self.picking.button_validate()
-        _logger.info("Receptie facuta")
+        _logger.debug("Receptie facuta")
 
         self.po = po
         return po
