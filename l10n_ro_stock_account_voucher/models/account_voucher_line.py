@@ -28,7 +28,6 @@ class AccountVoucherLine(models.Model):
     def modify_stock_move_value(self, value):
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         should_modify_stock_value = bool(self.product_id and \
-                                         self.product_id.valuation == 'real_time' and \
                                          self.product_id.type == 'product' and \
                                          self.product_id.cost_method != 'standard' and \
                                          self.purchase_line_id and \
