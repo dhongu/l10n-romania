@@ -394,7 +394,12 @@
                     </h4>
                     <div>
                         <div>
-                            <span>I received from:</span>
+                            <t t-if="o.type == 'out_invoice'">
+                                <span>I received from:</span>
+                            </t>
+                            <t t-else="">
+                                <span>I paid to:</span>
+                            </t>
                             <strong t-field="o.partner_id.name" />
                             <t t-if="o.partner_id.vat">
                                 <span>, VAT:</span>

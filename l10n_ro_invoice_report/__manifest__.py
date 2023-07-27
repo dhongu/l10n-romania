@@ -3,7 +3,7 @@
 
 {
     "name": "Romania - Invoice Report",
-    "version": "13.0.2.0.3",
+    "version": "13.0.2.0.4",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",
