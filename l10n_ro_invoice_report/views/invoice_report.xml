@@ -16,7 +16,6 @@
             </xpath>
         </template>
 
-
         <template id="header_invoice">
 
             <div t-attf-class="{{header_class}}">
@@ -141,7 +140,6 @@
             </div>
 
         </template>
-
 
         <template id="invoice_layout">
 
@@ -288,7 +286,7 @@
                                 <span t-field="o.reference"/>
                             </div>
                         </div>
-                        <table class="table table-condensed  table-bordered">
+                        <table class="table table-condensed table-bordered" style="margin-top:50px;">
                             <thead>
                                 <tr>
                                     <th>Ord</th>
@@ -517,7 +515,6 @@
                 </t>
             </xpath>
         </template>
-
 
         <template id="footer_invoice">
 
