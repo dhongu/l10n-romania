@@ -3,6 +3,7 @@
 
 from odoo import api, models
 from odoo.tools.misc import parse_date, format_date
+from odoo.tools.safe_eval import safe_eval
 
 
 class AccountReconciliation(models.AbstractModel):
@@ -19,13 +20,15 @@ class AccountReconciliation(models.AbstractModel):
         limit=None,
         target_currency_id=False,
     ):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        max_lines = safe_eval(get_param("reconcile.max_lines", "15"))
         lines = super().get_move_lines_for_manual_reconciliation(
             account_id=account_id,
             partner_id=partner_id,
             excluded_ids=excluded_ids,
             search_str=search_str,
             offset=offset,
-            limit=limit,
+            limit=max_lines or limit,
             target_currency_id=target_currency_id,
         )
         for line in lines:
