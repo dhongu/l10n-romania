@@ -18,10 +18,24 @@ default_language_version:
   python: python3
   node: "16.19.0"
 repos:
-  - repo: https://github.com/OCA/maintainer-tools
-    rev: f2d1be9daceb2cccc102ae2be44891ce4a0ed3a0 # This is just an example; you must use a tag/commit instead!
+  - repo: local
     hooks:
-      # Use each script's `--help` to understand the args
+      # These files are most likely copier diff rejection junks; if found,
+      # review them manually, fix the problem (if needed) and remove them
+      - id: forbidden-files
+        name: forbidden files
+        entry: found forbidden files; remove them
+        language: fail
+        files: "\\.rej$"
+      - id: en-po-files
+        name: en.po files cannot exist
+        entry: found a en.po file
+        language: fail
+        files: '[a-zA-Z0-9_]*/i18n/en\.po$'
+
+  - repo: https://github.com/oca/maintainer-tools
+    rev: ab1d7f6
+    hooks:
       - id: oca-gen-addon-readme
         args:
           - --addons-dir=.
@@ -35,35 +49,29 @@ repos:
       - id: oca-gen-addons-table
         stages: [manual]
 
-      #- id: oca-gen-addon-icon
-      #  args:
-      #    - --addons-dir=.
-  - repo: local
-    hooks:
-      # These files are most likely copier diff rejection junks; if found,
-      # review them manually, fix the problem (if needed) and remove them
-      - id: forbidden-files
-        name: forbidden files
-        entry: found forbidden files; remove them
-        language: fail
-        files: "\\.rej$"
-  - repo: https://github.com/oca/maintainer-tools
-    rev: f2d1be9daceb2cccc102ae2be44891ce4a0ed3a0
-    hooks:
       # update the NOT INSTALLABLE ADDONS section above
       - id: oca-update-pre-commit-excluded-addons
       - id: oca-fix-manifest-website
         args: ["https://github.com/OCA/l10n-romania"]
+
   - repo: https://github.com/myint/autoflake
     rev: v1.4
     hooks:
       - id: autoflake
-        args: ["-i", "--ignore-init-module-imports"]
+        args:
+          - --expand-star-imports
+          - --ignore-init-module-imports
+          - --in-place
+          - --remove-all-unused-imports
+          - --remove-duplicate-keys
+          - --remove-unused-variables
+
   - repo: https://github.com/psf/black
     rev: 22.6.0
     hooks:
       - id: black
         args: [-l 120]
+
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v2.7.1
     hooks:
@@ -74,6 +82,8 @@ repos:
           - "@prettier/plugin-xml@0.12.0"
         args:
           - --plugin=@prettier/plugin-xml
+        files: \.(css|htm|html|js|json|jsx|less|md|scss|toml|ts|xml|yaml|yml)$
+
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.22.0
     hooks:
@@ -110,7 +120,7 @@ repos:
       - id: pyupgrade
 
   - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
       - id: isort
         name: isort except __init__.py
@@ -130,31 +140,21 @@ repos:
   #          - "# generated from manifests external_dependencies"
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 3.9.2
+    rev: 3.8.3
     hooks:
       - id: flake8
-        name: flake8 except __init__.py
-        exclude: /__init__\.py$
-        additional_dependencies: ["flake8-bugbear==21.9.2"]
-      - id: flake8
-        name: flake8 only __init__.py
-        args: ["--extend-ignore=F401"] # ignore unused imports in __init__.py
-        files: /__init__\.py$
-        additional_dependencies: ["flake8-bugbear==21.9.2"]
+        name: flake8
+        additional_dependencies: ["flake8-bugbear==20.1.4"]
 
-  - repo: https://github.com/PyCQA/pylint
-    rev: v2.11.1
+  - repo: https://github.com/OCA/pylint-odoo
+    rev: 7.0.2
     hooks:
-      - id: pylint
+      - id: pylint_odoo
         name: pylint with optional checks
         args:
           - --rcfile=.pylintrc
           - --exit-zero
         verbose: true
-        additional_dependencies: &pylint_deps
-          - pylint-odoo==5.0.5
-      - id: pylint
-        name: pylint with mandatory checks
+      - id: pylint_odoo
         args:
           - --rcfile=.pylintrc-mandatory
-        additional_dependencies: *pylint_deps
