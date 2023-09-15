@@ -4,7 +4,7 @@
 {
     "name": "Romanian  Intrastat Declaration",
     "license": "AGPL-3",
-    "version": "14.0.1.0.1",
+    "version": "14.0.1.0.2",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "depends": ["product", "sale_stock", "account", "l10n_ro"],
@@ -15,7 +15,7 @@
         "security/groups.xml",
         "security/ir.model.access.csv",
         "views/l10n_ro_intrastat_view.xml",
-        "views/account_intrastat_report_view.xml",
+        # "views/account_intrastat_report_view.xml",
         "views/account_move_view.xml",
         "views/product_view.xml",
         "views/res_country_view.xml",
