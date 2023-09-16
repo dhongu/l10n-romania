@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
+
+        <record id="account_invoices_in_company_language" model="ir.actions.report">
+            <field name="name">Invoices in company language</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_invoice_company_language</field>
+            <field name="report_file">l10n_ro_invoice_report.report_invoice_company_language</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field
+                name="attachment"
+            >(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')</field>
+            <field name="binding_model_id" ref="model_account_move" />
+            <field name="binding_type">report</field>
+        </record>
+
+
+        <template id="report_invoice_company_language">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="res_company.partner_id.lang" />
+                    <t
+                        t-if="o._get_name_invoice_report() == 'account.report_invoice_document'"
+                        t-call="account.report_invoice_document"
+                        t-lang="lang"
+                    />
+                </t>
+            </t>
+        </template>
+
         <template id="l10n_ro_report_invoice" inherit_id="account.report_invoice">
             <xpath expr="." position="inside">
                 <t t-if="False">
@@ -10,6 +39,16 @@
         </template>
         <template id="header_invoice">
             <div id="address" class="address row">
+                <t t-set="address_fields" t-value="['address']" />
+
+                <t t-if="res_company.email_on_invoice_address">
+                    <t t-set="address_fields" t-value="address_fields + ['email']" />
+                </t>
+                <t t-if="res_company.phone_on_invoice_address">
+                    <t t-set="address_fields" t-value="address_fields + ['phone']" />
+                </t>
+                <t t-set="no_marker" t-value="not res_company.marker_on_invoice_address" />
+
                 <div name="information_block" class="col-6">
                     <div>
                         <strong t-if="o.move_type in ['out_invoice', 'out_refund']">Supplier:
@@ -24,7 +63,7 @@
                         </div>
                         <address
                             t-field="res_company.partner_id"
-                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": true,
+                            t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker,
                             "no_tag_br": true}'
                         />
                     </div>
@@ -53,7 +92,7 @@
                             </div>
                         </div>
                         <div>
-                            <!--                        <span t-esc="', '.join(map(lambda x: (x[0]), o.amount_by_group))" />-->
+
                         </div>
                     </div>
 
@@ -66,13 +105,15 @@
                         </strong>
                         <strong id="partner_name" t-field="o.commercial_partner_id.name" />
                     </div>
+
+
                     <div id="partner_address">
                         <div id="address_label" class="float-left mr-1">
                             <strong>Address:</strong>
                         </div>
                         <address
                             t-field="o.commercial_partner_id"
-                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": true,
+                            t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker,
                             "no_tag_br": true}'
                         />
                     </div>
@@ -82,7 +123,7 @@
                             <strong>Delivery address:</strong>
                             <address
                                 t-field="o.partner_shipping_id"
-                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
+                                t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker, "no_tag_br": true}'
                             />
                         </div>
                     </t>
@@ -280,7 +321,7 @@
             </xpath>
 
             <xpath expr="//div[@id='total']/div" position="replace">
-                <div class="col-8" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
+                <div class="col-7" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
                     <table id="signature" class="table table-sm">
                         <tr class="border-black">
                             <td>Elaborate:</td>
@@ -308,93 +349,30 @@
                         </tr>
                     </table>
                 </div>
-                <div class="col-4">
+                <div class="col-5">
+                    <t t-set="tax_totals" t-value="json.loads(o.tax_totals_json)" />
                     <table class="table table-sm" style="page-break-inside: avoid;">
-                        <tr class="border-black o_subtotal" style="">
-                            <td>
-                                <strong>Total Without Taxes</strong>
-                            </td>
-                            <td class="text-right">
-                                <t t-set="amount_untaxeds" t-value="o.amount_untaxed" />
-                                <t t-if="o.move_type == 'out_refund'">
-                                    <t t-set="amount_untaxeds" t-value="-1*o.amount_untaxed" />
-                                </t>
-                                <span id="amount_untaxeds">
-                                    <span
-                                        t-esc="amount_untaxeds"
-                                        t-options='{"widget": "monetary", "display_currency": currency_id}'
-                                    />
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Taxes</td>
-                            <td class="text-right">
-                                <t t-set="amount_tax" t-value="o.amount_tax" />
-                                <t t-if="o.move_type == 'out_refund'">
-                                    <t t-set="amount_tax" t-value="-1*o.amount_tax" />
-                                </t>
-                                <span id="amount_tax">
-                                    <span
-                                        t-esc="amount_tax"
-                                        t-options='{"widget": "monetary", "display_currency": currency_id}'
-                                    />
-                                </span>
-                            </td>
-                        </tr>
-                        <tr class="border-black">
-                            <td>
-                                <strong>Total</strong>
-                            </td>
-                            <td class="text-right">
-                                <t t-set="amount_total" t-value="o.amount_total" />
-                                <t t-if="o.move_type == 'out_refund'">
-                                    <t t-set="amount_total" t-value="-1*o.amount_total" />
-                                </t>
-                                <span id="amount_total">
-                                    <span
-                                        t-esc="amount_total"
-                                        t-options='{"widget": "monetary", "display_currency": currency_id}'
-                                    />
-                                </span>
-                                <div t-if="currency_id!=res_company.currency_id">
-                                    (
-                                    <t t-if="o.move_type == 'out_refund'">
-                                        <t t-set="amount_total_signed" t-value="-1*o.amount_total_signed" />
-                                        <t t-esc="amount_total_signed" />
-                                        <span t-field="res_company.currency_id.symbol" />
-                                    </t>
-                                    <t t-if="not o.move_type == 'out_refund'">
-                                        <span
-                                            t-field="o.amount_total_signed"
-                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
-                                        />
-                                    </t>
-
-                                    )
-                                </div>
-                            </td>
-                        </tr>
+                        <t t-call="account.document_tax_totals" />
                     </table>
                 </div>
             </xpath>
 
             <xpath expr="//p[@name='note']" position="after">
-                <small t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'">
+                <small t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'" name="legal_text">
                     <div>
                         Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance
                         no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and
                         subsequent amendments.
                     </div>
                 </small>
-                <div t-if="o.commercial_partner_id.info_for_invoice">
+                <div t-if="o.commercial_partner_id.info_for_invoice" name="info_text">
                     <span t-field="o.commercial_partner_id.info_for_invoice" />
                 </div>
 
             </xpath>
 
             <xpath expr="//p[@name='payment_term']/span" position="before">
-                <strong>Payment Term:</strong>
+                <strong name="payment_term_label">Payment Term:</strong>
             </xpath>
 
             <xpath expr="//div[hasclass('page')]" position="after">
@@ -455,10 +433,43 @@
                         </t>
                     </div>
                 </t>
-
             </xpath>
+        </template>
 
+        <template id="document_tax_totals" inherit_id="account.document_tax_totals" priority="100">
+            <xpath expr="//t/tr/td[2]/span" position="before">
+                <t t-set="o" t-value="o or sale_order or doc" />
+                <t t-if="o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
+                    <span>-</span>
+                </t>
+            </xpath>
+            <xpath expr="//tr[hasclass('o_total')]/td[2]/span" position="before">
+                <t t-set="o" t-value="o or sale_order or doc" />
+                <t t-if="o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
+                    <span>-</span>
+                </t>
+            </xpath>
+        </template>
 
+        <template id="tax_groups_totals" inherit_id="account.tax_groups_totals" priority="100">
+            <xpath expr="//t/tr/t/td/span[2]/t" position="before">
+                 <t t-set="o" t-value="o or sale_order or doc" />
+                <t t-if="o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
+                    <span>-</span>
+                </t>
+            </xpath>
+            <xpath expr="//t/tr/t/td[2]/span" position="before">
+                 <t t-set="o" t-value="o or sale_order or doc" />
+                <t t-if="o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
+                    <span>-</span>
+                </t>
+            </xpath>
+            <xpath expr="//t/tr/t[2]/td[2]/span" position="before">
+                 <t t-set="o" t-value="o or sale_order or doc" />
+                <t t-if="o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
+                    <span>-</span>
+                </t>
+            </xpath>
         </template>
     </data>
 </odoo>

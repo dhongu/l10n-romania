@@ -1,0 +1,2 @@
+ - Modifies the standard order of lines in reconciliation widget, from maturity date descending to maturity date ascending (or date).
+ - The number of lines in the reconciliation widget can be modified by setting the system parameter "reconcile.max_lines" to an integer value

@@ -2,7 +2,7 @@
 {
     "name": "Romania - Stock Accounting Check",
     "license": "AGPL-3",
-    "version": "15.0.1.0.4",
+    "version": "15.0.1.0.6",
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Warehouse",
@@ -10,7 +10,6 @@
         "l10n_ro_stock_account",
         "purchase_stock",
         "sale_stock",
-        "date_range",
     ],
     "data": [
         "report/stock_check_report_view.xml",
