@@ -11,6 +11,7 @@
                 <field name="month" />
                 <field name="code" />
                 <field name="ref" />
+                <field name="invoice_id" />
                 <field name="intrastat_name" />
                 <field name="weight" />
                 <field name="value" widget="monetary" />
@@ -30,6 +31,7 @@
                     filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]"
                     string="Intrastat Data"
                 />
+                <field name="invoice_id" />
                 <field name="month" />
                 <field name="type" />
                 <field name="intrastat_name" />
