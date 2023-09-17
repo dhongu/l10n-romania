@@ -1,0 +1,281 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_intrastat_xml
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-17 02:23+0000\n"
+"PO-Revision-Date: 2023-09-17 02:23+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__04
+msgid "April"
+msgstr "Aprilie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__type__arrivals
+msgid "Arrivals"
+msgstr "Intrări"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__08
+msgid "August"
+msgstr "August"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__cn8
+msgid "CN8"
+msgstr ""
+
+#. module: l10n_ro_intrastat_xml
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat_xml.view_intrastat_declaration_xml
+msgid "Cancel"
+msgstr "Renunță"
+
+#. module: l10n_ro_intrastat_xml
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat_xml.view_intrastat_declaration_xml
+msgid "Close"
+msgstr "Închide"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__contact_id
+msgid "Contact"
+msgstr "Contact"
+
+#. module: l10n_ro_intrastat_xml
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat_xml.view_intrastat_declaration_xml
+msgid "Create XML"
+msgstr "Crează XML"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__create_uid
+msgid "Created by"
+msgstr "Creat de"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__create_date
+msgid "Created on"
+msgstr "Creat la"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__12
+msgid "December"
+msgstr "Decembrie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__type__dispatches
+msgid "Dispatches"
+msgstr "Ieșiri"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__state__download
+msgid "Download"
+msgstr "Descarcă"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__state__draft
+msgid "Draft"
+msgstr "Ciornă"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__02
+msgid "February"
+msgstr "Februarie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__name
+msgid "File Name"
+msgstr "Nume fișier"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Go to company configuration screen"
+msgstr "Mergi la ecranul de configurare a companiei"
+
+#. module: l10n_ro_intrastat_xml
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat_xml.view_intrastat_declaration_xml
+msgid "Here is the XML file with your intrastat declaration:"
+msgstr "Aici este fișierul XML cu declarația intrastat:"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.ui.menu,name:l10n_ro_intrastat_xml.menu_intrastat
+msgid "Intrastat"
+msgstr "Intrastat"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.actions.act_window,name:l10n_ro_intrastat_xml.action_intrastat_xml_declaration
+#: model:ir.ui.menu,name:l10n_ro_intrastat_xml.l10n_ro_intrastat_xml_declaration
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat_xml.view_intrastat_declaration_xml
+msgid "Intrastat Declaration"
+msgstr "Declarație Intrastat"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__file_save
+msgid "Intrastat Report File"
+msgstr "Fișier raport Intrastat"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model,name:l10n_ro_intrastat_xml.model_l10n_ro_intrastat_xml_declaration
+msgid "Intrastat XML Declaration"
+msgstr "Declarație Intrastat XML"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Invoice %s without Intrastat Trasaction"
+msgstr "Factura %s fără tranzacție Intrastat"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Invoice %s without Transport Mode"
+msgstr "Factura %s fără mod de transport"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Invoice %s without incoterm"
+msgstr "Factura %s fără incoterm"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Invoice %s without intrastat country"
+msgstr "Factura %s fără țară intrastat"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__01
+msgid "January"
+msgstr "Ianuarie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__07
+msgid "July"
+msgstr "Iulie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__06
+msgid "June"
+msgstr "Iunie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration____last_update
+msgid "Last Modified on"
+msgstr "Ultima modificare la"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__write_uid
+msgid "Last Updated by"
+msgstr "Ultima actualizare de"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__write_date
+msgid "Last Updated on"
+msgstr "Ultima actualizare la"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__03
+msgid "March"
+msgstr "Martie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__05
+msgid "May"
+msgstr "Mai"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__month
+msgid "Month"
+msgstr "Lună"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__11
+msgid "November"
+msgstr "Noiembrie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__10
+msgid "October"
+msgstr "Octombrie"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Partner \"%s\" has no VAT code, please configure it"
+msgstr "Partenerul \"%s\" nu are cod TVA, vă rugăm să-l configurați"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Product \"%s\" has no intrastat code, please configure it"
+msgstr "Produsul \"%s\" nu are cod intrastat, vă rugăm să-l configurați"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Save"
+msgstr "Salvează"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat_xml.selection__l10n_ro_intrastat_xml_declaration__month__09
+msgid "September"
+msgstr "Septembrie"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__state
+msgid "State"
+msgstr "Stare"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid ""
+"The VAT of your company is not set, please make sure to configure it first."
+msgstr ""
+"TVA-ul companiei dvs. nu este setat, vă rugăm să vă asigurați că îl "
+"configurați mai întâi."
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid ""
+"The country of your company is not set, please make sure to configure it "
+"first."
+msgstr ""
+"Țara companiei dvs. nu este setată, vă rugăm să vă asigurați că o configurați "
+"mai întâi."
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__type
+msgid "Type"
+msgstr "Tip"
+
+#. module: l10n_ro_intrastat_xml
+#: model:ir.model.fields,field_description:l10n_ro_intrastat_xml.field_l10n_ro_intrastat_xml_declaration__year
+msgid "Year"
+msgstr "An"
+
+#. module: l10n_ro_intrastat_xml
+#: code:addons/l10n_ro_intrastat_xml/wizard/intrastat_xml_declaration.py:0
+#, python-format
+msgid "Year must be 4 digits number (YYYY)"
+msgstr "Anul trebuie să fie un număr de 4 cifre (AAAA)"

@@ -94,6 +94,6 @@ create or replace view report_intrastat as (
     group by to_char(coalesce(inv.date, inv.invoice_date), 'YYYY'),
     to_char(coalesce(inv.date, inv.invoice_date), 'MM'),
     intrastat.id,inv.move_type,pt.intrastat_id,
-    inv_country.code,inv.name,  inv.currency_id, inv.company_id
+    inv_country.code,inv.name,  inv.currency_id, inv.company_id, inv.id
             )"""
         )
