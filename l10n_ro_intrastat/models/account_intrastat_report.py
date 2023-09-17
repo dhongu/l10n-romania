@@ -36,6 +36,7 @@ class ReportIntrastat(models.Model):
     type = fields.Selection([("import", "Import"), ("export", "Export")], string="Type")
     currency_id = fields.Many2one("res.currency", string="Currency", readonly=True)
     company_id = fields.Many2one("res.company", string="Company", readonly=True)
+    invoice_id = fields.Many2one("account.move", string="Invoice", readonly=True)
 
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
@@ -46,6 +47,7 @@ create or replace view report_intrastat as (
         to_char(coalesce(inv.date, inv.invoice_date), 'YYYY') as name,
         to_char(coalesce(inv.date, inv.invoice_date), 'MM') as month,
         min(inv_line.id) as id,
+        inv.id as invoice_id,
         intrastat.name as intrastat_name,
         upper(inv_country.code) as code,
 
@@ -92,6 +94,6 @@ create or replace view report_intrastat as (
     group by to_char(coalesce(inv.date, inv.invoice_date), 'YYYY'),
     to_char(coalesce(inv.date, inv.invoice_date), 'MM'),
     intrastat.id,inv.move_type,pt.intrastat_id,
-    inv_country.code,inv.name,  inv.currency_id, inv.company_id
+    inv_country.code,inv.name,  inv.currency_id, inv.company_id, inv.id
             )"""
         )
