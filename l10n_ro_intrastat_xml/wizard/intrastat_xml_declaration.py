@@ -64,6 +64,13 @@ class IntrastatDeclaration(models.TransientModel):
     file_save = fields.Binary("Intrastat Report File", readonly=True)
     state = fields.Selection([("draft", "Draft"), ("download", "Download")], string="State", default="draft")
     cn8 = fields.Char("CN8", size=4, required=True, default="2022")
+    enterprise = fields.Boolean("Enterprise", default=False, compute="_compute_enterprise")
+
+    def _compute_enterprise(self):
+        for rec in self:
+            rec.enterprise = self.env["ir.module.module"].search(
+                [("name", "=", "account_intrastat"), ("state", "=", "installed")]
+            )
 
     def _company_warning(self, translated_msg):
         """
@@ -249,7 +256,12 @@ class IntrastatDeclaration(models.TransientModel):
                 TrCodeA = intrastat_transaction.code
                 TrCodeB = ""
 
-            ModeOfTransport = invoice.transport_mode_id.code or company.transport_mode_id.code or False
+            if self.enterprise:
+                ModeOfTransport = (
+                    invoice.intrastat_transport_mode_id.code or company.intrastat_transport_mode_id.code or False
+                )
+            else:
+                ModeOfTransport = invoice.transport_mode_id.code or company.transport_mode_id.code or False
 
             if not ModeOfTransport:
                 raise UserError(_("Invoice %s without Transport Mode") % invoice.name)
