@@ -52,7 +52,7 @@ class TestIntrastat(TransactionCase):
         # a facut onchange ?
         self.assertEqual(invoice.intrastat_country_id, country)
 
-        wizard = Form(self.env["l10n_ro_intrastat.intrastat_xml_declaration"])
+        wizard = Form(self.env["l10n.ro.intrastat.xml.declaration"])
         wizard.contact_id = self.env.user.partner_id
         wizard = wizard.save()
         wizard.create_xml()
@@ -80,7 +80,7 @@ class TestIntrastat(TransactionCase):
         invoice = invoice.save()
         invoice.post()
 
-        wizard = Form(self.env["l10n_ro_intrastat.intrastat_xml_declaration"])
+        wizard = Form(self.env["l10n.ro.intrastat.xml.declaration"])
         wizard.contact_id = self.env.user.partner_id
         wizard.type = "dispatches"
         wizard = wizard.save()
@@ -101,7 +101,7 @@ class TestIntrastat(TransactionCase):
         invoice = invoice.save()
         invoice.post()
 
-        wizard = Form(self.env["l10n_ro_intrastat.intrastat_xml_declaration"])
+        wizard = Form(self.env["l10n.ro.intrastat.xml.declaration"])
         wizard.contact_id = self.env.user.partner_id
         wizard = wizard.save()
 
