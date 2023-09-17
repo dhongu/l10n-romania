@@ -2,7 +2,7 @@
 
 
 from odoo import api, models
-from odoo.tools.misc import parse_date, format_date
+from odoo.tools.misc import format_date, parse_date
 from odoo.tools.safe_eval import safe_eval
 
 
