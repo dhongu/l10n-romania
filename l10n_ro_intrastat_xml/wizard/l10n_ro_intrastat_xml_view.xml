@@ -3,7 +3,7 @@
     <data>
         <record id="view_intrastat_declaration_xml" model="ir.ui.view">
             <field name="name">Intrastat XML Declaration</field>
-            <field name="model">l10n_ro_intrastat.intrastat_xml_declaration</field>
+            <field name="model">l10n.ro.intrastat.xml.declaration</field>
             <field name="arch" type="xml">
                 <form>
                     <!-- Need the field in the view in order to be able to hide or show part of the view according the state  -->
@@ -43,14 +43,30 @@
                 </form>
             </field>
         </record>
-        <act_window
-            id="action_intrastat_xml_declaration"
-            name="Intrastat Declaration"
-            res_model="l10n_ro_intrastat.intrastat_xml_declaration"
-            view_mode="form"
-            view_id="view_intrastat_declaration_xml"
-            target="new"
+
+        <record id="action_intrastat_xml_declaration" model="ir.actions.act_window">
+            <field name="name">Intrastat Declaration</field>
+            <field name="res_model">l10n.ro.intrastat.xml.declaration</field>
+<!--            <field name="binding_model_id" ref="account.model_account_move" />-->
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+<!--        <act_window-->
+<!--            id="action_intrastat_xml_declaration"-->
+<!--            name="Intrastat Declaration"-->
+<!--            res_model="intrastat_xml_declaration"-->
+<!--            view_mode="form"-->
+<!--            view_id="view_intrastat_declaration_xml"-->
+<!--            target="new"-->
+<!--        />-->
+            <menuitem
+            id="menu_intrastat"
+            name="Intrastat"
+            parent="account.menu_finance_reports"
+            groups="account.group_account_manager"
         />
+
         <menuitem
             name="Intrastat Declaration"
             parent="menu_intrastat"

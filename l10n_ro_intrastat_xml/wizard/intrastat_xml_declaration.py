@@ -17,7 +17,8 @@ class IntrastatDeclaration(models.TransientModel):
     Intrastat XML Declaration
     """
 
-    _name = "l10n_ro_intrastat.intrastat_xml_declaration"
+    # _name = "l10n_ro_intrastat.intrastat_xml_declaration"
+    _name = "l10n.ro.intrastat.xml.declaration"
     _description = "Intrastat XML Declaration"
 
     def _get_def_monthyear(self):
@@ -168,7 +169,7 @@ class IntrastatDeclaration(models.TransientModel):
             "name": _("Save"),
             "context": self.env.context,
             "view_mode": "form",
-            "res_model": "l10n_ro_intrastat.intrastat_xml_declaration",
+            "res_model": "l10n.ro.intrastat.xml.declaration",
             "type": "ir.actions.act_window",
             "target": "new",
             "res_id": self.id,
@@ -230,10 +231,13 @@ class IntrastatDeclaration(models.TransientModel):
 
             invoice = inv_line.move_id
             # Check type of transaction
-            if invoice.intrastat_transaction_id:
-                intrastat_transaction = invoice.intrastat_transaction_id
-            else:
-                intrastat_transaction = company.intrastat_transaction_id
+            if "intrastat_transaction_id" in invoice._fields:
+                if invoice.intrastat_transaction_id:
+                    intrastat_transaction = invoice.intrastat_transaction_id
+                else:
+                    intrastat_transaction = company.intrastat_transaction_id
+            else:  # enterprise
+                intrastat_transaction = inv_line.intrastat_transaction_id
 
             if not intrastat_transaction:
                 raise UserError(_("Invoice %s without Intrastat Trasaction") % invoice.name)
