@@ -17,7 +17,6 @@ class IntrastatDeclaration(models.TransientModel):
     Intrastat XML Declaration
     """
 
-    # _name = "l10n_ro_intrastat.intrastat_xml_declaration"
     _name = "l10n.ro.intrastat.xml.declaration"
     _description = "Intrastat XML Declaration"
 
