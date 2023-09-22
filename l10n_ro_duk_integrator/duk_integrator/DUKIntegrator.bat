@@ -1,0 +1,1 @@
+<cale_dist>\dist\jre6\bin\java.exe -jar <cale_dist>\dist\DUKIntegrator.jar

@@ -1,0 +1,82 @@
+19-Oct-2011 publicat versiunea 1.1.1.1.1 a DUKIntegrator
+	- adaugat componenta Download.jar, care permite downloadarea tuturor jar-urilor si fisierelor asociate aplicatiei (fisiere .cfg, fisiere de proprietati si fisiere documentatie) si instalarea automata a acestora. Incepand cu aceasta versiune nu mai este necesara descarcarea si dezarhivarea manuala a aplicatiei.
+
+20-Oct-2011 publicat versiunea 1.1.2.1.1 a DUKIntegrator
+	- reintrodusa facilitatea fisierXML in linia de comanda a interfetei grafice.
+	- ridicare bug: inerfata grafica nu se putea lansa avand ca folder curent o alta locatie decat cea de instalare.
+
+21-Oct-2011 publicat versiunea 1.1.3.1.1 a DUKIntegrator
+	- ridicare bug: programul accepta cai cu spatii
+
+29-Nov-2011 publicat versiunea 1.1.4.1.2 a DUKIntegrator
+	- ridicare bug: programul accepta cai care incep cu '//'
+	- adaugare: posibilitatea atasare fisiere ZIP pt. anumite tipuri de declaratii (in acest moment nu exista nici o declaratie de acest tip).
+	- adaugare versiune in bara de titlu
+	- la descarcarea unei declaratii se aduce fisierul cu istoria versiunilor numai de la aceasta declaratie.
+	- adaugat o fereastra de atentionare la pornirea programului cu posibilitatea anularii conectarii la internet, daca dureaza prea mult
+	- modificari pt. posibilitatea functionarii pe Linux (descarcare si semnare)
+
+5-Dec-2011 publicat versiunea 1.1.5.1.2 a DUKIntegrator
+	- ridicare bug la lansarea programului in mod linie comanda: s-a adaugat parametru pt. atasare ZIP. Informatii detaliate gasiti in fisierul Instructiuni.txt. Cateva exemple de lansare corecta a programului (s-a adaugat parametrul 0 semnificand neatasare ZIP):
+	java -version:1.6 -jar "C:\dist\DUKIntegrator.jar" -p D112 C:/D112.xml
+	java -version:1.6 -jar "C:\dist\DUKIntegrator.jar" -p D112 C:/D112.xml $ $ 0 C:\declaratie.pdf
+	java -version:1.6 -jar "C:\dist\DUKIntegrator.jar" -s D112 C:/D112.xml $ $ 0 $ 1234 aladdin
+	java -version:1.6 -jar "C:\dist\DUKIntegrator.jar" -c C:\dist\config -s D112 C:/D112.xml C:/erori.txt 0 0 C:\declaratie.pdf 1234 aladdin 1
+
+6-Dec-2011 publicat versiunea 1.2.6.1.2 si 1.2.7.1.2 a DUKIntegrator
+	- ridicare bug la updatarea automata a programului
+
+9-Jan-2012 publicat versiunea 1.2.8.1.3 a DUKIntegrator
+	- clasa Params eliminata din jar (se va folosi cea din DECValidation.jar)
+	- ridicare bug: ultimele setari in UI nu erau salvate in config.properties
+	- ridicare bug: daca fisierele XML/ZIP nu aveau extensia corespunzatoare prelucrarea pe serverul ANAF esua.
+	- modificare modalitate de semnare: daca semnarea esueaza cu SUNPKCS11 pe sisteme Windows, se incearca semnarea cu MSCAPI
+	- schimbare nivel compatibilitate pt. jar-urile DnnnPdf pt. a face posibila versionarea acestora
+	- rezolvare problema semnare cu certificate reinnoite pe acelasi alias, prin metoda MSCAPI.
+
+31-Jan-2012 publicat versiunea 1.2.9.1.3 a DUKIntegrator
+	- ridicare bug numerotare sectiuni (taguri) la afisarea erorilor
+	- limitare dimensiune maxima PDF la 10.000.000 bytes
+	- versiunea 6 Download: aducere la zi a clasei Params
+
+13-Mar-2012 publicat versiunea 1.2.10.2.3 a DUKIntegrator
+	- ridicare bug apel dintr-o retea locala
+	- adaugare functie validare PDF. Pt. a putea valida un fisier PDF se alege din dialogul de selectie a fisierelor tipul PDF. Consultati fisierul Instructiuni.txt pt. mai multe amanunte.
+	- optimizare apel Validator prin considerare namespace XML (necesita compatibilizare interfata la D112)
+
+24-Jan-2013 publicat versiunea 1.2.11.2.3 a DUKIntegrator si versiunea 7 de Download
+	- adaugare meniu cu functiile: dezinstalare declaratii, optiuni configurare, help, vizualizare IstoriaVersiunilor
+	- download peste proxy protejate prin user/parola
+
+21-Feb-2013 publicat versiunea 1.2.12.3.3 a DUKIntegrator
+	- uniformizare validare data calendaristica Oracle si java si corectie validare CNP (necesita schimbare compatibilitate java)
+
+30-Sep-2013 publicat versiunea 1.2.13.3.3 a DUKIntegrator si versiune 8 a Download. Modificari:
+	- semnare prin metoda MSCAPI cu distributii java pe 64 biti (DUKIntegrator)
+	- ridicare bug semnare (blocaj la a doua semnare) prin includerea unei solutii ocolitoare (DUKIntegrator)
+	- imbunatatire design forma "optiuni download" (DUKIntegrator)
+	- ridicare bug acces prin proxi (blocaj la conectare) in cazul distributiei java 1.7 (Download)
+	- acceptare content white-space intre tagurile de inceput si sfarsit ale elementelor XML (de acum se accepta taguri explicite de sfarsit element pt. elementele terminale ale structurii); restrictia anterioara asupra XML-ului acceptat de Validator era artificiala si neconforma standardului XML (Validare XML)
+	- mesaj de eroare mai explicit pt. nepotrivirea de namespaces la validare (Validare XML)
+	- interne:
+		- adaugare functie validare IBAN (programare Validatoare)
+		- optiune transformare erori in atentionari la nivelul nextAttribute (programare Validatoare)
+		- functia drawLine creata pt. D120 inclusa in DecPDF.jar (programare Validatoare)
+		- corectie validare parametru maxOccurs (repetitivitate elemente XML)
+		- modificari de implementare (algoritmi)/adaugare de functii noi in clasele Params si LogTrace
+		- schimbari Validator.jar active numai pe server: incifrare parole acces la BD, cai relative la fisierul de configurare
+
+30-Mar-2015 publicat versiunea 1.2.14.3.3 a DUKIntegrator si versiune 9 Download
+	- ridicat bug Validator nu completeaza corect structura Info (2014-06-02)
+	- adaugat versiune multilimba (pentru declaratia D399)
+	- ridicare alte buguri descoperite in ultima perioada
+	- imbunatatire infrastructura programare declaratii
+	- adaugare clasa SuperIntegrator la jar-ul DUKIntegrator pentru dezvoltatorii de aplicatii bazate pe modelul DUKIntegrator
+	- adaugare conexiune secunda la Validator 
+
+09-Nov-2016 publicat versiunea 1.3.15.3.3 si 1.3.16.3.3 a DUKIntegrator si versiune 10 Download
+	- adaugare tip nou token: epass3000
+	- ridicare bug semnare token athena
+	- modificari cosmetice texte, mesaje
+	- mod linie comanda: adaugare prefixe la numele fisierului de erori pt. pastrarea atentionarilor la validare (vezi instructiuni)
+	- redirectare controlata a locatiei pt. download componente

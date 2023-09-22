@@ -1,0 +1,456 @@
+31-Jan-2011 publicat J1.0.0
+
+03-Feb-2011 publicat J1.0.1: cu modificarile:
+DUKValidator:
+	- eliminat diacriticele din mesajele de eroare
+	- eliminat validarea A21.4
+	- corectat validarea V81 cf. ultimei formule
+	- adaugat validarea V87
+	- corectat validarea A137.3
+	- modificat validarea A26 cf. ultimei formule
+	- modificat validarea A21.13 cf. ultimei formule
+	- modificat validarea A28 cf. ultimei formule
+	- adaugat verificare namespace XML
+	- eliminat validare cf. pattern la atributul rgCom
+	- modificat validarea A21.6 cf. ultimei formule
+	- adaugat validarea V88
+	- modificat validarea S108 cf. ultimei formule
+DUKIntegrator:
+	- adaugat versiune validator in bara de titlu a ferestrei aplicatiei
+
+08-Feb-2011 publicat J1.0.2: cu modificarile:
+DUKValidator:
+	- adaugat verificare content taguri cf. schemei XSD
+
+10-Feb-2011 publicat J1.0.3: cu modificarile:
+DUKValidator:
+	- extins verificare namespace XML la toate tagurile (nu numai la tagul radacina, ca in J1.0.1)
+	- verificat corectitudine atribute in namespace='http://www.w3.org/2001/XMLSchema-instance'
+	- impus conditia ca un CUI sa nu inceapa cu '0' (pt. conformitate cu schema)
+	- eliminat spatiile de la inceput/sfarsit atribut; astfel, atributele care contin numai spatii, devin vide si vor da eroare (atributele vide trebuie omise!)
+	- modificat numele fisierului de erori: <fisier.xml>.err.txt
+	- corectat regula A21.1 (cazul F1_suma=0 nu era tratat corect)
+
+19-Feb-2011 publicat J1.1.0: cu modificarile:
+DUKValidator:
+	- validare suplimentara date: an >= 1900; pt. conformitate cu schema
+	- verificare varsta minima asigurati: 15 ani
+	- verificare unicitate CNP pt. aceeasi sectiune sau pt. sectiuni A si B
+	- modificat validare A21.3 cf. noii formule
+	- modificat validare A21.16 cf. noii formule
+	- modificat validare A24 cf. noii formule
+	- modificat validare A40 - A61 cf. noii formule
+	- modificat validare A95 cf. noii formule
+	- modificat validare S19 cf. noii formule
+	- modificat validare S20.1 si S20.2 cf. noii formule
+	- eliminat verificare: atributul A_20 obligatoriu
+	- modificat validare S22.1 cf. noii formule
+	- modificat validare S34 cf. noii formule
+	- modificat validare S35.1, S35.2 cf. noii formule
+	- modificat validare S38 cf. noii formule, devenind S38.1 si S38.2
+	- adaugat validarea S38.3
+	- modificat validare S69 cf. noii formule
+	- modificat validare S70 cf. noii formule
+	- modificat validare S85 cf. noii formule
+	- eliminat validare S107.3 cf. noiilor reguli de validare
+	- modificat validare V9 cf. noii formule
+	- adaugat validare V89
+	- adaugat validare V90
+	- corectat validarea S86; bug pt. C_11 = 2
+	- corectat S108: rotunjirea la 2 zecimale nu era corecta
+DUKIntegrator:
+	- corectat bug legat de folosirea parametrului -c (eroare: Smart Card neselectat)
+	- modificare pt. a permite semnarea cu token-uri avand mai multe certificate: posibilitate selectie certificat
+
+24-Feb-2011 publicat J1.1.1: cu modificarile:
+DUKValidator:
+	- corectat validarea S96.1 si S96.2
+	- revizuit analiza data calendaristica: mod strict (setLenient(false))
+	- adaugat in nomenclatorul de cifAJOFM noile valori
+DUKIntegrator:
+	- corectie functie semnare cu token-uri avand mai multe certificate: certificatul se cere o singura data pe fiecare actionare a butonului "Semnare..."
+
+23-Mar-2011 publicat J1.2.0 (valabila de la 01-Apr-2011): cu modificarile:
+DUKValidator:
+	- corectat validare V85
+	- modificat validare S108: nu mai dam atentionare la 4 zecimale. Atributul D_19 va avea 2 zecimale; nu se mai accepta 4 zecimale decat pt. declaratiile pt. luna Ianuarie 2011
+	- corectat S1: la verificarea varstei minime a asiguratului se ia in considerare si luna
+	- adaugare atentionare format email
+	- adaugat validare A16
+	- adaugat validare A19.2
+	- modificat A25 cf. noii formule
+	- modificat A28 cf. noii formule
+	- numele, prenumele si data angajarii asiguratului devin obligatorii
+	- adaugare exceptie la S1: nu se verifica varsta minima pt. C_1 = 3
+	- adaugare nomenclatoare urgente medico-chirurgicale si boli infecto-contagioase la validarile S100 si S101
+	- atributele asiguratD: D_14, D_15 si D_16, D_20, D_21 devin obligatorii
+	- modificat validari V3.1 si V3.2 cf. noilor formule
+	- eliminare valoare 1 din nomenclator pt. B11_1
+	- adaugat CUI-uri AJOFM si CASAN
+	- adaugat validarile V91, V92, V93 si V94
+	- corectat validare V3.1
+DUKIntegrator:
+	- corectie functie semnare cu token-uri: evitare certificate expirate
+
+04-Apr-2011 publicat J1.2.1: cu modificarile:
+DUKValidator:
+	- modificat V92 cf. noii formule
+
+14-Apr-2011 publicat J1.2.2: cu modificarile:
+DUKValidator:
+	- modificat A21.2 cf. noii formule (s-a revenit la acceptarea lui C_1 = 2)
+	- modificat S108: se accepta 4 zecimale pt. lunile Ianuarie si Februarie 2011
+	- modificat valoare maxima angajator.C3_aj_nr si angajator.E4_aj_nr de la 999999 la 99999
+DUKIntegrator:
+	- adaugat functie verificare versiuni si download versiuni noi
+
+15-Apr-2011 publicat J1.2.3: cu modificarile:
+DUKValidator:
+	- corectat A21.2 (modificarea anterioara avea un bug)
+
+19-Apr-2011 publicat J1.2.4: cu modificarile:
+DUKValidator:
+	- modificat A21.3 cf. cerintelor ANOFM
+
+6-May-2011 publicat J1.3.0: cu modificarile:
+DUKValidator:
+	- atributul C5_subv devine obligatoriu
+	- modificat A100 cf. noii formule
+	- modificat A105 cf. noii formule
+	- modificat A128 cf. noii formule
+	- modificat A129 cf. noii formule
+	- modificat A137 cf. noii formule
+	- modificat S76.2 cf. noii formule
+	- modificat S80 cf. noilor conditii
+	- adaugat S90.2: sectiunea asiguratD nu poate aparea pentru anumite tipuri de asigurati
+	- modificat V3.2 cf. noii formule
+	- modificat V80: transformat in V80.1 si V80.2
+	- modificat V94 cf. noii formule
+	- adaugat validarea V95
+	- adaugat validarea V96
+	- adaugat validarea V98
+	- adaugat CIF CASAN pt. Braila
+
+DUKIntegrator:
+	- corectat algoritmul de selectie a certificatului valid in cazul certificatelor digitale reinnoite (bug: in unele cazuri se semna cu certificatul expirat)
+	- suport pt. SmartCard Athena
+
+10-May-2011 publicat J1.3.1: cu modificarile:
+DUKValidator:
+	- corectat V62.3 cf. formulei
+	- adaugat CIF CASAN pt. Calarasi
+	- corectat bug de la S80.1 (cf. S90.2, pt. C_1 in (17, 18, 19) trebuie sa avem C_5 = 0)
+
+1-Jun-2011 publicat J1.4.0: cu modificarile:
+DUKValidator:
+	- modificat A19.2 cf. noii formule
+	- adaugat CIF-uri CASAN cf. nomenclatorului: Covasna, Dambovita, Maramures, Neamt, Vrancea, Caras-Severin
+	- adaugat S7: asigurat.dataAng <= data raportarii
+	- adaugat S14
+	- adaugat S29
+	- modificat A130
+	- modificat A131
+	- modificat A132
+	- modificat A133
+
+DUKIntegrator:
+	- modificat algoritm semnare pt. token-uri certSign reinnoite pe acelasi alias: tratat aleatoritatea prin incercari repetate
+
+18-Jul-2011 publicat J1.5.0: cu modificarile:
+ATENTIE, PT. DEZVOLTATORII DE SOLUTII INFORMATICE BAZATE PE DUKIntegrator:
+	- modul linie de comanda permite acum validarea, crearea PDF si semnarea.
+	- apelul prin linia de comanda folosit pana in acest moment nu mai functioneaza pt. ca a aparut un parametru nou, tipul declaratiei.
+	- DUKIntegrator.jar contine acum o clasa Integrator care poate fi folosita pt. dezvoltarea de aplicatii.
+	- cititi Instructiuni.txt pt. lamuriri!
+
+DUKValidator:
+	- crearea infrastructurii pt. integrarea altor declaratii
+	- adaugat CIF-uri CASAN cf. nomenclatorului: Buzau, Giurgiu
+	- modificari pt. OUG 6/2011: modificat: A30B, S43B, S43BB, S45, S46, S46B, S46BB; adaugat: S40.2, S41.2, S42, S44.2, V99, V100; s-a adaugat motivul de scutire 3 (OUG 6/2011) la nomenclatorul de scutiri la plata contributiilor
+	- modificari pt. institutiile publice de aparare, ordine publica si siguranta nationala: modificat A21.2, A21.5, A21.25, A39, S14, S29
+	- adaugat S40.1
+	- corectat V81 (valoarea tarifului de risc pt. someri = 1%)
+
+DUKIntegrator:
+	- corectie bug algoritm semnare: nu era posibila alegerea dintre mai multe certificate valide de pe acelasi token
+	- modificare interfata grafica in vederea integrarii altor declaratii
+	- suport pt. smartCard gemalto
+	- adaugat optiuni validare pt. institutiile publice de aparare, ordine publica si siguranta nationala
+	- la apasarea butonului "Validare + creare PDF semnat" se creaza doar fisierul PDF semnat. PDF-ul nesemnat poate fi obtinut prin apasarea butonului "Validare + creare PDF".
+	- la selectarea unui folder pt. validare + creare PDF semnat a tuturor fisierelor XML din folder, daca apare o eroare de semnare, procesul se opreste (pt. a evita blocarea smartCard-ului, in cazul ca s-a introdus un pin gresit)
+
+1-Sep-2011 publicat J1.5.1: cu modificarile:
+DUKValidator:
+	- modificari pt. institutiile publice de aparare, ordine publica si siguranta nationala: se accepta declaratii fara asigurati (s-a eliminat eroarea A19.2 care aparea pt. declaratii fara nici un asigurat, dar numai pt. aceasta categorie de contribuabili).
+	- modificat formula pt. A21.6
+
+DUKIntegrator:
+	- corectie bug denumire fisier PDF: daca extensia fisierului XML continea litere mari fisierul PDF era denumit "<fisier.XML>.pdf"; acum s-a corectat si fisierul se va numi "<fisier>.pdf"
+	- corectie bug: daca la apelul din linie de comanda calea catre dist/DUKIntegrator.jar continea spatii aparea o eroarea la lansare
+	- adaugare progress bar si buton anulare la procesarea tuturor fisierelor XML dintr-un folder.
+	- in mod linie comanda, daca nu exista erori la validare dar exista erori la creare/semnare PDF, fisierul de erori va contine aceste ultime erori.
+	- corectie bug: pe platforme java pe 64 biti atat modul linie comanda cat si modul InterfataGrafica se blocau imediat dupa pornire.
+	- pe sistemele Windows pe 64 biti se poate acum semna folosind o platforma java pe 32 biti (driverele smartCard pot fi pe 32 sau 64 biti): se decomenteaza atributul 'algorithm=mscapi' din fisierul .cfg corespunzator (se sterge '#').
+
+18-Oct-2011 publicat J1.5.2: cu modificarile:
+DUKValidator:
+	- adaugat CUI Casan Ialomita.
+
+4-Nov-2011 publicat J1.5.3: cu modificarile:
+DUKValidator:
+	- corectie bug: CM cu data sfarsit 31-Oct-2011 erau gresit calculate din cauza trecerii la ora de iarna.
+
+30-Nov-2011 publicat P2.0.1: cu modificarile:
+D112Pdf:
+	- corectie bug: la generarea PDF-ului nu se atasa fisierul XML.
+
+09-Jan-2012 publicat J1.6.0: cu modificarile:
+D112Validator:
+	- adaugare validare S8.2: daca dataSf completata ea trebuie sa aiba an/luna egale cu perioada de raportare
+	- adaugare parametri pentru 2012
+	- modificare eroare A128 in atentionare
+publicat versiunea P2.0.2 pentru D112Pdf: acceptare versiuni distincte pt. creare PDF. Schimbare interfata PDF (necesita compatibilizare)
+
+31-Jan-2012 publicat J1.6.1: cu modificarile:
+D112Validator:
+	- corectie parametri pentru 2012 (valorile efective si reprezentare in cod)
+
+13-Feb-2012 publicat J1.7.0: cu modificarile:
+D112Validator:
+	- modificare eroare S59 in atentionare
+	- modificare V99: foloseste parametrul castigMedAnt
+	- adaugare cui la CASAN Mures.
+
+13-Mar-2012 publicat J1.7.1: cu modificarile:
+D112Validator:
+	- ajustare de compatibilitate (cu DECValidation.jar)
+
+19-Apr-2012 publicat J1.7.2: cu modificarile:
+D112Validator:
+	- adaugare CUI CASAN pt. SatuMare.
+
+21-Jun-2012 publicat J1.8.0: cu modificarile:
+D112Validator:
+	- modificare validare S84
+	- adaugare tip asigurat (A_1, B1_1) = 6 (un asigurat de tip militar) si modificarea in consecinta a A25, A28, A29, A31, A33, S14, S26, S29.
+
+10-Aug-2012 publicat J2.0.2: cu modificarile:
+D112Validator pentru perioade pana la 7.2012:
+	- adaugare validari: S95.3, S96.3
+	- modificare validari: S90, S100, S101.
+D112Validator pentru perioade incepand cu 7.2012:
+	- adaugare atribut tip_rec
+	- modificat nomenclator creante si modificat validari:
+		- eliminat: A21.25, A21.26
+		- adaugat: A21.30, A21.31, A21.32, A21.33, A21.34, A21.35, A21.36, A21.37, A21.38
+	- modificat nomenclator Asigurat.C_1
+	- modificat validari: A99, A103, A105, S77, S81, S82, S83, S84, S85, S86, S89, S90, S100, S101, S103, V82, V94
+	- adaugat validari: S9bb, S95.3, S96.3
+
+20-Aug-2012 publicat J2.1.0: cu modificarile:
+	- corectat bug la S90.2 - C_5 poate fi <>0 si pentru C_1 =10, 13 sau 14
+	- modificat nomenclator C5.angajator
+	- mdificat A19.2 cf. noii formule
+
+21-Aug-2012 publicat J2.1.1: cu modificarile:
+	- corectat S90.2 si pentru perioadele anterioare lunii 07.2012
+
+24-Aug-2012 publicat P2.1.0: cu modificarile:
+	- daca tip_rec <>0, se preia in fisierul PDF tipul de rectificativa
+
+04-Oct-2012 publicat J2.1.2: cu modificarile:
+	- schimbare denumire creanta 616 incepand cu 07.2012
+
+27-Nov-2012 publicat J2.1.3: cu modificarile:
+	- modificat numar zile lucaratoare (NZL) in noiembrie de la 22 la 21.
+
+31-Ian-2013 publicat J2.2.0: cu modificarile:
+	- adaugat parametrii valabili pentru ianuarie 2013.
+	- corectat validare S36 => B1_8 nu poate fi decat 0
+
+01-Mar-2013 publicat J2.3.0 cu modificarile:
+	- modificat parametri (salmin, castig_med, ajutorDeces) pentru 02.2013
+	- adaugat 2 CUI-uri (Cluj si Iasi) pt. CASAN
+
+02-Apr-2013 publicat J2.4.0 cu modificarile:
+	-modificat S8: se accepta dataSf anterioara lunii de raportare
+	-adaugat validarea S106 
+
+17-Jun-2013 publicat J2.5.0 cu modificarile:
+	- adaugat tarifele de risc valabile incepand cu 06.2013
+
+17-Jun-2013 publicat J2.5.1 cu modificarile:
+	- corectat bug la tarifele de risc valabile incepand cu 06.2013 pentru CAEN-urile care incepeau cu 0
+
+26-Jun-2013 publicat J2.5.2 cu modificarile:
+	- adaugat 6 tarife de risc care fusesera omise in versiunea anterioara
+
+26-Jul-2013 publicat versiunea J2.6.0 cu modificarile:
+	- adaugat salariu minim = 800 incepand cu 07.2013
+
+31-Jan-2014 publicat versiunea J3.0.0 cu modificarile:
+	- adaugat validari, parametri valabile incepand cu 01.2014  
+
+
+04-Feb-2014 publicat versiunea J3.1.0 cu modificarile:
+	- corectat / rezolvat bug validari S135 si A26a
+	- adaugat validarea S122.2  
+
+07-Feb-2014 publicat versiunea J3.2.0 cu modificarile:
+	- eliminat validarea S135
+
+11-Feb-2014 publicat versiunea J3.2.1 cu modificarile:
+	- corectat validarile S80.1, S137
+	- modificat lungime campuri E1_5, E3_12
+
+12-Feb-2014 publicat versiunea J3.2.2 cu modificarile:
+	- corectat formula la S137
+
+18-Feb-2014 publicat versiunea J3.3.0 cu modificarile:
+	- eliminat formula S137
+
+24-Feb-2014 publicat versiunea J3.3.1 cu modificarile:
+	- corectat validare la C1_41 (pentru unitatile speciale)
+
+12-Mar-2014 publicat versiunea J3.3.2 cu modificarile:
+	- adaugat un CIF de casa de sanatate
+
+27-Mar-2014 publicat versiunea J3.3.3 cu modificarile:
+	- corectat bug la validarea S26 pentru tip_asigurat=6
+
+28-Apr-2014 publicat versiunea J3.3.4 cu modificarile:
+	- corectat bug la B_sal - se permitea N(15) in loc de N(5)
+
+9-Mai-2014 publicat versiunea J3.4.0 cu modificarile:
+	- la creanta 6 (A21.6), nu se mai calculeaza valori negative
+	- se permite declararea de persoane mai mici de 15 ani in sectiunea C, la C_1=3,5,6,17
+
+13-Mai-2014 publicat versiunea J3.4.1 cu modificarile:
+	- corectat bug la creanta 6 aparut ca urmare a ultimei modificari
+
+11-Iul_2014 publicat versiunea 3.5.0 cu modificarile:
+	- salariul minim din iulie 2014 este 900 lei
+	
+08-Oct_2014 publicat versiunea 3.6.0 cu modificarile valabile din 10.2014:
+	- modificat parametrii CAcasN, CAcasD, CAcasS (procent CAS angajator)
+	- la nomenclatorul 2 (case de sanatate) eliminat _T si adaugat _N
+	- modificat validarile V82 si S80
+
+18-Nov-2014 publicat versiunea 3.6.1 cu modificarile:
+	- corectat CAcasA =0.258  (alte conditii de munca)
+
+23-Ian-2015 publicat versiunea J3.8.0 cu modificarile:
+	- adaugat parametri pentru 2015
+
+23-Ian-2015 publicat versiunea J3.8.1 cu modificarile:
+	- corectat bug - parametrii se aplicau , eronat, si la 12.2014
+
+02-Mar-2015 publicat versiunea J3.9.0 cu modificarile:
+	- adaugat valoarea 11 la scutiri somaj (angajator C5)
+
+30-Apr-2015 publicat versiunea J3.9.1 cu modificarile:
+	- corectat validarea S60.1 - in unele cazuri rotunjirea nu era corecta
+
+10-Mai-2015 publicat versiunea J3.9.2 cu modificarile:
+	- corectat validarea S85 - problema de rotunjire similara cu S60.1
+
+11-Jun-2015 publicat versiunea J3.9.3 cu modificarile:
+	- corectat validare CNP pentru cei nascuti pe 29.02.2000
+
+01-Jul-2015 publicat versiunea J3.10.0 cu modificarile:
+	- de la 01.07 salariul minim este de 1050 lei
+
+11-Ian-2016 publicat versiunea J3.10.1 cu modificarile:
+	- corectie la acceptarea anumitor formate de data calendaristica
+
+27-Ian-2016 publicat versiunea J3.11.0 cu modificarile:
+	- introdus paramatrii pentru anul 2016
+
+30-Mai-2016 publicat versiunea J3.12.0 cu modificarile:
+	- modificat salariul minim  din 05.2016
+	- pt. declararea consilierilor locali, s-au modificat validarile : A21.2, A21.17, A21.16, A99, A100, A101, A103, A104, S9bb, S80.4, S80.5, S81, S82, S85, S86, S89.3
+
+10-Jun-2016 publicat versiunea J3.12.1 cu modificarile:
+	- corectat A21.17 (in unele cazuri nu se facea rotunjirea corect)
+	- pt. declararea cenzorilor, membrilor in consilii, comisii, etc, s-au modificat validarile : A21.16, A24, S22, S38.1, S38.2, S38.3, S69, S70, A95
+
+13-Jun-2016 publicat versiunea J3.12.2 cu modificarile:
+	- corectat  A21.17 pt. C_1=19
+
+21-Nov-2016 publicat versiunea J3.13.0 cu modificarile:
+	- modificat validarile  S85 si V82
+	- adaugat validarea V103
+
+13-Ian-2017 publicat versiunea J3.14.0 cu modificarile:
+	- modificat validarea A95 (pt. tip asigurat=4)
+
+31-Ian-2017 publicat versiunea J3.15.0 cu modificarile:
+	- introdus parametrii pentru 01.2017
+
+07-Feb-2017 publicat versiunea J3.15.1 cu modificarile:
+	- modificat validarile S25 si S72 pentru plafonarea pt. 01.2017
+
+17-Feb-2017 publicat versiunea J3.15.2 cu modificarile:
+	- modificat valoarea castigului mediu anterior pentru raportarile / 2017
+
+20-Feb-2017 publicat versiunea J3.15.3 cu modificarile:
+	- valoarea castigului mediu anterior pentru raportarile / 2017 nu era corect implementata in versiunea J3.15.2
+
+09-Mar-2017 publicat versiunea J3.16.0 cu modificarile:
+	- actualizat parametri si validari pentru 02.2017, conform structurii publicate pe www.anaf.ro
+
+20-Mar-2017 publicat versiunea J3.16.1 cu modificarile:
+	- corectat validarea A105
+
+28-Aug-2017 publicat versiunea J3.17.0 cu modificarile:
+	- modificat formula calcul A_datorat[431]
+	- modificat validare A37
+30-Aug-2017 publicat versiunea J3.17.1 cu modificarile:
+	- corectie calcul A_datorat[431]
+24-Oct-2017 publicat versiuni J4.0.0 si P2.2.0 cf ordin 1024/1582/934/2017
+
+01-Noi-2017 publicat versiune J4.0.1 cu modificarile:
+	- modificare nomenclator sectiuni A/B ( s-a adaugat valoarea 3 )
+13-Dec-2017 publicat versiune J4.0.2 cu modificarile:
+	- corectie validare tip asigurat 3 in sectiunile A/B
+	-adaugare validari sectiunea G angajator
+14-Feb-2018 publicat versiuni J5.0.0 si P2.2.0 cf ordin  1209/999/180/2018	
+15-Feb-2018 publicat versiune J5.0.1 cu modificarile:
+	-corectie unitati speciale
+21-Feb-2018 publicat versiune J5.0.4 cu modificarile:
+	-corectie CAM unitati speciale
+27-Feb-2018 publicat versiune J5.0.5 cu modificarile:
+	-corectie sectiune C asigurat : C_10
+01-Mar-2018 publicat versiune J5.0.6 cu modificarile:
+	-corectie sectiune B3 asigurat (B3_7) pt B1_1=22
+12-Mar-2018 publicat versiune J5.0.7 conform OUG 8/2018
+30-Mar-2018 publicat versiuni J5.0.8 si P2.3.0 cu modificarile:
+	-corectie sectiune B4 ( B4_8) in validator
+	-corectie tip declaratie la generare PDF
+10-Apr-2018 publicat versiune P2.3.1 cu modificarile:
+	-corectie Tip declaratie
+12-Apr-2018 publicat versiune P2.3.2 cu modificarile:
+	-corectie Tip declaratie pt an < 2018
+22-Mai-2018 publicat versiune J6.0.0 conform ordin 1931/1615/598
+23-Mai-2018 publicat versiune J6.0.3 cu modificarile:
+	-modificare validare B4_8 
+29-Mai-2018 publicat versiune J6.0.4 cu modificarile:
+	-modificare mod calcul D3 angajator 
+30-Mai-2018 publicat versiune J6.0.5 cu modificarile:
+	-corectie validator perioada de raportare ianuarie 2018-martie 2018	
+13-Iun-2018 publicat versiune J6.0.6 cu modificarile:
+	-modificare validare S51, V106
+18-Iul-2018 publicat versiune J6.1.1 cu modificarile:
+	-modificare coduri bugetare incepand cu luna de raportare iunie 2018,
+ 	-modificare formula de calcul B4_8 incepand cu luna de raportare iulie 2018
+26-Iul-2018 publicat versiune J6.1.2 cu modificarile:
+	-corectie validare B4_8
+14-Aug-2018 publicat versiune J6.1.3 cu modificarile:
+	-corectie validare C_11 pt tip asigurat C_1=2
+24-Aug-2018 publicat versiune J6.1.4 cu modificarile:
+	-corectie validare C_11 pt tip asigurat C_1=10
+31-Aug-2018 publicat versiune J6.1.5 cu modificarile:
+	- corectat vaidari S85 si S86 
+05-Sep-2018 publicat versiune J6.1.6 si P2.3.3 cu modificarile:
+	- corectat vaidari S85 si S86 si pentru perioada 04.2018 - 06.2018
+	- corectat generator PDF pentru anul 2011

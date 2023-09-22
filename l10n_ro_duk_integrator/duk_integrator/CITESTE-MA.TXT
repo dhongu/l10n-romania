@@ -1,0 +1,12 @@
+Acest kit DUKIntegrator are incorporat un kit jre6 de java, versiune 1.6, pe 32 biti.
+
+Va recomandam sa evitati dezarhivarea si folosirea acestui kit dintr-o cale care contine spatii in numele directoarelor.
+
+Kitul poate fi folosit pe PC-uri fara java instalat: modificati fisierul dist/DUKIntegrator.bat inlocuind cele 2 aparitii ale textului '<cale_dist>' cu calea in care se gaseste folderul dist. Apoi dati dublu-click pe fisierul DUKIntegrator.bat sau creati un shortcut catre acest fisier.
+
+In cazul ca exista java instalat pe PC lansarea DUKIntegrator se face dand dublu-click pe fisierul dist/DUKIntegrator.jar. Indiferent de versiunea java instalata pe PC programul va folosi versiunea 1.6/32 biti incorporata. Acest lucru este util cand versiunea de java instalata pe PC este anterioara versiunii 1.6 sau ulterioara (si apar erori netratabile la semnarea electronica a documentelor).
+
+Va rugam sa semnalati orice dificultate intampinata la folosirea acestui kit prin formularul de contact:
+
+https://www.anaf.ro/anaf/internet/ANAF/asistenta_contribuabili/persoane_fizice/asistenta_prin_email 
+
