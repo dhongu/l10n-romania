@@ -82,8 +82,8 @@ class AccountJournal(models.Model):
         return datas
 
     @api.model
-    def _fill_missing_values(self, vals):
-        res = super()._fill_missing_values(vals)
+    def _fill_missing_values(self, vals, protected_codes=False):
+        res = super()._fill_missing_values(vals, protected_codes)
         if not vals:
             vals = {}
         if (
