@@ -12,7 +12,9 @@ class TestIntrastat(TransactionCase):
         super(TestIntrastat, self).setUp()
         self.env.user.company_id.write({"vat": "RO20603502"})
         self.intrastat = self.env["account.intrastat.code"].create(
-            {"name": "test", "code": "84221100", "suppl_unit_code": "p/st"}
+            {"name": "test", "code": "84221100",
+             # "suppl_unit_code": "p/st",
+             }
         )
 
         self.product_1 = self.env["product.product"].create(
@@ -37,7 +39,7 @@ class TestIntrastat(TransactionCase):
 
         invoice = Form(self.env["account.move"].with_context(default_type="in_invoice"))
         invoice.partner_id = partner_de
-        invoice.intrastat_transaction_id = self.env.ref("l10n_ro_intrastat.intrastat_transaction_1_1")
+        # invoice.intrastat_transaction_id = self.env.ref("l10n_ro_intrastat.intrastat_transaction_1_1")
         invoice.transport_mode_id = self.env.ref("l10n_ro_intrastat.intrastat_trmode_3")
         invoice.invoice_incoterm_id = self.env.ref("account.incoterm_EXW")
 
@@ -73,8 +75,8 @@ class TestIntrastat(TransactionCase):
         so.action_confirm()
         invoice = so._create_invoices(final=True)
         invoice = Form(invoice)
-        invoice.intrastat_transaction_id = self.env.ref("l10n_ro_intrastat.intrastat_transaction_1_1")
-        invoice.transport_mode_id = self.env.ref("l10n_ro_intrastat.intrastat_trmode_3")
+        # invoice.intrastat_transaction_id = self.env.ref("l10n_ro_intrastat.intrastat_transaction_1_1")
+        # invoice.transport_mode_id = self.env.ref("l10n_ro_intrastat.intrastat_trmode_3")
         invoice.invoice_incoterm_id = self.env.ref("account.incoterm_EXW")
 
         invoice = invoice.save()
