@@ -30,6 +30,46 @@ class IntrastatDeclaration(models.TransientModel):
     def _get_def_year(self):
         return self._get_def_monthyear()[0]
 
+    def _get_country_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.country_ver", default="2021")
+
+    def _get_eu_country_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.eu_country_ver", default="2021")
+
+    def _get_cn8(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.cn8", default="2023")
+
+    def _get_mode_of_transport_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.mode_of_transport_ver", default="2005")
+
+    def _get_delivery_terms_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.delivery_terms_ver", default="2021")
+
+    def _get_nature_of_transaction_a_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.nature_of_transaction_a_ver", default="2010")
+
+    def _get_nature_of_transaction_b_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.nature_of_transaction_b_ver", default="2010")
+
+    def _get_county_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.county_ver", default="1")
+
+    def _get_locality_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.locality_ver", default="06/2006")
+
+    def _get_unit_ver(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        return get_param("l10n_ro_intrastat_xml.unit_ver", default="1")
+
     name = fields.Char("File Name", default="intrastat.xml")
     month = fields.Selection(
         [
@@ -62,7 +102,24 @@ class IntrastatDeclaration(models.TransientModel):
     contact_id = fields.Many2one("res.partner", "Contact", domain=[("is_company", "=", False)], required=True)
     file_save = fields.Binary("Intrastat Report File", readonly=True)
     state = fields.Selection([("draft", "Draft"), ("download", "Download")], string="State", default="draft")
-    cn8 = fields.Char("CN8", size=4, required=True, default="2022")
+
+    display_versions = fields.Boolean("Display Versions", default=False)
+    cn8 = fields.Char("CN8", size=4, required=True, default=_get_cn8)
+
+    country_ver = fields.Char("CountryVer", size=4, required=True, default=_get_country_ver)
+    eu_country_ver = fields.Char("EuCountryVer", size=4, required=True, default=_get_eu_country_ver)
+    mode_of_transport_ver = fields.Char("ModeOfTransportVer", size=4, required=True, default=_get_mode_of_transport_ver)
+    delivery_terms_ver = fields.Char("DeliveryTermsVer", size=4, required=True, default=_get_delivery_terms_ver)
+    nature_of_transaction_a_ver = fields.Char(
+        "NatureOfTransactionAVer", size=4, required=True, default=_get_nature_of_transaction_a_ver
+    )
+    nature_of_transaction_b_ver = fields.Char(
+        "NatureOfTransactionBVer", size=4, required=True, default=_get_nature_of_transaction_b_ver
+    )
+    county_ver = fields.Char("CountyVer", size=4, required=True, default=_get_county_ver)
+    locality_ver = fields.Char("LocalityVer", size=4, required=True, default=_get_locality_ver)
+    unit_ver = fields.Char("UnitVer", size=4, required=True, default=_get_unit_ver)
+
     enterprise = fields.Boolean("Enterprise", default=False, compute="_compute_enterprise")
 
     def _compute_enterprise(self):
@@ -85,6 +142,19 @@ class IntrastatDeclaration(models.TransientModel):
         :return: Value for next action.
         :rtype: dict
         """
+
+        set_param = self.env["ir.config_parameter"].sudo().set_param
+        set_param("l10n_ro_intrastat_xml.country_ver", self.country_ver)
+        set_param("l10n_ro_intrastat_xml.eu_country_ver", self.eu_country_ver)
+        set_param("l10n_ro_intrastat_xml.cn8", self.cn8)
+        set_param("l10n_ro_intrastat_xml.mode_of_transport_ver", self.mode_of_transport_ver)
+        set_param("l10n_ro_intrastat_xml.delivery_terms_ver", self.delivery_terms_ver)
+        set_param("l10n_ro_intrastat_xml.nature_of_transaction_a_ver", self.nature_of_transaction_a_ver)
+        set_param("l10n_ro_intrastat_xml.nature_of_transaction_b_ver", self.nature_of_transaction_b_ver)
+        set_param("l10n_ro_intrastat_xml.county_ver", self.county_ver)
+        set_param("l10n_ro_intrastat_xml.locality_ver", self.locality_ver)
+        set_param("l10n_ro_intrastat_xml.unit_ver", self.unit_ver)
+
         decl_datas = self
         company = self.env.user.company_id
         if not (company.partner_id and company.partner_id.country_id and company.partner_id.country_id.id):
@@ -108,25 +178,25 @@ class IntrastatDeclaration(models.TransientModel):
 
         CodeVersion = ET.SubElement(decl, "InsCodeVersions")
         tag = ET.SubElement(CodeVersion, "CountryVer")
-        tag.text = "2021"
+        tag.text = self.country_ver
         tag = ET.SubElement(CodeVersion, "EuCountryVer")
-        tag.text = "2021"
+        tag.text = self.eu_country_ver
         tag = ET.SubElement(CodeVersion, "CnVer")
-        tag.text = decl_datas.cn8
+        tag.text = self.cn8
         tag = ET.SubElement(CodeVersion, "ModeOfTransportVer")
-        tag.text = "2005"
+        tag.text = self.mode_of_transport_ver
         tag = ET.SubElement(CodeVersion, "DeliveryTermsVer")
-        tag.text = "2021"
+        tag.text = self.delivery_terms_ver
         tag = ET.SubElement(CodeVersion, "NatureOfTransactionAVer")
-        tag.text = "2010"
+        tag.text = self.nature_of_transaction_a_ver
         tag = ET.SubElement(CodeVersion, "NatureOfTransactionBVer")
-        tag.text = "2010"
+        tag.text = self.nature_of_transaction_b_ver
         tag = ET.SubElement(CodeVersion, "CountyVer")
-        tag.text = "1"
+        tag.text = self.county_ver
         tag = ET.SubElement(CodeVersion, "LocalityVer")
-        tag.text = "06/2006"
+        tag.text = self.locality_ver
         tag = ET.SubElement(CodeVersion, "UnitVer")
-        tag.text = "1"
+        tag.text = self.unit_ver
 
         # Add Administration elements
         header = ET.SubElement(decl, "InsDeclarationHeader")
@@ -185,7 +255,7 @@ class IntrastatDeclaration(models.TransientModel):
         company = self.env.user.company_id
 
         mode1 = "out_invoice" if dispatchmode else "in_invoice"
-        mode2 = "in_refund" if dispatchmode else "out_refund"
+        mode2 = "out_refund" if dispatchmode else "in_refund"
 
         entries = []
         # care sunt liniile de facturi relevante pentru delcaratia de intrastat

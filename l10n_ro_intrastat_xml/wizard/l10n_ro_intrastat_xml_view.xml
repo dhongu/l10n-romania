@@ -19,7 +19,23 @@
                             <field name="contact_id" />
                         </group>
                         <group>
+                            <field name="display_versions" />
+                        </group>
+                    </group>
+                    <group states="draft">
+                        <group attrs="{'invisible': [('display_versions', '=', False)]}">
                             <field name="cn8" />
+                            <field name="country_ver" />
+                            <field name="eu_country_ver" />
+                            <field name="mode_of_transport_ver" />
+                            <field name="delivery_terms_ver" />
+                        </group>
+                        <group attrs="{'invisible': [('display_versions', '=', False)]}">
+                            <field name="nature_of_transaction_a_ver" />
+                            <field name="nature_of_transaction_b_ver" />
+                            <field name="county_ver" />
+                            <field name="locality_ver" />
+                            <field name="unit_ver" />
                         </group>
                     </group>
                     <div states="download">
@@ -52,19 +68,12 @@
             <field name="target">new</field>
         </record>
 
-<!--        <act_window-->
-<!--            id="action_intrastat_xml_declaration"-->
-<!--            name="Intrastat Declaration"-->
-<!--            res_model="intrastat_xml_declaration"-->
-<!--            view_mode="form"-->
-<!--            view_id="view_intrastat_declaration_xml"-->
-<!--            target="new"-->
-<!--        />-->
+
             <menuitem
             id="menu_intrastat"
             name="Intrastat"
-            parent="account.menu_finance_reports"
-            groups="account.group_account_manager"
+            parent="account.menu_finance_entries"
+            groups="account.group_account_invoice"
         />
 
         <menuitem
@@ -72,7 +81,7 @@
             parent="menu_intrastat"
             action="action_intrastat_xml_declaration"
             id="l10n_ro_intrastat_xml_declaration"
-            groups="account.group_account_manager"
+            groups="account.group_account_invoice"
         />
     </data>
 </odoo>
