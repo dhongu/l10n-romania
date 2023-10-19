@@ -12,9 +12,11 @@ class TestIntrastat(TransactionCase):
         super(TestIntrastat, self).setUp()
         self.env.user.company_id.write({"vat": "RO20603502"})
         self.intrastat = self.env["account.intrastat.code"].create(
-            {"name": "test", "code": "84221100",
-             # "suppl_unit_code": "p/st",
-             }
+            {
+                "name": "test",
+                "code": "84221100",
+                # "suppl_unit_code": "p/st",
+            }
         )
 
         self.product_1 = self.env["product.product"].create(

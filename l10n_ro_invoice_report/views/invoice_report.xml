@@ -207,7 +207,23 @@
                     </thead>
                     <!-- display_type -->
                     <tbody class="invoice_tbody">
-                        <t t-foreach="o.invoice_line_ids" t-as="l">
+                        <t t-set="current_subtotal" t-value="0" />
+                        <t
+                            t-set="lines"
+                            t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"
+                        />
+                        <t t-foreach="lines" t-as="l">
+
+                            <t
+                                t-set="current_subtotal"
+                                t-value="current_subtotal + l.price_subtotal"
+                                groups="account.group_show_line_subtotals_tax_excluded"
+                            />
+                            <t
+                                t-set="current_subtotal"
+                                t-value="current_subtotal + l.price_total"
+                                groups="account.group_show_line_subtotals_tax_included"
+                            />
                             <tr t-if="not l.display_type">
                                 <td>
                                     <t t-esc="nr_crt" />
@@ -296,6 +312,24 @@
                                     <span t-field="l.name" t-options="{'widget': 'text'}" />
                                 </td>
                             </tr>
+                            <tr t-if="l.display_type == 'line_section'">
+                                <td colspan="99">
+                                    <strong t-field="l.name" t-options="{'widget': 'text'}" />
+                                </td>
+                                <t t-set="current_section" t-value="l" />
+                                <t t-set="current_subtotal" t-value="0" />
+                            </tr>
+                            <t t-if="current_section and (l_last or lines[l_index+1].display_type == 'line_section')">
+                                <tr class="is-subtotal text-right">
+                                    <td colspan="99">
+                                        <strong class="mr16">Subtotal:</strong>
+                                        <span
+                                            t-esc="current_subtotal"
+                                            t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"
+                                        />
+                                    </td>
+                                </tr>
+                            </t>
                         </t>
 
                         <t t-foreach="range(nr_crt,5)" t-as="l">
