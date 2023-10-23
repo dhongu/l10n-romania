@@ -86,8 +86,8 @@
                             <strong>Share Capital:</strong>
                             <span t-esc="int(res_company.l10n_ro_share_capital)" />
                         </div>
-                        <div t-if="'vat_on_payment' in res_company._fields">
-                            <div t-if="res_company.vat_on_payment">
+                        <div t-if="'l10n_ro_vat_on_payment' in res_company.partner_id._fields">
+                            <div t-if="res_company.partner_id.l10n_ro_vat_on_payment">
                                 <span>Vat on payment</span>
                             </div>
                         </div>
