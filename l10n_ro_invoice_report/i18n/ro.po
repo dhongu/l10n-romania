@@ -388,3 +388,13 @@ msgstr "Chitanță"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "from"
 msgstr "de la"
+
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+#, python-format
+msgid "Credit Note"
+msgstr "Factura ștorno"
+
+
+
