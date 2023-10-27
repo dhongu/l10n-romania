@@ -11,8 +11,9 @@ class TestDVI(SavepointCase):
     def setUpClass(cls):
         super(TestDVI, cls).setUpClass()
 
-
-        account_expense = cls.env["account.account"].search([("code", "=", "607000")], limit=1)
+        company = cls.env.company
+        domain = [("company_id", "=", company.id),("code", "=", "607000")]
+        account_expense = cls.env["account.account"].search(domain, limit=1)
         if not account_expense:
             account_expense = cls.env["account.account"].create(
                 {
@@ -22,8 +23,8 @@ class TestDVI(SavepointCase):
                     "reconcile": False,
                 }
             )
-
-        account_income = cls.env["account.account"].search([("code", "=", "707000")])
+        domain = [("company_id", "=", company.id),("code", "=", "707000")]
+        account_income = cls.env["account.account"].search(domain, limit=1)
         if not account_income:
             account_income = cls.env["account.account"].create(
                 {
@@ -35,7 +36,8 @@ class TestDVI(SavepointCase):
             )
 
         # se poate utiliza foarte bine si  408
-        account_input = cls.env["account.account"].search([("code", "=", "371000.i")])
+        domain = [("company_id", "=", company.id),("code", "=", "371000.i")]
+        account_input = cls.env["account.account"].search(domain, limit=1)
         if not account_input:
             account_input = cls.env["account.account"].create(
                 {
@@ -47,7 +49,8 @@ class TestDVI(SavepointCase):
             )
 
         # se poate utiliza foarte bine si  418
-        account_output = cls.env["account.account"].search([("code", "=", "371000.o")])
+        domain = [("company_id", "=", company.id),("code", "=", "371000.o")]
+        account_output = cls.env["account.account"].search(domain, limit=1)
         if not account_output:
             account_output = cls.env["account.account"].create(
                 {
@@ -57,8 +60,8 @@ class TestDVI(SavepointCase):
                     "reconcile": False,
                 }
             )
-
-        account_valuation = cls.env["account.account"].search([("code", "=", "371000")])
+        domain = [("company_id", "=", company.id),("code", "=", "371000")]
+        account_valuation = cls.env["account.account"].search(domain, limit=1)
         if not account_valuation:
             account_valuation = cls.env["account.account"].create(
                 {
@@ -68,8 +71,8 @@ class TestDVI(SavepointCase):
                     "reconcile": False,
                 }
             )
-
-        account_other_tax = cls.env["account.account"].search([("code", "=", "446000")])
+        domain = [("company_id", "=", company.id),("code", "=", "446000")]
+        account_other_tax = cls.env["account.account"].search(domain, limit=1)
         if not account_other_tax:
             account_other_tax = cls.env["account.account"].create(
                 {
@@ -79,8 +82,8 @@ class TestDVI(SavepointCase):
                     "reconcile": True,
                 }
             )
-
-        account_special_funds = cls.env["account.account"].search([("code", "=", "447000")])
+        domain = [("company_id", "=", company.id),("code", "=", "447000")]
+        account_special_funds = cls.env["account.account"].search(domain, limit=1)
         if not account_special_funds:
             account_special_funds = cls.env["account.account"].create(
                 {
@@ -90,8 +93,8 @@ class TestDVI(SavepointCase):
                     "reconcile": False,
                 }
             )
-
-        stock_journal = cls.env["account.journal"].search([("code", "=", "STJ")])
+        domain = [("company_id", "=", company.id),("code", "=", "STJ")]
+        stock_journal = cls.env["account.journal"].search(domain, limit=1)
         if not stock_journal:
             stock_journal = cls.env["account.journal"].create(
                 {"name": "Stock Journal", "code": "STJ", "type": "general"}
@@ -157,7 +160,7 @@ class TestDVI(SavepointCase):
             if valuation["product_id"][0] == self.product_2.id:
                 self.assertEqual(valuation["value"], 10 * 200)
 
-        invoice = Form(self.env["account.move"].with_context(default_type="in_invoice"))
+        invoice = Form(self.env["account.move"].with_context(default_move_type="in_invoice"))
         invoice.partner_id = self.vendor
         invoice.purchase_id = po
 
