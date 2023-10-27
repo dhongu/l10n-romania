@@ -11,9 +11,6 @@ class TestDVI(SavepointCase):
     def setUpClass(cls):
         super(TestDVI, cls).setUpClass()
 
-        account_type_inc = cls.env.ref("account.data_account_type_revenue")
-        account_type_exp = cls.env.ref("account.data_account_type_expenses")
-        account_type_cur = cls.env.ref("account.data_account_type_current_assets")
 
         account_expense = cls.env["account.account"].search([("code", "=", "607000")], limit=1)
         if not account_expense:
@@ -21,7 +18,7 @@ class TestDVI(SavepointCase):
                 {
                     "name": "Expense",
                     "code": "607000",
-                    "user_type_id": account_type_exp.id,
+                    "account_type": "expense",
                     "reconcile": False,
                 }
             )
@@ -32,7 +29,7 @@ class TestDVI(SavepointCase):
                 {
                     "name": "Income",
                     "code": "707000",
-                    "user_type_id": account_type_inc.id,
+                    "account_type": "income",
                     "reconcile": False,
                 }
             )
@@ -44,7 +41,7 @@ class TestDVI(SavepointCase):
                 {
                     "name": "Income",
                     "code": "371000.i",
-                    "user_type_id": account_type_cur.id,
+                    "account_type": "asset_current",
                     "reconcile": False,
                 }
             )
@@ -56,7 +53,7 @@ class TestDVI(SavepointCase):
                 {
                     "name": "Output",
                     "code": "371000.o",
-                    "user_type_id": account_type_cur.id,
+                    "account_type": "asset_current",
                     "reconcile": False,
                 }
             )
@@ -67,7 +64,7 @@ class TestDVI(SavepointCase):
                 {
                     "name": "Valuation",
                     "code": "371000",
-                    "user_type_id": account_type_cur.id,
+                    "account_type": "asset_current",
                     "reconcile": False,
                 }
             )
@@ -78,7 +75,7 @@ class TestDVI(SavepointCase):
                 {
                     "name": "Valuation",
                     "code": "446000",
-                    "user_type_id": account_type_cur.id,
+                    "account_type": "asset_current",
                     "reconcile": True,
                 }
             )
@@ -89,7 +86,7 @@ class TestDVI(SavepointCase):
                 {
                     "name": "Valuation",
                     "code": "447000",
-                    "user_type_id": account_type_cur.id,
+                    "account_type": "asset_current",
                     "reconcile": False,
                 }
             )
