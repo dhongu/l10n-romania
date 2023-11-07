@@ -20,7 +20,7 @@ class AccountEdiFormat(models.Model):
     ####################################################
 
     def _get_ubl_values(self, invoice):
-        values = super(AccountEdiFormat, self)._get_ubl_values(invoice)
+        values = super()._get_ubl_values(invoice)
         values["payment_means_code"] = 42 if invoice.partner_bank_id else 31
         return values
 
@@ -115,7 +115,6 @@ class AccountEdiFormat(models.Model):
         return self.code == "cius_ro" or super()._needs_web_services()
 
     def _l10n_ro_post_invoice_step_1(self, invoice, attachment):
-
         access_token = invoice.company_id.l10n_ro_edi_access_token
         if invoice.company_id.l10n_ro_edi_test_mode:
             url = "https://api.anaf.ro/test/FCTEL/rest/upload"
@@ -143,7 +142,6 @@ class AccountEdiFormat(models.Model):
         return res
 
     def _l10n_ro_post_invoice_step_2(self, invoice):
-
         access_token = invoice.company_id.l10n_ro_edi_access_token
         if invoice.company_id.l10n_ro_edi_test_mode:
             url = "https://api.anaf.ro/test/FCTEL/rest/listaMesajeFactura"
@@ -210,9 +208,8 @@ class AccountEdiFormat(models.Model):
         return errors
 
     def _get_invoice_edi_content(self, move):
-
         if self.code != "cius_ro":
-            return super(AccountEdiFormat, self)._get_invoice_edi_content(move)
+            return super()._get_invoice_edi_content(move)
 
         attachment = move._get_edi_attachment(self)
         if not attachment:

@@ -9,7 +9,7 @@ from odoo.tests.common import SavepointCase
 class TestDVI(SavepointCase):
     @classmethod
     def setUpClass(cls):
-        super(TestDVI, cls).setUpClass()
+        super().setUpClass()
 
         account_type_inc = cls.env.ref("account.data_account_type_revenue")
         account_type_exp = cls.env.ref("account.data_account_type_expenses")

@@ -10,7 +10,7 @@ class ResPartner(models.Model):
 
     def _credit_debit_get(self):
         if not self.env.context.get("date_to"):
-            return super(ResPartner, self)._credit_debit_get()
+            return super()._credit_debit_get()
         else:
             tables, where_clause, where_params = (
                 self.env["account.move.line"].with_context(state="posted", company_id=self.env.company.id)._query_get()

@@ -304,7 +304,6 @@ class IntrastatDeclaration(models.TransientModel):
         invoice_lines = self.env["account.move.line"].browse(invoice_lines_ids)
 
         for inv_line in invoice_lines:
-
             invoice = inv_line.move_id
             # Check type of transaction
             if "intrastat_transaction_id" in invoice._fields:
