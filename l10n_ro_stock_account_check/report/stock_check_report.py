@@ -85,7 +85,7 @@ class StockAccountingCheck(models.TransientModel):
                       date_trunc('day',sm.date) <= %(date_to)s AND
                         ( %(all_products)s  or sm.product_id in %(products)s )
                   group by sm.product_id)
-            union
+            union all
             select product_id, 0 as svl_value, sum(aml.balance) as aml_value,
                     array[]::integer[] as svl_ids,
                     array_agg(aml.id) as aml_ids
@@ -151,7 +151,7 @@ class StockAccountingCheck(models.TransientModel):
                       date_trunc('day',sm.date) <= %(date_to)s AND
                       ( %(all_products)s  or sm.product_id in %(products)s )
                   group by sm.product_id)
-            union
+            union all
             select product_id, 0 as svl_value, sum(aml.balance) as aml_value,
                     array[]::integer[] as svl_ids,
                     array_agg(aml.id) as aml_ids
