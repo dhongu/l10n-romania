@@ -36,7 +36,7 @@ class StorageSheetReport(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        defaults = super(StorageSheetReport, self).default_get(fields_list)
+        defaults = super().default_get(fields_list)
 
         active_model = self.env.context.get("active_model", False)
         active_ids = self.env.context.get("active_ids", False)
@@ -246,7 +246,6 @@ class DailyStockReportLine(models.TransientModel):
     valuation_ids = fields.Many2many("stock.valuation.layer")
 
     def action_valuation_at_date_details(self):
-
         self.ensure_one()
 
         action = {

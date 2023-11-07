@@ -9,7 +9,7 @@ from odoo.tests import common
 @common.post_install(True)
 class TestTrialBalanceReport(common.TransactionCase):
     def setUp(self):
-        super(TestTrialBalanceReport, self).setUp()
+        super().setUp()
         group_obj = self.env["account.group"]
         acc_obj = self.env["account.account"]
         self.account100 = acc_obj.create(

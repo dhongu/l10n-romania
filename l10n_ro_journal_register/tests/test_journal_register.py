@@ -23,12 +23,8 @@ class TesJournalRegisterReport(AccountTestInvoicingCommon):
         default_account_expense = cls.company_data["default_account_expense"]
         default_account_receivable = cls.company_data["default_account_receivable"]
         default_account_payable = cls.company_data["default_account_payable"]
-        default_account_tax_sale = company.account_sale_tax_id.mapped(
-            "invoice_repartition_line_ids.account_id"
-        )
-        default_account_tax_purchase = company.account_purchase_tax_id.mapped(
-            "invoice_repartition_line_ids.account_id"
-        )
+        default_account_tax_sale = company.account_sale_tax_id.mapped("invoice_repartition_line_ids.account_id")
+        default_account_tax_purchase = company.account_purchase_tax_id.mapped("invoice_repartition_line_ids.account_id")
 
         cls.misc_journal = cls.company_data["default_journal_misc"]
 
@@ -118,9 +114,7 @@ class TesJournalRegisterReport(AccountTestInvoicingCommon):
             [
                 {
                     "move_type": "out_invoice",
-                    "invoice_date": fields.Date.from_string(
-                        time.strftime("%Y-%m") + "-01"
-                    ),
+                    "invoice_date": fields.Date.from_string(time.strftime("%Y-%m") + "-01"),
                     "date": fields.Date.from_string(time.strftime("%Y-%m") + "-01"),
                     "partner_id": cls.partner_a.id,
                     "invoice_line_ids": [
@@ -129,11 +123,7 @@ class TesJournalRegisterReport(AccountTestInvoicingCommon):
                                 "product_id": cls.product_a.id,
                                 "quantity": 5.0,
                                 "price_unit": 1000.0,
-                                "tax_ids": [
-                                    Command.set(
-                                        cls.company_data["default_tax_sale"].ids
-                                    )
-                                ],
+                                "tax_ids": [Command.set(cls.company_data["default_tax_sale"].ids)],
                             }
                         )
                     ],
@@ -149,20 +139,14 @@ class TesJournalRegisterReport(AccountTestInvoicingCommon):
                                 "product_id": cls.product_a.id,
                                 "quantity": 2.0,
                                 "price_unit": 1500.0,
-                                "tax_ids": [
-                                    Command.set(
-                                        cls.company_data["default_tax_sale"].ids
-                                    )
-                                ],
+                                "tax_ids": [Command.set(cls.company_data["default_tax_sale"].ids)],
                             }
                         )
                     ],
                 },
                 {
                     "move_type": "out_refund",
-                    "invoice_date": fields.Date.from_string(
-                        time.strftime("%Y-%m") + "-01"
-                    ),
+                    "invoice_date": fields.Date.from_string(time.strftime("%Y-%m") + "-01"),
                     "date": fields.Date.from_string(time.strftime("%Y-%m") + "-01"),
                     "partner_id": cls.partner_a.id,
                     "invoice_line_ids": [
@@ -171,20 +155,14 @@ class TesJournalRegisterReport(AccountTestInvoicingCommon):
                                 "product_id": cls.product_a.id,
                                 "quantity": 3.0,
                                 "price_unit": 1000.0,
-                                "tax_ids": [
-                                    Command.set(
-                                        cls.company_data["default_tax_sale"].ids
-                                    )
-                                ],
+                                "tax_ids": [Command.set(cls.company_data["default_tax_sale"].ids)],
                             }
                         )
                     ],
                 },
                 {
                     "move_type": "in_invoice",
-                    "invoice_date": fields.Date.from_string(
-                        time.strftime("%Y-%m") + "-01"
-                    ),
+                    "invoice_date": fields.Date.from_string(time.strftime("%Y-%m") + "-01"),
                     "date": fields.Date.from_string(time.strftime("%Y-%m") + "-01"),
                     "partner_id": cls.partner_b.id,
                     "invoice_line_ids": [
@@ -193,11 +171,7 @@ class TesJournalRegisterReport(AccountTestInvoicingCommon):
                                 "product_id": cls.product_b.id,
                                 "quantity": 10.0,
                                 "price_unit": 800.0,
-                                "tax_ids": [
-                                    Command.set(
-                                        cls.company_data["default_tax_purchase"].ids
-                                    )
-                                ],
+                                "tax_ids": [Command.set(cls.company_data["default_tax_purchase"].ids)],
                             }
                         )
                     ],

@@ -18,7 +18,6 @@ class AccountInvoiceDVI(models.TransientModel):
     tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
 
     def _prepare_custom_duty_product(self):
-
         domain = [("code", "=like", "446%")]
         account = self.env["account.account"].search(domain, limit=1)
         return {
@@ -31,7 +30,6 @@ class AccountInvoiceDVI(models.TransientModel):
         }
 
     def _prepare_customs_commission_product(self):
-
         domain = [("code", "=like", "447%")]
         account = self.env["account.account"].search(domain, limit=1)
         return {
@@ -59,7 +57,7 @@ class AccountInvoiceDVI(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        defaults = super(AccountInvoiceDVI, self).default_get(fields_list)
+        defaults = super().default_get(fields_list)
         active_id = self.env.context.get("active_id", False)
         invoice = self.env["account.move"].browse(active_id)
         defaults["date"] = invoice.invoice_date or fields.Date.today()
@@ -91,7 +89,6 @@ class AccountInvoiceDVI(models.TransientModel):
         }
         set_param = self.env["ir.config_parameter"].sudo().set_param
         if self.custom_duty:
-
             custom_duty_product = self.get_custom_duty_product()
             if not custom_duty_product:
                 vals = self._prepare_custom_duty_product()
@@ -114,7 +111,6 @@ class AccountInvoiceDVI(models.TransientModel):
             ]
 
         if self.customs_commission:
-
             customs_commission_product = self.get_customs_commission_product()
             if not customs_commission_product:
                 vals = self._prepare_customs_commission_product()

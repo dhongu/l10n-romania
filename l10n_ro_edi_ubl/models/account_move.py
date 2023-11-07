@@ -34,7 +34,7 @@ class AccountMove(models.Model):
         return "ubl_b2g_{}{}{}".format(vat or "", "_" if vat else "", re.sub(r"[\W_]", "", self.name))
 
     def _send_only_when_ready(self):
-        return super(AccountMove, self)._send_only_when_ready()
+        return super()._send_only_when_ready()
 
     def button_draft(self):
         # OVERRIDE

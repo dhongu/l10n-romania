@@ -13,7 +13,7 @@ class AbstractTest(TransactionCase):
     """Common technical tests for all reports."""
 
     def setUp(self):
-        super(AbstractTest, self).setUp()
+        super().setUp()
 
         self.model = self._getReportModel()
 
