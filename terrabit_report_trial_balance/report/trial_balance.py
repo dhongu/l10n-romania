@@ -188,7 +188,6 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
         return report
 
     def compute_data_for_report(self):
-
         self.ensure_one()
         self._inject_account_lines()
         self._compute_path()
@@ -399,7 +398,6 @@ class RomaniaTrialBalanceComputeReport(models.TransientModel):
             #         all_accounts = all_accounts.filtered(lambda a: a.user_type_id.id != sp_acc_type.id)
 
             for group in groups:
-
                 accounts = acc_res.filtered(lambda a: a.account_id.id in group.compute_account_ids.ids)
                 # if self.hide_account_without_move:
                 #     accounts = accounts.filtered(lambda a: a.debit_balance != 0 or a.credit_balance != 0)

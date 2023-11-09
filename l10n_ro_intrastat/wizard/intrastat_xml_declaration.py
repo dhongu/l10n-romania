@@ -6,6 +6,5 @@ from odoo import models
 
 
 class IntrastatDeclaration(models.TransientModel):
-
     _name = "l10n_ro_intrastat.intrastat_xml_declaration"
     _description = "Intrastat XML Declaration"

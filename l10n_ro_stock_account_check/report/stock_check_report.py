@@ -34,7 +34,7 @@ class StockAccountingCheck(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(StockAccountingCheck, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         domain = [
             ("code", "=", "371000"),
             ("company_id", "=", self.env.company.id),
@@ -366,7 +366,6 @@ class StockAccountingCheckLine(models.TransientModel):
         return []
 
     def action_purchase(self):
-
         stock_moves = self.env["stock.move"]
         purchases = self.env["purchase.order"]
         for svl in self.svl_ids:

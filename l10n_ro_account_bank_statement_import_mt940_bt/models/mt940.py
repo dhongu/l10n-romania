@@ -99,7 +99,7 @@ class MT940Parser(MT940):
 
     def __init__(self):
         """Initialize parser - override at least header_regex."""
-        super(MT940Parser, self).__init__()
+        super().__init__()
         self.mt940_type = "BT"
         self.header_lines = 1
         self.header_regex = "^{1:"  # Start of relevant data
@@ -115,7 +115,7 @@ class MT940Parser(MT940):
 
     def handle_tag_61(self, data):
         """get transaction values"""
-        super(MT940Parser, self).handle_tag_61(data)
+        super().handle_tag_61(data)
         self.current_transaction["unique_import_id"] = data
 
         re_61 = self.tag_61_regex.match(data)

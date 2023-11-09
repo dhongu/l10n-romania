@@ -11,8 +11,7 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def _prepare_picking(self):
-
-        res = super(PurchaseOrder, self)._prepare_picking()
+        res = super()._prepare_picking()
         res["origin"] = self.partner_ref or self.origin
 
         return res

@@ -29,11 +29,10 @@ class AccountBankStatementImport(models.TransientModel):
         return res
 
     def _parse_file(self, data_file):
-
         csv = self._check_csv(data_file)
 
         if not csv:
-            return super(AccountBankStatementImport, self)._parse_file(data_file)
+            return super()._parse_file(data_file)
 
         try:
             account_num, currency = csv["cont"].split(" ")

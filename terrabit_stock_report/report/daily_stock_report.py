@@ -34,7 +34,7 @@ class DailyStockReport(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(DailyStockReport, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         mode = res.get("mode", "ref")
         if mode == "product":
             today = fields.Date.context_today(self)
@@ -55,7 +55,6 @@ class DailyStockReport(models.TransientModel):
             self.date_to = self.date_range_id.date_end
 
     def do_compute(self):
-
         self.env["account.move.line"].check_access_rights("read")
 
         lines = self.env["stock.daily.stock.report.line"].search([("report_id", "=", self.id)])
@@ -104,7 +103,6 @@ class DailyStockReport(models.TransientModel):
         res = self.env.cr.fetchall()
 
         for row in res:
-
             values = {
                 key: row[0],
                 "report_id": self.id,
@@ -161,7 +159,6 @@ class DailyStockReport(models.TransientModel):
 
         res = self.env.cr.fetchall()
         for row in res:
-
             values = {
                 key: row[0],
                 "report_id": self.id,

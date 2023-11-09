@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 
 class TestStorageSheet(TransactionCase):
     def setUp(self):
-        super(TestStorageSheet, self).setUp()
+        super().setUp()
 
         self.account_difference = self.env["account.account"].search([("code", "=", "348000")])
         self.account_expense = self.env["account.account"].search([("code", "=", "607000")])

@@ -10,7 +10,7 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     def _action_done(self):
-        super(StockPicking, self)._action_done()
+        super()._action_done()
         sale_orders = self.env["sale.order"]
         for picking in self:
             if (
