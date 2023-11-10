@@ -117,7 +117,7 @@ class IntrastatDeclaration(models.TransientModel):
         "NatureOfTransactionBVer", size=4, required=True, default=_get_nature_of_transaction_b_ver
     )
     county_ver = fields.Char("CountyVer", size=4, required=True, default=_get_county_ver)
-    locality_ver = fields.Char("LocalityVer", size=4, required=True, default=_get_locality_ver)
+    locality_ver = fields.Char("LocalityVer", required=True, default=_get_locality_ver)
     unit_ver = fields.Char("UnitVer", size=4, required=True, default=_get_unit_ver)
 
     enterprise = fields.Boolean("Enterprise", default=False, compute="_compute_enterprise")
