@@ -1,7 +1,7 @@
 # ©  2008-2022 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 {
-    "name": "Romania - EDI UBL",
+    "name": "Obsolete Romania - EDI UBL",
     "license": "AGPL-3",
     "version": "14.0.0.0.5",
     "author": "Terrabit," "Odoo Community Association (OCA)",
