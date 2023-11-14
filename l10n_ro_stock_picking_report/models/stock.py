@@ -34,11 +34,11 @@ class StockPicking(models.Model):
     delegate_id = fields.Many2one("res.partner", string="Delegate")
     mean_transp = fields.Char(string="Mean transport")
 
-    notice = fields.Boolean(
-        "Is a notice",
-        states={"done": [("readonly", True)], "cancel": [("readonly", True)]},
-        default=False,
-    )
+    # l10n_ro_notice = fields.Boolean(
+    #     "Is a notice",
+    #     states={"done": [("readonly", True)], "cancel": [("readonly", True)]},
+    #     default=False,
+    # )
 
     # """
     # invoice_state = fields.Selection([("invoiced", "Invoiced"),
@@ -81,7 +81,7 @@ class StockPicking(models.Model):
     def do_print_picking(self):
         self.write({"printed": True})
         if self.picking_type_code == "incoming":
-            if self.location_dest_id.merchandise_type == "store":
+            if self.location_dest_id.l10n_ro_merchandise_type == "store":
                 res = self.env.ref("l10n_ro_stock_picking_report.action_report_reception_sale_price").report_action(
                     self
                 )
