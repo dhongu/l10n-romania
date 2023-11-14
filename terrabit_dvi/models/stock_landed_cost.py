@@ -15,7 +15,7 @@ class LandedCost(models.Model):
     tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
 
     def button_validate(self):
-        res = super(LandedCost, self).button_validate()
+        res = super().button_validate()
         get_param = self.env["ir.config_parameter"].sudo().get_param
 
         product_id = get_param("dvi.custom_duty_product_id")
@@ -30,7 +30,6 @@ class LandedCost(models.Model):
             set_param("dvi.custom_duty_product_id", custom_duty_product.id)
 
         for cost in self.filtered(lambda c: c.tax_value and c.tax_id):
-
             accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
             tax_values = cost.tax_id.compute_all(1)
             aml = [
@@ -53,7 +52,7 @@ class LandedCost(models.Model):
         return res
 
     def _check_sum(self):
-        res = super(LandedCost, self)._check_sum()
+        res = super()._check_sum()
         if not res:
             # prec_digits = self.env.company.currency_id.decimal_places
             for landed_cost in self:

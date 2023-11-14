@@ -9,10 +9,10 @@ from odoo.tests.common import SavepointCase
 class TestDVI(SavepointCase):
     @classmethod
     def setUpClass(cls):
-        super(TestDVI, cls).setUpClass()
+        super().setUpClass()
 
         company = cls.env.company
-        domain = [("company_id", "=", company.id),("code", "=", "607000")]
+        domain = [("company_id", "=", company.id), ("code", "=", "607000")]
         account_expense = cls.env["account.account"].search(domain, limit=1)
         if not account_expense:
             account_expense = cls.env["account.account"].create(
@@ -23,7 +23,7 @@ class TestDVI(SavepointCase):
                     "reconcile": False,
                 }
             )
-        domain = [("company_id", "=", company.id),("code", "=", "707000")]
+        domain = [("company_id", "=", company.id), ("code", "=", "707000")]
         account_income = cls.env["account.account"].search(domain, limit=1)
         if not account_income:
             account_income = cls.env["account.account"].create(
@@ -36,7 +36,7 @@ class TestDVI(SavepointCase):
             )
 
         # se poate utiliza foarte bine si  408
-        domain = [("company_id", "=", company.id),("code", "=", "371000.i")]
+        domain = [("company_id", "=", company.id), ("code", "=", "371000.i")]
         account_input = cls.env["account.account"].search(domain, limit=1)
         if not account_input:
             account_input = cls.env["account.account"].create(
@@ -49,7 +49,7 @@ class TestDVI(SavepointCase):
             )
 
         # se poate utiliza foarte bine si  418
-        domain = [("company_id", "=", company.id),("code", "=", "371000.o")]
+        domain = [("company_id", "=", company.id), ("code", "=", "371000.o")]
         account_output = cls.env["account.account"].search(domain, limit=1)
         if not account_output:
             account_output = cls.env["account.account"].create(
@@ -60,7 +60,7 @@ class TestDVI(SavepointCase):
                     "reconcile": False,
                 }
             )
-        domain = [("company_id", "=", company.id),("code", "=", "371000")]
+        domain = [("company_id", "=", company.id), ("code", "=", "371000")]
         account_valuation = cls.env["account.account"].search(domain, limit=1)
         if not account_valuation:
             account_valuation = cls.env["account.account"].create(
@@ -71,7 +71,7 @@ class TestDVI(SavepointCase):
                     "reconcile": False,
                 }
             )
-        domain = [("company_id", "=", company.id),("code", "=", "446000")]
+        domain = [("company_id", "=", company.id), ("code", "=", "446000")]
         account_other_tax = cls.env["account.account"].search(domain, limit=1)
         if not account_other_tax:
             account_other_tax = cls.env["account.account"].create(
@@ -82,7 +82,7 @@ class TestDVI(SavepointCase):
                     "reconcile": True,
                 }
             )
-        domain = [("company_id", "=", company.id),("code", "=", "447000")]
+        domain = [("company_id", "=", company.id), ("code", "=", "447000")]
         account_special_funds = cls.env["account.account"].search(domain, limit=1)
         if not account_special_funds:
             account_special_funds = cls.env["account.account"].create(
@@ -93,7 +93,7 @@ class TestDVI(SavepointCase):
                     "reconcile": False,
                 }
             )
-        domain = [("company_id", "=", company.id),("code", "=", "STJ")]
+        domain = [("company_id", "=", company.id), ("code", "=", "STJ")]
         stock_journal = cls.env["account.journal"].search(domain, limit=1)
         if not stock_journal:
             stock_journal = cls.env["account.journal"].create(
