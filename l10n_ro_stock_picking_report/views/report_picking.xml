@@ -33,9 +33,9 @@
                             <strong>NRC:</strong>
                             <span t-field="res_company.partner_id.nrc" />
                         </div>
-                        <div i-if="res_company.share_capital">
+                        <div i-if="res_company.l10n_ro_share_capital">
                             <strong>Share Capital:</strong>
-                            <span t-field="res_company.share_capital" />
+                            <span t-field="res_company.l10n_ro_share_capital" />
                         </div>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                 <div class="col-3 bm-2">
                     <strong>Source</strong>
                     <p>
-                        <span t-field="o.origin" />
+                        <span t-esc="o.origin and o.origin[:30]" />
                         <t t-if="not  o.origin">
                             <span t-field="o.group_id" />
                         </t>
@@ -546,7 +546,7 @@
                                             <strong>Amount</strong>
                                         </th>
                                         <t
-                                            t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'"
+                                            t-if="o.location_dest_id.l10n_ro_merchandise_type=='store' or o.location_id.l10n_ro_merchandise_type=='store'"
                                         >
                                             <th class="text-right">
                                                 <strong>Sale Price</strong>
@@ -631,7 +631,7 @@
                                             </t>
                                         </td>-->
                                         <t
-                                            t-if="o.location_dest_id.merchandise_type=='store' or o.location_id.merchandise_type=='store'"
+                                            t-if="o.location_dest_id.l10n_ro_merchandise_type=='store' or o.location_id.l10n_ro_merchandise_type=='store'"
                                         >
                                             <th class="text-right">
                                                 <span
@@ -884,7 +884,7 @@
                 <div class="col-3 bm-2" t-if="o.origin or o.group_id">
                     <strong>Origin</strong>
                     <p>
-                        <span t-field="o.origin" />
+                        <span t-esc="o.origin and o.origin[:30]" />
                         <t t-if="not  o.origin">
                             <span t-field="o.group_id" />
                         </t>
@@ -925,10 +925,10 @@
                         <span t-field="o.partner_id.city" />
                     </strong>
                 </span>
-                <t t-if="o.notice">
+                <t t-if="o.l10n_ro_notice">
                     <span>under the delivery note no.</span>
                 </t>
-                <t t-if="not o.notice">
+                <t t-if="not o.l10n_ro_notice">
                     <span>under the document no.</span>
                 </t>
                 <strong>
