@@ -17,11 +17,7 @@
                                 class="oe_inline"
                                 options="{'related_end_date': 'date_to'}"
                             />
-                            <i
-                                class="fa fa-long-arrow-right mx-2"
-                                aria-label="Arrow icon"
-                                title="Arrow"
-                            />
+                            <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow" />
                             <field
                                 name="date_to"
                                 widget="daterange"
@@ -39,12 +35,7 @@
                 </group>
 
                 <footer>
-                    <button
-                        name="button_show"
-                        string="_Apply"
-                        type="object"
-                        class="oe_highlight"
-                    />
+                    <button name="button_show" string="_Apply" type="object" class="oe_highlight" />
                     or
                     <button string="_Cancel" class="oe_link" special="cancel" />
                 </footer>

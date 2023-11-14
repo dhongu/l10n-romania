@@ -80,7 +80,6 @@ class DUKIntegrator(models.TransientModel):
         self.write({"state": "get", "error": data.get("error"), "output": data.get("output")})
 
     def do_check_local_xml(self):
-
         try:
             subprocess.Popen(
                 [_get_java_bin(), "--version"],
@@ -118,7 +117,7 @@ class DUKIntegrator(models.TransientModel):
             os.unlink(xml_file_path)
             error_file_name = xml_file_path + ".err.txt"
             if os.path.exists(error_file_name):
-                with open(error_file_name, "r") as f:
+                with open(error_file_name) as f:
                     err = f.read()
                 os.unlink(error_file_name)
 

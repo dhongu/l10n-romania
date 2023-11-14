@@ -11,7 +11,7 @@ class TestINGImport(TransactionCase):
     """Run test to import MT940 BRD import."""
 
     def setUp(self):
-        super(TestINGImport, self).setUp()
+        super().setUp()
         self.statement_import_model = self.env["account.bank.statement.import"]
         self.bank_statement_model = self.env["account.bank.statement"]
 

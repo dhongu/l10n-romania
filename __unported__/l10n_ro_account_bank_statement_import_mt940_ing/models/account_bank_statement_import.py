@@ -50,4 +50,4 @@ class AccountBankStatementImport(models.TransientModel):
             # Returning super will call next candidate:
             _logger.info(str(e))
             _logger.debug("Statement file was not a MT940 IBAN ING file.", exc_info=True)
-            return super(AccountBankStatementImport, self)._parse_file(data_file)
+            return super()._parse_file(data_file)

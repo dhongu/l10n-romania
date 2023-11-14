@@ -24,10 +24,10 @@ class AccountBankStatementImport(models.TransientModel):
                 raise UserError(_("Mixing xlsx files with other file types is not allowed."))
             if xlsx.count(True) > 1:
                 raise UserError(_("Only one xlsx file can be selected."))
-            return super(AccountBankStatementImport, self).import_file()
+            return super().import_file()
 
         if not self._check_xlsx(self.attachment_ids.name):
-            return super(AccountBankStatementImport, self).import_file()
+            return super().import_file()
         ctx = dict(self.env.context)
         import_wizard = self.env["base_import.import"].create(
             {
@@ -53,7 +53,7 @@ class AccountBankStmtImportXLSX(models.TransientModel):
     _inherit = "base_import.import"
 
     def _parse_import_data(self, data, import_fields, options):
-        data = super(AccountBankStmtImportXLSX, self)._parse_import_data(data, import_fields, options)
+        data = super()._parse_import_data(data, import_fields, options)
         statement_id = self._context.get("bank_statement_id", False)
         if not statement_id:
             return data

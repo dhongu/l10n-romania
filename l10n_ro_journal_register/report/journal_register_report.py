@@ -11,9 +11,7 @@ class JournalRegisterReport(models.TransientModel):
     _name = "l10n.ro.journal.register.report"
     _description = "JournalRegisterReport"
 
-    date_from = fields.Date(
-        string="Start Date", required=True, default=fields.Date.today
-    )
+    date_from = fields.Date(string="Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date(string="End Date", required=True, default=fields.Date.today)
 
     in_red = fields.Boolean()
@@ -28,7 +26,7 @@ class JournalRegisterReport(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(JournalRegisterReport, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         today = fields.Date.context_today(self)
         today = fields.Date.from_string(today)
 
@@ -93,7 +91,6 @@ class JournalRegisterReport(models.TransientModel):
         return action
 
     def fix_debit_credit(self, cont_d, cont_c, value_d, value_c, in_red):
-
         value = value_d - value_c
 
         if value < 0 and not in_red:
@@ -133,7 +130,6 @@ class JournalRegisterReport(models.TransientModel):
     def extract_invoice_in(self, invoice_in_ids):
         report_lines_values = []
         for invoice in invoice_in_ids:
-
             cont_p = False
             for line in invoice.line_ids:
                 if line.account_id.account_type in [
@@ -171,9 +167,7 @@ class JournalRegisterReport(models.TransientModel):
                 value_d = line.debit
                 value_c = line.credit
 
-                cont_d, cont_c, value_d, value_c = self.fix_debit_credit(
-                    cont_d, cont_c, value_d, value_c, in_red
-                )
+                cont_d, cont_c, value_d, value_c = self.fix_debit_credit(cont_d, cont_c, value_d, value_c, in_red)
 
                 report_line["debit_account_id"] = cont_d.id
                 report_line["credit_account_id"] = cont_c.id
@@ -226,9 +220,7 @@ class JournalRegisterReport(models.TransientModel):
                 value_d = line.debit
                 value_c = line.credit
 
-                cont_d, cont_c, value_d, value_c = self.fix_debit_credit(
-                    cont_d, cont_c, value_d, value_c, in_red
-                )
+                cont_d, cont_c, value_d, value_c = self.fix_debit_credit(cont_d, cont_c, value_d, value_c, in_red)
 
                 report_line["debit_account_id"] = cont_d.id
                 report_line["credit_account_id"] = cont_c.id
@@ -246,7 +238,6 @@ class JournalRegisterReport(models.TransientModel):
         l10n_ro_stock_account = self.env["ir.module.module"].sudo().search(domain)
 
         for move in account_move_ids:
-
             lines = move.line_ids.filtered(lambda m: not m.display_type)
             if not lines:
                 continue
@@ -260,9 +251,7 @@ class JournalRegisterReport(models.TransientModel):
                     # este necesar sa fe instalat modulul l10n_ro_stock_account
                     move_type = svl.l10n_ro_valued_type
 
-                if (
-                    not move_type
-                ):  # evaluari de stoc netratate prin l10n_ro_stock_account
+                if not move_type:  # evaluari de stoc netratate prin l10n_ro_stock_account
                     move_type = move.move_type
 
             if move_type == "entry" and "POSS" in move.name:
@@ -320,9 +309,7 @@ class JournalRegisterReport(models.TransientModel):
                 if not self.in_red:
                     in_red = False
 
-                cont_d, cont_c, value_d, value_c = self.fix_debit_credit(
-                    cont_d, cont_c, value_d, value_c, in_red
-                )
+                cont_d, cont_c, value_d, value_c = self.fix_debit_credit(cont_d, cont_c, value_d, value_c, in_red)
 
                 report_line["debit_account_id"] = cont_d.id
                 report_line["credit_account_id"] = cont_c.id

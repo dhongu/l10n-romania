@@ -26,7 +26,7 @@ class AccountBankStatementImport(models.TransientModel):
         except ValueError:
             # Returning super will call next candidate:
             _logger.debug("Statement file was not a MT940 IBAN BCR file.", exc_info=True)
-            return super(AccountBankStatementImport, self)._parse_file(data_file)
+            return super()._parse_file(data_file)
 
     def _post_parse_file(self, data):
         currency, account_num, all_statements = data
