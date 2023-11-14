@@ -39,7 +39,7 @@ class StockPickingCumulative(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(StockPickingCumulative, self).default_get(fields_list)
+        res = super().default_get(fields_list)
 
         today = fields.Date.context_today(self)
         today = fields.Date.from_string(today)
@@ -59,7 +59,6 @@ class StockPickingCumulative(models.TransientModel):
             self.date_to = self.date_range_id.date_end
 
     def button_show(self):
-
         datetime_from = fields.Datetime.to_datetime(self.date_from)
         datetime_from = fields.Datetime.context_timestamp(self, datetime_from)
         datetime_from = datetime_from.replace(hour=0)

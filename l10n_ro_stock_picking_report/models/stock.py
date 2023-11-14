@@ -55,7 +55,7 @@ class StockPicking(models.Model):
     # metoda locala sau se poate in 10 are alt nume
     @api.model
     def _get_invoice_vals(self, key, inv_type, journal_id, move):
-        res = super(StockPicking, self)._get_invoice_vals(key, inv_type, journal_id, move)
+        res = super()._get_invoice_vals(key, inv_type, journal_id, move)
         if inv_type == "out_invoice":
             res["delegate_id"] = move.picking_id.delegate_id.id
             res["mean_transp"] = move.picking_id.mean_transp
