@@ -148,14 +148,19 @@
         </template>
 
         <template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document" priority="100">
-            <xpath expr="//t[@t-set='address']" position="replace">
+<!--            <xpath expr="//t[@t-set='address']" position="replace">-->
+<!--                <t t-call="l10n_ro_invoice_report.header_invoice" />-->
+<!--                <div style="visibility: hidden;height:1px;">-->
+<!--                    <address />-->
+<!--                </div>-->
+<!--                &lt;!&ndash;inherited by other modules, must be present&ndash;&gt;-->
+<!--            </xpath>-->
+            <xpath expr="//div" position="replace">
                 <t t-call="l10n_ro_invoice_report.header_invoice" />
                 <div style="visibility: hidden;height:1px;">
-                    <address />
+                    <div class="row" />
                 </div>
-                <!--inherited by other modules, must be present-->
             </xpath>
-
             <xpath expr="//div[@id='informations']" position="attributes">
                 <attribute name="class">row mt-1 mb-1</attribute>
             </xpath>
@@ -185,8 +190,6 @@
                     <t t-set="currency_id" t-value="o.currency_id" />
                 </t>
                 <t t-set="nr_crt" t-value="1" />
-                <!--                        <t t-if="with_discount_distinct">Cu discount</t>-->
-                <!--                        <t t-if="not with_discount_distinct">Fara discount</t>-->
                 <table class="table table-sm o_main_table" name="invoice_line_table">
                     <thead>
                         <tr>
@@ -200,6 +203,12 @@
                                 groups="product.group_discount_per_so_line"
                             >Discount (%)
                             </th>
+<!--                            <th-->
+<!--                                class="text-right"-->
+<!--                                t-if="with_discount(o) and with_discount_distinct"-->
+<!--                                groups="product.group_discount_per_so_line"-->
+<!--                            >Discounted price-->
+<!--                            </th>-->
                             <th class="text-right">Amount</th>
                             <th class="text-right">Tax</th>
                             <th class="text-right">Taxes</th>
@@ -213,7 +222,6 @@
                             t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"
                         />
                         <t t-foreach="lines" t-as="l">
-
                             <t
                                 t-set="current_subtotal"
                                 t-value="current_subtotal + l.price_subtotal"
@@ -224,12 +232,12 @@
                                 t-value="current_subtotal + l.price_total"
                                 groups="account.group_show_line_subtotals_tax_included"
                             />
-                            <tr t-if="not l.display_type">
+                            <tr t-if="l.display_type == 'product'">
                                 <td>
                                     <t t-esc="nr_crt" />
                                     <t t-set="nr_crt" t-value="nr_crt + 1" />
                                 </td>
-                                <td id="product_name">
+                                <td>
                                     <span t-field="l.name" />
                                 </td>
                                 <td class="text-right">
@@ -271,6 +279,14 @@
                                 >
                                     <span t-field="l.discount" />
                                 </td>
+<!--                                <td-->
+<!--                                    class="text-right"-->
+<!--                                    t-if="with_discount(o) and with_discount_distinct"-->
+<!--                                    groups="product.group_discount_per_so_line"-->
+<!--                                >-->
+<!--                                    <t t-set="price_w_discount" t-value="price_unit_without_taxes - (price_unit_without_taxes * l.discount / 100)" />-->
+<!--                                    <span t-esc="price_w_discount" t-options='{"widget": "float", "precision": 2}' />-->
+<!--                                </td>-->
                                 <td class="text-right">
                                     <t t-set="price_subtotal" t-value="l.price_subtotal" />
                                     <t t-if="o.move_type == 'out_refund'">
@@ -320,9 +336,9 @@
                                 <t t-set="current_subtotal" t-value="0" />
                             </tr>
                             <t t-if="current_section and (l_last or lines[l_index+1].display_type == 'line_section')">
-                                <tr class="is-subtotal text-right">
+                                <tr class="is-subtotal text-end">
                                     <td colspan="99">
-                                        <strong class="mr16">Subtotal:</strong>
+                                        <strong class="mr16">Subtotal</strong>
                                         <span
                                             t-esc="current_subtotal"
                                             t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"
@@ -332,24 +348,21 @@
                             </t>
                         </t>
 
-                        <t t-foreach="range(nr_crt,5)" t-as="l">
-                            <tr>
-                                <td>
-                                    <br />
-                                </td>
-                                <td />
-                                <td class="text-right" />
-                                <td class="text-right" />
-                                <td
-                                    class="text-right"
-                                    t-if="with_discount(o) and with_discount_distinct"
-                                    groups="product.group_discount_per_so_line"
-                                />
-                                <td class="text-right" />
-                                <td class="text-right" />
-                                <td class="text-right" />
-                            </tr>
-                        </t>
+<!--                         <t t-foreach="range(nr_crt,5)" t-as="l">-->
+<!--                             <tr>-->
+<!--                                 <td><br/></td>-->
+<!--                            <td/>-->
+<!--                            <td class="text-right"/>-->
+<!--                            <td class="text-right"/>-->
+<!--                            <td-->
+<!--                                class="text-right"-->
+<!--                                t-if="with_discount(o) and with_discount_distinct"-->
+<!--                                groups="product.group_discount_per_so_line"-->
+<!--                            />-->
+<!--                            <td class="text-right"/>-->
+<!--                            <td class="text-right"/>-->
+<!--                            <td class="text-right"/></tr>-->
+<!--                         </t>-->
                     </tbody>
                 </table>
             </xpath>
