@@ -1,38 +1,70 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
-        <report
-            string="Payment"
-            id="action_report_statement_line"
-            model="account.bank.statement.line"
-            report_type="qweb-pdf"
-            name="l10n_ro_invoice_report.report_statement_line"
-            file="l10n_ro_invoice_report.report_statement_line"
-        />
-        <report
-            string="Voucher"
-            id="action_report_statement_voucher"
-            model="account.bank.statement.line"
-            report_type="qweb-pdf"
-            name="l10n_ro_invoice_report.report_statement_voucher"
-            file="l10n_ro_invoice_report.report_statement_voucher"
-        />
-        <report
-            string="Cash collection"
-            id="action_report_statement_collection"
-            model="account.bank.statement.line"
-            report_type="qweb-pdf"
-            name="l10n_ro_invoice_report.report_statement_collection"
-            file="l10n_ro_invoice_report.report_statement_collection"
-        />
-        <report
-            string="Payment disposal"
-            id="action_report_statement_payment"
-            model="account.bank.statement.line"
-            report_type="qweb-pdf"
-            name="l10n_ro_invoice_report.report_statement_payment"
-            file="l10n_ro_invoice_report.report_statement_payment"
-        />
+<!--        <report-->
+<!--            string="Payment"-->
+<!--            id="action_report_statement_line"-->
+<!--            model="account.bank.statement.line"-->
+<!--            report_type="qweb-pdf"-->
+<!--            name="l10n_ro_invoice_report.report_statement_line"-->
+<!--            file="l10n_ro_invoice_report.report_statement_line"-->
+<!--        />-->
+        <record id="action_report_statement_line" model="ir.actions.report">
+            <field name="name">Payment</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_statement_line</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_line</field>
+            <field name="binding_type">report</field>
+        </record>
+<!--        <report-->
+<!--            string="Voucher"-->
+<!--            id="action_report_statement_voucher"-->
+<!--            model="account.bank.statement.line"-->
+<!--            report_type="qweb-pdf"-->
+<!--            name="l10n_ro_invoice_report.report_statement_voucher"-->
+<!--            file="l10n_ro_invoice_report.report_statement_voucher"-->
+<!--        />-->
+        <record id="action_report_statement_voucher" model="ir.actions.report">
+            <field name="name">Voucher</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_statement_voucher</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_voucher</field>
+            <field name="binding_type">report</field>
+        </record>
+<!--        <report-->
+<!--            string="Cash collection"-->
+<!--            id="action_report_statement_collection"-->
+<!--            model="account.bank.statement.line"-->
+<!--            report_type="qweb-pdf"-->
+<!--            name="l10n_ro_invoice_report.report_statement_collection"-->
+<!--            file="l10n_ro_invoice_report.report_statement_collection"-->
+<!--        />-->
+        <record id="action_report_statement_collection" model="ir.actions.report">
+            <field name="name">Cash collection</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_statement_collection</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_collection</field>
+            <field name="binding_type">report</field>
+        </record>
+<!--        <report-->
+<!--            string="Payment disposal"-->
+<!--            id="action_report_statement_payment"-->
+<!--            model="account.bank.statement.line"-->
+<!--            report_type="qweb-pdf"-->
+<!--            name="l10n_ro_invoice_report.report_statement_payment"-->
+<!--            file="l10n_ro_invoice_report.report_statement_payment"-->
+<!--        />-->
+        <record id="action_report_statement_payment" model="ir.actions.report">
+            <field name="name">Payment disposal</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_statement_payment</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_payment</field>
+            <field name="binding_type">report</field>
+        </record>
         <template id="report_statement_voucher">
             <t t-set="type" t-value="'voucher'" />
             <t t-call="l10n_ro_invoice_report.report_statement_print" />
@@ -88,9 +120,9 @@
                                         <strong>NRC:</strong>
                                         <span t-field="res_company.partner_id.nrc" />
                                     </div>
-                                    <div i-if="res_company.share_capital">
+                                    <div i-if="res_company.l10n_ro_share_capital">
                                         <strong>Share Capital:</strong>
-                                        <span t-field="res_company.share_capital" />
+                                        <span t-field="res_company.l10n_ro_share_capital" />
                                     </div>
                                 </div>
                                 <div class="col-5 col-offset-2">

@@ -1,21 +1,23 @@
 <?xml version="1.0" ?>
 <odoo>
     <data>
-        <report
-            string="Voucher"
-            id="action_report_voucher"
-            model="account.voucher"
-            report_type="qweb-pdf"
-            name="l10n_ro_invoice_report.report_voucher"
-            file="l10n_ro_invoice_report.report_voucher"
-        />
-        <report
-            string="Voucher / Payment"
-            id="action_report_payment"
-            model="account.payment"
-            report_type="qweb-pdf"
-            name="l10n_ro_invoice_report.report_payment"
-            file="l10n_ro_invoice_report.report_payment"
-        />
+
+        <record id="action_report_voucher" model="ir.actions.report">
+            <field name="name">Voucher</field>
+            <field name="model">account.voucher</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_voucher</field>
+            <field name="report_file">l10n_ro_invoice_report.report_voucher</field>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="action_report_payment" model="ir.actions.report">
+            <field name="name">Voucher / Payment</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_ro_invoice_report.report_payment</field>
+            <field name="report_file">l10n_ro_invoice_report.report_payment</field>
+            <field name="binding_type">report</field>
+        </record>
     </data>
 </odoo>
