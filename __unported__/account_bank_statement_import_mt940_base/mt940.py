@@ -83,7 +83,7 @@ def handle_common_subfields(transaction, subfields):
         transaction["ref"] = "".join(subfields[transaction["ref"]])
 
 
-class MT940(object):
+class MT940:
     """Inherit this class in your account_banking.parsers.models.parser,
     define functions to handle the tags you need to handle and adjust static
     variables as needed.

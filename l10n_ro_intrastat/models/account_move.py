@@ -22,7 +22,7 @@ class AccountMove(models.Model):
 
     @api.onchange("partner_id")
     def _onchange_partner_id(self):
-        res = super(AccountMove, self)._onchange_partner_id()
+        res = super()._onchange_partner_id()
         if self.partner_id.country_id.intrastat:
             self.intrastat_country_id = self.partner_id.country_id
         else:

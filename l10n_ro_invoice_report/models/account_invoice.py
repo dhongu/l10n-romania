@@ -31,7 +31,7 @@ class AccountInvoice(models.Model):
 
     @api.model
     def default_get(self, fields_list):
-        defaults = super(AccountInvoice, self).default_get(fields_list)
+        defaults = super().default_get(fields_list)
         if "delegate_id" not in defaults:
             if "default_delegate_id" in self.env.context:
                 defaults["default_delegate_id"] = defaults["default_delegate_id"]
@@ -50,7 +50,7 @@ class AccountInvoice(models.Model):
                 invoice.state = "open"
                 # invoice.write({'state':'open'})
 
-        return super(AccountInvoice, self).action_invoice_cancel()
+        return super().action_invoice_cancel()
 
     def set_origin_with_picking(self):
         for invoice in self:
@@ -72,7 +72,7 @@ class AccountInvoice(models.Model):
                 invoice.write({"invoice_origin": origin})
 
     def _get_reconciled_vals(self, partial, amount, counterpart_line):
-        values = super(AccountInvoice, self)._get_reconciled_vals(partial, amount, counterpart_line)
+        values = super()._get_reconciled_vals(partial, amount, counterpart_line)
         values.update(
             {
                 "journal_type": counterpart_line.journal_id.type,

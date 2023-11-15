@@ -42,7 +42,7 @@ class AccountIntrastatCode(models.Model):
             ("name", operator, name),
             ("description", operator, name),
         ]
-        return super(AccountIntrastatCode, self).search(domain, limit=limit).name_get()
+        return super().search(domain, limit=limit).name_get()
 
     _sql_constraints = [
         (

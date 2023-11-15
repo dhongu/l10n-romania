@@ -20,7 +20,6 @@ class StockPickingCumulative(models.TransientModel):
     partner_id = fields.Many2one("res.partner")
     note = fields.Char()
 
-    date_range_id = fields.Many2one("date.range", string="Date range")
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
     company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
@@ -39,7 +38,7 @@ class StockPickingCumulative(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(StockPickingCumulative, self).default_get(fields_list)
+        res = super().default_get(fields_list)
 
         today = fields.Date.context_today(self)
         today = fields.Date.from_string(today)
@@ -51,15 +50,7 @@ class StockPickingCumulative(models.TransientModel):
         res["date_to"] = fields.Date.to_string(to_date)
         return res
 
-    @api.onchange("date_range_id")
-    def onchange_date_range_id(self):
-        """Handle date range change."""
-        if self.date_range_id:
-            self.date_from = self.date_range_id.date_start
-            self.date_to = self.date_range_id.date_end
-
     def button_show(self):
-
         datetime_from = fields.Datetime.to_datetime(self.date_from)
         datetime_from = fields.Datetime.context_timestamp(self, datetime_from)
         datetime_from = datetime_from.replace(hour=0)

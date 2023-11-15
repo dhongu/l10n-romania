@@ -35,7 +35,7 @@ class ResPartner(models.Model):
         if vals.get("state_id") and not isinstance(vals["state_id"], int):
             vals["state_id"] = vals["state_id"].id
 
-        partner = super(ResPartner, self).create(vals)
+        partner = super().create(vals)
         return partner
 
     def button_get_partner_data(self):
