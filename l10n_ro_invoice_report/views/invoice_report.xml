@@ -41,9 +41,9 @@
             <div id="address" class="address row">
                 <div name="information_block" class="col-6">
                     <div>
-                        <strong t-if="o.move_type in ['out_invoice', 'out_refund']">Supplier
+                        <strong t-if="o.move_type in ['out_invoice', 'out_refund']">Supplier:
                         </strong>
-                        <strong t-if="o.move_type in ['in_invoice', 'in_refund']">Customer
+                        <strong t-if="o.move_type in ['in_invoice', 'in_refund']">Customer:
                         </strong>
                     </div>
                     <strong t-field="res_company.partner_id.name" />
@@ -60,9 +60,9 @@
                 </div>
                 <div class="col-5 offset-1">
                     <div>
-                        <strong t-if="o.move_type in ['out_invoice', 'out_refund']">Customer
+                        <strong t-if="o.move_type in ['out_invoice', 'out_refund']">Customer:
                         </strong>
-                        <strong t-if="o.move_type in ['in_invoice', 'in_refund']">Supplier
+                        <strong t-if="o.move_type in ['in_invoice', 'in_refund']">Supplier:
                         </strong>
                     </div>
                     <div id='partner_name'>
@@ -207,10 +207,14 @@
                     <t t-if="o.move_type == 'out_invoice'">
                         <strong>Deliveries:</strong>
                     </t>
-                    <p class="m-0" t-foreach="pickings" t-as="d">
+                    <span class="m-0" t-foreach="pickings" t-as="d">
                         <span t-field="d.name" />
-                    </p>
+                    </span>
                 </div>
+            </xpath>
+
+            <xpath expr="//h2/span[4]" position="after">
+                <span t-if="o.move_type == 'out_refund' and o.state == 'cancel'">Cancelled</span>
             </xpath>
 
 
