@@ -299,12 +299,12 @@
 
             <xpath expr="//div[@id='total']/div" position="replace">
                 <div class="col-8" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
-                    <table id="signature" class="table table-sm">
-                        <tr class="border-black">
+                    <table id="signature" class="table table-sm" style="page-break-inside: avoid;">
+                        <tr class="border-black" style="">
                             <td>Elaborate:</td>
                             <td>Information for delivery:</td>
                         </tr>
-                        <tr class="border-black">
+                        <tr class="border-black o_total">
                             <td>
                                 <span>Name:</span>
                                 <span t-field="o.user_id" />
@@ -324,6 +324,7 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr/>  <!-- empty row for white color-->
                     </table>
                 </div>
                 <div class="col-4">
@@ -360,7 +361,7 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr class="border-black">
+                        <tr class="border-black o_total">
                             <td>
                                 <strong>Total</strong>
                             </td>
