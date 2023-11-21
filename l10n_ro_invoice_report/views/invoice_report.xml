@@ -355,13 +355,13 @@
             </xpath>
 
             <xpath expr="//div[@id='total']/div" position="replace">
-                <div class="col-7" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
-                    <table id="signature" class="table table-sm">
-                        <tr class="border-black">
+                <div class="col-8" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
+                    <table id="signature" class="table table-sm" style="page-break-inside: avoid;">
+                        <tr class="border-black" style="">
                             <td>Elaborate:</td>
                             <td>Information for delivery:</td>
                         </tr>
-                        <tr class="border-black">
+                        <tr class="border-black o_total">
                             <td>
                                 <span>Name:</span>
                                 <span t-field="o.user_id" />
@@ -381,6 +381,7 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr/>  <!-- empty row for white color-->
                     </table>
                 </div>
                 <div class="col-5">
@@ -414,9 +415,7 @@
                     <t t-set="payments_vals" t-value="o.sudo()._get_reconciled_info_JSON_values()" />
                     <br />
                     <br />
-
                     <div t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
-
                         <t t-if="payment_vals['journal_type']=='cash'">
                             <div>
                                 <strong t-field="res_company.partner_id.name" />

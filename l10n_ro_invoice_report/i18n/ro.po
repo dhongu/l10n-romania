@@ -192,7 +192,7 @@ msgstr "Linie extras bacă"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Cancelled"
-msgstr "anulată"
+msgstr "Anulată"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_collection
@@ -251,7 +251,7 @@ msgid ""
 "                        subsequent amendments."
 msgstr ""
 "Factură valabilă fără semnatură şi ştampilă cf. art.V, alin (2) din "
-"Ordonanţa nr.17/2015, art. 319 alin (29) dinLegea nr. 227/2015 privind Codul"
+"Ordonanța nr.17/2015, art. 319 alin (29) dinLegea nr. 227/2015 privind Codul"
 " fiscal și modificările ulterioare."
 
 #. module: l10n_ro_invoice_report
@@ -395,6 +395,3 @@ msgstr "de la"
 #, python-format
 msgid "Credit Note"
 msgstr "Factura ștorno"
-
-
-
