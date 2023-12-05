@@ -386,7 +386,7 @@
                 </div>
                 <div class="col-5">
                     <t t-set="tax_totals" t-value="json.loads(o.tax_totals_json)" />
-                    <table class="table table-sm" style="page-break-inside: avoid;">
+                    <table class="table-sm" style="page-break-inside: avoid; width: 80%">
                         <t t-call="account.document_tax_totals" />
                     </table>
                 </div>
