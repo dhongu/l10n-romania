@@ -97,6 +97,12 @@ class MT940Parser(MT940):
         r"(?P<reference>\w{1,50})"
     )
 
+    tag_86_regex = re.compile(
+        r"(?P<desc>[\w\s]+)\s+"  # Descrierea tranzactiei
+        r"(?P<partner_name>[\w\s\S]+)\s+"  # Numele companiei
+        r"(?P<account_number>\b[A-Z]{2}\d{2}[A-Z0-9]{1,30}\b)"  # IBAN
+    )
+
     def __init__(self):
         """Initialize parser - override at least header_regex."""
         super().__init__()
@@ -123,10 +129,17 @@ class MT940Parser(MT940):
             raise ValueError("Cannot parse %s" % data)
         parsed_data = re_61.groupdict()
         self.current_transaction["amount"] = str2amount(parsed_data["sign"], parsed_data["amount"])
-        self.current_transaction["ref"] = parsed_data["reference"]
+        self.current_transaction["narration"] = parsed_data["reference"]
+
 
     def handle_tag_86(self, data):
         """Parse 86 tag containing reference data."""
-        if not self.current_transaction.get("name", ""):
-            self.current_transaction["name"] = data
-        self.current_transaction["name"] = data
+        re_86 = self.tag_86_regex.match(data)
+        if re_86:
+            parsed_data = re_86.groupdict()
+            self.current_transaction["partner_name"] = parsed_data["partner_name"]
+            self.current_transaction["account_number"] = parsed_data["account_number"]
+
+        if not self.current_transaction.get("payment_ref", ""):
+            self.current_transaction["payment_ref"] = data
+
