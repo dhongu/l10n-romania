@@ -123,7 +123,7 @@ class MT940Parser(MT940):
             raise ValueError("Cannot parse %s" % data)
         parsed_data = re_61.groupdict()
         self.current_transaction["amount"] = str2amount(parsed_data["sign"], parsed_data["amount"])
-        self.current_transaction["note"] = parsed_data["reference"]
+        self.current_transaction["ref"] = parsed_data["reference"]
 
     def handle_tag_86(self, data):
         """Parse 86 tag containing reference data."""
