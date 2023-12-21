@@ -4,7 +4,7 @@
 {
     "name": "Romania - Localization Config",
     "summary": "Romania - Localization Install and Config Applications",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "category": "Localization",
     "author": "Forest and Biomass Services Romania, " "Terrabit, " "Odoo Community Association (OCA)",
     "website": "https://www.forbiom.eu",
