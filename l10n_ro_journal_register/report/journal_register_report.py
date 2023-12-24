@@ -138,7 +138,7 @@ class JournalRegisterReport(models.TransientModel):
                 ]:
                     cont_p = line.account_id
 
-            for line in invoice.line_ids.filtered(lambda m: not m.display_type):
+            for line in invoice.line_ids.filtered(lambda m: m.display_type == "product"):
                 cont_l = line.account_id
                 if cont_l == cont_p:
                     continue
@@ -189,7 +189,7 @@ class JournalRegisterReport(models.TransientModel):
                 ]:
                     cont_p = line.account_id
 
-            for line in invoice.line_ids.filtered(lambda m: not m.display_type):
+            for line in invoice.line_ids.filtered(lambda m: m.display_type == "product"):
                 cont_l = line.account_id
                 if cont_l == cont_p:
                     continue
@@ -238,7 +238,7 @@ class JournalRegisterReport(models.TransientModel):
         l10n_ro_stock_account = self.env["ir.module.module"].sudo().search(domain)
 
         for move in account_move_ids:
-            lines = move.line_ids.filtered(lambda m: not m.display_type)
+            lines = move.line_ids.filtered(lambda m: m.display_type == "product")
             if not lines:
                 continue
             line = lines[-1]
