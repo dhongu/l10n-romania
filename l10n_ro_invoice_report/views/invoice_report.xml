@@ -43,7 +43,7 @@
                             <div>
                                 <strong>Address:</strong>
                                 <address t-field="res_company.partner_id"
-                                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
+                                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
                             </div>
 
                             <t t-set="partner_id" t-value="res_company.partner_id"/>
@@ -61,7 +61,7 @@
                             <div>
                                 <strong>Address:</strong>
                                 <address t-field="o.commercial_partner_id"
-                                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
+                                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
                             </div>
 
                             <t t-set="partner_id" t-value="o.commercial_partner_id"/>
@@ -286,7 +286,7 @@
                                 <span t-field="o.reference"/>
                             </div>
                         </div>
-                        <table class="table table-condensed table-bordered" style="margin-top:50px;">
+                        <table class="table table-condensed table-bordered" style="margin-top:150px;">
                             <thead>
                                 <tr>
                                     <th>Ord</th>
