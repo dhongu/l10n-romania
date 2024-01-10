@@ -131,7 +131,6 @@ class MT940Parser(MT940):
         self.current_transaction["amount"] = str2amount(parsed_data["sign"], parsed_data["amount"])
         self.current_transaction["narration"] = parsed_data["reference"]
 
-
     def handle_tag_86(self, data):
         """Parse 86 tag containing reference data."""
         re_86 = self.tag_86_regex.match(data)
@@ -142,4 +141,3 @@ class MT940Parser(MT940):
 
         if not self.current_transaction.get("payment_ref", ""):
             self.current_transaction["payment_ref"] = data
-
