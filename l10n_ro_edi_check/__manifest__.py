@@ -9,6 +9,7 @@
     "category": "Tools",
     "depends": [
         "l10n_ro_account_edi_ubl",
+        "queue_job",
     ],
     "data": [],
     "installable": True,
