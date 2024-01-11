@@ -10,7 +10,10 @@
     "depends": [
         "l10n_ro_account_edi_ubl",
         "queue_job",
+        "queue_job_cron_jobrunner",
     ],
-    "data": [],
+    "data": [
+        "data/cron.xml",
+    ],
     "installable": True,
 }

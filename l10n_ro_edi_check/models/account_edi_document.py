@@ -27,4 +27,7 @@ class AccountEdiDocument(models.Model):
         for edi_document in edi_documents:
             edi_document.with_delay()._process_documents_web_services()
 
+        self.env.ref('queue_job_cron_jobrunner.queue_job_cron')._trigger()
+
+
 
