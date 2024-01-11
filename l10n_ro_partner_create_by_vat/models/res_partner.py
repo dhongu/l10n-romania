@@ -224,7 +224,7 @@ class ResPartner(models.Model):
                 ("name", "=ilike", odoo_result["city"])]
             odoo_result["city_id"] = self.env["res.city"].search(domain, limit=1).id
 
-        if odoo_result["state_id"] == self.env.ref("l10n_ro.RO_B"):
+        if odoo_result["state_id"] == self.env.ref("l10n_ro.RO_B").id:
             if odoo_result.get("codPostal") and odoo_result["codPostal"][0] != "0":
                 odoo_result["codPostal"] = "0" + odoo_result["codPostal"]
 
@@ -256,7 +256,6 @@ class ResPartner(models.Model):
                 city = city.replace(tag, "")
             return city.strip().title()
 
-        state = False
         if result.get("adresa"):
             for tag in [
                 "ddenumire_Strada",
@@ -278,13 +277,12 @@ class ResPartner(models.Model):
             result["street"] = result["street"].strip().title()
             result["street2"] = result.get("ddetalii_Adresa", " ").strip().title()
             result["city"] = get_city(result.get("ddenumire_Localitate"))
-            state_name = get_city(result.get("ddenumire_Judet"))
-            if state_name:
-                state = self.env["res.country.state"].search(
-                    [("name", "=", state_name)],
-                    limit=1,
-                )
-        result["state_id"] = state.id if state else None
+            state_code = result.get('dcod_JudetAuto')
+            if state_code:
+                state = self.env["res.country.state"].search([
+                    ('code', '=', state_code),
+                    ('country_id', '=', self.env.ref('base.ro').id)])
+                result["state_id"] = state[0].id if state else None
         return result
 
     @api.model
