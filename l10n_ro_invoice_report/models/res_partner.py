@@ -9,3 +9,4 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     info_for_invoice = fields.Html(string="Additional info for invoice")
+    mean_transp = fields.Char(string="Mean transport")
