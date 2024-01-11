@@ -4,7 +4,7 @@
 
 
 
-from odoo import models, api
+from odoo import models, api, fields
 
 import logging
 
@@ -26,6 +26,16 @@ class AccountEdiDocument(models.Model):
 
         for edi_document in edi_documents:
             edi_document.with_delay()._process_documents_web_services()
+
+        domain = [
+            ('state', 'in', ('to_send', 'to_cancel')),
+            ('move_id.state', '=', 'posted'),
+            ("blocking_level", "=", "error"),
+            ("write_date", "<", fields.Date.today())
+        ]
+        edi_documents = self.search(domain)
+        if edi_documents:
+            edi_documents.write({"blocking_level": False})
 
         self.env.ref('queue_job_cron_jobrunner.queue_job_cron')._trigger()
 
