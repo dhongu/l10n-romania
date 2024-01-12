@@ -31,3 +31,14 @@ class AccountMove(models.Model):
                     errors_text = "\n".join(errors)
                     raise UserError(errors_text)
         return res
+
+
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    def _get_computed_price_unit(self):
+        self.ensure_one()
+        if self.move_id.move_type not in ["in_invoice", "in_refund"] or not self.move_id.l10n_ro_edi_download:
+            return super()._get_computed_price_unit()
+        else:
+            return self.price_unit
