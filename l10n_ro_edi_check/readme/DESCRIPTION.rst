@@ -1,1 +1,3 @@
-Verificare date pentru trimitere ANAF la validarea facturii
+ - Verificare date pentru trimitere ANAF la validarea facturii
+ - Implementare cu coada job-uri
+ - Dezactivare recalculare pret unitar la facuri furnizor cu ID eFactura

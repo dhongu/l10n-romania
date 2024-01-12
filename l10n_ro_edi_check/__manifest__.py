@@ -1,9 +1,9 @@
 # ©  2024-now Dan Stoica <danila(@)terrabit(.)ro
 # See README.rst file on addons root folder for license details
 {
-    "name": "Romania - EDI data check",
+    "name": "Romania - EDI data check and queue",
     "license": "AGPL-3",
-    "version": "14.0.0.0.1",
+    "version": "14.0.0.0.2",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",
