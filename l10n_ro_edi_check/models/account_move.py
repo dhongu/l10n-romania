@@ -1,7 +1,7 @@
 # ©  2024-now Dan Stoica <danila(@)terrabit(.)ro
 # See README.rst file on addons root folder for license details
 
-from odoo import _, models
+from odoo import _, api, models
 from odoo.exceptions import UserError
 
 
@@ -36,9 +36,14 @@ class AccountMove(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    def _get_computed_price_unit(self):
-        self.ensure_one()
-        if self.move_id.move_type not in ["in_invoice", "in_refund"] or not self.move_id.l10n_ro_edi_download:
-            return super()._get_computed_price_unit()
-        else:
-            return self.price_unit
+    @api.depends("product_id", "product_uom_id")
+    def _compute_price_unit(self):
+        """
+        Anuleaza functia compute daca factura este de furnizor si are tranzactie edi (este de pe ANAF)
+        """
+        is_supplier_from_anaf = True
+        for line in self:
+            if line.move_id.move_type not in ["in_invoice", "in_refund"] or not line.move_id.l10n_ro_edi_download:
+                is_supplier_from_anaf = False
+        if not is_supplier_from_anaf:
+            super()._compute_price_unit()
