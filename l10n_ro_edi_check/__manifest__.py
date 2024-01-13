@@ -3,7 +3,7 @@
 {
     "name": "Romania - EDI data check and queue",
     "license": "AGPL-3",
-    "version": "15.0.0.0.2",
+    "version": "15.0.0.0.3",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",
@@ -12,8 +12,6 @@
         "queue_job",
         "queue_job_cron_jobrunner",
     ],
-    "data": [
-        "data/cron.xml",
-    ],
+    "data": ["data/cron.xml", "views/account_move.xml"],
     "installable": True,
 }
