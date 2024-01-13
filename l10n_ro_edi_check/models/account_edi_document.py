@@ -35,6 +35,3 @@ class AccountEdiDocument(models.Model):
             edi_documents.write({"blocking_level": False})
 
         # self.env.ref('queue_job_cron_jobrunner.queue_job_cron')._trigger()
-
-
-
