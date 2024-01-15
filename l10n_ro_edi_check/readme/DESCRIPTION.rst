@@ -1,4 +1,4 @@
  - Verificare date pentru trimitere ANAF la validarea facturii
  - Implementare cu coada job-uri
  - Dezactivare recalculare pret unitar la facuri furnizor cu ID eFactura
- - Camp nr. caractere descriere in linie factura
+ - Camp nr. caractere produs/descriere in linie factura
