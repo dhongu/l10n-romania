@@ -3,7 +3,7 @@
 {
     "name": "Romania - EDI data check and queue",
     "license": "AGPL-3",
-    "version": "14.0.0.0.5",
+    "version": "14.0.0.0.6",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",
