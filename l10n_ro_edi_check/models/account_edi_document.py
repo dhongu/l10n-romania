@@ -28,7 +28,7 @@ class AccountEdiDocument(models.Model):
                 .sudo()
                 .search(
                     [
-                        ("identity_key", "=", self.identity_key),
+                        ("identity_key", "=", key),
                     ],
                     limit=1,
                 )
