@@ -38,7 +38,7 @@ class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
     l10n_ro_label_length = fields.Integer(string="Desc. length", compute="_compute_label_length")
-    l10n_ro_product_length = fields.Integer(string="prod. length", compute="_compute_label_length")
+    l10n_ro_product_length = fields.Integer(string="Prod. length", compute="_compute_label_length")
 
     @api.onchange("product_id", "name")
     def _compute_label_length(self):
