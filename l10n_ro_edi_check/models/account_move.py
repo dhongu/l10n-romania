@@ -33,6 +33,38 @@ class AccountMove(models.Model):
                     raise UserError(errors_text)
         return res
 
+    def l10n_ro_edi_resend(self):
+        self.ensure_one()
+        edi_document_vals_list = []
+        for edi_format in self.journal_id.edi_format_ids:
+            is_edi_needed = self.is_invoice(include_receipts=False) and edi_format._is_required_for_invoice(self)
+
+            if is_edi_needed:
+                errors = edi_format._check_move_configuration(self)
+                if errors:
+                    raise UserError(_("Invalid invoice configuration:\n\n%s") % "\n".join(errors))
+
+                existing_edi_document = self.edi_document_ids.filtered(lambda x: x.edi_format_id == edi_format)
+                if existing_edi_document:
+                    existing_edi_document.write(
+                        {
+                            "state": "to_send",
+                            "attachment_id": False,
+                        }
+                    )
+                else:
+                    edi_document_vals_list.append(
+                        {
+                            "edi_format_id": edi_format.id,
+                            "move_id": self.id,
+                            "state": "to_send",
+                        }
+                    )
+
+        self.env["account.edi.document"].create(edi_document_vals_list)
+        self.edi_document_ids._process_documents_web_services()
+        self.env.ref("queue_job_cron_jobrunner.queue_job_cron")._trigger()
+
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
