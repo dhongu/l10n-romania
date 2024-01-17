@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import api, models
+from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -23,16 +23,27 @@ class AccountEdiDocument(models.Model):
 
         for edi_document in edi_documents:
             key = "ro_efactura_{}".format(edi_document.move_id.id)
-            edi_document.with_delay(identity_key=key)._process_documents_web_services()
+            existing = (
+                self.env["queue.job"]
+                .sudo()
+                .search(
+                    [
+                        ("identity_key", "=", key),
+                    ],
+                    limit=1,
+                )
+            )
+            if existing:
+                edi_document.with_delay(identity_key=key)._process_documents_web_services()
 
-        # domain = [
-        #     ("state", "in", ("to_send", "to_cancel")),
-        #     ("move_id.state", "=", "posted"),
-        #     ("blocking_level", "=", "error"),
-        #     ("write_date", "<", fields.Date.today()),
-        # ]
-        # edi_documents = self.search(domain)
-        # if edi_documents:
-        #     edi_documents.write({"blocking_level": False})
+        domain = [
+            ("state", "in", ("to_send", "to_cancel")),
+            ("move_id.state", "=", "posted"),
+            ("blocking_level", "=", "error"),
+            ("write_date", "<", fields.Date.today()),
+        ]
+        edi_documents = self.search(domain)
+        if edi_documents:
+            edi_documents.write({"blocking_level": False})
 
         self.env.ref("queue_job_cron_jobrunner.queue_job_cron")._trigger()
