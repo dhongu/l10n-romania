@@ -62,8 +62,20 @@ class AccountMove(models.Model):
                     )
 
         self.env["account.edi.document"].create(edi_document_vals_list)
-        self.edi_document_ids._process_documents_web_services()
-        self.env.ref("queue_job_cron_jobrunner.queue_job_cron")._trigger()
+        key = "ro_efactura_{}".format(self.id)
+        existing = (
+            self.env["queue.job"]
+            .sudo()
+            .search(
+                [
+                    ("identity_key", "=", key),
+                ],
+                limit=1,
+            )
+        )
+        if not existing:
+            self.edi_document_ids.with_delay(identity_key=key)._process_documents_web_services()
+            self.env.ref("queue_job_cron_jobrunner.queue_job_cron")._trigger()
 
 
 class AccountMoveLine(models.Model):
