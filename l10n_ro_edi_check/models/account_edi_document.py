@@ -33,7 +33,7 @@ class AccountEdiDocument(models.Model):
                     limit=1,
                 )
             )
-            if existing:
+            if not existing:
                 edi_document.with_delay(identity_key=key)._process_documents_web_services()
 
         # domain = [
