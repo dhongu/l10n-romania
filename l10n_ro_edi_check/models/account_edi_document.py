@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import api, fields, models
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -33,17 +33,17 @@ class AccountEdiDocument(models.Model):
                     limit=1,
                 )
             )
-            if existing:
+            if not existing:
                 edi_document.with_delay(identity_key=key)._process_documents_web_services()
 
-        domain = [
-            ("state", "in", ("to_send", "to_cancel")),
-            ("move_id.state", "=", "posted"),
-            ("blocking_level", "=", "error"),
-            ("write_date", "<", fields.Date.today()),
-        ]
-        edi_documents = self.search(domain)
-        if edi_documents:
-            edi_documents.write({"blocking_level": False})
+        # domain = [
+        #     ("state", "in", ("to_send", "to_cancel")),
+        #     ("move_id.state", "=", "posted"),
+        #     ("blocking_level", "=", "error"),
+        #     ("write_date", "<", fields.Date.today()),
+        # ]
+        # edi_documents = self.search(domain)
+        # if edi_documents:
+        #     edi_documents.write({"blocking_level": False})
 
         self.env.ref("queue_job_cron_jobrunner.queue_job_cron")._trigger()
