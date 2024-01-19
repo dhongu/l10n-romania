@@ -59,6 +59,9 @@ class AccountMove(models.Model):
                     }
                 )
 
+        # clear transaction id
+        self.write({"l10n_ro_edi_transaction": False})
+
         # re-create edi documents
         self.env["account.edi.document"].create(edi_document_vals_list)
         self.edi_document_ids.with_delay(identity_key=key)._process_documents_web_services()
