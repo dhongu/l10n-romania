@@ -31,10 +31,14 @@ class AccountEdiDocument(models.Model):
                         ("identity_key", "=", key),
                     ],
                     limit=1,
+                    order="date_created DESC",
                 )
             )
             if not existing:
                 edi_document.with_delay(identity_key=key)._process_documents_web_services()
+            else:
+                # nu ar trebui sa obtinem si raspunsul?
+                existing.requeue()
 
         # domain = [
         #     ("state", "in", ("to_send", "to_cancel")),
