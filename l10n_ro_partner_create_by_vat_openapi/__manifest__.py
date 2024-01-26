@@ -10,7 +10,8 @@
     "category": "Localization",
     "depends": [
         #'l10n_ro',
-        "base_vat"
+        "base_vat",
+        "l10n_ro_config",
     ],
     "data": [
         "views/res_partner_view.xml",

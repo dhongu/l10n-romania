@@ -16,48 +16,21 @@ _logger = logging.getLogger(__name__)
 headers = {"User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)", "Content-Type": "application/json;"}
 
 
-# def unaccent(text):
-#   text = text.replace("\u015f", "\u0219")
-#  text = text.replace("\u0163", "\u021b")
-# text = text.replace("\u015e", "\u0218")
-# text = text.replace("\u0162", "\u021a")
-# text = unicodedata.normalize("NFD", text)
-# text = text.encode("ascii", "ignore")
-# text = text.decode("utf-8")
-# return str(text)
-
-
 class ResPartner(models.Model):
     _inherit = "res.partner"
-
-    vat_subjected = fields.Boolean(
-        "VAT Legal Statement"
-    )  # campul asta cred ca trebuie sa fie in modulul de baza de localizare
-    # split_vat = fields.Boolean("Split VAT")
-    # vat_on_payment = fields.Boolean("VAT on Payment")
 
     @api.constrains("vat", "country_id")
     def check_vat(self):
         partners = self
         for partner in partners:
-            if not partner.vat_subjected or not partner.is_company:
+            if not partner.l10n_ro_vat_subjected or not partner.is_company:
                 partners -= partner
         return super(ResPartner, partners).check_vat()
 
     @api.onchange("vat")
     def onchange_vat(self):
         if self.country_id.code == "RO" and self.vat:
-            self.vat_subjected = self.vat[:2].lower() == "ro"
-
-    @api.onchange("vat_subjected")
-    def onchange_vat_subjected(self):
-        if self.country_id.code == "RO" and self.vat:
-            if self.vat_subjected:
-                if self.vat[:2].lower() != "ro":
-                    self.vat = "RO" + self.vat
-            else:
-                if self.vat[:2].lower() == "ro":
-                    self.vat = self.vat[2:]
+            self.l10n_ro_vat_subjected = self.vat[:2].lower() == "ro"
 
     @api.model
     def create(self, vals):
@@ -74,14 +47,13 @@ class ResPartner(models.Model):
 
         return partner
 
-    
     @api.model
     def _get_Openapi(self, cod):
         result = {}
         openapi_key = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param(key="openapi_key", default="False")
+            .get_param(key="openapi_key", default="2bsLug_vmT4qBVKNnAGpmvNMQPJJWd5x5yMi9swHEb6hx322zg")
         )
 
         if not openapi_key:
@@ -110,11 +82,10 @@ class ResPartner(models.Model):
                 "street": res["adresa"],
                 "phone": res["telefon"] and res["telefon"] or "",
                 "zip": res["cod_postal"] and res["cod_postal"] or "",
-                "vat_subjected": bool(res["tva"]),
+                "l10n_ro_vat_subjected": bool(res["tva"]),
                 "state_id": state,
                 "company_type": "company",
             }
-            # fax": res["fax"] and res["fax"] or "",
 
         return result
 
@@ -185,8 +156,8 @@ class ResPartner(models.Model):
 
         vat_country, vat_number = self._split_vat(part.vat)
 
-        if part.vat_subjected:
-            self.write({"vat_subjected": False})
+        if part.l10n_ro_vat_subjected:
+            self.write({"l10n_ro_vat_subjected": False})
         if vat_number and vat_country:
             self.write(
                 {
@@ -202,7 +173,7 @@ class ResPartner(models.Model):
                     values = {}
 
                 if values:
-                    if not values["vat_subjected"]:
+                    if not values["l10n_ro_vat_subjected"]:
                         values["vat"] = self.vat.replace("RO", "")
                     self.write(values)
 
@@ -214,11 +185,11 @@ class ResPartner(models.Model):
                             {
                                 "name": result.name,  # .upper(),  # unicode(result.name).upper(),
                                 "is_company": True,
-                                "vat_subjected": True,
+                                "l10n_ro_vat_subjected": True,
                             }
                         )
                     if not part.street and result.address and result.address != "---":
                         self.write({"street": result.address.title()})  # unicode(result.address).title()})
-                    self.write({"vat_subjected": result.valid})
+                    self.write({"l10n_ro_vat_subjected": result.valid})
                 except:
-                    self.write({"vat_subjected": self.vies_vat_check(vat_country, vat_number)})
+                    self.write({"l10n_ro_vat_subjected": self.vies_vat_check(vat_country, vat_number)})

@@ -24,7 +24,7 @@
                         placeholder="e.g. BE0477472701"
                         attrs="{'invisible': [  ('is_company', '=', False )]}"
                     />
-                    <label
+                    <!--<label
                         for="vat_subjected"
                         string="VAT Detail"
                         attrs="{'invisible': [  ('is_company', '=', False )]}"
@@ -32,11 +32,11 @@
                     <div attrs="{'invisible': [  ('is_company', '=', False )]}">
                         <field name="vat_subjected" />
                         <label for="vat_subjected" />
-                        <!--<field name="split_vat" />
+                        <field name="split_vat" />
                         <label for="split_vat" />
                         <field name="vat_on_payment" />
-                        <label for="vat_on_payment" />-->
-                    </div>
+                        <label for="vat_on_payment" />
+                    </div>-->
                 </xpath>
             </field>
         </record>
