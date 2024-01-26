@@ -53,7 +53,7 @@ class ResPartner(models.Model):
         openapi_key = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param(key="openapi_key", default="2bsLug_vmT4qBVKNnAGpmvNMQPJJWd5x5yMi9swHEb6hx322zg")
+            .get_param(key="openapi_key", default="False")
         )
 
         if not openapi_key:
