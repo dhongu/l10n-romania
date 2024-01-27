@@ -23,16 +23,8 @@ class AccountEdiDocument(models.Model):
 
         for edi_document in edi_documents:
             key = "ro_efactura_{}".format(edi_document.move_id.id)
-            existing = (
-                self.env["queue.job"]
-                .sudo()
-                .search(
-                    [
-                        ("identity_key", "=", key),
-                    ],
-                    limit=1,
-                )
-            )
+            domain = [("identity_key", "=", key), ("state", "=", "failed")]
+            existing = self.env["queue.job"].sudo().search(domain, limit=1)
             if not existing:
                 edi_document.with_delay(identity_key=key)._process_documents_web_services()
 
