@@ -10,8 +10,8 @@ from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
-class AccountBankStatementImport(models.TransientModel):
-    _inherit = "account.bank.statement.import"
+class AccountStatementImport(models.TransientModel):
+    _inherit = "account.statement.import"
 
     def _check_xlsx(self, filename):
         return filename and filename.lower().strip().endswith(".xlsx")
