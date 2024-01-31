@@ -12,10 +12,6 @@
         "queue_job",
         "queue_job_cron_jobrunner",
     ],
-    "data": [
-        "data/cron.xml",
-        "views/account_move.xml",
-        "data/server_action.xml"
-    ],
+    "data": ["data/cron.xml", "views/account_move.xml", "data/server_action.xml"],
     "installable": True,
 }
