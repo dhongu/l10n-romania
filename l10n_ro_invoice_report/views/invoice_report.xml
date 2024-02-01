@@ -67,7 +67,21 @@
                             "no_tag_br": true}'
                         />
                     </div>
-
+                    <t t-if="o.journal_id.operating_unit_id">
+                        <div>
+                            <strong>Operating Unit:</strong>
+                            <span t-field="o.journal_id.operating_unit_id.name" />
+                        </div>
+                        <div id="address_label" class="float-left mr-1">
+                            <strong>Address:</strong>
+                        </div>
+                        <t t-set="journal" t-value="o.journal_id" />
+                        <address
+                            t-field="journal.operating_unit_id"
+                            t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker,
+                            "no_tag_br": true}'
+                        />
+                    </t>
                     <div>
                         <t t-set="partner_id" t-value="res_company.partner_id" />
                         <t t-call="l10n_ro_config.banks" />
@@ -237,7 +251,7 @@
                                     <t t-esc="nr_crt" />
                                     <t t-set="nr_crt" t-value="nr_crt + 1" />
                                 </td>
-                                <td>
+                                <td id="product_name">
                                     <span t-field="l.name" />
                                 </td>
                                 <td class="text-right">
@@ -279,14 +293,6 @@
                                 >
                                     <span t-field="l.discount" />
                                 </td>
-<!--                                <td-->
-<!--                                    class="text-right"-->
-<!--                                    t-if="with_discount(o) and with_discount_distinct"-->
-<!--                                    groups="product.group_discount_per_so_line"-->
-<!--                                >-->
-<!--                                    <t t-set="price_w_discount" t-value="price_unit_without_taxes - (price_unit_without_taxes * l.discount / 100)" />-->
-<!--                                    <span t-esc="price_w_discount" t-options='{"widget": "float", "precision": 2}' />-->
-<!--                                </td>-->
                                 <td class="text-right">
                                     <t t-set="price_subtotal" t-value="l.price_subtotal" />
                                     <t t-if="o.move_type == 'out_refund'">
@@ -368,13 +374,13 @@
             </xpath>
 
             <xpath expr="//div[@id='total']/div" position="replace">
-                <div class="col-7" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
-                    <table id="signature" class="table table-sm">
-                        <tr class="border-black">
+                <div class="col-8" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
+                    <table id="signature" class="table table-sm" style="page-break-inside: avoid;">
+                        <tr class="border-black" style="">
                             <td>Elaborate:</td>
                             <td>Information for delivery:</td>
                         </tr>
-                        <tr class="border-black">
+                        <tr class="border-black o_total">
                             <td>
                                 <span>Name:</span>
                                 <span t-field="o.user_id" />
@@ -394,11 +400,12 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr />  <!-- empty row for white color-->
                     </table>
                 </div>
                 <div class="col-5">
                    <t t-set="tax_totals" t-value="o.tax_totals" />
-                    <table class="table table-sm" style="page-break-inside: avoid;">
+                    <table class="table table-sm" style="page-break-inside: avoid; width: 80%">
                         <t t-call="account.document_tax_totals" />
                     </table>
                 </div>
