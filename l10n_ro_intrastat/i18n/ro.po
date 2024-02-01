@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* l10n_ro_intrastat
+# 	* l10n_ro_intrastat
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 14.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-27 08:24+0000\n"
-"PO-Revision-Date: 2017-03-27 08:24+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2023-09-17 02:14+0000\n"
+"PO-Revision-Date: 2023-09-17 02:14+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,56 +16,46 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Amount"
-msgstr "Suma"
-
-#. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__04
 msgid "April"
 msgstr "Aprilie"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,type:0
-msgid "Arrivals"
-msgstr "Arrivals"
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.view_move_form
+msgid "Arrival country"
+msgstr "Țara de sosire"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__08
 msgid "August"
 msgstr "August"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,cn8:0
-msgid "CN8"
-msgstr "CN8"
-
-#. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat_xml.xml_decl:l10n_ro_intrastat.view_intrastat_declaration_xml
-msgid "Cancel"
-msgstr "Anulați"
-
-#. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat_xml.xml_decl:l10n_ro_intrastat.view_intrastat_declaration_xml
-msgid "Close"
-msgstr "Închideți"
-
-#. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,code:0
-#: field:l10n_ro_intrastat.transport_mode,code:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__code
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode__code
 msgid "Code"
 msgstr "Cod"
 
 #. module: l10n_ro_intrastat
-#: sql_constraint:l10n_ro_intrastat.transaction:0
-#: sql_constraint:l10n_ro_intrastat.transport_mode:0
+#: model:ir.model.constraint,message:l10n_ro_intrastat.constraint_l10n_ro_intrastat_transaction_l10n_ro_intrastat_trcodeunique
+#: model:ir.model.constraint,message:l10n_ro_intrastat.constraint_l10n_ro_intrastat_transport_mode_l10n_ro_intrastat_trmodecodeunique
 msgid "Code must be unique."
 msgstr "Codul trebuie să fie unic."
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Comment:"
-msgstr "Comentariu:"
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__account_intrastat_code__type__commodity
+msgid "Commodity"
+msgstr ""
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_marketplace_product__intrastat_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_marketplace_product_category__intrastat_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_marketplace_product_template__intrastat_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_category__intrastat_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_product__intrastat_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_template__intrastat_id
+msgid "Commodity Code"
+msgstr "Cod mărfuri"
 
 #. module: l10n_ro_intrastat
 #: model:ir.model,name:l10n_ro_intrastat.model_res_company
@@ -73,352 +63,337 @@ msgid "Companies"
 msgstr "Companii"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,tax_code_id:0
-msgid "Company Tax Chart"
-msgstr "Company Tax Chart"
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__company_id
+msgid "Company"
+msgstr "Companie"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,contact_id:0
-msgid "Contact"
-msgstr "Contact"
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_config_settings__company_country_id
+msgid "Company country"
+msgstr "Țara companiei"
 
 #. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat_xml.xml_decl:l10n_ro_intrastat.view_intrastat_declaration_xml
-msgid "Create XML"
-msgstr "Generare XML"
+#: model:ir.model,name:l10n_ro_intrastat.model_res_config_settings
+msgid "Config Settings"
+msgstr "Setări de configurare"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,create_uid:0
-#: field:l10n_ro_intrastat.transport_mode,create_uid:0
-#: field:l10n_ro_intrastat_xml.xml_decl,create_uid:0
+#: model:ir.model,name:l10n_ro_intrastat.model_res_country
+msgid "Country"
+msgstr "Țară"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_marketplace_product__country_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_marketplace_product_template__country_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_product__country_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_template__country_id
+msgid "Country Of Origin"
+msgstr "Țara de origine"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__code
+msgid "Country code"
+msgstr "Cod țară"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode__create_uid
 msgid "Created by"
 msgstr "Creat de"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,create_date:0
-#: field:l10n_ro_intrastat.transport_mode,create_date:0
-#: field:l10n_ro_intrastat_xml.xml_decl,create_date:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__create_date
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode__create_date
 msgid "Created on"
-msgstr "Creat în"
+msgstr "Creat la"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__currency_id
+msgid "Currency"
+msgstr "Monedă"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__12
 msgid "December"
 msgstr "Decembrie"
 
 #. module: l10n_ro_intrastat
-#: field:res.company,incoterm_id:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_company__incoterm_id
+msgid "Default Incoterm "
+msgstr "Termen comercial implicit"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_company__intrastat_transaction_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_config_settings__intrastat_transaction_id
+msgid "Default Transaction Type"
+msgstr "Tip tranzacție implicit"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_company__transport_mode_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_config_settings__transport_mode_id
+msgid "Default Transport Mode"
+msgstr "Mod transport implicit"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_config_settings__incoterm_id
 msgid "Default incoterm for Intrastat"
-msgstr "Default incoterm for Intrastat"
+msgstr "Termen comercial implicit pentru Intrastat"
 
 #. module: l10n_ro_intrastat
-#: field:res.company,transport_mode_id:0
-msgid "Default transport mode"
-msgstr "Mode de transport implicit"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Delegate:"
-msgstr "Delegat:"
-
-#. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,description:0
-#: field:l10n_ro_intrastat.transport_mode,name:0
-#: view:website:report_intrastat.report_intrastatinvoice_document
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__description
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode__name
 msgid "Description"
 msgstr "Descriere"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Discount (%)"
-msgstr "Reducere (%)"
-
-#. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,type:0
-msgid "Dispatches"
-msgstr "Dispatches"
-
-#. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,display_name:0
-#: field:l10n_ro_intrastat.transport_mode,display_name:0
-#: field:l10n_ro_intrastat_xml.xml_decl,display_name:0
-#: field:report.report_intrastat.report_intrastatinvoice,display_name:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_category__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_product__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_template__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_country__display_name
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_sale_order__display_name
 msgid "Display Name"
-msgstr "Display Name"
+msgstr "Nume afișat"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,state:0
-msgid "Download"
-msgstr "Descarcă"
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__type__export
+msgid "Export"
+msgstr "Export"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,state:0
-msgid "Draft"
-msgstr "Ciornă"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Elaborate:"
-msgstr "Întocmit:"
-
-#. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__02
 msgid "February"
 msgstr "Februarie"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,name:0
-msgid "File Name"
-msgstr "Nume fișier"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Fiscal Position Remark:"
-msgstr "Remarcă poziție fiscală:"
-
-#. module: l10n_ro_intrastat
-#: code:addons/l10n_ro_intrastat/wizard/xml_decl.py:94
-#, python-format
-msgid "Go to company configuration screen"
-msgstr "Go to company configuration screen"
-
-#. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat_xml.xml_decl:l10n_ro_intrastat.view_intrastat_declaration_xml
-msgid "Here is the XML file with your intrastat declaration:"
-msgstr "Here is the XML file with your intrastat declaration:"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "I received from"
-msgstr "Am primit de la"
-
-#. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,id:0
-#: field:l10n_ro_intrastat.transport_mode,id:0
-#: field:l10n_ro_intrastat_xml.xml_decl,id:0
-#: field:report.report_intrastat.report_intrastatinvoice,id:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_category__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_product__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_template__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_country__id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_sale_order__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: l10n_ro_intrastat
-#: field:account.invoice,incoterm_id:0
-msgid "Incoterm"
-msgstr "Incoterm"
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__type__import
+msgid "Import"
+msgstr "Import"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Incoterm:"
-msgstr "Incoterm:"
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_res_company__incoterm_id
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_res_config_settings__incoterm_id
+msgid ""
+"International Commercial Terms are a series of predefined commercial terms "
+"used in international transactions."
+msgstr ""
+"Termenii Comerciali Internationali sunt o serie de termeni comerciali "
+"predefiniți folosiți in tranzacțiile internaționale."
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Information for delivery:"
-msgstr "Informații privind livrarea:"
+#: model:ir.actions.act_window,name:l10n_ro_intrastat.action_report_intrastat_tree_all
+#: model:ir.ui.menu,name:l10n_ro_intrastat.menu_intrastat
+#: model:ir.ui.menu,name:l10n_ro_intrastat.menu_report_intrastat_all
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.product_category_form_view_inherit_account_intrastat
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.product_template_form_view_inherit_account_intrastat
+msgid "Intrastat"
+msgstr ""
 
 #. module: l10n_ro_intrastat
-#: help:account.invoice,incoterm_id:0
-#: help:res.company,incoterm_id:0
-msgid "International Commercial Terms are a series of predefined commercial terms used in international transactions."
-msgstr "Termenii Comerciali Internaționali sunt o serie de termeni comerciali predefiniți folosiți în tranzacțiile internaționale."
-
-
-
-#. module: l10n_ro_intrastat
-#: field:product.category,intrastat_id:0
+#: model:ir.actions.act_window,name:l10n_ro_intrastat.action_report_intrastat_code_tree
+#: model:ir.model,name:l10n_ro_intrastat.model_account_intrastat_code
+#: model:ir.ui.menu,name:l10n_ro_intrastat.menu_report_intrastat_code
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.view_report_intrastat_code_form
 msgid "Intrastat Code"
 msgstr "Cod Intrastat"
 
 #. module: l10n_ro_intrastat
-#: field:account.invoice,intrastat_country_id:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_bank_statement_line__intrastat_country_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_move__intrastat_country_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_payment__intrastat_country_id
 msgid "Intrastat Country"
 msgstr "Țară Intrastat"
 
 #. module: l10n_ro_intrastat
-#: model:ir.actions.act_window,name:l10n_ro_intrastat.action_intrastat_xml_declaration
-#: model:ir.ui.menu,name:l10n_ro_intrastat.l10n_ro_intrastat_xml_declaration
-#: view:l10n_ro_intrastat_xml.xml_decl:l10n_ro_intrastat.view_intrastat_declaration_xml
-msgid "Intrastat Declaration"
-msgstr "Declarație Intrastat"
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.view_report_intrastat_search
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.view_report_intrastat_tree
+msgid "Intrastat Data"
+msgstr "Date Intrastat"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,file_save:0
-msgid "Intrastat Report File"
-msgstr "Intrastat Report File"
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_config_settings__module_l10n_ro_intrastat
+msgid "Intrastat RO"
+msgstr "Intrastat RO"
 
 #. module: l10n_ro_intrastat
-#: field:account.invoice,intrastat_transaction_id:0
-#: field:res.company,intrastat_transaction_id:0
+#: model:ir.model,name:l10n_ro_intrastat.model_l10n_ro_intrastat_transaction
+msgid "Intrastat Transaction"
+msgstr "Tranzacție Intrastat"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_bank_statement_line__intrastat_transaction_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_move__intrastat_transaction_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_payment__intrastat_transaction_id
 msgid "Intrastat Transaction Type"
-msgstr "Intrastat Transaction Type"
+msgstr "Tip tranzacție Intrastat"
 
 #. module: l10n_ro_intrastat
-#: field:account.invoice,transport_mode_id:0
+#: model:ir.model,name:l10n_ro_intrastat.model_l10n_ro_intrastat_transport_mode
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_bank_statement_line__transport_mode_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_move__transport_mode_id
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_payment__transport_mode_id
 msgid "Intrastat Transport Mode"
-msgstr "Intrastat Transport Mode"
+msgstr "Mod transport Intrastat"
 
 #. module: l10n_ro_intrastat
-#: model:ir.model,name:l10n_ro_intrastat.model_l10n_ro_intrastat_xml_xml_decl
-msgid "Intrastat XML Declaration"
-msgstr "Intrastat XML Declaration"
-
-#. module: l10n_ro_intrastat
-#: model:ir.model,name:l10n_ro_intrastat.model_report_intrastat_code
-#: field:product.product,intrastat_id:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__intrastat_name
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.view_report_intrastat_code_tree
 msgid "Intrastat code"
 msgstr "Cod Intrastat"
 
 #. module: l10n_ro_intrastat
-#: help:account.invoice,intrastat_country_id:0
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_account_bank_statement_line__intrastat_country_id
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_account_move__intrastat_country_id
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_account_payment__intrastat_country_id
 msgid "Intrastat country, delivery for sales, origin for purchases"
-msgstr "Intrastat country, delivery for sales, origin for purchases"
+msgstr "Țară Intrastat, livrare pentru vânzări, origine pentru achiziții"
 
 #. module: l10n_ro_intrastat
 #: model:res.groups,name:l10n_ro_intrastat.intrastat_extended
 msgid "Intrastat extended"
-msgstr "Intrastat extended"
+msgstr "Intrastat extins"
 
 #. module: l10n_ro_intrastat
-#: help:account.invoice,intrastat_transaction_id:0
-#: help:res.company,intrastat_transaction_id:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_marketplace_country__intrastat
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_country__intrastat
+msgid "Intrastat member"
+msgstr "Membru Intrastat"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_account_bank_statement_line__intrastat_transaction_id
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_account_move__intrastat_transaction_id
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_account_payment__intrastat_transaction_id
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_res_company__intrastat_transaction_id
+#: model:ir.model.fields,help:l10n_ro_intrastat.field_res_config_settings__intrastat_transaction_id
 msgid "Intrastat nature of transaction"
-msgstr "Intrastat nature of transaction"
+msgstr "Natura tranzacției Intrastat"
 
 #. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat.transaction:l10n_ro_intrastat.intra_view_transaction_form
+#: model:ir.model,name:l10n_ro_intrastat.model_report_intrastat
+msgid "Intrastat report"
+msgstr "Raport Intrastat"
+
+#. module: l10n_ro_intrastat
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.intra_view_transaction_form
 msgid "Intrastat transaction form"
-msgstr "Intrastat transaction form"
+msgstr ""
 
 #. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat.transaction:l10n_ro_intrastat.intra_view_transaction_tree
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.intra_view_transaction_tree
 msgid "Intrastat transaction types"
-msgstr "Intrastat transaction types"
+msgstr "Tipuri de tranzacții Intrastat"
 
 #. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat.transport_mode:l10n_ro_intrastat.intra_view_transport_mode_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.intra_view_transport_mode_form
 msgid "Intrastat transportation mode form"
-msgstr "Intrastat transportation mode form"
+msgstr ""
 
 #. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat.transport_mode:l10n_ro_intrastat.intra_view_transport_mode_tree
+#: model_terms:ir.ui.view,arch_db:l10n_ro_intrastat.intra_view_transport_mode_tree
 msgid "Intrastat transportation modes"
-msgstr "Intrastat transportation modes"
+msgstr ""
 
 #. module: l10n_ro_intrastat
-#: model:ir.model,name:l10n_ro_intrastat.model_account_invoice
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__invoice_id
 msgid "Invoice"
-msgstr "Factura"
+msgstr "Factură"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Invoice circulate without signature and stamp according to the law 227/2015, rule 319, paragraph 29"
-msgstr "Factura circulă fără semnătură și ștampilă în acord cu legea 227/2015, art. 319, alin. 29"
-
-#. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__01
 msgid "January"
 msgstr "Ianuarie"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model,name:l10n_ro_intrastat.model_account_move
+msgid "Journal Entry"
+msgstr "Notă contabilă"
+
+#. module: l10n_ro_intrastat
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__07
 msgid "July"
 msgstr "Iulie"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__06
 msgid "June"
 msgstr "Iunie"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,__last_update:0
-#: field:l10n_ro_intrastat.transport_mode,__last_update:0
-#: field:l10n_ro_intrastat_xml.xml_decl,__last_update:0
-#: field:report.report_intrastat.report_intrastatinvoice,__last_update:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_account_move____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_category____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_product____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_product_template____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_company____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_config_settings____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_res_country____last_update
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_sale_order____last_update
 msgid "Last Modified on"
-msgstr "Last Modified on"
+msgstr "Ultima modificare la"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,write_uid:0
-#: field:l10n_ro_intrastat.transport_mode,write_uid:0
-#: field:l10n_ro_intrastat_xml.xml_decl,write_uid:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode__write_uid
 msgid "Last Updated by"
-msgstr "Ultima actualizare făcută de"
+msgstr "Ultima actualizare de"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,write_date:0
-#: field:l10n_ro_intrastat.transport_mode,write_date:0
-#: field:l10n_ro_intrastat_xml.xml_decl,write_date:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__write_date
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transport_mode__write_date
 msgid "Last Updated on"
-msgstr "Ultima actualizare în"
+msgstr "Ultima actualizare la"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__03
 msgid "March"
 msgstr "Martie"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__05
 msgid "May"
 msgstr "Mai"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Mean Transport:"
-msgstr "Mijloc transport:"
-
-#. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__month
 msgid "Month"
-msgstr "Luna"
+msgstr "Lună"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "NRC:"
-msgstr "NRC:"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Name:"
-msgstr "Nume:"
-
-#. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__11
 msgid "November"
 msgstr "Noiembrie"
 
 #. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__10
 msgid "October"
 msgstr "Octombrie"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Ord"
-msgstr "Nr. Crt."
-
-#. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat.transaction,parent_id:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_l10n_ro_intrastat_transaction__parent_id
 msgid "Parent Code"
-msgstr "Parent Code"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Partner Ref.:"
-msgstr "Ref. Partener:"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Payment Term:"
-msgstr "Termenul de plată"
-
-#. module: l10n_ro_intrastat
-#: field:res.company,property_stock_picking_custody_account_id:0
-msgid "Picking Account Custody"
-msgstr "Picking Account Custody"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Printing and numbering system of its own under Law 571/2003 on the Fiscal Code, with subsequent amendments and OMPF 2226/2006"
-msgstr "Sistem propriu de imprimare și numerotare conform Legii 571/2003 privind Codul Fiscal, cu modificările și completările ulterioare și OMFP 2226/2006"
+msgstr "Cod părinte"
 
 #. module: l10n_ro_intrastat
 #: model:ir.model,name:l10n_ro_intrastat.model_product_product
@@ -426,30 +401,19 @@ msgid "Product"
 msgstr "Produs"
 
 #. module: l10n_ro_intrastat
-#: code:addons/l10n_ro_intrastat/wizard/xml_decl.py:314
-#, python-format
-msgid "Product \"%s\" has no intrastat code, please configure it"
-msgstr "Product \"%s\" has no intrastat code, please configure it"
-
-#. module: l10n_ro_intrastat
 #: model:ir.model,name:l10n_ro_intrastat.model_product_category
 msgid "Product Category"
-msgstr "Categoria Produsului"
+msgstr "Categorie produs"
 
 #. module: l10n_ro_intrastat
-#: model:ir.model,name:l10n_ro_intrastat.model_purchase_order
-msgid "Purchase Order"
-msgstr "Comandă de achiziție"
+#: model:ir.model,name:l10n_ro_intrastat.model_product_template
+msgid "Product Template"
+msgstr "Șablon produs"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Quantity"
-msgstr "Cantitate"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Representing counter value of invoice"
-msgstr "Reprezentând contravaloarea facturii"
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__account_intrastat_code__type__region
+msgid "Region"
+msgstr "Regiune"
 
 #. module: l10n_ro_intrastat
 #: model:ir.model,name:l10n_ro_intrastat.model_sale_order
@@ -457,116 +421,41 @@ msgid "Sales Order"
 msgstr "Comandă de vânzare"
 
 #. module: l10n_ro_intrastat
-#: code:addons/l10n_ro_intrastat/wizard/xml_decl.py:203
-#, python-format
-msgid "Save"
-msgstr "Salvează"
-
-#. module: l10n_ro_intrastat
-#: selection:l10n_ro_intrastat_xml.xml_decl,month:0
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__report_intrastat__month__09
 msgid "September"
 msgstr "Septembrie"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Signature for receive"
-msgstr "Semnătură de primire"
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__ref
+msgid "Source document"
+msgstr "Document sursă"
 
 #. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,state:0
-msgid "State"
-msgstr "Judeţ"
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__supply_units
+msgid "Supply Units"
+msgstr "Unități furnizate"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Taxes"
-msgstr "TVA"
+#: model:ir.model.fields.selection,name:l10n_ro_intrastat.selection__account_intrastat_code__type__transaction
+msgid "Transaction"
+msgstr "Tranzacție"
 
 #. module: l10n_ro_intrastat
-#: code:addons/l10n_ro_intrastat/wizard/xml_decl.py:114
-#, python-format
-msgid "The VAT of your company is not set, please make sure to configure it first."
-msgstr "The VAT of your company is not set, please make sure to configure it first."
-
-#. module: l10n_ro_intrastat
-#: code:addons/l10n_ro_intrastat/wizard/xml_decl.py:107
-#, python-format
-msgid "The country of your company is not set, please make sure to configure it first."
-msgstr "The country of your company is not set, please make sure to configure it first."
-
-#. module: l10n_ro_intrastat
-#: help:res.company,property_stock_picking_custody_account_id:0
-msgid "This account will be used as the extra trial balance payable account for the current partner on stock picking received in custody."
-msgstr "This account will be used as the extra trial balance payable account for the current partner on stock picking received in custody."
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Total"
-msgstr "Total"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Total Without Taxes"
-msgstr "Total fără TVA"
-
-#. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,type:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__type
 msgid "Type"
 msgstr "Tip"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Unit Price"
-msgstr "Preț unitar"
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__value
+msgid "Value"
+msgstr "Valoare"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "VAT"
-msgstr "TVA"
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__weight
+msgid "Weight"
+msgstr "Greutate"
 
 #. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "VAT Rate"
-msgstr "Rată TVA"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "VAT:"
-msgstr "TVA:"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "Voucher:"
-msgstr "Chitanța:"
-
-#. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat_xml.xml_decl:l10n_ro_intrastat.view_intrastat_declaration_xml
-msgid "XML Intratstat Declaration"
-msgstr "XML Intratstat Declaration"
-
-#. module: l10n_ro_intrastat
-#: field:l10n_ro_intrastat_xml.xml_decl,year:0
+#: model:ir.model.fields,field_description:l10n_ro_intrastat.field_report_intrastat__name
 msgid "Year"
-msgstr "Anul"
-
-#. module: l10n_ro_intrastat
-#: code:addons/l10n_ro_intrastat/wizard/xml_decl.py:118
-#, python-format
-msgid "Year must be 4 digits number (YYYY)"
-msgstr "Year must be 4 digits number (YYYY)"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "amount"
-msgstr "suma"
-
-#. module: l10n_ro_intrastat
-#: view:website:report_intrastat.report_intrastatinvoice_document
-msgid "from"
-msgstr "din"
-
-#. module: l10n_ro_intrastat
-#: view:l10n_ro_intrastat_xml.xml_decl:l10n_ro_intrastat.view_intrastat_declaration_xml
-msgid "or"
-msgstr "sau"
-
+msgstr "An"
