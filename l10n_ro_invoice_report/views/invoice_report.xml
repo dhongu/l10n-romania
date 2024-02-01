@@ -67,7 +67,21 @@
                             "no_tag_br": true}'
                         />
                     </div>
-
+                    <t t-if="o.journal_id.operating_unit_id">
+                        <div>
+                            <strong>Operating Unit:</strong>
+                            <span t-field="o.journal_id.operating_unit_id.name" />
+                        </div>
+                        <div id="address_label" class="float-left mr-1">
+                            <strong>Address:</strong>
+                        </div>
+                        <t t-set="journal" t-value="o.journal_id" />
+                        <address
+                            t-field="journal.operating_unit_id"
+                            t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker,
+                            "no_tag_br": true}'
+                        />
+                    </t>
                     <div>
                         <t t-set="partner_id" t-value="res_company.partner_id" />
                         <t t-call="l10n_ro_config.banks" />

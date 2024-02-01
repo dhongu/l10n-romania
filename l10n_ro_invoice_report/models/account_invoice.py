@@ -6,12 +6,6 @@
 from odoo import api, fields, models
 
 
-class ResPartner(models.Model):
-    _inherit = "res.partner"
-
-    mean_transp = fields.Char(string="Mean transport")
-
-
 class AccountInvoice(models.Model):
     _inherit = "account.move"
 
