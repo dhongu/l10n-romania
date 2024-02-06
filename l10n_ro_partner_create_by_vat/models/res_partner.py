@@ -20,7 +20,7 @@ from odoo.exceptions import Warning
 
 headers = {"User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)", "Content-Type": "application/json;"}
 
-ANAF_URL = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v6/ws/tva"
+ANAF_URL = "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v8/ws/tva"
 
 
 def unaccent(text):
@@ -98,18 +98,18 @@ class ResPartner(models.Model):
         )
         if res.status_code == 200:
             res = res.json()
-        if res["found"] and res["found"][0]:
-            result = res["found"][0]
-            if result["data_sfarsit_ScpTVA"] and result["data_sfarsit_ScpTVA"] != " ":
-                res = requests.post(
-                    ANAF_URL, json=[{"cui": cod, "data": result["data_sfarsit_ScpTVA"]}], headers=headers
-                )
-                if res.status_code == 200:
-                    res = res.json()
+        # if res["found"] and res["found"][0]:
+        #     result = res["found"][0]
+            # if result["data_sfarsit_ScpTVA"] and result["data_sfarsit_ScpTVA"] != " ":
+            #     res = requests.post(
+            #         ANAF_URL, json=[{"cui": cod, "data": result["data_sfarsit_ScpTVA"]}], headers=headers
+            #     )
+            #     if res.status_code == 200:
+            #         res = res.json()
         if res["found"] and res["found"][0]:
             result = res["found"][0]
         # Check if the partner was deactived
-        if res["notfound"] and res["notfound"][0]:
+        if "notfound" in res and res["notfound"] and res["notfound"][0]:
             result = res["notfound"][0]
             if result["data_sfarsit_ScpTVA"] and result["data_sfarsit_ScpTVA"] != " ":
                 res = requests.post(
@@ -126,23 +126,23 @@ class ResPartner(models.Model):
     @api.model
     def _Anaf_to_Odoo(self, result):
         res = {
-            "name": result["denumire"],
-            "vat_subjected": result["scpTVA"],
-            "split_vat": result["statusSplitTVA"],
-            "vat_on_payment": result["statusTvaIncasare"],
+            "name": result["date_generale"]["denumire"],
+            "vat_subjected": result["inregistrare_scop_Tva"]["scpTVA"],
+            "split_vat": result["inregistrare_SplitTVA"]["statusSplitTVA"],
+            "vat_on_payment": result["inregistrare_RTVAI"]["statusTvaIncasare"],
             "company_type": "company",
         }
 
-        if result["statusTvaIncasare"]:
+        if result["inregistrare_RTVAI"]["statusTvaIncasare"]:
             res["property_account_position_id"] = self.company_id.property_vat_on_payment_position_id.id
 
         addr = ""
         city = ""
-        if result["adresa"]:
-            result["adresa"] = result["adresa"].replace("MUNICIPIUL", "MUN.")
-            result["adresa"] = result["adresa"].replace("ORȘ.", "ORS.")
-            result["adresa"] = result["adresa"].replace("ORŞ.", "ORS.")
-            lines = [x for x in result["adresa"].split(",") if x]
+        if result["date_generale"]["adresa"]:
+            result["adresa"] = result["date_generale"]["adresa"].replace("MUNICIPIUL", "MUN.")
+            result["adresa"] = result["date_generale"]["adresa"].replace("ORȘ.", "ORS.")
+            result["adresa"] = result["date_generale"]["adresa"].replace("ORŞ.", "ORS.")
+            lines = [x for x in result["date_generale"]["adresa"].split(",") if x]
             nostreet = True
             # listabr = ['JUD.', 'MUN.', 'ORS.', 'COM.',
             #            'STR.', 'NR.', 'ET.', 'AP.']
