@@ -187,13 +187,7 @@ class ResPartner(models.Model):
                 if not result or not result.get("date_generale"):
                     anaf_error = _("Anaf didn't find any company with VAT=%s !") % cod
         else:
-            anaf_error = _(
-                "Anaf request error: \nresponse=%(response)s "
-                "\nreason=%(reason)s \ntext=%(text)s",
-                response=res,
-                reason=res.reason,
-                text=res.text,
-            )
+            raise Warning(_("Anaf request error: \nresponse=%s \nreason=%s \ntext=%s" % (res, res.reason, res.text)))
         return anaf_error, result
 
     @api.model
