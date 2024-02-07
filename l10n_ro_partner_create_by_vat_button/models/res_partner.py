@@ -22,7 +22,7 @@ class ResPartner(models.Model):
 
     @api.model
     def create(self, vals):
-        if "name" in vals:
+        if "name" in vals and vals["name"]:
             vat_number = vals["name"].lower().strip()
             if "ro" in vat_number:
                 vat_number = vat_number.replace("ro", "")

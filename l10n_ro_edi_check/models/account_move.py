@@ -35,37 +35,39 @@ class AccountMove(models.Model):
 
     def l10n_ro_edi_resend(self):
         self.ensure_one()
+        if not self.l10n_ro_edi_download:
+            # delete jobs if exists
+            key = "ro_efactura_{}".format(self.id)
+            existing = self.env["queue.job"].sudo().search([("identity_key", "=", key)])
+            existing.sudo().unlink()
 
-        # delete jobs if exists
-        key = "ro_efactura_{}".format(self.id)
-        existing = self.env["queue.job"].sudo().search([("identity_key", "=", key)])
-        existing.sudo().unlink()
+            edi_document_vals_list = []
+            for edi_format in self.journal_id.edi_format_ids:
+                is_edi_needed = self.is_invoice(include_receipts=False) and edi_format._is_required_for_invoice(self)
+                if is_edi_needed:
+                    errors = edi_format._check_move_configuration(self)
+                    if errors:
+                        raise UserError(_("Invalid invoice configuration:\n\n%s") % "\n".join(errors))
+                    # delete edi documents
+                    existing_edi_document = self.edi_document_ids.filtered(lambda x: x.edi_format_id == edi_format)
+                    existing_edi_document.sudo().unlink()
+                    edi_document_vals_list.append(
+                        {
+                            "edi_format_id": edi_format.id,
+                            "move_id": self.id,
+                            "state": "to_send",
+                        }
+                    )
 
-        edi_document_vals_list = []
-        for edi_format in self.journal_id.edi_format_ids:
-            is_edi_needed = self.is_invoice(include_receipts=False) and edi_format._is_required_for_invoice(self)
-            if is_edi_needed:
-                errors = edi_format._check_move_configuration(self)
-                if errors:
-                    raise UserError(_("Invalid invoice configuration:\n\n%s") % "\n".join(errors))
-                # delete edi documents
-                existing_edi_document = self.edi_document_ids.filtered(lambda x: x.edi_format_id == edi_format)
-                existing_edi_document.sudo().unlink()
-                edi_document_vals_list.append(
-                    {
-                        "edi_format_id": edi_format.id,
-                        "move_id": self.id,
-                        "state": "to_send",
-                    }
-                )
+            # clear transaction id
+            self.write({"l10n_ro_edi_transaction": False})
 
-        # clear transaction id
-        self.write({"l10n_ro_edi_transaction": False})
-
-        # re-create edi documents
-        self.env["account.edi.document"].create(edi_document_vals_list)
-        self.edi_document_ids.with_delay(identity_key=key)._process_documents_web_services()
-        self.env.ref("queue_job_cron_jobrunner.queue_job_cron")._trigger()
+            # re-create edi documents
+            self.env["account.edi.document"].create(edi_document_vals_list)
+            self.edi_document_ids.with_delay(identity_key=key)._process_documents_web_services()
+            self.env.ref("queue_job_cron_jobrunner.queue_job_cron")._trigger()
+        else:
+            raise UserError(_("Factura {} a fost validata deja de ANAF").format(self.name))
 
 
 class AccountMoveLine(models.Model):
