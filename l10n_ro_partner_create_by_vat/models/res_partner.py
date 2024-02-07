@@ -170,8 +170,7 @@ class ResPartner(models.Model):
         try:
             res = requests.post(anaf_url, json=json_data, headers=headers, timeout=30)
         except Exception as ex:
-            return _("ANAF Webservice not working. Exception=%s.") % ex, {}
-
+            raise Warning(_("ANAF Webservice not working. Exception=%s." % ex))
         result = {}
 
         if (
@@ -185,7 +184,7 @@ class ResPartner(models.Model):
                 if resjson.get("found") and resjson["found"][0]:
                     result = resjson["found"][0]
                 if not result or not result.get("date_generale"):
-                    anaf_error = _("Anaf didn't find any company with VAT=%s !") % cod
+                    raise Warning(_("Anaf didn't find any company with VAT=%s !" % cod))
         else:
             raise Warning(_("Anaf request error: \nresponse=%s \nreason=%s \ntext=%s" % (res, res.reason, res.text)))
         return anaf_error, result
