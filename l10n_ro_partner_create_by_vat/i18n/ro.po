@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* partner_create_by_vat
+#	* l10n_ro_partner_create_by_vat
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-09 12:11+0000\n"
-"PO-Revision-Date: 2015-01-09 12:11+0000\n"
+"POT-Creation-Date: 2024-02-07 15:36+0000\n"
+"PO-Revision-Date: 2024-02-07 15:36+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,29 +16,74 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_partner_create_by_vat
-#: view:res.partner:l10n_ro_partner_create_by_vat.view_partner_form
+#: code:addons/l10n_ro_partner_create_by_vat/models/res_partner.py:173
+#, python-format
+msgid "ANAF Webservice not working. Exception=%s."
+msgstr "Serviciul preluare date partener ANAF nu functioneaza. Mesaj=%s. Poți completa datele manual."
+
+#. module: l10n_ro_partner_create_by_vat
+#: code:addons/l10n_ro_partner_create_by_vat/models/res_partner.py:187
+#, python-format
+msgid "Anaf didn't find any company with VAT=%s !"
+msgstr "ANAF nu a găsit nicio companie cu CIF=%s !"
+
+#. module: l10n_ro_partner_create_by_vat
+#: code:addons/l10n_ro_partner_create_by_vat/models/res_partner.py:189
+#, python-format
+msgid "Anaf request error: \n"
+"response=%s \n"
+"reason=%s \n"
+"text=%s"
+msgstr "Eroare server ANAF: \n"
+"response=%s \n"
+"reason=%s \n"
+"text=%s"
+
+#. module: l10n_ro_partner_create_by_vat
+#: model:ir.model,name:l10n_ro_partner_create_by_vat.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: l10n_ro_partner_create_by_vat
+#: model:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat.view_partner_form
 msgid "Get Partner Data"
 msgstr "Preia Date Partener"
 
 #. module: l10n_ro_partner_create_by_vat
-#: model:ir.model,name:l10n_ro_partner_create_by_vat.model_res_partner
-msgid "Partner"
-msgstr "Partener"
+#: code:addons/l10n_ro_partner_create_by_vat/models/res_partner.py:386
+#, python-format
+msgid "No VAT number found"
+msgstr "Nu este găsit niciun CIF"
 
 #. module: l10n_ro_partner_create_by_vat
-#: view:res.partner:l10n_ro_partner_create_by_vat.view_partner_form
-msgid "e.g. BE0477472701"
-msgstr "e.g. BE0477472701"
+#: code:addons/l10n_ro_partner_create_by_vat/models/res_partner.py:353
+#, python-format
+msgid "Partner vat must be unique per company except on partner with parent/childe relationship. Partners with same vat and not related, are: %s!"
+msgstr "CIF partener trebuie să fie unic pe contacte, cu excepția relației părinte/copil. Partenerii cu același CIF sunt: %s"
 
 #. module: l10n_ro_partner_create_by_vat
-#: view:res.partner:l10n_ro_partner_create_by_vat.view_partner_form
-#: field:res.partner,vat_on_payment:0
-msgid "VAT on Payment"
-msgstr "TVA la Încasare"
-
-#. module: l10n_ro_partner_create_by_vat
-#: view:res.partner:l10n_ro_partner_create_by_vat.view_partner_form
-#: field:res.partner,split_vat:0
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat.field_res_partner_split_vat
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat.field_res_users_split_vat
 msgid "Split VAT"
-msgstr "Split TVA"
+msgstr "TVA împărțit"
 
+#. module: l10n_ro_partner_create_by_vat
+#: model:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat.view_partner_form
+msgid "VAT Detail"
+msgstr "Detaliu TVA"
+
+#. module: l10n_ro_partner_create_by_vat
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat.field_res_partner_vat_on_payment
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat.field_res_users_vat_on_payment
+msgid "VAT on Payment"
+msgstr "TVA la plată"
+
+#. module: l10n_ro_partner_create_by_vat
+#: model:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat.view_partner_form
+msgid "e.g. BE0477472701"
+msgstr "exemplu RO08486157"
+
+#. module: l10n_ro_partner_create_by_vat
+#: model:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat.view_partner_form
+msgid "e.g. J12/1234/2012"
+msgstr "e.g. J12/1234/2012"
