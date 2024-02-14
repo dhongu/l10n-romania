@@ -9,7 +9,7 @@ from odoo import models
 _logger = logging.getLogger(__name__)
 
 
-class AccountEdiXmlCIUSRO(models.Model):
+class AccountEdiFormat(models.Model):
     _inherit = "account.edi.format"
 
     def _find_value(self, xpath, xml_element, namespaces=None):
@@ -48,9 +48,7 @@ class AccountEdiXmlCIUSRO(models.Model):
                 {
                     "actual_delivery_date": invoice.invoice_date,
                     "delivery_location_vals": {
-                        "delivery_address_vals": self._get_partner_address_vals(
-                            shipping_address
-                        ),
+                        "delivery_address_vals": self._get_partner_address_vals(shipping_address),
                     },
                 }
             ]
