@@ -213,7 +213,7 @@ class ResPartner(models.Model):
         )
         if "city_id" in self._fields and odoo_result["state_id"] and odoo_result["city"]:
             domain = [
-                ("state_id", "=", odoo_result["state_id"].id),
+                ("state_id", "=", odoo_result["state_id"]),
                 ("name", "=ilike", odoo_result["city"])]
             odoo_result["city_id"] = self.env["res.city"].search(domain, limit=1).id
 

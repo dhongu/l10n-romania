@@ -6,7 +6,7 @@
     'name': 'Romania - Partner Create by VAT',
     'summary': 'Romania - Partner Create by VAT',
 
-    'version': '11.0.1.0.0',
+    'version': '11.0.1.0.1',
     'author': 'Forest and Biomass Romania, '
               'Odoo Community Association (OCA)',
     "website": "http://www.forbiom.eu",
