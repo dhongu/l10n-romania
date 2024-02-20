@@ -16,175 +16,136 @@
             </xpath>
         </template>
 
-        <template id="header_invoice">
-
-            <div t-attf-class="{{header_class}}">
-                <div class="row" customize_show="True">
-                    <div class="col-xs-3">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
-                             style="max-height: 45px;"/>
-                    </div>
-
-                </div>
-                <div class="row zero_min_height">
-                    <div class="col-xs-12">
-                        <div style="border-bottom: 1px solid black;"/>
-                    </div>
-                </div>
-
-                <table class="table table-condensed" style="border-top: initial;">
-                    <tr>
-                        <td width="50%">
-                            <div>
-                                <strong t-if="o.type in ['out_invoice', 'out_refund']">Supplier</strong>
-                                <strong t-if="o.type in ['in_invoice', 'in_refund']">Customer</strong>
-                            </div>
-                            <strong t-field="res_company.partner_id.name"/>
-                            <div>
-                                <strong>Address:</strong>
-                                <address t-field="res_company.partner_id"
-                                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
-                            </div>
-
-                            <t t-set="partner_id" t-value="res_company.partner_id"/>
-                            <t t-call="base.banks"/>
-
-                        </td>
-                        <td width="50%">
-                            <div>
-                                <strong t-if="o.type in ['out_invoice', 'out_refund']">Customer</strong>
-                                <strong t-if="o.type in ['in_invoice', 'in_refund']">Supplier</strong>
-                            </div>
-                            <div>
-                                <strong t-field="o.commercial_partner_id.name"/>
-                            </div>
-                            <div>
-                                <strong>Address:</strong>
-                                <address t-field="o.commercial_partner_id"
-                                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
-                            </div>
-
-                            <t t-set="partner_id" t-value="o.commercial_partner_id"/>
-                            <t t-call="base.banks"/>
-
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border-top: initial;">
-                            <div t-if="res_company.partner_id.vat">
-                                <strong>CIF:</strong>
-                                <span t-field="res_company.partner_id.vat"/>
-                            </div>
-                            <div t-if="res_company.partner_id.nrc">
-                                <strong>NRC:</strong>
-                                <span t-field="res_company.partner_id.nrc"/>
-                            </div>
-                            <div t-if="res_company.share_capital">
-                                <strong>Share Capital:</strong>
-                                <span t-field="res_company.share_capital"/>
-                            </div>
-                            <div t-if="'vat_on_payment' in res_company._fields">
-                                <div t-if="res_company.vat_on_payment">
-                                    <span>Vat on payment</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span t-esc="', '.join(map(lambda x: (x.tax_id.description or x.tax_id.name), o.tax_line_ids))"/>
-                                <!--<span t-foreach="o.tax_line_ids" t-as="t">-->
-                                <!--<span t-field="t.name"/>-->
-                                <!--</span>-->
-                            </div>
-                        </td>
-                        <td style="border-top: initial;">
-                            <div t-if="o.commercial_partner_id.vat">
-                                <strong>CIF:</strong>
-                                <span t-field="o.commercial_partner_id.vat"/>
-                            </div>
-                            <div t-if="o.commercial_partner_id.nrc">
-                                <strong>NRC:</strong>
-                                <span t-field="o.commercial_partner_id.nrc"/>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
-
-                <h4 class="text-center">
-                    <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
-                    <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
-                    <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
-                    <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
-                    <span t-if="o.type == 'out_refund'">Refund Invoice</span>
-                    <span t-if="o.type == 'in_refund'">Supplier Refund</span>
-                    <span t-if="o.type == 'in_invoice'">Supplier Invoice</span>
-                    <t t-if="o.number">
-                        <span t-field="o.number"/>
-                    </t>
-                    <t t-if="not o.number">
-                        <span t-field="o.move_name"/>
-                    </t>
-                    <span>/</span>
-                    <span t-field="o.date_invoice"/>
-                    <!--
-                    <div t-if="o.type == 'out_refund'">
-                        <span>Refunding invoice</span>
-                        <span t-field="o.origin"/>
-                    </div>
-                    -->
-                </h4>
-                <div t-if="company.watermark_image" class="mb32 col-md-12">
-                    <img t-att-src="'data:image/png;base64,%s' % company.watermark_image"
-                         style="width:100%;text-align:center;position:absolute;opacity:0.05"/>
-                </div>
-            </div>
-
-        </template>
-
         <template id="invoice_layout">
+            <t t-call="web.internal_layout">
+                <!-- Multicompany -->
+                <t t-if="not o and doc">
+                    <t t-set="o" t-value="doc"/>
+                </t>
 
-            <!-- Multicompany -->
-            <t t-if="not o and doc">
-                <t t-set="o" t-value="doc"/>
+                <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                    <t t-set="res_company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+
+                <div>
+                    <div class="row" customize_show="True">
+                        <div class="col-xs-3">
+                            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                                 style="max-height: 45px;"/>
+                        </div>
+
+                    </div>
+                    <div class="row zero_min_height">
+                        <div class="col-xs-12">
+                            <div style="border-bottom: 1px solid black;"/>
+                        </div>
+                    </div>
+
+                    <table class="table table-condensed" style="border-top: initial;">
+                        <tr>
+                            <td width="50%">
+                                <div>
+                                    <strong t-if="o.type in ['out_invoice', 'out_refund']">Supplier</strong>
+                                    <strong t-if="o.type in ['in_invoice', 'in_refund']">Customer</strong>
+                                </div>
+                                <strong t-field="res_company.partner_id.name"/>
+                                <div>
+                                    <strong>Address:</strong>
+                                    <address t-field="res_company.partner_id"
+                                             t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;,&quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
+                                </div>
+
+                                <t t-set="partner_id" t-value="res_company.partner_id"/>
+                                <t t-call="base.banks"/>
+
+                            </td>
+                            <td width="50%">
+                                <div>
+                                    <strong t-if="o.type in ['out_invoice', 'out_refund']">Customer</strong>
+                                    <strong t-if="o.type in ['in_invoice', 'in_refund']">Supplier</strong>
+                                </div>
+                                <div>
+                                    <strong t-field="o.commercial_partner_id.name"/>
+                                </div>
+                                <div>
+                                    <strong>Address:</strong>
+                                    <address t-field="o.commercial_partner_id"
+                                             t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: false, &quot;no_tag_br&quot;: true}"/>
+                                </div>
+
+                                <t t-set="partner_id" t-value="o.commercial_partner_id"/>
+                                <t t-call="base.banks"/>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top: initial;">
+                                <div t-if="res_company.partner_id.vat">
+                                    <strong>CIF:</strong>
+                                    <span t-field="res_company.partner_id.vat"/>
+                                </div>
+                                <div t-if="res_company.partner_id.nrc">
+                                    <strong>NRC:</strong>
+                                    <span t-field="res_company.partner_id.nrc"/>
+                                </div>
+                                <div t-if="res_company.share_capital">
+                                    <strong>Share Capital:</strong>
+                                    <span t-field="res_company.share_capital"/>
+                                </div>
+                                <div t-if="'vat_on_payment' in res_company._fields">
+                                    <div t-if="res_company.vat_on_payment">
+                                        <span>Vat on payment</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span t-esc="', '.join(map(lambda x: (x.tax_id.description or x.tax_id.name), o.tax_line_ids))"/>
+                                </div>
+                            </td>
+                            <td style="border-top: initial;">
+                                <div t-if="o.commercial_partner_id.vat">
+                                    <strong>CIF:</strong>
+                                    <span t-field="o.commercial_partner_id.vat"/>
+                                </div>
+                                <div t-if="o.commercial_partner_id.nrc">
+                                    <strong>NRC:</strong>
+                                    <span t-field="o.commercial_partner_id.nrc"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h4 class="text-center">
+                        <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
+                        <span t-if="o.type == 'out_refund'">Refund Invoice</span>
+                        <span t-if="o.type == 'in_refund'">Supplier Refund</span>
+                        <span t-if="o.type == 'in_invoice'">Supplier Invoice</span>
+                        <t t-if="o.number">
+                            <span t-field="o.number"/>
+                        </t>
+                        <t t-if="not o.number">
+                            <span t-field="o.move_name"/>
+                        </t>
+                        <span>/</span>
+                        <span t-field="o.date_invoice"/>
+                    </h4>
+                    <div t-if="company.watermark_image" class="mb32 col-md-12">
+                        <img t-att-src="'data:image/png;base64,%s' % company.watermark_image"
+                             style="width:100%;text-align:center;position:absolute;opacity:0.05"/>
+                    </div>
+                </div>
+
+                <div>
+                    <t t-raw="0"/>
+                </div>
+
             </t>
-
-            <t t-if="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
-                <t t-set="res_company" t-value="o.company_id.sudo()"/>
-            </t>
-            <t t-if="not o or not 'company_id' in o">
-                <t t-set="company" t-value="res_company"/>
-            </t>
-
-            <t t-set="header_class" t-value="'header'"/>
-            <t t-set="article_class" t-value="'article o_report_layout_standard'"/>
-            <t t-set="footer_class" t-value="'footer'"/>
-
-            <t t-if="company.external_report_layout == 'boxed'">
-                <t t-set="header_class" t-value="'header o_boxed_header'"/>
-                <t t-set="article_class" t-value="'article o_report_layout_boxed'"/>
-                <t t-set="footer_class" t-value="'footer o_boxed_footer'"/>
-            </t>
-            <t t-if="company.external_report_layout == 'clean'">
-                <t t-set="header_class" t-value="'header o_clean_header'"/>
-                <t t-set="article_class" t-value="'article o_report_layout_clean'"/>
-                <t t-set="footer_class" t-value="'footer o_clean_footer'"/>
-            </t>
-
-            <t t-if="company.external_report_layout == 'background'">
-                <t t-set="header_class" t-value="'header o_background_header'"/>
-                <t t-set="article_class" t-value="'article o_report_layout_background'"/>
-                <t t-set="footer_class" t-value="'footer o_background_footer'"/>
-            </t>
-
-
-            <t t-call="l10n_ro_invoice_report.header_invoice"/>
-
-            <div t-attf-class="{{article_class}}">
-                <t t-raw="0"/>
-            </div>
-
-            <t t-call="l10n_ro_invoice_report.footer_invoice"/>
         </template>
 
         <template id="l10n_ro_report_invoice_document_with_payments"
@@ -245,7 +206,6 @@
                     </div>
                 </div>
             </xpath>
-
         </template>
 
         <template id="l10n_ro_report_invoice_document" inherit_id="account.report_invoice_document">
@@ -286,7 +246,7 @@
                                 <span t-field="o.reference"/>
                             </div>
                         </div>
-                        <table class="table table-condensed table-bordered" style="margin-top:150px;">
+                        <table class="table table-condensed table-bordered">
                             <thead>
                                 <tr>
                                     <th>Ord</th>
@@ -514,25 +474,6 @@
                     </div>
                 </t>
             </xpath>
-        </template>
-
-        <template id="footer_invoice">
-
-            <div t-atts-class="{{footer_class}}">
-                <div class="text-right" style="border-top: 1px solid black;">
-                    <ul class="list-inline">
-                        <li>Page:</li>
-                        <li>
-                            <span class="page"/>
-                        </li>
-                        <li>/</li>
-                        <li>
-                            <span class="topage"/>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
         </template>
 
         <template id="report_address">
