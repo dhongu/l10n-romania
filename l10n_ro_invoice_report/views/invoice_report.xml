@@ -257,7 +257,7 @@
                                         groups="sale.group_discount_per_so_line">Discount (%)
                                     </th>
                                     <th class="text-right">Amount</th>
-                                    <th class="text-right">Taxes</th>
+                                    <th class="text-right">VAT</th>
                                 </tr>
                             </thead>
                             <tbody class="invoice_tbody">
@@ -348,7 +348,7 @@
                                     <table class="table table-condensed">
                                         <tr class="border-black">
                                             <td>
-                                                <strong>Total Without Taxes</strong>
+                                                <strong>Total Without VAT</strong>
                                             </td>
                                             <td class="text-right">
                                                 <t t-set="amount_untaxeds" t-value="o.amount_untaxed"/>
@@ -366,7 +366,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Taxes</td>
+                                            <td>VAT</td>
                                             <td class="text-right">
                                                 <t t-set="amount_tax" t-value="o.amount_tax"/>
                                                 <t t-if="o.type == 'out_refund'">
@@ -627,10 +627,10 @@
                                             <strong>Amount</strong>
                                         </th>
                                         <th class="text-right">
-                                            <strong>Taxes</strong>
+                                            <strong>VAT</strong>
                                         </th>
                                         <th class="text-right">
-                                            <strong>Amount with taxes</strong>
+                                            <strong>Amount with VAT</strong>
                                         </th>
                                     </tr>
                                 </thead>
@@ -664,14 +664,14 @@
                                     <table class="table table-condensed">
                                         <tr class="border-black">
                                             <td>
-                                                <strong>Total Without Taxes</strong>
+                                                <strong>Total Without VAT</strong>
                                             </td>
                                             <td class="text-right">
                                                 <span t-field="o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Taxes</td>
+                                            <td>VAT</td>
                                             <td class="text-right">
                                                 <span t-field="o.amount_tax" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                             </td>
