@@ -5,7 +5,8 @@
 
 import logging
 
-from odoo import api, models
+from odoo import api, models, _
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -41,5 +42,7 @@ class ResPartner(models.Model):
     def button_get_partner_data(self):
         if self.name and not self.vat:
             self.vat = self.name
-        self.ro_vat_change()
+        res = self.ro_vat_change()
+        if "warning" in res:
+            raise ValidationError(_("ANAF Webservice not working.\nPlease try again until it works."))
         # self.onchange_vat_subjected()  # fortare compltare ro
