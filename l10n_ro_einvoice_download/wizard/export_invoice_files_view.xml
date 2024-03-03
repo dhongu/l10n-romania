@@ -4,10 +4,10 @@
             <field name="name">invoice.files.export</field>
             <field name="model">invoice.files.export</field>
             <field name="arch" type="xml">
-                <form string="Export Invoice Files">
+                <form string="Export Zip Attachments">
                     <field name="state" invisible="1" />
                     <div states="choose">
-                        <p>Export selected invoice files</p>
+                        <p>Export selected invoice attached zip files</p>
                     </div>
                     <div states="get">
                         <h2>Export Complete</h2>
@@ -29,7 +29,7 @@
 
 
     <record id="action_invoice_files_export" model="ir.actions.act_window">
-        <field name="name">Export Invoice Files</field>
+        <field name="name">Export Zip Attachments</field>
         <field name="res_model">invoice.files.export</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>

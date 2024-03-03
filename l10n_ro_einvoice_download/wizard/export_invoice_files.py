@@ -30,8 +30,9 @@ class InvoiceFilesExport(models.TransientModel):
                         ]
                     )
                     for attachment in attachments:
-                        file_data = base64.b64decode(attachment.datas)
-                        zip_file.writestr(attachment.name, file_data)
+                        if invoice.l10n_ro_edi_transaction in attachment.name:
+                            file_data = base64.b64decode(attachment.datas)
+                            zip_file.writestr(attachment.name, file_data)
 
         # Set the zip file content and name
         self.write({"data_file": base64.b64encode(zip_buffer.getvalue()), "name": "attached_files.zip", "state": "get"})
