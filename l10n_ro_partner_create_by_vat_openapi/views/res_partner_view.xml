@@ -12,7 +12,7 @@
                             name="button_get_partner_data_openapi"
                             attrs="{'invisible': [('name', '&lt;&gt;', ' '),('vat', '=', False),('is_company', '=', False )]}"
                             colspan="2"
-                            string="Get Partner Data OpenAPI"
+                            string="Get Data OpenAPI"
                             context="{'active_id': active_id}"
                             type="object"
                         />

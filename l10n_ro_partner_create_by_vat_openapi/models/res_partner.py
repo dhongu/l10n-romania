@@ -1,4 +1,4 @@
-# Copyright  2015 Forest and Biomass Romania
+# Copyright 2024 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
@@ -19,14 +19,14 @@ headers = {"User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)", "
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    @api.model
-    def create(self, vals):
-        partner = super().create(vals)
-        if "name" in vals:
-            name = vals["name"].lower().strip()
-            if "ro" in name:
-                name = name.replace("ro", "")
-        return partner
+    # @api.model
+    # def create(self, vals):
+    #     partner = super().create(vals)
+    #     if "name" in vals:
+    #         name = vals["name"].lower().strip()
+    #         if "ro" in name:
+    #             name = name.replace("ro", "")
+    #     return partner
 
     @api.model
     def _get_Openapi(self, cod):
@@ -131,3 +131,9 @@ class ResPartner(models.Model):
                 except BaseException:
                     self.write({"l10n_ro_vat_subjected": self.vies_vat_check(vat_country, vat_number)})
                     raise Warning(_("No suitable information found for this partner"))
+
+    @api.onchange("vat", "country_id")
+    def ro_vat_change(self):
+        skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
+        self = self.with_context(skip_ro_vat_change=skip_ro_vat_change)
+        return super().ro_vat_change()

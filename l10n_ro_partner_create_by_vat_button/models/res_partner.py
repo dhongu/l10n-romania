@@ -47,7 +47,13 @@ class ResPartner(models.Model):
             return False
         if self.name and not self.vat:
             self.vat = self.name
-        self.ro_vat_change()
+        self.with_context(skip_ro_vat_change=False).ro_vat_change()
 
         return True
         # self.onchange_vat_subjected()  # fortare compltare ro
+
+    @api.onchange("vat", "country_id")
+    def ro_vat_change(self):
+        skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
+        self = self.with_context(skip_ro_vat_change=skip_ro_vat_change)
+        return super().ro_vat_change()
