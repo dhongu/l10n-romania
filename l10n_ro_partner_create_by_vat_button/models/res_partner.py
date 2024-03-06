@@ -55,5 +55,4 @@ class ResPartner(models.Model):
     @api.onchange("vat", "country_id")
     def ro_vat_change(self):
         skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
-        self = self.with_context(skip_ro_vat_change=skip_ro_vat_change)
-        return super().ro_vat_change()
+        return super(ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)).ro_vat_change()
