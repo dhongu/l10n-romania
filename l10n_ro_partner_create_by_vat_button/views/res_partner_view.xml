@@ -12,7 +12,7 @@
                             name="button_get_partner_data"
                             attrs="{'invisible': ['|','|',('vat', '=', False),('is_company', '=', False ), ('id', '=', False)]}"
                             colspan="2"
-                            string="Get Partner Data"
+                            string="Get Data ANAF"
                             context="{'active_id': active_id}"
                             type="object"
                         />
