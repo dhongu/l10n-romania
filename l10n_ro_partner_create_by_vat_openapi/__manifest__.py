@@ -1,11 +1,11 @@
-# Copyright  2015 Forest and Biomass Romania
+# Copyright 2024 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": "Romania - Partner Create by VAT",
-    "summary": "Romania - Partner Create by VAT",
+    "name": "Partner Create by VAT from OpenAPI",
+    "summary": "Romania - Partner Create by VAT from OpenAPI",
     "version": "16.0.1.0.0",
-    "author": "Forest and Biomass Romania, " "Odoo Community Association (OCA)",
+    "author": "Terrabit, " "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
     "depends": [

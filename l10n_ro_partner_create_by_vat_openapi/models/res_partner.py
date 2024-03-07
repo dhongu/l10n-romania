@@ -1,4 +1,4 @@
-# Copyright  2015 Forest and Biomass Romania
+# Copyright 2024 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
@@ -9,7 +9,7 @@ from urllib.request import Request, urlopen
 from stdnum.eu.vat import check_vies
 
 from odoo import _, api, models
-from odoo.exceptions import UserError, Warning
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -19,14 +19,14 @@ headers = {"User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)", "
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    @api.model
-    def create(self, vals):
-        partner = super().create(vals)
-        if "name" in vals:
-            name = vals["name"].lower().strip()
-            if "ro" in name:
-                name = name.replace("ro", "")
-        return partner
+    # @api.model
+    # def create(self, vals):
+    #     partner = super().create(vals)
+    #     if "name" in vals:
+    #         name = vals["name"].lower().strip()
+    #         if "ro" in name:
+    #             name = name.replace("ro", "")
+    #     return partner
 
     @api.model
     def _get_Openapi(self, cod):
@@ -88,8 +88,8 @@ class ResPartner(models.Model):
                 valid = self.vies_vat_check(vat_country, vat_number)
                 if valid:
                     self.write({"vat": part.name.upper().replace(" ", "")})
-            except BaseException:
-                raise Warning(_("No VAT number found"))
+            except BaseException as e:
+                raise UserError(_("No VAT number found")) from e
 
         vat_country, vat_number = self._split_vat(part.vat)
 
@@ -128,6 +128,12 @@ class ResPartner(models.Model):
                     if not part.street and result.address and result.address != "---":
                         self.write({"street": result.address.title()})
                     self.write({"l10n_ro_vat_subjected": result.valid})
-                except BaseException:
+                except BaseException as e:
                     self.write({"l10n_ro_vat_subjected": self.vies_vat_check(vat_country, vat_number)})
-                    raise Warning(_("No suitable information found for this partner"))
+                    raise UserError(_("No suitable information found for this partner")) from e
+
+    @api.onchange("vat", "country_id")
+    def ro_vat_change(self):
+        skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
+        self = self.with_context(skip_ro_vat_change=skip_ro_vat_change)
+        return super(ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)).ro_vat_change()
