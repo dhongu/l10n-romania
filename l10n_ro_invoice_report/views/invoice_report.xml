@@ -83,7 +83,12 @@
                         />
                     </t>
                     <div>
-                        <t t-set="partner_id" t-value="res_company.partner_id" />
+                        <t t-if="o.journal_id.operating_unit_id and o.journal_id.operating_unit_id.bank_ids">
+                            <t t-set="partner_id" t-value="o.journal_id.operating_unit_id" />
+                        </t>
+                        <t t-else="">
+                            <t t-set="partner_id" t-value="res_company.partner_id" />
+                        </t>
                         <t t-call="l10n_ro_config.banks" />
                     </div>
 
