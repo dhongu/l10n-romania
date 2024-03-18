@@ -7,8 +7,8 @@
             <form string="Get Partner Data">
                 <div>
                     <p>Select trough which service to get the data:</p>
-                    <lavel for="service"/>
-                    <field name="service" widget="radio"/>
+                    <lavel for="service" />
+                    <field name="service" widget="radio" />
                 </div>
                 <footer>
                     <button
@@ -28,7 +28,7 @@
         <field name="res_model">get.partner.data</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner" />
         <field name="binding_view_types">form</field>
         <field name="domain">[('company_type', '=', 'company')]</field>
     </record>
