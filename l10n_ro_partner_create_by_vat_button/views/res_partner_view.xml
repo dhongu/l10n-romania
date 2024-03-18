@@ -6,17 +6,8 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
-                <xpath expr="//sheet" position="before">
-                    <header>
-                        <button
-                            name="button_get_partner_data"
-                            attrs="{'invisible': ['|','|',('vat', '=', False),('is_company', '=', False ), ('id', '=', False)]}"
-                            colspan="2"
-                            string="Get Data ANAF"
-                            context="{'active_id': active_id}"
-                            type="object"
-                        />
-                    </header>
+                <xpath expr="//button[@name='button_get_partner_data_openapi']" position="attributes">
+                    <attribute name="invisible">True</attribute>
                 </xpath>
 
             </field>
