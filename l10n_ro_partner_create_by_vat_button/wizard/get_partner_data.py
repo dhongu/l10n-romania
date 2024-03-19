@@ -1,7 +1,7 @@
-from odoo import fields, models
+from odoo import _,api, fields, models
+from odoo.exceptions import UserError
 
-
-class BusinessProcessExport(models.TransientModel):
+class GetPartnerData(models.TransientModel):
     _name = "get.partner.data"
     _description = "Get partner data from"
 
@@ -14,6 +14,10 @@ class BusinessProcessExport(models.TransientModel):
         if self.service == "anaf":
             partner.button_get_partner_data()
         if self.service == "openapi":
+            openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default=False)
+            if not openapi_key:
+                raise UserError(_("API Key is missing - please contact support service!"))
             partner.button_get_partner_data_openapi()
 
         return
+
