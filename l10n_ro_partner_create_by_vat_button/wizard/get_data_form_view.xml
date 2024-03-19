@@ -7,7 +7,7 @@
             <form string="Get Partner Data">
                 <div>
                     <p>Select service:</p>
-                    <field name="service" widget="radio"/>
+                    <field name="service" widget="radio" />
                 </div>
                 <footer>
                     <button
@@ -27,7 +27,7 @@
         <field name="res_model">get.partner.data</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner" />
         <field name="binding_view_types">form</field>
     </record>
 </odoo>

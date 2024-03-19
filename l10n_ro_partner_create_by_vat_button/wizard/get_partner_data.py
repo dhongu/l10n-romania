@@ -1,5 +1,6 @@
-from odoo import _,api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
+
 
 class GetPartnerData(models.TransientModel):
     _name = "get.partner.data"
@@ -20,4 +21,3 @@ class GetPartnerData(models.TransientModel):
             partner.button_get_partner_data_openapi()
 
         return
-
