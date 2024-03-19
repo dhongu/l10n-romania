@@ -1,0 +1,103 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_partner_create_by_vat_button
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 07:28+0000\n"
+"PO-Revision-Date: 2024-03-19 07:28+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__service__anaf
+msgid "ANAF"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: code:addons/l10n_ro_partner_create_by_vat_button/wizard/get_partner_data.py:0
+#: code:addons/odoo-addons/dh_l10n_romania/l10n_ro_partner_create_by_vat_button/wizard/get_partner_data.py:0
+#, python-format
+msgid "API Key is missing - please contact support service!"
+msgstr "Cheie de acces lipsă - contactați serviciul de asistență!"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__create_uid
+msgid "Created by"
+msgstr "Creat de"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__create_date
+msgid "Created on"
+msgstr "Creat pe"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Get Data"
+msgstr "Preia date"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Get Partner Data"
+msgstr "Preia date partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.actions.act_window,name:l10n_ro_partner_create_by_vat_button.action_get_partner_data
+msgid "Get Partner's Data"
+msgstr "Preia date partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_get_partner_data
+msgid "Get partner data from"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__service__openapi
+msgid "OpenAPI"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Select service:"
+msgstr "Selectare serviciu"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__service
+msgid "Service"
+msgstr "Serviciu"
