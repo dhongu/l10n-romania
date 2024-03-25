@@ -20,7 +20,7 @@ headers = {"User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)", "
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    last_updated_at = fields.Date(string='Last Updated')
+    last_updated_at = fields.Date(string="Last Updated")
 
     # @api.model
     # def create(self, vals):
@@ -123,11 +123,11 @@ class ResPartner(models.Model):
                         values["vat"] = self.vat.replace("RO", "")
                     self.compute_last_updated_at(values["last_update"])
                     values.pop("last_update")
-                    radiata=values["radiata"]
+                    radiata = values["radiata"]
                     values.pop("radiata")
                     self.write(values)
                     if radiata:
-                        self.active=False
+                        self.active = False
 
             else:
                 try:
