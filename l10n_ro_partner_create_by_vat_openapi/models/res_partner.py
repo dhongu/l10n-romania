@@ -4,11 +4,12 @@
 
 import json
 import logging
+from datetime import datetime
 from urllib.request import Request, urlopen
 
 from stdnum.eu.vat import check_vies
 
-from odoo import _, api, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -19,6 +20,8 @@ headers = {"User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)", "
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    last_updated_at = fields.Date(string='Last Updated')
+
     # @api.model
     # def create(self, vals):
     #     partner = super().create(vals)
@@ -27,6 +30,10 @@ class ResPartner(models.Model):
     #         if "ro" in name:
     #             name = name.replace("ro", "")
     #     return partner
+
+    def compute_last_updated_at(self, data):
+        date = data[:10]
+        self.last_updated_at = datetime.strptime(date, "%Y-%m-%d").date()
 
     @api.model
     def _get_Openapi(self, cod):
@@ -61,6 +68,8 @@ class ResPartner(models.Model):
                 "zip": res["cod_postal"] and res["cod_postal"] or "",
                 "l10n_ro_vat_subjected": bool(res["tva"]),
                 "state_id": state,
+                "radiata": res["radiata"],
+                "last_update": res["meta"]["updated_at"],
                 "company_type": "company",
             }
 
@@ -112,7 +121,13 @@ class ResPartner(models.Model):
                 if values:
                     if not values["l10n_ro_vat_subjected"]:
                         values["vat"] = self.vat.replace("RO", "")
+                    self.compute_last_updated_at(values["last_update"])
+                    values.pop("last_update")
+                    radiata=values["radiata"]
+                    values.pop("radiata")
                     self.write(values)
+                    if radiata:
+                        self.active=False
 
             else:
                 try:

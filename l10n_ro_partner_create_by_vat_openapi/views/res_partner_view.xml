@@ -18,6 +18,9 @@
                         />
                     </header>
                 </xpath>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="last_updated_at" attrs="{'invisible':[('last_updated_at','=',False)]}"/>
+                </xpath>
             </field>
         </record>
     </data>
