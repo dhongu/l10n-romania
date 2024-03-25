@@ -6,7 +6,11 @@ class GetPartnerData(models.TransientModel):
     _name = "get.partner.data"
     _description = "Get partner data from"
 
-    service = fields.Selection([("anaf", "ANAF"), ("openapi", "OpenAPI")], default="anaf", string="Service")
+    service = fields.Selection(
+        [("anaf", "ANAF"), ("openapi", "OpenAPI"), ("vies", "VIES for non-Romanian partners")],
+        default="anaf",
+        string="Service",
+    )
 
     def do_get_data(self):
         active_ids = self.env.context.get("active_ids", [])
@@ -19,5 +23,6 @@ class GetPartnerData(models.TransientModel):
             if not openapi_key:
                 raise UserError(_("API Key is missing - please contact support service!"))
             partner.button_get_partner_data_openapi()
-
+        if self.service == "vies":
+            partner.get_partner_name_from_vies()
         return
