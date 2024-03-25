@@ -4,7 +4,9 @@
 
 
 import logging
+
 from zeep import Client
+
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
@@ -54,9 +56,8 @@ class ResPartner(models.Model):
         # self.onchange_vat_subjected()  # fortare compltare ro
 
     def get_partner_name_from_vies(self):
-
         # Create a client for the VIES SOAP service
-        client = Client('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl')
+        client = Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")
 
         # Make a request to the VIES service to check the VAT number
         response = client.service.checkVat(countryCode=self.name[:2], vatNumber=self.name[2:])

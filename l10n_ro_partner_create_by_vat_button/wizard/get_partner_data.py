@@ -6,8 +6,11 @@ class GetPartnerData(models.TransientModel):
     _name = "get.partner.data"
     _description = "Get partner data from"
 
-    service = fields.Selection([("anaf", "ANAF"), ("openapi", "OpenAPI"), ("vies", "VIES for non-Romanian partners")],
-                               default="anaf", string="Service")
+    service = fields.Selection(
+        [("anaf", "ANAF"), ("openapi", "OpenAPI"), ("vies", "VIES for non-Romanian partners")],
+        default="anaf",
+        string="Service",
+    )
 
     def do_get_data(self):
         active_ids = self.env.context.get("active_ids", [])
