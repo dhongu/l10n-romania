@@ -4,12 +4,11 @@
 
 import json
 import logging
-from datetime import datetime
 from urllib.request import Request, urlopen
 
 from stdnum.eu.vat import check_vies
 
-from odoo import _, api, fields, models
+from odoo import _, api, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
