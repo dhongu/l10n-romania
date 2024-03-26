@@ -1,0 +1,7 @@
+<odoo noupdate="0">
+    <record id="account_edi.ir_cron_edi_network" model="ir.cron">
+        <field
+            name="code"
+        >model.search([('state', 'in', ('to_send', 'to_cancel'))])._process_documents_web_services(job_count=1)</field>
+    </record>
+</odoo>

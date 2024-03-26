@@ -23,6 +23,7 @@
             <field name="arch" type="xml">
                 <field name="payment_state" position="after">
                     <field name="edi_state" optional="hide" />
+                    <field name="l10n_ro_edi_transaction" optional="hide" />
                     <field name="l10n_ro_edi_download" optional="hide" />
                 </field>
             </field>

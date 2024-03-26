@@ -35,6 +35,8 @@ class AccountMove(models.Model):
 
     def action_resend_edi(self):
         self.ensure_one()
+        if self.l10n_ro_edi_download:
+            raise UserError(_("Factura {} are deja ID de download").format(self.name))
         edi_document_vals_list = []
         for edi_format in self.journal_id.edi_format_ids:
             is_edi_needed = self.is_invoice(include_receipts=False) and edi_format._is_required_for_invoice(self)
