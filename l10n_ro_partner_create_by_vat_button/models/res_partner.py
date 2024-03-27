@@ -45,7 +45,7 @@ class ResPartner(models.Model):
         partner = super().create(vals)
         return partner
 
-    def button_get_partner_data(self):
+    def get_partner_data(self):
         if self.country_id and self.country_id.code != "RO":
             return False
         if self.name and not self.vat:
