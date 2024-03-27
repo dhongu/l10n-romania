@@ -61,6 +61,7 @@ class ResPartner(models.Model):
                 "zip": res["cod_postal"] and res["cod_postal"] or "",
                 "l10n_ro_vat_subjected": bool(res["tva"]),
                 "state_id": state,
+                "radiata": res["radiata"],
                 "company_type": "company",
             }
 
@@ -112,7 +113,11 @@ class ResPartner(models.Model):
                 if values:
                     if not values["l10n_ro_vat_subjected"]:
                         values["vat"] = self.vat.replace("RO", "")
+                    radiata = values["radiata"]
+                    values.pop("radiata")
                     self.write(values)
+                    if radiata:
+                        self.active = False
 
             else:
                 try:
