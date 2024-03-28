@@ -13,4 +13,4 @@ class GetPartnerData(models.TransientModel):
             openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default=False)
             if not openapi_key:
                 raise UserError(_("API Key is missing - please contact support service!"))
-            self.button_get_partner_data_openapi()
+            self.partner_id.button_get_partner_data_openapi()
