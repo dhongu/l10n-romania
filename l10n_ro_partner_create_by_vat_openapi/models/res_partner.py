@@ -121,7 +121,7 @@ class ResPartner(models.Model):
                     if radiata:
                         self.active = False
                     if not self.phone:
-                        self.phone=phone
+                        self.phone = phone
 
             else:
                 try:
