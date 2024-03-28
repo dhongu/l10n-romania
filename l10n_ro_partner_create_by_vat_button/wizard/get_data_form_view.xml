@@ -7,7 +7,7 @@
             <form string="Get Partner Data">
                 <div>
                     <p>Select service for partner:
-                    <field name="partner_id" readonly="True"/>
+                    <field name="partner_id" readonly="True" />
                     </p>
 
                     <field name="service" widget="radio" />
