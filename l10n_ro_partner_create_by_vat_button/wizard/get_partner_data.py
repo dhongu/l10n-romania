@@ -1,4 +1,4 @@
-from odoo import fields, models,api
+from odoo import fields, models
 
 
 class GetPartnerData(models.TransientModel):
@@ -12,15 +12,15 @@ class GetPartnerData(models.TransientModel):
     )
 
     def default_get(self, fields):
-        res = super(GetPartnerData, self).default_get(fields)
+        res = super().default_get(fields)
         active_ids = self.env.context.get("active_ids", [])
         active_model = self.env.context.get("active_model", "res.partner")
         partner = self.env[active_model].browse(active_ids)
         if partner:
-            res['partner_id'] = partner.id
+            res["partner_id"] = partner.id
         return res
 
-    partner_id = fields.Many2one('res.partner', string='Partner')
+    partner_id = fields.Many2one("res.partner", string="Partner")
 
     def do_get_data(self):
         if self.service == "anaf":
