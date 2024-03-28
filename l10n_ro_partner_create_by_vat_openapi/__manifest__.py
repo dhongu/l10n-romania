@@ -12,9 +12,7 @@
         "base_vat",
         "l10n_ro_config",
         "l10n_ro_partner_create_by_vat",
-    ],
-    "data": [
-        "views/res_partner_view.xml",
+        "l10n_ro_partner_create_by_vat_button",
     ],
     "installable": True,
     "license": "AGPL-3",
