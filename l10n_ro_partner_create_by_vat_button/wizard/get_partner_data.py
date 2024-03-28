@@ -19,4 +19,4 @@ class GetPartnerData(models.TransientModel):
             partner.get_partner_data()
         if self.service == "vies":
             partner.get_partner_name_from_vies()
-        return
+        return partner
