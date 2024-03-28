@@ -115,9 +115,13 @@ class ResPartner(models.Model):
                         values["vat"] = self.vat.replace("RO", "")
                     radiata = values["radiata"]
                     values.pop("radiata")
+                    phone = values["phone"]
+                    values.pop("phone")
                     self.write(values)
                     if radiata:
                         self.active = False
+                    if not self.phone:
+                        self.phone=phone
 
             else:
                 try:
