@@ -569,7 +569,7 @@
                                             </div>
                                         </td>
                                         <td class="text-right">
-                                            <t t-if="move.product_qty">
+                              <!--              <t t-if="move.product_qty">
                                                 <t t-set="product_qty" t-value="move.product_qty" />
                                                 <t
                                                     t-set="product_uom_qty"
@@ -587,7 +587,8 @@
                                                     t-value="move.product_uom._compute_quantity(move.quantity_done, move.product_uom, rounding_method='HALF-UP')"
                                                 />
                                                 <span t-esc="product_qty" />
-                                            </t>
+                                            </t>-->
+                                            <span t-field="move.quantity_done"  />
                                             <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
@@ -645,7 +646,7 @@
                                             </th>
                                             <th class="text-right">
                                                 <span
-                                                    t-esc="line['list_price'] * product_uom_qty "
+                                                    t-esc="line['list_price'] * move.quantity_done "
                                                     t-options='{"widget": "float", "precision": 2}'
                                                 />
                                             </th>
@@ -1277,7 +1278,7 @@
                                             </div>
                                         </td>
                                         <td class="text-right">
-                                            <span t-field="move.product_uom_qty" />
+                                            <span t-field="move.quantity_done" />
                                             <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
