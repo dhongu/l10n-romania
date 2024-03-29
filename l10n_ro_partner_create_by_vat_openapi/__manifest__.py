@@ -4,16 +4,15 @@
 {
     "name": "Partner Create by VAT from OpenAPI",
     "summary": "Romania - Partner Create by VAT from OpenAPI",
-    "version": "15.0.1.0.0",
+    "version": "15.0.1.0.2",
     "author": "Terrabit, " "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
     "depends": [
         "base_vat",
         "l10n_ro_config",
-    ],
-    "data": [
-        "views/res_partner_view.xml",
+        "l10n_ro_partner_create_by_vat",
+        "l10n_ro_partner_create_by_vat_button",
     ],
     "installable": True,
     "license": "AGPL-3",
