@@ -9,4 +9,5 @@ from odoo import fields, models
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
-    operating_unit_id = fields.Many2one("res.partner", string="Operating Unit")
+    operating_unit_id = fields.Many2one("res.partner", string="Operating Unit",
+                                        domain="[('parent_id','=',env.company.partner_id)]")
