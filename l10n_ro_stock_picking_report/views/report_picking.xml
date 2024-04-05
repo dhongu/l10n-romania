@@ -588,7 +588,7 @@
                                                 />
                                                 <span t-esc="product_qty" />
                                             </t>-->
-                                            <span t-field="move.quantity_done"  />
+                                            <span t-field="move.quantity_done" />
                                             <span t-field="move.product_uom" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-right">
