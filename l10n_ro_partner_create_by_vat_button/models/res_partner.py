@@ -23,27 +23,28 @@ class ResPartner(models.Model):
         partners = self.filtered(lambda p: p.country_id.code != "RO")
         return super(ResPartner, partners).check_vat()
 
-    @api.model
-    def create(self, vals):
-        if "name" in vals and vals["name"]:
-            vat_number = vals["name"].lower().strip()
-            if "ro" in vat_number:
-                vat_number = vat_number.replace("ro", "")
-                if vat_number.isdigit():
-                    try:
-                        vals["vat"] = vals["name"]
-                        result = self._get_Anaf(vat_number)
-                        if result:
-                            res = self._Anaf_to_Odoo(result)
-                            vals.update(res)
-                    except Exception as e:
-                        _logger.info("ANAF Webservice not working. Exception: % s" % e)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if "name" in vals and vals["name"]:
+                vat_number = vals["name"].lower().strip()
+                if "ro" in vat_number:
+                    vat_number = vat_number.replace("ro", "")
+                    if vat_number.isdigit():
+                        try:
+                            vals["vat"] = vals["name"]
+                            result = self._get_Anaf(vat_number)
+                            if result:
+                                res = self._Anaf_to_Odoo(result)
+                                vals.update(res)
+                        except Exception as e:
+                            _logger.info("ANAF Webservice not working. Exception: % s" % e)
 
-        if vals.get("state_id") and not isinstance(vals["state_id"], int):
-            vals["state_id"] = vals["state_id"].id
+            if vals.get("state_id") and not isinstance(vals["state_id"], int):
+                vals["state_id"] = vals["state_id"].id
 
-        partner = super().create(vals)
-        return partner
+        res = super().create(vals_list)
+        return res
 
     def get_partner_data(self):
         if self.country_id and self.country_id.code != "RO":
