@@ -18,12 +18,13 @@ class AccountMove(models.Model):
         for move in self:
             if move.move_type in ["out_invoice", "out_refund"] and move.commercial_partner_id.is_company:
                 country_ro = self.env.ref("base.ro")
-                partner = move.commercial_partner_id
-                if not partner.country_id:
-                    errors += [_("Partenerul %s nu are completata tara") % partner.name]
-                elif partner.country_id == country_ro:
-                    if not partner.street:
-                        errors += [_("Partenerul %s nu are completata strada") % partner.name]
+                parteners = list({move.partner_id, move.commercial_partner_id, move.partner_shipping_id})
+                for partner in parteners:
+                    if not partner.country_id:
+                        errors += [_("Partenerul %s nu are completata tara") % partner.name]
+                    elif partner.country_id == country_ro:
+                        if not partner.street:
+                            errors += [_("Partenerul %s nu are completata strada") % partner.name]
 
                     if not partner.city:
                         errors += [_("Partenerul %s nu are completata localitatea") % partner.name]
@@ -91,10 +92,3 @@ class AccountMoveLine(models.Model):
                 line.l10n_ro_product_length = len(line.product_id.display_name)
             else:
                 line.l10n_ro_product_length = 0
-
-    def _get_computed_price_unit(self):
-        self.ensure_one()
-        if self.move_id.move_type not in ["in_invoice", "in_refund"] or not self.move_id.l10n_ro_edi_download:
-            return super()._get_computed_price_unit()
-        else:
-            return self.price_unit

@@ -9,29 +9,6 @@ from odoo import models
 _logger = logging.getLogger(__name__)
 
 
-class AccountEdiFormat(models.Model):
-    _inherit = "account.edi.format"
-
-    def _find_value(self, xpath, xml_element, namespaces=None):
-        if namespaces is None:
-            namespaces = {}
-
-        namespaces.update(
-            {
-                "qdt": "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDataTypes-2",
-                "ccts": "urn:un:unece:uncefact:documentation:2",
-                "udt": "urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2",
-                "cac": "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2",  # noqa: B950
-                "cbc": "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2",
-                "xsi": "http://www.w3.org/2001/XMLSchema-instance",
-            }
-        )
-
-        res = super()._find_value(xpath, xml_element, namespaces=namespaces)
-
-        return res
-
-
 class AccountEdiXmlCIUSRO(models.Model):
     _inherit = "account.edi.xml.cius_ro"
 
