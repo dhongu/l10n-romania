@@ -8,6 +8,10 @@ from odoo.exceptions import UserError
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    def _l10n_ro_prepare_invoice_for_download(self):
+        res = super()._l10n_ro_prepare_invoice_for_download()
+        return res.with_delay()
+
     def action_post(self):
         res = super().action_post()
         errors = []
