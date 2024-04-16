@@ -27,6 +27,7 @@ class StockPickingCumulative(models.TransientModel):
     picking_type_code = fields.Selection(related="picking_type_id.code")
     origin = fields.Char()
     group_id = fields.Char()
+    date_done = fields.Datetime()
 
     report_id = fields.Many2one(
         "ir.actions.report",
@@ -48,6 +49,7 @@ class StockPickingCumulative(models.TransientModel):
 
         res["date_from"] = fields.Date.to_string(from_date)
         res["date_to"] = fields.Date.to_string(to_date)
+        res["date_done"] = res["date_to"]
         return res
 
     def button_show(self):

@@ -49,7 +49,7 @@ class ReportPickingDelivery(models.AbstractModel):
                 res["price"] = 0.0
                 list_price = 0.0
 
-            taxes_sale = taxes_ids.compute_all(list_price, quantity=move_line.product_qty, product=line.product_id)
+            taxes_sale = taxes_ids.compute_all(list_price, quantity=move_line.quantity_done, product=line.product_id)
 
             res["tax"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
             res["amount"] = taxes_sale["total_excluded"]
@@ -134,7 +134,7 @@ class ReportPickingReception(models.AbstractModel):
 
             taxes = line.taxes_id.compute_all(
                 res["price"],
-                quantity=move.product_qty,
+                quantity=move.quantity_done,
                 product=move.product_id,
                 partner=move.partner_id,
             )
@@ -158,7 +158,7 @@ class ReportPickingReception(models.AbstractModel):
             taxes_sale = taxes_ids.compute_all(
                 list_price,
                 currency=currency,
-                quantity=move.product_uom_qty,
+                quantity=move.quantity_done,
                 product=move.product_id,
             )
 
@@ -185,7 +185,7 @@ class ReportPickingReception(models.AbstractModel):
             taxes = taxes_ids.compute_all(
                 res["price"],
                 currency=currency,
-                quantity=move.product_uom_qty,
+                quantity=move.quantity_done,
                 product=move.product_id,
                 partner=move.partner_id,
             )
@@ -208,7 +208,7 @@ class ReportPickingReception(models.AbstractModel):
             taxes_sale = taxes_ids.compute_all(
                 list_price,
                 currency=currency,
-                quantity=move.product_uom_qty,
+                quantity=move.quantity_done,
                 product=move.product_id,
             )
 

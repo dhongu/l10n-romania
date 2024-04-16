@@ -10,3 +10,4 @@ class StockLocation(models.Model):
     _inherit = "stock.location"
 
     store_pricelist_id = fields.Many2one("product.pricelist", string="Pricelist")
+    user_id = fields.Many2one("res.users", string="Manager")

@@ -4,4 +4,4 @@
 
 from . import picking
 
-# from . import stock_picking_cumulative
+from . import stock_picking_cumulative
