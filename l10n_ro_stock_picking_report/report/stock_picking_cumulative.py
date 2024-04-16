@@ -49,7 +49,7 @@ class StockPickingCumulative(models.TransientModel):
 
         res["date_from"] = fields.Date.to_string(from_date)
         res["date_to"] = fields.Date.to_string(to_date)
-        res["date_done"] = res["date_to"]
+        res["date_done"] = fields.Datetime.to_string(to_date)
         return res
 
     def button_show(self):
