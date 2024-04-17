@@ -1336,5 +1336,13 @@
                 </t>
             </t>
         </template>
+        <template id="report_c_internal_transfer">
+            <t t-call="l10n_ro_stock_picking_report.report_internal_transfer" />
+        </template>
+        <template id="report_c_recep_sale_price">
+            <t t-call="l10n_ro_stock_picking_report.report_reception_sale_price" />
+        </template>
+
+
     </data>
 </odoo>

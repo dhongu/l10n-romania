@@ -71,7 +71,7 @@
             <field name="binding_model_id" ref="model_stock_picking" />
             <field name="binding_type">report</field>
         </record>
-        <record id="action_report_internal_transfer_cumulative" model="ir.actions.report">
+        <record id="action_report_c_internal_transfer" model="ir.actions.report">
             <field name="name">Cumulative Internal transfer</field>
             <field name="model">stock.picking.cumulative</field>
             <field name="report_type">qweb-pdf</field>
@@ -81,7 +81,7 @@
             <field name="binding_model_id" ref="model_stock_picking_cumulative" />
             <field name="binding_type">report</field>
         </record>
-        <record id="action_report_reception_sale_price_cumulative" model="ir.actions.report">
+        <record id="action_report_c_recep_sale_price" model="ir.actions.report">
             <field name="name">Cumulative Reception with sale price</field>
             <field name="model">stock.picking.cumulative</field>
             <field name="report_type">qweb-pdf</field>

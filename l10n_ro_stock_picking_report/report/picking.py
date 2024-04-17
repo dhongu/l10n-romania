@@ -259,7 +259,6 @@ class ReportDelivery(models.AbstractModel):
     _description = "Report delivery"
     _inherit = "report.abstract_report.delivery_report"
     _template = "l10n_ro_stock_picking_report.report_delivery"
-    # _wrapped_report_class = picking_delivery
 
 
 class ReportDeliveryPrice(models.AbstractModel):
@@ -267,7 +266,6 @@ class ReportDeliveryPrice(models.AbstractModel):
     _description = "Report delivery from store"
     _inherit = "report.abstract_report.delivery_report"
     _template = "l10n_ro_stock_picking_report.report_delivery_price"
-    # _wrapped_report_class = picking_delivery
 
 
 class ReportConsumeVoucher(models.AbstractModel):
@@ -275,7 +273,6 @@ class ReportConsumeVoucher(models.AbstractModel):
     _description = "Report consume voucher"
     _inherit = "report.abstract_report.delivery_report"
     _template = "l10n_ro_stock_picking_report.report_consume_voucher"
-    # _wrapped_report_class = picking_delivery
 
 
 class ReportInternalTransfer(models.AbstractModel):
@@ -283,7 +280,6 @@ class ReportInternalTransfer(models.AbstractModel):
     _description = "Report transfer"
     _inherit = "report.abstract_report.reception_report"
     _template = "l10n_ro_stock_picking_report.report_internal_transfer"
-    # _wrapped_report_class = picking_delivery
 
 
 class ReportReception(models.AbstractModel):
@@ -291,7 +287,6 @@ class ReportReception(models.AbstractModel):
     _description = "Report reception"
     _inherit = "report.abstract_report.reception_report"
     _template = "l10n_ro_stock_picking_report.report_reception"
-    # _wrapped_report_class = picking_reception
 
 
 class ReportReceptionNoTax(models.AbstractModel):
@@ -299,7 +294,6 @@ class ReportReceptionNoTax(models.AbstractModel):
     _description = "Report reception no tax"
     _inherit = "report.abstract_report.reception_report"
     _template = "l10n_ro_stock_picking_report.report_reception_no_tax"
-    # _wrapped_report_class = picking_reception
 
 
 class ReportReceptionSalePrice(models.AbstractModel):
@@ -307,18 +301,43 @@ class ReportReceptionSalePrice(models.AbstractModel):
     _description = "Report reception in store"
     _inherit = "report.abstract_report.reception_report"
     _template = "l10n_ro_stock_picking_report.report_reception_sale_price"
-    # _wrapped_report_class = picking_reception
 
 
 class ReportCumulativeSalePrice(models.AbstractModel):
     _name = "report.l10n_ro_stock_picking_report.report_c_recep_sale_price"
     _description = "Report cumulative reception in store"
     _inherit = "report.abstract_report.reception_report"
-    _template = "l10n_ro_stock_picking_report.report_reception_sale_price"
+    _template = "l10n_ro_stock_picking_report.report_c_recep_sale_price"
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        return {
+            "doc_ids": docids,
+            "doc_model": "stock.picking.cumulative",
+            "data": data,
+            "time": time,
+            "docs": self.env["stock.picking.cumulative"].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
 
 
 class ReportCumulativeIternalTransfer(models.AbstractModel):
     _name = "report.l10n_ro_stock_picking_report.report_c_internal_transfer"
     _description = "Report cumulative internal transfer"
     _inherit = "report.abstract_report.reception_report"
-    _template = "l10n_ro_stock_picking_report.report_internal_transfer"
+    _template = "l10n_ro_stock_picking_report.report_c_internal_transfer"
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        return {
+            "doc_ids": docids,
+            "doc_model": "stock.picking.cumulative",
+            "data": data,
+            "time": time,
+            "docs": self.env["stock.picking.cumulative"].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
