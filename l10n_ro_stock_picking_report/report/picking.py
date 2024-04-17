@@ -308,3 +308,17 @@ class ReportReceptionSalePrice(models.AbstractModel):
     _inherit = "report.abstract_report.reception_report"
     _template = "l10n_ro_stock_picking_report.report_reception_sale_price"
     # _wrapped_report_class = picking_reception
+
+
+class ReportCumulativeSalePrice(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_cumulative_reception_sale_price"
+    _description = "Report cumulative reception in store"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_reception_sale_price"
+
+
+class ReportCumulativeIternalTransfer(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_cumulative_internal_transfer"
+    _description = "Report cumulative internal transfer"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_internal_transfer"
