@@ -61,10 +61,19 @@ class ResPartner(models.Model):
         client = Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")
 
         # Make a request to the VIES service to check the VAT number
-        response = client.service.checkVat(countryCode=self.name[:2], vatNumber=self.name[2:])
+        if not self.vat.isdigit():
+            vat_number = self.vat[2:]
+            country_code = self.vat[:2]
+        elif self.country_id:
+            vat_number = self.vat
+            country_code = self.country_id.code
+        else:
+            raise UserError("Please add the country code to the vat number or country field")
+
+        response = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
         if response.valid:
-            self.vat = self.name
-            self.country_id = self.env["res.country"].search([("code", "ilike", self.name[:2].lower())])[0].id
+            self.vat = vat_number
+            self.country_id = self.env["res.country"].search([("code", "ilike", country_code)])[0].id
             self.name = response.name
             self.street = response.address
         else:
