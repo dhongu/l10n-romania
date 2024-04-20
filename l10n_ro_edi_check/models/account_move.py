@@ -18,7 +18,7 @@ class AccountMove(models.Model):
         for move in self:
             if move.move_type in ["out_invoice", "out_refund"] and move.commercial_partner_id.is_company:
                 country_ro = self.env.ref("base.ro")
-                parteners = list(set([move.partner_id, move.commercial_partner_id, move.partner_shipping_id]))
+                parteners = list({move.partner_id, move.commercial_partner_id, move.partner_shipping_id})
                 for partner in parteners:
                     if not partner.country_id:
                         errors += [_("Partenerul %s nu are completata tara") % partner.name]
@@ -32,7 +32,9 @@ class AccountMove(models.Model):
                         state_bucuresti = self.env.ref("base.RO_B")
                         if partner.state_id == state_bucuresti and partner.city:
                             if "sector" not in partner.city.lower():
-                                errors += [_("localitatea pertenerului %s trebuie sa fie de forma SectorX ") % partner.name]
+                                errors += [
+                                    _("localitatea pertenerului %s trebuie sa fie de forma SectorX ") % partner.name
+                                ]
                 if errors:
                     errors_text = "\n".join(errors)
                     raise UserError(errors_text)
