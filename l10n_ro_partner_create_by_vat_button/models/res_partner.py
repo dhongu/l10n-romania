@@ -68,7 +68,7 @@ class ResPartner(models.Model):
             vat_number = self.vat
             country_code = self.country_id.code
         else:
-            raise UserError("Please add the country code to the vat number or country field")
+            raise UserError(_("Please add the country code to the vat number or country field"))
 
         response = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
         if response.valid:
