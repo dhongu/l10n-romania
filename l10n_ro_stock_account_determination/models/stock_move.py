@@ -59,7 +59,7 @@ class StockMove(models.Model):
 
     def _is_reception(self):
         """Este receptie in stoc fara aviz"""
-        it_is = self.is_l10n_ro_record and self.location_id.usage == "supplier" and self._is_in()
+        it_is = self.location_id.usage == "supplier" and self._is_in()
         return it_is
 
     def _create_reception_svl(self, forced_quantity=None):
@@ -68,7 +68,7 @@ class StockMove(models.Model):
 
     def _is_reception_return(self):
         """Este un retur la o receptie in stoc fara aviz"""
-        it_is = self.is_l10n_ro_record and self.location_dest_id.usage == "supplier" and self._is_out()
+        it_is = self.location_dest_id.usage == "supplier" and self._is_out()
         return it_is
 
     def _create_reception_return_svl(self, forced_quantity=None):
@@ -86,7 +86,7 @@ class StockMove(models.Model):
 
     def _is_delivery(self):
         """Este livrare din stoc fara aviz"""
-        return self.is_l10n_ro_record and self.location_dest_id.usage == "customer" and self._is_out()
+        return self.location_dest_id.usage == "customer" and self._is_out()
 
     def _create_delivery_svl(self, forced_quantity=None):
         move = self.with_context(standard=True, valued_type="delivery")
@@ -94,7 +94,7 @@ class StockMove(models.Model):
 
     def _is_delivery_return(self):
         """Este retur la o livrare din stoc fara aviz"""
-        it_is = self.is_l10n_ro_record and self.location_id.usage == "customer" and self._is_in()
+        it_is = self.location_id.usage == "customer" and self._is_in()
         return it_is
 
     def _create_delivery_return_svl(self, forced_quantity=None):
@@ -102,11 +102,8 @@ class StockMove(models.Model):
         return move._create_in_svl(forced_quantity)
 
     def _is_plus_inventory(self):
-        it_is = (
-            self.is_l10n_ro_record
-            and self.location_id.usage == "inventory"
-            and self.location_dest_id.usage == "internal"
-        )
+        it_is = self.location_id.usage == "inventory" and self.location_dest_id.usage == "internal"
+
         return it_is
 
     def _create_plus_inventory_svl(self, forced_quantity=None):
@@ -114,11 +111,8 @@ class StockMove(models.Model):
         return move._create_in_svl(forced_quantity)
 
     def _is_minus_inventory(self):
-        it_is = (
-            self.is_l10n_ro_record
-            and self.location_id.usage == "internal"
-            and self.location_dest_id.usage == "inventory"
-        )
+        it_is = self.location_id.usage == "internal" and self.location_dest_id.usage == "inventory"
+
         return it_is
 
     def _create_minus_inventory_svl(self, forced_quantity=None):
@@ -127,12 +121,7 @@ class StockMove(models.Model):
 
     def _is_production(self):
         """Este inregistrare intrare produse finite prin productie"""
-        it_is = (
-            self.is_l10n_ro_record
-            and self._is_in()
-            and self.location_id.usage == "production"
-            and not self.origin_returned_move_id
-        )
+        it_is = self._is_in() and self.location_id.usage == "production" and not self.origin_returned_move_id
         return it_is
 
     def _create_production_svl(self, forced_quantity=None):
@@ -141,12 +130,7 @@ class StockMove(models.Model):
 
     def _is_production_return(self):
         """Este retur inregistrare produse finite prin productie"""
-        it_is = (
-            self.company_id.l10n_ro_accounting
-            and self._is_out()
-            and self.location_dest_id.usage == "production"
-            and self.origin_returned_move_id
-        )
+        it_is = self._is_out() and self.location_dest_id.usage == "production" and self.origin_returned_move_id
         return it_is
 
     def _create_production_return_svl(self, forced_quantity=None):
@@ -163,8 +147,7 @@ class StockMove(models.Model):
     def _is_consumption(self):
         """Este un conusm de materiale in productie"""
         it_is = (
-            self.is_l10n_ro_record
-            and self._is_out()
+            self._is_out()
             and self.location_dest_id.usage in ("consume", "production")
             and not self.origin_returned_move_id
         )
@@ -176,12 +159,7 @@ class StockMove(models.Model):
 
     def _is_consumption_return(self):
         """Este un conusm de materiale in productie"""
-        it_is = (
-            self.is_l10n_ro_record
-            and self._is_in()
-            and self.location_id.usage in ("consume", "production")
-            and self.origin_returned_move_id
-        )
+        it_is = self._is_in() and self.location_id.usage in ("consume", "production") and self.origin_returned_move_id
         return it_is
 
     def _create_consumption_return_svl(self, forced_quantity=None):
@@ -202,19 +180,14 @@ class StockMove(models.Model):
     def _get_in_move_lines(self):
         "fix _get_out_move_lines return None for move to transit"
         move_lines = super()._get_in_move_lines()
-        if not move_lines:
-            move_lines = self.move_line_ids.filtered(
-                lambda x: "transit" in (x.location_dest_id | x.location_id).mapped("usage")
-            )
+
         if not move_lines and self.env.context.get("valued_type", "") == "internal_transfer":
             move_lines = self.move_line_ids
         return move_lines
 
     def _is_internal_transit_in(self):
         """Este o iesire in trazit"""
-        it_is = (
-            self.is_l10n_ro_record and self.location_dest_id.usage == "transit" and self.location_id.usage == "internal"
-        )
+        it_is = self.location_dest_id.usage == "transit" and self.location_id.usage == "internal"
         return it_is
 
     def _create_internal_transit_in_svl(self, forced_quantity=None):
@@ -235,9 +208,7 @@ class StockMove(models.Model):
 
     def _is_internal_transit_out(self):
         """Este o intrare din tranzit"""
-        it_is = (
-            self.is_l10n_ro_record and self.location_dest_id.usage == "internal" and self.location_id.usage == "transit"
-        )
+        it_is = self.location_dest_id.usage == "internal" and self.location_id.usage == "transit"
         return it_is
 
     def _create_internal_transit_out_svl(self, forced_quantity=None):
@@ -263,16 +234,11 @@ class StockMove(models.Model):
 
     def _is_internal_transfer(self):
         """Este transfer intern"""
-        it_is = (
-            self.is_l10n_ro_record
-            and self.location_dest_id.usage == "internal"
-            and self.location_id.usage == "internal"
-        )
+        it_is = self.location_dest_id.usage == "internal" and self.location_id.usage == "internal"
         return it_is
 
     # cred ca este mai bine sa generam doua svl - o intrare si o iesire
     def _create_internal_transfer_svl(self, forced_quantity=None):
-        svls = self.env["stock.valuation.layer"]
         move = self.with_context(standard=True, valued_type="internal_transfer")
         svls = move._create_out_svl(forced_quantity)
         move = self.with_context(standard=True, valued_type="internal_transfer")
@@ -281,7 +247,7 @@ class StockMove(models.Model):
 
     def _is_usage_giving(self):
         """Este dare in folosinta"""
-        it_is = self.is_l10n_ro_record and self.location_dest_id.usage == "usage_giving" and self._is_out()
+        it_is = self.location_dest_id.usage == "usage_giving" and self._is_out()
 
         return it_is
 
@@ -291,7 +257,7 @@ class StockMove(models.Model):
 
     def _is_usage_giving_return(self):
         """Este return dare in folosinta"""
-        it_is = self.is_l10n_ro_record and self.location_id.usage == "usage_giving" and self._is_in()
+        it_is = self.location_id.usage == "usage_giving" and self._is_in()
         return it_is
 
     def _create_usage_giving_return_svl(self, forced_quantity=None):
@@ -352,9 +318,16 @@ class StockMove(models.Model):
         if svl.l10n_ro_valued_type == "internal_transfer":
             am_vals = self._account_entry_move_internal_transfer(qty, description, svl_id, cost)
 
-        self._romanian_account_entry_move(qty, description, svl_id, cost)
+        if svl.l10n_ro_valued_type == "internal_transit_out":
+            self._account_entry_move_internal_transit_out(qty, description, svl_id, cost)
 
         return am_vals
+
+    def _account_entry_move_internal_transit_out(self, qty, description, svl_id, cost):
+        move = self.with_context(valued_type="internal_transit_out")
+        journal_id, acc_src, acc_dest, acc_valuation = move._get_accounting_data_for_valuation()
+        am_vals = move._prepare_account_move_vals(acc_src, acc_valuation, journal_id, qty, description, svl_id, cost)
+        return [am_vals]
 
     def _account_entry_move_internal_transfer(self, qty, description, svl_id, cost):
         move = self.with_context(valued_type="internal_transfer")
@@ -373,12 +346,15 @@ class StockMove(models.Model):
 
         return am_vals
 
-
-    def _prepare_account_move_vals(self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost):
-        vals = super()._prepare_account_move_vals(credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost)
+    def _prepare_account_move_vals(
+        self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost
+    ):
+        vals = super()._prepare_account_move_vals(
+            credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost
+        )
         valued_type = self.env.context.get("valued_type", "indefinite")
-        if 'return' in valued_type and self.env.company.account_storno:
-            vals['is_storno'] = True
+        if "return" in valued_type and self.env.company.account_storno:
+            vals["is_storno"] = True
         return vals
 
     def _romanian_account_entry_move(self, qty, description, svl_id, cost):
@@ -418,16 +394,6 @@ class StockMove(models.Model):
             ) = move._get_accounting_data_for_valuation()
             move._create_account_move_line(acc_src, acc_dest, journal_id, qty, description, svl, cost)
 
-        if self._is_internal_transit_out():
-            move = self.with_context(valued_type="internal_transit_out")
-            (
-                journal_id,
-                acc_src,
-                acc_dest,
-                acc_valuation,
-            ) = move._get_accounting_data_for_valuation()
-            move._create_account_move_line(acc_src, acc_valuation, journal_id, qty, description, svl_id, cost)
-
     def _create_account_move_line(
         self,
         credit_account_id,
@@ -463,36 +429,39 @@ class StockMove(models.Model):
 
     def _get_accounting_data_for_valuation(self):
         journal_id, acc_src, acc_dest, acc_valuation = super()._get_accounting_data_for_valuation()
+        if not self.is_l10n_ro_record:
+            return journal_id, acc_src, acc_dest, acc_valuation
+
         valued_type = self.env.context.get("valued_type", "indefinite")
-        if self.is_l10n_ro_record and self.product_id.categ_id.l10n_ro_stock_account_change:
-            location_from = self.location_id
-            location_to = self.location_dest_id
+        location_from = self.location_id
+        location_to = self.location_dest_id
+        location_from_account = location_from.l10n_ro_property_stock_valuation_account_id
+        location_to_account = location_to.l10n_ro_property_stock_valuation_account_id
+
+        if self.product_id.categ_id.l10n_ro_stock_account_change:
             # produsele din aceasta locatia folosesc pentru evaluare contul
-            if location_to.l10n_ro_property_stock_valuation_account_id:
+            if location_to_account:
                 # in cazul unui transfer intern se va face contare dintre
                 # contul de stoc si contul din locatie
                 if valued_type == "internal_transfer":
-                    acc_dest = location_to.l10n_ro_property_stock_valuation_account_id.id
+                    acc_dest = location_to_account.id
                 else:
-                    acc_valuation = location_to.l10n_ro_property_stock_valuation_account_id.id
+                    acc_valuation = location_to_account.id
                 if valued_type == "reception":
                     acc_src = acc_valuation
 
             # produsele din aceasta locatia folosesc pentru evaluare contul
-            if location_from.l10n_ro_property_stock_valuation_account_id:
+            if location_from_account:
                 # in cazul unui transfer intern se va face contare dintre
                 # contul de stoc si contul din locatie
                 if valued_type == "internal_transfer":
-                    acc_src = location_from.l10n_ro_property_stock_valuation_account_id.id
+                    acc_src = location_from_account.id
                 else:
-                    acc_valuation = location_from.l10n_ro_property_stock_valuation_account_id.id
-                    acc_src = location_from.l10n_ro_property_stock_valuation_account_id.id
+                    acc_valuation = location_from_account.id
+                    acc_src = location_from_account.id
             # in cazul transferului intern se va face o singura nota
-            if (
-                location_from.l10n_ro_property_stock_valuation_account_id
-                and location_to.l10n_ro_property_stock_valuation_account_id
-            ):
-                acc_valuation = location_from.l10n_ro_property_stock_valuation_account_id.id
+            if location_from_account and location_to_account:
+                acc_valuation = location_from_account.id
             # in Romania iesirea din stoc de face de regula pe contul de cheltuiala
             if valued_type in [
                 "delivery",
@@ -503,9 +472,7 @@ class StockMove(models.Model):
                 "internal_transit_in",
             ]:
                 acc_dest = (
-                    location_to.l10n_ro_property_stock_valuation_account_id.id
-                    or location_from.l10n_ro_property_account_expense_location_id.id
-                    or acc_dest
+                    location_to_account.id or location_from.l10n_ro_property_account_expense_location_id.id or acc_dest
                 )
             elif valued_type in [
                 "production",
@@ -516,34 +483,26 @@ class StockMove(models.Model):
                 "internal_transit_out",
             ]:
                 acc_src = (
-                    location_from.l10n_ro_property_stock_valuation_account_id.id
-                    or location_to.l10n_ro_property_account_expense_location_id.id
-                    or acc_src
+                    location_from_account.id or location_to.l10n_ro_property_account_expense_location_id.id or acc_src
                 )
 
-        if self.is_l10n_ro_record and valued_type in (
-            "consumption",
-            "usage_giving",
-        ):
+        if valued_type in ("consumption", "usage_giving"):
             acc_dest_rec = self.env["account.account"].browse(acc_dest)
             if acc_dest_rec and acc_dest_rec.l10n_ro_stock_consume_account_id:
                 acc_dest = acc_dest_rec.l10n_ro_stock_consume_account_id.id
             acc_valuation_rec = self.env["account.account"].browse(acc_valuation)
             if acc_valuation_rec and acc_valuation_rec.l10n_ro_stock_consume_account_id:
                 acc_valuation = acc_valuation_rec.l10n_ro_stock_consume_account_id.id
-        if self.is_l10n_ro_record and valued_type in (
-            "consumption_return",
-            "usage_giving_return",
-        ):
+        if valued_type in ("consumption_return", "usage_giving_return"):
             acc_src_rec = self.env["account.account"].browse(acc_src)
             if acc_src_rec and acc_src_rec.l10n_ro_stock_consume_account_id:
                 acc_src = acc_src_rec.l10n_ro_stock_consume_account_id.id
             acc_valuation_rec = self.env["account.account"].browse(acc_valuation)
             if acc_valuation_rec and acc_valuation_rec.l10n_ro_stock_consume_account_id:
                 acc_valuation = acc_valuation_rec.l10n_ro_stock_consume_account_id.id
-        if self.is_l10n_ro_record and valued_type in ("internal_transit_out",):
-            acc_dest = location_to.l10n_ro_property_stock_valuation_account_id.id or acc_dest
-            acc_valuation = location_to.l10n_ro_property_stock_valuation_account_id.id or acc_dest
+        if valued_type == "internal_transit_out":
+            acc_dest = location_to_account.id or acc_dest
+            acc_valuation = location_to_account.id or acc_dest
         return journal_id, acc_src, acc_dest, acc_valuation
 
     def _l10n_ro_filter_svl_on_move_line(self, domain):

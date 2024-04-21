@@ -22,6 +22,9 @@ VALUED_TYPE = [
     ("internal_transfer", "Internal Transfer"),
     ("internal_transfer_out", "Internal Transfer Out"),
     ("internal_transfer_in", "Internal Transfer In"),
+    ("internal_transit", "Internal Transit"),  # de eliminat
+    ("internal_transit_in", "Internal Transit In"),
+    ("internal_transit_out", "Internal Transit In"),
     ("usage_giving", "Usage Giving"),
     ("usage_giving_return", "Return Usage Giving"),
     ("indefinite", "Indefinite"),
