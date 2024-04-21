@@ -5,7 +5,10 @@
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Determination",
-    "author": "NextERP Romania," "Dorin Hongu," "Forest and Biomass Romania," "Odoo Community Association (OCA)",
+    "author": "NextERP Romania,"
+    "Dorin Hongu,"
+    "Forest and Biomass Romania,"
+    "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "depends": [
         "sale_stock",

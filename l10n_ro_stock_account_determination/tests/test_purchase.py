@@ -79,7 +79,9 @@ class TestStockPurchase(TestStockCommon):
 
         self.check_stock_valuation(self.val_p1_i, self.val_p2_i)
 
-        self.check_account_valuation(self.val_p1_i, self.val_p2_i, self.account_valuation_mp)
+        self.check_account_valuation(
+            self.val_p1_i, self.val_p2_i, self.account_valuation_mp
+        )
 
         # verificare inregistrare diferenta de pret
         self.check_account_diff(0, 0)
@@ -101,14 +103,20 @@ class TestStockPurchase(TestStockCommon):
 
         self.create_po()
 
-        self.check_stock_valuation(self.val_p1_i, self.val_p2_i, self.account_valuation_mp)
+        self.check_stock_valuation(
+            self.val_p1_i, self.val_p2_i, self.account_valuation_mp
+        )
 
         self.check_account_valuation(0, 0, self.account_valuation_mp)
 
         self.create_invoice()
 
-        self.check_stock_valuation(self.val_p1_i, self.val_p2_i, self.account_valuation_mp)
+        self.check_stock_valuation(
+            self.val_p1_i, self.val_p2_i, self.account_valuation_mp
+        )
 
-        self.check_account_valuation(self.val_p1_i, self.val_p2_i, self.account_valuation_mp)
+        self.check_account_valuation(
+            self.val_p1_i, self.val_p2_i, self.account_valuation_mp
+        )
 
         self.check_account_diff(0, 0)

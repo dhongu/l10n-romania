@@ -12,7 +12,6 @@
                     domain="[('deprecated','=',False)]"
                     readonly="purchase_ok == 0"
                     invisible="not is_l10n_ro_record"
-
                     groups="account.group_account_readonly"
                 />
             </field>

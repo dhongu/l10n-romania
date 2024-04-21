@@ -18,7 +18,8 @@ class ProductTemplate(models.Model):
         "account.account",
         string="Stock Valuation Account",
         company_dependent=True,
-        domain="[('company_id', '=', allowed_company_ids[0])," "('deprecated', '=', False)]",
+        domain="[('company_id', '=', allowed_company_ids[0]),"
+        "('deprecated', '=', False)]",
         check_company=True,
         help="In Romania accounting is only one account for valuation/input/"
         "output. If this value is set, we will use it, otherwise will "
@@ -28,14 +29,20 @@ class ProductTemplate(models.Model):
     def _get_product_accounts(self):
         accounts = super()._get_product_accounts()
 
-        company = self.env["res.company"].browse(self._context.get("force_company")) or self.env.company
+        company = (
+            self.env["res.company"].browse(self._context.get("force_company"))
+            or self.env.company
+        )
         if not company.l10n_ro_accounting:
             return accounts
 
         property_stock_valuation_account_id = (
-            self.l10n_ro_property_stock_valuation_account_id or self.categ_id.property_stock_valuation_account_id
+            self.l10n_ro_property_stock_valuation_account_id
+            or self.categ_id.property_stock_valuation_account_id
         )
-        property_stock_usage_giving_account_id = company.l10n_ro_property_stock_usage_giving_account_id
+        property_stock_usage_giving_account_id = (
+            company.l10n_ro_property_stock_usage_giving_account_id
+        )
         if property_stock_valuation_account_id:
             accounts.update(
                 {

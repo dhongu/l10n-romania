@@ -49,7 +49,9 @@ class TestStockSale(TestStockCommon):
         self.check_account_valuation(val_stock_p1, val_stock_p2)
 
         _logger.debug("Verifcare valoare vanduta")
-        self.check_account_valuation(-self.val_so_p1, -self.val_so_p2, self.account_income)
+        self.check_account_valuation(
+            -self.val_so_p1, -self.val_so_p2, self.account_income
+        )
 
     def test_sale_and_invoice(self):
         """
@@ -84,7 +86,9 @@ class TestStockSale(TestStockCommon):
         self.check_account_valuation(val_stock_p1, val_stock_p2)
 
         _logger.debug("Verifcare valoare vanduta")
-        self.check_account_valuation(-self.val_so_p1, -self.val_so_p2, self.account_income)
+        self.check_account_valuation(
+            -self.val_so_p1, -self.val_so_p2, self.account_income
+        )
 
     def test_sale_and_invoice_and_retur(self):
         """
@@ -108,7 +112,9 @@ class TestStockSale(TestStockCommon):
             )
         )
         return_wiz = stock_return_picking_form.save()
-        return_wiz.product_return_moves.write({"quantity": 2.0, "to_refund": True})  # Return only 2
+        return_wiz.product_return_moves.write(
+            {"quantity": 2.0, "to_refund": True}
+        )  # Return only 2
         res = return_wiz.create_returns()
         return_pick = self.env["stock.picking"].browse(res["res_id"])
 
@@ -138,7 +144,9 @@ class TestStockSale(TestStockCommon):
 
         # valoarea de stoc dupa vanzarea produselor
         val_stock_p1 = round(self.qty_po_p1 * 50 + self.qty_po_p1 * 60 - 1 * 55, 2)
-        val_stock_p2 = round(self.qty_po_p2 * 50 + self.qty_po_p2 * 60 - self.qty_so_p2 * 55, 2)
+        val_stock_p2 = round(
+            self.qty_po_p2 * 50 + self.qty_po_p2 * 60 - self.qty_so_p2 * 55, 2
+        )
 
         self.check_stock_valuation(val_stock_p1, val_stock_p2)
         self.check_account_valuation(-1 * 55, -self.qty_so_p2 * 55)
@@ -149,7 +157,9 @@ class TestStockSale(TestStockCommon):
         self.create_so()
 
         self.check_stock_valuation(0.0, 0.0)
-        self.check_account_valuation(-1 * 2 * self.qty_po_p1 * 55, -1 * 2 * self.qty_po_p2 * 55)
+        self.check_account_valuation(
+            -1 * 2 * self.qty_po_p1 * 55, -1 * 2 * self.qty_po_p2 * 55
+        )
 
     def test_sale_negative(self):
         self.qty_po_p1 = 70.0

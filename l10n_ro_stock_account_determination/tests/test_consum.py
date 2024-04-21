@@ -104,7 +104,9 @@ class TestStockConsum(TestStockCommon):
 
         location_id = self.picking_type_transfer.default_location_src_id
 
-        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy({"usage": "usage_giving"})
+        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy(
+            {"usage": "usage_giving"}
+        )
 
         self.transfer(location_id, location_dest_id)
         _logger.debug("Dare in folosinta facuta")
@@ -118,7 +120,9 @@ class TestStockConsum(TestStockCommon):
 
         location_id = self.picking_type_transfer.default_location_src_id
 
-        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy({"usage": "consume"})
+        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy(
+            {"usage": "consume"}
+        )
 
         self.transfer(location_id, location_dest_id)
         _logger.debug("Consum facuta")
@@ -127,8 +131,12 @@ class TestStockConsum(TestStockCommon):
         self.make_return(self.picking, 1)
 
     def test_consume_extra_accounts(self):
-        acc_3028 = self.env["account.account"].search([("code", "=", "302800")], limit=1)
-        acc_6028 = self.env["account.account"].search([("code", "=", "602800")], limit=1)
+        acc_3028 = self.env["account.account"].search(
+            [("code", "=", "302800")], limit=1
+        )
+        acc_6028 = self.env["account.account"].search(
+            [("code", "=", "602800")], limit=1
+        )
         self.account_valuation_mp.l10n_ro_stock_consume_account_id = acc_3028
         self.account_expense_mp.l10n_ro_stock_consume_account_id = acc_6028
         self.product_mp.standard_price = self.price_p1
@@ -142,7 +150,9 @@ class TestStockConsum(TestStockCommon):
 
         _logger.debug("Start consum produse")
         location_id = self.picking_type_transfer.default_location_src_id
-        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy({"usage": "consume"})
+        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy(
+            {"usage": "consume"}
+        )
         self.transfer(location_id, location_dest_id)
         _logger.debug("Consum facuta")
 
@@ -159,8 +169,12 @@ class TestStockConsum(TestStockCommon):
         self.check_account_valuation(0, 0, acc_6028)
 
     def test_usage_giving_extra_accounts(self):
-        acc_3028 = self.env["account.account"].search([("code", "=", "302800")], limit=1)
-        acc_6028 = self.env["account.account"].search([("code", "=", "602800")], limit=1)
+        acc_3028 = self.env["account.account"].search(
+            [("code", "=", "302800")], limit=1
+        )
+        acc_6028 = self.env["account.account"].search(
+            [("code", "=", "602800")], limit=1
+        )
         self.account_valuation_mp.l10n_ro_stock_consume_account_id = acc_3028
         self.account_expense_mp.l10n_ro_stock_consume_account_id = acc_6028
         self.product_mp.standard_price = self.price_p1
@@ -174,7 +188,9 @@ class TestStockConsum(TestStockCommon):
 
         _logger.debug("Start dare in folosinta")
         location_id = self.picking_type_transfer.default_location_src_id
-        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy({"usage": "usage_giving"})
+        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy(
+            {"usage": "usage_giving"}
+        )
         self.transfer(location_id, location_dest_id)
         _logger.debug("Dare in folosinta facuta")
 
@@ -191,10 +207,16 @@ class TestStockConsum(TestStockCommon):
         self.check_account_valuation(0, 0, acc_6028)
 
     def test_consume_extra_location_accounts(self):
-        acc_3026 = self.env["account.account"].search([("code", "=", "302600")], limit=1)
-        acc_6026 = self.env["account.account"].search([("code", "=", "602600")], limit=1)
+        acc_3026 = self.env["account.account"].search(
+            [("code", "=", "302600")], limit=1
+        )
+        acc_6026 = self.env["account.account"].search(
+            [("code", "=", "602600")], limit=1
+        )
         acc_707 = self.env["account.account"].search([("code", "=", "707000")], limit=1)
-        _logger.debug("Start consum produse cand conturile de pe categorie difera de cele de pe locatie")
+        _logger.debug(
+            "Start consum produse cand conturile de pe categorie difera de cele de pe locatie"
+        )
         self.product_mp.standard_price = self.price_p1
         self.product_mp.categ_id.write({"l10n_ro_stock_account_change": True})
         val_stock_p1 = 1 * round(4 * self.price_p1, 2)
@@ -212,7 +234,9 @@ class TestStockConsum(TestStockCommon):
                 "l10n_ro_property_stock_valuation_account_id": acc_3026,
             }
         )
-        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy({"usage": "consume"})
+        location_dest_id = self.picking_type_transfer.default_location_dest_id.copy(
+            {"usage": "consume"}
+        )
 
         self.transfer(location_id, location_dest_id, self.product_mp)
         _logger.debug("Consum facut")

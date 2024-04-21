@@ -23,15 +23,22 @@ class ProductCategory(models.Model):
     )
     l10n_ro_stock_account_change = fields.Boolean(
         string="Allow stock account change from locations",
-        help="Only for Romania, to change the accounts to the ones defined " "on stock locations",
+        help="Only for Romania, to change the accounts to the ones defined "
+        "on stock locations",
     )
 
     @api.depends("name")
     def _compute_hide_accounts(self):
         for record in self:
-            record.l10n_ro_hide_stock_in_out_account = self.env.company.l10n_ro_accounting
+            record.l10n_ro_hide_stock_in_out_account = (
+                self.env.company.l10n_ro_accounting
+            )
 
-    @api.constrains(lambda self: tuple(self._get_stock_account_property_field_names() + ['property_valuation']))
+    @api.constrains(
+        lambda self: tuple(
+            self._get_stock_account_property_field_names() + ["property_valuation"]
+        )
+    )
     def _check_valuation_accounts(self):
         """Overwrite default constraint for Romania,
         stock_valuation, stock_output and stock_input
@@ -66,5 +73,9 @@ class ProductCategory(models.Model):
             if record.is_l10n_ro_record or self.env.company.l10n_ro_accounting:
                 if record.l10n_ro_hide_stock_in_out_account:
                     # is a romanian company:
-                    record.property_stock_account_input_categ_id = record.property_stock_valuation_account_id
-                    record.property_stock_account_output_categ_id = record.property_stock_valuation_account_id
+                    record.property_stock_account_input_categ_id = (
+                        record.property_stock_valuation_account_id
+                    )
+                    record.property_stock_account_output_categ_id = (
+                        record.property_stock_valuation_account_id
+                    )

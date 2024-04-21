@@ -30,17 +30,25 @@ class TestStockCommon(ValuationReconciliationTestCommon):
         cls.account_valuation = get_account("371000")
         cls.account_valuation_mp = get_account("301000")
 
-        cls.uneligible_tax_account_id = cls.env.user.company_id.tax_cash_basis_journal_id.default_account_id
+        cls.uneligible_tax_account_id = (
+            cls.env.user.company_id.tax_cash_basis_journal_id.default_account_id
+        )
         if not cls.uneligible_tax_account_id:
             cls.uneligible_tax_account_id = get_account("442810")
 
-        cls.env.user.company_id.tax_cash_basis_journal_id.default_account_id = cls.uneligible_tax_account_id
+        cls.env.user.company_id.tax_cash_basis_journal_id.default_account_id = (
+            cls.uneligible_tax_account_id
+        )
 
-        cls.stock_picking_payable_account_id = cls.env.user.company_id.l10n_ro_property_stock_picking_payable_account_id
+        cls.stock_picking_payable_account_id = (
+            cls.env.user.company_id.l10n_ro_property_stock_picking_payable_account_id
+        )
         if not cls.stock_picking_payable_account_id:
             cls.stock_picking_payable_account_id = get_account("408000")
 
-        cls.env.user.company_id.l10n_ro_property_stock_picking_payable_account_id = cls.stock_picking_payable_account_id
+        cls.env.user.company_id.l10n_ro_property_stock_picking_payable_account_id = (
+            cls.stock_picking_payable_account_id
+        )
 
         cls.stock_picking_receivable_account_id = (
             cls.env.user.company_id.l10n_ro_property_stock_picking_receivable_account_id
@@ -52,16 +60,26 @@ class TestStockCommon(ValuationReconciliationTestCommon):
             cls.stock_picking_receivable_account_id
         )
 
-        cls.stock_usage_giving_account_id = cls.env.user.company_id.l10n_ro_property_stock_usage_giving_account_id
+        cls.stock_usage_giving_account_id = (
+            cls.env.user.company_id.l10n_ro_property_stock_usage_giving_account_id
+        )
         if not cls.stock_usage_giving_account_id:
             cls.stock_usage_giving_account_id = get_account("803500")
-            cls.env.user.company_id.l10n_ro_property_stock_usage_giving_account_id = cls.stock_usage_giving_account_id
+            cls.env.user.company_id.l10n_ro_property_stock_usage_giving_account_id = (
+                cls.stock_usage_giving_account_id
+            )
 
     @classmethod
     def setup_company_data(cls, company_name, chart_template=None, **kwargs):
-        company_data = super().setup_company_data(company_name, chart_template=chart_template, **kwargs)
-        company_data["default_account_stock_in"] = company_data["default_account_stock_valuation"]
-        company_data["default_account_stock_out"] = company_data["default_account_stock_valuation"]
+        company_data = super().setup_company_data(
+            company_name, chart_template=chart_template, **kwargs
+        )
+        company_data["default_account_stock_in"] = company_data[
+            "default_account_stock_valuation"
+        ]
+        company_data["default_account_stock_out"] = company_data[
+            "default_account_stock_valuation"
+        ]
         return company_data
 
     @classmethod
@@ -104,7 +122,9 @@ class TestStockCommon(ValuationReconciliationTestCommon):
             "l10n_ro_stock_account_change": True,
         }
 
-        cls.category_fifo = cls.env["product.category"].search([("name", "=", "TEST Marfa")], limit=1)
+        cls.category_fifo = cls.env["product.category"].search(
+            [("name", "=", "TEST Marfa")], limit=1
+        )
         if not cls.category_fifo:
             cls.category_fifo = cls.env["product.category"].create(category_value)
         else:
@@ -119,7 +139,9 @@ class TestStockCommon(ValuationReconciliationTestCommon):
             }
         )
 
-        cls.category_average = cls.env["product.category"].search([("name", "=", "TEST Marfa Average")], limit=1)
+        cls.category_average = cls.env["product.category"].search(
+            [("name", "=", "TEST Marfa Average")], limit=1
+        )
         if not cls.category_average:
             cls.category_average = cls.env["product.category"].create(category_value)
         else:
@@ -184,11 +206,15 @@ class TestStockCommon(ValuationReconciliationTestCommon):
             }
         )
 
-        cls.vendor = cls.env["res.partner"].search([("name", "=", "TEST Vendor")], limit=1)
+        cls.vendor = cls.env["res.partner"].search(
+            [("name", "=", "TEST Vendor")], limit=1
+        )
         if not cls.vendor:
             cls.vendor = cls.env["res.partner"].create({"name": "TEST Vendor"})
 
-        cls.client = cls.env["res.partner"].search([("name", "=", "TEST Client")], limit=1)
+        cls.client = cls.env["res.partner"].search(
+            [("name", "=", "TEST Client")], limit=1
+        )
         if not cls.client:
             cls.client = cls.env["res.partner"].create({"name": "TEST Client"})
 
@@ -213,8 +239,12 @@ class TestStockCommon(ValuationReconciliationTestCommon):
         cls.val_stock_out_so_p2 = round(cls.qty_so_p2 * cls.price_p2, 2)
 
         # valoarea descarcari de gestiune incluzand si diferentele
-        cls.val_stock_out_so_p1_diff = round(cls.val_stock_out_so_p1 + (cls.qty_so_p1 * cls.diff_p1), 2)
-        cls.val_stock_out_so_p2_diff = round(cls.val_stock_out_so_p2 + (cls.qty_so_p2 * cls.diff_p2), 2)
+        cls.val_stock_out_so_p1_diff = round(
+            cls.val_stock_out_so_p1 + (cls.qty_so_p1 * cls.diff_p1), 2
+        )
+        cls.val_stock_out_so_p2_diff = round(
+            cls.val_stock_out_so_p2 + (cls.qty_so_p2 * cls.diff_p2), 2
+        )
 
         # valoarea vanzarii
         cls.val_so_p1 = round(cls.qty_so_p1 * cls.list_price_p1, 2)
@@ -292,7 +322,9 @@ class TestStockCommon(ValuationReconciliationTestCommon):
             vals = {}
         self.picking.write(vals)
 
-    def create_po(self, picking_type_in=None, partial=None, vals=False, validate_picking=True):
+    def create_po(
+        self, picking_type_in=None, partial=None, vals=False, validate_picking=True
+    ):
         if not picking_type_in:
             picking_type_in = self.picking_type_in_warehouse
         if not partial or (partial and not hasattr(self, "po")):
@@ -333,7 +365,9 @@ class TestStockCommon(ValuationReconciliationTestCommon):
         self.po = po
         return po
 
-    def create_invoice(self, diff_p1=0, diff_p2=0, quant_p1=0, quant_p2=0, auto_post=True):
+    def create_invoice(
+        self, diff_p1=0, diff_p2=0, quant_p1=0, quant_p2=0, auto_post=True
+    ):
         invoice = Form(
             self.env["account.move"].with_context(
                 default_move_type="in_invoice",
@@ -341,7 +375,9 @@ class TestStockCommon(ValuationReconciliationTestCommon):
                 active_model="accoun.move",
             )
         )
-        bill_union = self.env["purchase.bill.union"].search([("purchase_order_id", "=", self.po.id)])
+        bill_union = self.env["purchase.bill.union"].search(
+            [("purchase_order_id", "=", self.po.id)]
+        )
         invoice.partner_id = self.vendor
         invoice.purchase_vendor_bill_id = bill_union
 
@@ -429,7 +465,9 @@ class TestStockCommon(ValuationReconciliationTestCommon):
 
         invoice.action_post()
 
-    def transfer(self, location, location_dest, product=False, accounting_date=False, post=True):
+    def transfer(
+        self, location, location_dest, product=False, accounting_date=False, post=True
+    ):
         self.PickingObj = self.env["stock.picking"]
         self.MoveObj = self.env["stock.move"]
 
@@ -485,13 +523,13 @@ class TestStockCommon(ValuationReconciliationTestCommon):
             rem_val = round(valuation["remaining_value"], 2)
 
             if valuation["product_id"][0] == self.product_1.id:
-                _logger.debug("Check stock P1 {} = {}".format(val, val_p1))
+                _logger.debug(f"Check stock P1 {val} = {val_p1}")
                 self.assertAlmostEqual(val, val_p1)
                 if self.product_1.cost_method == "fifo":
                     self.assertAlmostEqual(rem_val, val_p1)
 
             if valuation["product_id"][0] == self.product_2.id:
-                _logger.debug("Check stock P2 {} = {}".format(val, val_p2))
+                _logger.debug(f"Check stock P2 {val} = {val_p2}")
                 self.assertAlmostEqual(val, val_p2)
                 if self.product_2.cost_method == "fifo":
                     self.assertAlmostEqual(rem_val, val_p2)
@@ -517,10 +555,10 @@ class TestStockCommon(ValuationReconciliationTestCommon):
         for valuation in account_valuations:
             val = round(valuation["debit"] - valuation["credit"], 2)
             if valuation["product_id"][0] == self.product_1.id:
-                _logger.debug("Check account P1 {} = {}".format(val, val_p1))
+                _logger.debug(f"Check account P1 {val} = {val_p1}")
                 self.assertAlmostEqual(val, val_p1)
             if valuation["product_id"][0] == self.product_2.id:
-                _logger.debug("Check account P2 {} = {}".format(val, val_p2))
+                _logger.debug(f"Check account P2 {val} = {val_p2}")
                 self.assertAlmostEqual(val, val_p2)
 
     def check_account_diff(self, val_p1, val_p2):
@@ -542,7 +580,7 @@ class TestStockCommon(ValuationReconciliationTestCommon):
         for valuation in account_valuations:
             val = round(valuation["debit"] - valuation["credit"], 2)
             if valuation["product_id"][0] == self.product_mp.id:
-                _logger.debug("Check account P1 {} = {}".format(val, val_p1))
+                _logger.debug(f"Check account P1 {val} = {val_p1}")
                 self.assertAlmostEqual(val, val_p1)
 
     def set_stock(self, product, qty, location=None):
@@ -577,7 +615,9 @@ class TestStockCommon(ValuationReconciliationTestCommon):
         )
 
     def create_lc(self, picking, lc_p1, lc_p2, vendor_bill=False):
-        default_vals = self.env["stock.landed.cost"].default_get(list(self.env["stock.landed.cost"].fields_get()))
+        default_vals = self.env["stock.landed.cost"].default_get(
+            list(self.env["stock.landed.cost"].fields_get())
+        )
         default_vals.update(
             {
                 "picking_ids": [picking.id],

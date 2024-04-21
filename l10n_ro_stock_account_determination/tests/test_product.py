@@ -18,5 +18,9 @@ class TestProductCategory(TestStockCommon):
 
         category = category.save()
 
-        self.assertEqual(category.property_stock_account_output_categ_id, self.account_valuation_mp)
-        self.assertEqual(category.property_stock_account_input_categ_id, self.account_valuation_mp)
+        self.assertEqual(
+            category.property_stock_account_output_categ_id, self.account_valuation_mp
+        )
+        self.assertEqual(
+            category.property_stock_account_input_categ_id, self.account_valuation_mp
+        )

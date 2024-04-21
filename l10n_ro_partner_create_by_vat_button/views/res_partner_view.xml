@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.vat.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button
+                        name="%(action_get_partner_data)d"
+                        invisible="name == ' ' or vat == False or is_company == False"
+                        string="Get Data"
+                        context="{'active_id': active_id}"
+                        type="action"
+                    />
+                    </header>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_res_partner_filter" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="vat" />
+                </field>
+            </field>
+        </record>
+
+</odoo>

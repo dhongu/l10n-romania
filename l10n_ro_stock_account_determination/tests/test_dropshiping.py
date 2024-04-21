@@ -46,7 +46,9 @@ class TestStockDropshiping(TestStockCommon):
         # Confirm sales order
         sale_order.action_confirm()
 
-        purchase = self.env["purchase.order"].search([("partner_id", "=", self.vendor.id)])
+        purchase = self.env["purchase.order"].search(
+            [("partner_id", "=", self.vendor.id)]
+        )
         purchase.button_confirm()
 
         sale_order.picking_ids.action_set_quantities_to_reservation()

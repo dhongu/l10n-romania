@@ -17,14 +17,20 @@ class StockPicking(models.Model):
             return False
 
         self.ensure_one()
-        return self.location_id.usage == "supplier" and self.location_dest_id.usage == "customer"
+        return (
+            self.location_id.usage == "supplier"
+            and self.location_dest_id.usage == "customer"
+        )
 
     def _is_dropshipped_returned(self):
         if not self.is_l10n_ro_record:
             return super()._is_dropshipped()
 
         self.ensure_one()
-        return self.location_id.usage == "customer" and self.location_dest_id.usage == "supplier"
+        return (
+            self.location_id.usage == "customer"
+            and self.location_dest_id.usage == "supplier"
+        )
 
     def action_l10n_ro_view_account_moves(self):
         self.ensure_one()

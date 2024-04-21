@@ -11,7 +11,6 @@
                 <field
                     name="l10n_ro_stock_consume_account_id"
                     invisible="not is_l10n_ro_record"
-
                 />
             </field>
         </field>

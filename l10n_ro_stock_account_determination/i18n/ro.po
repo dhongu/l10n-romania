@@ -23,7 +23,8 @@ msgstr "Cont"
 #. module: l10n_ro_stock_account_determination
 #: model:ir.model.fields,help:l10n_ro_stock_account_determination.field_account_account__l10n_ro_stock_consume_account_id
 msgid "Account used for stock consume and usage giving operations"
-msgstr "Cont folosit pentru operațiile de consum și de dare în folosință a stocului"
+msgstr ""
+"Cont folosit pentru operațiile de consum și de dare în folosință a stocului"
 
 #. module: l10n_ro_stock_account_determination
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_account_determination.view_location_form_inherit
@@ -87,7 +88,6 @@ msgstr ""
 "Pentru contabilitatea stocurilor din România, conturile de intrare stoc, "
 "ieșire stoc și evaluare stoc trebuie să fie aceleași pentru categoria %s"
 
-
 #. module: l10n_ro_stock_account_determination
 #: model:ir.model.fields,field_description:l10n_ro_stock_account_determination.field_product_category__l10n_ro_hide_stock_in_out_account
 msgid "Hide Odoo Stock In/Out Accounts"
@@ -111,8 +111,9 @@ msgid ""
 "In Romania accounting is only one account for valuation/input/output. If "
 "this value is set, we will use it, otherwise will use the category value. "
 msgstr ""
-"În contabilitatea din România există un singur cont pentru evaluare/intrare/"
-"ieșire. Dacă această valoare este setată, o vom folosi, altfel vom folosi "
+"În contabilitatea din România există un singur cont pentru "
+"evaluare/intrare/ieșire. Dacă această valoare este setată, o vom folosi, "
+"altfel vom folosi "
 
 #. module: l10n_ro_stock_account_determination
 #: model:ir.model.fields,field_description:l10n_ro_stock_account_determination.field_stock_location__l10n_ro_property_account_income_location_id
@@ -202,7 +203,8 @@ msgid ""
 "Only for Romania, to change the accounts to the ones defined on stock "
 "locations"
 msgstr ""
-"Numai pentru România, pentru a schimba conturile cu cele definite în locațiile"
+"Numai pentru România, pentru a schimba conturile cu cele definite în "
+"locațiile"
 
 #. module: l10n_ro_stock_account_determination
 #: model:ir.model.fields,help:l10n_ro_stock_account_determination.field_product_category__l10n_ro_hide_stock_in_out_account
@@ -308,7 +310,6 @@ msgid ""
 msgstr ""
 "Acest cont va suprascrie conturile de cheltuieli din produs sau categorie."
 
-
 #. module: l10n_ro_stock_account_determination
 #: model:ir.model.fields,help:l10n_ro_stock_account_determination.field_stock_location__l10n_ro_property_account_income_location_id
 msgid ""
@@ -319,7 +320,7 @@ msgstr ""
 #. module: l10n_ro_stock_account_determination
 #: model:ir.model,name:l10n_ro_stock_account_determination.model_stock_picking
 msgid "Transfer"
-msgstr "Transfer"
+msgstr ""
 
 #. module: l10n_ro_stock_account_determination
 #: model:ir.model.fields.selection,name:l10n_ro_stock_account_determination.selection__stock_valuation_layer__l10n_ro_valued_type__usage_giving
@@ -340,4 +341,3 @@ msgstr "Cont evaluare"
 #: model:ir.model.fields,field_description:l10n_ro_stock_account_determination.field_stock_valuation_layer__l10n_ro_valued_type
 msgid "Valued Type"
 msgstr "Tip evaluat"
-
