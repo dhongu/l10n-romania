@@ -9,6 +9,7 @@
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
+    "countries": ["ro"],
     "depends": [
         "l10n_ro_partner_create_by_vat",
         # "l10n_ro_partner_create_by_vat_openapi"

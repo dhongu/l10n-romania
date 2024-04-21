@@ -8,6 +8,7 @@
     "author": "Terrabit, " "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
+    "countries": ["ro"],
     "depends": [
         "base_vat",
         "l10n_ro_config",
