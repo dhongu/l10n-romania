@@ -5,7 +5,7 @@
 
 import logging
 
-from odoo import api, models
+from odoo import models
 
 _logger = logging.getLogger(__name__)
 
@@ -26,17 +26,6 @@ class AccountMove(models.Model):
 class AccountMoveLine(models.Model):
     _name = "account.move.line"
     _inherit = ["account.move.line", "l10n.ro.mixin"]
-
-    @api.onchange("is_landed_costs_line")
-    def _onchange_is_landed_costs_line(self):
-        res = super()._onchange_is_landed_costs_line()
-        if self.move_id.is_l10n_ro_record and self.product_type == "service" and self.is_landed_costs_line:
-            accounts = self.product_id.product_tmpl_id._get_product_accounts()
-            if self.move_id.move_type not in ("out_invoice", "out_refund"):
-                self.account_id = accounts["expense"]
-            else:
-                self.account_id = accounts["income"]
-        return res
 
     def _l10n_ro_get_valuation_stock_moves(self):
         valuation_stock_moves = self.env["stock.move"]

@@ -374,8 +374,6 @@ class StockMove(models.Model):
         return am_vals
 
     def _romanian_account_entry_move(self, qty, description, svl_id, cost):
-        self.location_id
-        self.location_dest_id
         svl = self.env["stock.valuation.layer"]
         if self._is_usage_giving() or self._is_consumption():
             (
@@ -411,19 +409,6 @@ class StockMove(models.Model):
                 acc_valuation,
             ) = move._get_accounting_data_for_valuation()
             move._create_account_move_line(acc_src, acc_dest, journal_id, qty, description, svl, cost)
-
-        # if self._is_internal_transfer():
-        #     move = self.with_context(valued_type="internal_transfer")
-        #     (
-        #         journal_id,
-        #         acc_src,
-        #         acc_dest,
-        #         acc_valuation,
-        #     ) = move._get_accounting_data_for_valuation()
-        #     if location_to.l10n_ro_property_stock_valuation_account_id and cost < 0:
-        #         move._create_account_move_line(acc_dest, acc_valuation, journal_id, qty, description, svl_id, cost)
-        #     if location_from.l10n_ro_property_stock_valuation_account_id and cost > 0:
-        #         move._create_account_move_line(acc_src, acc_valuation, journal_id, qty, description, svl_id, cost)
 
         if self._is_internal_transit_out():
             move = self.with_context(valued_type="internal_transit_out")
