@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.account</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//block[@id='invoicing_settings']" position="inside">
+                    <block>
+
+                        <div class="o_setting_left_pane">
+                            <field name="marker_on_invoice_address" />
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="marker_on_invoice_address" />
+                            <div class="text-muted">
+                                Show marker on invoice address
+                            </div>
+                        </div>
+
+                        <div class="o_setting_left_pane">
+                            <field name="email_on_invoice_address" />
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="email_on_invoice_address" />
+                            <div class="text-muted">
+                                Show email on invoice address
+                            </div>
+                        </div>
+
+                        <div class="o_setting_left_pane">
+                            <field name="phone_on_invoice_address" />
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="phone_on_invoice_address" />
+                            <div class="text-muted">
+                                Show phone on invoice address
+                            </div>
+                        </div>
+                    </block>
+
+                </xpath>
+            </field>
+        </record>
+
+</odoo>
