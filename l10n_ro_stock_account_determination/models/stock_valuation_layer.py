@@ -41,8 +41,8 @@ class StockValuationLayer(models.Model):
         "account.account", compute="_compute_account", store=True, string="Valuation Account"
     )
 
-    l10n_ro_invoice_line_id = fields.Many2one("account.move.line", string="Romania - Invoice Line")
-    l10n_ro_invoice_id = fields.Many2one("account.move", string="Romania - Invoice")
+    l10n_ro_invoice_line_id = fields.Many2one("account.move.line", string="Invoice Line")
+    l10n_ro_invoice_id = fields.Many2one("account.move", string="Invoice")
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -50,6 +50,8 @@ class StockValuationLayer(models.Model):
         for layer in layers:
             if layer.stock_valuation_layer_id and not layer.l10n_ro_valued_type:
                 layer.l10n_ro_valued_type = layer.stock_valuation_layer_id.l10n_ro_valued_type
+            if layer.stock_valuation_layer_id and not layer.stock_move_id:
+                layer.stock_move_id = layer.stock_valuation_layer_id.stock_move_id
         return layers
 
     @api.depends("product_id", "account_move_id")

@@ -542,7 +542,7 @@ class TestStockCommon(ValuationReconciliationTestCommon):
         for valuation in account_valuations:
             val = round(valuation["debit"] - valuation["credit"], 2)
             if valuation["product_id"][0] == self.product_mp.id:
-                _logger.info("Check account P1 {} = {}".format(val, val_p1))
+                _logger.debug("Check account P1 {} = {}".format(val, val_p1))
                 self.assertAlmostEqual(val, val_p1)
 
     def set_stock(self, product, qty, location=None):

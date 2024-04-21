@@ -22,6 +22,25 @@ class AccountMove(models.Model):
                 invoices -= move
         return super(AccountMove, invoices)._stock_account_prepare_anglo_saxon_out_lines_vals()
 
+    def action_post(self):
+        res = super().action_post()
+        for move in self.filtered("is_l10n_ro_record"):
+            for line in move.line_ids:
+                _logger.debug("{}\t\t{}\t\t{}".format(line.debit, line.credit, line.account_id.display_name))
+            invoice_lines = move.invoice_line_ids.filtered(lambda line: line.display_type == "product")
+            for line in invoice_lines:
+                valuation_stock_moves = line._l10n_ro_get_valuation_stock_moves()
+                if valuation_stock_moves:
+                    svls = valuation_stock_moves.sudo().mapped("stock_valuation_layer_ids")
+                    svls = svls.filtered(lambda layer: not layer.l10n_ro_invoice_line_id)
+                    svls.write(
+                        {
+                            "l10n_ro_invoice_line_id": line.id,
+                            "l10n_ro_invoice_id": line.move_id.id,
+                        }
+                    )
+        return res
+
 
 class AccountMoveLine(models.Model):
     _name = "account.move.line"

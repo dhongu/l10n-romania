@@ -9,6 +9,7 @@
     "depends": [
         "sale_stock",
         "purchase_stock",
+        "stock_dropshipping",
         "l10n_ro_config",
         "l10n_ro_stock",
     ],
