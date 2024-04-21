@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_get_partner_data_form" model="ir.ui.view">
+        <field name="name">get.partner.data.form</field>
+        <field name="model">get.partner.data</field>
+        <field name="arch" type="xml">
+            <form string="Get Partner Data">
+                <div>
+                    <p>Select service for partner:
+                    <field name="partner_id" readonly="True" />
+                    </p>
+
+                    <field name="service" widget="radio" />
+                </div>
+                <footer>
+                    <button
+                        name="do_get_data"
+                        colspan="2"
+                        string="Get Data"
+                        context="{'active_id': active_id}"
+                        type="object"
+                    />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_get_partner_data" model="ir.actions.act_window">
+        <field name="name">Get Partner's Data</field>
+        <field name="res_model">get.partner.data</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>
