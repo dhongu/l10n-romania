@@ -373,6 +373,14 @@ class StockMove(models.Model):
 
         return am_vals
 
+
+    def _prepare_account_move_vals(self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost):
+        vals = super()._prepare_account_move_vals(credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost)
+        valued_type = self.env.context.get("valued_type", "indefinite")
+        if 'return' in valued_type and self.env.company.account_storno:
+            vals['is_storno'] = True
+        return vals
+
     def _romanian_account_entry_move(self, qty, description, svl_id, cost):
         svl = self.env["stock.valuation.layer"]
         if self._is_usage_giving() or self._is_consumption():
