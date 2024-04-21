@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <record id="action_report_delivery" model="ir.actions.report">
+            <field name="name">Delivery</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_delivery</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_delivery</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_delivery_price" model="ir.actions.report">
+            <field name="name">Delivery with price</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_delivery_price</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_delivery_price</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_consume_voucher" model="ir.actions.report">
+            <field name="name">Consume Voucher</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_consume_voucher</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_consume_voucher</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_reception" model="ir.actions.report">
+            <field name="name">Reception</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_reception</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_reception</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_reception_no_tax" model="ir.actions.report">
+            <field name="name">Reception without tax</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_reception_no_tax</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_reception_no_tax</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_reception_sale_price" model="ir.actions.report">
+            <field name="name">Reception with sale price</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_reception_sale_price</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_reception_sale_price</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_internal_transfer" model="ir.actions.report">
+            <field name="name">Internal transfer</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_internal_transfer</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_internal_transfer</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_c_internal_transfer" model="ir.actions.report">
+            <field name="name">Cumulative Internal transfer</field>
+            <field name="model">stock.picking.cumulative</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_c_internal_transfer</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_c_internal_transfer</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking_cumulative" />
+            <field name="binding_type">report</field>
+        </record>
+        <record id="action_report_c_recep_sale_price" model="ir.actions.report">
+            <field name="name">Cumulative Reception with sale price</field>
+            <field name="model">stock.picking.cumulative</field>
+            <field name="report_type">qweb-pdf</field>
+            <field
+            name="report_name"
+        >l10n_ro_stock_picking_report.report_c_recep_sale_price</field>
+            <field
+            name="report_file"
+        >l10n_ro_stock_picking_report.report_c_recep_sale_price</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="model_stock_picking_cumulative" />
+            <field name="binding_type">report</field>
+        </record>
+
+</odoo>
