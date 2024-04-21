@@ -1,0 +1,370 @@
+# ©  2008-2022 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+
+import time
+from functools import reduce
+
+from odoo import api, models
+
+
+class ReportPickingDelivery(models.AbstractModel):
+    _name = "report.abstract_report.delivery_report"
+    _description = "ReportPickingDelivery"
+    _template = None
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        report = self.env["ir.actions.report"]._get_report_from_name(self._template)
+        return {
+            "doc_ids": docids,
+            "doc_model": report.model,
+            "data": data,
+            "time": time,
+            "docs": self.env[report.model].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
+
+    def _get_line(self, move_line):
+        res = {"price": 0.0, "amount": 0.0, "tax": 0.0, "amount_tax": 0.0}
+        if move_line.sale_line_id:
+            line = move_line.sale_line_id
+
+            taxes_ids = line.tax_id  # line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
+
+            incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+
+            if line.product_uom_qty != 0:
+                res["price"] = line.price_subtotal / line.product_uom_qty
+                if incl_tax:
+                    list_price = line.price_total / line.product_uom_qty
+                else:
+                    list_price = res["price"]
+            else:
+                res["price"] = 0.0
+                list_price = 0.0
+
+            taxes_sale = taxes_ids.compute_all(
+                list_price, quantity=move_line.product_qty, product=line.product_id
+            )
+
+            res["tax"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
+            res["amount"] = taxes_sale["total_excluded"]
+            res["amount_tax"] = taxes_sale["total_included"]
+
+        return res
+
+    def _get_totals(self, moves):
+        res = {"amount": 0.0, "tax": 0.0, "amount_tax": 0.0}
+        for move in moves:
+            line = self._get_line(move)
+            if move.picking_id.state == "done":
+                if move.product_qty > 0.0:
+                    res["amount"] += line["amount"]
+                    res["tax"] += line["tax"]
+                    res["amount_tax"] += line["amount_tax"]
+            else:
+                res["amount"] += line["amount"]
+                res["tax"] += line["tax"]
+                res["amount_tax"] += line["amount_tax"]
+        return res
+
+
+class ReportPickingReception(models.AbstractModel):
+    _name = "report.abstract_report.reception_report"
+    _description = "ReportPickingReception"
+    _template = None
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        report = self.env["ir.actions.report"]._get_report_from_name(self._template)
+        return {
+            "doc_ids": docids,
+            "doc_model": report.model,
+            "data": data,
+            "time": time,
+            "docs": self.env[report.model].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
+
+    def _get_line(self, move):
+        res = {
+            "price": 0.0,
+            "amount": 0.0,
+            "tax": 0.0,
+            "amount_tax": 0.0,
+            "amount_sale": 0.0,
+            "margin": 0.0,
+        }
+
+        value = 0
+        quantity = 0
+        for valuation in move.stock_valuation_layer_ids:
+            if (
+                valuation.l10n_ro_valued_type == "internal_transfer"
+                and not valuation.account_move_id
+            ):
+                continue
+            if valuation.l10n_ro_valued_type == "dropshipped" and valuation.value < 0:
+                continue
+            value += valuation.value
+            quantity += valuation.quantity
+        if move.stock_valuation_layer_ids:
+            res["price"] = value / (quantity or 1)
+
+        currency = move.company_id.currency_id
+
+        if move.purchase_line_id:
+            # todo: ce fac cu receptii facute cu preturi diferite ????
+            line = move.purchase_line_id
+
+            # todo:
+            #  de verificat daca pretul din miscare este actualizat inainte de
+            #  confirmarea transferului pentru a se actualiza cursul valutar !!
+            # res["price"] = move.price_unit  # pretul caculat la genereare miscarii
+
+            if not res["price"]:
+                res["price"] = move.price_unit
+            # la loturi nu este completat move_line.price_unit
+            # if move_line.price_unit == 0:
+            #     if move_line.remaining_qty != 0:
+            #         res['price'] = move_line.remaining_value /  move_line.remaining_qty
+
+            taxes = line.taxes_id.compute_all(
+                res["price"],
+                quantity=move.product_qty,
+                product=move.product_id,
+                partner=move.partner_id,
+            )
+
+            res["tax"] = taxes["total_included"] - taxes["total_excluded"]
+            res["amount"] = taxes["total_excluded"]
+            res["amount_tax"] = taxes["total_included"]
+
+            taxes_ids = line.product_id.taxes_id.filtered(
+                lambda r: r.company_id == move.company_id
+            )
+            list_price = move.product_id.list_price
+            if move.location_dest_id.store_pricelist_id:
+                list_price = move.location_dest_id.store_pricelist_id.get_product_price(
+                    move.product_id, 1, False
+                )
+
+            res["list_price"] = list_price
+            # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+            # if incl_tax:
+            #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
+            # else:
+            #     list_price = move_line.product_id.list_price
+
+            taxes_sale = taxes_ids.compute_all(
+                list_price,
+                currency=currency,
+                quantity=move.product_qty,
+                product=move.product_id,
+            )
+
+            res["amount_sale"] = taxes_sale["total_excluded"]
+            res["tax_sale"] = (
+                taxes_sale["total_included"] - taxes_sale["total_excluded"]
+            )
+            res["amount_tax_sale"] = taxes_sale["total_included"]
+            #  conversie pret din pretul din unitatea de masura de baza in pret in unitatea de masura din document
+            res["price"] = res["price"] * line.product_uom._compute_quantity(
+                1, line.product_id.uom_id
+            )
+            if res["amount_tax"] != 0.0:
+                res["margin"] = (
+                    100
+                    * (taxes_sale["total_included"] - res["amount_tax"])
+                    / res["amount_tax"]
+                )
+            else:
+                res["margin"] = 0.0
+        else:
+            # receptie fara comanda de aprovizionare
+
+            if not res["price"]:
+                res["price"] = abs(move.price_unit)
+
+            # obtinere valoare pentru transferuri interne
+            if not res["price"] and move.picking_id.picking_type_code == "internal":
+                res["price"] = move._get_price_unit()
+
+            taxes_ids = move.product_id.supplier_taxes_id.filtered(
+                lambda r: r.company_id == move.company_id
+            )
+            taxes = taxes_ids.compute_all(
+                res["price"],
+                currency=currency,
+                quantity=move.product_qty,
+                product=move.product_id,
+                partner=move.partner_id,
+            )
+            res["amount"] = taxes["total_excluded"]
+            res["tax"] = taxes["total_included"] - taxes["total_excluded"]
+            res["amount_tax"] = taxes["total_included"]
+
+            taxes_ids = move.product_id.taxes_id.filtered(
+                lambda r: r.company_id == move.company_id
+            )
+            # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+            # if incl_tax:
+            #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
+            # else:
+
+            list_price = move.product_id.list_price
+            if move.location_dest_id.store_pricelist_id:
+                list_price = move.location_dest_id.store_pricelist_id.get_product_price(
+                    move.product_id, 1, False
+                )
+
+            res["list_price"] = list_price
+
+            taxes_sale = taxes_ids.compute_all(
+                list_price,
+                currency=currency,
+                quantity=move.product_qty,
+                product=move.product_id,
+            )
+
+            res["amount_sale"] = taxes_sale["total_excluded"]
+            res["tax_sale"] = (
+                taxes_sale["total_included"] - taxes_sale["total_excluded"]
+            )
+            res["amount_tax_sale"] = taxes_sale["total_included"]
+
+            if taxes["total_included"] != 0.0:
+                res["margin"] = (
+                    100
+                    * (taxes_sale["total_included"] - taxes["total_included"])
+                    / taxes["total_included"]
+                )
+            else:
+                res["margin"] = 0.0
+
+        return res
+
+    def _get_totals(self, moves):
+        res = {
+            "amount": 0.0,
+            "tax": 0.0,
+            "amount_tax": 0.0,
+            "amount_sale": 0.0,
+            "tax_sale": 0.0,
+            "amount_tax_sale": 0.0,
+        }
+        for move in moves:
+            line = self._get_line(move)
+            if move.picking_id.state == "done":
+                if move.state == "done" and move.product_qty:
+                    res["amount"] += line["amount"]
+                    res["tax"] += line["tax"]
+                    res["amount_tax"] += line["amount_tax"]
+
+                    res["amount_sale"] += line["amount_sale"]
+                    res["tax_sale"] += line["tax_sale"]
+                    res["amount_tax_sale"] += line["amount_tax_sale"]
+            else:
+                res["amount"] += line["amount"]
+                res["tax"] += line["tax"]
+                res["amount_tax"] += line["amount_tax"]
+
+                res["amount_sale"] += line["amount_sale"]
+                res["tax_sale"] += line["tax_sale"]
+                res["amount_tax_sale"] += line["amount_tax_sale"]
+        return res
+
+
+class ReportDelivery(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_delivery"
+    _description = "Report delivery"
+    _inherit = "report.abstract_report.delivery_report"
+    _template = "l10n_ro_stock_picking_report.report_delivery"
+
+
+class ReportDeliveryPrice(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_delivery_price"
+    _description = "Report delivery from store"
+    _inherit = "report.abstract_report.delivery_report"
+    _template = "l10n_ro_stock_picking_report.report_delivery_price"
+
+
+class ReportConsumeVoucher(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_consume_voucher"
+    _description = "Report consume voucher"
+    _inherit = "report.abstract_report.delivery_report"
+    _template = "l10n_ro_stock_picking_report.report_consume_voucher"
+
+
+class ReportInternalTransfer(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_internal_transfer"
+    _description = "Report transfer"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_internal_transfer"
+
+
+class ReportReception(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_reception"
+    _description = "Report reception"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_reception"
+
+
+class ReportReceptionNoTax(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_reception_no_tax"
+    _description = "Report reception no tax"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_reception_no_tax"
+
+
+class ReportReceptionSalePrice(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_reception_sale_price"
+    _description = "Report reception in store"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_reception_sale_price"
+
+
+class ReportCumulativeSalePrice(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_c_recep_sale_price"
+    _description = "Report cumulative reception in store"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_c_recep_sale_price"
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        return {
+            "doc_ids": docids,
+            "doc_model": "stock.picking.cumulative",
+            "data": data,
+            "time": time,
+            "docs": self.env["stock.picking.cumulative"].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
+
+
+class ReportCumulativeIternalTransfer(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_c_internal_transfer"
+    _description = "Report cumulative internal transfer"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_c_internal_transfer"
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        return {
+            "doc_ids": docids,
+            "doc_model": "stock.picking.cumulative",
+            "data": data,
+            "time": time,
+            "docs": self.env["stock.picking.cumulative"].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
