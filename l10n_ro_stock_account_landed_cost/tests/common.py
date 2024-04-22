@@ -16,11 +16,8 @@ _logger = logging.getLogger(__name__)
 
 @tagged("post_install", "-at_install")
 class TestStockCommon(TestStockCommonBase):
-
     def create_lc(self, picking, lc_p1, lc_p2, vendor_bill=False):
-        default_vals = self.env["stock.landed.cost"].default_get(
-            list(self.env["stock.landed.cost"].fields_get())
-        )
+        default_vals = self.env["stock.landed.cost"].default_get(list(self.env["stock.landed.cost"].fields_get()))
         default_vals.update(
             {
                 "picking_ids": [picking.id],

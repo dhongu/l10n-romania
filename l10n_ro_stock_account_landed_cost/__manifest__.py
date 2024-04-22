@@ -4,10 +4,7 @@
     "version": "16.0.1.23.0",
     "category": "Localization",
     "summary": "Romania - Stock Accounting Landed Cost",
-    "author": "NextERP Romania,"
-    "Dorin Hongu,"
-    "Forest and Biomass Romania,"
-    "Odoo Community Association (OCA)",
+    "author": "NextERP Romania," "Dorin Hongu," "Forest and Biomass Romania," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "depends": [
         "stock_landed_costs",

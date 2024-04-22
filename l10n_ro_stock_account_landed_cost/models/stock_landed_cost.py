@@ -52,17 +52,12 @@ class StockLandedCost(models.Model):
         if not self.filtered(lambda c: c.company_id.l10n_ro_accounting):
             return super().button_validate()
         self._check_can_validate()
-        cost_without_adjusment_lines = self.filtered(
-            lambda c: not c.valuation_adjustment_lines
-        )
+        cost_without_adjusment_lines = self.filtered(lambda c: not c.valuation_adjustment_lines)
         if cost_without_adjusment_lines:
             cost_without_adjusment_lines.compute_landed_cost()
         if not self._check_sum():
             raise UserError(
-                _(
-                    "Cost and adjustments lines do not match. "
-                    "You should maybe recompute the landed costs."
-                )
+                _("Cost and adjustments lines do not match. " "You should maybe recompute the landed costs.")
             )
 
         for cost in self:
@@ -76,22 +71,13 @@ class StockLandedCost(models.Model):
                 "move_type": "entry",
             }
             valuation_layer_ids = []
-            cost_to_add_byproduct = defaultdict(lambda: 0.0)
-            for line in cost.valuation_adjustment_lines.filtered(
-                lambda line: line.move_id
-            ):
+            cost_to_add_byproduct = defaultdict(float)
+            for line in cost.valuation_adjustment_lines.filtered(lambda line: line.move_id):
                 # Add distributed cost for each stock valuation layer.
                 product = line.move_id.product_id
-                for svl in line.move_id.stock_valuation_layer_ids.filtered(
-                    lambda s: s.quantity != 0
-                ):
-
-                    cost_to_add = (
-                        svl.quantity / line.move_id.quantity_done
-                    ) * line.additional_landed_cost
-                    valuation_layer = cost.l10n_ro_create_valuation_layer(
-                        line, svl, cost_to_add
-                    )
+                for svl in line.move_id.stock_valuation_layer_ids.filtered(lambda s: s.quantity != 0):
+                    cost_to_add = (svl.quantity / line.move_id.quantity_done) * line.additional_landed_cost
+                    valuation_layer = cost.l10n_ro_create_valuation_layer(line, svl, cost_to_add)
                     svl.remaining_value += cost_to_add
                     valuation_layer_ids.append(valuation_layer.id)
                     if product.cost_method == "average":
@@ -109,12 +95,8 @@ class StockLandedCost(models.Model):
                             svl_move._post()
 
                     # Add separate svl for each quantity out
-                    for svl_out in svl.l10n_ro_svl_dest_ids.filtered(
-                        lambda s: s.quantity != 0
-                    ):
-                        out_cost_to_add = (
-                            svl_out.quantity / svl.quantity
-                        ) * cost_to_add
+                    for svl_out in svl.l10n_ro_svl_dest_ids.filtered(lambda s: s.quantity != 0):
+                        out_cost_to_add = (svl_out.quantity / svl.quantity) * cost_to_add
                         valuation_layer_out = cost.l10n_ro_create_valuation_layer(
                             self.env["stock.valuation.adjustment.lines"],
                             svl_out,
@@ -138,9 +120,7 @@ class StockLandedCost(models.Model):
                             if amls:
                                 svl_move_vals["line_ids"] = amls
                                 svl_move = move.create(svl_move_vals)
-                                valuation_layer_out.update(
-                                    {"account_move_id": svl_move.id}
-                                )
+                                valuation_layer_out.update({"account_move_id": svl_move.id})
                                 svl_move._post()
 
                 # Products with manual inventory valuation are ignored because
@@ -148,18 +128,10 @@ class StockLandedCost(models.Model):
                 if product.valuation != "real_time":
                     continue
             # batch standard price computation avoid recompute quantity_svl at each iteration
-            products = self.env["product.product"].browse(
-                p.id for p in cost_to_add_byproduct.keys()
-            )
-            for (
-                product
-            ) in products:  # iterate on recordset to prefetch efficiently quantity_svl
-                if not float_is_zero(
-                    product.quantity_svl, precision_rounding=product.uom_id.rounding
-                ):
-                    product.with_company(cost.company_id).sudo().with_context(
-                        disable_auto_svl=True
-                    ).standard_price += (
+            products = self.env["product.product"].browse(p.id for p in cost_to_add_byproduct.keys())
+            for product in products:  # iterate on recordset to prefetch efficiently quantity_svl
+                if not float_is_zero(product.quantity_svl, precision_rounding=product.uom_id.rounding):
+                    product.with_company(cost.company_id).sudo().with_context(disable_auto_svl=True).standard_price += (
                         cost_to_add_byproduct[product] / product.quantity_svl
                     )
 
@@ -172,36 +144,26 @@ class AdjustmentLines(models.Model):
     _name = "stock.valuation.adjustment.lines"
     _inherit = ["stock.valuation.adjustment.lines", "l10n.ro.mixin"]
 
-    def _l10n_ro_prepare_accounting_entries(
-        self, valuation_layer, move_vals, cost_to_add, svl_type="in"
-    ):
+    def _l10n_ro_prepare_accounting_entries(self, valuation_layer, move_vals, cost_to_add, svl_type="in"):
         """Prepare the account move lines (accounting entries) for each valuation layer."""
         self.ensure_one()
         cost_product = self.cost_line_id.product_id
         if not cost_product:
             return False
         accounts = self.product_id.product_tmpl_id.get_product_accounts()
-        debit_account_id = (
-            accounts.get("stock_valuation") and accounts["stock_valuation"].id or False
-        )
+        debit_account_id = accounts.get("stock_valuation") and accounts["stock_valuation"].id or False
         credit_account_id = (
-            self.cost_line_id.account_id.id
-            or cost_product.categ_id.property_stock_account_input_categ_id.id
+            self.cost_line_id.account_id.id or cost_product.categ_id.property_stock_account_input_categ_id.id
         )
 
         # If the stock move is dropshipped move we need to get the cost account
         # instead the stock valuation account
         if self.move_id._is_dropshipped():
-            debit_account_id = (
-                accounts.get("expense") and accounts["expense"].id or False
-            )
+            debit_account_id = accounts.get("expense") and accounts["expense"].id or False
         already_out_account_id = accounts["stock_output"].id
 
         if not credit_account_id:
-            raise UserError(
-                _("Please configure Stock Expense Account for product: %s.")
-                % (cost_product.name)
-            )
+            raise UserError(_("Please configure Stock Expense Account for product: %s.") % (cost_product.name))
         AccountMoveLine = []
 
         base_line = {
@@ -211,9 +173,7 @@ class AdjustmentLines(models.Model):
         }
 
         if svl_type == "out":
-            credit_account_id = self.product_id.product_tmpl_id.get_product_accounts()[
-                "expense"
-            ].id
+            credit_account_id = self.product_id.product_tmpl_id.get_product_accounts()["expense"].id
             debit_account_id = already_out_account_id
             base_line["name"] += ": " + _(" already out")
         debit_line = dict(base_line, account_id=debit_account_id)
@@ -230,9 +190,7 @@ class AdjustmentLines(models.Model):
 
         return AccountMoveLine
 
-    def _create_account_move_line(
-        self, move, credit_account_id, debit_account_id, qty_out, already_out_account_id
-    ):
+    def _create_account_move_line(self, move, credit_account_id, debit_account_id, qty_out, already_out_account_id):
         res = super()._create_account_move_line(
             move, credit_account_id, debit_account_id, qty_out, already_out_account_id
         )

@@ -15,9 +15,7 @@ _logger = logging.getLogger(__name__)
 class TestStockLandedCostSale(TestStockCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
-        super(TestStockLandedCostSale, cls).setUpClass(
-            chart_template_ref=chart_template_ref
-        )
+        super().setUpClass(chart_template_ref=chart_template_ref)
 
     def test_po_lc_sale_tracking_fifo(self):
         self.product_1.product_tmpl_id.categ_id.property_cost_method = "fifo"
@@ -40,12 +38,8 @@ class TestStockLandedCostSale(TestStockCommon):
         self.create_invoice()
 
         # verificare SVLs reception
-        move_po_p1 = income_ship.move_ids.filtered(
-            lambda mv: mv.product_id == self.product_1
-        )
-        move_po_p2 = income_ship.move_ids.filtered(
-            lambda mv: mv.product_id == self.product_2
-        )
+        move_po_p1 = income_ship.move_ids.filtered(lambda mv: mv.product_id == self.product_1)
+        move_po_p2 = income_ship.move_ids.filtered(lambda mv: mv.product_id == self.product_2)
 
         svls_in_p1 = move_po_p1.stock_valuation_layer_ids
         self.assertEqual(len(svls_in_p1), 2)
@@ -71,12 +65,8 @@ class TestStockLandedCostSale(TestStockCommon):
         out_ship = self.create_so()
 
         # verificare SVLs delivery
-        move_so_p1 = out_ship.move_ids.filtered(
-            lambda mv: mv.product_id == self.product_1
-        )
-        move_so_p2 = out_ship.move_ids.filtered(
-            lambda mv: mv.product_id == self.product_2
-        )
+        move_so_p1 = out_ship.move_ids.filtered(lambda mv: mv.product_id == self.product_1)
+        move_so_p2 = out_ship.move_ids.filtered(lambda mv: mv.product_id == self.product_2)
 
         svls_out_p1 = move_so_p1.stock_valuation_layer_ids
         self.assertEqual(len(svls_out_p1), 1)
