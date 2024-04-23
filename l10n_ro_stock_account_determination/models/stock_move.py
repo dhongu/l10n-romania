@@ -315,17 +315,29 @@ class StockMove(models.Model):
         ):
             am_vals = super()._account_entry_move(qty, description, svl_id, cost)
 
+        if self.env.context.get("l10n_ro_reception_in_progress"):
+            am_vals = super()._account_entry_move(qty, description, svl_id, cost)
+
         if svl.l10n_ro_valued_type == "internal_transfer":
             am_vals = self._account_entry_move_internal_transfer(qty, description, svl_id, cost)
 
         if svl.l10n_ro_valued_type == "internal_transit_out":
             self._account_entry_move_internal_transit_out(qty, description, svl_id, cost)
 
+        # todo: de eliminat
+        if self.is_l10n_ro_record:
+            self._romanian_account_entry_move(qty, description, svl_id, cost)
+
         return am_vals
 
     def _account_entry_move_internal_transit_out(self, qty, description, svl_id, cost):
         move = self.with_context(valued_type="internal_transit_out")
-        journal_id, acc_src, acc_dest, acc_valuation = move._get_accounting_data_for_valuation()
+        (
+            journal_id,
+            acc_src,
+            acc_dest,
+            acc_valuation,
+        ) = move._get_accounting_data_for_valuation()
         am_vals = move._prepare_account_move_vals(acc_src, acc_valuation, journal_id, qty, description, svl_id, cost)
         return [am_vals]
 
@@ -334,7 +346,12 @@ class StockMove(models.Model):
         location_from = self.location_id
         location_to = self.location_dest_id
         am_vals = []
-        journal_id, acc_src, acc_dest, acc_valuation = move._get_accounting_data_for_valuation()
+        (
+            journal_id,
+            acc_src,
+            acc_dest,
+            acc_valuation,
+        ) = move._get_accounting_data_for_valuation()
         if location_to.l10n_ro_property_stock_valuation_account_id and cost < 0:
             am_vals.append(
                 move._prepare_account_move_vals(acc_dest, acc_valuation, journal_id, qty, description, svl_id, cost)
@@ -347,10 +364,23 @@ class StockMove(models.Model):
         return am_vals
 
     def _prepare_account_move_vals(
-        self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost
+        self,
+        credit_account_id,
+        debit_account_id,
+        journal_id,
+        qty,
+        description,
+        svl_id,
+        cost,
     ):
         vals = super()._prepare_account_move_vals(
-            credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost
+            credit_account_id,
+            debit_account_id,
+            journal_id,
+            qty,
+            description,
+            svl_id,
+            cost,
         )
         valued_type = self.env.context.get("valued_type", "indefinite")
         if "return" in valued_type and self.env.company.account_storno:
