@@ -7,6 +7,8 @@ def migrate(cr, version):
     if not version:
         return
 
+
+    cr.execute("DELETE FROM ir_ui_view WHERE arch_db::text LIKE '%l10n_ro_e_invoice%';")
     env = api.Environment(cr, SUPERUSER_ID, {})
     IrModule = env["ir.module.module"]
     IrModule.update_list()
