@@ -318,8 +318,6 @@
                                     <t
                                     t-set="price_unit_without_taxes"
                                     t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
-
-
                                 />
                                     <t t-if="not with_discount_distinct and l.discount">
 
@@ -351,7 +349,6 @@
                                     <t
                                     t-set="price_subtotal"
                                     t-value="o.currency_id._convert(price_subtotal,currency_id,date=o.invoice_date)"
-
                                 />
                                     <span
                                     id="price_subtotal"
