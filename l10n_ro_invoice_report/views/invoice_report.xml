@@ -434,8 +434,10 @@
                     </tbody>
                 </table>
             </xpath>
-
             <xpath expr="//div[@id='total']/div" position="replace">
+            </xpath>
+
+            <xpath expr="//div[@id='total']/.." position="before">
                 <div
                 class="col-8"
                 t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' "
@@ -481,6 +483,7 @@
                         <t t-call="account.document_tax_totals" />
                     </table>
                 </div>
+
             </xpath>
 
             <xpath expr="//p[@name='note']" position="after">
