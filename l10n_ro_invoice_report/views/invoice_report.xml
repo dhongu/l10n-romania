@@ -438,20 +438,21 @@
             </xpath>
 
             <xpath expr="//div[@id='total']/.." position="before">
+                <div class="row">
                 <div
-                class="col-8"
-                t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' "
-            >
-                    <table
-                    id="signature"
-                    class="table table-sm"
-                    style="page-break-inside: avoid;"
+                    class="col-7"
+                    t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' "
                 >
-                        <tr class="border-black" style="">
+                    <table
+                        id="signature"
+                        class="table table-sm"
+                        style="page-break-inside: avoid;"
+                    >
+                        <tr>
                             <td>Elaborate:</td>
                             <td>Information for delivery:</td>
                         </tr>
-                        <tr class="border-black o_total">
+                        <tr>
                             <td>
                                 <span>Name:</span>
                                 <span t-field="o.user_id" />
@@ -476,14 +477,11 @@
                 </div>
                 <div class="col-5">
                    <t t-set="tax_totals" t-value="o.tax_totals" />
-                    <table
-                    class="table table-sm"
-                    style="page-break-inside: avoid; width: 80%"
-                >
+                    <table class="table table-sm" style="page-break-inside: avoid;">
                         <t t-call="account.document_tax_totals" />
                     </table>
                 </div>
-
+                </div>
             </xpath>
 
             <xpath expr="//p[@name='note']" position="after">
