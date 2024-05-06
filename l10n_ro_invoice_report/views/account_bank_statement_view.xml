@@ -84,7 +84,7 @@
                                     <field name="to_check" invisible="1"/>
                                     <field name="country_code" invisible="1"/>
                                     <field name="currency_id" invisible="1"/>
-
+                                    <field name="suitable_journal_ids" invisible="1"/>
 
                                     <!--Visible fields-->
                                     <field name="sequence" widget="handle"/>
