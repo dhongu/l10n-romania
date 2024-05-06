@@ -12,15 +12,11 @@ class AccountInvoice(models.Model):
     delegate_id = fields.Many2one(
         "res.partner",
         string="Delegate",
-        readonly=True,
-        # states={"draft": [("readonly", False)]},
         domain=[("is_company", "=", False)],
     )
 
     mean_transp = fields.Char(
         string="Mean transport",
-        readonly=True,
-        # states={"draft": [("readonly", False)]},
     )
 
     @api.model
