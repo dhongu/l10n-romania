@@ -1,15 +1,141 @@
 <?xml version="1.0" ?>
 <odoo>
-<!--
-    # nu mai exista in 16 acest ecran.
-    <record id="view_bank_statement_form" model="ir.ui.view">
-        <field name="name">account.bank.statement.form.inherit</field>
+
+    <record id="view_bank_statement_tree" model="ir.ui.view">
+        <field name="name">account.bank.statement.tree</field>
         <field name="model">account.bank.statement</field>
-        <field name="inherit_id" ref="account.view_bank_statement_form" />
+        <field name="inherit_id" ref="account.view_bank_statement_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='button_undo_reconciliation']" position="after">
-                <button name="button_print" icon='fa-print' type="object" />
-            </xpath>
+            <tree position="attributes">
+                <attribute name="create">True</attribute>
+            </tree>
+
+            <field name="balance_end_real" position="after">
+                <button name="action_open_form_view" type="object" string="View" class="float-end btn-secondary"/>
+            </field>
         </field>
-    </record>-->
+    </record>
+
+    <record id="view_bank_statement_form" model="ir.ui.view">
+        <field name="name">account.bank.statement.form</field>
+        <field name="model">account.bank.statement</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="Bank Statement">
+                <header>
+
+                </header>
+                <field name="is_valid" invisible="1"/>
+                <field name="is_complete" invisible="1"/>
+                <div class="alert alert-warning text-center" role="alert" attrs="{
+                                'invisible': [('is_valid','=',True), ('is_complete','=',True)]}">
+                    <field name="problem_description"/>
+                </div>
+                <sheet>
+                    <div class="oe_title oe_inline">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. BNK/2021/0001"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="journal_id"
+                                   options="{'no_open': True, 'no_create': True}"/>
+                            <field name="date"
+                                   options="{'datepicker': {'warn_future': true}}"/>
+                            <field name='company_id' options="{'no_create': True}" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <label for="balance_start"/>
+                            <div>
+                                <field name="balance_start" class="oe_inline"/>
+                            </div>
+                            <label for="balance_end_real"/>
+                            <div>
+                                <field name="balance_end_real" class="oe_inline"/>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Transactions" name="statement_line_ids">
+                            <field name="line_ids"
+                                   context="{'default_journal_id': journal_id, 'default_internal_index':1}"
+                            >
+                                <tree string="Statement lines"
+                                      editable="bottom"
+
+
+                                      decoration-muted="state == 'draft'"
+                                      default_order="sequence"
+
+                                      limit="500">
+
+
+                                    <field name="journal_id" invisible="True"/>
+
+
+                                    <!--Invisible fields-->
+                                    <field name="statement_complete" invisible="1"/>
+                                    <field name="statement_valid" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="is_reconciled" invisible="1"/>
+                                    <field name="to_check" invisible="1"/>
+                                    <field name="country_code" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+
+
+                                    <!--Visible fields-->
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="date"
+                                           attrs="{'readonly': [('is_reconciled', '=', True),('amount', '!=', 0)]}"
+                                           options="{'datepicker': {'warn_future': true}}"/>
+                                    <field name="move_id" optional="hidden" required="0"/>
+                                    <field name="payment_ref" required="1"
+                                           attrs="{'readonly': [('is_reconciled', '=', True),('amount', '!=', 0)]}"/>
+                                    <field name="partner_id"
+                                           attrs="{'readonly': [('is_reconciled', '=', True),('amount', '!=', 0)]}"/>
+                                    <field name="narration"
+                                           string="Notes"
+                                           attrs="{'readonly': [('is_reconciled', '=', True), ('amount', '!=', 0)],
+                                   'invisible': [('narration', '=', False)]}"
+                                           optional="hidden"/>
+                                    <field name="ref"
+                                           attrs="{'readonly': [('is_reconciled', '=', True),('amount', '!=', 0)]}"
+                                           optional="hidden"/>
+                                    <field name="transaction_type" optional="hidden"/>
+                                    <field name="foreign_currency_id"
+                                           optional="hidden"
+                                           groups="base.group_multi_currency"
+                                           domain="[('id', '!=', currency_id)]"
+                                           options="{'no_open': True, 'no_create': True}"
+                                           attrs="{'readonly': [('is_reconciled', '=', True),('amount', '!=', 0)]}"
+                                    />
+                                    <field name="amount_currency"
+                                           optional="hidden"
+                                           groups="base.group_multi_currency"
+                                           attrs="{'invisible': [('foreign_currency_id', '=', False)], 'readonly': [('is_reconciled', '=', True),('amount', '!=', 0)]}"
+                                    />
+                                    <field name="amount"
+                                           attrs="{'readonly': [('is_reconciled', '=', True),('amount', '!=', 0)]}"/>
+
+
+                                    <field name="account_number" optional="hidden"/>
+
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                            <label for="balance_end"/>
+                        </div>
+                        <field name="balance_end" nolabel="1" class="oe_subtotal_footer_separator"/>
+                    </group>
+                    <div class="oe_clear"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
 </odoo>
