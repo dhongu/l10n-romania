@@ -10,10 +10,10 @@
                 <xpath
                 expr="//group[@id='header_left_group']"
                 position="inside"
-                attrs="{'invisible': [('move_type', '!=', 'out_invoice')]}"
+                invisible="move_type!='out_invoice'"
             >
-                      <field name="delegate_id" />
-                      <field name="mean_transp" colspan="2" />
+                      <field name="delegate_id" readonly="state!='draft'"/>
+                      <field name="mean_transp" colspan="2" readonly="state!='draft'"/>
                 </xpath>
             </field>
         </record>
