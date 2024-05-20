@@ -8,7 +8,7 @@
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Banking addons",
-    "depends": ["account_statement_import_file"],
+    "depends": ["account_bank_statement_import"],
     "data": ["views/account_bank_statement_import_sta_view.xml"],
     "maintainers": ["dhongu"],
 }

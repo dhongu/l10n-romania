@@ -54,9 +54,7 @@ class AccountBankStmtImportXLSX(models.TransientModel):
 
     def _parse_import_data(self, data, import_fields, options):
         data = super()._parse_import_data(data, import_fields, options)
-        statement_id = self._context.get("bank_statement_id", False)
-        if not statement_id:
-            return data
+
 
         if "partner_id" not in import_fields:
             import_fields += ["partner_id/.id"]
@@ -78,9 +76,9 @@ class AccountBankStmtImportXLSX(models.TransientModel):
             for item in data:
                 if not item[index_partner_id] and item[index_payment_ref]:
                     domain = [("name", "=", item[index_payment_ref])]
-                    invoice = self.env["sale.order"].search(domain, limit=1)
-                    if invoice:
-                        item[index_partner_id] = invoice.partner_id.id
+                    sale_order = self.env["sale.order"].search(domain, limit=1)
+                    if sale_order:
+                        item[index_partner_id] = sale_order.partner_id.id
                 if not item[index_payment_ref]:
                     item[index_payment_ref] = "N/A"
 
