@@ -55,6 +55,11 @@ class AccountBankStmtImportXLSX(models.TransientModel):
     def _parse_import_data(self, data, import_fields, options):
         data = super()._parse_import_data(data, import_fields, options)
 
+        journal_id = self._context.get('default_journal_id')
+        bank_stmt_import = options.get('bank_stmt_import')
+        if not journal_id or not bank_stmt_import:
+            return data
+
 
         if "partner_id" not in import_fields:
             import_fields += ["partner_id/.id"]
