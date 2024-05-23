@@ -1,0 +1,2 @@
+ - Fix xml values for invoices with line discounts
+ - Only one VAT value is accepted in invoice (for now)
