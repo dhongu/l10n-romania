@@ -1,35 +1,37 @@
 <?xml version="1.0" ?>
 <odoo>
 
-
     <record id="view_bank_statement_tree" model="ir.ui.view">
-        <field name="name">account.bank.statement.tree.inherit</field>
+        <field name="name">account.bank.statement.tree</field>
         <field name="model">account.bank.statement</field>
         <field name="inherit_id" ref="account.view_bank_statement_tree"/>
         <field name="arch" type="xml">
             <tree position="attributes">
-                <attribute name="open_form_view">True</attribute>
+<!--                <attribute name="open_form_view">True</attribute>-->
                 <attribute name="create">True</attribute>
             </tree>
+
+            <field name="balance_end_real" position="after">
+                <button name="action_open_form_view" type="object" string="View" class="float-end btn-secondary"/>
+            </field>
         </field>
     </record>
-
 
     <record id="view_bank_statement_form" model="ir.ui.view">
         <field name="name">account.bank.statement.form</field>
         <field name="model">account.bank.statement</field>
-        <field name="priority">1</field>
+        <field name="priority">100</field>
         <field name="arch" type="xml">
             <form string="Bank Statement">
                 <header>
 
                 </header>
-
+                <field name="is_valid" invisible="1"/>
+                <field name="is_complete" invisible="1"/>
                 <div class="alert alert-warning text-center" role="alert" invisible="is_valid and is_complete">
                         <field name="problem_description"/>
                 </div>
                 <sheet>
-
                     <div class="oe_title oe_inline">
                         <label for="name"/>
                         <h1>
@@ -38,13 +40,9 @@
                     </div>
                     <group>
                         <group>
-
                             <field name="journal_id"
-
                                    options="{'no_open': True, 'no_create': True}"/>
                             <field name="date"
-
-
                                    options="{'datepicker': {'warn_future': true}}"/>
                             <field name='company_id' options="{'no_create': True}" groups="base.group_multi_company"/>
                             <field name="currency_id" invisible="1"/>
@@ -53,12 +51,10 @@
                             <label for="balance_start"/>
                             <div>
                                 <field name="balance_start" class="oe_inline"/>
-
                             </div>
                             <label for="balance_end_real"/>
                             <div>
                                 <field name="balance_end_real" class="oe_inline"/>
-
                             </div>
                         </group>
                     </group>
@@ -70,8 +66,6 @@
                                 <tree string="Statement lines"
                                       editable="bottom"
 
-
-                                      decoration-muted="state == 'draft'"
                                       default_order="sequence"
 
                                       limit="500">
@@ -84,12 +78,13 @@
                                     <field name="statement_complete" column_invisible="True"/>
                                     <field name="statement_valid" column_invisible="True"/>
                                     <field name="state" column_invisible="True"/>
+                                    <field name="statement_id" column_invisible="True"/>
                                     <field name="is_reconciled" column_invisible="True"/>
                                     <field name="to_check" column_invisible="True"/>
                                     <field name="country_code" column_invisible="True"/>
                                     <field name="currency_id" column_invisible="True"/>
                                     <field name="company_id" column_invisible="True"/>
-
+                                    <field name="suitable_journal_ids" column_invisible="1"/>
 
                                     <!-- Visible fields -->
                                     <field name="sequence" widget="handle"/>
@@ -108,10 +103,10 @@
                                     <field name="narration" string="Notes" optional="hidden"/>
 
                                     <field name="amount_currency" optional="hidden" groups="base.group_multi_currency"
-                                           readonly="parent.state != 'open'"/>
+                                           />
                                     <field name="foreign_currency_id" optional="hidden"
                                            groups="base.group_multi_currency"
-                                           readonly="parent.state != 'open'"/>
+                                            />
 
                                     <field name="account_number" optional="hidden"/>
 

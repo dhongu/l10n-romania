@@ -44,6 +44,17 @@ class AccountBankStatement(models.Model):
             'journal_id': journal.id,
         })]
 
+    def action_open_form_view(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'account.bank.statement',
+            'res_id': self.id,
+            'views': [(self.env.ref('l10n_ro_invoice_report.view_bank_statement_form', False).id, 'form')],
+            'view_mode': 'form',
+            'target': 'current',
+        }
+
 class AccountBankStatementLine(models.Model):
     _inherit = "account.bank.statement.line"
 
