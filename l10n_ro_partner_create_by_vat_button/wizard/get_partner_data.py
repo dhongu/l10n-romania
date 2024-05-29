@@ -27,4 +27,6 @@ class GetPartnerData(models.TransientModel):
             self.partner_id.get_partner_data()
         if self.service == "vies":
             self.partner_id.get_partner_name_from_vies()
+        if self.partner_id.zip and hasattr(self.partner_id, "onchange_zip"):
+            self.partner_id.onchange_zip()
         return
