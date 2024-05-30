@@ -272,7 +272,7 @@
                                     />
                                     <t
                                         t-set="price_unit_without_taxes"
-                                        t-value="o.currency_id._convert(price_unit_without_taxes, currency_id,  o.company_id, o.invoice_date)"
+                                        t-value="o.currency_id._convert(price_unit_without_taxes, currency_id,  o.company_id, o.invoice_date or datetime.date.today())"
                                     />
                                     <t t-if="not with_discount_distinct and l.discount">
 
@@ -297,7 +297,7 @@
                                     </t>
                                     <t
                                         t-set="price_subtotal"
-                                        t-value="o.currency_id._convert(price_subtotal, currency_id,  o.company_id, o.invoice_date)"
+                                        t-value="o.currency_id._convert(price_subtotal, currency_id,  o.company_id, o.invoice_date or datetime.date.today())"
                                     />
                                     <span
                                         id="price_subtotal"
@@ -317,7 +317,7 @@
                                     </t>
                                     <t
                                         t-set="price_taxes"
-                                        t-value="o.currency_id._convert(price_taxes, currency_id,  o.company_id, o.invoice_date)"
+                                        t-value="o.currency_id._convert(price_taxes, currency_id,  o.company_id, o.invoice_date or datetime.date.today())"
                                     />
                                     <span
                                         id="price_taxes"
