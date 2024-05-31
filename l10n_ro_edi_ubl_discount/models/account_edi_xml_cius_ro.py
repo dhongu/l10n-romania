@@ -1,7 +1,22 @@
 # ©  2024-now Dan Stoica <danila(@)terrabit(.)ro
 # See README.rst file on addons root folder for license details
 
+import math
+
 from odoo import models
+
+
+def round_up(value, decimals=2):
+    """
+    Rounds up from .5 like anaf . Ex. 17.555 will be rounded to 17.56
+    :param value: value to round
+    :param decimals: decimals to use
+    :return:
+    """
+    expo = value * 10**decimals
+    if abs(expo) - abs(math.floor(expo)) < 0.5:
+        return math.floor(expo) / 10**decimals
+    return math.ceil(expo) / 10**decimals
 
 
 class AccountEdiXmlCIUSRO(models.Model):
@@ -17,7 +32,7 @@ class AccountEdiXmlCIUSRO(models.Model):
             # calcul amount fara discount din linii
             line_extension_amount = 0.0
             for line_vals in vals_list["vals"]["invoice_line_vals"]:
-                value = round(line_vals["line_extension_amount"], line_vals["currency_dp"])
+                value = round_up(line_vals["line_extension_amount"], line_vals["currency_dp"])
                 line_extension_amount += value
             if vals_list["vals"]["legal_monetary_total_vals"]["line_extension_amount"] != line_extension_amount:
                 # aplicare corectie:
@@ -33,7 +48,7 @@ class AccountEdiXmlCIUSRO(models.Model):
                 # calcul total taxe
                 taxes_total = 0.0
                 for tax in vals_list["vals"]["tax_total_vals"]:
-                    taxes_total += round(tax["tax_amount"], tax["currency_dp"])
+                    taxes_total += round_up(tax["tax_amount"], tax["currency_dp"])
 
                 # total cu taxe = total fara taxe + total taxe
                 vals_list["vals"]["legal_monetary_total_vals"]["tax_inclusive_amount"] = (
@@ -72,7 +87,7 @@ class AccountEdiXmlCIUSRO(models.Model):
                         else:
                             price_per_unit = line_vals["price_vals"]["price_amount"]
                         line_vals["price_vals"]["price_amount"] = price_per_unit
-                line_extension_amount += round(line_vals["line_extension_amount"], line_vals["currency_dp"])
+                line_extension_amount += round_up(line_vals["line_extension_amount"], line_vals["currency_dp"])
             vals_list["vals"]["legal_monetary_total_vals"]["line_extension_amount"] = line_extension_amount
 
             # aplicare restul de corectii pe totaluri
@@ -81,7 +96,7 @@ class AccountEdiXmlCIUSRO(models.Model):
             # calcul total taxe
             taxes_total = 0.0
             for tax in vals_list["vals"]["tax_total_vals"]:
-                taxes_total += round(tax["tax_amount"], tax["currency_dp"])
+                taxes_total += round_up(tax["tax_amount"], tax["currency_dp"])
             vals_list["vals"]["legal_monetary_total_vals"]["tax_inclusive_amount"] = line_extension_amount + taxes_total
 
             # fix taxable
