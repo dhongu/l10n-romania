@@ -23,6 +23,9 @@ class AccountInvoice(models.Model):
         states={"draft": [("readonly", False)]},
     )
 
+    weight = fields.Float()
+    weight_net = fields.Float()
+
     @api.model
     def default_get(self, fields_list):
         defaults = super().default_get(fields_list)
@@ -73,6 +76,25 @@ class AccountInvoice(models.Model):
             }
         )
         return values
+
+    def write(self, vals):
+        # Check if both modules are installed
+        if self.env["ir.module.module"].search(
+            [("name", "=", "deltatech_invoice_weight"), ("state", "=", "installed")]
+        ) and self.env["ir.module.module"].search([("name", "=", "l10n_ro_stock"), ("state", "=", "installed")]):
+            if self.invoice_line_ids:
+                net_weight = 0
+                gross_weight = 0
+                for line in self.invoice_line_ids:
+                    if line.product_id and line.product_id.l10n_ro_net_weight:
+                        net_weight += line.quantity * line.product_id.l10n_ro_net_weight
+                    if line.product_id and line.product_id.l10n_ro_net_weight:
+                        gross_weight += line.quantity * line.product_id.weight
+                vals["weight_net"] = net_weight
+                vals["weight"] = gross_weight
+        result = super().write(vals)
+
+        return result
 
 
 #
