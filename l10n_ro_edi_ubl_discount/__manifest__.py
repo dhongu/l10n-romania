@@ -3,7 +3,7 @@
 {
     "name": "Romania - EDI UBL Line Discount Fix",
     "license": "AGPL-3",
-    "version": "15.0.0.0.2",
+    "version": "15.0.0.0.3",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",

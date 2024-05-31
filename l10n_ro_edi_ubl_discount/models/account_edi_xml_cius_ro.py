@@ -31,9 +31,18 @@ class AccountEdiXmlCIUSRO(models.Model):
         if invoice.move_type == "out_invoice":
             # calcul amount fara discount din linii
             line_extension_amount = 0.0
+            line_allowances = 0.0
+            # vals_in_lines = []
+            # vals_allowance = []
             for line_vals in vals_list["vals"]["invoice_line_vals"]:
-                value = round_up(line_vals["line_extension_amount"], line_vals["currency_dp"])
+                value_rounded = round(line_vals["line_extension_amount"], line_vals["currency_dp"] + 1)
+                value = round_up(value_rounded, line_vals["currency_dp"])
+                # vals_in_lines.append(value)
                 line_extension_amount += value
+                # vals_allowance.append(round(line_vals["allowance_charge_vals"][0]["amount"], line_vals["currency_dp"]))
+                line_allowances += round(line_vals["allowance_charge_vals"][0]["amount"], line_vals["currency_dp"])
+            vals_list["vals"]["legal_monetary_total_vals"]["allowance_total_amount"] = line_allowances
+            vals_list["vals"]["allowance_charge_vals"][0]["amount"] = line_allowances
             if vals_list["vals"]["legal_monetary_total_vals"]["line_extension_amount"] != line_extension_amount:
                 # aplicare corectie:
                 # total fara discount = suma linii fara discount
@@ -48,7 +57,7 @@ class AccountEdiXmlCIUSRO(models.Model):
                 # calcul total taxe
                 taxes_total = 0.0
                 for tax in vals_list["vals"]["tax_total_vals"]:
-                    taxes_total += round_up(tax["tax_amount"], tax["currency_dp"])
+                    taxes_total += round(tax["tax_amount"], tax["currency_dp"])
 
                 # total cu taxe = total fara taxe + total taxe
                 vals_list["vals"]["legal_monetary_total_vals"]["tax_inclusive_amount"] = (
