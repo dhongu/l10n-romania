@@ -40,7 +40,8 @@ class AccountEdiXmlCIUSRO(models.Model):
                 # vals_in_lines.append(value)
                 line_extension_amount += value
                 # vals_allowance.append(round(line_vals["allowance_charge_vals"][0]["amount"], line_vals["currency_dp"]))
-                line_allowances += round(line_vals["allowance_charge_vals"][0]["amount"], line_vals["currency_dp"])
+                if line_vals["allowance_charge_vals"]:
+                    line_allowances += round(line_vals["allowance_charge_vals"][0]["amount"], line_vals["currency_dp"])
             vals_list["vals"]["legal_monetary_total_vals"]["allowance_total_amount"] = line_allowances
             vals_list["vals"]["allowance_charge_vals"][0]["amount"] = line_allowances
             if vals_list["vals"]["legal_monetary_total_vals"]["line_extension_amount"] != line_extension_amount:
