@@ -68,14 +68,20 @@ class AccountInvoice(models.Model):
             if origin:
                 invoice.write({"invoice_origin": origin})
 
-    def _get_reconciled_vals(self, partial, amount, counterpart_line):
-        values = super()._get_reconciled_vals(partial, amount, counterpart_line)
-        values.update(
-            {
-                "journal_type": counterpart_line.journal_id.type,
-            }
-        )
-        return values
+    def _compute_payments_widget_reconciled_info(self):
+        res = super()._compute_payments_widget_reconciled_info()
+        for move in self:
+            vals = move.invoice_payments_widget
+            if vals and "content" in vals and vals["content"]:
+                for index, value in enumerate(vals["content"]):
+                    journal_type = False
+                    if "account_payment_id" in value:
+                        payment_id = self.env["account.payment"].browse(value["account_payment_id"])
+                        if payment_id:
+                            journal_type = payment_id.journal_id.type
+                    if journal_type:
+                        move.invoice_payments_widget["content"][index]["journal_type"] = journal_type
+        return res
 
     def write(self, vals):
         # Check if both modules are installed

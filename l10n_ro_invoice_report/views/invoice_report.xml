@@ -445,11 +445,18 @@
             <xpath expr="//div[hasclass('page')]" position="after">
                 <t t-if="print_with_payments">
                     <!--                    <t t-set="payments_vals" t-value="o.sudo()._get_reconciled_info_JSON_values()" />-->
-                    <t t-set="payments_vals" t-value="[]" /> <!--TODO-->
+                    <t
+                        t-set="payments_vals"
+                        t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"
+                    />
                     <br />
                     <br />
 
-                    <div t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
+                    <div
+                        t-foreach="payments_vals"
+                        t-as="payment_vals"
+                        style="page-break-inside: avoid; border: 1px solid black;padding: 15px;"
+                    >
 
                         <t t-if="payment_vals['journal_type']=='cash'">
                             <div>
@@ -476,6 +483,12 @@
                             <div>
                                 <span>I received from</span>
                                 <strong t-field="o.partner_id.name" />
+                                <span t-if="o.partner_id.vat">
+                                    , <span t-field="o.partner_id.vat" />,
+                                </span>
+                                <span t-if="o.partner_id.nrc">
+                                    <span t-field="o.partner_id.nrc" />,
+                                </span>
                                 <span t-if="o.partner_id.city">
                                     from
                                     <span t-field="o.partner_id.city" />
