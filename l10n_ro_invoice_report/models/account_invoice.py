@@ -75,12 +75,15 @@ class AccountInvoice(models.Model):
             if vals and "content" in vals and vals["content"]:
                 for index, value in enumerate(vals["content"]):
                     journal_type = False
+                    partner_type = ""
                     if "account_payment_id" in value:
                         payment_id = self.env["account.payment"].browse(value["account_payment_id"])
                         if payment_id:
                             journal_type = payment_id.journal_id.type
+                            partner_type = payment_id.partner_type
                     if journal_type:
                         move.invoice_payments_widget["content"][index]["journal_type"] = journal_type
+                        move.invoice_payments_widget["content"][index]["partner_type"] = partner_type
         return res
 
     def write(self, vals):

@@ -481,7 +481,12 @@
                                 <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
                             </h4>
                             <div>
-                                <span>I received from</span>
+                                <t t-if="payment_vals['partner_type'] == 'supplier'">
+                                    <span>I payed to</span>
+                                </t>
+                                <t t-else="">
+                                    <span>I received from</span>
+                                </t>
                                 <strong t-field="o.partner_id.name" />
                                 <span t-if="o.partner_id.vat">
                                     , <span t-field="o.partner_id.vat" />,
