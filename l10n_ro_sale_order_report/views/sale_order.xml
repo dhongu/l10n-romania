@@ -31,18 +31,27 @@
                     </div>
                 </div>
             </xpath>
-            <!--            Poze produse-->
+            <!--Poze produse si nr. crt-->
+            <xpath expr="//tbody/t" position="before">
+                <t t-set="nr_crt" t-value="1" />
+            </xpath>
+            <xpath expr="//tbody/t/tr/t" position="inside">
+                <t t-set="nr_crt" t-value="nr_crt + 1" />
+            </xpath>
             <xpath expr="//table/thead/tr/th" position="before">
+                <th name="th_number" class="text-start">No.</th>
                 <th />
             </xpath>
-            <xpath expr="//table/tbody/t[2]/tr/t/td" position="before">
-                <td>
+            <td name="td_name" position="before">
+                <td name="td_number">
+                    <span t-esc="nr_crt" />
+                </td>
+                <td name="td_image">
                     <img t-attf-src="data:image/*;base64,{{line.product_id.image_256}}" style="max-height:50px;" />
                 </td>
-            </xpath>
+            </td>
 
-
-            <xpath expr="//span[@t-field='doc.payment_term_id.note']" position="after">
+            <p id="fiscal_position_remark" position="before">
                 <t t-set="transa" t-value="1" />
                 <t t-if="doc.payment_term_id">
                     <t t-if="len(doc.payment_term_id.line_ids)==2">
@@ -55,7 +64,7 @@
                         </div>
                     </t>
                 </t>
-            </xpath>
+            </p>
         </template>
         <template id="saleorder_proforma_percent_document">
             <t t-call="web.external_layout">
