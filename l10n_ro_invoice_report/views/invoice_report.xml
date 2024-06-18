@@ -456,9 +456,10 @@
                         t-foreach="payments_vals"
                         t-as="payment_vals"
                         style="page-break-inside: avoid; border: 1px solid black;padding: 15px;"
+                        t-if="'journal_type' in payment_vals and payment_vals['journal_type']=='cash'"
                     >
 
-                        <t t-if="payment_vals['journal_type']=='cash'">
+                        <t>
                             <div>
                                 <strong t-field="res_company.partner_id.name" />
                             </div>
