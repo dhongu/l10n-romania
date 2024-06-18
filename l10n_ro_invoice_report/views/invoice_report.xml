@@ -438,13 +438,8 @@
 
             </xpath>
 
-            <!--            <xpath expr="//p[@name='payment_term']/span" position="before">
-                            <strong name="payment_term_label">Payment Term:</strong>
-                        </xpath>-->
-
             <xpath expr="//div[hasclass('page')]" position="after">
                 <t t-if="print_with_payments">
-                    <!--                    <t t-set="payments_vals" t-value="o.sudo()._get_reconciled_info_JSON_values()" />-->
                     <t
                         t-set="payments_vals"
                         t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"
@@ -453,13 +448,13 @@
                     <br />
 
                     <div
+                        id="payment"
                         t-foreach="payments_vals"
                         t-as="payment_vals"
                         style="page-break-inside: avoid; border: 1px solid black;padding: 15px;"
                         t-if="'journal_type' in payment_vals and payment_vals['journal_type']=='cash'"
                     >
-
-                        <t>
+                        <t name="payment_container">
                             <div>
                                 <strong t-field="res_company.partner_id.name" />
                             </div>
@@ -481,7 +476,7 @@
                                 <span>/</span>
                                 <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
                             </h4>
-                            <div>
+                            <div name="payment_text">
                                 <t t-if="payment_vals['partner_type'] == 'supplier'">
                                     <span>I payed to</span>
                                 </t>
@@ -495,7 +490,7 @@
                                 <span t-if="o.partner_id.nrc">
                                     <span t-field="o.partner_id.nrc" />,
                                 </span>
-                                <span t-if="o.partner_id.city">
+                                <span t-if="o.partner_id.city" name="address">
                                     from
                                     <span t-field="o.partner_id.city" />
                                     <span t-field="o.partner_id.street" />
