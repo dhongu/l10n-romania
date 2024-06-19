@@ -14,7 +14,7 @@ class EFacturaOAuthController(http.Controller):
     @http.route('/l10n_ro_edi/authorize/<int:company_id>', auth="user")
     def authorize(self, company_id, **kw):
         """ Generate Authorization Token to acquire access_key for requesting Access Token """
-        company = http.request.env['res.company'].sudo().browse(company_id)
+        company = http.request.env['res.company'].browse(company_id)
         if not company.l10n_ro_edi_client_id or not company.l10n_ro_edi_client_secret:
             raise UserError(_("Client ID and Client Secret field must be filled."))
 
@@ -29,7 +29,7 @@ class EFacturaOAuthController(http.Controller):
     @http.route('/l10n_ro_edi/callback/<int:company_id>', type='http', auth="user")
     def callback(self, company_id, **kw):
         """ Use the acquired access_key to request access & refresh token from ANAF """
-        company = http.request.env['res.company'].sudo().browse(company_id)
+        company = http.request.env['res.company'].browse(company_id)
         access_key = kw.get('code')
         # Without certificate, ANAF won't give any access key in the callback URL's "code" parameter
         if not access_key:

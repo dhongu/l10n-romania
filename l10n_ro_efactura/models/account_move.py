@@ -10,47 +10,75 @@ class AccountMove(models.Model):
         comodel_name='l10n_ro_edi.document',
         inverse_name='invoice_id',
     )
-    l10n_ro_edi_active_document_id = fields.Many2one(
-        comodel_name='l10n_ro_edi.document',
-        compute='_compute_from_l10n_ro_edi_document_ids',
-    )
     l10n_ro_edi_state = fields.Selection(
         selection=[
             ('invoice_sending', 'Sending'),
-            ('invoice_sending_failed', 'Error'),
             ('invoice_sent', 'Sent'),
         ],
         string='E-Factura Status',
-        compute='_compute_from_l10n_ro_edi_document_ids_stored',
+        compute='_compute_l10n_ro_edi_state',
         store=True,
     )
-    l10n_ro_edi_message = fields.Char(compute='_compute_from_l10n_ro_edi_document_ids')
+
+    @api.model
+    def _l10n_ro_edi_create_document_invoice_sending(self, invoice, key_loading: str):
+        self.env['l10n_ro_edi.document'].create({
+            'invoice_id': invoice.id,
+            'state': 'invoice_sending',
+            'key_loading': key_loading,
+        })
+
+    @api.model
+    def _l10n_ro_edi_create_document_invoice_sending_failed(self, invoice, message: str):
+        self.env['l10n_ro_edi.document'].create({
+            'invoice_id': invoice.id,
+            'state': 'invoice_sending_failed',
+            'message': message,
+        })
+
+    @api.model
+    def _l10n_ro_edi_create_document_invoice_sent(self, invoice, result: dict):
+        document = self.env['l10n_ro_edi.document'].create({
+            'invoice_id': invoice.id,
+            'state': 'invoice_sent',
+            'key_signature': result['key_signature'],
+            'key_certificate': result['key_certificate'],
+        })
+        document.attachment_id = self.env['ir.attachment'].sudo().create({
+            'name': invoice._l10n_ro_edi_get_attachment_file_name(),
+            'raw': result['attachment_raw'],
+            'res_model': self._name,
+            'res_id': document.id,
+            'type': 'binary',
+            'mimetype': 'application/xml',
+        })
 
     @api.depends('l10n_ro_edi_document_ids')
-    def _compute_from_l10n_ro_edi_document_ids(self):
+    def _compute_l10n_ro_edi_state(self):
+        self.l10n_ro_edi_state = False
         for move in self:
-            active_document = self.env['l10n_ro_edi.document'].search([('invoice_id', '=', move.id)], limit=1)
-            move.l10n_ro_edi_active_document_id = active_document
-            move.l10n_ro_edi_message = active_document.message
+            for document in move.l10n_ro_edi_document_ids.sorted():
+                if document.state in ('invoice_sending', 'invoice_sent'):
+                    move.l10n_ro_edi_state = document.state
+                    break
 
-    @api.depends('l10n_ro_edi_document_ids')
-    def _compute_from_l10n_ro_edi_document_ids_stored(self):
-        for move in self:
-            active_document = self.env['l10n_ro_edi.document'].search([('invoice_id', '=', move.id)], limit=1)
-            move.l10n_ro_edi_state = active_document.state
-
-    @api.depends('l10n_ro_edi_state')
+    @api.depends('l10n_ro_edi_document_ids', 'l10n_ro_edi_state')
     def _compute_show_reset_to_draft_button(self):
         """ Prevent user to reset move to draft when there's an
             active sending document or an OK response has been received """
         super()._compute_show_reset_to_draft_button()
         for move in self:
-            if move.l10n_ro_edi_state in ('invoice_sending', 'invoice_sent'):
+            received_error_document = (move.l10n_ro_edi_state == 'invoice_sending' and
+                                       all(doc.state != 'invoice_sending_failed' for doc in move.l10n_ro_edi_document_ids))
+            if move.l10n_ro_edi_state == 'invoice_sent' or received_error_document:
                 move.show_reset_to_draft_button = False
 
     def _l10n_ro_edi_get_attachment_file_name(self):
         self.ensure_one()
-        return f"{self.name.replace('/', '_')}.xml"
+        return f"ciusro_{self.name.replace('/', '_')}.xml"
+
+    def _l10n_ro_edi_get_sending_and_failed_documents(self):
+        return self.l10n_ro_edi_document_ids.filtered(lambda d: d.state in ('invoice_sending', 'invoice_sending_failed'))
 
     def _l10n_ro_edi_compute_errors(self, xml_data):
         """ Compute possible errors before sending E-Factura """
@@ -71,7 +99,8 @@ class AccountMove(models.Model):
                  - if success -> delete all other sending documents and create a new sending document"""
         self.ensure_one()
         if errors := self.company_id._l10n_ro_edi_get_errors_pre_request():
-            self.env['l10n_ro_edi.document']._create_document_invoice_sending_failed(self, '\n'.join(errors))
+            self._l10n_ro_edi_get_sending_and_failed_documents().unlink()
+            self._l10n_ro_edi_create_document_invoice_sending_failed(self, '\n'.join(errors))
             return
 
         result = self.env['l10n_ro_edi.document']._request_ciusro_send_invoice(
@@ -80,11 +109,11 @@ class AccountMove(models.Model):
             move_type=self.move_type,
         )
         if 'error' in result:
-            self.l10n_ro_edi_document_ids.filtered(lambda d: d.state == 'invoice_sending_failed').unlink()
-            self.env['l10n_ro_edi.document']._create_document_invoice_sending_failed(self, result['error'])
+            self._l10n_ro_edi_get_sending_and_failed_documents().unlink()
+            self._l10n_ro_edi_create_document_invoice_sending_failed(self, result['error'])
         else:
-            self.l10n_ro_edi_document_ids.filtered(lambda d: d.state == 'invoice_sending').unlink()
-            self.env['l10n_ro_edi.document']._create_document_invoice_sending(self, result['key_loading'])
+            self._l10n_ro_edi_get_sending_and_failed_documents().unlink()
+            self._l10n_ro_edi_create_document_invoice_sending(self, result['key_loading'])
 
     def _l10n_ro_edi_fetch_invoice_sending_documents(self):
         """ Collects all selected active documents in self and process them as a batch.
@@ -92,26 +121,25 @@ class AccountMove(models.Model):
             if error -> generate error document on that document's invoice
             else -> immediately make a download request and process it
         """
-        documents = self.l10n_ro_edi_active_document_id.filtered(lambda d: d.state == 'invoice_sending')
-        if not documents:
-            return
         session = requests.session()
         to_delete_documents = self.env['l10n_ro_edi.document']
 
-        for document in documents:
-            invoice = document.invoice_id
+        for invoice in self.filtered(lambda inv: inv.l10n_ro_edi_state == 'invoice_sending'):
+            active_sending_document = invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == 'invoice_sending')[0]
+
             if errors := invoice.company_id._l10n_ro_edi_get_errors_pre_request():
-                to_delete_documents |= invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == 'invoice_sending_failed')
-                self.env['l10n_ro_edi.document']._create_document_invoice_sending_failed(invoice, '\n'.join(errors))
+                to_delete_documents |= invoice._l10n_ro_edi_get_sending_and_failed_documents()
+                self._l10n_ro_edi_create_document_invoice_sending_failed(invoice, '\n'.join(errors))
                 continue
             result = self.env['l10n_ro_edi.document']._request_ciusro_fetch_status(
                 company=invoice.company_id,
-                key_loading=document.key_loading,
+                key_loading=active_sending_document.key_loading,
                 session=session,
             )
+
             if 'error' in result:
-                to_delete_documents |= invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == 'invoice_sending_failed')
-                self.env['l10n_ro_edi.document']._create_document_invoice_sending_failed(invoice, result['error'])
+                to_delete_documents |= invoice._l10n_ro_edi_get_sending_and_failed_documents()
+                self._l10n_ro_edi_create_document_invoice_sending_failed(invoice, result['error'])
             elif 'key_download' in result:
                 # use the obtained key_download to immediately make a download request and process them
                 final_result = self.env['l10n_ro_edi.document']._request_ciusro_download_answer(
@@ -120,11 +148,11 @@ class AccountMove(models.Model):
                     session=session,
                 )
                 if 'error' in final_result:
-                    to_delete_documents |= invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == 'invoice_sending_failed')
-                    self.env['l10n_ro_edi.document']._create_document_invoice_sending_failed(invoice, final_result['error'])
+                    to_delete_documents |= invoice._l10n_ro_edi_get_sending_and_failed_documents()
+                    self._l10n_ro_edi_create_document_invoice_sending_failed(invoice, final_result['error'])
                 else:
-                    to_delete_documents |= invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == 'invoice_sending')
-                    self.env['l10n_ro_edi.document']._create_document_invoice_sent(invoice, final_result)
+                    to_delete_documents |= invoice._l10n_ro_edi_get_sending_and_failed_documents()
+                    self._l10n_ro_edi_create_document_invoice_sent(invoice, final_result)
 
         # Delete outdated documents in batches
         to_delete_documents.unlink()

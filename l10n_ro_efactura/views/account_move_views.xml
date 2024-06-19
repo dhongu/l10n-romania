@@ -93,7 +93,7 @@
                 <filter string="Sending to E-Factura" name="l10n_ro_edi_state_invoice_sending"
                         domain="[('l10n_ro_edi_state', '=', 'invoice_sending')]"/>
                 <filter string="Error from E-Factura" name="l10n_ro_edi_state_invoice_sending_failed"
-                        domain="[('l10n_ro_edi_state', '=', 'invoice_sending_failed')]"/>
+                        domain="[('l10n_ro_edi_document_ids.state', '=', 'invoice_sending_failed')]"/>
                 <filter string="Processed by E-Factura" name="l10n_ro_edi_state_invoice_sent"
                         domain="[('l10n_ro_edi_state', '=', 'invoice_sent')]"/>
             </xpath>

@@ -57,7 +57,7 @@ class AccountMoveSend(models.TransientModel):
         # EXTENDS 'account'
         super()._call_web_service_after_invoice_pdf_render(invoices_data)
         for invoice, invoice_data in invoices_data.items():
-            if invoice_data.get('l10n_ro_edi_send') and invoice.l10n_ro_edi_state not in ('invoice_sending', 'invoice_sent'):
+            if invoice_data.get('l10n_ro_edi_send') and not invoice.l10n_ro_edi_state:
                 if invoice_data.get('ubl_cii_xml_attachment_values'):
                     xml_data = invoice_data['ubl_cii_xml_attachment_values']['raw']
                 elif invoice.ubl_cii_xml_id:
@@ -72,12 +72,11 @@ class AccountMoveSend(models.TransientModel):
                     }
                     continue
 
-                # document = self.env['l10n_ro_edi.document'].create({'invoice_id': invoice.id})
-                # document._request_ciusro_send_invoice(xml_data)
                 invoice._l10n_ro_edi_send_invoice(xml_data=xml_data)
+                active_document = invoice.l10n_ro_edi_document_ids.sorted()[0]
 
-                if invoice.l10n_ro_edi_state == 'invoice_sending_failed':
+                if active_document.state == 'invoice_sending_failed':
                     invoice_data['error'] = {
                         'error_title': _("Error when sending CIUS-RO E-Factura to the SPV"),
-                        'errors': invoice.l10n_ro_edi_message.split('\n'),
+                        'errors': active_document.message.split('\n'),
                     }

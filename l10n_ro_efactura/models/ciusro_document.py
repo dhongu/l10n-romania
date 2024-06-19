@@ -36,46 +36,13 @@ class L10nRoEdiDocument(models.Model):
     key_certificate = fields.Char()
     need_fetch_button = fields.Boolean(compute='_compute_need_fetch_button')
 
-    @api.model
-    def _create_document_invoice_sending(self, invoice, key_loading: str):
-        self.env['l10n_ro_edi.document'].create({
-            'invoice_id': invoice.id,
-            'state': 'invoice_sending',
-            'key_loading': key_loading,
-        })
-
-    @api.model
-    def _create_document_invoice_sending_failed(self, invoice, message: str):
-        self.env['l10n_ro_edi.document'].create({
-            'invoice_id': invoice.id,
-            'state': 'invoice_sending_failed',
-            'message': message,
-        })
-
-    @api.model
-    def _create_document_invoice_sent(self, invoice, result: dict):
-        document = self.env['l10n_ro_edi.document'].create({
-            'invoice_id': invoice.id,
-            'state': 'invoice_sent',
-            'key_signature': result['key_signature'],
-            'key_certificate': result['key_certificate'],
-        })
-        document.attachment_id = self.env['ir.attachment'].create({
-            'name': invoice._l10n_ro_edi_get_attachment_file_name(),
-            'raw': result['attachment_raw'],
-            'res_model': self._name,
-            'res_id': document.id,
-            'type': 'binary',
-            'mimetype': 'application/xml',
-        })
-
     def unlink(self):
         """ Make sure any created attachments are also deleted """
         self.attachment_id.unlink()
         return super().unlink()
 
     @api.model
-    def _make_efactura_request(self, company, endpoint, method, params, data=None, session=None):
+    def _make_efactura_request(self, company, endpoint, method, params, data=None, session=None) -> dict[str, str | bytes]:
         """ Make an API request to E-Factura and handle the response and return a `result` dictionary
             :param company: `res.company` object containing l10n_ro_edi_access_token
             :param endpoint: 'upload' (for sending) |
@@ -180,11 +147,10 @@ class L10nRoEdiDocument(models.Model):
             'key_certificate': root.find('.//ns:X509Certificate', namespaces=NS_SIGNATURE).text,
         }
 
-    @api.depends('invoice_id.l10n_ro_edi_active_document_id', 'state')
+    @api.depends('state')
     def _compute_need_fetch_button(self):
         for document in self:
-            document.need_fetch_button = (document.invoice_id.l10n_ro_edi_active_document_id.id == document.id and
-                                          document.state == 'invoice_sending')
+            document.need_fetch_button = document.state == 'invoice_sending'
 
     def action_l10n_ro_edi_fetch_status(self):
         """ Fetch the latest response from E-Factura about the XML sent """

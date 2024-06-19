@@ -84,7 +84,7 @@ class ResCompany(models.Model):
         response_json = response.json()
         self._l10n_ro_edi_process_token_response(response_json)
 
-    def cron_l10n_ro_edi_refresh_access_token(self):
+    def _cron_l10n_ro_edi_refresh_access_token(self):
         ro_companies = self.env['res.company'].sudo().search([
             ('l10n_ro_edi_refresh_token', '!=', False),
             ('l10n_ro_edi_client_id', '!=', False),
