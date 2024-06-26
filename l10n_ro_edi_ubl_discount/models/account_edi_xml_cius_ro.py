@@ -2,19 +2,22 @@
 # See README.rst file on addons root folder for license details
 
 
+import math
+
 from odoo import models
 
-# def round_up(value, decimals=2):
-#     """
-#     Rounds up from .5 like anaf . Ex. 17.555 will be rounded to 17.56
-#     :param value: value to round
-#     :param decimals: decimals to use
-#     :return:
-#     """
-#     expo = value * 10**decimals
-#     if abs(expo) - abs(math.floor(expo)) < 0.5:
-#         return math.floor(expo) / 10**decimals
-#     return math.ceil(expo) / 10**decimals
+
+def round_up(value, decimals=2):
+    """
+    Rounds up from .5 like anaf . Ex. 17.555 will be rounded to 17.56
+    :param value: value to round
+    :param decimals: decimals to use
+    :return:
+    """
+    expo = value * 10**decimals
+    if abs(expo) - abs(math.floor(expo)) < 0.5:
+        return math.floor(expo) / 10**decimals
+    return math.ceil(expo) / 10**decimals
 
 
 class AccountEdiXmlCIUSRO(models.Model):
@@ -25,6 +28,27 @@ class AccountEdiXmlCIUSRO(models.Model):
         with_discount = any(line.discount for line in invoice.invoice_line_ids)
         if not with_discount:
             return vals_list
+        # re-adunare linii (LineExtensionAmount)
+        sum_lines = 0.0
+        for line in vals_list["vals"]["invoice_line_vals"]:
+            discount = 0.0
+            value_without_discount = line["price_vals"]["price_amount"] * line["invoiced_quantity"]
+            for discount_val in line["allowance_charge_vals"]:
+                discount += discount_val["amount"]
+            line["line_extension_amount"] = round_up(value_without_discount - discount, 2)
+            sum_lines += line["line_extension_amount"]
+        if vals_list["vals"]["legal_monetary_total_vals"]["tax_exclusive_amount"] != sum_lines:
+            vals_list["vals"]["legal_monetary_total_vals"]["tax_exclusive_amount"] = sum_lines
+            taxes = 0.00
+            for tax_line in vals_list["vals"]["tax_total_vals"]:
+                taxes += tax_line["tax_amount"]
+            vals_list["vals"]["legal_monetary_total_vals"]["tax_inclusive_amount"] = (
+                vals_list["vals"]["legal_monetary_total_vals"]["tax_exclusive_amount"] + taxes
+            )
+            vals_list["vals"]["legal_monetary_total_vals"]["payable_amount"] = (
+                vals_list["vals"]["legal_monetary_total_vals"]["tax_inclusive_amount"]
+                - vals_list["vals"]["legal_monetary_total_vals"]["prepaid_amount"]
+            )
         # corectie discount
         if "allowance_charge_vals" in vals_list["vals"]:
             vals_list["vals"].pop("allowance_charge_vals")
@@ -33,12 +57,6 @@ class AccountEdiXmlCIUSRO(models.Model):
         ]["tax_exclusive_amount"]
         if "allowance_total_amount" in vals_list["vals"]["legal_monetary_total_vals"]:
             vals_list["vals"]["legal_monetary_total_vals"].pop("allowance_total_amount")
-        for line in vals_list["vals"]["invoice_line_vals"]:
-            discount = 0.0
-            value_without_discount = line["price_vals"]["price_amount"] * line["invoiced_quantity"]
-            for discount_val in line["allowance_charge_vals"]:
-                discount += discount_val["amount"]
-            line["line_extension_amount"] = value_without_discount - discount
         return vals_list
 
         # if invoice.move_type == "out_invoice":
