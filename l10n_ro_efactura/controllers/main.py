@@ -5,11 +5,7 @@ from odoo.http import request
 from werkzeug.urls import url_join, url_encode
 
 
-ENDPOINT_AUTHORIZE = 'https://logincert.anaf.ro/anaf-oauth2/v1/authorize'
-ENDPOINT_TOKEN = 'https://logincert.anaf.ro/anaf-oauth2/v1/token'
-
-
-class EFacturaOAuthController(http.Controller):
+class L10nRoEdiController(http.Controller):
 
     @http.route('/l10n_ro_edi/authorize/<int:company_id>', auth="user")
     def authorize(self, company_id, **kw):
@@ -18,7 +14,7 @@ class EFacturaOAuthController(http.Controller):
         if not company.l10n_ro_edi_client_id or not company.l10n_ro_edi_client_secret:
             raise UserError(_("Client ID and Client Secret field must be filled."))
 
-        auth_url = url_join(ENDPOINT_AUTHORIZE, '?' + url_encode({
+        auth_url = url_join('https://logincert.anaf.ro/anaf-oauth2/v1/authorize', '?' + url_encode({
             'response_type': 'code',
             'client_id': company.l10n_ro_edi_client_id,
             'redirect_uri': company.l10n_ro_edi_callback_url,
@@ -39,20 +35,20 @@ class EFacturaOAuthController(http.Controller):
             raise UserError(error_message)
 
         response = requests.post(
-            url=ENDPOINT_TOKEN,
+            url='https://logincert.anaf.ro/anaf-oauth2/v1/token',
             data={
-                "grant_type": "authorization_code",
-                "client_id": company.l10n_ro_edi_client_id,
-                "client_secret": company.l10n_ro_edi_client_secret,
-                "code": access_key,
-                "access_key": access_key,
-                "redirect_uri": company.l10n_ro_edi_callback_url,
-                "token_content_type": "jwt",
+                'grant_type': 'authorization_code',
+                'client_id': company.l10n_ro_edi_client_id,
+                'client_secret': company.l10n_ro_edi_client_secret,
+                'code': access_key,
+                'access_key': access_key,
+                'redirect_uri': company.l10n_ro_edi_callback_url,
+                'token_content_type': 'jwt',
             },
             headers={
-                "content-type": "application/x-www-form-urlencoded",
-                "accept": "application/json",
-                "user-agent": "PostmanRuntime/7.29.2",
+                'content-type': 'application/x-www-form-urlencoded',
+                'accept': 'application/json',
+                'user-agent': 'PostmanRuntime/7.29.2',
             },
             timeout=10,
         )

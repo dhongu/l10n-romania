@@ -29,15 +29,14 @@
                               decoration-success="state == 'invoice_sent'">
                             <field name="message" column_invisible="1"/>
                             <field name="attachment_id" column_invisible="1"/>
-                            <field name="need_fetch_button" column_invisible="1"/>
                             <field name="datetime"/>
                             <field name="state" widget="account_document_state"/>
 
                             <button name="action_l10n_ro_edi_fetch_status"
                                     type="object"
                                     string="Fetch status"
-                                    invisible="not need_fetch_button"/>
-                            <button name="action_l10n_ro_edi_download_zip"
+                                    invisible="state != 'invoice_sending'"/>
+                            <button name="action_l10n_ro_edi_download_signature"
                                     type="object"
                                     string="Download"
                                     invisible="not attachment_id"/>
@@ -90,11 +89,11 @@
                 <field name="l10n_ro_edi_state"/>
             </xpath>
             <xpath expr="//filter[@name='to_check']" position="after">
-                <filter string="Sending to E-Factura" name="l10n_ro_edi_state_invoice_sending"
+                <filter string="Sending E-Factura" name="l10n_ro_edi_state_invoice_sending"
                         domain="[('l10n_ro_edi_state', '=', 'invoice_sending')]"/>
-                <filter string="Error from E-Factura" name="l10n_ro_edi_state_invoice_sending_failed"
+                <filter string="Error E-Factura" name="l10n_ro_edi_state_invoice_sending_failed"
                         domain="[('l10n_ro_edi_document_ids.state', '=', 'invoice_sending_failed')]"/>
-                <filter string="Processed by E-Factura" name="l10n_ro_edi_state_invoice_sent"
+                <filter string="Sent E-Factura" name="l10n_ro_edi_state_invoice_sent"
                         domain="[('l10n_ro_edi_state', '=', 'invoice_sent')]"/>
             </xpath>
             <xpath expr="//group" position="inside">

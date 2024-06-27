@@ -4,7 +4,6 @@ import zipfile
 
 from lxml import etree
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
 
 NS_UPLOAD = {"ns": "mfp:anaf:dgti:spv:respUploadFisier:v1"}
 NS_STATUS = {"ns": "mfp:anaf:dgti:efactura:stareMesajFactura:v1"}
@@ -30,21 +29,19 @@ class L10nRoEdiDocument(models.Model):
     datetime = fields.Datetime(default=fields.Datetime.now, required=True)
     attachment_id = fields.Many2one(comodel_name='ir.attachment')
     message = fields.Char()
-    key_loading = fields.Char()
-    key_download = fields.Char()
-    key_signature = fields.Char()
-    key_certificate = fields.Char()
-    need_fetch_button = fields.Boolean(compute='_compute_need_fetch_button')
+    key_loading = fields.Char()         # To be used to fetch the status of previously sent XML
+    key_signature = fields.Char()       # Received from a successful response: to be saved for government purposes
+    key_certificate = fields.Char()     # Received from a successful response: to be saved for government purposes
 
     def unlink(self):
-        """ Make sure any created attachments are also deleted """
-        self.attachment_id.unlink()
+        """ This method make sure that the created attachment (if it exists) is also deleted """
+        self.attachment_id.sudo().unlink()
         return super().unlink()
 
     @api.model
     def _make_efactura_request(self, company, endpoint, method, params, data=None, session=None) -> dict[str, str | bytes]:
-        """ Make an API request to E-Factura and handle the response and return a `result` dictionary
-            :param company: `res.company` object containing l10n_ro_edi_access_token
+        """ Make an API request to the Romanian SPV, handle the response, and return a `result` dictionary
+            :param company: `res.company` object containing l10n_ro_edi_test_env, l10n_ro_edi_access_token
             :param endpoint: 'upload' (for sending) |
                              'stareMesaj' (for fetching status) |
                              'descarcare' (for downloading answer)
@@ -52,18 +49,15 @@ class L10nRoEdiDocument(models.Model):
                            'get' (for 'stareMesaj'|'descarcare')
             :param params: Dictionary of query parameters
             :param data: xml data for 'upload' request
-            :return: dict of {'error': <str>|<bytes>} or {'content': <response.content>} from E-Factura
+            :return: dictionary of {'error': <str>} or {'content': <response.content>} from E-Factura
         """
-
-        url = f"https://api.anaf.ro/test/FCTEL/rest/{endpoint}"
-        if not company.l10n_ro_edi_test_env:
-            url = f"https://api.anaf.ro/prod/FCTEL/rest/{endpoint}"
-
+        send_mode = 'test' if company.l10n_ro_edi_test_env else 'prod'
+        url = f"https://api.anaf.ro/{send_mode}/FCTEL/rest/{endpoint}"
         headers = {'Content-Type': 'application/xml',
                    'Authorization': f'Bearer {company.l10n_ro_edi_access_token}'}
 
         try:
-            requester = session and session or requests
+            requester = session or requests
             response = requester.request(method=method, url=url, params=params, data=data, headers=headers, timeout=10)
         except requests.HTTPError as e:
             return {'error': str(e)}
@@ -79,6 +73,14 @@ class L10nRoEdiDocument(models.Model):
 
     @api.model
     def _request_ciusro_send_invoice(self, company, xml_data, move_type='out_invoice'):
+        """ This method makes an 'upload' request to send xml_data to Romanian SPV.
+            Based on the result, it will then process the answer and returns a dictionary,
+            which may consist of either an 'error' or a 'key_loading' string
+            :param company: `res.company` object
+            :param xml_data: string of XML data to be sent
+            :param move_type: `move_type` field from `account.move` object, used for the request parameter
+            :return: result dictionary -> {'error': <str>} | {'key_loading': <str>}
+        """
         result = self._make_efactura_request(
             company=company,
             endpoint='upload',
@@ -101,6 +103,16 @@ class L10nRoEdiDocument(models.Model):
 
     @api.model
     def _request_ciusro_fetch_status(self, company, key_loading, session=None):
+        """ This method makes a "Fetch Status" (GET/stareMesaj) request to the Romanian SPV.
+            After processing the response, it will return 1 of the following 3 possible object:
+             - {'error': <str>} ~ failing response from a bad request
+             - {'key_download': <str>} ~ The response was successful, and we can use this key to download the answer
+             - {} ~ (empty dict) The response was successful but the SPV haven't finished processing the XML yet.
+        :param company: `res.company` object
+        :param key_loading: content of `key_loading` received from `_request_ciusro_send_invoice`
+        :param session: optional `requests.session` object
+        :return: {'error': <str>} | {'key_download': <str>} | {}
+        """
         result = self._make_efactura_request(
             company=company,
             endpoint='stareMesaj',
@@ -124,6 +136,15 @@ class L10nRoEdiDocument(models.Model):
 
     @api.model
     def _request_ciusro_download_answer(self, company, key_download, session=None):
+        """ This method makes a "Download Answer" (GET/descarcare) request to the Romanian SPV.
+            It then processes the response by opening the received zip file and returns either:
+             - {'error': <str>} ~ failing response from a bad request / unaccepted XML answer from the SPV
+             - <successful response dictionary> ~ contains the necessary information to be stored from the SPV
+        :param company: a `res.company` object
+        :param key_download: content of `key_download` received from `_request_ciusro_send_invoice`
+        :param session: optional `requests.session` object
+        :return: {'error': <str>} | {'attachment_raw': <str>, 'key_signature': <str>, 'key_certificate': <str>'}
+        """
         result = self._make_efactura_request(
             company=company,
             endpoint='descarcare',
@@ -151,26 +172,15 @@ class L10nRoEdiDocument(models.Model):
             'key_certificate': root.find('.//ns:X509Certificate', namespaces=NS_SIGNATURE).text,
         }
 
-    @api.depends('state')
-    def _compute_need_fetch_button(self):
-        for document in self:
-            document.need_fetch_button = document.state == 'invoice_sending'
-
     def action_l10n_ro_edi_fetch_status(self):
         """ Fetch the latest response from E-Factura about the XML sent """
         self.ensure_one()
-        if self.state != 'invoice_sending':
-            raise UserError(_('This document is not currently in sending state'))
-        if not self.key_loading:
-            raise UserError(_('This document does not have a loading key'))
-        # do the fetch process on a single invoice/document
+        # Do the batch fetch process on a single invoice/document
         self.invoice_id._l10n_ro_edi_fetch_invoice_sending_documents()
 
-    def action_l10n_ro_edi_download_zip(self):
-        """ Download the received ZIP file from E-Factura """
+    def action_l10n_ro_edi_download_signature(self):
+        """ Download the received successful signature XML file from E-Factura """
         self.ensure_one()
-        if not self.attachment_id:
-            raise UserError(_('This document does not have any attachment'))
         return {
             'type': 'ir.actions.act_url',
             'url': f'/web/content/{self.attachment_id.id}?download=true',

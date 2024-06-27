@@ -15,6 +15,7 @@ class ResConfigSettings(models.TransientModel):
     l10n_ro_edi_oauth_error = fields.Char(related='company_id.l10n_ro_edi_oauth_error')
 
     def button_l10n_ro_edi_generate_token(self):
+        """ Redirects to controllers/main.py ~ `authorize` method """
         self.ensure_one()
         return {
             'type': 'ir.actions.act_url',

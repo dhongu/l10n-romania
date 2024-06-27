@@ -21,24 +21,20 @@ class ResCompany(models.Model):
     l10n_ro_edi_refresh_expiry_date = fields.Date(string='Refresh Token Expiry Date')
     l10n_ro_edi_callback_url = fields.Char(compute='_compute_l10n_ro_edi_callback_url')
     l10n_ro_edi_test_env = fields.Boolean(string='Use Test Environment', default=True)
-    l10n_ro_edi_oauth_error = fields.Char()
+    l10n_ro_edi_oauth_error = fields.Char()  # Error field to be shown in case of error from the authentication process
 
     @api.depends('country_code')
     def _compute_l10n_ro_edi_callback_url(self):
+        """ Callback URLs are used for generating client_id and client_secret from l10n_ro_edi's setting. """
         for company in self:
             if company.country_code == 'RO':
-                company.l10n_ro_edi_callback_url = url_join(self.get_base_url(), 'l10n_ro_edi/callback/%s' % company.id)
+                company.l10n_ro_edi_callback_url = url_join(company.get_base_url(), 'l10n_ro_edi/callback/%s' % company.id)
             else:
                 company.l10n_ro_edi_callback_url = False
 
-    def _l10n_ro_edi_get_errors_pre_request(self):
-        self.ensure_one()
-        errors = []
-        if not self.l10n_ro_edi_access_token:
-            errors.append(_('Romanian access token not found. Please generate or fill it in the settings.'))
-        return errors
-
     def _l10n_ro_edi_process_token_response(self, response_json):
+        """ To be called just after processing the json response from https://logincert.anaf.ro/anaf-oauth2/v1/token
+            This method reads and process the json, and writes the token fields on the company. """
         self.ensure_one()
         if 'access_token' not in response_json or 'refresh_token' not in response_json:
             error_message = _("Token not found.\nResponse: %s", response_json)
@@ -64,6 +60,8 @@ class ResCompany(models.Model):
         })
 
     def _l10n_ro_edi_refresh_access_token(self, session):
+        """ Uses the saved client_id, client_secret, and refresh_token on the company (self)
+            to make request to the SPV and renew the company's token fields. """
         self.ensure_one()
         if not self.l10n_ro_edi_client_id or not self.l10n_ro_edi_client_secret:
             raise UserError(_("Client ID and Client Secret field must be filled."))
@@ -85,6 +83,12 @@ class ResCompany(models.Model):
         self._l10n_ro_edi_process_token_response(response_json)
 
     def _cron_l10n_ro_edi_refresh_access_token(self):
+        """ This CRON method will be run every 30 days to refresh the following fields on the company:
+             - l10n_ro_edi_access_token
+             - l10n_ro_edi_refresh_token
+             - l10n_ro_edi_access_expiry_date
+             - l10n_ro_edi_refresh_expiry_date
+        """
         ro_companies = self.env['res.company'].sudo().search([
             ('l10n_ro_edi_refresh_token', '!=', False),
             ('l10n_ro_edi_client_id', '!=', False),
