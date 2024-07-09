@@ -8,7 +8,7 @@
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Tools",
     "depends": [
-        "l10n_ro_account_edi_ubl",
+        # "l10n_ro_account_edi_ubl",
         "queue_job",
         "queue_job_cron_jobrunner",
     ],
