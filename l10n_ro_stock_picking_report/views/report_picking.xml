@@ -306,7 +306,7 @@
                                                 <span t-field="move_line.lot_id.name" />
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="move_line.qty_done" />
+                                                <span t-field="move_line.quantity" />
                                                 <span
                                                 t-field="move.product_uom"
                                                 groups="uom.group_uom"
@@ -322,11 +322,6 @@
                             <div t-if="o.note">
                                 <span t-field="o.note" />
                             </div>
-                            <!--
-                            <div t-if="o.invoice_state=='none'">
-                                <span>There are not billed according to agreement</span>
-                            </div>
-                            -->
 
                         </div>
                     </t>

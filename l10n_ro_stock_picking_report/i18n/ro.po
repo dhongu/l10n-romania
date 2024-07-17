@@ -328,12 +328,12 @@ msgstr "Delegat"
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report,name:l10n_ro_stock_picking_report.action_report_delivery
 msgid "Delivery"
-msgstr "Livrare"
+msgstr "Aviz"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report,name:l10n_ro_stock_picking_report.action_report_delivery_price
 msgid "Delivery with price"
-msgstr "Livrare cu preț"
+msgstr "Aviz cu preț"
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.model.fields,field_description:l10n_ro_stock_picking_report.field_account_move__display_name
