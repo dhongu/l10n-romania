@@ -7,42 +7,42 @@
         <field name="arch" type="xml">
             <form>
                 <!-- Need the field in the view in order to be able to hide or show part of the view according the state  -->
-                <field name="state" invisible="1"/>
-                <field name="name" invisible="1"/>
+                <field name="state" invisible="1" />
+                <field name="name" invisible="1" />
                 <group invisible="state!='draft'">
                     <group>
-                        <field name="month"/>
-                        <field name="year"/>
+                        <field name="month" />
+                        <field name="year" />
                     </group>
                     <group>
-                        <field name="type"/>
-                        <field name="contact_id"/>
+                        <field name="type" />
+                        <field name="contact_id" />
                     </group>
                     <group>
-                        <field name="display_versions"/>
+                        <field name="display_versions" />
                     </group>
                 </group>
                 <group invisible="state!='draft'">
                     <group invisible="not display_versions">
-                        <field name="cn8"/>
-                        <field name="country_ver"/>
-                        <field name="eu_country_ver"/>
-                        <field name="mode_of_transport_ver"/>
-                        <field name="delivery_terms_ver"/>
+                        <field name="cn8" />
+                        <field name="country_ver" />
+                        <field name="eu_country_ver" />
+                        <field name="mode_of_transport_ver" />
+                        <field name="delivery_terms_ver" />
                     </group>
                     <group invisible="not display_versions">
-                        <field name="nature_of_transaction_a_ver"/>
-                        <field name="nature_of_transaction_b_ver"/>
-                        <field name="county_ver"/>
-                        <field name="locality_ver"/>
-                        <field name="unit_ver"/>
+                        <field name="nature_of_transaction_a_ver" />
+                        <field name="nature_of_transaction_b_ver" />
+                        <field name="county_ver" />
+                        <field name="locality_ver" />
+                        <field name="unit_ver" />
                     </group>
                 </group>
                 <div invisible="state!='download'">
                     <h2>Intrastat Declaration</h2>
                     <p>
                         Here is the XML file with your intrastat declaration:
-                        <field name="file_save" filename="name"/>
+                        <field name="file_save" filename="name" />
                     </p>
                 </div>
                 <footer>

@@ -1,4 +1,5 @@
 - Verificare date pentru trimitere ANAF la validarea facturii
 - Implementare cu coada job-uri
-- Anulare recalculare pret in factura furnizor daca factura are ID eFactura
+- Anulare recalculare pret in factura furnizor daca factura are ID
+  eFactura
 - Camp nr. caractere produs/descriere in linie factura

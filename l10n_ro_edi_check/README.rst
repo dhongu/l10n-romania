@@ -1,6 +1,6 @@
-==================================
-Romania - EDI data check and queue
-==================================
+===========================================
+Romania - EDI data check and queue Obsolete
+===========================================
 
 .. 
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -17,15 +17,16 @@ Romania - EDI data check and queue
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/16.0/l10n_ro_edi_check
+    :target: https://github.com/dhongu/l10n-romania/tree/17.0/l10n_ro_edi_check
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
 
-- Verificare date pentru trimitere ANAF la validarea facturii
-- Implementare cu coada job-uri
-- Anulare recalculare pret in factura furnizor daca factura are ID eFactura
-- Camp nr. caractere produs/descriere in linie factura
+-  Verificare date pentru trimitere ANAF la validarea facturii
+-  Implementare cu coada job-uri
+-  Anulare recalculare pret in factura furnizor daca factura are ID
+   eFactura
+-  Camp nr. caractere produs/descriere in linie factura
 
 **Table of contents**
 
@@ -38,7 +39,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/dhongu/l10n-romania/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/dhongu/l10n-romania/issues/new?body=module:%20l10n_ro_edi_check%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/dhongu/l10n-romania/issues/new?body=module:%20l10n_ro_edi_check%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -46,23 +47,23 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Terrabit
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* `Terrabit <https://www.terrabit.ro>`_:
+-  `Terrabit <https://www.terrabit.ro>`__:
 
-  * Dan Stoica <danila@terrabit.ro>
+   -  Dan Stoica <danila@terrabit.ro>
 
-
-Do not contact contributors directly about support or help with technical issues.
+Do not contact contributors directly about support or help with
+technical issues.
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/16.0/l10n_ro_edi_check>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/17.0/l10n_ro_edi_check>`_ project on GitHub.
 
 You are welcome to contribute.
