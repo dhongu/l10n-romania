@@ -1,9 +1,10 @@
 import io
-import requests
 import zipfile
 
+import requests
 from lxml import etree
-from odoo import models, fields, api, _
+
+from odoo import _, api, fields, models
 
 NS_UPLOAD = {"ns": "mfp:anaf:dgti:spv:respUploadFisier:v1"}
 NS_STATUS = {"ns": "mfp:anaf:dgti:efactura:stareMesajFactura:v1"}
@@ -11,7 +12,9 @@ NS_HEADER = {"ns": "mfp:anaf:dgti:efactura:mesajEroriFactuta:v1"}
 NS_SIGNATURE = {"ns": "http://www.w3.org/2000/09/xmldsig#"}
 
 
-def make_efactura_request(session, company, endpoint, method, params, data=None) -> dict[str, str | bytes]:
+def make_efactura_request(
+    session, company, endpoint, method, params, data=None
+) -> dict[str, str | bytes]:
     """
     Make an API request to the Romanian SPV, handle the response, and return a ``result`` dictionary.
 
@@ -23,52 +26,69 @@ def make_efactura_request(session, company, endpoint, method, params, data=None)
     :param data: XML data for ``upload`` request
     :return: Dictionary of {'error': <str>} or {'content': <response.content>} from E-Factura
     """
-    send_mode = 'test' if company.l10n_ro_edi_test_env else 'prod'
+    send_mode = "test" if company.l10n_ro_edi_test_env else "prod"
     url = f"https://api.anaf.ro/{send_mode}/FCTEL/rest/{endpoint}"
-    headers = {'Content-Type': 'application/xml',
-               'Authorization': f'Bearer {company.l10n_ro_edi_access_token}'}
+    headers = {
+        "Content-Type": "application/xml",
+        "Authorization": f"Bearer {company.l10n_ro_edi_access_token}",
+    }
 
     try:
-        response = session.request(method=method, url=url, params=params, data=data, headers=headers, timeout=10)
+        response = session.request(
+            method=method,
+            url=url,
+            params=params,
+            data=data,
+            headers=headers,
+            timeout=10,
+        )
     except requests.HTTPError as e:
-        return {'error': str(e)}
+        return {"error": str(e)}
     if response.status_code == 204:
-        return {'error': _('You reached the limit of requests. Please try again later.')}
+        return {
+            "error": _("You reached the limit of requests. Please try again later.")
+        }
     if response.status_code == 400:
         error_json = response.json()
-        return {'error': error_json['message']}
+        return {"error": error_json["message"]}
     if response.status_code == 403:
-        return {'error': _('Access token is forbidden.')}
+        return {"error": _("Access token is forbidden.")}
     if response.status_code == 500:
-        return {'error': _('There is something wrong with the SPV. Please try again later.')}
+        return {
+            "error": _("There is something wrong with the SPV. Please try again later.")
+        }
 
-    return {'content': response.content}
+    return {"content": response.content}
 
 
 class L10nRoEdiDocument(models.Model):
-    _name = 'l10n_ro_edi.document'
+    _name = "l10n_ro_edi.document"
     _description = "Document object for tracking CIUS-RO XML sent to E-Factura"
-    _order = 'datetime DESC, id DESC'
+    _order = "datetime DESC, id DESC"
 
-    invoice_id = fields.Many2one(comodel_name='account.move', required=True)
+    invoice_id = fields.Many2one(comodel_name="account.move", required=True)
     state = fields.Selection(
         selection=[
-            ('invoice_sending', 'Sending'),
-            ('invoice_sending_failed', 'Error'),
-            ('invoice_sent', 'Sent'),
+            ("invoice_sending", "Sending"),
+            ("invoice_sending_failed", "Error"),
+            ("invoice_sent", "Sent"),
         ],
-        string='E-Factura Status',
+        string="E-Factura Status",
         required=True,
     )
     datetime = fields.Datetime(default=fields.Datetime.now, required=True)
-    attachment_id = fields.Many2one(comodel_name='ir.attachment')
+    attachment_id = fields.Many2one(comodel_name="ir.attachment")
     message = fields.Char()
-    key_loading = fields.Char()         # To be used to fetch the status of previously sent XML
-    key_signature = fields.Char()       # Received from a successful response: to be saved for government purposes
-    key_certificate = fields.Char()     # Received from a successful response: to be saved for government purposes
+    key_loading = fields.Char()  # To be used to fetch the status of previously sent XML
+    key_signature = (
+        fields.Char()
+    )  # Received from a successful response: to be saved for government purposes
+    key_certificate = (
+        fields.Char()
+    )  # Received from a successful response: to be saved for government purposes
 
     @api.model
-    def _request_ciusro_send_invoice(self, company, xml_data, move_type='out_invoice'):
+    def _request_ciusro_send_invoice(self, company, xml_data, move_type="out_invoice"):
         """
         This method makes an 'upload' request to send xml_data to Romanian SPV.Based on the result, it will then process
         the answer and return a dictionary, which may consist of either an 'error' or a 'key_loading' string.
@@ -81,23 +101,27 @@ class L10nRoEdiDocument(models.Model):
         result = make_efactura_request(
             session=requests,
             company=company,
-            endpoint='upload',
-            method='POST',
-            params={'standard': 'UBL' if move_type == 'out_invoice' else 'CN',
-                    'cif': company.vat.replace('RO', '')},
+            endpoint="upload",
+            method="POST",
+            params={
+                "standard": "UBL" if move_type == "out_invoice" else "CN",
+                "cif": company.vat.replace("RO", ""),
+            },
             data=xml_data,
         )
-        if 'error' in result:
+        if "error" in result:
             return result
 
-        root = etree.fromstring(result['content'])
-        res_status = root.get('ExecutionStatus')
-        if res_status == '1':
-            error_elements = root.findall('.//ns:Errors', namespaces=NS_UPLOAD)
-            error_messages = [error_element.get('errorMessage') for error_element in error_elements]
-            return {'error': '\n'.join(error_messages)}
+        root = etree.fromstring(result["content"])
+        res_status = root.get("ExecutionStatus")
+        if res_status == "1":
+            error_elements = root.findall(".//ns:Errors", namespaces=NS_UPLOAD)
+            error_messages = [
+                error_element.get("errorMessage") for error_element in error_elements
+            ]
+            return {"error": "\n".join(error_messages)}
         else:
-            return {'key_loading': root.get('index_incarcare')}
+            return {"key_loading": root.get("index_incarcare")}
 
     @api.model
     def _request_ciusro_fetch_status(self, company, key_loading, session):
@@ -117,21 +141,26 @@ class L10nRoEdiDocument(models.Model):
         result = make_efactura_request(
             session=session,
             company=company,
-            endpoint='stareMesaj',
-            method='GET',
-            params={'id_incarcare': key_loading},
+            endpoint="stareMesaj",
+            method="GET",
+            params={"id_incarcare": key_loading},
         )
-        if 'error' in result:
+        if "error" in result:
             return result
 
-        root = etree.fromstring(result['content'])
-        error_elements = root.findall('.//ns:Errors', namespaces=NS_STATUS)
+        root = etree.fromstring(result["content"])
+        error_elements = root.findall(".//ns:Errors", namespaces=NS_STATUS)
         if error_elements:
-            return {'error': '\n'.join(error_element.get('errorMessage') for error_element in error_elements)}
+            return {
+                "error": "\n".join(
+                    error_element.get("errorMessage")
+                    for error_element in error_elements
+                )
+            }
 
-        state_status = root.get('stare')
-        if state_status in ('nok', 'ok'):
-            return {'key_download': root.get('id_descarcare')}
+        state_status = root.get("stare")
+        if state_status in ("nok", "ok"):
+            return {"key_download": root.get("id_descarcare")}
         else:
             return {}
 
@@ -152,40 +181,48 @@ class L10nRoEdiDocument(models.Model):
         result = make_efactura_request(
             session=session,
             company=company,
-            endpoint='descarcare',
-            method='GET',
-            params={'id': key_download},
+            endpoint="descarcare",
+            method="GET",
+            params={"id": key_download},
         )
-        if 'error' in result:
+        if "error" in result:
             return result
 
         # E-Factura gives download response in ZIP format
-        zip_ref = zipfile.ZipFile(io.BytesIO(result['content']))
-        signature_file = next(file for file in zip_ref.namelist() if 'semnatura' in file)
+        zip_ref = zipfile.ZipFile(io.BytesIO(result["content"]))
+        signature_file = next(
+            file for file in zip_ref.namelist() if "semnatura" in file
+        )
         xml_bytes = zip_ref.open(signature_file)
         root = etree.parse(xml_bytes)
-        error_element = root.find('.//ns:Error', namespaces=NS_HEADER)
+        error_element = root.find(".//ns:Error", namespaces=NS_HEADER)
         if error_element is not None:
-            return {'error': error_element.get('errorMessage')}
+            return {"error": error_element.get("errorMessage")}
 
         # Pretty-print the XML content of the signature file to be saved as attachment
-        attachment_raw = etree.tostring(root, pretty_print=True, xml_declaration=True, encoding='UTF-8')
+        attachment_raw = etree.tostring(
+            root, pretty_print=True, xml_declaration=True, encoding="UTF-8"
+        )
         return {
-            'attachment_raw': attachment_raw,
-            'key_signature': root.findtext('.//ns:SignatureValue', namespaces=NS_SIGNATURE),
-            'key_certificate': root.findtext('.//ns:X509Certificate', namespaces=NS_SIGNATURE),
+            "attachment_raw": attachment_raw,
+            "key_signature": root.findtext(
+                ".//ns:SignatureValue", namespaces=NS_SIGNATURE
+            ),
+            "key_certificate": root.findtext(
+                ".//ns:X509Certificate", namespaces=NS_SIGNATURE
+            ),
         }
 
     def action_l10n_ro_edi_fetch_status(self):
-        """ Fetch the latest response from E-Factura about the XML sent """
+        """Fetch the latest response from E-Factura about the XML sent"""
         self.ensure_one()
         # Do the batch fetch process on a single invoice/document
         self.invoice_id._l10n_ro_edi_fetch_invoice_sending_documents()
 
     def action_l10n_ro_edi_download_signature(self):
-        """ Download the received successful signature XML file from E-Factura """
+        """Download the received successful signature XML file from E-Factura"""
         self.ensure_one()
         return {
-            'type': 'ir.actions.act_url',
-            'url': f'/web/content/{self.attachment_id.id}?download=true',
+            "type": "ir.actions.act_url",
+            "url": f"/web/content/{self.attachment_id.id}?download=true",
         }

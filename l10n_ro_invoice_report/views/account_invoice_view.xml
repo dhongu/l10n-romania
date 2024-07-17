@@ -12,8 +12,8 @@
                 position="inside"
                 invisible="move_type!='out_invoice'"
             >
-                      <field name="delegate_id" readonly="state!='draft'"/>
-                      <field name="mean_transp" colspan="2" readonly="state!='draft'"/>
+                      <field name="delegate_id" readonly="state!='draft'" />
+                      <field name="mean_transp" colspan="2" readonly="state!='draft'" />
                 </xpath>
             </field>
         </record>

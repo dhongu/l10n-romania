@@ -34,7 +34,7 @@ Romania - Invoice Report Terrabit
    pip3 install --force-reinstall num2words==0.5.9 pip3 install
    --force-reinstall num2words==0.5.12
 
-   `https://static.anaf.ro/static/10/Anaf/legislatie/Cod_fiscal_norme_31072017.htm#A330 <https://static.anaf.ro/static/10/Anaf/legislatie/Cod_fiscal_norme_31072017.htm#A330>`__
+   https://static.anaf.ro/static/10/Anaf/legislatie/Cod_fiscal_norme_31072017.htm#A330
 
 **Table of contents**
 
