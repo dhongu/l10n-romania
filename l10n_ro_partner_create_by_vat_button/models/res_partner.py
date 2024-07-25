@@ -54,7 +54,21 @@ class ResPartner(models.Model):
         if self.name and not self.vat:
             self.vat = self.name
         self.with_context(skip_ro_vat_change=False).ro_vat_change()
-
+        module_installed = self.env["ir.module.module"].search(
+            [("name", "=", "l10n_ro_city")]
+        )
+        if module_installed.state == "installed" and self.country_id.code == "RO":
+            # city = self.env["res.city"].search([("name", "=", self.city_id.name)])
+            # if len(city) == 1:
+            #     self.city_id = city
+            # else:
+            #     if self.zip:
+            #         city = self.env["res.city"].search(
+            #             [("zipcode", "=", self.zip)], limit=1
+            #         )
+            #         if city:
+            #             self.city_id = city
+            self.onchange_zip()
         return True
         # self.onchange_vat_subjected()  # fortare compltare ro
 
