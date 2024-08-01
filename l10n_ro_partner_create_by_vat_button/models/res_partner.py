@@ -57,6 +57,8 @@ class ResPartner(models.Model):
         module_installed = self.env["ir.module.module"].search(
             [("name", "=", "l10n_ro_city")]
         )
+        if len(self.zip) == 5:
+            self.zip = "0" + self.zip
         if module_installed.state == "installed" and self.country_id.code == "RO":
             # city = self.env["res.city"].search([("name", "=", self.city_id.name)])
             # if len(city) == 1:
