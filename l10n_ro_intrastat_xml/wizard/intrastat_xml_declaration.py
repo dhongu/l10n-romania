@@ -384,8 +384,6 @@ class IntrastatDeclaration(models.TransientModel):
                     _('Product "%s" has no intrastat code, please configure it') % inv_line.product_id.display_name
                 )
 
-
-
             supply_units = inv_line.product_uom_id._compute_quantity(inv_line.quantity, inv_line.product_id.uom_id)
             weight = (inv_line.product_id.weight or 0.0) * supply_units
 
