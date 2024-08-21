@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0\n"
+"Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-02 11:51+0000\n"
-"PO-Revision-Date: 2024-03-02 11:51+0000\n"
+"POT-Creation-Date: 2024-08-21 06:05+0000\n"
+"PO-Revision-Date: 2024-08-21 06:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,22 +16,108 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_partner_create_by_vat_button
-#. odoo-python
-#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
-#, python-format
-msgid ""
-"ANAF Webservice not working.\n"
-"Please try again until it works"
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__service__anaf
+msgid "ANAF"
 msgstr ""
-"Serviciul web ANAF nu funcționează.\n"
-"Te rog încearcă din nou până când vei primi datele."
 
 #. module: l10n_ro_partner_create_by_vat_button
 #: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_res_partner
 msgid "Contact"
-msgstr "Contact"
+msgstr ""
 
 #. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
 #: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_partner_form
+msgid "Get Data"
+msgstr "Preia date"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
 msgid "Get Partner Data"
 msgstr "Preia date partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.actions.act_window,name:l10n_ro_partner_create_by_vat_button.action_get_partner_data
+msgid "Get Partner's Data"
+msgstr "Preia date partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_get_partner_data
+msgid "Get partner data from"
+msgstr "Preia date partener de la"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "Invalid VAT"
+msgstr "Cui invalid"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__partner_id
+msgid "Partner"
+msgstr "Partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "Please add the country code to the vat number or country field"
+msgstr "Vă rugăm să adăugați codul țării la numărul de TVA sau la câmpul țară"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Select service for partner:"
+msgstr "Selectați serviciul pentru partener:"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__service
+msgid "Service"
+msgstr "Serviciu"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__service__vies
+msgid "VIES for non-Romanian partners"
+msgstr "VIES pentru parteneri non-români"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/wizard/get_partner_data.py:0
+#, python-format
+msgid "You can't use this function on delivery contacts."
+msgstr "Nu puteți folosi această funcție pentru contactele de tip adresa de livrare."

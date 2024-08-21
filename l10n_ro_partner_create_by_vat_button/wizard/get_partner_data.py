@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, fields, models
+from odoo.exceptions import ValidationError
 
 
 class GetPartnerData(models.TransientModel):
@@ -23,6 +24,8 @@ class GetPartnerData(models.TransientModel):
     partner_id = fields.Many2one("res.partner", string="Partner")
 
     def do_get_data(self):
+        if self.partner_id.type == "delivery":
+            raise ValidationError(_("You can't use this function on delivery contacts."))
         if self.service == "anaf":
             self.partner_id.get_partner_data()
         if self.service == "vies":
@@ -30,3 +33,5 @@ class GetPartnerData(models.TransientModel):
         if self.partner_id.zip and hasattr(self.partner_id, "onchange_zip"):
             self.partner_id.onchange_zip()
         return
+
+        # Check if the required field is empty
