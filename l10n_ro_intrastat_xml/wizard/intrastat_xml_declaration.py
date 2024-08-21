@@ -305,6 +305,17 @@ class IntrastatDeclaration(models.TransientModel):
 
         for inv_line in invoice_lines:
             invoice = inv_line.move_id
+
+            amount = inv_line.price_subtotal
+            amount = invoice.currency_id._convert(
+                from_amount=amount,
+                to_currency=company.currency_id,
+                company=company,
+                date=invoice.invoice_date,
+            )
+            if not amount:
+                continue
+
             # Check type of transaction
             if "intrastat_transaction_id" in invoice._fields:
                 if invoice.intrastat_transaction_id:
@@ -372,14 +383,6 @@ class IntrastatDeclaration(models.TransientModel):
                 raise UserError(
                     _('Product "%s" has no intrastat code, please configure it') % inv_line.product_id.display_name
                 )
-
-            amount = inv_line.price_subtotal
-            amount = invoice.currency_id._convert(
-                from_amount=amount,
-                to_currency=company.currency_id,
-                company=company,
-                date=invoice.invoice_date,
-            )
 
             supply_units = inv_line.product_uom_id._compute_quantity(inv_line.quantity, inv_line.product_id.uom_id)
             weight = (inv_line.product_id.weight or 0.0) * supply_units

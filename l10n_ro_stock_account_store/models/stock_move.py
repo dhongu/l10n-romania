@@ -8,26 +8,26 @@ from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
+
 class StockMove(models.Model):
     _name = "stock.move"
     _inherit = ["stock.move", "l10n.ro.mixin"]
 
     @api.model
     def _get_valued_types(self):
-        valued_types = super(StockMove, self)._get_valued_types()
+        valued_types = super()._get_valued_types()
         if not self.filtered("is_l10n_ro_record"):
             return valued_types
 
         valued_types += [
-            'in_store'  # 'Intrare in magazin'
-            'out_store' # 'Iesire din maazin
+            "in_store"  # 'Intrare in magazin'
+            "out_store"  # 'Iesire din maazin
         ]
         return valued_types
 
-
     def _is_in_store(self):
         """Este receptie in magazin"""
-        it_is = self._is_in()  and self.location_dest_id.l10n_ro_merchandise_type == 'store'
+        it_is = self._is_in() and self.location_dest_id.l10n_ro_merchandise_type == "store"
         return it_is
 
     def _create_in_store_svl(self, forced_quantity=None):
@@ -38,7 +38,7 @@ class StockMove(models.Model):
         #       4428
         account_diff = self.company_id.l10n_ro_property_stock_picking_payable_account_id
 
-        svls = self.env['stock.valuation.layer']
+        svls = self.env["stock.valuation.layer"]
         # move._create_account_move_line(
         #     acc_dest,
         #     acc_valuation,
@@ -55,12 +55,11 @@ class StockMove(models.Model):
             svl_vals = {}
             svl_vals.update(move._prepare_common_svl_vals())
             svl_vals_list.append(svl_vals)
-        return self.env['stock.valuation.layer'].sudo().create(svl_vals_list)
-
+        return self.env["stock.valuation.layer"].sudo().create(svl_vals_list)
 
     def _is_out_store(self):
         """Este iesire din magazin"""
-        it_is = self._is_out()  and self.location_id.l10n_ro_merchandise_type == 'store'
+        it_is = self._is_out() and self.location_id.l10n_ro_merchandise_type == "store"
         return it_is
 
     def _create_out_store_svl(self, forced_quantity=None):
@@ -77,5 +76,4 @@ class StockMove(models.Model):
             svl_vals = {}
             svl_vals.update(move._prepare_common_svl_vals())
             svl_vals_list.append(svl_vals)
-        return self.env['stock.valuation.layer'].sudo().create(svl_vals_list)
-
+        return self.env["stock.valuation.layer"].sudo().create(svl_vals_list)
