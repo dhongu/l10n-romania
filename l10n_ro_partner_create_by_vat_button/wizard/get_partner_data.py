@@ -33,5 +33,3 @@ class GetPartnerData(models.TransientModel):
         if self.partner_id.zip and hasattr(self.partner_id, "onchange_zip"):
             self.partner_id.onchange_zip()
         return
-
-        # Check if the required field is empty
