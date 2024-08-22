@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, fields, models
+from odoo.exceptions import ValidationError
 
 
 class GetPartnerData(models.TransientModel):
@@ -6,7 +7,9 @@ class GetPartnerData(models.TransientModel):
     _description = "Get partner data from"
 
     service = fields.Selection(
-        [("anaf", "ANAF"), ("vies", "VIES for non-Romanian partners")], default="anaf"
+        [("anaf", "ANAF"), ("vies", "VIES for non-Romanian partners")],
+        default="anaf",
+        string="Service",
     )
 
     def default_get(self, fields):
@@ -21,8 +24,14 @@ class GetPartnerData(models.TransientModel):
     partner_id = fields.Many2one("res.partner", string="Partner")
 
     def do_get_data(self):
+        if self.partner_id.type == "delivery":
+            raise ValidationError(
+                _("You can't use this function on delivery contacts.")
+            )
         if self.service == "anaf":
             self.partner_id.get_partner_data()
         if self.service == "vies":
             self.partner_id.get_partner_name_from_vies()
+        if self.partner_id.zip and hasattr(self.partner_id, "onchange_zip"):
+            self.partner_id.onchange_zip()
         return
