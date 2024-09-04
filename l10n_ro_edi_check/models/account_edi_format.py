@@ -41,7 +41,7 @@ class AccountEdiXmlBis3(models.AbstractModel):
         get_param = self.env["ir.config_parameter"].sudo().get_param
         get_all_banks = get_param("l10n_ro_edi_check.get_all_banks", "False")
         get_all_banks = safe_eval(get_all_banks)
-        if get_all_banks:
+        if get_all_banks and invoice.type == "out_invoice":
             domain = [("l10n_ro_print_report", "=", True), ("currency_id", "=", invoice.company_id.currency_id.id)]
             banks = self.env["res.partner.bank"].search(domain)
             if banks:
