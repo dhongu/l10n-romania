@@ -95,6 +95,11 @@ msgstr "<span>Chitanță:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Payment:</span>"
+msgstr "<span>Disp. plată:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>amount</span>"
 msgstr "<span>suma de</span>"
 

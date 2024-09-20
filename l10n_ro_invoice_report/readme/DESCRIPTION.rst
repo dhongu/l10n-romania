@@ -3,6 +3,7 @@ Functionalitati
  - La factura au fost adugate campurile delegat si mijloc de transport
  - la partener se poate adauga un text aditinonal care apara pe facura
  - tiparire plata / incasare / dispozitie de plata
+ - tiparire pret fara discount si pret cu discount. Pt dezactivare (se va tipari doar pretul fara discount si valoarea cu discount - standard) se pune param. sistem l10n_ro_config.show_discount pe False
 
 
  pip3 install --force-reinstall num2words==0.5.9
