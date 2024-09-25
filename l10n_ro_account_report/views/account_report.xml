@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="action_report_account_statement" model="ir.actions.report">
+        <field name="name">Cash/Bank Statement</field>
+        <field name="model">account.bank.statement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ro_account_report.report_statement</field>
+        <field name="report_file">l10n_ro_account_report.report_statement</field>
+        <field name="print_report_name">"Cash_Bank_Statement"</field>
+        <field name="binding_model_id" ref="account.model_account_bank_statement" />
+        <field name="binding_type">report</field>
+    </record>
+    <!--    <report-->
+    <!--        id="action_report_account_statement"-->
+    <!--        model="account.bank.statement"-->
+    <!--        string="Cash / Bank Statement"-->
+    <!--        name="l10n_ro_account_report.report_statement"-->
+    <!--        file="l10n_ro_account_report.report_statement"-->
+    <!--        report_type="qweb-pdf"-->
+    <!--    />-->
+    <!--        <record id="action_report_picking_slip" model="ir.actions.report">-->
+    <!--            <field name="name">CMR Document</field>-->
+    <!--            <field name="model">stock.picking</field>-->
+    <!--            <field name="report_type">qweb-pdf</field>-->
+    <!--            <field name="report_name">deltatech_cmr_document.report_cmr_document</field>-->
+    <!--            <field name="report_file">deltatech_cmr_document.report_cmr_document</field>-->
+    <!--            <field name="print_report_name">CMR_Document</field>-->
+    <!--            <field name="binding_model_id" ref="model_stock_picking" />-->
+    <!--            <field name="binding_type">report</field>-->
+    <!--            <field name="paperformat_id" ref="deltatech_cmr_document.paperformat_a4_cmr" />-->
+
+    <!--        </record>-->
+</odoo>

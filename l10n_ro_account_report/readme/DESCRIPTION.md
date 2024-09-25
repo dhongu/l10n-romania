@@ -1,0 +1,2 @@
+Functionalitati  
+- registrul de casa
