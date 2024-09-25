@@ -44,3 +44,4 @@ class AccountMoveLine(models.Model):
                 is_supplier_from_anaf = False
         if not is_supplier_from_anaf:
             super()._compute_price_unit()
+        return
