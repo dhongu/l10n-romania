@@ -293,11 +293,14 @@
                                         t-set="price_unit_without_taxes"
                                         t-value="o.currency_id.with_context(date=o.invoice_date).compute(price_unit_without_taxes,currency_id)"
                                     />
-                                    <span
-                                        id="price_unit"
-                                        t-field="l.price_unit"
-                                        t-options='{"widget": "float", "precision": 2}'
-                                    />
+                                    <span id="price_unit_without_taxes" t-esc="price_unit_without_taxes"
+                                        t-options='{"widget": "float", "precision": 2}'/>
+
+<!--                                    <span-->
+<!--                                        id="price_unit"-->
+<!--                                        t-field="l.price_unit"-->
+<!--                                        t-options='{"widget": "float", "precision": 2}'-->
+<!--                                    />-->
                                 </td>
                                 <td
                                     style="text-align: right;"
