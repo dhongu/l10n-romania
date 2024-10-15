@@ -3,7 +3,7 @@
 {
     "author": "Odoo",
     "name": "Romania - Send E-Factura - legacy",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Accounting/Localizations/EDI",
     "summary": "Bridge module for sending Romanian E-Factura to the SPV",
     "countries": ["ro"],
