@@ -230,11 +230,11 @@
                 </div>
             </xpath>
 
-            <xpath expr="//h2/span[4]" position="after">
+<!--            <xpath expr="//h2/span[4]" position="after">
                 <span
                 t-if="o.move_type == 'out_refund' and o.state == 'cancel'"
             >Cancelled</span>
-            </xpath>
+            </xpath>-->
 
 
             <xpath expr="//table[@name='invoice_line_table']" position="replace">
