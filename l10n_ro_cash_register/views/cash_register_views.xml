@@ -1,0 +1,113 @@
+<odoo>
+    <!-- List View pentru Registru de Casa -->
+    <record id="view_cash_register_tree" model="ir.ui.view">
+        <field name="name">cash.register.tree</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="arch" type="xml">
+            <tree string="Cash Registers">
+                <field name="name" />
+                <field name="date" />
+                <field name="journal_id" />
+                <field name="balance_start" />
+                <field name="balance_end" />
+                <field name="currency_id" invisible="1" />
+                <field name="activity_ids" widget="list_activity" optional="hide" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View pentru Registru de Casa -->
+    <record id="view_cash_register_form" model="ir.ui.view">
+        <field name="name">cash.register.form</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="arch" type="xml">
+            <form string="Cash Register">
+                <header>
+                    <button name="action_refresh" string="Refresh" type="object" />
+                    <button name="action_receipt" string="Add Receipt" type="object" />
+                    <button name="action_payment" string="Add Payment" type="object" />
+                </header>
+                <sheet>
+                    <div class="oe_title oe_inline">
+                        <label for="name" />
+                        <h1><field name="name" placeholder="e.g. CAS/2021/0001" /></h1>
+                    </div>
+                    <group>
+                       <group>
+                            <field name="date" />
+                            <field name="journal_id" />
+                        </group>
+                        <group>
+                            <field name="balance_start" />
+                            <field name="balance_end" />
+                        </group>
+                        <group>
+                            <field name="currency_id" />
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                                optional="show"
+                            />
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Cash Register Lines">
+                            <field name="move_line_ids">
+                                <tree string="Lines">
+                                    <field
+                                        name="move_name"
+                                        string="Journal Entry"
+                                        widget="open_move_widget"
+                                    />
+                                    <field name="partner_id" />
+                                    <field
+                                        name="balance"
+                                        sum="Total Amount"
+                                        string="Total"
+                                        decoration-bf="1"
+                                    />
+                                    <field name="currency_id" column_invisible="1" />
+                                    <button
+                                        name="print_cash_operation"
+                                        string="Print"
+                                        type="object"
+                                        icon="fa-print"
+                                    />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                    <!-- Chatter -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                    </div>
+            </form>
+        </field>
+    </record>
+
+
+       <!-- Actiune pentru vizualizarea registrelor de casa -->
+    <record id="action_cash_register" model="ir.actions.act_window">
+        <field name="name">Cash Register</field>
+        <field name="res_model">l10n.ro.cash.register</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_cash_register_tree" />
+    </record>
+
+
+    <menuitem
+        id="menu_cash_register"
+        name="Cash register"
+        parent="account.menu_finance_entries"
+        groups="account.group_account_manager"
+        action="action_cash_register"
+        sequence="10"
+    />
+
+
+</odoo>
