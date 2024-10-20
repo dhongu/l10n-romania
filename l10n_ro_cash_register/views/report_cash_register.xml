@@ -1,0 +1,195 @@
+<odoo>
+        <template id="report_cash_register">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.internal_layout">
+                        <div class="page">
+                            <div class="text-left">Company:
+                                <strong t-esc="res_company.name" />
+                            </div>
+                            <div>
+                                <strong>Address:</strong>
+                                <address
+                                t-field="res_company.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'
+                            />
+                            </div>
+                            <div t-if="res_company.partner_id.vat">
+                                <strong>CIF:</strong>
+                                <span t-field="res_company.partner_id.vat" />
+                            </div>
+                            <div t-if="res_company.partner_id.nrc">
+                                <strong>NRC:</strong>
+                                <span t-field="res_company.partner_id.nrc" />
+                            </div>
+
+                            <h2>Cash Register</h2>
+
+                            <div class="row">
+                                <div class="col-3">
+                                    <strong>Name</strong>:
+                                    <br />
+                                    <span t-field="o.name" />
+                                </div>
+                                <div class="col-3">
+                                    <strong>Opening Date</strong>:
+                                    <br />
+                                    <span t-field="o.date" />
+                                </div>
+                                <div class="col-3">
+                                    <strong>Journal</strong>:
+                                    <br />
+                                    <span t-field="o.journal_id" />
+                                </div>
+                                <div class="col-3">
+                                    <strong>User</strong>:
+                                    <br />
+                                    <span t-field="user.name" />
+                                </div>
+                            </div>
+                            <div class="row">
+                            </div>
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>Ord</th>
+                                        <th>Name</th>
+                                        <th>Partner</th>
+
+                                        <th class="text-right">Receipts</th>
+                                        <th class="text-right">Payment</th>
+                                        <th class="text-right">Sold</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left" colspan="4">
+                                            <strong>Starting Balance</strong>
+                                        </td>
+                                        <td class="text-right">
+
+                                        </td>
+                                        <td class="text-right">
+
+                                        </td>
+                                        <td class="text-right">
+                                            <strong
+                                            t-esc="o.balance_start"
+                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                        />
+                                        </td>
+                                    </tr>
+                                    <t t-set="sold" t-value="o.balance_start" />
+                                    <t t-set="sold_inc" t-value="0.0" />
+                                    <t t-set="sold_plt" t-value="0.0" />
+                                    <t t-set="index_l" t-value="1" />
+                                    <tr t-foreach="o.move_line_ids" t-as="line">
+                                        <td>
+                                            <span t-esc="index_l" />
+                                        </td>
+                                        <td>
+                                            <span t-field="line.move_name" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="line.partner_id.name" />
+                                        </td>
+
+                                        <td class="text-right">
+                                            <t t-if="line.balance&gt;0">
+                                                <span
+                                                t-field="line.balance"
+                                                t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                            />
+                                                <t
+                                                t-set="sold_inc"
+                                                t-value="sold_inc+line.balance"
+                                            />
+                                            </t>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-if="line.balance&lt;0">
+                                                <span
+                                                t-esc="-1*line.balance"
+                                                t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                            />
+                                                <t
+                                                t-set="sold_plt"
+                                                t-value="sold_plt-line.balance"
+                                            />
+                                            </t>
+                                        </td>
+                                        <td class="text-right">
+                                            <t
+                                            t-set="sold"
+                                            t-value="sold+line.balance"
+                                        />
+                                            <span
+                                            t-esc="sold"
+                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                        />
+                                        </td>
+                                        <t t-set="index_l" t-value="index_l + 1" />
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left" colspan="4">
+                                            <strong>Sold Final:</strong>
+                                        </td>
+                                        <td class="text-right">
+                                            <strong
+                                            t-esc="sold_inc"
+                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                        />
+                                        </td>
+                                        <td class="text-right">
+                                            <strong
+                                            t-esc="sold_plt"
+                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                        />
+                                        </td>
+                                        <td class="text-right">
+                                            <strong
+                                            t-esc="o.balance_end"
+                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                        />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-xs-4 pull-right">
+                                    <table class="table table-condensed">
+                                        <tr class="border-black">
+                                            <td>
+                                                <strong>Total</strong>
+                                            </td>
+                                            <td class="text-right">
+                                                <span
+                                                t-esc="sum([line.balance for line in o.move_line_ids])"
+                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
+                                            />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    <record id="action_report_cash_register" model="ir.actions.report">
+        <field name="name">Cash Register</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ro_cash_register.report_cash_register</field>
+        <field name="report_file">l10n_ro_cash_register.report_cash_register</field>
+        <field name="print_report_name">"Cash Register"</field>
+        <field
+            name="binding_model_id"
+            ref="l10n_ro_cash_register.model_l10n_ro_cash_register"
+        />
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
