@@ -5,6 +5,7 @@ class CashRegister(models.Model):
     _name = "l10n.ro.cash.register"
     _description = "Cash Register"
     _inherit = ["mail.thread", "mail.activity.mixin", "sequence.mixin"]
+    _order = "date desc"
 
     def _get_default_journal_id(self):
         return self.env["account.journal"].search([("type", "=", "cash")], limit=1)
@@ -45,7 +46,7 @@ class CashRegister(models.Model):
     balance_end = fields.Monetary(
         string="Computed Balance",
         compute="_compute_balance_end",
-        store=True,
+        store=True
     )
 
     move_ids = fields.Many2many("account.move", string="Journal Items", compute="_compute_move_ids")
@@ -89,35 +90,7 @@ class CashRegister(models.Model):
         if self.journal_id:
             self.currency_id = self.journal_id.currency_id or self.env.company.currency_id
 
-    def generate_missing_cash_register(self):
-        """Generate missing cash registers for all cash journals and for all moves"""
-        domain = [("type", "=", "cash")]
-        journals = self.env["account.journal"].search(domain)
-        for journal in journals:
-            account = journal.default_account_id
-            # cautam toate miscari pentru contul de casa grupate dupa data
-            sql = """
-                SELECT date, SUM(debit-credit) as amount
-                FROM account_move_line
-                WHERE account_id = %s and state = 'posted'
-                GROUP BY date
-            """
-            self.env.cr.execute(sql, (account.id,))
-            for row in self.env.cr.dictfetchall():
-                date = row["date"]
-                row["amount"]
-                # verificam daca exista deja un registru de casa pentru aceasta data
-                cash_register = self.env["cash.register"].search([("journal_id", "=", journal.id), ("date", "=", date)])
-                if not cash_register:
-                    cash_register.create(
-                        {
-                            "name": f"{journal.name} - {date}",
-                            "company_id": journal.company_id.id,
-                            "currency_id": journal.currency_id.id,
-                            "journal_id": journal.id,
-                            "date": date,
-                        }
-                    )
+
 
     @api.depends("date", "journal_id")
     def _compute_move_ids(self):
@@ -132,6 +105,7 @@ class CashRegister(models.Model):
             record.move_line_ids = move_lines
             record.move_ids = move_lines.mapped("move_id")
 
+    @api.depends("date", "journal_id", "move_ids")
     def _compute_balance_start(self):
         for record in self:
             param = {
