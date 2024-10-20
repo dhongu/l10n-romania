@@ -100,10 +100,7 @@
                                                 t-field="line.balance"
                                                 t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                             />
-                                                <t
-                                                t-set="sold_inc"
-                                                t-value="sold_inc+line.balance"
-                                            />
+                                                <t t-set="sold_inc" t-value="sold_inc+line.balance" />
                                             </t>
                                         </td>
                                         <td class="text-right">
@@ -112,17 +109,11 @@
                                                 t-esc="-1*line.balance"
                                                 t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                             />
-                                                <t
-                                                t-set="sold_plt"
-                                                t-value="sold_plt-line.balance"
-                                            />
+                                                <t t-set="sold_plt" t-value="sold_plt-line.balance" />
                                             </t>
                                         </td>
                                         <td class="text-right">
-                                            <t
-                                            t-set="sold"
-                                            t-value="sold+line.balance"
-                                        />
+                                            <t t-set="sold" t-value="sold+line.balance" />
                                             <span
                                             t-esc="sold"
                                             t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
@@ -186,10 +177,7 @@
         <field name="report_name">l10n_ro_cash_register.report_cash_register</field>
         <field name="report_file">l10n_ro_cash_register.report_cash_register</field>
         <field name="print_report_name">"Cash Register"</field>
-        <field
-            name="binding_model_id"
-            ref="l10n_ro_cash_register.model_l10n_ro_cash_register"
-        />
+        <field name="binding_model_id" ref="l10n_ro_cash_register.model_l10n_ro_cash_register" />
         <field name="binding_type">report</field>
     </record>
 </odoo>
