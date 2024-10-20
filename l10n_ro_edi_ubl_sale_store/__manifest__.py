@@ -6,7 +6,7 @@
     "name": "Deltatech Sale from Store UBL",
     "version": "15.0.1.0.0",
     "author": "Terrabit, Dorin Hongu",
-    "website": "https://www.terrabit.ro",
+    "website": "https://github.com/OCA/l10n-romania",
     "summary": "Sale from store",
     "category": "Generic Modules",
     "depends": [
