@@ -24,7 +24,7 @@ Romania - Cash Register
 
 Functionalitati
 
--  registrul de casa
+-  Registrul de casa
 
 **Table of contents**
 

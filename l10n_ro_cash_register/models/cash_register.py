@@ -5,18 +5,20 @@ class CashRegister(models.Model):
     _name = "l10n.ro.cash.register"
     _description = "Cash Register"
     _inherit = ["mail.thread.main.attachment", "mail.activity.mixin", "sequence.mixin"]
+    _order = "date desc"
 
     def _get_default_journal_id(self):
         return self.env["account.journal"].search([("type", "=", "cash")], limit=1)
 
     name = fields.Char(
-        string='Number',
-        compute='_compute_name',  readonly=False, store=True,
+        string="Number",
+        compute="_compute_name",
+        readonly=False,
+        store=True,
         copy=False,
         tracking=True,
-        index='trigram',
+        index="trigram",
     )
-
 
     company_id = fields.Many2one(
         "res.company",
@@ -56,12 +58,14 @@ class CashRegister(models.Model):
         "account.move.line", string="Journal Items", compute="_compute_move_ids"
     )
 
-    _sql_constraints = [("unique_date_journal", "unique(date, journal_id)", "Duplicate date")]
+    _sql_constraints = [
+        ("unique_date_journal", "unique(date, journal_id)", "Duplicate date")
+    ]
 
-    @api.depends('journal_id', 'date')
+    @api.depends("journal_id", "date")
     def _compute_name(self):
         for item in self.sorted(lambda m: m.date):
-            move_has_name = item.name and item.name != '/'
+            move_has_name = item.name and item.name != "/"
             if move_has_name:
                 if not item._sequence_matches_date():
                     if item._get_last_sequence():
@@ -70,7 +74,7 @@ class CashRegister(models.Model):
                         item.name = False
                         continue
                 else:
-                    if move_has_name  or not move_has_name and item._get_last_sequence():
+                    if move_has_name or not move_has_name and item._get_last_sequence():
                         # The move either
                         # - has a name and was posted before, or
                         # - doesn't have a name, but is not the first in the period
@@ -86,45 +90,15 @@ class CashRegister(models.Model):
         if not self.date or not self.journal_id:
             return "WHERE FALSE", {}
         where_string = "WHERE journal_id = %(journal_id)s AND name != '/'"
-        param = {'journal_id': self.journal_id.id}
+        param = {"journal_id": self.journal_id.id}
         return where_string, param
 
     @api.onchange("journal_id")
     def _onchange_journal_id(self):
         if self.journal_id:
-            self.currency_id = self.journal_id.currency_id or self.env.company.currency_id
-
-    def generate_missing_cash_register(self):
-        """Generate missing cash registers for all cash journals and for all moves"""
-        domain = [("type", "=", "cash")]
-        journals = self.env["account.journal"].search(domain)
-        for journal in journals:
-            account = journal.default_account_id
-            # cautam toate miscari pentru contul de casa grupate dupa data
-            sql = """
-                SELECT date, SUM(debit-credit) as amount
-                FROM account_move_line
-                WHERE account_id = %s and state = 'posted'
-                GROUP BY date
-            """
-            self.env.cr.execute(sql, (account.id,))
-            for row in self.env.cr.dictfetchall():
-                date = row["date"]
-                row["amount"]
-                # verificam daca exista deja un registru de casa pentru aceasta data
-                cash_register = self.env["cash.register"].search(
-                    [("journal_id", "=", journal.id), ("date", "=", date)]
-                )
-                if not cash_register:
-                    cash_register.create(
-                        {
-                            "name": f"{journal.name} - {date}",
-                            "company_id": journal.company_id.id,
-                            "currency_id": journal.currency_id.id,
-                            "journal_id": journal.id,
-                            "date": date,
-                        }
-                    )
+            self.currency_id = (
+                self.journal_id.currency_id or self.env.company.currency_id
+            )
 
     @api.depends("date", "journal_id")
     def _compute_move_ids(self):
@@ -139,6 +113,7 @@ class CashRegister(models.Model):
             record.move_line_ids = move_lines
             record.move_ids = move_lines.mapped("move_id")
 
+    @api.depends("date", "journal_id", "move_ids")
     def _compute_balance_start(self):
         for record in self:
             param = {
@@ -189,20 +164,12 @@ class CashRegister(models.Model):
 
     def action_receipt(self):
         action = self.journal_id.open_payments_action("inbound", "form")
-        action["context"].update(
-            {
-                "default_journal_id": self.journal_id.id
-            }
-        )
+        action["context"].update({"default_journal_id": self.journal_id.id})
         action["target"] = "new"
         return action
 
     def action_payment(self):
         action = self.journal_id.open_payments_action("outbound", "form")
-        action["context"].update(
-            {
-                "default_journal_id": self.journal_id.id
-            }
-        )
+        action["context"].update({"default_journal_id": self.journal_id.id})
         action["target"] = "new"
         return action
