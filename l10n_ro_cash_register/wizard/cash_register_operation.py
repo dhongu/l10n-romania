@@ -18,12 +18,12 @@ class CashRegisterOperation(models.TransientModel):
         required=True,
     )
     description = fields.Char(string="Description")
-
+    partner_id = fields.Many2one("res.partner", string="Partner")
     counterpart_account_id = fields.Many2one("account.account", string="Account", required=True)
 
     def default_get(self, fields_list):
         defaults = super().default_get(fields_list)
-        defaults["account_id"] = self.env.company.transfer_account_id.id
+        defaults["counterpart_account_id"] = self.env.company.transfer_account_id.id
         return defaults
 
     def action_confirm(self):
@@ -38,6 +38,7 @@ class CashRegisterOperation(models.TransientModel):
                     0,
                     0,
                     {
+                        "partner_id": self.partner_id.id,
                         "account_id": self.journal_id.default_account_id.id,
                         "name": self.description,
                         "debit" if self.operation == "in" else "credit": self.amount,
@@ -47,6 +48,7 @@ class CashRegisterOperation(models.TransientModel):
                     0,
                     0,
                     {
+                        "partner_id": self.partner_id.id,
                         "account_id": self.counterpart_account_id.id,
                         "name": self.description,
                         "credit" if self.operation == "in" else "debit": self.amount,
