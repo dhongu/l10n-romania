@@ -4,9 +4,7 @@ from odoo import fields, models
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    payment_type = fields.Selection(
-        related="payment_id.payment_type", readonly=True, store=True
-    )
+    payment_type = fields.Selection(related="payment_id.payment_type", readonly=True, store=True)
 
     def _get_last_sequence_domain(self, relaxed=False):
         where_string, param = super()._get_last_sequence_domain(relaxed=relaxed)

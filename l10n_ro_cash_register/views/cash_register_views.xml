@@ -26,6 +26,7 @@
                     <button name="action_refresh" string="Refresh" type="object" />
                     <button name="action_receipt" string="Add Receipt" type="object" />
                     <button name="action_payment" string="Add Payment" type="object" />
+                    <button name="action_operation" string="Operation" type="object" />
                 </header>
                 <sheet>
                     <div class="oe_title oe_inline">
@@ -100,5 +101,12 @@
         <field name="code">record.generate_missing_cash_register()</field>
     </record>
 
+    <record id="action_remove_outstanding_accounts" model="ir.actions.server">
+        <field name="name">Remove Outstanding Accounts</field>
+        <field name="model_id" ref="account.model_account_journal" />
+        <field name="binding_model_id" ref="account.model_account_journal" />
+        <field name="state">code</field>
+        <field name="code">record.remove_outstanding_accounts()</field>
+    </record>
 
 </odoo>
