@@ -7,9 +7,7 @@ class GetPartnerData(models.TransientModel):
     _description = "Get partner data from"
 
     service = fields.Selection(
-        [("anaf", "ANAF"), ("vies", "VIES for non-Romanian partners")],
-        default="anaf",
-        string="Service",
+        [("anaf", "ANAF"), ("vies", "VIES for non-Romanian partners")], default="anaf"
     )
 
     def default_get(self, fields):

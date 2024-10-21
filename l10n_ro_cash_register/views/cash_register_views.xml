@@ -4,7 +4,7 @@
         <field name="name">cash.register.tree</field>
         <field name="model">l10n.ro.cash.register</field>
         <field name="arch" type="xml">
-            <tree string="Cash Registers">
+            <tree>
                 <field name="name" />
                 <field name="date" />
                 <field name="journal_id" />
@@ -54,7 +54,7 @@
                     <notebook>
                         <page string="Cash Register Lines">
                             <field name="move_line_ids">
-                                <tree string="Lines">
+                                <tree>
                                     <field
                                         name="move_name"
                                         string="Journal Entry"
