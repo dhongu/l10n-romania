@@ -4,11 +4,11 @@ from odoo import models
 class account_journal(models.Model):
     _inherit = "account.journal"
 
-    def open_action_with_context(self):
-        if self.type == "cash" and self.company_id.country_id.code == "RO":
-            action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_cash_register.action_cash_register")
-            action["context"] = {"default_journal_id": self.id}
-            return action
+    # def open_action_with_context(self):
+    #     if self.type == "cash" and self.company_id.country_id.code == "RO":
+    #         action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_cash_register.action_cash_register")
+    #         action["context"] = {"default_journal_id": self.id}
+    #         return action
 
     def open_action(self):
         if self.type == "cash" and self.company_id.country_id.code == "RO":
@@ -56,3 +56,26 @@ class account_journal(models.Model):
                         }
                     )
         return True
+
+    def remove_outstanding_accounts(self):
+        for journal in self:
+            if journal.type != "cash":
+                continue
+            lines =  self.outbound_payment_method_line_ids + self.inbound_payment_method_line_ids
+            for line in lines:
+                account_id =  line.payment_account_id.id or self.company_id.account_journal_payment_debit_account_id.id
+                if account_id == journal.default_account_id.id:
+                    continue
+                journal._remove_outstanding_account(account_id)
+                line.write({"payment_account_id": journal.default_account_id.id})
+
+    def _remove_outstanding_account(self, account_id):
+        param = {'old_account': account_id, 'journal_id': self.id, 'new_account': self.default_account_id.id}
+        sql = """
+            UPDATE account_move_line
+                SET account_id = %(new_account)s
+                WHERE account_id = %(old_account)s
+                    AND journal_id = %(journal_id)s
+        """""
+        self.env.cr.execute(sql, param)
+
