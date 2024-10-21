@@ -36,9 +36,9 @@ class StockMove(models.Model):
         # 371 = %
         #       378
         #       4428
-        account_diff = self.company_id.l10n_ro_property_stock_picking_payable_account_id
+        # account_diff = self.company_id.l10n_ro_property_stock_picking_payable_account_id
 
-        svls = self.env["stock.valuation.layer"]
+        # svls = self.env["stock.valuation.layer"]
         # move._create_account_move_line(
         #     acc_dest,
         #     acc_valuation,

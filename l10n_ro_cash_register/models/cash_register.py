@@ -43,11 +43,7 @@ class CashRegister(models.Model):
     balance_start = fields.Monetary(string="Starting Balance", compute="_compute_balance_start", store=True)
 
     # Balance end is calculated based on the statement line amounts and real starting balance.
-    balance_end = fields.Monetary(
-        string="Computed Balance",
-        compute="_compute_balance_end",
-        store=True
-    )
+    balance_end = fields.Monetary(string="Computed Balance", compute="_compute_balance_end", store=True)
 
     move_ids = fields.Many2many("account.move", string="Journal Items", compute="_compute_move_ids")
     move_line_ids = fields.Many2many("account.move.line", string="Journal Items", compute="_compute_move_ids")
@@ -89,8 +85,6 @@ class CashRegister(models.Model):
     def _onchange_journal_id(self):
         if self.journal_id:
             self.currency_id = self.journal_id.currency_id or self.env.company.currency_id
-
-
 
     @api.depends("date", "journal_id")
     def _compute_move_ids(self):
@@ -156,12 +150,26 @@ class CashRegister(models.Model):
 
     def action_receipt(self):
         action = self.journal_id.open_payments_action("inbound", "form")
-        action["context"].update({"default_journal_id": self.journal_id.id})
+        action["context"].update(
+            {
+                "default_journal_id": self.journal_id.id,
+                "default_date": self.date,
+            }
+        )
         action["target"] = "new"
         return action
 
     def action_payment(self):
         action = self.journal_id.open_payments_action("outbound", "form")
-        action["context"].update({"default_journal_id": self.journal_id.id})
+        action["context"].update({"default_journal_id": self.journal_id.id, "default_date": self.date})
+        action["target"] = "new"
+        return action
+
+    def action_operation(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_cash_register.action_cash_register_operation")
+        action["context"] = {
+            "default_journal_id": self.journal_id.id,
+            "default_date": self.date,
+        }
         action["target"] = "new"
         return action

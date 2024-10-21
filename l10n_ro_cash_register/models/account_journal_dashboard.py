@@ -17,7 +17,6 @@ class account_journal(models.Model):
             return action
         return super().open_action()
 
-
     def generate_missing_cash_register(self):
         """Generate missing cash registers for all cash journals and for all moves"""
 
@@ -45,7 +44,9 @@ class account_journal(models.Model):
             for row in self.env.cr.dictfetchall():
                 date = row["date"]
                 # verificam daca exista deja un registru de casa pentru aceasta data
-                cash_register = self.env["l10n.ro.cash.register"].search([("journal_id", "=", journal.id), ("date", "=", date)])
+                cash_register = self.env["l10n.ro.cash.register"].search(
+                    [("journal_id", "=", journal.id), ("date", "=", date)]
+                )
                 if not cash_register:
                     cash_register.create(
                         {
@@ -61,21 +62,23 @@ class account_journal(models.Model):
         for journal in self:
             if journal.type != "cash":
                 continue
-            lines =  self.outbound_payment_method_line_ids + self.inbound_payment_method_line_ids
+            lines = self.outbound_payment_method_line_ids + self.inbound_payment_method_line_ids
             for line in lines:
-                account_id =  line.payment_account_id.id or self.company_id.account_journal_payment_debit_account_id.id
+                account_id = line.payment_account_id.id or self.company_id.account_journal_payment_debit_account_id.id
                 if account_id == journal.default_account_id.id:
                     continue
                 journal._remove_outstanding_account(account_id)
                 line.write({"payment_account_id": journal.default_account_id.id})
 
     def _remove_outstanding_account(self, account_id):
-        param = {'old_account': account_id, 'journal_id': self.id, 'new_account': self.default_account_id.id}
-        sql = """
+        param = {"old_account": account_id, "journal_id": self.id, "new_account": self.default_account_id.id}
+        sql = (
+            """
             UPDATE account_move_line
                 SET account_id = %(new_account)s
                 WHERE account_id = %(old_account)s
                     AND journal_id = %(journal_id)s
-        """""
+        """
+            ""
+        )
         self.env.cr.execute(sql, param)
-

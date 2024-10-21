@@ -14,3 +14,15 @@ class GetPartnerData(models.TransientModel):
             if not openapi_key:
                 raise UserError(_("API Key is missing - please contact support service!"))
             self.partner_id.button_get_partner_data_openapi()
+
+        action = {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Title",
+                "message": "message",
+                "sticky": True,
+                "next": {"type": "ir.actions.act_window_close"},
+            },
+        }
+        return action
