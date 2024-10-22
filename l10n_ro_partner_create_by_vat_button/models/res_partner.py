@@ -7,7 +7,7 @@ import logging
 
 from zeep import Client
 
-from odoo import _, api, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -15,6 +15,24 @@ _logger = logging.getLogger(__name__)
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    warning_companies = fields.Text(string="Warning", store=True, compute="_compute_warning_companies")
+
+    @api.depends("vat", "country_id", "street", "city", "state_id")
+    def _compute_warning_companies(self):
+        for partner in self:
+            partner.warning_companies = "Missing:"
+            if partner.is_company and partner.country_id and partner.country_id.code == "RO":
+                if not partner.vat:
+                    partner.warning_companies += " VAT,"
+                if not partner.street:
+                    partner.warning_companies += " Street,"
+                if not partner.city:
+                    partner.warning_companies += " City,"
+                if not partner.state_id:
+                    partner.warning_companies += " State,"
+                if partner.warning_companies.endswith(","):
+                    partner.warning_companies = partner.warning_companies[:-1] + "!"
 
     @api.constrains("vat", "country_id")
     def check_vat(self):
@@ -51,9 +69,9 @@ class ResPartner(models.Model):
             return False
         if self.name and not self.vat:
             self.vat = self.name
-        self.with_context(skip_ro_vat_change=False).ro_vat_change()
+        res = self.with_context(skip_ro_vat_change=False).ro_vat_change()
 
-        return True
+        return res
         # self.onchange_vat_subjected()  # fortare compltare ro
 
     def get_partner_name_from_vies(self):

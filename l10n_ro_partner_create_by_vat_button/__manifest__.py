@@ -5,7 +5,7 @@
 {
     "name": "Romania - Partner Create by VAT Button",
     "license": "AGPL-3",
-    "version": "16.0.1.0.9",
+    "version": "16.0.1.1.0",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
