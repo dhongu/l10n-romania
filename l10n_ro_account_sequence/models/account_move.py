@@ -43,3 +43,15 @@ class AccountMove(models.Model):
                 starting_sequence = "DI" + starting_sequence
 
         return starting_sequence
+
+    def _sequence_matches_date(self):
+        res = super()._sequence_matches_date()
+        if self.move_type in ["out_invoice", "out_refund"]:
+            move_has_name = self.name and self.name != "/"
+            if move_has_name:
+                last_sequence = self._get_last_sequence()
+                if last_sequence:
+                    last_move = self.search([("name", "=", last_sequence)], limit=1)
+                    if last_move.date > self.date:
+                        res = False
+        return res
