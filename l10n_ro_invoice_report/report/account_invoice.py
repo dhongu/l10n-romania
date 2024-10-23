@@ -33,11 +33,7 @@ class ReportInvoiceWithoutPayment(models.AbstractModel):
         return res
 
     def _get_pickings(self, invoice):
-        if (
-            not self.env["ir.module.module"]
-            .sudo()
-            .search([("name", "=", "stock"), ("state", "=", "installed")])
-        ):
+        if not self.env["ir.module.module"].sudo().search([("name", "=", "stock"), ("state", "=", "installed")]):
             return False
 
         pickings = self.env["stock.picking"]

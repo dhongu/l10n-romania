@@ -12,12 +12,7 @@
             </tree>
 
             <field name="balance_end_real" position="after">
-                <button
-                    name="action_open_form_view"
-                    type="object"
-                    string="View"
-                    class="float-end btn-secondary"
-                />
+                <button name="action_open_form_view" type="object" string="View" class="float-end btn-secondary" />
             </field>
         </field>
     </record>
@@ -33,11 +28,7 @@
                 </header>
                 <field name="is_valid" invisible="1" />
                 <field name="is_complete" invisible="1" />
-                <div
-                    class="alert alert-warning text-center"
-                    role="alert"
-                    invisible="is_valid and is_complete"
-                >
+                <div class="alert alert-warning text-center" role="alert" invisible="is_valid and is_complete">
                         <field name="problem_description" />
                 </div>
                 <sheet>
@@ -49,19 +40,9 @@
                     </div>
                     <group>
                         <group>
-                            <field
-                                name="journal_id"
-                                options="{'no_open': True, 'no_create': True}"
-                            />
-                            <field
-                                name="date"
-                                options="{'datepicker': {'warn_future': true}}"
-                            />
-                            <field
-                                name='company_id'
-                                options="{'no_create': True}"
-                                groups="base.group_multi_company"
-                            />
+                            <field name="journal_id" options="{'no_open': True, 'no_create': True}" />
+                            <field name="date" options="{'datepicker': {'warn_future': true}}" />
+                            <field name='company_id' options="{'no_create': True}" groups="base.group_multi_company" />
                             <field name="currency_id" invisible="1" />
                         </group>
                         <group>
@@ -81,45 +62,23 @@
                                 name="line_ids"
                                 context="{'default_journal_id': journal_id, 'default_internal_index':1}"
                             >
-                                <tree
-                                    editable="bottom"
-                                    default_order="sequence"
-                                    limit="500"
-                                >
+                                <tree editable="bottom" default_order="sequence" limit="500">
                                     <!-- Invisible fields -->
 
                                     <field name="internal_index" column_invisible="1" />
                                     <field name="journal_id" column_invisible="1" />
 
 
-                                    <field
-                                        name="statement_complete"
-                                        column_invisible="True"
-                                    />
-                                    <field
-                                        name="statement_valid"
-                                        column_invisible="True"
-                                    />
+                                    <field name="statement_complete" column_invisible="True" />
+                                    <field name="statement_valid" column_invisible="True" />
                                     <field name="state" column_invisible="True" />
-                                    <field
-                                        name="statement_id"
-                                        column_invisible="True"
-                                    />
-                                    <field
-                                        name="is_reconciled"
-                                        column_invisible="True"
-                                    />
+                                    <field name="statement_id" column_invisible="True" />
+                                    <field name="is_reconciled" column_invisible="True" />
                                     <field name="to_check" column_invisible="True" />
-                                    <field
-                                        name="country_code"
-                                        column_invisible="True"
-                                    />
+                                    <field name="country_code" column_invisible="True" />
                                     <field name="currency_id" column_invisible="True" />
                                     <field name="company_id" column_invisible="True" />
-                                    <field
-                                        name="suitable_journal_ids"
-                                        column_invisible="1"
-                                    />
+                                    <field name="suitable_journal_ids" column_invisible="1" />
 
                                     <!-- Visible fields -->
                                     <field name="sequence" widget="handle" />
@@ -129,35 +88,16 @@
                                         readonly="is_reconciled and amount != 0"
                                         options="{'warn_future': true}"
                                     />
-                                    <field
-                                        name="move_id"
-                                        optional="hidden"
-                                        required="0"
-                                    />
-                                    <field
-                                        name="payment_ref"
-                                        required="1"
-                                        readonly="is_reconciled and amount != 0"
-                                    />
-                                    <field
-                                        name="partner_id"
-                                        readonly="is_reconciled and amount != 0"
-                                    />
+                                    <field name="move_id" optional="hidden" required="0" />
+                                    <field name="payment_ref" required="1" readonly="is_reconciled and amount != 0" />
+                                    <field name="partner_id" readonly="is_reconciled and amount != 0" />
 
 
-                                    <field
-                                        name="ref"
-                                        readonly="is_reconciled and amount != 0"
-                                        optional="hidden"
-                                    />
+                                    <field name="ref" readonly="is_reconciled and amount != 0" optional="hidden" />
                                     <field name="transaction_type" optional="hidden" />
 
 
-                                    <field
-                                        name="narration"
-                                        string="Notes"
-                                        optional="hidden"
-                                    />
+                                    <field name="narration" string="Notes" optional="hidden" />
 
                                     <field
                                         name="amount_currency"
@@ -173,10 +113,7 @@
                                     <field name="account_number" optional="hidden" />
 
 
-                                    <field
-                                        name="amount"
-                                        readonly="is_reconciled and amount != 0"
-                                    />
+                                    <field name="amount" readonly="is_reconciled and amount != 0" />
                                     <field
                                         name="journal_id"
                                         domain="[('type', 'in', ['bank','cash'])]"
@@ -189,19 +126,11 @@
                             </field>
                         </page>
                     </notebook>
-                    <group
-                        class="oe_subtotal_footer oe_right"
-                        colspan="2"
-                        name="sale_total"
-                    >
+                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
                         <div class="oe_subtotal_footer_separator oe_inline">
                             <label for="balance_end" />
                         </div>
-                        <field
-                            name="balance_end"
-                            nolabel="1"
-                            class="oe_subtotal_footer_separator"
-                        />
+                        <field name="balance_end" nolabel="1" class="oe_subtotal_footer_separator" />
                     </group>
                     <div class="oe_clear" />
                 </sheet>

@@ -18,9 +18,7 @@ class AccountMove(models.Model):
             payment = self.payment_id
             if payment:
                 l10n_ro_cash_document_type = payment.l10n_ro_cash_document_type
-                where_string += (
-                    " AND l10n_ro_cash_document_type = %(l10n_ro_cash_document_type)s "
-                )
+                where_string += " AND l10n_ro_cash_document_type = %(l10n_ro_cash_document_type)s "
                 param["l10n_ro_cash_document_type"] = l10n_ro_cash_document_type
         return where_string, param
 

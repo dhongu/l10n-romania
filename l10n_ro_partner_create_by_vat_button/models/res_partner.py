@@ -38,9 +38,7 @@ class ResPartner(models.Model):
                                 res = self._Anaf_to_Odoo(result)
                                 vals.update(res)
                         except Exception as e:
-                            _logger.info(
-                                "ANAF Webservice not working. Exception: % s" % e
-                            )
+                            _logger.info("ANAF Webservice not working. Exception: % s" % e)
 
             if vals.get("state_id") and not isinstance(vals["state_id"], int):
                 vals["state_id"] = vals["state_id"].id
@@ -54,9 +52,7 @@ class ResPartner(models.Model):
         if self.name and not self.vat:
             self.vat = self.name
         self.with_context(skip_ro_vat_change=False).ro_vat_change()
-        module_installed = self.env["ir.module.module"].search(
-            [("name", "=", "l10n_ro_city")]
-        )
+        module_installed = self.env["ir.module.module"].search([("name", "=", "l10n_ro_city")])
         if self.zip and len(self.zip) == 5:
             self.zip = "0" + self.zip
         if module_installed.state == "installed" and self.country_id.code == "RO":
@@ -76,9 +72,7 @@ class ResPartner(models.Model):
 
     def get_partner_name_from_vies(self):
         # Create a client for the VIES SOAP service
-        client = Client(
-            "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
-        )
+        client = Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")
 
         # Make a request to the VIES service to check the VAT number
         if not self.vat.isdigit():
@@ -88,18 +82,12 @@ class ResPartner(models.Model):
             vat_number = self.vat
             country_code = self.country_id.code
         else:
-            raise UserError(
-                _("Please add the country code to the vat number or country field")
-            )
+            raise UserError(_("Please add the country code to the vat number or country field"))
 
-        response = client.service.checkVat(
-            countryCode=country_code, vatNumber=vat_number
-        )
+        response = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
         if response.valid:
             self.vat = vat_number
-            self.country_id = (
-                self.env["res.country"].search([("code", "ilike", country_code)])[0].id
-            )
+            self.country_id = self.env["res.country"].search([("code", "ilike", country_code)])[0].id
             self.name = response.name
             self.street = response.address
         else:
@@ -108,6 +96,4 @@ class ResPartner(models.Model):
     @api.onchange("vat", "country_id")
     def ro_vat_change(self):
         skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
-        return super(
-            ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)
-        ).ro_vat_change()
+        return super(ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)).ro_vat_change()

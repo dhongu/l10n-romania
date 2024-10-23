@@ -4,9 +4,7 @@ from odoo import api, fields, models
 class AccountPayment(models.Model):
     _inherit = "account.payment"
 
-    l10n_ro_journal_type = fields.Selection(
-        related="journal_id.type", readonly=True, store=True
-    )
+    l10n_ro_journal_type = fields.Selection(related="journal_id.type", readonly=True, store=True)
     l10n_ro_cash_document_type = fields.Selection(
         [
             ("customer_receipt", "Customer Receipt"),
@@ -58,24 +56,12 @@ class AccountPayment(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get("l10n_ro_cash_document_type", False):
-                if (
-                    vals["payment_type"] == "inbound"
-                    and vals["partner_type"] == "customer"
-                ):
-                    vals["l10n_ro_cash_document_type"] = "customer_receipt"
-                if (
-                    vals["payment_type"] == "outbound"
-                    and vals["partner_type"] == "customer"
-                ):
-                    vals["l10n_ro_cash_document_type"] = "payment_disposal"
-                if (
-                    vals["payment_type"] == "outbound"
-                    and vals["partner_type"] == "supplier"
-                ):
-                    vals["l10n_ro_cash_document_type"] = "supplier_receipt"
-                if (
-                    vals["payment_type"] == "inbound"
-                    and vals["partner_type"] == "supplier"
-                ):
-                    vals["l10n_ro_cash_document_type"] = "cash_collection"
+                if vals["payment_type"] == "inbound":
+                    vals["l10n_ro_cash_document_type"] = (
+                        "customer_receipt" if vals["partner_type"] == "customer" else "cash_collection"
+                    )
+                elif vals["payment_type"] == "outbound":
+                    vals["l10n_ro_cash_document_type"] = (
+                        "supplier_receipt" if vals["partner_type"] == "supplier" else "payment_disposal"
+                    )
         return super().create(vals_list)

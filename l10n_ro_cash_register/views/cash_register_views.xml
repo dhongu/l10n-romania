@@ -43,11 +43,7 @@
                         </group>
                         <group>
                             <field name="currency_id" />
-                            <field
-                                name="company_id"
-                                groups="base.group_multi_company"
-                                optional="show"
-                            />
+                            <field name="company_id" groups="base.group_multi_company" optional="show" />
                         </group>
                     </group>
 
@@ -55,25 +51,11 @@
                         <page string="Cash Register Lines">
                             <field name="move_line_ids">
                                 <tree>
-                                    <field
-                                        name="move_name"
-                                        string="Journal Entry"
-                                        widget="open_move_widget"
-                                    />
+                                    <field name="move_name" string="Journal Entry" widget="open_move_widget" />
                                     <field name="partner_id" />
-                                    <field
-                                        name="balance"
-                                        sum="Total Amount"
-                                        string="Total"
-                                        decoration-bf="1"
-                                    />
+                                    <field name="balance" sum="Total Amount" string="Total" decoration-bf="1" />
                                     <field name="currency_id" column_invisible="1" />
-                                    <button
-                                        name="print_cash_operation"
-                                        string="Print"
-                                        type="object"
-                                        icon="fa-print"
-                                    />
+                                    <button name="print_cash_operation" string="Print" type="object" icon="fa-print" />
                                 </tree>
                             </field>
                         </page>
@@ -85,10 +67,7 @@
                     <div class="oe_chatter">
                         <field name="message_follower_ids" groups="base.group_user" />
                         <field name="activity_ids" />
-                        <field
-                        name="message_ids"
-                        options="{'post_refresh': 'always'}"
-                    />
+                        <field name="message_ids" options="{'post_refresh': 'always'}" />
                     </div>
             </form>
         </field>

@@ -10,14 +10,8 @@ class GetPartnerData(models.TransientModel):
     def do_get_data(self):
         res = super().do_get_data()
         if self.service == "openapi":
-            openapi_key = (
-                self.env["ir.config_parameter"]
-                .sudo()
-                .get_param(key="openapi_key", default=False)
-            )
+            openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default=False)
             if not openapi_key:
-                raise UserError(
-                    _("API Key is missing - please contact support service!")
-                )
+                raise UserError(_("API Key is missing - please contact support service!"))
             self.partner_id.button_get_partner_data_openapi()
         return res

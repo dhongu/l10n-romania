@@ -34,11 +34,7 @@ class ResPartner(models.Model):
     @api.model
     def _get_Openapi(self, cod):
         result = {}
-        openapi_key = (
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param(key="openapi_key", default="False")
-        )
+        openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default="False")
 
         if not openapi_key:
             UserError(_("Setati openapi_key in parametrii de sistem"))
@@ -59,9 +55,7 @@ class ResPartner(models.Model):
             res = json.loads(response.read())
             state = False
             if res["judet"]:
-                state = self.env["res.country.state"].search(
-                    [("name", "=", res["judet"].title())]
-                )
+                state = self.env["res.country.state"].search([("name", "=", res["judet"].title())])
                 if state:
                     state = state[0].id
 
@@ -97,9 +91,7 @@ class ResPartner(models.Model):
 
         if not part.vat and part.name:
             try:
-                vat_country, vat_number = self._split_vat(
-                    part.name.upper().replace(" ", "")
-                )
+                vat_country, vat_number = self._split_vat(part.name.upper().replace(" ", ""))
                 valid = self.vies_vat_check(vat_country, vat_number)
                 if valid:
                     self.write({"vat": part.name.upper().replace(" ", "")})
@@ -114,9 +106,7 @@ class ResPartner(models.Model):
             self.write(
                 {
                     "is_company": True,
-                    "country_id": self.env["res.country"]
-                    .search([("code", "ilike", vat_country)])[0]
-                    .id,
+                    "country_id": self.env["res.country"].search([("code", "ilike", vat_country)])[0].id,
                 }
             )
             if vat_country == "ro":
@@ -154,21 +144,11 @@ class ResPartner(models.Model):
                         self.write({"street": result.address.title()})
                     self.write({"l10n_ro_vat_subjected": result.valid})
                 except BaseException as e:
-                    self.write(
-                        {
-                            "l10n_ro_vat_subjected": self.vies_vat_check(
-                                vat_country, vat_number
-                            )
-                        }
-                    )
-                    raise UserError(
-                        _("No suitable information found for this partner")
-                    ) from e
+                    self.write({"l10n_ro_vat_subjected": self.vies_vat_check(vat_country, vat_number)})
+                    raise UserError(_("No suitable information found for this partner")) from e
 
     @api.onchange("vat", "country_id")
     def ro_vat_change(self):
         skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
         self = self.with_context(skip_ro_vat_change=skip_ro_vat_change)
-        return super(
-            ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)
-        ).ro_vat_change()
+        return super(ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)).ro_vat_change()

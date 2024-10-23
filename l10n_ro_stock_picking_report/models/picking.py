@@ -52,9 +52,7 @@ class StockPicking(models.Model):
         report = False
         if self.picking_type_code == "incoming":
             if self.location_dest_id.l10n_ro_merchandise_type == "store":
-                report = (
-                    "l10n_ro_stock_picking_report.action_report_reception_sale_price"
-                )
+                report = "l10n_ro_stock_picking_report.action_report_reception_sale_price"
 
             else:
                 report = "l10n_ro_stock_picking_report.action_report_reception"

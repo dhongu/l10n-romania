@@ -40,9 +40,7 @@ class CashRegister(models.Model):
     )
     date = fields.Date(required=True, default=fields.Date.context_today)
 
-    balance_start = fields.Monetary(
-        string="Starting Balance", compute="_compute_balance_start", store=True
-    )
+    balance_start = fields.Monetary(string="Starting Balance", compute="_compute_balance_start", store=True)
 
     # Balance end is calculated based on the statement line amounts and real starting balance.
     balance_end = fields.Monetary(
@@ -51,16 +49,10 @@ class CashRegister(models.Model):
         store=True,
     )
 
-    move_ids = fields.Many2many(
-        "account.move", string="Journal Items", compute="_compute_move_ids"
-    )
-    move_line_ids = fields.Many2many(
-        "account.move.line", string="Journal Items", compute="_compute_move_ids"
-    )
+    move_ids = fields.Many2many("account.move", string="Journal Items", compute="_compute_move_ids")
+    move_line_ids = fields.Many2many("account.move.line", string="Journal Items", compute="_compute_move_ids")
 
-    _sql_constraints = [
-        ("unique_date_journal", "unique(date, journal_id)", "Duplicate date")
-    ]
+    _sql_constraints = [("unique_date_journal", "unique(date, journal_id)", "Duplicate date")]
 
     @api.depends("journal_id", "date")
     def _compute_name(self):
@@ -96,9 +88,7 @@ class CashRegister(models.Model):
     @api.onchange("journal_id")
     def _onchange_journal_id(self):
         if self.journal_id:
-            self.currency_id = (
-                self.journal_id.currency_id or self.env.company.currency_id
-            )
+            self.currency_id = self.journal_id.currency_id or self.env.company.currency_id
 
     @api.depends("date", "journal_id")
     def _compute_move_ids(self):

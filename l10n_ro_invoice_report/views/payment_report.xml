@@ -46,9 +46,7 @@
                                     </div>
                                     <div i-if="res_company.l10n_ro_share_capital">
                                         <strong>Share Capital:</strong>
-                                        <span
-                                        t-field="res_company.l10n_ro_share_capital"
-                                    />
+                                        <span t-field="res_company.l10n_ro_share_capital" />
                                     </div>
                                 </div>
                                 <div class="col-5 col-offset-2">
@@ -81,9 +79,7 @@
                             </h2>
                             <table class="table table-sm o_main_table">
                                 <tr>
-                                    <td
-                                    t-if="o.payment_type=='inbound'"
-                                >Received from:</td>
+                                    <td t-if="o.payment_type=='inbound'">Received from:</td>
                                     <td t-if="o.payment_type=='outbound'">For:</td>
                                     <td t-if="o.payment_type=='transfer'">To:</td>
                                     <td>
@@ -101,9 +97,7 @@
                                     <td>Amount (in words):</td>
                                     <td>
                                         <!--                                        <span t-esc="convert(o.amount)"/>-->
-                                        <span
-                                        t-esc="o.currency_id.amount_to_text(o.amount)"
-                                    />
+                                        <span t-esc="o.currency_id.amount_to_text(o.amount)" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -111,14 +105,8 @@
                                     <td>
                                         <t t-set="communication" t-value="''" />
                                         <t t-if="o.reconciled_invoice_ids">
-                                            <t
-                                            t-foreach="o.reconciled_invoice_ids"
-                                            t-as="i"
-                                        >
-                                                <t
-                                                t-set="communication"
-                                                t-value="communication + i.name"
-                                            />
+                                            <t t-foreach="o.reconciled_invoice_ids" t-as="i">
+                                                <t t-set="communication" t-value="communication + i.name" />
                                                 <span t-field="i.name" />
                                                 <span>/</span>
                                                 <span t-field="i.invoice_date" />

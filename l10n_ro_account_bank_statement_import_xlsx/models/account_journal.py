@@ -20,9 +20,7 @@ class AccountJournal(models.Model):
         if len(attachments) > 1:
             csv = [bool(self._check_xlsx(att.name)) for att in attachments]
             if True in csv and False in csv:
-                raise UserError(
-                    _("Mixing XLSX files with other file types is not allowed.")
-                )
+                raise UserError(_("Mixing XLSX files with other file types is not allowed."))
             if csv.count(True) > 1:
                 raise UserError(_("Only one XLSX file can be selected."))
             return super()._import_bank_statement(attachments)

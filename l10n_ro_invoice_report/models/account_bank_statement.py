@@ -44,9 +44,7 @@ class AccountBankStatement(models.Model):
         journal = self.journal_id
         if not journal:
             if self.env.context.get("default_journal_id"):
-                journal = self.env["account.journal"].browse(
-                    self.env.context["default_journal_id"]
-                )
+                journal = self.env["account.journal"].browse(self.env.context["default_journal_id"])
         return [
             (
                 0,
@@ -66,9 +64,7 @@ class AccountBankStatement(models.Model):
             "res_id": self.id,
             "views": [
                 (
-                    self.env.ref(
-                        "l10n_ro_invoice_report.view_bank_statement_form", False
-                    ).id,
+                    self.env.ref("l10n_ro_invoice_report.view_bank_statement_form", False).id,
                     "form",
                 )
             ],
@@ -81,7 +77,5 @@ class AccountBankStatementLine(models.Model):
     _inherit = "account.bank.statement.line"
 
     def button_print(self):
-        res = self.env.ref(
-            "l10n_ro_invoice_report.action_report_statement_line"
-        ).report_action(self)
+        res = self.env.ref("l10n_ro_invoice_report.action_report_statement_line").report_action(self)
         return res

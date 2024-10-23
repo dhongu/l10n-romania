@@ -22,12 +22,8 @@ class StockPickingCumulative(models.TransientModel):
 
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
-    company_id = fields.Many2one(
-        "res.company", string="Company", default=lambda self: self.env.company
-    )
-    picking_type_id = fields.Many2one(
-        "stock.picking.type", string="Picking Type", required=True
-    )
+    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
+    picking_type_id = fields.Many2one("stock.picking.type", string="Picking Type", required=True)
     picking_type_code = fields.Selection(related="picking_type_id.code")
     origin = fields.Char()
     group_id = fields.Char()

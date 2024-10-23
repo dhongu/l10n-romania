@@ -6,9 +6,7 @@ class GetPartnerData(models.TransientModel):
     _name = "get.partner.data"
     _description = "Get partner data from"
 
-    service = fields.Selection(
-        [("anaf", "ANAF"), ("vies", "VIES for non-Romanian partners")], default="anaf"
-    )
+    service = fields.Selection([("anaf", "ANAF"), ("vies", "VIES for non-Romanian partners")], default="anaf")
 
     def default_get(self, fields):
         res = super().default_get(fields)
@@ -23,9 +21,7 @@ class GetPartnerData(models.TransientModel):
 
     def do_get_data(self):
         if self.partner_id.type == "delivery":
-            raise ValidationError(
-                _("You can't use this function on delivery contacts.")
-            )
+            raise ValidationError(_("You can't use this function on delivery contacts."))
         if self.service == "anaf":
             self.partner_id.get_partner_data()
         if self.service == "vies":

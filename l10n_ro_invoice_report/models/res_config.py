@@ -8,15 +8,9 @@ from odoo import fields, models
 class ResCompany(models.Model):
     _inherit = "res.company"
 
-    email_on_invoice_address = fields.Boolean(
-        string="Show email", help="Show email on invoice address"
-    )
-    phone_on_invoice_address = fields.Boolean(
-        string="Show phone", help="Show phone on invoice address"
-    )
-    marker_on_invoice_address = fields.Boolean(
-        string="Show marker", help="Show marker on invoice address"
-    )
+    email_on_invoice_address = fields.Boolean(string="Show email", help="Show email on invoice address")
+    phone_on_invoice_address = fields.Boolean(string="Show phone", help="Show phone on invoice address")
+    marker_on_invoice_address = fields.Boolean(string="Show marker", help="Show marker on invoice address")
 
 
 class ResConfigSettings(models.TransientModel):
