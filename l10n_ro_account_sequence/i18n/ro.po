@@ -24,13 +24,9 @@ msgstr "Dispoziție de încasare"
 #: model:ir.model.fields,field_description:l10n_ro_account_sequence.field_account_bank_statement_line__l10n_ro_cash_document_type
 #: model:ir.model.fields,field_description:l10n_ro_account_sequence.field_account_move__l10n_ro_cash_document_type
 #: model:ir.model.fields,field_description:l10n_ro_account_sequence.field_account_payment__l10n_ro_cash_document_type
-msgid "Cash Document Type"
-msgstr "Tip document casă"
-
-#. module: l10n_ro_account_sequence
 #: model_terms:ir.ui.view,arch_db:l10n_ro_account_sequence.view_account_payment_search
 msgid "Cash Document Type"
-msgstr "Tip document casă"
+msgstr "Tip document"
 
 #. module: l10n_ro_account_sequence
 #: model:ir.model.fields.selection,name:l10n_ro_account_sequence.selection__account_payment__l10n_ro_cash_document_type__customer_receipt

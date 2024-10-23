@@ -40,6 +40,7 @@
                     <field
                     name="l10n_ro_cash_document_type"
                     invisible="l10n_ro_journal_type != 'cash'"
+                    readonly="state != 'draft'"
                 />
                 </xpath>
             </field>
