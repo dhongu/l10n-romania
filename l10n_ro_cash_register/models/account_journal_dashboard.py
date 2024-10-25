@@ -51,7 +51,7 @@ class account_journal(models.Model):
                     cash_register.create(
                         {
                             "company_id": journal.company_id.id,
-                            "currency_id": journal.currency_id.id,
+                            "currency_id": journal.currency_id.id or journal.company_id.currency_id.id,
                             "journal_id": journal.id,
                             "date": date,
                         }

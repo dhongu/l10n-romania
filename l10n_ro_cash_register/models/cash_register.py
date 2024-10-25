@@ -85,6 +85,11 @@ class CashRegister(models.Model):
         param = {"journal_id": self.journal_id.id}
         return where_string, param
 
+    def _get_starting_sequence(self):
+        starting_sequence = super()._get_starting_sequence()
+        starting_sequence = self.journal_id.code + starting_sequence
+        return starting_sequence
+
     @api.onchange("journal_id")
     def _onchange_journal_id(self):
         if self.journal_id:
