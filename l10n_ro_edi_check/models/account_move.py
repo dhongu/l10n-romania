@@ -11,12 +11,8 @@ class AccountMove(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    l10n_ro_label_length = fields.Integer(
-        string="Desc. length", compute="_compute_label_length"
-    )
-    l10n_ro_product_length = fields.Integer(
-        string="Prod. length", compute="_compute_label_length"
-    )
+    l10n_ro_label_length = fields.Integer(string="Desc. length", compute="_compute_label_length")
+    l10n_ro_product_length = fields.Integer(string="Prod. length", compute="_compute_label_length")
 
     @api.onchange("product_id", "name")
     def _compute_label_length(self):
@@ -37,10 +33,7 @@ class AccountMoveLine(models.Model):
         """
         is_supplier_from_anaf = True
         for line in self:
-            if (
-                line.move_id.move_type not in ["in_invoice", "in_refund"]
-                or not line.move_id.l10n_ro_edi_download
-            ):
+            if line.move_id.move_type not in ["in_invoice", "in_refund"] or not line.move_id.l10n_ro_edi_download:
                 is_supplier_from_anaf = False
         if not is_supplier_from_anaf:
             super()._compute_price_unit()

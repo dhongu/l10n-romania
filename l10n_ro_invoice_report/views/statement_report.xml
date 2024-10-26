@@ -6,16 +6,9 @@
             <field name="name">Payment</field>
             <field name="model">account.bank.statement.line</field>
             <field name="report_type">qweb-pdf</field>
-            <field
-            name="report_name"
-        >l10n_ro_invoice_report.report_statement_line</field>
-            <field
-            name="report_file"
-        >l10n_ro_invoice_report.report_statement_line</field>
-            <field
-            name="binding_model_id"
-            ref="account.model_account_bank_statement_line"
-        />
+            <field name="report_name">l10n_ro_invoice_report.report_statement_line</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_line</field>
+            <field name="binding_model_id" ref="account.model_account_bank_statement_line" />
             <field name="binding_type">report</field>
         </record>
 
@@ -32,16 +25,9 @@
             <field name="name">Voucher</field>
             <field name="model">account.bank.statement.line</field>
             <field name="report_type">qweb-pdf</field>
-            <field
-            name="report_name"
-        >l10n_ro_invoice_report.report_statement_voucher</field>
-            <field
-            name="report_file"
-        >l10n_ro_invoice_report.report_statement_voucher</field>
-            <field
-            name="binding_model_id"
-            ref="account.model_account_bank_statement_line"
-        />
+            <field name="report_name">l10n_ro_invoice_report.report_statement_voucher</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_voucher</field>
+            <field name="binding_model_id" ref="account.model_account_bank_statement_line" />
             <field name="binding_type">report</field>
         </record>
 
@@ -60,16 +46,9 @@
             <field name="name">Cash collection</field>
             <field name="model">account.bank.statement.line</field>
             <field name="report_type">qweb-pdf</field>
-            <field
-            name="report_name"
-        >l10n_ro_invoice_report.report_statement_collection</field>
-            <field
-            name="report_file"
-        >l10n_ro_invoice_report.report_statement_collection</field>
-            <field
-            name="binding_model_id"
-            ref="account.model_account_bank_statement_line"
-        />
+            <field name="report_name">l10n_ro_invoice_report.report_statement_collection</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_collection</field>
+            <field name="binding_model_id" ref="account.model_account_bank_statement_line" />
             <field name="binding_type">report</field>
         </record>
 
@@ -88,16 +67,9 @@
             <field name="name">Payment disposal</field>
             <field name="model">account.bank.statement.line</field>
             <field name="report_type">qweb-pdf</field>
-            <field
-            name="report_name"
-        >l10n_ro_invoice_report.report_statement_payment</field>
-            <field
-            name="report_file"
-        >l10n_ro_invoice_report.report_statement_payment</field>
-            <field
-            name="binding_model_id"
-            ref="account.model_account_bank_statement_line"
-        />
+            <field name="report_name">l10n_ro_invoice_report.report_statement_payment</field>
+            <field name="report_file">l10n_ro_invoice_report.report_statement_payment</field>
+            <field name="binding_model_id" ref="account.model_account_bank_statement_line" />
             <field name="binding_type">report</field>
         </record>
 
@@ -168,9 +140,7 @@
                                     </div>
                                     <div i-if="res_company.l10n_ro_share_capital">
                                         <strong>Share Capital:</strong>
-                                        <span
-                                        t-field="res_company.l10n_ro_share_capital"
-                                    />
+                                        <span t-field="res_company.l10n_ro_share_capital" />
                                     </div>
                                 </div>
                                 <div class="col-5 col-offset-2">
@@ -220,10 +190,7 @@
                                         <span t-field="o.partner_id.name" />
                                     </td>
                                 </tr>
-                                <t
-                                t-set="currency"
-                                t-value="o.currency_id or user.company_id.currency_id"
-                            />
+                                <t t-set="currency" t-value="o.currency_id or user.company_id.currency_id" />
                                 <tr>
                                     <td>Amount:</td>
                                     <td>
@@ -238,9 +205,7 @@
                                     <td>Amount (in words):</td>
                                     <td>
                                         <!--                                        <span t-esc="convert(abs(o.amount))"/>-->
-                                        <span
-                                        t-esc="currency.amount_to_text(abs(o.amount))"
-                                    />
+                                        <span t-esc="currency.amount_to_text(abs(o.amount))" />
                                     </td>
                                 </tr>
                                 <tr>

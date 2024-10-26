@@ -53,17 +53,8 @@
                         type="object"
                         class="oe_highlight"
                     />
-                    <button
-                        invisible="state != 'draft'"
-                        string="Cancel"
-                        class="oe_link"
-                        special="cancel"
-                    />
-                    <button
-                        invisible="state != 'download'"
-                        string="Close"
-                        special="cancel"
-                    />
+                    <button invisible="state != 'draft'" string="Cancel" class="oe_link" special="cancel" />
+                    <button invisible="state != 'download'" string="Close" special="cancel" />
                 </footer>
             </form>
         </field>

@@ -87,10 +87,7 @@
                                     <t t-set="sold_inc" t-value="0.0" />
                                     <t t-set="sold_plt" t-value="0.0" />
                                     <t t-set="index_l" t-value="1" />
-                                    <tr
-                                    t-foreach="o.line_ids.sorted(key=lambda r: (r.sequence, r.id))"
-                                    t-as="line"
-                                >
+                                    <tr t-foreach="o.line_ids.sorted(key=lambda r: (r.sequence, r.id))" t-as="line">
                                         <td>
                                             <span t-esc="index_l" />
                                         </td>
@@ -109,10 +106,7 @@
                                                 t-field="line.amount"
                                                 t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                             />
-                                                <t
-                                                t-set="sold_inc"
-                                                t-value="sold_inc+line.amount"
-                                            />
+                                                <t t-set="sold_inc" t-value="sold_inc+line.amount" />
                                             </t>
                                         </td>
                                         <td class="text-right">
@@ -121,17 +115,11 @@
                                                 t-esc="-1*line.amount"
                                                 t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                             />
-                                                <t
-                                                t-set="sold_plt"
-                                                t-value="sold_plt-line.amount"
-                                            />
+                                                <t t-set="sold_plt" t-value="sold_plt-line.amount" />
                                             </t>
                                         </td>
                                         <td class="text-right">
-                                            <t
-                                            t-set="sold"
-                                            t-value="sold+line.amount"
-                                        />
+                                            <t t-set="sold" t-value="sold+line.amount" />
                                             <span
                                             t-esc="sold"
                                             t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
