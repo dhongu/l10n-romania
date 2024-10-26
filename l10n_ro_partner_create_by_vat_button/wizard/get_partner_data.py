@@ -25,9 +25,7 @@ class GetPartnerData(models.TransientModel):
 
     def do_get_data(self):
         if self.partner_id.type == "delivery":
-            raise ValidationError(
-                _("You can't use this function on delivery contacts.")
-            )
+            raise ValidationError(_("You can't use this function on delivery contacts."))
         if self.service == "anaf":
             self.partner_id.get_partner_data()
         if self.service == "vies":
