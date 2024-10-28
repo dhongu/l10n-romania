@@ -30,7 +30,7 @@ class TestIntrastat(TransactionCase):
         self.product_2 = self.env["product.product"].create({"name": "Test intrastat", "invoice_policy": "order"})
 
     def test_name(self):
-        intrastat = self.env["account.intrastat.code"]._name_search("84221100")
+        intrastat = self.env["account.intrastat.code"].name_search("84221100")
         self.assertEqual(self.intrastat.id, intrastat[0][0])
 
         self.product_1.categ_id.search_intrastat_code()
