@@ -3,6 +3,6 @@
 
 from . import res_partner
 from . import account_invoice
-from . import account_bank_statement
+# from . import account_bank_statement
 from . import res_config
 from . import account_journal

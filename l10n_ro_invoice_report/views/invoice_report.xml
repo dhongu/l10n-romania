@@ -208,7 +208,7 @@
             <xpath expr="//table[@name='invoice_line_table']" position="replace">
                 <t t-set="with_discount_distinct" t-value="get_discount" />
                 <t t-if="not currency_id">
-                    <t t-set="currency_id" t-value="o.currency_id" />
+                    <t t-set="currency_id" t-value="o.currency_id or res_company.currency_id" />
                 </t>
                 <t t-set="nr_crt" t-value="1" />
                 <table class="table table-sm o_main_table" name="invoice_line_table">
@@ -354,7 +354,7 @@
                                         <strong class="mr16">Subtotal</strong>
                                         <span
                                         t-esc="current_subtotal"
-                                        t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                     />
                                     </td>
                                 </tr>
@@ -416,7 +416,11 @@
                 <div class="col-5">
                    <t t-set="tax_totals" t-value="o.tax_totals" />
                     <table class="table table-sm" style="page-break-inside: avoid;">
-                        <t t-call="account.document_tax_totals" />
+                        <!-- Tax totals summary (invoice currency) -->
+                            <t t-if="o.tax_totals" t-call="account.document_tax_totals">
+                                <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                <t t-set="currency" t-value="o.currency_id"/>
+                            </t>
                     </table>
                 </div>
                 </div>
