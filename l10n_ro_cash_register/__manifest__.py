@@ -13,6 +13,7 @@
         "security/cash_register_security.xml",
         "wizard/cash_register_operation_view.xml",
         "views/report_cash_register.xml",
+        # "views/account_payment_view.xml",
     ],
     "license": "AGPL-3",
 }

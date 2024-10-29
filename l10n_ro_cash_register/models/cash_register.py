@@ -87,7 +87,8 @@ class CashRegister(models.Model):
 
     def _get_starting_sequence(self):
         starting_sequence = super()._get_starting_sequence()
-        starting_sequence = self.journal_id.code + starting_sequence
+        if self.journal_id:
+            starting_sequence = self.journal_id.code + starting_sequence
         return starting_sequence
 
     @api.onchange("journal_id")
@@ -111,6 +112,9 @@ class CashRegister(models.Model):
     @api.depends("date", "journal_id", "move_ids")
     def _compute_balance_start(self):
         for record in self:
+            record.balance_start = 0
+            if not record.journal_id:
+                continue
             param = {
                 "account_id": record.journal_id.default_account_id.id,
                 "date": record.date,
@@ -162,16 +166,16 @@ class CashRegister(models.Model):
         action["context"].update(
             {
                 "default_journal_id": self.journal_id.id,
-                "default_date": self.date,
+                "default_date": self.date
             }
         )
-        action["target"] = "new"
+        # action["target"] = "new"
         return action
 
     def action_payment(self):
         action = self.journal_id.open_payments_action("outbound", "form")
         action["context"].update({"default_journal_id": self.journal_id.id, "default_date": self.date})
-        action["target"] = "new"
+        # action["target"] = "new"
         return action
 
     def action_operation(self):
