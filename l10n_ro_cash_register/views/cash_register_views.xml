@@ -55,8 +55,9 @@
                                     <field name="move_name" string="Journal Entry" widget="open_move_widget" />
                                     <field name="partner_id" />
                                     <field name="balance" sum="Total Amount" string="Total" decoration-bf="1" />
-                                    <field name="currency_id" column_invisible="1" />
-                                    <button name="print_cash_operation" string="Print" type="object" icon="fa-print" />
+                                    <field name="currency_id" invisible="1" />
+                                    <button name="print_cash_operation" string="Print" type="object" icon="fa-print"  invisible="1" />
+                                    <field name="ref" />
                                 </tree>
                             </field>
                         </page>

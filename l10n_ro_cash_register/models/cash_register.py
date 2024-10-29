@@ -44,9 +44,9 @@ class CashRegister(models.Model):
 
     # Balance end is calculated based on the statement line amounts and real starting balance.
     balance_end = fields.Monetary(
-        string="Computed Balance",
+        string="Finished Balance",
         compute="_compute_balance_end",
-        store=True,
+        store=True
     )
 
     move_ids = fields.Many2many("account.move", string="Journal Items", compute="_compute_move_ids")
