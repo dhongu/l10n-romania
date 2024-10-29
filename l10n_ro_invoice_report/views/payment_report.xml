@@ -9,6 +9,7 @@
                             <div class="row">
                                 <div class="col-5">
                                     <strong>Company</strong><br />
+                                    <t t-set="res_company" t-value="o.company_id" />
                                     <strong t-field="res_company.partner_id.name" />
                                     <div>
                                         <strong>Address:</strong>
