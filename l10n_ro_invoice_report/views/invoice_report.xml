@@ -40,7 +40,7 @@
         <template id="header_invoice">
             <div id="address" class="address row">
                 <t t-set="address_fields" t-value="['address']" />
-
+                <t t-set="res_company" t-value="o.company_id" />
                 <t t-if="res_company.email_on_invoice_address">
                     <t t-set="address_fields" t-value="address_fields + ['email']" />
                 </t>

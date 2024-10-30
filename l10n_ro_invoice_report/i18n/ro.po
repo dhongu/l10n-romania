@@ -49,6 +49,11 @@ msgstr "<span>Am primit de la</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>I payed to</span>"
+msgstr "<span>Am plătit către</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>Mean Transport:</span>"
 msgstr "<span>Mijloc transport:</span>"
 
@@ -233,7 +238,7 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Customer:"
-msgstr "Client"
+msgstr "Client:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__delegate_id
@@ -439,7 +444,7 @@ msgstr "Arată valorile taxelor pe raportul de recepție"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Supplier:"
-msgstr "Furnizor"
+msgstr "Furnizor:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
