@@ -10,16 +10,26 @@
                             <strong>Company</strong>
                         </div>
                     </div>
+
+                    <t t-set="warehouse_address" t-value="o.company_id.partner_id" />
+                    <div t-if="o.picking_type_id.code=='outgoing'">
+                         <t t-set="warehouse_address" t-value="o.location_id.warehouse_id.partner_id" />
+                    </div>
+                    <div t-if="o.picking_type_id.code=='incoming'">
+                         <t t-set="warehouse_address" t-value="o.location_dest_id.warehouse_id.partner_id" />
+                    </div>
+
+                    <t t-set="warehouse_address" t-value="warehouse_address or o.company_id.partner_id" />
                     <strong t-field="res_company.partner_id.name" />
                     <div>
                         <strong>Address:</strong>
                         <address
-                        t-field="res_company.partner_id"
+                        t-field="warehouse_address"
                         t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'
                     />
                     </div>
                     <div>
-                        <t t-set="partner_id" t-value="res_company.partner_id" />
+                        <t t-set="partner_id" t-value="warehouse_address" />
                         <t t-if="res_company.banks_on_pickings">
                             <t t-call="l10n_ro_config.banks" />
                         </t>
