@@ -1,4 +1,4 @@
-<?xml version="1.0"  ?>
+<?xml version="1.0" ?>
 <odoo>
 
 
@@ -312,10 +312,10 @@
                                 <t t-if="with_discount(o) and with_discount_distinct">
                                     <td style="text-align: right;">
                                         <span
-                                            id="price_unit_without_taxes"
-                                            t-esc="price_unit_without_taxes"
-                                            t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"
-                                        />
+                                        id="price_unit_without_taxes"
+                                        t-esc="price_unit_without_taxes"
+                                        t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"
+                                    />
                                     </td>
                                 </t>
 
