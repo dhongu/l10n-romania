@@ -8,7 +8,7 @@
     "summary": "Bridge module for sending Romanian E-Factura to the SPV",
     "countries": ["ro"],
     "website": "https://github.com/OCA/l10n-romania",
-    "depends": ["l10n_ro_efactura"],
+    "depends": ["l10n_ro_edi"],
     "data": [],
     "installable": True,
     "auto_install": True,
