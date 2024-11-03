@@ -55,7 +55,6 @@
                                         <th>Ord</th>
                                         <th>Name</th>
                                         <th>Partner</th>
-
                                         <th class="text-right">Receipts</th>
                                         <th class="text-right">Payment</th>
                                         <th class="text-right">Sold</th>
@@ -63,7 +62,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-left" colspan="4">
+                                        <td class="text-left" colspan="3">
                                             <strong>Starting Balance</strong>
                                         </td>
                                         <td class="text-right">
@@ -122,7 +121,7 @@
                                         <t t-set="index_l" t-value="index_l + 1" />
                                     </tr>
                                     <tr>
-                                        <td class="text-left" colspan="4">
+                                        <td class="text-left" colspan="3">
                                             <strong>Sold Final:</strong>
                                         </td>
                                         <td class="text-right">

@@ -44,7 +44,7 @@ class CashRegister(models.Model):
 
     # Balance end is calculated based on the statement line amounts and real starting balance.
     balance_end = fields.Monetary(
-        string="Computed Balance",
+        string="Finished Balance",
         compute="_compute_balance_end",
         store=True,
     )
@@ -85,6 +85,12 @@ class CashRegister(models.Model):
         param = {"journal_id": self.journal_id.id}
         return where_string, param
 
+    def _get_starting_sequence(self):
+        starting_sequence = super()._get_starting_sequence()
+        if self.journal_id:
+            starting_sequence = self.journal_id.code + starting_sequence
+        return starting_sequence
+
     @api.onchange("journal_id")
     def _onchange_journal_id(self):
         if self.journal_id:
@@ -106,6 +112,9 @@ class CashRegister(models.Model):
     @api.depends("date", "journal_id", "move_ids")
     def _compute_balance_start(self):
         for record in self:
+            record.balance_start = 0
+            if not record.journal_id:
+                continue
             param = {
                 "account_id": record.journal_id.default_account_id.id,
                 "date": record.date,
@@ -155,11 +164,20 @@ class CashRegister(models.Model):
     def action_receipt(self):
         action = self.journal_id.open_payments_action("inbound", "form")
         action["context"].update({"default_journal_id": self.journal_id.id})
-        action["target"] = "new"
+        # action["target"] = "new"
         return action
 
     def action_payment(self):
         action = self.journal_id.open_payments_action("outbound", "form")
         action["context"].update({"default_journal_id": self.journal_id.id})
+        # action["target"] = "new"
+        return action
+
+    def action_operation(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_cash_register.action_cash_register_operation")
+        action["context"] = {
+            "default_journal_id": self.journal_id.id,
+            "default_date": self.date,
+        }
         action["target"] = "new"
         return action
