@@ -63,7 +63,7 @@ msgstr ""
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 msgid "<strong>Sold Final:</strong>"
-msgstr "<strong>Sold Final:</strong>"
+msgstr ""
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register

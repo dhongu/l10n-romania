@@ -8,16 +8,15 @@ class CashRegisterOperation(models.TransientModel):
     journal_id = fields.Many2one("account.journal", string="Journal", required=True, domain=[("type", "=", "cash")])
     currency_id = fields.Many2one(related="journal_id.currency_id", string="Currency", readonly=True)
     date = fields.Date(required=True, default=fields.Date.context_today)
-    amount = fields.Monetary(string="Amount", required=True)
+    amount = fields.Monetary(required=True)
     operation = fields.Selection(
         [
             ("in", "Cash In"),
             ("out", "Cash Out"),
         ],
-        string="Operation",
         required=True,
     )
-    description = fields.Char(string="Description")
+    description = fields.Char()
     partner_id = fields.Many2one("res.partner", string="Partner")
     counterpart_account_id = fields.Many2one("account.account", string="Account", required=True)
 

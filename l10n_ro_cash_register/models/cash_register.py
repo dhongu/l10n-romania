@@ -163,13 +163,13 @@ class CashRegister(models.Model):
 
     def action_receipt(self):
         action = self.journal_id.open_payments_action("inbound", "form")
-        action["context"].update({"default_journal_id": self.journal_id.id})
+        action["context"].update({"default_journal_id": self.journal_id.id, "default_date": self.date})
         # action["target"] = "new"
         return action
 
     def action_payment(self):
         action = self.journal_id.open_payments_action("outbound", "form")
-        action["context"].update({"default_journal_id": self.journal_id.id})
+        action["context"].update({"default_journal_id": self.journal_id.id, "default_date": self.date})
         # action["target"] = "new"
         return action
 
