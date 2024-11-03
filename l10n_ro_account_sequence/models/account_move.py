@@ -46,7 +46,7 @@ class AccountMove(models.Model):
 
     def _sequence_matches_date(self):
         res = super()._sequence_matches_date()
-        if self.move_type in ["out_invoice", "out_refund"]:
+        if self.move_type in ["out_invoice", "out_refund"] and self.state != "draft":
             move_has_name = self.name and self.name != "/"
             if move_has_name:
                 last_sequence = self._get_last_sequence()
