@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 class AccountBankStatementImport(models.TransientModel):
     """Add parsing of mt940 files to bank statement import."""
 
-    _inherit = "account.bank.statement.import"
+    _inherit = "account.statement.import"
 
     def _parse_file(self, data_file):
         """Parse a MT940 IBAN bt file."""
