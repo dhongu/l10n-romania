@@ -9,7 +9,7 @@
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Banking addons",
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],
-    "data": ["views/account_bank_statement_import_sta_view.xml"],
+    # "data": ["views/account_bank_statement_import_sta_view.xml"],
     "demo": ["demo/demo_data.xml"],
     "installable": True,
 }
