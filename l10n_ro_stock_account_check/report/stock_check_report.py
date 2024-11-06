@@ -55,6 +55,7 @@ class StockAccountingCheck(models.TransientModel):
         self.line_ids.unlink()
 
         query = """
+
         SELECT %(report)s as report_id, product_id, sum(svl_value) as amount_svl ,
                 sum(aml_value) as amount_aml,
                 jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids
@@ -118,7 +119,7 @@ class StockAccountingCheck(models.TransientModel):
         ok = True
         for purchase in purchases:
             if purchase.invoice_count == 1:
-                invoice_date = purchase.invoice_ids.invoice_date
+                invoice_date = purchase.invoice_ids.invoice_date or fields.Date.today()
                 for picking in purchase.picking_ids:
                     if invoice_date != picking.date.date() and not picking.notice:
                         new_date = picking.date.replace(
@@ -133,7 +134,7 @@ class StockAccountingCheck(models.TransientModel):
                         ok = False
             if (
                 purchase.invoice_status == "to invoice"
-                and purchase.picking_count > 0
+                and len(purchase.picking_ids) > 0
                 and purchase.state not in ["done", "cancel"]
             ):
                 if not purchase.activity_ids:
@@ -154,7 +155,7 @@ class StockAccountingCheck(models.TransientModel):
         ok = True
         for sale_oreder in sale_oreders:
             if sale_oreder.invoice_count == 1:
-                invoice_date = sale_oreder.invoice_ids.invoice_date
+                invoice_date = sale_oreder.invoice_ids.invoice_date or fields.Date.today()
                 for picking in sale_oreder.picking_ids:
                     if invoice_date != picking.date.date() and not picking.notice:
                         new_date = picking.date.replace(
@@ -246,8 +247,11 @@ class StockAccountingCheckLine(models.TransientModel):
     report_id = fields.Many2one("stock.accounting.check")
     product_id = fields.Many2one("product.product", string="Product")
 
-    amount_svl = fields.Monetary(currency_field="currency_id", string="Amount SVL")
+    standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price")
+    price_svl = fields.Monetary(currency_field="currency_id", string="Price SVL")
+    price_aml = fields.Monetary(currency_field="currency_id", string="Price AML")
 
+    amount_svl = fields.Monetary(currency_field="currency_id", string="Amount SVL")
     amount_aml = fields.Monetary(currency_field="currency_id", string="Amount AML")
 
     currency_id = fields.Many2one(

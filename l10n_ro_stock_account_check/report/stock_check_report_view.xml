@@ -8,16 +8,33 @@
                 <group name="filters">
                     <group>
                         <field name="account_id" />
-                    </group>
-                    <group name="date_range">
-                        <field
-                            name="date_range_id"
-                            domain="['|',('company_id','=',company_id), ('company_id','=',False)]"
-                        />
-                        <field name="date_from" />
-                        <field name="date_to" />
                         <field name="company_id" invisible="1" />
                     </group>
+                    <group name="date_range">
+                        <label for="date_from" string="Date" />
+                        <div class="o_row">
+                            <field
+                                name="date_from"
+                                widget="daterange"
+                                nolabel="1"
+                                class="oe_inline"
+                                options="{'related_end_date': 'date_to'}"
+                            />
+                            <i
+                                class="fa fa-long-arrow-right mx-2"
+                                aria-label="Arrow icon"
+                                title="Arrow"
+                            />
+                            <field
+                                name="date_to"
+                                widget="daterange"
+                                nolabel="1"
+                                class="oe_inline"
+                                options="{'related_start_date': 'date_from'}"
+                            />
+                        </div>
+                    </group>
+
                 </group>
                 <footer>
                     <button
@@ -61,6 +78,9 @@
                     type="object"
                     icon="fa-info-circle"
                 />
+                <field name="standard_price" />
+                <field name="price_svl" />
+                <field name="price_aml" />
 
             </tree>
         </field>
