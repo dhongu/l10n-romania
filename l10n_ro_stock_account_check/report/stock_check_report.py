@@ -27,6 +27,10 @@ class StockAccountingCheck(models.TransientModel):
 
     line_ids = fields.One2many("stock.accounting.check.line", "report_id")
 
+    check_purchase = fields.Boolean("Check Purchase")
+    check_sale = fields.Boolean("Check Sale")
+    check_stock_move = fields.Boolean("Check Stock Move")
+
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
@@ -126,6 +130,17 @@ class StockAccountingCheck(models.TransientModel):
             line["quantity"] = product.qty_available
             line["price_svl"] = line["amount_svl"] / line["quantity_svl"] if line["quantity_svl"] else 0
             line["price_aml"] = line["amount_aml"] / line["quantity_aml"] if line["quantity_aml"] else 0
+
+            purchase_price = 0
+            if product.seller_ids:
+                seller = product.seller_ids[0]
+                purchase_price = seller.price
+                if seller.currency_id != self.company_id.currency_id:
+                    purchase_price = seller.currency_id._convert(
+                        purchase_price, self.company_id.currency_id, self.company_id, fields.Date.today()
+                    )
+            line["purchase_price"] = purchase_price
+
             if self.line_details:
                 svl_ids = list(sum(line["svl_ids"], []))
                 if svl_ids:
@@ -250,11 +265,14 @@ class StockAccountingCheck(models.TransientModel):
 
     def button_show_report(self):
         self.do_compute_product()
-        # if not self.do_check_purchases():
-        #     self.do_compute_product()
-        # if not self.do_check_sale_order():
-        #     self.do_compute_product()
-        # self.do_check_move()
+        if self.check_purchase:
+            if not self.do_check_purchases():
+                self.do_compute_product()
+        if self.check_sale:
+            if not self.do_check_sale_order():
+                self.do_compute_product()
+        if self.check_stock_move:
+            self.do_check_move()
 
         action = self.env["ir.actions.actions"]._for_xml_id(
             "l10n_ro_stock_account_check.action_stock_accounting_check_line"
@@ -278,6 +296,8 @@ class StockAccountingCheckLine(models.TransientModel):
     product_id = fields.Many2one("product.product", string="Product")
 
     standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price")
+    purchase_price = fields.Monetary(currency_field="currency_id", string="Purchase Price")
+
     price_svl = fields.Monetary(currency_field="currency_id", string="Price SVL")
     price_aml = fields.Monetary(currency_field="currency_id", string="Price AML")
 

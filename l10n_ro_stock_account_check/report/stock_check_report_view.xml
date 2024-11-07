@@ -10,12 +10,12 @@
                         <field name="account_id" />
                          <field name="product_id" />
                         <field name="company_id" invisible="1" />
-                        <field name="interval" />
-                        <field name="line_details" />
+
                     </group>
                     <group name="date_range">
-                        <label for="date_from" string="Date" />
-                        <div class="o_row">
+                        <field name="interval" />
+                        <label for="date_from" string="Date" attrs="{'invisible':[('interval','=',False)]}" />
+                        <div class="o_row" attrs="{'invisible':[('interval','=',False)]}">
                             <field
                                 name="date_from"
                                 widget="daterange"
@@ -32,6 +32,15 @@
                                 options="{'related_start_date': 'date_from'}"
                             />
                         </div>
+                    </group>
+                    <group>
+
+                        <field name="line_details" />
+                    </group>
+                    <group>
+                        <field name="check_purchase" />
+                        <field name="check_sale" />
+                        <field name="check_stock_move" />
                     </group>
 
                 </group>
@@ -84,12 +93,12 @@
                     icon="fa-info-circle"
                 />
                 <field name="standard_price" />
-                <field name="price_svl" decoration-danger="standard_price != price_svl" />
-                <field name="price_aml" decoration-danger="standard_price != price_aml" />
+                <field name="price_svl" decoration-danger="price_svl and standard_price != price_svl" />
+                <field name="price_aml" decoration-danger="price_aml and standard_price != price_aml" />
 
                 <field name="quantity" />
                 <field name="quantity_svl" decoration-danger="quantity != quantity_svl" />
-                <field name="quantity_aml" decoration-danger="quantity != quantity_svl" />
+                <field name="quantity_aml" decoration-danger="quantity != quantity_aml" />
             </tree>
         </field>
     </record>

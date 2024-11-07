@@ -7,7 +7,7 @@ from odoo import fields, models
 class StockValuationLayer(models.Model):
     _inherit = "stock.valuation.layer"
 
-    date = fields.Datetime(related="stock_move_id.date")
+    # date = fields.Datetime(related="stock_move_id.date")
     rounding_adjustment = fields.Char("Rounding Adjustment")
 
     def correction_valuation_type(self):
