@@ -8,7 +8,10 @@
                 <group name="filters">
                     <group>
                         <field name="account_id" />
+                         <field name="product_id" />
                         <field name="company_id" invisible="1" />
+                        <field name="interval" />
+                        <field name="line_details" />
                     </group>
                     <group name="date_range">
                         <label for="date_from" string="Date" />
@@ -20,11 +23,7 @@
                                 class="oe_inline"
                                 options="{'related_end_date': 'date_to'}"
                             />
-                            <i
-                                class="fa fa-long-arrow-right mx-2"
-                                aria-label="Arrow icon"
-                                title="Arrow"
-                            />
+                            <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow" />
                             <field
                                 name="date_to"
                                 widget="daterange"
@@ -56,11 +55,17 @@
         <field name="arch" type="xml">
             <tree edit="0" create="0" import="0">
                 <header>
-
+                    <button
+                        name="action_purchase"
+                        aria-label="Purchase"
+                        title="Purchase"
+                        type="object"
+                        icon="fa-sign-in"
+                    />
+                    <button name="action_sale" aria-label="Sale" title="Sale" type="object" icon="fa-sign-out" />
                 </header>
                 <field name="product_id" />
-                <button name="action_purchase" aria-label="Purchase" title="Purchase" type="object" icon="fa-sign-in" />
-                <button name="action_sale" aria-label="Sale" title="Sale" type="object" icon="fa-sign-out" />
+
                 <field name="amount_svl" />
                 <button
                     name="action_slv_details"
@@ -79,9 +84,12 @@
                     icon="fa-info-circle"
                 />
                 <field name="standard_price" />
-                <field name="price_svl" />
-                <field name="price_aml" />
+                <field name="price_svl" decoration-danger="standard_price != price_svl" />
+                <field name="price_aml" decoration-danger="standard_price != price_aml" />
 
+                <field name="quantity" />
+                <field name="quantity_svl" decoration-danger="quantity != quantity_svl" />
+                <field name="quantity_aml" decoration-danger="quantity != quantity_svl" />
             </tree>
         </field>
     </record>

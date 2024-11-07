@@ -18,7 +18,10 @@ class StockAccountingCheck(models.TransientModel):
 
     account_id = fields.Many2one("account.account", required=True)
     company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
-    date_range_id = fields.Many2one("date.range", string="Date range")
+
+    product_id = fields.Many2one("product.product", string="Product")
+    interval = fields.Boolean("Interval")
+    line_details = fields.Boolean("Line Details")
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
 
@@ -44,71 +47,97 @@ class StockAccountingCheck(models.TransientModel):
         res["date_to"] = fields.Date.to_string(to_date)
         return res
 
-    @api.onchange("date_range_id")
-    def onchange_date_range_id(self):
-        """Handle date range change."""
-        if self.date_range_id:
-            self.date_from = self.date_range_id.date_start
-            self.date_to = self.date_range_id.date_end
-
     def do_compute_product(self):
         self.line_ids.unlink()
 
-        query = """
+        _select = ""
+        _select_svl = ""
+        _select_aml = ""
+        _where_svl = ""
+        _where_aml = ""
+        _having = "having abs( sum(svl_value) - sum(aml_value) ) > 1"
+        if self.interval:
+            _where_svl = "AND date_trunc('day',sm.date) >= %(date_from)s  AND date_trunc('day',sm.date) <= %(date_to)s"
+            _where_aml = (
+                "AND date_trunc('day',aml.date) >= %(date_from)s  AND date_trunc('day',aml.date) <= %(date_to)s"
+            )
 
-        SELECT %(report)s as report_id, product_id, sum(svl_value) as amount_svl ,
-                sum(aml_value) as amount_aml,
-                jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids
+        if self.product_id:
+            _where_svl += "AND sm.product_id = %(product)s"
+            _where_aml += "AND aml.product_id = %(product)s"
+            _having = ""
 
-            FROM
-             (  ( select sm.product_id, sum(svl.value) as svl_value , 0 as aml_value,
-                    array_agg(svl.id) as svl_ids,
-                    array[]::integer[] as aml_ids
-                 from stock_valuation_layer as svl
-                      left join stock_move as sm on svl.stock_move_id = sm.id
-                  where svl.company_id = %(company)s and
-                      date_trunc('day',sm.date) >= %(date_from)s  AND
-                      date_trunc('day',sm.date) <= %(date_to)s
-                  group by sm.product_id)
-            union
-            select product_id, 0 as svl_value, sum(aml.balance) as aml_value,
-                    array[]::integer[] as svl_ids,
-                    array_agg(aml.id) as aml_ids
-             from account_move_line as aml
-                where
-                        account_id = %(account)s and
-                        parent_state = 'posted' and company_id = %(company)s and
-                        date_trunc('day',aml.date) >= %(date_from)s  AND
-                        date_trunc('day',aml.date) <= %(date_to)s
-             group by product_id
-             ) as subq
+        if self.line_details:
+            _select = ",jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids"
+            _select_svl = ",array_agg(svl.id) as svl_ids, array[]::integer[] as aml_ids"
+            _select_aml = ",array[]::integer[] as svl_ids, array_agg(aml.id) as aml_ids"
+
+        query = f"""
+            SELECT %(report)s as report_id, product_id,
+                    sum(svl_value) as amount_svl ,
+                    sum(quantity_svl) as quantity_svl,
+                    sum(aml_value) as amount_aml,
+                    sum(quantity_aml) as quantity_aml
+                    {_select}
+
+                FROM
+                 (  ( select sm.product_id,
+                        sum(svl.value) as svl_value ,
+                        sum(svl.quantity) as quantity_svl,
+                        0 as aml_value,
+                        0 as quantity_aml
+                        {_select_svl}
+                     from stock_valuation_layer as svl
+                          left join stock_move as sm on svl.stock_move_id = sm.id
+                      where svl.company_id = %(company)s  {_where_svl}
+                      group by sm.product_id)
+                union all
+                select product_id,
+                        0 as svl_value,
+                        0 as quantity_svl,
+                        sum(aml.balance) as aml_value,
+                        sum(aml.quantity) as quantity_aml
+                        {_select_aml}
+                 from account_move_line as aml
+                    where
+                            account_id = %(account)s and
+                            parent_state = 'posted' and company_id = %(company)s {_where_aml}
+                 group by product_id
+                 ) as subq
 
 
-             group by product_id
-             having abs( sum(svl_value) - sum(aml_value) ) > 1
+                 group by product_id
+                 {_having}
+            """
 
-        """
         params = {
             "report": self.id,
             "company": self.company_id.id,
             "account": self.account_id.id,
             "date_from": fields.Date.to_string(self.date_from),
             "date_to": fields.Date.to_string(self.date_to),
+            "product": self.product_id.id,
         }
-        self.env.cr.execute(query, params=params)
+        self.env.cr.execute(query, params=params)  # pylint: disable=E8103
         lines = self.env.cr.dictfetchall()
         for line in lines:
-            svl_ids = list(sum(line["svl_ids"], []))
-            if svl_ids:
-                line["svl_ids"] = [(6, 0, svl_ids)]
-            else:
-                line["svl_ids"] = False
+            product = self.env["product.product"].browse(line["product_id"])
+            line["standard_price"] = product.standard_price
+            line["quantity"] = product.qty_available
+            line["price_svl"] = line["amount_svl"] / line["quantity_svl"] if line["quantity_svl"] else 0
+            line["price_aml"] = line["amount_aml"] / line["quantity_aml"] if line["quantity_aml"] else 0
+            if self.line_details:
+                svl_ids = list(sum(line["svl_ids"], []))
+                if svl_ids:
+                    line["svl_ids"] = [(6, 0, svl_ids)]
+                else:
+                    line["svl_ids"] = False
 
-            aml_ids = list(sum(line["aml_ids"], []))
-            if aml_ids:
-                line["aml_ids"] = [(6, 0, aml_ids)]
-            else:
-                line["aml_ids"] = False
+                aml_ids = list(sum(line["aml_ids"], []))
+                if aml_ids:
+                    line["aml_ids"] = [(6, 0, aml_ids)]
+                else:
+                    line["aml_ids"] = False
 
         self.line_ids.create(lines)
 
@@ -221,20 +250,21 @@ class StockAccountingCheck(models.TransientModel):
 
     def button_show_report(self):
         self.do_compute_product()
-        if not self.do_check_purchases():
-            self.do_compute_product()
-        if not self.do_check_sale_order():
-            self.do_compute_product()
-        self.do_check_move()
+        # if not self.do_check_purchases():
+        #     self.do_compute_product()
+        # if not self.do_check_sale_order():
+        #     self.do_compute_product()
+        # self.do_check_move()
 
         action = self.env["ir.actions.actions"]._for_xml_id(
             "l10n_ro_stock_account_check.action_stock_accounting_check_line"
         )
-        action["display_name"] = "{} ({}-{})".format(
-            action["name"],
-            format_date(self.env, self.date_from),
-            format_date(self.env, self.date_to),
-        )
+        if self.interval:
+            action["display_name"] = "{} ({}-{})".format(
+                action["name"],
+                format_date(self.env, self.date_from),
+                format_date(self.env, self.date_to),
+            )
         return action
 
 
@@ -250,6 +280,10 @@ class StockAccountingCheckLine(models.TransientModel):
     standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price")
     price_svl = fields.Monetary(currency_field="currency_id", string="Price SVL")
     price_aml = fields.Monetary(currency_field="currency_id", string="Price AML")
+
+    quantity = fields.Float(string="Quantity")
+    quantity_svl = fields.Float(string="Quantity SVL")
+    quantity_aml = fields.Float(string="Quantity AML")
 
     amount_svl = fields.Monetary(currency_field="currency_id", string="Amount SVL")
     amount_aml = fields.Monetary(currency_field="currency_id", string="Amount AML")

@@ -43,11 +43,7 @@ class CashRegister(models.Model):
     balance_start = fields.Monetary(string="Starting Balance", compute="_compute_balance_start", store=True)
 
     # Balance end is calculated based on the statement line amounts and real starting balance.
-    balance_end = fields.Monetary(
-        string="Finished Balance",
-        compute="_compute_balance_end",
-        store=True
-    )
+    balance_end = fields.Monetary(string="Finished Balance", compute="_compute_balance_end", store=True)
 
     move_ids = fields.Many2many("account.move", string="Journal Items", compute="_compute_move_ids")
     move_line_ids = fields.Many2many("account.move.line", string="Journal Items", compute="_compute_move_ids")
@@ -163,12 +159,7 @@ class CashRegister(models.Model):
 
     def action_receipt(self):
         action = self.journal_id.open_payments_action("inbound", "form")
-        action["context"].update(
-            {
-                "default_journal_id": self.journal_id.id,
-                "default_date": self.date
-            }
-        )
+        action["context"].update({"default_journal_id": self.journal_id.id, "default_date": self.date})
         # action["target"] = "new"
         return action
 
