@@ -16,7 +16,7 @@ class StockAccountingCheck(models.TransientModel):
 
     # Filters fields, used for data computation
 
-    account_id = fields.Many2one("account.account", required=True)
+    account_id = fields.Many2one("account.account")
     company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
 
     product_id = fields.Many2one("product.product", string="Product")
@@ -71,13 +71,18 @@ class StockAccountingCheck(models.TransientModel):
             _where_aml += "AND aml.product_id = %(product)s"
             _having = ""
 
+        if self.account_id:
+            _where_svl += "AND l10n_ro_account_id = %(account)s"
+            _where_aml += "AND account_id = %(account)s "
+
+
         if self.line_details:
             _select = ",jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids"
             _select_svl = ",array_agg(svl.id) as svl_ids, array[]::integer[] as aml_ids"
             _select_aml = ",array[]::integer[] as svl_ids, array_agg(aml.id) as aml_ids"
 
         query = f"""
-            SELECT %(report)s as report_id, product_id,
+            SELECT %(report)s as report_id, product_id, account_id,
                     sum(svl_value) as amount_svl ,
                     sum(quantity_svl) as quantity_svl,
                     sum(aml_value) as amount_aml,
@@ -85,7 +90,7 @@ class StockAccountingCheck(models.TransientModel):
                     {_select}
 
                 FROM
-                 (  ( select sm.product_id,
+                 (  ( select sm.product_id, l10n_ro_account_id as account_id,
                         sum(svl.value) as svl_value ,
                         sum(svl.quantity) as quantity_svl,
                         0 as aml_value,
@@ -93,10 +98,11 @@ class StockAccountingCheck(models.TransientModel):
                         {_select_svl}
                      from stock_valuation_layer as svl
                           left join stock_move as sm on svl.stock_move_id = sm.id
-                      where svl.company_id = %(company)s  {_where_svl}
-                      group by sm.product_id)
+                      where svl.company_id = %(company)s
+                            {_where_svl}
+                      group by sm.product_id, l10n_ro_account_id)
                 union all
-                select product_id,
+                select product_id, account_id,
                         0 as svl_value,
                         0 as quantity_svl,
                         sum(aml.balance) as aml_value,
@@ -104,13 +110,12 @@ class StockAccountingCheck(models.TransientModel):
                         {_select_aml}
                  from account_move_line as aml
                     where
-                            account_id = %(account)s and
                             parent_state = 'posted' and company_id = %(company)s {_where_aml}
-                 group by product_id
+                 group by product_id, account_id
                  ) as subq
 
 
-                 group by product_id
+                 group by product_id, account_id
                  {_having}
             """
 
@@ -294,7 +299,7 @@ class StockAccountingCheckLine(models.TransientModel):
 
     report_id = fields.Many2one("stock.accounting.check")
     product_id = fields.Many2one("product.product", string="Product")
-
+    account_id = fields.Many2one("account.account")
     standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price")
     purchase_price = fields.Monetary(currency_field="currency_id", string="Purchase Price")
 

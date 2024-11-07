@@ -74,7 +74,7 @@
                     <button name="action_sale" aria-label="Sale" title="Sale" type="object" icon="fa-sign-out" />
                 </header>
                 <field name="product_id" />
-
+                <field name="account_id" optional="hide" />
                 <field name="amount_svl" />
                 <button
                     name="action_slv_details"
@@ -92,11 +92,12 @@
                     type="object"
                     icon="fa-info-circle"
                 />
-                <field name="standard_price" />
+                <field name="standard_price" optional="hide" />
+                <field name="purchase_price" optional="hide" />
                 <field name="price_svl" decoration-danger="price_svl and standard_price != price_svl" />
                 <field name="price_aml" decoration-danger="price_aml and standard_price != price_aml" />
 
-                <field name="quantity" />
+                <field name="quantity" optional="hide" />
                 <field name="quantity_svl" decoration-danger="quantity != quantity_svl" />
                 <field name="quantity_aml" decoration-danger="quantity != quantity_aml" />
             </tree>
