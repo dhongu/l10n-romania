@@ -39,18 +39,22 @@ class StockMove(models.Model):
     def _create_reception_store_svl(self, forced_quantity=None):
         svl_values = self._get_in_svl_vals(forced_quantity)
         for svl_value in svl_values:
-            svl_value.update({
-                'l10n_ro_valued_type': "reception_store",
-            })
+            svl_value.update(
+                {
+                    "l10n_ro_valued_type": "reception_store",
+                }
+            )
         svls = self.env["stock.valuation.layer"].create(svl_values)
         return svls
 
     def _create_delivery_store_svl(self, forced_quantity=None):
         svl_values = self._get_out_svl_vals(forced_quantity)
         for svl_value in svl_values:
-            svl_value.update({
-                'l10n_ro_valued_type': "delivery_store",
-            })
+            svl_value.update(
+                {
+                    "l10n_ro_valued_type": "delivery_store",
+                }
+            )
         svls = self.env["stock.valuation.layer"].create(svl_values)
         return svls
 
@@ -78,7 +82,6 @@ class StockMove(models.Model):
 
         svl = self.env["stock.valuation.layer"].browse(svl_id)
 
-
         if not account_difference:
             raise UserError(
                 _("Please define a 'Price Difference Account' on the product category '%s'.")
@@ -90,12 +93,14 @@ class StockMove(models.Model):
         uneligible_tax = prices["total_included"] - prices["total_excluded"]
 
         svl_value = prices["total_included"] - cost
-        svl.write({
-            'value':svl_value,
-            'quantity': 0,
-            'remaining_qty': 0,
-            'remaining_value': svl_value,
-        })
+        svl.write(
+            {
+                "value": svl_value,
+                "quantity": 0,
+                "remaining_qty": 0,
+                "remaining_value": svl_value,
+            }
+        )
 
         self.l10n_ro_sale_price = sale_amount
         (
@@ -112,7 +117,7 @@ class StockMove(models.Model):
             0,
             description,
             svl_id,
-            sale_amount - cost,
+            (sale_amount - cost),
         )
 
         move_ids = self._prepare_account_move_line(
@@ -133,19 +138,21 @@ class StockMove(models.Model):
             )
 
         prices = self.product_id.taxes_id.compute_all(self.product_id.lst_price, quantity=qty)
+        standard_price = self.product_id.standard_price
         sale_amount = prices["total_excluded"]
         uneligible_tax = prices["total_included"] - prices["total_excluded"]
 
         svl = self.env["stock.valuation.layer"].browse(svl_id)
 
-        svl_value = prices["total_included"] - cost
-        svl.write({
-            'value':svl_value,
-            'quantity': 0,
-            'remaining_qty': 0,
-            'remaining_value': svl_value,
-        })
-
+        svl_value = prices["total_included"] - standard_price * qty
+        svl.write(
+            {
+                "value": svl_value,
+                "quantity": 0,
+                "remaining_qty": 0,
+                "remaining_value": svl_value,
+            }
+        )
 
         self.l10n_ro_sale_price = sale_amount
         (
@@ -162,11 +169,11 @@ class StockMove(models.Model):
             0,
             description,
             svl_id,
-            -1*(sale_amount - cost),
+            -1 * (sale_amount - standard_price * qty),
         )
 
         move_ids = self._prepare_account_move_line(
-            0, -1*(uneligible_tax), acc_valuation, uneligible_tax_account_id, svl_id, description
+            0, -1 * (uneligible_tax), acc_valuation, uneligible_tax_account_id, svl_id, description
         )
         am_vals["line_ids"] += move_ids
         return am_vals
