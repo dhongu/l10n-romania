@@ -9,5 +9,5 @@ class StockValuationLayer(models.Model):
     _inherit = "stock.valuation.layer"
 
     l10n_ro_valued_type = fields.Selection(
-        selection_add=[("reception_store", "reception_store"), ("delivery_store", "delivery_store")]
+        selection_add=[("reception_store", "Reception in store"), ("delivery_store", "Delivery from store")]
     )
