@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import _, api, fields, models
+from odoo import _, api, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -13,8 +13,6 @@ _logger = logging.getLogger(__name__)
 class StockMove(models.Model):
     _name = "stock.move"
     _inherit = ["stock.move", "l10n.ro.mixin"]
-
-    l10n_ro_sale_price = fields.Float()
 
     @api.model
     def _get_valued_types(self):
@@ -92,17 +90,17 @@ class StockMove(models.Model):
         sale_amount = prices["total_excluded"]
         uneligible_tax = prices["total_included"] - prices["total_excluded"]
 
-        svl_value = prices["total_included"] - cost
+        # svl_value = prices["total_included"] - cost
         svl.write(
             {
-                "value": svl_value,
+                "value": 0,
                 "quantity": 0,
                 "remaining_qty": 0,
-                "remaining_value": svl_value,
+                "remaining_value": 0,
+                "l10n_ro_sale_amount": prices["total_included"],
             }
         )
 
-        self.l10n_ro_sale_price = sale_amount
         (
             journal_id,
             acc_src,
@@ -144,17 +142,17 @@ class StockMove(models.Model):
 
         svl = self.env["stock.valuation.layer"].browse(svl_id)
 
-        svl_value = prices["total_included"] - standard_price * qty
+        # svl_value = prices["total_included"] - standard_price * qty
         svl.write(
             {
-                "value": svl_value,
+                "value": 0,
                 "quantity": 0,
                 "remaining_qty": 0,
-                "remaining_value": svl_value,
+                "remaining_value": 0,
+                "l10n_ro_sale_amount": prices["total_included"],
             }
         )
 
-        self.l10n_ro_sale_price = sale_amount
         (
             journal_id,
             acc_src,

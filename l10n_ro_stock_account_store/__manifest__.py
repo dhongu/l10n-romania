@@ -10,7 +10,9 @@
     "website": "https://github.com/OCA/l10n-romania",
     "depends": ["l10n_ro_stock_account"],
     "license": "AGPL-3",
-    "data": [],
+    "data": [
+        "views/stock_valuation_layer_view.xml",
+    ],
     "installable": True,
     "auto_install": False,
     "development_status": "Mature",
