@@ -67,13 +67,13 @@ class StockAccountingCheck(models.TransientModel):
             )
 
         if self.product_id:
-            _where_svl += "AND sm.product_id = %(product)s"
-            _where_aml += "AND aml.product_id = %(product)s"
+            _where_svl += " AND sm.product_id = %(product)s"
+            _where_aml += " AND aml.product_id = %(product)s"
             _having = ""
 
         if self.account_id:
-            _where_svl += "AND l10n_ro_account_id = %(account)s"
-            _where_aml += "AND account_id = %(account)s "
+            _where_svl += " AND l10n_ro_account_id = %(account)s"
+            _where_aml += " AND account_id = %(account)s "
 
 
         if self.line_details:
