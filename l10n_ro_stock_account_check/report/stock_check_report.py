@@ -75,7 +75,6 @@ class StockAccountingCheck(models.TransientModel):
             _where_svl += " AND l10n_ro_account_id = %(account)s"
             _where_aml += " AND account_id = %(account)s "
 
-
         if self.line_details:
             _select = ",jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids"
             _select_svl = ",array_agg(svl.id) as svl_ids, array[]::integer[] as aml_ids"
