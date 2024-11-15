@@ -10,43 +10,43 @@ from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
-class AccountStatementImport(models.TransientModel):
-    _inherit = "account.statement.import"
-
-    def _check_xlsx(self, filename):
-        return filename and filename.lower().strip().endswith(".xlsx")
-
-    def import_file(self):
-        # In case of CSV files, only one file can be imported at a time.
-        if len(self.attachment_ids) > 1:
-            xlsx = [bool(self._check_xlsx(att.name)) for att in self.attachment_ids]
-            if True in xlsx and False in xlsx:
-                raise UserError(_("Mixing xlsx files with other file types is not allowed."))
-            if xlsx.count(True) > 1:
-                raise UserError(_("Only one xlsx file can be selected."))
-            return super().import_file()
-
-        if not self._check_xlsx(self.attachment_ids.name):
-            return super().import_file()
-        ctx = dict(self.env.context)
-        import_wizard = self.env["base_import.import"].create(
-            {
-                "res_model": "account.bank.statement.line",
-                "file": base64.b64decode(self.attachment_ids.datas),
-                "file_name": self.attachment_ids.name,
-                "file_type": "xlsx",
-            }
-        )
-        ctx["wizard_id"] = import_wizard.id
-        return {
-            "type": "ir.actions.client",
-            "tag": "import_bank_stmt",
-            "params": {
-                "model": "account.bank.statement.line",
-                "context": ctx,
-                "filename": self.attachment_ids.name,
-            },
-        }
+# class AccountStatementImport(models.TransientModel):
+#     _inherit = "account.statement.import"
+#
+#     def _check_xlsx(self, filename):
+#         return filename and filename.lower().strip().endswith(".xlsx")
+#
+#     def import_file(self):
+#         # In case of CSV files, only one file can be imported at a time.
+#         if len(self.attachment_ids) > 1:
+#             xlsx = [bool(self._check_xlsx(att.name)) for att in self.attachment_ids]
+#             if True in xlsx and False in xlsx:
+#                 raise UserError(_("Mixing xlsx files with other file types is not allowed."))
+#             if xlsx.count(True) > 1:
+#                 raise UserError(_("Only one xlsx file can be selected."))
+#             return super().import_file()
+#
+#         if not self._check_xlsx(self.attachment_ids.name):
+#             return super().import_file()
+#         ctx = dict(self.env.context)
+#         import_wizard = self.env["base_import.import"].create(
+#             {
+#                 "res_model": "account.bank.statement.line",
+#                 "file": base64.b64decode(self.attachment_ids.datas),
+#                 "file_name": self.attachment_ids.name,
+#                 "file_type": "xlsx",
+#             }
+#         )
+#         ctx["wizard_id"] = import_wizard.id
+#         return {
+#             "type": "ir.actions.client",
+#             "tag": "import_bank_stmt",
+#             "params": {
+#                 "model": "account.bank.statement.line",
+#                 "context": ctx,
+#                 "filename": self.attachment_ids.name,
+#             },
+#         }
 
 
 class AccountBankStmtImportXLSX(models.TransientModel):
