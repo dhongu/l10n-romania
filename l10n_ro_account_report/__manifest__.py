@@ -5,7 +5,7 @@
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Romania Adaptation",
-    "depends": ["account", "date_range"],
+    "depends": ["account"],
     "data": [
         "views/account_report.xml",
         "views/report_bank_statement.xml",
