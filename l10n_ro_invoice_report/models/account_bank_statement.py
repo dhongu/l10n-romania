@@ -12,7 +12,7 @@ class AccountBankStatement(models.Model):
         required=True,
         readonly=True,
         copy=False,
-        tracking=True,
+
         selection=[
             ("open", "New"),
             ("posted", "Processing"),
