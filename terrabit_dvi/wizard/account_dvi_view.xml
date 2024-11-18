@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <data>
         <record id="view_account_invoice_dvi_form" model="ir.ui.view">
             <field name="name">DVI</field>
             <field name="model">account.invoice.dvi</field>
@@ -31,5 +30,4 @@
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
-    </data>
 </odoo>

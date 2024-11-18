@@ -13,7 +13,7 @@
         "deltatech_sale_store",
         "l10n_ro_edi",
     ],
-    "license": "OPL-1",
+    "license": "LGPL-3",
     "price": 25.00,
     "currency": "EUR",
     "data": [],

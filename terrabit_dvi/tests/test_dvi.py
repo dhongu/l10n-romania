@@ -171,7 +171,7 @@ class TestDVI(SavepointCase):
         action = invoice.button_dvi()
         wizard = self.env[(action.get("res_model"))].browse(action.get("res_id"))
 
-        wizard = Form(wizard.with_context({"active_id": invoice.id}))
+        wizard = Form(wizard.with_context(active_id=invoice.id))
         wizard.custom_duty = 5.0
         wizard.customs_commission = 6.0
         wizard.tax_value = wizard.tax_value + 1
