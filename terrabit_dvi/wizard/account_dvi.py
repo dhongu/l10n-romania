@@ -9,9 +9,9 @@ class AccountInvoiceDVI(models.TransientModel):
     _name = "account.invoice.dvi"
     _description = "account.invoice.dvi"
 
-    date = fields.Date("Date")
-    custom_duty = fields.Monetary(string="Custom Duty")  # costuri vamale
-    customs_commission = fields.Monetary(string="Customs Commission")  # comision vamal
+    date = fields.Date()
+    custom_duty = fields.Monetary()  # costuri vamale
+    customs_commission = fields.Monetary()  # comision vamal
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
     tax_value = fields.Monetary()

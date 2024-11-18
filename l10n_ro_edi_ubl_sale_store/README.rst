@@ -13,11 +13,14 @@ Deltatech Sale from Store UBL
 .. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
     :alt: Mature
-.. |badge2| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
+.. |badge2| image:: https://img.shields.io/badge/licence-LGPL--3-blue.png
+    :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
+    :alt: License: LGPL-3
+.. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/17.0/l10n_ro_edi_ubl_sale_store
     :alt: dhongu/l10n-romania
 
-|badge1| |badge2|
+|badge1| |badge2| |badge3|
 
 Features:
 

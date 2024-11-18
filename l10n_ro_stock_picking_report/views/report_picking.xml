@@ -12,7 +12,7 @@
                     </div>
                     <t t-set="res_company" t-value="o.company_id" />
                     <t t-set="warehouse" t-value="False" />
-                    <div t-if="o.picking_type_id.code=='outgoing'">
+                    <div t-if="o.picking_type_id.code in ['outgoing', 'internal']">
                          <t t-set="warehouse" t-value="o.location_id.warehouse_id" />
                     </div>
                     <div t-if="o.picking_type_id.code=='incoming'">
