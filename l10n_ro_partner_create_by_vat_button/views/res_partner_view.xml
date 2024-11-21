@@ -7,6 +7,19 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
+                <xpath expr="//div[@class='alert alert-warning oe_edit_only']" position="after">
+                    <field name="warning_companies" invisible="1" />
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                        style="margin-bottom:0px;"
+                        attrs="{'invisible': [('warning_companies','=', 'Missing:')]}"
+                    >
+                        <span>
+                            <field name="warning_companies" />
+                        </span>
+                    </div>
+                </xpath>
                 <xpath expr="//sheet" position="before">
                     <header>
                         <button

@@ -7,7 +7,7 @@ import logging
 
 from zeep import Client
 
-from odoo import _, api, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -16,6 +16,24 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    warning_companies = fields.Text(string="Warning", store=True, compute="_compute_warning_companies")
+
+    @api.depends("vat", "country_id", "street", "city", "state_id")
+    def _compute_warning_companies(self):
+        for partner in self:
+            partner.warning_companies = "Missing:"
+            if partner.is_company and partner.country_id and partner.country_id.code == "RO":
+                if not partner.vat:
+                    partner.warning_companies += " VAT,"
+                if not partner.street:
+                    partner.warning_companies += " Street,"
+                if not partner.city:
+                    partner.warning_companies += " City,"
+                if not partner.state_id:
+                    partner.warning_companies += " State,"
+                if partner.warning_companies.endswith(","):
+                    partner.warning_companies = partner.warning_companies[:-1] + "!"
+
     @api.constrains("vat", "country_id")
     def check_vat(self):
         if self.env.context.get("no_vat_validation"):
@@ -23,36 +41,38 @@ class ResPartner(models.Model):
         partners = self.filtered(lambda p: p.country_id.code != "RO")
         return super(ResPartner, partners).check_vat()
 
-    @api.model
-    def create(self, vals):
-        if "name" in vals and vals["name"]:
-            vat_number = vals["name"].lower().strip()
-            if "ro" in vat_number:
-                vat_number = vat_number.replace("ro", "")
-                if vat_number.isdigit():
-                    try:
-                        vals["vat"] = vals["name"]
-                        result = self._get_Anaf(vat_number)
-                        if result:
-                            res = self._Anaf_to_Odoo(result)
-                            vals.update(res)
-                    except Exception as e:
-                        _logger.info("ANAF Webservice not working. Exception: % s" % e)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if "name" in vals and vals["name"]:
+                vat_number = vals["name"].lower().strip()
+                if "ro" in vat_number:
+                    vat_number = vat_number.replace("ro", "")
+                    if vat_number.isdigit():
+                        try:
+                            vals["vat"] = vals["name"]
+                            result = self._get_Anaf(vat_number)
+                            if result:
+                                res = self._Anaf_to_Odoo(result)
+                                vals.update(res)
+                        except Exception as e:
+                            _logger.info("ANAF Webservice not working. Exception: % s" % e)
 
-        if vals.get("state_id") and not isinstance(vals["state_id"], int):
-            vals["state_id"] = vals["state_id"].id
+            if vals.get("state_id") and not isinstance(vals["state_id"], int):
+                vals["state_id"] = vals["state_id"].id
 
-        partner = super().create(vals)
-        return partner
+        res = super().create(vals_list)
+        return res
 
     def get_partner_data(self):
         if self.country_id and self.country_id.code != "RO":
             return False
         if self.name and not self.vat:
             self.vat = self.name
-        self.with_context(skip_ro_vat_change=False).ro_vat_change()
+        self.write({"is_l10n_ro_record": True})  # nu stiu daca e ok sa pun asta aici asta aici
+        res = self.with_context(skip_ro_vat_change=False).ro_vat_change()
 
-        return True
+        return res
         # self.onchange_vat_subjected()  # fortare compltare ro
 
     def get_partner_name_from_vies(self):

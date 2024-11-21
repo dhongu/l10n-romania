@@ -107,8 +107,7 @@ class ResPartner(models.Model):
                 try:
                     values = self._get_Openapi(vat_number)
                 except Exception as e:
-                    _logger.warning("OpenAPI interrogation failed:%s", str(e))
-                    values = {}
+                    return "OpenAPI interrogation failed:%s" % str(e)
 
                 if values:
                     if not values["l10n_ro_vat_subjected"]:
@@ -122,6 +121,7 @@ class ResPartner(models.Model):
                         self.active = False
                     if not self.phone:
                         self.phone = phone
+                return
 
             else:
                 try:
