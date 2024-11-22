@@ -45,7 +45,7 @@ class ResPartner(models.Model):
         }
 
         request = Request(
-            "https://api.openapi.ro/api/companies/%s" % cod,
+            f"https://api.openapi.ro/api/companies/{cod}",
             headers=headers,
         )
         response = urlopen(request, timeout=10)

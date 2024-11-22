@@ -38,7 +38,7 @@ class ResPartner(models.Model):
                                 res = self._Anaf_to_Odoo(result)
                                 vals.update(res)
                         except Exception as e:
-                            _logger.info("ANAF Webservice not working. Exception: % s" % e)
+                            _logger.info(f"ANAF Webservice not working. Exception: {e: }")
 
             if vals.get("state_id") and not isinstance(vals["state_id"], int):
                 vals["state_id"] = vals["state_id"].id
