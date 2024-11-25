@@ -69,7 +69,6 @@ class ResPartner(models.Model):
             return False
         if self.name and not self.vat:
             self.vat = self.name
-        self.write({"is_l10n_ro_record": True})  # nu stiu daca e ok sa pun asta aici asta aici
         res = self.with_context(skip_ro_vat_change=False).ro_vat_change()
 
         return res
