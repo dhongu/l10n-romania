@@ -13,7 +13,7 @@
         "deltatech_sale_store",
         "l10n_ro_account_edi_ubl",
     ],
-    "license": "OPL-1",
+    "license": "AGPL-3",
     "price": 25.00,
     "currency": "EUR",
     "data": [],
