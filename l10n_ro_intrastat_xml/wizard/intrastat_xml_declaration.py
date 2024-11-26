@@ -293,7 +293,7 @@ class IntrastatDeclaration(models.TransientModel):
         and inv.move_type in (%(mode1)s, %(mode2)s)
         and to_char(inv.invoice_date, 'YYYY')=%(year)s
         and to_char(inv.invoice_date, 'MM')=%(month)s
-        and exclude_from_invoice_tab = false
+        and display_type = 'product'
 
             """
 
