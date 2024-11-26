@@ -64,7 +64,7 @@
                            <!-- Attachment preview -->
                     <div class="o_attachment_preview" />
                     <!-- Chatter -->
-       <chatter/>
+       <chatter />
             </form>
         </field>
     </record>
