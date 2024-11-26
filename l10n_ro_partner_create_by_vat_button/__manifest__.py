@@ -19,4 +19,5 @@
         "wizard/get_data_form_view.xml",
         "views/res_partner_view.xml",
     ],
+    "sequence": 100,
 }
