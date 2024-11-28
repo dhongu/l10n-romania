@@ -1,4 +1,4 @@
-<?xml version="1.0"  ?>
+<?xml version="1.0" ?>
 <odoo>
 
     <template id="report_delivery" inherit_id="l10n_ro_stock_picking_report.report_delivery">
