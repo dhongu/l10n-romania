@@ -5,6 +5,9 @@
         <field name="model">l10n.ro.cash.register</field>
         <field name="arch" type="xml">
             <tree string="Cash Registers">
+                <header>
+                    <button name="action_refresh" string="Refresh" type="object" />
+                </header>
                 <field name="name" />
                 <field name="date" />
                 <field name="journal_id" />
