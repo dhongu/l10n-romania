@@ -196,13 +196,7 @@
                         <span t-field="d.name" />
                     </span>
                     <br />
-                    <div t-if="o.weight">
-                        <strong>Gross weight:</strong>
-                        <span t-field="o.weight" />
-                        <br />
-                        <strong>New weight:</strong>
-                        <span t-field="o.weight_net" />
-                    </div>
+
                 </div>
             </xpath>
 
