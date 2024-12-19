@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Get Partner Data">
                 <field name="state" invisible="1" />
-                <div invisible="state!='get'" >
+                <div invisible="state!='get'">
                     <div>
                         <p>Select service for partner:
                             <field name="partner_id" readonly="True" />
@@ -15,11 +15,11 @@
                         <field name="service" widget="radio" />
                     </div>
                 </div>
-                <div   invisible="state!='set'">
+                <div invisible="state!='set'">
                     <field name="status_message" readonly="True" />
                 </div>
                 <footer>
-                    <div     invisible="state!='get'">
+                    <div invisible="state!='get'">
                         <button
                             name="do_get_data"
                             string="Get Data"

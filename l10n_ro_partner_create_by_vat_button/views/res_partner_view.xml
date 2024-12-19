@@ -5,7 +5,7 @@
     <record id="view_partner_form" model="ir.ui.view">
         <field name="name">res.partner.vat.inherit</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
             <xpath expr="//div[@class='alert alert-warning oe_edit_only']" position="before">
                 <header>
@@ -17,16 +17,15 @@
                         type="action"
                     />
                 </header>
-                <field name="warning_companies" invisible="1"/>
+                <field name="warning_companies" invisible="1" />
                 <div
                     class="alert alert-danger"
                     role="alert"
                     style="margin-bottom:0px;"
                     invisible="not warning_companies"
-
                 >
                     <span>
-                        <field name="warning_companies"/>
+                        <field name="warning_companies" />
                     </span>
                 </div>
             </xpath>
@@ -37,10 +36,10 @@
     <record id="view_res_partner_filter" model="ir.ui.view">
         <field name="name">res.partner.select</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
         <field name="arch" type="xml">
             <field name="user_id" position="after">
-                <field name="vat"/>
+                <field name="vat" />
             </field>
         </field>
     </record>

@@ -42,7 +42,6 @@ class ResPartner(models.Model):
                 if missing:
                     partner.warning_companies = _("Missing: ") + ", ".join(missing)
 
-
     @api.constrains("vat", "country_id")
     def check_vat(self):
         if self.env.context.get("no_vat_validation"):
