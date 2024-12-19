@@ -132,7 +132,7 @@
                 </t>
             </t>
             <div class="page">
-                <div class="oe_structure" />
+
                 <h2 class="mt16">
                     <span>Pro-Forma Invoice #</span>
                     <span t-field="doc.name" />
@@ -144,10 +144,10 @@
                     <thead>
                         <tr>
                             <th name="th_description" class="text-left">Description</th>
-                            <th name="th_quantity" class="text-right">Quantity</th>
-                            <th name="th_priceunit" class="text-right">Unit Price</th>
-                            <th name="th_taxes" class="text-right">Taxes</th>
-                            <th name="th_subtotal" class="text-right">
+                            <th name="th_quantity" class="text-end">Quantity</th>
+                            <th name="th_priceunit" class="text-end">Unit Price</th>
+                            <th name="th_taxes" class="text-end">Taxes</th>
+                            <th name="th_subtotal" class="text-end">
                                 <t groups="account.group_show_line_subtotals_tax_excluded">Amount</t>
                                 <t groups="account.group_show_line_subtotals_tax_included">Total Price</t>
                             </th>
@@ -170,17 +170,17 @@
                                 <span>according to Order #</span>
                                 <span t-field="doc.name" />
                             </td>
-                            <td name="td_quantity" class="text-right">
+                            <td name="td_quantity" class="text-end">
                                 <span>1</span>
                             </td>
-                            <td name="td_priceunit" class="text-right">
+                            <td name="td_priceunit" class="text-end">
                                 <t t-set="untaxed_amount" t-value="doc.amount_untaxed * percent" />
                                 <span
                                     t-esc="untaxed_amount"
                                     t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"
                                 />
                             </td>
-                            <td name="td_taxes" class="text-right">
+                            <td name="td_taxes" class="text-end">
                                 <t t-set="amount_taxes" t-value="doc.amount_tax * percent" />
                                 <span
                                     t-esc="amount_taxes"
@@ -233,7 +233,7 @@
                                     <td name="td_amount_untaxed_label">
                                         <strong>Subtotal</strong>
                                     </td>
-                                    <td name="td_amount_untaxed" class="text-right">
+                                    <td name="td_amount_untaxed" class="text-end">
                                         <t t-set="untaxed_amount" t-value="doc.amount_untaxed * percent" />
                                         <span
                                             t-esc="untaxed_amount"
@@ -302,7 +302,7 @@
                                     <td name="td_amount_total_label">
                                         <strong>Total</strong>
                                     </td>
-                                    <td name="td_amount_total" class="text-right">
+                                    <td name="td_amount_total" class="text-end">
                                         <t t-set="total_amount" t-value="doc.amount_total * percent" />
                                         <span
                                             t-esc="total_amount"
