@@ -12,7 +12,7 @@ class GetPartnerData(models.TransientModel):
         string="Service",
     )
     state = fields.Selection(selection=[("get", "get"), ("set", "set")], default="get")
-    status_message = fields.Char()
+    status_message = fields.Html()
 
     def default_get(self, fields):
         res = super().default_get(fields)

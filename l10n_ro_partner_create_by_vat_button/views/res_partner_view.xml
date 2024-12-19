@@ -13,7 +13,7 @@
                         class="alert alert-danger"
                         role="alert"
                         style="margin-bottom:0px;"
-                        attrs="{'invisible': [('warning_companies','=', 'Missing:')]}"
+                        attrs="{'invisible': [('warning_companies','=',False)]}"
                     >
                         <span>
                             <field name="warning_companies" />

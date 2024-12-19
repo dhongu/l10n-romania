@@ -21,18 +21,22 @@ class ResPartner(models.Model):
     @api.depends("vat", "country_id", "street", "city", "state_id")
     def _compute_warning_companies(self):
         for partner in self:
-            partner.warning_companies = "Missing:"
+            partner.warning_companies = False
             if partner.is_company and partner.country_id and partner.country_id.code == "RO":
+                missing = []
                 if not partner.vat:
-                    partner.warning_companies += " VAT,"
+                    missing.append(_("VAT"))
                 if not partner.street:
-                    partner.warning_companies += " Street,"
+                    missing.append(_("Street"))
                 if not partner.city:
-                    partner.warning_companies += " City,"
+                    missing.append(_("City"))
                 if not partner.state_id:
-                    partner.warning_companies += " State,"
-                if partner.warning_companies.endswith(","):
-                    partner.warning_companies = partner.warning_companies[:-1] + "!"
+                    missing.append(_("State"))
+                if not partner.zip:
+                    missing.append(_("ZIP"))
+                if missing:
+                    partner.warning_companies = _("Missing: ") + ", ".join(missing)
+
 
     @api.constrains("vat", "country_id")
     def check_vat(self):
@@ -56,7 +60,7 @@ class ResPartner(models.Model):
                                 res = self._Anaf_to_Odoo(result)
                                 vals.update(res)
                         except Exception as e:
-                            _logger.info("ANAF Webservice not working. Exception: % s" % e)
+                            _logger.info(f"ANAF Webservice not working. Exception: {e}")
 
             if vals.get("state_id") and not isinstance(vals["state_id"], int):
                 vals["state_id"] = vals["state_id"].id
