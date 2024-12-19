@@ -8,7 +8,8 @@
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "Sale from store",
-    "category": "Generic Modules",
+    "countries": ["ro"],
+    "category": "Localization",
     "depends": [
         "deltatech_sale_store",
         "l10n_ro_edi",
