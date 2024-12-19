@@ -4,3 +4,4 @@
 
 
 from . import account_edi_xml_cius_ro
+from . import account_move
