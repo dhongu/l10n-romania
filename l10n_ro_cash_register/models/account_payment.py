@@ -9,7 +9,7 @@ class AccountPayment(models.Model):
         for payment in self:
             if payment.journal_id.type == "cash":
                 domain = [("journal_id", "=", payment.journal_id.id), ("date", "=", payment.date)]
-                cash_register = self.env["l10n.ro.cash.register"].search(domain, limit=1)
+                cash_register = self.env["l10n.ro.cash.register"].sudo().search(domain, limit=1)
                 if not cash_register:
                     cash_register.create(
                         {
