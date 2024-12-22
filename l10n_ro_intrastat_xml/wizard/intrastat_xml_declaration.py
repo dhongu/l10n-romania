@@ -348,7 +348,8 @@ class IntrastatDeclaration(models.TransientModel):
                 ModeOfTransport = invoice.transport_mode_id.code or company.transport_mode_id.code or False
 
             if not ModeOfTransport:
-                raise UserError(_("Invoice %s without Transport Mode") % invoice.name)
+                ModeOfTransport = '3'  # default value
+                #raise UserError(_("Invoice %s without Transport Mode") % invoice.name)
 
             DeliveryTerms = invoice.invoice_incoterm_id.code or company.incoterm_id.code or False
 
