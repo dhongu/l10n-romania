@@ -323,16 +323,22 @@ class IntrastatDeclaration(models.TransientModel):
                     intrastat_transaction = company.intrastat_transaction_id
             else:  # enterprise
                 intrastat_transaction = inv_line.intrastat_transaction_id
+                if not intrastat_transaction:
+                    inv_line._compute_intrastat_transaction_id()
+                    intrastat_transaction = inv_line.intrastat_transaction_id
 
             if not intrastat_transaction:
                 raise UserError(_("Invoice %s without Intrastat Trasaction") % invoice.name)
 
-            if intrastat_transaction.parent_id:
-                TrCodeA = intrastat_transaction.parent_id.code
-                TrCodeB = intrastat_transaction.code
-            else:
-                TrCodeA = intrastat_transaction.code
-                TrCodeB = ""
+            # if intrastat_transaction.parent_id:
+            #     TrCodeA = intrastat_transaction.parent_id.code
+            #     TrCodeB = intrastat_transaction.code
+            # else:
+            #     TrCodeA = intrastat_transaction.code
+            #     TrCodeB = ""
+
+            TrCodeA = intrastat_transaction.code
+            TrCodeB = ""
 
             if self.enterprise:
                 ModeOfTransport = (
@@ -368,16 +374,19 @@ class IntrastatDeclaration(models.TransientModel):
             else:
                 PartnerVatNr = ""
 
-            if inv_line.product_id.country_id:
-                OriginCountry = inv_line.product_id.country_id.code
-            else:
-                OriginCountry = Country
+            # if inv_line.product_id.country_id:
+            #     OriginCountry = inv_line.product_id.country_id.code
+            # else:
+            #     OriginCountry = Country
+
+            OriginCountry = inv_line.intrastat_product_origin_country_id.code
 
             # Check commodity codes
-            intrastat_id = inv_line.product_id.search_intrastat_code()
+            # intrastat_id = inv_line.product_id.search_intrastat_code()
+            intrastat_id = inv_line.product_id.intrastat_code_id
             if intrastat_id and intrastat_id.code:
                 Cn8Code = intrastat_id.code
-                suppl_unit_code = intrastat_id.suppl_unit_code
+                suppl_unit_code = intrastat_id.supplementary_unit
             else:
                 raise UserError(
                     _('Product "%s" has no intrastat code, please configure it') % inv_line.product_id.display_name
