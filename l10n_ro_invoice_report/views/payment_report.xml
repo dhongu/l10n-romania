@@ -22,7 +22,7 @@
                                 </div>
                                 <div class="col-5 col-offset-2">
                                     <div>
-                                        <strong>Client:</strong><br />
+                                        <strong>Customer:</strong><br />
                                         <strong t-field="o.partner_id.name" />
                                     </div>
                                     <div>
