@@ -315,6 +315,7 @@ class IntrastatDeclaration(models.TransientModel):
 
         for inv_line in invoice_lines:
             invoice = inv_line.move_id
+
             # Check type of transaction
             if "intrastat_transaction_id" in invoice._fields:
                 if invoice.intrastat_transaction_id:
@@ -324,6 +325,9 @@ class IntrastatDeclaration(models.TransientModel):
             else:  # enterprise
                 intrastat_transaction = inv_line.intrastat_transaction_id
                 if not intrastat_transaction:
+
+                    invoice._compute_intrastat_country_id()
+
                     inv_line._compute_intrastat_transaction_id()
                     intrastat_transaction = inv_line.intrastat_transaction_id
 
