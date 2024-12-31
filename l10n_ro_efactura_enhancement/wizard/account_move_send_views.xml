@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <data>
+
         <record model="ir.ui.view" id="account_move_send_inherit_l10n_ro_edi">
             <field name="name">account.move.send.form.inherit.l10n_ro_edi</field>
             <field name="model">account.move.send</field>
@@ -14,14 +14,14 @@
 
                 <xpath expr="//button[@name='action_send_and_print']" position="after">
                     <button
-                        name="action_resend"
-                        invisible="not l10n_ro_edi_resend_enable"
-                        string="Resend"
-                        type="object"
-                        class="btn-primary"
-                    />
+                    name="action_resend"
+                    invisible="not l10n_ro_edi_resend_enable"
+                    string="Resend"
+                    type="object"
+                    class="btn-primary"
+                />
                 </xpath>
             </field>
         </record>
-    </data>
+
 </odoo>
