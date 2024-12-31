@@ -325,7 +325,6 @@ class IntrastatDeclaration(models.TransientModel):
             else:  # enterprise
                 intrastat_transaction = inv_line.intrastat_transaction_id
                 if not intrastat_transaction:
-
                     invoice._compute_intrastat_country_id()
 
                     inv_line._compute_intrastat_transaction_id()
@@ -352,8 +351,8 @@ class IntrastatDeclaration(models.TransientModel):
                 ModeOfTransport = invoice.transport_mode_id.code or company.transport_mode_id.code or False
 
             if not ModeOfTransport:
-                ModeOfTransport = '3'  # default value
-                #raise UserError(_("Invoice %s without Transport Mode") % invoice.name)
+                ModeOfTransport = "3"  # default value
+                # raise UserError(_("Invoice %s without Transport Mode") % invoice.name)
 
             DeliveryTerms = invoice.invoice_incoterm_id.code or company.incoterm_id.code or False
 
