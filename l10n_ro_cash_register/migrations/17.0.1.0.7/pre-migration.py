@@ -1,5 +1,4 @@
 import logging
-from odoo.upgrade import util
 
 _logger = logging.getLogger(__name__)
 
@@ -12,4 +11,3 @@ def migrate(cr, version):
     cr.execute("""
         DROP INDEX IF EXISTS account_move_unique_name;
     """)
-
