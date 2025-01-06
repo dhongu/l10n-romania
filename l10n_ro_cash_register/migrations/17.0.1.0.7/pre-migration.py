@@ -8,6 +8,6 @@ def migrate(cr, version):
 
     # drop account_move_unique_name
 
-    cr.execute("""
-        DROP INDEX IF EXISTS account_move_unique_name;
-    """)
+    # cr.execute("""
+    #     DROP INDEX IF EXISTS account_move_unique_name;
+    # """)
