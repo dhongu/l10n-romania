@@ -4,7 +4,7 @@
         <field name="name">cash.register.tree</field>
         <field name="model">l10n.ro.cash.register</field>
         <field name="arch" type="xml">
-            <tree string="Cash Registers">
+            <tree>
                 <header>
                     <button name="action_refresh" string="Refresh" type="object" />
                 </header>
