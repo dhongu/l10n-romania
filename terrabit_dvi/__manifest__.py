@@ -4,6 +4,7 @@
     "name": "Romania - DVI",
     "license": "AGPL-3",
     "version": "17.0.1.0.0",
+    "countries": ["ro"],
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Warehouse",
