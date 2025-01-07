@@ -33,6 +33,7 @@ class StockAccountingCheck(models.TransientModel):
     check_stock_move = fields.Boolean()
 
     journal_id = fields.Many2one("account.journal")
+    picking_type_id = fields.Many2one("stock.picking.type")
 
     @api.model
     def default_get(self, fields_list):
@@ -340,10 +341,13 @@ class StockAccountingCheckLine(models.TransientModel):
     aml_ids = fields.Many2many("account.move.line")
 
     def _compute_price(self):
+
+
         for line in self:
             product = line.product_id
             standard_price = product.standard_price
-            line.quantity = product.qty_available
+            report = line.report_id
+            line.quantity = product.with_context(from_date=report.date_from, to_date=report.date_to).qty_available
             line.amount = line.quantity * standard_price
             if float_is_zero(line.quantity_svl, precision_digits=2):
                 line.price_svl = standard_price
@@ -499,7 +503,38 @@ class StockAccountingCheckLine(models.TransientModel):
             line.quantity_aml = line.quantity_svl
 
     def action_fix_svl(self):
-        pass
+
+        picking_vals = {
+            'picking_type_id': self.report_id.picking_type_id.id,
+            'state': 'done',
+            'location_id': self.report_id.picking_type_id.default_location_src_id.id,
+            'location_dest_id': self.report_id.picking_type_id.default_location_dest_id.id,
+            'company_id': self.report_id.company_id.id,
+        }
+        picking = self.env['stock.picking'].create(picking_vals)
+
+        for line in self:
+            if float_is_zero(line.quantity_svl, precision_digits=3) and line.amount_svl:
+                stock_move = self.env['stock.move'].create({
+                    'name': line.product_id.name,
+                    'product_id': line.product_id.id,
+                    'product_uom_qty': 0,
+                    'picking_id': picking.id,
+                    'location_id': picking.location_id.id,
+                    'location_dest_id': picking.location_dest_id.id,
+                })
+                svl_values = {
+                    'l10n_ro_valued_type': 'internal_transfer',
+                    "product_id": line.product_id.id,
+                    "value": -line.amount_svl,
+                    "quantity": 0,
+                    "stock_move_id": stock_move.id,
+                    "l10n_ro_account_id": line.account_id.id,
+                    "company_id": line.report_id.company_id.id,
+                    'create_date': line.report_id.date_to,
+                }
+                self.env["stock.valuation.layer"].create(svl_values)
+                line.write({"amount_svl": 0})
 
 
     def action_fix_cost_price(self):

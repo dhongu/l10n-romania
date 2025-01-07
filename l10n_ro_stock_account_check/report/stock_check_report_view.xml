@@ -25,6 +25,7 @@
                     <group string="Options">
                         <field name="line_details" />
                         <field name="journal_id" />
+                        <field name="picking_type_id" />
                     </group>
                     <group string="Checks">
                         <field name="check_purchase" />
@@ -53,13 +54,14 @@
         <field name="arch" type="xml">
             <tree edit="0" create="0" import="0">
                 <header>
-                    <button name="action_fix_aml"
-                        aria-label="Fix Account Move Line"
-                        string="Fix AML"
+
+                    <button name="action_fix_cost_price"
+                        aria-label="Fix CostPrice"
+                        string="Fix Cost Price"
 
                         type="object"
-                        icon="fa-wrench"
-                    />
+                        icon="fa-wrench"/>
+
                     <button name="action_fix_svl"
                         aria-label="Fix Stock Valuation Layer"
                         string="Fix SVL"
@@ -67,12 +69,14 @@
                         type="object"
                         icon="fa-wrench"
                     />
-                    <button name="action_fix_cost_price"
-                        aria-label="Fix CostPrice"
-                        string="Fix Cost Price"
+
+                    <button name="action_fix_aml"
+                        aria-label="Fix Account Move Line"
+                        string="Fix AML"
 
                         type="object"
-                        icon="fa-wrench"/>
+                        icon="fa-wrench"
+                    />
 
                     <button
                         name="action_purchase"
