@@ -5,6 +5,7 @@ import logging
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
+from odoo.tools.float_utils import float_is_zero, float_round
 from odoo.tools.misc import format_date
 
 _logger = logging.getLogger(__name__)
@@ -129,21 +130,32 @@ class StockAccountingCheck(models.TransientModel):
         self.env.cr.execute(query, params=params)  # pylint: disable=E8103
         lines = self.env.cr.dictfetchall()
         for line in lines:
-            product = self.env["product.product"].browse(line["product_id"])
-            line["standard_price"] = product.standard_price
-            line["quantity"] = product.qty_available
-            line["price_svl"] = line["amount_svl"] / line["quantity_svl"] if line["quantity_svl"] else 0
-            line["price_aml"] = line["amount_aml"] / line["quantity_aml"] if line["quantity_aml"] else 0
-
-            purchase_price = 0
-            if product.seller_ids:
-                seller = product.seller_ids[0]
-                purchase_price = seller.price
-                if seller.currency_id != self.company_id.currency_id:
-                    purchase_price = seller.currency_id._convert(
-                        purchase_price, self.company_id.currency_id, self.company_id, fields.Date.today()
-                    )
-            line["purchase_price"] = purchase_price
+            # product = self.env["product.product"].browse(line["product_id"])
+            # line["standard_price"] = product.standard_price
+            # line["quantity"] = product.qty_available
+            # line["price_svl"] = float_round( line["amount_svl"] / line["quantity_svl"] if line["quantity_svl"] else 0, 2)
+            # line["price_aml"] = float_round(line["amount_aml"] / line["quantity_aml"] if line["quantity_aml"] else 0, 2)
+            #
+            # # calcul abatere procentuala de la pretul standard
+            # if line["standard_price"]:
+            #     line["price_svl_deviation"] = float_round((line["price_svl"] - line["standard_price"]) / line["standard_price"] * 100, 2)
+            #     line["price_aml_deviation"] = float_round((line["price_aml"] - line["standard_price"]) / line["standard_price"] * 100, 2)
+            #
+            # # purchase_price = 0
+            #
+            # # if product.seller_ids:
+            # #     seller = product.seller_ids[0]
+            # #     purchase_price = seller.price
+            # #     if seller.currency_id != self.company_id.currency_id:
+            # #         purchase_price = seller.currency_id._convert(
+            # #             purchase_price, self.company_id.currency_id, self.company_id, fields.Date.today()
+            # #         )
+            # #         from_uom = seller.product_uom or product.uom_id
+            # #         to_uom = product.uom_id
+            # #         purchase_price = from_uom._compute_price(purchase_price, to_uom)
+            #
+            # # line["purchase_price"] = purchase_price
+            # line["purchase_price"] = product.last_purchase_price
 
             if self.line_details:
                 svl_ids = list(sum(line["svl_ids"], []))
@@ -299,13 +311,18 @@ class StockAccountingCheckLine(models.TransientModel):
     report_id = fields.Many2one("stock.accounting.check")
     product_id = fields.Many2one("product.product")
     account_id = fields.Many2one("account.account")
-    standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price")
-    purchase_price = fields.Monetary(currency_field="currency_id")
+    standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price", compute="_compute_price")
+    purchase_price = fields.Monetary(currency_field="currency_id", compute="_compute_price")
 
-    price_svl = fields.Monetary(currency_field="currency_id", string="Price SVL")
-    price_aml = fields.Monetary(currency_field="currency_id", string="Price AML")
+    amount = fields.Monetary(currency_field="currency_id", string="Amount", compute="_compute_price")
+    price_svl = fields.Monetary(currency_field="currency_id", string="Price SVL", compute="_compute_price")
 
-    quantity = fields.Float()
+    price_svl_deviation = fields.Float(string="Price SVL Deviation", compute="_compute_price")
+
+    price_aml = fields.Monetary(currency_field="currency_id", string="Price AML", compute="_compute_price")
+    price_aml_deviation = fields.Float(string="Price AML Deviation", compute="_compute_price")
+
+    quantity = fields.Float(compute="_compute_price")
     quantity_svl = fields.Float(string="Quantity SVL")
     quantity_aml = fields.Float(string="Quantity AML")
 
@@ -315,6 +332,31 @@ class StockAccountingCheckLine(models.TransientModel):
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
     svl_ids = fields.Many2many("stock.valuation.layer")
     aml_ids = fields.Many2many("account.move.line")
+
+    def _compute_price(self):
+        for line in self:
+            product = line.product_id
+            standard_price = product.standard_price
+            line.quantity = product.qty_available
+            line.amount = line.quantity * standard_price
+            if float_is_zero(line.quantity_svl, precision_digits=2):
+                line.price_svl = standard_price
+            else:
+                line.price_svl = float_round(line.amount_svl / line.quantity_svl, 2)
+
+            if float_is_zero(line.quantity_aml, precision_digits=2):
+                line.price_aml = standard_price
+            else:
+                line.price_aml = float_round(line.amount_aml / line.quantity_aml, 2)
+
+            if standard_price:
+                line.price_svl_deviation = float_round((line.price_svl - standard_price) / standard_price * 100, 2)
+                line.price_aml_deviation = float_round((line.price_aml - standard_price) / standard_price * 100, 2)
+            else:
+                line.price_svl_deviation = 0
+                line.price_aml_deviation = 0
+            line.purchase_price = product.last_purchase_price
+            line.standard_price = standard_price
 
     def action_slv_details(self):
         self.ensure_one()
@@ -345,9 +387,6 @@ class StockAccountingCheckLine(models.TransientModel):
         }
 
         return action
-
-    def get_general_buttons(self):
-        return []
 
     def action_purchase(self):
         stock_moves = self.env["stock.move"]
@@ -384,3 +423,18 @@ class StockAccountingCheckLine(models.TransientModel):
             "domain": [("id", "in", sales.ids)],
         }
         return action
+
+    def action_line_details(self):
+        details = self.report_id.copy({"line_details": True, "product_id": self.product_id.id})
+        # details = self.env["stock.accounting.check"].create(
+        #     {
+        #         "account_id": self.account_id.id,
+        #         "product_id": self.product_id.id,
+        #         "interval": True,
+        #         "line_details": True,
+        #         "date_from": self.report_id.date_from,
+        #         "date_to": self.report_id.date_to,
+        #     }
+        # )
+
+        return details.button_show_report()

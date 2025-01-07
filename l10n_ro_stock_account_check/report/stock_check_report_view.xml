@@ -6,14 +6,13 @@
         <field name="arch" type="xml">
             <form string="Report Options">
                 <group name="filters">
-                    <group>
+                    <group string="Filters">
                         <field name="account_id" />
-                         <field name="product_id" />
+                        <field name="product_id" />
                         <field name="company_id" invisible="1" />
 
                     </group>
                     <group name="date_range" string="Date">
-
                         <field
                             name="date_from"
                             string="Date"
@@ -21,16 +20,11 @@
                             options="{'end_date_field': 'date_to'}"
                         />
                         <field name="date_to" invisible="1" />
-
-
                     </group>
-
-
-                    <group>
-
+                    <group string="Options">
                         <field name="line_details" />
                     </group>
-                    <group>
+                    <group string="Checks">
                         <field name="check_purchase" />
                         <field name="check_sale" />
                         <field name="check_stock_move" />
@@ -85,14 +79,35 @@
                     type="object"
                     icon="fa-info-circle"
                 />
+                <field name="amount" optional="show" />
                 <field name="standard_price" optional="hide" />
                 <field name="purchase_price" optional="hide" />
                 <field name="price_svl" decoration-danger="price_svl and standard_price != price_svl" />
+                <field
+                    name="price_svl_deviation"
+                    decoration-warning="price_svl_deviation and price_svl_deviation &lt; 50"
+                    decoration-danger="price_svl_deviation &gt; 50"
+                    optional="hide"
+                />
                 <field name="price_aml" decoration-danger="price_aml and standard_price != price_aml" />
+                <field
+                    name="price_aml_deviation"
+                    decoration-warning="price_aml_deviation and price_aml_deviation &lt; 50"
+                    decoration-danger="price_aml_deviation &gt; 50"
+                    optional="hide"
+                />
 
                 <field name="quantity" optional="hide" />
                 <field name="quantity_svl" decoration-danger="quantity != quantity_svl" />
                 <field name="quantity_aml" decoration-danger="quantity != quantity_aml" />
+                <field name="currency_id" optional="hide" />
+                <button
+                    name="action_line_details"
+                    aria-label="Line Details"
+                    title="Line Details"
+                    type="object"
+                    icon="fa-info-circle"
+                />
             </tree>
         </field>
     </record>
