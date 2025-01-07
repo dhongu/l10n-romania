@@ -10,9 +10,10 @@
                         <field name="account_id" />
                         <field name="product_id" />
                         <field name="company_id" invisible="1" />
-
+                        <field name="interval" />
                     </group>
-                    <group name="date_range" string="Date">
+                    <group name="date_range" string="Date" invisible="not interval">
+
                         <field
                             name="date_from"
                             string="Date"
@@ -82,14 +83,14 @@
                 <field name="amount" optional="show" />
                 <field name="standard_price" optional="hide" />
                 <field name="purchase_price" optional="hide" />
-                <field name="price_svl" decoration-danger="price_svl and standard_price != price_svl" />
+                <field name="price_svl"   />
                 <field
                     name="price_svl_deviation"
                     decoration-warning="price_svl_deviation and price_svl_deviation &lt; 50"
                     decoration-danger="price_svl_deviation &gt; 50"
                     optional="hide"
                 />
-                <field name="price_aml" decoration-danger="price_aml and standard_price != price_aml" />
+                <field name="price_aml"  />
                 <field
                     name="price_aml_deviation"
                     decoration-warning="price_aml_deviation and price_aml_deviation &lt; 50"

@@ -21,7 +21,7 @@ class StockAccountingCheck(models.TransientModel):
     company_id = fields.Many2one("res.company", default=lambda self: self.env.company)
 
     product_id = fields.Many2one("product.product")
-    interval = fields.Boolean()
+    interval = fields.Boolean(default=True)
     line_details = fields.Boolean()
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
@@ -45,7 +45,8 @@ class StockAccountingCheck(models.TransientModel):
         today = fields.Date.context_today(self)
         today = fields.Date.from_string(today)
 
-        from_date = today + relativedelta(day=1, months=0, days=0)
+        from_date = '2020-01-01'
+        # from_date = today + relativedelta(day=1, months=0, days=0)
         to_date = today + relativedelta(day=1, months=1, days=-1)
 
         res["date_from"] = fields.Date.to_string(from_date)
@@ -425,16 +426,8 @@ class StockAccountingCheckLine(models.TransientModel):
         return action
 
     def action_line_details(self):
-        details = self.report_id.copy({"line_details": True, "product_id": self.product_id.id})
-        # details = self.env["stock.accounting.check"].create(
-        #     {
-        #         "account_id": self.account_id.id,
-        #         "product_id": self.product_id.id,
-        #         "interval": True,
-        #         "line_details": True,
-        #         "date_from": self.report_id.date_from,
-        #         "date_to": self.report_id.date_to,
-        #     }
-        # )
-
-        return details.button_show_report()
+        details = self.report_id.copy({
+            "line_details": True,
+            "product_id": self.product_id.id
+        })
+        return details.with_context(active_id=details.id).button_show_report()
