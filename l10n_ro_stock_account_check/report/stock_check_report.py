@@ -32,6 +32,8 @@ class StockAccountingCheck(models.TransientModel):
     check_sale = fields.Boolean()
     check_stock_move = fields.Boolean()
 
+    journal_id = fields.Many2one("account.journal")
+
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
@@ -45,8 +47,8 @@ class StockAccountingCheck(models.TransientModel):
         today = fields.Date.context_today(self)
         today = fields.Date.from_string(today)
 
-        from_date = '2020-01-01'
-        # from_date = today + relativedelta(day=1, months=0, days=0)
+
+        from_date = today + relativedelta(day=1, months=0, days=0, years=-10)
         to_date = today + relativedelta(day=1, months=1, days=-1)
 
         res["date_from"] = fields.Date.to_string(from_date)
@@ -300,6 +302,8 @@ class StockAccountingCheck(models.TransientModel):
                 format_date(self.env, self.date_from),
                 format_date(self.env, self.date_to),
             )
+        action["context"] = {'line_details': self.line_details}
+        action["domain"] = [("report_id", "=", self.id)]
         return action
 
 
@@ -310,6 +314,7 @@ class StockAccountingCheckLine(models.TransientModel):
     _rec_name = "product_id"
 
     report_id = fields.Many2one("stock.accounting.check")
+
     product_id = fields.Many2one("product.product")
     account_id = fields.Many2one("account.account")
     standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price", compute="_compute_price")
@@ -351,8 +356,8 @@ class StockAccountingCheckLine(models.TransientModel):
                 line.price_aml = float_round(line.amount_aml / line.quantity_aml, 2)
 
             if standard_price:
-                line.price_svl_deviation = float_round((line.price_svl - standard_price) / standard_price * 100, 2)
-                line.price_aml_deviation = float_round((line.price_aml - standard_price) / standard_price * 100, 2)
+                line.price_svl_deviation = abs(float_round((line.price_svl - standard_price) / standard_price * 100, 2))
+                line.price_aml_deviation = abs(float_round((line.price_aml - standard_price) / standard_price * 100, 2))
             else:
                 line.price_svl_deviation = 0
                 line.price_aml_deviation = 0
@@ -370,6 +375,7 @@ class StockAccountingCheckLine(models.TransientModel):
             "context": self.env.context,
             "res_model": "stock.valuation.layer",
             "domain": [("id", "in", self.svl_ids.ids)],
+            "target": "current",
         }
 
         return action
@@ -385,6 +391,7 @@ class StockAccountingCheckLine(models.TransientModel):
             "context": self.env.context,
             "res_model": "account.move.line",
             "domain": [("id", "in", self.aml_ids.ids)],
+            "target": "current",
         }
 
         return action
@@ -426,8 +433,75 @@ class StockAccountingCheckLine(models.TransientModel):
         return action
 
     def action_line_details(self):
-        details = self.report_id.copy({
+        report_detail = self.report_id.copy({
             "line_details": True,
             "product_id": self.product_id.id
         })
-        return details.with_context(active_id=details.id).button_show_report()
+        action = report_detail.with_context(active_id=report_detail.id).button_show_report()
+
+        action["target"] = "current"
+        return action
+
+
+    def action_fix_aml(self):
+        report = self.mapped("report_id")
+        account = report.account_id
+        account_move_values = {
+            "journal_id": report.journal_id.id,
+            "date": report.date_to,
+            "ref": _("Stock Accounting Adjustment"),
+            "line_ids": [],
+        }
+        aml = account_move_values["line_ids"]
+        total = 0
+        for line in self:
+            if line.amount_svl < 0:
+                continue
+
+            diff = line.amount_svl - line.amount_aml
+            qty = line.quantity_svl - line.quantity_aml
+            if not diff and not qty:
+                continue
+            total += diff
+            aml.append(
+                (
+                    0,
+                    0,
+                    {
+                        "account_id": account.id,
+                        "product_id": line.product_id.id,
+                        "name": _("Stock Accounting Adjustment"),
+                        "debit": diff,
+                        "credit": 0,
+                        'quantity': qty,
+                    },
+                )
+            )
+        if aml:
+            aml.append(
+                (
+                    0,
+                    0,
+                    {
+                        "account_id": account.id,
+                        "name": _("Stock Accounting Adjustment"),
+                        "debit": 0,
+                        "credit": total,
+                    },
+                )
+            )
+            account_move = self.env["account.move"].create(account_move_values)
+            account_move.action_post()
+        for line in self:
+            if line.amount_svl < 0:
+                continue
+            line.amount_aml = line.amount_svl
+            line.quantity_aml = line.quantity_svl
+
+    def action_fix_svl(self):
+        pass
+
+
+    def action_fix_cost_price(self):
+        for line in self:
+            line.product_id.with_context(disable_auto_svl=True).write({"standard_price": line.purchase_price})
