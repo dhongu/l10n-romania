@@ -512,31 +512,49 @@ class StockAccountingCheckLine(models.TransientModel):
             'company_id': self.report_id.company_id.id,
         }
         picking = self.env['stock.picking'].create(picking_vals)
-
+        move_count = 0
         for line in self:
-            if float_is_zero(line.quantity_svl, precision_digits=3) and line.amount_svl:
-                stock_move = self.env['stock.move'].create({
-                    'name': line.product_id.name,
-                    'product_id': line.product_id.id,
-                    'product_uom_qty': 0,
-                    'picking_id': picking.id,
-                    'location_id': picking.location_id.id,
-                    'location_dest_id': picking.location_dest_id.id,
-                })
-                svl_values = {
-                    'l10n_ro_valued_type': 'internal_transfer',
-                    "product_id": line.product_id.id,
-                    "value": -line.amount_svl,
-                    "quantity": 0,
-                    "stock_move_id": stock_move.id,
-                    "l10n_ro_account_id": line.account_id.id,
-                    "company_id": line.report_id.company_id.id,
-                    'create_date': line.report_id.date_to,
-                }
-                self.env["stock.valuation.layer"].create(svl_values)
-                line.write({"amount_svl": 0})
+            post_date = line.report_id.date_to - relativedelta(hour=12)
+            diff = float_round(line.amount - line.amount_svl, 2)
+            qty = float_round(line.quantity - line.quantity_svl, 2)
+
+            if not diff and not qty:
+                continue
+
+            stock_move = self.env['stock.move'].create({
+                'name': line.product_id.name,
+                'date': post_date,
+                'product_id': line.product_id.id,
+                'product_uom_qty': qty,
+                'picking_id': picking.id,
+                'location_id': picking.location_id.id,
+                'location_dest_id': picking.location_dest_id.id,
+                'company_id': line.report_id.company_id.id,
+                'state': 'done',
+            })
+
+            svl_values = {
+                'l10n_ro_valued_type': 'internal_transfer',
+                "product_id": line.product_id.id,
+                "value": diff,
+                "quantity": qty,
+                "stock_move_id": stock_move.id,
+                "l10n_ro_account_id": line.account_id.id,
+                "company_id": line.report_id.company_id.id,
+                'create_date': post_date,
+            }
+            self.env["stock.valuation.layer"].create(svl_values)
+            line.write({"amount_svl": line.amount, "quantity_svl": line.quantity})
+            move_count += 1
+
+        if not move_count:
+            picking.unlink()
+        else:
+            picking.write({'state': 'done'})
 
 
     def action_fix_cost_price(self):
         for line in self:
+            if not line.purchase_price:
+                continue
             line.product_id.with_context(disable_auto_svl=True).write({"standard_price": line.purchase_price})
