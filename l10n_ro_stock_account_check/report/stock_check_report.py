@@ -114,6 +114,7 @@ class StockAccountingCheck(models.TransientModel):
                         {_select_aml}
                  from account_move_line as aml
                     where
+                            product_id is not null and
                             parent_state = 'posted' and company_id = %(company)s {_where_aml}
                  group by product_id, account_id
                  ) as subq
@@ -341,9 +342,8 @@ class StockAccountingCheckLine(models.TransientModel):
     aml_ids = fields.Many2many("account.move.line")
 
     def _compute_price(self):
-
-
         for line in self:
+
             product = line.product_id
             standard_price = product.standard_price
             report = line.report_id
@@ -449,7 +449,7 @@ class StockAccountingCheckLine(models.TransientModel):
 
     def action_fix_aml(self):
         report = self.mapped("report_id")
-        account = report.account_id
+
         account_move_values = {
             "journal_id": report.journal_id.id,
             "date": report.date_to,
@@ -459,9 +459,7 @@ class StockAccountingCheckLine(models.TransientModel):
         aml = account_move_values["line_ids"]
         total = 0
         for line in self:
-            if line.amount_svl < 0:
-                continue
-
+            account = line.account_id
             diff = line.amount_svl - line.amount_aml
             qty = line.quantity_svl - line.quantity_aml
             if not diff and not qty:
@@ -497,8 +495,6 @@ class StockAccountingCheckLine(models.TransientModel):
             account_move = self.env["account.move"].create(account_move_values)
             account_move.action_post()
         for line in self:
-            if line.amount_svl < 0:
-                continue
             line.amount_aml = line.amount_svl
             line.quantity_aml = line.quantity_svl
 
@@ -528,13 +524,13 @@ class StockAccountingCheckLine(models.TransientModel):
                 'product_uom_qty': qty,
                 'picking_id': picking.id,
                 'location_id': picking.location_id.id,
-                'location_dest_id': picking.location_dest_id.id,
+                'location_dest_id': line.product_id.property_stock_inventory.id,
                 'company_id': line.report_id.company_id.id,
                 'state': 'done',
             })
 
             svl_values = {
-                'l10n_ro_valued_type': 'internal_transfer',
+                'l10n_ro_valued_type': 'plus_inventory' if diff > 0 else 'minus_inventory',
                 "product_id": line.product_id.id,
                 "value": diff,
                 "quantity": qty,
@@ -552,6 +548,69 @@ class StockAccountingCheckLine(models.TransientModel):
         else:
             picking.write({'state': 'done'})
 
+    def action_move_svl_to_product_account(self):
+        picking_vals = {
+            'picking_type_id': self.report_id.picking_type_id.id,
+            'state': 'done',
+            'location_id': self.report_id.picking_type_id.default_location_src_id.id,
+            'location_dest_id': self.report_id.picking_type_id.default_location_dest_id.id,
+            'company_id': self.report_id.company_id.id,
+        }
+        picking = self.env['stock.picking'].create(picking_vals)
+        move_count = 0
+        for line in self:
+            post_date = line.report_id.date_to - relativedelta(hour=12)
+            diff = -line.amount_svl
+            qty = -line.quantity_svl
+
+            if not diff and not qty:
+                continue
+
+            account = line.product_id.l10n_ro_property_stock_valuation_account_id or line.product_id.categ_id.property_stock_valuation_account_id
+
+            stock_move = self.env['stock.move'].create({
+                'name': line.product_id.name,
+                'date': post_date,
+                'product_id': line.product_id.id,
+                'product_uom_qty': qty,
+                'picking_id': picking.id,
+                'location_id': picking.location_id.id,
+                'location_dest_id': line.product_id.property_stock_inventory.id,
+                'company_id': line.report_id.company_id.id,
+                'state': 'done',
+            })
+
+            svl_values = {
+                'l10n_ro_valued_type': 'plus_inventory' if diff > 0 else 'minus_inventory',
+                "product_id": line.product_id.id,
+                "value": diff,
+                "quantity": qty,
+                "stock_move_id": stock_move.id,
+                "l10n_ro_account_id": line.account_id.id,
+                "company_id": line.report_id.company_id.id,
+                'create_date': post_date,
+            }
+            self.env["stock.valuation.layer"].create(svl_values)
+
+            svl_values = {
+                'l10n_ro_valued_type': 'plus_inventory' if diff < 0 else 'minus_inventory',
+                "product_id": line.product_id.id,
+                "value": -diff,
+                "quantity": -qty,
+                "stock_move_id": stock_move.id,
+                "l10n_ro_account_id": account.id,
+                "company_id": line.report_id.company_id.id,
+                'create_date': post_date,
+            }
+
+            self.env["stock.valuation.layer"].create(svl_values)
+            line.write({"amount_svl": line.amount, "quantity_svl": line.quantity})
+            move_count += 1
+
+        if not move_count:
+            picking.unlink()
+        else:
+            picking.write({'state': 'done'})
 
     def action_fix_cost_price(self):
         for line in self:

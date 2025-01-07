@@ -78,6 +78,12 @@
                         icon="fa-wrench"
                     />
 
+                    <button name="action_move_svl_to_product_account"
+                        string="Move SLV on Product Account"
+                        type="object"
+                        confirmation="Are you sure you want to move the Stock Valuation Layer to the Product Account?"
+                    />
+
                     <button
                         name="action_purchase"
                         aria-label="Purchase"
