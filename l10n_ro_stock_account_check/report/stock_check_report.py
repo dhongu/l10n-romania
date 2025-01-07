@@ -76,9 +76,17 @@ class StockAccountingCheck(models.TransientModel):
             _where_aml += " AND aml.product_id = %(product)s"
             _having = ""
 
+        accounts = self.env["account.account"].search([("code", "=like", "3%")])
+        # accounts |= self.env["account.account"].search([("code", "like", "408%")])
+
         if self.account_id:
             _where_svl += " AND l10n_ro_account_id = %(account)s"
             _where_aml += " AND account_id = %(account)s "
+        else:
+            _where_svl += f" AND l10n_ro_account_id in %(accounts)s"
+            _where_aml += f" AND account_id in %(accounts)s"
+
+
 
         if self.line_details:
             _select = ",jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids"
@@ -115,7 +123,9 @@ class StockAccountingCheck(models.TransientModel):
                  from account_move_line as aml
                     where
                             product_id is not null and
-                            parent_state = 'posted' and company_id = %(company)s {_where_aml}
+                            parent_state = 'posted' and
+                            company_id = %(company)s
+                            {_where_aml}
                  group by product_id, account_id
                  ) as subq
 
@@ -128,6 +138,7 @@ class StockAccountingCheck(models.TransientModel):
             "report": self.id,
             "company": self.company_id.id,
             "account": self.account_id.id,
+            "accounts": tuple(accounts.ids),
             "date_from": fields.Date.to_string(self.date_from),
             "date_to": fields.Date.to_string(self.date_to),
             "product": self.product_id.id,
@@ -439,7 +450,8 @@ class StockAccountingCheckLine(models.TransientModel):
     def action_line_details(self):
         report_detail = self.report_id.copy({
             "line_details": True,
-            "product_id": self.product_id.id
+            "product_id": self.product_id.id,
+            "account_id": self.account_id.id,
         })
         action = report_detail.with_context(active_id=report_detail.id).button_show_report()
 
@@ -539,7 +551,8 @@ class StockAccountingCheckLine(models.TransientModel):
                 "company_id": line.report_id.company_id.id,
                 'create_date': post_date,
             }
-            self.env["stock.valuation.layer"].create(svl_values)
+            svl = self.env["stock.valuation.layer"].create(svl_values)
+            svl.write({"l10n_ro_account_id": line.account_id.id})
             line.write({"amount_svl": line.amount, "quantity_svl": line.quantity})
             move_count += 1
 
@@ -563,10 +576,10 @@ class StockAccountingCheckLine(models.TransientModel):
             diff = -line.amount_svl
             qty = -line.quantity_svl
 
-            if not diff and not qty:
-                continue
-
             account = line.product_id.l10n_ro_property_stock_valuation_account_id or line.product_id.categ_id.property_stock_valuation_account_id
+
+            if account == line.account_id:
+                continue
 
             stock_move = self.env['stock.move'].create({
                 'name': line.product_id.name,
@@ -590,7 +603,8 @@ class StockAccountingCheckLine(models.TransientModel):
                 "company_id": line.report_id.company_id.id,
                 'create_date': post_date,
             }
-            self.env["stock.valuation.layer"].create(svl_values)
+            svl = self.env["stock.valuation.layer"].create(svl_values)
+            svl.write({"l10n_ro_account_id": line.account_id.id})
 
             svl_values = {
                 'l10n_ro_valued_type': 'plus_inventory' if diff < 0 else 'minus_inventory',
@@ -603,8 +617,9 @@ class StockAccountingCheckLine(models.TransientModel):
                 'create_date': post_date,
             }
 
-            self.env["stock.valuation.layer"].create(svl_values)
-            line.write({"amount_svl": line.amount, "quantity_svl": line.quantity})
+            svl = self.env["stock.valuation.layer"].create(svl_values)
+            svl.write({"l10n_ro_account_id": line.account_id.id})
+            line.write({"amount_svl": 0, "quantity_svl": 0})
             move_count += 1
 
         if not move_count:
