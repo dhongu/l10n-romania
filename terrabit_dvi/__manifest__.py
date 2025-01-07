@@ -7,7 +7,7 @@
     "countries": ["ro"],
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
-    "category": "Warehouse",
+    "category": "Localization",
     "depends": [
         "stock_account",
         "account",

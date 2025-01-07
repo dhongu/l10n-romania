@@ -8,7 +8,8 @@
     "version": "17.0.1.0.1",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
-    "category": "Generic Modules",
+    "category": "Localization",
+    "countries": ["ro"],
     "depends": ["l10n_ro_stock_picking_report", "product_expiry"],
     "data": [
         "views/report_picking.xml",

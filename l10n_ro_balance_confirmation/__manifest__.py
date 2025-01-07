@@ -3,6 +3,7 @@
     "name": "Romania - balance confirmation",
     "version": "17.0.0.0.4",
     "category": "Localization",
+    "countries": ["ro"],
     "summary": "Generate balance confirmation for partners",
     "author": "Dan Stoica," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",

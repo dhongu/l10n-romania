@@ -4,7 +4,8 @@
     "version": "17.0.1.0.1",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
-    "category": "Romania Adaptation",
+    "category": "Localization",
+    "countries": ["ro"],
     "depends": ["account", "date_range"],
     "data": [
         "views/account_report.xml",

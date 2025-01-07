@@ -6,7 +6,8 @@
     "version": "17.0.0.1.1",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
-    "category": "Tools",
+    "category": "Localization",
+    "countries": ["ro"],
     "depends": [
         "account",
         # "l10n_ro_account_edi_ubl",
