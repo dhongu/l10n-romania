@@ -17,15 +17,15 @@
                         type="action"
                     />
                 </header>
-                <field name="warning_companies" invisible="1" />
+                <field name="warning_message" invisible="1" />
                 <div
                     class="alert alert-danger"
                     role="alert"
                     style="margin-bottom:0px;"
-                    invisible="not warning_companies"
+                    invisible="not warning_message"
                 >
                     <span>
-                        <field name="warning_companies" />
+                        <field name="warning_message" />
                     </span>
                 </div>
             </xpath>

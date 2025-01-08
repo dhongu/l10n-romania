@@ -16,15 +16,15 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    warning_companies = fields.Text(string="Warning", store=True, compute="_compute_warning_companies")
+    warning_message = fields.Text(string="Warning",  compute="_compute_warning_message")
 
     @api.depends("vat", "country_id", "street", "city", "state_id")
-    def _compute_warning_companies(self):
+    def _compute_warning_message(self):
         for partner in self:
-            partner.warning_companies = False
-            if partner.is_company and partner.country_id and partner.country_id.code == "RO":
+            partner.warning_message = False
+            if partner.country_id and partner.country_id.code == "RO":
                 missing = []
-                if not partner.vat:
+                if not partner.vat and partner.is_company:
                     missing.append(_("VAT"))
 
                 if not partner.street:
@@ -40,7 +40,7 @@ class ResPartner(models.Model):
                     missing.append(_("ZIP"))
 
                 if missing:
-                    partner.warning_companies = _("Missing: ") + ", ".join(missing)
+                    partner.warning_message = _("Missing: ") + ", ".join(missing)
 
     @api.constrains("vat", "country_id")
     def check_vat(self):
