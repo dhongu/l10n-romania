@@ -26,19 +26,14 @@ class ResPartner(models.Model):
                 missing = []
                 if not partner.vat and partner.is_company:
                     missing.append(_("VAT"))
-
                 if not partner.street:
                     missing.append(_("Street"))
-
                 if not partner.city:
                     missing.append(_("City"))
-
                 if not partner.state_id:
                     missing.append(_("State"))
-
                 if not partner.zip:
                     missing.append(_("ZIP"))
-
                 if missing:
                     partner.warning_message = _("Missing: ") + ", ".join(missing)
 
