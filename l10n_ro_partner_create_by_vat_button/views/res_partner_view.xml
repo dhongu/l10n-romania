@@ -8,15 +8,15 @@
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
                 <xpath expr="//div[@class='alert alert-warning oe_edit_only']" position="after">
-                    <field name="warning_companies" invisible="1" />
+                    <field name="warning_message" invisible="1" />
                     <div
                         class="alert alert-danger"
                         role="alert"
                         style="margin-bottom:0px;"
-                        attrs="{'invisible': [('warning_companies','=',False)]}"
+                        attrs="{'invisible': [('warning_message','=',False)]}"
                     >
                         <span>
-                            <field name="warning_companies" />
+                            <field name="warning_message" />
                         </span>
                     </div>
                 </xpath>
