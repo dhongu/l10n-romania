@@ -48,7 +48,6 @@ class StockAccountingCheck(models.TransientModel):
         today = fields.Date.context_today(self)
         today = fields.Date.from_string(today)
 
-
         from_date = today + relativedelta(day=1, months=0, days=0, years=-10)
         to_date = today + relativedelta(day=1, months=1, days=-1)
 
@@ -83,10 +82,8 @@ class StockAccountingCheck(models.TransientModel):
             _where_svl += " AND l10n_ro_account_id = %(account)s"
             _where_aml += " AND account_id = %(account)s "
         else:
-            _where_svl += f" AND l10n_ro_account_id in %(accounts)s"
-            _where_aml += f" AND account_id in %(accounts)s"
-
-
+            _where_svl += " AND l10n_ro_account_id in %(accounts)s"
+            _where_aml += " AND account_id in %(accounts)s"
 
         if self.line_details:
             _select = ",jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids"
@@ -315,7 +312,7 @@ class StockAccountingCheck(models.TransientModel):
                 format_date(self.env, self.date_from),
                 format_date(self.env, self.date_to),
             )
-        action["context"] = {'line_details': self.line_details}
+        action["context"] = {"line_details": self.line_details}
         action["domain"] = [("report_id", "=", self.id)]
         return action
 
@@ -354,7 +351,6 @@ class StockAccountingCheckLine(models.TransientModel):
 
     def _compute_price(self):
         for line in self:
-
             product = line.product_id
             standard_price = product.standard_price
             report = line.report_id
@@ -448,16 +444,17 @@ class StockAccountingCheckLine(models.TransientModel):
         return action
 
     def action_line_details(self):
-        report_detail = self.report_id.copy({
-            "line_details": True,
-            "product_id": self.product_id.id,
-            "account_id": self.account_id.id,
-        })
+        report_detail = self.report_id.copy(
+            {
+                "line_details": True,
+                "product_id": self.product_id.id,
+                "account_id": self.account_id.id,
+            }
+        )
         action = report_detail.with_context(active_id=report_detail.id).button_show_report()
 
         action["target"] = "current"
         return action
-
 
     def action_fix_aml(self):
         report = self.mapped("report_id")
@@ -487,7 +484,7 @@ class StockAccountingCheckLine(models.TransientModel):
                         "name": _("Stock Accounting Adjustment"),
                         "debit": diff,
                         "credit": 0,
-                        'quantity': qty,
+                        "quantity": qty,
                     },
                 )
             )
@@ -511,15 +508,14 @@ class StockAccountingCheckLine(models.TransientModel):
             line.quantity_aml = line.quantity_svl
 
     def action_fix_svl(self):
-
         picking_vals = {
-            'picking_type_id': self.report_id.picking_type_id.id,
-            'state': 'done',
-            'location_id': self.report_id.picking_type_id.default_location_src_id.id,
-            'location_dest_id': self.report_id.picking_type_id.default_location_dest_id.id,
-            'company_id': self.report_id.company_id.id,
+            "picking_type_id": self.report_id.picking_type_id.id,
+            "state": "done",
+            "location_id": self.report_id.picking_type_id.default_location_src_id.id,
+            "location_dest_id": self.report_id.picking_type_id.default_location_dest_id.id,
+            "company_id": self.report_id.company_id.id,
         }
-        picking = self.env['stock.picking'].create(picking_vals)
+        picking = self.env["stock.picking"].create(picking_vals)
         move_count = 0
         for line in self:
             post_date = line.report_id.date_to - relativedelta(hour=12)
@@ -529,27 +525,29 @@ class StockAccountingCheckLine(models.TransientModel):
             if not diff and not qty:
                 continue
 
-            stock_move = self.env['stock.move'].create({
-                'name': line.product_id.name,
-                'date': post_date,
-                'product_id': line.product_id.id,
-                'product_uom_qty': qty,
-                'picking_id': picking.id,
-                'location_id': picking.location_id.id,
-                'location_dest_id': line.product_id.property_stock_inventory.id,
-                'company_id': line.report_id.company_id.id,
-                'state': 'done',
-            })
+            stock_move = self.env["stock.move"].create(
+                {
+                    "name": line.product_id.name,
+                    "date": post_date,
+                    "product_id": line.product_id.id,
+                    "product_uom_qty": qty,
+                    "picking_id": picking.id,
+                    "location_id": picking.location_id.id,
+                    "location_dest_id": line.product_id.property_stock_inventory.id,
+                    "company_id": line.report_id.company_id.id,
+                    "state": "done",
+                }
+            )
 
             svl_values = {
-                'l10n_ro_valued_type': 'plus_inventory' if diff > 0 else 'minus_inventory',
+                "l10n_ro_valued_type": "plus_inventory" if diff > 0 else "minus_inventory",
                 "product_id": line.product_id.id,
                 "value": diff,
                 "quantity": qty,
                 "stock_move_id": stock_move.id,
                 "l10n_ro_account_id": line.account_id.id,
                 "company_id": line.report_id.company_id.id,
-                'create_date': post_date,
+                "create_date": post_date,
             }
             svl = self.env["stock.valuation.layer"].create(svl_values)
             svl.write({"l10n_ro_account_id": line.account_id.id})
@@ -559,62 +557,67 @@ class StockAccountingCheckLine(models.TransientModel):
         if not move_count:
             picking.unlink()
         else:
-            picking.write({'state': 'done'})
+            picking.write({"state": "done"})
 
     def action_move_svl_to_product_account(self):
         picking_vals = {
-            'picking_type_id': self.report_id.picking_type_id.id,
-            'state': 'done',
-            'location_id': self.report_id.picking_type_id.default_location_src_id.id,
-            'location_dest_id': self.report_id.picking_type_id.default_location_dest_id.id,
-            'company_id': self.report_id.company_id.id,
+            "picking_type_id": self.report_id.picking_type_id.id,
+            "state": "done",
+            "location_id": self.report_id.picking_type_id.default_location_src_id.id,
+            "location_dest_id": self.report_id.picking_type_id.default_location_dest_id.id,
+            "company_id": self.report_id.company_id.id,
         }
-        picking = self.env['stock.picking'].create(picking_vals)
+        picking = self.env["stock.picking"].create(picking_vals)
         move_count = 0
         for line in self:
             post_date = line.report_id.date_to - relativedelta(hour=12)
             diff = -line.amount_svl
             qty = -line.quantity_svl
 
-            account = line.product_id.l10n_ro_property_stock_valuation_account_id or line.product_id.categ_id.property_stock_valuation_account_id
+            account = (
+                line.product_id.l10n_ro_property_stock_valuation_account_id
+                or line.product_id.categ_id.property_stock_valuation_account_id
+            )
 
             if account == line.account_id:
                 continue
 
-            stock_move = self.env['stock.move'].create({
-                'name': line.product_id.name,
-                'date': post_date,
-                'product_id': line.product_id.id,
-                'product_uom_qty': qty,
-                'picking_id': picking.id,
-                'location_id': picking.location_id.id,
-                'location_dest_id': line.product_id.property_stock_inventory.id,
-                'company_id': line.report_id.company_id.id,
-                'state': 'done',
-            })
+            stock_move = self.env["stock.move"].create(
+                {
+                    "name": line.product_id.name,
+                    "date": post_date,
+                    "product_id": line.product_id.id,
+                    "product_uom_qty": qty,
+                    "picking_id": picking.id,
+                    "location_id": picking.location_id.id,
+                    "location_dest_id": line.product_id.property_stock_inventory.id,
+                    "company_id": line.report_id.company_id.id,
+                    "state": "done",
+                }
+            )
 
             svl_values = {
-                'l10n_ro_valued_type': 'plus_inventory' if diff > 0 else 'minus_inventory',
+                "l10n_ro_valued_type": "plus_inventory" if diff > 0 else "minus_inventory",
                 "product_id": line.product_id.id,
                 "value": diff,
                 "quantity": qty,
                 "stock_move_id": stock_move.id,
                 "l10n_ro_account_id": line.account_id.id,
                 "company_id": line.report_id.company_id.id,
-                'create_date': post_date,
+                "create_date": post_date,
             }
             svl = self.env["stock.valuation.layer"].create(svl_values)
             svl.write({"l10n_ro_account_id": line.account_id.id})
 
             svl_values = {
-                'l10n_ro_valued_type': 'plus_inventory' if diff < 0 else 'minus_inventory',
+                "l10n_ro_valued_type": "plus_inventory" if diff < 0 else "minus_inventory",
                 "product_id": line.product_id.id,
                 "value": -diff,
                 "quantity": -qty,
                 "stock_move_id": stock_move.id,
                 "l10n_ro_account_id": account.id,
                 "company_id": line.report_id.company_id.id,
-                'create_date': post_date,
+                "create_date": post_date,
             }
 
             svl = self.env["stock.valuation.layer"].create(svl_values)
@@ -625,7 +628,7 @@ class StockAccountingCheckLine(models.TransientModel):
         if not move_count:
             picking.unlink()
         else:
-            picking.write({'state': 'done'})
+            picking.write({"state": "done"})
 
     def action_fix_cost_price(self):
         for line in self:

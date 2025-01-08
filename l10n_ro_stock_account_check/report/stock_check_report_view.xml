@@ -55,33 +55,34 @@
             <tree edit="0" create="0" import="0">
                 <header>
 
-                    <button name="action_fix_cost_price"
+                    <button
+                        name="action_fix_cost_price"
                         aria-label="Fix CostPrice"
                         string="Fix Cost Price"
-
                         type="object"
-                        icon="fa-wrench"/>
+                        icon="fa-wrench"
+                    />
 
-                    <button name="action_fix_svl"
+                    <button
+                        name="action_fix_svl"
                         aria-label="Fix Stock Valuation Layer"
                         string="Fix SVL"
-
                         type="object"
                         icon="fa-wrench"
                     />
 
-                    <button name="action_fix_aml"
+                    <button
+                        name="action_fix_aml"
                         aria-label="Fix Account Move Line"
                         string="Fix AML"
-
                         type="object"
                         icon="fa-wrench"
                     />
 
-                    <button name="action_move_svl_to_product_account"
+                    <button
+                        name="action_move_svl_to_product_account"
                         string="Move SLV on Product Account"
                         type="object"
-
                     />
 
                     <button
@@ -96,7 +97,7 @@
 
                 <field name="product_id" />
                 <field name="account_id" optional="hide" />
-                <field name="amount_svl"  decoration-danger="amount_svl &lt; 0"/>
+                <field name="amount_svl" decoration-danger="amount_svl &lt; 0" />
                 <button
                     name="action_slv_details"
                     aria-label="Valuation"
@@ -106,7 +107,7 @@
                     column_invisible="not context.get('line_details')"
                 />
 
-                <field name="amount_aml" decoration-danger="amount_aml &lt; 0"/>
+                <field name="amount_aml" decoration-danger="amount_aml &lt; 0" />
                 <button
                     name="action_aml_details"
                     aria-label="Account Move Line"
@@ -118,14 +119,14 @@
                 <field name="amount" optional="show" />
                 <field name="standard_price" optional="hide" />
                 <field name="purchase_price" optional="hide" />
-                <field name="price_svl"   />
+                <field name="price_svl" />
                 <field
                     name="price_svl_deviation"
                     decoration-warning="price_svl_deviation and price_svl_deviation &lt; 50"
                     decoration-danger="price_svl_deviation &gt; 50"
                     optional="hide"
                 />
-                <field name="price_aml"  />
+                <field name="price_aml" />
                 <field
                     name="price_aml_deviation"
                     decoration-warning="price_aml_deviation and price_aml_deviation &lt; 50"

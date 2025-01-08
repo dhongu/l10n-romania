@@ -9,7 +9,6 @@ from odoo import models
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
 
-
     def _get_partner_party_vals(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
         vals = super()._get_partner_party_vals(partner, role)
@@ -29,7 +28,6 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 vals["company_id"] = "0000000000000"
         return vals_list
 
-
     def _get_partner_party_legal_entity_vals_list(self, partner):
         val_list = super()._get_partner_party_legal_entity_vals_list(partner)
         partner = partner.commercial_partner_id
@@ -38,7 +36,6 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 if vals.get("commercial_partner") == partner:
                     vals["company_id"] = "0000000000000"
         return val_list
-
 
     def _get_invoice_line_item_vals(self, line, taxes_vals):
         vals = super()._get_invoice_line_item_vals(line, taxes_vals)
@@ -53,7 +50,6 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         vals_list = super()._export_invoice_vals(invoice)
 
         return vals_list
-
 
     def _export_invoice_constraints(self, invoice, vals):
         partner = invoice.commercial_partner_id

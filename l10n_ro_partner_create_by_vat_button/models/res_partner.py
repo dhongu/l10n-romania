@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    warning_message = fields.Text(string="Warning",  compute="_compute_warning_message")
+    warning_message = fields.Text(string="Warning", compute="_compute_warning_message")
 
     @api.depends("vat", "country_id", "street", "city", "state_id")
     def _compute_warning_message(self):
