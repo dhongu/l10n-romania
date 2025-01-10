@@ -28,3 +28,12 @@ class AccountMoveSend(models.TransientModel):
             "views": [(False, "form")],
             "target": "new",
         }
+
+    def _compute_l10n_ro_edi_send_enable(self):
+        res = super()._compute_l10n_ro_edi_send_enable()
+        for wizard in self:
+            wizard.l10n_ro_edi_send_enable = wizard.l10n_ro_edi_send_enable and any(
+                move.commercial_partner_id.country_id.code == 'RO'
+                for move in wizard.move_ids
+            )
+        return res
