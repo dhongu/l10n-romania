@@ -69,6 +69,6 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         constraints = super()._export_invoice_constraints(invoice, vals)
 
         if not partner.is_company:
-            constraints.pop("ciusro_customer_tax_identifier_required")
+            constraints.pop("ciusro_customer_tax_identifier_required", False)
 
         return constraints
