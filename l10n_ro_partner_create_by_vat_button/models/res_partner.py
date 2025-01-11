@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    warning_message = fields.Text(string="Warning",  compute="_compute_warning_message")
+    warning_message = fields.Text(string="Warning", compute="_compute_warning_message")
 
     @api.depends("vat", "country_id", "street", "city", "state_id")
     def _compute_warning_message(self):
@@ -37,8 +37,7 @@ class ResPartner(models.Model):
                 if missing:
                     partner.warning_message = _("Missing: ") + ", ".join(missing)
 
-
-    @api.onchange("country_id",'is_company')
+    @api.onchange("country_id", "is_company")
     def _onchange_country_or_is_company(self):
         if self.country_id.code == "RO" and not self.is_company:
             self.l10n_ro_edi_ubl_no_send_cnp = True
