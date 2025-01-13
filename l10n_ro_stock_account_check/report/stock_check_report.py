@@ -330,7 +330,7 @@ class StockAccountingCheckLine(models.TransientModel):
     standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price", compute="_compute_price")
     purchase_price = fields.Monetary(currency_field="currency_id", compute="_compute_price")
 
-    amount = fields.Monetary(currency_field="currency_id", string="Amount", compute="_compute_price")
+    amount = fields.Monetary(currency_field="currency_id", compute="_compute_price")
     price_svl = fields.Monetary(currency_field="currency_id", string="Price SVL", compute="_compute_price")
 
     price_svl_deviation = fields.Float(string="Price SVL Deviation", compute="_compute_price")
