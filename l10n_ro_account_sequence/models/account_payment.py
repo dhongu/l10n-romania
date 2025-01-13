@@ -57,9 +57,10 @@ class AccountPayment(models.Model):
         for vals in vals_list:
             if not vals.get("l10n_ro_cash_document_type", False):
                 payment_type = vals.get("payment_type", "inbound")
+                partner_type = vals.get("partner_type", "customer")
                 if payment_type == "inbound":
                     vals["l10n_ro_cash_document_type"] = (
-                        "customer_receipt" if payment_type == "customer" else "cash_collection"
+                        "customer_receipt" if partner_type == "customer" else "cash_collection"
                     )
 
                 elif payment_type == "outbound":
