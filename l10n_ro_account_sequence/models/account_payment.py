@@ -65,7 +65,7 @@ class AccountPayment(models.Model):
 
                 elif payment_type == "outbound":
                     vals["l10n_ro_cash_document_type"] = (
-                        "supplier_receipt" if payment_type == "supplier" else "payment_disposal"
+                        "supplier_receipt" if partner_type == "supplier" else "payment_disposal"
                     )
 
         return super().create(vals_list)
