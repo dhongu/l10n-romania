@@ -11,6 +11,7 @@
                         <field name="product_id" />
                         <field name="company_id" invisible="1" />
                         <field name="interval" />
+                        <field name="limit" />
                     </group>
                     <group name="date_range" string="Date" invisible="not interval">
 
@@ -26,6 +27,7 @@
                         <field name="line_details" />
                         <field name="journal_id" />
                         <field name="picking_type_id" />
+
                     </group>
                     <group string="Checks">
                         <field name="check_purchase" />
@@ -97,7 +99,7 @@
 
                 <field name="product_id" />
                 <field name="account_id" optional="hide" />
-                <field name="amount_svl" decoration-danger="amount_svl &lt; 0" />
+                <field name="amount_svl" decoration-danger="amount_svl &lt; 0"  decoration-success="amount_svl == amount" />
                 <button
                     name="action_slv_details"
                     aria-label="Valuation"
@@ -107,7 +109,7 @@
                     column_invisible="not context.get('line_details')"
                 />
 
-                <field name="amount_aml" decoration-danger="amount_aml &lt; 0" />
+                <field name="amount_aml" decoration-danger="amount_aml &lt; 0" decoration-success="amount_aml == amount"/>
                 <button
                     name="action_aml_details"
                     aria-label="Account Move Line"

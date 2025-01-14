@@ -34,6 +34,7 @@ class StockAccountingCheck(models.TransientModel):
 
     journal_id = fields.Many2one("account.journal")
     picking_type_id = fields.Many2one("stock.picking.type")
+    limit = fields.Integer(default=1000)
 
     @api.model
     def default_get(self, fields_list):
@@ -129,6 +130,7 @@ class StockAccountingCheck(models.TransientModel):
 
                  group by product_id, account_id
                  {_having}
+                 limit %(limit)s
             """
 
         params = {
@@ -139,6 +141,7 @@ class StockAccountingCheck(models.TransientModel):
             "date_from": fields.Date.to_string(self.date_from),
             "date_to": fields.Date.to_string(self.date_to),
             "product": self.product_id.id,
+            'limit': self.limit
         }
         self.env.cr.execute(query, params=params)  # pylint: disable=E8103
         lines = self.env.cr.dictfetchall()
