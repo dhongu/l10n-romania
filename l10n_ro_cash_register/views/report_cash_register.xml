@@ -54,6 +54,7 @@
                                     <tr>
                                         <th>Ord</th>
                                         <th>Name</th>
+                                        <th>Ref</th>
                                         <th>Partner</th>
                                         <th class="text-end">Receipts</th>
                                         <th class="text-end">Payment</th>
@@ -64,6 +65,9 @@
                                     <tr>
                                         <td class="text-left" colspan="3">
                                             <strong>Starting Balance</strong>
+                                        </td>
+                                        <td class="text-end">
+
                                         </td>
                                         <td class="text-end">
 
@@ -88,6 +92,9 @@
                                         </td>
                                         <td>
                                             <span t-field="line.move_name" />
+                                        </td>
+                                        <td>
+                                            <span t-field="line.ref" />
                                         </td>
                                         <td>
                                             <span t-esc="line.partner_id.name" />
@@ -121,9 +128,10 @@
                                         <t t-set="index_l" t-value="index_l + 1" />
                                     </tr>
                                     <tr>
-                                        <td class="text-left" colspan="3">
+                                        <td class="text-left" colspan="4">
                                             <strong>Sold Final:</strong>
                                         </td>
+
                                         <td class="text-end">
                                             <strong
                                             t-esc="sold_inc"
