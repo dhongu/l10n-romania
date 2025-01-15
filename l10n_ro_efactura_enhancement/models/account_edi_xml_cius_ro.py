@@ -15,6 +15,18 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
         partner = partner.commercial_partner_id
 
+        postal_address = vals.get("postal_address_vals", {})
+        if not postal_address.get('street_name',False):
+            postal_address['street_name'] = "Principala"
+
+        if postal_address.get('country_subentity',False) == "RO-B":
+            if "SECTOR" not in postal_address.get('city_name','').upper():
+                postal_code = postal_address.get('postal_zone',False)
+                if postal_code and postal_code[0] == '0' and postal_code[1] in ['1','2','3','4','5','6']:
+                    postal_address['city_name'] = 'SECTOR' + postal_code[1]
+                else:
+                    postal_address['city_name'] = 'SECTOR1'
+
         if not partner.is_company:
             vals["endpoint_id"] = "0000000000000"
         return vals
