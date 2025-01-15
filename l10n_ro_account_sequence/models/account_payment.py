@@ -56,6 +56,12 @@ class AccountPayment(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get("l10n_ro_cash_document_type", False):
+                if vals.get("journal_id"):
+                    journal = self.env["account.journal"].browse(vals["journal_id"])
+                    if journal.type != "cash":
+                        vals["l10n_ro_cash_document_type"] = "other"
+                        continue
+
                 payment_type = vals.get("payment_type", "inbound")
                 partner_type = vals.get("partner_type", "customer")
                 if payment_type == "inbound":

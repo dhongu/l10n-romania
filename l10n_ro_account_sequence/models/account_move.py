@@ -29,8 +29,8 @@ class AccountMove(models.Model):
             and self.journal_id.type == "cash"
             and self.company_id.account_fiscal_country_id.code == "RO"
         ):
-            if self.journal_id.payment_sequence:
-                starting_sequence = starting_sequence[1:]
+            # if self.journal_id.payment_sequence:
+            #     starting_sequence = starting_sequence[1:]
             if self.payment_id.l10n_ro_cash_document_type == "internal_transfer":
                 starting_sequence = "IT" + starting_sequence
             if self.payment_id.l10n_ro_cash_document_type == "customer_receipt":
