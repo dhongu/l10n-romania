@@ -21,7 +21,7 @@
 
 
                     <strong t-field="res_company.partner_id.name" />
-                    <div>
+                    <div t-if="warehouse">
                         <strong>Address:</strong>
                         <address
                         t-field="warehouse.partner_id"
