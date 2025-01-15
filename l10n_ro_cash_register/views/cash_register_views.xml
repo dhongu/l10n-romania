@@ -84,8 +84,25 @@
         </field>
     </record>
 
+    <record id="view_cash_register_search" model="ir.ui.view">
+        <field name="name">cash.register.search</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="journal_id" string="Journal" />
+                <field name="move_line_ids" string="Partner" filter_domain="[('move_line_ids.partner_id', 'ilike', self)]"/>
+                <separator/>
+                <field name="date" string="Period" date="date"/>
 
-       <!-- Actiune pentru vizualizarea registrelor de casa -->
+                <filter string="Date" name="date" />
+                <group expand="1" string="Group By">
+                    <filter string="Journal" name="group_by_journal" context="{'group_by': 'journal_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actiune pentru vizualizarea registrelor de casa -->
     <record id="action_cash_register" model="ir.actions.act_window">
         <field name="name">Cash Register</field>
         <field name="res_model">l10n.ro.cash.register</field>
