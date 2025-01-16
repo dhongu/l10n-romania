@@ -19,6 +19,13 @@ class AccountPayment(models.Model):
         required=True,
     )
 
+    @api.onchange('posted_before', 'state', 'journal_id', 'date')
+    def _onchange_journal_date(self):
+        res = super()._onchange_journal_date()
+        if not self.move_id.id:
+            self.name = False
+        return res
+
     @api.onchange("payment_type", "partner_type", "is_internal_transfer", "journal_id")
     def _onchange_payment_type_and_partner_type(self):
         self.l10n_ro_cash_document_type = "other"
