@@ -9,13 +9,15 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     def _credit_debit_get(self):
-        if not self.env.context.get("date_to"):
+        date = self.env.context.get("date_to")
+        if not date:
             return super()._credit_debit_get()
         else:
             # cautat prin codul sursa si am gasit versiunea asta
             domain = [
                 ("parent_state", "=", "posted"),
                 ("company_id", "=", self.env.company.id),
+                ("date", "<=", date),
             ]
             query = self.env["account.move.line"]._where_calc(domain)
             tables, where_clause, where_params = query.get_sql()
