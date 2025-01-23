@@ -181,3 +181,15 @@ class CashRegister(models.Model):
         }
         action["target"] = "new"
         return action
+
+    def action_recompute_from_previous_balance(self):
+        for register in self.sorted(key=lambda p: p.date, reverse=True):
+            previous_register = self.search([("journal_id", "=", register.journal_id.id)], order="date DESC", limit=1)
+            if not previous_register:
+                balance = register.balance_start
+            else:
+                balance = previous_register.balance_end
+            register.write({"balance_start": balance})
+            for line in register.move_line_ids:
+                balance += line.balance
+            register.write({"balance_end": balance})

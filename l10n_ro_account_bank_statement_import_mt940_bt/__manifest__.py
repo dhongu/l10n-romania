@@ -10,9 +10,7 @@
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],
     "license": "AGPL-3",
     "version": "17.0.0.1.0",
-    "author": "NextERP Romania,"
-    "Forest and Biomass Romania,"
-    "Odoo Community Association (OCA)",
+    "author": "NextERP Romania," "Forest and Biomass Romania," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "installable": True,
     "development_status": "Mature",

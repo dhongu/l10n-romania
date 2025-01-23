@@ -90,11 +90,15 @@
         <field name="arch" type="xml">
             <search>
                 <field name="journal_id" string="Journal" />
-                <field name="move_line_ids" string="Partner" filter_domain="[('move_line_ids.partner_id', 'ilike', self)]"/>
-                <separator/>
+                <field
+                    name="move_line_ids"
+                    string="Partner"
+                    filter_domain="[('move_line_ids.partner_id', 'ilike', self)]"
+                />
+                <separator />
                 <field name="date" string="Period" />
 
-                <filter string="Date" name="date" date="date"/>
+                <filter string="Date" name="date" date="date" />
                 <group expand="1" string="Group By">
                     <filter string="Journal" name="group_by_journal" context="{'group_by': 'journal_id'}" />
                 </group>

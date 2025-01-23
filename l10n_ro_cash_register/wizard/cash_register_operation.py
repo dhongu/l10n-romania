@@ -55,5 +55,5 @@ class CashRegisterOperation(models.TransientModel):
                 ),
             ],
         }
-        move = self.env["account.move"].wit_context(default_l10n_ro_cash_document_type="other").create(value)
+        move = self.env["account.move"].with_context(default_l10n_ro_cash_document_type="other").create(value)
         move._post()

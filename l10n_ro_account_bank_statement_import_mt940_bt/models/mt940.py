@@ -4,7 +4,6 @@
 
 import re
 
-
 from odoo import models
 
 
@@ -30,7 +29,6 @@ class MT940Parser(models.AbstractModel):
             )
         return super().get_tag_86_regex()
 
-
     def get_header_lines(self):
         if self.get_mt940_type() == "mt940_ro_bt":
             return 1
@@ -40,7 +38,6 @@ class MT940Parser(models.AbstractModel):
         if self.get_mt940_type() == "mt940_ro_bt":
             return "^{1:"
         return super().get_header_regex()
-
 
     def handle_tag_25(self, data, result):
         if self.get_mt940_type() == "mt940_ro_bt":
@@ -53,7 +50,6 @@ class MT940Parser(models.AbstractModel):
             result["statement"]["name"] = data.replace(".", "").strip()
             return result
         return super().handle_tag_28(data, result)
-
 
     def handle_tag_61(self, data, result):
         """get transaction values"""
@@ -68,11 +64,9 @@ class MT940Parser(models.AbstractModel):
 
         return res
 
-
     def handle_tag_86(self, data, result):
         """Parse 86 tag containing reference data."""
         if self.get_mt940_type() == "mt940_ro_bt":
-
             transaction = {}
             if result["statement"]["transactions"]:
                 transaction = result["statement"]["transactions"][-1]
@@ -88,4 +82,3 @@ class MT940Parser(models.AbstractModel):
                 transaction["payment_ref"] = data
 
         return super().handle_tag_86(data, result)
-

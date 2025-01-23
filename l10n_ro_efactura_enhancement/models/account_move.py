@@ -15,7 +15,7 @@ class AccountMove(models.Model):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
 
         domain = [
-            ("move_type", "in", ("out_invoice","out_refund")),
+            ("move_type", "in", ("out_invoice", "out_refund")),
             ("state", "=", "posted"),
             ("date", "<", fields.Date.today()),
             ("date", ">=", fields.Date.today() - timedelta(days=1)),
