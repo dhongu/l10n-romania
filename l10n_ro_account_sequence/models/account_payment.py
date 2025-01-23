@@ -19,7 +19,7 @@ class AccountPayment(models.Model):
         required=True,
     )
 
-    @api.onchange('posted_before', 'state', 'journal_id', 'date')
+    @api.onchange("posted_before", "state", "journal_id", "date")
     def _onchange_journal_date(self):
         res = super()._onchange_journal_date()
         if not self.move_id.id:
