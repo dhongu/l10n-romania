@@ -16,10 +16,11 @@ class AccountMove(models.Model):
             and self.company_id.account_fiscal_country_id.code == "RO"
         ):
             payment = self.payment_id
+            l10n_ro_cash_document_type  = "other"
             if payment:
                 l10n_ro_cash_document_type = payment.l10n_ro_cash_document_type or "other"
-                where_string += " AND l10n_ro_cash_document_type = %(l10n_ro_cash_document_type)s "
-                param["l10n_ro_cash_document_type"] = l10n_ro_cash_document_type
+            where_string += " AND l10n_ro_cash_document_type = %(l10n_ro_cash_document_type)s "
+            param["l10n_ro_cash_document_type"] = l10n_ro_cash_document_type
         return where_string, param
 
     def _get_starting_sequence(self):
