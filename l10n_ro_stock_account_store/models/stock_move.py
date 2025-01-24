@@ -185,3 +185,24 @@ class StockMove(models.Model):
         )
         am_vals["line_ids"] += move_ids
         return am_vals
+
+    # de mutat in loclizare
+    def _prepare_account_move_vals(self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id,
+                                   cost):
+        # determina analiticul aferent jurnalului
+        if journal_id:
+            journal = self.env["account.journal"].browse(journal_id)
+            if journal.l10n_ro_fiscal_position_id:
+                fiscal_position = journal.l10n_ro_fiscal_position_id
+                credit_account = self.env["account.account"].browse(credit_account_id)
+                debit_account = self.env["account.account"].browse(debit_account_id)
+
+                credit_account = fiscal_position.map_account(credit_account)
+                debit_account = fiscal_position.map_account(debit_account)
+
+                credit_account_id = credit_account.id
+                debit_account_id = debit_account.id
+
+        vals = super()._prepare_account_move_vals(credit_account_id, debit_account_id, journal_id, qty, description,
+                                                     svl_id, cost)
+        return vals
