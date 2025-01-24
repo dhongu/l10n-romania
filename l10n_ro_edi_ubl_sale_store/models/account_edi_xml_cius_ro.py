@@ -12,5 +12,5 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
     def _export_invoice_vals(self, invoice):
         vals_list = super()._export_invoice_vals(invoice)
         if invoice.receipt_print:
-            vals_list["vals"]["invoice_type_code"] = 751
+            vals_list["vals"]["document_type_code"] = 751
         return vals_list
