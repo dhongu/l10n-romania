@@ -21,38 +21,38 @@ class StockMove(models.Model):
             return valued_types
 
         valued_types += [
-            "reception_store",
-            "delivery_store",
+            "in_store",
+            "out_store",
         ]
         return valued_types
 
-    def _is_reception_store(self):
-        it_is = self._is_in() and self.location_dest_id.l10n_ro_merchandise_type == "store"
+    def _is_in_store(self):
+        "Este o intrare in magazie?"
+        it_is = (
+            self.location_id.l10n_ro_merchandise_type != "store"
+            and self.location_dest_id.l10n_ro_merchandise_type == "store"
+        )
         return it_is
 
-    def _is_delivery_store(self):
-        it_is = self._is_out() and self.location_id.l10n_ro_merchandise_type == "store"
+    def _is_out_store(self):
+        "Este o iesire din magazie?"
+        it_is = (
+            self.location_id.l10n_ro_merchandise_type == "store"
+            and self.location_dest_id.l10n_ro_merchandise_type != "store"
+        )
         return it_is
 
-    def _create_reception_store_svl(self, forced_quantity=None):
-        svl_values = self._get_in_svl_vals(forced_quantity)
+    def _create_in_store_svl(self, forced_quantity=None):
+        svl_values = self._get_in_svl_vals(self.quantity)
         for svl_value in svl_values:
-            svl_value.update(
-                {
-                    "l10n_ro_valued_type": "reception_store",
-                }
-            )
+            svl_value.update({"l10n_ro_valued_type": "in_store"})
         svls = self.env["stock.valuation.layer"].create(svl_values)
         return svls
 
-    def _create_delivery_store_svl(self, forced_quantity=None):
-        svl_values = self._get_out_svl_vals(forced_quantity)
+    def _create_out_store_svl(self, forced_quantity=None):
+        svl_values = self._get_out_svl_vals(self.quantity)
         for svl_value in svl_values:
-            svl_value.update(
-                {
-                    "l10n_ro_valued_type": "delivery_store",
-                }
-            )
+            svl_value.update({"l10n_ro_valued_type": "out_store"})
         svls = self.env["stock.valuation.layer"].create(svl_values)
         return svls
 
@@ -62,18 +62,18 @@ class StockMove(models.Model):
         svl = self.env["stock.valuation.layer"].browse(svl_id)
 
         am_val_store = False
-        if svl.l10n_ro_valued_type == "reception_store":
-            am_val_store = self._create_account_entry_reception_store(qty, description, svl_id, cost)
+        if svl.l10n_ro_valued_type == "in_store":
+            am_val_store = self._create_account_entry_in_store(qty, description, svl_id, cost)
 
-        if svl.l10n_ro_valued_type == "delivery_store":
-            am_val_store = self._create_account_entry_delivery_store(qty, description, svl_id, cost)
+        if svl.l10n_ro_valued_type == "out_store":
+            am_val_store = self._create_account_entry_out_store(qty, description, svl_id, cost)
 
         if am_val_store:
             am_vals = [am_val_store]
 
         return am_vals
 
-    def _create_account_entry_reception_store(self, qty, description, svl_id, cost):
+    def _create_account_entry_in_store(self, qty, description, svl_id, cost):
         company = self.company_id or self.env.company
         uneligible_tax_account_id = company.l10n_ro_property_uneligible_tax_account_id.id
         account_difference = self.product_id.categ_id.property_account_creditor_price_difference_categ.id
@@ -124,7 +124,7 @@ class StockMove(models.Model):
         am_vals["line_ids"] += move_ids
         return am_vals
 
-    def _create_account_entry_delivery_store(self, qty, description, svl_id, cost):
+    def _create_account_entry_out_store(self, qty, description, svl_id, cost):
         company = self.company_id or self.env.company
         uneligible_tax_account_id = company.l10n_ro_property_uneligible_tax_account_id.id
         account_difference = self.product_id.categ_id.property_account_creditor_price_difference_categ.id
