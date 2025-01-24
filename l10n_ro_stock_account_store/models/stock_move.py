@@ -81,11 +81,22 @@ class StockMove(models.Model):
         if am_val_store:
             am_vals = [am_val_store]
 
+        for am_val in am_vals:
+            journal_id = am_val.get("journal_id")
+            journal = self.env["account.journal"].browse(journal_id)
+            if journal.l10n_ro_fiscal_position_id:
+                fiscal_position = journal.l10n_ro_fiscal_position_id
+                for line in am_val["line_ids"]:
+                    account_id = line[2]["account_id"]
+                    account = self.env["account.account"].browse(account_id)
+                    account = fiscal_position.map_account(account)
+                    line[2]["account_id"] = account.id
+
         return am_vals
 
     def _create_account_entry_in_store(self, qty, description, svl_id, cost):
         company = self.company_id or self.env.company
-        uneligible_tax_account_id = company.l10n_ro_property_uneligible_tax_account_id.id
+        uneligible_tax_account_id = company.l10n_ro_property_uneligible_tax_account_id
         account_difference = self.product_id.categ_id.property_account_creditor_price_difference_categ.id
 
         svl = self.env["stock.valuation.layer"].browse(svl_id)
@@ -129,14 +140,14 @@ class StockMove(models.Model):
         )
 
         move_ids = self._prepare_account_move_line(
-            0, uneligible_tax, uneligible_tax_account_id, acc_dest, svl_id, description
+            0, uneligible_tax, uneligible_tax_account_id.id, acc_dest, svl_id, description
         )
         am_vals["line_ids"] += move_ids
         return am_vals
 
     def _create_account_entry_out_store(self, qty, description, svl_id, cost):
         company = self.company_id or self.env.company
-        uneligible_tax_account_id = company.l10n_ro_property_uneligible_tax_account_id.id
+        uneligible_tax_account_id = company.l10n_ro_property_uneligible_tax_account_id
         account_difference = self.product_id.categ_id.property_account_creditor_price_difference_categ.id
 
         if not account_difference:
@@ -181,30 +192,7 @@ class StockMove(models.Model):
         )
 
         move_ids = self._prepare_account_move_line(
-            0, -1 * (uneligible_tax), acc_src, uneligible_tax_account_id, svl_id, description
+            0, -1 * (uneligible_tax), acc_src, uneligible_tax_account_id.id, svl_id, description
         )
         am_vals["line_ids"] += move_ids
         return am_vals
-
-    # de mutat in loclizare
-    def _prepare_account_move_vals(
-        self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost
-    ):
-        # determina analiticul aferent jurnalului
-        if journal_id:
-            journal = self.env["account.journal"].browse(journal_id)
-            if journal.l10n_ro_fiscal_position_id:
-                fiscal_position = journal.l10n_ro_fiscal_position_id
-                credit_account = self.env["account.account"].browse(credit_account_id)
-                debit_account = self.env["account.account"].browse(debit_account_id)
-
-                credit_account = fiscal_position.map_account(credit_account)
-                debit_account = fiscal_position.map_account(debit_account)
-
-                credit_account_id = credit_account.id
-                debit_account_id = debit_account.id
-
-        vals = super()._prepare_account_move_vals(
-            credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost
-        )
-        return vals
