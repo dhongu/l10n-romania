@@ -116,7 +116,7 @@ class StockMove(models.Model):
             acc_src,
             acc_dest,
             acc_valuation,
-        ) = self._get_accounting_data_for_valuation()
+        ) = self.with_context(valued_type='internal_transfer')._get_accounting_data_for_valuation()
 
         am_vals = self._prepare_account_move_vals(
             account_difference,
@@ -168,7 +168,7 @@ class StockMove(models.Model):
             acc_src,
             acc_dest,
             acc_valuation,
-        ) = self._get_accounting_data_for_valuation()
+        ) = self.self.with_context(valued_type='internal_transfer')._get_accounting_data_for_valuation()
 
         am_vals = self._prepare_account_move_vals(
             acc_src,
