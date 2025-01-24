@@ -116,7 +116,7 @@ class StockMove(models.Model):
             acc_src,
             acc_dest,
             acc_valuation,
-        ) = self.with_context(valued_type='internal_transfer')._get_accounting_data_for_valuation()
+        ) = self.with_context(valued_type="internal_transfer")._get_accounting_data_for_valuation()
 
         am_vals = self._prepare_account_move_vals(
             account_difference,
@@ -168,7 +168,7 @@ class StockMove(models.Model):
             acc_src,
             acc_dest,
             acc_valuation,
-        ) = self.with_context(valued_type='internal_transfer')._get_accounting_data_for_valuation()
+        ) = self.with_context(valued_type="internal_transfer")._get_accounting_data_for_valuation()
 
         am_vals = self._prepare_account_move_vals(
             acc_src,
@@ -187,8 +187,9 @@ class StockMove(models.Model):
         return am_vals
 
     # de mutat in loclizare
-    def _prepare_account_move_vals(self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id,
-                                   cost):
+    def _prepare_account_move_vals(
+        self, credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost
+    ):
         # determina analiticul aferent jurnalului
         if journal_id:
             journal = self.env["account.journal"].browse(journal_id)
@@ -203,6 +204,7 @@ class StockMove(models.Model):
                 credit_account_id = credit_account.id
                 debit_account_id = debit_account.id
 
-        vals = super()._prepare_account_move_vals(credit_account_id, debit_account_id, journal_id, qty, description,
-                                                     svl_id, cost)
+        vals = super()._prepare_account_move_vals(
+            credit_account_id, debit_account_id, journal_id, qty, description, svl_id, cost
+        )
         return vals
