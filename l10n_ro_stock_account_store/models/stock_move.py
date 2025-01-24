@@ -45,14 +45,24 @@ class StockMove(models.Model):
     def _create_in_store_svl(self, forced_quantity=None):
         svl_values = self._get_in_svl_vals(self.quantity)
         for svl_value in svl_values:
-            svl_value.update({"l10n_ro_valued_type": "in_store"})
+            svl_value.update(
+                {
+                    "l10n_ro_valued_type": "in_store",
+                    "description": f"Store Evaluation {self.reference} - {self.product_id.name}",
+                }
+            )
         svls = self.env["stock.valuation.layer"].create(svl_values)
         return svls
 
     def _create_out_store_svl(self, forced_quantity=None):
         svl_values = self._get_out_svl_vals(self.quantity)
         for svl_value in svl_values:
-            svl_value.update({"l10n_ro_valued_type": "out_store"})
+            svl_value.update(
+                {
+                    "l10n_ro_valued_type": "out_store",
+                    "description": f"Store Evaluation {self.reference} - {self.product_id.name}",
+                }
+            )
         svls = self.env["stock.valuation.layer"].create(svl_values)
         return svls
 
@@ -110,7 +120,7 @@ class StockMove(models.Model):
 
         am_vals = self._prepare_account_move_vals(
             account_difference,
-            acc_valuation,
+            acc_dest,
             journal_id,
             0,
             description,
@@ -119,7 +129,7 @@ class StockMove(models.Model):
         )
 
         move_ids = self._prepare_account_move_line(
-            0, uneligible_tax, uneligible_tax_account_id, acc_valuation, svl_id, description
+            0, uneligible_tax, uneligible_tax_account_id, acc_dest, svl_id, description
         )
         am_vals["line_ids"] += move_ids
         return am_vals
@@ -161,7 +171,7 @@ class StockMove(models.Model):
         ) = self._get_accounting_data_for_valuation()
 
         am_vals = self._prepare_account_move_vals(
-            acc_valuation,
+            acc_src,
             account_difference,
             journal_id,
             0,
@@ -171,7 +181,7 @@ class StockMove(models.Model):
         )
 
         move_ids = self._prepare_account_move_line(
-            0, -1 * (uneligible_tax), acc_valuation, uneligible_tax_account_id, svl_id, description
+            0, -1 * (uneligible_tax), acc_src, uneligible_tax_account_id, svl_id, description
         )
         am_vals["line_ids"] += move_ids
         return am_vals
