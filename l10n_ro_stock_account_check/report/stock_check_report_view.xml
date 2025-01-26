@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_stock_accounting_check_form" model="ir.ui.view">
+        <field name="name">stock.accounting.check.form</field>
+        <field name="model">stock.accounting.check</field>
+        <field name="arch" type="xml">
+            <form string="Report Options">
+                <group name="filters">
+                    <group string="Filters">
+                        <field name="account_id" />
+                        <field name="product_id" />
+                        <field name="company_id" invisible="1" />
+                        <field name="interval" />
+                        <field name="limit" />
+                    </group>
+                    <group name="date_range" string="Date" invisible="not interval">
+
+                        <field
+                            name="date_from"
+                            string="Date"
+                            widget="daterange"
+                            options="{'end_date_field': 'date_to'}"
+                        />
+                        <field name="date_to" invisible="1" />
+                    </group>
+                    <group string="Options">
+                        <field name="line_details" />
+                        <field name="journal_id" />
+                        <field name="picking_type_id" />
+
+                    </group>
+                    <group string="Checks">
+                        <field name="check_purchase" />
+                        <field name="check_sale" />
+                        <field name="check_stock_move" />
+                    </group>
+
+                </group>
+                <footer>
+                    <button
+                        name="button_show_report"
+                        string="Show"
+                        type="object"
+                        default_focus="1"
+                        class="oe_highlight"
+                    />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="view_stock_accounting_check_line_tree" model="ir.ui.view">
+        <field name="name">stock.accounting.check.line</field>
+        <field name="model">stock.accounting.check.line</field>
+        <field name="arch" type="xml">
+            <tree edit="0" create="0" import="0">
+                <header>
+
+                    <button
+                        name="action_fix_cost_price"
+                        aria-label="Fix CostPrice"
+                        string="Fix Cost Price"
+                        type="object"
+                        icon="fa-wrench"
+                    />
+
+                    <button
+                        name="action_fix_svl"
+                        aria-label="Fix Stock Valuation Layer"
+                        string="Fix SVL"
+                        type="object"
+                        icon="fa-wrench"
+                    />
+
+                    <button
+                        name="action_fix_aml"
+                        aria-label="Fix Account Move Line"
+                        string="Fix AML"
+                        type="object"
+                        icon="fa-wrench"
+                    />
+
+                    <button
+                        name="action_move_svl_to_product_account"
+                        string="Move SLV on Product Account"
+                        type="object"
+                    />
+
+                    <button
+                        name="action_purchase"
+                        aria-label="Purchase"
+                        title="Purchase"
+                        type="object"
+                        icon="fa-sign-in"
+                    />
+                    <button name="action_sale" aria-label="Sale" title="Sale" type="object" icon="fa-sign-out" />
+                </header>
+
+                <field name="product_id" />
+                <field name="account_id" optional="hide" />
+                <field
+                    name="amount_svl"
+                    decoration-danger="amount_svl &lt; 0"
+                    decoration-success="amount_svl == amount"
+                />
+                <button
+                    name="action_slv_details"
+                    aria-label="Valuation"
+                    title="Valuation"
+                    type="object"
+                    icon="fa-info-circle"
+                    column_invisible="not context.get('line_details')"
+                />
+
+                <field
+                    name="amount_aml"
+                    decoration-danger="amount_aml &lt; 0"
+                    decoration-success="amount_aml == amount"
+                />
+                <button
+                    name="action_aml_details"
+                    aria-label="Account Move Line"
+                    title="Account Move Line"
+                    type="object"
+                    icon="fa-info-circle"
+                    column_invisible="not context.get('line_details')"
+                />
+                <field name="amount" optional="show" />
+                <field name="standard_price" optional="hide" />
+                <field name="purchase_price" optional="hide" />
+                <field name="price_svl" />
+                <field
+                    name="price_svl_deviation"
+                    decoration-warning="price_svl_deviation and price_svl_deviation &lt; 50"
+                    decoration-danger="price_svl_deviation &gt; 50"
+                    optional="hide"
+                />
+                <field name="price_aml" />
+                <field
+                    name="price_aml_deviation"
+                    decoration-warning="price_aml_deviation and price_aml_deviation &lt; 50"
+                    decoration-danger="price_aml_deviation &gt; 50"
+                    optional="hide"
+                />
+
+                <field name="quantity" optional="hide" />
+                <field name="quantity_svl" decoration-danger="quantity != quantity_svl" />
+                <field name="quantity_aml" decoration-danger="quantity != quantity_aml" />
+                <field name="currency_id" optional="hide" />
+                <button
+                    name="action_line_details"
+                    aria-label="Line Details"
+                    title="Line Details"
+                    type="object"
+                    icon="fa-info-circle"
+                    column_invisible="context.get('line_details')"
+                />
+            </tree>
+        </field>
+    </record>
+    <record id="view_stock_accounting_check_line_form" model="ir.ui.view">
+        <field name="name">stock.accounting.check.report.line</field>
+        <field name="model">stock.accounting.check.line</field>
+        <field name="arch" type="xml">
+            <form edit="0" create="0" import="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id" />
+                        </group>
+                        <group>
+                            <field name="amount_svl" sum="1" />
+                            <field name="amount_aml" sum="1" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_stock_accounting_check_line_pivot" model="ir.ui.view">
+        <field name="name">stock.accounting.check.line.pivot</field>
+        <field name="model">stock.accounting.check.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Stock Analysis" disable_linking="True">
+                <field name="product_id" type="row" />
+                <field name="amount_svl" type="measure" />
+                <field name="amount_aml" type="measure" />
+            </pivot>
+        </field>
+    </record>
+    <record id="view_stock_accounting_check_line_search" model="ir.ui.view">
+        <field name="name">stock.accounting.check.line.search</field>
+        <field name="model">stock.accounting.check.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id" />
+                <group expand="1" string="Group by">
+                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_stock_accounting_check" model="ir.actions.act_window">
+        <field name="name">Stock accounting check</field>
+        <field name="res_model">stock.accounting.check</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem
+        id="menu_stock_accounting_check"
+        name="Stock accounting check"
+        action="action_stock_accounting_check"
+        parent="stock.menu_warehouse_report"
+        groups="stock.group_stock_user"
+    />
+    <record id="action_stock_accounting_check_line" model="ir.actions.act_window">
+        <field name="name">Stock Sheet Report</field>
+        <field name="res_model">stock.accounting.check.line</field>
+        <field name="view_mode">tree,form,pivot</field>
+
+        <field name="context">{}</field>
+    </record>
+</odoo>
