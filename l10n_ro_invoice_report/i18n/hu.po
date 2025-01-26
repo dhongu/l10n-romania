@@ -1,0 +1,435 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_invoice_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-21 11:35+0000\n"
+"PO-Revision-Date: 2023-02-21 11:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,print_report_name:l10n_ro_invoice_report.account_invoices_in_company_language
+msgid "(object._get_report_base_filename())"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.document_tax_totals
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.tax_groups_totals
+msgid "<span>-</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<span>/</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+msgid "<span>Cash collection:</span>"
+msgstr "<span>Készpénz befogadás:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Delegate:</span>"
+msgstr "<span>Delegált:<span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>I received from</span>"
+msgstr "<span>Fizetőtől kapott</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Mean Transport:</span>"
+msgstr "<span>Szállítás módja:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Name:</span>"
+msgstr "<span>Név:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<span>Payment disposal:</span>"
+msgstr "<span>Fizetés elszámolása:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Signature for receive</span>"
+msgstr "<span>Átvételt igazoló aláírás</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<span>Transfer:</span>"
+msgstr "<span>Átutalás:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "<span>Vat on payment</span>"
+msgstr "<span>ÁFA fizetésnél</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<span>Voucher:</span>"
+msgstr "<span>Értékesítési bizonylat:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>amount</span>"
+msgstr "<span>nettó érték</span"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong name=\"payment_term_label\">Payment Term:</strong>"
+msgstr "<strong name=\"payment_term_label\">Fizetési határidő:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<strong>Address:</strong>"
+msgstr "<strong>Cím:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<strong>CIF:</strong>"
+msgstr "<strong>Adószám:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<strong>Client:</strong><br/>"
+msgstr "<strong>Vevő:</strong><br/>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<strong>Company</strong><br/>"
+msgstr "<strong>Cég</strong><br/>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Deliveries:</strong>"
+msgstr "<strong>Szállítások:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "<strong>Delivery address:</strong>"
+msgstr "<strong>Szállítási cím:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<strong>NRC:</strong>"
+msgstr "<strong>Adószám:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Receptions:</strong>"
+msgstr "<strong>Bevételek:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<strong>Share Capital:</strong>"
+msgstr "<strong>Társadalmi tőke:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_account_report_invoice
+msgid "Account report without payment lines"
+msgstr "Számla jelentés fizetési sorok nélkül"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_marketplace_customer__info_for_invoice
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__info_for_invoice
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__info_for_invoice
+msgid "Additional info for invoice"
+msgstr "További információk a számlához"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Amount"
+msgstr "Nettó érték"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "Amount (in words):"
+msgstr "Nettó érték (szavakkal):"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "Amount:"
+msgstr "Nettó érték:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_bank_statement_line
+msgid "Bank Statement Line"
+msgstr "Bankkivonat tételsor"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Cancelled"
+msgstr "Törölve"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_collection
+msgid "Cash collection"
+msgstr "Készpénz befizetés"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_company
+msgid "Companies"
+msgstr "Vállalatok"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_config_settings
+msgid "Config Settings"
+msgstr "Beállítások módosítása"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_partner
+msgid "Contact"
+msgstr "Kapcsolat"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Customer:"
+msgstr "Vevő:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__delegate_id
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__delegate_id
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_payment__delegate_id
+msgid "Delegate"
+msgstr "Delegált"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Description"
+msgstr "A termék megnevezése"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Discount (%)"
+msgstr "Kedvezmény (%)"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Elaborate:"
+msgstr "Bonyolult:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "For:"
+msgstr "Cél:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Information for delivery:"
+msgstr "Információ a szállításhoz:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance\n"
+"                        no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and\n"
+"                        subsequent amendments."
+msgstr ""
+"A számla aláírás és bélyegző nélkül érvényes, vö. a 17/2015. sz. rendelet V."
+" cikkének (2) bekezdésével, az adótörvénykönyvről szóló 227/2015. sz. "
+"törvény 319. cikkének (29)"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,name:l10n_ro_invoice_report.account_invoices_in_company_language
+msgid "Invoices in company language"
+msgstr "Számlák a vállalat nyelvén"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_move
+msgid "Journal Entry"
+msgstr "Könyvelési tétel"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_payment__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_marketplace_customer__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__mean_transp
+msgid "Mean transport"
+msgstr "Szállítás módja"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "NRC:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Ord"
+msgstr "#"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_line
+msgid "Payment"
+msgstr "Fizetés"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_payment_disposal
+msgid "Payment disposal"
+msgstr "Fizetés elszámolás"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.bill_preview
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "Please use the following communication for your payment :"
+msgstr "Kérjük, használja a következő kommunikációt a fizetéshez:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Quantity"
+msgstr "Mennyiség"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "Received from:"
+msgstr "Fogadó:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_invoice_company_language
+msgid "Report Invoice in Company Language"
+msgstr "Számla jelentés a vállalat nyelvén"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Representing counter value of invoice"
+msgstr "Számla ellenértéke"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "Representing:"
+msgstr "Jelentés:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__email_on_invoice_address
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__email_on_invoice_address
+msgid "Show email"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__email_on_invoice_address
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show email on invoice address"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__marker_on_invoice_address
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__marker_on_invoice_address
+msgid "Show marker"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__marker_on_invoice_address
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__marker_on_invoice_address
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show marker on invoice address"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__phone_on_invoice_address
+msgid "Show phone"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__phone_on_invoice_address
+msgid "Show phone "
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__phone_on_invoice_address
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__phone_on_invoice_address
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show phone on invoice address"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__email_on_invoice_address
+msgid "Show taxes values on reception report"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Supplier:"
+msgstr "Szállító:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Tax"
+msgstr "ÁFA (%)"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Taxes"
+msgstr "ÁFA értéke"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "To:"
+msgstr "Címzett:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Unit Price"
+msgstr "Egységár"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "VAT:"
+msgstr "ÁFA:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_voucher
+msgid "Voucher"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_payment
+msgid "Voucher / Payment"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "from"
+msgstr "tól"
