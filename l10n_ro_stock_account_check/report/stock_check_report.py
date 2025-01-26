@@ -64,7 +64,7 @@ class StockAccountingCheck(models.TransientModel):
         _select_aml = ""
         _where_svl = ""
         _where_aml = ""
-        _having = "having abs( sum(svl_value) - sum(aml_value) ) > 1"
+        _having = "having abs( sum(svl_value) - sum(aml_value) ) > 1 or sum(svl_value) < -0.01 or sum(aml_value)  < -0.01"
         if self.interval:
             _where_svl = "AND date_trunc('day',sm.date) >= %(date_from)s  AND date_trunc('day',sm.date) <= %(date_to)s"
             _where_aml = (
