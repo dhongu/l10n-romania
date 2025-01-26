@@ -2,14 +2,14 @@
 <odoo>
 
     <record id="view_bank_statement_tree" model="ir.ui.view">
-        <field name="name">account.bank.statement.list</field>
+        <field name="name">account.bank.statement.tree</field>
         <field name="model">account.bank.statement</field>
         <field name="inherit_id" ref="account.view_bank_statement_tree" />
         <field name="arch" type="xml">
-            <list position="attributes">
+            <tree position="attributes">
 <!--                <attribute name="open_form_view">True</attribute>-->
                 <attribute name="create">True</attribute>
-            </list>
+            </tree>
 
             <field name="balance_end_real" position="after">
                 <button name="action_open_form_view" type="object" string="View" class="float-end btn-secondary" />
@@ -62,7 +62,7 @@
                                 name="line_ids"
                                 context="{'default_journal_id': journal_id, 'default_internal_index':1}"
                             >
-                                <list editable="bottom" default_order="sequence" limit="500">
+                                <tree editable="bottom" default_order="sequence" limit="500">
                                     <!-- Invisible fields -->
 
                                     <field name="internal_index" column_invisible="1" />
@@ -122,7 +122,7 @@
                                     />
 
 
-                                </list>
+                                </tree>
                             </field>
                         </page>
                     </notebook>

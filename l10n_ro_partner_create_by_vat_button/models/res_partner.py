@@ -7,7 +7,7 @@ import logging
 
 from zeep import Client
 
-from odoo import _, api, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -15,6 +15,27 @@ _logger = logging.getLogger(__name__)
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    warning_message = fields.Text(string="Warning", compute="_compute_warning_message")
+
+    @api.depends("vat", "country_id", "street", "city", "state_id")
+    def _compute_warning_message(self):
+        for partner in self:
+            partner.warning_message = False
+            if partner.country_id and partner.country_id.code == "RO":
+                missing = []
+                if not partner.vat and partner.is_company:
+                    missing.append(_("VAT"))
+                if not partner.street:
+                    missing.append(_("Street"))
+                if not partner.city:
+                    missing.append(_("City"))
+                if not partner.state_id:
+                    missing.append(_("State"))
+                if not partner.zip:
+                    missing.append(_("ZIP"))
+                if missing:
+                    partner.warning_message = _("Missing: ") + ", ".join(missing)
 
     @api.constrains("vat", "country_id")
     def check_vat(self):
@@ -38,7 +59,7 @@ class ResPartner(models.Model):
                                 res = self._Anaf_to_Odoo(result)
                                 vals.update(res)
                         except Exception as e:
-                            _logger.info(f"ANAF Webservice not working. Exception: {e: }")
+                            _logger.info(f"ANAF Webservice not working. Exception: {e}")
 
             if vals.get("state_id") and not isinstance(vals["state_id"], int):
                 vals["state_id"] = vals["state_id"].id
@@ -51,23 +72,9 @@ class ResPartner(models.Model):
             return False
         if self.name and not self.vat:
             self.vat = self.name
-        self.with_context(skip_ro_vat_change=False).ro_vat_change()
-        module_installed = self.env["ir.module.module"].search([("name", "=", "l10n_ro_city")])
-        if self.zip and len(self.zip) == 5:
-            self.zip = "0" + self.zip
-        if module_installed.state == "installed" and self.country_id.code == "RO":
-            # city = self.env["res.city"].search([("name", "=", self.city_id.name)])
-            # if len(city) == 1:
-            #     self.city_id = city
-            # else:
-            #     if self.zip:
-            #         city = self.env["res.city"].search(
-            #             [("zipcode", "=", self.zip)], limit=1
-            #         )
-            #         if city:
-            #             self.city_id = city
-            self.onchange_zip()
-        return True
+        res = self.with_context(skip_ro_vat_change=False).ro_vat_change()
+
+        return res
         # self.onchange_vat_subjected()  # fortare compltare ro
 
     def get_partner_name_from_vies(self):
