@@ -624,7 +624,7 @@ class StockAccountingCheckLine(models.TransientModel):
             }
 
             svl = self.env["stock.valuation.layer"].create(svl_values)
-            svl.write({"l10n_ro_account_id": line.account_id.id})
+            svl.write({"l10n_ro_account_id": account.id})
             line.write({"amount_svl": 0, "quantity_svl": 0})
             move_count += 1
 
