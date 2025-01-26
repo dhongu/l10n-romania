@@ -16,10 +16,11 @@ class AccountMove(models.Model):
             and self.company_id.account_fiscal_country_id.code == "RO"
         ):
             payment = self.payment_id
+            l10n_ro_cash_document_type = "other"
             if payment:
-                l10n_ro_cash_document_type = payment.l10n_ro_cash_document_type
-                where_string += " AND l10n_ro_cash_document_type = %(l10n_ro_cash_document_type)s "
-                param["l10n_ro_cash_document_type"] = l10n_ro_cash_document_type
+                l10n_ro_cash_document_type = payment.l10n_ro_cash_document_type or "other"
+            where_string += " AND l10n_ro_cash_document_type = %(l10n_ro_cash_document_type)s "
+            param["l10n_ro_cash_document_type"] = l10n_ro_cash_document_type
         return where_string, param
 
     def _get_starting_sequence(self):
@@ -29,8 +30,8 @@ class AccountMove(models.Model):
             and self.journal_id.type == "cash"
             and self.company_id.account_fiscal_country_id.code == "RO"
         ):
-            if self.journal_id.payment_sequence:
-                starting_sequence = starting_sequence[1:]
+            # if self.journal_id.payment_sequence:
+            #     starting_sequence = starting_sequence[1:]
             if self.payment_id.l10n_ro_cash_document_type == "internal_transfer":
                 starting_sequence = "IT" + starting_sequence
             if self.payment_id.l10n_ro_cash_document_type == "customer_receipt":
@@ -44,14 +45,14 @@ class AccountMove(models.Model):
 
         return starting_sequence
 
-    def _sequence_matches_date(self):
-        res = super()._sequence_matches_date()
-        if self.move_type in ["out_invoice", "out_refund"]:
-            move_has_name = self.name and self.name != "/"
-            if move_has_name:
-                last_sequence = self._get_last_sequence()
-                if last_sequence:
-                    last_move = self.search([("name", "=", last_sequence)], limit=1)
-                    if last_move.date > self.date:
-                        res = False
-        return res
+    # def _sequence_matches_date(self):
+    #     res = super()._sequence_matches_date()
+    #     if self.move_type in ["out_invoice", "out_refund"] and self.state != "draft":
+    #         move_has_name = self.name and self.name != "/"
+    #         if move_has_name:
+    #             last_sequence = self._get_last_sequence()
+    #             if last_sequence:
+    #                 last_move = self.search([("name", "=", last_sequence)], limit=1)
+    #                 if last_move.date > self.date:
+    #                     res = False
+    #     return res
