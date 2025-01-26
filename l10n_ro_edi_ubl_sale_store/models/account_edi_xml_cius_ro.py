@@ -1,0 +1,16 @@
+# ©  2024 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+
+from odoo import models
+
+
+class AccountEdiXmlUBLRO(models.AbstractModel):
+    _inherit = "account.edi.xml.ubl_ro"
+
+    def _export_invoice_vals(self, invoice):
+        vals_list = super()._export_invoice_vals(invoice)
+        if invoice.receipt_print:
+            vals_list["vals"]["document_type_code"] = 751
+        return vals_list
