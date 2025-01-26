@@ -1,0 +1,535 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_invoice_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-01 09:33+0000\n"
+"PO-Revision-Date: 2025-04-01 09:33+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,print_report_name:l10n_ro_invoice_report.account_invoices_in_company_language
+msgid "(object._get_report_base_filename())"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"<br/>\n"
+"                    <strong>AWB:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.document_tax_totals_template
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.tax_groups_totals
+msgid "<span>-</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<span>/</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Delegate:</span>"
+msgstr "<span>Делегат:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>I received from</span>"
+msgstr "<span>Получих от</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Mean Transport:</span>"
+msgstr "<span>Средство на транспорта:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Name:</span>"
+msgstr "<span>Име:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<span>Payment disposal:</span>"
+msgstr "<span>Поръчка за плащане:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Signature for receive</span>"
+msgstr "<span>Подпис за получаване</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<span>Transfer:</span>"
+msgstr "<span>Трансфер:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "<span>Vat on payment</span>"
+msgstr "<span>ДДС по плащане</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<span>Voucher:</span>"
+msgstr "<span>Ваучер:</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>amount</span>"
+msgstr "<span>сума</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong class=\"mr16\">Subtotal</strong>"
+msgstr "<strong class=\"mr16\">Междинна сума</strong>"
+
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Account:</strong>"
+msgstr "<strong>Сметка:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<strong>Address:</strong>"
+msgstr "<strong>Адрес:</strong>"
+
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Bank:</strong>"
+msgstr "<strong>Банка:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<strong>CIF:</strong>"
+msgstr "<strong>ИН:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<strong>Company</strong><br/>"
+msgstr "<strong>Фирма</strong><br/>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<strong>Customer:</strong><br/>"
+msgstr "<strong>Клиент:</strong><br/>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Deliveries:</strong>"
+msgstr "<strong>Доставки:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "<strong>Delivery address:</strong>"
+msgstr "<strong>Адрес за доставка:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<strong>NRC:</strong>"
+msgstr "<strong>ЕИК:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "<strong>Operating Unit:</strong>"
+msgstr "<strong>Работна единица:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Receptions:</strong>"
+msgstr "<strong>Приеми:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "<strong>Share Capital:</strong>"
+msgstr "<strong>Споделен капитал:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_account_report_invoice
+msgid "Account report without payment lines"
+msgstr "Отчет по сметка без редове за плащане"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_marketplace_customer__info_for_invoice
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__info_for_invoice
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__info_for_invoice
+msgid "Additional info for invoice"
+msgstr "Допълнителна информация за фактура"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Amount"
+msgstr "Сума"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "Amount (in words):"
+msgstr "Сума (на думи):"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "Amount:"
+msgstr "Сума:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_bank_statement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
+msgid "Bank Statement"
+msgstr "Банково Извлечение"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_bank_statement_line
+msgid "Bank Statement Line"
+msgstr "Ред на Банково Извлечение"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Cancelled"
+msgstr "Анулирано"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_company
+msgid "Companies"
+msgstr "Фирми"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_config_settings
+msgid "Config Settings"
+msgstr "Настройки"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_res_partner
+msgid "Contact"
+msgstr "Контакт"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Customer:"
+msgstr "Клиент:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__delegate_id
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__delegate_id
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_payment__delegate_id
+msgid "Delegate"
+msgstr "Делегат"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Description"
+msgstr "Описание"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Discount (%)"
+msgstr "Отстъпка (%)"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Elaborate:"
+msgstr "Изготвено:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "For:"
+msgstr "За:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Information for delivery:"
+msgstr "Информация за доставка:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance\n"
+"                    no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and\n"
+"                    subsequent amendments."
+msgstr ""
+"Фактурата е валидна без подпис и печат съгласно чл. V, ал. (2) от Наредба\n"
+"                    № 17 / 2015, чл. 319 ал. (29) от Закона № 227/2015 за фискалния кодекс и\n"
+"                    последващите изменения."
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,name:l10n_ro_invoice_report.account_invoices_in_company_language
+msgid "Invoices in company language"
+msgstr "Фактури на фирмения език"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_journal
+msgid "Journal"
+msgstr "Дневник"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_account_move
+msgid "Journal Entry"
+msgstr "Записи в Дневника"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_payment__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_marketplace_customer__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__mean_transp
+msgid "Mean transport"
+msgstr "Средство на транспорта"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "NRC:"
+msgstr "ЕИК:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__open
+msgid "New"
+msgstr "Ново"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
+msgid "Notes"
+msgstr "Бележки"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_journal__operating_unit_id
+msgid "Operating Unit"
+msgstr "Работна единица"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Ord"
+msgstr "№"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "Payment Communication:"
+msgstr "Комуникация за плащане:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Preț cu discount"
+msgstr "Цена с отстъпка"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__posted
+msgid "Processing"
+msgstr "Обработка"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Quantity"
+msgstr "Количество"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "Received from:"
+msgstr "Получено от:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_invoice_company_language
+msgid "Report Invoice in Company Language"
+msgstr "Отчет за фактура на фирмения език"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_payment
+msgid "ReportPaymentPrint"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_statement_collection
+msgid "ReportStatementLineCollection"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_statement_payment
+msgid "ReportStatementLinePayment"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_statement_line
+msgid "ReportStatementLinePrint"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_statement_voucher
+msgid "ReportStatementLineVoucher"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_voucher
+msgid "ReportVoucherPrint"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Representing counter value of invoice"
+msgstr "Представяне на стойността на броя на фактурата"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "Representing:"
+msgstr "Представяне:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__email_on_invoice_address
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__email_on_invoice_address
+msgid "Show email"
+msgstr "Показване на имейл"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__email_on_invoice_address
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show email on invoice address"
+msgstr "Показване на имейл на адреса за фактура"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__marker_on_invoice_address
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__marker_on_invoice_address
+msgid "Show marker"
+msgstr "Показване на маркер"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__marker_on_invoice_address
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__marker_on_invoice_address
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show marker on invoice address"
+msgstr "Показване на маркер на адреса за фактура"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__phone_on_invoice_address
+msgid "Show phone"
+msgstr "Показване на телефон"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__phone_on_invoice_address
+msgid "Show phone "
+msgstr "Показване на телефон "
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__phone_on_invoice_address
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__phone_on_invoice_address
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show phone on invoice address"
+msgstr "Показване на телефон на адреса за фактура"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__email_on_invoice_address
+msgid "Show taxes values on reception report"
+msgstr "Показване на стойностите на данъците в отчета за прием"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement__line_ids
+msgid "Statement lines"
+msgstr "Редове на извлечения"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement__state
+msgid "Status"
+msgstr "Статус"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Supplier:"
+msgstr "Доставчик:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Tax"
+msgstr "данък"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Taxes"
+msgstr "данъци"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_account_bank_statement__state
+msgid ""
+"The current state of your bank statement:- New: Fully editable with draft "
+"Journal Entries.- Processing: No longer editable with posted Journal "
+"entries, ready for the reconciliation.- Validated: All lines are reconciled."
+" There is nothing left to process."
+msgstr ""
+"Текущото състояние на вашето банково извлечение:- Ново: Пълно редактиране с "
+"чернови Дневни записи.- Обработка: Вече не може да се редактира с "
+"публикувани Дневни записи, готов за съпоставяне.- Валидирано: Всички редове "
+"са съпоставени. Няма нищо останало за обработка."
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+msgid "To:"
+msgstr "До:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Total amount"
+msgstr "Обща сума"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
+msgid "Transactions"
+msgstr "Транзакции"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Unit Price"
+msgstr "Единична цена"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "VAT:"
+msgstr "ДДС:"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__confirm
+msgid "Validated"
+msgstr "Валидирано"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_tree
+msgid "View"
+msgstr "Преглед"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_payment
+msgid "Voucher / Payment"
+msgstr "Ваучер / Плащане"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
+msgid "e.g. BNK/2021/0001"
+msgstr "напр. BNK/2021/0001"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "from"
+msgstr "от"
