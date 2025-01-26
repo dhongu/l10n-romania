@@ -5,12 +5,13 @@
 {
     "name": "Romania - Partner Create by VAT Button",
     "license": "AGPL-3",
-    "version": "18.0.1.0.9",
+    "version": "18.0.1.1.1",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
     "countries": ["ro"],
     "depends": [
+        "l10n_ro_config",
         "l10n_ro_partner_create_by_vat",
         # "l10n_ro_partner_create_by_vat_openapi"
     ],
@@ -19,4 +20,5 @@
         "wizard/get_data_form_view.xml",
         "views/res_partner_view.xml",
     ],
+    "sequence": 100,
 }
