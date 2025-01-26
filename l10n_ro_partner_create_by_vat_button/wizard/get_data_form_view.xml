@@ -5,6 +5,7 @@
         <field name="model">get.partner.data</field>
         <field name="arch" type="xml">
             <form string="Get Partner Data">
+                <field name="partner_id" readonly="1"/>
                 <field name="state" invisible="1" />
                 <div invisible="state!='get'">
                     <div>
@@ -24,7 +25,7 @@
                             name="do_get_data"
                             string="Get Data"
                             type="object"
-                            context="{'active_id': active_id}"
+
                             class="oe_highlight"
                         />
                         or
