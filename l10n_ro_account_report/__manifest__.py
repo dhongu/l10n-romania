@@ -6,7 +6,7 @@
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
     "countries": ["ro"],
-    "depends": ["account", "date_range"],
+    "depends": ["account"],
     "data": [
         "views/account_report.xml",
         "views/report_bank_statement.xml",
