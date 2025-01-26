@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - ANPC footer",
-    "version": "17.0.0.0.1",
+    "version": "18.0.0.0.1",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Displays ANPC logos and links in website footer",
