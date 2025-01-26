@@ -4,7 +4,7 @@
         <field name="name">cash.register.tree</field>
         <field name="model">l10n.ro.cash.register</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <header>
                     <button name="action_refresh" string="Refresh" type="object" />
                 </header>
@@ -15,7 +15,7 @@
                 <field name="balance_end" />
                 <field name="currency_id" column_invisible="1" />
                 <field name="activity_ids" widget="list_activity" optional="hide" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -54,7 +54,7 @@
                     <notebook>
                         <page string="Cash Register Lines">
                             <field name="move_line_ids">
-                                <tree>
+                                <list>
                                     <field name="move_name" string="Journal Entry" widget="open_move_widget" />
                                     <field name="partner_id" />
                                     <field name="balance" sum="Total Amount" string="Total" decoration-bf="1" />
@@ -67,7 +67,7 @@
                                         invisible="1"
                                     />
                                     <field name="ref" />
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -110,7 +110,7 @@
     <record id="action_cash_register" model="ir.actions.act_window">
         <field name="name">Cash Register</field>
         <field name="res_model">l10n.ro.cash.register</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_cash_register_tree" />
     </record>
 
