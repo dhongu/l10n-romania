@@ -81,16 +81,16 @@ class StockMove(models.Model):
         if am_val_store:
             am_vals = [am_val_store]
 
-        for am_val in am_vals:
-            journal_id = am_val.get("journal_id")
-            journal = self.env["account.journal"].browse(journal_id)
-            if journal.l10n_ro_fiscal_position_id:
-                fiscal_position = journal.l10n_ro_fiscal_position_id
-                for line in am_val["line_ids"]:
-                    account_id = line[2]["account_id"]
-                    account = self.env["account.account"].browse(account_id)
-                    account = fiscal_position.map_account(account)
-                    line[2]["account_id"] = account.id
+        # for am_val in am_vals:
+        #     journal_id = am_val.get("journal_id")
+        #     journal = self.env["account.journal"].browse(journal_id)
+        #     if journal.l10n_ro_fiscal_position_id:
+        #         fiscal_position = journal.l10n_ro_fiscal_position_id
+        #         for line in am_val["line_ids"]:
+        #             account_id = line[2]["account_id"]
+        #             account = self.env["account.account"].browse(account_id)
+        #             account = fiscal_position.map_account(account)
+        #             line[2]["account_id"] = account.id
 
         return am_vals
 
