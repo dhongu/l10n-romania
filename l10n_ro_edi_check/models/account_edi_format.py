@@ -36,6 +36,20 @@ class AccountEdiXmlCIUSRO(models.Model):
 class AccountEdiXmlBis3(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_bis3"
 
+    def _get_partner_address_vals(self, partner):
+        vals = super()._get_partner_address_vals(partner)
+        if partner.state_id.code == "B":
+            city = vals.get("city_name", partner.city).upper()
+            city = city.replace("SECTORUL", "SECTOR")
+            if "SECTOR" not in city:
+                    postal_code = vals.get("postal_zone", False)
+                    if postal_code and postal_code[0] == "0" and postal_code[1] in ["1", "2", "3", "4", "5", "6"]:
+                        vals["city_name"] = "SECTOR" + postal_code[1]
+                    else:
+                        vals["city_name"] = "SECTOR1"
+        return vals
+
+
     def _get_invoice_payment_means_vals_list(self, invoice):
         # rewrite function to send all bank accounts printed in invoice, if parameter set
         get_param = self.env["ir.config_parameter"].sudo().get_param
