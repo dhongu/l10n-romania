@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_balance_confirmation,access_balance_confirmation,model_l10n_ro_balance_confirm_dialog,l10n_ro_balance_confirmation.group_print_balance,1,1,1,1
