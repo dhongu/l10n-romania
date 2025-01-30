@@ -43,27 +43,29 @@ class StockMove(models.Model):
         return it_is
 
     def _create_in_store_svl(self, forced_quantity=None):
-        svl_values = self._get_in_svl_vals(self.quantity)
-        for svl_value in svl_values:
-            svl_value.update(
-                {
-                    "l10n_ro_valued_type": "in_store",
-                    "description": f"Store Evaluation {self.reference} - {self.product_id.name}",
-                }
-            )
-        svls = self.env["stock.valuation.layer"].create(svl_values)
+        for move in self:
+            svl_values = move._get_in_svl_vals(move.quantity)
+            for svl_value in svl_values:
+                svl_value.update(
+                    {
+                        "l10n_ro_valued_type": "in_store",
+                        "description": f"Store Evaluation {move.reference} - {move.product_id.name}",
+                    }
+                )
+        svls = self.env["stock.valuation.layer"].create(svl_value)
         return svls
 
     def _create_out_store_svl(self, forced_quantity=None):
-        svl_values = self._get_out_svl_vals(self.quantity)
-        for svl_value in svl_values:
-            svl_value.update(
-                {
-                    "l10n_ro_valued_type": "out_store",
-                    "description": f"Store Evaluation {self.reference} - {self.product_id.name}",
-                }
-            )
-        svls = self.env["stock.valuation.layer"].create(svl_values)
+        for move in self:
+            svl_values = move._get_out_svl_vals(move.quantity)
+            for svl_value in svl_values:
+                svl_value.update(
+                    {
+                        "l10n_ro_valued_type": "out_store",
+                        "description": f"Store Evaluation {move.reference} - {move.product_id.name}",
+                    }
+                )
+        svls = self.env["stock.valuation.layer"].create(svl_value)
         return svls
 
     def _account_entry_move(self, qty, description, svl_id, cost):
