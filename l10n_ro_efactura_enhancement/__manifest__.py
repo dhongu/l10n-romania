@@ -12,7 +12,7 @@
     "category": "Localization",
     "depends": [
         "l10n_ro_edi",
-        "l10n_ro_efactura",
+        # "l10n_ro_efactura",
     ],
     "license": "LGPL-3",
     "price": 25.00,
