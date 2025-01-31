@@ -5,7 +5,7 @@
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
-    "depends": ["account"],
+    "depends": ["account","l10n_ro_account_sequence"],
     "countries": ["ro"],
     "data": [
         "views/cash_register_views.xml",
