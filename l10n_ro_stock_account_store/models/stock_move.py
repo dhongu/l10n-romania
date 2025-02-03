@@ -43,6 +43,7 @@ class StockMove(models.Model):
         return it_is
 
     def _create_in_store_svl(self, forced_quantity=None):
+        svls = self.env["stock.valuation.layer"]
         for move in self:
             svl_values = move._get_in_svl_vals(move.quantity)
             for svl_value in svl_values:
@@ -52,10 +53,11 @@ class StockMove(models.Model):
                         "description": f"Store Evaluation {move.reference} - {move.product_id.name}",
                     }
                 )
-        svls = self.env["stock.valuation.layer"].create(svl_value)
+            svls |= self.env["stock.valuation.layer"].create(svl_value)
         return svls
 
     def _create_out_store_svl(self, forced_quantity=None):
+        svls = self.env["stock.valuation.layer"]
         for move in self:
             svl_values = move._get_out_svl_vals(move.quantity)
             for svl_value in svl_values:
@@ -65,7 +67,7 @@ class StockMove(models.Model):
                         "description": f"Store Evaluation {move.reference} - {move.product_id.name}",
                     }
                 )
-        svls = self.env["stock.valuation.layer"].create(svl_value)
+            svls |= self.env["stock.valuation.layer"].create(svl_value)
         return svls
 
     def _account_entry_move(self, qty, description, svl_id, cost):
@@ -83,16 +85,6 @@ class StockMove(models.Model):
         if am_val_store:
             am_vals = [am_val_store]
 
-        # for am_val in am_vals:
-        #     journal_id = am_val.get("journal_id")
-        #     journal = self.env["account.journal"].browse(journal_id)
-        #     if journal.l10n_ro_fiscal_position_id:
-        #         fiscal_position = journal.l10n_ro_fiscal_position_id
-        #         for line in am_val["line_ids"]:
-        #             account_id = line[2]["account_id"]
-        #             account = self.env["account.account"].browse(account_id)
-        #             account = fiscal_position.map_account(account)
-        #             line[2]["account_id"] = account.id
 
         return am_vals
 
