@@ -493,12 +493,13 @@
                         </h4>
                         <div>
                             <span>I received from</span>
-                            <strong t-field="o.partner_id.name" />
-                            <span t-if="o.partner_id.city">
+                            <t t-set="partner" t-value="o.partner_id.commercial_partner_id" />
+                            <strong t-field="partner.name" />
+                            <span t-if="partner.city">
                                 from
-                                <span t-field="o.partner_id.city" />
-                                <span t-field="o.partner_id.street" />
-                                <span t-field="o.partner_id.street2" />
+                                <span t-field="partner.city" />
+                                <span t-field="partner.street" />
+                                <span t-field="partner.street2" />
                             </span>
 
                             <span>amount</span>
