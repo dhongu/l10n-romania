@@ -85,7 +85,6 @@ class StockMove(models.Model):
         if am_val_store:
             am_vals = [am_val_store]
 
-
         return am_vals
 
     def _create_account_entry_in_store(self, qty, description, svl_id, cost):
