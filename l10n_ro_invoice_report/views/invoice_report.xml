@@ -286,13 +286,15 @@
                                     t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
                                 />
                                 <t t-if="not with_discount_distinct and l.discount">
-
+                                    <span t-field="l.price_unit" />
                                 </t>
-                                <span
-                                    id="price_unit_without_taxes"
-                                    t-esc="price_unit_without_taxes"
-                                    t-options='{"widget": "float", "precision": 2}'
-                                />
+                                <t t-else="">
+                                    <span
+                                        id="price_unit_without_taxes"
+                                        t-esc="price_unit_without_taxes"
+                                        t-options='{"widget": "float", "precision": 2}'
+                                    />
+                                </t>
                             </td>
                             <td
                                 class="text-end"

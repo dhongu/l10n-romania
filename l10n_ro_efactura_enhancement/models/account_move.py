@@ -1,8 +1,10 @@
+import logging
 from datetime import timedelta
 
 from odoo import fields, models
-import logging
+
 _logger = logging.getLogger(__name__)
+
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -25,7 +27,7 @@ class AccountMove(models.Model):
 
         invoices = self.search(domain)
 
-        _logger.info("Count of invoices to send: %s" % len(invoices))
+        _logger.info(f"Count of invoices to send: {len(invoices)}")
 
         composer_vals = {
             "move_ids": invoices.ids,
