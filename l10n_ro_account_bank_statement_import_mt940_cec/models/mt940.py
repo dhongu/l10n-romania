@@ -83,37 +83,34 @@ class MT940Parser(models.AbstractModel):
                 transaction["payment_ref"] = data
                 transaction["narration"] = data
 
-                regec_p = r".*Platitor(?P<platitor>.*)(?P<iban_p>\w{24})"
-                regec_b = r".*Beneficiar(?P<beneficiar>.*)(?P<iban_b>\w{24})"
-                regec_d = r".*Detalii(?P<detalii>.*)"
-                regec_cfp = r".*CODFISC (?P<codfis_p>\w+)"
-                regec_cfb = r".*CODFISC (?P<codfis_b>\w+)"
 
-                tag_86_regex_v1 = re.compile(
-                     regec_p + regec_cfp + regec_b + regec_cfb + regec_d
-                )
-                tag_86_regex_v2 = re.compile(
-                     regec_b + regec_cfb + regec_p + regec_cfp + regec_d
-                )
-                tag_86_regex_v3 = re.compile(  regec_p + regec_b + regec_d)
-                tag_86_regex_v4 = re.compile(   regec_b + regec_p + regec_d)
-                tag_86_regex_v5 = re.compile(  regec_b + regec_p)
-                tag_86_regex_v6 = re.compile( regec_b + regec_p)
 
-                re_86 = tag_86_regex_v1.match(data)
-                if not re_86:
-                    re_86 = tag_86_regex_v2.match(data)
-                if not re_86:
-                    re_86 = tag_86_regex_v3.match(data)
-                if not re_86:
-                    re_86 = tag_86_regex_v4.match(data)
-                if not re_86:
-                    re_86 = tag_86_regex_v5.match(data)
-                if not re_86:
-                    re_86 = tag_86_regex_v6.match(data)
+                regec_b = r"Beneficiar\s+(?P<beneficiar>[\w\s.]+),"  # Beneficiar
+                regec_iban_b = r"Iban Beneficiar\s+(?P<iban_b>[A-Z]{2}\w{22,30})"  # IBAN Beneficiar
+                regec_banca = r"Banca beneficiar\s+(?P<banca_b>\w+)"  # Banca Beneficiar
+                regec_cfb = r"CUI/CNP Beneficiar\s+(?P<codfis_b>\w+)"  # CUI Beneficiar
 
-                if re_86:
-                    parsed_data = re_86.groupdict()
+                regec_p = r"Platitor\s+(?P<platitor>[\w\s.-]+),"  # Platitor
+                regec_iban_p = r"Iban Platitor\s+(?P<iban_p>[A-Z]{2}\w{22,30})"  # IBAN Platitor
+                regec_banca_p = r"Banca platitor\s+(?P<banca_p>\w+)"  # Banca Platitor
+                regec_cfp_p = r"CUI\s*/CNP\s+Platitor\s+(?P<codfis_p>\w+)"  # CUI Platitor
+
+                regex_list = [regec_b, regec_iban_b, regec_banca, regec_cfb, regec_p, regec_iban_p, regec_banca_p, regec_cfp_p]
+
+                # Dicționar pentru a stoca rezultatele extrase
+                parsed_data = {}
+
+                # Iterăm prin fiecare regex și căutăm potriviri
+                for pattern in regex_list:
+                    match = re.search(pattern, data)
+                    if match:
+                        parsed_data.update(match.groupdict())
+
+
+                # Verificare și extragere date
+                if parsed_data:
+
+                    _logger.info(parsed_data)  # Afișează rezultatele extrase
                     if transaction["amount"] > 0:
                         transaction["partner_name"] = parsed_data.get(
                             "platitor", ""
