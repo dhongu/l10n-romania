@@ -80,7 +80,6 @@
                                     <td t-if="o.payment_type=='transfer'">To:</td>
                                     <td>
                                         <span t-field="o.partner_id.name" />
-                                        <span t-field="o.destination_journal_id.name" />
                                     </td>
                                 </tr>
                                 <tr>
