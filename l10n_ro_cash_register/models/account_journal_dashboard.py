@@ -1,14 +1,14 @@
-from odoo import models
+from odoo import fields, models
 
 
 class account_journal(models.Model):
     _inherit = "account.journal"
 
-    # def open_action_with_context(self):
-    #     if self.type == "cash" and self.company_id.country_id.code == "RO":
-    #         action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_cash_register.action_cash_register")
-    #         action["context"] = {"default_journal_id": self.id}
-    #         return action
+    def open_action_with_context(self):
+        if self.type == "cash" and self.company_id.country_id.code == "RO":
+            action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_cash_register.action_cash_register")
+            action["context"] = {"default_journal_id": self.id}
+            return action
 
     def open_action(self):
         if self.type == "cash" and self.company_id.country_id.code == "RO":
@@ -56,6 +56,22 @@ class account_journal(models.Model):
                             "date": date,
                         }
                     )
+
+            # pentru ziua curenta verificam daca exista un registru de casa
+            today = fields.Date.context_today(self)
+            cash_register = self.env["l10n.ro.cash.register"].search(
+                [("journal_id", "=", journal.id), ("date", "=", today)]
+            )
+            if not cash_register:
+                cash_register.create(
+                    {
+                        "company_id": journal.company_id.id,
+                        "currency_id": journal.currency_id.id or journal.company_id.currency_id.id,
+                        "journal_id": journal.id,
+                        "date": today,
+                    }
+                )
+
         return True
 
     def remove_outstanding_accounts(self):
