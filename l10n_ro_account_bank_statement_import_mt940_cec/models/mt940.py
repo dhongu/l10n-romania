@@ -67,9 +67,7 @@ class MT940Parser(models.AbstractModel):
         return super().handle_tag_28(data, result)
 
     def handle_tag_86(self, data, result):
-
         if self.get_mt940_type() == "mt940_ro_cec":
-
             # :86: INVOICE NO. 16864,Beneficiar GB RICAMBI S.P.A.,Iban Beneficiar I
             # T07K0100512900000000001681,Banca beneficiar BNLIITRRMOX,CUI/CNP B
             # eneficiar 104
@@ -83,8 +81,6 @@ class MT940Parser(models.AbstractModel):
                 transaction["payment_ref"] = data
                 transaction["narration"] = data
 
-
-
                 regec_b = r"Beneficiar\s+(?P<beneficiar>[\w\s.]+),"  # Beneficiar
                 regec_iban_b = r"Iban Beneficiar\s+(?P<iban_b>[A-Z]{2}\w{22,30})"  # IBAN Beneficiar
                 regec_banca = r"Banca beneficiar\s+(?P<banca_b>\w+)"  # Banca Beneficiar
@@ -95,7 +91,16 @@ class MT940Parser(models.AbstractModel):
                 regec_banca_p = r"Banca platitor\s+(?P<banca_p>\w+)"  # Banca Platitor
                 regec_cfp_p = r"CUI\s*/CNP\s+Platitor\s+(?P<codfis_p>\w+)"  # CUI Platitor
 
-                regex_list = [regec_b, regec_iban_b, regec_banca, regec_cfb, regec_p, regec_iban_p, regec_banca_p, regec_cfp_p]
+                regex_list = [
+                    regec_b,
+                    regec_iban_b,
+                    regec_banca,
+                    regec_cfb,
+                    regec_p,
+                    regec_iban_p,
+                    regec_banca_p,
+                    regec_cfp_p,
+                ]
 
                 # Dicționar pentru a stoca rezultatele extrase
                 parsed_data = {}
@@ -106,22 +111,16 @@ class MT940Parser(models.AbstractModel):
                     if match:
                         parsed_data.update(match.groupdict())
 
-
                 # Verificare și extragere date
                 if parsed_data:
-
                     _logger.info(parsed_data)  # Afișează rezultatele extrase
                     if transaction["amount"] > 0:
-                        transaction["partner_name"] = parsed_data.get(
-                            "platitor", ""
-                        ).strip()
+                        transaction["partner_name"] = parsed_data.get("platitor", "").strip()
                         transaction["account_number"] = parsed_data.get("iban_p")
                         vat = parsed_data.get("codfis_p")
 
                     else:
-                        transaction["partner_name"] = parsed_data.get(
-                            "beneficiar", ""
-                        ).strip()
+                        transaction["partner_name"] = parsed_data.get("beneficiar", "").strip()
                         transaction["account_number"] = parsed_data.get("iban_b")
                         vat = parsed_data.get("codfis_b")
                     if vat:
