@@ -134,7 +134,7 @@ class ReportPickingReception(models.AbstractModel):
 
             taxes = line.taxes_id.compute_all(
                 res["price"],
-                quantity=move.product_qty,
+                quantity=quantity,
                 product=move.product_id,
                 partner=move.partner_id,
             )
