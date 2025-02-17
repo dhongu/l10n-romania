@@ -1,7 +1,7 @@
 from odoo import fields, models
 
 
-class account_journal(models.Model):
+class AccountJournal(models.Model):
     _inherit = "account.journal"
 
     def open_action_with_context(self):
