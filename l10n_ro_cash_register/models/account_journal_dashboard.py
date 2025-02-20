@@ -1,7 +1,7 @@
 from odoo import fields, models
 
 
-class account_journal(models.Model):
+class AccountJournal(models.Model):
     _inherit = "account.journal"
 
     def open_action_with_context(self):
@@ -9,6 +9,7 @@ class account_journal(models.Model):
             action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_cash_register.action_cash_register")
             action["context"] = {"default_journal_id": self.id}
             return action
+        return super().open_action_with_context()
 
     def open_action(self):
         if self.type == "cash" and self.company_id.country_id.code == "RO":

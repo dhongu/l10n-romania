@@ -991,7 +991,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <span t-field="move.product_qty" />
+                                                        <span t-field="move.quantity" />
                                                         <span t-field="move.product_uom" groups="uom.group_uom" />
                                                     </td>
                                                     <td class="text-end">
