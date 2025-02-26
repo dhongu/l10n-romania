@@ -1,7 +1,7 @@
 # ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 {
-    "name": "Romania - DVI",
+    "name": "Terrabit - DVI",
     "license": "AGPL-3",
     "version": "17.0.1.0.0",
     "countries": ["ro"],

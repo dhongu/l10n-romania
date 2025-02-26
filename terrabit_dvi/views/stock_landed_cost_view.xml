@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <notebook position="before">
                     <group>
-                        <group>
+                        <group invisible="landed_type != 'dvi'">
                             <field name="tax_id" />
                             <field name="tax_value" />
                         </group>
