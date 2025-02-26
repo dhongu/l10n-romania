@@ -27,6 +27,7 @@ class AccountInvoiceDVI(models.TransientModel):
             "property_account_expense_id": account.id,
             "taxes_id": False,
             "company_id": False,
+            "categ_id": self.env.ref("product.product_category_all").id,
         }
 
     def _prepare_customs_commission_product(self):
@@ -39,6 +40,7 @@ class AccountInvoiceDVI(models.TransientModel):
             "property_account_expense_id": account.id,
             "taxes_id": False,
             "company_id": False,
+            "categ_id": self.env.ref("product.product_category_all").id,
         }
 
     @api.model

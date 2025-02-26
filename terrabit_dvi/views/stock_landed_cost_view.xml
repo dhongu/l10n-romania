@@ -5,14 +5,14 @@
             <field name="model">stock.landed.cost</field>
             <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form" />
             <field name="arch" type="xml">
+                <field name="target_model" position="before">
+                    <field name="landed_type" />
+                </field>
                 <notebook position="before">
                     <group>
                         <group invisible="landed_type != 'dvi'">
                             <field name="tax_id" />
                             <field name="tax_value" />
-                        </group>
-                        <group>
-                            <field name="landed_type" />
                         </group>
                     </group>
                 </notebook>
