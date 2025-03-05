@@ -1,11 +1,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Cash Register",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.1.1",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
-    "depends": ["account","l10n_ro_account_sequence"],
+    "depends": ["account", "l10n_ro_account_sequence"],
     "countries": ["ro"],
     "data": [
         "views/cash_register_views.xml",
