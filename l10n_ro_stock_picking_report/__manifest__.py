@@ -20,6 +20,7 @@
         "l10n_ro_stock",
         # "l10n_ro_stock_account",
     ],
+    "excludes":["l10n_ro_stock_picking_comment_template"],
     "data": [
         "views/l10n_ro_stock_picking_report.xml",
         "views/report_picking.xml",

@@ -16,6 +16,7 @@
         "purchase_stock",
         "stock_landed_costs",
     ],
+    "excludes": ["l10n_ro_dvi"],
     "data": [
         "views/account_invoice_view.xml",
         "views/stock_landed_cost_view.xml",
@@ -23,4 +24,5 @@
         "security/ir.model.access.csv",
     ],
     "installable": True,
+
 }
