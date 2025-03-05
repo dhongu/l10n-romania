@@ -21,10 +21,10 @@ class AccountPayment(models.Model):
 
     @api.onchange("posted_before", "state", "journal_id", "date")
     def _onchange_journal_date(self):
-        res = super()._onchange_journal_date()
+        # res = super()._onchange_journal_date()
         if not self.move_id.id:
             self.name = False
-        return res
+        # return res
 
     @api.onchange("payment_type", "partner_type", "is_internal_transfer", "journal_id")
     def _onchange_payment_type_and_partner_type(self):
@@ -33,7 +33,10 @@ class AccountPayment(models.Model):
             return
         if self.journal_id.type != "cash":
             return
-        if self.is_internal_transfer:
+        is_internal_transfer = (
+            self.partner_id and self.partner_id == self.journal_id.company_id.partner_id and self.destination_journal_id
+        )
+        if is_internal_transfer:
             self.l10n_ro_cash_document_type = "internal_transfer"
         elif self.payment_type == "inbound":
             if self.partner_type == "customer":
