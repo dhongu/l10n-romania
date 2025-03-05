@@ -20,8 +20,6 @@ class GetPartnerData(models.TransientModel):
             res["partner_id"] = partner.id
         return res
 
-
-
     def do_back(self):
         self.write({"state": "get"})
         return {
