@@ -1,0 +1,182 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="action_report_delivery_batch" model="ir.actions.report">
+        <field name="name">Delivery</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ro_stock_picking_report.report_batch_delivery</field>
+        <field name="report_file">l10n_ro_stock_picking_report.report_batch_delivery</field>
+        <field name="binding_model_id" ref="stock_picking_batch.model_stock_picking_batch" />
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_batch_address">
+        <div id="address" class="address row">
+            <div name="information_block" class="col-6">
+                <div>
+                    <strong>Company</strong>
+                </div>
+                <t t-set="warehouse_id" t-value="batch.picking_type_id.warehouse_id" />
+                <div t-if="warehouse_id">
+                    <div>
+                        <strong t-field="batch.company_id.name" />,
+                        <strong t-field="warehouse_id.name" />
+                    </div>
+                    <strong>Address:</strong>
+                    <address
+                        t-field="warehouse_id.partner_id"
+                        t-options='{"widget": "contact", "fields": ["address","phone"], "no_marker": false, "no_tag_br": true}'
+                    />
+                </div>
+                <div id="cif">
+                    <div t-if="batch.company_id.partner_id.vat">
+                        <strong>CIF:</strong>
+                        <span t-field="batch.company_id.partner_id.vat" />
+                    </div>
+                    <div t-if="batch.company_id.partner_id.nrc">
+                        <strong>NRC:</strong>
+                        <span t-field="batch.company_id.partner_id.nrc" />
+                    </div>
+                </div>
+            </div>
+            <div name="address" class="col-5 offset-1">
+                <div id="right_name">
+                    <strong>Recipient</strong>
+                </div>
+                <t t-set="partner_id" t-value="batch.picking_ids[0].partner_id if batch.picking_ids else False" />
+                <t t-if="partner_id">
+                    <div id="recipient">
+                        <strong t-field="partner_id.name" />
+                    </div>
+                    <div id="recipient_address">
+                        <strong>Address:</strong>
+                        <address
+                            t-esc="partner_id"
+                            t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": false, "no_tag_br": true}'
+                        />
+                    </div>
+                </t>
+                <div t-if="partner_id.vat">
+                    <strong>CIF:</strong>
+                    <span t-field="partner_id.commercial_partner_id.vat" />
+                </div>
+                <div t-if="partner_id.nrc">
+                    <strong>NRC:</strong>
+                    <span t-field="partner_id.commercial_partner_id.nrc" />
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_batch_delivery">
+        <t t-set="with_price" t-value="1" />
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="batch">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <t t-call="l10n_ro_stock_picking_report.report_batch_address" />
+
+                        <t t-set="doc_type" t-value="'delivery'" />
+                        <h2 class="text-center">
+                            Delivery of goods
+                            <span t-field="batch.name" />
+                        </h2>
+                        <h4 class="text-center">
+                            <span>Date:</span>
+                            <t t-if="batch.scheduled_date">
+                                <span t-field="batch.scheduled_date" t-options='{"widget": "date"}' />
+                            </t>
+                        </h4>
+                        <t t-set="products" t-value="batch.move_ids.product_id.ids" />
+                        <div t-esc="products" />
+                        <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th class="text-end">
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th class="text-end" t-if="with_price">
+                                            <strong>Unit price</strong>
+                                        </th>
+                                        <th class="text-end" t-if="with_price">
+                                            <strong>Value</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="total_value" t-value="0" />
+                                    <t t-foreach="products" t-as="product">
+                                        <tr>
+                                            <t
+                                            t-set="product_moves"
+                                            t-value="batch.move_ids.filtered(lambda m: m.product_id.id == product)"
+                                        />
+                                            <t t-if="with_price">
+
+                                            </t>
+                                            <t t-set="product_qty" t-value="0" />
+                                            <t t-set="product_value" t-value="0.0" />
+                                            <t t-set="product_price_unit" t-value="0.0" />
+                                            <t t-foreach="product_moves" t-as="move">
+                                                <t t-set="product_qty" t-value="product_qty + move.quantity" />
+                                                <t t-if="move.purchase_line_id">
+                                                    <t
+                                                    t-set="product_value"
+                                                    t-value="product_value + (move.purchase_line_id.price_unit * move.quantity)"
+                                                />
+                                                </t>
+                                                <t t-elif="move.sale_line_id">
+                                                    <t
+                                                    t-set="product_value"
+                                                    t-value="product_value + (move.sale_line_id.price_unit * move.quantity)"
+                                                />
+                                                </t>
+                                            </t>
+                                            <t t-if="product_qty">
+                                                <t t-set="product_price_unit" t-value="product_value / product_qty" />
+                                            </t>
+                                            <td>
+                                                <span t-field="product_moves[0].product_id" />
+                                            </td>
+
+                                            <td class="text-end">
+                                                <span t-esc="product_qty" />
+                                                <span t-field="product_moves[0].product_uom" groups="uom.group_uom" />
+                                            </td>
+                                            <td class="text-end" t-if="with_price">
+                                                <span
+                                                t-esc="product_price_unit"
+                                                t-options="{'widget': 'monetary', 'display_currency': batch.company_id.currency_id}"
+                                            />
+                                            </td>
+                                            <td class="text-end" t-if="with_price">
+                                                <span
+                                                t-esc="product_value"
+                                                t-options="{'widget': 'monetary', 'display_currency': batch.company_id.currency_id}"
+                                            />
+                                            </td>
+                                            <t t-set="total_value" t-value="total_value + product_value" />
+                                        </tr>
+                                    </t>
+                                    <tr t-if="with_price">
+                                        <td colspan="3" class="text-end">
+                                            <strong>Total:</strong>
+                                        </td>
+                                        <td class="text-end">
+                                            <strong><span
+                                                t-esc="total_value"
+                                                t-options="{'widget': 'monetary', 'display_currency': batch.company_id.currency_id}"
+                                            /></strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
