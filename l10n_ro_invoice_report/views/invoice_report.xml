@@ -285,7 +285,7 @@
                                     t-set="price_unit_without_taxes"
                                     t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
                                 />
-                                <t t-if="not with_discount_distinct and l.discount">
+                                <t t-if="with_discount_distinct and l.discount">
                                     <span t-field="l.price_unit" />
                                 </t>
                                 <t t-else="">
