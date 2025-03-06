@@ -39,7 +39,6 @@ msgid "<span>Consume Voucher:</span>"
 msgstr "<span>Bon de consum:</span>"
 
 #. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_batch_delivery
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_title
 msgid "<span>Date:</span>"
@@ -216,7 +215,6 @@ msgid "<strong>Price</strong>"
 msgstr "<strong>Preț unitar</strong>"
 
 #. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_batch_delivery
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
@@ -228,7 +226,6 @@ msgid "<strong>Product</strong>"
 msgstr "<strong>Produs</strong>"
 
 #. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_batch_delivery
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_consume_voucher
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_price
@@ -307,27 +304,12 @@ msgid "<strong>Total Without Taxes</strong>"
 msgstr "<strong>Total fără TVA</strong>"
 
 #. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_batch_delivery
-msgid "<strong>Total:</strong>"
-msgstr ""
-
-#. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_internal_transfer
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_reception_no_tax
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_totals
 msgid "<strong>Total</strong>"
 msgstr ""
-
-#. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_batch_delivery
-msgid "<strong>Unit price</strong>"
-msgstr "Preț"
-
-#. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_batch_delivery
-msgid "<strong>Value</strong>"
-msgstr "Valoare"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_address
@@ -411,11 +393,6 @@ msgstr "Delegat"
 #: model:ir.actions.report,name:l10n_ro_stock_picking_report.action_report_delivery
 msgid "Delivery"
 msgstr "Livrare"
-
-#. module: l10n_ro_stock_picking_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_batch_delivery
-msgid "Delivery of goods"
-msgstr "Aviz de însoțire a mărfii: "
 
 #. module: l10n_ro_stock_picking_report
 #: model:ir.actions.report,name:l10n_ro_stock_picking_report.action_report_delivery_price
