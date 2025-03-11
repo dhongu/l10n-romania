@@ -47,6 +47,13 @@ class AccountMoveSend(models.TransientModel):
     def _postprocess_invoice_ubl_xml(self, invoice, invoice_data):
         # Adding the PDF to the XML
         # Rewrite to remove <cbc:IssueDate>{invoice.invoice_date}</cbc:IssueDate>
+
+        # configurable embed
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        embed_pdf = get_param("efactura.embed_pdf", True)
+        if not embed_pdf:
+            return
+
         tree = etree.fromstring(invoice_data["ubl_cii_xml_attachment_values"]["raw"])
         anchor_elements = tree.xpath("//*[local-name()='AccountingSupplierParty']")
         if not anchor_elements:
