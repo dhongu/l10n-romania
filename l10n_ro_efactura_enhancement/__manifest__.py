@@ -4,7 +4,7 @@
 
 {
     "name": "eFactura Enhacement",
-    "version": "17.0.0.0.3",
+    "version": "17.0.0.0.4",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "eFactura Enhacement",
@@ -18,6 +18,7 @@
     "price": 25.00,
     "currency": "EUR",
     "data": [
+        "data/ir_config_parameter.xml",
         "wizard/account_move_send_views.xml",
         "data/ir_cron.xml",
     ],
