@@ -5,6 +5,7 @@ from lxml import etree
 
 from odoo import api, fields, models
 from odoo.tools import cleanup_xml_node
+from odoo.tools.safe_eval import safe_eval
 
 
 class AccountMoveSend(models.TransientModel):
@@ -50,7 +51,7 @@ class AccountMoveSend(models.TransientModel):
 
         # configurable embed
         get_param = self.env["ir.config_parameter"].sudo().get_param
-        embed_pdf = get_param("efactura.embed_pdf", True)
+        embed_pdf = safe_eval(get_param("efactura.embed_pdf", True))
         if not embed_pdf:
             return
 
