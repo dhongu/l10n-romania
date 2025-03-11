@@ -24,7 +24,7 @@ Deltatech Sale from Store UBL
 
 Features:
 
--  seteaza tipul de efactura ca fiind 751 daca a fost tiparit bon fiscal
+- seteaza tipul de efactura ca fiind 751 daca a fost tiparit bon fiscal
 
 **Table of contents**
 
