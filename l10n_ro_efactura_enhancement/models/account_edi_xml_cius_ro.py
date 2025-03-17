@@ -4,6 +4,7 @@
 
 
 from odoo import models
+from odoo.tools.safe_eval import safe_eval
 
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
@@ -60,7 +61,12 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
     def _export_invoice_vals(self, invoice):
         vals_list = super()._export_invoice_vals(invoice)
-
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        clean_chars = safe_eval(get_param("efactura.clean_name", False))
+        if not clean_chars:
+            return vals_list
+        if "vals" in vals_list and vals_list["vals"] and "id" in vals_list["vals"] and vals_list["vals"]["id"]:
+            vals_list["vals"]["id"] = vals_list["vals"]["id"].replace("/", "")
         return vals_list
 
     def _export_invoice_constraints(self, invoice, vals):

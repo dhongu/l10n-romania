@@ -140,7 +140,7 @@ class ReportPickingReception(models.AbstractModel):
             )
 
             res["tax"] = taxes["total_included"] - taxes["total_excluded"]
-            res["amount"] = taxes["total_excluded"]
+            res["amount"] = taxes["total_excluded"] or res["price"] * move.quantity
             res["amount_tax"] = taxes["total_included"]
 
             taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
