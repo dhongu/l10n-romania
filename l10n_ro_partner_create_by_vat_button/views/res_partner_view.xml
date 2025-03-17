@@ -11,7 +11,7 @@
                 <header>
                     <button
                         name="%(action_get_partner_data)d"
-                        invisible="name == ' ' or vat == False or is_company == False"
+                        invisible="(name == False and vat == False) or is_company == False"
                         string="Get Data"
                         context="{'active_id': active_id}"
                         type="action"

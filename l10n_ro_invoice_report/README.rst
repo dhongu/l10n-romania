@@ -22,17 +22,19 @@ Romania - Invoice Report Terrabit
 
 |badge1| |badge2| |badge3|
 
-- Functionalitati
+-  Functionalitati
 
-  - factura contine: pretul fara tva, valoare si valoare tva
-  - La factura au fost adugate campurile delegat si mijloc de transport
-  - la partener se poate adauga un text aditinonal care apara pe facura
-  - tiparire plata / incasare / dispozitie de plata
+   -  factura contine: pretul fara tva, valoare si valoare tva
+   -  La factura au fost adugate campurile delegat si mijloc de
+      transport
+   -  la partener se poate adauga un text aditinonal care apara pe
+      facura
+   -  tiparire plata / incasare / dispozitie de plata
 
-  pip3 install --force-reinstall num2words==0.5.9 pip3 install
-  --force-reinstall num2words==0.5.12
+   pip3 install --force-reinstall num2words==0.5.9 pip3 install
+   --force-reinstall num2words==0.5.12
 
-  https://static.anaf.ro/static/10/Anaf/legislatie/Cod_fiscal_norme_31072017.htm#A330
+   https://static.anaf.ro/static/10/Anaf/legislatie/Cod_fiscal_norme_31072017.htm#A330
 
 **Table of contents**
 
@@ -60,9 +62,9 @@ Authors
 Contributors
 ------------
 
-- `Terrabit <https://www.terrabit.ro>`__:
+-  `Terrabit <https://www.terrabit.ro>`__:
 
-  - Dorin Hongu <dhongu@gmail.com>
+   -  Dorin Hongu <dhongu@gmail.com>
 
 Do not contact contributors directly about support or help with
 technical issues.
