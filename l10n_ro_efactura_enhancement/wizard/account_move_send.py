@@ -8,8 +8,8 @@ from odoo.tools import cleanup_xml_node
 from odoo.tools.safe_eval import safe_eval
 
 
-class AccountMoveSend(models.TransientModel):
-    _inherit = "account.move.send"
+class AccountMoveSendWizard(models.TransientModel):
+    _inherit = "account.move.send.wizard"
 
     l10n_ro_edi_resend_enable = fields.Boolean(compute="_compute_l10n_ro_edi_resend_enable")
 
