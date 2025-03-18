@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-        <record model="ir.ui.view" id="account_move_send_inherit_l10n_ro_edi">
+        <record id="account_move_send_inherit_l10n_ro_edi" model="ir.ui.view" >
             <field name="name">account.move.send.form.inherit.l10n_ro_edi</field>
             <field name="model">account.move.send</field>
-            <field name="inherit_id" ref="account.account_move_send_form" />
+            <field name="inherit_id" ref="account.account_move_send_wizard_form" />
             <field name="arch" type="xml">
 
 

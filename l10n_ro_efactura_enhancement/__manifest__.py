@@ -19,7 +19,7 @@
     "currency": "EUR",
     "data": [
         "data/ir_config_parameter.xml",
-        "wizard/account_move_send_views.xml",
+        # "wizard/account_move_send_views.xml",
         "data/ir_cron.xml",
     ],
     "images": ["static/description/main_screenshot.png"],
