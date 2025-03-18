@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+        <record model="ir.config_parameter" id="efactura_embed_pdf">
+            <field name="key">efactura.embed_pdf</field>
+            <field name="value">True</field>
+        </record>
+     <record model="ir.config_parameter" id="efactura_clean_name">
+            <field name="key">efactura.clean_name</field>
+            <field name="value">False</field>
+        </record>
+</odoo>
