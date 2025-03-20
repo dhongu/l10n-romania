@@ -188,14 +188,21 @@
                 <t t-if="o.move_type == 'in_invoice'">
                     <strong>Receptions:</strong>
                 </t>
+                <t t-set="awbs" t-value="[]" />
                 <t t-if="o.move_type == 'out_invoice'">
                     <strong>Deliveries:</strong>
                 </t>
                 <span class="m-0" t-foreach="pickings" t-as="d">
                     <span t-field="d.name" />
+                    <t t-if="d.carrier_tracking_ref">
+                        <t t-set="awbs" t-value="awbs + [d.carrier_tracking_ref]" />
+                    </t>
                 </span>
-                <br />
-
+                <t t-if="awbs">
+                    <br />
+                    <strong>AWB:</strong>
+                    <span t-esc="', '.join(awbs)" />
+                </t>
             </div>
         </xpath>
         <xpath expr="//h2" position="before">
