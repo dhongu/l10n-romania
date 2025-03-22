@@ -24,10 +24,10 @@ Terrabit Sale Order Report
 
 Two kind of proforma invoice can be printed from the quotation:
 
--  initial proforma, in amount computed from the payment term lines
-   (first "percent" or "fixed" line)
--  final proforma, with the remaining amount (a payment must be
-   processed with the Deltatech Sale Payment module)
+- initial proforma, in amount computed from the payment term lines
+  (first "percent" or "fixed" line)
+- final proforma, with the remaining amount (a payment must be processed
+  with the Deltatech Sale Payment module)
 
 **Table of contents**
 
@@ -56,10 +56,10 @@ Authors
 Contributors
 ------------
 
--  `Terrabit <https://www.terrabit.ro>`__:
+- `Terrabit <https://www.terrabit.ro>`__:
 
-   -  Dan Stoica
-   -  Dorin Hongu <dhongu@gmail.com>
+  - Dan Stoica
+  - Dorin Hongu <dhongu@gmail.com>
 
 Do not contact contributors directly about support or help with
 technical issues.
