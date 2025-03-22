@@ -27,30 +27,30 @@ Stock accounting for receptions, deliveries from store
 1. Achizitionarea marfurilor de la furnizori. Marfurile ajung cu
    factura:
 
--  371 = 401
+- 371 = 401
 
--  4426 = 401
+- 4426 = 401
 
--  inregistrarea adaosului comecial :
+- inregistrarea adaosului comecial :
 
--  371 = 378
+- 371 = 378
 
--  371 = 4428
+- 371 = 4428
 
 2. Achizitionarea marfurilor de la furnizori. Marfurile ajung cu aviz de
    insotire:
 
 La receptie:
 
--  371 = 408
--  inregistrarea adaosului comercial
--  371 = 378
--  371 = 4428
+- 371 = 408
+- inregistrarea adaosului comercial
+- 371 = 378
+- 371 = 4428
 
 In momentul primirii facturii:
 
--  408 = 401
--  4426 = 401
+- 408 = 401
+- 4426 = 401
 
 **Table of contents**
 
@@ -79,9 +79,9 @@ Authors
 Contributors
 ------------
 
--  `Terrabit <https://www.terrabit.ro>`__:
+- `Terrabit <https://www.terrabit.ro>`__:
 
-   -  Dorin Hongu <dhongu@gmail.com>
+  - Dorin Hongu <dhongu@gmail.com>
 
 Do not contact contributors directly about support or help with
 technical issues.
