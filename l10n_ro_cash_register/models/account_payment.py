@@ -1,4 +1,4 @@
-from odoo import models
+from odoo import api, models
 
 
 class AccountPayment(models.Model):
@@ -20,3 +20,11 @@ class AccountPayment(models.Model):
                         }
                     )
         return res
+
+    @api.depends("company_id", "partner_id")
+    def _compute_journal_id(self):
+        """
+        Skip journal compute if called from cash register action
+        """
+        if not self.env.context.get("keep_journal"):
+            return super()._compute_journal_id()
