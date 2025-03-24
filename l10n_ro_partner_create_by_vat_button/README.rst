@@ -22,8 +22,8 @@ Romania - Partner Create by VAT Button
 
 |badge1| |badge2| |badge3|
 
-   - Adaugare buton in ecran pentru recitire date ANF
-   - 
+   -  Adaugare buton in ecran pentru recitire date ANF
+   -  
 
 **Table of contents**
 
@@ -51,9 +51,9 @@ Authors
 Contributors
 ------------
 
-- `Terrabit <https://www.terrabit.ro>`__:
+-  `Terrabit <https://www.terrabit.ro>`__:
 
-  - Dorin Hongu <dhongu@gmail.com>
+   -  Dorin Hongu <dhongu@gmail.com>
 
 Do not contact contributors directly about support or help with
 technical issues.
