@@ -24,7 +24,7 @@ Romania - Cash Sequence
 
 Functionalitati
 
-- Numerotarea separata a documetelor din jurnalul de casa
+-  Numerotarea separata a documetelor din jurnalul de casa
 
 **Table of contents**
 
@@ -52,9 +52,9 @@ Authors
 Contributors
 ------------
 
-- `Terrabit <https://www.terrabit.ro>`__:
+-  `Terrabit <https://www.terrabit.ro>`__:
 
-  - Dorin Hongu <dhongu@gmail.com>
+   -  Dorin Hongu <dhongu@gmail.com>
 
 Do not contact contributors directly about support or help with
 technical issues.
