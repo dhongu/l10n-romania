@@ -244,6 +244,7 @@
                         <th class="text-end">Amount</th>
                         <th class="text-end">Tax</th>
                         <th class="text-end">Taxes</th>
+                        <th class="text-end">Total amount</th>
                     </tr>
                 </thead>
                 <!-- display_type -->
@@ -352,6 +353,21 @@
                                 <span
                                     id="price_taxes"
                                     t-esc="price_taxes"
+                                    t-options='{"widget": "float", "precision": 2}'
+                                />
+                            </td>
+                            <td class="text-end">
+                                <t t-set="price_total" t-value="l.price_total" />
+                                <t t-if="o.move_type == 'out_refund'">
+                                    <t t-set="price_total" t-value="-1*l.price_total" />
+                                </t>
+                                <t
+                                    t-set="price_total"
+                                    t-value="o.currency_id._convert(price_total,currency_id,date=o.invoice_date)"
+                                />
+                                <span
+                                    id="price_total"
+                                    t-esc="price_total"
                                     t-options='{"widget": "float", "precision": 2}'
                                 />
                             </td>

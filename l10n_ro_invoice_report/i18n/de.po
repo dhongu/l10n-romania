@@ -93,6 +93,11 @@ msgstr "span>wert</span>"
 msgid "<strong name=\"payment_term_label\">Payment Term:</strong>"
 msgstr "<strong name=\"payment_term_label\">Zahlungsbedingung:</strong>"
 
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Account:</strong>"
+msgstr "<strong>Konto:</strong>"
+
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -101,13 +106,18 @@ msgstr "<strong name=\"payment_term_label\">Zahlungsbedingung:</strong>"
 msgid "<strong>Address:</strong>"
 msgstr "<strong>Anschrift:</strong>"
 
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Bank:</strong>"
+msgstr ""
+
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>CIF:</strong>"
-msgstr ""
+msgstr "<strong>USt-IdNr.:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -135,7 +145,7 @@ msgstr "<strong>Lieferadresse:</strong>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_statement_print
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>NRC:</strong>"
-msgstr ""
+msgstr "<strong>HR-Nummer:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -279,7 +289,7 @@ msgstr "Transportmittel"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "NRC:"
-msgstr ""
+msgstr "HR-Nummer:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -290,6 +300,11 @@ msgstr "Kt."
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_line
 msgid "Payment"
 msgstr "Zahlung"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "Payment Communication:"
+msgstr "Zahlungskommunikation:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_payment_disposal
@@ -395,7 +410,7 @@ msgstr "Telefon auf Rechnungsadresse anzeigen"
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__email_on_invoice_address
 msgid "Show taxes values on reception report"
-msgstr ""
+msgstr "Steuerwerte im Empfangsbericht anzeigen"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -416,7 +431,12 @@ msgstr "Val. MWST."
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "To:"
-msgstr ""
+msgstr "Zu:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Total amount"
+msgstr "Gesamtbetrag"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -426,19 +446,19 @@ msgstr "Preis"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "VAT:"
-msgstr ""
+msgstr "MwSt:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_statement_voucher
 msgid "Voucher"
-msgstr ""
+msgstr "Gutschein"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_payment
 msgid "Voucher / Payment"
-msgstr ""
+msgstr "Gutschein / Zahlung"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "from"
-msgstr ""
+msgstr "von"
