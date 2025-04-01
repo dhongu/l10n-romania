@@ -99,12 +99,22 @@ msgstr "<span>ποσό</span>"
 msgid "<strong class=\"mr16\">Subtotal</strong>"
 msgstr "<strong class=\"mr16\">Μερικό σύνολο</strong>"
 
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Account:</strong>"
+msgstr "<strong>Λογαριασμός:</strong>"
+
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>Address:</strong>"
 msgstr "<strong>Διεύθυνση:</strong>"
+
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Bank:</strong>"
+msgstr "<strong>Τράπεζα:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -138,7 +148,7 @@ msgstr "<strong>Διεύθυνση παράδοσης:</strong>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>NRC:</strong>"
-msgstr "<strong>ΑΦΜ:</strong>"
+msgstr "<strong>ΓΕΜΗ:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -294,7 +304,7 @@ msgstr "Μέσο μεταφοράς"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "NRC:"
-msgstr "ΑΦΜ:"
+msgstr "ΓΕΜΗ:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__open
@@ -314,7 +324,12 @@ msgstr "Λειτουργική μονάδα"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Ord"
-msgstr ""
+msgstr "Αριθ"
+
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "Payment Communication:"
+msgstr "Επικοινωνία Πληρωμής:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__posted
@@ -370,7 +385,7 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Representing counter value of invoice"
-msgstr ""
+msgstr "Αντιπροσωπεύοντας την αντίστροφη τιμή του τιμολογίου"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -443,12 +458,12 @@ msgstr "Προμηθευτής:"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Tax"
-msgstr ""
+msgstr "Φόρος"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Taxes"
-msgstr ""
+msgstr "Φόροι"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_account_bank_statement__state
@@ -458,12 +473,22 @@ msgid ""
 "entries, ready for the reconciliation.- Validated: All lines are reconciled."
 " There is nothing left to process."
 msgstr ""
+"Η τρέχουσα κατάσταση της κατάστασης του τραπεζικού σας λογαριασμού:- Νέο: "
+"Πλήρως επεξεργάσιμο με προσχέδια καταχωρήσεις ημερολογίου.- Επεξεργασία: Δεν"
+" είναι πλέον επεξεργάσιμο με καταχωρήσεις ημερολογίου που έχουν δημοσιευτεί,"
+" έτοιμο για τη συμφιλίωση.- Επικυρωμένο: Όλες οι γραμμές είναι "
+"συμφιλιωμένες. Δεν υπάρχει τίποτα άλλο για επεξεργασία."
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "To:"
 msgstr "Για:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Total amount"
+msgstr "Συνολικό ποσό"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
@@ -488,7 +513,7 @@ msgstr "Επικυρωμένο"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_tree
 msgid "View"
-msgstr ""
+msgstr "Προβολή"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_payment
@@ -498,7 +523,7 @@ msgstr "Απόδειξη / Πληρωμή"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
 msgid "e.g. BNK/2021/0001"
-msgstr ""
+msgstr "π.χ. BNK/2021/0001"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
