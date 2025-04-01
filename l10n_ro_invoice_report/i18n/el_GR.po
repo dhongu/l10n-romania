@@ -316,7 +316,6 @@ msgstr "Λειτουργική μονάδα"
 msgid "Ord"
 msgstr ""
 
-
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__posted
 msgid "Processing"
