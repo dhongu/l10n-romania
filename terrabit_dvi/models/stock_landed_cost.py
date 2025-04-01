@@ -32,13 +32,15 @@ class LandedCost(models.Model):
         for cost in self.filtered(lambda c: c.tax_value and c.tax_id):
             accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
             if not cost.account_move_id:
-                cost.account_move_id =self.env["account.move"].create(  {
-                'journal_id': cost.account_journal_id.id,
-                'date': cost.date,
-                'ref': cost.name,
-                'line_ids': [],
-                'move_type': 'entry',
-            })
+                cost.account_move_id = self.env["account.move"].create(
+                    {
+                        "journal_id": cost.account_journal_id.id,
+                        "date": cost.date,
+                        "ref": cost.name,
+                        "line_ids": [],
+                        "move_type": "entry",
+                    }
+                )
             tax_values = cost.tax_id.compute_all(1)
             aml = [
                 {

@@ -36,3 +36,6 @@ class AccountMove(models.Model):
 
         composer = self.env["account.move.send"].create(composer_vals)
         return composer.action_send_and_print()
+
+    def _l10n_ro_edi_send_invoice(self, xml_data):
+        return super(AccountMove, self.with_context(active_id=self.id))._l10n_ro_edi_send_invoice(xml_data)
