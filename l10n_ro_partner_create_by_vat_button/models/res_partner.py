@@ -87,14 +87,27 @@ class ResPartner(models.Model):
             country_code = self.vat[:2]
         elif self.country_id:
             vat_number = self.vat
-            country_code = self.country_id.code
+            if self.country_id.code == "GR":
+                country_code = "EL"
+            else:
+                country_code = self.country_id.code
         else:
             raise UserError(_("Please add the country code to the vat number or country field"))
 
         response = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
+        if not response.valid and country_code == "GB":
+            # Businesses in Northern Ireland are required to use XI as the country code but the country code is still GB
+            response = client.service.checkVat(countryCode="XI", vatNumber=vat_number)
         if response.valid:
             self.vat = vat_number
-            self.country_id = self.env["res.country"].search([("code", "ilike", country_code)])[0].id
+            possible_country = self.env["res.country"].search([("code", "ilike", country_code)])
+            if possible_country:
+                self.country_id = possible_country[0].id
+            else:
+                if country_code == "EL":
+                    self.country_id = self.env["res.country"].search([("code", "ilike", "GR")])[0].id
+                if country_code == "XI":
+                    self.country_id = self.env["res.country"].search([("code", "ilike", "GB")])[0].id
             self.name = response.name
             self.street = response.address
         else:
