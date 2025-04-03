@@ -44,7 +44,9 @@ class GetPartnerData(models.TransientModel):
                 self.status_message = _("Partner data updated!")
         if self.service == "vies":
             self.partner_id.get_partner_name_from_vies()
-            self.status_message = _("Partner data updated!")
+            self.status_message = _(
+                "Partner data updated! Please check the address fields. VIES does not return the addresses in a consistent form or complete so it can not be split automatically."
+            )
         if self.partner_id.zip and hasattr(self.partner_id, "onchange_zip"):
             self.partner_id.onchange_zip()
 
