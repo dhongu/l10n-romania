@@ -21,6 +21,9 @@ class AdjustmentLines(models.Model):
         if stock_move._is_out():
             debit_account_id = from_account.id or debit_account_id
 
+        accounts = self.product_id.product_tmpl_id.get_product_accounts()
+        already_out_account_id = accounts.get('expense') and accounts['expense'].id or False
+
         fiscal_position = self.cost_id.account_journal_id.l10n_ro_fiscal_position_id
         if fiscal_position:
             credit_account_id = fiscal_position.map_account(credit_account_id)
