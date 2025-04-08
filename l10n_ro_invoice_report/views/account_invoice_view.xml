@@ -1,25 +1,56 @@
 <?xml version="1.0" ?>
 <odoo>
+    <record id="l10n_ro_invoice_form_view" model="ir.ui.view">
+        <field name="name">l10n_ro.account.invoice.form</field>
+        <field name="model">account.move</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@id='header_left_group']" position="inside" invisible="move_type!='out_invoice'">
+                  <field name="delegate_id" readonly="state!='draft'" />
+                  <field name="mean_transp" colspan="2" readonly="state!='draft'" />
+            </xpath>
+        </field>
+    </record>
 
-        <record id="l10n_ro_invoice_form_view" model="ir.ui.view">
-            <field name="name">l10n_ro.account.invoice.form</field>
-            <field name="model">account.move</field>
-            <field name="type">form</field>
-            <field name="inherit_id" ref="account.view_move_form" />
-            <field name="arch" type="xml">
-                <xpath expr="//group[@id='header_left_group']" position="inside" invisible="move_type!='out_invoice'">
-                      <field name="delegate_id" readonly="state!='draft'" />
-                      <field name="mean_transp" colspan="2" readonly="state!='draft'" />
-                </xpath>
-            </field>
-        </record>
-<!--        <record id="action_invoice_set_origin_with_picking" model="ir.actions.server">-->
-<!--            <field name="name">Set Origin</field>-->
-<!--            <field name="model_id" ref="model_account_move" />-->
-<!--            <field name="state">code</field>-->
-<!--            <field name="code">-->
-<!--records.set_origin_with_picking()-->
-<!--            </field>-->
-<!--        </record>-->
-
+    <record id="view_account_invoice_filter" model="ir.ui.view">
+        <field name="name">account.invoice.select.tomorrow</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter" />
+        <field name="arch" type="xml">
+            <filter name="myinvoices" position="after">
+                <separator />
+                <filter
+                    string="Scadente mâine"
+                    name="tomorrow"
+                    domain="[('invoice_date_due', '=', (datetime.datetime.now() + relativedelta(days=1))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                />
+                <filter
+                    string="Scadente azi"
+                    name="today"
+                    domain="[('invoice_date_due', '=', (datetime.datetime.now())), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                />
+                <filter
+                    string="Scadente de 1-7 zile"
+                    name="7days"
+                    domain="[('invoice_date_due', '&lt;=', datetime.datetime.now()), ('invoice_date_due', '&gt;=', (datetime.datetime.now() - relativedelta(days=7))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                />
+                <filter
+                    string="Scadente de 8-14 zile"
+                    name="7_14days"
+                    domain="[('invoice_date_due', '&lt;=', (datetime.datetime.now() - relativedelta(days=8))), ('invoice_date_due', '&gt;=', (datetime.datetime.now() - relativedelta(days=14))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                />
+                <filter
+                    string="Scadente de 15-30 zile"
+                    name="14_30days"
+                    domain="[('invoice_date_due', '&lt;=', (datetime.datetime.now() - relativedelta(days=14))), ('invoice_date_due', '&gt;=', (datetime.datetime.now() - relativedelta(days=30))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                />
+                <filter
+                    string="Scadente de peste 30 zile"
+                    name="30days"
+                    domain="[('invoice_date_due', '&lt;', (datetime.datetime.now() - relativedelta(days=30))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                />
+            </filter>
+        </field>
+    </record>
 </odoo>
