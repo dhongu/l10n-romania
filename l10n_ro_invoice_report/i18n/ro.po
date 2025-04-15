@@ -308,6 +308,12 @@ msgid "Ord"
 msgstr "Nr. Crt."
 
 #. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__payment_bank_id
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__payment_bank_id
+msgid "Payment Bank"
+msgstr "Bancă încasări"
+
+#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Preț cu discount"
 msgstr ""
@@ -445,6 +451,16 @@ msgstr "TVA"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Taxes"
 msgstr "Val. TVA"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_partner__payment_bank_id
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_users__payment_bank_id
+msgid ""
+"The bank account in which this partner will pay.Will be sent in the SPV and "
+"will be printed on the invoice"
+msgstr ""
+"Contul bancar in care clientul va plăti. Acest cont va fi trimis in SPV si "
+"va fi tipărit pe factură (la final)"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_account_bank_statement__state
