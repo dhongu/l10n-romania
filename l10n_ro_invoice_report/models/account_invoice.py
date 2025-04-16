@@ -61,15 +61,6 @@ class AccountInvoice(models.Model):
             if origin:
                 invoice.write({"invoice_origin": origin})
 
-    # def _get_reconciled_vals(self, partial, amount, counterpart_line):
-    #     values = super()._get_reconciled_vals(partial, amount, counterpart_line)
-    #     values.update(
-    #         {
-    #             "journal_type": counterpart_line.journal_id.type,
-    #         }
-    #     )
-    #     return values
-
     def _compute_payments_widget_reconciled_info(self):
         res = super()._compute_payments_widget_reconciled_info()
         for invoice in self:
@@ -81,6 +72,15 @@ class AccountInvoice(models.Model):
                     payment_id = item["account_payment_id"]
                     payment = self.env["account.payment"].browse(payment_id)
                     item["payment_type"] = payment.payment_type
+        return res
+
+    @api.depends("bank_partner_id")
+    def _compute_partner_bank_id(self):
+        res = super()._compute_partner_bank_id()
+        for move in self:
+            # Check for any payment bank set in partner
+            if move.move_type in ["out_invoice", "in_refund"] and move.commercial_partner_id.payment_bank_id:
+                move.partner_bank_id = move.commercial_partner_id.payment_bank_id
         return res
 
 
