@@ -13,7 +13,7 @@ class IrHttp(models.AbstractModel):
     def get_nearest_lang(cls, lang_code: str) -> str:
         res = super().get_nearest_lang(lang_code)
         # sa citesc din cookies
-        lang = request.httprequest.cookies.get('frontend_lang', False)
+        lang = request.httprequest.cookies.get("frontend_lang", False)
         if not lang:
             country_code = request.geoip.country_code or "RO"
             if country_code == "RO" and not lang_code:
