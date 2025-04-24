@@ -14,6 +14,13 @@ class StockMove(models.Model):
     _name = "stock.move"
     _inherit = ["stock.move", "l10n.ro.mixin"]
 
+    def _action_done(self, cancel_backorder=False):
+        for move in self:
+            if move.location_usage == 'view' or move.location_dest_usage == 'view':
+                raise UserError(_("You cannot complete a view location move."))
+        return super()._action_done(cancel_backorder=cancel_backorder)
+
+
     @api.model
     def _get_valued_types(self):
         valued_types = super()._get_valued_types()
