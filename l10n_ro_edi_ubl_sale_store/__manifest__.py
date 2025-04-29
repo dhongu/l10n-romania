@@ -4,7 +4,7 @@
 
 {
     "name": "Deltatech Sale from Store UBL",
-    "version": "18.0.1.0.2",
+    "version": "18.0.1.0.3",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "Sale from store",
