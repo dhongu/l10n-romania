@@ -24,7 +24,7 @@ HR Revisal
 
 Features:
 
-- preluare angajatii din fisierul XML generat de Revisal
+-  preluare angajatii din fisierul XML generat de Revisal
 
 **Table of contents**
 
