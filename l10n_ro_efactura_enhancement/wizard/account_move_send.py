@@ -17,7 +17,7 @@ class AccountMoveSendWizard(models.TransientModel):
     def _compute_l10n_ro_edi_resend_enable(self):
         for wizard in self:
             wizard.l10n_ro_edi_resend_enable = any(
-                not move._need_ubl_cii_xml() and move.country_code == "RO" and move.invoice_pdf_report_id
+                not move._need_ubl_cii_xml("ciusro") and move.country_code == "RO" and move.invoice_pdf_report_id
                 for move in wizard.move_ids
             )
 
