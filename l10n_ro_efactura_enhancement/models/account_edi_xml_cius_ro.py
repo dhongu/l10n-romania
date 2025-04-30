@@ -90,3 +90,25 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             constraints.pop("ciusro_customer_tax_identifier_required", False)
 
         return constraints
+
+    def _get_invoice_payment_means_vals_list(self, invoice):
+        # add accounts according to the invoice currency and l10n_ro_print_report
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        get_all_banks = get_param("efactura.get_all_banks", "False")
+        get_all_banks = safe_eval(get_all_banks)
+        if get_all_banks and invoice.move_type == "out_invoice":
+            domain = [("l10n_ro_print_report", "=", True), ("currency_id", "=", invoice.currency_id.id)]
+            banks = self.env["res.partner.bank"].search(domain)
+            if banks:
+                vals = []
+                for bank in banks:
+                    val = {
+                        "payment_means_code": 30,
+                        "payee_financial_account_vals": self._get_financial_account_vals(bank),
+                    }
+                    vals.append(val)
+                return vals
+            else:
+                return super()._get_invoice_payment_means_vals_list(invoice)
+        else:
+            return super()._get_invoice_payment_means_vals_list(invoice)

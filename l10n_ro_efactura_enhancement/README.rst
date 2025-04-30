@@ -32,6 +32,8 @@ Features:
       True
    -  "efactura.clean_name" - daca curata caracterul "/" din numele
       facturii in tag-ul de ID. Default pe False
+   -  "efactura.get_all_banks" - daca pune toate bancile cu
+      l10n_ro_print_report si in valuta facturii. Default pe False
 
 **Table of contents**
 
