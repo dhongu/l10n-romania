@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 class GetPartnerData(models.TransientModel):
     _name = "get.partner.data"
     _description = "Get partner data from"
-
+    
     partner_id = fields.Many2one("res.partner", string="Partner")
     service = fields.Selection([("anaf", "ANAF"), ("vies", "VIES for non-Romanian partners")], default="anaf")
     state = fields.Selection(selection=[("get", "get"), ("set", "set")], default="get")

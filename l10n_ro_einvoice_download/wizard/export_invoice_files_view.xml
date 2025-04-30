@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-     <record id="view_working_days_export_form" model="ir.ui.view">
-            <field name="name">invoice.files.export</field>
-            <field name="model">invoice.files.export</field>
-            <field name="arch" type="xml">
-                <form string="Export Zip Attachments">
-                    <field name="state" invisible="1" />
-                    <div invisible="state != 'choose'">
-                        <p>Export selected invoice attached zip files</p>
-                    </div>
-                    <div invisible="state != 'get'">
-                        <h2>Export Complete</h2>
-                        <p>Here is the exported file: <field name="data_file" readonly="1" filename="name" /></p>
-                    </div>
+    <record id="view_working_days_export_form" model="ir.ui.view">
+        <field name="name">invoice.files.export</field>
+        <field name="model">invoice.files.export</field>
+        <field name="arch" type="xml">
+            <form string="Export Zip Attachments">
+                <field name="state" invisible="1" />
+                <div invisible="state!='choose'">
+                    <p>Export selected invoice attached zip files</p>
+                </div>
+                <div invisible="state!='get'">
+                    <h2>Export Complete</h2>
+                    <p>Here is the exported file:
+                        <field name="name" invisible="1" />
+                        <field name="data_file" readonly="1" filename="name" widget="binary" />
+                    </p>
+                </div>
 
-                    <footer invisible="state != 'choose'">
-                        <button name="do_export" string="Apply" type="object" class="oe_highlight" />
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </footer>
-                    <footer invisible="state != 'get'">
-                        <button string="Exit" class="oe_link" special="cancel" />
-                    </footer>
+                <footer invisible="state!='choose'">
+                    <button name="do_export" string="Apply" type="object" class="oe_highlight" />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+                <footer invisible="state!='get'">
+                    <button string="Exit" class="oe_link" special="cancel" />
+                </footer>
 
-                </form>
-            </field>
-     </record>
+            </form>
+        </field>
+    </record>
 
 
     <record id="action_invoice_files_export" model="ir.actions.act_window">
@@ -33,7 +36,7 @@
         <field name="res_model">invoice.files.export</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <field name="binding_model_id" ref="account.model_account_move" />
+        <field name="binding_model_id" ref="l10n_ro_message_spv.model_l10n_ro_message_spv" />
         <field name="binding_view_types">list</field>
     </record>
 

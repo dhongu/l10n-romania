@@ -14,26 +14,16 @@ class InvoiceFilesExport(models.TransientModel):
 
     def do_export(self):
         active_ids = self.env.context.get("active_ids", [])
-        active_model = self.env.context.get("active_model", "account.move")
-        invoices = self.env[active_model].browse(active_ids)
-
+        active_model = self.env.context.get("active_model", "l10n.ro.message.spv")
+        spv_messages = self.env[active_model].browse(active_ids)
         zip_buffer = io.BytesIO()
 
         with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
-            for invoice in invoices:
-                if invoice.l10n_ro_edi_transaction:
-                    attachments = self.env["ir.attachment"].search(
-                        [
-                            ("res_model", "=", active_model),
-                            ("res_id", "=", invoice.id),
-                            ("mimetype", "=", "application/zip"),
-                        ]
-                    )
-                    for attachment in attachments:
-                        if invoice.l10n_ro_edi_transaction in attachment.name:
-                            file_data = base64.b64decode(attachment.datas)
-                            file_name = invoice.commercial_partner_id.vat + "/" + attachment.name
-                            zip_file.writestr(file_name, file_data)
+            for message in spv_messages:
+                if message.attachment_id:
+                    file_data = base64.b64decode(message.attachment_id.datas)
+                    file_name = message.invoice_id.commercial_partner_id.vat + "/" + message.attachment_id.name
+                    zip_file.writestr(file_name, file_data)
 
         # Set the zip file content and name
         self.write({"data_file": base64.b64encode(zip_buffer.getvalue()), "name": "attached_files.zip", "state": "get"})

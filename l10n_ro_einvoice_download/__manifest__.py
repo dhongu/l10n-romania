@@ -6,7 +6,7 @@
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",
     "category": "Generic Modules",
-    "depends": ["account", "l10n_ro_account_edi_ubl"],
+    "depends": ["account", "l10n_ro_message_spv"],
     "data": ["security/ir.model.access.csv", "wizard/export_invoice_files_view.xml"],
     "development_status": "Beta",
     "maintainers": ["VoicuStefan2001"],
