@@ -16,7 +16,6 @@ class InvoiceFilesExport(models.TransientModel):
         active_ids = self.env.context.get("active_ids", [])
         active_model = self.env.context.get("active_model", "l10n.ro.message.spv")
         spv_messages = self.env[active_model].browse(active_ids)
-
         zip_buffer = io.BytesIO()
 
         with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:

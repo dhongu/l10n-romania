@@ -19,6 +19,13 @@ class AccountPayment(models.Model):
         required=True,
     )
 
+    @api.onchange("posted_before", "state", "journal_id", "date")
+    def _onchange_journal_date(self):
+        # res = super()._onchange_journal_date()
+        if not self.move_id.id:
+            self.name = False
+        # return res
+
     @api.onchange("payment_type", "partner_type", "is_internal_transfer", "journal_id")
     def _onchange_payment_type_and_partner_type(self):
         self.l10n_ro_cash_document_type = "other"
@@ -26,7 +33,10 @@ class AccountPayment(models.Model):
             return
         if self.journal_id.type != "cash":
             return
-        if self.is_internal_transfer:
+        is_internal_transfer = (
+            self.partner_id and self.partner_id == self.journal_id.company_id.partner_id and self.destination_journal_id
+        )
+        if is_internal_transfer:
             self.l10n_ro_cash_document_type = "internal_transfer"
         elif self.payment_type == "inbound":
             if self.partner_type == "customer":
@@ -56,12 +66,22 @@ class AccountPayment(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get("l10n_ro_cash_document_type", False):
-                if vals["payment_type"] == "inbound":
+                if vals.get("journal_id"):
+                    journal = self.env["account.journal"].browse(vals["journal_id"])
+                    if journal.type != "cash":
+                        vals["l10n_ro_cash_document_type"] = "other"
+                        continue
+
+                payment_type = vals.get("payment_type", "inbound")
+                partner_type = vals.get("partner_type", "customer")
+                if payment_type == "inbound":
                     vals["l10n_ro_cash_document_type"] = (
-                        "customer_receipt" if vals["partner_type"] == "customer" else "cash_collection"
+                        "customer_receipt" if partner_type == "customer" else "cash_collection"
                     )
-                elif vals["payment_type"] == "outbound":
+
+                elif payment_type == "outbound":
                     vals["l10n_ro_cash_document_type"] = (
-                        "supplier_receipt" if vals["partner_type"] == "supplier" else "payment_disposal"
+                        "supplier_receipt" if partner_type == "supplier" else "payment_disposal"
                     )
+
         return super().create(vals_list)

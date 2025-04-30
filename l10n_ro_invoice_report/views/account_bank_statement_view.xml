@@ -2,7 +2,7 @@
 <odoo>
 
     <record id="view_bank_statement_tree" model="ir.ui.view">
-        <field name="name">account.bank.statement.list</field>
+        <field name="name">account.bank.statement.tree</field>
         <field name="model">account.bank.statement</field>
         <field name="inherit_id" ref="account.view_bank_statement_tree" />
         <field name="arch" type="xml">
@@ -11,9 +11,9 @@
                 <attribute name="create">True</attribute>
             </list>
 
-            <field name="balance_end_real" position="after">
+<!--            <field name="balance_end_real" position="after">
                 <button name="action_open_form_view" type="object" string="View" class="float-end btn-secondary" />
-            </field>
+            </field>-->
         </field>
     </record>
 
@@ -74,7 +74,7 @@
                                     <field name="state" column_invisible="True" />
                                     <field name="statement_id" column_invisible="True" />
                                     <field name="is_reconciled" column_invisible="True" />
-                                    <field name="to_check" column_invisible="True" />
+<!--                                    <field name="to_check" column_invisible="True" />-->
                                     <field name="country_code" column_invisible="True" />
                                     <field name="currency_id" column_invisible="True" />
                                     <field name="company_id" column_invisible="True" />

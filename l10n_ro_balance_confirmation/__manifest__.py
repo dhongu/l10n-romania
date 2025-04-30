@@ -1,0 +1,22 @@
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+{
+    "name": "Romania - balance confirmation",
+    "version": "18.0.0.0.5",
+    "category": "Localization",
+    "countries": ["ro"],
+    "summary": "Generate balance confirmation for partners",
+    "author": "Dan Stoica," "Odoo Community Association (OCA)",
+    "website": "https://github.com/OCA/l10n-romania",
+    "depends": [
+        "account",
+        "l10n_ro_config",
+    ],
+    "license": "AGPL-3",
+    "data": [
+        "views/res_partner_balance.xml",
+        "wizard/confirm_balance.xml",
+        "security/groups.xml",
+        "security/ir.model.access.csv",
+    ],
+    "maintainers": ["danila12"],
+}

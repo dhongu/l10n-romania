@@ -16,13 +16,15 @@ exclude: |
   readme/.*\.(rst|md)$|
   # Ignore build and dist directories in addons
   /build/|/dist/|
+  # Ignore test files in addons
+  /tests/samples/.*|
   # You don't usually want a bot to modify your legal texts
   (LICENSE.*|COPYING.*)
   __unported__
 
 default_language_version:
   python: python3
-  node: "16.17.0"
+  node: "22.9.0"
 repos:
   - repo: local
     hooks:
@@ -60,7 +62,7 @@ repos:
           - --convert-fragments-to-markdown
       - id: oca-gen-external-dependencies
   - repo: https://github.com/OCA/odoo-pre-commit-hooks
-    rev: v0.0.33
+    rev: v0.0.34
     hooks:
       - id: oca-checks-odoo-module
       - id: oca-checks-po
@@ -78,7 +80,7 @@ repos:
         files: \.(css|htm|html|js|json|jsx|less|md|scss|toml|ts|xml|yaml|yml)$
 
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v9.13.0
+    rev: v9.15.0
     hooks:
       - id: eslint
         verbose: true
@@ -108,7 +110,7 @@ repos:
       - id: mixed-line-ending
         args: ["--fix=lf"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.7.1
+    rev: v0.7.4
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix, --unsafe-fixes]

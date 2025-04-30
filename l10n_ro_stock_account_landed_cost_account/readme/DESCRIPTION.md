@@ -1,0 +1,1 @@
+- determinare cont din locatie

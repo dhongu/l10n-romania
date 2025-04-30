@@ -1,10 +1,13 @@
 <odoo>
     <!-- List View pentru Registru de Casa -->
     <record id="view_cash_register_tree" model="ir.ui.view">
-        <field name="name">cash.register.list</field>
+        <field name="name">cash.register.tree</field>
         <field name="model">l10n.ro.cash.register</field>
         <field name="arch" type="xml">
             <list>
+                <header>
+                    <button name="action_refresh" string="Refresh" type="object" />
+                </header>
                 <field name="name" />
                 <field name="date" />
                 <field name="journal_id" />
@@ -26,6 +29,7 @@
                     <button name="action_refresh" string="Refresh" type="object" />
                     <button name="action_receipt" string="Add Receipt" type="object" />
                     <button name="action_payment" string="Add Payment" type="object" />
+                    <button name="action_operation" string="Operation" type="object" />
                 </header>
                 <sheet>
                     <div class="oe_title oe_inline">
@@ -55,22 +59,48 @@
                                     <field name="partner_id" />
                                     <field name="balance" sum="Total Amount" string="Total" decoration-bf="1" />
                                     <field name="currency_id" column_invisible="1" />
-                                    <button name="print_cash_operation" string="Print" type="object" icon="fa-print" />
+                                    <button
+                                        name="print_cash_operation"
+                                        string="Print"
+                                        type="object"
+                                        icon="fa-print"
+                                        invisible="1"
+                                    />
+                                    <field name="ref" />
                                 </list>
                             </field>
                         </page>
                     </notebook>
                 </sheet>
-                           <!-- Attachment preview -->
-                    <div class="o_attachment_preview" />
-                    <!-- Chatter -->
-       <chatter />
+
+                <chatter reload_on_follower="True" />
             </form>
         </field>
     </record>
 
+    <record id="view_cash_register_search" model="ir.ui.view">
+        <field name="name">cash.register.search</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="journal_id" string="Journal" />
+                <field
+                    name="move_line_ids"
+                    string="Partner"
+                    filter_domain="[('move_line_ids.partner_id', 'ilike', self)]"
+                />
+                <separator />
+                <field name="date" string="Period" />
 
-       <!-- Actiune pentru vizualizarea registrelor de casa -->
+                <filter string="Date" name="date" date="date" />
+                <group expand="1" string="Group By">
+                    <filter string="Journal" name="group_by_journal" context="{'group_by': 'journal_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actiune pentru vizualizarea registrelor de casa -->
     <record id="action_cash_register" model="ir.actions.act_window">
         <field name="name">Cash Register</field>
         <field name="res_model">l10n.ro.cash.register</field>
@@ -97,5 +127,12 @@
         <field name="code">record.generate_missing_cash_register()</field>
     </record>
 
+    <record id="action_remove_outstanding_accounts" model="ir.actions.server">
+        <field name="name">Remove Outstanding Accounts</field>
+        <field name="model_id" ref="account.model_account_journal" />
+        <field name="binding_model_id" ref="account.model_account_journal" />
+        <field name="state">code</field>
+        <field name="code">record.remove_outstanding_accounts()</field>
+    </record>
 
 </odoo>

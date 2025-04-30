@@ -78,6 +78,9 @@ class AccountInvoice(models.Model):
                     move_id = item["move_id"]
                     move = self.env["account.move"].browse(move_id)
                     item["journal_type"] = move.journal_id.type
+                    payment_id = item["account_payment_id"]
+                    payment = self.env["account.payment"].browse(payment_id)
+                    item["payment_type"] = payment.payment_type
         return res
 
 
