@@ -54,7 +54,7 @@ class ResPartner(models.Model):
                     if vat_number.isdigit():
                         try:
                             vals["vat"] = vals["name"]
-                            result = self._get_Anaf(vat_number)
+                            error, result = self._get_Anaf(vat_number)
                             if result:
                                 res = self._Anaf_to_Odoo(result)
                                 vals.update(res)
@@ -117,3 +117,22 @@ class ResPartner(models.Model):
     def ro_vat_change(self):
         skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
         return super(ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)).ro_vat_change()
+
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     res = super(ResPartner, self).create(vals_list)
+    #
+    #     for partner in res:
+    #         if partner.name and not partner.vat and partner.is_company:
+    #             vat_number = self.vat[2:]
+    #             country_code = self.vat[:2]
+    #             if vat_number.isdigit() and country_code == "RO":
+    #                 try:
+    #                     result = self._get_Anaf(vat_number)
+    #                     if result:
+    #                         res = self._Anaf_to_Odoo(result)
+    #                         partner.write(res)
+    #                 except Exception as e:
+    #                     _logger.info(f"ANAF Webservice not working. Exception: {e}")
+    #
+    #     return res
