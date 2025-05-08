@@ -338,7 +338,7 @@
                             </td>
                             <td class="text-end">
                                 <t t-foreach="l.tax_ids" t-as="tax">
-                                    <span t-field="tax.description" />
+                                    <span t-field="tax.invoice_label" />
                                 </t>
                             </td>
                             <td class="text-end">
