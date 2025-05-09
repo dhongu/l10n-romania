@@ -2,7 +2,7 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class Picking(models.Model):
@@ -34,6 +34,11 @@ class Picking(models.Model):
             locatie = res["data"]["notificare"][key].get("locatie", {})
             if locatie and not locatie["alteInfo"]:
                 locatie["alteInfo"] = "-"
+        transport_partner = data["transport_partner_id"]
+        if transport_partner.country_code == "GR":
+            res["data"]["notificare"]["dateTransport"]["codTaraOrgTransport"] = "EL"
+        if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
+            res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
         return res
 
     def action_l10n_ro_edi_stock_fetch_status(self):
@@ -43,3 +48,13 @@ class Picking(models.Model):
                 picking.carrier_tracking_ref = picking.l10n_ro_edi_stock_document_uit
 
         return res
+
+    @api.model
+    def _l10n_ro_edi_stock_validate_data(self, data: dict):
+        errors = super()._l10n_ro_edi_stock_validate_data(data)
+
+        for error in errors:
+            if error == _("The delivery carrier partner has to be located in Romania."):
+                errors.remove(error)
+
+        return errors
