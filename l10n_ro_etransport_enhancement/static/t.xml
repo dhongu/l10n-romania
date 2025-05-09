@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<eTransport
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="mfp:anaf:dgti:eTransport:declaratie:v2"
+    xsi:schemaLocation="mfp:anaf:dgti:eTransport:declaratie:v2"
+    codDeclarant="10167619"
+    refDeclarant="WH/IN/03104"
+>
+
+
+            <notificare codTipOperatiune="10">
+
+                    <bunuriTransportate
+            codScopOperatiune="201"
+            codTarifar="31021010"
+            denumireMarfa="UREE -adblue"
+            cantitate="24000.0"
+            codUnitateMasura="KGM"
+            greutateNeta="24000.0"
+            greutateBruta="24000.0"
+            valoareLeiFaraTva="1.0"
+        />
+
+
+                <partenerComercial codTara="BG" denumire="GENESIS TRADING AD" cod="207370997" />
+
+
+                <dateTransport
+            nrVehicul="XXX"
+            codTaraOrgTransport="RO"
+            codOrgTransport="767055"
+            denumireOrgTransport="BELLA DONA COM S.R.L."
+            dataTransport="2025-05-09"
+        />
+
+
+
+                    <locStartTraseuRutier codPtf="9" />
+
+
+
+                    <locFinalTraseuRutier>
+                        <locatie
+                codJudet="4"
+                denumireLocalitate="Filipești"
+                denumireStrada="G Filipești Nr. 340A"
+                codPostal="607185"
+                alteInfo=""
+            />
+                    </locFinalTraseuRutier>
+
+
+                <documenteTransport tipDocument="30" dataDocument="2025-05-09" numarDocument="WH/IN/03104" />
+            </notificare>
+        </eTransport>
