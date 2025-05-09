@@ -22,7 +22,7 @@ Romania - Stock Accounting Enhancement
 
 |badge1| |badge2| |badge3|
 
--  verificare pret de cost ca sa fie diferit de zero
+- verificare pret de cost ca sa fie diferit de zero
 
 **Table of contents**
 
@@ -50,9 +50,9 @@ Authors
 Contributors
 ------------
 
--  `Terrabit <https://www.terrabit.ro>`__:
+- `Terrabit <https://www.terrabit.ro>`__:
 
-   -  Dorin Hongu <dhongu@gmail.com>
+  - Dorin Hongu <dhongu@gmail.com>
 
 Do not contact contributors directly about support or help with
 technical issues.

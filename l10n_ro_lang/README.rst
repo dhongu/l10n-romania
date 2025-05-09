@@ -50,9 +50,9 @@ Authors
 Contributors
 ------------
 
--  `Terrabit <https://www.terrabit.ro>`__:
+- `Terrabit <https://www.terrabit.ro>`__:
 
-   -  Dorin Hongu <dorin@terrabit.ro>
+  - Dorin Hongu <dorin@terrabit.ro>
 
 Do not contact contributors directly about support or help with
 technical issues.
