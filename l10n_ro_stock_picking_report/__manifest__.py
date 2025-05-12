@@ -6,7 +6,7 @@
     "name": "Romania - Terrabit - Picking Reports",
     "summary": "Rapoarte: NIR, aviz, bon consum",
     "license": "AGPL-3",
-    "version": "17.0.1.2.0",
+    "version": "17.0.1.2.1",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
@@ -19,6 +19,7 @@
         "sale_stock",
         "l10n_ro_stock",
         # "l10n_ro_stock_account",
+        "delivery",
     ],
     "excludes": ["l10n_ro_stock_picking_comment_template"],
     "data": [
