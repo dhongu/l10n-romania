@@ -69,9 +69,24 @@ class AccountInvoice(models.Model):
                     move_id = item["move_id"]
                     move = self.env["account.move"].browse(move_id)
                     item["journal_type"] = move.journal_id.type
+                    # get payment for POS
+                    if (
+                        move.journal_id.type == "sale"
+                        and "pos_payment_name" in item
+                        and invoice.move_type == "out_refund"
+                    ):
+                        pos_payment_method = (
+                            self.env["pos.payment.method"]
+                            .sudo()
+                            .search([("name", "=", item["pos_payment_name"])], limit=1)
+                        )
+                        if pos_payment_method:
+                            item["journal_type"] = pos_payment_method.journal_id.type
+                        item["payment_type"] = "outbound"
                     payment_id = item["account_payment_id"]
-                    payment = self.env["account.payment"].browse(payment_id)
-                    item["payment_type"] = payment.payment_type
+                    if payment_id:
+                        payment = self.env["account.payment"].browse(payment_id)
+                        item["payment_type"] = payment.payment_type
         return res
 
     @api.depends("bank_partner_id")
