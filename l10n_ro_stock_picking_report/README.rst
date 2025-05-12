@@ -22,10 +22,10 @@ Romania - Terrabit - Picking Reports
 
 |badge1| |badge2| |badge3|
 
-   - Reports for Reception, Delivery and Internal Transfer
-   - Referinta din comanda de achizitie este copiata in NIR si factura
-   - Option in settings (Romania) for printing taxes on reception
-   - Option in settings (Romania) for printing banks on reports
+   -  Reports for Reception, Delivery and Internal Transfer
+   -  Referinta din comanda de achizitie este copiata in NIR si factura
+   -  Option in settings (Romania) for printing taxes on reception
+   -  Option in settings (Romania) for printing banks on reports
 
 **Table of contents**
 
@@ -53,14 +53,14 @@ Authors
 Contributors
 ------------
 
-- `NextERP Romania <https://www.nexterp.ro>`__:
+-  `NextERP Romania <https://www.nexterp.ro>`__:
 
-  - Fekete Mihai <feketemihai@nexterp.ro>
-  - Alexandru Teodor <teodoralexandru@nexterp.ro>
+   -  Fekete Mihai <feketemihai@nexterp.ro>
+   -  Alexandru Teodor <teodoralexandru@nexterp.ro>
 
-- `Terrabit <https://www.terrabit.ro>`__:
+-  `Terrabit <https://www.terrabit.ro>`__:
 
-  - Dorin Hongu <dhongu@gmail.com>
+   -  Dorin Hongu <dhongu@gmail.com>
 
 Do not contact contributors directly about support or help with
 technical issues.
