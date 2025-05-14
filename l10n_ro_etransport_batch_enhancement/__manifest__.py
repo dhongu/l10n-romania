@@ -26,5 +26,4 @@
     "development_status": "Mature",
     "maintainers": ["dhongu"],
     "extra_buy": True,
-    "post_init_hook": "post_init_hook",
 }
