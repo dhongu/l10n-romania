@@ -47,51 +47,10 @@ class AccountMoveSend(models.TransientModel):
     @api.model
     def _postprocess_invoice_ubl_xml(self, invoice, invoice_data):
         # Adding the PDF to the XML
-        # Rewrite to remove <cbc:IssueDate>{invoice.invoice_date}</cbc:IssueDate>
 
-        # configurable embed
         get_param = self.env["ir.config_parameter"].sudo().get_param
-        embed_pdf = safe_eval(get_param("efactura.embed_pdf", True))
+        embed_pdf = safe_eval(get_param("efactura.embed_pdf", "False"))
         if not embed_pdf:
             return
+        return super()._postprocess_invoice_ubl_xml(invoice, invoice_data)
 
-        tree = etree.fromstring(invoice_data["ubl_cii_xml_attachment_values"]["raw"])
-        anchor_elements = tree.xpath("//*[local-name()='AccountingSupplierParty']")
-        if not anchor_elements:
-            return
-
-        xmlns_move_type = "Invoice" if invoice.move_type == "out_invoice" else "CreditNote"
-        pdf_values = invoice_data.get("pdf_attachment_values") or invoice_data["proforma_pdf_attachment_values"]
-        filename = pdf_values["name"]
-        content = pdf_values["raw"]
-
-        doc_type_node = ""
-        edi_model = invoice_data["ubl_cii_xml_options"]["builder"]
-        doc_type_code_vals = edi_model._get_document_type_code_vals(invoice, invoice_data)
-        if doc_type_code_vals["value"]:
-            doc_type_code_attrs = " ".join(f'{name}="{value}"' for name, value in doc_type_code_vals["attrs"].items())
-            doc_type_node = (
-                f"<cbc:DocumentTypeCode {doc_type_code_attrs}>{doc_type_code_vals['value']}</cbc:DocumentTypeCode>"
-            )
-        to_inject = f"""
-                <cac:AdditionalDocumentReference
-                    xmlns="urn:oasis:names:specification:ubl:schema:xsd:{xmlns_move_type}-2"
-                    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
-                    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2">
-                    <cbc:ID>{escape(filename)}</cbc:ID>
-                    {doc_type_node}
-                    <cac:Attachment>
-                        <cbc:EmbeddedDocumentBinaryObject
-                            mimeCode="application/pdf"
-                            filename={quoteattr(filename)}>
-                            {base64.b64encode(content).decode()}
-                        </cbc:EmbeddedDocumentBinaryObject>
-                    </cac:Attachment>
-                </cac:AdditionalDocumentReference>
-            """
-
-        anchor_index = tree.index(anchor_elements[0])
-        tree.insert(anchor_index, etree.fromstring(to_inject))
-        invoice_data["ubl_cii_xml_attachment_values"]["raw"] = etree.tostring(
-            cleanup_xml_node(tree), xml_declaration=True, encoding="UTF-8"
-        )
