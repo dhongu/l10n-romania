@@ -4,7 +4,7 @@
             <field name="name">E-Factura: Send TO SPV</field>
             <field name="model_id" ref="account.model_account_move" />
             <field name="state">code</field>
-            <field name="code">model._cron_l10n_ro_edi_auto_send()</field>
+            <field name="code">action = model._cron_l10n_ro_edi_auto_send()</field>
             <field name="user_id" ref="base.user_admin" />
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
