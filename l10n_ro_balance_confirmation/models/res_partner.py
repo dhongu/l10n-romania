@@ -12,7 +12,7 @@ class ResPartner(models.Model):
     def _where_calc(self, domain, active_test=True):
         date = self.env.context.get("date_to")
         if date:
-            domain += [('date', '<=', date)]
+            domain += [("date", "<=", date)]
         return super()._where_calc(domain, active_test=active_test)
 
     # def _credit_debit_get(self):

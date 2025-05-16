@@ -82,7 +82,7 @@ class ResPartner(models.Model):
         client = Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")
 
         # Make a request to the VIES service to check the VAT number
-        if not self.vat.isdigit():
+        if self.vat and not self.vat.isdigit():
             vat_number = self.vat[2:]
             country_code = self.vat[:2]
         elif self.country_id:
