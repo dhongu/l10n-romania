@@ -61,12 +61,16 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
     def _export_invoice_vals(self, invoice):
         vals_list = super()._export_invoice_vals(invoice)
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        clean_chars = safe_eval(get_param("efactura.clean_name", False))
-        if not clean_chars:
-            return vals_list
-        if "vals" in vals_list and vals_list["vals"] and "id" in vals_list["vals"] and vals_list["vals"]["id"]:
-            vals_list["vals"]["id"] = vals_list["vals"]["id"].replace("/", "")
+        # get_param = self.env["ir.config_parameter"].sudo().get_param
+        # clean_chars = safe_eval(get_param("efactura.clean_name", False))
+        # if not clean_chars:
+        #     return vals_list
+        # if "vals" in vals_list and vals_list["vals"] and "id" in vals_list["vals"] and vals_list["vals"]["id"]:
+        #     vals_list["vals"]["id"] = vals_list["vals"]["id"].replace("/", "")
+        if vals_list["vals"]["sales_order_id"]:
+            vals_list["vals"]["sales_order_id"] = vals_list["vals"]["sales_order_id"][:200]
+        if vals_list["vals"]["order_reference"]:
+            vals_list["vals"]["order_reference"] = vals_list["vals"]["order_reference"][:200]
         return vals_list
 
     def _export_invoice_constraints(self, invoice, vals):
