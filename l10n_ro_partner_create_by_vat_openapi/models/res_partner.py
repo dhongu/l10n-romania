@@ -98,7 +98,7 @@ class ResPartner(models.Model):
             except BaseException as e:
                 raise UserError(_("No VAT number found")) from e
 
-        vat_country, vat_number = self._split_vat(part.vat)
+        vat_country, vat_number = self._split_vat(vat)
 
         if part.l10n_ro_vat_subjected:
             self.write({"l10n_ro_vat_subjected": False})
