@@ -11,7 +11,7 @@
         <field name="print_report_name">(object._get_report_base_filename())</field>
         <field name="attachment">(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')
         </field>
-        <field name="binding_model_id" ref="model_account_move" />
+        <field name="binding_model_id" ref="model_account_move"/>
         <field name="binding_type">report</field>
     </record>
 
@@ -19,7 +19,7 @@
     <template id="report_invoice_company_language">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-set="lang" t-value="res_company.partner_id.lang" />
+                <t t-set="lang" t-value="res_company.partner_id.lang"/>
                 <t
                     t-if="o._get_name_invoice_report() == 'account.report_invoice_document'"
                     t-call="account.report_invoice_document"
@@ -32,21 +32,21 @@
     <template id="l10n_ro_report_invoice" inherit_id="account.report_invoice">
         <xpath expr="." position="inside">
             <t t-if="False">
-                <t t-call="account.report_invoice_document" />
+                <t t-call="account.report_invoice_document"/>
             </t>
         </xpath>
     </template>
     <template id="header_invoice">
         <div id="address" class="address row">
-            <t t-set="address_fields" t-value="['address']" />
-            <t t-set="res_company" t-value="o.company_id" />
+            <t t-set="address_fields" t-value="['address']"/>
+            <t t-set="res_company" t-value="o.company_id"/>
             <t t-if="res_company.email_on_invoice_address">
-                <t t-set="address_fields" t-value="address_fields + ['email']" />
+                <t t-set="address_fields" t-value="address_fields + ['email']"/>
             </t>
             <t t-if="res_company.phone_on_invoice_address">
-                <t t-set="address_fields" t-value="address_fields + ['phone']" />
+                <t t-set="address_fields" t-value="address_fields + ['phone']"/>
             </t>
-            <t t-set="no_marker" t-value="not res_company.marker_on_invoice_address" />
+            <t t-set="no_marker" t-value="not res_company.marker_on_invoice_address"/>
 
             <div name="information_block" class="col-6">
                 <div>
@@ -54,7 +54,7 @@
                     </strong>
                     <strong t-if="o.move_type in ['in_invoice', 'in_refund']">Customer:
                     </strong>
-                    <strong id="company_name" t-field="res_company.partner_id.name" />
+                    <strong id="company_name" t-field="res_company.partner_id.name"/>
                 </div>
                 <div id="company_address">
                     <div id="address_label" class="float-left mr-1">
@@ -69,12 +69,12 @@
                 <t t-if="o.journal_id.operating_unit_id">
                     <div>
                         <strong>Operating Unit:</strong>
-                        <span t-field="o.journal_id.operating_unit_id.name" />
+                        <span t-field="o.journal_id.operating_unit_id.name"/>
                     </div>
                     <div id="address_label" class="float-left mr-1">
                         <strong>Address:</strong>
                     </div>
-                    <t t-set="journal" t-value="o.journal_id" />
+                    <t t-set="journal" t-value="o.journal_id"/>
                     <address
                         t-field="journal.operating_unit_id"
                         t-options='{"widget": "contact", "fields": address_fields, "no_marker": no_marker,
@@ -83,26 +83,26 @@
                 </t>
                 <div>
                     <t t-if="o.journal_id.operating_unit_id and o.journal_id.operating_unit_id.bank_ids">
-                        <t t-set="partner_id" t-value="o.journal_id.operating_unit_id" />
+                        <t t-set="partner_id" t-value="o.journal_id.operating_unit_id"/>
                     </t>
                     <t t-else="">
-                        <t t-set="partner_id" t-value="res_company.partner_id" />
+                        <t t-set="partner_id" t-value="res_company.partner_id"/>
                     </t>
-                    <t t-call="l10n_ro_config.banks" />
+                    <t t-call="l10n_ro_config.banks"/>
                 </div>
 
                 <div>
                     <div t-if="res_company.partner_id.vat">
                         <strong>CIF:</strong>
-                        <span t-field="res_company.partner_id.vat" />
+                        <span t-field="res_company.partner_id.vat"/>
                     </div>
                     <div t-if="res_company.partner_id.nrc">
                         <strong>NRC:</strong>
-                        <span t-field="res_company.partner_id.nrc" />
+                        <span t-field="res_company.partner_id.nrc"/>
                     </div>
                     <div t-if="res_company.l10n_ro_share_capital">
                         <strong>Share Capital:</strong>
-                        <span t-esc="int(res_company.l10n_ro_share_capital)" />
+                        <span t-esc="int(res_company.l10n_ro_share_capital)"/>
                     </div>
                     <div t-if="'l10n_ro_vat_on_payment' in res_company.partner_id._fields">
                         <div t-if="res_company.partner_id.l10n_ro_vat_on_payment">
@@ -121,7 +121,7 @@
                     </strong>
                     <strong t-if="o.move_type in ['in_invoice', 'in_refund']">Supplier:
                     </strong>
-                    <strong id="partner_name" t-field="o.commercial_partner_id.name" />
+                    <strong id="partner_name" t-field="o.commercial_partner_id.name"/>
                 </div>
 
 
@@ -146,18 +146,18 @@
                     </div>
                 </t>
                 <div>
-                    <t t-set="partner_id" t-value="o.commercial_partner_id" />
-                    <t t-call="l10n_ro_config.banks" />
+                    <t t-set="partner_id" t-value="o.commercial_partner_id"/>
+                    <t t-call="l10n_ro_config.banks"/>
                 </div>
 
                 <div id="partner_cui">
                     <div t-if="o.commercial_partner_id.vat">
                         <strong>CIF:</strong>
-                        <span t-field="o.commercial_partner_id.vat" />
+                        <span t-field="o.commercial_partner_id.vat"/>
                     </div>
                     <div t-if="o.commercial_partner_id.nrc">
                         <strong>NRC:</strong>
-                        <span t-field="o.commercial_partner_id.nrc" />
+                        <span t-field="o.commercial_partner_id.nrc"/>
                     </div>
                 </div>
             </div>
@@ -174,39 +174,39 @@
         <!--                &lt;!&ndash;inherited by other modules, must be present&ndash;&gt;-->
         <!--            </xpath>-->
         <xpath expr="//div" position="replace">
-            <t t-call="l10n_ro_invoice_report.header_invoice" />
+            <t t-call="l10n_ro_invoice_report.header_invoice"/>
             <div style="visibility: hidden;height:1px;">
-                <div class="row" />
+                <div class="row"/>
             </div>
         </xpath>
         <xpath expr="//div[@id='informations']" position="attributes">
             <attribute name="class">row mt-1 mb-1</attribute>
         </xpath>
         <xpath expr="//p[@name='payment_communication']" position="after">
-            <t t-set="pickings" t-value="get_pickings(o)" />
+            <t t-set="pickings" t-value="get_pickings(o)"/>
             <div t-if="pickings" name="pickings">
                 <t t-if="o.move_type == 'in_invoice'">
                     <strong>Receptions:</strong>
                 </t>
-                <t t-set="awbs" t-value="[]" />
+                <t t-set="awbs" t-value="[]"/>
                 <t t-if="o.move_type == 'out_invoice'">
                     <strong>Deliveries:</strong>
                 </t>
                 <span class="m-0" t-foreach="pickings" t-as="d">
-                    <span t-field="d.name" />
+                    <span t-field="d.name"/>
                     <t t-if="d.carrier_tracking_ref">
-                        <t t-set="awbs" t-value="awbs + [d.carrier_tracking_ref]" />
+                        <t t-set="awbs" t-value="awbs + [d.carrier_tracking_ref]"/>
                     </t>
                 </span>
                 <t t-if="awbs">
-                    <br />
+                    <br/>
                     <strong>AWB:</strong>
-                    <span t-esc="', '.join(awbs)" />
+                    <span t-esc="', '.join(awbs)"/>
                 </t>
             </div>
         </xpath>
         <xpath expr="//h2" position="before">
-            <t t-set="proforma" t-value="False" />
+            <t t-set="proforma" t-value="False"/>
         </xpath>
         <xpath expr="//h2/span[4]" position="after">
             <span t-if="o.move_type == 'out_refund' and o.state == 'cancel'">Cancelled</span>
@@ -214,11 +214,11 @@
 
 
         <xpath expr="//table[@name='invoice_line_table']" position="replace">
-            <t t-set="with_discount_distinct" t-value="get_discount" />
+            <t t-set="with_discount_distinct" t-value="get_discount"/>
             <t t-if="not currency_id">
-                <t t-set="currency_id" t-value="o.currency_id" />
+                <t t-set="currency_id" t-value="o.currency_id"/>
             </t>
-            <t t-set="nr_crt" t-value="1" />
+            <t t-set="nr_crt" t-value="1"/>
             <table class="table table-sm o_main_table" name="invoice_line_table">
                 <thead>
                     <tr>
@@ -249,7 +249,7 @@
                 </thead>
                 <!-- display_type -->
                 <tbody class="invoice_tbody">
-                    <t t-set="current_subtotal" t-value="0" />
+                    <t t-set="current_subtotal" t-value="0"/>
                     <t
                         t-set="lines"
                         t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"
@@ -267,16 +267,16 @@
                         />
                         <tr t-if="l.display_type == 'product'">
                             <td>
-                                <t t-esc="nr_crt" />
-                                <t t-set="nr_crt" t-value="nr_crt + 1" />
+                                <t t-esc="nr_crt"/>
+                                <t t-set="nr_crt" t-value="nr_crt + 1"/>
                             </td>
                             <td id="product_name">
-                                <span t-field="l.name" />
+                                <span t-field="l.name"/>
                             </td>
                             <td class="text-end">
-                                <t t-set="quantity" t-value="l.quantity" />
+                                <t t-set="quantity" t-value="l.quantity"/>
                                 <t t-if="o.move_type == 'out_refund'">
-                                    <t t-set="quantity" t-value="-1*l.quantity" />
+                                    <t t-set="quantity" t-value="-1*l.quantity"/>
                                 </t>
                                 <span
                                     t-if="quantity"
@@ -285,16 +285,16 @@
                                     t-options='{"widget": "float",
                                             "decimal_precision": "Product Unit of Measure"}'
                                 />
-                                <span t-field="l.product_uom_id" groups="uom.group_uom" />
+                                <span t-field="l.product_uom_id" groups="uom.group_uom"/>
                             </td>
                             <td class="text-end">
-                                <t t-set="price_unit_without_taxes" t-value="l.price_subtotal / (l.quantity or 1)" />
+                                <t t-set="price_unit_without_taxes" t-value="l.price_subtotal / (l.quantity or 1)"/>
                                 <t
                                     t-set="price_unit_without_taxes"
                                     t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
                                 />
                                 <t t-if="with_discount_distinct and l.discount">
-                                    <span t-field="l.price_unit" />
+                                    <span t-field="l.price_unit"/>
                                 </t>
                                 <t t-else="">
                                     <span
@@ -309,7 +309,7 @@
                                 t-if="with_discount(o) and with_discount_distinct"
                                 groups="product.group_discount_per_so_line"
                             >
-                                <span t-field="l.discount" />
+                                <span t-field="l.discount"/>
                             </td>
                             <t t-if="with_discount(o) and with_discount_distinct">
                                 <td style="text-align: right;">
@@ -322,9 +322,9 @@
                             </t>
 
                             <td class="text-end">
-                                <t t-set="price_subtotal" t-value="l.price_subtotal" />
+                                <t t-set="price_subtotal" t-value="l.price_subtotal"/>
                                 <t t-if="o.move_type == 'out_refund'">
-                                    <t t-set="price_subtotal" t-value="-1*l.price_subtotal" />
+                                    <t t-set="price_subtotal" t-value="-1*l.price_subtotal"/>
                                 </t>
                                 <t
                                     t-set="price_subtotal"
@@ -338,13 +338,13 @@
                             </td>
                             <td class="text-end">
                                 <t t-foreach="l.tax_ids" t-as="tax">
-                                    <span t-field="tax.invoice_label" />
+                                    <span t-field="tax.invoice_label"/>
                                 </t>
                             </td>
                             <td class="text-end">
-                                <t t-set="price_taxes" t-value="(l.price_total - l.price_subtotal )" />
+                                <t t-set="price_taxes" t-value="(l.price_total - l.price_subtotal )"/>
                                 <t t-if="o.move_type == 'out_refund'">
-                                    <t t-set="price_taxes" t-value="-1*price_taxes" />
+                                    <t t-set="price_taxes" t-value="-1*price_taxes"/>
                                 </t>
                                 <t
                                     t-set="price_taxes"
@@ -357,9 +357,9 @@
                                 />
                             </td>
                             <td class="text-end">
-                                <t t-set="price_total" t-value="l.price_total" />
+                                <t t-set="price_total" t-value="l.price_total"/>
                                 <t t-if="o.move_type == 'out_refund'">
-                                    <t t-set="price_total" t-value="-1*l.price_total" />
+                                    <t t-set="price_total" t-value="-1*l.price_total"/>
                                 </t>
                                 <t
                                     t-set="price_total"
@@ -374,15 +374,15 @@
                         </tr>
                         <tr t-if="l.display_type == 'line_note'">
                             <td colspan="99">
-                                <span t-field="l.name" t-options="{'widget': 'text'}" />
+                                <span t-field="l.name" t-options="{'widget': 'text'}"/>
                             </td>
                         </tr>
                         <tr t-if="l.display_type == 'line_section'">
                             <td colspan="99">
-                                <strong t-field="l.name" t-options="{'widget': 'text'}" />
+                                <strong t-field="l.name" t-options="{'widget': 'text'}"/>
                             </td>
-                            <t t-set="current_section" t-value="l" />
-                            <t t-set="current_subtotal" t-value="0" />
+                            <t t-set="current_section" t-value="l"/>
+                            <t t-set="current_subtotal" t-value="0"/>
                         </tr>
                         <t t-if="current_section and (l_last or lines[l_index+1].display_type == 'line_section')">
                             <tr class="is-subtotal text-end">
@@ -429,30 +429,30 @@
                         <tr>
                             <td>
                                 <span>Name:</span>
-                                <span t-field="o.user_id" />
-                                <span id="signature" />
+                                <span t-field="o.user_id"/>
+                                <span id="signature"/>
                             </td>
                             <td>
                                 <div>
                                     <span>Delegate:</span>
-                                    <span t-field="o.delegate_id" />
+                                    <span t-field="o.delegate_id"/>
                                 </div>
                                 <div>
                                     <span>Mean Transport:</span>
-                                    <span t-field="o.mean_transp" />
+                                    <span t-field="o.mean_transp"/>
                                 </div>
                                 <div>
                                     <span>Signature for receive</span>
                                 </div>
                             </td>
                         </tr>
-                        <tr />  <!-- empty row for white color-->
+                        <tr/>  <!-- empty row for white color-->
                     </table>
                 </div>
                 <div class="col-5">
-                    <t t-set="tax_totals" t-value="o.tax_totals" />
+                    <t t-set="tax_totals" t-value="o.tax_totals"/>
                     <table class="table table-sm" style="page-break-inside: avoid;">
-                        <t t-call="account.document_tax_totals" />
+                        <t t-call="account.document_tax_totals"/>
                     </table>
                 </div>
             </div>
@@ -467,7 +467,7 @@
                 </div>
             </small>
             <div t-if="o.commercial_partner_id.info_for_invoice" name="info_text">
-                <span t-field="o.commercial_partner_id.info_for_invoice" />
+                <span t-field="o.commercial_partner_id.info_for_invoice"/>
             </div>
 
         </xpath>
@@ -482,66 +482,82 @@
                     t-set="payments_vals"
                     t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"
                 />
-                <br />
-                <br />
+                <br/>
+                <br/>
 
-                <div t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
+                <div t-foreach="payments_vals" t-as="payment_vals"
+                     style="page-break-inside: avoid; border: 1px solid black;padding: 15px;">
 
                     <t t-if="payment_vals['journal_type']=='cash'">
-                        <t t-set="res_company" t-value="o.company_id" />
-                        <div>
-                            <strong t-field="res_company.partner_id.name" />
-                        </div>
-                        <div>
-                            VAT:
-                            <span t-field="res_company.partner_id.vat" />
-                        </div>
-                        <div>
-                            NRC:
-                            <span t-field="res_company.partner_id.nrc" />
-                        </div>
-                        <address
-                            t-field="res_company.partner_id"
-                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
-                        />
-                        <h4>
-                            <t t-if="payment_vals['payment_type']=='inbound'">
-                                <span>Voucher:</span>
-                            </t>
-                            <t t-if="payment_vals['payment_type']=='outbound'">
-                                <span>Payment disposal:</span>
-                            </t>
-
-                            <span t-esc="payment_vals['ref']" />
-                            <span>/</span>
-                            <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
-                        </h4>
-                        <div>
-                            <span>I received from</span>
-                            <t t-set="partner" t-value="o.partner_id.commercial_partner_id" />
-                            <strong t-field="partner.name" />
-                            <span t-if="partner.city">
-                                from
-                                <span t-field="partner.city" />
-                                <span t-field="partner.street" />
-                                <span t-field="partner.street2" />
-                            </span>
-
-                            <span>amount</span>
-
-                            <span
-                                t-esc="payment_vals['amount']"
-                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                        <t name="payment_container">
+                            <t t-set="res_company" t-value="o.company_id"/>
+                            <div>
+                                <strong t-field="res_company.partner_id.name"/>
+                            </div>
+                            <div>
+                                VAT:
+                                <span t-field="res_company.partner_id.vat"/>
+                            </div>
+                            <div>
+                                NRC:
+                                <span t-field="res_company.partner_id.nrc"/>
+                            </div>
+                            <address
+                                t-field="res_company.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
                             />
-                            (
-                            <!--                                <span t-esc="convert(payment.amount)"/>-->
-                            <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])" />
-                            )
-                        </div>
-                        <div>
-                            Representing counter value of invoice
-                            <span t-field="o.name" />
-                        </div>
+                            <h4>
+                                <t t-if="payment_vals['payment_type']=='inbound'">
+                                    <span>Voucher:</span>
+                                </t>
+                                <t t-if="payment_vals['payment_type']=='outbound'">
+                                    <span>Payment disposal:</span>
+                                </t>
+
+                                <span t-esc="payment_vals['ref']"/>
+                                <span>/</span>
+                                <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/>
+                            </h4>
+                            <div name="payment_text">
+                                <t t-if="payment_vals['payment_type']=='outbound'">
+                                    <span>I payed to</span>
+                                </t>
+                                <t t-else="">
+                                    <span>I received from</span>
+                                </t>
+                                <t t-set="partner" t-value="o.partner_id.commercial_partner_id"/>
+                                <strong t-field="partner.name"/>
+
+                                <span t-if="partner.vat">
+                                    ,<span t-field="partner.vat"/>,
+                                </span>
+                                <span t-if="partner.nrc">
+                                    <span t-field="partner.nrc"/>,
+                                </span>
+
+                                <span t-if="partner.city" name="address">
+                                    from
+                                    <span t-field="partner.city"/>
+                                    <span t-field="partner.street"/>
+                                    <span t-field="partner.street2"/>
+                                </span>
+
+                                <span>amount</span>
+
+                                <strong
+                                    t-esc="payment_vals['amount']"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                />
+                                (
+                                <!--                                <span t-esc="convert(payment.amount)"/>-->
+                                <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])"/>
+                                )
+                            </div>
+                            <div>
+                                Representing counter value of invoice
+                                <span t-field="o.name"/>
+                            </div>
+                        </t>
                     </t>
                 </div>
             </t>
@@ -550,13 +566,13 @@
 
     <template id="document_tax_totals_template" inherit_id="account.document_tax_totals_template" priority="100">
         <xpath expr="//t/tr/td[2]/span" position="before">
-            <t t-set="o" t-value="o or sale_order or doc" />
+            <t t-set="o" t-value="o or sale_order or doc"/>
             <t t-if="o and o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
                 <span>-</span>
             </t>
         </xpath>
         <xpath expr="//tr[hasclass('o_total')]/td[2]/span" position="before">
-            <t t-set="o" t-value="o or sale_order or doc" />
+            <t t-set="o" t-value="o or sale_order or doc"/>
             <t t-if="o and o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
                 <span>-</span>
             </t>
@@ -565,19 +581,19 @@
 
     <template id="tax_groups_totals" inherit_id="account.tax_groups_totals">
         <xpath expr="//t/tr/t/td/span[2]/t" position="before">
-            <t t-set="o" t-value="o or sale_order or doc" />
+            <t t-set="o" t-value="o or sale_order or doc"/>
             <t t-if="o and o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
                 <span>-</span>
             </t>
         </xpath>
         <xpath expr="//t/tr/t/td[2]/span" position="before">
-            <t t-set="o" t-value="o or sale_order or doc" />
+            <t t-set="o" t-value="o or sale_order or doc"/>
             <t t-if="o and o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
                 <span>-</span>
             </t>
         </xpath>
         <xpath expr="//t/tr/t[2]/td[2]/span" position="before">
-            <t t-set="o" t-value="o or sale_order or doc" />
+            <t t-set="o" t-value="o or sale_order or doc"/>
             <t t-if="o and o._name == 'account.move' and o.move_type in ['out_refund', 'in_refund']">
                 <span>-</span>
             </t>
