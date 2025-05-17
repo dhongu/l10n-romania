@@ -25,7 +25,7 @@ class AccountMove(models.Model):
             ("partner_id.country_id.code", "=", "RO"),
         ]
 
-        invoices = self.search(domain, limit=limit+1, order="date desc")
+        invoices = self.search(domain, limit=limit + 1, order="date desc")
         need_retrigger = False
         if len(invoices) > limit:
             invoices = invoices[:limit]
@@ -40,15 +40,15 @@ class AccountMove(models.Model):
             "move_ids": invoices.ids,
             "checkbox_download": False,
             "checkbox_send_mail": False,
-            "mode":"invoice_multi",
+            "mode": "invoice_multi",
         }
 
         composer = self.env["account.move.send"].create(composer_vals)
         action = composer.action_send_and_print()
 
-        self.env.ref('account.ir_cron_account_move_send')._trigger()
+        self.env.ref("account.ir_cron_account_move_send")._trigger()
         if need_retrigger:
-            self.env.ref('l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send')._trigger()
+            self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger()
 
         return action
 

@@ -39,14 +39,13 @@ msgstr "<span>Delegat:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "<span>I received from</span>"
-msgstr "<span>Am primit de la</span>"
-
+msgid "<span>I payed to</span>"
+msgstr "<span>Am plătit către</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "<span>I payed to</span>"
-msgstr "<span>Am plătit către</span>"
+msgid "<span>I received from</span>"
+msgstr "<span>Am primit de la</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
