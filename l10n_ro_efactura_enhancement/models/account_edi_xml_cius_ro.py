@@ -5,10 +5,17 @@
 
 from odoo import models
 from odoo.tools.safe_eval import safe_eval
-
+from odoo.tools import float_is_zero
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
+
+
+    def _get_invoice_line_price_vals(self, line):
+        vals = super()._get_invoice_line_price_vals(line)
+        if float_is_zero(vals["price_amount"], precision_rounding=0.01):
+            vals["price_amount"] = 0.0
+        return vals
 
     def _get_partner_party_vals(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
