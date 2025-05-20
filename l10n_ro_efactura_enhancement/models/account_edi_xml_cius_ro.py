@@ -4,12 +4,12 @@
 
 
 from odoo import models
-from odoo.tools.safe_eval import safe_eval
 from odoo.tools import float_is_zero
+from odoo.tools.safe_eval import safe_eval
+
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
-
 
     def _get_invoice_line_price_vals(self, line):
         vals = super()._get_invoice_line_price_vals(line)
