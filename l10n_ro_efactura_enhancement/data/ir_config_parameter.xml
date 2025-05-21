@@ -4,8 +4,8 @@
             <field name="key">efactura.embed_pdf</field>
             <field name="value">True</field>
         </record>
-     <record model="ir.config_parameter" id="efactura_clean_name">
-            <field name="key">efactura.clean_name</field>
-            <field name="value">False</field>
-        </record>
+<!--     <record model="ir.config_parameter" id="efactura_clean_name">-->
+<!--            <field name="key">efactura.clean_name</field>-->
+<!--            <field name="value">False</field>-->
+<!--        </record>-->
 </odoo>
