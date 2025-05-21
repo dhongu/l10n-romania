@@ -1,8 +1,6 @@
-# ©  2024 Deltatech
+# ©  2025 Deltatech
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
 
-from . import models
-from . import wizard
-# from . import patch
+from . import stock_picking_batch

@@ -4,11 +4,18 @@
 
 
 from odoo import models
+from odoo.tools import float_is_zero
 from odoo.tools.safe_eval import safe_eval
 
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
+
+    def _get_invoice_line_price_vals(self, line):
+        vals = super()._get_invoice_line_price_vals(line)
+        if float_is_zero(vals["price_amount"], precision_rounding=0.01):
+            vals["price_amount"] = 0.0
+        return vals
 
     def _get_partner_party_vals(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
@@ -61,12 +68,16 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
     def _export_invoice_vals(self, invoice):
         vals_list = super()._export_invoice_vals(invoice)
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        clean_chars = safe_eval(get_param("efactura.clean_name", False))
-        if not clean_chars:
-            return vals_list
-        if "vals" in vals_list and vals_list["vals"] and "id" in vals_list["vals"] and vals_list["vals"]["id"]:
-            vals_list["vals"]["id"] = vals_list["vals"]["id"].replace("/", "")
+        # get_param = self.env["ir.config_parameter"].sudo().get_param
+        # clean_chars = safe_eval(get_param("efactura.clean_name", False))
+        # if not clean_chars:
+        #     return vals_list
+        # if "vals" in vals_list and vals_list["vals"] and "id" in vals_list["vals"] and vals_list["vals"]["id"]:
+        #     vals_list["vals"]["id"] = vals_list["vals"]["id"].replace("/", "")
+        if vals_list["vals"]["sales_order_id"]:
+            vals_list["vals"]["sales_order_id"] = vals_list["vals"]["sales_order_id"][:200]
+        if vals_list["vals"]["order_reference"]:
+            vals_list["vals"]["order_reference"] = vals_list["vals"]["order_reference"][:200]
         return vals_list
 
     def _export_invoice_constraints(self, invoice, vals):
@@ -90,3 +101,25 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             constraints.pop("ciusro_customer_tax_identifier_required", False)
 
         return constraints
+
+    def _get_invoice_payment_means_vals_list(self, invoice):
+        # add accounts according to the invoice currency and l10n_ro_print_report
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        get_all_banks = get_param("efactura.get_all_banks", "False")
+        get_all_banks = safe_eval(get_all_banks)
+        if get_all_banks and invoice.move_type == "out_invoice":
+            domain = [("l10n_ro_print_report", "=", True), ("currency_id", "=", invoice.currency_id.id)]
+            banks = self.env["res.partner.bank"].search(domain)
+            if banks:
+                vals = []
+                for bank in banks:
+                    val = {
+                        "payment_means_code": 30,
+                        "payee_financial_account_vals": self._get_financial_account_vals(bank),
+                    }
+                    vals.append(val)
+                return vals
+            else:
+                return super()._get_invoice_payment_means_vals_list(invoice)
+        else:
+            return super()._get_invoice_payment_means_vals_list(invoice)
