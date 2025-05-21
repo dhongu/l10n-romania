@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-22 05:36+0000\n"
-"PO-Revision-Date: 2024-12-22 05:36+0000\n"
+"POT-Creation-Date: 2025-03-31 13:07+0000\n"
+"PO-Revision-Date: 2025-03-31 13:07+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,6 +18,13 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,print_report_name:l10n_ro_invoice_report.account_invoices_in_company_language
 msgid "(object._get_report_base_filename())"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"<br/>\n"
+"                    <strong>AWB:</strong>"
 msgstr ""
 
 #. module: l10n_ro_invoice_report
@@ -35,222 +42,228 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>Delegate:</span>"
-msgstr "<span>Delegat:</span>"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "<span>I payed to</span>"
-msgstr "<span>Am plătit către</span>"
+msgstr "<span>Διαχειριστής:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>I received from</span>"
-msgstr "<span>Am primit de la</span>"
+msgstr "<span>Έλαβα από</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>Mean Transport:</span>"
-msgstr "<span>Mijloc transport:</span>"
+msgstr "<span>Μέσο Μεταφοράς:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>Name:</span>"
-msgstr "<span>Nume:</span>"
+msgstr "<span>Όνομα:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<span>Payment disposal:</span>"
-msgstr "<span>Dispoziție de plată:</span>"
+msgstr "<span>Διάθεση πληρωμής:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>Signature for receive</span>"
-msgstr "<span>Semnatura primire</span>"
+msgstr "<span>Υπογραφή για παραλαβή</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<span>Transfer:</span>"
-msgstr ""
+msgstr "<span>Μεταφορά:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "<span>Vat on payment</span>"
-msgstr "<span>TVA la încasare</span>"
+msgstr "<span>ΦΠΑ κατά την πληρωμή</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<span>Voucher:</span>"
-msgstr "<span>Chitanță:</span>"
+msgstr "<span>Απόδειξη:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>amount</span>"
-msgstr "<span>suma de</span>"
+msgstr "<span>ποσό</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong class=\"mr16\">Subtotal</strong>"
-msgstr "<strong class=\"mr16\">Subtotal:</strong>"
+msgstr "<strong class=\"mr16\">Μερικό σύνολο</strong>"
+
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Account:</strong>"
+msgstr "<strong>Λογαριασμός:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>Address:</strong>"
-msgstr "<strong>Adresa:</strong>"
+msgstr "<strong>Διεύθυνση:</strong>"
+
+#. module: l10n_ro_config
+#: model_terms:ir.ui.view,arch_db:l10n_ro_config.banks
+msgid "<strong>Bank:</strong>"
+msgstr "<strong>Τράπεζα:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>CIF:</strong>"
-msgstr ""
+msgstr "<strong>ΑΦΜ:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 msgid "<strong>Company</strong><br/>"
-msgstr "<strong>Companie</strong><br/>"
+msgstr "<strong>Εταιρία</strong><br/>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 msgid "<strong>Customer:</strong><br/>"
-msgstr "<strong>Client:</strong><br/>"
+msgstr "<strong>Πελάτης:</strong><br/>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong>Deliveries:</strong>"
-msgstr "<strong>Livrări:</strong>"
+msgstr "<strong>Παραδόσεις:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "<strong>Delivery address:</strong>"
-msgstr "<strong>Adresa livrare:</strong>"
+msgstr "<strong>Διεύθυνση παράδοσης:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>NRC:</strong>"
-msgstr ""
+msgstr "<strong>ΓΕΜΗ:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "<strong>Operating Unit:</strong>"
-msgstr "<strong>Punct de lucru:</strong>"
+msgstr "<strong>Λειτουργική μονάδα:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong>Receptions:</strong>"
-msgstr "<strong>Recepții:</strong>"
+msgstr "<strong>Παραλαβές:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>Share Capital:</strong>"
-msgstr "<strong>Capital social:</strong>"
+msgstr "<strong>Μετοχικό Κεφάλαιο:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_report_account_report_invoice
 msgid "Account report without payment lines"
-msgstr "Raportului contului fără liniile de plată"
+msgstr "Αναφορά λογαριασμού χωρίς γραμμές πληρωμής"
 
 #. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_marketplace_customer__info_for_invoice
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__info_for_invoice
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__info_for_invoice
 msgid "Additional info for invoice"
-msgstr "Informații suplimentare în factură"
+msgstr "Πρόσθετες πληροφορίες για τιμολόγιο"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Amount"
-msgstr "Valoare"
+msgstr "Ποσό"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Amount (in words):"
-msgstr "Suma (în cuvinte):"
+msgstr "Ποσό (σε λέξεις):"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Amount:"
-msgstr "Suma:"
+msgstr "Ποσό:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_bank_statement
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
 msgid "Bank Statement"
-msgstr "Extras bancă"
+msgstr "Κατάσταση Κίνησης Τραπεζικού Λογαριασμού"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_bank_statement_line
 msgid "Bank Statement Line"
-msgstr "Linie extras bacă"
+msgstr "Γραμμή Κίνησης Τραπεζικού Λογαριασμού"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Cancelled"
-msgstr "anulată"
+msgstr "Ακυρώθηκε"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_company
 msgid "Companies"
-msgstr "Companii"
+msgstr "Εταιρίες"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_config_settings
 msgid "Config Settings"
-msgstr "Setări de configurare"
+msgstr "Ρυθμίσεις διαμόρφωσης"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Επαφή"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Customer:"
-msgstr "Client"
+msgstr "Πελάτης:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__delegate_id
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__delegate_id
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_payment__delegate_id
 msgid "Delegate"
-msgstr "Delegat"
+msgstr "Διαχειριστής"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Description"
-msgstr "Descriere"
+msgstr "Περιγραφή"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Discount (%)"
-msgstr "Reducere (%)"
+msgstr "Έκπτωση (%)"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Elaborate:"
-msgstr "Întocmit:"
+msgstr "Επεξεργασία:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "For:"
-msgstr "Pentru:"
+msgstr "Για:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Information for delivery:"
-msgstr "Informații privind livrarea:"
+msgstr "Πληροφορίες για παράδοση:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -259,90 +272,85 @@ msgid ""
 "                    no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and\n"
 "                    subsequent amendments."
 msgstr ""
-"Această factură are doar un caracter informativ. Originalul va putea fi "
-"descărcat din SPV în maximum 5 zile de la emitere, conform legislației în "
-"vigoare"
+"Τιμολόγιο έγκυρο χωρίς υπογραφή και σφραγίδα σύμφωνα με το άρθρο V, παράγραφος (2) της Υπουργικής\n"
+"                    Απόφασης αριθ. 17/2015, άρθρο 319 παράγραφος (29) του Νόμου αριθ. 227/2015 σχετικά με τον\n"
+"                    Φορολογικό Κώδικα και τις επόμενες τροποποιήσεις."
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.account_invoices_in_company_language
 msgid "Invoices in company language"
-msgstr "Facturi în limba companiei"
+msgstr "Τιμολόγια στη γλώσσα της εταιρίας"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_journal
 msgid "Journal"
-msgstr "Jurnal"
+msgstr "Ημερολόγιο"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_move
 msgid "Journal Entry"
-msgstr "Înregistrare jurnal"
+msgstr "Εγγραφή Ημερολογίου"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__mean_transp
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__mean_transp
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_payment__mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_marketplace_customer__mean_transp
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__mean_transp
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__mean_transp
 msgid "Mean transport"
-msgstr "Mijloc transport"
+msgstr "Μέσο μεταφοράς"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "NRC:"
-msgstr ""
+msgstr "ΓΕΜΗ:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__open
 msgid "New"
-msgstr ""
+msgstr "Νέο"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
 msgid "Notes"
-msgstr ""
+msgstr "Σημειώσεις"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_journal__operating_unit_id
 msgid "Operating Unit"
-msgstr "Punct de lucru"
+msgstr "Λειτουργική μονάδα"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Ord"
-msgstr "Nr. Crt."
+msgstr "Αριθ"
 
-#. module: l10n_ro_invoice_report
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_partner__payment_bank_id
-#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_users__payment_bank_id
-msgid "Payment Bank"
-msgstr "Bancă încasări"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "Preț cu discount"
-msgstr ""
+#. module: account
+#: model_terms:ir.ui.view,arch_db:account.report_invoice_document
+msgid "Payment Communication:"
+msgstr "Επικοινωνία Πληρωμής:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__posted
 msgid "Processing"
-msgstr ""
+msgstr "Επεξεργασία"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Quantity"
-msgstr "Cantitate"
+msgstr "Ποσότητα"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Received from:"
-msgstr "Primit de la:"
+msgstr "Έλαβα από:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_invoice_company_language
 msgid "Report Invoice in Company Language"
-msgstr "Raport factura în limba companiei"
+msgstr "Αναφορά Τιμολογίου στη Γλώσσα της Εταιρίας"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_payment
@@ -377,95 +385,85 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Representing counter value of invoice"
-msgstr "Reprezentând contravaloarea facturii"
+msgstr "Αντιπροσωπεύοντας την αντίστροφη τιμή του τιμολογίου"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Representing:"
-msgstr "Reprezentând c/v:"
+msgstr "Αντιπροσωπεύοντας:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__email_on_invoice_address
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__email_on_invoice_address
 msgid "Show email"
-msgstr "Arată email"
+msgstr "Δείξε email"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__email_on_invoice_address
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
 msgid "Show email on invoice address"
-msgstr "Arată email pe adresa facturii"
+msgstr "Δείξε email στη διεύθυνση τιμολογίου"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__marker_on_invoice_address
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__marker_on_invoice_address
 msgid "Show marker"
-msgstr "Arată marcator"
+msgstr "Δείξε δείκτη"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__marker_on_invoice_address
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__marker_on_invoice_address
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
 msgid "Show marker on invoice address"
-msgstr "Arată marcator pe adresa facturii"
+msgstr "Δείξε δείκτη στη διεύθυνση τιμολογίου"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__phone_on_invoice_address
 msgid "Show phone"
-msgstr "Arată telefon"
+msgstr "Δείξε τηλέφωνο"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__phone_on_invoice_address
 msgid "Show phone "
-msgstr "Arată telefon"
+msgstr "Δείξε τηλέφωνο "
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__phone_on_invoice_address
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__phone_on_invoice_address
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
 msgid "Show phone on invoice address"
-msgstr "Arată telefon pe adresa facturii"
+msgstr "Δείξε τηλέφωνο στη διεύθυνση τιμολογίου"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__email_on_invoice_address
 msgid "Show taxes values on reception report"
-msgstr "Arată valorile taxelor pe raportul de recepție"
+msgstr "Δείξε τις τιμές φόρων στην αναφορά παραλαβής"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement__line_ids
 msgid "Statement lines"
-msgstr "Linii extras de cont"
+msgstr "Γραμμές Δήλωσης"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement__state
 msgid "Status"
-msgstr ""
+msgstr "Κατάσταση"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Supplier:"
-msgstr "Furnizor"
+msgstr "Προμηθευτής:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Tax"
-msgstr "TVA"
+msgstr "Φόρος"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Taxes"
-msgstr "Val. TVA"
-
-#. module: l10n_ro_invoice_report
-#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_partner__payment_bank_id
-#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_users__payment_bank_id
-msgid ""
-"The bank account in which this partner will pay.Will be sent in the SPV and "
-"will be printed on the invoice"
-msgstr ""
-"Contul bancar in care clientul va plăti. Acest cont va fi trimis in SPV si "
-"va fi tipărit pe factură (la final)"
+msgstr "Φόροι"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,help:l10n_ro_invoice_report.field_account_bank_statement__state
@@ -475,54 +473,59 @@ msgid ""
 "entries, ready for the reconciliation.- Validated: All lines are reconciled."
 " There is nothing left to process."
 msgstr ""
+"Η τρέχουσα κατάσταση της κατάστασης του τραπεζικού σας λογαριασμού:- Νέο: "
+"Πλήρως επεξεργάσιμο με προσχέδια καταχωρήσεις ημερολογίου.- Επεξεργασία: Δεν"
+" είναι πλέον επεξεργάσιμο με καταχωρήσεις ημερολογίου που έχουν δημοσιευτεί,"
+" έτοιμο για τη συμφιλίωση.- Επικυρωμένο: Όλες οι γραμμές είναι "
+"συμφιλιωμένες. Δεν υπάρχει τίποτα άλλο για επεξεργασία."
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "To:"
-msgstr "Către:"
+msgstr "Για:"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Total amount"
-msgstr "Val. cu TVA"
+msgstr "Συνολικό ποσό"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
 msgid "Transactions"
-msgstr ""
+msgstr "Συναλλαγές"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Unit Price"
-msgstr "Preț"
+msgstr "Τιμή μονάδας"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "VAT:"
-msgstr "CUI"
+msgstr "ΦΠΑ:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields.selection,name:l10n_ro_invoice_report.selection__account_bank_statement__state__confirm
 msgid "Validated"
-msgstr ""
+msgstr "Επικυρωμένο"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_tree
 msgid "View"
-msgstr ""
+msgstr "Προβολή"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,name:l10n_ro_invoice_report.action_report_payment
 msgid "Voucher / Payment"
-msgstr "Chitanță"
+msgstr "Απόδειξη / Πληρωμή"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
 msgid "e.g. BNK/2021/0001"
-msgstr ""
+msgstr "π.χ. BNK/2021/0001"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "from"
-msgstr "de la"
+msgstr "από"

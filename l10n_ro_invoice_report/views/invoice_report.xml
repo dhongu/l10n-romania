@@ -199,14 +199,21 @@
                 <t t-if="o.move_type == 'in_invoice'">
                     <strong>Receptions:</strong>
                 </t>
+                <t t-set="awbs" t-value="[]" />
                 <t t-if="o.move_type == 'out_invoice'">
                     <strong>Deliveries:</strong>
                 </t>
                 <span class="m-0" t-foreach="pickings" t-as="d">
                     <span t-field="d.name" />
+                    <t t-if="d.carrier_tracking_ref">
+                        <t t-set="awbs" t-value="awbs + [d.carrier_tracking_ref]" />
+                    </t>
                 </span>
-                <br />
-
+                <t t-if="awbs">
+                    <br />
+                    <strong>AWB:</strong>
+                    <span t-esc="', '.join(awbs)" />
+                </t>
             </div>
         </xpath>
 
@@ -236,6 +243,7 @@
                         <th class="text-end">Amount</th>
                         <th class="text-end">Tax</th>
                         <th class="text-end">Taxes</th>
+                        <th class="text-end">Total amount</th>
                     </tr>
                 </thead>
                 <!-- display_type -->
@@ -284,14 +292,16 @@
                                     t-set="price_unit_without_taxes"
                                     t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
                                 />
-                                <t t-if="not with_discount_distinct and l.discount">
-
+                                <t t-if="with_discount_distinct and l.discount">
+                                    <span t-field="l.price_unit" />
                                 </t>
-                                <span
-                                    id="price_unit_without_taxes"
-                                    t-esc="price_unit_without_taxes"
-                                    t-options='{"widget": "float", "precision": 2}'
-                                />
+                                <t t-else="">
+                                    <span
+                                        id="price_unit_without_taxes"
+                                        t-esc="price_unit_without_taxes"
+                                        t-options='{"widget": "float", "precision": 2}'
+                                    />
+                                </t>
                             </td>
                             <td
                                 class="text-end"
@@ -327,7 +337,7 @@
                             </td>
                             <td class="text-end">
                                 <t t-foreach="l.tax_ids" t-as="tax">
-                                    <span t-field="tax.description" />
+                                    <span t-field="tax.invoice_label" />
                                 </t>
                             </td>
                             <td class="text-end">
@@ -342,6 +352,21 @@
                                 <span
                                     id="price_taxes"
                                     t-esc="price_taxes"
+                                    t-options='{"widget": "float", "precision": 2}'
+                                />
+                            </td>
+                            <td class="text-end">
+                                <t t-set="price_total" t-value="l.price_total" />
+                                <t t-if="o.move_type == 'out_refund'">
+                                    <t t-set="price_total" t-value="-1*l.price_total" />
+                                </t>
+                                <t
+                                    t-set="price_total"
+                                    t-value="o.currency_id._convert(price_total,currency_id,date=o.invoice_date)"
+                                />
+                                <span
+                                    id="price_total"
+                                    t-esc="price_total"
                                     t-options='{"widget": "float", "precision": 2}'
                                 />
                             </td>
@@ -444,62 +469,82 @@
                 <br />
                 <br />
 
-                <div t-foreach="payments_vals" t-as="payment_vals" style="page-break-inside: avoid;">
+                <div
+                    t-foreach="payments_vals"
+                    t-as="payment_vals"
+                    style="page-break-inside: avoid; border: 1px solid black;padding: 15px;"
+                >
 
                     <t t-if="payment_vals['journal_type']=='cash'">
-                        <t t-set="res_company" t-value="o.company_id" />
-                        <div>
-                            <strong t-field="res_company.partner_id.name" />
-                        </div>
-                        <div>
-                            VAT:
-                            <span t-field="res_company.partner_id.vat" />
-                        </div>
-                        <div>
-                            NRC:
-                            <span t-field="res_company.partner_id.nrc" />
-                        </div>
-                        <address
-                            t-field="res_company.partner_id"
-                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
-                        />
-                        <h4>
-                            <t t-if="payment_vals['payment_type']=='inbound'">
-                                <span>Voucher:</span>
-                            </t>
-                            <t t-if="payment_vals['payment_type']=='outbound'">
-                                <span>Payment disposal:</span>
-                            </t>
-
-                            <span t-esc="payment_vals['ref']" />
-                            <span>/</span>
-                            <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
-                        </h4>
-                        <div>
-                            <span>I received from</span>
-                            <strong t-field="o.partner_id.name" />
-                            <span t-if="o.partner_id.city">
-                                from
-                                <span t-field="o.partner_id.city" />
-                                <span t-field="o.partner_id.street" />
-                                <span t-field="o.partner_id.street2" />
-                            </span>
-
-                            <span>amount</span>
-
-                            <span
-                                t-esc="payment_vals['amount']"
-                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                        <t name="payment_container">
+                            <t t-set="res_company" t-value="o.company_id" />
+                            <div>
+                                <strong t-field="res_company.partner_id.name" />
+                            </div>
+                            <div>
+                                VAT:
+                                <span t-field="res_company.partner_id.vat" />
+                            </div>
+                            <div>
+                                NRC:
+                                <span t-field="res_company.partner_id.nrc" />
+                            </div>
+                            <address
+                                t-field="res_company.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
                             />
-                            (
-                            <!--                                <span t-esc="convert(payment.amount)"/>-->
-                            <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])" />
-                            )
-                        </div>
-                        <div>
-                            Representing counter value of invoice
-                            <span t-field="o.name" />
-                        </div>
+                            <h4>
+                                <t t-if="payment_vals['payment_type']=='inbound'">
+                                    <span>Voucher:</span>
+                                </t>
+                                <t t-if="payment_vals['payment_type']=='outbound'">
+                                    <span>Payment disposal:</span>
+                                </t>
+
+                                <span t-esc="payment_vals['ref']" />
+                                <span>/</span>
+                                <t t-esc="payment_vals['date']" t-options='{"widget": "date"}' />
+                            </h4>
+                            <div name="payment_text">
+                                <t t-if="payment_vals['payment_type']=='outbound'">
+                                    <span>I payed to</span>
+                                </t>
+                                <t t-else="">
+                                    <span>I received from</span>
+                                </t>
+                                <t t-set="partner" t-value="o.partner_id.commercial_partner_id" />
+                                <strong t-field="partner.name" />
+
+                                <span t-if="partner.vat">
+                                    ,<span t-field="partner.vat" />,
+                                </span>
+                                <span t-if="partner.nrc">
+                                    <span t-field="partner.nrc" />,
+                                </span>
+
+                                <span t-if="partner.city" name="address">
+                                    from
+                                    <span t-field="partner.city" />
+                                    <span t-field="partner.street" />
+                                    <span t-field="partner.street2" />
+                                </span>
+
+                                <span>amount</span>
+
+                                <strong
+                                    t-esc="payment_vals['amount']"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                />
+                                (
+                                <!--                                <span t-esc="convert(payment.amount)"/>-->
+                                <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])" />
+                                )
+                            </div>
+                            <div>
+                                Representing counter value of invoice
+                                <span t-field="o.name" />
+                            </div>
+                        </t>
                     </t>
                 </div>
             </t>
