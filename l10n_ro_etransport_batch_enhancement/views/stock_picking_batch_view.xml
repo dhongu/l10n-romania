@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+   <record id="l10n_ro_edi_stock_view_batch_form" model="ir.ui.view">
+      <field name="name">stock.picking.batch.form.inherit.l10n_ro_edi_stock</field>
+      <field name="model">stock.picking.batch</field>
+      <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group/group" position="inside">
+                <field name="l10n_ro_edi_stock_required" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
