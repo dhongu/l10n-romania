@@ -13,6 +13,7 @@ class ResPartner(models.Model):
     payment_bank_id = fields.Many2one(
         "res.partner.bank",
         domain="['|', ('company_id', '=', company_id), ('company_id', '=', False)]",
+        company_dependent = True,
         help="The bank account in which this partner will pay."
         "Will be sent in the SPV and will be printed on the invoice",
     )
