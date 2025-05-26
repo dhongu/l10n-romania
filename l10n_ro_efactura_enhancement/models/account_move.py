@@ -14,15 +14,16 @@ class AccountMove(models.Model):
 
         return res
 
-    def _cron_l10n_ro_edi_auto_send(self, limit=20):
+    def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
         _logger.info("Cron job for sending invoices to SPV")
         domain = [
             ("move_type", "in", ("out_invoice", "out_refund")),
             ("state", "=", "posted"),
             ("date", "<", fields.Date.today()),
-            ("date", ">=", fields.Date.today() - timedelta(days=1)),
+            ("date", ">=", fields.Date.today() - timedelta(days=days)),
             ("partner_id.country_id.code", "=", "RO"),
+            ("l10n_ro_edi_state", "=", False),
         ]
 
         invoices = self.search(domain, limit=limit + 1, order="date desc")
