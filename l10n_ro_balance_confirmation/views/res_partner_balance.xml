@@ -72,7 +72,7 @@
                     <t t-if="date_to">
                         <t t-set="doc" t-value="o.with_context(date_to=date_to)" />
                     </t>
-                    <span t-esc="doc.debit - doc.credit" t-options='{"widget": "float", "precision": 2}' />
+                    ><span t-field="doc.credit" />
 <!--                    <span>Partner balance: </span><span t-field="o.credit" />-->
                 </div>
                 <div id="text2" style="font-size: 0.85rem;">

@@ -9,7 +9,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
 
-    @api.depends_context('company')
+    @api.depends_context('company', 'date_to')
     def _credit_debit_get(self):
         date = self.env.context.get("date_to")
         if not date:
@@ -38,7 +38,7 @@ class ResPartner(models.Model):
                       LEFT JOIN account_account a ON (account_move_line.account_id=a.id)
                       WHERE a.account_type IN ('asset_receivable','liability_payable')
                       AND account_move_line.partner_id IN %s
-                      AND account_move_line.reconciled IS NOT TRUE
+
                       """ + where_clause + """
                       GROUP BY account_move_line.partner_id, a.account_type
                       """, where_params)
