@@ -17,6 +17,21 @@ class AccountMove(models.Model):
     def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
         _logger.info("Cron job for sending invoices to SPV")
+
+        need_retrigger = False
+        domain = [
+            ("move_type", "in", ("out_invoice", "out_refund")),
+            ("state", "=", "posted"),
+            ("date", "<", fields.Date.today()),
+            ("date", ">=", fields.Date.today() - timedelta(days=days)),
+            ("l10n_ro_edi_state", "=", 'invoice_sending'),
+        ]
+
+        invoices = self.search(domain, limit=limit, order="date desc")
+        if invoices:
+            invoices._l10n_ro_edi_fetch_invoice_sending_documents()
+            need_retrigger = True
+
         domain = [
             ("move_type", "in", ("out_invoice", "out_refund")),
             ("state", "=", "posted"),
@@ -27,7 +42,7 @@ class AccountMove(models.Model):
         ]
 
         invoices = self.search(domain, limit=limit + 1, order="date desc")
-        need_retrigger = False
+
         if len(invoices) > limit:
             invoices = invoices[:limit]
             need_retrigger = True
