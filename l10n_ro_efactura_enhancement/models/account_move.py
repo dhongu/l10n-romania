@@ -27,7 +27,7 @@ class AccountMove(models.Model):
             ("l10n_ro_edi_state", "=", 'invoice_sending'),
         ]
 
-        invoices = self.search(domain, limit=limit, order="date desc")
+        invoices = self.search(domain, limit=limit, order="date")
         if invoices:
             invoices._l10n_ro_edi_fetch_invoice_sending_documents()
             need_retrigger = True
@@ -42,6 +42,10 @@ class AccountMove(models.Model):
         ]
 
         invoices = self.search(domain, limit=limit + 1, order="date desc")
+
+        # daca au fost deja generate PDF-uri pentru facturi, le stergem
+        invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
+        invoice_pdf_report_ids.unlink()
 
         if len(invoices) > limit:
             invoices = invoices[:limit]
