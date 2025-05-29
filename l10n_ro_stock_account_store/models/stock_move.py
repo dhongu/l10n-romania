@@ -93,6 +93,11 @@ class StockMove(models.Model):
 
         return am_vals
 
+    def _get_sale_price(self):
+        """Return the sale price for the product, taking into account taxes."""
+
+        return self.product_id.lst_price
+
     def _create_account_entry_in_store(self, qty, description, svl_id, cost):
         company = self.company_id or self.env.company
         uneligible_tax_account_id = company.l10n_ro_property_uneligible_tax_account_id
@@ -105,8 +110,8 @@ class StockMove(models.Model):
                 _("Please define a 'Price Difference Account' on the product category '%s'.")
                 % self.product_id.categ_id.name
             )
-
-        prices = self.product_id.taxes_id.compute_all(self.product_id.lst_price, quantity=qty)
+        price = self._get_sale_price()
+        prices = self.product_id.taxes_id.compute_all(price, quantity=qty)
         sale_amount = prices["total_excluded"]
         uneligible_tax = prices["total_included"] - prices["total_excluded"]
 
@@ -155,7 +160,8 @@ class StockMove(models.Model):
                 % self.product_id.categ_id.name
             )
 
-        prices = self.product_id.taxes_id.compute_all(self.product_id.lst_price, quantity=qty)
+        price = self._get_sale_price()
+        prices = self.product_id.taxes_id.compute_all(price, quantity=qty)
         standard_price = self.product_id.standard_price
         sale_amount = prices["total_excluded"]
         uneligible_tax = prices["total_included"] - prices["total_excluded"]
