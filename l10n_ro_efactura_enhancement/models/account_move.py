@@ -42,6 +42,7 @@ class AccountMove(models.Model):
             ("date", ">=", fields.Date.today() - timedelta(days=days)),
             ("partner_id.country_id.code", "=", "RO"),
             ("l10n_ro_edi_state", "=", False),
+
         ]
 
         invoices = self.search(domain, limit=limit + 1, order="date desc")
