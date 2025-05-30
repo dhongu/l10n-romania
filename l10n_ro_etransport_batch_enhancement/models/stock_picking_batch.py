@@ -9,7 +9,7 @@ class StockPickingBatch(models.Model):
     _inherit = "stock.picking.batch"
 
     l10n_ro_edi_stock_required = fields.Boolean(string="eTransport Required")
-    l10n_ro_edi_carrier_id = carrier_id = fields.Many2one('delivery.carrier', string="Delivery",
+    l10n_ro_edi_carrier_id =  fields.Many2one('delivery.carrier', string="Delivery",
         compute='_compute_l10n_ro_edi_carrier_id',
         inverse='_inverse_l10n_ro_edi_carrier_id',
     )

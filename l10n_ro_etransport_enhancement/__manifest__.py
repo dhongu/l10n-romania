@@ -3,7 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "eTransport enhancement",
+    "name": "eTransport Enhancement",
     "version": "17.0.0.0.1",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
