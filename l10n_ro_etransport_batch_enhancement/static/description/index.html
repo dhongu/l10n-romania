@@ -371,6 +371,22 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/licence-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/17.0/l10n_ro_etransport_batch_enhancement"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <p>Features:</p>
+<ul class="simple">
+<li>Types can be defined for records sale.order, purchase.order,
+account.move</li>
+<li>If a model has no types defined, the type field will not be displayed</li>
+<li>completare automata cu 13 de zero pt persane fizice</li>
+<li>retransmiterea unei facturi</li>
+<li>parametri sistem:<ul>
+<li>“efactura.embed_pdf” - daca pune sau nu embedded pdf. Default pe
+True</li>
+<li>“efactura.clean_name” - daca curata caracterul “/” din numele
+facturii in tag-ul de ID. Default pe False</li>
+<li>“efactura.get_all_banks” - daca pune toate bancile cu
+l10n_ro_print_report si in valuta facturii. Default pe False</li>
+</ul>
+</li>
+</ul>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">

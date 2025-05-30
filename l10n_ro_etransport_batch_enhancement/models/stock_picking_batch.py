@@ -9,24 +9,22 @@ class StockPickingBatch(models.Model):
     _inherit = "stock.picking.batch"
 
     l10n_ro_edi_stock_required = fields.Boolean(string="eTransport Required")
-    l10n_ro_edi_carrier_id =  fields.Many2one('delivery.carrier', string="Delivery",
-        compute='_compute_l10n_ro_edi_carrier_id',
-        inverse='_inverse_l10n_ro_edi_carrier_id',
+    l10n_ro_edi_carrier_id = fields.Many2one(
+        "delivery.carrier",
+        string="Delivery",
+        compute="_compute_l10n_ro_edi_carrier_id",
+        inverse="_inverse_l10n_ro_edi_carrier_id",
     )
-
 
     def _compute_l10n_ro_edi_carrier_id(self):
         for batch in self:
             first_carrier = self.picking_ids[0].carrier_id
             batch.l10n_ro_edi_carrier_id = first_carrier
 
-
     def _inverse_l10n_ro_edi_carrier_id(self):
         for batch in self:
             for picking in batch.picking_ids:
                 picking.carrier_id = batch.l10n_ro_edi_carrier_id
-
-
 
     def _compute_l10n_ro_edi_stock_enable(self):
         res = super()._compute_l10n_ro_edi_stock_enable()

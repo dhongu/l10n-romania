@@ -24,7 +24,7 @@ class AccountMove(models.Model):
             ("state", "=", "posted"),
             ("date", "<", fields.Date.today()),
             ("date", ">=", fields.Date.today() - timedelta(days=days)),
-            ("l10n_ro_edi_state", "=", 'invoice_sending'),
+            ("l10n_ro_edi_state", "=", "invoice_sending"),
         ]
 
         invoices = self.search(domain, limit=limit, order="date")
@@ -42,11 +42,9 @@ class AccountMove(models.Model):
             ("date", ">=", fields.Date.today() - timedelta(days=days)),
             ("partner_id.country_id.code", "=", "RO"),
             ("l10n_ro_edi_state", "=", False),
-
         ]
 
         invoices = self.search(domain, limit=limit + 1, order="date desc")
-
 
         # daca au fost deja generate PDF-uri pentru facturi, le stergem
         invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
