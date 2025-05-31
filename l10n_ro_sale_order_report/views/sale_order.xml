@@ -225,95 +225,20 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="clearfix" name="so_total_summary">
-                    <div id="total" class="row" name="total">
-                        <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                            <table class="table table-sm">
-                                <tr class="border-black o_subtotal" style="">
-                                    <td name="td_amount_untaxed_label">
-                                        <strong>Subtotal</strong>
-                                    </td>
-                                    <td name="td_amount_untaxed" class="text-end">
-                                        <t t-set="untaxed_amount" t-value="doc.amount_untaxed * percent" />
-                                        <span
-                                            t-esc="untaxed_amount"
-                                            t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"
-                                        />
-                                    </td>
-                                </tr>
-
-                                <t t-set="tax_totals" t-value="json.loads(doc.tax_totals_json)" />
-                                <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
-                                    <tr class="border-black o_subtotal" />
-                                    <t t-set="subtotal_to_show" t-value="subtotal['name']" />
-                                    <t
-                                        t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]"
-                                        t-as="amount_by_group"
-                                    >
-                                        <tr>
-                                            <t t-if="len(tax_totals['groups_by_subtotal'][subtotal_to_show]) &gt; 1">
-                                                <td>
-                                                    <span t-esc="amount_by_group['tax_group_name']" />
-                                                    <t
-                                                        t-set="base_percent"
-                                                        t-value="amount_by_group['tax_group_base_amount'] * percent"
-                                                    />
-                                                    <span class="text-nowrap">on
-                                                        <span
-                                                            t-esc="base_percent"
-                                                            t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"
-                                                        />
-                                                    </span>
-                                                </td>
-                                                <td class="text-right o_price_total">
-                                                    <t
-                                                        t-set="tax_percent"
-                                                        t-value="amount_by_group['tax_group_amount'] * percent"
-                                                    />
-                                                    <span
-                                                        t-esc="tax_percent"
-                                                        t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"
-                                                    />
-                                                </td>
-                                            </t>
-                                            <t t-else="">
-                                                <td>
-                                                    <span
-                                                        class="text-nowrap"
-                                                        t-esc="amount_by_group['tax_group_name']"
-                                                    />
-                                                </td>
-                                                <td class="text-right o_price_total">
-                                                    <t
-                                                        t-set="tax_percent"
-                                                        t-value="amount_by_group['tax_group_amount'] * percent"
-                                                    />
-                                                    <span
-                                                        t-esc="tax_percent"
-                                                        t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"
-                                                    />
-                                                </td>
-                                            </t>
-                                        </tr>
-                                    </t>
-                                </t>
-
-                                <tr class="border-black o_total">
-                                    <td name="td_amount_total_label">
-                                        <strong>Total</strong>
-                                    </td>
-                                    <td name="td_amount_total" class="text-end">
-                                        <t t-set="total_amount" t-value="doc.amount_total * percent" />
-                                        <span
-                                            t-esc="total_amount"
-                                            t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"
-                                        />
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+            <div class="clearfix" name="so_total_summary">
+                <div id="total" class="row mt-n3" name="total">
+                    <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                        <table class="o_total_table table table-borderless">
+                            <!-- Tax totals -->
+                            <t t-call="sale.document_tax_totals">
+                                <t t-set="tax_totals" t-value="doc.tax_totals"/>
+                                <t t-set="currency" t-value="doc.currency_id"/>
+                            </t>
+                        </table>
                     </div>
                 </div>
+            </div>
+            <div class="oe_structure"></div>
             </div>
         </t>
     </template>
