@@ -46,6 +46,7 @@ Credits
 Authors
 -------
 
+* Terrabit
 * NextERP Romania
 * Forest and Biomass Romania
 

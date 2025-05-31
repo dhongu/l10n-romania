@@ -23,9 +23,10 @@ class MT940Parser(models.AbstractModel):
     def get_tag_86_regex(self):
         if self.get_mt940_type() == "mt940_ro_bt":
             return re.compile(
-                r"(?P<desc>[\w\s]+)\s+"  # Descrierea tranzactiei
-                r"(?P<partner_name>[\w\s\S]+)\s+"  # Numele companiei
-                r"(?P<account_number>\b[A-Z]{2}\d{2}[A-Z0-9]{1,30}\b)"  # IBAN
+                r"^(?P<desc>.*?)\s+"
+                r"C\.I\.F\.:?(?P<cif>\d{5,})\s+.*?"  # CIF + orice altceva
+                r"(?P<partner_name>[A-Z][A-Z0-9\s\.\-&]{3,})\s+"
+                r"(?P<account_number>[A-Z]{2}\d{2}[A-Z0-9]{10,30})"
             )
         return super().get_tag_86_regex()
 
@@ -77,7 +78,12 @@ class MT940Parser(models.AbstractModel):
                 parsed_data = re_86.groupdict()
                 transaction["partner_name"] = parsed_data["partner_name"]
                 transaction["account_number"] = parsed_data["account_number"]
-
+                cif = parsed_data.get("cif", "").strip()
+                domain = [("vat", "like", cif), ("is_company", "=", True)]
+                partner = self.env["res.partner"].search(domain, limit=1)
+                if partner:
+                    transaction["partner_name"] = partner.name
+                    transaction["partner_id"] = partner.id
             if not transaction.get("payment_ref", ""):
                 transaction["payment_ref"] = data
 
