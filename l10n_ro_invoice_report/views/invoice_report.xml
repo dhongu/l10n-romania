@@ -433,10 +433,14 @@
                     </table>
                 </div>
                 <div class="col-5">
-                    <t t-set="tax_totals" t-value="o.tax_totals" />
-                    <t t-set="currency" t-value="o.currency_id" />
+                    <!-- Tax totals summary (invoice currency) -->
+
+
                     <table class="table table-sm" style="page-break-inside: avoid;">
-                        <t t-call="account.document_tax_totals" />
+                         <t t-if="o.tax_totals" t-call="account.document_tax_totals">
+                            <t t-set="tax_totals" t-value="o.tax_totals"/>
+                            <t t-set="currency" t-value="o.currency_id"/>
+                        </t>
                     </table>
                 </div>
             </div>
