@@ -97,7 +97,7 @@ class CashRegister(models.Model):
             self.currency_id = self.journal_id.currency_id or self.env.company.currency_id
             # change the name of the cash register
             self.name = "/"
-            self._compute_name()
+            # self._compute_name()
 
     @api.depends("date", "journal_id")
     def _compute_move_ids(self):
