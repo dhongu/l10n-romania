@@ -35,6 +35,22 @@ class AccountMove(models.Model):
             invoices._l10n_ro_edi_fetch_invoice_sending_documents()
             need_retrigger = True
 
+
+        # facturi la care nu este complatata tara
+        domain = [
+            ("move_type", "in", ("out_invoice", "out_refund")),
+            ("state", "=", "posted"),
+            ("date", "<", fields.Date.today()),
+            ("date", ">=", fields.Date.today() - timedelta(days=days)),
+            ("partner_id.country_id.code", "=", False),
+            ("l10n_ro_edi_state", "=", False),
+        ]
+
+        invoices = self.search(domain, limit=limit)
+        for invoice in invoices:
+            invoice.partner_id.country_id = self.env.ref("base.ro").id
+
+
         domain = [
             ("move_type", "in", ("out_invoice", "out_refund")),
             ("state", "=", "posted"),
