@@ -39,6 +39,9 @@ class Picking(models.Model):
             res["data"]["notificare"]["dateTransport"]["codTaraOrgTransport"] = "EL"
         if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
             res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
+        for item in res["data"]["notificare"]['bunuriTransportate']:
+            item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"], 2)
+
         return res
 
     def action_l10n_ro_edi_stock_fetch_status(self):
