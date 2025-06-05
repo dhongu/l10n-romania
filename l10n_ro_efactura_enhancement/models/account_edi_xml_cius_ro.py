@@ -20,7 +20,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
     def _get_partner_party_vals(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
-        vals = super()._get_partner_party_vals(partner, role)
+
 
         if not partner.country_code:
             _logger.warning(
@@ -35,6 +35,8 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 partner.name,
                 partner.id,
             )
+
+        vals = super()._get_partner_party_vals(partner, role)
 
 
         partner = partner.commercial_partner_id
