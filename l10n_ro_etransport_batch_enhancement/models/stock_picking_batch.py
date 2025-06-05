@@ -18,8 +18,9 @@ class StockPickingBatch(models.Model):
 
     def _compute_l10n_ro_edi_carrier_id(self):
         for batch in self:
-            first_carrier = self.picking_ids[0].carrier_id
-            batch.l10n_ro_edi_carrier_id = first_carrier
+            if self.picking_ids:
+                first_carrier = self.picking_ids[0].carrier_id
+                batch.l10n_ro_edi_carrier_id = first_carrier
 
     def _inverse_l10n_ro_edi_carrier_id(self):
         for batch in self:
