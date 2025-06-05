@@ -4,7 +4,7 @@
 
 {
     "name": "eTransport Batch Enhancement",
-    "version": "17.0.0.0.2",
+    "version": "17.0.0.0.3",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "eTransport Batch Enhancement",

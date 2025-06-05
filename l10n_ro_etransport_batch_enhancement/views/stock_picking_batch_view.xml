@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-   <record id="l10n_ro_edi_stock_view_batch_form" model="ir.ui.view">
-      <field name="name">stock.picking.batch.form.inherit.l10n_ro_edi_stock</field>
-      <field name="model">stock.picking.batch</field>
-      <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form" />
+    <record id="l10n_ro_edi_stock_view_batch_form" model="ir.ui.view">
+        <field name="name">stock.picking.batch.form.inherit.l10n_ro_edi_stock</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form" />
         <field name="arch" type="xml">
             <xpath expr="//sheet/group/group" position="inside">
                 <field name="l10n_ro_edi_stock_required" />
@@ -11,4 +11,30 @@
             </xpath>
         </field>
     </record>
+
+    <template
+        id="report_batch_report_batch_delivery"
+        inherit_id="l10n_ro_stock_picking_batch_report.report_batch_delivery"
+    >
+        <xpath expr="//t[@t-call='l10n_ro_stock_picking_report.report_delivery_sign']" position="after">
+            <span t-if="batch.l10n_ro_edi_stock_required">
+                <t
+                    t-set="filtered_documents"
+                    t-value="batch.l10n_ro_edi_stock_document_ids.filtered(lambda doc: doc.state in ['stock_validated'])"
+                />
+                <t t-if="filtered_documents">
+                    <span>
+                        <strong>UIT:</strong><span t-field="filtered_documents[0].l10n_ro_edi_stock_uit" />
+                    </span>
+                </t>
+            </span>
+
+            <!--                <t t-if="filtered_documents">-->
+            <!--                    <span>-->
+            <!--                        UIT:-->
+            <!--                        <span t-field="o.l10n_ro_edi_stock_document_ids[0].l10n_ro_edi_stock_uit"/>-->
+            <!--                    </span>-->
+            <!--                </t>-->
+        </xpath>
+    </template>
 </odoo>
