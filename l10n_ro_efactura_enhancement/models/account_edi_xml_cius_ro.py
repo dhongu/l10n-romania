@@ -21,6 +21,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
     def _get_partner_party_vals(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
 
+        _logger.info("partner %s (%s)", partner.name, partner.id)
 
         if not partner.country_code:
             _logger.warning(
