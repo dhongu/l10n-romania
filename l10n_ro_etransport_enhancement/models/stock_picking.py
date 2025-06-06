@@ -29,6 +29,8 @@ class Picking(models.Model):
 
     @api.model
     def _l10n_ro_edi_stock_get_template_data(self, data: dict):
+        for move in self.move_ids:
+            move._cal_move_weight()
         res = super()._l10n_ro_edi_stock_get_template_data(data)
         for key in ("locStartTraseuRutier", "locFinalTraseuRutier"):
             locatie = res["data"]["notificare"][key].get("locatie", {})
