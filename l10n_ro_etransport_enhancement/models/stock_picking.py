@@ -54,12 +54,12 @@ class Picking(models.Model):
 
         return res
 
-    @api.model
-    def _l10n_ro_edi_stock_validate_data(self, data: dict):
-        errors = super()._l10n_ro_edi_stock_validate_data(data)
-
-        for error in errors:
-            if error == _("The delivery carrier partner has to be located in Romania."):
-                errors.remove(error)
-
-        return errors
+    # @api.model
+    # def _l10n_ro_edi_stock_validate_data(self, data: dict):
+    #     errors = super()._l10n_ro_edi_stock_validate_data(data)
+    #
+    #     for error in errors:
+    #         if error == _("The delivery carrier partner has to be located in Romania."):
+    #             errors.remove(error)
+    #
+    #     return errors
