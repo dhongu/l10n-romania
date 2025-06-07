@@ -61,15 +61,6 @@ class AccountInvoice(models.Model):
             if origin:
                 invoice.write({"invoice_origin": origin})
 
-    # def _get_reconciled_vals(self, partial, amount, counterpart_line):
-    #     values = super()._get_reconciled_vals(partial, amount, counterpart_line)
-    #     values.update(
-    #         {
-    #             "journal_type": counterpart_line.journal_id.type,
-    #         }
-    #     )
-    #     return values
-
     def _compute_payments_widget_reconciled_info(self):
         res = super()._compute_payments_widget_reconciled_info()
         for invoice in self:
@@ -78,9 +69,33 @@ class AccountInvoice(models.Model):
                     move_id = item["move_id"]
                     move = self.env["account.move"].browse(move_id)
                     item["journal_type"] = move.journal_id.type
+                    # get payment for POS
+                    if (
+                        move.journal_id.type == "sale"
+                        and "pos_payment_name" in item
+                        and invoice.move_type == "out_refund"
+                    ):
+                        pos_payment_method = (
+                            self.env["pos.payment.method"]
+                            .sudo()
+                            .search([("name", "=", item["pos_payment_name"])], limit=1)
+                        )
+                        if pos_payment_method:
+                            item["journal_type"] = pos_payment_method.journal_id.type
+                        item["payment_type"] = "outbound"
                     payment_id = item["account_payment_id"]
-                    payment = self.env["account.payment"].browse(payment_id)
-                    item["payment_type"] = payment.payment_type
+                    if payment_id:
+                        payment = self.env["account.payment"].browse(payment_id)
+                        item["payment_type"] = payment.payment_type
+        return res
+
+    @api.depends("bank_partner_id")
+    def _compute_partner_bank_id(self):
+        res = super()._compute_partner_bank_id()
+        for move in self:
+            # Check for any payment bank set in partner
+            if move.move_type in ["out_invoice", "in_refund"] and move.commercial_partner_id.payment_bank_id:
+                move.partner_bank_id = move.commercial_partner_id.payment_bank_id
         return res
 
 
