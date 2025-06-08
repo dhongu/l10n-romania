@@ -554,7 +554,7 @@ class StockAccountingCheckLine(models.TransientModel):
             qty = float_round(line.quantity - line.quantity_svl, 2)
             remaining_qty = float_round(line.quantity  - line.remaining_qty, 2)
             remaining_value = float_round(line.amount - line.remaining_value, 2)
-            if not diff and not qty and not remaining_value:
+            if not diff and not qty and not remaining_qty and not remaining_value:
                 continue
 
             stock_move = self.env["stock.move"].create(
