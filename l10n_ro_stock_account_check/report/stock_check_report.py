@@ -97,6 +97,7 @@ class StockAccountingCheck(models.TransientModel):
             SELECT %(report)s as report_id, product_id, account_id,
                     sum(svl_value) as amount_svl ,
                     sum(quantity_svl) as quantity_svl,
+                    sum(remaining_qty) as remaining_qty,
                     sum(aml_value) as amount_aml,
                     sum(quantity_aml) as quantity_aml
                     {_select}
@@ -105,6 +106,7 @@ class StockAccountingCheck(models.TransientModel):
                  (  ( select sm.product_id, l10n_ro_account_id as account_id,
                         sum(svl.value) as svl_value ,
                         sum(svl.quantity) as quantity_svl,
+                        sum(svl.remaining_qty) as remaining_qty,
                         0 as aml_value,
                         0 as quantity_aml
                         {_select_svl}
@@ -117,6 +119,7 @@ class StockAccountingCheck(models.TransientModel):
                 select product_id, account_id,
                         0 as svl_value,
                         0 as quantity_svl,
+                        0 as remaining_qty,
                         sum(aml.balance) as aml_value,
                         sum(aml.quantity) as quantity_aml
                         {_select_aml}
@@ -345,6 +348,7 @@ class StockAccountingCheckLine(models.TransientModel):
 
     quantity = fields.Float(compute="_compute_price")
     quantity_svl = fields.Float(string="Quantity SVL")
+    remaining_qty = fields.Float(string="Remaining Qty SVL")
     quantity_aml = fields.Float(string="Quantity AML")
 
     amount_svl = fields.Monetary(currency_field="currency_id", string="Amount SVL")
@@ -526,7 +530,7 @@ class StockAccountingCheckLine(models.TransientModel):
             post_date = line.report_id.date_to - relativedelta(hour=12)
             diff = float_round(line.amount - line.amount_svl, 2)
             qty = float_round(line.quantity - line.quantity_svl, 2)
-
+            remaining_qty = float_round(line.quantity  - line.remaining_qty, 2)
             if not diff and not qty:
                 continue
 
@@ -549,6 +553,7 @@ class StockAccountingCheckLine(models.TransientModel):
                 "product_id": line.product_id.id,
                 "value": diff,
                 "quantity": qty,
+                "remaining_qt": remaining_qty,
                 "stock_move_id": stock_move.id,
                 "l10n_ro_account_id": line.account_id.id,
                 "company_id": line.report_id.company_id.id,
@@ -556,7 +561,7 @@ class StockAccountingCheckLine(models.TransientModel):
             }
             svl = self.env["stock.valuation.layer"].create(svl_values)
             svl.write({"l10n_ro_account_id": line.account_id.id})
-            line.write({"amount_svl": line.amount, "quantity_svl": line.quantity})
+            line.write({"amount_svl": line.amount, "quantity_svl": line.quantity, "remaining_qty": line.quantity})
             move_count += 1
 
         if not move_count:
