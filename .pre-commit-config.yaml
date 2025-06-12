@@ -44,22 +44,24 @@ repos:
     rev: v1.2
     hooks:
       - id: whool-init
+
+
+
   - repo: https://github.com/oca/maintainer-tools
-    rev: cc63f71d3da20629c71cd095cdec394291f22713
+    rev: d5fab7ee87fceee858a3d01048c78a548974d935
     hooks:
-      # update the NOT INSTALLABLE ADDONS section above
-      - id: oca-update-pre-commit-excluded-addons
-      - id: oca-fix-manifest-website
-        args: ["https://github.com/OCA/l10n-romania"]
+      # Use each script's `--help` to understand the args
       - id: oca-gen-addon-readme
+        stages: [manual]
         args:
           - --addons-dir=.
-          - --branch=17.0
           - --org-name=dhongu
           - --repo-name=l10n-romania
           - --if-source-changed
           - --keep-source-digest
           - --convert-fragments-to-markdown
+          - --template-filename=gen_addon_readme.rst.jinja
+
       - id: oca-gen-external-dependencies
   - repo: https://github.com/OCA/odoo-pre-commit-hooks
     rev: v0.0.34
