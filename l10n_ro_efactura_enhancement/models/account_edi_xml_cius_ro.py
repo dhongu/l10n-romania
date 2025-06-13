@@ -3,9 +3,13 @@
 # See README.rst file on addons root folder for license details
 
 
+import logging
+
 from odoo import models
 from odoo.tools import float_is_zero
 from odoo.tools.safe_eval import safe_eval
+
+_logger = logging.getLogger(__name__)
 
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
@@ -19,6 +23,23 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
     def _get_partner_party_vals(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
+
+        _logger.info("partner %s (%s)", partner.name, partner.id)
+
+        if not partner.country_code:
+            _logger.warning(
+                "Partner %s (%s) has no country_code set, using 'RO' as default.",
+                partner.name,
+                partner.id,
+            )
+
+        if not partner.state_id.code:
+            _logger.warning(
+                "Partner %s (%s) has no state_id set, using 'B' as default.",
+                partner.name,
+                partner.id,
+            )
+
         vals = super()._get_partner_party_vals(partner, role)
 
         partner = partner.commercial_partner_id
