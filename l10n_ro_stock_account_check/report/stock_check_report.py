@@ -66,7 +66,7 @@ class StockAccountingCheck(models.TransientModel):
         journals = categories.mapped("property_stock_journal")
         if journals:
             res["journal_id"] = journals[0].id
-        res['picking_type_id'] = stock_picking_type.id if stock_picking_type else False
+        res["picking_type_id"] = stock_picking_type.id if stock_picking_type else False
         return res
 
     def do_compute_product(self):
@@ -77,13 +77,11 @@ class StockAccountingCheck(models.TransientModel):
         _select_aml = ""
         _where_svl = ""
         _where_aml = ""
-        _having = (
-            """
+        _having = """
                having abs( sum(svl_value) - sum(aml_value) ) > 0.1 or
                abs( sum(svl_value) - sum(remaining_value) ) > 0.1 or
                abs( sum(quantity_svl) - sum(remaining_qty) ) > 0.1
             """
-        )
         if self.interval:
             _where_svl = "AND date_trunc('day',sm.date) >= %(date_from)s  AND date_trunc('day',sm.date) <= %(date_to)s"
             _where_aml = (
@@ -372,7 +370,6 @@ class StockAccountingCheckLine(models.TransientModel):
     remaining_value = fields.Monetary(currency_field="currency_id", string="Remaining Value SVL")
     quantity_aml = fields.Float(string="Quantity AML")
 
-
     amount_svl = fields.Monetary(currency_field="currency_id", string="Amount SVL")
     amount_aml = fields.Monetary(currency_field="currency_id", string="Amount AML")
 
@@ -552,7 +549,7 @@ class StockAccountingCheckLine(models.TransientModel):
             post_date = line.report_id.date_to - relativedelta(hour=12)
             diff = float_round(line.amount - line.amount_svl, 2)
             qty = float_round(line.quantity - line.quantity_svl, 2)
-            remaining_qty = float_round(line.quantity  - line.remaining_qty, 2)
+            remaining_qty = float_round(line.quantity - line.remaining_qty, 2)
             remaining_value = float_round(line.amount - line.remaining_value, 2)
             if not diff and not qty and not remaining_qty and not remaining_value:
                 continue
@@ -585,12 +582,14 @@ class StockAccountingCheckLine(models.TransientModel):
             }
             svl = self.env["stock.valuation.layer"].create(svl_values)
             svl.write({"l10n_ro_account_id": line.account_id.id})
-            line.write({
-                "amount_svl": line.amount,
-                "quantity_svl": line.quantity,
-                "remaining_qty": line.quantity,
-                "remaining_value": line.amount,
-            })
+            line.write(
+                {
+                    "amount_svl": line.amount,
+                    "quantity_svl": line.quantity,
+                    "remaining_qty": line.quantity,
+                    "remaining_value": line.amount,
+                }
+            )
             move_count += 1
 
         if not move_count:

@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from odoo import _, fields, models
 from odoo.exceptions import UserError
+
 _logger = logging.getLogger(__name__)
 
 
@@ -10,7 +11,6 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     # l10n_ro_edi_state = fields.Selection( selection_add=[ ('invoice_sending_failed', 'Error')])
-
 
     def check_partner(self, partner):
         """Check if the partner has a country set, raise UserError if not."""
@@ -24,13 +24,11 @@ class AccountMove(models.Model):
             if not partner.street:
                 raise UserError(_("You can not post invoice without street for partner: %s") % partner.name)
 
-
     def action_post(self):
         for move in self:
-            if move.move_type in  ["out_invoice", "out_refund"]:
+            if move.move_type in ["out_invoice", "out_refund"]:
                 move.check_partner(move.partner_id)
                 move.check_partner(move.partner_shipping_id)
-
 
     def _need_ubl_cii_xml(self):
         res = super()._need_ubl_cii_xml()
@@ -57,7 +55,6 @@ class AccountMove(models.Model):
             _logger.info(f"Fetch status for invoices: {invoices_name}")
             invoices._l10n_ro_edi_fetch_invoice_sending_documents()
             need_retrigger = True
-
 
         domain = [
             ("move_type", "in", ("out_invoice", "out_refund")),

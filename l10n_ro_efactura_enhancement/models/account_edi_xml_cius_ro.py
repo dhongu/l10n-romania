@@ -3,11 +3,14 @@
 # See README.rst file on addons root folder for license details
 
 
+import logging
+
 from odoo import models
 from odoo.tools import float_is_zero
 from odoo.tools.safe_eval import safe_eval
-import logging
+
 _logger = logging.getLogger(__name__)
+
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
@@ -38,7 +41,6 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             )
 
         vals = super()._get_partner_party_vals(partner, role)
-
 
         partner = partner.commercial_partner_id
 

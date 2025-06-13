@@ -45,8 +45,6 @@ repos:
     hooks:
       - id: whool-init
 
-
-
   - repo: https://github.com/oca/maintainer-tools
     rev: d5fab7ee87fceee858a3d01048c78a548974d935
     hooks:
