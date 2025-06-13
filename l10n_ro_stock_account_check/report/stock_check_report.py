@@ -547,12 +547,21 @@ class StockAccountingCheckLine(models.TransientModel):
         move_count = 0
         for line in self:
             post_date = line.report_id.date_to - relativedelta(hour=12)
-            diff = float_round(line.amount - line.amount_svl, 2)
+            amount = float_round(line.amount - line.amount_svl, 2)
             qty = float_round(line.quantity - line.quantity_svl, 2)
-            remaining_qty = float_round(line.quantity - line.remaining_qty, 2)
             remaining_value = float_round(line.amount - line.remaining_value, 2)
-            if not diff and not qty and not remaining_qty and not remaining_value:
+            remaining_qty = float_round(line.quantity - line.remaining_qty, 2)
+
+
+            if line.quantity > line.quantity_svl:
+                remaining_qty = qty
+                remaining_value = amount
+
+            if not amount and not qty and not remaining_qty and not remaining_value:
                 continue
+
+            if remaining_qty < 0:
+                remaining_qty = 0
 
             stock_move = self.env["stock.move"].create(
                 {
@@ -569,9 +578,9 @@ class StockAccountingCheckLine(models.TransientModel):
             )
 
             svl_values = {
-                "l10n_ro_valued_type": "plus_inventory" if diff > 0 else "minus_inventory",
+                "l10n_ro_valued_type": "plus_inventory" if amount > 0 else "minus_inventory",
                 "product_id": line.product_id.id,
-                "value": diff,
+                "value": amount,
                 "quantity": qty,
                 "remaining_qty": remaining_qty,
                 "remaining_value": remaining_value,
