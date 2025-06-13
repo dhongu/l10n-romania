@@ -556,6 +556,30 @@ class StockAccountingCheckLine(models.TransientModel):
             if line.quantity > line.quantity_svl:
                 remaining_qty = qty
                 remaining_value = amount
+            else:
+                svls = self.env["stock.valuation.layer"].search(
+                    [
+                        ("product_id", "=", line.product_id.id),
+                        ("l10n_ro_account_id", "=", line.account_id.id),
+                        ("remaining_qty", ">", 0),
+                    ],
+                )
+                for svl in svls:
+                    if remaining_qty > svl.remaining_qty:
+                        remaining_qty -= svl.remaining_qty
+                        remaining_value -= svl.remaining_value
+                        svl.write({"remaining_qty": 0, "remaining_value": 0})
+                    else:
+                        svl.write(
+                            {
+                                "remaining_qty": float_round(svl.remaining_qty - remaining_qty, 2),
+                                "remaining_value": float_round(svl.remaining_value - remaining_value, 2),
+                            }
+                        )
+                        remaining_qty = 0
+                        remaining_value = 0
+                        break
+
 
             if not amount and not qty and not remaining_qty and not remaining_value:
                 continue
