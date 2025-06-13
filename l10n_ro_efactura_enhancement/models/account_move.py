@@ -29,6 +29,7 @@ class AccountMove(models.Model):
             if move.move_type in ["out_invoice", "out_refund"]:
                 move.check_partner(move.partner_id)
                 move.check_partner(move.partner_shipping_id)
+        return super().action_post()
 
     def _need_ubl_cii_xml(self):
         res = super()._need_ubl_cii_xml()
