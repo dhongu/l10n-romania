@@ -1,7 +1,8 @@
 import logging
 from datetime import timedelta
 
-from odoo import fields, models
+from odoo import _, fields, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -9,8 +10,29 @@ _logger = logging.getLogger(__name__)
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    def _need_ubl_cii_xml(self, format):
-        res = super()._need_ubl_cii_xml(format)
+    # l10n_ro_edi_state = fields.Selection( selection_add=[ ('invoice_sending_failed', 'Error')])
+
+    def check_partner(self, partner):
+        """Check if the partner has a country set, raise UserError if not."""
+        if not partner.country_id:
+            raise UserError(_("You can not post invoice without country for partner: %s") % partner.name)
+        if partner.country_id.code == "RO":
+            if not partner.state_id:
+                raise UserError(_("You can not post invoice without state for partner: %s") % partner.name)
+            if not partner.city:
+                raise UserError(_("You can not post invoice without city for partner: %s") % partner.name)
+            if not partner.street:
+                raise UserError(_("You can not post invoice without street for partner: %s") % partner.name)
+
+    def action_post(self):
+        for move in self:
+            if move.move_type in ["out_invoice", "out_refund"]:
+                move.check_partner(move.partner_id)
+                move.check_partner(move.partner_shipping_id)
+        return super().action_post()
+
+    def _need_ubl_cii_xml(self):
+        res = super()._need_ubl_cii_xml()
 
         return res
 
@@ -24,7 +46,7 @@ class AccountMove(models.Model):
             ("state", "=", "posted"),
             ("date", "<", fields.Date.today()),
             ("date", ">=", fields.Date.today() - timedelta(days=days)),
-            ("l10n_ro_edi_state", "=", 'invoice_sending'),
+            ("l10n_ro_edi_state", "=", "invoice_sending"),
         ]
 
         invoices = self.search(domain, limit=limit, order="date")
@@ -42,11 +64,9 @@ class AccountMove(models.Model):
             ("date", ">=", fields.Date.today() - timedelta(days=days)),
             ("partner_id.country_id.code", "=", "RO"),
             ("l10n_ro_edi_state", "=", False),
-
         ]
 
         invoices = self.search(domain, limit=limit + 1, order="date desc")
-
 
         # daca au fost deja generate PDF-uri pentru facturi, le stergem
         invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
