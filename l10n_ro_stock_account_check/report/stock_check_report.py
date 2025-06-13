@@ -54,6 +54,19 @@ class StockAccountingCheck(models.TransientModel):
 
         res["date_from"] = fields.Date.to_string(from_date)
         res["date_to"] = fields.Date.to_string(to_date)
+
+        stock_picking_type = self.env["stock.picking.type"].search(
+            [
+                ("code", "=", "internal"),
+                ("company_id", "=", self.env.company.id),
+            ],
+            limit=1,
+        )
+        categories = self.env["product.category"].search([])
+        journals = categories.mapped("property_stock_journal")
+        if journals:
+            res["journal_id"] = journals[0].id
+        res["picking_type_id"] = stock_picking_type.id if stock_picking_type else False
         return res
 
     def do_compute_product(self):
@@ -64,9 +77,11 @@ class StockAccountingCheck(models.TransientModel):
         _select_aml = ""
         _where_svl = ""
         _where_aml = ""
-        _having = (
-            "having abs( sum(svl_value) - sum(aml_value) ) > 1 or sum(svl_value) < -0.01 or sum(aml_value)  < -0.01"
-        )
+        _having = """
+               having abs( sum(svl_value) - sum(aml_value) ) > 0.1 or
+               abs( sum(svl_value) - sum(remaining_value) ) > 0.1 or
+               abs( sum(quantity_svl) - sum(remaining_qty) ) > 0.1
+            """
         if self.interval:
             _where_svl = "AND date_trunc('day',sm.date) >= %(date_from)s  AND date_trunc('day',sm.date) <= %(date_to)s"
             _where_aml = (
@@ -98,6 +113,7 @@ class StockAccountingCheck(models.TransientModel):
                     sum(svl_value) as amount_svl ,
                     sum(quantity_svl) as quantity_svl,
                     sum(remaining_qty) as remaining_qty,
+                    sum(remaining_value) as remaining_value,
                     sum(aml_value) as amount_aml,
                     sum(quantity_aml) as quantity_aml
                     {_select}
@@ -107,6 +123,7 @@ class StockAccountingCheck(models.TransientModel):
                         sum(svl.value) as svl_value ,
                         sum(svl.quantity) as quantity_svl,
                         sum(svl.remaining_qty) as remaining_qty,
+                        sum(svl.remaining_value) as remaining_value,
                         0 as aml_value,
                         0 as quantity_aml
                         {_select_svl}
@@ -120,6 +137,7 @@ class StockAccountingCheck(models.TransientModel):
                         0 as svl_value,
                         0 as quantity_svl,
                         0 as remaining_qty,
+                        0 as remaining_value,
                         sum(aml.balance) as aml_value,
                         sum(aml.quantity) as quantity_aml
                         {_select_aml}
@@ -232,12 +250,12 @@ class StockAccountingCheck(models.TransientModel):
     def do_check_sale_order(self):
         products = self.line_ids.mapped("product_id")
         sale_lines = self.env["sale.order.line"].search([("product_id", "in", products.ids)])
-        sale_oreders = sale_lines.mapped("order_id")
+        sale_orders = sale_lines.mapped("order_id")
         ok = True
-        for sale_oreder in sale_oreders:
-            if sale_oreder.invoice_count == 1:
-                invoice_date = sale_oreder.invoice_ids.invoice_date or fields.Date.today()
-                for picking in sale_oreder.picking_ids:
+        for sale_order in sale_orders:
+            if sale_order.invoice_count == 1:
+                invoice_date = sale_order.invoice_ids.invoice_date or fields.Date.today()
+                for picking in sale_order.picking_ids:
                     if invoice_date != picking.date.date() and not picking.notice:
                         new_date = picking.date.replace(
                             year=invoice_date.year,
@@ -252,18 +270,18 @@ class StockAccountingCheck(models.TransientModel):
                         # account_move.write({'date': invoice_date})
                         ok = False
             if (
-                sale_oreder.invoice_status == "to invoice"
-                and sale_oreder.delivery_count > 0
-                and sale_oreder.state not in ["done", "cancel"]
+                sale_order.invoice_status == "to invoice"
+                and sale_order.delivery_count > 0
+                and sale_order.state not in ["done", "cancel"]
             ):
-                if not sale_oreder.activity_ids:
+                if not sale_order.activity_ids:
                     note = _("Livrare fara factura")
                     summary = _("Factura lipsa")
-                    sale_oreder.activity_schedule(
+                    sale_order.activity_schedule(
                         "mail.mail_activity_data_warning",
                         note=note,
                         summary=summary,
-                        user_id=sale_oreder.user_id.id,
+                        user_id=sale_order.user_id.id,
                     )
         return ok
 
@@ -348,7 +366,8 @@ class StockAccountingCheckLine(models.TransientModel):
 
     quantity = fields.Float(compute="_compute_price")
     quantity_svl = fields.Float(string="Quantity SVL")
-    remaining_qty = fields.Float(string="Remaining Qty SVL")
+    remaining_qty = fields.Float(string="Remaining Quantity SVL")
+    remaining_value = fields.Monetary(currency_field="currency_id", string="Remaining Value SVL")
     quantity_aml = fields.Float(string="Quantity AML")
 
     amount_svl = fields.Monetary(currency_field="currency_id", string="Amount SVL")
@@ -530,8 +549,9 @@ class StockAccountingCheckLine(models.TransientModel):
             post_date = line.report_id.date_to - relativedelta(hour=12)
             diff = float_round(line.amount - line.amount_svl, 2)
             qty = float_round(line.quantity - line.quantity_svl, 2)
-            remaining_qty = float_round(line.quantity  - line.remaining_qty, 2)
-            if not diff and not qty:
+            remaining_qty = float_round(line.quantity - line.remaining_qty, 2)
+            remaining_value = float_round(line.amount - line.remaining_value, 2)
+            if not diff and not qty and not remaining_qty and not remaining_value:
                 continue
 
             stock_move = self.env["stock.move"].create(
@@ -553,7 +573,8 @@ class StockAccountingCheckLine(models.TransientModel):
                 "product_id": line.product_id.id,
                 "value": diff,
                 "quantity": qty,
-                "remaining_qt": remaining_qty,
+                "remaining_qty": remaining_qty,
+                "remaining_value": remaining_value,
                 "stock_move_id": stock_move.id,
                 "l10n_ro_account_id": line.account_id.id,
                 "company_id": line.report_id.company_id.id,
@@ -561,7 +582,14 @@ class StockAccountingCheckLine(models.TransientModel):
             }
             svl = self.env["stock.valuation.layer"].create(svl_values)
             svl.write({"l10n_ro_account_id": line.account_id.id})
-            line.write({"amount_svl": line.amount, "quantity_svl": line.quantity, "remaining_qty": line.quantity})
+            line.write(
+                {
+                    "amount_svl": line.amount,
+                    "quantity_svl": line.quantity,
+                    "remaining_qty": line.quantity,
+                    "remaining_value": line.amount,
+                }
+            )
             move_count += 1
 
         if not move_count:
