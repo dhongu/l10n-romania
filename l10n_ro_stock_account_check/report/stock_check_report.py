@@ -79,9 +79,9 @@ class StockAccountingCheck(models.TransientModel):
         _where_aml = ""
         _having = (
             """
-               having abs( sum(svl_value) - sum(aml_value) ) > 0 or
-               abs( sum(svl_value) - sum(remaining_value) ) > 0 or
-               abs( sum(quantity_svl) - sum(remaining_qty) ) > 0
+               having abs( sum(svl_value) - sum(aml_value) ) > 0.1 or
+               abs( sum(svl_value) - sum(remaining_value) ) > 0.1 or
+               abs( sum(quantity_svl) - sum(remaining_qty) ) > 0.1
             """
         )
         if self.interval:
