@@ -555,8 +555,8 @@ class StockAccountingCheckLine(models.TransientModel):
 
             if line.quantity_svl < line.remaining_qty:
 
-                qty_to_remove = line.quantity - line.remaining_qty
-                amount_to_remove = line.amount - line.remaining_value
+                qty_to_remove = line.remaining_qty - line.quantity_svl
+                amount_to_remove = line.remaining_value - line.amount_svl
                 svls = self.env["stock.valuation.layer"].search(
                     [
                         ("product_id", "=", line.product_id.id),
@@ -577,12 +577,19 @@ class StockAccountingCheckLine(models.TransientModel):
                             }
                         )
                         qty_to_remove = 0
-                        amount_to_remove = 0
+                        amount_to_remove -= svl.remaining_value
                         break
                 remaining_value = -qty_to_remove
                 remaining_qty = -amount_to_remove
 
-
+            line.write(
+                {
+                    "amount_svl": line.amount,
+                    "quantity_svl": line.quantity,
+                    "remaining_qty": line.quantity,
+                    "remaining_value": line.amount,
+                }
+            )
             if not amount and not qty and not remaining_qty and not remaining_value:
                 continue
 
@@ -617,14 +624,7 @@ class StockAccountingCheckLine(models.TransientModel):
             }
             svl = self.env["stock.valuation.layer"].create(svl_values)
             svl.write({"l10n_ro_account_id": line.account_id.id})
-            line.write(
-                {
-                    "amount_svl": line.amount,
-                    "quantity_svl": line.quantity,
-                    "remaining_qty": line.quantity,
-                    "remaining_value": line.amount,
-                }
-            )
+
             move_count += 1
 
         if not move_count:
