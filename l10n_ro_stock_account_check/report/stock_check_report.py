@@ -554,7 +554,6 @@ class StockAccountingCheckLine(models.TransientModel):
 
             if line.quantity_svl < line.remaining_qty:
                 qty_to_remove = line.remaining_qty - line.quantity_svl
-                amount_to_remove = line.remaining_value - line.amount_svl
                 svls = self.env["stock.valuation.layer"].search(
                     [
                         ("product_id", "=", line.product_id.id),
@@ -570,6 +569,10 @@ class StockAccountingCheckLine(models.TransientModel):
                         svl.write({"remaining_qty": svl.remaining_qty - qty_to_remove})
                         qty_to_remove = 0
                         break
+                remaining_qty = -qty_to_remove
+
+            if line.amount_svl < line.remaining_value:
+                amount_to_remove = line.remaining_value - line.amount_svl
                 svls = self.env["stock.valuation.layer"].search(
                     [
                         ("product_id", "=", line.product_id.id),
@@ -586,7 +589,7 @@ class StockAccountingCheckLine(models.TransientModel):
                         amount_to_remove = 0
                         break
                 remaining_value = -amount_to_remove
-                remaining_qty = -qty_to_remove
+
 
             line.write(
                 {
