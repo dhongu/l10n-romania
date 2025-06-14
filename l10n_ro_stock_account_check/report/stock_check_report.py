@@ -552,9 +552,7 @@ class StockAccountingCheckLine(models.TransientModel):
             remaining_value = float_round(line.amount - line.remaining_value, 2)
             remaining_qty = float_round(line.quantity - line.remaining_qty, 2)
 
-
             if line.quantity_svl < line.remaining_qty:
-
                 qty_to_remove = line.remaining_qty - line.quantity_svl
                 amount_to_remove = line.remaining_value - line.amount_svl
                 svls = self.env["stock.valuation.layer"].search(
@@ -567,20 +565,28 @@ class StockAccountingCheckLine(models.TransientModel):
                 for svl in svls:
                     if qty_to_remove > svl.remaining_qty:
                         qty_to_remove -= svl.remaining_qty
-                        amount_to_remove -= svl.remaining_value
-                        svl.write({"remaining_qty": 0, "remaining_value": 0})
+                        svl.write({"remaining_qty": 0})
                     else:
-                        svl.write(
-                            {
-                                "remaining_qty": float_round(svl.remaining_qty - qty_to_remove, 2),
-                                "remaining_value": float_round(svl.remaining_value - amount_to_remove, 2),
-                            }
-                        )
+                        svl.write({"remaining_qty": svl.remaining_qty - qty_to_remove})
                         qty_to_remove = 0
-                        amount_to_remove -= svl.remaining_value
                         break
-                remaining_value = -qty_to_remove
-                remaining_qty = -amount_to_remove
+                svls = self.env["stock.valuation.layer"].search(
+                    [
+                        ("product_id", "=", line.product_id.id),
+                        ("l10n_ro_account_id", "=", line.account_id.id),
+                        ("remaining_value", ">", 0),
+                    ],
+                )
+                for svl in svls:
+                    if amount_to_remove > svl.remaining_value:
+                        amount_to_remove -= svl.remaining_value
+                        svl.write({"remaining_value": 0})
+                    else:
+                        svl.write({"remaining_value": svl.remaining_value - amount_to_remove}  )
+                        amount_to_remove = 0
+                        break
+                remaining_value = -amount_to_remove
+                remaining_qty = -qty_to_remove
 
             line.write(
                 {
