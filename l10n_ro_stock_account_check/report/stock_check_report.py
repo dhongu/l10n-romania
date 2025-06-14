@@ -553,7 +553,7 @@ class StockAccountingCheckLine(models.TransientModel):
             remaining_qty = float_round(line.quantity - line.remaining_qty, 2)
 
 
-            if line.quantity > line.quantity_svl:
+            if line.quantity < line.remaining_qty:
                 remaining_qty = qty
                 remaining_value = amount
             else:
