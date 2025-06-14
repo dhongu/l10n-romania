@@ -553,10 +553,10 @@ class StockAccountingCheckLine(models.TransientModel):
             remaining_qty = float_round(line.quantity - line.remaining_qty, 2)
 
 
-            if line.quantity < line.remaining_qty:
-                remaining_qty = qty
-                remaining_value = amount
-            else:
+            if line.quantity_svl < line.remaining_qty:
+
+                qty_to_remove = line.quantity - line.remaining_qty
+                amount_to_remove = line.amount - line.remaining_value
                 svls = self.env["stock.valuation.layer"].search(
                     [
                         ("product_id", "=", line.product_id.id),
@@ -565,20 +565,22 @@ class StockAccountingCheckLine(models.TransientModel):
                     ],
                 )
                 for svl in svls:
-                    if remaining_qty > svl.remaining_qty:
-                        remaining_qty -= svl.remaining_qty
-                        remaining_value -= svl.remaining_value
+                    if qty_to_remove > svl.remaining_qty:
+                        qty_to_remove -= svl.remaining_qty
+                        amount_to_remove -= svl.remaining_value
                         svl.write({"remaining_qty": 0, "remaining_value": 0})
                     else:
                         svl.write(
                             {
-                                "remaining_qty": float_round(svl.remaining_qty - remaining_qty, 2),
-                                "remaining_value": float_round(svl.remaining_value - remaining_value, 2),
+                                "remaining_qty": float_round(svl.remaining_qty - qty_to_remove, 2),
+                                "remaining_value": float_round(svl.remaining_value - amount_to_remove, 2),
                             }
                         )
-                        remaining_qty = 0
-                        remaining_value = 0
+                        qty_to_remove = 0
+                        amount_to_remove = 0
                         break
+                remaining_value = -qty_to_remove
+                remaining_qty = -amount_to_remove
 
 
             if not amount and not qty and not remaining_qty and not remaining_value:
