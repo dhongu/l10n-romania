@@ -338,7 +338,7 @@ class StockAccountingCheck(models.TransientModel):
                 format_date(self.env, self.date_from),
                 format_date(self.env, self.date_to),
             )
-        action["context"] = {"line_details": self.line_details}
+        action["context"] = {"line_details": self.line_details,"report_id": self.id}
         action["domain"] = [("report_id", "=", self.id)]
         return action
 
@@ -376,6 +376,19 @@ class StockAccountingCheckLine(models.TransientModel):
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
     svl_ids = fields.Many2many("stock.valuation.layer")
     aml_ids = fields.Many2many("account.move.line")
+
+
+    def refresh(self):
+        report_id =  self.env.context.get("report_id") or self.env.context.get("active_id")
+        if report_id:
+            report = self.env["stock.accounting.check"].browse(report_id)
+            if report:
+                report.do_compute_product()
+        return {
+            "context": self.env.context,
+            "type": "ir.actions.client",
+            "tag": "reload",
+        }
 
     def _compute_price(self):
         for line in self:
