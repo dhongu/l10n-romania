@@ -56,13 +56,7 @@
         <field name="arch" type="xml">
             <tree edit="0" create="0" import="0">
                 <header>
-                    <button
-                        name="refresh"
-                        string="Refresh"
-                        type="object"
-                        icon="fa-refresh"
-                        display="always"
-                    />
+                    <button name="refresh" string="Refresh" type="object" icon="fa-refresh" display="always" />
                     <button
                         name="action_fix_cost_price"
                         aria-label="Fix CostPrice"

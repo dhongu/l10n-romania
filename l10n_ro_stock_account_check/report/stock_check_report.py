@@ -338,7 +338,7 @@ class StockAccountingCheck(models.TransientModel):
                 format_date(self.env, self.date_from),
                 format_date(self.env, self.date_to),
             )
-        action["context"] = {"line_details": self.line_details,"report_id": self.id}
+        action["context"] = {"line_details": self.line_details, "report_id": self.id}
         action["domain"] = [("report_id", "=", self.id)]
         return action
 
@@ -377,9 +377,8 @@ class StockAccountingCheckLine(models.TransientModel):
     svl_ids = fields.Many2many("stock.valuation.layer")
     aml_ids = fields.Many2many("account.move.line")
 
-
     def refresh(self):
-        report_id =  self.env.context.get("report_id") or self.env.context.get("active_id")
+        report_id = self.env.context.get("report_id") or self.env.context.get("active_id")
         if report_id:
             report = self.env["stock.accounting.check"].browse(report_id)
             if report:
@@ -598,11 +597,10 @@ class StockAccountingCheckLine(models.TransientModel):
                         amount_to_remove -= svl.remaining_value
                         svl.write({"remaining_value": 0})
                     else:
-                        svl.write({"remaining_value": svl.remaining_value - amount_to_remove}  )
+                        svl.write({"remaining_value": svl.remaining_value - amount_to_remove})
                         amount_to_remove = 0
                         break
                 remaining_value = -amount_to_remove
-
 
             line.write(
                 {
