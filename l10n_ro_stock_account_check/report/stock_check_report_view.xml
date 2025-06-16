@@ -127,7 +127,12 @@
                     icon="fa-info-circle"
                     column_invisible="not context.get('line_details')"
                 />
-                <field name="remaining_value" decoration-danger="amount_svl != remaining_value" optional="hide" />
+                <field
+                    name="remaining_value"
+                    decoration-success="amount_svl == remaining_value"
+                    decoration-danger="amount_svl != remaining_value"
+                    optional="hide"
+                />
 
 
 
