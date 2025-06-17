@@ -438,8 +438,8 @@
 
                     <table class="table table-sm" style="page-break-inside: avoid;">
                          <t t-if="o.tax_totals" t-call="account.document_tax_totals">
-                            <t t-set="tax_totals" t-value="o.tax_totals"/>
-                            <t t-set="currency" t-value="o.currency_id"/>
+                            <t t-set="tax_totals" t-value="o.tax_totals" />
+                            <t t-set="currency" t-value="o.currency_id" />
                         </t>
                     </table>
                 </div>
