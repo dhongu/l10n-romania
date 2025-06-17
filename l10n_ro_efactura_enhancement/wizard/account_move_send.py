@@ -1,10 +1,4 @@
-import base64
-from xml.sax.saxutils import escape, quoteattr
-
-from lxml import etree
-
 from odoo import api, fields, models
-from odoo.tools import cleanup_xml_node
 from odoo.tools.safe_eval import safe_eval
 
 
