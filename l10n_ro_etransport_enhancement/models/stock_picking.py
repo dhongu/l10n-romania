@@ -43,7 +43,7 @@ class Picking(models.Model):
             res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
         for item in res["data"]["notificare"]["bunuriTransportate"]:
             # fix bug
-            item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"]*item['cantitate'], 2)
+            item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)
 
         return res
 
