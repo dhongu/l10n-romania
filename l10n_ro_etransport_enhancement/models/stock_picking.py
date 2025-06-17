@@ -42,7 +42,8 @@ class Picking(models.Model):
         if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
             res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
         for item in res["data"]["notificare"]["bunuriTransportate"]:
-            item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"], 2)
+            # fix bug
+            item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"]*item['cantitate'], 2)
 
         return res
 
