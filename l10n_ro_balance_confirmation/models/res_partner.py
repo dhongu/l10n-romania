@@ -64,14 +64,14 @@ class ResPartner(models.Model):
             where_params,
         )
         treated = self.browse()
-        for pid, type, val in self._cr.fetchall():
+        for pid, acc_type, val in self._cr.fetchall():
             partner = self.browse(pid)
-            if type == "asset_receivable":
+            if acc_type == "asset_receivable":
                 partner.credit = val
                 if partner not in treated:
                     partner.debit = False
                     treated |= partner
-            elif type == "liability_payable":
+            elif acc_type == "liability_payable":
                 partner.debit = -val
                 if partner not in treated:
                     partner.credit = False
