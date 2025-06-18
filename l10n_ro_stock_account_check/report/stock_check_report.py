@@ -371,7 +371,7 @@ class StockAccountingCheckLine(models.TransientModel):
     price_aml = fields.Monetary(currency_field="currency_id", string="Price AML", compute="_compute_price")
     price_aml_deviation = fields.Float(string="Price AML Deviation", compute="_compute_price")
 
-    quantity = fields.Float(compute="_compute_price")
+    quantity = fields.Float(compute="_compute_price",  search='_search_quantity')
     quantity_svl = fields.Float(string="Quantity SVL")
     remaining_qty = fields.Float(string="Remaining Quantity SVL")
     remaining_value = fields.Monetary(currency_field="currency_id", string="Remaining Value SVL")
@@ -395,6 +395,9 @@ class StockAccountingCheckLine(models.TransientModel):
             "type": "ir.actions.client",
             "tag": "reload",
         }
+
+    def _search_quantity(self, operator, value):
+        return [("product_id.qty_available", operator, value)]
 
     def _compute_price(self):
         for line in self:

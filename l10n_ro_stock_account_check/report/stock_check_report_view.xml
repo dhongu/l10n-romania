@@ -10,13 +10,12 @@
                         <field name="account_id" />
                         <field name="product_id" />
                         <field name="company_id" invisible="1" />
-                        <field name="interval" />
-
+                        <field name="limit" />
                         <field name="all_products" />
                     </group>
                     <group name="date_range" string="Date" >
+                        <field name="interval" />
 
-                        <field name="limit" />
                         <field
                             name="date_from"
                             string="Date"
@@ -213,6 +212,8 @@
         <field name="arch" type="xml">
             <search>
                 <field name="product_id" />
+                <field name="account_id" />
+<!--                <filter string="In Stock" name="in_stoc" domain="[('quantity', '>', 0)]"/>-->
                 <group expand="1" string="Group by">
                     <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}" />
                 </group>
