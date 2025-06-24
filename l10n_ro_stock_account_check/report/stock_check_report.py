@@ -78,7 +78,7 @@ class StockAccountingCheck(models.TransientModel):
         _select_aml = ""
         _where_svl = ""
         _where_aml = ""
-        if  self.all_products:
+        if self.all_products:
             _having = ""
         else:
             _having = """
@@ -91,7 +91,6 @@ class StockAccountingCheck(models.TransientModel):
                 _where_aml = (
                     "AND date_trunc('day',aml.date) >= %(date_from)s  AND date_trunc('day',aml.date) <= %(date_to)s"
                 )
-
 
         if self.product_id:
             _where_svl += " AND sm.product_id = %(product)s"
@@ -215,7 +214,6 @@ class StockAccountingCheck(models.TransientModel):
             WHERE sacl.product_id = lpp.product_id;
         """
         self.env.cr.execute(query)
-
 
     def do_check_purchases(self):
         products = self.line_ids.mapped("product_id")
@@ -371,7 +369,7 @@ class StockAccountingCheckLine(models.TransientModel):
     price_aml = fields.Monetary(currency_field="currency_id", string="Price AML", compute="_compute_price")
     price_aml_deviation = fields.Float(string="Price AML Deviation", compute="_compute_price")
 
-    quantity = fields.Float(compute="_compute_price",  search='_search_quantity')
+    quantity = fields.Float(compute="_compute_price", search="_search_quantity")
     quantity_svl = fields.Float(string="Quantity SVL")
     remaining_qty = fields.Float(string="Remaining Quantity SVL")
     remaining_value = fields.Monetary(currency_field="currency_id", string="Remaining Value SVL")
@@ -736,7 +734,7 @@ class StockAccountingCheckLine(models.TransientModel):
 
     def action_fix_cost_price(self):
         for line in self:
-            purchase_price  = max(line.purchase_price, line.last_purchase_price)
+            purchase_price = max(line.purchase_price, line.last_purchase_price)
             if not purchase_price:
                 continue
             line.product_id.with_context(disable_auto_svl=True).write({"standard_price": purchase_price})
