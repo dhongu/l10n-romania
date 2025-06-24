@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//sheet/group/group" position="inside">
                 <field name="l10n_ro_edi_stock_required" />
-                <field name="l10n_ro_edi_carrier_id" invisible="not l10n_ro_edi_stock_required" />
+                <field name="l10n_ro_edi_carrier_id" />
             </xpath>
         </field>
     </record>
