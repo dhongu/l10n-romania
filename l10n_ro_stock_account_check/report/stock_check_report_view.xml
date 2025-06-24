@@ -13,7 +13,7 @@
                         <field name="limit" />
                         <field name="all_products" />
                     </group>
-                    <group name="date_range" string="Date" >
+                    <group name="date_range" string="Date">
                         <field name="interval" />
 
                         <field
@@ -141,8 +141,11 @@
 
                 <field name="standard_price" optional="hide" />
                 <field name="purchase_price" optional="hide" />
-                <field name="last_purchase_price" optional="hide"
-                       decoration-danger="purchase_price != last_purchase_price" />
+                <field
+                    name="last_purchase_price"
+                    optional="hide"
+                    decoration-danger="purchase_price != last_purchase_price"
+                />
 
                 <field name="price_svl" />
                 <field
