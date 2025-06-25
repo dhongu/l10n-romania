@@ -132,6 +132,10 @@ class ReportPickingReception(models.AbstractModel):
             #     if move_line.remaining_qty != 0:
             #         res['price'] = move_line.remaining_value /  move_line.remaining_qty
 
+            # verificare price_include
+            incl_tax = line.taxes_id.filtered(lambda tax: tax.price_include)
+            if incl_tax:
+                res["price"] = line.price_unit
             taxes = line.taxes_id.compute_all(
                 res["price"],
                 quantity=quantity,

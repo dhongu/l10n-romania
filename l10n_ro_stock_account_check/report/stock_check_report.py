@@ -87,7 +87,9 @@ class StockAccountingCheck(models.TransientModel):
                    abs( sum(quantity_svl) - sum(remaining_qty) ) > 0.1
                 """
             if self.interval:
-                _where_svl = "AND date_trunc('day',sm.date) >= %(date_from)s  AND date_trunc('day',sm.date) <= %(date_to)s"
+                _where_svl = (
+                    "AND date_trunc('day',sm.date) >= %(date_from)s  AND date_trunc('day',sm.date) <= %(date_to)s"
+                )
                 _where_aml = (
                     "AND date_trunc('day',aml.date) >= %(date_from)s  AND date_trunc('day',aml.date) <= %(date_to)s"
                 )
@@ -358,7 +360,7 @@ class StockAccountingCheckLine(models.TransientModel):
     product_id = fields.Many2one("product.product")
     account_id = fields.Many2one("account.account")
     standard_price = fields.Monetary(currency_field="currency_id", string="Cost Price", compute="_compute_price")
-    last_purchase_price = fields.Monetary(currency_field="currency_id", string="Last Purchase Price")
+    last_purchase_price = fields.Monetary(currency_field="currency_id")
     purchase_price = fields.Monetary(currency_field="currency_id", compute="_compute_price")
 
     amount = fields.Monetary(currency_field="currency_id", compute="_compute_price")
