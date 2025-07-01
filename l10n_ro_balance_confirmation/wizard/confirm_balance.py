@@ -19,8 +19,17 @@ class BalanceConfirm(models.TransientModel):
         # partners = partners.with_context(date_to=self.l10n_ro_balance_date)
         action = self.env.ref("l10n_ro_balance_confirmation.action_report_partner_balance")
         # Curățăm contextul: eliminăm cheia 'date_to' dacă există
-        cleaned_context = dict(self.env.context)
-        cleaned_context.pop("date_to", None)
+        # Curățăm tot contextul și punem doar ce e necesar
+        cleaned_context = {
+            "lang": self.env.context.get("lang"),
+            "tz": self.env.context.get("tz"),
+            "uid": self.env.context.get("uid"),
+            "allowed_company_ids": self.env.context.get("allowed_company_ids"),
+            "active_model": "res.partner",
+            "active_ids": partners.ids,
+            "active_id": partners.ids[0] if partners else False,
+            "date_to": self.l10n_ro_balance_date,  # acesta este critic!
+        }
         # action = action.with_context(date_to=self.l10n_ro_balance_date)
         return action.with_context(cleaned_context).report_action(
             partners,
