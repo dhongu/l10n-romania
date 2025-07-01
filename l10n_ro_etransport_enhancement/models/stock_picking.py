@@ -44,6 +44,9 @@ class Picking(models.Model):
         for item in res["data"]["notificare"]["bunuriTransportate"]:
             # fix bug
             item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)
+            # fix rounding - ex. 0.470000000000003
+            item["greutateNeta"] = round(item["greutateNeta"], 2)
+            item["greutateBruta"] = round(item["greutateBruta"], 2)
 
         return res
 
