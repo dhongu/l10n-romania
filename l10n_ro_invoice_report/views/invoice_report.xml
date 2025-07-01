@@ -266,14 +266,14 @@
                             groups="account.group_show_line_subtotals_tax_included"
                         />
                         <tr t-if="l.display_type == 'product'" id="tr_line">
-                            <td>
+                            <td id="nr_crt">
                                 <t t-esc="nr_crt" />
                                 <t t-set="nr_crt" t-value="nr_crt + 1" />
                             </td>
                             <td id="product_name">
                                 <span t-field="l.name" />
                             </td>
-                            <td class="text-end">
+                            <td class="text-end" id="quantity">
                                 <t t-set="quantity" t-value="l.quantity" />
                                 <t t-if="o.move_type == 'out_refund'">
                                     <t t-set="quantity" t-value="-1*l.quantity" />
@@ -287,7 +287,7 @@
                                 />
                                 <span t-field="l.product_uom_id" groups="uom.group_uom" />
                             </td>
-                            <td class="text-end">
+                            <td class="text-end" id="price">
                                 <t t-set="price_unit_without_taxes" t-value="l.price_subtotal / (l.quantity or 1)" />
                                 <t
                                     t-set="price_unit_without_taxes"
@@ -308,11 +308,12 @@
                                 class="text-end"
                                 t-if="with_discount(o) and with_discount_distinct"
                                 groups="product.group_discount_per_so_line"
+                                id="discount"
                             >
                                 <span t-field="l.discount" />
                             </td>
                             <t t-if="with_discount(o) and with_discount_distinct">
-                                <td style="text-align: right;">
+                                <td style="text-align: right;" id="price_discount">
                                     <span
                                         id="price_unit_without_taxes"
                                         t-esc="price_unit_without_taxes"
@@ -321,7 +322,7 @@
                                 </td>
                             </t>
 
-                            <td class="text-end">
+                            <td class="text-end" id="subtotal">
                                 <t t-set="price_subtotal" t-value="l.price_subtotal" />
                                 <t t-if="o.move_type == 'out_refund'">
                                     <t t-set="price_subtotal" t-value="-1*l.price_subtotal" />
@@ -336,12 +337,12 @@
                                     t-options='{"widget": "float", "precision": 2}'
                                 />
                             </td>
-                            <td class="text-end">
+                            <td class="text-end" id="tax">
                                 <t t-foreach="l.tax_ids" t-as="tax">
                                     <span t-field="tax.invoice_label" />
                                 </t>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end" id="price_taxes">
                                 <t t-set="price_taxes" t-value="(l.price_total - l.price_subtotal )" />
                                 <t t-if="o.move_type == 'out_refund'">
                                     <t t-set="price_taxes" t-value="-1*price_taxes" />
@@ -356,7 +357,7 @@
                                     t-options='{"widget": "float", "precision": 2}'
                                 />
                             </td>
-                            <td class="text-end">
+                            <td class="text-end" id="price_total">
                                 <t t-set="price_total" t-value="l.price_total" />
                                 <t t-if="o.move_type == 'out_refund'">
                                     <t t-set="price_total" t-value="-1*l.price_total" />
