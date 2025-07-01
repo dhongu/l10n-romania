@@ -16,7 +16,7 @@ class BalanceConfirm(models.TransientModel):
         if not partners:
             raise UserError(_("No partners selected for balance confirmation."))
         # self = self.with_context(date_to=self.l10n_ro_balance_date)
-        partners = partners.with_context(date_to=self.l10n_ro_balance_date)
+        # partners = partners.with_context(date_to=self.l10n_ro_balance_date)
         action = self.env.ref("l10n_ro_balance_confirmation.action_report_partner_balance")
         # action = action.with_context(date_to=self.l10n_ro_balance_date)
         return action.report_action(
