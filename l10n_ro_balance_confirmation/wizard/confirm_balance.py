@@ -18,8 +18,11 @@ class BalanceConfirm(models.TransientModel):
         # self = self.with_context(date_to=self.l10n_ro_balance_date)
         # partners = partners.with_context(date_to=self.l10n_ro_balance_date)
         action = self.env.ref("l10n_ro_balance_confirmation.action_report_partner_balance")
+        # Curățăm contextul: eliminăm cheia 'date_to' dacă există
+        cleaned_context = dict(self.env.context)
+        cleaned_context.pop("date_to", None)
         # action = action.with_context(date_to=self.l10n_ro_balance_date)
-        return action.report_action(
+        return action.with_context(cleaned_context).report_action(
             partners,
             data={
                 "date_to": self.l10n_ro_balance_date,
