@@ -6,7 +6,6 @@ class GetPartnerData(models.TransientModel):
     _name = "get.partner.data"
     _description = "Get partner data from"
 
-    partner_id = fields.Many2one("res.partner", string="Partner")
     service = fields.Selection([("anaf", "ANAF"), ("vies", "VIES for non-Romanian partners")], default="anaf")
     state = fields.Selection(selection=[("get", "get"), ("set", "set")], default="get")
     status_message = fields.Html()
@@ -19,6 +18,8 @@ class GetPartnerData(models.TransientModel):
         if partner:
             res["partner_id"] = partner.id
         return res
+
+    partner_id = fields.Many2one("res.partner", string="Partner")
 
     def do_back(self):
         self.write({"state": "get"})
@@ -37,13 +38,15 @@ class GetPartnerData(models.TransientModel):
             raise ValidationError(_("You can't use this function on delivery contacts."))
         if self.service == "anaf":
             res = self.partner_id.get_partner_data()
-            if "warning" in res:
+            if res and "warning" in res:
                 self.status_message = _("Attention! ") + res["warning"]["message"]
             else:
                 self.status_message = _("Partner data updated!")
         if self.service == "vies":
             self.partner_id.get_partner_name_from_vies()
-            self.status_message = _("Partner data updated!")
+            self.status_message = _(
+                "Partner data updated! Please check the address fields. VIES does not return the addresses in a consistent form or complete so it can not be split automatically."
+            )
         if self.partner_id.zip and hasattr(self.partner_id, "onchange_zip"):
             self.partner_id.onchange_zip()
 
