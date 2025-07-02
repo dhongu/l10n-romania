@@ -144,17 +144,17 @@ class ReportPickingReception(models.AbstractModel):
             res["amount_tax"] = taxes["total_included"]
 
             taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
-            list_price = move.product_id.list_price
+            # list_price = move.product_id.list_price
             if move.location_dest_id.store_pricelist_id:
                 list_price = move.location_dest_id.store_pricelist_id.get_product_price(move.product_id, 1, False)
 
+            else:
+                # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+                # if incl_tax:
+                #     list_price = incl_tax.compute_all(move.product_id.list_price)['total_excluded']
+                # else:
+                list_price = move.product_id.list_price
             res["list_price"] = list_price
-            # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
-            # if incl_tax:
-            #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
-            # else:
-            #     list_price = move_line.product_id.list_price
-
             taxes_sale = taxes_ids.compute_all(
                 list_price,
                 currency=currency,
@@ -168,7 +168,7 @@ class ReportPickingReception(models.AbstractModel):
             #  conversie pret din pretul din unitatea de masura de baza in pret in unitatea de masura din document
             res["price"] = res["price"] * line.product_uom._compute_quantity(1, line.product_id.uom_id)
             if res["amount_tax"] != 0.0:
-                res["margin"] = 100 * (taxes_sale["total_included"] - res["amount_tax"]) / res["amount_tax"]
+                res["margin"] = 100 * (taxes_sale["total_excluded"] - res["amount"]) / res["amount"]
             else:
                 res["margin"] = 0.0
         else:
