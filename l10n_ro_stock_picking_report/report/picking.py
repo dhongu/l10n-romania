@@ -168,7 +168,7 @@ class ReportPickingReception(models.AbstractModel):
             #  conversie pret din pretul din unitatea de masura de baza in pret in unitatea de masura din document
             res["price"] = res["price"] * line.product_uom._compute_quantity(1, line.product_id.uom_id)
             if res["amount_tax"] != 0.0:
-                res["margin"] = 100 * (taxes_sale["total_included"] - res["amount_tax"]) / res["amount_tax"]
+                res["margin"] = 100 * (taxes_sale["total_excluded"] - res["amount"]) / res["amount"]
             else:
                 res["margin"] = 0.0
         else:
