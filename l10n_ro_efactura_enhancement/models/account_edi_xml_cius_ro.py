@@ -15,6 +15,14 @@ _logger = logging.getLogger(__name__)
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
 
+    def _export_invoice_vals(self, invoice):
+        vals_list = super()._export_invoice_vals(invoice)
+        if 'pos_order_ids' in invoice._fields and invoice.pos_order_ids:
+            if vals_list["vals"]["document_type_code"] == '380':
+                vals_list["vals"]["document_type_code"] = 751
+        return vals_list
+
+
     def _get_invoice_line_price_vals(self, line):
         vals = super()._get_invoice_line_price_vals(line)
         if float_is_zero(vals["price_amount"], precision_rounding=0.01):
