@@ -18,7 +18,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
     def _export_invoice_vals(self, invoice):
         vals_list = super()._export_invoice_vals(invoice)
         if 'pos_order_ids' in invoice._fields and invoice.pos_order_ids:
-            if vals_list["vals"]["document_type_code"] == '380':
+            if vals_list["vals"]["document_type_code"] == 380:
                 vals_list["vals"]["document_type_code"] = 751
         return vals_list
 
