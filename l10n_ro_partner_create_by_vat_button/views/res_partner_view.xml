@@ -13,7 +13,6 @@
                         name="%(action_get_partner_data)d"
                         invisible="(name == False and vat == False) or is_company == False"
                         string="Get Data"
-                        context="{'active_id': active_id}"
                         type="action"
                     />
                 </header>
