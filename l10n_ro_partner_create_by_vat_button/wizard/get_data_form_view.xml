@@ -25,7 +25,7 @@
                             name="do_get_data"
                             string="Get Data"
                             type="object"
-                            context="{'active_id': active_id}"
+
                             class="oe_highlight"
                         />
                         or
