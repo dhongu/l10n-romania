@@ -21,6 +21,6 @@ class StockMove(models.Model):
         inv_location = self.env.ref('stock.location_inventory')
         for move in res.filtered(lambda m: m.location_id == inv_location):
             if (move.value == 0.0):
-                raise UserError(_("Cannot validate inventory with product %s that has cost 0") % move.product_id.name)
+                raise UserError(_("Cannot validate inventory with product %s that has cost 0") % move.product_id.display_name)
 
         return res
