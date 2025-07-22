@@ -2,6 +2,7 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
+import pytz
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -43,6 +44,9 @@ class Picking(models.Model):
             res["data"]["notificare"]["dateTransport"]["codTaraOrgTransport"] = "EL"
         if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
             res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
+        user_tz = self.env.user.tz or self.env.context.get('tz')
+        scheduled_date_tz = pytz.utc.localize(self.scheduled_date).astimezone(pytz.timezone(user_tz))
+        res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
         if self.l10n_ro_edi_stock_check_purchase and len(data["stock_move_ids"]) != len(
             res["data"]["notificare"]["bunuriTransportate"]
         ):
