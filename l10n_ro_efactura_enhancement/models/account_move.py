@@ -31,8 +31,8 @@ class AccountMove(models.Model):
                 move.check_partner(move.partner_shipping_id)
         return super().action_post()
 
-    def _need_ubl_cii_xml(self):
-        res = super()._need_ubl_cii_xml()
+    def _need_ubl_cii_xml(self, ubl_cii_format=None):
+        res = super()._need_ubl_cii_xml(ubl_cii_format)
 
         return res
 
