@@ -123,6 +123,10 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
         return constraints
 
+
+class AccountEdiXmlUBLBIS3(models.AbstractModel):
+    _inherit = "account.edi.xml.ubl_bis3"
+
     def _get_invoice_payment_means_vals_list(self, invoice):
         # add accounts according to the invoice currency and l10n_ro_print_report
         get_param = self.env["ir.config_parameter"].sudo().get_param
