@@ -2,6 +2,8 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
+import pytz
+
 from odoo import api, fields, models
 
 
@@ -41,6 +43,15 @@ class Picking(models.Model):
             res["data"]["notificare"]["dateTransport"]["codTaraOrgTransport"] = "EL"
         if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
             res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
+
+        # fix data
+        user_tz = self.env.user.tz or self.env.context.get("tz")
+        scheduled_date_tz = pytz.utc.localize(self.scheduled_date).astimezone(pytz.timezone(user_tz))
+        res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
+        today = fields.Date.today()
+        if res["data"]["notificare"]["dateTransport"]["dataTransport"] < today:
+            res["data"]["notificare"]["dateTransport"]["dataTransport"] = today
+
         for item in res["data"]["notificare"]["bunuriTransportate"]:
             # fix bug
             item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)

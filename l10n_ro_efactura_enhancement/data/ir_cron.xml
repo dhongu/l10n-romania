@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<odoo  noupdate="1">
+<odoo noupdate="1">
     <record id="ir_cron_l10n_ro_edi_auto_send" model="ir.cron">
         <field name="name">E-Factura: Send TO SPV</field>
         <field name="model_id" ref="account.model_account_move" />
