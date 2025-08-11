@@ -1,0 +1,12 @@
+<odoo>
+    <record id="view_hr_job_form_inherit" model="ir.ui.view">
+        <field name="name">hr.job.form.inherit</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='contract_type_id']" position="after">
+                <field name="code_cor" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
