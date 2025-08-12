@@ -7,6 +7,7 @@ from odoo import fields, models
 
 class InvoiceFilesExport(models.TransientModel):
     _name = "invoice.files.export"
+    _description = "Export Invoice Files"
 
     state = fields.Selection([("choose", "choose"), ("get", "get")], default="choose")
     data_file = fields.Binary(string="File", readonly=True)
