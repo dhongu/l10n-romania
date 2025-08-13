@@ -43,27 +43,31 @@ class StockMove(models.Model):
         return it_is
 
     def _create_in_store_svl(self, forced_quantity=None):
-        svl_values = self._get_in_svl_vals(self.quantity)
-        for svl_value in svl_values:
-            svl_value.update(
-                {
-                    "l10n_ro_valued_type": "in_store",
-                    "description": f"Store Evaluation {self.reference} - {self.product_id.name}",
-                }
-            )
-        svls = self.env["stock.valuation.layer"].create(svl_values)
+        svls = self.env["stock.valuation.layer"]
+        for move in self:
+            svl_values = move._get_in_svl_vals(move.quantity)
+            for svl_value in svl_values:
+                svl_value.update(
+                    {
+                        "l10n_ro_valued_type": "in_store",
+                        "description": f"Store Evaluation {move.reference} - {move.product_id.name}",
+                    }
+                )
+            svls |= self.env["stock.valuation.layer"].create(svl_value)
         return svls
 
     def _create_out_store_svl(self, forced_quantity=None):
-        svl_values = self._get_out_svl_vals(self.quantity)
-        for svl_value in svl_values:
-            svl_value.update(
-                {
-                    "l10n_ro_valued_type": "out_store",
-                    "description": f"Store Evaluation {self.reference} - {self.product_id.name}",
-                }
-            )
-        svls = self.env["stock.valuation.layer"].create(svl_values)
+        svls = self.env["stock.valuation.layer"]
+        for move in self:
+            svl_values = move._get_out_svl_vals(move.quantity)
+            for svl_value in svl_values:
+                svl_value.update(
+                    {
+                        "l10n_ro_valued_type": "out_store",
+                        "description": f"Store Evaluation {move.reference} - {move.product_id.name}",
+                    }
+                )
+            svls |= self.env["stock.valuation.layer"].create(svl_value)
         return svls
 
     def _account_entry_move(self, qty, description, svl_id, cost):
@@ -81,18 +85,12 @@ class StockMove(models.Model):
         if am_val_store:
             am_vals = [am_val_store]
 
-        for am_val in am_vals:
-            journal_id = am_val.get("journal_id")
-            journal = self.env["account.journal"].browse(journal_id)
-            if journal.l10n_ro_fiscal_position_id:
-                fiscal_position = journal.l10n_ro_fiscal_position_id
-                for line in am_val["line_ids"]:
-                    account_id = line[2]["account_id"]
-                    account = self.env["account.account"].browse(account_id)
-                    account = fiscal_position.map_account(account)
-                    line[2]["account_id"] = account.id
-
         return am_vals
+
+    def _get_sale_price(self):
+        """Return the sale price for the product, taking into account taxes."""
+
+        return self.product_id.lst_price
 
     def _create_account_entry_in_store(self, qty, description, svl_id, cost):
         company = self.company_id or self.env.company
@@ -106,8 +104,8 @@ class StockMove(models.Model):
                 _("Please define a 'Price Difference Account' on the product category '%s'.")
                 % self.product_id.categ_id.name
             )
-
-        prices = self.product_id.taxes_id.compute_all(self.product_id.lst_price, quantity=qty)
+        price = self._get_sale_price()
+        prices = self.product_id.taxes_id.compute_all(price, quantity=qty)
         sale_amount = prices["total_excluded"]
         uneligible_tax = prices["total_included"] - prices["total_excluded"]
 
@@ -156,7 +154,8 @@ class StockMove(models.Model):
                 % self.product_id.categ_id.name
             )
 
-        prices = self.product_id.taxes_id.compute_all(self.product_id.lst_price, quantity=qty)
+        price = self._get_sale_price()
+        prices = self.product_id.taxes_id.compute_all(price, quantity=qty)
         standard_price = self.product_id.standard_price
         sale_amount = prices["total_excluded"]
         uneligible_tax = prices["total_included"] - prices["total_excluded"]
