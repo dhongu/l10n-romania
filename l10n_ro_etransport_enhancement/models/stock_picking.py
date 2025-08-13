@@ -1,8 +1,13 @@
-# ©  2025 Deltatech
+# © 2025 Deltatech
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import api, fields, models
+from datetime import datetime, time
+
+import pytz
+
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class Picking(models.Model):
@@ -41,9 +46,87 @@ class Picking(models.Model):
             res["data"]["notificare"]["dateTransport"]["codTaraOrgTransport"] = "EL"
         if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
             res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
-        for item in res["data"]["notificare"]["bunuriTransportate"]:
-            item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"], 2)
 
+        # fix data
+        user_tz = self.env.user.tz or self.env.context.get("tz")
+        if self:
+            scheduled_date_tz = pytz.utc.localize(self.scheduled_date or fields.Date.today()).astimezone(
+                pytz.timezone(user_tz)
+            )
+            res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
+        else:
+            dt = datetime.combine(res["data"]["notificare"]["dateTransport"]["dataTransport"], time.min)
+            scheduled_date_tz = pytz.utc.localize(dt).astimezone(pytz.timezone(user_tz))
+            res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
+        today = fields.Date.today()
+        if res["data"]["notificare"]["dateTransport"]["dataTransport"] < today:
+            res["data"]["notificare"]["dateTransport"]["dataTransport"] = today
+
+        for item in res["data"]["notificare"]["bunuriTransportate"]:
+            # fix bug
+            item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)
+            # fix rounding - ex. 0.470000000000003
+            item["greutateNeta"] = round(item["greutateNeta"], 2)
+            item["greutateBruta"] = round(item["greutateBruta"], 2)
+
+        # get prices if configured in settings
+        def _get_unit_price_for_uit(move):
+            direction = move.picking_code
+            if direction == "incoming" and move.purchase_line_id:
+                price = (
+                    move.purchase_line_id.price_subtotal / move.purchase_line_id.product_qty
+                    if move.purchase_line_id.product_qty
+                    else 0.00
+                )
+                if move.purchase_line_id.currency_id != move.picking_id.company_id.currency_id:
+                    price = move.purchase_line_id.currency_id._convert(
+                        price, move.picking_id.company_id.currency_id, move.picking_id.company_id, move.scheduled_date
+                    )
+                return price
+            elif direction == "outgoing" and move.sale_line_id:
+                price = move.sale_line_id.price_reduce_taxexcl
+                if move.sale_line_id.currency_id != move.picking_id.company_id.currency_id:
+                    price = move.sale_line_id.currency_id._convert(
+                        price, move.picking_id.company_id.currency_id, move.picking_id.company_id, move.scheduled_date
+                    )
+                return price
+            return 0.00
+
+        if self and self.company_id.l10n_ro_etransport_get_order_value:
+            if len(data["stock_move_ids"]) != len(res["data"]["notificare"]["bunuriTransportate"]):
+                raise UserError(_("UIT lines and moves lines are not the same. Cannot get prices."))
+            else:
+                item_no = 0
+                for item in res["data"]["notificare"]["bunuriTransportate"]:
+                    try:
+                        move_id = data["stock_move_ids"][item_no]
+                    except IndexError:
+                        move_id = False
+                    if move_id:
+                        unit_price = _get_unit_price_for_uit(move_id)
+                        if unit_price:
+                            item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
+                    item_no += 1
+        if (
+            not self
+            and "company_id" in data
+            and data["company_id"]
+            and data["company_id"].l10n_ro_etransport_get_order_value
+        ):  # called from batch
+            if len(data["stock_move_ids"]) != len(res["data"]["notificare"]["bunuriTransportate"]):
+                raise UserError(_("UIT lines and moves lines are not the same. Cannot get prices."))
+            else:
+                item_no = 0
+                for item in res["data"]["notificare"]["bunuriTransportate"]:
+                    try:
+                        move_id = data["stock_move_ids"][item_no]
+                    except IndexError:
+                        move_id = False
+                    if move_id:
+                        unit_price = _get_unit_price_for_uit(move_id)
+                        if unit_price:
+                            item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
+                    item_no += 1
         return res
 
     def action_l10n_ro_edi_stock_fetch_status(self):
