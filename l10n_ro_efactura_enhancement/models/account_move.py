@@ -41,64 +41,67 @@ class AccountMove(models.Model):
         _logger.info("Cron job for sending invoices to SPV")
 
         need_retrigger = False
-        domain = [
-            ("move_type", "in", ("out_invoice", "out_refund")),
-            ("state", "=", "posted"),
-            ("date", "<", fields.Date.today()),
-            ("date", ">=", fields.Date.today() - timedelta(days=days)),
-            ("l10n_ro_edi_state", "=", "invoice_sending"),
-        ]
 
-        invoices = self.search(domain, limit=limit, order="date")
+        domain = [("l10n_ro_edi_access_token", "!=", False)]
+        ro_companies = self or self.env["res.company"].sudo().search(domain)
+        for company in ro_companies:
+            domain = [
+                ("move_type", "in", ("out_invoice", "out_refund")),
+                ("state", "=", "posted"),
+                ("date", "<", fields.Date.today()),
+                ("date", ">=", fields.Date.today() - timedelta(days=days)),
+                ("l10n_ro_edi_state", "=", "invoice_sending"),
+                ("company_id", "=", company.id),
+            ]
 
-        if invoices:
-            invoices_name = invoices.mapped("name")
-            _logger.info(f"Fetch status for invoices: {invoices_name}")
-            invoices._l10n_ro_edi_fetch_invoice_sending_documents()
-            need_retrigger = True
+            invoices = self.search(domain, limit=limit, order="date")
 
-        domain = [
-            ("move_type", "in", ("out_invoice", "out_refund")),
-            ("state", "=", "posted"),
-            ("date", "<", fields.Date.today()),
-            ("date", ">=", fields.Date.today() - timedelta(days=days)),
-            ("partner_id.country_id.code", "=", "RO"),
-            ("l10n_ro_edi_state", "=", False),
-        ]
+            if invoices:
+                invoices_name = invoices.mapped("name")
+                _logger.info(f"Fetch status for invoices: {invoices_name}")
+                invoices._l10n_ro_edi_fetch_invoice_sending_documents()
+                need_retrigger = True
 
-        invoices = self.search(domain, limit=limit + 1, order="date desc")
+            domain = [
+                ("move_type", "in", ("out_invoice", "out_refund")),
+                ("state", "=", "posted"),
+                ("date", "<", fields.Date.today()),
+                ("date", ">=", fields.Date.today() - timedelta(days=days)),
+                ("partner_id.country_id.code", "=", "RO"),
+                ("l10n_ro_edi_state", "=", False),
+                ("company_id", "=", company.id),
+            ]
 
-        # daca au fost deja generate PDF-uri pentru facturi, le stergem
-        invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
-        invoice_pdf_report_ids.unlink()
+            invoices = self.search(domain, limit=limit + 1, order="date desc")
 
-        if len(invoices) > limit:
-            invoices = invoices[:limit]
-            need_retrigger = True
+            # daca au fost deja generate PDF-uri pentru facturi, le stergem
+            invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
+            invoice_pdf_report_ids.unlink()
 
-        if not invoices:
-            return False
+            if len(invoices) > limit:
+                invoices = invoices[:limit]
+                need_retrigger = True
 
-        if invoices:
-            invoices_name = invoices.mapped("name")
-            _logger.info(f"Sending invoices to SPV: {invoices_name}")
-        _logger.info(f"Count of invoices to send in SPV: {len(invoices)}")
+            if invoices:
+                invoices_name = invoices.mapped("name")
+                _logger.info(f"Sending invoices to SPV: {invoices_name}")
+                _logger.info(f"Count of invoices to send in SPV: {len(invoices)}")
 
-        composer_vals = {
-            "move_ids": invoices.ids,
-            "checkbox_download": False,
-            "checkbox_send_mail": False,
-            "mode": "invoice_multi",
-        }
+                composer_vals = {
+                    "move_ids": invoices.ids,
+                    "checkbox_download": False,
+                    "checkbox_send_mail": False,
+                    "mode": "invoice_multi",
+                }
 
-        composer = self.env["account.move.send"].create(composer_vals)
-        action = composer.action_send_and_print()
+                composer = self.env["account.move.send"].create(composer_vals)
+                action = composer.action_send_and_print()
+                self.env.ref("account.ir_cron_account_move_send")._trigger()
 
-        at = fields.Datetime.now() + timedelta(minutes=5)
-        self.env.ref("account.ir_cron_account_move_send")._trigger()
-        if need_retrigger:
-            # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
-            self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
+            if need_retrigger:
+                at = fields.Datetime.now() + timedelta(minutes=5)
+                # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
+                self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
 
         return action
 

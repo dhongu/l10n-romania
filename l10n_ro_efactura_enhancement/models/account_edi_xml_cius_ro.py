@@ -99,6 +99,11 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             vals_list["vals"]["sales_order_id"] = vals_list["vals"]["sales_order_id"][:200]
         if vals_list["vals"]["order_reference"]:
             vals_list["vals"]["order_reference"] = vals_list["vals"]["order_reference"][:200]
+        if "despatch_advice" in vals_list["vals"] and vals_list["vals"]["despatch_advice"]:
+            vals_list["vals"]["despatch_advice"] = vals_list["vals"]["despatch_advice"][:200]
+        if "pos_order_ids" in invoice._fields and invoice.pos_order_ids:
+            if vals_list["vals"]["document_type_code"] == 380:
+                vals_list["vals"]["document_type_code"] = 751
         return vals_list
 
     def _export_invoice_constraints(self, invoice, vals):
