@@ -2,7 +2,7 @@
 # See README.rst file on addons root folder for license details
 
 
-from odoo import api, models
+from odoo import api, fields, models
 
 
 class ReportPartnerBalance(models.AbstractModel):
@@ -12,12 +12,12 @@ class ReportPartnerBalance(models.AbstractModel):
 
     @api.model
     def _get_report_values(self, docids, data=None):
-        report = self.env["ir.actions.report"]._get_report_from_name(self._template)
         if not docids:
             docids = self.env.context.get("active_ids")
         return {
             "doc_ids": docids,
-            "doc_model": report.model,
+            "doc_model": "res.partner",
             "data": data,
-            "docs": self.env[report.model].browse(docids),
+            "docs": self.env["res.partner"].browse(docids),
+            "date_to": data.get("date_to", fields.Date.today()),
         }
