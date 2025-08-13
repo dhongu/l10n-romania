@@ -15,6 +15,7 @@ class StockPickingBatch(models.Model):
         compute="_compute_l10n_ro_edi_carrier_id",
         inverse="_inverse_l10n_ro_edi_carrier_id",
     )
+    carrier_tracking_ref = fields.Char(string="Tracking Reference", copy=False)
 
     def _compute_l10n_ro_edi_carrier_id(self):
         for batch in self:
