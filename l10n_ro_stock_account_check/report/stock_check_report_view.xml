@@ -10,16 +10,18 @@
                         <field name="account_id" />
                         <field name="product_id" />
                         <field name="company_id" invisible="1" />
-                        <field name="interval" />
                         <field name="limit" />
+                        <field name="all_products" />
                     </group>
-                    <group name="date_range" string="Date" invisible="not interval">
+                    <group name="date_range" string="Date">
+                        <field name="interval" />
 
                         <field
                             name="date_from"
                             string="Date"
                             widget="daterange"
                             options="{'end_date_field': 'date_to'}"
+                            invisible="not interval"
                         />
                         <field name="date_to" invisible="1" />
                     </group>
@@ -56,7 +58,7 @@
         <field name="arch" type="xml">
             <list edit="0" create="0" import="0">
                 <header>
-
+                    <button name="refresh" string="Refresh" type="object" icon="fa-refresh" display="always" />
                     <button
                         name="action_fix_cost_price"
                         aria-label="Fix CostPrice"
@@ -99,6 +101,21 @@
 
                 <field name="product_id" />
                 <field name="account_id" optional="hide" />
+                <field name="amount" optional="show" />
+
+                 <field
+                    name="amount_aml"
+                    decoration-danger="amount_aml &lt; 0"
+                    decoration-success="amount_aml == amount"
+                />
+                <button
+                    name="action_aml_details"
+                    aria-label="Account Move Line"
+                    title="Account Move Line"
+                    type="object"
+                    icon="fa-info-circle"
+                    column_invisible="not context.get('line_details')"
+                />
                 <field
                     name="amount_svl"
                     decoration-danger="amount_svl &lt; 0"
@@ -112,23 +129,24 @@
                     icon="fa-info-circle"
                     column_invisible="not context.get('line_details')"
                 />
-
                 <field
-                    name="amount_aml"
-                    decoration-danger="amount_aml &lt; 0"
-                    decoration-success="amount_aml == amount"
+                    name="remaining_value"
+                    decoration-success="amount_svl == remaining_value"
+                    decoration-danger="amount_svl != remaining_value"
+                    optional="hide"
                 />
-                <button
-                    name="action_aml_details"
-                    aria-label="Account Move Line"
-                    title="Account Move Line"
-                    type="object"
-                    icon="fa-info-circle"
-                    column_invisible="not context.get('line_details')"
-                />
-                <field name="amount" optional="show" />
+
+
+
+
                 <field name="standard_price" optional="hide" />
                 <field name="purchase_price" optional="hide" />
+                <field
+                    name="last_purchase_price"
+                    optional="hide"
+                    decoration-danger="purchase_price != last_purchase_price"
+                />
+
                 <field name="price_svl" />
                 <field
                     name="price_svl_deviation"
@@ -147,7 +165,7 @@
                 <field name="quantity" optional="hide" />
                 <field name="quantity_svl" decoration-danger="quantity != quantity_svl" />
                 <field name="remaining_qty" decoration-danger="quantity_svl != remaining_qty" optional="hide" />
-                <field name="remaining_value" decoration-danger="amount_svl != remaining_value" optional="hide" />
+
                 <field name="quantity_aml" decoration-danger="quantity != quantity_aml" />
                 <field name="currency_id" optional="hide" />
                 <button
@@ -197,6 +215,8 @@
         <field name="arch" type="xml">
             <search>
                 <field name="product_id" />
+                <field name="account_id" />
+<!--                <filter string="In Stock" name="in_stoc" domain="[('quantity', '>', 0)]"/>-->
                 <group expand="1" string="Group by">
                     <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}" />
                 </group>
