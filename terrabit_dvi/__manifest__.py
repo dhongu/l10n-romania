@@ -1,7 +1,7 @@
 # ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 {
-    "name": "Romania - DVI",
+    "name": "Terrabit - DVI",
     "license": "AGPL-3",
     "version": "18.0.1.0.0",
     "countries": ["ro"],
@@ -16,6 +16,7 @@
         "purchase_stock",
         "stock_landed_costs",
     ],
+    "excludes": ["l10n_ro_dvi"],
     "data": [
         "views/account_invoice_view.xml",
         "views/stock_landed_cost_view.xml",
