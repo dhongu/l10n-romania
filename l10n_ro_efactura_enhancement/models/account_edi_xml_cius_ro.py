@@ -149,3 +149,15 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 return super()._get_invoice_payment_means_vals_list(invoice)
         else:
             return super()._get_invoice_payment_means_vals_list(invoice)
+
+
+    def _get_invoice_monetary_total_vals(self, invoice, taxes_vals, line_extension_amount, allowance_total_amount, charge_total_amount):
+        vals = super()._get_invoice_monetary_total_vals(
+            invoice, taxes_vals, line_extension_amount, allowance_total_amount, charge_total_amount
+        )
+
+        if invoice.payment_state != "paid":
+            vals["prepaid_amount"] = 0.0
+            vals["payable_amount"] = invoice.amount_total
+
+        return vals
