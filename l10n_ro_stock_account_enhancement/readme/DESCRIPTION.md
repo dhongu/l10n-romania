@@ -1,0 +1,1 @@
+- verificare pret de cost ca sa fie diferit de zero
