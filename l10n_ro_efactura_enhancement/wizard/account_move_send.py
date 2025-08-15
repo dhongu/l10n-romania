@@ -5,15 +5,15 @@ from odoo.tools.safe_eval import safe_eval
 class AccountMoveSendWizard(models.TransientModel):
     _inherit = "account.move.send.wizard"
 
-    l10n_ro_edi_resend_enable = fields.Boolean(compute="_compute_l10n_ro_edi_resend_enable")
+    # l10n_ro_edi_resend_enable = fields.Boolean(compute="_compute_l10n_ro_edi_resend_enable")
 
-    @api.depends("l10n_ro_edi_send_enable")
-    def _compute_l10n_ro_edi_resend_enable(self):
-        for wizard in self:
-            wizard.l10n_ro_edi_resend_enable = any(
-                not move._need_ubl_cii_xml("ciusro") and move.country_code == "RO" and move.invoice_pdf_report_id
-                for move in wizard.move_ids
-            )
+    # @api.depends("l10n_ro_edi_send_enable")
+    # def _compute_l10n_ro_edi_resend_enable(self):
+    #     for wizard in self:
+    #         wizard.l10n_ro_edi_resend_enable = any(
+    #             not move._need_ubl_cii_xml("ciusro") and move.country_code == "RO" and move.invoice_pdf_report_id
+    #             for move in wizard.move_ids
+    #         )
 
     def action_resend(self):
         self.ensure_one()
