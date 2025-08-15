@@ -54,7 +54,7 @@ class ResPartner(models.Model):
                     if vat_number.isdigit():
                         try:
                             vals["vat"] = vals["name"]
-                            result = self._get_Anaf(vat_number)
+                            error, result = self._get_Anaf(vat_number)
                             if result:
                                 res = self._Anaf_to_Odoo(result)
                                 vals.update(res)
