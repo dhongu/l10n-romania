@@ -132,21 +132,25 @@ class ReportPickingReception(models.AbstractModel):
             #     if move_line.remaining_qty != 0:
             #         res['price'] = move_line.remaining_value /  move_line.remaining_qty
 
+            # verificare price_include
+            incl_tax = line.taxes_id.filtered(lambda tax: tax.price_include)
+            if incl_tax:
+                res["price"] = line.price_unit
             taxes = line.taxes_id.compute_all(
                 res["price"],
-                quantity=move.product_qty,
+                quantity=quantity,
                 product=move.product_id,
                 partner=move.partner_id,
             )
 
             res["tax"] = taxes["total_included"] - taxes["total_excluded"]
-            res["amount"] = taxes["total_excluded"]
+            res["amount"] = taxes["total_excluded"] or res["price"] * move.quantity
             res["amount_tax"] = taxes["total_included"]
 
             taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
             list_price = move.product_id.list_price
             if move.location_dest_id.store_pricelist_id:
-                list_price = move.location_dest_id.store_pricelist_id.get_product_price(move.product_id, 1, False)
+                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1, False)
 
             res["list_price"] = list_price
             # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
@@ -201,7 +205,7 @@ class ReportPickingReception(models.AbstractModel):
 
             list_price = move.product_id.list_price
             if move.location_dest_id.store_pricelist_id:
-                list_price = move.location_dest_id.store_pricelist_id.get_product_price(move.product_id, 1, False)
+                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1, False)
 
             res["list_price"] = list_price
 
