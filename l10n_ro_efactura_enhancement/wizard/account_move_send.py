@@ -1,10 +1,10 @@
-from odoo import api, fields, models
+from odoo import api, models
 from odoo.tools.safe_eval import safe_eval
 
 
 class AccountMoveSendWizard(models.TransientModel):
     _inherit = "account.move.send.wizard"
-    #todo: de gasit cum se poate face in 18.0
+    # todo: de gasit cum se poate face in 18.0
     # l10n_ro_edi_resend_enable = fields.Boolean(compute="_compute_l10n_ro_edi_resend_enable")
 
     # @api.depends("l10n_ro_edi_send_enable")

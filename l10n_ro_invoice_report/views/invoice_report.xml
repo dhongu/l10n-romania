@@ -384,7 +384,10 @@
                             <t t-set="current_section" t-value="l" />
                             <t t-set="current_subtotal" t-value="0" />
                         </tr>
-                        <t t-if="current_section and (l_last or lines[l_index+1].display_type == 'line_section')" id="final_section">
+                        <t
+                            t-if="current_section and (l_last or lines[l_index+1].display_type == 'line_section')"
+                            id="final_section"
+                        >
                             <tr class="is-subtotal text-end">
                                 <td colspan="99">
                                     <strong class="mr16">Subtotal</strong>
