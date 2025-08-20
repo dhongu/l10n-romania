@@ -150,8 +150,9 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         else:
             return super()._get_invoice_payment_means_vals_list(invoice)
 
-
-    def _get_invoice_monetary_total_vals(self, invoice, taxes_vals, line_extension_amount, allowance_total_amount, charge_total_amount):
+    def _get_invoice_monetary_total_vals(
+        self, invoice, taxes_vals, line_extension_amount, allowance_total_amount, charge_total_amount
+    ):
         vals = super()._get_invoice_monetary_total_vals(
             invoice, taxes_vals, line_extension_amount, allowance_total_amount, charge_total_amount
         )
