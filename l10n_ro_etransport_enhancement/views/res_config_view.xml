@@ -7,7 +7,11 @@
         <field name="arch" type="xml">
             <xpath expr="//block[@name='shipping_connectors_setting_container']" position="after">
                 <block title="UIT" name="uit_settings">
-                    <setting id="l10n_ro_etransport_get_order_value" company_dependent="1" help="Get UIT prices from sale/purchase orders">
+                    <setting
+                        id="l10n_ro_etransport_get_order_value"
+                        company_dependent="1"
+                        help="Get UIT prices from sale/purchase orders"
+                    >
                         <field name="l10n_ro_etransport_get_order_value" />
                     </setting>
                 </block>

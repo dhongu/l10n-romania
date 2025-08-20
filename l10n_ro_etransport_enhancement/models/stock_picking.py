@@ -80,14 +80,20 @@ class Picking(models.Model):
                 )
                 if move.purchase_line_id.currency_id != move.picking_id.company_id.currency_id:
                     price = move.purchase_line_id.currency_id._convert(
-                        price, move.picking_id.company_id.currency_id, move.picking_id.company_id, move.scheduled_date
+                        price,
+                        move.picking_id.company_id.currency_id,
+                        move.picking_id.company_id,
+                        move.picking_id.scheduled_date,
                     )
                 return price
             elif direction == "outgoing" and move.sale_line_id:
                 price = move.sale_line_id.price_reduce_taxexcl
                 if move.sale_line_id.currency_id != move.picking_id.company_id.currency_id:
                     price = move.sale_line_id.currency_id._convert(
-                        price, move.picking_id.company_id.currency_id, move.picking_id.company_id, move.scheduled_date
+                        price,
+                        move.picking_id.company_id.currency_id,
+                        move.picking_id.company_id,
+                        move.picking_id.scheduled_date,
                     )
                 return price
             return 0.00
