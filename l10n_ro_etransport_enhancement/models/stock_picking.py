@@ -14,6 +14,10 @@ class Picking(models.Model):
     _inherit = "stock.picking"
 
     l10n_ro_edi_stock_required = fields.Boolean(string="eTransport Required")
+    l10n_ro_shipping_weights = fields.Boolean(string="Custom Shipping Weights")
+    l10n_ro_shipping_weight_lines = fields.One2many(
+        "l10n.ro.stock.picking.weight.line", "picking_id", string="Shipping Weight Lines"
+    )
 
     def _compute_l10n_ro_edi_stock_enable(self):
         res = super()._compute_l10n_ro_edi_stock_enable()
@@ -112,6 +116,11 @@ class Picking(models.Model):
                         unit_price = _get_unit_price_for_uit(move_id)
                         if unit_price:
                             item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
+                        if self.l10n_ro_shipping_weights:
+                            weight_line = self.l10n_ro_shipping_weight_lines.filtered(lambda x: x.move_id == move_id)
+                            if weight_line:
+                                item["greutateNeta"] = round(weight_line.net_weight, 2)
+                                item["greutateBruta"] = round(weight_line.gross_weight, 2)
                     item_no += 1
         if (
             not self
@@ -142,6 +151,24 @@ class Picking(models.Model):
                 picking.carrier_tracking_ref = picking.l10n_ro_edi_stock_document_uit
 
         return res
+
+    def l10n_ro_compute_weight_lines(self):
+        for picking in self:
+            vals = []
+            for move in picking.move_ids:
+                if move.quantity > 0:
+                    vals.append(
+                        {
+                            "picking_id": picking.id,
+                            "move_id": move.id,
+                            "net_weight": move.product_id.l10n_ro_net_weight * move.quantity,
+                            "gross_weight": move.product_id.weight * move.quantity,
+                            "weight_uom_id": self.env["product.template"]
+                            ._get_weight_uom_id_from_ir_config_parameter()
+                            .id,
+                        }
+                    )
+            picking.l10n_ro_shipping_weight_lines.create(vals)
 
     # @api.model
     # def _l10n_ro_edi_stock_validate_data(self, data: dict):
