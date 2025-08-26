@@ -8,6 +8,35 @@
             <field name="carrier_id" position="before">
                 <field name="l10n_ro_edi_stock_required" />
             </field>
+            <page name="etransport" position="inside">
+                <group name="weights">
+                    <field name="l10n_ro_shipping_weights" />
+                    <field
+                        name="l10n_ro_shipping_weight_lines"
+                        invisible="not l10n_ro_shipping_weights"
+                        mode="tree,kanban"
+                    >
+                        <tree editable="1">
+                            <field name="picking_id" column_invisible="1" />
+                            <field
+                                name="move_id"
+                                domain="[('picking_id', '=', picking_id)]"
+                                context="{'show_product_in_move': True}"
+                            />
+                            <field name="net_weight" />
+                            <field name="gross_weight" />
+                            <field name="weight_uom_id" />
+                        </tree>
+                    </field>
+                    <button
+                        name="l10n_ro_compute_weight_lines"
+                        string="Get lines"
+                        type="object"
+                        class="btn-primary"
+                        invisible="not l10n_ro_shipping_weights"
+                    />
+                </group>
+            </page>
         </field>
     </record>
 </odoo>

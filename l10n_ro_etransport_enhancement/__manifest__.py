@@ -4,7 +4,7 @@
 
 {
     "name": "eTransport Enhancement",
-    "version": "17.0.0.0.4",
+    "version": "17.0.0.1.0",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "eTransport enhancement",
@@ -18,6 +18,7 @@
     "price": 25.00,
     "currency": "EUR",
     "data": [
+        "security/ir.model.access.csv",
         "views/stock_picking_view.xml",
         "views/res_config_view.xml",
     ],
