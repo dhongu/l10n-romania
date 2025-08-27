@@ -155,7 +155,11 @@ class Picking(models.Model):
     def l10n_ro_compute_weight_lines(self):
         for picking in self:
             vals = []
+            no_weight = self.env['product.product']
             for move in picking.move_ids:
+                if not move.product_id.weight:
+                    no_weight |= move.product_id
+                    continue
                 if move.quantity > 0:
                     vals.append(
                         {
@@ -168,6 +172,13 @@ class Picking(models.Model):
                             .id,
                         }
                     )
+            if no_weight:
+                product_name = no_weight.mapped("display_name")
+                raise UserError(
+                    _(
+                        f"The following products do not have weight defined:\n{product_name}\n."
+                    )
+                )
             picking.l10n_ro_shipping_weight_lines.create(vals)
 
     # @api.model
