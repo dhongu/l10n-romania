@@ -38,20 +38,6 @@ class Picking(models.Model):
 
     @api.model
     def _l10n_ro_edi_stock_get_template_data(self, data: dict):
-        no_weight = self.env['product.product']
-
-        for move in self.move_ids:
-            if not move.product_id.weight:
-                no_weight |= move.product_id
-            move._cal_move_weight()
-        if no_weight:
-            product_name = no_weight.mapped("display_name")
-            raise UserError(
-                _(
-                    f"The following products do not have weight defined:\n{product_name}\n."
-                )
-            )
-
         res = super()._l10n_ro_edi_stock_get_template_data(data)
         for key in ("locStartTraseuRutier", "locFinalTraseuRutier"):
             locatie = res["data"]["notificare"][key].get("locatie", {})
@@ -191,3 +177,19 @@ class Picking(models.Model):
     #             errors.remove(error)
     #
     #     return errors
+
+    @api.model
+    def _l10n_ro_edi_stock_validate_data(self, data: dict):
+
+        errors = super()._l10n_ro_edi_stock_validate_data(data)
+
+        no_weight = self.env['product.product']
+        for move in data["stock_move_ids"]:
+            if not move.product_id.weight:
+                no_weight |= move.product_id
+        if no_weight:
+            product_name = no_weight.mapped("display_name")
+            errors.append(_(
+                f"The following products do not have weight defined:\n{product_name}\n."
+            ))
+        return errors
