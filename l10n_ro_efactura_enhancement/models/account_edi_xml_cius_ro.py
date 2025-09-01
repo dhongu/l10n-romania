@@ -83,8 +83,10 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         name = vals.get("name") or "n/a"
         vals["name"] = name[:100]
         description = vals.get("description") or vals["name"]
+        if "\n" in description:
+            description_array = description.split("\n")
+            description = "\n".join(description_array[1:])
         vals["description"] = description[:200]
-
         return vals
 
     def _export_invoice_vals(self, invoice):
