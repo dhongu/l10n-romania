@@ -270,7 +270,16 @@
                                 <t t-set="nr_crt" t-value="nr_crt + 1" />
                             </td>
                             <td id="product_name">
-                                <span t-field="l.name" />
+                                <!-- only description if exists-->
+                                <t t-set="line_name" t-value="l.name" />
+                                <t t-if="'\n' in line_name">
+                                    <t
+                                        t-set="line_name"
+                                        t-value="'\n'.join(line_name.split('\n')[1:])"
+                                        t-options="{'widget': 'text'}"
+                                    />
+                                </t>
+                                <span t-esc="line_name" />
                             </td>
                             <td class="text-end" id="quantity">
                                 <t t-set="quantity" t-value="l.quantity" />
