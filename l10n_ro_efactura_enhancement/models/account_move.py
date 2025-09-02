@@ -61,6 +61,8 @@ class AccountMove(models.Model):
                 _logger.info(f"Fetch status for invoices: {invoices_name}")
                 invoices._l10n_ro_edi_fetch_invoice_sending_documents()
                 need_retrigger = True
+            else:
+                _logger.info("No invoices to fetch status")
 
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
@@ -83,27 +85,26 @@ class AccountMove(models.Model):
                 need_retrigger = True
 
             if invoices:
+                partner_ids = invoices.mapped("partner_id")
+                partner_ids.write({'invoice_sending_method':'manual'})
                 invoices_name = invoices.mapped("name")
                 _logger.info(f"Sending invoices to SPV: {invoices_name}")
                 _logger.info(f"Count of invoices to send in SPV: {len(invoices)}")
 
                 composer_vals = {
                     "move_ids": invoices.ids,
-                    "checkbox_download": False,
-                    "checkbox_send_mail": False,
-                    "mode": "invoice_multi",
                 }
 
-                composer = self.env["account.move.send"].create(composer_vals)
-                action = composer.action_send_and_print()
-                self.env.ref("account.ir_cron_account_move_send")._trigger()
+                composer = self.env["account.move.send.batch.wizard"].sudo().create(composer_vals)
+                composer.action_send_and_print()
+
 
             if need_retrigger:
                 at = fields.Datetime.now() + timedelta(minutes=5)
                 # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
                 self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
 
-        return action
+
 
     def _l10n_ro_edi_send_invoice(self, xml_data):
         return super(AccountMove, self.with_context(active_id=self.id))._l10n_ro_edi_send_invoice(xml_data)
