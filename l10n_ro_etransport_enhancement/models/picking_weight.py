@@ -7,6 +7,7 @@ from odoo import api, fields, models
 
 class StockPickingWeightLine(models.Model):
     _name = "l10n.ro.stock.picking.weight.line"
+    _description = "Stock Picking Weight Line"
 
     picking_id = fields.Many2one("stock.picking")
     move_id = fields.Many2one("stock.move")
