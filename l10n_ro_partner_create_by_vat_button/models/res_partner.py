@@ -117,3 +117,9 @@ class ResPartner(models.Model):
     def ro_vat_change(self):
         skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
         return super(ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)).ro_vat_change()
+
+    def _fix_vat_number(self, vat, country_id):
+        if self.env.context.get("skip_ro_vat_change"):
+            return vat
+        return super()._fix_vat_number(vat, country_id)
+
