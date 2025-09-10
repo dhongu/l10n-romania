@@ -36,7 +36,7 @@ class AccountMove(models.Model):
 
         return res
 
-    def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1):
+    def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1, delay_days=0):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
         _logger.info("Cron job for sending invoices to SPV")
 
@@ -48,8 +48,8 @@ class AccountMove(models.Model):
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
-                ("date", "<", fields.Date.today()),
-                ("date", ">=", fields.Date.today() - timedelta(days=days)),
+                ("date", "<", fields.Date.today()- timedelta(days=delay_days)),
+                ("date", ">=", fields.Date.today() - timedelta(days=days+delay_days)),
                 ("l10n_ro_edi_state", "=", "invoice_sending"),
                 ("company_id", "=", company.id),
             ]
@@ -61,12 +61,14 @@ class AccountMove(models.Model):
                 _logger.info(f"Fetch status for invoices: {invoices_name}")
                 invoices._l10n_ro_edi_fetch_invoice_sending_documents()
                 need_retrigger = True
+            else:
+                _logger.info("No invoices to fetch status")
 
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
-                ("date", "<", fields.Date.today()),
-                ("date", ">=", fields.Date.today() - timedelta(days=days)),
+                ("date", "<", fields.Date.today()- timedelta(days=delay_days)),
+                ("date", ">=", fields.Date.today() - timedelta(days=days+delay_days)),
                 ("partner_id.country_id.code", "=", "RO"),
                 ("l10n_ro_edi_state", "=", False),
                 ("company_id", "=", company.id),
