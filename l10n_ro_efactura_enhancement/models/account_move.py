@@ -49,7 +49,7 @@ class AccountMove(models.Model):
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
                 ("date", "<", fields.Date.today()- timedelta(days=delay_days)),
-                ("date", ">=", fields.Date.today() - timedelta(days=days)),
+                ("date", ">=", fields.Date.today() - timedelta(days=days+delay_days)),
                 ("l10n_ro_edi_state", "=", "invoice_sending"),
                 ("company_id", "=", company.id),
             ]
@@ -68,7 +68,7 @@ class AccountMove(models.Model):
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
                 ("date", "<", fields.Date.today()- timedelta(days=delay_days)),
-                ("date", ">=", fields.Date.today() - timedelta(days=days)),
+                ("date", ">=", fields.Date.today() - timedelta(days=days+delay_days)),
                 ("partner_id.country_id.code", "=", "RO"),
                 ("l10n_ro_edi_state", "=", False),
                 ("company_id", "=", company.id),
