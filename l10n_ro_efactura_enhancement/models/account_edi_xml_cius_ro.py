@@ -48,6 +48,9 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         if not postal_address.get("street_name", False):
             postal_address["street_name"] = "Principala"
 
+        if 'city_id' in partner._fields and partner.city_id:
+            postal_address["city_name"] = partner.city_id.name
+
         if postal_address.get("country_subentity", False) == "RO-B":
             if "SECTOR" not in postal_address.get("city_name", "").upper():
                 postal_code = postal_address.get("postal_zone", False)
