@@ -58,6 +58,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                     postal_address["city_name"] = "SECTOR" + postal_code[1]
                 else:
                     postal_address["city_name"] = "SECTOR1"
+            postal_address["city_name"] = postal_address.get("city_name", "").upper()
 
         if not partner.is_company:
             vals["endpoint_id"] = "0000000000000"
