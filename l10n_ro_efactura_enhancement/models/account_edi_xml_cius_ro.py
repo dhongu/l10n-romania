@@ -42,18 +42,18 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
         vals = super()._get_partner_party_vals(partner, role)
 
-        if role == "customer":
-            partner = partner.commercial_partner_id
+        # if role == "customer":
+        #     partner = partner.commercial_partner_id
 
         postal_address = vals.get("postal_address_vals", {})
         if not postal_address.get("street_name", False):
             postal_address["street_name"] = "Principala"
 
-
+        if partner.state_id and partner.state_id.code == "B":
+            if 'city_id' in partner._fields and partner.city_id:
+                postal_address["city_name"] = partner.city_id.name.upper()
 
         if postal_address.get("country_subentity", False) == "RO-B":
-            if 'city_id' in partner._fields and partner.city_id:
-                postal_address["city_name"] = partner.city_id.name
             if "SECTOR" not in postal_address.get("city_name", "").upper():
                 postal_code = postal_address.get("postal_zone", False)
                 if postal_code and postal_code[0] == "0" and postal_code[1] in ["1", "2", "3", "4", "5", "6"]:
@@ -61,6 +61,8 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 else:
                     postal_address["city_name"] = "SECTOR1"
             postal_address["city_name"] = postal_address.get("city_name", "").upper().replace(" ", "").replace("UL", "")
+            if partner.city != postal_address["city_name"]:
+                partner.write({"city": postal_address["city_name"]})
 
         if not partner.is_company:
             vals["endpoint_id"] = "0000000000000"
