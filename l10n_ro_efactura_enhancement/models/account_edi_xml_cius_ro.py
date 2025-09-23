@@ -42,8 +42,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
         vals = super()._get_partner_party_vals(partner, role)
 
-        # if role == "customer":
-        #     partner = partner.commercial_partner_id
+        # partner = partner.commercial_partner_id
 
         postal_address = vals.get("postal_address_vals", {})
         if not postal_address.get("street_name", False):
