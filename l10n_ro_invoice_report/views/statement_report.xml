@@ -212,7 +212,7 @@
                                 <tr>
                                     <td>Representing:</td>
                                     <td>
-                                         <span t-field="o.ref" />
+                                         <span t-field="o.memo" />
                                          <span t-field="o.payment_ref" />
 
                                     </td>
