@@ -113,8 +113,8 @@
                                                 <span t-field="i.invoice_date" />
                                             </t>
                                         </t>
-                                        <t t-if="communication != o.ref">
-                                            <span t-field="o.ref" />
+                                        <t t-if="communication != o.memo">
+                                            <span t-field="o.memo" />
                                         </t>
                                     </td>
                                 </tr>
