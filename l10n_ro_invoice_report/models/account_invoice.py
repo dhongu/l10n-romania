@@ -104,7 +104,7 @@ class account_invoice_line(models.Model):
     _inherit = "account.move.line"
 
     def write(self, vals):
-        if 'name' in vals:
+        if vals.get('name', False):
             lines = vals['name'].split('\n')
             if len(lines) > 1:
                 # pe prima line e numele produsului
