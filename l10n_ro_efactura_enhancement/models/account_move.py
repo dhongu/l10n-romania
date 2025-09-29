@@ -107,6 +107,23 @@ class AccountMove(models.Model):
         return super(AccountMove, self.with_context(active_id=self.id))._l10n_ro_edi_send_invoice(xml_data)
 
 
+    @api.model
+    def _cron_account_move_send(self, job_count=10):
+        domain = [
+            ('sending_data', '!=', False),
+            ('state', '=', 'posted'),
+        ]
+        limit = job_count + 1
+
+        invoices = self.env['account.move'].search(domain, limit=limit)
+        for move in invoices:
+            if move.sending_data and not move.sending_data.get("author_partner_id"):
+                move.sending_data = False
+
+
+        return super()._cron_account_move_send(job_count=job_count)
+
+
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
