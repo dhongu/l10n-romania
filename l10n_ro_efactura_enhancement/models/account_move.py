@@ -115,6 +115,7 @@ class AccountMove(models.Model):
         ]
         limit = job_count + 1
 
+        # fix pt facturile care au fost programate pentru trimitere in 17.0
         invoices = self.env['account.move'].search(domain, limit=limit)
         for move in invoices:
             if move.sending_data and not move.sending_data.get("author_partner_id"):
