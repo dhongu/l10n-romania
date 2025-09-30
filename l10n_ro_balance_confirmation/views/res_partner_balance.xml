@@ -57,7 +57,7 @@
                 <br />
                 <div id="text1" style="font-size: 0.85rem;">
                     Conform dispozițiilor în vigoare, vă înștiințăm că în evidențele noastre contabile, unitatea dvs.
-                    figurează cu următoarele credite:
+                    figurează cu următoarele:
                 </div>
                 <div id="title" style="text-align: center; font-weight: bold">
                     EXTRAS DE CONT
@@ -66,15 +66,23 @@
                     </t>
                 </div>
                 <br />
-                <div id="sold" style="font-weight: bold">
-                    <span>Partner balance: </span>
-                    <t t-set="doc" t-value="o" />
-                    <t t-if="date_to">
-                        <t t-set="doc" t-value="o.with_context(date_to=date_to)" />
-                    </t>
-                    <span t-field="doc.credit" />
-<!--                    <span>Partner balance: </span><span t-field="o.credit" />-->
+
+                <t t-set="doc" t-value="o"/>
+                <t t-if="date_to">
+                    <t t-set="doc" t-value="o.with_context(date_to=date_to)"/>
+                </t>
+
+                <div id="credit" style="font-weight: bold" t-if="doc.credit">
+                    <span>Credite: </span>
+                    <span t-field="doc.credit"/>
                 </div>
+
+                <div id="debit" style="font-weight: bold" t-if="doc.debit">
+                    <span>Debite: </span>
+                    <span t-field="doc.debit"/>
+                </div>
+
+
                 <div id="text2" style="font-size: 0.85rem;">
                     În termen de 5 zile de la primire urmează să ne restituiți acest extras confirmat pentru suma
                     acceptată, iar în cazul constatării de diferențe să anexați o notă explicativă cuprinzând obiecțiile
