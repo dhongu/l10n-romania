@@ -266,7 +266,7 @@
             </td>
             </t>
         </xpath>
-
+        <!-- Cantitate -->
         <xpath expr="//table[@name='invoice_line_table']//td[@name='td_quantity']" position="replace">
             <t t-set="signed_quantity" t-value="line.quantity"/>
             <t t-if="o.move_type == 'out_refund'">
@@ -278,16 +278,13 @@
                 <span t-field="line.product_uom_id" groups="uom.group_uom">units</span>
             </td>
         </xpath>
-
+        <!-- Preț unitar fara taxe -->
         <xpath expr="//table[@name='invoice_line_table']//td[@name='td_price_unit']" position="replace">
-
             <t t-set="price_unit_without_taxes" t-value="line.price_subtotal / (line.quantity or 1)"/>
             <t
                 t-set="price_unit_without_taxes"
                 t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
             />
-
-
             <td name="td_price_unit"
                 t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                 <span class="text-nowrap" id="price_unit_without_taxes"
@@ -299,6 +296,8 @@
 
 
         <xpath expr="//table[@name='invoice_line_table']//td[@name='td_subtotal']" position="after">
+
+            <!-- Valoare TVA -->
             <td name="td_price_taxes" class="text-end">
                 <t t-set="price_taxes" t-value="(line.price_total - line.price_subtotal )"/>
                 <t t-if="o.move_type == 'out_refund'">
@@ -314,7 +313,8 @@
                 />
             </td>
 
-            <td class="text-end" id="price_total">
+            <!-- Total (cu taxe) -->
+            <td class="text-end" id="price_total" t-if="res_company.show_total_amount_with_taxes">
                 <t t-set="price_total" t-value="line.price_total"/>
                 <t t-if="o.move_type == 'out_refund'">
                     <t t-set="price_total" t-value="-1*line.price_total"/>
@@ -330,13 +330,13 @@
             </td>
         </xpath>
 
-
+        <!-- Subtotal fara taxe -->
         <xpath expr="//table[@name='invoice_line_table']//td[@name='td_subtotal']" position="replace">
             <t t-set="signed_price_subtotal" t-value="line.price_subtotal"/>
             <t t-if="o.move_type == 'out_refund'">
                 <t t-set="signed_price_subtotal" t-value="-1*line.price_subtotal"/>
             </t>
-            <td name="td_subtotal" class="o_td_quantity text-end" t-if="res_company.show_total_amount_with_taxes">
+            <td name="td_subtotal" class="o_td_quantity text-end" >
                 <span t-esc="signed_price_subtotal" t-options='{"widget": "float", "precision": 2}' class="text-nowrap">
                     27.0
                 </span>

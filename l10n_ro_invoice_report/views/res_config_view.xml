@@ -18,8 +18,8 @@
                 <setting help="Show index line on invoicee">
                     <field name="index_line_on_invoice" />
                 </setting>
-                <setting help="Show index line on invoicee">
-                    <field name="index_line_on_invoice" />
+                <setting help="Show total amount with taxes on invoice">
+                    <field name="show_total_amount_with_taxes" />
                 </setting>
             </xpath>
         </field>
