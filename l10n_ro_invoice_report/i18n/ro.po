@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 19:06+0000\n"
-"PO-Revision-Date: 2025-10-01 19:06+0000\n"
+"POT-Creation-Date: 2025-10-02 10:07+0000\n"
+"PO-Revision-Date: 2025-10-02 10:07+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,11 @@ msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "31.05"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "9.00"
 msgstr ""
 
@@ -41,6 +46,11 @@ msgid ""
 "<br/>\n"
 "                    <strong>AWB:</strong>"
 msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<br/><span>(without taxes)</span>"
+msgstr "<br/><span>(fără TVA)</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.document_tax_totals_template
@@ -97,8 +107,12 @@ msgstr "<span>Val. TVA</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "<span>Total amount</span>"
-msgstr "<span>Total</span>"
+msgid ""
+"<span>Total amount</span>\n"
+"                <br/><span>(with taxes)</span>"
+msgstr ""
+"<span>Suma totală</span>\n"
+"                <br/><span>(cu TVA)</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -122,6 +136,11 @@ msgstr "<span>Chitanță:</span>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>amount</span>"
 msgstr "<span>suma de</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong class=\"mr16 ml16\">Subtotal (with taxes)</strong>"
+msgstr "<strong class=\"mr16 ml16\">Subtotal (cu TVA)</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.document_tax_totals_template
@@ -451,6 +470,23 @@ msgid "Show email on invoice address"
 msgstr "Arată email pe adresa facturii"
 
 #. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__index_line_on_invoice
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__index_line_on_invoice
+msgid "Show index line"
+msgstr "Arată nr. crt."
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__index_line_on_invoice
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__index_line_on_invoice
+msgid "Show index line on invoice"
+msgstr "Arată nr. crt. pe factură"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show index line on invoicee"
+msgstr "Arată nr. crt. pe factură"
+
+#. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__marker_on_invoice_address
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__marker_on_invoice_address
 msgid "Show marker"
@@ -545,3 +581,9 @@ msgstr "de la"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "units"
 msgstr ""
+
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:account.document_tax_totals_template
+msgid "Untaxed Amount"
+msgstr "Valoare fără TVA"

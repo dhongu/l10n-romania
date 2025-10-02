@@ -214,28 +214,57 @@
             </div>
         </xpath>
 
+
+        <!-- configurea coloanelor din tabelul de linii -->
+
         <!-- Adaugă coloana în antet, înainte de Description -->
         <xpath expr="//table[@name='invoice_line_table']//th[@name='th_description']" position="before">
-            <th class="text-start">Ord</th>
-            <t t-set="nr_crt" t-value="1"/>
+            <t t-if="o.company_id.index_line_on_invoice">
+                    <th class="text-start">Ord</th>
+                <t t-set="nr_crt" t-value="1"/>
+            </t>
+        </xpath>
+
+
+        <xpath expr="//table[@name='invoice_line_table']//th[@name='th_priceunit']/span" position="after">
+            <br/><span>(without taxes)</span>
+        </xpath>
+
+         <xpath expr="//table[@name='invoice_line_table']//th[@name='th_subtotal']/span" position="after">
+            <br/><span>(without taxes)</span>
         </xpath>
 
         <xpath expr="//table[@name='invoice_line_table']//th[@name='th_subtotal']" position="after">
             <th name="th_price_taxes" class="text-end">
                 <span>Taxes Values</span>
             </th>
-            <th name="th_total_amount" class="text-end">
+            <th name="th_total_amount" class="text-end" t-if="res_company.show_total_amount_with_taxes">
                 <span>Total amount</span>
+                <br/><span>(with taxes)</span>
             </th>
+        </xpath>
 
+
+        <xpath expr="//table[@name='invoice_line_table']//tbody/t" position="before">
+            <t t-set="current_subtotal_with_taxes" t-value="0"/>
+        </xpath>
+
+        <xpath expr="//table[@name='invoice_line_table']//tbody//t[@t-foreach='lines']/t" position="before">
+            <t t-set="current_subtotal_with_taxes" t-value="current_subtotal_with_taxes + line.price_total"/>
+        </xpath>
+
+        <xpath expr="//table[@name='invoice_line_table']//tbody//tr//t[@t-set='current_subtotal']" position="before">
+            <t t-set="current_subtotal_with_taxes" t-value="0"/>
         </xpath>
 
         <!-- Adaugă coloana pe fiecare linie de tip product, înainte de Description -->
         <xpath expr="//table[@name='invoice_line_table']//td[@name='account_invoice_line_name']" position="before">
+            <t t-if="o.company_id.index_line_on_invoice">
             <td class="text-start">
                 <span t-esc="nr_crt"/>
                 <t t-set="nr_crt" t-value="nr_crt + 1"/>
             </td>
+            </t>
         </xpath>
 
         <xpath expr="//table[@name='invoice_line_table']//td[@name='td_quantity']" position="replace">
@@ -307,11 +336,19 @@
             <t t-if="o.move_type == 'out_refund'">
                 <t t-set="signed_price_subtotal" t-value="-1*line.price_subtotal"/>
             </t>
-            <td name="td_subtotal" class="o_td_quantity text-end">
+            <td name="td_subtotal" class="o_td_quantity text-end" t-if="res_company.show_total_amount_with_taxes">
                 <span t-esc="signed_price_subtotal" t-options='{"widget": "float", "precision": 2}' class="text-nowrap">
                     27.0
                 </span>
             </td>
+        </xpath>
+
+        <xpath expr="//table[@name='invoice_line_table']//tr//span[@t-out='current_subtotal']" position="after">
+            <strong class="mr16 ml16">Subtotal (with taxes)</strong>
+            <span
+                t-out="current_subtotal_with_taxes"
+                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+            >31.05</span>
         </xpath>
 
 

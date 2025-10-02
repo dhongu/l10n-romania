@@ -15,6 +15,12 @@
                 <setting help="Show phone on invoice address">
                     <field name="phone_on_invoice_address" />
                 </setting>
+                <setting help="Show index line on invoicee">
+                    <field name="index_line_on_invoice" />
+                </setting>
+                <setting help="Show index line on invoicee">
+                    <field name="index_line_on_invoice" />
+                </setting>
             </xpath>
         </field>
     </record>
