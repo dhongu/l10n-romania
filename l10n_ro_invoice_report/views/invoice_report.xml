@@ -272,16 +272,22 @@
         <xpath expr="//table[@name='invoice_line_table']//td[@name='account_invoice_line_name']" position="replace">
             <td name="account_invoice_line_name">
                 <t t-if="line.name">
-                    <t t-set="line_name" t-value="l.name" />
+                    <t t-if="res_company.remove_product_name_from_invoice_line">
+                        <t t-set="line_name" t-value="line.name" />
                         <t t-if="'\n' in line_name">
                             <t
                                 t-set="line_name"
                                 t-value="'\n'.join(line_name.split('\n')[1:])"
-                                t-options="{'widget': 'text'}"
                             />
                         </t>
-                    <span  t-field="line_name" t-options="{'widget': 'text'}">Bacon Burger</span>
+                        <span  t-esc="line_name" >Bacon Burger</span>
+                    </t>
+                   <t t-if="not res_company.remove_product_name_from_invoice_line">
+                       <span  t-field="line.name" t-options="{'widget': 'text'}">Bacon Burger</span>
+                   </t>
                 </t>
+
+
             </td>
         </xpath>
 
@@ -640,16 +646,21 @@
                     t-set="payments_vals"
                     t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"
                 />
-                <br/>
-                <br/>
-
-                <div
-                    t-foreach="payments_vals"
-                    t-as="payment_vals"
-                    style="page-break-inside: avoid; border: 1px solid black;padding: 15px;"
-                >
-
+                <t t-set="payments_vals_cash" t-value="[]"/>
+                <t t-foreach="payments_vals" t-as="payment_vals">
                     <t t-if="payment_vals['journal_type']=='cash'">
+                        <t t-set="payments_vals_cash" t-value="payments_vals_cash + [payment_vals]"/>
+                    </t>
+                </t>
+                <t t-if="payments_vals_cash">
+                    <br/>
+                    <div
+                        t-foreach="payments_vals_cash"
+                        t-as="payment_vals"
+                        style="page-break-inside: avoid; border: 1px solid black;padding: 15px;"
+                    >
+
+
                         <t name="payment_container">
                             <t t-set="res_company" t-value="o.company_id"/>
                             <div>
@@ -718,9 +729,10 @@
                                 Representing counter value of invoice
                                 <span t-field="o.name"/>
                             </div>
+
                         </t>
-                    </t>
-                </div>
+                    </div>
+                </t>
             </t>
         </xpath>
     </template>

@@ -27,6 +27,9 @@
                 <setting help="Hide picking on invoice">
                     <field name="hide_pickings_in_invoice" />
                 </setting>
+                <setting help="Remove product name from invoice lines">
+                    <field name="remove_product_name_from_invoice_line" />
+                </setting>
             </xpath>
         </field>
     </record>
