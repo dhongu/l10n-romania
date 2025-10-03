@@ -267,6 +267,24 @@
             </td>
             </t>
         </xpath>
+
+        <!-- Descriere -->
+        <xpath expr="//table[@name='invoice_line_table']//td[@name='account_invoice_line_name']" position="replace">
+            <td name="account_invoice_line_name">
+                <t t-if="line.name">
+                    <t t-set="line_name" t-value="l.name" />
+                        <t t-if="'\n' in line_name">
+                            <t
+                                t-set="line_name"
+                                t-value="'\n'.join(line_name.split('\n')[1:])"
+                                t-options="{'widget': 'text'}"
+                            />
+                        </t>
+                    <span  t-field="line_name" t-options="{'widget': 'text'}">Bacon Burger</span>
+                </t>
+            </td>
+        </xpath>
+
         <!-- Cantitate -->
         <xpath expr="//table[@name='invoice_line_table']//td[@name='td_quantity']" position="replace">
             <t t-set="signed_quantity" t-value="line.quantity"/>
@@ -555,7 +573,7 @@
         <xpath expr="//div[@id='total']/.." position="before">
             <div class="row">
                 <div class="col-7" t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund' ">
-                    <table id="signature" class="table table-sm" style="page-break-inside: avoid;">
+                    <table id="signature" class="o_total_table table table-borderless mb-0" style="page-break-inside: avoid;">
                         <tr>
                             <td>Elaborate:</td>
                             <td>Information for delivery:</td>
@@ -587,7 +605,7 @@
                     <!-- Tax totals summary (invoice currency) -->
 
 
-                    <table class="table table-sm" style="page-break-inside: avoid;">
+                    <table class="o_total_table table table-borderless mb-0" style="page-break-inside: avoid;">
                         <t t-if="o.tax_totals" t-call="account.document_tax_totals">
                             <t t-set="tax_totals" t-value="o.tax_totals"/>
                             <t t-set="currency" t-value="o.currency_id"/>
