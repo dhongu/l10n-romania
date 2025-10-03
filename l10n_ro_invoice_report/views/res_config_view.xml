@@ -21,6 +21,12 @@
                 <setting help="Show total amount with taxes on invoice">
                     <field name="show_total_amount_with_taxes" />
                 </setting>
+                <setting help="Hide invoice payment communication">
+                    <field name="hide_invoice_payment_communication" />
+                </setting>
+                <setting help="Hide picking on invoice">
+                    <field name="hide_pickings_in_invoice" />
+                </setting>
             </xpath>
         </field>
     </record>

@@ -190,9 +190,10 @@
         <xpath expr="//div[@id='informations']" position="attributes">
             <attribute name="class">row mt-1 mb-1</attribute>
         </xpath>
+
         <xpath expr="//p[@name='payment_communication']" position="after">
             <t t-set="pickings" t-value="get_pickings(o)"/>
-            <div t-if="pickings" name="pickings">
+            <div t-if="pickings and not res_company.hide_pickings_in_invoice" name="pickings">
                 <t t-if="o.move_type == 'in_invoice'">
                     <strong>Receptions:</strong>
                 </t>
@@ -611,9 +612,9 @@
 
         </xpath>
 
-        <!--            <xpath expr="//p[@name='payment_term']/span" position="before">
-                        <strong name="payment_term_label">Payment Term:</strong>
-                    </xpath>-->
+        <xpath expr="//p[@name='payment_communication']" position="attributes">
+            <attribute name="t-if">not res_company.hide_invoice_payment_communication</attribute>
+        </xpath>
 
         <xpath expr="//div[hasclass('page')]" position="after">
             <t t-if="print_with_payments">

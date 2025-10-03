@@ -13,6 +13,8 @@ class ResCompany(models.Model):
     marker_on_invoice_address = fields.Boolean(string="Show marker", help="Show marker on invoice address")
     index_line_on_invoice = fields.Boolean(string="Show index line", help="Show index line on invoice")
     show_total_amount_with_taxes = fields.Boolean(string="Show total amount with taxes", help="Show total amount with taxes")
+    hide_invoice_payment_communication = fields.Boolean(string="Hide invoice payment communication")
+    hide_pickings_in_invoice = fields.Boolean(string="Hide picking in invoice")
 
 
 class ResConfigSettings(models.TransientModel):
@@ -48,5 +50,17 @@ class ResConfigSettings(models.TransientModel):
         string="Show total amount with taxes",
         readonly=False,
         help="Show total amount with taxes",
+    )
+
+    hide_invoice_payment_communication  = fields.Boolean(
+        related="company_id.hide_invoice_payment_communication",
+        string="Hide invoice comments",
+        readonly=False
+    )
+
+    hide_pickings_in_invoice = fields.Boolean(
+        related="company_id.hide_pickings_in_invoice",
+        string="Show picking in invoice",
+        readonly=False
     )
 
