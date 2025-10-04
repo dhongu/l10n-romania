@@ -295,7 +295,7 @@
         </xpath>
 
         <xpath
-            expr="//table[@name='invoice_line_table']//tbody//t[@t-foreach='lines']/t"
+            expr="//table[@name='invoice_line_table']//tbody//t[@t-foreach='lines_to_report']/t"
             position="before"
         >
             <t
@@ -304,12 +304,12 @@
             />
         </xpath>
 
-        <xpath
-            expr="//table[@name='invoice_line_table']//tbody//tr//t[@t-set='current_subtotal']"
-            position="before"
-        >
-            <t t-set="current_subtotal_with_taxes" t-value="0" />
-        </xpath>
+<!--        <xpath-->
+<!--            expr="//table[@name='invoice_line_table']//tbody//tr//t[@t-set='current_subtotal']"-->
+<!--            position="before"-->
+<!--        >-->
+<!--            <t t-set="current_subtotal_with_taxes" t-value="0" />-->
+<!--        </xpath>-->
 
         <!-- Adaugă coloana pe fiecare linie de tip product, înainte de Description -->
         <xpath
@@ -463,16 +463,16 @@
             </td>
         </xpath>
 
-        <xpath
-            expr="//table[@name='invoice_line_table']//tr//span[@t-out='current_subtotal']"
-            position="after"
-        >
-            <strong class="mr16 ml16">Subtotal (with taxes)</strong>
-            <span
-                t-out="current_subtotal_with_taxes"
-                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
-            >31.05</span>
-        </xpath>
+<!--        <xpath-->
+<!--            expr="//table[@name='invoice_line_table']//tr//span[@t-out='current_subtotal']"-->
+<!--            position="after"-->
+<!--        >-->
+<!--            <strong class="mr16 ml16">Subtotal (with taxes)</strong>-->
+<!--            <span-->
+<!--                t-out="current_subtotal_with_taxes"-->
+<!--                t-options='{"widget": "monetary", "display_currency": o.currency_id}'-->
+<!--            >31.05</span>-->
+<!--        </xpath>-->
 
         <!--       <xpath expr="//table[@name='invoice_line_table']" position="replace">
                    <t t-set="with_discount_distinct" t-value="get_discount" />
