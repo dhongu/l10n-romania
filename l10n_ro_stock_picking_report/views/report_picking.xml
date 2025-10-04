@@ -186,7 +186,7 @@
                     <span t-field="o.date_done" t-options='{"widget": "date"}' />
                 </p>
                 <p t-else="">
-                    <span t-field="o.date" t-options='{"widget": "date"}' />
+                    <span t-field="o.scheduled_date" t-options='{"widget": "date"}' />
                 </p>
             </div>
             <div class="col-3 bm-2" t-if="o.location_id.usage == 'internal'">
@@ -346,7 +346,7 @@
                         </h2>
                         <h4>
                             <span>Date:</span>
-                            <span t-field="o.date" t-options='{"widget": "date"}' />
+                            <span t-field="o.date_done" t-options='{"widget": "date"}' />
                         </h4>
 
                         <div id="information" class="row mt32 mb32">
@@ -365,7 +365,7 @@
                                     <span t-field="o.date_done" t-options='{"widget": "date"}' />
                                 </p>
                                 <p t-else="">
-                                    <span t-field="o.date" t-options='{"widget": "date"}' />
+                                    <span t-field="o.scheduled_date" t-options='{"widget": "date"}' />
                                 </p>
                             </div>
                             <div class="col-3 bm-2">
@@ -418,10 +418,11 @@
                                         <span t-field="move.product_uom" groups="uom.group_uom" />
                                     </td>
                                     <td class="text-end">
-                                        <t t-set="line_value" t-value="0.0" />
-                                        <t t-foreach="move.stock_valuation_layer_ids" t-as="valuation_line">
-                                            <t t-set="line_value" t-value="line_value-valuation_line.value" />
-                                        </t>
+                                        <t t-set="line_value" t-value="move.value" />
+<!--                                        <t t-foreach="move.stock_valuation_layer_ids" t-as="valuation_line">-->
+<!--                                            <t t-set="line_value" t-value="line_value-valuation_line.value" />-->
+<!--                                        </t>-->
+
                                         <span
                                             t-esc="line_value/move.product_uom_qty"
                                             t-options='{"widget": "float", "precision": 4}'
@@ -511,7 +512,7 @@
                 <span t-field="o.date_done" t-options='{"widget": "date"}' />
             </t>
             <t t-else="">
-                <span t-field="o.date" t-options='{"widget": "date"}' />
+                <span t-field="o.scheduled_date" t-options='{"widget": "date"}' />
             </t>
         </h4>
     </template>
@@ -890,7 +891,7 @@
             <div class="col-3 bm-2">
                 <strong>Date</strong>
                 <p>
-                    <span t-field="o.date" t-options='{"widget": "date"}' />
+                    <span t-field="o.date_done" t-options='{"widget": "date"}' />
                 </p>
             </div>
 

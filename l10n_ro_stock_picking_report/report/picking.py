@@ -102,17 +102,21 @@ class ReportPickingReception(models.AbstractModel):
             "margin": 0.0,
         }
 
-        value = 0
-        quantity = 0
-        for valuation in move.stock_valuation_layer_ids:
-            if valuation.l10n_ro_valued_type == "internal_transfer" and not valuation.account_move_id:
-                continue
-            if valuation.l10n_ro_valued_type == "dropshipped" and valuation.value < 0:
-                continue
-            value += valuation.value
-            quantity += valuation.quantity
-        if move.stock_valuation_layer_ids:
-            res["price"] = value / (quantity or 1)
+        value = move.value
+
+        quantity = move.quantity
+        if move.quantity:
+            res['price'] = value / move.quantity
+
+        # for valuation in move.stock_valuation_layer_ids:
+        #     if valuation.l10n_ro_valued_type == "internal_transfer" and not valuation.account_move_id:
+        #         continue
+        #     if valuation.l10n_ro_valued_type == "dropshipped" and valuation.value < 0:
+        #         continue
+        #     value += valuation.value
+        #     quantity += valuation.quantity
+        # if move.stock_valuation_layer_ids:
+        #     res["price"] = value / (quantity or 1)
 
         currency = move.company_id.currency_id
 
@@ -133,10 +137,10 @@ class ReportPickingReception(models.AbstractModel):
             #         res['price'] = move_line.remaining_value /  move_line.remaining_qty
 
             # verificare price_include
-            incl_tax = line.taxes_id.filtered(lambda tax: tax.price_include)
+            incl_tax = line.tax_ids.filtered(lambda tax: tax.price_include)
             if incl_tax:
                 res["price"] = line.price_unit
-            taxes = line.taxes_id.compute_all(
+            taxes = line.tax_ids.compute_all(
                 res["price"],
                 quantity=quantity,
                 product=move.product_id,
@@ -170,7 +174,7 @@ class ReportPickingReception(models.AbstractModel):
             res["tax_sale"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
             res["amount_tax_sale"] = taxes_sale["total_included"]
             #  conversie pret din pretul din unitatea de masura de baza in pret in unitatea de masura din document
-            res["price"] = res["price"] * line.product_uom._compute_quantity(1, line.product_id.uom_id)
+            res["price"] = res["price"] * line.product_uom_id._compute_quantity(1, line.product_id.uom_id)
             if res["amount_tax"] != 0.0:
                 res["margin"] = 100 * (taxes_sale["total_excluded"] - res["amount"]) / res["amount"]
             else:
