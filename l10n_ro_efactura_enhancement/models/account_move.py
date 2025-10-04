@@ -1,7 +1,7 @@
 import logging
 from datetime import timedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -15,14 +15,14 @@ class AccountMove(models.Model):
     def check_partner(self, partner):
         """Check if the partner has a country set, raise UserError if not."""
         if not partner.country_id:
-            raise UserError(_("You can not post invoice without country for partner: %s") % partner.name)
+            raise UserError(self.env._("You can not post invoice without country for partner: %s", partner.name))
         if partner.country_id.code == "RO":
             if not partner.state_id:
-                raise UserError(_("You can not post invoice without state for partner: %s") % partner.name)
+                raise UserError(self.env._("You can not post invoice without state for partner: %s", partner.name))
             if not partner.city:
-                raise UserError(_("You can not post invoice without city for partner: %s") % partner.name)
+                raise UserError(self.env._("You can not post invoice without city for partner: %s", partner.name))
             if not partner.street:
-                raise UserError(_("You can not post invoice without street for partner: %s") % partner.name)
+                raise UserError(self.env._("You can not post invoice without street for partner: %s", partner.name))
 
     def action_post(self):
         for move in self:
