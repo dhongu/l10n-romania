@@ -36,7 +36,7 @@ class CashRegister(models.Model):
         string="Journal",
         required=True,
         domain=[("type", "=", "cash")],
-        default=_get_default_journal_id,
+        default=lambda self: self._get_default_journal_id,
     )
     date = fields.Date(required=True, default=fields.Date.context_today)
 
