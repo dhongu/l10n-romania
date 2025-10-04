@@ -1,49 +1,63 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-# Copyright (c) 2014 Deltatech All Rights Reserved
-#                    Dorin Hongu <dhongu(@)gmail(.)com       
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
 
 
-import time
-from openerp.report import report_sxw
-from openerp.osv import osv
-from openerp.tools import amount_to_text_en
-from amount_to_text_ro import *
+from odoo import api, models
+from odoo.tools.safe_eval import safe_eval
 
-class report_invoice_print(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(report_invoice_print, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-            'convert':self._convert,
-        })
-        
-    def _convert(self, amount):
-        amt_ro =  amount_to_text_ro(amount)
-        return amt_ro
- 
- 
-class report_voucher(osv.AbstractModel):
-    _name = 'report.account.report_invoice'
-    _inherit = 'report.abstract_report'
-    _template = 'account.report_invoice'
-    _wrapped_report_class = report_invoice_print
- 
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+class ReportInvoiceWithoutPayment(models.AbstractModel):
+    _inherit = "report.account.report_invoice"
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        result = super()._get_report_values(docids, data)
+        result.update(
+            {
+                "with_discount": self._with_discount,
+                "amount_to_text": self._amount_to_text,
+                "get_pickings": self._get_pickings,
+                "get_discount": self._get_discount(),
+            }
+        )
+        return result
+
+    def _amount_to_text(self, amount, currency):
+        return currency.amount_to_text(amount)
+
+    def _with_discount(self, invoice):
+        res = False
+        for line in invoice.invoice_line_ids:
+            if line.discount != 0.0:
+                res = True
+        return res
+
+    def _get_pickings(self, invoice):
+        if not self.env["ir.module.module"].sudo().search([("name", "=", "stock"), ("state", "=", "installed")]):
+            return False
+
+        pickings = self.env["stock.picking"]
+        for line in invoice.invoice_line_ids:
+            for sale_line in line.sale_line_ids:
+                for move in sale_line.move_ids:
+                    if move.picking_id.state == "done":
+                        pickings |= move.picking_id
+            if line.purchase_line_id:
+                for move in line.purchase_line_id.move_ids:
+                    if move.picking_id.state == "done":
+                        pickings |= move.picking_id
+        return pickings
+
+    def _get_discount(self):
+        params = self.env["ir.config_parameter"].sudo()
+        show_discount = params.get_param("l10n_ro_config.show_discount", default="True")
+        show_discount = safe_eval(show_discount)
+
+        return show_discount
+
+
+class ReportInvoicePrintInCompanyLanguage(models.AbstractModel):
+    _name = "report.l10n_ro_invoice_report.report_invoice_company_language"
+    _description = "Report Invoice in Company Language"
+    _inherit = "report.account.report_invoice"
+    _template = "l10n_ro_invoice_report.report_invoice_company_language"
