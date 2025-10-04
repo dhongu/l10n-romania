@@ -1,0 +1,137 @@
+<odoo>
+    <!-- List View pentru Registru de Casa -->
+    <record id="view_cash_register_tree" model="ir.ui.view">
+        <field name="name">cash.register.tree</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="arch" type="xml">
+            <list>
+                <header>
+                    <button name="action_refresh" string="Refresh" type="object" />
+                </header>
+                <field name="name" />
+                <field name="date" />
+                <field name="journal_id" />
+                <field name="balance_start" />
+                <field name="balance_end" />
+                <field name="currency_id" column_invisible="1" />
+                <field name="activity_ids" widget="list_activity" optional="hide" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View pentru Registru de Casa -->
+    <record id="view_cash_register_form" model="ir.ui.view">
+        <field name="name">cash.register.form</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="arch" type="xml">
+            <form string="Cash Register">
+                <header>
+                    <button name="action_refresh" string="Refresh" type="object" />
+                    <button name="action_receipt" string="Add Receipt" type="object" />
+                    <button name="action_payment" string="Add Payment" type="object" />
+                    <button name="action_operation" string="Operation" type="object" />
+                </header>
+                <sheet>
+                    <div class="oe_title oe_inline">
+                        <label for="name" />
+                        <h1><field name="name" placeholder="e.g. CAS/2021/0001" /></h1>
+                    </div>
+                    <group>
+                       <group>
+                            <field name="date" />
+                            <field name="journal_id" />
+                        </group>
+                        <group>
+                            <field name="balance_start" />
+                            <field name="balance_end" />
+                        </group>
+                        <group>
+                            <field name="currency_id" />
+                            <field name="company_id" groups="base.group_multi_company" optional="show" />
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Cash Register Lines">
+                            <field name="move_line_ids">
+                                <list>
+                                    <field name="move_name" string="Journal Entry" widget="open_move_widget" />
+                                    <field name="partner_id" />
+                                    <field name="balance" sum="Total Amount" string="Total" decoration-bf="1" />
+                                    <field name="currency_id" column_invisible="1" />
+                                    <button
+                                        name="print_cash_operation"
+                                        string="Print"
+                                        type="object"
+                                        icon="fa-print"
+                                        invisible="1"
+                                    />
+                                    <field name="ref" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter reload_on_follower="True" />
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cash_register_search" model="ir.ui.view">
+        <field name="name">cash.register.search</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="journal_id" string="Journal" />
+                <field
+                    name="move_line_ids"
+                    string="Partner"
+                    filter_domain="[('move_line_ids.partner_id', 'ilike', self)]"
+                />
+                <separator />
+                <field name="date" string="Period" />
+
+                <filter string="Date" name="date" date="date" />
+                <group expand="1" string="Group By">
+                    <filter string="Journal" name="group_by_journal" context="{'group_by': 'journal_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actiune pentru vizualizarea registrelor de casa -->
+    <record id="action_cash_register" model="ir.actions.act_window">
+        <field name="name">Cash Register</field>
+        <field name="res_model">l10n.ro.cash.register</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_cash_register_tree" />
+    </record>
+
+
+    <menuitem
+        id="menu_cash_register"
+        name="Cash register"
+        parent="account.menu_finance_entries"
+        groups="account.group_account_manager"
+        action="action_cash_register"
+        sequence="10"
+    />
+
+
+    <record id="action_generate_missing_cash_register" model="ir.actions.server">
+        <field name="name">Generate Missing Cash Register</field>
+        <field name="model_id" ref="account.model_account_journal" />
+        <field name="binding_model_id" ref="account.model_account_journal" />
+        <field name="state">code</field>
+        <field name="code">record.generate_missing_cash_register()</field>
+    </record>
+
+    <record id="action_remove_outstanding_accounts" model="ir.actions.server">
+        <field name="name">Remove Outstanding Accounts</field>
+        <field name="model_id" ref="account.model_account_journal" />
+        <field name="binding_model_id" ref="account.model_account_journal" />
+        <field name="state">code</field>
+        <field name="code">record.remove_outstanding_accounts()</field>
+    </record>
+
+</odoo>

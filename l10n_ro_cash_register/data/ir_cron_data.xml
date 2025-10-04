@@ -1,0 +1,16 @@
+<odoo noupdate="1">
+    <record id="ir_cron_generate_missing_cash_register" model="ir.cron">
+        <field name="name">Cash Register: Generate missing cash register</field>
+        <field name="model_id" ref="model_account_journal" />
+        <field name="state">code</field>
+        <field name="code">
+journals = env['account.journal'].search([('type', '=', 'cash')])
+journals.generate_missing_cash_register()
+        </field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+
+        <field name="user_id" ref="base.user_root" />
+        <field name="active" eval="False" />
+    </record>
+</odoo>
