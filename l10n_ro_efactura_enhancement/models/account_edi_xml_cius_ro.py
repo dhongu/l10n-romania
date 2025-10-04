@@ -49,7 +49,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             postal_address["street_name"] = "Principala"
 
         if partner.state_id and partner.state_id.code == "B":
-            if 'city_id' in partner._fields and partner.city_id:
+            if "city_id" in partner._fields and partner.city_id:
                 postal_address["city_name"] = partner.city_id.name.upper()
 
         if postal_address.get("country_subentity", False) == "RO-B":
