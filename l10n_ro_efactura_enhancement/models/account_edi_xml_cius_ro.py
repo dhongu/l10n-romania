@@ -15,8 +15,9 @@ _logger = logging.getLogger(__name__)
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
 
+    #nu mai exista in 19
     def _get_invoice_line_price_vals(self, line):
-        vals = super()._get_invoice_line_price_vals(line)
+        vals = super()._get_invoice_line_price_vals(line)  #nu mai exista in 19
         if float_is_zero(vals["price_amount"], precision_rounding=0.01):
             vals["price_amount"] = 0.0
         return vals
@@ -40,7 +41,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 partner.id,
             )
 
-        vals = super()._get_partner_party_vals(partner, role)
+        vals = super()._get_partner_party_vals(partner, role)  #nu mai exista in 19
 
         # partner = partner.commercial_partner_id
 
@@ -69,7 +70,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
     def _get_partner_party_tax_scheme_vals_list(self, partner, role):
         # EXTENDS account.edi.xml.ubl_21
-        vals_list = super()._get_partner_party_tax_scheme_vals_list(partner, role)
+        vals_list = super()._get_partner_party_tax_scheme_vals_list(partner, role) #nu mai exista in 19
         partner = partner.commercial_partner_id
         for vals in vals_list:
             if not partner.is_company:
