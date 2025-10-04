@@ -106,7 +106,7 @@ class ReportPickingReception(models.AbstractModel):
 
         quantity = move.quantity
         if move.quantity:
-            res['price'] = value / move.quantity
+            res["price"] = value / move.quantity
 
         # for valuation in move.stock_valuation_layer_ids:
         #     if valuation.l10n_ro_valued_type == "internal_transfer" and not valuation.account_move_id:
