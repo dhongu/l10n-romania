@@ -1,7 +1,7 @@
 # ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class StockPicking(models.Model):
@@ -73,9 +73,9 @@ class StockPicking(models.Model):
         report = self.env["ir.actions.report"]._render_qweb_pdf("l10n_ro_stock_picking_report.report_delivery", self.id)
         filename = f"{self.name}_signed_delivery_slip"
         if self.partner_id:
-            message = _("Order signed by %s", self.partner_id.name)
+            message = self.env._("Order signed by %s", self.partner_id.name)
         else:
-            message = _("Order signed")
+            message = self.env._("Order signed")
         self.message_post(
             attachments=[(f"{filename}.pdf", report[0])],
             body=message,
