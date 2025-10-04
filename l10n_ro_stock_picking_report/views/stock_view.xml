@@ -17,7 +17,7 @@
                     groups="base.group_user"
                 />
                 </button>
-                <field name="group_id" position="after">
+                <field name="user_id" position="after">
                     <field
                     name="delegate_id"
                     domain="[('type','=','contact'),('is_company','=',False)]"
