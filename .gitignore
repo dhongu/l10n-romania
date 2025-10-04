@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.py~
 /.venv
 /.pytest_cache
 /.ruff_cache
@@ -15,7 +16,9 @@ bin/
 build/
 develop-eggs/
 dist/
+downloads/
 eggs/
+
 lib64/
 parts/
 sdist/
@@ -79,6 +82,9 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+# PyBuilder
+target/
 
 # Backup files
 *~

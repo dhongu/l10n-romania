@@ -5,10 +5,10 @@ score=n
 
 [ODOOLINT]
 readme-template-url="https://github.com/OCA/maintainer-tools/blob/master/template/module/README.rst"
-manifest-required-authors=Odoo Community Association (OCA)
-manifest-required-keys=license
+manifest-required-authors=Terrabit
+manifest-required-keys=license,summary,development_status
 manifest-deprecated-keys=description,active
-license-allowed=AGPL-3,GPL-2,GPL-2 or any later version,GPL-3,GPL-3 or any later version,LGPL-3
+license-allowed=AGPL-3,GPL-2,GPL-2 or any later version,GPL-3,GPL-3 or any later version,LGPL-3,OPL-1
 valid-odoo-versions=19.0
 
 [MESSAGES CONTROL]
@@ -43,7 +43,7 @@ enable=anomalous-backslash-in-string,
     translation-required,
     unreachable,
     use-vim-comment,
-    attribute-string-redundant,
+
     consider-merging-classes-inherited,
     context-overridden,
     except-pass,

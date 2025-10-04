@@ -20,6 +20,7 @@ exclude: |
   /tests/samples/.*|
   # You don't usually want a bot to modify your legal texts
   (LICENSE.*|COPYING.*)
+    __unported__
 default_language_version:
   python: python3
   node: "22.9.0"
@@ -48,17 +49,26 @@ repos:
       # update the NOT INSTALLABLE ADDONS section above
       - id: oca-update-pre-commit-excluded-addons
       - id: oca-fix-manifest-website
-        args: ["https://github.com/dhongu/l10n-romania"]
+        args: ["https://www.terrabit.ro"]
       - id: oca-gen-addon-readme
+        stages: [manual]
         args:
           - --addons-dir=.
-          - --branch=19.0
           - --org-name=dhongu
           - --repo-name=l10n-romania
+          - --branch=19.0
           - --if-source-changed
           - --keep-source-digest
           - --convert-fragments-to-markdown
+          - --template-filename=gen_addon_readme.rst.jinja
+
+      # This job could easily produce conflicts when it runs on every commit,
+      # so it's added as a manual job. If you automate it, beware.
+      # See https://pre-commit.com/#confining-hooks-to-run-at-certain-stages
+      - id: oca-gen-addons-table
+        stages: [manual]
       - id: oca-gen-external-dependencies
+
   - repo: https://github.com/OCA/odoo-pre-commit-hooks
     rev: v0.1.6
     hooks:

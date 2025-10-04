@@ -15,13 +15,13 @@ github_enforce_dev_status_compatibility: true
 include_wkhtmltopdf: false
 odoo_test_flavor: Both
 odoo_version: 19.0
-org_name: Odoo Community Association (OCA)
-org_slug: OCA
+org_name: Terrabit
+org_slug: dhongu
 rebel_module_groups: []
-repo_description: l10n-romania
+repo_description: 'Deltatech modules.'
 repo_name: l10n-romania
 repo_slug: l10n-romania
-repo_website: https://github.com/OCA/l10n-romania
+repo_website: https://github.com/dhongu/l10n-romania
 use_pyproject_toml: true
 use_ruff: true
 
