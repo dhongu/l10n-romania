@@ -2,8 +2,8 @@
 {
     "name": "Romania - Cash Register",
     "version": "18.0.1.1.6",
-    "author": "Terrabit," "Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "author": "Terrabit,Odoo Community Association (OCA)",
+    "website": "https://www.terrabit.ro",
     "category": "Localization",
     "depends": ["account", "l10n_ro_account_sequence"],
     "countries": ["ro"],
