@@ -104,12 +104,14 @@ class account_invoice_line(models.Model):
     _inherit = "account.move.line"
 
     def write(self, vals):
-        if vals.get('name', False):
-            lines = vals['name'].split('\n')
+        if vals.get("name", False):
+            lines = vals["name"].split("\n")
             if len(lines) > 1:
                 # pe prima line e numele produsului
-                vals['name'] = '\n'.join(lines[1:])
+                vals["name"] = "\n".join(lines[1:])
         return super().write(vals)
+
+
 #
 #     sequence = fields.Integer(default=1)
 #
