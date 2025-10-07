@@ -12,7 +12,9 @@ class ResCompany(models.Model):
     phone_on_invoice_address = fields.Boolean(string="Show phone", help="Show phone on invoice address")
     marker_on_invoice_address = fields.Boolean(string="Show marker", help="Show marker on invoice address")
     index_line_on_invoice = fields.Boolean(string="Show index line", help="Show index line on invoice")
-    show_total_amount_with_taxes = fields.Boolean(string="Show total amount with taxes", help="Show total amount with taxes")
+    show_total_amount_with_taxes = fields.Boolean(
+        string="Show total amount with taxes", help="Show total amount with taxes"
+    )
     hide_invoice_payment_communication = fields.Boolean(string="Hide invoice payment communication")
     hide_pickings_in_invoice = fields.Boolean(string="Hide picking in invoice")
     remove_product_name_from_invoice_line = fields.Boolean(string="Remove product name from invoice line")
@@ -53,23 +55,16 @@ class ResConfigSettings(models.TransientModel):
         help="Show total amount with taxes",
     )
 
-    hide_invoice_payment_communication  = fields.Boolean(
-        related="company_id.hide_invoice_payment_communication",
-        string="Hide invoice comments",
-        readonly=False
+    hide_invoice_payment_communication = fields.Boolean(
+        related="company_id.hide_invoice_payment_communication", string="Hide invoice comments", readonly=False
     )
 
     hide_pickings_in_invoice = fields.Boolean(
-        related="company_id.hide_pickings_in_invoice",
-        string="Show picking in invoice",
-        readonly=False
+        related="company_id.hide_pickings_in_invoice", string="Show picking in invoice", readonly=False
     )
 
     remove_product_name_from_invoice_line = fields.Boolean(
         related="company_id.remove_product_name_from_invoice_line",
         string="Remove product name from invoice line if line has description",
-        readonly=False
+        readonly=False,
     )
-
-
-
