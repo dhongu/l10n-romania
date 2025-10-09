@@ -297,7 +297,11 @@
                 <t t-set="signed_quantity" t-value="-1*line.quantity" />
             </t>
             <td name="td_quantity" class="o_td_quantity text-end">
-                <span t-esc="signed_quantity" t-options='{"widget": "float", "precision": 2}' class="text-nowrap">3.00
+                <span
+                    t-esc="signed_quantity"
+                    t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'
+                    class="text-nowrap"
+                >3.00
                 </span>
                 <span t-field="line.product_uom_id" groups="uom.group_uom">units</span>
             </td>
