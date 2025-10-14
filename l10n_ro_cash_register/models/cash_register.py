@@ -72,6 +72,9 @@ class CashRegister(models.Model):
                         # - doesn't have a name, but is not the first in the period
                         # so we don't recompute the name
                         continue
+            # _set_next_sequence throws an error if NewID
+            if not isinstance(item.id, int):
+                continue
             if item.date and (not move_has_name or not item._sequence_matches_date()):
                 item._set_next_sequence()
 
