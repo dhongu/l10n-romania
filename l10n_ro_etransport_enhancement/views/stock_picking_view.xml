@@ -14,9 +14,9 @@
                     <field
                         name="l10n_ro_shipping_weight_lines"
                         invisible="not l10n_ro_shipping_weights"
-                        mode="tree,kanban"
+                        mode="list,kanban"
                     >
-                        <tree editable="1">
+                        <list editable="1">
                             <field name="picking_id" column_invisible="1" />
                             <field
                                 name="move_id"
@@ -26,7 +26,7 @@
                             <field name="net_weight" />
                             <field name="gross_weight" />
                             <field name="weight_uom_id" />
-                        </tree>
+                        </list>
                     </field>
                     <button
                         name="l10n_ro_compute_weight_lines"
