@@ -50,6 +50,6 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_res_zip_root" name="Zip Codes"   parent="contacts.menu_localisation" action="action_res_zip"/>
+    <menuitem id="menu_res_zip_root" name="Zip Codes" parent="contacts.menu_localisation" action="action_res_zip" />
 
 </odoo>

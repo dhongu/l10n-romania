@@ -180,16 +180,13 @@ class Picking(models.Model):
 
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data: dict):
-
         errors = super()._l10n_ro_edi_stock_validate_data(data)
 
-        no_weight = self.env['product.product']
+        no_weight = self.env["product.product"]
         for move in data["stock_move_ids"]:
             if not move.product_id.weight:
                 no_weight |= move.product_id
         if no_weight:
             product_name = no_weight.mapped("display_name")
-            errors.append(_(
-                f"The following products do not have weight defined:\n{product_name}\n."
-            ))
+            errors.append(_(f"The following products do not have weight defined:\n{product_name}\n."))
         return errors

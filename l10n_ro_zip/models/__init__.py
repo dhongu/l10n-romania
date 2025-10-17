@@ -4,4 +4,3 @@
 
 from . import res_zip
 from . import res_partenr
-

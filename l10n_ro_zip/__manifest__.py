@@ -12,13 +12,12 @@
     "category": "Localization",
     "depends": ["base_address_extended", "l10n_ro_city"],
     "data": [
-        'views/res_partner_view.xml',
-        'views/res_zip_view.xml',
+        "views/res_partner_view.xml",
+        "views/res_zip_view.xml",
         "security/ir.model.access.csv",
     ],
     "development_status": "Beta",
     "installable": True,
     "maintainers": ["dhongu"],
     "post_init_hook": "post_init_hook",
-
 }
