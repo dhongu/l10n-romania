@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<odoo>
+    <!-- view pt res.zip -->
+    <record id="view_res_zip_form" model="ir.ui.view">
+        <field name="name">res.zip.form</field>
+        <field name="model">res.zip</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                    </group>
+                    <group>
+                        <field name="street_type" />
+                        <field name="street_name" />
+                    </group>
+                    <group>
+                        <field name="city_id" />
+                        <field name="state_id" />
+                        <field name="country_id" />
+                    </group>
+                    <group>
+                        <field name="sector" />
+                        <field name="office" />
+                        <field name="address" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_res_zip_tree" model="ir.ui.view">
+        <field name="name">res.zip.tree</field>
+        <field name="model">res.zip</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="street_type" />
+                <field name="street_name" />
+                <field name="name" />
+                <field name="city_id" />
+                <field name="state_id" />
+                <field name="country_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_res_zip" model="ir.actions.act_window">
+        <field name="name">Postal Codes</field>
+        <field name="res_model">res.zip</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_res_zip_root" name="Zip Codes" parent="contacts.menu_localisation" action="action_res_zip" />
+
+</odoo>
