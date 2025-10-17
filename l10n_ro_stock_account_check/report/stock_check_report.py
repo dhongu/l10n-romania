@@ -215,7 +215,7 @@ class StockAccountingCheck(models.TransientModel):
             FROM last_purchase_price_per_product lpp
             WHERE sacl.product_id = lpp.product_id;
         """
-        self.env.cr.execute(query)
+        self.env.cr.execute(query)  # nosec # pylint: disable=E8103
 
     def do_check_purchases(self):
         products = self.line_ids.mapped("product_id")

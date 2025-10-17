@@ -27,11 +27,11 @@ class ResZip(models.Model):
     address = fields.Char(string="Address")
 
     def _compute_display_name(self):
-        for zip in self:
-            if not zip.street_name:
-                zip.display_name = f"{zip.city} ({zip.name})"
+        for zip_code in self:
+            if not zip_code.street_name:
+                zip_code.display_name = f"{zip_code.city} ({zip_code.name})"
             else:
-                zip.display_name = f"{zip.street_type} {zip.street_name} ({zip.name})"
+                zip_code.display_name = f"{zip_code.street_type} {zip_code.street_name} ({zip_code.name})"
 
     @api.model
     def _name_search(self, name, domain=None, operator="ilike", limit=None, order=None):
