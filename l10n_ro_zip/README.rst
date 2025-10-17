@@ -1,6 +1,6 @@
-====================================
-Romania - Terrabit - Picking Reports
-====================================
+========================
+Romania - Coduri Postale
+========================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -17,15 +17,12 @@ Romania - Terrabit - Picking Reports
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/17.0/l10n_ro_stock_picking_report
+    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_zip
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
 
-   - Reports for Reception, Delivery and Internal Transfer
-   - Referinta din comanda de achizitie este copiata in NIR si factura
-   - Option in settings (Romania) for printing taxes on reception
-   - Option in settings (Romania) for printing banks on reports
+
 
 **Table of contents**
 
@@ -46,15 +43,10 @@ Credits
 Authors
 -------
 
-* Dorin Hongu
+* Terrabit
 
 Contributors
 ------------
-
-- `NextERP Romania <https://www.nexterp.ro>`__:
-
-  - Fekete Mihai <feketemihai@nexterp.ro>
-  - Alexandru Teodor <teodoralexandru@nexterp.ro>
 
 - `Terrabit <https://www.terrabit.ro>`__:
 
@@ -66,6 +58,14 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/17.0/l10n_ro_stock_picking_report>`_ project on GitHub.
+.. |maintainer-dhongu| image:: https://github.com/dhongu.png?size=40px
+    :target: https://github.com/dhongu
+    :alt: dhongu
+
+Current maintainer:
+
+|maintainer-dhongu| 
+
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_zip>`_ project on GitHub.
 
 You are welcome to contribute.
