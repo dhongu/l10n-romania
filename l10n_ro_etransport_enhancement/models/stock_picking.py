@@ -115,7 +115,9 @@ class Picking(models.Model):
                         if unit_price:
                             item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
                         if self.l10n_ro_shipping_weights:
-                            weight_line = self.l10n_ro_shipping_weight_lines.filtered(lambda x: x.move_id == move_id)
+                            weight_line = self.l10n_ro_shipping_weight_lines.filtered(
+                                lambda x, move_id=move_id: x.move_id == move_id
+                            )
                             if weight_line:
                                 item["greutateNeta"] = round(weight_line.net_weight, 2)
                                 item["greutateBruta"] = round(weight_line.gross_weight, 2)
