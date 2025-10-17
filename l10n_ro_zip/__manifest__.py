@@ -10,9 +10,11 @@
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
-    "depends": ["base_address_extended", "l10n_ro_config"],
+    "depends": ["base_address_extended", "l10n_ro_city"],
     "data": [
-
+        'views/res_partner_view.xml',
+        'views/res_zip_view.xml',
+        "security/ir.model.access.csv",
     ],
     "development_status": "Beta",
     "installable": True,
