@@ -1,5 +1,5 @@
 
- 
+
 
 INSERT INTO res_zip (id, state, city, street_type, street_name, name, sector, office, address) VALUES
 (1, 'Bucuresti', 'Bucuresti', 'Uz intern', 'Bucuresti 73 - curier rapid', '062640', '', '', ''),
@@ -646,7 +646,7 @@ INSERT INTO res_zip (id, state, city, street_type, street_name, name, sector, of
 (642, 'Arad', 'Arad', 'Strada', 'Goga Octavian nr. 23-T; 26-T', '310028', '', '', ''),
 (643, 'Arad', 'Arad', 'Strada', 'Gogol Nicolai', '310240', '', '', ''),
 (644, 'Arad', 'Arad', 'Strada', 'Gojdu Emanuel', '310090', '', '', '');
-INSERT INTO res_zip (id, state, city, street_type, street_name, name, sector, office, address) VALUES 
+INSERT INTO res_zip (id, state, city, street_type, street_name, name, sector, office, address) VALUES
 (645, 'Arad', 'Arad', 'Strada', 'Goldis Vasile', '310090', '', '', ''),
 (646, 'Arad', 'Arad', 'Strada', 'Golescu Nicolae', '310497', '', '', ''),
 (647, 'Arad', 'Arad', 'Strada', 'Gorunului nr. 1-41A; 2-40', '310212', '', '', ''),

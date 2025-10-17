@@ -16,23 +16,21 @@ def post_init_hook(env):
     """Import SQL file res_zip.sql to populate res_zip table"""
     _logger.info("Importing zip codes from res_zip.sql")
 
+    sql_file_path = file_path("l10n_ro_zip/data/res_zip.sql")
 
-    sql_file_path = file_path('l10n_ro_zip/data/res_zip.sql')
-
-    with open(sql_file_path, "r") as sql_file:
+    with open(sql_file_path) as sql_file:
         sql_script = sql_file.read()
         # Executăm script-ul SQL pentru a popula tabela
         env.cr.execute(sql_script)
     _logger.info("Zip codes imported successfully")
 
-
-    country_ro = env.ref('base.ro', raise_if_not_found=False)
+    country_ro = env.ref("base.ro", raise_if_not_found=False)
 
     if country_ro:
         env.cr.execute("""UPDATE res_zip SET country_id = %s WHERE country_id IS NULL""", (country_ro.id,))
 
     # Obținem toate înregistrările din res.country.state care au l10n_ro_prefix_zip setat
-    states = env['res.country.state'].search([('l10n_ro_prefix_zip', '!=', False)])
+    states = env["res.country.state"].search([("l10n_ro_prefix_zip", "!=", False)])
 
     # Pentru fiecare judet, actualizăm înregistrările din res_zip care au state-ul potrivit
     for state in states:
@@ -42,8 +40,6 @@ def post_init_hook(env):
               WHERE SUBSTRING(name, 1, 2) = %s
               """
         env.cr.execute(sql, (state.id, state.l10n_ro_prefix_zip))
-
-
 
     # Actualizăm și city_id dacă există potriviri
     sql = """
@@ -80,7 +76,13 @@ def post_init_hook(env):
               SET city_id = %(city_id)s
               WHERE sector = %(sector)s
               """
-        env.cr.execute(sql, {'sector': sector, 'city_id': city.id, 'city': city.name,})
-
+        env.cr.execute(
+            sql,
+            {
+                "sector": sector,
+                "city_id": city.id,
+                "city": city.name,
+            },
+        )
 
     _logger.info("State_id, country_id and city_id update completed")
