@@ -31,6 +31,8 @@ class BalanceConfirm(models.TransientModel):
             "date_to": self.l10n_ro_balance_date,  # acesta este critic!
         }
         # action = action.with_context(date_to=self.l10n_ro_balance_date)
+
+        # pylint: disable=W8121
         return action.with_context(cleaned_context).report_action(
             partners,
             data={
