@@ -34,7 +34,7 @@ def post_init_hook(env):
     # Obținem toate înregistrările din res.country.state care au l10n_ro_prefix_zip setat
     states = env['res.country.state'].search([('l10n_ro_prefix_zip', '!=', False)])
 
-    # Pentru fiecare state, actualizăm înregistrările din res_zip care au state-ul potrivit
+    # Pentru fiecare judet, actualizăm înregistrările din res_zip care au state-ul potrivit
     for state in states:
         sql = """
               UPDATE res_zip
@@ -64,6 +64,23 @@ def post_init_hook(env):
             AND city_id is null
           """
     env.cr.execute(sql)
+
+    sectors = {
+        "1": "l10n_ro_city.RO_179141",
+        "2": "l10n_ro_city.RO_179150",
+        "3": "l10n_ro_city.RO_179169",
+        "4": "l10n_ro_city.RO_179178",
+        "5": "l10n_ro_city.RO_179187",
+        "6": "l10n_ro_city.RO_179196",
+    }
+    for sector, city_ref in sectors.items():
+        city = env.ref(city_ref)
+        sql = """
+              UPDATE res_zip
+              SET city_id = %(city_id)s
+              WHERE sector = %(sector)s
+              """
+        env.cr.execute(sql, {'sector': sector, 'city_id': city.id, 'city': city.name,})
 
 
     _logger.info("State_id, country_id and city_id update completed")
