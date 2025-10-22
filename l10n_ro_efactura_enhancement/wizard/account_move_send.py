@@ -64,3 +64,11 @@ class AccountMoveSendWizard(models.TransientModel):
         alerts = super()._get_alerts(moves, moves_data)
         _logger.info(f"alerts: {alerts}")
         return alerts
+
+
+    def _compute_alerts(self):
+        for wizard in self:
+            moves_data = {move: self._get_default_sending_settings(move) for move in wizard.move_ids}
+            alerts = self._get_alerts(wizard.move_ids, moves_data)
+            _logger.info(f"alerts: {alerts}")
+        return super()._compute_alerts()
