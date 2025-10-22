@@ -1,5 +1,17 @@
 from odoo import api, models
 from odoo.tools.safe_eval import safe_eval
+import logging
+
+_logger = logging.getLogger(__name__)
+
+class AccountMoveSend(models.AbstractModel):
+    _inherit = 'account.move.send'
+
+    def _get_alerts(self, moves, moves_data):
+        alerts = super()._get_alerts(moves, moves_data)
+        _logger.info(f"alerts: {alerts}")
+        return alerts
+
 
 
 class AccountMoveSendWizard(models.TransientModel):
