@@ -59,3 +59,8 @@ class AccountMoveSendWizard(models.TransientModel):
         if not embed_pdf:
             return
         return super()._postprocess_invoice_ubl_xml(invoice, invoice_data)
+
+    def _get_alerts(self, moves, moves_data):
+        alerts = super()._get_alerts(moves, moves_data)
+        _logger.info(f"alerts: {alerts}")
+        return alerts
