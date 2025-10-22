@@ -4,18 +4,27 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+
 class AccountMoveSend(models.AbstractModel):
     _inherit = 'account.move.send'
 
     def _get_alerts(self, moves, moves_data):
         alerts = super()._get_alerts(moves, moves_data)
         _logger.info(f"alerts: {alerts}")
-        return alerts
 
+        account_missing_email = alerts.get('account_missing_email',{})
+        if account_missing_email:
+            action = account_missing_email.get('action',{})
+            if action:
+                context = action.get('context',{})
+                context.pop('lastcall',None)
+
+        return alerts
 
 
 class AccountMoveSendWizard(models.TransientModel):
     _inherit = "account.move.send.wizard"
+
     # todo: de gasit cum se poate face in 18.0
     # l10n_ro_edi_resend_enable = fields.Boolean(compute="_compute_l10n_ro_edi_resend_enable")
 
@@ -64,7 +73,6 @@ class AccountMoveSendWizard(models.TransientModel):
         alerts = super()._get_alerts(moves, moves_data)
         _logger.info(f"alerts: {alerts}")
         return alerts
-
 
     def _compute_alerts(self):
         for wizard in self:
