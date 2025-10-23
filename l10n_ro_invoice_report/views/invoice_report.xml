@@ -604,7 +604,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr />  <!-- empty row for white color-->
+<!--                        <tr />  &lt;!&ndash; empty row for white color&ndash;&gt;-->
                     </table>
                 </div>
                 <div class="col-5">

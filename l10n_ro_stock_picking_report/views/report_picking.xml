@@ -25,7 +25,7 @@
                     <strong>Address:</strong>
                     <address
                         t-field="warehouse.partner_id"
-                        t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'
+                        t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": true, "no_tag_br": true}'
                     />
                 </div>
                 <div>
@@ -71,7 +71,7 @@
                     <strong t-if="o.partner_id">Address:</strong>
                     <address
                         t-field="o.partner_id"
-                        t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'
+                        t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": true, "no_tag_br": true}'
                     />
                 </div>
                 <div>
@@ -96,8 +96,8 @@
     </template>
     <template id="report_totals">
         <div class="col-4  col-sm-4 col-md-4  pull-right">
-            <table class="table table-sm">
-                <tr class="border-black">
+            <table class="table table-borderless">
+                <tr class="border_black">
                     <td>
                         <strong>Total Without Taxes</strong>
                     </td>
@@ -117,7 +117,7 @@
                         />
                     </td>
                 </tr>
-                <tr class="border-black">
+                <tr class="border_black">
                     <td>
                         <strong>Total</strong>
                     </td>
@@ -133,8 +133,8 @@
     </template>
     <template id="report_totals_sale">
         <div class="col-4  col-sm-4 col-md-4 ">
-            <table class="table table-sm" style="page-break-inside: avoid;">
-                <tr class="border-black o_subtotal" style="">
+            <table class="table table-borderless" style="page-break-inside: avoid;">
+                <tr class="border_black o_subtotal" style="">
                     <td>
                         <strong>Total Sale Without Taxes</strong>
                     </td>
@@ -154,7 +154,7 @@
                         />
                     </td>
                 </tr>
-                <tr class="border-black o_total">
+                <tr class="border_black o_total">
                     <td>
                         <strong>Total Sale</strong>
                     </td>
@@ -170,7 +170,7 @@
     </template>
 
     <template id="report_delivery_info">
-        <div id="information" class="row mt32 mb32">
+        <div id="informations" class="row mt32 mb32">
             <div class="col-3 bm-2">
                 <strong>Source</strong>
                 <p>
@@ -216,7 +216,7 @@
 
     <template id="report_delivery_sign">
         <div class="col-8  col-sm-8 col-md-8">
-            <table class="table table-sm">
+            <table class="table table-borderless">
                 <thead>
                     <tr>
                         <th>Elaborate:</th>
@@ -289,7 +289,7 @@
                             t-value="o.move_line_ids.mapped('lot_id')"
                             groups="stock.group_lot_on_delivery_slip"
                         />
-                        <table class="table table-sm">
+                        <table class="table table-borderless">
                             <thead>
                                 <tr>
                                     <th>
@@ -349,7 +349,7 @@
                             <span t-field="o.date" t-options='{"widget": "date"}' />
                         </h4>
 
-                        <div id="information" class="row mt32 mb32">
+                        <div id="informations" class="row mt32 mb32">
                             <div class="col-3 bm-2">
                                 <strong>Source</strong>
                                 <p>
@@ -385,7 +385,7 @@
 
 
                         <t t-set="total_amount" t-value="0" />
-                        <table class="table table-sm">
+                        <table class="table table-borderless">
                             <thead>
                                 <tr>
                                     <th>
@@ -436,8 +436,8 @@
                             </tbody>
                         </table>
                         <div class="col-4  col-sm-4 col-md-4  pull-right">
-                            <table class="table table-sm">
-                                <tr class="border-black">
+                            <table class="table table-borderless">
+                                <tr class="border_black">
                                     <td>
                                         <strong>Total Without Taxes</strong>
                                     </td>
@@ -546,7 +546,7 @@
                                 </p>
                             </div>
                         </div>
-                        <table class="table table-sm">
+                        <table class="table table-borderless">
                             <thead>
                                 <tr>
                                     <th>
@@ -657,7 +657,7 @@
                             <t t-set="totals" t-value="get_totals(o.move_ids)" />
                             <div class="col-4 ml-auto">
                                 <table class="table table-condensed">
-                                    <tr class="border-black">
+                                    <tr class="border_black">
                                         <td>
                                             <strong>Total</strong>
                                         </td>
@@ -671,7 +671,7 @@
                                 </table>
                             </div>
                         </div>
-                        <table class="table table-sm">
+                        <table class="table table-borderless">
                             <thead>
                                 <tr>
                                     <th>Signature delivery:</th>
@@ -715,7 +715,7 @@
 
                         <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
 
-                        <table class="table table-sm ">
+                        <table class="table table-borderless ">
                             <thead>
                                 <tr>
                                     <th>
@@ -824,7 +824,7 @@
         </t>
     </template>
     <template id="report_consume_sign">
-        <table class="table table-sm">
+        <table class="table table-borderless">
             <thead>
                 <tr>
                     <th>Reception Committee:</th>
@@ -848,7 +848,7 @@
         </table>
     </template>
     <template id="report_reception_sign">
-        <table class="table table-sm">
+        <table class="table table-borderless">
             <thead>
                 <tr>
                     <th>Reception Committee:</th>
@@ -877,7 +877,7 @@
         </table>
     </template>
     <template id="report_reception_text">
-        <div id="information" class="row mt32 mb32">
+        <div id="informations" class="row mt32 mb32">
             <div class="col-3 bm-2" t-if="o.origin or o.group_id">
                 <strong>Origin</strong>
                 <p>
@@ -955,7 +955,7 @@
                         <t t-set="doc_type" t-value="'reception'" />
                         <t t-call="l10n_ro_stock_picking_report.report_title" />
                         <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
-                        <table class="table table-sm">
+                        <table class="table table-borderless">
                             <thead>
                                 <tr>
                                     <th>
@@ -1073,7 +1073,7 @@
                             <t t-else="">
                                 <div class="col-4 ml-auto">
                                     <table class="table table-condensed">
-                                        <tr class="border-black">
+                                        <tr class="border_black">
                                             <td>
                                                 <strong>Total</strong>
                                             </td>
@@ -1107,7 +1107,7 @@
                         <t t-set="doc_type" t-value="'reception'" />
                         <t t-call="l10n_ro_stock_picking_report.report_title" />
                         <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
-                        <table class="table table-sm">
+                        <table class="table table-borderless">
                             <thead>
                                 <tr>
                                     <th>
@@ -1193,7 +1193,7 @@
                             <t t-set="totals" t-value="get_totals(o.move_ids)" />
                             <div class="col-4 ml-auto">
                                 <table class="table table-condensed">
-                                    <tr class="border-black">
+                                    <tr class="border_black">
                                         <td>
                                             <strong>Total</strong>
                                         </td>
@@ -1226,7 +1226,7 @@
                         <t t-set="doc_type" t-value="'reception'" />
                         <t t-call="l10n_ro_stock_picking_report.report_title" />
                         <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
-                        <table class="table table-sm">
+                        <table class="table table-borderless">
                             <thead>
                                 <tr>
                                     <th>
