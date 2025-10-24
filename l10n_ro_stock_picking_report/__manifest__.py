@@ -6,7 +6,7 @@
     "name": "Romania - Terrabit - Picking Reports",
     "summary": "Rapoarte: NIR, aviz, bon consum",
     "license": "AGPL-3",
-    "version": "19.0.1.2.4",
+    "version": "19.0.1.2.5",
     "development_status": "Mature",
     "author": "Dorin Hongu,Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
