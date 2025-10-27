@@ -45,7 +45,7 @@ def post_init_hook(env):
     sql = """
           UPDATE res_zip rz
           SET city_id = rc.id FROM res_city rc
-          WHERE rz.city = rc.name->>'en_US'
+          WHERE unaccent(rz.city) = unaccent(rc.name->>'en_US')
             AND rz.state_id = rc.state_id
             AND rz.name = rc.zipcode
           """
@@ -55,7 +55,7 @@ def post_init_hook(env):
     sql = """
           UPDATE res_zip rz
           SET city_id = rc.id FROM res_city rc
-          WHERE rz.city = rc.name->>'en_US'
+          WHERE unaccent(rz.city) = unaccent(rc.name->>'en_US')
             AND rz.state_id = rc.state_id
             AND city_id is null
           """
