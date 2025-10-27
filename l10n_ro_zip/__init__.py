@@ -32,6 +32,10 @@ def post_init_hook(env):
     # Obținem toate înregistrările din res.country.state care au l10n_ro_prefix_zip setat
     states = env["res.country.state"].search([("l10n_ro_prefix_zip", "!=", False)])
 
+
+    sql = 'CREATE EXTENSION IF NOT EXISTS unaccent;'
+    env.cr.execute(sql)
+
     # Pentru fiecare judet, actualizăm înregistrările din res_zip care au state-ul potrivit
     for state in states:
         sql = """
