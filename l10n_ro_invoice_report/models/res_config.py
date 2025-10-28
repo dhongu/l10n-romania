@@ -61,7 +61,7 @@ class ResConfigSettings(models.TransientModel):
     )
 
     hide_pickings_in_invoice = fields.Boolean(
-        related="company_id.hide_pickings_in_invoice", string="Show picking in invoice", readonly=False
+        related="company_id.hide_pickings_in_invoice", string="Hide picking in invoice", readonly=False
     )
 
     remove_product_name_from_invoice_line = fields.Boolean(
