@@ -18,6 +18,7 @@ class ResCompany(models.Model):
     hide_invoice_payment_communication = fields.Boolean(string="Hide invoice payment communication")
     hide_pickings_in_invoice = fields.Boolean(string="Hide picking in invoice")
     remove_product_name_from_invoice_line = fields.Boolean(string="Remove product name from invoice line")
+    show_invoice_delegate = fields.Boolean(string="Show invoice delegate")
 
 
 class ResConfigSettings(models.TransientModel):
@@ -67,4 +68,7 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.remove_product_name_from_invoice_line",
         string="Remove product name from invoice line if line has description",
         readonly=False,
+    )
+    show_invoice_delegate = fields.Boolean(
+        related="company_id.show_invoice_delegate", string="Show invoice delegate", readonly=False
     )

@@ -30,6 +30,9 @@
                 <setting help="Remove product name from invoice lines">
                     <field name="remove_product_name_from_invoice_line" />
                 </setting>
+                <setting help="Show delegate on invoices">
+                    <field name="show_invoice_delegate" />
+                </setting>
             </xpath>
         </field>
     </record>

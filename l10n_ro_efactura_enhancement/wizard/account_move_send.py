@@ -1,23 +1,24 @@
+import logging
+
 from odoo import api, models
 from odoo.tools.safe_eval import safe_eval
-import logging
 
 _logger = logging.getLogger(__name__)
 
 
 class AccountMoveSend(models.AbstractModel):
-    _inherit = 'account.move.send'
+    _inherit = "account.move.send"
 
     def _get_alerts(self, moves, moves_data):
         alerts = super()._get_alerts(moves, moves_data)
         _logger.info(f"alerts: {alerts}")
 
-        account_missing_email = alerts.get('account_missing_email',{})
+        account_missing_email = alerts.get("account_missing_email", {})
         if account_missing_email:
-            action = account_missing_email.get('action',{})
+            action = account_missing_email.get("action", {})
             if action:
-                context = action.get('context',{})
-                context.pop('lastcall',None)
+                context = action.get("context", {})
+                context.pop("lastcall", None)
 
         return alerts
 
@@ -68,6 +69,3 @@ class AccountMoveSendWizard(models.TransientModel):
         if not embed_pdf:
             return
         return super()._postprocess_invoice_ubl_xml(invoice, invoice_data)
-
-
-
