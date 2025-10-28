@@ -33,6 +33,9 @@
                 <setting help="Show delegate on invoices">
                     <field name="show_invoice_delegate" />
                 </setting>
+                <setting help="Show undiscounted price on invoices">
+                    <field name="show_undiscounted_price_on_invoice" />
+                </setting>
             </xpath>
         </field>
     </record>

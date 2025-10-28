@@ -209,6 +209,16 @@
             <span>(without taxes)</span>
         </xpath>
 
+        <xpath expr="//table[@name='invoice_line_table']//th[@name='th_discount']" position="after">
+            <th
+                name="th_undiscounted_price"
+                t-if="display_discount and res_company.show_undiscounted_price_on_invoice"
+                class="text-end"
+            >
+                <span>Price with disc.%</span>
+            </th>
+        </xpath>
+
         <xpath expr="//table[@name='invoice_line_table']//th[@name='th_subtotal']/span" position="after">
             <br />
             <span>(without taxes)</span>
@@ -288,23 +298,78 @@
         </xpath>
         <!-- Preț unitar fara taxe -->
         <xpath expr="//table[@name='invoice_line_table']//td[@name='td_price_unit']" position="replace">
-            <t t-set="price_unit_without_taxes" t-value="line.price_subtotal / (line.quantity or 1)" />
-            <t
-                t-set="price_unit_without_taxes"
-                t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
-            />
-            <td
-                name="td_price_unit"
-                t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"
-            >
-                <span
-                    class="text-nowrap"
-                    id="price_unit_without_taxes"
-                    t-esc="price_unit_without_taxes"
-                    t-options='{"widget": "float", "precision": 2}'
-                >9.00
-                </span>
-            </td>
+            <t t-if="display_discount and res_company.show_undiscounted_price_on_invoice">
+                <t
+                    t-set="price_unit_undiscounted"
+                    t-value="line.tax_ids.compute_all(line.price_unit, currency=line.currency_id, quantity=1, handle_price_include=any(t.price_include for t in line.tax_ids))['total_excluded']"
+                />
+                <td>
+                    <span
+                        t-esc="price_unit_undiscounted"
+                        t-options='{"widget": "float", "precision": 2}'
+                        class="text-nowrap"
+                    />
+                </td>
+            </t>
+            <t t-else="">
+
+                <t t-set="price_unit_without_taxes" t-value="line.price_subtotal / (line.quantity or 1)" />
+                <t
+                    t-set="price_unit_without_taxes"
+                    t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
+                />
+                <td
+                    name="td_price_unit"
+                    t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"
+                >
+                    <span
+                        class="text-nowrap"
+                        id="price_unit_without_taxes"
+                        t-esc="price_unit_without_taxes"
+                        t-options='{"widget": "float", "precision": 2}'
+                    >9.00
+                    </span>
+                </td>
+            </t>
+        </xpath>
+
+        <xpath expr="//table[@name='invoice_line_table']//td[@name='td_discount']" position="after">
+            <t t-if="display_discount and res_company.show_undiscounted_price_on_invoice">
+                <t t-set="price_unit_without_taxes" t-value="line.price_subtotal / (line.quantity or 1)" />
+                <t
+                    t-set="price_unit_without_taxes"
+                    t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"
+                />
+                <td
+                    name="td_price_unit"
+                    t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"
+                >
+                    <span
+                        class="text-nowrap"
+                        id="price_unit_without_taxes"
+                        t-esc="price_unit_without_taxes"
+                        t-options='{"widget": "float", "precision": 2}'
+                    >9.00
+                    </span>
+                </td>
+            </t>
+            <!--            <t t-set="price_unit_without_taxes" t-value="line.price_subtotal / (line.quantity or 1)"/>-->
+            <!--            <t-->
+            <!--                t-set="price_unit_without_taxes"-->
+            <!--                t-value="o.currency_id._convert(price_unit_without_taxes,currency_id, date=o.invoice_date)"-->
+            <!--            />-->
+            <!--            <td-->
+            <!--                name="td_price_unit"-->
+            <!--                t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"-->
+            <!--            >-->
+            <!--                <span-->
+            <!--                    class="text-nowrap"-->
+            <!--                    id="price_unit_without_taxes"-->
+            <!--                    t-esc="price_unit_without_taxes"-->
+            <!--                    t-options='{"widget": "float", "precision": 2}'-->
+            <!--                >9.00-->
+            <!--                </span>-->
+            <!--            </td>-->
         </xpath>
 
 
