@@ -97,6 +97,11 @@ msgstr "<span>Dispoziție de plată:</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Price with disc.%</span>"
+msgstr "<span>Preț cu reduc.%</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<span>Signature for receive</span>"
 msgstr "<span>Semnatura primire</span>"
 
