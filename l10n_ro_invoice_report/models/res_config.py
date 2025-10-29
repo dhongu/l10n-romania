@@ -18,7 +18,7 @@ class ResCompany(models.Model):
     hide_invoice_payment_communication = fields.Boolean(string="Hide invoice payment communication")
     hide_pickings_in_invoice = fields.Boolean(string="Hide picking in invoice")
     remove_product_name_from_invoice_line = fields.Boolean(string="Remove product name from invoice line")
-    show_invoice_delegate = fields.Boolean(string="Show invoice delegate")
+    show_invoice_delegate = fields.Boolean(string="Show invoice delegate", default=True)
     show_undiscounted_price_on_invoice = fields.Boolean(string="Show undiscounted price on invoice")
 
 
