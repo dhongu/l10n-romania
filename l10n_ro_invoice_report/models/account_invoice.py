@@ -103,13 +103,13 @@ class AccountInvoice(models.Model):
 class account_invoice_line(models.Model):
     _inherit = "account.move.line"
 
-    def write(self, vals):
-        if vals.get("name", False):
-            lines = vals["name"].split("\n")
-            if len(lines) > 1:
-                # pe prima line e numele produsului
-                vals["name"] = "\n".join(lines[1:])
-        return super().write(vals)
+    # def write(self, vals):
+    #     if vals.get("name", False):
+    #         lines = vals["name"].split("\n")
+    #         if len(lines) > 1:
+    #             # pe prima line e numele produsului
+    #             vals["name"] = "\n".join(lines[1:])
+    #     return super().write(vals)
 
 
 #
