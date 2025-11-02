@@ -38,7 +38,7 @@ class StockPicking(models.Model):
     #     if type == 'out_invoice':
     #         context = {}
     #         for picking in self :
-    #             context = self._context.copy()
+    #             context = self.env.context.copy()
     #             context['default_delegate_id'] = picking.delegate_id.id
     #             context['default_mean_transp'] = picking.mean_transp
     #     picking = self.with_context(context)
