@@ -37,6 +37,8 @@ class StockPickingCumulative(models.TransientModel):
 
     move_ids = fields.Many2many("stock.move")
 
+    l10n_ro_notice = fields.Boolean()  # camp definit in modulul de localizare
+
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
@@ -47,9 +49,9 @@ class StockPickingCumulative(models.TransientModel):
         from_date = today + relativedelta(day=1, months=0, days=0)
         to_date = today + relativedelta(day=1, months=1, days=-1)
 
-        res["date_from"] = fields.Date.to_string(from_date)
-        res["date_to"] = fields.Date.to_string(to_date)
-        res["date_done"] = fields.Datetime.to_string(to_date)
+        res["date_from"] = from_date  #  fields.Date.to_string(from_date)
+        res["date_to"] = to_date  #  fields.Date.to_string(to_date)
+        res["date_done"] = to_date  # fields.Datetime.to_string(to_date)
         return res
 
     def button_show(self):
@@ -57,11 +59,13 @@ class StockPickingCumulative(models.TransientModel):
         datetime_from = fields.Datetime.context_timestamp(self, datetime_from)
         datetime_from = datetime_from.replace(hour=0)
         datetime_from = datetime_from.astimezone(pytz.utc)
+        datetime_from = datetime_from.strftime("%Y-%m-%d %H:%M:%S")
 
         datetime_to = fields.Datetime.to_datetime(self.date_to)
         datetime_to = fields.Datetime.context_timestamp(self, datetime_to)
         datetime_to = datetime_to.replace(hour=23, minute=59, second=59)
         datetime_to = datetime_to.astimezone(pytz.utc)
+        datetime_to = datetime_to.strftime("%Y-%m-%d %H:%M:%S")
 
         domain = [
             ("date", ">=", datetime_from),

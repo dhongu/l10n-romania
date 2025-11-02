@@ -51,10 +51,8 @@ class StockPicking(models.Model):
         self.write({"printed": True})
         report = False
         if self.picking_type_code == "incoming":
-            if "l10n_ro_merchandise_type" in self.location_dest_id._fields:
-                if self.location_dest_id.l10n_ro_merchandise_type == "store":
-                    report = "l10n_ro_stock_picking_report.action_report_reception_sale_price"
-
+            if self.location_dest_id.is_store:
+                report = "l10n_ro_stock_picking_report.action_report_reception_sale_price"
             else:
                 report = "l10n_ro_stock_picking_report.action_report_reception"
 
