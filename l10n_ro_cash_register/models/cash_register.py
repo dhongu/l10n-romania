@@ -53,7 +53,7 @@ class CashRegister(models.Model):
     move_line_ids = fields.Many2many("account.move.line", string="Journal Item Line", compute="_compute_move_ids")
 
     _unique_date_journal = models.Constraint(
-        'unique(date, journal_id)',
+        "unique(date, journal_id)",
         "Duplicate date",
     )
 
