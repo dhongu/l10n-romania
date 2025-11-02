@@ -10,14 +10,14 @@ Romania - Terrabit - Picking Reports
    !! source digest: sha256:302b4fe5da876a317bb3166fef11bfdba75aebcd1b6d2d0d5e04d0d56cb71fc2
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+    :alt: Mature
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_stock_picking_report
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_report
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -47,6 +47,7 @@ Authors
 -------
 
 * Dorin Hongu
+* Terrabit
 
 Contributors
 ------------
@@ -66,6 +67,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_stock_picking_report>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_report>`_ project on GitHub.
 
 You are welcome to contribute.
