@@ -7,7 +7,7 @@
     "development_status": "Mature",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
-    "depends": ["account"],
+    "depends": ["account", "l10n_ro"],
     "countries": ["ro"],
     "data": [
         "views/account_payment_view.xml",
