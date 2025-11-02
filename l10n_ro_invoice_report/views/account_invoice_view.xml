@@ -32,32 +32,32 @@
                 <filter
                     string="Scadente mâine"
                     name="tomorrow"
-                    domain="[('invoice_date_due', '=', (datetime.datetime.now() + relativedelta(days=1))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                    domain="[('invoice_date_due', '=', '+1d'), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
                 />
                 <filter
                     string="Scadente azi"
                     name="today"
-                    domain="[('invoice_date_due', '=', (datetime.datetime.now())), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                    domain="[('invoice_date_due', '=', 'now'), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
                 />
                 <filter
                     string="Scadente de 1-7 zile"
                     name="7days"
-                    domain="[('invoice_date_due', '&lt;=', datetime.datetime.now()), ('invoice_date_due', '&gt;=', (datetime.datetime.now() - relativedelta(days=7))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                    domain="[('invoice_date_due', '&lt;=', 'now'), ('invoice_date_due', '&gt;=', '-7d'), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
                 />
                 <filter
                     string="Scadente de 8-14 zile"
                     name="7_14days"
-                    domain="[('invoice_date_due', '&lt;=', (datetime.datetime.now() - relativedelta(days=8))), ('invoice_date_due', '&gt;=', (datetime.datetime.now() - relativedelta(days=14))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                    domain="[('invoice_date_due', '&lt;=', '-8d'), ('invoice_date_due', '&gt;=', '-14d'), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
                 />
                 <filter
                     string="Scadente de 15-30 zile"
                     name="14_30days"
-                    domain="[('invoice_date_due', '&lt;=', (datetime.datetime.now() - relativedelta(days=14))), ('invoice_date_due', '&gt;=', (datetime.datetime.now() - relativedelta(days=30))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                    domain="[('invoice_date_due', '&lt;=', '-14d'), ('invoice_date_due', '&gt;=', '-30d'), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
                 />
                 <filter
                     string="Scadente de peste 30 zile"
                     name="30days"
-                    domain="[('invoice_date_due', '&lt;', (datetime.datetime.now() - relativedelta(days=30))), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
+                    domain="[('invoice_date_due', '&lt;', '-30d'), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial'))]"
                 />
             </filter>
         </field>
