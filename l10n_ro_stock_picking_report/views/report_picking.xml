@@ -563,7 +563,7 @@
                                         <strong>Amount</strong>
                                     </th>
                                     <t
-                                        t-if="o.location_dest_id.l10n_ro_merchandise_type=='store' or o.location_id.l10n_ro_merchandise_type=='store'"
+                                        t-if="o.location_dest_id.is_store or o.location_id.is_store"
                                     >
                                         <th class="text-end">
                                             <strong>Sale Price</strong>
@@ -632,7 +632,7 @@
                                         </t>
                                     </td>-->
                                     <t
-                                        t-if="o.location_dest_id.l10n_ro_merchandise_type=='store' or o.location_id.l10n_ro_merchandise_type=='store'"
+                                        t-if="o.location_dest_id.is_store or o.location_id.is_store"
                                     >
                                         <th class="text-end">
                                             <span
