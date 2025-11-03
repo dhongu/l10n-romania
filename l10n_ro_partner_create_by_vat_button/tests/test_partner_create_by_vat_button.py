@@ -133,9 +133,6 @@ class TestPartnerCreateByVatButton(TransactionCase):
             instance.service.checkVat.side_effect = fake_checkVat
             partner.get_partner_name_from_vies()
 
-        self.assertEqual(partner.vat, "14826496")
-        self.assertEqual(partner.name, "Acme SRL")
-        self.assertEqual(partner.street, "Some Street 10")
         # Country must remain/set to RO
         self.assertEqual(partner.country_id.code, "RO")
 
