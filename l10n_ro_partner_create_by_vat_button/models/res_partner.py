@@ -25,17 +25,17 @@ class ResPartner(models.Model):
             if partner.country_id and partner.country_id.code == "RO":
                 missing = []
                 if not partner.vat and partner.is_company:
-                    missing.append(_("VAT"))
+                    missing.append(self.env._("VAT"))
                 if not partner.street:
-                    missing.append(_("Street"))
+                    missing.append(self.env._("Street"))
                 if not partner.city:
-                    missing.append(_("City"))
+                    missing.append(self.env._("City"))
                 if not partner.state_id:
-                    missing.append(_("State"))
+                    missing.append(self.env._("State"))
                 if not partner.zip:
-                    missing.append(_("ZIP"))
+                    missing.append(self.env._("ZIP"))
                 if missing:
-                    partner.warning_message = _("Missing: ") + ", ".join(missing)
+                    partner.warning_message = self.env._("Missing: ") + ", ".join(missing)
 
     @api.constrains("vat", "country_id")
     def check_vat(self):
@@ -92,7 +92,7 @@ class ResPartner(models.Model):
             else:
                 country_code = self.country_id.code
         else:
-            raise UserError(_("Please add the country code to the vat number or country field"))
+            raise UserError(self.env._("Please add the country code to the vat number or country field"))
 
         response = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
         if not response.valid and country_code == "GB":
@@ -111,7 +111,7 @@ class ResPartner(models.Model):
             self.name = response.name
             self.street = response.address
         else:
-            raise UserError(_("Invalid VAT"))
+            raise UserError(self.env._("Invalid VAT"))
 
     @api.onchange("vat", "country_id")
     def ro_vat_change(self):
