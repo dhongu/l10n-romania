@@ -7,7 +7,7 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
-            <xpath expr="//div[@class='alert alert-warning oe_edit_only']" position="before">
+            <xpath expr="//div[hasclass('alert-warning')]" position="before">
                 <header>
                     <button
                         name="%(action_get_partner_data)d"
