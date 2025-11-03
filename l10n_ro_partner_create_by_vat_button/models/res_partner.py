@@ -37,12 +37,12 @@ class ResPartner(models.Model):
                 if missing:
                     partner.warning_message = self.env._("Missing: ") + ", ".join(missing)
 
-    # @api.constrains("vat", "country_id")
-    # def check_vat(self):
-    #     if self.env.context.get("no_vat_validation"):
-    #         return
-    #     partners = self.filtered(lambda p: p.country_id.code != "RO")
-    #     return super(ResPartner, partners).check_vat()
+    @api.constrains("vat", "country_id")
+    def _check_vat(self, validation="error"):
+        if self.env.context.get("no_vat_validation"):
+            return
+        partners = self.filtered(lambda p: p.country_id.code != "RO")
+        return super(ResPartner, partners)._check_vat(validation)
 
     @api.model_create_multi
     def create(self, vals_list):
