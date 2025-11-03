@@ -7,7 +7,7 @@ import logging
 
 from zeep import Client
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)

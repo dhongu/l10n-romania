@@ -1,4 +1,4 @@
-from odoo import _, fields, models
+from odoo import fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -35,16 +35,16 @@ class GetPartnerData(models.TransientModel):
 
     def do_get_data(self):
         if self.partner_id.type == "delivery":
-            raise ValidationError(_("You can't use this function on delivery contacts."))
+            raise ValidationError(self.env._("You can't use this function on delivery contacts."))
         if self.service == "anaf":
             res = self.partner_id.get_partner_data()
             if res and "warning" in res:
-                self.status_message = _("Attention! ") + res["warning"]["message"]
+                self.status_message = self.env._("Attention! ") + res["warning"]["message"]
             else:
-                self.status_message = _("Partner data updated!")
+                self.status_message = self.env._("Partner data updated!")
         if self.service == "vies":
             self.partner_id.get_partner_name_from_vies()
-            self.status_message = _(
+            self.status_message = self.env._(
                 "Partner data updated! Please check the address fields. VIES does not return the addresses in a consistent form or complete so it can not be split automatically."
             )
         if self.partner_id.zip and hasattr(self.partner_id, "onchange_zip"):
