@@ -1,4 +1,4 @@
-from odoo import _, fields, models
+from odoo import fields, models
 from odoo.exceptions import UserError
 
 
@@ -12,13 +12,13 @@ class GetPartnerData(models.TransientModel):
         if self.service == "openapi":
             openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default=False)
             if not openapi_key:
-                raise UserError(_("API Key is missing - please contact support service!"))
+                raise UserError(self.env._("API Key is missing - please contact support service!"))
             if self.partner_id.vat:
                 if self.partner_id.vat.isdigit():
                     if not self.partner_id.country_id or (
                         self.partner_id.country_id and self.partner_id.country_id.code != "RO"
                     ):
-                        raise UserError(_("You can only use OpenAPI for Romanian partners!"))
+                        raise UserError(self.env._("You can only use OpenAPI for Romanian partners!"))
                     vat_digit = self.partner_id.vat
                     self.partner_id.vat = ""
                     self.partner_id.vat = "RO" + vat_digit
@@ -27,7 +27,7 @@ class GetPartnerData(models.TransientModel):
                     if not self.partner_id.country_id or (
                         self.partner_id.country_id and self.partner_id.country_id.code != "RO"
                     ):
-                        raise UserError(_("You can only use OpenAPI for Romanian partners!"))
+                        raise UserError(self.env._("You can only use OpenAPI for Romanian partners!"))
                     self.partner_id.vat = "RO" + self.partner_id.name
                     self.partner_id.name = self.partner_id.vat
                 else:
