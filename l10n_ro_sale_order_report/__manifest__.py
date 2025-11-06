@@ -10,7 +10,11 @@
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",
     "countries": ["ro"],
-    "depends": ["sale", "l10n_ro_config", "deltatech_sale_payment"],
+    "depends": [
+        "sale",
+        "l10n_ro_config",
+        "deltatech_sale_payment"  # pentru ce e ?
+    ],
     "license": "LGPL-3",
     "data": ["views/sale_order.xml"],
     "images": ["images/main_screenshot.png"],
