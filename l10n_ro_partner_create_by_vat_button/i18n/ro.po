@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0\n"
+"Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-02 11:51+0000\n"
-"PO-Revision-Date: 2024-03-02 11:51+0000\n"
+"POT-Creation-Date: 2025-11-03 10:00+0000\n"
+"PO-Revision-Date: 2025-11-03 10:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,22 +16,130 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_partner_create_by_vat_button
-#. odoo-python
-#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
-#, python-format
-msgid ""
-"ANAF Webservice not working.\n"
-"Please try again until it works"
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__service__anaf
+msgid "ANAF"
 msgstr ""
-"Serviciul web ANAF nu funcționează.\n"
-"Te rog încearcă din nou până când vei primi datele."
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Back"
+msgstr "Înapoi"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Close"
+msgstr "Închide"
 
 #. module: l10n_ro_partner_create_by_vat_button
 #: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_res_partner
 msgid "Contact"
+msgstr "Contact"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,website_form_label:l10n_ro_partner_create_by_vat_button.model_res_partner
+msgid "Create a Customer"
+msgstr "Creează un client"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__create_uid
+msgid "Created by"
 msgstr ""
 
 #. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__display_name
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
 #: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_partner_form
+msgid "Get Data"
+msgstr "Obține datele"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
 msgid "Get Partner Data"
-msgstr "Preia date partener"
+msgstr "Obține datele partenerului"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.actions.act_window,name:l10n_ro_partner_create_by_vat_button.action_get_partner_data
+msgid "Get Partner's Data"
+msgstr "Obține datele partenerului"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_get_partner_data
+msgid "Get partner data from"
+msgstr "Obține datele partenerului de la"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__id
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_res_partner__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__partner_id
+msgid "Partner"
+msgstr "Partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Select service for partner:"
+msgstr "Selectați serviciul pentru partener:"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__service
+msgid "Service"
+msgstr "Serviciu"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__state
+msgid "State"
+msgstr "Stare"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__status_message
+msgid "Status Message"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__service__vies
+msgid "VIES for non-Romanian partners"
+msgstr "VIES pentru partenerii în afara României"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_res_partner__warning_message
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_res_users__warning_message
+msgid "Warning"
+msgstr "Avertisment"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__state__get
+msgid "get"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "or"
+msgstr ""
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__state__set
+msgid "set"
+msgstr ""
