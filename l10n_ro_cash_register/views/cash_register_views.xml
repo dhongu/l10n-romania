@@ -72,7 +72,6 @@
                         </page>
                     </notebook>
                 </sheet>
-
                 <chatter reload_on_follower="True" />
             </form>
         </field>
@@ -93,7 +92,7 @@
                 <field name="date" string="Period" />
 
                 <filter string="Date" name="date" date="date" />
-                <group expand="1" string="Group By">
+                <group>
                     <filter string="Journal" name="group_by_journal" context="{'group_by': 'journal_id'}" />
                 </group>
             </search>
