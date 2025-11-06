@@ -1,8 +1,10 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.py~
 /.venv
 /.pytest_cache
+/.ruff_cache
 
 # C extensions
 *.so
@@ -14,8 +16,9 @@ bin/
 build/
 develop-eggs/
 dist/
+downloads/
 eggs/
-lib/
+
 lib64/
 parts/
 sdist/
@@ -24,6 +27,19 @@ var/
 .installed.cfg
 *.egg
 *.eggs
+
+# Windows installers
+*.msi
+
+# Debian packages
+*.deb
+
+# Redhat packages
+*.rpm
+
+# MacOS packages
+*.dmg
+*.pkg
 
 # Installer logs
 pip-log.txt
@@ -66,6 +82,9 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+# PyBuilder
+target/
 
 # Backup files
 *~
