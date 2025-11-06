@@ -4,14 +4,14 @@
 
 {
     "name": "Deltatech Sale from Store UBL",
-    "version": "18.0.1.0.3",
+    "version": "18.0.1.0.4",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "Sale from store",
     "countries": ["ro"],
     "category": "Localization",
     "depends": [
-        "deltatech_sale_store",
+        # "deltatech_sale_store",
         "l10n_ro_edi",
         # "l10n_ro_efactura",
     ],
