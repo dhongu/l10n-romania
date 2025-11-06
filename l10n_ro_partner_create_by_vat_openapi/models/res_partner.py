@@ -8,7 +8,7 @@ from urllib.request import Request, urlopen
 
 from stdnum.eu.vat import check_vies
 
-from odoo import _, api, models
+from odoo import api, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ class ResPartner(models.Model):
         openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default="False")
 
         if not openapi_key:
-            UserError(_("Setati openapi_key in parametrii de sistem"))
+            UserError(self.env._("Setati openapi_key in parametrii de sistem"))
         headers = {
             "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",
             "Content-Type": "application/json;",
@@ -96,7 +96,7 @@ class ResPartner(models.Model):
                 if valid:
                     self.write({"vat": part.name.upper().replace(" ", "")})
             except BaseException as e:
-                raise UserError(_("No VAT number found")) from e
+                raise UserError(self.env._("No VAT number found")) from e
 
         vat_country, vat_number = self._split_vat(part.vat)
 
@@ -145,7 +145,7 @@ class ResPartner(models.Model):
                     self.write({"l10n_ro_vat_subjected": result.valid})
                 except BaseException as e:
                     self.write({"l10n_ro_vat_subjected": self.vies_vat_check(vat_country, vat_number)})
-                    raise UserError(_("No suitable information found for this partner")) from e
+                    raise UserError(self.env._("No suitable information found for this partner")) from e
 
     @api.onchange("vat", "country_id")
     def ro_vat_change(self):

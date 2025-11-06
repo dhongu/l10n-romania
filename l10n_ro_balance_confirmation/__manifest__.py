@@ -1,11 +1,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Balance confirmation",
-    "version": "18.0.0.0.8",
+    "version": "19.0.0.0.8",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Generate balance confirmation for partners",
-    "author": "Dan Stoica,Odoo Community Association (OCA)",
+    "author": "Dan Stoica, Terrabit, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "depends": [
         "account",
@@ -19,4 +19,5 @@
         "security/ir.model.access.csv",
     ],
     "maintainers": ["danila12"],
+    "development_status": "Production/Stable",
 }

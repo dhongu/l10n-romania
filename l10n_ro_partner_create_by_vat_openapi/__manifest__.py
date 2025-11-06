@@ -19,4 +19,5 @@
     "license": "AGPL-3",
     "application": False,
     "auto_install": False,
+    "development_status": "Production/Stable",
 }

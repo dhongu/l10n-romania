@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-        <record id="group_print_balance" model="res.groups">
-            <field name="name">Can print partner balance confirmation</field>
-            <field name="category_id" ref="base.module_category_hidden" />
-        </record>
+    <record id="group_print_balance" model="res.groups">
+        <field name="name">Can print partner balance confirmation</field>
+    </record>
 
-        <record id="base.group_system" model="res.groups">
-            <field name="implied_ids" eval="[(4, ref('l10n_ro_balance_confirmation.group_print_balance'))]" />
-        </record>
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('l10n_ro_balance_confirmation.group_print_balance'))]"/>
+    </record>
 
 </odoo>

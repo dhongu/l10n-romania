@@ -1,7 +1,7 @@
 # ©  2008-2022 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import _, fields, models
+from odoo import fields, models
 from odoo.exceptions import UserError
 
 
@@ -14,7 +14,7 @@ class BalanceConfirm(models.TransientModel):
     def action_print_balance(self):
         partners = self.env["res.partner"].browse(self.env.context.get("active_ids"))
         if not partners:
-            raise UserError(_("No partners selected for balance confirmation."))
+            raise UserError(self.env._("No partners selected for balance confirmation."))
         # self = self.with_context(date_to=self.l10n_ro_balance_date)
         # partners = partners.with_context(date_to=self.l10n_ro_balance_date)
         action = self.env.ref("l10n_ro_balance_confirmation.action_report_partner_balance")
