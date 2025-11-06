@@ -55,11 +55,15 @@
             <t t-set="transa" t-value="1" />
             <t t-if="doc.payment_term_id">
                 <t t-if="len(doc.payment_term_id.line_ids)==2">
-                    <div t-foreach="doc.payment_term_id.compute(doc.amount_total)" t-as="term">
-                        <spna>Transa:</spna>
+                    <t
+                        t-set="terms"
+                        t-value="doc.payment_term_id._compute_terms(date_ref=doc.date_order, currency=doc.currency_id, company=doc.company_id, tax_amount=doc.amount_tax, tax_amount_currency=doc.amount_tax, untaxed_amount=doc.amount_untaxed, untaxed_amount_currency=doc.amount_untaxed, sign=1)"
+                    />
+                    <div t-foreach="doc.payment_term_id._get_amount_by_date(terms).values()" t-as="term">
+                        <span>Transa:</span>
                         <span t-esc="transa" />
                         Valoare:
-                        <span t-esc="term[1]" t-options='{"widget": "float", "precision": 2}' />
+                        <span t-esc="term['amount']" t-options='{"widget": "float", "precision": 2}' />
                         <t t-set="transa" t-value="transa+1" />
                     </div>
                 </t>
