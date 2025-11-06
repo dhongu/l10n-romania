@@ -53,6 +53,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Check out deltatech repository
+        uses: actions/checkout@v4
+        with:
+          repository: dhongu/deltatech
+          ref: "18.0"
+          path: deltatech
       - name: Install addons and dependencies
         run: oca_install_addons
       - name: Check licenses
