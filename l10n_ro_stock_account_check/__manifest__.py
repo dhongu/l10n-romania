@@ -11,7 +11,7 @@
         "l10n_ro_stock_account",
         "purchase_stock",
         "sale_stock",
-        "deltatech_purchase_price",
+        # "deltatech_purchase_price",
     ],
     "data": [
         "report/stock_check_report_view.xml",
