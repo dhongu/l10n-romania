@@ -1,4 +1,13 @@
+import calendar
+import logging
+from datetime import date
+
+from dateutil.relativedelta import relativedelta
+
 from odoo import api, fields, models
+from odoo.tools import date_utils
+
+_logger = logging.getLogger(__name__)
 
 
 class CashRegister(models.Model):
@@ -6,6 +15,37 @@ class CashRegister(models.Model):
     _description = "Cash Register"
     _inherit = ["mail.thread.main.attachment", "mail.activity.mixin", "sequence.mixin"]
     _order = "date desc"
+    _sequence_index = "journal_id"
+
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        # Ensure numbering is assigned on create if missing
+        for rec in records:
+            try:
+                if (not rec.name or rec.name in ("/", "")) and rec.date and rec.journal_id and isinstance(rec.id, int):
+                    rec._set_next_sequence()
+            except Exception as e:
+                _logger.warning("Error while creating cash register %s: %s", rec, e)
+                # In case of concurrent writes, avoid breaking the create
+                # The normal compute will still assign a number on next valid change
+                pass
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        # If the current write explicitly modifies 'name', respect that change and don't auto-assign now.
+        if "name" in vals:
+            return res
+        # Assign a number on save if it's missing and we have the necessary data
+        for rec in self:
+            try:
+                if (not rec.name or rec.name in ("/", "")) and rec.date and rec.journal_id and isinstance(rec.id, int):
+                    rec._set_next_sequence()
+            except Exception as e:
+                _logger.warning("Error while writing cash register %s: %s", rec, e)
+                # Be defensive; don't block writes due to sequencing edge cases
+                pass
+        return res
 
     def _get_default_journal_id(self):
         return self.env["account.journal"].search([("type", "=", "cash")], limit=1)
@@ -36,7 +76,7 @@ class CashRegister(models.Model):
         string="Journal",
         required=True,
         domain=[("type", "=", "cash")],
-        default=lambda self: self._get_default_journal_id,
+        default=_get_default_journal_id,
     )
     date = fields.Date(required=True, default=fields.Date.context_today)
 
@@ -80,27 +120,94 @@ class CashRegister(models.Model):
 
     def _get_last_sequence_domain(self, relaxed=False):
         # pylint: disable=sql-injection
-        # EXTENDS account sequence.mixin
+        # EXTENDS account sequence.mixin to mimic account.move behavior
         self.ensure_one()
         if not self.date or not self.journal_id:
             return "WHERE FALSE", {}
-        where_string = "WHERE journal_id = %(journal_id)s AND name != '/'"
+        where_string = "WHERE journal_id = %(journal_id)s AND name IS NOT NULL AND name NOT IN ('/', '')"
         param = {"journal_id": self.journal_id.id}
+
+        if not relaxed:
+            # Find a reference move name close to our date to deduce the reset rule
+            domain = [
+                ("journal_id", "=", self.journal_id.id),
+                ("id", "!=", self.id or self._origin.id),
+                ("name", "not in", ("/", "", False)),
+            ]
+            reference_name = self.sudo().search(domain + [("date", "<=", self.date)], order="date desc", limit=1).name
+            if not reference_name:
+                reference_name = self.sudo().search(domain, order="date asc", limit=1).name
+            sequence_number_reset = self._deduce_sequence_number_reset(reference_name)
+            date_start, date_end, *_ = self._get_sequence_date_range(sequence_number_reset)
+            where_string += " AND date BETWEEN %(date_start)s AND %(date_end)s"
+            param["date_start"] = date_start
+            param["date_end"] = date_end
+
+            # Exclude formats we don't want as in account.move
+            if sequence_number_reset in ("year", "year_range"):
+                param["anti_regex"] = (
+                    self._make_regex_non_capturing(self._sequence_monthly_regex.split("(?P<seq>")[0]) + "$"
+                )
+            elif sequence_number_reset == "never":
+                param["anti_regex"] = (
+                    self._make_regex_non_capturing(self._sequence_yearly_regex.split("(?P<seq>")[0]) + "$"
+                )
+            if param.get("anti_regex"):
+                where_string += " AND sequence_prefix !~ %(anti_regex)s "
+
         return where_string, param
 
     def _get_starting_sequence(self):
-        starting_sequence = super()._get_starting_sequence()
-        if self.journal_id:
-            starting_sequence = self.journal_id.code + starting_sequence
+        # Mirror account.move logic: cash journals use yearly numbering
+        self.ensure_one()
+        move_date = self.date or fields.Date.context_today(self)
+        year_part = "%04d" % move_date.year
+        last_day = int(self.company_id.fiscalyear_last_day)
+        last_month = int(self.company_id.fiscalyear_last_month)
+        is_staggered_year = last_month != 12 or last_day != 31
+        if is_staggered_year:
+            max_last_day = calendar.monthrange(move_date.year, last_month)[1]
+            last_day = min(last_day, max_last_day)
+            if move_date > date(move_date.year, last_month, last_day):
+                year_part = "{}-{}".format(
+                    move_date.strftime("%y"), (move_date + relativedelta(years=1)).strftime("%y")
+                )
+            else:
+                year_part = "{}-{}".format(
+                    (move_date + relativedelta(years=-1)).strftime("%y"), move_date.strftime("%y")
+                )
+        # For cash register we use yearly pattern like journals of type cash
+        # Use 5 digits except when staggered fiscal year where we reduce to 4
+        seq_part = "0000" if is_staggered_year else "00000"
+        starting_sequence = f"{self.journal_id.code}/{year_part}/{seq_part}"
         return starting_sequence
+
+    def _get_sequence_date_range(self, reset):
+        # Support fiscal year ranges like account.move when staggered FY
+        if reset not in ("year_range", "year_range_month"):
+            return super()._get_sequence_date_range(reset)
+        fiscalyear_last_day = self.company_id.fiscalyear_last_day
+        fiscalyear_last_month = int(self.company_id.fiscalyear_last_month)
+        date_start, date_end = date_utils.get_fiscal_year(
+            self.date, day=fiscalyear_last_day, month=fiscalyear_last_month
+        )
+        if reset == "year_range":
+            return (date_start, date_end) + (None, None)
+        forced_year_range = (date_start.year, date_end.year)
+        month_range = date_utils.get_month(self.date)
+        fiscalyear_last_month_max_day = calendar.monthrange(self.date.year, fiscalyear_last_month)[1]
+        if fiscalyear_last_day < fiscalyear_last_month_max_day and fiscalyear_last_month == self.date.month:
+            if self.date.day <= fiscalyear_last_day:
+                return (month_range[0], month_range[1].replace(day=fiscalyear_last_day)) + forced_year_range
+            else:
+                return (month_range[0].replace(day=fiscalyear_last_day + 1), month_range[1]) + forced_year_range
+        else:
+            return month_range + forced_year_range
 
     @api.onchange("journal_id")
     def _onchange_journal_id(self):
         if self.journal_id:
             self.currency_id = self.journal_id.currency_id or self.env.company.currency_id
-            # change the name of the cash register
-            self.name = "/"
-            # self._compute_name()
 
     @api.depends("date", "journal_id")
     def _compute_move_ids(self):
