@@ -21,10 +21,13 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [l10n_ro_account_sequence](l10n_ro_account_sequence/) | 19.0.1.0.3 |  | Romania - Cash Sequence
+[l10n_ro_balance_confirmation](l10n_ro_balance_confirmation/) | 19.0.0.0.8 | <a href='https://github.com/danila12'><img src='https://github.com/danila12.png' width='32' height='32' style='border-radius:50%;' alt='danila12'/></a> | Generate balance confirmation for partners
 [l10n_ro_cash_register](l10n_ro_cash_register/) | 19.0.1.1.6 |  | Romania - Cash Register
 [l10n_ro_efactura_enhancement](l10n_ro_efactura_enhancement/) | 19.0.0.0.11 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | eFactura Enhancement
 [l10n_ro_invoice_report](l10n_ro_invoice_report/) | 19.0.3.4.15 |  | Localizare Terrabit - Facturi, Chitanta
-[l10n_ro_stock_picking_report](l10n_ro_stock_picking_report/) | 19.0.1.2.5 |  | Rapoarte: NIR, aviz, bon consum
+[l10n_ro_partner_create_by_vat_button](l10n_ro_partner_create_by_vat_button/) | 19.0.1.1.6 |  | Partner Create by VAT Button
+[l10n_ro_partner_create_by_vat_openapi](l10n_ro_partner_create_by_vat_openapi/) | 19.0.1.0.2 |  | Romania - Partner Create by VAT from OpenAPI
+[l10n_ro_stock_picking_report](l10n_ro_stock_picking_report/) | 19.0.1.2.6 |  | Rapoarte: NIR, aviz, bon consum
 
 [//]: # (end addons)
 

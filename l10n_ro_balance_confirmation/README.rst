@@ -10,14 +10,14 @@ Romania - Balance confirmation
    !! source digest: sha256:980ec25c659bc3a7926089b5c0586497c4df2ec066bd240e290de549b6ff9a4c
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+    :alt: Production/Stable
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_balance_confirmation
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_balance_confirmation
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -137,6 +137,7 @@ Authors
 -------
 
 * Dan Stoica
+* Terrabit
 
 Contributors
 ------------
@@ -160,6 +161,6 @@ Current maintainer:
 
 |maintainer-danila12| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_balance_confirmation>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_balance_confirmation>`_ project on GitHub.
 
 You are welcome to contribute.
