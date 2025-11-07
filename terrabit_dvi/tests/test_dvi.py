@@ -3,10 +3,10 @@
 
 
 from odoo.tests import Form
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class TestDVI(SavepointCase):
+class TestDVI(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
