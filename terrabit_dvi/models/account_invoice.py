@@ -16,8 +16,8 @@ class AccountInvoice(models.Model):
         europe = self.env.ref("base.europe")
         if not self.commercial_partner_id.country_id:
             raise UserError(_("The partner has no country set."))
-        if self.commercial_partner_id.country_id in europe.country_ids:
-            raise UserError(_("The partner is in UE."))
+        # if self.commercial_partner_id.country_id  in europe.country_ids:
+        #     raise UserError(_("The partner is in UE."))
 
         if self.dvi_id:
             # afisare DVI
