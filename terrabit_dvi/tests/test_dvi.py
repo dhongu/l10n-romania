@@ -12,7 +12,6 @@ class TestDVI(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
 
-
         account_expense = cls.env["account.account"].search([("code", "=", "607000")], limit=1)
         if not account_expense:
             account_expense = cls.env["account.account"].create(
@@ -54,7 +53,6 @@ class TestDVI(TransactionCase):
                 {
                     "name": "Output",
                     "code": "371000.o",
-
                     "reconcile": False,
                 }
             )
@@ -65,7 +63,6 @@ class TestDVI(TransactionCase):
                 {
                     "name": "Valuation",
                     "code": "371000",
-
                     "reconcile": False,
                 }
             )
@@ -76,7 +73,6 @@ class TestDVI(TransactionCase):
                 {
                     "name": "Valuation",
                     "code": "446000",
-
                     "reconcile": True,
                 }
             )
@@ -87,7 +83,6 @@ class TestDVI(TransactionCase):
                 {
                     "name": "Valuation",
                     "code": "447000",
-
                     "reconcile": False,
                 }
             )
@@ -162,9 +157,9 @@ class TestDVI(TransactionCase):
         # Create the vendor bill from the PO using the supported API in purchase
         action = po.action_create_invoice()
         # action should contain res_id of the created account.move
-        invoice = self.env['account.move'].browse(action.get('res_id'))
+        invoice = self.env["account.move"].browse(action.get("res_id"))
         self.assertTrue(invoice, "Vendor bill was not created from the Purchase Order")
-        self.assertEqual(invoice.move_type, 'in_invoice')
+        self.assertEqual(invoice.move_type, "in_invoice")
         # Ensure vendor is set as in test setup
         if not invoice.partner_id:
             invoice.partner_id = self.vendor
