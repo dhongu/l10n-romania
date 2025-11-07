@@ -28,9 +28,9 @@ class TestL10nRoInvoiceReportBasics(TransactionCase):
         partner = Partner.create({"name": "Test Customer"})
         # Try to get a reasonable income account
         income_account = (
-            Account.search([("account_type", "=", "income") ], limit=1)
-            or Account.search([("internal_group", "=", "income") ], limit=1)
-            or Account.search([("deprecated", "=", False) ], limit=1)
+            Account.search([("account_type", "=", "income")], limit=1)
+            or Account.search([("internal_group", "=", "income")], limit=1)
+            or Account.search([("deprecated", "=", False)], limit=1)
         )
         self.assertTrue(income_account, "No account found to use on invoice line.")
 
