@@ -60,13 +60,14 @@ jobs:
         with:
           repository: dhongu/deltatech
           ref: "18.0"
-          path: deltatech
+          path: deltatech-addons
+
       - name: Check out l10n-romania repository
         uses: actions/checkout@v4
         with:
           repository: OCA/l10n-romania
           ref: "18.0"
-          path: l10n-romania
+          path: l10n-romania-addons
 
       - name: Install addons and dependencies
         run: oca_install_addons
