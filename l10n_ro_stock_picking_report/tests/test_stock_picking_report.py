@@ -61,6 +61,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         picking = self.env["stock.picking"].create(picking_vals)
         move = self.env["stock.move"].create(
             {
+                "name": "Move 1",
                 "product_id": self.product.id,
                 "product_uom_qty": qty,
                 "product_uom": self.product.uom_id.id,

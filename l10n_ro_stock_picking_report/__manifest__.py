@@ -18,7 +18,7 @@
         "purchase_stock",
         "sale_stock",
         "l10n_ro_stock",
-        # "l10n_ro_stock_account",
+        "l10n_ro_stock_account",
         "delivery",
     ],
     "excludes": ["l10n_ro_stock_picking_comment_template"],

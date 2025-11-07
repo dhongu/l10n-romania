@@ -28,7 +28,7 @@ class StockPickingCumulative(models.TransientModel):
     origin = fields.Char()
     group_id = fields.Char()
     date_done = fields.Datetime()
-
+    l10n_ro_notice = fields.Boolean()
     report_id = fields.Many2one(
         "ir.actions.report",
         required=True,
