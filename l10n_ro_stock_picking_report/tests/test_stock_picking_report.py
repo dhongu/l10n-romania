@@ -14,7 +14,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         # Basic partner for customer/supplier
         cls.partner_customer = cls.env["res.partner"].create({"name": "Client SRL", "company_type": "company"})
         cls.partner_supplier = cls.env["res.partner"].create({"name": "Furnizor SRL", "company_type": "company"})
-        cls.env.user.group_ids += cls.env.ref("stock.group_stock_multi_locations")
+        cls.env.user.groups_id += cls.env.ref("stock.group_stock_multi_locations")
         # Simple storable product
         cls.env.company.logo = False
         cls.product = cls.env["product.product"].create(
@@ -83,7 +83,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         """Render report to HTML and return as decoded string."""
 
         html_bytes, _ = self.env["ir.actions.report"]._render_qweb_html(action_xmlid, [record.id])
-        return html_bytes.decode("utf-8") if isinstance(html_bytes, (bytes, bytearray)) else str(html_bytes)
+        return html_bytes.decode("utf-8") if isinstance(html_bytes, bytes | bytearray) else str(html_bytes)
 
     # -----------------------------
     # Single picking reports
