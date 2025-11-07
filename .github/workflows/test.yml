@@ -69,6 +69,14 @@ jobs:
           ref: "18.0"
           path: l10n-romania-addons
 
+      - name: Debug addons paths
+        run: |
+          echo "=== Listing deltatech-addons ==="
+          find deltatech-addons -maxdepth 3 -type f -name "__manifest__.py"
+          echo "=== Listing l10n-romania-addons ==="
+          find l10n-romania-addons -maxdepth 3 -type f -name "__manifest__.py"
+
+
       - name: Install addons and dependencies
         run: oca_install_addons
       - name: Check licenses
