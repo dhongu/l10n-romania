@@ -49,7 +49,7 @@ jobs:
           - 5432:5432
     env:
       OCA_ENABLE_CHECKLOG_ODOO: "1"
-      LOCAL_ADDONS: "./deltatech-addons"
+      LOCAL_ADDONS: "./deltatech-addons,./l10n-romania-addons"
 
     steps:
       - uses: actions/checkout@v4
@@ -61,6 +61,13 @@ jobs:
           repository: dhongu/deltatech
           ref: "18.0"
           path: deltatech
+      - name: Check out l10n-romania repository
+        uses: actions/checkout@v4
+        with:
+          repository: OCA/l10n-romania
+          ref: "18.0"
+          path: l10n-romania
+
       - name: Install addons and dependencies
         run: oca_install_addons
       - name: Check licenses
