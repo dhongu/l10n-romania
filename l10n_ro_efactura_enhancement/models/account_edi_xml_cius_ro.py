@@ -53,13 +53,15 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 postal_address["city_name"] = partner.city_id.name.upper()
 
         if postal_address.get("country_subentity", False) == "RO-B":
-            if "SECTOR" not in postal_address.get("city_name", "").upper():
+            if "SECTOR" not in (postal_address.get("city_name") or "").upper():
                 postal_code = postal_address.get("postal_zone", False)
                 if postal_code and postal_code[0] == "0" and postal_code[1] in ["1", "2", "3", "4", "5", "6"]:
                     postal_address["city_name"] = "SECTOR" + postal_code[1]
                 else:
                     postal_address["city_name"] = "SECTOR1"
-            postal_address["city_name"] = postal_address.get("city_name", "").upper().replace(" ", "").replace("UL", "")
+            postal_address["city_name"] = (
+                (postal_address.get("city_name") or "").upper().replace(" ", "").replace("UL", "")
+            )
             if partner.city != postal_address["city_name"]:
                 partner.write({"city": postal_address["city_name"]})
 
