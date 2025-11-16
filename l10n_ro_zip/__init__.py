@@ -76,7 +76,8 @@ def post_init_hook(env):
         city = env.ref(city_ref)
         sql = """
               UPDATE res_zip
-              SET city_id = %(city_id)s
+              SET city_id = %(city_id)s,
+                  state_id = %(state_id)s
               WHERE sector = %(sector)s
               """
         env.cr.execute(
@@ -85,6 +86,7 @@ def post_init_hook(env):
                 "sector": sector,
                 "city_id": city.id,
                 "city": city.name,
+                "state_id": city.state_id.id,
             },
         )
 
