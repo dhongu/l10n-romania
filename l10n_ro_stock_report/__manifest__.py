@@ -1,11 +1,12 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Report (Fișă Magazie)",
+    "summary": "Stock Report (Fișă Magazie)",
     "license": "AGPL-3",
     "version": "19.0.2.0.0",
     "countries": ["ro"],
     "author": "Terrabit,NextERP Romania,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "website": "https://www.terrabit.ro",
     "category": "Warehouse",
     "depends": [
         "stock",

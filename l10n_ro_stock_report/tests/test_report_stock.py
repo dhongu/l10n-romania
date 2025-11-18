@@ -21,18 +21,10 @@ class TestStockReport(TransactionCase):
                 "l10n_ro_stock_acc_price_diff": True,
             }
         )
-        self.account_difference = self.env["account.account"].search(
-            [("code", "=", "348000")]
-        )
-        self.account_expense = self.env["account.account"].search(
-            [("code", "=", "607000")]
-        )
-        self.account_income = self.env["account.account"].search(
-            [("code", "=", "707000")]
-        )
-        self.account_valuation = self.env["account.account"].search(
-            [("code", "=", "371000")]
-        )
+        self.account_difference = self.env["account.account"].search([("code", "=", "348000")])
+        self.account_expense = self.env["account.account"].search([("code", "=", "607000")])
+        self.account_income = self.env["account.account"].search([("code", "=", "707000")])
+        self.account_valuation = self.env["account.account"].search([("code", "=", "371000")])
 
         self.stock_journal = self.env["account.journal"].search(
             [("code", "=", "STJ"), ("company_id", "=", self.env.company.id)]
@@ -52,9 +44,7 @@ class TestStockReport(TransactionCase):
             "property_stock_journal": self.stock_journal.id,
         }
 
-        self.category = self.env["product.category"].search(
-            [("name", "=", "TEST Marfa")]
-        )
+        self.category = self.env["product.category"].search([("name", "=", "TEST Marfa")])
         if not self.category:
             self.category = self.env["product.category"].create(category_value)
         else:
@@ -129,9 +119,7 @@ class TestStockReport(TransactionCase):
             if move_line.product_id == self.product_1:
                 move_line.write({"quantity": self.qty_po_p1})
             if move_line.product_id == self.product_2:
-                move_line.write(
-                    {"quantity": self.qty_po_p2, "location_dest_id": self.location_2.id}
-                )
+                move_line.write({"quantity": self.qty_po_p2, "location_dest_id": self.location_2.id})
                 move_line.move_id.write({"location_dest_id": self.location_2.id})
 
         self.picking.button_validate()
@@ -156,9 +144,7 @@ class TestStockReport(TransactionCase):
         wizard = wizard.save()
 
         wizard.button_show_sheet_pdf()
-        line = self.env["l10n.ro.stock.storage.sheet.line"].search(
-            [("report_id", "=", wizard.id)], limit=1
-        )
+        line = self.env["l10n.ro.stock.storage.sheet.line"].search([("report_id", "=", wizard.id)], limit=1)
         self.assertTrue(line)
 
     def test_get_products_with_move(self):
@@ -170,9 +156,7 @@ class TestStockReport(TransactionCase):
             ("company_id", "=", self.env.company.id),
             ("company_id", "=", False),
         ]
-        products = (
-            self.env["product.product"].with_context(active_test=False).search(domain)
-        )
+        products = self.env["product.product"].with_context(active_test=False).search(domain)
 
         self._create_receipt(self.product_1, 1, fields.Datetime.now())
 

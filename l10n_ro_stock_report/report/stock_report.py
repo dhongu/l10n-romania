@@ -38,27 +38,19 @@ class StorageSheet(models.TransientModel):
 
     date_from = fields.Date("Start Date", required=True, default=fields.Date.today)
     date_to = fields.Date("End Date", required=True, default=fields.Date.today)
-    company_id = fields.Many2one(
-        "res.company", string="Company", default=lambda self: self.env.company
-    )
+    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
 
     one_product = fields.Boolean("One product per page")
-    line_product_ids = fields.One2many(
-        comodel_name="l10n.ro.stock.storage.sheet.line", inverse_name="report_id"
-    )
+    line_product_ids = fields.One2many(comodel_name="l10n.ro.stock.storage.sheet.line", inverse_name="report_id")
     sublocation = fields.Boolean("Include Sublocations", default=True)
     detailed_locations = fields.Boolean("Detailed by locations", default=False)
     show_locations = fields.Boolean("Show location", default=False)
-    location_ids = fields.Many2many(
-        "stock.location", string="Only for locations", compute="_compute_location_ids"
-    )
+    location_ids = fields.Many2many("stock.location", string="Only for locations", compute="_compute_location_ids")
 
     @api.depends("sublocation", "location_id", "show_locations")
     def _compute_location_ids(self):
         if not self.location_id:
-            self.location_ids = self.env["stock.location"].search(
-                [("usage", "=", "internal")]
-            )
+            self.location_ids = self.env["stock.location"].search([("usage", "=", "internal")])
         else:
             if self.sublocation:
                 children_location = (
@@ -164,20 +156,14 @@ class StorageSheet(models.TransientModel):
                 product_list = self.get_products_with_move_sql()
                 all_products = False
                 if not product_list:
-                    raise UserError(
-                        self.env._(
-                            "There are no stock movements in the selected period"
-                        )
-                    )
+                    raise UserError(self.env._("There are no stock movements in the selected period"))
             else:
                 product_list = [-1]  # dummy list
                 all_products = True
 
         self.env["account.move.line"].check_access("read")
 
-        lines = self.env["l10n.ro.stock.storage.sheet.line"].search(
-            [("report_id", "=", self.id)]
-        )
+        lines = self.env["l10n.ro.stock.storage.sheet.line"].search([("report_id", "=", self.id)])
         lines.unlink()
 
         datetime_from = fields.Datetime.to_datetime(self.date_from)
@@ -465,36 +451,23 @@ class StorageSheet(models.TransientModel):
                 ("company_id", "=", self.company_id.id),
                 ("company_id", "=", False),
             ]
-            product_list = (
-                self.env["product.product"]
-                .with_context(active_test=False)
-                .search(domain)
-                .ids
-            )
+            product_list = self.env["product.product"].with_context(active_test=False).search(domain).ids
             all_products = True
         if self.products_with_move:
             product_list = self.get_products_with_move_sql(product_list)
             all_products = False
             if not product_list:
-                raise UserError(
-                    self.env._("There are no stock movements in the selected period")
-                )
+                raise UserError(self.env._("There are no stock movements in the selected period"))
         return product_list, all_products
 
     def get_found_products(self):
         self.ensure_one()
         product_list, _all_products = self.get_report_products()
-        return (
-            self.env["product.product"]
-            .with_context(active_test=False)
-            .browse(product_list)
-        )
+        return self.env["product.product"].with_context(active_test=False).browse(product_list)
 
     def button_show_sheet(self):
         self.do_compute_product()
-        action = self.env["ir.actions.actions"]._for_xml_id(
-            "l10n_ro_stock_report.action_sheet_stock_report_line"
-        )
+        action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_stock_report.action_sheet_stock_report_line")
 
         action["display_name"] = "{} {} ({}-{})".format(
             action["name"],
@@ -514,13 +487,9 @@ class StorageSheet(models.TransientModel):
 
     def print_pdf(self):
         if self.one_product:
-            action_report_storage_sheet = self.env.ref(
-                "l10n_ro_stock_report.action_report_storage_sheet"
-            )
+            action_report_storage_sheet = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet")
         else:
-            action_report_storage_sheet = self.env.ref(
-                "l10n_ro_stock_report.action_report_storage_sheet_all"
-            )
+            action_report_storage_sheet = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet_all")
         return action_report_storage_sheet.report_action(self, config=False)
 
 
@@ -530,46 +499,28 @@ class StorageSheetLine(models.TransientModel):
     _order = "report_id, product_id, date_time"
     _rec_name = "product_id"
 
-    report_id = fields.Many2one(
-        "l10n.ro.stock.storage.sheet", index=True, ondelete="cascade"
-    )
+    report_id = fields.Many2one("l10n.ro.stock.storage.sheet", index=True, ondelete="cascade")
     product_id = fields.Many2one("product.product", string="Product", index=True)
-    amount_initial = fields.Monetary(
-        currency_field="currency_id", string="Initial Amount", default=0.0
-    )
-    quantity_initial = fields.Float(
-        digits="Product Unit of Measure", string="Initial Quantity", default=0.0
-    )
-    amount_in = fields.Monetary(
-        currency_field="currency_id", string="Input Amount", default=0.0
-    )
-    quantity_in = fields.Float(
-        digits="Product Unit of Measure", string="Input Quantity", default=0.0
-    )
+    amount_initial = fields.Monetary(currency_field="currency_id", string="Initial Amount", default=0.0)
+    quantity_initial = fields.Float(digits="Product Unit of Measure", string="Initial Quantity", default=0.0)
+    amount_in = fields.Monetary(currency_field="currency_id", string="Input Amount", default=0.0)
+    quantity_in = fields.Float(digits="Product Unit of Measure", string="Input Quantity", default=0.0)
     unit_price_in = fields.Monetary(
         currency_field="currency_id",
         string="Price Unit In",
         default=0.0,
         aggregator="avg",
     )
-    amount_out = fields.Monetary(
-        currency_field="currency_id", default=0.0, string="Output Amount"
-    )
-    quantity_out = fields.Float(
-        digits="Product Unit of Measure", string="Output Quantity", default=0.0
-    )
+    amount_out = fields.Monetary(currency_field="currency_id", default=0.0, string="Output Amount")
+    quantity_out = fields.Float(digits="Product Unit of Measure", string="Output Quantity", default=0.0)
     unit_price_out = fields.Monetary(
         currency_field="currency_id",
         string="Price Unit Out",
         default=0.0,
         aggregator="avg",
     )
-    amount_final = fields.Monetary(
-        currency_field="currency_id", default=0.0, string="Final Amount"
-    )
-    quantity_final = fields.Float(
-        digits="Product Unit of Measure", string="Final Quantity", default=0.0
-    )
+    amount_final = fields.Monetary(currency_field="currency_id", default=0.0, string="Final Amount")
+    quantity_final = fields.Float(digits="Product Unit of Measure", string="Final Quantity", default=0.0)
     date_time = fields.Datetime(string="Datetime")
     date = fields.Date()
     reference = fields.Char()
