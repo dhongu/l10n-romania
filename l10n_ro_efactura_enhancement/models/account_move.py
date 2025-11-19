@@ -45,8 +45,7 @@ class AccountMove(models.Model):
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
-
-            domain = [('l10n_ro_edi_document_ids.state', '=', 'invoice_sending_failed')]
+            domain = [("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed")]
             invoice_sending_failed = self.search(domain)
 
             domain = [
@@ -68,9 +67,8 @@ class AccountMove(models.Model):
             else:
                 _logger.info("No invoices to fetch status")
 
-            domain = [('l10n_ro_edi_document_ids.state', '=', 'invoice_sending_failed')]
+            domain = [("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed")]
             invoice_sending_failed = self.search(domain)
-
 
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
@@ -80,7 +78,7 @@ class AccountMove(models.Model):
                 ("partner_id.country_id.code", "=", "RO"),
                 ("l10n_ro_edi_state", "=", False),
                 ("company_id", "=", company.id),
-                ('ids','not in', invoice_sending_failed.ids)
+                ("ids", "not in", invoice_sending_failed.ids),
             ]
 
             invoices = self.search(domain, limit=limit + 1, order="date desc")
