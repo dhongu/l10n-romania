@@ -10,6 +10,7 @@ class ResPartner(models.Model):
 
     info_for_invoice = fields.Html(string="Additional info for invoice")
     mean_transp = fields.Char(string="Mean transport")
+    # acest camp trebuie sa fie company dependent
     payment_bank_id = fields.Many2one(
         "res.partner.bank",
         domain="['|', ('company_id', '=', company_id), ('company_id', '=', False)]",
