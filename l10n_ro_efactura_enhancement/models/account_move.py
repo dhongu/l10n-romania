@@ -38,13 +38,14 @@ class AccountMove(models.Model):
 
     def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1, delay_days=0):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
-        _logger.info("Cron job for sending invoices to SPV")
+        _logger.info("⏱️ Cron job for sending invoices to SPV")
 
         need_retrigger = False
 
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
+
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
@@ -58,15 +59,16 @@ class AccountMove(models.Model):
 
             if invoices:
                 invoices_name = invoices.mapped("name")
-                _logger.info(f"Fetch status for invoices: {invoices_name}")
+                _logger.info(f"🔍 Fetch status for invoices: {invoices_name}")
                 invoices._l10n_ro_edi_fetch_invoice_sending_documents()
                 need_retrigger = True
             else:
                 _logger.info("No invoices to fetch status")
 
-            domain = [('l10n_ro_edi_document_ids.state', '=', 'invoice_sending_failed')]
+            domain = [("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed")]
             invoice_sending_failed = self.search(domain)
-
+            invoices_name = invoice_sending_failed.mapped("name")
+            _logger.info(f"❌ Invoice sending failed: {invoices_name}")
 
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
@@ -76,10 +78,13 @@ class AccountMove(models.Model):
                 ("partner_id.country_id.code", "=", "RO"),
                 ("l10n_ro_edi_state", "=", False),
                 ("company_id", "=", company.id),
-                ('id','not in', invoice_sending_failed.ids)
             ]
+            if invoice_sending_failed:
+                domain.append(("id", "not in", invoice_sending_failed.ids))
 
             invoices = self.search(domain, limit=limit + 1, order="date desc")
+            invoices_name = invoices.mapped("name")
+            _logger.info(f"📤 Invoices to send to SPV: {invoices_name}")
 
             # daca au fost deja generate PDF-uri pentru facturi, le stergem
             invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
@@ -88,10 +93,11 @@ class AccountMove(models.Model):
             if len(invoices) > limit:
                 invoices = invoices[:limit]
                 need_retrigger = True
+                _logger.info("🔁 More invoices to send to SPV, retriggering cron...")
 
             if invoices:
                 invoices_name = invoices.mapped("name")
-                _logger.info(f"Sending invoices to SPV: {invoices_name}")
+                _logger.info(f"📨 Sending invoices to SPV: {invoices_name}")
                 _logger.info(f"Count of invoices to send in SPV: {len(invoices)}")
 
                 composer_vals = {
@@ -108,6 +114,7 @@ class AccountMove(models.Model):
             if need_retrigger:
                 at = fields.Datetime.now() + timedelta(minutes=5)
                 # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
+                _logger.info("⏳ Retrigger cron scheduled in 5 minutes")
                 self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
 
         return action
