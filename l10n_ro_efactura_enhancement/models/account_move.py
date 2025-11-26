@@ -59,7 +59,7 @@ class AccountMove(models.Model):
 
             if invoices:
                 invoices_name = invoices.mapped("name")
-                _logger.info(f"Fetch status for invoices: {invoices_name}")
+                _logger.info(f" 🔍 Fetch status for invoices: {invoices_name}")
                 invoices._l10n_ro_edi_fetch_invoice_sending_documents()
                 need_retrigger = True
             else:
