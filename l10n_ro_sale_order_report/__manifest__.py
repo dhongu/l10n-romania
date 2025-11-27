@@ -16,7 +16,10 @@
         # "deltatech_sale_payment"  # pentru ce e ?
     ],
     "license": "LGPL-3",
-    "data": ["views/sale_order.xml"],
+    "data": [
+        "views/sale_order.xml",
+        "views/res_config_view.xml",
+    ],
     "images": ["images/main_screenshot.png"],
     "installable": True,
 }
