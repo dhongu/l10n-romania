@@ -1,18 +1,18 @@
-
+import logging
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
+_logger = logging.getLogger(__name__)
+
+
 class MessageSPV(models.Model):
     _inherit = "l10n.ro.message.spv"
-
 
     purchase_ref = fields.Char(string="Purchase Reference")
     purchase_order_id = fields.Many2one("purchase.order")
 
-
     def process_xml(self, xml_tree, attachment_xml):
-
         values = super().process_xml(xml_tree, attachment_xml)
         order_reference = xml_tree.findtext("./{*}OrderReference/{*}ID")
 
@@ -105,8 +105,8 @@ class MessageSPV(models.Model):
                 msg=self.name or "-",
                 ref=self._get_purchase_ref() or "-",
             )
-        except Exception:
-            pass
+        except Exception as e:
+            _logger.error(e)
 
         return Attachment.create(vals)
 
@@ -240,9 +240,7 @@ class MessageSPV(models.Model):
         # 0 rezultate: creăm
         if not self.partner_id:
             raise UserError(
-                _(
-                    "Nu există un partener setat pe mesaj. Setați partenerul înainte de a crea comanda de achiziție."
-                )
+                _("Nu există un partener setat pe mesaj. Setați partenerul înainte de a crea comanda de achiziție.")
             )
 
         po_vals = {
