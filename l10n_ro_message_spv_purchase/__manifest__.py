@@ -10,10 +10,7 @@
     "summary": "Add SPV message on purchase orders for Romania",
     "countries": ["ro"],
     "category": "Localization",
-    "depends": [
-        "l10n_ro_message_spv",
-        "purchase"
-    ],
+    "depends": ["l10n_ro_message_spv", "purchase"],
     "license": "LGPL-3",
     "price": 25.00,
     "currency": "EUR",
