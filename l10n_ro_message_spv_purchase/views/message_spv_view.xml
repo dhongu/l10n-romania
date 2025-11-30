@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit form view of l10n.ro.message.spv to add purchase fields -->
+    <record id="view_l10n_ro_message_spv_form_inherit_purchase" model="ir.ui.view">
+        <field name="name">l10n.ro.message.spv.form.inherit.purchase</field>
+        <field name="model">l10n.ro.message.spv</field>
+        <field name="inherit_id" ref="l10n_ro_message_spv.view_l10n_ro_message_spv_form"/>
+        <field name="arch" type="xml">
+            <!-- butoane separate: găsește și creează (crează caută mai întâi) -->
+            <xpath expr="//form/header" position="inside">
+                <button name="action_find_purchase"
+                        string="Găsește Comanda"
+                        type="object"
+                        class="btn-secondary"
+                        help="Caută o comandă de achiziție după Purchase Reference/Reference și o leagă dacă este găsită"/>
+                <button name="action_create_purchase"
+                        string="Creează Comanda"
+                        type="object"
+                        class="btn-primary"
+                        help="Caută o comandă de achiziție; dacă nu găsește, creează una nouă și o leagă"/>
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="purchase_ref"/>
+                <field name="purchase_order_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
