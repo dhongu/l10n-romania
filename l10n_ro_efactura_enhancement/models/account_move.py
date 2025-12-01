@@ -45,7 +45,6 @@ class AccountMove(models.Model):
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
-
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
