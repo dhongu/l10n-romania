@@ -4,7 +4,7 @@
 
 {
     "name": "eTransport Enhancement",
-    "version": "18.0.0.1.1",
+    "version": "19.0.0.1.1",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport enhancement",
@@ -15,8 +15,6 @@
         "l10n_ro_edi_stock",
     ],
     "license": "LGPL-3",
-    "price": 25.00,
-    "currency": "EUR",
     "data": [
         "security/ir.model.access.csv",
         "views/stock_picking_view.xml",
