@@ -6,7 +6,7 @@ from datetime import datetime, time
 
 import pytz
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -98,7 +98,7 @@ class Picking(models.Model):
 
         if self and self.company_id.l10n_ro_etransport_get_order_value:
             if len(data["stock_move_ids"]) != len(res["data"]["notificare"]["bunuriTransportate"]):
-                raise UserError(_("UIT lines and moves lines are not the same. Cannot get prices."))
+                raise UserError(self.env._("UIT lines and moves lines are not the same. Cannot get prices."))
             else:
                 item_no = 0
                 for item in res["data"]["notificare"]["bunuriTransportate"]:
@@ -125,7 +125,7 @@ class Picking(models.Model):
             and data["company_id"].l10n_ro_etransport_get_order_value
         ):  # called from batch
             if len(data["stock_move_ids"]) != len(res["data"]["notificare"]["bunuriTransportate"]):
-                raise UserError(_("UIT lines and moves lines are not the same. Cannot get prices."))
+                raise UserError(self.env._("UIT lines and moves lines are not the same. Cannot get prices."))
             else:
                 item_no = 0
                 for item in res["data"]["notificare"]["bunuriTransportate"]:
@@ -186,5 +186,10 @@ class Picking(models.Model):
                 no_weight |= move.product_id
         if no_weight:
             product_name = no_weight.mapped("display_name")
-            errors.append(self.env._(f"The following products do not have weight defined:\n{product_name}\n."))
+            errors.append(
+                self.env._(
+                    "The following products do not have weight defined:\n%(product_name)s\n.",
+                    product_name=", ".join(product_name),
+                )
+            )
         return errors
