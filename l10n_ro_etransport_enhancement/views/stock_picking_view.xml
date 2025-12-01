@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.l10n_ro_edi_stock</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <field name="carrier_id" position="before">
+                <field name="l10n_ro_edi_stock_required" />
+            </field>
+            <page name="etransport" position="inside">
+                <group name="weights">
+                    <field name="l10n_ro_shipping_weights" />
+                    <field
+                        name="l10n_ro_shipping_weight_lines"
+                        invisible="not l10n_ro_shipping_weights"
+                        mode="list,kanban"
+                    >
+                        <list editable="bottom">
+                            <field name="picking_id" column_invisible="1" />
+                            <field
+                                name="move_id"
+                                domain="[('picking_id', '=', picking_id)]"
+                                context="{'show_product_in_move': True}"
+                            />
+                            <field name="net_weight" />
+                            <field name="gross_weight" />
+                            <field name="weight_uom_id" />
+                        </list>
+                    </field>
+                    <button
+                        name="l10n_ro_compute_weight_lines"
+                        string="Get lines"
+                        type="object"
+                        class="btn-primary"
+                        invisible="not l10n_ro_shipping_weights"
+                    />
+                </group>
+            </page>
+        </field>
+    </record>
+</odoo>
