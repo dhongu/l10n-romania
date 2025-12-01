@@ -6,4 +6,3 @@
 from . import picking_weight
 from . import stock_picking
 from . import res_config
-
