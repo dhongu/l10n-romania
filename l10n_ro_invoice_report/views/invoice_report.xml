@@ -275,6 +275,12 @@
                         <span t-field="line.name" t-options="{'widget': 'text'}">Bacon Burger</span>
                     </t>
                 </t>
+                <t t-else="">
+                    <t t-if="line.product_id">
+                        <span t-field="line.product_id.display_name" t-options="{'widget': 'text'}">--</span>
+                    </t>
+                    <t t-else="">--</t>
+                </t>
 
 
             </td>
