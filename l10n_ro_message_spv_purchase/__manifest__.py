@@ -4,7 +4,7 @@
 
 {
     "name": "Purchase Message SPV",
-    "version": "17.0.0.0.1",
+    "version": "18.0.0.0.1",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "Add SPV message on purchase orders for Romania",
