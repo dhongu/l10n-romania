@@ -5,7 +5,7 @@
 
 import logging
 
-from odoo import models
+from odoo import _, models
 from odoo.tools import float_is_zero
 from odoo.tools.safe_eval import safe_eval
 
@@ -16,12 +16,21 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
 
     def _get_invoice_line_price_vals(self, line):
+        # old helper
         vals = super()._get_invoice_line_price_vals(line)
         if float_is_zero(vals["price_amount"], precision_rounding=0.01):
             vals["price_amount"] = 0.0
         return vals
 
+    def _get_address_node(self, vals):
+        # New helper: put default street if not present
+        res = super()._get_address_node(vals)
+        if not res["cbc:StreetName"]["_text"]:
+            res["cbc:StreetName"] = ({"_text": "Principala"},)
+        return res
+
     def _get_partner_party_vals(self, partner, role):
+        # old helper
         # EXTENDS account.edi.xml.ubl_21
 
         _logger.info("partner %s (%s)", partner.name, partner.id)
@@ -70,6 +79,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         return vals
 
     def _get_partner_party_tax_scheme_vals_list(self, partner, role):
+        # old helper
         # EXTENDS account.edi.xml.ubl_21
         vals_list = super()._get_partner_party_tax_scheme_vals_list(partner, role)
         partner = partner.commercial_partner_id
@@ -79,6 +89,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         return vals_list
 
     def _get_partner_party_legal_entity_vals_list(self, partner):
+        # old helper
         val_list = super()._get_partner_party_legal_entity_vals_list(partner)
         partner = partner.commercial_partner_id
         if not partner.is_company:
@@ -88,6 +99,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         return val_list
 
     def _get_invoice_line_item_vals(self, line, taxes_vals):
+        # old helper
         vals = super()._get_invoice_line_item_vals(line, taxes_vals)
         name = vals.get("name") or "n/a"
         vals["name"] = name[:100]
@@ -98,7 +110,88 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         vals["description"] = description[:200]
         return vals
 
+    def get_description(self, line):
+        """
+        Returns only description
+        :param line: invoice line
+        :return: description
+        """
+        line_name = line.name or ""
+        if line_name:
+            product = line.product_id
+            if product and product.display_name in line.name:
+                if line.name != product.display_name:
+                    return line_name.replace(product.display_name, "", 1).strip()
+                else:
+                    return line_name
+            else:
+                return line_name
+        else:
+            if line.product_id:
+                return line.product_id.name
+            else:
+                return line_name
+
+    def _add_document_line_item_nodes(self, line_node, vals):
+        # New helper extension: keep base behavior, then optionally use free-text line description
+        res = super()._add_document_line_item_nodes(line_node, vals)
+
+        # Ensure structure exists and apply safe truncation for product-based defaults
+        product = vals["base_line"]["product_id"]
+        item = line_node.setdefault("cac:Item", {})
+        desc = item.setdefault("cbc:Description", {})
+        name = item.setdefault("cbc:Name", {})
+        # Default from product, truncated
+        if not desc.get("_text"):
+            default_desc = product.description_sale or product.name or ""
+            desc["_text"] = (default_desc or "")[:200]
+        if not name.get("_text"):
+            name["_text"] = (product.name or "")[:100]
+
+        # Apply behavior only when system parameter is enabled
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        use_line_desc = safe_eval(get_param("efactura.use_line_description", "False"))
+
+        if use_line_desc:
+            line = vals["base_line"]["record"]
+            if getattr(line, "name", None):
+                description = self.get_description(line)
+                if description:
+                    desc["_text"] = description[:200]
+                    name["_text"] = description[:100]
+        if item.get("cac:AdditionalItemProperty"):
+            item["cac:AdditionalItemProperty"] = []
+        return res
+
+    def _add_invoice_line_item_nodes(self, line_node, vals):
+        # New helper
+        # Restrict name and description length
+        # Replace name with description if present
+        # Call the proper parent hook for invoice line items
+        res = super()._add_invoice_line_item_nodes(line_node, vals)
+
+        # Apply behavior only when system parameter is enabled
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        use_line_desc = safe_eval(get_param("efactura.use_line_description", "False"))
+        item = line_node.setdefault("cac:Item", {})
+        desc = item.setdefault("cbc:Description", {})
+        name = item.setdefault("cbc:Name", {})
+        if use_line_desc:
+            line = vals["base_line"]["record"]
+            # Normalize and truncate the line description
+            if getattr(line, "name", None):
+                description = self.get_description(line)
+                if description:
+                    desc["_text"] = description[:200]
+                    name["_text"] = description[:100]
+
+        # When a free-text line description is used, drop additional properties
+        if item.get("cac:AdditionalItemProperty"):
+            item["cac:AdditionalItemProperty"] = []
+        return res
+
     def _export_invoice_vals(self, invoice):
+        # old helper
         vals_list = super()._export_invoice_vals(invoice)
         # get_param = self.env["ir.config_parameter"].sudo().get_param
         # clean_chars = safe_eval(get_param("efactura.clean_name", False))
@@ -117,57 +210,109 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 vals_list["vals"]["document_type_code"] = 751
         return vals_list
 
-    def _export_invoice_constraints(self, invoice, vals):
-        partner = invoice.commercial_partner_id
+    def _add_invoice_header_nodes(self, document_node, vals):
+        """New helper"""
+        res = super()._add_invoice_header_nodes(document_node, vals)
+        if document_node["cac:OrderReference"] and document_node["cac:OrderReference"].get("cbc:SalesOrderID"):
+            document_node["cac:OrderReference"]["cbc:SalesOrderID"]["_text"] = document_node["cac:OrderReference"][
+                "cbc:SalesOrderID"
+            ]["_text"][:200]
+        invoice = vals["invoice"]
+        if (
+            "pos_order_ids" in invoice._fields
+            and invoice.pos_order_ids
+            and document_node["cbc:InvoiceTypeCode"]["_text"] == 380
+        ):
+            document_node["cbc:InvoiceTypeCode"] = {"_text": 751}
 
-        if partner.country_id.code == "RO" and not partner.is_company:
-            # if not partner.vat:
-            #     partner.with_context(no_vat_validation=True).write({"vat": "0000000000000"})
-            if not partner.street:
-                partner.write({"street": "Principala"})
-
-            if partner.state_id and partner.state_id.code == "B":
-                if not partner.city:
-                    partner.write({"city": "SECTOR1"})
-                if "SECTOR" not in partner.city.upper():
-                    partner.write({"city": "SECTOR1"})
-
-        constraints = super()._export_invoice_constraints(invoice, vals)
-
-        if not partner.is_company:
-            constraints.pop("ciusro_customer_tax_identifier_required", False)
-
-        return constraints
+        return res
 
 
 class AccountEdiXmlUBLBIS3(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_bis3"
 
-    def _get_invoice_payment_means_vals_list(self, invoice):
-        # add accounts according to the invoice currency and l10n_ro_print_report
+    def _add_invoice_payment_means_nodes(self, document_node, vals):
+        # New helper:
+        # Build multiple cac:PaymentMeans nodes (code 42), one per eligible bank,
+        # when the multi-bank parameter is enabled for customer invoices.
+        # Otherwise, keep the default BIS3 behavior (single node).
+        res = super()._add_invoice_payment_means_nodes(document_node, vals)
+
         get_param = self.env["ir.config_parameter"].sudo().get_param
-        get_all_banks = get_param("efactura.get_all_banks", "False")
-        get_all_banks = safe_eval(get_all_banks)
+        get_all_banks = safe_eval(get_param("efactura.get_all_banks", "False"))
+        invoice = vals["invoice"]
+
         if get_all_banks and invoice.move_type == "out_invoice":
             domain = [("l10n_ro_print_report", "=", True), ("currency_id", "=", invoice.currency_id.id)]
             banks = self.env["res.partner.bank"].search(domain)
+
             if banks:
-                vals = []
+                payment_means_nodes = []
                 for bank in banks:
-                    val = {
-                        "payment_means_code": 30,
-                        "payee_financial_account_vals": self._get_financial_account_vals(bank),
+                    node = {
+                        "cbc:PaymentMeansCode": {
+                            "_text": 42,
+                        },
+                        # 'cbc:PaymentDueDate': {'_text': invoice.invoice_date_due or invoice.invoice_date},
+                        "cac:PayeeFinancialAccount": self._get_financial_account_node({**vals, "partner_bank": bank}),
                     }
-                    vals.append(val)
-                return vals
-            else:
-                return super()._get_invoice_payment_means_vals_list(invoice)
+                    payment_means_nodes.append(node)
+
+                # Replace any existing single node with the list of nodes
+                document_node["cac:PaymentMeans"] = payment_means_nodes
+
+        return res
+
+    def _invoice_constraints_cen_en16931_ubl_new(self, invoice, vals):
+        """
+        New helper:
+        Adjust only the BR-61 behavior to allow multiple cac:PaymentMeans
+        All other constraints are inherited from the core implementation.
+        """
+        # If multiple cac:PaymentMeans are present (list), call super() with a
+        # temporary view that uses only the first payment means node so that the
+        # core implementation (which expects a dict) does not crash.
+        payment_means = vals["document_node"].get("cac:PaymentMeans")
+        if isinstance(payment_means, list):
+            first_pm = payment_means[0] if payment_means else {}
+            document_node_copy = dict(vals["document_node"])
+            document_node_copy["cac:PaymentMeans"] = first_pm
+            vals_for_super = {**vals, "document_node": document_node_copy}
+            constraints = super()._invoice_constraints_cen_en16931_ubl_new(invoice, vals_for_super)
         else:
-            return super()._get_invoice_payment_means_vals_list(invoice)
+            constraints = super()._invoice_constraints_cen_en16931_ubl_new(invoice, vals)
+
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        get_all_banks = safe_eval(get_param("efactura.get_all_banks", "False"))
+
+        # Determine payment means code (from the first node if multiple)
+        pm_node = None
+        if isinstance(payment_means, list):
+            pm_node = payment_means[0] if payment_means else {}
+        else:
+            pm_node = payment_means or {}
+        pm_code = pm_node.get("cbc:PaymentMeansCode", {}).get("_text")
+
+        if pm_code in (30, 58) and get_all_banks and invoice.move_type == "out_invoice":
+            accounts = pm_node.get("cac:PayeeFinancialAccount")
+            has_account = False
+            if isinstance(accounts, list):
+                has_account = any(bool(acc) for acc in accounts)
+            else:
+                has_account = bool(accounts)
+
+            constraints["cen_en16931_payment_account_identifier"] = (
+                None
+                if has_account
+                else _("For credit transfer, at least one payee financial account should be provided.")
+            )
+
+        return constraints
 
     def _get_invoice_monetary_total_vals(
         self, invoice, taxes_vals, line_extension_amount, allowance_total_amount, charge_total_amount
     ):
+        # old helper
         vals = super()._get_invoice_monetary_total_vals(
             invoice, taxes_vals, line_extension_amount, allowance_total_amount, charge_total_amount
         )
