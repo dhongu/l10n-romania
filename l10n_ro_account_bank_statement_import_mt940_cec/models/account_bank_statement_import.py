@@ -8,14 +8,14 @@ from odoo import models
 class AccountBankStatementImport(models.TransientModel):
     _inherit = "account.statement.import"
 
-    def _is_bcr(self):
+    def _is_cec(self):
         if self._context.get("journal_id"):
             journal = self.env["account.journal"].browse(self._context["journal_id"])
             return journal.bank_account_id.bank_bic == "CECEROBU"
         return self._context.get("mt940_ro_cec")
 
     def _parse_file(self, data_file):
-        if self._is_bcr():
+        if self._is_cec():
             parser = self.env["l10n.ro.account.bank.statement.import.mt940.parser"]
             parser = parser.with_context(type="mt940_ro_cec")
             data = parser.parse(data_file)
