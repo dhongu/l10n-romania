@@ -145,9 +145,12 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         if not desc.get("_text"):
             default_desc = product.description_sale or product.name or ""
             desc["_text"] = (default_desc or "")[:200]
+        else:
+            desc["_text"] = desc["_text"][:200]
         if not name.get("_text"):
             name["_text"] = (product.name or "")[:100]
-
+        else:
+            name["_text"] = name["_text"][:100]
         # Apply behavior only when system parameter is enabled
         get_param = self.env["ir.config_parameter"].sudo().get_param
         use_line_desc = safe_eval(get_param("efactura.use_line_description", "False"))
@@ -159,6 +162,8 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 if description:
                     desc["_text"] = description[:200]
                     name["_text"] = description[:100]
+        line_node["cac:Item"]["cbc:Description"]["_text"] = desc["_text"]
+        line_node["cac:Item"]["cbc:Name"]["_text"] = name["_text"]
         if item.get("cac:AdditionalItemProperty"):
             item["cac:AdditionalItemProperty"] = []
         return res
@@ -188,6 +193,8 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         # When a free-text line description is used, drop additional properties
         if item.get("cac:AdditionalItemProperty"):
             item["cac:AdditionalItemProperty"] = []
+        line_node["cac:Item"]["cbc:Description"]["_text"] = desc["_text"][:200]
+        line_node["cac:Item"]["cbc:Name"]["_text"] = name["_text"][:100]
         return res
 
     def _export_invoice_vals(self, invoice):
@@ -221,6 +228,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         if (
             "pos_order_ids" in invoice._fields
             and invoice.pos_order_ids
+            and "cbc:InvoiceTypeCode" in document_node
             and document_node["cbc:InvoiceTypeCode"]["_text"] == 380
         ):
             document_node["cbc:InvoiceTypeCode"] = {"_text": 751}
