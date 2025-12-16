@@ -228,9 +228,8 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         if (
             "pos_order_ids" in invoice._fields
             and invoice.pos_order_ids
-            and "cbc:InvoiceTypeCode" in document_node
-            and "_text" in document_node["cbc:InvoiceTypeCode"]
-            and document_node["cbc:InvoiceTypeCode"]["_text"] == 380
+            and document_node.get("cbc:InvoiceTypeCode")
+            and document_node["cbc:InvoiceTypeCode"].get("_text") == 380
         ):
             document_node["cbc:InvoiceTypeCode"] = {"_text": 751}
 
