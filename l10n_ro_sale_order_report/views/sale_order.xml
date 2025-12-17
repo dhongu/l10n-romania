@@ -86,7 +86,9 @@
         </td>
 
         <xpath expr="//t[@t-foreach='lines_to_report']" position="attributes">
-            <attribute name="t-foreach">lines_to_report.filtered(lambda l: l.product_uom_qty != 0.0)</attribute>
+            <attribute
+                name="t-foreach"
+            >lines_to_report.filtered(lambda l: l.product_uom_qty != 0.0 or l.display_type)</attribute>
         </xpath>
 
         <p id="fiscal_position_remark" position="before">
@@ -314,7 +316,7 @@
         <xpath expr="//t[@t-set='lines_to_report']" position="attributes">
             <attribute
                 name="t-value"
-            >sale_order._get_order_lines_to_report().filtered(lambda l: l.product_uom_qty != 0.0)</attribute>
+            >sale_order._get_order_lines_to_report().filtered(lambda l: l.product_uom_qty != 0.0 or l.display_type)</attribute>
         </xpath>
     </template>
 
