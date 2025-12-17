@@ -85,6 +85,10 @@
             </td>
         </td>
 
+        <xpath expr="//t[@t-foreach='lines_to_report']" position="attributes">
+            <attribute name="t-foreach">lines_to_report.filtered(lambda l: l.product_uom_qty != 0.0)</attribute>
+        </xpath>
+
         <p id="fiscal_position_remark" position="before">
             <t t-set="transa" t-value="1" />
             <t t-if="doc.payment_term_id">
@@ -304,6 +308,14 @@
                 />
             </t>
         </t>
+    </template>
+
+    <template id="sale_order_portal_content_inherited" inherit_id="sale.sale_order_portal_content">
+        <xpath expr="//t[@t-set='lines_to_report']" position="attributes">
+            <attribute
+                name="t-value"
+            >sale_order._get_order_lines_to_report().filtered(lambda l: l.product_uom_qty != 0.0)</attribute>
+        </xpath>
     </template>
 
 
