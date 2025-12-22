@@ -193,8 +193,10 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         # When a free-text line description is used, drop additional properties
         if item.get("cac:AdditionalItemProperty"):
             item["cac:AdditionalItemProperty"] = []
-        line_node["cac:Item"]["cbc:Description"]["_text"] = desc["_text"][:200]
-        line_node["cac:Item"]["cbc:Name"]["_text"] = name["_text"][:100]
+        if desc:
+            line_node["cac:Item"]["cbc:Description"]["_text"] = desc["_text"][:200]
+        if name:
+            line_node["cac:Item"]["cbc:Name"]["_text"] = name["_text"][:100]
         return res
 
     def _export_invoice_vals(self, invoice):
