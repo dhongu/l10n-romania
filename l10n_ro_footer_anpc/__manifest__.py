@@ -5,8 +5,8 @@
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Displays ANPC logos and links in website footer",
-    "author": "Dan Stoica," "Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "author": "Dan Stoica,Odoo Community Association (OCA)",
+    "website": "https://www.terrabit.ro",
     "depends": [
         "website",
     ],
