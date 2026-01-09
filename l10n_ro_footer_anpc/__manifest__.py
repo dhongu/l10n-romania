@@ -5,7 +5,7 @@
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Displays ANPC logos and links in website footer",
-    "author": "Dan Stoica,Odoo Community Association (OCA)",
+    "author": "Terrabit, Dan Stoica,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "depends": [
         "website",
@@ -15,4 +15,5 @@
         "views/footer_template.xml",
     ],
     "maintainers": ["danila12"],
+    "development_status": "Mature",
 }
