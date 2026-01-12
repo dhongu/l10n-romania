@@ -24,7 +24,7 @@ class AccountInvoice(models.Model):
         defaults = super().default_get(fields_list)
         if "delegate_id" not in defaults:
             if "default_delegate_id" in self.env.context:
-                defaults["default_delegate_id"] = defaults["default_delegate_id"]
+                defaults["delegate_id"] = self.env.context["default_delegate_id"]
         return defaults
 
     @api.onchange("delegate_id")
@@ -34,13 +34,13 @@ class AccountInvoice(models.Model):
 
     # anularea facturilor cu zero
 
-    def action_invoice_cancel(self):
+    def button_cancel(self):
         for invoice in self:
             if invoice.amount_total == 0.0 and invoice.state == "paid":
                 invoice.state = "open"
                 # invoice.write({'state':'open'})
 
-        return super().action_invoice_cancel()
+        return super().button_cancel()
 
     def set_origin_with_picking(self):
         for invoice in self:
