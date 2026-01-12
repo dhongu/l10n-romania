@@ -15,7 +15,7 @@
         "l10n_ro_config",
         # "deltatech_sale_payment"  # pentru ce e ?
     ],
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     "data": [
         "views/sale_order.xml",
         "views/res_config_view.xml",
