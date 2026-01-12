@@ -13,8 +13,11 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Test Customer",
+                "vat": "RO1234567897",
                 "country_id": cls.country_ro.id,
                 "state_id": cls.state_bc.id,
+                "city": "Bacau",
+                "street": "Street Test 1",
             }
         )
         cls.delegate = cls.env["res.partner"].create(
@@ -23,6 +26,8 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
                 "is_company": False,
                 "mean_transp": "Auto CJ 01 AAA",
                 "country_id": cls.country_ro.id,
+                "city": "Bacau",
+                "street": "Street Test 2",
             }
         )
 
