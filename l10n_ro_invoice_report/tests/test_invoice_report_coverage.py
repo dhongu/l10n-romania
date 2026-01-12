@@ -9,10 +9,12 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
         super().setUpClass()
         cls.company = cls.env.company
         cls.country_ro = cls.env.ref("base.ro")
+        cls.state_bc = cls.env.ref("base.RO_BC")
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Test Customer",
                 "country_id": cls.country_ro.id,
+                "state_id": cls.state_bc.id,
             }
         )
         cls.delegate = cls.env["res.partner"].create(
