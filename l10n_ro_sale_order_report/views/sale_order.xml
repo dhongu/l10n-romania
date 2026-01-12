@@ -204,7 +204,7 @@
                                 <t t-if="adv_type == 'fixed'">
                                     <span
                                         t-esc="adv_value"
-                                        t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"
+                                        t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                     />
                                 </t>
                                 <span>according to Order #</span>
@@ -217,21 +217,21 @@
                                 <t t-set="untaxed_amount" t-value="doc.amount_untaxed * percent" />
                                 <span
                                     t-esc="untaxed_amount"
-                                    t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                 />
                             </td>
                             <td name="td_taxes" class="text-end">
                                 <t t-set="amount_taxes" t-value="doc.amount_tax * percent" />
                                 <span
                                     t-esc="amount_taxes"
-                                    t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                 />
                             </td>
                             <td name="td_subtotal" class="text-right o_price_total">
                                 <t t-set="total_amount" t-value="doc.amount_total * percent" />
                                 <span
                                     t-esc="total_amount"
-                                    t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"
+                                    t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                 />
                             </td>
                         </tr>
@@ -252,7 +252,7 @@
                                     <t t-set="total_amount" t-value="doc.amount_total * percent" />
                                     <span
                                         t-esc="total_amount"
-                                        t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"
+                                        t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                     />
                                 </span>
                             </td>
