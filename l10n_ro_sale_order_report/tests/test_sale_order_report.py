@@ -112,8 +112,6 @@ class TestSaleOrderReport(TransactionCase):
     def test_render_custom_proforma_template(self):
         # Ensure the custom proforma template compiles with a basic context
         qweb = self.env["ir.qweb"]
-        if not self.so.pricelist_id:
-            self.so.pricelist_id = self.env["product.pricelist"].search([], limit=1)
         values = {
             "doc": self.so.with_context(lang=self.so.partner_id.lang or self.env.lang),
             "docs": self.so,
