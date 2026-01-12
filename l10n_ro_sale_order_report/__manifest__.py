@@ -6,7 +6,7 @@
     "name": "Terrabit Sale Order Report",
     "summary": "Formular Factura Proformae",
     "version": "19.0.1.0.4",
-    "author": "Dorin Hongu, Dan Stoica, Odoo Community Association (OCA)",
+    "author": "Terrabit, Dorin Hongu, Dan Stoica, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],
@@ -21,5 +21,5 @@
         "views/res_config_view.xml",
     ],
     "images": ["images/main_screenshot.png"],
-    "installable": True,
+    "development_status": "Mature",
 }
