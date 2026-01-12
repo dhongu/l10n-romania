@@ -22,7 +22,6 @@ class TestL10nRoInvoiceReportBasics(TransactionCase):
         self.assertEqual(template_view._name, "ir.ui.view")
 
     def test_render_report_on_minimal_invoice(self):
-        Partner = self.env["res.partner"]
         Account = self.env["account.account"]
         Move = self.env["account.move"]
         country_ro = self.env.ref("base.ro")
