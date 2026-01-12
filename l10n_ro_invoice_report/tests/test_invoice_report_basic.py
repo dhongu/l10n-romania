@@ -2,10 +2,11 @@
 # Basic sanity tests for l10n_ro_invoice_report
 # Goal: ensure the report action exists, templates are available, and report renders.
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase, tagged
 
 
-class TestL10nRoInvoiceReportBasics(SavepointCase):
+@tagged("post_install", "-at_install")
+class TestL10nRoInvoiceReportBasics(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -28,9 +29,9 @@ class TestL10nRoInvoiceReportBasics(SavepointCase):
         partner = Partner.create({"name": "Test Customer"})
         # Try to get a reasonable income account
         income_account = (
-            Account.search([("account_type", "=", "income"), ("company_id", "=", self.company.id)], limit=1)
-            or Account.search([("internal_group", "=", "income"), ("company_id", "=", self.company.id)], limit=1)
-            or Account.search([("deprecated", "=", False), ("company_id", "=", self.company.id)], limit=1)
+            Account.search([("account_type", "=", "income"), ("company_ids", "in", self.company.ids)], limit=1)
+            or Account.search([("internal_group", "=", "income"), ("company_ids", "in", self.company.ids)], limit=1)
+            or Account.search([("deprecated", "=", False), ("company_ids", "in", self.company.ids)], limit=1)
         )
         self.assertTrue(income_account, "No account found to use on invoice line.")
 
@@ -55,7 +56,7 @@ class TestL10nRoInvoiceReportBasics(SavepointCase):
         # Do not require posting; the report should render in draft as well
 
         report = self.env.ref("l10n_ro_invoice_report.account_invoices_in_company_language")
-        html, html_type = report._render_qweb_html(move.ids)
+        html, html_type = report._render_qweb_html(report.report_name, move.ids, data={})
         self.assertIsInstance(html, (bytes, bytearray))
         self.assertGreater(len(html), 0)
         self.assertIn(html_type, ("html", "qweb-html"))
