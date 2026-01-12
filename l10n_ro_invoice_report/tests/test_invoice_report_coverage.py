@@ -8,18 +8,26 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.partner = cls.env["res.partner"].create({"name": "Test Customer"})
-        cls.delegate = cls.env["res.partner"].create({
-            "name": "Test Delegate",
-            "is_company": False,
-            "mean_transp": "Auto CJ 01 AAA"
-        })
+        cls.country_ro = cls.env.ref("base.ro")
+        cls.partner = cls.env["res.partner"].create(
+            {
+                "name": "Test Customer",
+                "country_id": cls.country_ro.id,
+            }
+        )
+        cls.delegate = cls.env["res.partner"].create(
+            {
+                "name": "Test Delegate",
+                "is_company": False,
+                "mean_transp": "Auto CJ 01 AAA",
+                "country_id": cls.country_ro.id,
+            }
+        )
 
         cls.Account = cls.env["account.account"]
-        cls.income_account = (
-            cls.Account.search([("account_type", "=", "income"), ("company_ids", "in", cls.company.ids)], limit=1)
-            or cls.Account.search([("internal_group", "=", "income"), ("company_ids", "in", cls.company.ids)], limit=1)
-        )
+        cls.income_account = cls.Account.search(
+            [("account_type", "=", "income"), ("company_ids", "in", cls.company.ids)], limit=1
+        ) or cls.Account.search([("internal_group", "=", "income"), ("company_ids", "in", cls.company.ids)], limit=1)
 
     def create_invoice(self, amount=100.0, partner=None):
         if partner is None:
@@ -28,12 +36,16 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
             "move_type": "out_invoice",
             "partner_id": partner.id,
             "invoice_line_ids": [
-                (0, 0, {
-                    "name": "Test Line",
-                    "quantity": 1.0,
-                    "price_unit": amount,
-                    "account_id": self.income_account.id,
-                })
+                (
+                    0,
+                    0,
+                    {
+                        "name": "Test Line",
+                        "quantity": 1.0,
+                        "price_unit": amount,
+                        "account_id": self.income_account.id,
+                    },
+                )
             ],
         }
         return self.env["account.move"].create(move_vals)
@@ -46,16 +58,18 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
         self.assertEqual(invoice.mean_transp, self.delegate.mean_transp)
 
         # Test default_get with context
-        invoice_with_ctx = self.env["account.move"].with_context(default_delegate_id=self.delegate.id).create({
-            "move_type": "out_invoice",
-            "partner_id": self.partner.id,
-        })
+        self.env["account.move"].with_context(default_delegate_id=self.delegate.id).create(
+            {
+                "move_type": "out_invoice",
+                "partner_id": self.partner.id,
+            }
+        )
         # Note: the code in default_get seems to have a bug or is very specific:
         # if "default_delegate_id" in self.env.context:
         #     defaults["default_delegate_id"] = defaults["default_delegate_id"]
         # It doesn't seem to do much unless defaults["default_delegate_id"] was already there or intended to be set.
         # But we call it to ensure coverage.
-        self.env["account.move"].with_context(default_delegate_id=self.delegate.id).default_get(['delegate_id'])
+        self.env["account.move"].with_context(default_delegate_id=self.delegate.id).default_get(["delegate_id"])
 
     def test_action_invoice_cancel_zero_amount(self):
         invoice = self.create_invoice(amount=0.0)
@@ -96,13 +110,15 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
         invoice._compute_payments_widget_reconciled_info()
 
     def test_compute_partner_bank_id(self):
-        bank = self.env['res.partner.bank'].create({
-            'acc_number': 'RO1234567890',
-            'partner_id': self.partner.commercial_partner_id.id,
-        })
+        bank = self.env["res.partner.bank"].create(
+            {
+                "acc_number": "RO1234567890",
+                "partner_id": self.partner.commercial_partner_id.id,
+            }
+        )
         # Assuming payment_bank_id is a field added by some module this depends on
         # If it doesn't exist, this might fail, let's check if it exists
-        if 'payment_bank_id' in self.env['res.partner']._fields:
+        if "payment_bank_id" in self.env["res.partner"]._fields:
             self.partner.commercial_partner_id.payment_bank_id = bank
             invoice = self.create_invoice()
             invoice._compute_partner_bank_id()
@@ -111,16 +127,18 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
     def test_report_helpers(self):
         invoice = self.create_invoice()
         # Add a line with discount
-        self.env["account.move.line"].create({
-            "move_id": invoice.id,
-            "name": "Discounted Line",
-            "quantity": 1.0,
-            "price_unit": 100.0,
-            "discount": 10.0,
-            "account_id": self.income_account.id,
-        })
+        self.env["account.move.line"].create(
+            {
+                "move_id": invoice.id,
+                "name": "Discounted Line",
+                "quantity": 1.0,
+                "price_unit": 100.0,
+                "discount": 10.0,
+                "account_id": self.income_account.id,
+            }
+        )
 
-        report_model = self.env["report.account.report_invoice"]
+        # report_model = self.env["report.account.report_invoice"]
         # In Odoo, AbstractModels are accessed via env
         # But report.account.report_invoice is inherited by ReportInvoiceWithoutPayment in our module
 
@@ -131,7 +149,7 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
 
         currency = invoice.currency_id
         text = report._amount_to_text(100.0, currency)
-        self.assertIn("One Hundred", text) # English default likely
+        self.assertIn("One Hundred", text)  # English default likely
 
         # _get_pickings
         report._get_pickings(invoice)
