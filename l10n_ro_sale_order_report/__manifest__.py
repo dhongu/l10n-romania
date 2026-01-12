@@ -7,7 +7,7 @@
     "summary": "Formular Factura Proformae",
     "version": "18.0.1.0.4",
     "author": "Dorin Hongu, Dan Stoica, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],
     "depends": [
