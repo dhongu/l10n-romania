@@ -25,8 +25,10 @@ class TestL10nRoInvoiceReportBasics(TransactionCase):
         Partner = self.env["res.partner"]
         Account = self.env["account.account"]
         Move = self.env["account.move"]
-
-        partner = Partner.create({"name": "Test Customer"})
+        state = self.env["res.country.state"].search([("code", "=", "BC")], limit=1)
+        partner = Partner.create(
+            {"name": "Test Customer", "country_id": self.company.country_id.id, "state_id": state.id}
+        )
         # Try to get a reasonable income account
         income_account = (
             Account.search([("account_type", "=", "income"), ("company_ids", "in", self.company.ids)], limit=1)
