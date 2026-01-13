@@ -176,7 +176,7 @@
                 <p>
                     <span t-esc="o.origin and o.origin[:30]" />
                     <t t-if="not  o.origin">
-                        <span t-field="o.group_id" />
+                        <span t-field="o.reference_ids" />
                     </t>
                 </p>
             </div>
@@ -355,7 +355,7 @@
                                 <p>
                                     <span t-field="o.origin" />
                                     <t t-if="not  o.origin">
-                                        <span t-field="o.group_id" />
+                                        <span t-field="o.reference_ids" />
                                     </t>
                                 </p>
                             </div>
