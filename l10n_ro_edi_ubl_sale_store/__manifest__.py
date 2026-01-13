@@ -4,7 +4,7 @@
 
 {
     "name": "Deltatech Sale from Store UBL",
-    "version": "18.0.1.0.5",
+    "version": "19.0.1.0.5",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "summary": "Sale from store",
@@ -16,8 +16,8 @@
         # "l10n_ro_efactura",
     ],
     "license": "LGPL-3",
-    "price": 25.00,
-    "currency": "EUR",
+    # "price": 25.00,
+    # "currency": "EUR",
     "data": [],
     "images": ["static/description/main_screenshot.png"],
     "development_status": "Mature",
