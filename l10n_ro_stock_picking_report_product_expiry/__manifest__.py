@@ -7,7 +7,7 @@
     "summary": "Adds product expiry date to picking reports",
     "license": "AGPL-3",
     "version": "19.0.1.0.1",
-    "author": "Dorin Hongu,Odoo Community Association (OCA)",
+    "author": "Terrabit,Dorin Hongu,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],
