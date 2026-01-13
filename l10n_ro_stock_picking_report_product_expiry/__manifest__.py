@@ -4,8 +4,9 @@
 
 {
     "name": "Romania - Picking Reports -Product Expiry",
+    "summary": "Adds product expiry date to picking reports",
     "license": "AGPL-3",
-    "version": "18.0.1.0.1",
+    "version": "19.0.1.0.1",
     "author": "Dorin Hongu,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
@@ -15,4 +16,5 @@
         "views/report_picking.xml",
     ],
     "auto_install": True,
+    "development_status": "Mature",
 }
