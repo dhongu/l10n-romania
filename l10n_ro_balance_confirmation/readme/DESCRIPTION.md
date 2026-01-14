@@ -44,6 +44,7 @@ The module extends standard Odoo functionality for partners by:
 
 - Extending the `res.partner` model for correct calculation of balances at a specified date
 - Implementing a wizard for entering the reference date
+- If a date is not provided in the wizard, the system parameter "l10n_ro_balance_confirmation.date_to" can be used. Date must be in YYYY-MM-DD (ex. 2026-12-31) format.
 - Developing a customized QWeb report template for the account statement
 - Using Odoo context to pass parameters between components
 

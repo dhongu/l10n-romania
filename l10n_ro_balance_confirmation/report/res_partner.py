@@ -3,6 +3,7 @@
 
 
 from odoo import api, fields, models
+from odoo.tools import safe_eval
 
 
 class ReportPartnerBalance(models.AbstractModel):
@@ -14,10 +15,19 @@ class ReportPartnerBalance(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
         if not docids:
             docids = self.env.context.get("active_ids")
+        if not data:
+            data = {}
+        date_to = data.get("date_to") or self.env.context.get("date_to")
+        if not date_to:
+            date_to = self.env["ir.config_parameter"].sudo().get_param("l10n_ro_balance_confirmation.date_to")
+
+            if date_to and isinstance(date_to, str):
+                date_to = fields.Date.to_date(date_to)
+
         return {
             "doc_ids": docids,
             "doc_model": "res.partner",
             "data": data,
             "docs": self.env["res.partner"].browse(docids),
-            "date_to": data.get("date_to", fields.Date.today()),
+            "date_to": date_to or fields.Date.today(),
         }
