@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Balance confirmation",
-    "version": "18.0.0.0.8",
+    "version": "18.0.0.0.9",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Generate balance confirmation for partners",
