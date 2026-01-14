@@ -1,22 +1,20 @@
-import requests
+import logging
 import re
 
+import requests
 
+_logger = logging.getLogger(__name__)
 
 BASE_URL = "https://www.posta-romana.ro"
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0"
-}
+HEADERS = {"User-Agent": "Mozilla/5.0"}
+
 
 def cauta_localitati(judet):
     url = BASE_URL + "/cnpr-app/modules/cauta-cod-postal/ajax/cauta_orase.php?q="
-    data = {
-        "k_judet": judet,
-        "k_lang": "ro"
-    }
-    r = requests.post(url, data=data, headers=HEADERS)
-    r=  r.json()   # conține HTML în câmpul "formular"
+    data = {"k_judet": judet, "k_lang": "ro"}
+    r = requests.post(url, data=data, headers=HEADERS, timeout=5)
+    r = r.json()  # conține HTML în câmpul "formular"
     html = r["formular"]
     return parseaza_localitati(html)
 
@@ -44,22 +42,15 @@ def parseaza_localitati(html):
         class_match = re.search(r"class=['\"](.*?)['\"]", attr)
         clasa = class_match.group(1) if class_match else ""
 
-        rezultate.append({
-            "nume": valoare,
-            "clasa": clasa
-        })
+        rezultate.append({"nume": valoare, "clasa": clasa})
 
     return rezultate
 
+
 def cauta_cod_postal_dupa_adresa(judet, localitate, adresa=""):
     url = BASE_URL + "/cnpr-app/modules/cauta-cod-postal/ajax/cautare_pentru_cod.php?q="
-    data = {
-        "k_adresa": adresa,
-        "k_judet": judet,
-        "k_localitate": localitate,
-        "k_lang": "ro"
-    }
-    r = requests.post(url, data=data, headers=HEADERS)
+    data = {"k_adresa": adresa, "k_judet": judet, "k_localitate": localitate, "k_lang": "ro"}
+    r = requests.post(url, data=data, headers=HEADERS, timeout=5)
     r = r.json()
     html = r["formular"]
     return parseaza_coduri_localitate_div(html)
@@ -91,7 +82,7 @@ def parseaza_coduri_localitate_div(html):
             "judet": p_tags[1].strip() if len(p_tags) > 1 else "",
             "localitate": p_tags[2].strip() if len(p_tags) > 2 else "",
             "strada": p_tags[3].strip() if len(p_tags) > 3 else "",
-            "oficiu": a_tags[0].strip() if len(a_tags) > 0 else ""
+            "oficiu": a_tags[0].strip() if len(a_tags) > 0 else "",
         }
 
         rezultate.append(rezultat)
@@ -101,25 +92,20 @@ def parseaza_coduri_localitate_div(html):
 
 def cauta_dupa_cod_postal(cod_postal):
     url = BASE_URL + "/cnpr-app/modules/cauta-cod-postal/ajax/cautare_cod.php?q="
-    data = {
-        "k_cod_postal": cod_postal,
-        "k_lang": "ro"
-    }
-    r = requests.post(url, data=data, headers=HEADERS)
+    data = {"k_cod_postal": cod_postal, "k_lang": "ro"}
+    r = requests.post(url, data=data, headers=HEADERS, timeout=5)
     return r.json()
-
-
 
 
 # ---------------------------
 # Exemple de utilizare:
 # ---------------------------
 
-print("Lista localități Bacău:")
-print(cauta_localitati("BACĂU"))
+_logger.info("Lista localități Bacău:")
+_logger.info(cauta_localitati("BACĂU"))
 
-print("Căutare cod poștal pentru Onesti:")
-print(cauta_cod_postal_dupa_adresa("BACĂU", "Onești"))
+_logger.info("Căutare cod poștal pentru Onesti:")
+_logger.info(cauta_cod_postal_dupa_adresa("BACĂU", "Onești"))
 
-print("Căutare după cod poștal:")
-print(cauta_dupa_cod_postal("607226"))
+_logger.info("Căutare după cod poștal:")
+_logger.info(cauta_dupa_cod_postal("607226"))

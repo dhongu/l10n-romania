@@ -45,14 +45,16 @@ class AccountMove(models.Model):
 
         return starting_sequence
 
-    # def _sequence_matches_date(self):
-    #     res = super()._sequence_matches_date()
-    #     if self.move_type in ["out_invoice", "out_refund"] and self.state != "draft":
-    #         move_has_name = self.name and self.name != "/"
-    #         if move_has_name:
-    #             last_sequence = self._get_last_sequence()
-    #             if last_sequence:
-    #                 last_move = self.search([("name", "=", last_sequence)], limit=1)
-    #                 if last_move.date > self.date:
-    #                     res = False
-    #     return res
+    def create(self, vals_list):
+        res = super().create(vals_list)
+        for move in res:
+            if (
+                move.journal_id
+                and move.journal_id.type == "cash"
+                and move.company_id.account_fiscal_country_id.code == "RO"
+            ):
+                if move.payment_id:
+                    move.l10n_ro_cash_document_type = move.payment_id.l10n_ro_cash_document_type
+                else:
+                    move.l10n_ro_cash_document_type = "other"
+        return res
