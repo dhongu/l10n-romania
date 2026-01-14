@@ -21,8 +21,8 @@ class ReportPartnerBalance(models.AbstractModel):
         if not date_to:
             date_to = self.env["ir.config_parameter"].sudo().get_param("l10n_ro_balance_confirmation.date_to")
 
-            if date_to and isinstance(date_to, str):
-                date_to = fields.Date.to_date(date_to)
+        if date_to and isinstance(date_to, str):
+            date_to = fields.Date.to_date(date_to)
 
         return {
             "doc_ids": docids,
