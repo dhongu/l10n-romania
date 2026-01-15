@@ -7,12 +7,6 @@ from odoo import _, api, fields, models
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
-    def _prepare_invoice_values(self):
-        res = super()._prepare_invoice_values()
-        res["delegate_id"] = self.delegate_id.id
-        res["mean_transp"] = self.mean_transp
-        return res
-
     def _get_report_base_filename(self):
         self.ensure_one()
         return f"{self.picking_type_id.name} {self.name}"
@@ -87,31 +81,3 @@ class StockPicking(models.Model):
             body=message,
         )
         return True
-
-
-
-from odoo import _, api, fields, models, SUPERUSER_ID
-from odoo.exceptions import UserError
-from odoo.fields import Command
-from odoo.tools import format_date, formatLang, frozendict
-
-
-class SaleAdvancePaymentInv(models.TransientModel):
-    _inherit = 'sale.advance.payment.inv'
-
-    def _create_invoices(self, sale_orders):
-        res = super(SaleAdvancePaymentInv, self)._create_invoices(sale_orders)
-        for order in sale_orders:
-            pickings = order.picking_ids.filtered(lambda p: p.state == 'done')
-            if not pickings:
-                pickings = order.picking_ids.filtered(lambda p: p.state not in ['cancel'])
-            if pickings:
-                picking = pickings[0]
-                invoices = res.filtered(lambda i: i.invoice_origin == order.name)
-                if not invoices:
-                    invoices = res
-                invoices.write({
-                    'delegate_id': picking.delegate_id.id,
-                    'mean_transp': picking.mean_transp,
-                })
-        return res
