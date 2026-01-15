@@ -3,6 +3,7 @@
 
 
 from odoo import api, fields, models
+from datetime import date
 
 
 class ReportPartnerBalance(models.AbstractModel):
@@ -20,6 +21,9 @@ class ReportPartnerBalance(models.AbstractModel):
         if not date_to:
             date_to = self.env["ir.config_parameter"].sudo().get_param("l10n_ro_balance_confirmation.date_to")
 
+        if not date_to:
+            date_to = date(date.today().year - 1, 12, 31)
+
         if date_to and isinstance(date_to, str):
             date_to = fields.Date.to_date(date_to)
 
@@ -28,5 +32,5 @@ class ReportPartnerBalance(models.AbstractModel):
             "doc_model": "res.partner",
             "data": data,
             "docs": self.env["res.partner"].browse(docids),
-            "date_to": date_to or fields.Date.today(),
+            "date_to": date_to,
         }
