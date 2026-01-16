@@ -6,18 +6,16 @@
             <div class="page">
                 <div id="from" style="font-size: 0.85rem">
                     <div id="issuer">
-                        <span style="font-weight: bold;">Issuer: <span t-field="res_company.partner_id.name" /></span>
+                        <span style="font-weight: bold;">Emitent: <span t-field="res_company.partner_id.name" /></span>
                     </div>
                     <div id="vat">
-                        <span>VAT: <span t-field="res_company.partner_id.vat" /></span>
+                        <span>CIF: <span t-field="res_company.partner_id.vat" /></span>
                     </div>
                     <div id="nrc" t-if="res_company.partner_id.nrc">
-                        <span>Registration number at the Registry of Commerce: <span
-                                t-field="res_company.partner_id.nrc"
-                            /></span>
+                        <span>Nr. Reg. Com: <span t-field="res_company.partner_id.nrc" /></span>
                     </div>
                     <div id="address">
-                        <span>Company address:
+                        <span>Sediu:
                             <address
                                 t-field="res_company.partner_id"
                                 t-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": false, "no_tag_br": true}'
@@ -33,15 +31,15 @@
                     </div>
                 </div>
                 <div id="to">
-                    <div id="to_text" class="h5" style="margin-top: 25px;">To: </div>
+                    <div id="to_text" class="h5" style="margin-top: 25px;">Către: </div>
                     <div id="partner">
                         <span style="font-weight: bold;" t-field="o.name" />
                     </div>
                     <div id="partner_vat">
-                        <span>VAT: </span><span t-field="o.vat" />
+                        <span>CIF: </span><span t-field="o.vat" />
                     </div>
                     <div id="partner_address">
-                        <span>Address: </span>
+                        <span>Adresa: </span>
                         <span t-field="o.street" />, <span t-field="o.city" />, <span t-field="o.state_id" />
                     </div>
                     <div id="partner_tel">
@@ -50,41 +48,35 @@
                             <span>, </span><span t-field="o.mobile" />
                         </t>
                     </div>
-                    <div id="partner_mail">
+                    <div id="partner_mail" t-if="o.email">
                         <span>E-mail: </span><span t-field="o.email" />
                     </div>
                 </div>
                 <br />
                 <div id="text1" style="font-size: 0.85rem;">
-                    Conform dispozițiilor în vigoare, vă înștiințăm că în evidențele noastre contabile, unitatea dvs.
-                    figurează cu următoarele:
+                    Conform dispozițiilor legale în vigoare, vă înștiințăm că în evidențele noastre contabile, unitatea
+                    dvs. figurează la data de
+                    <span t-esc="date_to" t-options='{"widget": "date"}' />,
+                    cu următoarele sume:
                 </div>
                 <div id="title" style="text-align: center; font-weight: bold">
                     EXTRAS DE CONT
                     <t t-if="date_to">
-                        LA DATA: <span t-esc="date_to" />
+                        LA DATA: <span t-esc="date_to" t-options='{"widget": "date"}' />
                     </t>
                 </div>
                 <br />
-
-                <t t-set="doc" t-value="o" />
-                <t t-if="date_to">
-                    <t t-set="doc" t-value="o.with_context(date_to=date_to)" />
-                </t>
-
-                <div id="credit" style="font-weight: bold" t-if="doc.credit">
-                    <span>Credite: </span>
+                <div id="sold" style="font-weight: bold">
+                    <span>Partner balance: </span>
+                    <t t-set="doc" t-value="o" />
+                    <t t-if="date_to">
+                        <t t-set="doc" t-value="o.with_context(date_to=date_to)" />
+                    </t>
                     <span t-field="doc.credit" />
+<!--                    <span>Partner balance: </span><span t-field="o.credit" />-->
                 </div>
-
-                <div id="debit" style="font-weight: bold" t-if="doc.debit">
-                    <span>Debite: </span>
-                    <span t-field="doc.debit" />
-                </div>
-
-
                 <div id="text2" style="font-size: 0.85rem;">
-                    În termen de 5 zile de la primire urmează să ne restituiți acest extras confirmat pentru suma
+                    Vă rugăm ca în termen de 5 zile de la primire, să ne restituiți acest extras confirmat pentru suma
                     acceptată, iar în cazul constatării de diferențe să anexați o notă explicativă cuprinzând obiecțiile
                     dumneavoastră.
                     <br />
@@ -106,17 +98,17 @@
 
                 <div id="response" style="font-size: 0.85rem; margin-top: 90px;">
                     <div id="partner_an_name">
-                        <span>Partner credit: </span><span t-field="o.name" />
+                        <span>Unitate debitoare: </span><span t-field="o.name" />
                     </div>
                     <div id="nr_reg">
-                        <span>No.</span>
+                        <span>Nr. de înregistrare</span>
                         <span>_______________</span>
-                        <span>from</span>
+                        <span>din</span>
                         <span>______________________</span>
                     </div>
                     <br />
                     <div id="partner_an_to" style="text-align: center; font-weight:bold;">
-                        To
+                        Către
                         <br />
                         <span t-field="res_company.partner_id.name" />
                     </div>
@@ -168,6 +160,7 @@
         <field name="binding_type">report</field>
         <field name="report_name">l10n_ro_balance_confirmation.report_partner_balance</field>
         <field name="report_file">l10n_ro_balance_confirmation.report_partner_balance</field>
+        <field name="print_report_name">'Confirmare sold'</field>
     </record>
 
 </odoo>
