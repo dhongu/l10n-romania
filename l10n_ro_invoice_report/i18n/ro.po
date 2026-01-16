@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 10:21+0000\n"
-"PO-Revision-Date: 2026-01-16 10:21+0000\n"
+"POT-Creation-Date: 2026-01-16 10:42+0000\n"
+"PO-Revision-Date: 2026-01-16 10:42+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -189,7 +189,7 @@ msgstr "<strong>Mijloc transport:</strong>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>NRC:</strong>"
-msgstr "<strong>NRC:</strong>"
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -313,7 +313,7 @@ msgstr "Ascunde livrările pe factură"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
 msgid "Hide picking on invoice"
-msgstr "Ascunde livrările pe factură"
+msgstr "Ascunde livrarile"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -332,8 +332,8 @@ msgid ""
 "                    no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and\n"
 "                    subsequent amendments."
 msgstr ""
-"Această document are doar un caracter informativ. Originalul va putea fi "
-"descărcat din SPV în maximum 5 zile lucrătoare de la emitere, conform legislației în "
+"Acest document are doar un caracter informativ. Originalul va putea fi "
+"descărcat din SPV în maximum 5 zile de la emitere, conform legislației în "
 "vigoare"
 
 #. module: l10n_ro_invoice_report
@@ -349,12 +349,12 @@ msgstr "Jurnal"
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_move
 msgid "Journal Entry"
-msgstr "Înregistrare jurnal"
+msgstr "Notă contabilă"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_move_line
 msgid "Journal Item"
-msgstr "Element de jurnal"
+msgstr "Element jurnal"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_bank_statement_line__mean_transp
@@ -404,7 +404,8 @@ msgstr "Ascunde numele produsului"
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__remove_product_name_from_invoice_line
 msgid "Remove product name from invoice line if line has description"
-msgstr "Eliminați numele produsului din linia facturii dacă linia are descriere"
+msgstr ""
+"Eliminați numele produsului din linia facturii dacă linia are descriere"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
