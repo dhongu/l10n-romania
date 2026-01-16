@@ -3,6 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
+
 from odoo.addons.stock_picking_batch.models.stock_picking_batch import StockPickingBatch as BaseBatch
 
 
@@ -78,23 +80,24 @@ class StockPickingBatch(models.Model):
 
         return errors
 
-    #monkey patching action_done
+    # monkey patching action_done
     def action_done(self):
-        # EXTENDS 'stock_picking_batch'
         self.ensure_one()
         self._check_company()
 
         self.picking_ids.with_context(l10n_ro_edi_stock_validate_carrier=True)._l10n_ro_edi_stock_validate_carrier()
-    
+
         if self.l10n_ro_edi_stock_required:
             # Carrier should be the same on all pickings
             first_carrier = self.picking_ids[0].carrier_id
             if any(picking.carrier_id != first_carrier for picking in self.picking_ids):
                 raise UserError(_("All Pickings in a Batch Transfer should have the same Carrier"))
-    
+
             # Commercial partner should be the same on all pickings
             first_commercial_partner = self.picking_ids[0].partner_id.commercial_partner_id
-            if any(picking.partner_id.commercial_partner_id != first_commercial_partner for picking in self.picking_ids):
+            if any(
+                picking.partner_id.commercial_partner_id != first_commercial_partner for picking in self.picking_ids
+            ):
                 raise UserError(_("All Pickings in a Batch Transfer should have the same Commercial Partner"))
 
         return BaseBatch.action_done(self)
