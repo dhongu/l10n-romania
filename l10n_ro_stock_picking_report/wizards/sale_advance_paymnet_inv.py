@@ -12,7 +12,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
                 pickings = order.picking_ids.filtered(lambda p: p.state not in ["cancel"])
             if pickings:
                 picking = pickings[0]
-                invoices = res.filtered(lambda i: i.invoice_origin == order.name)
+                invoices = res.filtered(lambda i, order=order: i.invoice_origin == order.name)
                 if not invoices:
                     invoices = res
                 invoices.write(

@@ -259,7 +259,7 @@ msgid ""
 "                    no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and\n"
 "                    subsequent amendments."
 msgstr ""
-"Această factură are doar un caracter informativ. Originalul va putea fi "
+"Acest document are doar un caracter informativ. Originalul va putea fi "
 "descărcat din SPV în maximum 5 zile de la emitere, conform legislației în "
 "vigoare"
 
