@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-15 13:22+0000\n"
-"PO-Revision-Date: 2026-01-15 13:22+0000\n"
+"POT-Creation-Date: 2026-01-19 09:53+0000\n"
+"PO-Revision-Date: 2026-01-19 09:53+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -19,6 +19,13 @@ msgstr ""
 #: model:ir.actions.report,print_report_name:l10n_ro_balance_confirmation.action_report_partner_balance
 msgid "'Confirmare sold'"
 msgstr "\"Confirmare sold\""
+
+#. module: l10n_ro_balance_confirmation
+#: model_terms:ir.ui.view,arch_db:l10n_ro_balance_confirmation.report_partner_balance_document
+msgid ""
+",\n"
+"                    cu următoarele sume:"
+msgstr ""
 
 #. module: l10n_ro_balance_confirmation
 #: model:mail.template,body_html:l10n_ro_balance_confirmation.mail_template_balance_confirmation
@@ -44,7 +51,7 @@ msgstr ""
 
 #. module: l10n_ro_balance_confirmation
 #: model_terms:ir.ui.view,arch_db:l10n_ro_balance_confirmation.report_partner_balance_document
-msgid "<span>Addresa: </span>"
+msgid "<span>Adresa: </span>"
 msgstr ""
 
 #. module: l10n_ro_balance_confirmation
@@ -223,6 +230,13 @@ msgid "Emitent:"
 msgstr ""
 
 #. module: l10n_ro_balance_confirmation
+#: model:ir.model.fields,field_description:l10n_ro_balance_confirmation.field_res_partner__has_debit_credit_at_date
+#: model:ir.model.fields,field_description:l10n_ro_balance_confirmation.field_res_users__has_debit_credit_at_date
+#: model_terms:ir.ui.view,arch_db:l10n_ro_balance_confirmation.view_res_partner_filter
+msgid "Has Debit/Credit at date"
+msgstr "Are debit/credit la data"
+
+#. module: l10n_ro_balance_confirmation
 #: model:ir.model.fields,field_description:l10n_ro_balance_confirmation.field_l10n_ro_balance_confirm_dialog__id
 msgid "ID"
 msgstr ""
@@ -302,10 +316,3 @@ msgstr ""
 #: model:ir.model,name:l10n_ro_balance_confirmation.model_l10n_ro_balance_confirm_dialog
 msgid "Wizard for date input for balance confirmation"
 msgstr ""
-
-#. module: l10n_ro_balance_confirmation
-#: model_terms:ir.ui.view,arch_db:l10n_ro_balance_confirmation.report_partner_balance_document
-msgid "cu următoarele sume:"
-msgstr ""
-",\n"
-"                    cu următoarele sume:"
