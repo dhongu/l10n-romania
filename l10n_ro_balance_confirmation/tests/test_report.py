@@ -12,11 +12,12 @@ class TestBalanceConfirmation(TransactionCase):
         )
 
     def test_report_values_default(self):
-        # Test default (today)
+        # Test default (31st Dec of previous year)
         values = self.env["report.l10n_ro_balance_confirmation.report_partner_balance"]._get_report_values(
             self.partner.ids
         )
-        self.assertEqual(values["date_to"], fields.Date.today())
+        expected_date = fields.Date.to_date("%s-12-31" % (fields.Date.today().year - 1))
+        self.assertEqual(values["date_to"], expected_date)
 
     def test_report_values_data(self):
         # Test from data
