@@ -234,7 +234,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_balance_confirmation.field_res_users__has_debit_credit_at_date
 #: model_terms:ir.ui.view,arch_db:l10n_ro_balance_confirmation.view_res_partner_filter
 msgid "Has Debit/Credit at date"
-msgstr "Are debit/credit la data"
+msgstr "Cu sold la 31 dec."
 
 #. module: l10n_ro_balance_confirmation
 #: model:ir.model.fields,field_description:l10n_ro_balance_confirmation.field_l10n_ro_balance_confirm_dialog__id
