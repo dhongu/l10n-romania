@@ -10,6 +10,9 @@ class BalanceConfirm(models.TransientModel):
     _description = "Wizard for date input for balance confirmation"
 
     l10n_ro_balance_date = fields.Date(string="At Date", default=fields.Date.today())
+    l10n_ro_balance_type = fields.Selection(
+        selection=[("supplier", "Furnizor"), ("client", "Client"), ("all", "Toate")], default="client"
+    )
 
     def action_print_balance(self):
         partners = self.env["res.partner"].browse(self.env.context.get("active_ids"))
@@ -29,6 +32,7 @@ class BalanceConfirm(models.TransientModel):
             "active_ids": partners.ids,
             "active_id": partners.ids[0] if partners else False,
             "date_to": self.l10n_ro_balance_date,  # acesta este critic!
+            "type": self.l10n_ro_balance_type,
         }
         # action = action.with_context(date_to=self.l10n_ro_balance_date)
         # pylint: disable=W8121
