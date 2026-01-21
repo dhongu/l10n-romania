@@ -8,6 +8,7 @@
             <form string="Balance Confirmation">
                 <group>
                     <field name="l10n_ro_balance_date" required="1" />
+                    <field name="l10n_ro_balance_type" required="1" />
                 </group>
                 <footer>
                     <button name="action_print_balance" string="Print" type="object" class="btn-primary" />
