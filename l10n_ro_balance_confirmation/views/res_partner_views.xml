@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_res_partner_filter" model="ir.ui.view">
+        <field name="name">res.partner.select.inherit.l10n_ro_balance_confirmation</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
+        <field name="arch" type="xml">
+            <filter name="type_company" position="after">
+                <separator />
+                <filter
+                    string="Cu sold la 31 dec."
+                    name="has_debit_credit"
+                    domain="[('has_debit_credit_at_date', '=', True)]"
+                />
+            </filter>
+        </field>
+    </record>
+</odoo>
