@@ -74,7 +74,7 @@
                     </t>
                     <t t-if="type == 'all' or not type">
                         <span
-                            t-esc="doc.credit - doc.debit"
+                            t-esc="doc.credit + doc.debit"
                             t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                         />
                     </t>
