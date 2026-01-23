@@ -12,12 +12,12 @@ class ResZip(models.Model):
     _description = "Zip Code"
 
     name = fields.Char(string="Postal Code", required=True)
-    city = fields.Char(string="City", required=True)
+    city = fields.Char(string="City Name", required=True)
     city_id = fields.Many2one(
         "res.city",
         string="City",
     )
-    state = fields.Char(string="State")
+    state = fields.Char(string="State Name")
     state_id = fields.Many2one("res.country.state", string="State")
     country_id = fields.Many2one("res.country", string="Country")
     street_type = fields.Char(string="Street Type")
