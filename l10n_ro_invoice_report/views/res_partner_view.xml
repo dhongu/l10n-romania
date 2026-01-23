@@ -17,7 +17,7 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
-            <group name="misc" position="inside">
+            <group name="purchase" position="inside">
                 <field name="payment_bank_id" />
             </group>
         </field>
