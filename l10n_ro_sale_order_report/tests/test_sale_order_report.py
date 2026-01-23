@@ -16,6 +16,8 @@ class TestSaleOrderReport(TransactionCase):
         super().setUpClass()
         cls.company = cls.env.company
         cls.company.logo = False
+        cls.company.counter_on_sale_order = True
+        cls.company.include_image_line = True
         # Partner
         cls.partner = cls.env["res.partner"].create(
             {
@@ -37,7 +39,7 @@ class TestSaleOrderReport(TransactionCase):
             {
                 "name": "Test Product",
                 "list_price": 10.0,
-                "image_256": png_1x1,
+                "image_1920": png_1x1,
                 "type": "consu",
             }
         )

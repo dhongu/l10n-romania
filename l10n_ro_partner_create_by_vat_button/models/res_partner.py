@@ -92,7 +92,9 @@ class ResPartner(models.Model):
             else:
                 country_code = self.country_id.code
         else:
-            if self.name and not self.name.isdigit():
+            if self.vat:
+                raise UserError(_("Please add the country code to the vat number or country field"))
+            if self.name and len(self.name) > 2 and not self.name.isdigit() and not self.name[:2].isdigit():
                 vat_number = self.name[2:]
                 country_code = self.name[:2]
             else:

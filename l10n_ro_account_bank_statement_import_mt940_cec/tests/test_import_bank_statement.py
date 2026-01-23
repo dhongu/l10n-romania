@@ -105,7 +105,7 @@ class TestImport(TestMT940BankStatementImport):
     def test_statement_import(self):
         """Test correct creation of single statement BCR."""
         testfile = file_path(
-            "l10n_ro_account_bank_statement_import_mt940_bcr/test_files/test_file_bcr.STA",
+            "l10n_ro_account_bank_statement_import_mt940_cec/test_files/test_file_bcr.STA",
         )
         parser = self.env["l10n.ro.account.bank.statement.import.mt940.parser"]
         parser = parser.with_context(type="mt940_ro_cec")
