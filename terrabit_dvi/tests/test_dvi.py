@@ -143,7 +143,7 @@ class TestDVI(TransactionCase):
         po = po.save()
         po.button_confirm()
         self.picking = po.picking_ids[0]
-        self.picking.move_line_ids.write({"qty_done": 10.0})
+        self.picking.move_line_ids.write({"quantity": 10.0})
         self.picking.button_validate()
 
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]

@@ -89,10 +89,13 @@ class CashRegister(models.Model):
         store=True,
     )
 
-    move_ids = fields.Many2many("account.move", string="Journal Items", compute="_compute_move_ids")
-    move_line_ids = fields.Many2many("account.move.line", string="Journal Items", compute="_compute_move_ids")
+    move_ids = fields.Many2many("account.move", string="Moves", compute="_compute_move_ids")
+    move_line_ids = fields.Many2many("account.move.line", string="Move Lines", compute="_compute_move_ids")
 
-    _sql_constraints = [("unique_date_journal", "unique(date, journal_id)", "Duplicate date")]
+    _sql_constraints = [
+        ("unique_name_journal", "unique(name, journal_id)", "The number must be unique per journal"),
+        ("unique_date_journal", "unique(date, journal_id)", "Duplicate date"),
+    ]
 
     @api.depends("journal_id", "date")
     def _compute_name(self):

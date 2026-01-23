@@ -89,7 +89,7 @@ class AccountInvoice(models.Model):
                         item["payment_type"] = payment.payment_type
         return res
 
-    @api.depends("bank_partner_id")
+    @api.depends("bank_partner_id", "commercial_partner_id.payment_bank_id")
     def _compute_partner_bank_id(self):
         res = super()._compute_partner_bank_id()
         for move in self:
