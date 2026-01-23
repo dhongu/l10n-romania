@@ -20,7 +20,7 @@
                     instrucțiunile necesare completării. Nu ezitați să ne contactați dacă sunt necesare detalii.
                 </p>
                 <p>
-                    <t t-out="user.signature"/>
+                    <t t-out="user.signature" />
                 </p>
             </div>
         </field>
