@@ -8,6 +8,7 @@ import pytz
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
 
 
 class Picking(models.Model):
@@ -65,7 +66,18 @@ class Picking(models.Model):
             res["data"]["notificare"]["dateTransport"]["dataTransport"] = today
 
         for item in res["data"]["notificare"]["bunuriTransportate"]:
-            # fix bug
+            # fix bug and get price from move if cost price is 0
+            if float_is_zero(item["valoareLeiFaraTva"], precision_rounding=0.01):
+                # try to find the move
+                product_name = item["denumireMarfa"]
+                move = self.env["stock.move"].search(
+                    [("product_id.name", "=", product_name), ("picking_id", "in", self.ids)], limit=1
+                )
+                if move:
+                    try:
+                        item["valoareLeiFaraTva"] = move.price_unit
+                    except Exception:
+                        item["valoareLeiFaraTva"] = move.product_id.list_price
             item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)
             # fix rounding - ex. 0.470000000000003
             item["greutateNeta"] = round(item["greutateNeta"], 2)
