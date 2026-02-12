@@ -73,11 +73,26 @@ class Picking(models.Model):
                 move = self.env["stock.move"].search(
                     [("product_id.name", "=", product_name), ("picking_id", "in", self.ids)], limit=1
                 )
+
                 if move:
-                    try:
-                        item["valoareLeiFaraTva"] = move.price_unit
-                    except Exception:
-                        item["valoareLeiFaraTva"] = move.product_id.list_price
+                    price_unit = 0.0
+                    if move.stock_valuation_layer_ids:
+                        quantity = 0.0
+                        value = 0.0
+                        for svl in move.stock_valuation_layer_ids:
+                            quantity += svl.quantity
+                            value += svl.value
+                        if quantity:
+                            price_unit = value / quantity
+                        else:
+                            price_unit = 0.0
+                    if not price_unit:
+                        price_unit = move.product_id.standard_price
+                    if not price_unit:
+                        price_unit = move.product_id.list_price
+                    if not price_unit:
+                        raise UserError(_("Nu am gasit un pret pentru %s") % move.product_id.display_name)
+                    item["valoareLeiFaraTva"] = price_unit
             item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)
             # fix rounding - ex. 0.470000000000003
             item["greutateNeta"] = round(item["greutateNeta"], 2)
