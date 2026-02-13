@@ -13,6 +13,7 @@ _logger = logging.getLogger(__name__)
 
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
+    _name = "account.edi.xml.ubl_ro"
     _inherit = "account.edi.xml.ubl_ro"
 
     def _get_invoice_line_price_vals(self, line):
@@ -239,6 +240,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
 
 class AccountEdiXmlUBLBIS3(models.AbstractModel):
+    _name = "account.edi.xml.ubl_bis3"
     _inherit = "account.edi.xml.ubl_bis3"
 
     def _add_invoice_payment_means_nodes(self, document_node, vals):
