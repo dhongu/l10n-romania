@@ -4,7 +4,7 @@
 
 {
     "name": "eFactura Enhancement",
-    "version": "18.0.0.1.5",
+    "version": "18.0.0.1.6",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "eFactura Enhancement",
@@ -13,6 +13,7 @@
     "depends": [
         "l10n_ro_edi",
         "l10n_ro_config",
+        "account_edi_ubl_cii",
         # "l10n_ro_efactura",
     ],
     "license": "LGPL-3",
