@@ -7,6 +7,7 @@ from odoo import models
 
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
+    _name = "account.edi.xml.ubl_ro"
     _inherit = "account.edi.xml.ubl_ro"
 
     def _export_invoice_vals(self, invoice):
