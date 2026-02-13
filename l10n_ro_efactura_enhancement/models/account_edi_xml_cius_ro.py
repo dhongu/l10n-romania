@@ -332,3 +332,9 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
             vals["payable_amount"] = invoice.amount_total
 
         return vals
+
+    def _invoice_constraints_peppol_en16931_ubl_new(self, invoice, vals):
+        res = super()._invoice_constraints_peppol_en16931_ubl_new(invoice, vals)
+        if "ubl_peppol_en16931-r010" in res:
+            res.pop("ubl_peppol_en16931-r010")
+        return res
