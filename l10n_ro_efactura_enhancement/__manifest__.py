@@ -12,6 +12,7 @@
     "category": "Localization",
     "depends": [
         "l10n_ro_edi",
+        "l10n_ro_config",
         # "l10n_ro_efactura",
     ],
     "license": "LGPL-3",
