@@ -414,7 +414,7 @@
                                         </div>
                                     </td>
                                     <td class="text-end">
-                                        <span t-field="move.product_uom_qty" />
+                                        <span t-field="move.quantity" />
                                         <span t-field="move.product_uom" groups="uom.group_uom" />
                                     </td>
                                     <td class="text-end">
@@ -423,7 +423,7 @@
                                             <t t-set="line_value" t-value="line_value-valuation_line.value" />
                                         </t>
                                         <span
-                                            t-esc="line_value/move.product_uom_qty"
+                                            t-esc="line_value/move.quantity if move.quantity else 0.0"
                                             t-options='{"widget": "float", "precision": 4}'
                                         />
 
