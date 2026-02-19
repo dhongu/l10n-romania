@@ -73,7 +73,6 @@ class Picking(models.Model):
                 move = self.env["stock.move"].search(
                     [("product_id.name", "=", product_name), ("picking_id", "in", self.ids)], limit=1
                 )
-
                 if move:
                     price_unit = 0.0
                     if move.stock_valuation_layer_ids:
@@ -140,6 +139,8 @@ class Picking(models.Model):
                     if move_id:
                         unit_price = _get_unit_price_for_uit(move_id)
                         if unit_price:
+                            if self and self.company_id.l10n_ro_etransport_get_validated_qty:
+                                item["cantitate"] = move_id.quantity
                             item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
                         if self.l10n_ro_shipping_weights:
                             weight_line = self.l10n_ro_shipping_weight_lines.filtered(
@@ -167,8 +168,17 @@ class Picking(models.Model):
                     if move_id:
                         unit_price = _get_unit_price_for_uit(move_id)
                         if unit_price:
+                            if self and self.company_id.l10n_ro_etransport_get_validated_qty:
+                                item["cantitate"] = move_id.quantity
                             item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
                     item_no += 1
+        # remove lines with 0 quantity, it's possible when the validated qty is used
+        if self and self.company_id.l10n_ro_etransport_get_validated_qty:
+            for item in res["data"]["notificare"]["bunuriTransportate"]:
+                if float_is_zero(item["cantitate"], precision_rounding=0.01):
+                    res["data"]["notificare"]["bunuriTransportate"].pop(
+                        res["data"]["notificare"]["bunuriTransportate"].index(item)
+                    )
         return res
 
     def action_l10n_ro_edi_stock_fetch_status(self):
@@ -196,16 +206,6 @@ class Picking(models.Model):
                         }
                     )
             picking.l10n_ro_shipping_weight_lines.create(vals)
-
-    # @api.model
-    # def _l10n_ro_edi_stock_validate_data(self, data: dict):
-    #     errors = super()._l10n_ro_edi_stock_validate_data(data)
-    #
-    #     for error in errors:
-    #         if error == _("The delivery carrier partner has to be located in Romania."):
-    #             errors.remove(error)
-    #
-    #     return errors
 
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data: dict):

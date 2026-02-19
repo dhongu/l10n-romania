@@ -14,6 +14,13 @@
                     >
                         <field name="l10n_ro_etransport_get_order_value" />
                     </setting>
+                    <setting
+                        id="l10n_ro_etransport_get_validated_qty"
+                        company_dependent="1"
+                        help="Get only validated quantity from the picking instead of picking quantity"
+                    >
+                        <field name="l10n_ro_etransport_get_validated_qty" />
+                    </setting>
                 </block>
             </xpath>
         </field>
