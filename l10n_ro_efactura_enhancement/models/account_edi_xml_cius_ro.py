@@ -11,6 +11,12 @@ from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
 
+DEFAULT_VAT = "0000000000000"
+
+
+def _has_vat(vat):
+    return bool(vat and len(vat) > 1)
+
 
 class AccountEdiUBL(models.AbstractModel):
     _name = "account.edi.ubl"
@@ -344,3 +350,11 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         if "ubl_peppol_en16931-r010" in res:
             res.pop("ubl_peppol_en16931-r010")
         return res
+
+    def _ubl_add_accounting_customer_party_tax_scheme_nodes(self, vals):
+        # EXTENDS account.edi.xml.ubl_bis3, for boolean not iterable error
+        partner = vals["party_vals"]["partner"]
+        commercial_partner = partner.commercial_partner_id
+        if not _has_vat(commercial_partner.vat) and not commercial_partner.is_company:
+            commercial_partner.company_registry = DEFAULT_VAT
+        return super()._ubl_add_accounting_customer_party_tax_scheme_nodes(vals)
