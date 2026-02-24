@@ -357,4 +357,11 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         commercial_partner = partner.commercial_partner_id
         if not _has_vat(commercial_partner.vat) and not commercial_partner.is_company:
             commercial_partner.company_registry = DEFAULT_VAT
-        return super()._ubl_add_accounting_customer_party_tax_scheme_nodes(vals)
+        res = super()._ubl_add_accounting_customer_party_tax_scheme_nodes(vals)
+        if vals["party_node"]["cac:PartyTaxScheme"]:
+            if (
+                "RO" not in vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"]
+                and commercial_partner.is_company
+            ):
+                vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"] = "RO" + commercial_partner.vat
+        return res
