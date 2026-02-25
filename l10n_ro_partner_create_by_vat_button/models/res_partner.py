@@ -4,6 +4,7 @@
 
 
 import logging
+import re
 
 from zeep import Client
 
@@ -128,3 +129,31 @@ class ResPartner(models.Model):
         if self.env.context.get("skip_ro_vat_change"):
             return vat
         return super()._fix_vat_number(vat, country_id)
+
+    def write(self, vals):
+        if "is_company" in vals or "vat" in vals:
+            lock_with_invoice = self.env.company.partner_lock_with_invoice
+            if lock_with_invoice:
+                for partner in self:
+                    # we check if there are invoices for this partner
+                    invoice_count = self.env["account.move"].search_count(
+                        [
+                            ("partner_id", "child_of", partner.commercial_partner_id.id),
+                            ("move_type", "in", ["out_invoice", "out_refund", "in_invoice", "in_refund"]),
+                        ]
+                    )
+                    if invoice_count > 0:
+                        if "is_company" in vals and vals["is_company"] != partner.is_company:
+                            raise UserError(
+                                _("You cannot change the type of contact if there are already invoices on it.")
+                            )
+                        if "vat" in vals and vals["vat"] != partner.vat:
+                            new_vat = vals["vat"] or ""
+                            old_vat = partner.vat or ""
+                            if old_vat:
+                                new_vat_digits = re.sub(r"\D", "", new_vat)
+                                old_vat_digits = re.sub(r"\D", "", old_vat)
+                                if new_vat_digits != old_vat_digits:
+                                    raise UserError(_("You cannot change VAT if there are already invoices on it."))
+
+        return super().write(vals)
