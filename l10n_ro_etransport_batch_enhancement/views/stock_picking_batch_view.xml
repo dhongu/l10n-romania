@@ -21,7 +21,7 @@
                         invisible="not l10n_ro_shipping_weights"
                         mode="list,kanban"
                     >
-                        <list editable="1">
+                        <list editable="bottom">
                             <field name="picking_id" />
                             <field
                                 name="move_id"
