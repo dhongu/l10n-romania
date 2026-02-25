@@ -43,28 +43,28 @@
             <t t-if="res_company.counter_on_sale_order">
                 <th name="th_number" class="text-start">No.</th>
             </t>
-             <t t-if="res_company.include_image_line">
+            <t t-if="res_company.include_image_line">
                 <th />
-             </t>
+            </t>
         </xpath>
         <td name="td_name" position="before">
-             <t t-if="res_company.counter_on_sale_order">
+            <t t-if="res_company.counter_on_sale_order">
                 <td name="td_number">
                     <span t-esc="nr_crt" />
                 </td>
-             </t>
-             <t t-if="res_company.include_image_line">
+            </t>
+            <t t-if="res_company.include_image_line">
                 <td name="td_image">
-                     <img
+                    <img
                         t-if="line.product_id.image_256"
                         t-attf-src="#{image_data_uri(line.product_id.image_256)}"
                         alt="Image"
                         style="max-width:50px;"
                     />
                 </td>
-             </t>
+            </t>
         </td>
-         <td name="td_name" position="replace">
+        <td name="td_name" position="replace">
             <td name="td_name">
                 <t t-if="line.name">
                     <t t-if="res_company.exclude_product_name_from_description_offer">
@@ -77,7 +77,17 @@
                         <span t-esc="line_name">Bacon Burger</span>
                     </t>
                     <t t-if="not res_company.exclude_product_name_from_description_offer">
-                        <span t-field="line.name">Bacon Burger</span>
+                        <t t-if="res_company.make_description_smaller">
+                            <span t-field="line.product_id.display_name">Bacon Burger</span>
+                            <br />
+                            <t t-set="line_name" t-value="line.name" />
+                            <t t-set="product_name" t-value="line.product_id.display_name" />
+                            <t t-set="line_name" t-value="line_name.replace(product_name, '',1)" />
+                            <span t-esc="line_name" style="font-size: 85%;">Bacon Burger</span>
+                        </t>
+                        <t t-else="not res_company.make_description_smaller">
+                            <span t-field="line.name">Bacon Burger</span>
+                        </t>
                     </t>
                 </t>
 
@@ -265,20 +275,20 @@
                         </tr>
                     </tbody>
                 </table>
-            <div class="clearfix" name="so_total_summary">
-                <div id="total" class="row mt-n3" name="total">
-                    <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
-                        <table class="o_total_table table table-borderless">
-                            <!-- Tax totals -->
-                            <t t-call="sale.document_tax_totals">
-                                <t t-set="tax_totals" t-value="doc.tax_totals" />
-                                <t t-set="currency" t-value="doc.currency_id" />
-                            </t>
-                        </table>
+                <div class="clearfix" name="so_total_summary">
+                    <div id="total" class="row mt-n3" name="total">
+                        <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                            <table class="o_total_table table table-borderless">
+                                <!-- Tax totals -->
+                                <t t-call="sale.document_tax_totals">
+                                    <t t-set="tax_totals" t-value="doc.tax_totals" />
+                                    <t t-set="currency" t-value="doc.currency_id" />
+                                </t>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="oe_structure" />
+                <div id="oe_structure" />
             </div>
         </t>
     </template>

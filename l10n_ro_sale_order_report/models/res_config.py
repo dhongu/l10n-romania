@@ -15,6 +15,11 @@ class ResCompany(models.Model):
     exclude_product_name_from_description_offer = fields.Boolean(
         string="Exclude product name from description", help="Exclude product name from sale order line description"
     )
+    make_description_smaller = fields.Boolean(
+        string="Make description smaller",
+        default=False,
+        help="Make the description smaller on the sale order line if the product name is not excluded",
+    )
 
 
 class ResConfigSettings(models.TransientModel):
@@ -37,4 +42,10 @@ class ResConfigSettings(models.TransientModel):
         string="Exclude product name from description",
         readonly=False,
         help="Exclude product name from sale order line description",
+    )
+    make_description_smaller = fields.Boolean(
+        related="company_id.make_description_smaller",
+        string="Make description smaller",
+        readonly=False,
+        help="Make the description smaller on the sale order line if the product name is not excluded",
     )

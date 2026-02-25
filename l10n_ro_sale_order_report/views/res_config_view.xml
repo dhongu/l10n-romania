@@ -15,6 +15,9 @@
              <setting help="Exclude product name from sale order line description">
                     <field name="exclude_product_name_from_description_offer" />
                 </setting>
+                <setting help="Make the description smaller on the sale order line if the product name is not excluded">
+                    <field name="make_description_smaller" />
+                </setting>
             </xpath>
         </field>
     </record>
