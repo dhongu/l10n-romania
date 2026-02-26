@@ -9,6 +9,48 @@
                 <field name="l10n_ro_edi_stock_required" />
                 <field name="l10n_ro_edi_carrier_id" invisible="not l10n_ro_edi_stock_required" />
             </xpath>
+            <page name="etransport" position="inside">
+                <group name="weights">
+                    <field name="l10n_ro_shipping_weights" />
+                    <group>
+                        <field name="total_net_weight" invisible="not l10n_ro_shipping_weights" />
+                        <field name="total_gross_weight" invisible="not l10n_ro_shipping_weights" />
+                    </group>
+                    <field
+                        name="l10n_ro_shipping_weight_lines"
+                        invisible="not l10n_ro_shipping_weights"
+                        mode="list,kanban"
+                    >
+                        <list editable="bottom">
+                            <field name="picking_id" />
+                            <field
+                                name="move_id"
+                                domain="[('picking_id', '=', picking_id)]"
+                                context="{'show_product_in_move': True}"
+                            />
+                            <field name="net_weight" sum="Total net" />
+                            <field name="gross_weight" sum="Total gross" />
+                            <field name="weight_uom_id" />
+                        </list>
+                    </field>
+                    <div groups="base.group_user">
+                        <button
+                            name="l10n_ro_compute_weight_lines"
+                            string="Get lines"
+                            type="object"
+                            class="btn-primary"
+                            invisible="not l10n_ro_shipping_weights"
+                        />
+                        <button
+                            name="l10n_ro_distribute_weights"
+                            string="Distribute weights"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="not l10n_ro_shipping_weights"
+                        />
+                    </div>
+                </group>
+            </page>
         </field>
     </record>
 
