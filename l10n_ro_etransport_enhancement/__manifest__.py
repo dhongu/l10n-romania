@@ -4,7 +4,7 @@
 
 {
     "name": "eTransport Enhancement",
-    "version": "18.0.0.1.1",
+    "version": "18.0.0.2.0",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "eTransport enhancement",
