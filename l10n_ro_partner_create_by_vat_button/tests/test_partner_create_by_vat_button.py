@@ -128,9 +128,7 @@ class TestPartnerCreateByVatButton(TransactionCase):
             self.assertEqual(vatNumber, "14826496")
             return SimpleNamespace(valid=True, name="Acme SRL", address="Some Street 10")
 
-        fake_client = SimpleNamespace(
-            service=SimpleNamespace(checkVat=fake_checkVat)
-        )
+        fake_client = SimpleNamespace(service=SimpleNamespace(checkVat=fake_checkVat))
         with patch.object(type(partner), "_get_vies_client", return_value=fake_client):
             partner.get_partner_name_from_vies()
 
@@ -143,9 +141,7 @@ class TestPartnerCreateByVatButton(TransactionCase):
         def fake_checkVat(countryCode, vatNumber):
             return SimpleNamespace(valid=False, name="", address="")
 
-        fake_client = SimpleNamespace(
-            service=SimpleNamespace(checkVat=fake_checkVat)
-        )
+        fake_client = SimpleNamespace(service=SimpleNamespace(checkVat=fake_checkVat))
         with patch.object(type(partner), "_get_vies_client", return_value=fake_client):
             with self.assertRaises(UserError):
                 partner.get_partner_name_from_vies()
