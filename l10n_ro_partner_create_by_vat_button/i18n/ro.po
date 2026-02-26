@@ -1,37 +1,234 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* l10n_ro_partner_create_by_vat_button
+#       * l10n_ro_partner_create_by_vat_button
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-02 11:51+0000\n"
-"PO-Revision-Date: 2024-03-02 11:51+0000\n"
+"POT-Creation-Date: 2026-02-25 00:00+0000\n"
+"PO-Revision-Date: 2026-02-25 00:00+0000\n"
 "Last-Translator: \n"
-"Language-Team: \n"
+"Language-Team: Romanian\n"
+"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_res_company
+msgid "Companies"
+msgstr "Companii"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_res_config_settings
+msgid "Config Settings"
+msgstr "Setări configurare"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_get_partner_data
+msgid "Get partner data from"
+msgstr "Preia date partener din"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_res_partner__warning_message
+msgid "Warning"
+msgstr "Avertisment"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_res_company__partner_lock_with_invoice
+msgid "Lock Partner with Invoice"
+msgstr "Blocare partener cu factură"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,help:l10n_ro_partner_create_by_vat_button.field_res_company__partner_lock_with_invoice
+msgid "If enabled, it is not possible to change the type of contact or the VAT if there are already invoices on it."
+msgstr "Dacă este activat, nu este posibilă schimbarea tipului de contact sau a CUI-ului dacă există deja facturi."
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__service
+msgid "Service"
+msgstr "Serviciu"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__service__anaf
+msgid "ANAF"
+msgstr "ANAF"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields.selection,name:l10n_ro_partner_create_by_vat_button.selection__get_partner_data__service__vies
+msgid "VIES for non-Romanian partners"
+msgstr "VIES pentru parteneri din alte țări UE"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__partner_id
+msgid "Partner"
+msgstr "Partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.fields,field_description:l10n_ro_partner_create_by_vat_button.field_get_partner_data__status_message
+msgid "Status Message"
+msgstr "Mesaj de stare"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.actions.act_window,name:l10n_ro_partner_create_by_vat_button.action_get_partner_data
+msgid "Get Partner's Data"
+msgstr "Preia date partener"
 
 #. module: l10n_ro_partner_create_by_vat_button
 #. odoo-python
 #: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
 #, python-format
-msgid ""
-"ANAF Webservice not working.\n"
-"Please try again until it works"
-msgstr ""
-"Serviciul web ANAF nu funcționează.\n"
-"Te rog încearcă din nou până când vei primi datele."
+msgid "VAT"
+msgstr "CUI"
 
 #. module: l10n_ro_partner_create_by_vat_button
-#: model:ir.model,name:l10n_ro_partner_create_by_vat_button.model_res_partner
-msgid "Contact"
-msgstr ""
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "Street"
+msgstr "Strada"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "City"
+msgstr "Orașul"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "State"
+msgstr "Județul"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "ZIP"
+msgstr "Cod poștal"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "Missing: "
+msgstr "Lipsește: "
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "The 'zeep' library is required for VIES lookups. Install it with: pip install zeep"
+msgstr "Biblioteca 'zeep' este necesară pentru verificări VIES. Instalați cu: pip install zeep"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "Please add the country code to the vat number or country field"
+msgstr "Vă rugăm adăugați codul țării la numărul de TVA sau în câmpul țară"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "VIES service error: %s"
+msgstr "Eroare serviciu VIES: %s"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "Invalid VAT"
+msgstr "CUI invalid"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "You cannot change the type of contact if there are already invoices on it."
+msgstr "Nu puteți schimba tipul contactului dacă există deja facturi."
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/models/res_partner.py:0
+#, python-format
+msgid "You cannot change VAT if there are already invoices on it."
+msgstr "Nu puteți schimba CUI-ul dacă există deja facturi."
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/wizard/get_partner_data.py:0
+#, python-format
+msgid "You can't use this function on delivery contacts."
+msgstr "Nu puteți folosi această funcție pe contacte de livrare."
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/wizard/get_partner_data.py:0
+#, python-format
+msgid "Attention! "
+msgstr "Atenție! "
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/wizard/get_partner_data.py:0
+#, python-format
+msgid "Partner data updated!"
+msgstr "Datele partenerului au fost actualizate!"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#. odoo-python
+#: code:addons/l10n_ro_partner_create_by_vat_button/wizard/get_partner_data.py:0
+#, python-format
+msgid "Partner data updated! Please check the address fields. VIES does not return the addresses in a consistent form or complete so it can not be split automatically."
+msgstr "Datele partenerului au fost actualizate! Vă rugăm verificați câmpurile de adresă. VIES nu returnează adresele într-o formă consistentă sau completă, deci nu pot fi separate automat."
 
 #. module: l10n_ro_partner_create_by_vat_button
 #: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_partner_form
+msgid "Get Data"
+msgstr "Preia date"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
 msgid "Get Partner Data"
 msgstr "Preia date partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Select service for partner:"
+msgstr "Selectați serviciul pentru partener:"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Close"
+msgstr "Închide"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.view_get_partner_data_form
+msgid "Back"
+msgstr "Înapoi"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.res_config_settings_view_form
+msgid "Partner Lock"
+msgstr "Blocare partener"
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_create_by_vat_button.res_config_settings_view_form
+msgid "Lock partner type and VAT if invoices exist."
+msgstr "Blochează tipul partenerului și CUI-ul dacă există facturi."
+
+#. module: l10n_ro_partner_create_by_vat_button
+#: model:ir.model.access,name:l10n_ro_partner_create_by_vat_button.access_get_partner_data
+msgid "access_get_partner_data"
+msgstr "access_get_partner_data"
