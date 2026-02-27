@@ -5,6 +5,18 @@
 from odoo import fields, models
 
 
+class AccountMove(models.Model):
+    _inherit = "account.move"
+
+    def _compute_is_storno(self):
+        res = super()._compute_is_storno()
+        for move in self:
+            if move.reversed_entry_id:
+                move.is_storno = not move.reversed_entry_id.is_storno
+
+        return res
+
+
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
