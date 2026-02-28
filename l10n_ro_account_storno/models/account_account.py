@@ -8,8 +8,8 @@ class Account(models.Model):
     _inherit = "account.account"
 
     l10n_ro_usage = fields.Selection(
-        [("bivalent", "Bivalent"), ("debit", "Debit"), ("credit", "Credit")],
+        [("bifunctional", "Bifunctional"), ("activ", "Activ"), ("pasiv", "Pasiv")],
         string="Usage",
         help="Usage of the account in the Romanian accounting system",
-        default="bivalent",
+        default="bifunctional",
     )
