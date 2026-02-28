@@ -31,7 +31,7 @@ class TestL10nRoStorno(TransactionCase):
                 "name": "Bivalent",
                 "code": "601000",
                 "account_type": "expense",
-                "l10n_ro_usage": "bivalent",
+                "l10n_ro_usage": "bifunctional",
             }
         )
         cls.account_debit = cls.env["account.account"].create(
@@ -39,7 +39,7 @@ class TestL10nRoStorno(TransactionCase):
                 "name": "Debit Only",
                 "code": "602000",
                 "account_type": "expense",
-                "l10n_ro_usage": "debit",
+                "l10n_ro_usage": "activ",
             }
         )
         cls.account_credit = cls.env["account.account"].create(
@@ -47,7 +47,7 @@ class TestL10nRoStorno(TransactionCase):
                 "name": "Credit Only",
                 "code": "603000",
                 "account_type": "liability_current",
-                "l10n_ro_usage": "credit",
+                "l10n_ro_usage": "pasiv",
             }
         )
 

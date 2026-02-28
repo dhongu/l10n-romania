@@ -5,6 +5,18 @@
 from odoo import fields, models
 
 
+class AccountMove(models.Model):
+    _inherit = "account.move"
+
+    def _compute_is_storno(self):
+        res = super()._compute_is_storno()
+        for move in self:
+            if move.reversed_entry_id:
+                move.is_storno = not move.reversed_entry_id.is_storno
+
+        return res
+
+
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
@@ -18,10 +30,10 @@ class AccountMoveLine(models.Model):
                     line.debit = -line.balance if line.balance > 0.0 else 0.0
                     line.credit = line.balance if line.balance < 0.0 else 0.0
 
-                if line.account_id.l10n_ro_usage == "debit" and line.credit:
+                if line.account_id.l10n_ro_usage == "activ" and line.credit:
                     line.debit = -line.credit
                     line.credit = 0.0
-                if line.account_id.l10n_ro_usage == "credit" and line.debit:
+                if line.account_id.l10n_ro_usage == "pasiv" and line.debit:
                     line.credit = -line.debit
                     line.debit = 0
                 if line.credit < 0.0 and line.debit < 0.0:
