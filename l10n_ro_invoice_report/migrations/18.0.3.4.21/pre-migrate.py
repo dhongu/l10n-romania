@@ -20,17 +20,7 @@ def migrate(cr, version):
     # to jsonb (because it's now company_dependent).
 
     # We rename the column if it exists.
-    # Since we don't have access to information_schema or pg_ catalogs,
-    # we use a try-except block with a savepoint.
-
-    try:
-        with cr.savepoint():
-            # Check if column exists by trying to select from it
-            cr.execute("SELECT payment_bank_id FROM res_partner LIMIT 1")
-    except psycopg2.Error:
-        # Column likely doesn't exist, or table doesn't exist, nothing to do
-        _logger.info("payment_bank_id does not exist in res_partner or table missing, skipping migration.")
-    else:
+    if sql.column_exists(cr, "res_partner", "payment_bank_id"):
         # Column exists, we migrate it
         _logger.info("Migrating payment_bank_id in res_partner to new jsonb format")
         try:
@@ -61,3 +51,5 @@ def migrate(cr, version):
 
         except Exception as e:
             _logger.error("Failed to migrate payment_bank_id: %s", e)
+    else:
+        _logger.info("payment_bank_id does not exist in res_partner, skipping migration.")
