@@ -3,8 +3,6 @@
 
 import logging
 
-import psycopg2
-
 from odoo.tools import sql
 
 _logger = logging.getLogger(__name__)

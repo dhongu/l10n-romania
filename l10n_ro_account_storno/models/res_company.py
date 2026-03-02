@@ -9,12 +9,12 @@ class ResCompany(models.Model):
 
     def _l10n_ro_initialize_accounts(self):
         # Identificăm companiile care folosesc localizarea românească
-        companies = self.search([("country_id.code", "=", "RO")])
+        companies = self.search([("chart_template", "=", "ro")])
         if not companies:
             return
 
         company_ids = companies.ids
-
+        # fmt: off
         # Maparea codurilor de conturi conform planului de conturi românesc
         activ_codes = [
             "109100", "109200", "109500", "129000", "149100", "149500", "149800", "169110", "169120", "169210", "169220",
@@ -77,21 +77,17 @@ class ResCompany(models.Model):
             "805100", "805200", "806000", "807000", "808000", "809000", "891000", "892000", "901000", "902000", "903000",
             "921000", "922000", "923000", "924000", "925000", "931000", "933000", "999001", "999002",
         ]
-
-
+        # fmt: on
 
         # Actualizăm conturile pe baza codului folosind ORM
-        self.env["account.account"].search([
-            ("code", "in", activ_codes),
-            ("company_ids", "in", company_ids)
-        ]).write({"l10n_ro_usage": "activ"})
+        self.env["account.account"].search([("code", "in", activ_codes), ("company_ids", "in", company_ids)]).write(
+            {"l10n_ro_usage": "activ"}
+        )
 
-        self.env["account.account"].search([
-            ("code", "in", pasiv_codes),
-            ("company_ids", "in", company_ids)
-        ]).write({"l10n_ro_usage": "pasiv"})
+        self.env["account.account"].search([("code", "in", pasiv_codes), ("company_ids", "in", company_ids)]).write(
+            {"l10n_ro_usage": "pasiv"}
+        )
 
-        self.env["account.account"].search([
-            ("code", "in", bifunctional_codes),
-            ("company_ids", "in", company_ids)
-        ]).write({"l10n_ro_usage": "bifunctional"})
+        self.env["account.account"].search(
+            [("code", "in", bifunctional_codes), ("company_ids", "in", company_ids)]
+        ).write({"l10n_ro_usage": "bifunctional"})

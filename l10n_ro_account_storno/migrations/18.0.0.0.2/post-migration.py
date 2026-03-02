@@ -6,7 +6,7 @@ def migrate(cr, version):
     if not version:
         return
 
-    from odoo import api, SUPERUSER_ID
+    from odoo import SUPERUSER_ID, api
 
     env = api.Environment(cr, SUPERUSER_ID, {})
     env["res.company"]._l10n_ro_initialize_accounts()
