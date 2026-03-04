@@ -20,6 +20,11 @@ class ResCompany(models.Model):
         default=False,
         help="Make the description smaller on the sale order line if the product name is not excluded",
     )
+    show_total_amount_with_taxes_on_so = fields.Boolean(
+        string="Show Total Amount with Taxes on SO",
+        help="Show Total Amount with Taxes on Sale Order Report",
+        default=False,
+    )
 
 
 class ResConfigSettings(models.TransientModel):
@@ -48,4 +53,10 @@ class ResConfigSettings(models.TransientModel):
         string="Make description smaller",
         readonly=False,
         help="Make the description smaller on the sale order line if the product name is not excluded",
+    )
+    show_total_amount_with_taxes_on_so = fields.Boolean(
+        related="company_id.show_total_amount_with_taxes_on_so",
+        string="Show Total Amount with Taxes on SO",
+        readonly=False,
+        help="Show Total Amount with Taxes on Sale Order Report",
     )
