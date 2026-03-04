@@ -100,7 +100,7 @@ msgid ""
 "<span>Total amount</span>\n"
 "                <br/>\n"
 "                <span>(with taxes)</span>"
-msgstr "<span>Total valoare</span> <br/> <span>(fără TVA)</span>"
+msgstr "<span>Total valoare</span> <br/> <span>(cu TVA)</span>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
