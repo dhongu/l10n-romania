@@ -238,6 +238,10 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             document_node["cac:OrderReference"]["cbc:SalesOrderID"]["_text"] = document_node["cac:OrderReference"][
                 "cbc:SalesOrderID"
             ]["_text"][:200]
+
+        if document_node["cbc:Note"] and document_node["cbc:Note"].get("_text"):
+            document_node["cbc:Note"]["_text"] = document_node["cbc:Note"]["_text"][:300]
+
         invoice = vals["invoice"]
         if (
             "pos_order_ids" in invoice._fields
