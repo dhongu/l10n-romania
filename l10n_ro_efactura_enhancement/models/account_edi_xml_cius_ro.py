@@ -242,7 +242,11 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
     def _add_invoice_header_nodes(self, document_node, vals):
         """New helper"""
         res = super()._add_invoice_header_nodes(document_node, vals)
-        if document_node["cac:OrderReference"] and document_node["cac:OrderReference"].get("cbc:SalesOrderID"):
+        if (
+            document_node["cac:OrderReference"]
+            and document_node["cac:OrderReference"].get("cbc:SalesOrderID")
+            and document_node["cac:OrderReference"]["cbc:SalesOrderID"].get("_text")
+        ):
             document_node["cac:OrderReference"]["cbc:SalesOrderID"]["_text"] = document_node["cac:OrderReference"][
                 "cbc:SalesOrderID"
             ]["_text"][:200]
@@ -290,6 +294,10 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
                         # 'cbc:PaymentDueDate': {'_text': invoice.invoice_date_due or invoice.invoice_date},
                         "cac:PayeeFinancialAccount": self._get_financial_account_node({**vals, "partner_bank": bank}),
                     }
+                    if node["cac:PayeeFinancialAccount"] and node["cac:PayeeFinancialAccount"].get(
+                        "cac:FinancialInstitutionBranch"
+                    ):
+                        node["cac:PayeeFinancialAccount"].pop("cac:FinancialInstitutionBranch")
                     payment_means_nodes.append(node)
 
                 # Replace any existing single node with the list of nodes
@@ -310,7 +318,7 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         if isinstance(payment_means, list):
             first_pm = payment_means[0] if payment_means else {}
             document_node_copy = dict(vals["document_node"])
-            document_node_copy["cac:PaymentMeans"] = first_pm
+            document_node_copy["cac:PaymentMeans"] = [first_pm]
             vals_for_super = {**vals, "document_node": document_node_copy}
             constraints = super()._invoice_constraints_cen_en16931_ubl_new(invoice, vals_for_super)
         else:
