@@ -190,6 +190,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         # Apply behavior only when system parameter is enabled
         get_param = self.env["ir.config_parameter"].sudo().get_param
         use_line_desc = safe_eval(get_param("efactura.use_line_description", "False"))
+        replace_unit_uom = safe_eval(get_param("efactura.replace_unit_uom", "False"))
         item = line_node.setdefault("cac:Item", {})
         desc = item.setdefault("cbc:Description", {})
         name = item.setdefault("cbc:Name", {})
@@ -209,6 +210,13 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             line_node["cac:Item"]["cbc:Description"]["_text"] = desc["_text"][:200]
         if name:
             line_node["cac:Item"]["cbc:Name"]["_text"] = name["_text"][:100]
+        # replace line uom if parameter is set for unit
+        if (
+            replace_unit_uom
+            and line_node["cbc:InvoicedQuantity"]["unitCode"]
+            and line_node["cbc:InvoicedQuantity"]["unitCode"] == "C62"
+        ):
+            line_node["cbc:InvoicedQuantity"]["unitCode"] = replace_unit_uom
         return res
 
     def _export_invoice_vals(self, invoice):
