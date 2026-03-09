@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <record id="view_res_partner_form_inherit_zip" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.zip</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base_address_extended.address_street_extended_city_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='zip']" position="after">
+                <field
+                    name="zip_id"
+                    options="{'no_create': True}"
+                    context="{'default_country_id': country_id, 'default_state_id': state_id, 'default_city_id': city_id}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
