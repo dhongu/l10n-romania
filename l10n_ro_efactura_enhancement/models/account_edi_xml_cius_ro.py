@@ -243,7 +243,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         """New helper"""
         res = super()._add_invoice_header_nodes(document_node, vals)
         if (
-            document_node["cac:OrderReference"]
+            document_node.get("cac:OrderReference")
             and document_node["cac:OrderReference"].get("cbc:SalesOrderID")
             and document_node["cac:OrderReference"]["cbc:SalesOrderID"].get("_text")
         ):
@@ -251,8 +251,13 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
                 "cbc:SalesOrderID"
             ]["_text"][:200]
 
-        if document_node["cbc:Note"] and document_node["cbc:Note"].get("_text"):
-            document_node["cbc:Note"]["_text"] = document_node["cbc:Note"]["_text"][:300]
+        if document_node.get("cbc:Note"):
+            if isinstance(document_node["cbc:Note"], list):
+                for note in document_node["cbc:Note"]:
+                    if isinstance(note, dict) and note.get("_text"):
+                        note["_text"] = note["_text"][:300]
+            if isinstance(document_node["cbc:Note"], dict) and document_node["cbc:Note"].get("_text"):
+                document_node["cbc:Note"]["_text"] = document_node["cbc:Note"]["_text"][:300]
 
         invoice = vals["invoice"]
         if (
