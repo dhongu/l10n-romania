@@ -50,7 +50,7 @@ class AccountMove(models.Model):
                 ("state", "=", "posted"),
                 ("date", "<", fields.Date.today() - timedelta(days=delay_days)),
                 ("date", ">=", fields.Date.today() - timedelta(days=days + delay_days)),
-                ("l10n_ro_edi_state", "=", "invoice_sending"),
+                ("l10n_ro_edi_state", "=", "invoice_sent"),
                 ("company_id", "=", company.id),
             ]
 
