@@ -36,12 +36,9 @@ class AccountMove(models.Model):
 
         return res
 
-    def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1, delay_days=0):
-        """Trimiterea automata a facturilor din ziua precedenta in SPV"""
-        _logger.info("⏱️ Cron job for sending invoices to SPV")
-
+    def _cron_l10n_ro_edi_fetch_status(self, limit=20, days=1, delay_days=0):
         need_retrigger = False
-
+        _logger.info("⏱️ Cron job for fetch status from SPV")
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
@@ -64,6 +61,22 @@ class AccountMove(models.Model):
             else:
                 _logger.info("No invoices to fetch status")
 
+        if need_retrigger:
+            at = fields.Datetime.now() + timedelta(minutes=2)
+            # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
+            _logger.info("⏳ Retrigger cron scheduled in 2 minutes")
+            self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_fetch_status")._trigger(at)
+
+    def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1, delay_days=0):
+        """Trimiterea automata a facturilor din ziua precedenta in SPV"""
+        _logger.info("⏱️ Cron job for sending invoices to SPV")
+
+        need_retrigger = False
+        self._cron_l10n_ro_edi_fetch_status(limit=limit, days=days, delay_days=delay_days)
+
+        domain = [("l10n_ro_edi_access_token", "!=", False)]
+        ro_companies = self or self.env["res.company"].sudo().search(domain)
+        for company in ro_companies:
             domain = [("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed")]
             invoice_sending_failed = self.search(domain)
             invoices_name = invoice_sending_failed.mapped("name")
