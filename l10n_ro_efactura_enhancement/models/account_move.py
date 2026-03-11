@@ -36,7 +36,6 @@ class AccountMove(models.Model):
 
         return res
 
-
     def _cron_l10n_ro_edi_fetch_status(self, limit=20, days=1, delay_days=0):
         need_retrigger = False
         _logger.info("⏱️ Cron job for fetch status from SPV")
@@ -67,7 +66,6 @@ class AccountMove(models.Model):
             # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
             _logger.info("⏳ Retrigger cron scheduled in 2 minutes")
             self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_fetch_status")._trigger(at)
-
 
     def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1, delay_days=0):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
