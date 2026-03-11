@@ -380,69 +380,78 @@ specific business needs for Romanian fiscal compliance.</p>
 <div class="section" id="key-features">
 <h1>Key Features</h1>
 <ul class="simple">
-<li>Automatic completion with 13 zeros for individual persons (physical
-persons) in the VAT field</li>
-<li>Ability to retransmit an invoice to the e-Factura system</li>
-<li>Configurable system parameters:<ul>
-<li><ul class="first">
-<li>Controls whether to include embedded PDF in the e-invoice
-(Default: True) <tt class="docutils literal">efactura.embed_pdf</tt></li>
+<li><strong>Automatic completion with 13 zeros</strong> for individual persons
+(physical persons) in the VAT field for e-invoice generation.</li>
+<li><strong>Enhanced Address Validation</strong>: Automatically checks that Romanian
+partners have a country, state, city, and street defined before
+posting an invoice.</li>
+<li><strong>EDI Format Suggestion</strong>: Automatically suggests the <tt class="docutils literal">ciusro</tt>
+format for Romanian partners.</li>
+<li><strong>Automated e-Invoice Operations</strong>:<ul>
+<li>Cron job for <strong>automatic sending</strong> of posted invoices to SPV.</li>
+<li>Cron job for <strong>fetching status</strong> updates from SPV for sent invoices.</li>
 </ul>
 </li>
-<li><ul class="first">
-<li>Controls whether to clean the “/” character from invoice names in
-the ID tag (Default: False) <tt class="docutils literal">efactura.clean_name</tt></li>
+<li><strong>Data Truncation and Sanitization</strong>:<ul>
+<li>Truncates product names to 100 characters and descriptions to 200
+characters to ensure compliance with UBL standards.</li>
+<li>Truncates notes to 300 characters.</li>
+<li>Truncates order references and despatch advice to 200 characters.</li>
 </ul>
 </li>
-<li><ul class="first">
-<li>Controls whether to include all banks with l10n_ro_print_report
-and in the invoice currency (Default: False)
-<tt class="docutils literal">efactura.get_all_banks</tt></li>
+<li><strong>POS Integration</strong>: Automatically changes the document type code to
+751 (Specialised Invoice) for invoices originating from Point of Sale.</li>
+<li><strong>Configurable System Parameters</strong>:<ul>
+<li><tt class="docutils literal">efactura.embed_pdf</tt>: Controls whether to include the embedded PDF
+in the e-invoice (Default: True).</li>
+<li><tt class="docutils literal">efactura.use_line_description</tt>: If enabled, uses the invoice line
+description instead of the product name/description in the e-invoice
+(Default: False).</li>
+<li><tt class="docutils literal">efactura.replace_unit_uom</tt>: Allows specifying a replacement unit
+code for the standard ‘C62’ unit (Default: False).</li>
+<li><tt class="docutils literal">efactura.get_all_banks</tt>: If enabled, includes all banks marked
+with <tt class="docutils literal">l10n_ro_print_report</tt> that match the invoice currency
+(Default: False).</li>
 </ul>
 </li>
-</ul>
-</li>
+<li><strong>Line Length Tracking</strong>: Adds computed fields on invoice lines to
+track the length of descriptions and product names, helping users
+identify potential truncation issues.</li>
 </ul>
 </div>
 <div class="section" id="technical-implementation">
 <h1>Technical Implementation</h1>
-<p>The module builds upon the standard Romanian localization and enhances
-the e-Factura integration with additional configuration options and data
-handling improvements.</p>
+<p>The module inherits and extends several base Odoo and Romanian
+localization models:</p>
+<ul class="simple">
+<li><tt class="docutils literal">account.move</tt>: Adds validation, cron jobs, and POS type handling.</li>
+<li><tt class="docutils literal">account.edi.xml.ubl_ro</tt>: Enhances UBL generation with custom logic
+for addresses, product descriptions, and multi-bank support.</li>
+<li><tt class="docutils literal">res.partner</tt>: Overrides the EDI format suggestion for Romanian
+entities.</li>
+<li><tt class="docutils literal">account.move.line</tt>: Adds UI helpers for label length.</li>
+</ul>
 </div>
 <div class="section" id="business-benefits">
 <h1>Business Benefits</h1>
 <ul class="simple">
-<li>Improved compliance with Romanian fiscal requirements</li>
-<li>Enhanced flexibility in e-invoice generation and transmission</li>
-<li>Better handling of special cases like individual customers without VAT
-numbers</li>
-<li>Support for retransmission of invoices when needed</li>
+<li><strong>Improved Compliance</strong>: Prevents errors by validating mandatory
+address fields for Romanian fiscal reporting.</li>
+<li><strong>Automation</strong>: Reduces manual effort by automatically transmitting
+and tracking e-invoices.</li>
+<li><strong>Flexibility</strong>: Provides granular control over how product
+information and unit codes are mapped to the e-invoice.</li>
+<li><strong>UBL Stability</strong>: Ensures generated XML files remain within character
+limit constraints for various fields.</li>
 </ul>
 </div>
 <div class="section" id="usage">
 <h1>Usage</h1>
 <p>After installation, the module automatically enhances the e-Factura
 functionality. System parameters can be configured in the technical
-settings to adjust behavior according to specific business needs. This
-module is part of the Romanian localization suite developed by Terrabit.</p>
-<p>Features:</p>
-<ul class="simple">
-<li>Types can be defined for records sale.order, purchase.order,
-account.move</li>
-<li>If a model has no types defined, the type field will not be displayed</li>
-<li>completare automata cu 13 de zero pt persane fizice</li>
-<li>retransmiterea unei facturi</li>
-<li>parametri sistem:<ul>
-<li>“efactura.embed_pdf” - daca pune sau nu embedded pdf. Default pe
-True</li>
-<li>“efactura.clean_name” - daca curata caracterul “/” din numele
-facturii in tag-ul de ID. Default pe False</li>
-<li>“efactura.get_all_banks” - daca pune toate bancile cu
-l10n_ro_print_report si in valuta facturii. Default pe False</li>
-</ul>
-</li>
-</ul>
+settings (<tt class="docutils literal">Settings &gt; Technical &gt; Parameters &gt; System Parameters</tt>) to
+adjust behavior according to specific business needs. This module is
+part of the Romanian localization suite developed by Terrabit.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
