@@ -4,13 +4,24 @@
         <field name="name">l10n.ro.account.account.form</field>
         <field name="model">account.account</field>
         <field name="type">form</field>
-        <field name="inherit_id" ref="account.view_account_form" />
+        <field name="inherit_id" ref="account.view_account_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='accounting']/group/group[last()]" position="inside">
-                <field name="l10n_ro_usage" />
-
+                <field name="l10n_ro_usage"/>
             </xpath>
         </field>
     </record>
+
+    <record id="view_account_list" model="ir.ui.view">
+        <field name="name">account.account.list</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='account_type']" position="after">
+                <field name="l10n_ro_usage"/>
+            </xpath>
+        </field>
+    </record>
+
 
 </odoo>
