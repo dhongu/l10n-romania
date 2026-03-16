@@ -4,7 +4,6 @@
 
 
 from odoo import api, fields, models
-from odoo.osv import expression
 from odoo.fields import Domain
 
 class ResZip(models.Model):
@@ -38,14 +37,14 @@ class ResZip(models.Model):
     #     # OVERRIDE
     #     domain = domain or []
     #     if operator != "ilike" or (name or "").strip():
-    #         name_domain = ["|", ("name", "ilike", name), ("street_name", "ilike", name)]
-    #         domain = expression.AND([name_domain, domain])
+    #         name_domain = [("|", "name", "ilike", name), ("street_name", "ilike", name)]
+    #         domain = Domain.AND([name_domain, domain])
     #     return self._search(domain, limit=limit, order=order)
 
     @api.model
     def _search_display_name(self, operator, value):
         domain = super()._search_display_name(operator, value)
         if operator == "ilike":
-            name_domain = ["|", ("name", "ilike", value), ("street_name", "ilike", value)]
+            name_domain = [("|", "name", "ilike", value), ("street_name", "ilike", value)]
             domain = Domain.OR([domain, name_domain])
         return domain
