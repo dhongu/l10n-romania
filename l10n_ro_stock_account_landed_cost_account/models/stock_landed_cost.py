@@ -26,10 +26,10 @@ class AdjustmentLines(models.Model):
 
         fiscal_position = self.cost_id.account_journal_id.l10n_ro_fiscal_position_id
         if fiscal_position:
-            credit_account_id = fiscal_position.map_account(self.env["acount.acount"].browse(credit_account_id)).id
-            debit_account_id = fiscal_position.map_account(self.env["acount.acount"].browse(debit_account_id)).id
+            credit_account_id = fiscal_position.map_account(self.env["account.account"].browse(credit_account_id)).id
+            debit_account_id = fiscal_position.map_account(self.env["account.account"].browse(debit_account_id)).id
             already_out_account_id = fiscal_position.map_account(
-                self.env["acount.acount"].browse(already_out_account_id)
+                self.env["account.account"].browse(already_out_account_id)
             ).id
 
         return super()._create_account_move_line(
