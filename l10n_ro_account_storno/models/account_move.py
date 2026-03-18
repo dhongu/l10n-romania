@@ -30,13 +30,13 @@ class AccountMoveLine(models.Model):
                     line.debit = -line.balance if line.balance > 0.0 else 0.0
                     line.credit = line.balance if line.balance < 0.0 else 0.0
 
-                if line.account_id.l10n_ro_usage == "activ" and line.credit:
-                    line.debit = -line.credit
-                    line.credit = 0.0
-                if line.account_id.l10n_ro_usage == "pasiv" and line.debit:
-                    line.credit = -line.debit
-                    line.debit = 0
-                if line.credit < 0.0 and line.debit < 0.0:
+                # if line.account_id.l10n_ro_usage == "activ" and line.credit:
+                #     line.debit = -line.credit
+                #     line.credit = 0.0
+                # if line.account_id.l10n_ro_usage == "pasiv" and line.debit:
+                #     line.credit = -line.debit
+                #     line.debit = 0
+                if line.credit < 0.0 or line.debit < 0.0:
                     line.storno_line = True
         return res
 
