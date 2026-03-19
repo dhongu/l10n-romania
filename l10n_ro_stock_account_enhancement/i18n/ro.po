@@ -1,0 +1,71 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_stock_account_enhancement
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-19 10:34+0000\n"
+"PO-Revision-Date: 2026-03-19 10:34+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_stock_account_enhancement
+#: model:ir.model.fields,help:l10n_ro_stock_account_enhancement.field_res_config_settings__l10n_ro_check_storable_line_source
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_account_enhancement.res_config_settings_view_form
+msgid ""
+"Check if storable product lines have a reference to a sales or purchase "
+"order line."
+msgstr ""
+"Verifică dacă linia de produs stocabilă are o referință la o linie de "
+"comandă de vânzare sau de achiziție."
+
+#. module: l10n_ro_stock_account_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_stock_account_enhancement.field_res_config_settings__l10n_ro_check_storable_line_source
+msgid "Check storable product line source"
+msgstr "Verifică sursa liniei de produs stocabilă"
+
+#. module: l10n_ro_stock_account_enhancement
+#: model:ir.model,name:l10n_ro_stock_account_enhancement.model_res_config_settings
+msgid "Config Settings"
+msgstr "Setări de configurare"
+
+#. module: l10n_ro_stock_account_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_stock_account_enhancement/models/account_move.py:0
+msgid ""
+"Invoice line with storable product '%s' must have a reference to a purchase "
+"order line."
+msgstr ""
+"Linia de factură cu produs stocabil '%s' trebuie să aibă o referință la o "
+"linie de comandă de achiziție."
+
+#. module: l10n_ro_stock_account_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_stock_account_enhancement/models/account_move.py:0
+msgid ""
+"Invoice line with storable product '%s' must have a reference to a sales "
+"order line."
+msgstr ""
+"Linia de factură cu produs stocabil '%s' trebuie să aibă o referință la o "
+"linie de comandă de vânzare."
+
+#. module: l10n_ro_stock_account_enhancement
+#: model:ir.model,name:l10n_ro_stock_account_enhancement.model_account_move
+msgid "Journal Entry"
+msgstr "Înregistrare jurnal"
+
+#. module: l10n_ro_stock_account_enhancement
+#: model:ir.model,name:l10n_ro_stock_account_enhancement.model_product_product
+msgid "Product Variant"
+msgstr "Variantă de produs"
+
+#. module: l10n_ro_stock_account_enhancement
+#: model:ir.model,name:l10n_ro_stock_account_enhancement.model_stock_move
+msgid "Stock Move"
+msgstr "Mișcare de stoc"
