@@ -9,6 +9,10 @@
     "website": "https://github.com/OCA/l10n-romania",
     "depends": [
         "l10n_ro_stock_account",
+        "l10n_ro_config",
+    ],
+    "data": [
+        "views/res_config_settings_views.xml",
     ],
     "license": "AGPL-3",
     "installable": True,
