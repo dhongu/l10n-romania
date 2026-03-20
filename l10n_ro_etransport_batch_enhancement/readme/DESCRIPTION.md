@@ -1,12 +1,16 @@
 
+Extinde funcționalitatea e-Transport pentru loturile de transferuri (stock.picking.batch), oferind suport pentru gestionarea centralizată a transportatorilor și greutăților.
 
+## Caracteristici Cheie
+- Adăugarea câmpului `l10n_ro_transport_partner_id` pe lotul de transferuri, cu sincronizare automată către toate transferurile (pickings) componente.
+- Posibilitatea de a specifica un curier (`delivery.carrier`) la nivel de lot, care se propagă către transferurile individuale.
+- Gestionarea greutăților la nivel de lot:
+  - Calculul greutăților pe liniile de transfer din lot.
+  - Distribuirea greutății totale (netă și brută) proporțional pe liniile lotului.
+- Validarea datelor e-Transport pentru loturi, injectând corect partenerul de transport în datele trimise către ANAF.
+- Afișarea numărului UIT pe raportul de livrare al lotului.
 
-Features:
-- Types can be defined for records sale.order, purchase.order, account.move
-- If a model has no types defined, the type field will not be displayed
-- completare automata cu 13 de zero pt persane fizice
-- retransmiterea unei facturi
-- parametri sistem:
-  - "efactura.embed_pdf" - daca pune sau nu embedded pdf. Default pe True
-  - "efactura.clean_name" - daca curata caracterul "/" din numele facturii in tag-ul de ID. Default pe False
-  - "efactura.get_all_banks" - daca pune toate bancile cu l10n_ro_print_report si in valuta facturii. Default pe False
+## Implementare Tehnică
+- Moștenește `stock.picking.batch` pentru a adăuga suportul e-Transport similar cu transferurile individuale.
+- Sincronizează câmpurile de transport între lot și transferurile sale prin metode de `compute` și `inverse`.
+- Extinde logica de validare a datelor (`_l10n_ro_edi_stock_validate_data`) pentru a utiliza partenerul de transport manual de pe lot.
