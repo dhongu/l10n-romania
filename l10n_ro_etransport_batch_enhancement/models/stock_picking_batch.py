@@ -22,6 +22,24 @@ class StockPickingBatch(models.Model):
     )
     total_net_weight = fields.Float()
     total_gross_weight = fields.Float()
+    l10n_ro_transport_partner_id = fields.Many2one(
+        "res.partner",
+        string="Transport Partner",
+        compute="_compute_l10n_ro_transport_partner_id",
+        inverse="_inverse_l10n_ro_transport_partner_id",
+        store=True,
+    )
+
+    @api.depends("picking_ids.l10n_ro_transport_partner_id")
+    def _compute_l10n_ro_transport_partner_id(self):
+        for batch in self:
+            if batch.picking_ids:
+                batch.l10n_ro_transport_partner_id = batch.picking_ids[0].l10n_ro_transport_partner_id
+
+    def _inverse_l10n_ro_transport_partner_id(self):
+        for batch in self:
+            for picking in batch.picking_ids:
+                picking.l10n_ro_transport_partner_id = batch.l10n_ro_transport_partner_id
 
     def _compute_l10n_ro_edi_carrier_id(self):
         for batch in self:
@@ -75,6 +93,8 @@ class StockPickingBatch(models.Model):
 
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data: dict):
+        if self:
+            data["transport_partner_id"] = self.l10n_ro_transport_partner_id or data["transport_partner_id"]
         errors = super()._l10n_ro_edi_stock_validate_data(data)
 
         for error in errors:
