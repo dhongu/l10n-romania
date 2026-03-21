@@ -11,7 +11,7 @@
     "category": "Localization",
     "depends": ["account", "l10n_ro"],
     "countries": ["ro"],
-    "data": ["views/account_account_view.xml"],
+    "data": ["views/account_account_view.xml", "views/account_move_view.xml"],
     "license": "AGPL-3",
     "maintainers": ["dhongu"],
     "development_status": "Production/Stable",
