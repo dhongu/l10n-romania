@@ -259,7 +259,7 @@ class Picking(models.Model):
 
         # Pentru pickings fără l10n_ro_transport_partner_id, apelăm super() care verifică carrier_id
         if pickings_without_transport_partner:
-            super(Picking, pickings_without_transport_partner)._l10n_ro_edi_stock_validate_carrier()
+            return super(Picking, pickings_without_transport_partner)._l10n_ro_edi_stock_validate_carrier()
 
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data: dict):
