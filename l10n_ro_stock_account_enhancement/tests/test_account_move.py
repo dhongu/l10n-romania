@@ -26,7 +26,15 @@ class TestAccountMove(TransactionCase):
                 "list_price": 15.0,
             }
         )
-        cls.partner = cls.env["res.partner"].create({"name": "Test Partner"})
+        cls.partner = cls.env["res.partner"].create(
+            {
+                "name": "Test Partner",
+                "country_id": cls.env.ref("base.ro").id,
+                "state_id": cls.env.ref("base.RO_B").id,
+                "city": "Bucuresti",
+                "street": "Strada Test 1",
+            }
+        )
 
     def test_01_out_invoice_storable_no_so(self):
         """Test that an customer invoice with a storable product and no SO line fails on post if param is set"""
