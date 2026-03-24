@@ -269,7 +269,7 @@
                         <t t-if="product_name and product_name in line_name and product_name != line_name">
                             <t t-set="line_name" t-value="line_name.replace(product_name, '',1)" />
                         </t>
-                        <span t-esc="line_name">-----------</span>
+                        <span t-esc="line_name" style="white-space: pre-wrap;">-----------</span>
                     </t>
                     <t t-if="not res_company.remove_product_name_from_invoice_line">
                         <span t-field="line.name" t-options="{'widget': 'text'}">-----------</span>

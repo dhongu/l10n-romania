@@ -22,7 +22,6 @@ class AccountMoveLine(models.Model):
 
     storno_line = fields.Boolean()
 
-
     @api.onchange("storno_line")
     def onchange_storno_line(self):
         if self.move_id.is_storno:
@@ -30,7 +29,7 @@ class AccountMoveLine(models.Model):
 
         if self.storno_line or self.move_id.is_storno:
             self.debit = -1 * abs(self.debit)
-            self.credit =-1 * abs(self.credit)
+            self.credit = -1 * abs(self.credit)
         else:
             self.debit = abs(self.debit)
             self.credit = abs(self.credit)
@@ -56,6 +55,7 @@ class AccountMoveLine(models.Model):
                 if line.storno_line:
                     line.debit = -line.balance if line.balance > 0.0 else 0.0
                     line.credit = line.balance if line.balance < 0.0 else 0.0
+        return res
 
     # def _compute_debit_credit(self):
     #     res = super()._compute_debit_credit()
