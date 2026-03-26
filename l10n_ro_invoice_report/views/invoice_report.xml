@@ -267,7 +267,7 @@
                         <t t-set="line_name" t-value="line.name" />
                         <t t-set="product_name" t-value="line.product_id.display_name or ''" />
                         <t t-if="product_name and product_name in line_name and product_name != line_name">
-                            <t t-set="line_name" t-value="line_name.replace(product_name, '',1)" />
+                            <t t-set="line_name" t-value="line_name.replace(product_name, '',1).lstrip()" />
                         </t>
                         <span t-esc="line_name" style="white-space: pre-wrap;">-----------</span>
                     </t>
