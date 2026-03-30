@@ -98,6 +98,13 @@ class AccountInvoice(models.Model):
                 move.partner_bank_id = move.commercial_partner_id.payment_bank_id
         return res
 
+    def is_bf_printed(self):
+        """Check if the invoice has been printed with BF (Bon Fiscal)"""
+        self.ensure_one()
+        if hasattr(self, "receipt_print"):
+            return self.receipt_print
+        return False
+
 
 #
 class account_invoice_line(models.Model):
