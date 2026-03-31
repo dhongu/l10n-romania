@@ -737,7 +737,8 @@
 
 
         <xpath expr="//div[hasclass('page')]" position="after">
-            <t t-if="print_with_payments">
+            <t t-set="has_bf" t-value="o.is_bf_printed()" />
+            <t t-if="print_with_payments and not has_bf">
                 <t
                     t-set="payments_vals"
                     t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"
