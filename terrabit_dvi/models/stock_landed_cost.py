@@ -12,6 +12,7 @@ class LandedCost(models.Model):
     landed_type = fields.Selection([("standard", "Standard"), ("dvi", "DVI")], default="standard")
 
     tax_value = fields.Float("VAT paid at customs")
+    tax_base = fields.Float("Tax base")
     tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
 
     def button_validate(self):
@@ -41,21 +42,26 @@ class LandedCost(models.Model):
                         "move_type": "entry",
                     }
                 )
-            tax_values = cost.tax_id.compute_all(1)
+            tax_values = cost.tax_id.compute_all(cost.tax_base or cost.tax_value)
+            name = _("VAT paid at customs - %s") % cost.tax_id.name
             aml = [
                 {
-                    "name": _("VAT paid at customs"),
+                    "name": name,
                     "debit": cost.tax_value,
                     "credit": 0.0,
                     "account_id": tax_values["taxes"][0]["account_id"],
                     "move_id": cost.account_move_id.id,
+                    "tax_tag_ids": [(6, 0, tax_values["taxes"][0]["tag_ids"])],
                 },
                 {
-                    "name": _("VAT paid at customs"),
+                    "name": name,
                     "debit": 0.0,
                     "credit": cost.tax_value,
                     "account_id": accounts_data["expense"].id,
                     "move_id": cost.account_move_id.id,
+                    "tax_ids": [(6, 0, [cost.tax_id.id])],
+                    "tax_tag_ids": [(6, 0, tax_values["base_tags"])],
+                    "balance": -cost.tax_value,  # Asigurăm echilibrul dacă e nevoie, deși debit/credit sunt setate
                 },
             ]
             self.env["account.move.line"].create(aml)

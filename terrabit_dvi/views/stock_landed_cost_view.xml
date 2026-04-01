@@ -9,6 +9,7 @@
                     <group>
                         <group>
                             <field name="tax_id" />
+                            <field name="tax_base" />
                             <field name="tax_value" />
                         </group>
                         <group>

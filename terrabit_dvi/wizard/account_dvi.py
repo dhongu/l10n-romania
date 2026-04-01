@@ -15,6 +15,7 @@ class AccountInvoiceDVI(models.TransientModel):
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
     tax_value = fields.Monetary()
+    tax_base = fields.Monetary()
     tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
 
     def _prepare_custom_duty_product(self):
@@ -63,7 +64,9 @@ class AccountInvoiceDVI(models.TransientModel):
         defaults["date"] = invoice.invoice_date or fields.Date.today()
         tax_id = self.env.company.account_purchase_tax_id
         defaults["tax_id"] = tax_id.id
-        tax_values = tax_id.compute_all(abs(invoice.amount_untaxed_signed))
+        amount_untaxed = abs(invoice.amount_untaxed_signed)
+        defaults["tax_base"] = amount_untaxed
+        tax_values = tax_id.compute_all(amount_untaxed)
         defaults["tax_value"] = tax_values["total_included"] - tax_values["total_excluded"]
 
         return defaults
@@ -85,6 +88,7 @@ class AccountInvoiceDVI(models.TransientModel):
             "cost_lines": [],
             "account_journal_id": invoice.journal_id.id,
             "tax_id": self.tax_id.id,
+            "tax_base": self.tax_base,
             "tax_value": self.tax_value,
         }
         set_param = self.env["ir.config_parameter"].sudo().set_param
