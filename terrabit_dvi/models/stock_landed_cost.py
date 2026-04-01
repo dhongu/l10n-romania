@@ -3,7 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 
-from odoo import _, fields, models
+from odoo import fields, models
 
 
 class LandedCost(models.Model):
@@ -44,7 +44,7 @@ class LandedCost(models.Model):
                 )
             tax_values = cost.tax_id.compute_all(cost.tax_base)
 
-            name = self.env._("VAT paid at customs - %s") % cost.tax_id.name
+            name = self.env._("VAT paid at customs - %s", cost.tax_id.name)
             aml = [
                 {
                     "name": name,

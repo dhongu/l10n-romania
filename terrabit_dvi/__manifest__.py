@@ -25,5 +25,5 @@
         "security/ir.model.access.csv",
     ],
     "installable": True,
-    "development_status":"Production/Stable"
+    "development_status": "Production/Stable",
 }

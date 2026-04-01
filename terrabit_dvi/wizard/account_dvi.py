@@ -2,7 +2,7 @@
 # See README.rst file on addons root folder for license details
 
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class AccountInvoiceDVI(models.TransientModel):
@@ -22,7 +22,7 @@ class AccountInvoiceDVI(models.TransientModel):
         domain = [("code", "=like", "446%")]
         account = self.env["account.account"].search(domain, limit=1)
         return {
-            "name": _("Custom Duty"),
+            "name": self.env._("Custom Duty"),
             "type": "service",
             "invoice_policy": "order",
             "property_account_expense_id": account.id,
@@ -34,7 +34,7 @@ class AccountInvoiceDVI(models.TransientModel):
         domain = [("code", "=like", "447%")]
         account = self.env["account.account"].search(domain, limit=1)
         return {
-            "name": _("Customs Commission"),
+            "name": self.env._("Customs Commission"),
             "type": "service",
             "invoice_policy": "order",
             "property_account_expense_id": account.id,

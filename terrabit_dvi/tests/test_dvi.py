@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from odoo import _, fields
+from odoo import fields
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
 
@@ -253,7 +253,7 @@ class TestDVI(TransactionCase):
         # Verificam liniile notei contabile pentru TVA
         # In Odoo 18, nota contabila poate fi partajata cu intrarile de evaluare stoc.
         # Identificam liniile de TVA dupa numele lor specific.
-        text = _("VAT paid at customs")
+        text = self.env._("VAT paid at customs")
         tva_lines = vat_move.line_ids.filtered(lambda l: text in l.name)
         self.assertEqual(len(tva_lines), 2, "Ar trebui sa avem exact 2 linii de TVA (debit si credit)")
         debit_line = tva_lines.filtered(lambda l: l.debit > 0)
