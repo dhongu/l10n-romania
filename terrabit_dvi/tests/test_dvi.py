@@ -253,7 +253,8 @@ class TestDVI(TransactionCase):
         # Verificam liniile notei contabile pentru TVA
         # In Odoo 18, nota contabila poate fi partajata cu intrarile de evaluare stoc.
         # Identificam liniile de TVA dupa numele lor specific.
-        tva_lines = vat_move.line_ids.filtered(lambda l: _("VAT paid at customs") in l.name)
+        text = _("VAT paid at customs")
+        tva_lines = vat_move.line_ids.filtered(lambda l: text in l.name)
         self.assertEqual(len(tva_lines), 2, "Ar trebui sa avem exact 2 linii de TVA (debit si credit)")
         debit_line = tva_lines.filtered(lambda l: l.debit > 0)
         tva_lines.filtered(lambda l: l.credit > 0)
