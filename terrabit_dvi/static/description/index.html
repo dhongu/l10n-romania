@@ -473,8 +473,8 @@ exclusiv în RON.</li>
 <div class="section" id="usage">
 <h1>Usage</h1>
 </div>
-<div class="section" id="capitolul-4-procedura-generala-de-operare-in-odoo-pentru-importuri-de-marfa-cu-locatie-de-tranzit-si-declaratie-vamala-de-import-dvi">
-<h1>Capitolul 4: Procedura generală de operare în Odoo pentru importuri de marfă cu locație de tranzit și Declarație Vamală de Import (DVI)</h1>
+<div class="section" id="procedura-generala-de-operare-in-odoo-pentru-importuri-de-marfa-cu-locatie-de-tranzit-si-declaratie-vamala-de-import-dvi">
+<h1>Procedura generală de operare în Odoo pentru importuri de marfă cu locație de tranzit și Declarație Vamală de Import (DVI)</h1>
 <p>Prezentul capitol descrie fluxul complet, standardizat și optimizat de
 operare în sistemul Odoo pentru un import de marfă din afara Uniunii
 Europene, în regim <strong>FOB</strong>, cu recepție în locație virtuală de tranzit
@@ -490,7 +490,7 @@ mărfurilor;</li>
 <li>Trasabilitate completă de la comandă până la stocul final.</li>
 </ul>
 <div class="section" id="pasul-1-crearea-comenzii-de-achizitie-purchase-order">
-<h2>4.1. Pasul 1 – Crearea Comenzii de Achiziție (Purchase Order)</h2>
+<h2>Pasul 1 – Crearea Comenzii de Achiziție (Purchase Order)</h2>
 <p><strong>Acțiune:</strong> Se creează o comandă de achiziție (PO) către furnizorul
 extern pentru articolele importate.</p>
 <p><strong>Modul:</strong> <tt class="docutils literal">Purchasing → Purchase Orders</tt></p>
@@ -501,7 +501,7 @@ extern pentru articolele importate.</p>
 </ul>
 </div>
 <div class="section" id="pasul-2-receptia-in-locatia-de-tranzit-inventory-receipt">
-<h2>4.2. Pasul 2 – Recepția în Locația de Tranzit (Inventory Receipt)</h2>
+<h2>Pasul 2 – Recepția în Locația de Tranzit (Inventory Receipt)</h2>
 <p><strong>Acțiune:</strong> Deoarece marfa este livrată în regim <strong>FOB</strong>, proprietatea
 se transferă la plecarea din țara de origine. Se efectuează recepția
 într-o locație virtuală/intermediară denumită <strong>„Transit/In-Coming”</strong>.</p>
@@ -514,7 +514,7 @@ cursul BNR din <strong>data recepției</strong>.</li>
 </ul>
 </div>
 <div class="section" id="pasul-3-inregistrarea-facturii-de-marfa-vendor-bill">
-<h2>4.3. Pasul 3 – Înregistrarea Facturii de Marfă (Vendor Bill)</h2>
+<h2>Pasul 3 – Înregistrarea Facturii de Marfă (Vendor Bill)</h2>
 <p><strong>Acțiune:</strong> Se înregistrează factura comercială primită de la furnizor
 și se asociază cu PO-ul creat la Pasul 1.</p>
 <p><strong>Modul:</strong> <tt class="docutils literal">Accounting → Vendors → Bills</tt></p>
@@ -527,7 +527,7 @@ externi)</li>
 la <strong>cursul BNR din data emiterii facturii</strong>.</p>
 </div>
 <div class="section" id="pasul-4-plata-facturii-si-diferentele-de-curs-valutar">
-<h2>4.4. Pasul 4 – Plata Facturii și Diferențele de Curs Valutar</h2>
+<h2>Pasul 4 – Plata Facturii și Diferențele de Curs Valutar</h2>
 <p><strong>Acțiune:</strong> Se efectuează plata facturii către furnizor (de obicei
 înainte de sosirea mărfii în vamă).</p>
 <p><strong>Modul:</strong> <tt class="docutils literal">Accounting → Bank → Register Payment</tt></p>
@@ -541,7 +541,7 @@ favorabile de curs)</li>
 automat diferențele de curs valutar.</p>
 </div>
 <div class="section" id="pasul-5-inregistrarea-dvi-taxe-si-tva-journal-entry">
-<h2>4.5. Pasul 5 – Înregistrarea DVI – Taxe și TVA (Journal Entry)</h2>
+<h2>Pasul 5 – Înregistrarea DVI – Taxe și TVA (Journal Entry)</h2>
 <p><strong>Acțiune:</strong> După sosirea mărfii în vamă se înregistrează manual datele
 din DVI.</p>
 <p><strong>Modul:</strong> <tt class="docutils literal">Accounting → Journal Entries</tt> <strong>Referință:</strong> MRN (Movement
@@ -554,7 +554,7 @@ A00</li>
 </ul>
 </div>
 <div class="section" id="pasul-6-plata-datoriei-catre-vama">
-<h2>4.6. Pasul 6 – Plata Datoriei către Vamă</h2>
+<h2>Pasul 6 – Plata Datoriei către Vamă</h2>
 <p><strong>Acțiune:</strong> Se efectuează plata efectivă a taxelor vamale și a TVA-ului
 la import către organele vamale (stingerea datoriei create la Pasul 5).</p>
 <p><strong>Modul:</strong> <tt class="docutils literal">Accounting → Payments → Register Payment</tt> (sau
@@ -573,7 +573,7 @@ pentru respectivul DVI.</li>
 </ul>
 </div>
 <div class="section" id="pasul-7-repartizarea-costurilor-aditionale-landed-costs">
-<h2>4.7. Pasul 7 – Repartizarea Costurilor Adiționale (Landed Costs)</h2>
+<h2>Pasul 7 – Repartizarea Costurilor Adiționale (Landed Costs)</h2>
 <p><strong>Acțiune:</strong> Se repartizează taxele vamale plătite asupra mărfii aflate
 încă în tranzit.</p>
 <p><strong>Modul:</strong> <tt class="docutils literal">Inventory → Operations → Landed Costs</tt></p>
@@ -588,7 +588,7 @@ clearing taxe) — suma taxă vamală A00</li>
 (capitalizare în costul de achiziție).</p>
 </div>
 <div class="section" id="pasul-8-transferul-final-in-depozit-internal-transfer">
-<h2>4.8. Pasul 8 – Transferul Final în Depozit (Internal Transfer)</h2>
+<h2>Pasul 8 – Transferul Final în Depozit (Internal Transfer)</h2>
 <p><strong>Acțiune:</strong> După finalizarea vămuirii, se transferă marfa din locația
 de tranzit în depozitul fizic.</p>
 <p><strong>Modul:</strong> <tt class="docutils literal">Inventory → Internal Transfers</tt> (din „Transit” în
@@ -602,8 +602,8 @@ aprovizionare)</li>
 recepție) + Taxe vamale A00.</p>
 </div>
 </div>
-<div class="section" id="capitolul-5-incoterms-reguli-internationale-de-livrare-in-comertul-exterior">
-<h1>Capitolul 5: Incoterms – Reguli internaționale de livrare în comerțul exterior</h1>
+<div class="section" id="incoterms-reguli-internationale-de-livrare-in-comertul-exterior">
+<h1>Incoterms – Reguli internaționale de livrare în comerțul exterior</h1>
 <p>Prezentul capitol explică regulile <strong>Incoterms® 2020</strong> (International
 Commercial Terms) emise de Camera Internațională de Comerț (ICC), care
 stabilesc clar <strong>repartizarea costurilor, riscurilor și
@@ -617,7 +617,7 @@ internaționale.</p>
 <li>Determinarea responsabilităților vamale și de transport.</li>
 </ul>
 <div class="section" id="principalele-incoterms-utilizate-la-import-2020">
-<h2>5.1. Principalele Incoterms utilizate la import (2020)</h2>
+<h2>Principalele Incoterms utilizate la import (2020)</h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="10%" />
@@ -784,7 +784,7 @@ TVA</td>
 </tbody>
 </table>
 <div class="section" id="impactul-incoterm-ului-asupra-procedurii-odoo">
-<h3>5.2. Impactul Incoterm-ului asupra procedurii Odoo</h3>
+<h3>Impactul Incoterm-ului asupra procedurii Odoo</h3>
 <table border="1" class="docutils">
 <colgroup>
 <col width="19%" />
@@ -892,7 +892,7 @@ cumpărător</td>
 </table>
 </div>
 <div class="section" id="recomandarea-pentru-importuri-din-china-2026">
-<h3>5.3. Recomandarea pentru importuri din China (2026)</h3>
+<h3>Recomandarea pentru importuri din China (2026)</h3>
 <ul class="simple">
 <li><strong>Cel mai folosit:</strong> <strong>FOB</strong> (echilibru bun între preț și control).</li>
 <li><strong>Cel mai avantajos logistic:</strong> <strong>FCA</strong> (mai modern și mai sigur decât
