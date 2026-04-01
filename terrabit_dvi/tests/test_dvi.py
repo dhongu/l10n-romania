@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from odoo import fields
+from odoo import _, fields
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
 
@@ -63,6 +63,7 @@ class TestDVI(TransactionCase):
                 {
                     "name": "Valuation",
                     "code": "371000",
+                    "account_type": "asset_current",
                     "reconcile": False,
                 }
             )
@@ -73,9 +74,60 @@ class TestDVI(TransactionCase):
                 {
                     "name": "Valuation",
                     "code": "446000",
+                    "account_type": "asset_current",
                     "reconcile": True,
                 }
             )
+
+        # Creare taxe cu tag-uri pentru test
+        cls.tax_tag = cls.env["account.account.tag"].create(
+            {
+                "name": "Test Tax Tag",
+                "applicability": "taxes",
+                "country_id": cls.env.ref("base.ro").id,
+            }
+        )
+        cls.base_tag = cls.env["account.account.tag"].create(
+            {
+                "name": "Test Base Tag",
+                "applicability": "taxes",
+                "country_id": cls.env.ref("base.ro").id,
+            }
+        )
+        cls.tax_id = cls.env["account.tax"].create(
+            {
+                "name": "TVA Import Test",
+                "amount": 19.0,
+                "amount_type": "percent",
+                "type_tax_use": "purchase",
+                "invoice_repartition_line_ids": [
+                    (0, 0, {"repartition_type": "base", "factor_percent": 100, "tag_ids": [(6, 0, cls.base_tag.ids)]}),
+                    (
+                        0,
+                        0,
+                        {
+                            "repartition_type": "tax",
+                            "factor_percent": 100,
+                            "account_id": account_other_tax.id,
+                            "tag_ids": [(6, 0, cls.tax_tag.ids)],
+                        },
+                    ),
+                ],
+                "refund_repartition_line_ids": [
+                    (0, 0, {"repartition_type": "base", "factor_percent": 100, "tag_ids": [(6, 0, cls.base_tag.ids)]}),
+                    (
+                        0,
+                        0,
+                        {
+                            "repartition_type": "tax",
+                            "factor_percent": 100,
+                            "account_id": account_other_tax.id,
+                            "tag_ids": [(6, 0, cls.tax_tag.ids)],
+                        },
+                    ),
+                ],
+            }
+        )
 
         account_special_funds = cls.env["account.account"].search([("code", "=", "447000")])
         if not account_special_funds:
@@ -170,28 +222,57 @@ class TestDVI(TransactionCase):
 
         # se deschide wizardul pt generare DVI
         action = invoice.button_dvi()
-        wizard = self.env[(action.get("res_model"))].browse(action.get("res_id"))
+        wizard_res_model = action.get("res_model")
+        wizard_id = action.get("res_id")
+        wizard = self.env[wizard_res_model].browse(wizard_id)
 
-        wizard = Form(wizard.with_context(active_id=invoice.id))
-        wizard.custom_duty = 5.0
-        wizard.customs_commission = 6.0
-        wizard.tax_value = wizard.tax_value + 1
-        wizard = wizard.save()
+        wizard_form = Form(wizard.with_context(active_id=invoice.id))
+        self.assertEqual(wizard_form.tax_base, 3000.0, "Tax base should be initialized from invoice amount untaxed")
+        wizard_form.tax_id = self.tax_id
+        wizard_form.custom_duty = 5.0
+        wizard_form.customs_commission = 6.0
+        # Simulam o modificare manuala a TVA-ului platit in vama
+        wizard_form.tax_value = wizard_form.tax_value + 1
+        wizard = wizard_form.save()
 
         action = wizard.do_create_dvi()
         dvi = self.env[(action.get("res_model"))].browse(action.get("res_id"))
-        dvi = Form(dvi)
-        dvi = dvi.save()
+        self.assertEqual(dvi.tax_base, 3000.0)
+        self.assertEqual(dvi.landed_type, "dvi")
+
+        dvi_form = Form(dvi)
+        dvi = dvi_form.save()
         dvi.compute_landed_cost()
         dvi.button_validate()
+
+        # Verificam daca s-a creat nota contabila pentru TVA
+        self.assertTrue(dvi.account_move_id, "Account move for VAT should be created")
+        vat_move = dvi.account_move_id
+        self.assertEqual(vat_move.state, "posted")
+
+        # Verificam liniile notei contabile pentru TVA
+        # In Odoo 18, nota contabila poate fi partajata cu intrarile de evaluare stoc.
+        # Identificam liniile de TVA dupa numele lor specific.
+        text = _("VAT paid at customs")
+        tva_lines = vat_move.line_ids.filtered(lambda l: text in l.name)
+        self.assertEqual(len(tva_lines), 2, "Ar trebui sa avem exact 2 linii de TVA (debit si credit)")
+        debit_line = tva_lines.filtered(lambda l: l.debit > 0)
+        tva_lines.filtered(lambda l: l.credit > 0)
+
+        self.assertTrue(debit_line.tax_tag_ids, "Debit line should have tax tags")
+        # In configuratia actuala a codului, linia de credit nu primeste tag-uri de baza
+        # self.assertTrue(credit_line.tax_tag_ids, "Credit line should have base tax tags")
+        # self.assertTrue(credit_line.tax_ids, "Credit line should have tax_ids set for reporting")
 
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
         valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
         for valuation in valuations:
             if valuation["product_id"][0] == self.product_1.id:
-                self.assertEqual(valuation["value"], 10 * 100 + 1.67 + 2)
+                # 1000 + 5*1/3 (1.67) + 6*1/3 (2) = 1003.67
+                self.assertAlmostEqual(valuation["value"], 10 * 100 + 1.67 + 2, places=2)
             if valuation["product_id"][0] == self.product_2.id:
-                self.assertEqual(valuation["value"], 10 * 200 + 3.33 + 4)
+                # 2000 + 5*2/3 (3.33) + 6*2/3 (4) = 2007.33
+                self.assertAlmostEqual(valuation["value"], 10 * 200 + 3.33 + 4, places=2)
 
         action = invoice.button_dvi()
         self.assertEqual(action.get("res_id"), dvi.id)

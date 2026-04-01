@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-28 05:20+0000\n"
-"PO-Revision-Date: 2020-04-28 05:20+0000\n"
+"POT-Creation-Date: 2026-04-01 04:55+0000\n"
+"PO-Revision-Date: 2026-04-01 04:55+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,18 +17,23 @@ msgstr ""
 
 #. module: terrabit_dvi
 #: model_terms:ir.ui.view,arch_db:terrabit_dvi.view_account_invoice_dvi_form
+msgid "Apply"
+msgstr "Aplică"
+
+#. module: terrabit_dvi
+#: model_terms:ir.ui.view,arch_db:terrabit_dvi.view_account_invoice_dvi_form
 msgid "Cancel"
 msgstr "Abandonează"
 
 #. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creat de"
 
 #. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creat la"
 
 #. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__currency_id
@@ -36,21 +41,22 @@ msgid "Currency"
 msgstr "Moneda"
 
 #. module: terrabit_dvi
+#. odoo-python
 #: code:addons/terrabit_dvi/wizard/account_dvi.py:0
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__custom_duty
-#, python-format
 msgid "Custom Duty"
 msgstr "Taxă vamală"
 
 #. module: terrabit_dvi
+#. odoo-python
 #: code:addons/terrabit_dvi/wizard/account_dvi.py:0
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__customs_commission
-#, python-format
 msgid "Customs Commission"
 msgstr "Comision vamal"
 
 #. module: terrabit_dvi
 #: model:ir.actions.act_window,name:terrabit_dvi.action_account_invoice_dvi
+#: model:ir.model.fields,field_description:terrabit_dvi.field_account_bank_statement_line__dvi_id
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_move__dvi_id
 #: model:ir.model.fields.selection,name:terrabit_dvi.selection__stock_landed_cost__landed_type__dvi
 #: model_terms:ir.ui.view,arch_db:terrabit_dvi.view_move_form
@@ -74,28 +80,23 @@ msgstr ""
 
 #. module: terrabit_dvi
 #: model:ir.model,name:terrabit_dvi.model_account_move
-msgid "Journal Entries"
-msgstr "Note contabile"
+msgid "Journal Entry"
+msgstr "Înregistrare de jurnal "
 
 #. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_stock_landed_cost__landed_type
 msgid "Landed Type"
-msgstr "Tip"
-
-#. module: terrabit_dvi
-#: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi____last_update
-msgid "Last Modified on"
-msgstr ""
+msgstr "Tip cost adițional"
 
 #. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultima actualizare de"
 
 #. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultima actualizare la"
 
 #. module: terrabit_dvi
 #: model:ir.model.fields.selection,name:terrabit_dvi.selection__stock_landed_cost__landed_type__standard
@@ -114,28 +115,38 @@ msgid "Tax"
 msgstr "TVA"
 
 #. module: terrabit_dvi
+#: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__tax_base
+msgid "Tax Base"
+msgstr "Bază de impozitare"
+
+#. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__tax_value
 msgid "Tax Value"
 msgstr "Valoare TVA"
 
 #. module: terrabit_dvi
-#: code:addons/terrabit_dvi/models/stock_landed_cost.py:0
-#, python-format
-msgid "The product Custom Duty not found"
-msgstr "Produsul Taxă vamală nu este găsit"
+#: model:ir.model.fields,field_description:terrabit_dvi.field_stock_landed_cost__tax_base
+msgid "Tax base"
+msgstr "Bază de impozitare"
 
 #. module: terrabit_dvi
-#: code:addons/terrabit_dvi/models/stock_landed_cost.py:0
-#: code:addons/terrabit_dvi/models/stock_landed_cost.py:0
+#. odoo-python
+#: code:addons/terrabit_dvi/models/account_invoice.py:0
+msgid "The partner has no country set."
+msgstr "Partenerul nu are o țară setată."
+
+#. module: terrabit_dvi
+#. odoo-python
+#: code:addons/terrabit_dvi/tests/test_dvi.py:0
 #: model:ir.model.fields,field_description:terrabit_dvi.field_stock_landed_cost__tax_value
-#, python-format
 msgid "VAT paid at customs"
 msgstr "TVA plătit în vamă"
 
 #. module: terrabit_dvi
-#: model_terms:ir.ui.view,arch_db:terrabit_dvi.view_account_invoice_dvi_form
-msgid "_Apply"
-msgstr "_Aplică"
+#. odoo-python
+#: code:addons/terrabit_dvi/models/stock_landed_cost.py:0
+msgid "VAT paid at customs - %s"
+msgstr "TVA plătit în vamă - %s"
 
 #. module: terrabit_dvi
 #: model_terms:ir.ui.view,arch_db:terrabit_dvi.view_account_invoice_dvi_form

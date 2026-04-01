@@ -8,11 +8,12 @@
                 <notebook position="before">
                     <group>
                         <group>
-                            <field name="tax_id" />
-                            <field name="tax_value" />
-                        </group>
-                        <group>
                             <field name="landed_type" />
+                        </group>
+                        <group invisible="landed_type == 'standard'">
+                            <field name="tax_id" />
+                            <field name="tax_base" />
+                            <field name="tax_value" />
                         </group>
                     </group>
                 </notebook>

@@ -370,80 +370,90 @@ ul.auto-toc {
 !! source digest: sha256:82dad9fd93fb19748471db3f4ba19840a80f821af9ff77805380aea4e6d1276b
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/licence-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_etransport_enhancement"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
-<div class="section" id="l10n-ro-etransport-enhancement">
-<h1>l10n_ro_etransport_enhancement</h1>
-<div class="section" id="overview">
-<h2>Overview</h2>
-<p>The l10n_ro_etransport_enhancement module extends the standard Romanian
-e-Transport functionality in Odoo with additional features and
-improvements. This module enhances the e-Transport system integration
-for Romanian fiscal compliance, making it more flexible and
-user-friendly.</p>
-</div>
-<div class="section" id="key-features">
-<h2>Key Features</h2>
+<p>Modulul l10n_ro_etransport_enhancement extinde funcționalitatea standard
+e-Transport din Odoo cu caracteristici și îmbunătățiri suplimentare.
+Acest modul optimizează integrarea sistemului e-Transport pentru
+conformitatea fiscală din România, făcându-l mai flexibil și mai ușor de
+utilizat.</p>
+<div class="section" id="caracteristici-cheie">
+<h1>Caracteristici Cheie</h1>
 <ul class="simple">
-<li>Enhanced functionality for sending e-Transport documents directly from
-stock pickings</li>
-<li>Support for different sending types through context parameters</li>
-<li>Improved handling of stock valuation layer tracking for e-Transport
-documents</li>
-<li>Streamlined integration with the Romanian e-Transport system (SPV)</li>
+<li>Posibilitatea de a defini un partener de transport manual
+(<tt class="docutils literal">l10n_ro_transport_partner_id</tt>) fără a fi necesară configurarea
+unui curier (<tt class="docutils literal">delivery.carrier</tt>).</li>
+<li>Validarea transferurilor (pickings) permite lipsa curierului dacă este
+completat partenerul de transport.</li>
+<li>Calculul și distribuirea greutăților (netă și brută) direct pe liniile
+de transfer pentru raportarea corectă în e-Transport.</li>
+<li>Integrare îmbunătățită pentru preluarea prețurilor din comenzile de
+vânzare/achiziție în documentul e-Transport.</li>
+<li>Suport pentru corecția greutăților pe linii prin distribuirea unei
+valori totale.</li>
 </ul>
 </div>
-<div class="section" id="technical-implementation">
-<h2>Technical Implementation</h2>
-<p>The module builds upon the standard Romanian localization and enhances
-the e-Transport integration through:</p>
+<div class="section" id="implementare-tehnica">
+<h1>Implementare Tehnică</h1>
+<p>Modulul se bazează pe localizarea standard pentru România și
+îmbunătățește integrarea e-Transport prin:</p>
 <ul class="simple">
-<li>Extended stock picking methods for e-Transport document submission</li>
-<li>Advanced tracking mechanisms for stock valuation layers</li>
-<li>Improved context handling for different document sending scenarios</li>
+<li>Metode extinse pentru livrări (stock picking) pentru trimiterea
+documentelor e-Transport</li>
+<li>Mecanisme avansate de urmărire a straturilor de evaluare a stocurilor
+(stock valuation layers)</li>
+<li>Gestionare îmbunătățită a contextului pentru diferite scenarii de
+trimitere a documentelor</li>
 </ul>
 </div>
-<div class="section" id="business-benefits">
-<h2>Business Benefits</h2>
+<div class="section" id="beneficii-pentru-afacere">
+<h1>Beneficii pentru Afacere</h1>
 <ul class="simple">
-<li>Simplified compliance with Romanian e-Transport regulations</li>
-<li>More flexible options for submitting transport documents to
-authorities</li>
-<li>Better tracking and management of stock movements subject to
-e-Transport requirements</li>
-<li>Reduced administrative burden for logistics and accounting departments</li>
+<li>Conformitate simplificată cu reglementările românești privind
+e-Transport</li>
+<li>Opțiuni mai flexibile pentru transmiterea documentelor de transport
+către autorități</li>
+<li>Monitorizare și gestionare mai bună a mișcărilor de stoc supuse
+cerințelor e-Transport</li>
+<li>Reducerea poverii administrative pentru departamentele de logistică și
+contabilitate</li>
 </ul>
 </div>
-<div class="section" id="usage">
-<h2>Usage</h2>
-<p>After installation, the module automatically enhances the e-Transport
-functionality in stock operations. Users can access the enhanced
-e-Transport features through the stock picking interface, with
-additional options available in the action menu. This module is part of
-the Romanian localization suite developed by Terrabit.</p>
+<div class="section" id="utilizare">
+<h1>Utilizare</h1>
+<p>După instalare, modulul îmbunătățește automat funcționalitatea
+e-Transport în operațiunile de stoc. Utilizatorii pot accesa funcțiile
+extinse e-Transport prin interfața de livrări, cu opțiuni suplimentare
+disponibile în meniul de acțiuni. Acest modul face parte din suita de
+localizare pentru România dezvoltată de Terrabit.</p>
 <p><strong>Table of contents</strong></p>
-</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-1">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-2">Credits</a></li>
+</ul>
 </div>
 <div class="section" id="bug-tracker">
-<h1>Bug Tracker</h1>
+<h2><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1>Credits</h1>
+<h2><a class="toc-backref" href="#toc-entry-2">Credits</a></h2>
+</div>
+</div>
 <div class="section" id="authors">
-<h2>Authors</h2>
+<h1>Authors</h1>
 <ul class="simple">
 <li>Terrabit</li>
 <li>Dorin Hongu</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2>Maintainers</h2>
+<h1>Maintainers</h1>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_etransport_enhancement">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
-</div>
 </div>
 </div>
 </body>
