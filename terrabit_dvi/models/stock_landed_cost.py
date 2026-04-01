@@ -42,7 +42,8 @@ class LandedCost(models.Model):
                         "move_type": "entry",
                     }
                 )
-            tax_values = cost.tax_id.compute_all(cost.tax_base or cost.tax_value)
+            tax_values = cost.tax_id.compute_all(cost.tax_base )
+
             name = _("VAT paid at customs - %s") % cost.tax_id.name
             aml = [
                 {
@@ -59,9 +60,7 @@ class LandedCost(models.Model):
                     "credit": cost.tax_value,
                     "account_id": accounts_data["expense"].id,
                     "move_id": cost.account_move_id.id,
-                    "tax_ids": [(6, 0, [cost.tax_id.id])],
-                    "tax_tag_ids": [(6, 0, tax_values["base_tags"])],
-                    "balance": -cost.tax_value,  # Asigurăm echilibrul dacă e nevoie, deși debit/credit sunt setate
+                    # "tax_ids": [(6, 0, [cost.tax_id.id])],
                 },
             ]
             self.env["account.move.line"].create(aml)
