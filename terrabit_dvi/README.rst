@@ -131,8 +131,8 @@ Cadrul legal este clar şi unitar:
 Usage
 =====
 
-Capitolul 4: Procedura generală de operare în Odoo pentru importuri de marfă cu locație de tranzit și Declarație Vamală de Import (DVI)
-=======================================================================================================================================
+Procedura generală de operare în Odoo pentru importuri de marfă cu locație de tranzit și Declarație Vamală de Import (DVI)
+==========================================================================================================================
 
 Prezentul capitol descrie fluxul complet, standardizat și optimizat de
 operare în sistemul Odoo pentru un import de marfă din afara Uniunii
@@ -149,8 +149,8 @@ Fluxul asigură:
 - Calculul automat al diferențelor de curs valutar;
 - Trasabilitate completă de la comandă până la stocul final.
 
-4.1. Pasul 1 – Crearea Comenzii de Achiziție (Purchase Order)
--------------------------------------------------------------
+Pasul 1 – Crearea Comenzii de Achiziție (Purchase Order)
+--------------------------------------------------------
 
 **Acțiune:** Se creează o comandă de achiziție (PO) către furnizorul
 extern pentru articolele importate.
@@ -162,8 +162,8 @@ extern pentru articolele importate.
 - Rezervă marfa în sistem.
 - Nu generează nicio notă contabilă.
 
-4.2. Pasul 2 – Recepția în Locația de Tranzit (Inventory Receipt)
------------------------------------------------------------------
+Pasul 2 – Recepția în Locația de Tranzit (Inventory Receipt)
+------------------------------------------------------------
 
 **Acțiune:** Deoarece marfa este livrată în regim **FOB**, proprietatea
 se transferă la plecarea din țara de origine. Se efectuează recepția
@@ -177,8 +177,8 @@ se transferă la plecarea din țara de origine. Se efectuează recepția
   facturi nesosite) **Suma:** Valoarea totală în valută convertită la
   cursul BNR din **data recepției**.
 
-4.3. Pasul 3 – Înregistrarea Facturii de Marfă (Vendor Bill)
-------------------------------------------------------------
+Pasul 3 – Înregistrarea Facturii de Marfă (Vendor Bill)
+-------------------------------------------------------
 
 **Acțiune:** Se înregistrează factura comercială primită de la furnizor
 și se asociază cu PO-ul creat la Pasul 1.
@@ -193,8 +193,8 @@ se transferă la plecarea din țara de origine. Se efectuează recepția
 Se închide contul 408 și se stabilește datoria fermă pe contul 401.ext
 la **cursul BNR din data emiterii facturii**.
 
-4.4. Pasul 4 – Plata Facturii și Diferențele de Curs Valutar
-------------------------------------------------------------
+Pasul 4 – Plata Facturii și Diferențele de Curs Valutar
+-------------------------------------------------------
 
 **Acțiune:** Se efectuează plata facturii către furnizor (de obicei
 înainte de sosirea mărfii în vamă).
@@ -210,8 +210,8 @@ la **cursul BNR din data emiterii facturii**.
 **Observație:** Acesta este singurul moment în care se înregistrează
 automat diferențele de curs valutar.
 
-4.5. Pasul 5 – Înregistrarea DVI – Taxe și TVA (Journal Entry)
---------------------------------------------------------------
+Pasul 5 – Înregistrarea DVI – Taxe și TVA (Journal Entry)
+---------------------------------------------------------
 
 **Acțiune:** După sosirea mărfii în vamă se înregistrează manual datele
 din DVI.
@@ -225,8 +225,8 @@ Reference Number) din DVI
 - **371.tranzit** (Taxe Vamale) = **446 / 401.Vama** — suma taxă vamală
   A00
 
-4.6. Pasul 6 – Plata Datoriei către Vamă
-----------------------------------------
+Pasul 6 – Plata Datoriei către Vamă
+-----------------------------------
 
 **Acțiune:** Se efectuează plata efectivă a taxelor vamale și a TVA-ului
 la import către organele vamale (stingerea datoriei create la Pasul 5).
@@ -246,8 +246,8 @@ la import către organele vamale (stingerea datoriei create la Pasul 5).
 - După această plată, contul 401.Vama (sau 446) rămâne cu sold zero
   pentru respectivul DVI.
 
-4.7. Pasul 7 – Repartizarea Costurilor Adiționale (Landed Costs)
-----------------------------------------------------------------
+Pasul 7 – Repartizarea Costurilor Adiționale (Landed Costs)
+-----------------------------------------------------------
 
 **Acțiune:** Se repartizează taxele vamale plătite asupra mărfii aflate
 încă în tranzit.
@@ -265,8 +265,8 @@ Pasul 2.
 **Impact:** Valoarea mărfii în tranzit crește cu valoarea taxelor vamale
 (capitalizare în costul de achiziție).
 
-4.8. Pasul 8 – Transferul Final în Depozit (Internal Transfer)
---------------------------------------------------------------
+Pasul 8 – Transferul Final în Depozit (Internal Transfer)
+---------------------------------------------------------
 
 **Acțiune:** După finalizarea vămuirii, se transferă marfa din locația
 de tranzit în depozitul fizic.
@@ -282,8 +282,8 @@ de tranzit în depozitul fizic.
 **Valoarea transferată include:** Preț marfă (valută la cursul BNR
 recepție) + Taxe vamale A00.
 
-Capitolul 5: Incoterms – Reguli internaționale de livrare în comerțul exterior
-==============================================================================
+Incoterms – Reguli internaționale de livrare în comerțul exterior
+=================================================================
 
 Prezentul capitol explică regulile **Incoterms® 2020** (International
 Commercial Terms) emise de Camera Internațională de Comerț (ICC), care
@@ -298,8 +298,8 @@ Cunoașterea Incoterm-ului este esențială pentru:
 - Calculul corect al landed costs;
 - Determinarea responsabilităților vamale și de transport.
 
-5.1. Principalele Incoterms utilizate la import (2020)
-------------------------------------------------------
+Principalele Incoterms utilizate la import (2020)
+-------------------------------------------------
 
 +----------+----------------+----------------+------------+----------+--------------+------------+------------+
 | Incoterm | Denumire       | Momentul       | Transport  | Vămuire  | Vămuire      | Asigurare  | Recomandat |
@@ -351,8 +351,8 @@ Cunoașterea Incoterm-ului este esențială pentru:
 |          |                |                |            |          |              |            | TVA        |
 +----------+----------------+----------------+------------+----------+--------------+------------+------------+
 
-5.2. Impactul Incoterm-ului asupra procedurii Odoo
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Impactul Incoterm-ului asupra procedurii Odoo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 +-------------+---------------+----------------+-------------+-------------+
 | Incoterm    | Momentul      | Cine plătește  | Landed      | Observații  |
@@ -393,8 +393,8 @@ Cunoașterea Incoterm-ului este esențială pentru:
 |             |               |                | pentru taxe | cumpărător  |
 +-------------+---------------+----------------+-------------+-------------+
 
-5.3. Recomandarea pentru importuri din China (2026)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Recomandarea pentru importuri din China (2026)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - **Cel mai folosit:** **FOB** (echilibru bun între preț și control).
 - **Cel mai avantajos logistic:** **FCA** (mai modern și mai sigur decât
