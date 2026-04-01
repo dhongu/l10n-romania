@@ -152,8 +152,6 @@ class TestDVI(TransactionCase):
                 "property_valuation": "real_time",
                 "property_account_income_categ_id": account_income.id,
                 "property_account_expense_categ_id": account_expense.id,
-                "property_stock_account_input_categ_id": account_input.id,
-                "property_stock_account_output_categ_id": account_output.id,
                 "property_stock_valuation_account_id": account_valuation.id,
                 "property_stock_journal": stock_journal.id,
             }
