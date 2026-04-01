@@ -61,7 +61,7 @@ msgstr "Comision vamal"
 #: model:ir.model.fields.selection,name:terrabit_dvi.selection__stock_landed_cost__landed_type__dvi
 #: model_terms:ir.ui.view,arch_db:terrabit_dvi.view_move_form
 msgid "DVI"
-msgstr "DVI"
+msgstr ""
 
 #. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__date
@@ -101,7 +101,7 @@ msgstr "Ultima actualizare la"
 #. module: terrabit_dvi
 #: model:ir.model.fields.selection,name:terrabit_dvi.selection__stock_landed_cost__landed_type__standard
 msgid "Standard"
-msgstr "Standard"
+msgstr ""
 
 #. module: terrabit_dvi
 #: model:ir.model,name:terrabit_dvi.model_stock_landed_cost
@@ -147,7 +147,6 @@ msgstr "TVA plătit în vamă"
 #: code:addons/terrabit_dvi/models/stock_landed_cost.py:0
 msgid "VAT paid at customs - %s"
 msgstr "TVA plătit în vamă - %s"
-
 
 #. module: terrabit_dvi
 #: model_terms:ir.ui.view,arch_db:terrabit_dvi.view_account_invoice_dvi_form
