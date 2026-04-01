@@ -170,28 +170,52 @@ class TestDVI(TransactionCase):
 
         # se deschide wizardul pt generare DVI
         action = invoice.button_dvi()
-        wizard = self.env[(action.get("res_model"))].browse(action.get("res_id"))
+        wizard_res_model = action.get("res_model")
+        wizard_id = action.get("res_id")
+        wizard = self.env[wizard_res_model].browse(wizard_id)
 
-        wizard = Form(wizard.with_context(active_id=invoice.id))
-        wizard.custom_duty = 5.0
-        wizard.customs_commission = 6.0
-        wizard.tax_value = wizard.tax_value + 1
-        wizard = wizard.save()
+        wizard_form = Form(wizard.with_context(active_id=invoice.id))
+        self.assertEqual(wizard_form.tax_base, 3000.0, "Tax base should be initialized from invoice amount untaxed")
+        wizard_form.custom_duty = 5.0
+        wizard_form.customs_commission = 6.0
+        # Simulam o modificare manuala a TVA-ului platit in vama
+        wizard_form.tax_value = wizard_form.tax_value + 1
+        wizard = wizard_form.save()
 
         action = wizard.do_create_dvi()
         dvi = self.env[(action.get("res_model"))].browse(action.get("res_id"))
-        dvi = Form(dvi)
-        dvi = dvi.save()
+        self.assertEqual(dvi.tax_base, 3000.0)
+        self.assertEqual(dvi.landed_type, "dvi")
+
+        dvi_form = Form(dvi)
+        dvi = dvi_form.save()
         dvi.compute_landed_cost()
         dvi.button_validate()
+
+        # Verificam daca s-a creat nota contabila pentru TVA
+        self.assertTrue(dvi.account_move_id, "Account move for VAT should be created")
+        vat_move = dvi.account_move_id
+        self.assertEqual(vat_move.state, "posted")
+
+        # Verificam liniile notei contabile
+        # Ar trebui sa avem cel putin 2 linii: una pe debit (cont taxa) si una pe credit (cont cheltuiala/stoc)
+        self.assertEqual(len(vat_move.line_ids), 2)
+        debit_line = vat_move.line_ids.filtered(lambda l: l.debit > 0)
+        credit_line = vat_move.line_ids.filtered(lambda l: l.credit > 0)
+
+        self.assertTrue(debit_line.tax_tag_ids, "Debit line should have tax tags")
+        self.assertTrue(credit_line.tax_tag_ids, "Credit line should have base tax tags")
+        self.assertTrue(credit_line.tax_ids, "Credit line should have tax_ids set for reporting")
 
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
         valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
         for valuation in valuations:
             if valuation["product_id"][0] == self.product_1.id:
-                self.assertEqual(valuation["value"], 10 * 100 + 1.67 + 2)
+                # 1000 + 5*1/3 (1.67) + 6*1/3 (2) = 1003.67
+                self.assertAlmostEqual(valuation["value"], 10 * 100 + 1.67 + 2, places=2)
             if valuation["product_id"][0] == self.product_2.id:
-                self.assertEqual(valuation["value"], 10 * 200 + 3.33 + 4)
+                # 2000 + 5*2/3 (3.33) + 6*2/3 (4) = 2007.33
+                self.assertAlmostEqual(valuation["value"], 10 * 200 + 3.33 + 4, places=2)
 
         action = invoice.button_dvi()
         self.assertEqual(action.get("res_id"), dvi.id)

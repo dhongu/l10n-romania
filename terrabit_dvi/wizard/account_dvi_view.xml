@@ -9,6 +9,7 @@
                         <group>
                             <field name="custom_duty" />
                             <field name="customs_commission" />
+                            <field name="tax_base" />
                             <field name="tax_value" />
                         </group>
                         <group>
