@@ -44,7 +44,7 @@ class LandedCost(models.Model):
                 )
             tax_values = cost.tax_id.compute_all(cost.tax_base)
 
-            name = _("VAT paid at customs - %s") % cost.tax_id.name
+            name = self.env._("VAT paid at customs - %s") % cost.tax_id.name
             aml = [
                 {
                     "name": name,

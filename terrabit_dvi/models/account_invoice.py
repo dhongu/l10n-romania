@@ -15,7 +15,7 @@ class AccountInvoice(models.Model):
     def button_dvi(self):
         self.env.ref("base.europe")
         if not self.commercial_partner_id.country_id:
-            raise UserError(_("The partner has no country set."))
+            raise UserError(self.env._("The partner has no country set."))
         # if self.commercial_partner_id.country_id  in europe.country_ids:
         #     raise UserError(_("The partner is in UE."))
 

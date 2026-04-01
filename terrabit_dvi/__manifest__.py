@@ -2,6 +2,7 @@
 # See README.rst file on addons root folder for license details
 {
     "name": "Terrabit - DVI",
+    "summary": "DVI",
     "license": "AGPL-3",
     "version": "19.0.1.0.1",
     "countries": ["ro"],
@@ -24,4 +25,5 @@
         "security/ir.model.access.csv",
     ],
     "installable": True,
+    "development_status":"Production/Stable"
 }
