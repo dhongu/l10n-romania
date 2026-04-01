@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from odoo import fields, _
+from odoo import _, fields
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
 
@@ -80,30 +80,54 @@ class TestDVI(TransactionCase):
             )
 
         # Creare taxe cu tag-uri pentru test
-        cls.tax_tag = cls.env['account.account.tag'].create({
-            'name': 'Test Tax Tag',
-            'applicability': 'taxes',
-            'country_id': cls.env.ref('base.ro').id,
-        })
-        cls.base_tag = cls.env['account.account.tag'].create({
-            'name': 'Test Base Tag',
-            'applicability': 'taxes',
-            'country_id': cls.env.ref('base.ro').id,
-        })
-        cls.tax_id = cls.env['account.tax'].create({
-            'name': 'TVA Import Test',
-            'amount': 19.0,
-            'amount_type': 'percent',
-            'type_tax_use': 'purchase',
-            'invoice_repartition_line_ids': [
-                (0, 0, {'repartition_type': 'base', 'factor_percent': 100, 'tag_ids': [(6, 0, cls.base_tag.ids)]}),
-                (0, 0, {'repartition_type': 'tax', 'factor_percent': 100, 'account_id': account_other_tax.id, 'tag_ids': [(6, 0, cls.tax_tag.ids)]}),
-            ],
-            'refund_repartition_line_ids': [
-                (0, 0, {'repartition_type': 'base', 'factor_percent': 100, 'tag_ids': [(6, 0, cls.base_tag.ids)]}),
-                (0, 0, {'repartition_type': 'tax', 'factor_percent': 100, 'account_id': account_other_tax.id, 'tag_ids': [(6, 0, cls.tax_tag.ids)]}),
-            ],
-        })
+        cls.tax_tag = cls.env["account.account.tag"].create(
+            {
+                "name": "Test Tax Tag",
+                "applicability": "taxes",
+                "country_id": cls.env.ref("base.ro").id,
+            }
+        )
+        cls.base_tag = cls.env["account.account.tag"].create(
+            {
+                "name": "Test Base Tag",
+                "applicability": "taxes",
+                "country_id": cls.env.ref("base.ro").id,
+            }
+        )
+        cls.tax_id = cls.env["account.tax"].create(
+            {
+                "name": "TVA Import Test",
+                "amount": 19.0,
+                "amount_type": "percent",
+                "type_tax_use": "purchase",
+                "invoice_repartition_line_ids": [
+                    (0, 0, {"repartition_type": "base", "factor_percent": 100, "tag_ids": [(6, 0, cls.base_tag.ids)]}),
+                    (
+                        0,
+                        0,
+                        {
+                            "repartition_type": "tax",
+                            "factor_percent": 100,
+                            "account_id": account_other_tax.id,
+                            "tag_ids": [(6, 0, cls.tax_tag.ids)],
+                        },
+                    ),
+                ],
+                "refund_repartition_line_ids": [
+                    (0, 0, {"repartition_type": "base", "factor_percent": 100, "tag_ids": [(6, 0, cls.base_tag.ids)]}),
+                    (
+                        0,
+                        0,
+                        {
+                            "repartition_type": "tax",
+                            "factor_percent": 100,
+                            "account_id": account_other_tax.id,
+                            "tag_ids": [(6, 0, cls.tax_tag.ids)],
+                        },
+                    ),
+                ],
+            }
+        )
 
         account_special_funds = cls.env["account.account"].search([("code", "=", "447000")])
         if not account_special_funds:
@@ -232,7 +256,7 @@ class TestDVI(TransactionCase):
         tva_lines = vat_move.line_ids.filtered(lambda l: _("VAT paid at customs") in l.name)
         self.assertEqual(len(tva_lines), 2, "Ar trebui sa avem exact 2 linii de TVA (debit si credit)")
         debit_line = tva_lines.filtered(lambda l: l.debit > 0)
-        credit_line = tva_lines.filtered(lambda l: l.credit > 0)
+        tva_lines.filtered(lambda l: l.credit > 0)
 
         self.assertTrue(debit_line.tax_tag_ids, "Debit line should have tax tags")
         # In configuratia actuala a codului, linia de credit nu primeste tag-uri de baza
