@@ -195,16 +195,13 @@ class TestDVI(TransactionCase):
         self.picking = po.picking_ids[0]
         self.picking.move_line_ids.write({"quantity": 10.0})
         self.picking.button_validate()
-
-        domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
-        valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
-        for valuation in valuations:
-            if valuation["product_id"][0] == self.product_1.id:
-                self.assertEqual(valuation["value"], 10 * 100)
-            if valuation["product_id"][0] == self.product_2.id:
-                self.assertEqual(valuation["value"], 10 * 200)
-
-        # Create the vendor bill from the PO using the supported API in purchase
+        domain = [("product_id", "in", [self.product_1.id, self.product_2.id]), ("is_in", "=", True)]
+        valuations = self.env["stock.move"]._read_group(domain, ["product_id"], ["value:sum", "quantity:sum"])
+        for product, value, quantity in valuations:
+            if product.id == self.product_1.id:
+                self.assertEqual(value, 10 * 100)
+            if product.id == self.product_2.id:
+                self.assertEqual(value, 10 * 200)
         action = po.action_create_invoice()
         # action should contain res_id of the created account.move
         invoice = self.env["account.move"].browse(action.get("res_id"))
@@ -262,15 +259,15 @@ class TestDVI(TransactionCase):
         # self.assertTrue(credit_line.tax_tag_ids, "Credit line should have base tax tags")
         # self.assertTrue(credit_line.tax_ids, "Credit line should have tax_ids set for reporting")
 
-        domain = [("product_id", "in", [self.product_1.id, self.product_2.id])]
-        valuations = self.env["stock.valuation.layer"].read_group(domain, ["value:sum", "quantity:sum"], ["product_id"])
-        for valuation in valuations:
-            if valuation["product_id"][0] == self.product_1.id:
+        domain = [("product_id", "in", [self.product_1.id, self.product_2.id]), ("is_in", "=", True)]
+        valuations = self.env["stock.move"]._read_group(domain, ["product_id"], ["value:sum", "quantity:sum"])
+        for product, value, quantity in valuations:
+            if product.id == self.product_1.id:
                 # 1000 + 5*1/3 (1.67) + 6*1/3 (2) = 1003.67
-                self.assertAlmostEqual(valuation["value"], 10 * 100 + 1.67 + 2, places=2)
-            if valuation["product_id"][0] == self.product_2.id:
+                self.assertAlmostEqual(value, 10 * 100 + 1.67 + 2, places=2)
+            if product.id == self.product_2.id:
                 # 2000 + 5*2/3 (3.33) + 6*2/3 (4) = 2007.33
-                self.assertAlmostEqual(valuation["value"], 10 * 200 + 3.33 + 4, places=2)
+                self.assertAlmostEqual(value, 10 * 200 + 3.33 + 4, places=2)
 
         action = invoice.button_dvi()
         self.assertEqual(action.get("res_id"), dvi.id)
