@@ -10,8 +10,8 @@ class GetPartnerData(models.TransientModel):
     state = fields.Selection(selection=[("get", "get"), ("set", "set")], default="get")
     status_message = fields.Html()
 
-    def default_get(self, fields):
-        res = super().default_get(fields)
+    def default_get(self, field_list):
+        res = super().default_get(field_list)
         active_ids = self.env.context.get("active_ids", [])
         active_model = self.env.context.get("active_model", "res.partner")
         partner = self.env[active_model].browse(active_ids)
