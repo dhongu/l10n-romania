@@ -122,15 +122,14 @@ class TestPartnerCreateByVatButton(TransactionCase):
         # Prepare partner with RO country, vat 'RO14826496' (alpha prefix to trigger slicing)
         partner = self._new_partner(vat="RO14826496", name="Old Name", street=False)
 
-        # Mock zeep Client inside our model module
+        # Mock _get_vies_client to return a fake SOAP client
         def fake_checkVat(countryCode, vatNumber):
             self.assertEqual(countryCode, "RO")
             self.assertEqual(vatNumber, "14826496")
             return SimpleNamespace(valid=True, name="Acme SRL", address="Some Street 10")
 
-        with patch("odoo.addons.l10n_ro_partner_create_by_vat_button.models.res_partner.Client") as MockClient:
-            instance = MockClient.return_value
-            instance.service.checkVat.side_effect = fake_checkVat
+        fake_client = SimpleNamespace(service=SimpleNamespace(checkVat=fake_checkVat))
+        with patch.object(type(partner), "_get_vies_client", return_value=fake_client):
             partner.get_partner_name_from_vies()
 
         # Country must remain/set to RO
@@ -142,9 +141,8 @@ class TestPartnerCreateByVatButton(TransactionCase):
         def fake_checkVat(countryCode, vatNumber):
             return SimpleNamespace(valid=False, name="", address="")
 
-        with patch("odoo.addons.l10n_ro_partner_create_by_vat_button.models.res_partner.Client") as MockClient:
-            instance = MockClient.return_value
-            instance.service.checkVat.side_effect = fake_checkVat
+        fake_client = SimpleNamespace(service=SimpleNamespace(checkVat=fake_checkVat))
+        with patch.object(type(partner), "_get_vies_client", return_value=fake_client):
             with self.assertRaises(UserError):
                 partner.get_partner_name_from_vies()
 
@@ -158,8 +156,8 @@ class TestPartnerCreateByVatButton(TransactionCase):
             }
         )
         with self.assertRaisesRegex(UserError, "Please add the country code"):
-            # Patch Client so it wouldn't actually be called; code should raise before
-            with patch("odoo.addons.l10n_ro_partner_create_by_vat_button.models.res_partner.Client"):
+            # Patch _get_vies_client; code should raise before it's called
+            with patch.object(type(partner), "_get_vies_client"):
                 partner.get_partner_name_from_vies()
 
     def test_compute_warning_message_for_ro_company_missing_fields(self):
