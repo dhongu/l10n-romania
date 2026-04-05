@@ -2,7 +2,7 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import _, models
+from odoo import models
 from odoo.exceptions import UserError
 from odoo.tools.convert import safe_eval
 
@@ -22,14 +22,14 @@ class AccountMove(models.Model):
                         if line.product_id.is_storable:
                             if move.move_type in ["out_invoice", "out_refund"] and not line.sale_line_ids:
                                 raise UserError(
-                                    _(
+                                    self.env._(
                                         "Invoice line with storable product '%s' must have a reference to a sales order line."
                                     )
                                     % line.product_id.display_name
                                 )
                             if move.move_type in ["in_invoice", "in_refund"] and not line.purchase_line_id:
                                 raise UserError(
-                                    _(
+                                    self.env._(
                                         "Invoice line with storable product '%s' must have a reference to a purchase order line."
                                     )
                                     % line.product_id.display_name
