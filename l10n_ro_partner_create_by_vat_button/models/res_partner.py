@@ -157,12 +157,12 @@ class ResPartner(models.Model):
         try:
             response = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
         except Exception as e:
-            raise UserError(self.env._("VIES service error: %s") % e) from e
+            raise UserError(self.env._("VIES service error: %s", e)) from e
         if not response.valid and country_code == "GB":
             try:
                 response = client.service.checkVat(countryCode="XI", vatNumber=vat_number)
             except Exception as e:
-                raise UserError(self.env._("VIES service error: %s") % e) from e
+                raise UserError(self.env._("VIES service error: %s", e)) from e
         if response.valid:
             self.vat = vat_number
             possible_country = self.env["res.country"].search([("code", "ilike", country_code)])
