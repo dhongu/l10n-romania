@@ -6,6 +6,7 @@
 from odoo import api, fields, models
 from odoo.fields import Domain
 
+
 class ResZip(models.Model):
     _name = "res.zip"
     _description = "Zip Code"
