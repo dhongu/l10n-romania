@@ -8,7 +8,7 @@
     "license": "AGPL-3",
     "version": "19.0.0.0.0",
     "author": "Terrabit,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "website": "https://www.terrabit.ro",
     "category": "Localization",
     "depends": ["base_address_extended", "l10n_ro_city"],
     "data": [
