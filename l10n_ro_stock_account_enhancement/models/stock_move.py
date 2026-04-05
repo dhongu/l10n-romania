@@ -2,7 +2,7 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import _, models
+from odoo import models
 from odoo.exceptions import UserError
 from odoo.tools.convert import safe_eval
 
@@ -19,6 +19,6 @@ class StockMove(models.Model):
             return price
         if not price:
             product = self.product_id
-            raise UserError(_(f"Price unit is not set for product {product.name}"))
+            raise UserError(self.env._(f"Price unit is not set for product {product.name}"))
 
         return price
