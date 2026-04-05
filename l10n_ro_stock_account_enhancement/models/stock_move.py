@@ -19,6 +19,6 @@ class StockMove(models.Model):
             return price
         if not price:
             product = self.product_id
-            raise UserError(self.env._(f"Price unit is not set for product {product.name}"))
+            raise UserError(self.env._("Price unit is not set for product %s", product.name))
 
         return price
