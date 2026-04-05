@@ -6,7 +6,7 @@
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Enhancement",
     "author": "Dorin Hongu,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "website": "https://www.terrabit.ro",
     "depends": [
         "l10n_ro_stock_account",
         "l10n_ro_config",
