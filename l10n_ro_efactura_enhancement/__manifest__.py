@@ -15,7 +15,7 @@
         "l10n_ro_config",
         # "l10n_ro_efactura",
     ],
-    "license": "OPL-1",
+    "license": "AGPL-3",
     "data": [
         "data/ir_config_parameter.xml",
         # "wizard/account_move_send_views.xml",
