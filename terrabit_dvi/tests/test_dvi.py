@@ -197,7 +197,7 @@ class TestDVI(TransactionCase):
         self.picking.button_validate()
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id]), ("is_in", "=", True)]
         valuations = self.env["stock.move"]._read_group(domain, ["product_id"], ["value:sum", "quantity:sum"])
-        for product, value, quantity in valuations:
+        for product, value, _quantity in valuations:
             if product.id == self.product_1.id:
                 self.assertEqual(value, 10 * 100)
             if product.id == self.product_2.id:
@@ -261,7 +261,7 @@ class TestDVI(TransactionCase):
 
         domain = [("product_id", "in", [self.product_1.id, self.product_2.id]), ("is_in", "=", True)]
         valuations = self.env["stock.move"]._read_group(domain, ["product_id"], ["value:sum", "quantity:sum"])
-        for product, value, quantity in valuations:
+        for product, value, _quantity in valuations:
             if product.id == self.product_1.id:
                 # 1000 + 5*1/3 (1.67) + 6*1/3 (2) = 1003.67
                 self.assertAlmostEqual(value, 10 * 100 + 1.67 + 2, places=2)
