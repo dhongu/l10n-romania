@@ -6,7 +6,7 @@
 import logging
 import re
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -128,7 +128,7 @@ class ResPartner(models.Model):
             from zeep import Client  # pylint: disable=import-outside-toplevel
         except ImportError as e:
             raise UserError(
-                _("The 'zeep' library is required for VIES lookups. Install it with: pip install zeep")
+                self.env._("The 'zeep' library is required for VIES lookups. Install it with: pip install zeep")
             ) from e
         return Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")
 
@@ -147,22 +147,22 @@ class ResPartner(models.Model):
                 country_code = self.country_id.code
         else:
             if self.vat:
-                raise UserError(_("Please add the country code to the vat number or country field"))
+                raise UserError(self.env._("Please add the country code to the vat number or country field"))
             if self.name and len(self.name) > 2 and not self.name.isdigit() and not self.name[:2].isdigit():
                 vat_number = self.name[2:]
                 country_code = self.name[:2]
             else:
-                raise UserError(_("Please add the country code to the vat number or country field"))
+                raise UserError(self.env._("Please add the country code to the vat number or country field"))
 
         try:
             response = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
         except Exception as e:
-            raise UserError(_("VIES service error: %s") % e) from e
+            raise UserError(self.env._("VIES service error: %s") % e) from e
         if not response.valid and country_code == "GB":
             try:
                 response = client.service.checkVat(countryCode="XI", vatNumber=vat_number)
             except Exception as e:
-                raise UserError(_("VIES service error: %s") % e) from e
+                raise UserError(self.env._("VIES service error: %s") % e) from e
         if response.valid:
             self.vat = vat_number
             possible_country = self.env["res.country"].search([("code", "ilike", country_code)])
@@ -203,7 +203,7 @@ class ResPartner(models.Model):
                     if invoice_count > 0:
                         if "is_company" in vals and vals["is_company"] != partner.is_company:
                             raise UserError(
-                                _("You cannot change the type of contact if there are already invoices on it.")
+                                self.env._("You cannot change the type of contact if there are already invoices on it.")
                             )
                         if "vat" in vals and vals["vat"] != partner.vat:
                             new_vat = vals["vat"] or ""
@@ -212,6 +212,8 @@ class ResPartner(models.Model):
                                 new_vat_digits = re.sub(r"\D", "", new_vat)
                                 old_vat_digits = re.sub(r"\D", "", old_vat)
                                 if new_vat_digits != old_vat_digits:
-                                    raise UserError(_("You cannot change VAT if there are already invoices on it."))
+                                    raise UserError(
+                                        self.env._("You cannot change VAT if there are already invoices on it.")
+                                    )
 
         return super().write(vals)
