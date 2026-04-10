@@ -5,8 +5,8 @@
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Set language to romanian if IP is from Romania",
-    "author": "Dorin Hongu," "Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "author": "Dorin Hongu,Odoo Community Association (OCA)",
+    "website": "https://www.terrabit.ro",
     "depends": [
         "website",
     ],
