@@ -737,6 +737,13 @@
 
 
         <xpath expr="//div[hasclass('page')]" position="after">
+            <div t-if="o.company_id.show_coface_logo" class="text-end mt-4" style="page-break-inside: avoid;">
+                <img
+                    src="/l10n_ro_invoice_report/static/src/img/Coface_logo.svg"
+                    style="max-height: 50px;"
+                    alt="Coface Logo"
+                />
+            </div>
             <t t-set="has_bf" t-value="o.is_bf_printed()" />
             <t t-if="print_with_payments and not has_bf">
                 <t
