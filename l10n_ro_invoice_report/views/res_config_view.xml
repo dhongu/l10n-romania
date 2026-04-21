@@ -36,7 +36,9 @@
                 <setting help="Show undiscounted price on invoices">
                     <field name="show_undiscounted_price_on_invoice" />
                 </setting>
-                <setting help="Display the Coface logo at the end of the invoice to indicate that the debt is insured by Coface (trade credit insurance).">
+                <setting
+                    help="Display the Coface logo at the end of the invoice to indicate that the debt is insured by Coface (trade credit insurance)."
+                >
                     <field name="show_coface_logo" />
                 </setting>
             </xpath>

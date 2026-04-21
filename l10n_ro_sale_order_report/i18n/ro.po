@@ -151,6 +151,11 @@ msgid "Invoicing and Shipping Address:"
 msgstr "Adresa de facturare și livrare:"
 
 #. module: l10n_ro_sale_order_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_sale_order_report.sale_order_company_data
+msgid "No."
+msgstr "Nr.Crt."
+
+#. module: l10n_ro_sale_order_report
 #: model:ir.actions.report,name:l10n_ro_sale_order_report.action_report_percent_proforma_init
 msgid "Percent Proforma - first"
 msgstr "Proforma inițiala"
