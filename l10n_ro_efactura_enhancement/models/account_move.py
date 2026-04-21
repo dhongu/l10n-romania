@@ -139,10 +139,20 @@ class AccountMove(models.Model):
         limit = job_count + 1
 
         # fix pt facturile care au fost programate pentru trimitere in 17.0
+        # stergem sending_data pentru facturile care nu au author_partner_id (migrate din 17.0)
         invoices = self.env["account.move"].search(domain, limit=limit)
-        for move in invoices:
-            if move.sending_data and not move.sending_data.get("author_partner_id"):
-                move.sending_data = False
+        invalid_moves = invoices.filtered(
+            lambda m: m.sending_data and not m.sending_data.get("author_partner_id")
+        )
+        if invalid_moves:
+            _logger.info(
+                "🔧 Resetting sending_data for %d invoice(s) missing 'author_partner_id': %s",
+                len(invalid_moves),
+                invalid_moves.mapped("name"),
+            )
+            invalid_moves.write({"sending_data": False})
+            self.env.cr.flush()
+            invalid_moves.invalidate_recordset(["sending_data"])
 
         return super()._cron_account_move_send(job_count=job_count)
 
