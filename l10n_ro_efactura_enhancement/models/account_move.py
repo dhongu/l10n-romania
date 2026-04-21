@@ -141,9 +141,7 @@ class AccountMove(models.Model):
         # fix pt facturile care au fost programate pentru trimitere in 17.0
         # stergem sending_data pentru facturile care nu au author_partner_id (migrate din 17.0)
         invoices = self.env["account.move"].search(domain, limit=limit)
-        invalid_moves = invoices.filtered(
-            lambda m: m.sending_data and not m.sending_data.get("author_partner_id")
-        )
+        invalid_moves = invoices.filtered(lambda m: m.sending_data and not m.sending_data.get("author_partner_id"))
         if invalid_moves:
             _logger.info(
                 "🔧 Resetting sending_data for %d invoice(s) missing 'author_partner_id': %s",
