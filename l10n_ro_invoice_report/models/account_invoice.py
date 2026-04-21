@@ -105,6 +105,21 @@ class AccountInvoice(models.Model):
             return self.receipt_print
         return False
 
+    def _get_invoice_pdf_proforma(self):
+        self.ensure_one()
+        filename = self._get_invoice_proforma_pdf_report_filename()
+        content, report_type = self.env['ir.actions.report']._pre_render_qweb_pdf(
+            'account.account_invoices', self.ids, data={'proforma': False}
+        )
+        content_by_id = self.env['ir.actions.report']._get_splitted_report(
+            'account.account_invoices', content, report_type
+        )
+        return {
+            'filename': filename,
+            'filetype': 'pdf',
+            'content': content_by_id[self.id],
+        }
+
 
 #
 class account_invoice_line(models.Model):
