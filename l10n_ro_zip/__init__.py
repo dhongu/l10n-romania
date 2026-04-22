@@ -7,7 +7,6 @@ from . import models
 
 import logging
 from odoo.tools.misc import file_path
-from odoo import api, SUPERUSER_ID
 
 _logger = logging.getLogger(__name__)
 
@@ -18,11 +17,17 @@ def post_init_hook(env):
 
     sql_file_path = file_path("l10n_ro_zip/data/res_zip.sql")
 
-    with open(sql_file_path) as sql_file:
-        sql_script = sql_file.read()
-        # Executăm script-ul SQL pentru a popula tabela
-        env.cr.execute(sql_script)
-    _logger.info("Zip codes imported successfully")
+    env.cr.execute("SELECT COUNT(*) FROM res_zip")
+    count = env.cr.fetchone()[0]
+    if count == 0:
+        with open(sql_file_path) as sql_file:
+            sql_script = sql_file.read()
+            env.cr.execute(sql_script)
+        # Resetăm secvența pentru a evita conflicte la inserări ulterioare prin ORM
+        env.cr.execute("SELECT setval('res_zip_id_seq', (SELECT MAX(id) FROM res_zip))")
+        _logger.info("Zip codes imported successfully")
+    else:
+        _logger.info("Zip codes already imported, skipping SQL import (%d records found)", count)
 
     country_ro = env.ref("base.ro", raise_if_not_found=False)
 
