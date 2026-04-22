@@ -26,6 +26,7 @@ class ResZip(models.Model):
     office = fields.Char(string="Office")
     address = fields.Char(string="Address")
 
+    @api.depends("name", "city", "street_type", "street_name")
     def _compute_display_name(self):
         for zip_code in self:
             if not zip_code.street_name:
@@ -46,6 +47,6 @@ class ResZip(models.Model):
     def _search_display_name(self, operator, value):
         domain = super()._search_display_name(operator, value)
         if operator == "ilike":
-            name_domain = [("|", "name", "ilike", value), ("street_name", "ilike", value)]
+            name_domain = ["|", ("name", "ilike", value), ("street_name", "ilike", value)]
             domain = Domain.OR([domain, name_domain])
         return domain
