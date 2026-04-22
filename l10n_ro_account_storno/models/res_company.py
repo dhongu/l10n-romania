@@ -78,16 +78,16 @@ class ResCompany(models.Model):
             "921000", "922000", "923000", "924000", "925000", "931000", "933000", "999001", "999002",
         ]
         # fmt: on
-
+        for company in company_ids:
         # Actualizăm conturile pe baza codului folosind ORM
-        self.env["account.account"].search([("code", "in", activ_codes), ("company_ids", "in", company_ids)]).write(
-            {"l10n_ro_usage": "activ"}
-        )
+            domain = [("code", "in", activ_codes)]
+            active_accounts = self.with_company(company).env["account.account"].search(domain)
+            active_accounts.write(   {"l10n_ro_usage": "activ"}  )
 
-        self.env["account.account"].search([("code", "in", pasiv_codes), ("company_ids", "in", company_ids)]).write(
-            {"l10n_ro_usage": "pasiv"}
-        )
+            domain = [("code", "in", pasiv_codes)]
+            pasiv_accounts = self.with_company(company).env["account.account"].search(domain)
+            pasiv_accounts.write(   {"l10n_ro_usage": "pasiv"}  )
 
-        self.env["account.account"].search(
-            [("code", "in", bifunctional_codes), ("company_ids", "in", company_ids)]
-        ).write({"l10n_ro_usage": "bifunctional"})
+            domain = [("code", "in", bifunctional_codes)]
+            bifunctional_accounts = self.with_company(company).env["account.account"].search(domain)
+            bifunctional_accounts.write(   {"l10n_ro_usage": "bifunctional"}  )
