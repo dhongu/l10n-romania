@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Check that each modified Odoo addon has a readme/HISTORY.md file
 and that the manifest version is mentioned in it."""
+
 import ast
+import logging
 import re
 import sys
 from pathlib import Path
+
+_logger = logging.getLogger(__name__)
 
 
 def find_addon_root(file_path: Path, repo_root: Path) -> Path | None:
@@ -16,7 +20,7 @@ def find_addon_root(file_path: Path, repo_root: Path) -> Path | None:
                 if len(rel.parts) == 1:
                     return candidate
             except ValueError:
-                pass
+                _logger.debug("Candidate %s is not relative to repo root", candidate)
     return None
 
 
@@ -26,7 +30,8 @@ def get_manifest_version(addon: Path) -> str | None:
     try:
         tree = ast.literal_eval(manifest_path.read_text(encoding="utf-8"))
         return tree.get("version")
-    except Exception:
+    except Exception as exc:
+        _logger.debug("Could not read manifest version from %s: %s", manifest_path, exc)
         return None
 
 
@@ -39,6 +44,7 @@ def check_version_in_history(history_path: Path, version: str) -> bool:
 
 
 def main() -> int:
+    logging.basicConfig(level=logging.WARNING, format="%(message)s")
     repo_root = Path.cwd()
     checked = set()
 
@@ -54,18 +60,21 @@ def main() -> int:
 
         history = addon / "readme" / "HISTORY.md"
         if not history.exists():
-            print(f"WARNING: {addon_rel} — lipsește readme/HISTORY.md")
+            _logger.warning("WARNING: %s — lipsește readme/HISTORY.md", addon_rel)
             continue
 
         version = get_manifest_version(addon)
         if not version:
-            print(f"WARNING: {addon_rel} — nu s-a putut citi versiunea din __manifest__.py")
+            _logger.warning(
+                "WARNING: %s — nu s-a putut citi versiunea din __manifest__.py", addon_rel
+            )
             continue
 
         if not check_version_in_history(history, version):
-            print(
-                f"WARNING: {addon_rel} — versiunea {version} din manifest "
-                f"nu apare în readme/HISTORY.md"
+            _logger.warning(
+                "WARNING: %s — versiunea %s din manifest nu apare în readme/HISTORY.md",
+                addon_rel,
+                version,
             )
 
     return 0
