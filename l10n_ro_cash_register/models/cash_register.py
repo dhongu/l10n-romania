@@ -76,7 +76,8 @@ class CashRegister(models.Model):
                         # so we don't recompute the name
                         continue
             if item.date and (not move_has_name or not item._sequence_matches_date()):
-                item._set_next_sequence()
+                if not isinstance(item.id, models.NewId):
+                    item._set_next_sequence()
 
     def _get_last_sequence_domain(self, relaxed=False):
         # pylint: disable=sql-injection
