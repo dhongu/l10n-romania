@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+from odoo.orm.identifiers import NewId
 
 
 class CashRegister(models.Model):
@@ -76,7 +77,7 @@ class CashRegister(models.Model):
                         # so we don't recompute the name
                         continue
             if item.date and (not move_has_name or not item._sequence_matches_date()):
-                if not isinstance(item.id, models.NewId):
+                if not isinstance(item.id, NewId):
                     item._set_next_sequence()
 
     def _get_last_sequence_domain(self, relaxed=False):
