@@ -111,7 +111,7 @@
     <menuitem
         id="menu_cash_register"
         name="Cash register"
-        parent="account.menu_finance_entries"
+        parent="account.account_transactions_menu"
         groups="account.group_account_manager"
         action="action_cash_register"
         sequence="10"
