@@ -395,6 +395,7 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
     def _ubl_add_order_reference_node(self, vals):
         # linit salesorder names
         res = super()._ubl_add_order_reference_node(vals)
-        order_ref_node = vals["document_node"]["cac:OrderReference"]
-        order_ref_node["cbc:SalesOrderID"]["_text"] = order_ref_node["cbc:SalesOrderID"]["_text"][:200]
+        order_ref_node = vals.get("document_node", {}).get("cac:OrderReference")
+        if order_ref_node and order_ref_node.get("cbc:SalesOrderID", {}).get("_text"):
+            order_ref_node["cbc:SalesOrderID"]["_text"] = order_ref_node["cbc:SalesOrderID"]["_text"][:200]
         return res
