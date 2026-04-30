@@ -387,6 +387,7 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
             if (
                 "RO" not in vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"]
                 and commercial_partner.is_company
+                and commercial_partner.vat
             ):
                 vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"] = "RO" + commercial_partner.vat
         return res
