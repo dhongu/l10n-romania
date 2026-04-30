@@ -391,3 +391,10 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
             ):
                 vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"] = "RO" + commercial_partner.vat
         return res
+
+    def _ubl_add_order_reference_node(self, vals):
+        # linit salesorder names
+        res = super()._ubl_add_order_reference_node(vals)
+        order_ref_node = vals["document_node"]["cac:OrderReference"]
+        order_ref_node["cbc:SalesOrderID"]["_text"] = order_ref_node["cbc:SalesOrderID"]["_text"][:200]
+        return res
