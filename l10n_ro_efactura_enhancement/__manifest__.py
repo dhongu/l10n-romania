@@ -4,7 +4,7 @@
 
 {
     "name": "eFactura Enhancement",
-    "version": "18.0.0.2.0",
+    "version": "18.0.0.2.2",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "eFactura Enhancement",

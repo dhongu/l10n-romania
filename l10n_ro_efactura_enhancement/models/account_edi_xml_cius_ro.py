@@ -387,6 +387,15 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
             if (
                 "RO" not in vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"]
                 and commercial_partner.is_company
+                and commercial_partner.vat
             ):
                 vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"] = "RO" + commercial_partner.vat
+        return res
+
+    def _ubl_add_order_reference_node(self, vals):
+        # linit salesorder names
+        res = super()._ubl_add_order_reference_node(vals)
+        order_ref_node = vals.get("document_node", {}).get("cac:OrderReference")
+        if order_ref_node and order_ref_node.get("cbc:SalesOrderID", {}).get("_text"):
+            order_ref_node["cbc:SalesOrderID"]["_text"] = order_ref_node["cbc:SalesOrderID"]["_text"][:200]
         return res
