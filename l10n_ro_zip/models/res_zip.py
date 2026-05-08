@@ -45,7 +45,7 @@ class ResZip(models.Model):
     @api.model
     def _search_display_name(self, operator, value):
         domain = super()._search_display_name(operator, value)
-        if operator == "ilike" :
+        if operator == "ilike":
             name_domain = [
                 "|",
                 "|",
