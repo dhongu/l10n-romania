@@ -11,3 +11,9 @@ class ResPartner(models.Model):
         for partner in self:
             if partner.zip_id:
                 partner.zip = partner.zip_id.name
+                if partner.zip_id.city_id:
+                    partner.city_id = partner.zip_id.city_id
+                if partner.zip_id.state_id:
+                    partner.state_id = partner.zip_id.state_id
+                if partner.zip_id.country_id:
+                    partner.country_id = partner.zip_id.country_id

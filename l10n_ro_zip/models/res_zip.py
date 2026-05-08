@@ -33,11 +33,25 @@ class ResZip(models.Model):
             else:
                 zip_code.display_name = f"{zip_code.street_type} {zip_code.street_name} ({zip_code.name})"
 
+    # @api.model
+    # def _name_search(self, name, domain=None, operator="ilike", limit=None, order=None):
+    #     # OVERRIDE
+    #     domain = domain or []
+    #     if operator != "ilike" or (name or "").strip():
+    #         name_domain = ["|", ("name", "ilike", name), ("street_name", "ilike", name)]
+    #         domain = expression.AND([name_domain, domain])
+    #     return self._search(domain, limit=limit, order=order)
+
     @api.model
-    def _name_search(self, name, domain=None, operator="ilike", limit=None, order=None):
-        # OVERRIDE
-        domain = domain or []
-        if operator != "ilike" or (name or "").strip():
-            name_domain = ["|", ("name", "ilike", name), ("street_name", "ilike", name)]
-            domain = expression.AND([name_domain, domain])
-        return self._search(domain, limit=limit, order=order)
+    def _search_display_name(self, operator, value):
+        domain = super()._search_display_name(operator, value)
+        if operator == "ilike" :
+            name_domain = [
+                "|",
+                "|",
+                ("name", "ilike", value),
+                ("street_name", "ilike", value),
+                ("street_type", "ilike", value),
+            ]
+            domain = expression.OR([domain, name_domain])
+        return domain
