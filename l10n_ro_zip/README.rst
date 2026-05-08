@@ -13,16 +13,31 @@ Romania - Coduri Postale
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_zip
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_zip
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
 
+Modul pentru gestionarea codurilor poștale din România.
 
+Funcționalități principale:
+
+- Adaugă modelul ``res.zip`` cu ~52.000 de înregistrări de coduri
+  poștale românești, fiecare conținând: cod poștal, localitate, județ,
+  tip stradă, nume stradă, sector (București), oficiu poștal.
+- Datele sunt importate automat la instalare dintr-un fișier SQL și sunt
+  corelate cu județele și localitățile din modulul ``l10n_ro_city``.
+- Extinde formularul partenerului (``res.partner``) cu câmpul
+  ``Cod Poștal (zip_id)``, filtrat după localitate, care completează
+  automat câmpul standard ``zip`` la selecție.
+- Căutarea codurilor poștale funcționează atât după codul numeric, cât
+  și după numele străzii.
+- Suportă sectoarele municipiului București (1–6) cu legătură directă la
+  localitățile corespunzătoare.
 
 **Table of contents**
 
@@ -66,6 +81,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_zip>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_zip>`_ project on GitHub.
 
 You are welcome to contribute.
