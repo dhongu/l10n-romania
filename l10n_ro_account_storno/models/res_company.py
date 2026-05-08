@@ -79,15 +79,15 @@ class ResCompany(models.Model):
         ]
         # fmt: on
         for company in company_ids:
-        # Actualizăm conturile pe baza codului folosind ORM
+            # Actualizăm conturile pe baza codului folosind ORM
             domain = [("code", "in", activ_codes)]
             active_accounts = self.with_company(company).env["account.account"].search(domain)
-            active_accounts.write(   {"l10n_ro_usage": "activ"}  )
+            active_accounts.write({"l10n_ro_usage": "activ"})
 
             domain = [("code", "in", pasiv_codes)]
             pasiv_accounts = self.with_company(company).env["account.account"].search(domain)
-            pasiv_accounts.write(   {"l10n_ro_usage": "pasiv"}  )
+            pasiv_accounts.write({"l10n_ro_usage": "pasiv"})
 
             domain = [("code", "in", bifunctional_codes)]
             bifunctional_accounts = self.with_company(company).env["account.account"].search(domain)
-            bifunctional_accounts.write(   {"l10n_ro_usage": "bifunctional"}  )
+            bifunctional_accounts.write({"l10n_ro_usage": "bifunctional"})
