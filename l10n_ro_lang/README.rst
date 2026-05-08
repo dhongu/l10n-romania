@@ -10,14 +10,14 @@ Romania - Set Lang to Romanian
    !! source digest: sha256:3b2c721803ef93d2af777124219f51877636d9712baeb7c3bbfc7834378c5160
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+    :alt: Mature
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_lang
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_lang
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -43,6 +43,7 @@ Credits
 Authors
 -------
 
+* Terrabit
 * Dorin Hongu
 
 Contributors
@@ -66,6 +67,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_lang>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_lang>`_ project on GitHub.
 
 You are welcome to contribute.
