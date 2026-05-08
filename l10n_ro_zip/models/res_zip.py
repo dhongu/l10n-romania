@@ -44,14 +44,18 @@ class ResZip(models.Model):
 
     @api.model
     def _search_display_name(self, operator, value):
+        # Obținem domeniul standard (de obicei caută în 'name')
         domain = super()._search_display_name(operator, value)
-        if operator == "ilike":
+
+        # Verificăm operatorii de tip string cei mai frecvenți
+        if operator in ('ilike', 'like', '='):
             name_domain = [
-                "|",
-                "|",
-                ("name", "ilike", value),
-                ("street_name", "ilike", value),
-                ("street_type", "ilike", value),
+                '|', '|',
+                ('name', operator, value),
+                ('street_name', operator, value),
+                ('street_type', operator, value),
             ]
+            # Combinăm folosind OR pentru a extinde rezultatele
             domain = expression.OR([domain, name_domain])
+
         return domain
