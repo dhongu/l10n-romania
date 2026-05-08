@@ -10,21 +10,36 @@ Romania - Storno Enhancements
    !! source digest: sha256:eab9b8f2fd4a1039836786adeb3436cfa3e3f46346d8b6d5d589522d93155e33
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+    :alt: Production/Stable
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_account_storno
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_account_storno
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
 
-Functionalitati
+This module provides enhancements for handling "storno" (negative/red)
+accounting entries according to Romanian accounting standards.
 
-- Note conatabile cu linii in rosu
+**Key Features:**
+
+- **Negative (Red) Accounting Entries:** Automatically calculates debit
+  and credit values as negative numbers for storno lines, ensuring
+  correct ledger reporting in the Romanian localization.
+- **Account Usage Configuration:** Adds a "Usage" field to General
+  Ledger accounts (Debit, Credit, or Bivalent), allowing for automatic
+  redirection of amounts to the correct column based on Romanian
+  accounting rules.
+- **Improved Storno Logic:** Extends the default Odoo reversal logic to
+  mark moves and lines as "storno," ensuring that balances are correctly
+  decreased rather than increased on the opposite side.
+- **Company-level Activation:** The storno behavior is controlled by a
+  company-level setting, allowing for flexibility across different
+  entities.
 
 **Table of contents**
 
@@ -69,6 +84,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_account_storno>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_account_storno>`_ project on GitHub.
 
 You are welcome to contribute.
