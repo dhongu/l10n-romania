@@ -1,6 +1,6 @@
 import logging
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ class MessageSPV(models.Model):
 
         # Conținutul mesajului
         ref_to_use = self._get_purchase_ref() or "-"
-        body = _(
+        body = self.env._(
             "Legat din mesajul SPV %(msg)s (Ref: %(ref)s).",
             msg=self.name or "-",
             ref=ref_to_use,
@@ -100,7 +100,7 @@ class MessageSPV(models.Model):
         }
         # Adăugăm o descriere pentru trasabilitate
         try:
-            vals["description"] = _(
+            vals["description"] = self.env._(
                 "Copie XML din mesajul SPV %(msg)s (Ref: %(ref)s)",
                 msg=self.name or "-",
                 ref=self._get_purchase_ref() or "-",
@@ -113,7 +113,7 @@ class MessageSPV(models.Model):
     def _action_open_purchase_list(self, domain):
         return {
             "type": "ir.actions.act_window",
-            "name": _("Purchase Orders"),
+            "name": self.env._("Purchase Orders"),
             "res_model": "purchase.order",
             "view_mode": "tree,form",
             "domain": domain,
@@ -161,7 +161,7 @@ class MessageSPV(models.Model):
         ref_to_use = self._get_purchase_ref()
         if not ref_to_use:
             raise UserError(
-                _(
+                self.env._(
                     "Nu există o referință pentru a căuta comanda de achiziție. Completați câmpul Reference sau Purchase Reference."
                 )
             )
@@ -191,7 +191,7 @@ class MessageSPV(models.Model):
 
         # Niciun rezultat
         raise UserError(
-            _(
+            self.env._(
                 "Nu a fost găsită nicio comandă de achiziție după referința '%s'.",
                 ref_to_use,
             )
@@ -209,7 +209,7 @@ class MessageSPV(models.Model):
         ref_to_use = self._get_purchase_ref()
         if not ref_to_use:
             raise UserError(
-                _(
+                self.env._(
                     "Nu există o referință pentru a căuta sau crea comanda de achiziție. Completați câmpul Reference sau Purchase Reference."
                 )
             )
@@ -240,7 +240,9 @@ class MessageSPV(models.Model):
         # 0 rezultate: creăm
         if not self.partner_id:
             raise UserError(
-                _("Nu există un partener setat pe mesaj. Setați partenerul înainte de a crea comanda de achiziție.")
+                self.env._(
+                    "Nu există un partener setat pe mesaj. Setați partenerul înainte de a crea comanda de achiziție."
+                )
             )
 
         po_vals = {

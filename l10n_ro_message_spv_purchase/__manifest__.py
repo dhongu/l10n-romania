@@ -11,9 +11,8 @@
     "countries": ["ro"],
     "category": "Localization",
     "depends": ["l10n_ro_message_spv", "purchase"],
-    "license": "LGPL-3",
-    "price": 25.00,
-    "currency": "EUR",
+    "license": "AGPL-3",
+    "support": "support@terrabit.ro",
     "data": [
         "views/message_spv_view.xml",
     ],
