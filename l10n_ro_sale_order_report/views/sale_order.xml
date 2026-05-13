@@ -36,8 +36,25 @@
         <xpath expr="//tbody/t" position="before">
             <t t-set="nr_crt" t-value="1" />
         </xpath>
+
         <xpath expr="//tbody/t/tr/t" position="inside">
             <t t-set="nr_crt" t-value="nr_crt + 1" />
+        </xpath>
+         <xpath expr="//th[@name='th_discount']" position="after">
+                <th
+                t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)"
+                name="th_terms"
+                class="text-end"
+            >Lead Time (days)</th>
+            </xpath>
+        <xpath expr="//td[@name='td_taxes']" position="before">
+            <td
+                t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)"
+                name="td_terms"
+                class="text-end"
+            >
+                <span t-esc="round(line.customer_lead)" />
+            </td>
         </xpath>
         <xpath expr="//table/thead/tr/th" position="before">
             <t t-if="res_company.counter_on_sale_order">

@@ -21,6 +21,9 @@
                 <setting help="Show Total Amount with Taxes on Sale Order Report">
                     <field name="show_total_amount_with_taxes_on_so" />
                 </setting>
+                <setting help="Show Lead Time on Sale Order Report">
+                    <field name="show_lead_time" />
+                </setting>
             </xpath>
         </field>
     </record>

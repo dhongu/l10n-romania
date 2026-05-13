@@ -25,6 +25,11 @@ class ResCompany(models.Model):
         help="Show Total Amount with Taxes on Sale Order Report",
         default=False,
     )
+    show_lead_time = fields.Boolean(
+        string="Show Lead Time on SO",
+        help="Show Lead Time on Sale Order Report",
+        default=False,
+    )
 
 
 class ResConfigSettings(models.TransientModel):
@@ -59,4 +64,10 @@ class ResConfigSettings(models.TransientModel):
         string="Show Total Amount with Taxes on SO",
         readonly=False,
         help="Show Total Amount with Taxes on Sale Order Report",
+    )
+    show_lead_time = fields.Boolean(
+        related="company_id.show_lead_time",
+        string="Show Lead Time on SO",
+        readonly=False,
+        help="Show Lead Time on Sale Order Report",
     )
