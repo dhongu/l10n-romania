@@ -106,10 +106,16 @@ class TestL10nRoStorno(TransactionCase):
         move.action_post()
 
         # Reverse the move
-        reversal = self.env["account.move.reversal"].with_context(active_model="account.move", active_ids=move.ids).create({
-            "date": "2023-01-02",
-            "journal_id": self.journal.id,
-        })
+        reversal = (
+            self.env["account.move.reversal"]
+            .with_context(active_model="account.move", active_ids=move.ids)
+            .create(
+                {
+                    "date": "2023-01-02",
+                    "journal_id": self.journal.id,
+                }
+            )
+        )
         action = reversal.reverse_moves()
         reversed_move = self.env["account.move"].browse(action["res_id"])
 
