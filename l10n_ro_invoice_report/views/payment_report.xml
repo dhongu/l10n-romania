@@ -8,7 +8,12 @@
                         <div class="page">
                             <div class="row">
                                 <div class="col-5">
-                                    <strong>Company</strong><br />
+                                    <t t-if="o.payment_type=='outbound'">
+                                        <strong>Customer</strong><br />
+                                    </t>
+                                    <t t-else="">
+                                        <strong>Supplier</strong><br />
+                                    </t>
                                     <t t-set="res_company" t-value="o.company_id" />
                                     <strong t-field="res_company.partner_id.name" />
                                     <div>
@@ -22,7 +27,12 @@
                                 </div>
                                 <div class="col-5 col-offset-2">
                                     <div>
-                                        <strong>Customer:</strong><br />
+                                        <t t-if="o.payment_type=='outbound'">
+                                            <strong>Supplier</strong><br />
+                                        </t>
+                                        <t t-else="">
+                                            <strong>Customer</strong><br />
+                                        </t>
                                         <strong t-field="o.partner_id.name" />
                                     </div>
                                     <div>
@@ -85,7 +95,7 @@
                                     <td t-if="o.payment_type=='transfer'">To:</td>
                                     <td>
                                         <span t-field="o.partner_id.name" />
-                                        <span t-field="o.journal_id.name" />
+<!--                                        <span t-field="o.journal_id.name" />-->
                                     </td>
                                 </tr>
                                 <tr>
