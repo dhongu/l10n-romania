@@ -67,7 +67,6 @@ class TestL10nRoStorno(TransactionCase):
                             "account_id": self.account_biv.id,
                             "name": "storno debit",
                             "balance": 100.0,
-                            "storno_line": True,
                         },
                     ),
                     (
@@ -77,17 +76,42 @@ class TestL10nRoStorno(TransactionCase):
                             "account_id": self.account_biv.id,
                             "name": "counter",
                             "balance": -100.0,
-                            "storno_line": True,
                         },
                     ),
                 ],
             }
         )
 
-        # Create a balanced move with one storno line (initially debit positive)
-
+        # Create a balanced move
         line1 = move.line_ids[0]
 
-        # With storno and positive balance (=100), debit becomes -100, credit stays 0
-        self.assertEqual(line1.debit, -100.0)
+        # By default, balance 100 becomes debit 100
+        self.assertEqual(line1.debit, 100.0)
         self.assertEqual(line1.credit, 0.0)
+        self.assertFalse(move.is_storno)
+
+    def test_storno_reversal(self):
+        # Test if is_storno is correctly computed for reversals
+        move = self.env["account.move"].create(
+            {
+                "journal_id": self.journal.id,
+                "move_type": "entry",
+                "date": "2023-01-01",
+                "line_ids": [
+                    (0, 0, {"account_id": self.account_biv.id, "name": "line1", "balance": 100.0}),
+                    (0, 0, {"account_id": self.account_biv.id, "name": "line2", "balance": -100.0}),
+                ],
+            }
+        )
+        move.action_post()
+
+        # Reverse the move
+        reversal = self.env["account.move.reversal"].with_context(active_model="account.move", active_ids=move.ids).create({
+            "date": "2023-01-02",
+            "journal_id": self.journal.id,
+        })
+        action = reversal.reverse_moves()
+        reversed_move = self.env["account.move"].browse(action["res_id"])
+
+        self.assertTrue(reversed_move.reversed_entry_id)
+        self.assertTrue(reversed_move.is_storno, "Reversed move should be marked as storno")
