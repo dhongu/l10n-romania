@@ -399,3 +399,35 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         if order_ref_node and order_ref_node.get("cbc:SalesOrderID", {}).get("_text"):
             order_ref_node["cbc:SalesOrderID"]["_text"] = order_ref_node["cbc:SalesOrderID"]["_text"][:200]
         return res
+
+    def _ubl_add_accounting_supplier_party_legal_entity_nodes(self, vals):
+        res = super()._ubl_add_accounting_supplier_party_tax_scheme_nodes(vals)
+        if (
+            vals.get("party_node", {}).get("cac:PartyTaxScheme", {})
+            and vals.get("party_vals").get("partner")
+            and hasattr(vals.get("party_vals").get("partner"), "nrc")
+            and vals.get("party_vals").get("partner").nrc
+        ):
+            vals["party_node"]["cac:PartyLegalEntity"] = [
+                {
+                    "cbc:RegistrationName": {"_text": vals.get("party_vals").get("partner").name},
+                    "cbc:CompanyID": {"_text": vals.get("party_vals").get("partner").nrc},
+                }
+            ]
+        return res
+
+    def _ubl_add_accounting_customer_party_legal_entity_nodes(self, vals):
+        res = super()._ubl_add_accounting_customer_party_legal_entity_nodes(vals)
+        if (
+            vals.get("party_node", {}).get("cac:PartyTaxScheme", {})
+            and vals.get("party_vals").get("partner")
+            and hasattr(vals.get("party_vals").get("partner"), "nrc")
+            and vals.get("party_vals").get("partner").nrc
+        ):
+            vals["party_node"]["cac:PartyLegalEntity"] = [
+                {
+                    "cbc:RegistrationName": {"_text": vals.get("party_vals").get("partner").name},
+                    "cbc:CompanyID": {"_text": vals.get("party_vals").get("partner").nrc},
+                }
+            ]
+        return res

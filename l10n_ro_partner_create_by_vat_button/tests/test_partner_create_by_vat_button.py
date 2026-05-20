@@ -10,6 +10,9 @@ class TestPartnerCreateByVatButton(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # Fix res.zip sequence to avoid duplicate key errors
+        cls.env.cr.execute("SELECT setval('res_zip_id_seq', (SELECT MAX(id) FROM res_zip))")
+
         # Ensure Romania exists
         cls.country_ro = cls.env["res.country"].search([("code", "=", "RO")], limit=1)
         if not cls.country_ro:

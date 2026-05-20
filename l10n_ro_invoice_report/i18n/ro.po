@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 10:42+0000\n"
-"PO-Revision-Date: 2026-01-16 10:42+0000\n"
+"POT-Creation-Date: 2026-05-20 11:51+0000\n"
+"PO-Revision-Date: 2026-05-20 11:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,26 +18,6 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model:ir.actions.report,print_report_name:l10n_ro_invoice_report.account_invoices_in_company_language
 msgid "(object._get_report_base_filename())"
-msgstr ""
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "27.0"
-msgstr ""
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "3.00"
-msgstr ""
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "31.05"
-msgstr ""
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "9.00"
 msgstr ""
 
 #. module: l10n_ro_invoice_report
@@ -151,12 +131,7 @@ msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-msgid "<strong>Company</strong><br/>"
-msgstr "<strong>Companie</strong><br/>"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-msgid "<strong>Customer:</strong><br/>"
+msgid "<strong>Customer</strong><br/>"
 msgstr "<strong>Client:</strong><br/>"
 
 #. module: l10n_ro_invoice_report
@@ -209,6 +184,11 @@ msgid "<strong>Share Capital:</strong>"
 msgstr "<strong>Capital social:</strong>"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<strong>Supplier</strong><br/>"
+msgstr "<strong>Furnizor</strong><br/>"
+
+#. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_report_account_report_invoice
 msgid "Account report without payment lines"
 msgstr "Raportului contului fără liniile de plată"
@@ -247,6 +227,11 @@ msgid "Cancelled Invoice"
 msgstr "Factura anulata"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Coface Logo"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_company
 msgid "Companies"
 msgstr "Companii"
@@ -259,7 +244,7 @@ msgstr "Setări de configurare"
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Contactați"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -276,6 +261,26 @@ msgstr "Client:"
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_move__delegate_id
 msgid "Delegate"
 msgstr "Delegat"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid ""
+"Display the Coface logo at the end of the invoice to indicate that the debt "
+"is insured by Coface (trade credit insurance)."
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__show_coface_logo
+msgid ""
+"Display the Coface logo at the end of the invoice to signal debt insurance."
+msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__show_coface_logo
+msgid ""
+"Display the Coface logo on the invoice to indicate that the debt is insured "
+"by Coface."
+msgstr ""
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
@@ -349,7 +354,7 @@ msgstr "Jurnal"
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_move
 msgid "Journal Entry"
-msgstr "Notă contabilă"
+msgstr "Înregistrare contabilă"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_move_line
@@ -372,7 +377,7 @@ msgstr ""
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
 msgid "Notes"
-msgstr ""
+msgstr "Note"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_account_journal__operating_unit_id
@@ -487,6 +492,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_account_invoice_filter
 msgid "Scadente mâine"
 msgstr ""
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__show_coface_logo
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__show_coface_logo
+msgid "Show Coface logo"
+msgstr "Arată Coface logo"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
@@ -646,4 +657,4 @@ msgstr "de la"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "units"
-msgstr ""
+msgstr "buc"

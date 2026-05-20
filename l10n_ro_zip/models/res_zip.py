@@ -48,12 +48,13 @@ class ResZip(models.Model):
         domain = super()._search_display_name(operator, value)
 
         # Verificăm operatorii de tip string cei mai frecvenți
-        if operator in ('ilike', 'like', '='):
+        if operator in ("ilike", "like", "="):
             name_domain = [
-                '|', '|',
-                ('name', operator, value),
-                ('street_name', operator, value),
-                ('street_type', operator, value),
+                "|",
+                "|",
+                ("name", operator, value),
+                ("street_name", operator, value),
+                ("street_type", operator, value),
             ]
             # Combinăm folosind OR pentru a extinde rezultatele
             domain = expression.OR([domain, name_domain])

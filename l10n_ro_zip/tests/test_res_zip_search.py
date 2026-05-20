@@ -6,6 +6,7 @@ class TestResZipSearch(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env.cr.execute("SELECT setval('res_zip_id_seq', (SELECT MAX(id) FROM res_zip))")
         cls.zip_1 = cls.env["res.zip"].create(
             {
                 "name": "123456",
