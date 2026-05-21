@@ -19,7 +19,7 @@ class StockMove(models.Model):
         string="Sale Price (at reception)",
         digits="Product Price",
         help="Prețul de vânzare al produsului la momentul validării recepției. "
-             "Folosit în raportul NIR pentru a evita modificările ulterioare ale prețului de vânzare.",
+        "Folosit în raportul NIR pentru a evita modificările ulterioare ale prețului de vânzare.",
     )
 
     def _action_done(self, cancel_backorder=False):
@@ -28,8 +28,6 @@ class StockMove(models.Model):
             if move.picking_id.picking_type_code == "incoming" and not move.l10n_ro_sale_price:
                 list_price = move.product_id.list_price
                 if move.location_dest_id.store_pricelist_id:
-                    list_price = move.location_dest_id.store_pricelist_id._get_product_price(
-                        move.product_id, 1, False
-                    )
+                    list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1, False)
                 move.l10n_ro_sale_price = list_price
         return res
