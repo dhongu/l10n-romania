@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_account_invoice_dvi,access_account_invoice_dvi,model_account_invoice_dvi,base.group_user,1,1,1,1
+access_account_invoice_taxare_inversa,access_account_invoice_taxare_inversa,model_account_invoice_taxare_inversa,base.group_user,1,1,1,1

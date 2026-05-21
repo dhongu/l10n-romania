@@ -2,3 +2,4 @@
 # See README.rst file on addons root folder for license details
 
 from . import account_dvi
+from . import account_taxare_inversa

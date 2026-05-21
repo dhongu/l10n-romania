@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_invoice_taxare_inversa_form" model="ir.ui.view">
+        <field name="name">Taxare inversă intracomunitară</field>
+        <field name="model">account.invoice.taxare.inversa</field>
+        <field name="arch" type="xml">
+            <form string="Taxare inversă intracomunitară (4426=4427)">
+                <group>
+                    <group>
+                        <field name="date"/>
+                        <field name="tax_id"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="tax_base"/>
+                        <field name="tax_value"/>
+                    </group>
+                </group>
+                <div class="alert alert-info" role="status">
+                    Se va genera nota contabilă:
+                    <strong>Dr 4426</strong> (TVA achiziții IC) =
+                    <strong>Cr 4427</strong> (TVA colectată IC)
+                    pentru suma de TVA calculată.
+                </div>
+                <footer>
+                    <button name="do_create_taxare_inversa"
+                            string="Generează notă taxare inversă"
+                            type="object"
+                            class="oe_highlight"/>
+                    or
+                    <button string="Anulează" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_invoice_taxare_inversa" model="ir.actions.act_window">
+        <field name="name">Taxare inversă IC</field>
+        <field name="res_model">account.invoice.taxare.inversa</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

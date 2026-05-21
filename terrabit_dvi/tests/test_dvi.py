@@ -271,3 +271,87 @@ class TestDVI(TransactionCase):
 
         action = invoice.button_dvi()
         self.assertEqual(action.get("res_id"), dvi.id)
+
+    def test_taxare_inversa_eu_supplier(self):
+        """TC-02: furnizor UE → wizard taxare inversă → nota 4426=4427."""
+        # Cream un furnizor din UE (Germania)
+        vendor_eu = self.env["res.partner"].search([("name", "=", "vendor_eu_de")], limit=1)
+        if not vendor_eu:
+            vendor_eu = self.env["res.partner"].create({"name": "vendor_eu_de"})
+        vendor_eu.country_id = self.env.ref("base.de")
+
+        # Cream cont 4426 și 4427
+        account_4426 = self.env["account.account"].search([("code", "=like", "4426%")], limit=1)
+        if not account_4426:
+            account_4426 = self.env["account.account"].create(
+                {
+                    "name": "TVA deductibila achizitii IC",
+                    "code": "4426001",
+                    "account_type": "asset_current",
+                    "reconcile": True,
+                }
+            )
+        account_4427 = self.env["account.account"].search([("code", "=like", "4427%")], limit=1)
+        if not account_4427:
+            account_4427 = self.env["account.account"].create(
+                {
+                    "name": "TVA colectata IC",
+                    "code": "4427001",
+                    "account_type": "liability_current",
+                    "reconcile": True,
+                }
+            )
+
+        po = Form(self.env["purchase.order"])
+        po.partner_id = vendor_eu
+        with po.order_line.new() as po_line:
+            po_line.product_id = self.product_1
+            po_line.product_qty = 5
+            po_line.price_unit = 200
+        po = po.save()
+        po.button_confirm()
+        picking = po.picking_ids[0]
+        picking.move_line_ids.write({"quantity": 5.0})
+        picking.button_validate()
+
+        action = po.action_create_invoice()
+        invoice = self.env["account.move"].browse(action.get("res_id"))
+        if not invoice.partner_id:
+            invoice.partner_id = vendor_eu
+        invoice.invoice_date = fields.Date.today()
+        invoice.action_post()
+
+        # Verificam ca _is_intracom_supplier() returneaza True
+        self.assertTrue(invoice._is_intracom_supplier())
+
+        # button_dvi() trebuie sa deschida wizardul de taxare inversa (nu DVI)
+        action = invoice.button_dvi()
+        self.assertEqual(action.get("res_model"), "account.invoice.taxare.inversa")
+
+        # Simulam completarea wizard-ului
+        wizard = self.env["account.invoice.taxare.inversa"].with_context(active_id=invoice.id).create(
+            {
+                "date": fields.Date.today(),
+                "tax_id": self.tax_id.id,
+                "tax_base": abs(invoice.amount_untaxed_signed),
+                "tax_value": abs(invoice.amount_untaxed_signed) * self.tax_id.amount / 100,
+            }
+        )
+        action_result = wizard.with_context(active_id=invoice.id).do_create_taxare_inversa()
+        self.assertEqual(action_result.get("res_model"), "account.move")
+
+        # Verificam nota generata
+        nota = self.env["account.move"].browse(action_result.get("res_id"))
+        self.assertEqual(nota.state, "posted")
+        debit_line = nota.line_ids.filtered(lambda l: l.account_id.id == account_4426.id)
+        credit_line = nota.line_ids.filtered(lambda l: l.account_id.id == account_4427.id)
+        self.assertTrue(debit_line, "Trebuie să existe linie Dr 4426")
+        self.assertTrue(credit_line, "Trebuie să existe linie Cr 4427")
+        self.assertAlmostEqual(debit_line.debit, credit_line.credit, places=2)
+
+        # invoice.taxare_inversa_move_id trebuie setat
+        self.assertEqual(invoice.taxare_inversa_move_id, nota)
+
+        # Al doilea apel la button_dvi() trebuie sa afiseze nota existenta
+        action2 = invoice.button_dvi()
+        self.assertEqual(action2.get("res_id"), nota.id)

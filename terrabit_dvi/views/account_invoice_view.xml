@@ -1,19 +1,30 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <record id="view_move_form" model="ir.ui.view">
-            <field name="name">account.move.form</field>
-            <field name="model">account.move</field>
-            <field name="inherit_id" ref="account.view_move_form" />
-            <field name="arch" type="xml">
-                <button name="button_draft" position="after">
-                    <button
-                    name="button_dvi"
-                    status='posted'
-                    string="DVI"
-                    type="object"
-                    invisible="move_type != 'in_invoice' or state != 'posted'"
-                />
-                </button>
+
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <button name="button_draft" position="after">
+                <!-- DVI (non-UE) sau Taxare inversă (UE) — același buton, logică smart în Python -->
+                <button name="button_dvi"
+                        string="DVI / Taxare inversă"
+                        type="object"
+                        invisible="move_type != 'in_invoice' or state != 'posted'"/>
+            </button>
+            <!-- Câmp referință notă taxare inversă IC -->
+            <field name="invoice_date_due" position="after">
+                <field name="dvi_id"
+                       readonly="1"
+                       invisible="not dvi_id"
+                       string="DVI (taxe vamale)"/>
+                <field name="taxare_inversa_move_id"
+                       readonly="1"
+                       invisible="not taxare_inversa_move_id"
+                       string="Notă taxare inversă IC"/>
             </field>
-        </record>
+        </field>
+    </record>
+
 </odoo>
