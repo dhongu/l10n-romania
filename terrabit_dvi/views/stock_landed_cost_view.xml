@@ -1,22 +1,56 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <record id='view_stock_landed_cost_form' model='ir.ui.view'>
-            <field name="name">stock.landed.cost.form</field>
-            <field name="model">stock.landed.cost</field>
-            <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form" />
-            <field name="arch" type="xml">
-                <notebook position="before">
+
+    <!-- Extindere form: câmpuri DVI pe landed cost -->
+    <record id="view_stock_landed_cost_form" model="ir.ui.view">
+        <field name="name">stock.landed.cost.form</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+            <notebook position="before">
+                <group>
                     <group>
-                        <group>
-                            <field name="landed_type" />
-                        </group>
-                        <group invisible="landed_type == 'standard'">
-                            <field name="tax_id" />
-                            <field name="tax_base" />
-                            <field name="tax_value" />
-                        </group>
+                        <field name="landed_type"/>
                     </group>
-                </notebook>
-            </field>
-        </record>
+                    <group invisible="landed_type == 'standard'">
+                        <field name="tax_id"/>
+                        <field name="tax_base"/>
+                        <field name="tax_value"/>
+                    </group>
+                </group>
+            </notebook>
+        </field>
+    </record>
+
+    <!-- Extindere search view: filtru rapid DVI -->
+    <record id="view_stock_landed_cost_search_dvi" model="ir.ui.view">
+        <field name="name">stock.landed.cost.search.dvi</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_search"/>
+        <field name="arch" type="xml">
+            <filter name="done" position="after">
+                <separator/>
+                <filter name="filter_dvi"
+                        string="DVI"
+                        domain="[('landed_type', '=', 'dvi')]"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- Acțiune dedicată: lista DVI-uri -->
+    <record id="action_stock_landed_cost_dvi" model="ir.actions.act_window">
+        <field name="name">DVI — Costuri vamale</field>
+        <field name="res_model">stock.landed.cost</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('landed_type', '=', 'dvi')]</field>
+        <field name="context">{'search_default_filter_dvi': 1, 'search_default_group_by_month': 1}</field>
+    </record>
+
+    <!-- Meniu -->
+    <menuitem id="menu_stock_landed_cost_dvi"
+              name="DVI — Costuri vamale"
+              parent="account.menu_finance_entries"
+              action="action_stock_landed_cost_dvi"
+              sequence="50"/>
+
 </odoo>
