@@ -10,6 +10,7 @@
     "author": "Terrabit, NextERP Romania,Dakai Soft,Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "depends": ["l10n_ro_stock", "l10n_ro_stock_account"],
+    "development_status": "Beta",
     "license": "AGPL-3",
     "data": [
         "wizard/stock_age_report.xml",
