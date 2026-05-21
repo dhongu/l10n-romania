@@ -123,7 +123,7 @@ class StockAgeReport(models.TransientModel):
             name = f"{days} - {days_next}"
             if i == NUMBER_INTERVALS - 1:
                 name += "+"
-            name = f"[{i+1}] {name} " + _("days")
+            name = f"[{i + 1}] {name} " + _("days")
 
             intervals.append(
                 {

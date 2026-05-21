@@ -166,7 +166,8 @@ class TestL10nRoStockPickingReport(TransactionCase):
         picking = self._create_picking(self.picking_type_in, qty=2.0, partner=self.partner_supplier)
         for move in picking.move_ids:
             self.assertAlmostEqual(
-                move.l10n_ro_sale_price, 25.0,
+                move.l10n_ro_sale_price,
+                25.0,
                 msg="l10n_ro_sale_price trebuie să fie egal cu list_price la momentul recepției",
             )
 
@@ -178,7 +179,8 @@ class TestL10nRoStockPickingReport(TransactionCase):
         self.product.list_price = 99.0
         for move in picking.move_ids:
             self.assertAlmostEqual(
-                move.l10n_ro_sale_price, 30.0,
+                move.l10n_ro_sale_price,
+                30.0,
                 msg="l10n_ro_sale_price nu trebuie modificat după schimbarea list_price",
             )
             # list_price curent este diferit
@@ -194,7 +196,8 @@ class TestL10nRoStockPickingReport(TransactionCase):
         for move in picking.move_ids:
             res = report_model._get_move_values(move)
             self.assertAlmostEqual(
-                res["list_price"], 40.0,
+                res["list_price"],
+                40.0,
                 msg="Raportul trebuie să folosească prețul stocat la recepție (40.0), nu cel curent (80.0)",
             )
 
@@ -204,7 +207,8 @@ class TestL10nRoStockPickingReport(TransactionCase):
         picking = self._create_picking(self.picking_type_out, qty=1.0, partner=self.partner_customer)
         for move in picking.move_ids:
             self.assertAlmostEqual(
-                move.l10n_ro_sale_price, 0.0,
+                move.l10n_ro_sale_price,
+                0.0,
                 msg="l10n_ro_sale_price nu trebuie setat pentru livrări",
             )
 
