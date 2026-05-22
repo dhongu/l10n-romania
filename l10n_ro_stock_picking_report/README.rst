@@ -47,6 +47,7 @@ Authors
 -------
 
 * Dorin Hongu
+* Terrabit
 
 Contributors
 ------------
