@@ -24,6 +24,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         if (
             "receipt_print" in invoice._fields
             and invoice.receipt_print
+            and "cbc:InvoiceTypeCode" in document_node
             and document_node["cbc:InvoiceTypeCode"]["_text"] == 380
         ):
             document_node["cbc:InvoiceTypeCode"] = {"_text": 751}
