@@ -53,6 +53,7 @@ class StockPicking(models.Model):
         if self.picking_type_code == "incoming":
             if self.location_dest_id.is_store:
                 report = "l10n_ro_stock_picking_report.action_report_reception_sale_price"
+
             else:
                 report = "l10n_ro_stock_picking_report.action_report_reception"
 
