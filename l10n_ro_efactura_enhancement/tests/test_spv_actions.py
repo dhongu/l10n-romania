@@ -14,37 +14,51 @@ class TestSpvActions(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.ref("base.main_company")
-        cls.partner = cls.env["res.partner"].create({
-            "name": "Test Partner SPV",
-            "country_id": cls.env.ref("base.ro").id,
-            "state_id": cls.env.ref("base.RO_B").id,
-            "city": "Bucuresti",
-            "street": "Str. Test 1",
-            "invoice_sending_method": "email",
-        })
-        cls.product = cls.env["product.product"].create({
-            "name": "Test Product SPV",
-        })
+        cls.partner = cls.env["res.partner"].create(
+            {
+                "name": "Test Partner SPV",
+                "country_id": cls.env.ref("base.ro").id,
+                "state_id": cls.env.ref("base.RO_B").id,
+                "city": "Bucuresti",
+                "street": "Str. Test 1",
+                "invoice_sending_method": "email",
+            }
+        )
+        cls.product = cls.env["product.product"].create(
+            {
+                "name": "Test Product SPV",
+            }
+        )
 
     def _create_posted_invoice(self):
-        invoice = self.env["account.move"].create({
-            "move_type": "out_invoice",
-            "partner_id": self.partner.id,
-            "invoice_line_ids": [(0, 0, {
-                "product_id": self.product.id,
-                "quantity": 1,
-                "price_unit": 100,
-            })],
-        })
+        invoice = self.env["account.move"].create(
+            {
+                "move_type": "out_invoice",
+                "partner_id": self.partner.id,
+                "invoice_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": self.product.id,
+                            "quantity": 1,
+                            "price_unit": 100,
+                        },
+                    )
+                ],
+            }
+        )
         invoice.action_post()
         return invoice
 
     def test_action_send_to_spv_only_no_invoices(self):
         """Test că acțiunea ridică UserError dacă nu există facturi confirmate selectate."""
-        draft_invoice = self.env["account.move"].create({
-            "move_type": "out_invoice",
-            "partner_id": self.partner.id,
-        })
+        draft_invoice = self.env["account.move"].create(
+            {
+                "move_type": "out_invoice",
+                "partner_id": self.partner.id,
+            }
+        )
         with self.assertRaises(UserError):
             draft_invoice.action_send_to_spv_only()
 
