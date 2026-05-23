@@ -3,7 +3,7 @@
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 _interval = {
     "15": lambda count: relativedelta(days=count * 15),
@@ -67,14 +67,11 @@ class StockAgeReport(models.TransientModel):
         string="Report Lines",
     )
 
-    def name_get(self):
-        res = []
+    def _compute_display_name(self):
         for rep in self:
-            name = "Stock Age Report: {} (interval: {})".format(
+            rep.display_name = "Stock Age Report: {} (interval: {})".format(
                 rep.date_ref, dict(self._fields["interval_days"].selection).get(rep.interval_days)
             )
-            res.append((rep.id, name))
-        return res
 
     @api.model
     def default_get(self, fields):
@@ -97,7 +94,7 @@ class StockAgeReport(models.TransientModel):
         self.location_ids = location_ids
 
     def do_compute_report(self):
-        products = self.product_id or self.env["product.product"].search([])
+        products = self.product_id or self.env["product.product"].search([], limit=10000)
         locations = self.location_ids.mapped("location_id")
 
         self._run_aged_inventory(products, locations.ids)
@@ -123,7 +120,7 @@ class StockAgeReport(models.TransientModel):
             name = f"{days} - {days_next}"
             if i == NUMBER_INTERVALS - 1:
                 name += "+"
-            name = f"[{i + 1}] {name} " + _("days")
+            name = f"[{i + 1}] {name} " + self.env._("days")
 
             intervals.append(
                 {

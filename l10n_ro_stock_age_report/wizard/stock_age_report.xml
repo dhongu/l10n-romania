@@ -87,12 +87,11 @@
                 <field name="product_id" />
                 <field name="account_id" />
                 <field name="last_out_date" />
-                <group expand="1" string="Group by">
-                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}" />
-                    <filter string="Days Range" name="group_by_days" context="{'group_by': 'name'}" />
-                    <filter string="Date" name="group_by_date" context="{'group_by': 'date'}" />
-                    <filter string="Account" name="group_by_account" context="{'group_by': 'account_id'}" />
-                </group>
+                <separator />
+                <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}" />
+                <filter string="Days Range" name="group_by_days" context="{'group_by': 'name'}" />
+                <filter string="Date" name="group_by_date" context="{'group_by': 'date'}" />
+                <filter string="Account" name="group_by_account" context="{'group_by': 'account_id'}" />
             </search>
         </field>
     </record>
@@ -109,8 +108,7 @@
         <field name="name">Stock Age Report</field>
         <field name="action" ref="action_stock_age_report" />
         <field name="parent_id" ref="stock.menu_warehouse_report" />
-        <field name="groups_id" eval="[(4, ref('stock.group_stock_user'))]" />
-        <field name="is_l10n_ro_record" eval="True" />
+        <field name="group_ids" eval="[Command.link(ref('stock.group_stock_user'))]" />
     </record>
 
     <record id="action_sheet_age_report_line" model="ir.actions.act_window">

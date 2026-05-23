@@ -1,14 +1,16 @@
 # Copyright (C) 2022 NextERP Romania
 # Copyright (C) 2022 Saai SOFT
+# Copyright (C) 2026 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Aged Report",
     "version": "19.0.0.0.2",
     "category": "Localization",
     "summary": "Romania - Stock Aged Report",
-    "author": "NextERP Romania,Dakai Soft,Terrabit,Odoo Community Association (OCA)",
+    "author": "Terrabit, NextERP Romania,Dakai Soft,Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "depends": ["l10n_ro_stock", "l10n_ro_stock_account"],
+    "development_status": "Beta",
     "license": "AGPL-3",
     "data": [
         "wizard/stock_age_report.xml",
