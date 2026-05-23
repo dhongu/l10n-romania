@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Aged Report",
-    "version": "18.0.0.0.2",
+    "version": "19.0.0.0.2",
     "category": "Localization",
     "summary": "Romania - Stock Aged Report",
     "author": "NextERP Romania,Dakai Soft,Terrabit,Odoo Community Association (OCA)",
