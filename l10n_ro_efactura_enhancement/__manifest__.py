@@ -16,7 +16,7 @@
         "account_edi_ubl_cii",
         # "l10n_ro_efactura",
     ],
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     # "price": 25.00,
     # "currency": "EUR",
     "data": [
