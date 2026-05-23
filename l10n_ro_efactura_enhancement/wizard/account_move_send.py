@@ -1,9 +1,31 @@
+import logging
+
 from odoo import api, models
 from odoo.tools.safe_eval import safe_eval
+
+_logger = logging.getLogger(__name__)
+
+
+class AccountMoveSend(models.AbstractModel):
+    _inherit = "account.move.send"
+
+    def _get_alerts(self, moves, moves_data):
+        alerts = super()._get_alerts(moves, moves_data)
+        _logger.info(f"alerts: {alerts}")
+
+        account_missing_email = alerts.get("account_missing_email", {})
+        if account_missing_email:
+            action = account_missing_email.get("action", {})
+            if action:
+                context = action.get("context", {})
+                context.pop("lastcall", None)
+
+        return alerts
 
 
 class AccountMoveSendWizard(models.TransientModel):
     _inherit = "account.move.send.wizard"
+
     # todo: de gasit cum se poate face in 18.0
     # l10n_ro_edi_resend_enable = fields.Boolean(compute="_compute_l10n_ro_edi_resend_enable")
 
@@ -30,13 +52,7 @@ class AccountMoveSendWizard(models.TransientModel):
             "target": "new",
         }
 
-    def _compute_l10n_ro_edi_send_enable(self):
-        res = super()._compute_l10n_ro_edi_send_enable()
-        for wizard in self:
-            wizard.l10n_ro_edi_send_enable = wizard.l10n_ro_edi_send_enable and any(
-                move.commercial_partner_id.country_id.code == "RO" for move in wizard.move_ids
-            )
-        return res
+    # _compute_l10n_ro_edi_send_enable nu mai exista in v19 standard
 
     @api.model
     def _postprocess_invoice_ubl_xml(self, invoice, invoice_data):
