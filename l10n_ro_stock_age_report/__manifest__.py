@@ -6,8 +6,8 @@
     "version": "18.0.0.0.2",
     "category": "Localization",
     "summary": "Romania - Stock Aged Report",
-    "author": "NextERP Romania," "Dakai Soft," "Terrabit," "Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "author": "NextERP Romania,Dakai Soft,Terrabit,Odoo Community Association (OCA)",
+    "website": "https://www.terrabit.ro",
     "depends": ["l10n_ro_stock", "l10n_ro_stock_account"],
     "license": "AGPL-3",
     "data": [
