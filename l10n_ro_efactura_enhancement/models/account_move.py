@@ -77,7 +77,10 @@ class AccountMove(models.Model):
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
-            domain = [("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed")]
+            domain = [
+                ("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed"),
+                ("company_id", "=", company.id),
+            ]
             invoice_sending_failed = self.search(domain)
             invoices_name = invoice_sending_failed.mapped("name")
             _logger.info(f"❌ Invoice sending failed: {invoices_name}")
