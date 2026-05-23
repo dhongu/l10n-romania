@@ -131,6 +131,8 @@ class ReportPickingReception(models.AbstractModel):
 
             if not res["price"]:
                 res["price"] = move.price_unit
+            if not quantity:
+                quantity = move.product_qty
             # la loturi nu este completat move_line.price_unit
             # if move_line.price_unit == 0:
             #     if move_line.remaining_qty != 0:

@@ -9,6 +9,6 @@ class AccountMove(models.Model):
 
     def _need_ubl_cii_xml(self, ubl_cii_format):
         res = super()._need_ubl_cii_xml(ubl_cii_format)
-        if self.only_fiscal_receipt:
+        if self.only_fiscal_receipt and self.move_type == "out_invoice":
             return False
         return res

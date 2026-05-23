@@ -82,7 +82,7 @@ class StockAgeReport(models.TransientModel):
 
     @api.depends("warehouse_id")
     def _compute_location_ids(self):
-        self.location_ids = [(6, 0, [])]
+        self.location_ids = [(5, 0, 0)]
 
         locs = self.env["stock.location"].search([("usage", "=", "internal")], order="id")
         locs = locs.filtered(lambda l: l.warehouse_id == self.warehouse_id)
