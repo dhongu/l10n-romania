@@ -1,6 +1,7 @@
 # © 2025 Deltatech
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import base64
+
 from lxml import etree
 
 from odoo.exceptions import UserError
@@ -37,7 +38,7 @@ class TestMessageSPVPurchase(TransactionCase):
         """Helper: creează un mesaj SPV minimal."""
         return self.env["l10n.ro.message.spv"].create(
             {
-                "name": "SPV-%s" % ref,
+                "name": f"SPV-{ref}",
                 "ref": ref,
                 "partner_id": (partner or self.partner).id,
                 "company_id": self.company.id,

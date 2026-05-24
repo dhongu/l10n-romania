@@ -1,11 +1,14 @@
 # ©  2024 Deltatech
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
+import logging
 from unittest.mock import patch
 
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+
+_logger = logging.getLogger(__name__)
 
 
 @tagged("post_install", "-at_install")
@@ -31,9 +34,7 @@ class TestCheckPartner(TransactionCase):
             {
                 "move_type": "out_invoice",
                 "partner_id": partner.id,
-                "invoice_line_ids": [
-                    (0, 0, {"product_id": self.product.id, "quantity": 1, "price_unit": 100})
-                ],
+                "invoice_line_ids": [(0, 0, {"product_id": self.product.id, "quantity": 1, "price_unit": 100})],
             }
         )
 
@@ -93,17 +94,15 @@ class TestCheckPartner(TransactionCase):
             {
                 "move_type": "in_invoice",
                 "partner_id": partner.id,
-                "invoice_line_ids": [
-                    (0, 0, {"product_id": self.product.id, "quantity": 1, "price_unit": 100})
-                ],
+                "invoice_line_ids": [(0, 0, {"product_id": self.product.id, "quantity": 1, "price_unit": 100})],
             }
         )
         # check_partner nu trebuie apelat pentru in_invoice
         with patch.object(type(invoice), "check_partner") as mock_check:
             try:
                 invoice.action_post()
-            except Exception:
-                pass
+            except Exception as e:
+                _logger.warning("action_post raised exception: %s", e)
             mock_check.assert_not_called()
 
 
