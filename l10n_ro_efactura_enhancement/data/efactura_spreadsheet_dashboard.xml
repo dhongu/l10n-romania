@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="spreadsheet_dashboard_efactura" model="spreadsheet.dashboard">
+        <field name="name">eFactura SPV</field>
+        <field name="spreadsheet_binary_data" type="base64" file="l10n_ro_efactura_enhancement/data/files/efactura_dashboard.json"/>
+        <field name="sample_dashboard_file_path">l10n_ro_efactura_enhancement/data/files/efactura_dashboard.json</field>
+        <field name="main_data_model_ids" eval="[(4, ref('account.model_account_move'))]"/>
+        <field name="dashboard_group_id" ref="spreadsheet_dashboard.spreadsheet_dashboard_group_finance"/>
+        <field name="group_ids" eval="[Command.link(ref('account.group_account_readonly')), Command.link(ref('account.group_account_invoice'))]"/>
+        <field name="sequence">25</field>
+        <field name="is_published">True</field>
+    </record>
+</odoo>

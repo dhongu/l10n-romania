@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <record id="view_efactura_dashboard_form" model="ir.ui.view">
+        <field name="name">l10n.ro.efactura.dashboard.form</field>
+        <field name="model">l10n.ro.efactura.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="eFactura Dashboard">
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            name="action_view_to_send"
+                            icon="fa-clock-o"
+                        >
+                            <div class="o_stat_info">
+                                <field name="count_to_send" class="o_stat_value" />
+                                <span class="o_stat_text">De trimis</span>
+                            </div>
+                        </button>
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            name="action_view_sent"
+                            icon="fa-paper-plane"
+                        >
+                            <div class="o_stat_info">
+                                <field name="count_sent" class="o_stat_value" />
+                                <span class="o_stat_text">Trimise (în așteptare)</span>
+                            </div>
+                        </button>
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            name="action_view_not_indexed"
+                            icon="fa-hourglass-half"
+                        >
+                            <div class="o_stat_info">
+                                <field name="count_not_indexed" class="o_stat_value" />
+                                <span class="o_stat_text">Neindexate</span>
+                            </div>
+                        </button>
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            name="action_view_validated"
+                            icon="fa-check-circle"
+                        >
+                            <div class="o_stat_info">
+                                <field name="count_validated" class="o_stat_value" />
+                                <span class="o_stat_text">Validate</span>
+                            </div>
+                        </button>
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            name="action_view_refused"
+                            icon="fa-times-circle"
+                        >
+                            <div class="o_stat_info">
+                                <field name="count_refused" class="o_stat_value" />
+                                <span class="o_stat_text">Refuzate</span>
+                            </div>
+                        </button>
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            name="action_view_sending_failed"
+                            icon="fa-exclamation-triangle"
+                        >
+                            <div class="o_stat_info">
+                                <field name="count_sending_failed" class="o_stat_value" />
+                                <span class="o_stat_text">Eroare trimitere</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>eFactura Dashboard</h1>
+                    </div>
+                    <group>
+                        <field name="company_id" widget="many2one" options="{'no_create': True}" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_efactura_dashboard_server" model="ir.actions.server">
+        <field name="name">eFactura Dashboard</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">
+rec = env["l10n.ro.efactura.dashboard"].create({"company_id": env.company.id})
+action = {
+    "type": "ir.actions.act_window",
+    "name": "eFactura Dashboard",
+    "res_model": "l10n.ro.efactura.dashboard",
+    "res_id": rec.id,
+    "view_mode": "form",
+    "target": "current",
+    "context": {"form_view_initial_mode": "readonly"},
+}
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_efactura_dashboard"
+        name="eFactura Dashboard"
+        action="action_efactura_dashboard_server"
+        parent="account.menu_finance_reports"
+        sequence="99"
+    />
+
+</odoo>

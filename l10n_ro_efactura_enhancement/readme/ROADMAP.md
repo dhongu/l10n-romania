@@ -1,4 +1,4 @@
-# Roadmap
+  # Roadmap
 
 ## Known Bugs to Fix
 
@@ -22,6 +22,35 @@
   all companies to be collected instead of only the current company in the loop.
 
 ## Planned Improvements
+
+### Dashboard operațional eFactura (`l10n.ro.efactura.dashboard`)
+
+Obiectiv: pagină dedicată în meniul Accounting → Rapoarte → eFactura Dashboard care oferă
+o vedere rapidă a stării trimiterilor SPV cu navigare directă la liste filtrate.
+
+Funcționalități dorite:
+
+- **Stat buttons** pentru fiecare stare SPV:
+  - *De trimis* — facturi confirmate fără `l10n_ro_edi_state` (state `False`)
+  - *Trimise (în așteptare)* — `invoice_sent`, trimise dar neconfirmate încă de SPV
+  - *Neindexate* — `invoice_not_indexed`, acceptate dar neindexate în portalul ANAF
+  - *Validate* — `invoice_validated`, acceptate și indexate cu succes
+  - *Refuzate* — `invoice_refused`, respinse de SPV
+  - *Eroare trimitere* — `invoice_sending_failed` pe documentul EDI
+- **Click pe orice buton** deschide lista facturilor filtrate pe acea stare
+- **Selector companie** pentru multi-company
+- **Acces**: grupurile `account.group_account_invoice` și `account.group_account_manager`
+
+Probleme tehnice identificate și rezolvate (de re-activat după testare):
+- View structurat cu `oe_button_box` ca prim copil al `<sheet>` (standard Odoo 19)
+- Server action returnează `target: "current"` în loc de `"main"` (compatibil TransientModel)
+- Atribute deprecate `create/edit/delete` eliminate din `<form>`
+- Access rules adăugate în `security/ir.model.access.csv`
+
+Codul modelului și view-ului este prezent dar **dezactivat temporar** (`efactura_dashboard.py`,
+`views/efactura_dashboard_views.xml`) — de re-activat după validare pe o instanță live.
+
+### Alte îmbunătățiri planificate
 
 - **Re-enable wizard view**: Uncomment `wizard/account_move_send_views.xml` in the manifest once the
   resend UI flow is finalized for Odoo 18 (see TODO in `wizard/account_move_send.py`).

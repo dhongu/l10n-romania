@@ -1,0 +1,315 @@
+{
+  "version": 16,
+  "sheets": [
+    {
+      "id": "dashboard_sheet",
+      "name": "eFactura",
+      "isVisible": true,
+      "figures": [
+        {
+          "id": "sc_to_send",
+          "width": 220,
+          "height": 120,
+          "tag": "chart",
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "De trimis",
+              "color": "#434343",
+              "bold": true
+            },
+            "background": "#FFF3CD",
+            "keyValue": "Data!B1",
+            "baselineMode": "text",
+            "baselineColorDown": "#DC6965",
+            "baselineColorUp": "#00A04A",
+            "humanize": false,
+            "chartId": "sc_to_send"
+          },
+          "offset": {
+            "x": 0,
+            "y": 10
+          },
+          "col": 0,
+          "row": 0
+        },
+        {
+          "id": "sc_sent",
+          "width": 220,
+          "height": 120,
+          "tag": "chart",
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Trimise (in asteptare)",
+              "color": "#434343",
+              "bold": true
+            },
+            "background": "#D1ECF1",
+            "keyValue": "Data!B2",
+            "baselineMode": "text",
+            "baselineColorDown": "#DC6965",
+            "baselineColorUp": "#00A04A",
+            "humanize": false,
+            "chartId": "sc_sent"
+          },
+          "offset": {
+            "x": 230,
+            "y": 10
+          },
+          "col": 0,
+          "row": 0
+        },
+        {
+          "id": "sc_not_indexed",
+          "width": 220,
+          "height": 120,
+          "tag": "chart",
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Neindexate",
+              "color": "#434343",
+              "bold": true
+            },
+            "background": "#E2E3E5",
+            "keyValue": "Data!B3",
+            "baselineMode": "text",
+            "baselineColorDown": "#DC6965",
+            "baselineColorUp": "#00A04A",
+            "humanize": false,
+            "chartId": "sc_not_indexed"
+          },
+          "offset": {
+            "x": 460,
+            "y": 10
+          },
+          "col": 0,
+          "row": 0
+        },
+        {
+          "id": "sc_validated",
+          "width": 220,
+          "height": 120,
+          "tag": "chart",
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Validate",
+              "color": "#434343",
+              "bold": true
+            },
+            "background": "#D4EDDA",
+            "keyValue": "Data!B4",
+            "baselineMode": "text",
+            "baselineColorDown": "#DC6965",
+            "baselineColorUp": "#00A04A",
+            "humanize": false,
+            "chartId": "sc_validated"
+          },
+          "offset": {
+            "x": 690,
+            "y": 10
+          },
+          "col": 0,
+          "row": 0
+        },
+        {
+          "id": "sc_refused",
+          "width": 220,
+          "height": 120,
+          "tag": "chart",
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Refuzate",
+              "color": "#434343",
+              "bold": true
+            },
+            "background": "#F8D7DA",
+            "keyValue": "Data!B5",
+            "baselineMode": "text",
+            "baselineColorDown": "#DC6965",
+            "baselineColorUp": "#00A04A",
+            "humanize": false,
+            "chartId": "sc_refused"
+          },
+          "offset": {
+            "x": 920,
+            "y": 10
+          },
+          "col": 0,
+          "row": 0
+        },
+        {
+          "id": "sc_error",
+          "width": 220,
+          "height": 120,
+          "tag": "chart",
+          "data": {
+            "type": "scorecard",
+            "title": {
+              "text": "Eroare trimitere",
+              "color": "#434343",
+              "bold": true
+            },
+            "background": "#F8D7DA",
+            "keyValue": "Data!B6",
+            "baselineMode": "text",
+            "baselineColorDown": "#DC6965",
+            "baselineColorUp": "#00A04A",
+            "humanize": false,
+            "chartId": "sc_error"
+          },
+          "offset": {
+            "x": 1150,
+            "y": 10
+          },
+          "col": 0,
+          "row": 0
+        },
+        {
+          "id": "chart_bar",
+          "width": 1380,
+          "height": 350,
+          "tag": "chart",
+          "data": {
+            "type": "odoo_bar",
+            "title": {
+              "text": "Facturi eFactura pe stare EDI"
+            },
+            "background": "#FFFFFF",
+            "legendPosition": "top",
+            "metaData": {
+              "groupBy": ["l10n_ro_edi_state"],
+              "measure": "__count",
+              "order": null,
+              "resModel": "account.move",
+              "mode": "bar"
+            },
+            "searchParams": {
+              "comparison": null,
+              "context": {},
+              "domain": [
+                ["move_type", "in", ["out_invoice", "out_refund"]],
+                ["state", "=", "posted"],
+                ["l10n_ro_edi_state", "!=", false]
+              ],
+              "groupBy": ["l10n_ro_edi_state"],
+              "orderBy": []
+            },
+            "dataSets": [{}],
+            "stacked": false,
+            "chartId": "chart_bar",
+            "fieldMatching": {}
+          },
+          "offset": {
+            "x": 0,
+            "y": 150
+          },
+          "col": 0,
+          "row": 0
+        }
+      ],
+      "cells": {},
+      "colNumber": 26,
+      "rowNumber": 100
+    },
+    {
+      "id": "data_sheet",
+      "name": "Data",
+      "isVisible": false,
+      "figures": [],
+      "cells": {
+        "A1": {
+          "content": "De trimis"
+        },
+        "A2": {
+          "content": "Trimise"
+        },
+        "A3": {
+          "content": "Neindexate"
+        },
+        "A4": {
+          "content": "Validate"
+        },
+        "A5": {
+          "content": "Refuzate"
+        },
+        "A6": {
+          "content": "Eroare trimitere"
+        },
+        "B1": {
+          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",FALSE),0)"
+        },
+        "B2": {
+          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_sent\"),0)"
+        },
+        "B3": {
+          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_not_indexed\"),0)"
+        },
+        "B4": {
+          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_validated\"),0)"
+        },
+        "B5": {
+          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_refused\"),0)"
+        },
+        "B6": {
+          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_sending_failed\"),0)"
+        }
+      },
+      "colNumber": 26,
+      "rowNumber": 100
+    }
+  ],
+  "styles": {},
+  "formats": {},
+  "borders": {},
+  "revisionId": "START_REVISION",
+  "uniqueFigureIds": true,
+  "settings": {
+    "locale": {
+      "name": "Romanian (Romania)",
+      "code": "ro_RO",
+      "thousandsSeparator": ".",
+      "decimalSeparator": ",",
+      "dateFormat": "DD/MM/YYYY",
+      "timeFormat": "HH:mm:ss",
+      "formulaArgSeparator": ";"
+    }
+  },
+  "pivots": {
+    "1": {
+      "type": "ODOO",
+      "id": "1",
+      "formulaId": "1",
+      "name": "eFactura State",
+      "model": "account.move",
+      "domain": [
+        ["move_type", "in", ["out_invoice", "out_refund"]],
+        ["state", "=", "posted"]
+      ],
+      "context": {},
+      "measures": [
+        {
+          "id": "__count",
+          "fieldName": "__count",
+          "userDefinedName": "Count"
+        }
+      ],
+      "columns": [],
+      "rows": [
+        {
+          "fieldName": "l10n_ro_edi_state"
+        }
+      ],
+      "fieldMatching": {},
+      "sortedColumn": null
+    }
+  },
+  "pivotNextId": 2,
+  "globalFilters": [],
+  "lists": {},
+  "listNextId": 1,
+  "chartOdooMenusReferences": {}
+}
