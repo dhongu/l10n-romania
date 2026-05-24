@@ -15,9 +15,7 @@ class TestStockPickingFields(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.warehouse = cls.env["stock.warehouse"].search(
-            [("company_id", "=", cls.company.id)], limit=1
-        )
+        cls.warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.company.id)], limit=1)
         cls.product = cls.env["product.product"].create(
             {
                 "name": "Produs Test eTransport",
@@ -91,9 +89,7 @@ class TestResConfigSettings(TransactionCase):
     def test_config_settings_write_propagates_to_company(self):
         """Scrierea în res.config.settings propagă valoarea la companie."""
         self.env.company.l10n_ro_etransport_get_order_value = False
-        config = self.env["res.config.settings"].create(
-            {"l10n_ro_etransport_get_order_value": True}
-        )
+        config = self.env["res.config.settings"].create({"l10n_ro_etransport_get_order_value": True})
         config.execute()
         self.assertTrue(self.env.company.l10n_ro_etransport_get_order_value)
 
@@ -106,9 +102,7 @@ class TestStockPickingWeightLine(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.warehouse = cls.env["stock.warehouse"].search(
-            [("company_id", "=", cls.company.id)], limit=1
-        )
+        cls.warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.company.id)], limit=1)
         cls.product = cls.env["product.product"].create(
             {
                 "name": "Produs Greutate",
@@ -190,9 +184,7 @@ class TestValidateDataNoWeight(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.warehouse = cls.env["stock.warehouse"].search(
-            [("company_id", "=", cls.company.id)], limit=1
-        )
+        cls.warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.company.id)], limit=1)
         cls.product_no_weight = cls.env["product.product"].create(
             {
                 "name": "Produs Fara Greutate",
@@ -269,9 +261,7 @@ class TestComputeWeightLines(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.warehouse = cls.env["stock.warehouse"].search(
-            [("company_id", "=", cls.company.id)], limit=1
-        )
+        cls.warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.company.id)], limit=1)
         cls.product = cls.env["product.product"].create(
             {
                 "name": "Produs Weight Lines",
