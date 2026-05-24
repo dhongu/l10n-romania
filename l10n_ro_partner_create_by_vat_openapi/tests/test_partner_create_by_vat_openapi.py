@@ -178,9 +178,12 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         )
         original_name = partner.name
 
-        with patch(
-            "odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner.urlopen",
-            side_effect=Exception("Connection timeout"),
+        with (
+            patch(
+                "odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner.urlopen",
+                side_effect=Exception("Connection timeout"),
+            ),
+            patch("odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner._logger"),
         ):
             partner.button_get_partner_data_openapi()
 
