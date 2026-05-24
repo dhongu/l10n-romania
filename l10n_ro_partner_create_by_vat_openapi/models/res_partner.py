@@ -36,7 +36,7 @@ class ResPartner(models.Model):
         result = {}
         openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default="False")
 
-        if not openapi_key:
+        if not openapi_key or openapi_key == "False":
             raise UserError(self.env._("Setati openapi_key in parametrii de sistem"))
         headers = {
             "User-Agent": "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)",

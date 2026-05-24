@@ -68,18 +68,11 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         self.assertFalse(result["radiata"])
 
     def test_get_openapi_no_api_key(self):
-        """Test că _get_Openapi nu ridică eroare dacă lipsește cheia (doar loghează)."""
+        """Test că _get_Openapi ridică UserError dacă lipsește openapi_key."""
         self.env["ir.config_parameter"].sudo().set_param("openapi_key", "")
-        # Metoda nu ridică UserError, doar returnează {} sau continuă
-        # (bug în cod: UserError fără raise — testăm că nu crăpă)
         try:
-            with patch(
-                "odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner.urlopen",
-                side_effect=Exception("No connection"),
-            ):
+            with self.assertRaises(UserError):
                 self.partner._get_Openapi("12345678")
-        except Exception as e:
-            _logger.warning("_get_Openapi raised exception: %s", e)
         finally:
             self.env["ir.config_parameter"].sudo().set_param("openapi_key", "test-api-key-123")
 
