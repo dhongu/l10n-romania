@@ -4,6 +4,7 @@
 import logging
 from unittest.mock import patch
 
+from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -34,6 +35,7 @@ class TestCheckPartner(TransactionCase):
             {
                 "move_type": "out_invoice",
                 "partner_id": partner.id,
+                "invoice_date": fields.Date.today(),
                 "invoice_line_ids": [(0, 0, {"product_id": self.product.id, "quantity": 1, "price_unit": 100})],
             }
         )
@@ -94,6 +96,7 @@ class TestCheckPartner(TransactionCase):
             {
                 "move_type": "in_invoice",
                 "partner_id": partner.id,
+                "invoice_date": fields.Date.today(),
                 "invoice_line_ids": [(0, 0, {"product_id": self.product.id, "quantity": 1, "price_unit": 100})],
             }
         )
