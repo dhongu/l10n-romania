@@ -1,7 +1,7 @@
 # © 2025 Terrabit - Dorin Hongu
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-from odoo.tests.common import TransactionCase
 from odoo.tests import tagged
+from odoo.tests.common import TransactionCase
 
 
 @tagged("post_install", "-at_install")
@@ -62,18 +62,26 @@ class TestL10nRoStorno(TransactionCase):
                 "move_type": "entry",
                 "date": date,
                 "line_ids": [
-                    (0, 0, {
-                        "account_id": self.account_activ.id,
-                        "name": "debit line",
-                        "debit": 200.0,
-                        "credit": 0.0,
-                    }),
-                    (0, 0, {
-                        "account_id": self.account_pasiv.id,
-                        "name": "credit line",
-                        "debit": 0.0,
-                        "credit": 200.0,
-                    }),
+                    (
+                        0,
+                        0,
+                        {
+                            "account_id": self.account_activ.id,
+                            "name": "debit line",
+                            "debit": 200.0,
+                            "credit": 0.0,
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "account_id": self.account_pasiv.id,
+                            "name": "credit line",
+                            "debit": 0.0,
+                            "credit": 200.0,
+                        },
+                    ),
                 ],
             }
         )
@@ -82,17 +90,21 @@ class TestL10nRoStorno(TransactionCase):
 
     def _reverse_move(self, move):
         """Helper: create a reversal for a posted move."""
-        reversal = self.env["account.move.reversal"].with_context(
-            active_model="account.move",
-            active_ids=move.ids,
-        ).create({
-            "reason": "Test reversal",
-            "journal_id": self.journal.id,
-        })
-        reversal.reverse_moves()
-        return self.env["account.move"].search(
-            [("reversed_entry_id", "=", move.id)], limit=1
+        reversal = (
+            self.env["account.move.reversal"]
+            .with_context(
+                active_model="account.move",
+                active_ids=move.ids,
+            )
+            .create(
+                {
+                    "reason": "Test reversal",
+                    "journal_id": self.journal.id,
+                }
+            )
         )
+        reversal.reverse_moves()
+        return self.env["account.move"].search([("reversed_entry_id", "=", move.id)], limit=1)
 
     def test_account_l10n_ro_usage_field(self):
         """Test that l10n_ro_usage field is correctly set on accounts."""
