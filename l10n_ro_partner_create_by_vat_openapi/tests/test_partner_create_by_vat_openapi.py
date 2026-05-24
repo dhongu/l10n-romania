@@ -1,10 +1,13 @@
 # © 2025 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+import logging
 from unittest.mock import MagicMock, patch
 
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+
+_logger = logging.getLogger(__name__)
 
 
 @tagged("post_install", "-at_install")
@@ -49,6 +52,7 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         mock_response.read.return_value = str(mock_response_data).replace("'", '"').encode()
 
         import json
+
         mock_response.read.return_value = json.dumps(mock_response_data).encode()
 
         with patch(
@@ -73,9 +77,9 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
                 "odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner.urlopen",
                 side_effect=Exception("No connection"),
             ):
-                result = self.partner._get_Openapi("12345678")
-        except Exception:
-            pass
+                self.partner._get_Openapi("12345678")
+        except Exception as e:
+            _logger.warning("_get_Openapi raised exception: %s", e)
         finally:
             self.env["ir.config_parameter"].sudo().set_param("openapi_key", "test-api-key-123")
 
@@ -272,8 +276,8 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         ) as mock_btn:
             try:
                 wizard.do_get_data()
-            except Exception:
-                pass
+            except Exception as e:
+                _logger.warning("do_get_data raised exception: %s", e)
             mock_btn.assert_not_called()
 
     def test_ro_vat_change_onchange(self):
