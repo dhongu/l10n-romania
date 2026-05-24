@@ -17,6 +17,7 @@
         "views/message_spv_view.xml",
     ],
     "images": ["static/description/main_screenshot.png"],
+    "test": ["tests/test_message_spv_purchase.py"],
     "development_status": "Beta",
     "maintainers": ["dhongu"],
     "extra_buy": True,
