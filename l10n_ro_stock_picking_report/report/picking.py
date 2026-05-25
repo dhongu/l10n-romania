@@ -104,6 +104,7 @@ class ReportPickingReception(models.AbstractModel):
 
         value = 0
         quantity = 0
+        unit_cost = 0.0
         for valuation in move.stock_valuation_layer_ids:
             if valuation.l10n_ro_valued_type == "internal_transfer" and not valuation.account_move_id:
                 continue
@@ -111,8 +112,10 @@ class ReportPickingReception(models.AbstractModel):
                 continue
             value += valuation.value
             quantity += valuation.quantity
+            if not unit_cost and valuation.unit_cost:
+                unit_cost = valuation.unit_cost
         if move.stock_valuation_layer_ids:
-            res["price"] = value / (quantity or 1)
+            res["price"] = value / quantity if quantity else unit_cost
 
         currency = move.company_id.currency_id
 
