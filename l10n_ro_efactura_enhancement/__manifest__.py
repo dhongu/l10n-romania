@@ -4,7 +4,7 @@
 
 {
     "name": "eFactura Enhancement",
-    "version": "19.0.0.3.5",
+    "version": "19.0.0.3.7",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "summary": "eFactura Enhancement",
@@ -13,6 +13,8 @@
     "depends": [
         "l10n_ro_edi",
         "l10n_ro_config",
+        "spreadsheet_dashboard",
+        "l10n_ro_message_spv",
         "account_edi_ubl_cii",
         "spreadsheet_dashboard_account",
         # "l10n_ro_efactura",
@@ -21,10 +23,9 @@
     # "price": 25.00,
     # "currency": "EUR",
     "data": [
-        "security/ir.model.access.csv",
+        # "security/ir.model.access.csv",
         "data/ir_config_parameter.xml",
-        # "data/efactura_spreadsheet_dashboard.xml",
-        # "wizard/account_move_send_views.xml",
+        "data/efactura_spreadsheet_dashboard.xml",
         "data/ir_cron.xml",
         "data/server_action.xml",
         "views/account_move.xml",
