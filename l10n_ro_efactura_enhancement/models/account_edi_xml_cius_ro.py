@@ -38,7 +38,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         # New helper: put default street if not present
         res = super()._get_address_node(vals)
         if not res["cbc:StreetName"]["_text"]:
-            res["cbc:StreetName"] = ({"_text": "Principala"},)
+            res["cbc:StreetName"] = {"_text": "Principala"}
         return res
 
     def _get_partner_party_vals(self, partner, role):
@@ -401,7 +401,7 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         return res
 
     def _ubl_add_accounting_supplier_party_legal_entity_nodes(self, vals):
-        res = super()._ubl_add_accounting_supplier_party_tax_scheme_nodes(vals)
+        res = super()._ubl_add_accounting_supplier_party_legal_entity_nodes(vals)
         if (
             vals.get("party_node", {}).get("cac:PartyTaxScheme", {})
             and vals.get("party_vals").get("partner")

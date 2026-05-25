@@ -8,6 +8,8 @@ The l10n_ro_efactura_enhancement module extends the standard Romanian e-Invoicin
 - **Automated e-Invoice Operations**:
     - Cron job for **automatic sending** of posted invoices to SPV.
     - Cron job for **fetching status** updates from SPV for sent invoices.
+    - **Server action "Trimite in SPV"**: Allows sending selected invoices directly to SPV from the invoice list view, without triggering email sending.
+    - **Configuration option**: A setting in the Accounting configuration page controls whether the automatic SPV cron job suppresses email sending (sends only to SPV).
 - **Data Truncation and Sanitization**:
     - Truncates product names to 100 characters and descriptions to 200 characters to ensure compliance with UBL standards.
     - Truncates notes to 300 characters.

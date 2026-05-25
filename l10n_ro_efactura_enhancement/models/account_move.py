@@ -77,7 +77,10 @@ class AccountMove(models.Model):
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
-            domain = [("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed")]
+            domain = [
+                ("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed"),
+                ("company_id", "=", company.id),
+            ]
             invoice_sending_failed = self.search(domain)
             invoices_name = invoice_sending_failed.mapped("name")
             _logger.info(f"❌ Invoice sending failed: {invoices_name}")
@@ -108,24 +111,33 @@ class AccountMove(models.Model):
                 _logger.info("🔁 More invoices to send to SPV, retriggering cron...")
 
             if invoices:
-                partner_ids = invoices.mapped("partner_id")
-                partner_ids.write({"invoice_sending_method": "manual"})
                 invoices_name = invoices.mapped("name")
                 _logger.info(f"📨 Sending invoices to SPV: {invoices_name}")
                 _logger.info(f"Count of invoices to send in SPV: {len(invoices)}")
 
-                composer_vals = {
-                    "move_ids": invoices.ids,
-                }
-
-                composer = self.env["account.move.send.batch.wizard"].sudo().create(composer_vals)
-                composer.action_send_and_print()
+                sending_methods = {"manual"} if company.l10n_ro_spv_cron_no_email else None
+                kwargs = {"sending_methods": sending_methods} if sending_methods else {}
+                self.env["account.move.send"]._generate_and_send_invoices(
+                    invoices,
+                    **kwargs,
+                )
 
             if need_retrigger:
                 at = fields.Datetime.now() + timedelta(minutes=5)
                 # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
                 _logger.info("⏳ Retrigger cron scheduled in 5 minutes")
                 self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
+
+    def action_send_to_spv_only(self):
+        """Trimite facturile doar in SPV, fara email."""
+        invoices = self.filtered(lambda m: m.move_type in ("out_invoice", "out_refund") and m.state == "posted")
+        if not invoices:
+            raise UserError(_("Nu exista facturi confirmate selectate pentru trimitere in SPV."))
+
+        self.env["account.move.send"]._generate_and_send_invoices(
+            invoices,
+            sending_methods={"manual"},
+        )
 
     def _l10n_ro_edi_send_invoice(self, xml_data):
         return super(AccountMove, self.with_context(active_id=self.id))._l10n_ro_edi_send_invoice(xml_data)
