@@ -21,7 +21,6 @@
     # "price": 25.00,
     # "currency": "EUR",
     "data": [
-        "security/ir.model.access.csv",
         "data/ir_config_parameter.xml",
         # "data/efactura_spreadsheet_dashboard.xml",
         # "wizard/account_move_send_views.xml",
