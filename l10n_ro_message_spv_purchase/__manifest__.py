@@ -18,7 +18,7 @@
     ],
     "images": ["static/description/main_screenshot.png"],
     "test": ["tests/test_message_spv_purchase.py"],
-    "development_status": "Beta",
+    "development_status": "Production/Stable",
     "maintainers": ["dhongu"],
     "extra_buy": True,
 }
