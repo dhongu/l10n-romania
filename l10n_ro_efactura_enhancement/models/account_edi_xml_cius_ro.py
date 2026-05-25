@@ -131,16 +131,17 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         line_name = line.name or ""
         if line_name:
             product = line.product_id
-            if product and product.display_name in line.name:
-                if line.name != product.display_name:
-                    return line_name.replace(product.display_name, "", 1).strip()
+            product_name = product.display_name or product.name or ""
+            if product and product_name and product_name in line_name:
+                if line_name != product_name:
+                    return line_name.replace(product_name, "", 1).strip()
                 else:
                     return line_name
             else:
                 return line_name
         else:
             if line.product_id:
-                return line.product_id.name
+                return line.product_id.name or ""
             else:
                 return line_name
 
