@@ -115,7 +115,7 @@ class ReportPickingReception(models.AbstractModel):
             if not unit_cost and valuation.unit_cost:
                 unit_cost = valuation.unit_cost
         if move.stock_valuation_layer_ids:
-            res["price"] = value / quantity if quantity else unit_cost
+            res["price"] = (value / quantity if quantity else 0.0) or unit_cost
 
         currency = move.company_id.currency_id
 

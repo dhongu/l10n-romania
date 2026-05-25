@@ -235,3 +235,64 @@ class TestL10nRoStockPickingReport(TransactionCase):
         html = self._render_report_html("l10n_ro_stock_picking_report.action_report_c_recep_sale_price", wiz)
         self.assertIn("Sale price", html)
         self.assertIn("Product", html)
+
+    # -----------------------------
+    # Tests for internal_transit_out unit_cost fix
+    # -----------------------------
+    def test_get_line_internal_transit_out_uses_unit_cost(self):
+        """_get_line trebuie sa foloseasca unit_cost cand SVL are value=0 (internal_transit_out)."""
+        picking = self._create_picking(self.picking_type_int, qty=2.0)
+        move = picking.move_ids[:1]
+
+        move.stock_valuation_layer_ids.sudo().unlink()
+
+        unit_cost = 5.0
+        self.env["stock.valuation.layer"].sudo().create(
+            {
+                "product_id": self.product.id,
+                "quantity": 2.0,
+                "value": 0.0,
+                "unit_cost": unit_cost,
+                "l10n_ro_valued_type": "internal_transit_out",
+                "stock_move_id": move.id,
+                "company_id": self.env.company.id,
+            }
+        )
+
+        report_model = self.env["report.abstract_report.reception_report"]
+        res = report_model._get_line(move)
+
+        self.assertAlmostEqual(
+            res["price"],
+            unit_cost,
+            places=2,
+            msg="_get_line trebuie sa foloseasca unit_cost=5.0 cand value=0 (internal_transit_out)",
+        )
+
+    def test_get_line_normal_svl_price_not_affected(self):
+        """SVL normale (value>0) trebuie sa foloseasca value/quantity, nu unit_cost."""
+        picking = self._create_picking(self.picking_type_in, qty=2.0, partner=self.partner_supplier)
+        move = picking.move_ids[:1]
+
+        move.stock_valuation_layer_ids.sudo().unlink()
+
+        self.env["stock.valuation.layer"].sudo().create(
+            {
+                "product_id": self.product.id,
+                "quantity": 2.0,
+                "value": 20.0,
+                "unit_cost": 10.0,
+                "stock_move_id": move.id,
+                "company_id": self.env.company.id,
+            }
+        )
+
+        report_model = self.env["report.abstract_report.reception_report"]
+        res = report_model._get_line(move)
+
+        self.assertAlmostEqual(
+            res["price"],
+            10.0,  # value / quantity = 20.0 / 2.0
+            places=2,
+            msg="_get_line trebuie sa foloseasca value/quantity=10.0 pentru SVL normale",
+        )
