@@ -78,14 +78,6 @@ class AccountMove(models.Model):
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
             domain = [
-                ("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed"),
-                ("company_id", "=", company.id),
-            ]
-            invoice_sending_failed = self.search(domain)
-            invoices_name = invoice_sending_failed.mapped("name")
-            _logger.info(f"❌ Invoice sending failed: {invoices_name}")
-
-            domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
                 ("date", "<", fields.Date.today() - timedelta(days=delay_days)),
@@ -94,8 +86,6 @@ class AccountMove(models.Model):
                 ("l10n_ro_edi_state", "=", False),
                 ("company_id", "=", company.id),
             ]
-            if invoice_sending_failed:
-                domain.append(("id", "not in", invoice_sending_failed.ids))
 
             invoices = self.search(domain, limit=limit + 1, order="date desc")
             invoices_name = invoices.mapped("name")
