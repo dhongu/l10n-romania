@@ -37,7 +37,7 @@
         "views/efactura_dashboard_views.xml",
     ],
     "images": ["static/description/main_screenshot.png"],
-    "development_status": "Mature",
+    "development_status": "Production/Stable",
     "maintainers": ["dhongu"],
     "extra_buy": True,
 }
