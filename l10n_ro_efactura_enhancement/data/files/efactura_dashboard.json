@@ -1,315 +1,155 @@
 {
-  "version": 16,
+  "version": "18.5.10",
   "sheets": [
     {
-      "id": "dashboard_sheet",
-      "name": "eFactura",
-      "isVisible": true,
+      "id": "dashboard",
+      "name": "eFactura Messages",
+      "colNumber": 20,
+      "rowNumber": 40,
+      "cols": {
+        "0": { "size": 180 },
+        "1": { "size": 10 },
+        "2": { "size": 180 },
+        "3": { "size": 10 },
+        "4": { "size": 180 },
+        "5": { "size": 10 },
+        "6": { "size": 180 },
+        "7": { "size": 10 },
+        "8": { "size": 180 }
+      },
+      "rows": {
+        "6": { "size": 30 },
+        "12": { "size": 30 },
+        "18": { "size": 30 }
+      },
+      "cells": {
+        "A1": "Yesterday",
+        "A10": "Last 7 Days",
+        "A20": "Last 30 Days",
+        "A7": "[View Draft](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -1d\"],[\"date\",\"<\",\"today\"],[\"state\",\"=\",\"draft\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "C7": "[View Downloaded](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -1d\"],[\"date\",\"<\",\"today\"],[\"state\",\"=\",\"downloaded\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "E7": "[View Invoice](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -1d\"],[\"date\",\"<\",\"today\"],[\"state\",\"=\",\"invoice\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "G7": "[View Error](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -1d\"],[\"date\",\"<\",\"today\"],[\"state\",\"=\",\"error\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "I7": "[View Done](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -1d\"],[\"date\",\"<\",\"today\"],[\"state\",\"=\",\"done\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "A13": "[View Draft](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -7d\"],[\"state\",\"=\",\"draft\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "C13": "[View Downloaded](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -7d\"],[\"state\",\"=\",\"downloaded\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "E13": "[View Invoice](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -7d\"],[\"state\",\"=\",\"invoice\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "G13": "[View Error](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -7d\"],[\"state\",\"=\",\"error\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "I13": "[View Done](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -7d\"],[\"state\",\"=\",\"done\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "A19": "[View Draft](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -30d\"],[\"state\",\"=\",\"draft\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "C19": "[View Downloaded](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -30d\"],[\"state\",\"=\",\"downloaded\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "E19": "[View Invoice](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -30d\"],[\"state\",\"=\",\"invoice\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "G19": "[View Error](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -30d\"],[\"state\",\"=\",\"error\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})",
+        "I19": "[View Done](odoo://view/{\"viewType\":\"list\",\"action\":{\"domain\":[[\"date\",\">=\",\"today -30d\"],[\"state\",\"=\",\"done\"]],\"context\":{},\"modelName\":\"l10n.ro.message.spv\",\"views\":[[false,\"list\"],[false,\"form\"]]}})"
+      },
+      "styles": {
+        "A1": {"bold": true, "fontSize": 14},
+        "A10": {"bold": true, "fontSize": 14},
+        "A20": {"bold": true, "fontSize": 14},
+        "A7,C7,E7,G7,I7": {"align": "center", "textColor": "#01666B"},
+        "A13,C13,E13,G13,I13": {"align": "center", "textColor": "#01666B"},
+        "A19,C19,E19,G19,I19": {"align": "center", "textColor": "#01666B"}
+      },
       "figures": [
-        {
-          "id": "sc_to_send",
-          "width": 220,
-          "height": 120,
-          "tag": "chart",
-          "data": {
-            "type": "scorecard",
-            "title": {
-              "text": "De trimis",
-              "color": "#434343",
-              "bold": true
-            },
-            "background": "#FFF3CD",
-            "keyValue": "Data!B1",
-            "baselineMode": "text",
-            "baselineColorDown": "#DC6965",
-            "baselineColorUp": "#00A04A",
-            "humanize": false,
-            "chartId": "sc_to_send"
-          },
-          "offset": {
-            "x": 0,
-            "y": 10
-          },
-          "col": 0,
-          "row": 0
-        },
-        {
-          "id": "sc_sent",
-          "width": 220,
-          "height": 120,
-          "tag": "chart",
-          "data": {
-            "type": "scorecard",
-            "title": {
-              "text": "Trimise (in asteptare)",
-              "color": "#434343",
-              "bold": true
-            },
-            "background": "#D1ECF1",
-            "keyValue": "Data!B2",
-            "baselineMode": "text",
-            "baselineColorDown": "#DC6965",
-            "baselineColorUp": "#00A04A",
-            "humanize": false,
-            "chartId": "sc_sent"
-          },
-          "offset": {
-            "x": 230,
-            "y": 10
-          },
-          "col": 0,
-          "row": 0
-        },
-        {
-          "id": "sc_not_indexed",
-          "width": 220,
-          "height": 120,
-          "tag": "chart",
-          "data": {
-            "type": "scorecard",
-            "title": {
-              "text": "Neindexate",
-              "color": "#434343",
-              "bold": true
-            },
-            "background": "#E2E3E5",
-            "keyValue": "Data!B3",
-            "baselineMode": "text",
-            "baselineColorDown": "#DC6965",
-            "baselineColorUp": "#00A04A",
-            "humanize": false,
-            "chartId": "sc_not_indexed"
-          },
-          "offset": {
-            "x": 460,
-            "y": 10
-          },
-          "col": 0,
-          "row": 0
-        },
-        {
-          "id": "sc_validated",
-          "width": 220,
-          "height": 120,
-          "tag": "chart",
-          "data": {
-            "type": "scorecard",
-            "title": {
-              "text": "Validate",
-              "color": "#434343",
-              "bold": true
-            },
-            "background": "#D4EDDA",
-            "keyValue": "Data!B4",
-            "baselineMode": "text",
-            "baselineColorDown": "#DC6965",
-            "baselineColorUp": "#00A04A",
-            "humanize": false,
-            "chartId": "sc_validated"
-          },
-          "offset": {
-            "x": 690,
-            "y": 10
-          },
-          "col": 0,
-          "row": 0
-        },
-        {
-          "id": "sc_refused",
-          "width": 220,
-          "height": 120,
-          "tag": "chart",
-          "data": {
-            "type": "scorecard",
-            "title": {
-              "text": "Refuzate",
-              "color": "#434343",
-              "bold": true
-            },
-            "background": "#F8D7DA",
-            "keyValue": "Data!B5",
-            "baselineMode": "text",
-            "baselineColorDown": "#DC6965",
-            "baselineColorUp": "#00A04A",
-            "humanize": false,
-            "chartId": "sc_refused"
-          },
-          "offset": {
-            "x": 920,
-            "y": 10
-          },
-          "col": 0,
-          "row": 0
-        },
-        {
-          "id": "sc_error",
-          "width": 220,
-          "height": 120,
-          "tag": "chart",
-          "data": {
-            "type": "scorecard",
-            "title": {
-              "text": "Eroare trimitere",
-              "color": "#434343",
-              "bold": true
-            },
-            "background": "#F8D7DA",
-            "keyValue": "Data!B6",
-            "baselineMode": "text",
-            "baselineColorDown": "#DC6965",
-            "baselineColorUp": "#00A04A",
-            "humanize": false,
-            "chartId": "sc_error"
-          },
-          "offset": {
-            "x": 1150,
-            "y": 10
-          },
-          "col": 0,
-          "row": 0
-        },
-        {
-          "id": "chart_bar",
-          "width": 1380,
-          "height": 350,
-          "tag": "chart",
-          "data": {
-            "type": "odoo_bar",
-            "title": {
-              "text": "Facturi eFactura pe stare EDI"
-            },
-            "background": "#FFFFFF",
-            "legendPosition": "top",
-            "metaData": {
-              "groupBy": ["l10n_ro_edi_state"],
-              "measure": "__count",
-              "order": null,
-              "resModel": "account.move",
-              "mode": "bar"
-            },
-            "searchParams": {
-              "comparison": null,
-              "context": {},
-              "domain": [
-                ["move_type", "in", ["out_invoice", "out_refund"]],
-                ["state", "=", "posted"],
-                ["l10n_ro_edi_state", "!=", false]
-              ],
-              "groupBy": ["l10n_ro_edi_state"],
-              "orderBy": []
-            },
-            "dataSets": [{}],
-            "stacked": false,
-            "chartId": "chart_bar",
-            "fieldMatching": {}
-          },
-          "offset": {
-            "x": 0,
-            "y": 150
-          },
-          "col": 0,
-          "row": 0
-        }
-      ],
-      "cells": {},
-      "colNumber": 26,
-      "rowNumber": 100
+        {"id": "y1", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 0, "row": 0, "data": {"type": "scorecard", "title": {"text": "Draft (Yesterday)"}, "keyValue": "Data!A1", "background": "#EFF6FF"}},
+        {"id": "y2", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 2, "row": 0, "data": {"type": "scorecard", "title": {"text": "Downloaded (Yesterday)"}, "keyValue": "Data!B1", "background": "#EFF6FF"}},
+        {"id": "y3", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 4, "row": 0, "data": {"type": "scorecard", "title": {"text": "Invoice (Yesterday)"}, "keyValue": "Data!C1", "background": "#EFF6FF"}},
+        {"id": "y4", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 6, "row": 0, "data": {"type": "scorecard", "title": {"text": "Error (Yesterday)"}, "keyValue": "Data!D1", "background": "#FEF2F2"}},
+        {"id": "y5", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 8, "row": 0, "data": {"type": "scorecard", "title": {"text": "Done (Yesterday)"}, "keyValue": "Data!E1", "background": "#F0FDF4"}},
+        {"id": "w1", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 0, "row": 0, "data": {"type": "scorecard", "title": {"text": "Draft (7D)"}, "keyValue": "Data!A2", "background": "#EFF6FF"}},
+        {"id": "w2", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 2, "row": 0, "data": {"type": "scorecard", "title": {"text": "Downloaded (7D)"}, "keyValue": "Data!B2", "background": "#EFF6FF"}},
+        {"id": "w3", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 4, "row": 0, "data": {"type": "scorecard", "title": {"text": "Invoice (7D)"}, "keyValue": "Data!C2", "background": "#EFF6FF"}},
+        {"id": "w4", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 6, "row": 0, "data": {"type": "scorecard", "title": {"text": "Error (7D)"}, "keyValue": "Data!D2", "background": "#FEF2F2"}},
+        {"id": "w5", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 8, "row": 0, "data": {"type": "scorecard", "title": {"text": "Done (7D)"}, "keyValue": "Data!E2", "background": "#F0FDF4"}},
+        {"id": "m1", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 0, "row": 0, "data": {"type": "scorecard", "title": {"text": "Draft (30D)"}, "keyValue": "Data!A3", "background": "#EFF6FF"}},
+        {"id": "m2", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 2, "row": 0, "data": {"type": "scorecard", "title": {"text": "Downloaded (30D)"}, "keyValue": "Data!B3", "background": "#EFF6FF"}},
+        {"id": "m3", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 4, "row": 0, "data": {"type": "scorecard", "title": {"text": "Invoice (30D)"}, "keyValue": "Data!C3", "background": "#EFF6FF"}},
+        {"id": "m4", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 6, "row": 0, "data": {"type": "scorecard", "title": {"text": "Error (30D)"}, "keyValue": "Data!D3", "background": "#FEF2F2"}},
+        {"id": "m5", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 8, "row": 0, "data": {"type": "scorecard", "title": {"text": "Done (30D)"}, "keyValue": "Data!E3", "background": "#F0FDF4"}}
+      ]
     },
     {
-      "id": "data_sheet",
+      "id": "Data",
       "name": "Data",
       "isVisible": false,
-      "figures": [],
+      "colNumber": 20,
+      "rowNumber": 20,
       "cells": {
-        "A1": {
-          "content": "De trimis"
-        },
-        "A2": {
-          "content": "Trimise"
-        },
-        "A3": {
-          "content": "Neindexate"
-        },
-        "A4": {
-          "content": "Validate"
-        },
-        "A5": {
-          "content": "Refuzate"
-        },
-        "A6": {
-          "content": "Eroare trimitere"
-        },
-        "B1": {
-          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",FALSE),0)"
-        },
-        "B2": {
-          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_sent\"),0)"
-        },
-        "B3": {
-          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_not_indexed\"),0)"
-        },
-        "B4": {
-          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_validated\"),0)"
-        },
-        "B5": {
-          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_refused\"),0)"
-        },
-        "B6": {
-          "content": "=IFERROR(PIVOT.VALUE(1,\"__count\",\"l10n_ro_edi_state\",\"invoice_sending_failed\"),0)"
-        }
-      },
-      "colNumber": 26,
-      "rowNumber": 100
+        "A1": "=IFERROR(PIVOT.VALUE(\"1\",\"__count\",\"state\",\"draft\"),0)",
+        "B1": "=IFERROR(PIVOT.VALUE(\"1\",\"__count\",\"state\",\"downloaded\"),0)",
+        "C1": "=IFERROR(PIVOT.VALUE(\"1\",\"__count\",\"state\",\"invoice\"),0)",
+        "D1": "=IFERROR(PIVOT.VALUE(\"1\",\"__count\",\"state\",\"error\"),0)",
+        "E1": "=IFERROR(PIVOT.VALUE(\"1\",\"__count\",\"state\",\"done\"),0)",
+        "A2": "=IFERROR(PIVOT.VALUE(\"2\",\"__count\",\"state\",\"draft\"),0)",
+        "B2": "=IFERROR(PIVOT.VALUE(\"2\",\"__count\",\"state\",\"downloaded\"),0)",
+        "C2": "=IFERROR(PIVOT.VALUE(\"2\",\"__count\",\"state\",\"invoice\"),0)",
+        "D2": "=IFERROR(PIVOT.VALUE(\"2\",\"__count\",\"state\",\"error\"),0)",
+        "E2": "=IFERROR(PIVOT.VALUE(\"2\",\"__count\",\"state\",\"done\"),0)",
+        "A3": "=IFERROR(PIVOT.VALUE(\"3\",\"__count\",\"state\",\"draft\"),0)",
+        "B3": "=IFERROR(PIVOT.VALUE(\"3\",\"__count\",\"state\",\"downloaded\"),0)",
+        "C3": "=IFERROR(PIVOT.VALUE(\"3\",\"__count\",\"state\",\"invoice\"),0)",
+        "D3": "=IFERROR(PIVOT.VALUE(\"3\",\"__count\",\"state\",\"error\"),0)",
+        "E3": "=IFERROR(PIVOT.VALUE(\"3\",\"__count\",\"state\",\"done\"),0)"
+      }
     }
   ],
-  "styles": {},
-  "formats": {},
-  "borders": {},
-  "revisionId": "START_REVISION",
-  "uniqueFigureIds": true,
-  "settings": {
-    "locale": {
-      "name": "Romanian (Romania)",
-      "code": "ro_RO",
-      "thousandsSeparator": ".",
-      "decimalSeparator": ",",
-      "dateFormat": "DD/MM/YYYY",
-      "timeFormat": "HH:mm:ss",
-      "formulaArgSeparator": ";"
-    }
-  },
   "pivots": {
     "1": {
       "type": "ODOO",
       "id": "1",
       "formulaId": "1",
-      "name": "eFactura State",
-      "model": "account.move",
-      "domain": [
-        ["move_type", "in", ["out_invoice", "out_refund"]],
-        ["state", "=", "posted"]
-      ],
+      "name": "Yesterday",
+      "model": "l10n.ro.message.spv",
+      "domain": [["date", ">=", "today -1d"], ["date", "<", "today"]],
       "context": {},
-      "measures": [
-        {
-          "id": "__count",
-          "fieldName": "__count",
-          "userDefinedName": "Count"
-        }
-      ],
+      "measures": [{"id": "__count", "fieldName": "__count"}],
       "columns": [],
-      "rows": [
-        {
-          "fieldName": "l10n_ro_edi_state"
-        }
-      ],
+      "rows": [{"fieldName": "state"}],
+      "fieldMatching": {},
+      "sortedColumn": null
+    },
+    "2": {
+      "type": "ODOO",
+      "id": "2",
+      "formulaId": "2",
+      "name": "Last 7 Days",
+      "model": "l10n.ro.message.spv",
+      "domain": [["date", ">=", "today -7d"]],
+      "context": {},
+      "measures": [{"id": "__count", "fieldName": "__count"}],
+      "columns": [],
+      "rows": [{"fieldName": "state"}],
+      "fieldMatching": {},
+      "sortedColumn": null
+    },
+    "3": {
+      "type": "ODOO",
+      "id": "3",
+      "formulaId": "3",
+      "name": "Last 30 Days",
+      "model": "l10n.ro.message.spv",
+      "domain": [["date", ">=", "today -30d"]],
+      "context": {},
+      "measures": [{"id": "__count", "fieldName": "__count"}],
+      "columns": [],
+      "rows": [{"fieldName": "state"}],
       "fieldMatching": {},
       "sortedColumn": null
     }
   },
-  "pivotNextId": 2,
+  "pivotNextId": 4,
   "globalFilters": [],
   "lists": {},
   "listNextId": 1,
-  "chartOdooMenusReferences": {}
+  "settings": {
+    "locale": {
+      "name": "English (US)",
+      "code": "en_US",
+      "thousandsSeparator": ",",
+      "decimalSeparator": ".",
+      "dateFormat": "mm/dd/yyyy",
+      "timeFormat": "hh:mm:ss",
+      "formulaArgSeparator": ","
+    }
+  }
 }
