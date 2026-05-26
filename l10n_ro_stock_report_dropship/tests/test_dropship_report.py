@@ -18,7 +18,7 @@ class TestDropshipReport(TransactionCase):
         )
 
         cls.account_valuation = cls.env["account.account"].search(
-            [("code", "=", "371000"), ("company_id", "=", cls.env.company.id)], limit=1
+            [("code", "=", "371000"), ("company_ids", "in", cls.env.company.ids)], limit=1
         )
         if not cls.account_valuation:
             cls.account_valuation = cls.env["account.account"].create(
@@ -26,7 +26,7 @@ class TestDropshipReport(TransactionCase):
                     "name": "Marfa",
                     "code": "371000",
                     "account_type": "asset_current",
-                    "company_id": cls.env.company.id,
+                    "company_ids": [(6, 0, cls.env.company.ids)],
                 }
             )
 
