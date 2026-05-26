@@ -78,8 +78,7 @@ class TestDropshipReport(TransactionCase):
 
         # Enable Multi-Step Routes for the user to see route_id on SO lines
         cls.env.user.write({"groups_id": [(4, cls.env.ref("stock.group_adv_location").id)]})
-        # Clear the cache to ensure the group change is picked up
-        cls.env.user.clear_caches()
+        cls.env.invalidate_all()
 
     def test_dropship_stock_report(self):
         # Create Sale Order with dropship route
@@ -98,13 +97,16 @@ class TestDropshipReport(TransactionCase):
         so.action_confirm()
 
         # Check that a Purchase Order was created
-        po = self.env["purchase.order"].search([("origin", "=", so.name)])
+        po = self.env["purchase.order"].search(
+            [("partner_id", "=", self.vendor.id), ("origin", "=", so.name)]
+        )
         self.assertTrue(po, "Purchase Order should be created for dropship")
         po.button_confirm()
 
+        self.assertTrue(po.picking_ids, "Dropship picking should be created after PO confirmation")
         # Validate the dropship picking
         picking = po.picking_ids[0]
-        self.assertEqual(picking.picking_type_id, self.env.ref("stock_dropshipping.picking_type_dropship"))
+        self.assertEqual(picking.picking_type_id.code, "dropship")
 
         # We need to make sure the SVL is created.
         # In Odoo 18, we can use the following to validate:
