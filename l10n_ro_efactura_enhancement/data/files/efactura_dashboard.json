@@ -7,20 +7,20 @@
       "colNumber": 20,
       "rowNumber": 40,
       "cols": {
-        "0": { "size": 180 },
-        "1": { "size": 10 },
-        "2": { "size": 180 },
-        "3": { "size": 10 },
-        "4": { "size": 180 },
-        "5": { "size": 10 },
-        "6": { "size": 180 },
-        "7": { "size": 10 },
-        "8": { "size": 180 }
+        "0": {"size": 180},
+        "1": {"size": 10},
+        "2": {"size": 180},
+        "3": {"size": 10},
+        "4": {"size": 180},
+        "5": {"size": 10},
+        "6": {"size": 180},
+        "7": {"size": 10},
+        "8": {"size": 180}
       },
       "rows": {
-        "6": { "size": 30 },
-        "12": { "size": 30 },
-        "18": { "size": 30 }
+        "6": {"size": 30},
+        "12": {"size": 30},
+        "18": {"size": 30}
       },
       "cells": {
         "A1": "Yesterday",
@@ -51,21 +51,211 @@
         "A19,C19,E19,G19,I19": {"align": "center", "textColor": "#01666B"}
       },
       "figures": [
-        {"id": "y1", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 0, "row": 0, "data": {"type": "scorecard", "title": {"text": "Draft (Yesterday)"}, "keyValue": "Data!A1", "background": "#EFF6FF"}},
-        {"id": "y2", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 2, "row": 0, "data": {"type": "scorecard", "title": {"text": "Downloaded (Yesterday)"}, "keyValue": "Data!B1", "background": "#EFF6FF"}},
-        {"id": "y3", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 4, "row": 0, "data": {"type": "scorecard", "title": {"text": "Invoice (Yesterday)"}, "keyValue": "Data!C1", "background": "#EFF6FF"}},
-        {"id": "y4", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 6, "row": 0, "data": {"type": "scorecard", "title": {"text": "Error (Yesterday)"}, "keyValue": "Data!D1", "background": "#FEF2F2"}},
-        {"id": "y5", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 40}, "col": 8, "row": 0, "data": {"type": "scorecard", "title": {"text": "Done (Yesterday)"}, "keyValue": "Data!E1", "background": "#F0FDF4"}},
-        {"id": "w1", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 0, "row": 0, "data": {"type": "scorecard", "title": {"text": "Draft (7D)"}, "keyValue": "Data!A2", "background": "#EFF6FF"}},
-        {"id": "w2", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 2, "row": 0, "data": {"type": "scorecard", "title": {"text": "Downloaded (7D)"}, "keyValue": "Data!B2", "background": "#EFF6FF"}},
-        {"id": "w3", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 4, "row": 0, "data": {"type": "scorecard", "title": {"text": "Invoice (7D)"}, "keyValue": "Data!C2", "background": "#EFF6FF"}},
-        {"id": "w4", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 6, "row": 0, "data": {"type": "scorecard", "title": {"text": "Error (7D)"}, "keyValue": "Data!D2", "background": "#FEF2F2"}},
-        {"id": "w5", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 180}, "col": 8, "row": 0, "data": {"type": "scorecard", "title": {"text": "Done (7D)"}, "keyValue": "Data!E2", "background": "#F0FDF4"}},
-        {"id": "m1", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 0, "row": 0, "data": {"type": "scorecard", "title": {"text": "Draft (30D)"}, "keyValue": "Data!A3", "background": "#EFF6FF"}},
-        {"id": "m2", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 2, "row": 0, "data": {"type": "scorecard", "title": {"text": "Downloaded (30D)"}, "keyValue": "Data!B3", "background": "#EFF6FF"}},
-        {"id": "m3", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 4, "row": 0, "data": {"type": "scorecard", "title": {"text": "Invoice (30D)"}, "keyValue": "Data!C3", "background": "#EFF6FF"}},
-        {"id": "m4", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 6, "row": 0, "data": {"type": "scorecard", "title": {"text": "Error (30D)"}, "keyValue": "Data!D3", "background": "#FEF2F2"}},
-        {"id": "m5", "tag": "chart", "width": 180, "height": 100, "offset": {"x": 0, "y": 320}, "col": 8, "row": 0, "data": {"type": "scorecard", "title": {"text": "Done (30D)"}, "keyValue": "Data!E3", "background": "#F0FDF4"}}
+        {
+          "id": "y1",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 40},
+          "col": 0,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Draft (Yesterday)"},
+            "keyValue": "Data!A1",
+            "background": "#EFF6FF"
+          }
+        },
+        {
+          "id": "y2",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 40},
+          "col": 2,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Downloaded (Yesterday)"},
+            "keyValue": "Data!B1",
+            "background": "#EFF6FF"
+          }
+        },
+        {
+          "id": "y3",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 40},
+          "col": 4,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Invoice (Yesterday)"},
+            "keyValue": "Data!C1",
+            "background": "#EFF6FF"
+          }
+        },
+        {
+          "id": "y4",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 40},
+          "col": 6,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Error (Yesterday)"},
+            "keyValue": "Data!D1",
+            "background": "#FEF2F2"
+          }
+        },
+        {
+          "id": "y5",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 40},
+          "col": 8,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Done (Yesterday)"},
+            "keyValue": "Data!E1",
+            "background": "#F0FDF4"
+          }
+        },
+        {
+          "id": "w1",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 180},
+          "col": 0,
+          "row": 0,
+          "data": {"type": "scorecard", "title": {"text": "Draft (7D)"}, "keyValue": "Data!A2", "background": "#EFF6FF"}
+        },
+        {
+          "id": "w2",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 180},
+          "col": 2,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Downloaded (7D)"},
+            "keyValue": "Data!B2",
+            "background": "#EFF6FF"
+          }
+        },
+        {
+          "id": "w3",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 180},
+          "col": 4,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Invoice (7D)"},
+            "keyValue": "Data!C2",
+            "background": "#EFF6FF"
+          }
+        },
+        {
+          "id": "w4",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 180},
+          "col": 6,
+          "row": 0,
+          "data": {"type": "scorecard", "title": {"text": "Error (7D)"}, "keyValue": "Data!D2", "background": "#FEF2F2"}
+        },
+        {
+          "id": "w5",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 180},
+          "col": 8,
+          "row": 0,
+          "data": {"type": "scorecard", "title": {"text": "Done (7D)"}, "keyValue": "Data!E2", "background": "#F0FDF4"}
+        },
+        {
+          "id": "m1",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 320},
+          "col": 0,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Draft (30D)"},
+            "keyValue": "Data!A3",
+            "background": "#EFF6FF"
+          }
+        },
+        {
+          "id": "m2",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 320},
+          "col": 2,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Downloaded (30D)"},
+            "keyValue": "Data!B3",
+            "background": "#EFF6FF"
+          }
+        },
+        {
+          "id": "m3",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 320},
+          "col": 4,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Invoice (30D)"},
+            "keyValue": "Data!C3",
+            "background": "#EFF6FF"
+          }
+        },
+        {
+          "id": "m4",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 320},
+          "col": 6,
+          "row": 0,
+          "data": {
+            "type": "scorecard",
+            "title": {"text": "Error (30D)"},
+            "keyValue": "Data!D3",
+            "background": "#FEF2F2"
+          }
+        },
+        {
+          "id": "m5",
+          "tag": "chart",
+          "width": 180,
+          "height": 100,
+          "offset": {"x": 0, "y": 320},
+          "col": 8,
+          "row": 0,
+          "data": {"type": "scorecard", "title": {"text": "Done (30D)"}, "keyValue": "Data!E3", "background": "#F0FDF4"}
+        }
       ]
     },
     {
@@ -100,7 +290,10 @@
       "formulaId": "1",
       "name": "Yesterday",
       "model": "l10n.ro.message.spv",
-      "domain": [["date", ">=", "today -1d"], ["date", "<", "today"]],
+      "domain": [
+        ["date", ">=", "today -1d"],
+        ["date", "<", "today"]
+      ],
       "context": {},
       "measures": [{"id": "__count", "fieldName": "__count"}],
       "columns": [],
