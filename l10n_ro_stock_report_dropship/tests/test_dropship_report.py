@@ -76,6 +76,11 @@ class TestDropshipReport(TransactionCase):
         cls.warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.env.company.id)], limit=1)
         cls.location = cls.warehouse.lot_stock_id
 
+        # Enable Multi-Step Routes for the user to see route_id on SO lines
+        cls.env.user.write({"groups_id": [(4, cls.env.ref("stock.group_adv_location").id)]})
+        # Clear the cache to ensure the group change is picked up
+        cls.env.user.clear_caches()
+
     def test_dropship_stock_report(self):
         # Create Sale Order with dropship route
         so_form = Form(self.env["sale.order"])
@@ -83,8 +88,13 @@ class TestDropshipReport(TransactionCase):
         with so_form.order_line.new() as line:
             line.product_id = self.product
             line.product_uom_qty = 10.0
-            line.route_id = self.dropship_route
         so = so_form.save()
+
+        # Update the route_id directly on the order line.
+        # This bypasses the Form view issue if route_id is missing from the view.
+        # In Odoo 18, it seems route_id might be hidden by default in some views.
+        so.order_line.write({"route_id": self.dropship_route.id})
+
         so.action_confirm()
 
         # Check that a Purchase Order was created
