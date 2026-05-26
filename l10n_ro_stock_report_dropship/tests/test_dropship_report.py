@@ -97,9 +97,7 @@ class TestDropshipReport(TransactionCase):
         so.action_confirm()
 
         # Check that a Purchase Order was created
-        po = self.env["purchase.order"].search(
-            [("partner_id", "=", self.vendor.id), ("origin", "=", so.name)]
-        )
+        po = self.env["purchase.order"].search([("partner_id", "=", self.vendor.id), ("origin", "=", so.name)])
         self.assertTrue(po, "Purchase Order should be created for dropship")
         po.button_confirm()
 
