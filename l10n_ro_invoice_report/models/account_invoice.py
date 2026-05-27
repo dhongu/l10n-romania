@@ -94,7 +94,12 @@ class AccountInvoice(models.Model):
         res = super()._compute_partner_bank_id()
         for move in self:
             # Check for any payment bank set in partner
-            if move.move_type in ["out_invoice", "in_refund"] and move.commercial_partner_id.payment_bank_id:
+            if (
+                move.move_type in ["out_invoice", "in_refund"]
+                and move.commercial_partner_id
+                and move.commercial_partner_id.id
+                and move.commercial_partner_id.payment_bank_id
+            ):
                 move.partner_bank_id = move.commercial_partner_id.payment_bank_id
         return res
 
