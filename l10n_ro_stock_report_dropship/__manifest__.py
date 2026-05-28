@@ -1,6 +1,6 @@
 {
     "name": "Romania - Stock Storage Sheet Dropship",
-    "version": "18.0.0.0.1",
+    "version": "18.0.0.0.2",
     "category": "Inventory/Localizations",
     "summary": "Show dropship valuation in the Romania stock storage sheet report.",
     "author": "Dan Stoica,Terrabit,Odoo Community Association (OCA)",
