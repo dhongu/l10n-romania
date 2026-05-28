@@ -20,8 +20,13 @@ class StorageSheet(models.TransientModel):
             WHERE
                     sm.state = 'done' AND
                     sm.company_id = %(company)s AND
-                    ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
-                     (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))) AND
+                    (
+                      ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                       (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL)))
+                      OR
+                      ((sl_src.usage = 'customer' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                       (sl_dest.usage = 'supplier' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL)))
+                    ) AND
                     date_trunc('day',sm.date) >= %(date_from)s  AND
                     date_trunc('day',sm.date) <= %(date_to)s
             """
@@ -77,6 +82,8 @@ class StorageSheet(models.TransientModel):
             CASE
                 WHEN ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
                       (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))) THEN 'dropship'
+                WHEN ((sl_src.usage = 'customer' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                      (sl_dest.usage = 'supplier' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))) THEN 'dropship'
                 ELSE COALESCE(svl_in.l10n_ro_valued_type, 'indefinite')
             END as valued_type,
             pt.categ_id as categ_id
@@ -95,8 +102,14 @@ class StorageSheet(models.TransientModel):
                      l10n_ro_valued_type='reception_return'))
                     or
                      (svl_in.quantity>=0 and
-                      ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
-                       (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))))
+                      (
+                        ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                         (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL)))
+                        OR
+                        ((sl_src.usage = 'customer' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                         (sl_dest.usage = 'supplier' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL)))
+                      )
+                     )
                     )
                 left join product_product prod on prod.id = sm.product_id
                 left join product_template pt on pt.id = prod.product_tmpl_id
@@ -110,7 +123,9 @@ class StorageSheet(models.TransientModel):
                 (sm.location_dest_id in %(locations)s or
                  sm.location_id in %(locations)s or
                  ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
-                  (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))))
+                  (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))) or
+                 ((sl_src.usage = 'customer' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                  (sl_dest.usage = 'supplier' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))))
             GROUP BY sm.product_id, sm.date,
              sm.reference, sp.partner_id, l10n_ro_account_id,
              svl_in.l10n_ro_invoice_id, am.name, svl_in.l10n_ro_valued_type,
@@ -149,6 +164,8 @@ class StorageSheet(models.TransientModel):
             CASE
                 WHEN ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
                       (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))) THEN 'dropship'
+                WHEN ((sl_src.usage = 'customer' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                      (sl_dest.usage = 'supplier' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))) THEN 'dropship'
                 ELSE COALESCE(svl_out.l10n_ro_valued_type, 'indefinite')
             END as valued_type,
             pt.categ_id as categ_id
@@ -167,8 +184,14 @@ class StorageSheet(models.TransientModel):
                    l10n_ro_valued_type like '%%_return'))
                  or
                   (svl_out.quantity<=0 and
-                   ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
-                    (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))))
+                   (
+                    ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                     (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL)))
+                    OR
+                    ((sl_src.usage = 'customer' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                     (sl_dest.usage = 'supplier' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL)))
+                   )
+                  )
                  )
                 left join product_product prod on prod.id = sm.product_id
                 left join product_template pt on pt.id = prod.product_tmpl_id
@@ -182,7 +205,9 @@ class StorageSheet(models.TransientModel):
                 (sm.location_id in %(locations)s or
                  sm.location_dest_id in %(locations)s or
                  ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
-                  (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))))
+                  (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))) or
+                 ((sl_src.usage = 'customer' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
+                  (sl_dest.usage = 'supplier' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL))))
             GROUP BY sm.product_id, sm.date,
                      sm.reference, sp.partner_id, svl_out.l10n_ro_account_id,
                      svl_out.l10n_ro_invoice_id, am.name, svl_out.l10n_ro_valued_type,
