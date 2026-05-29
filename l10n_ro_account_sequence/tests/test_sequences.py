@@ -28,8 +28,6 @@ class TestL10nRoAccountSequence(TransactionCase):
             }
         )
 
-        self.cash_journal.remove_outstanding_accounts()
-
         self.bank_journal = self.env["account.journal"].create(
             {
                 "name": "Bank RO",
@@ -43,6 +41,34 @@ class TestL10nRoAccountSequence(TransactionCase):
         self.assertTrue(payment.move_id, "Posted payment should have a move_id")
         self.assertTrue(payment.move_id.name and payment.move_id.name != "/", "Move should have a sequence name")
         return payment
+
+    def test_cash_journal_uses_default_account_for_both_payment_directions(self):
+        lines = self.cash_journal.inbound_payment_method_line_ids + self.cash_journal.outbound_payment_method_line_ids
+        self.assertTrue(lines, "Cash journal should provide payment method lines")
+        self.assertTrue(all(line.payment_account_id == self.cash_journal.default_account_id for line in lines))
+
+    def test_cash_journal_realigns_payment_accounts_when_default_account_changes(self):
+        new_account = self.env["account.account"].search(
+            [
+                ("company_ids", "in", self.env.company.id),
+                ("account_type", "=", "asset_cash"),
+                ("id", "!=", self.cash_journal.default_account_id.id),
+            ],
+            limit=1,
+        )
+        if not new_account:
+            new_account = self.env["account.account"].create(
+                {
+                    "name": "Cash RO Secondary",
+                    "code": "531199",
+                    "account_type": "asset_cash",
+                    "company_ids": [(4, self.env.company.id)],
+                }
+            )
+
+        self.cash_journal.write({"default_account_id": new_account.id})
+        lines = self.cash_journal.inbound_payment_method_line_ids + self.cash_journal.outbound_payment_method_line_ids
+        self.assertTrue(all(line.payment_account_id == new_account for line in lines))
 
     def test_prefix_customer_receipt_CH(self):
         payment = self._post_payment(
