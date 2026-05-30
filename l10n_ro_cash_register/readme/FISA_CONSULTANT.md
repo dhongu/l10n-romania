@@ -61,9 +61,17 @@ jurnalul de casă.
 
 ## 5. Unde se găsește în interfață
 
-- **Accounting → Transactions → Cash register**
+- **Contabilitate → Tranzacții → Registrul de casă**
 - direct din jurnalul cash, deoarece dashboard-ul jurnalului redirecționează către registrul de
   casă pentru companiile RO
+
+Jurnalul de casă (din care se accesează registrul):
+
+![Jurnalul de casă](screenshots/01_jurnal_cash.png)
+
+Lista registrelor de casă (un registru pe zi, cu sold inițial și calculat):
+
+![Lista registrelor de casă](screenshots/02_lista_registre.png)
 
 ## 6. Flux de lucru
 
@@ -84,11 +92,16 @@ Butonul **Refresh** recalculează soldurile și liniile asociate.
 
 ### Pasul 3 — Operare din registru
 
-Din formularul registrului sunt disponibile trei acțiuni:
+Din formularul registrului (butoanele **Împrospătare / Încasare / Plată / Operație**) sunt
+disponibile trei acțiuni:
 
-1. **Add Receipt** — deschide fluxul de încasare pe jurnalul și data registrului.
-2. **Add Payment** — deschide fluxul de plată pe jurnalul și data registrului.
-3. **Operation** — deschide wizardul de operațiune casă.
+![Formularul registrului de casă cu solduri și linii](screenshots/03_formular_registru.png)
+
+1. **Încasare (Add Receipt)** — deschide fluxul de încasare pe jurnalul și data registrului.
+2. **Plată (Add Payment)** — deschide fluxul de plată pe jurnalul și data registrului.
+3. **Operație (Operation)** — deschide wizardul de operațiune casă.
+
+![Wizardul de operațiune casă (Depunere / Retragere)](screenshots/04_wizard_operatiune.png)
 
 Wizardul de operațiune casă permite:
 
@@ -123,6 +136,8 @@ Registrul are raport PDF dedicat, cu:
 - total încasări;
 - total plăți;
 - sold final.
+
+![Raportul PDF „Registrul de casă"](screenshots/05_raport_pdf.png)
 
 ## 7. Reguli funcționale importante
 
@@ -174,10 +189,25 @@ Registrul are raport PDF dedicat, cu:
   import bancar.
 - Pentru **plafoane legale de numerar**, sunt necesare reguli suplimentare față de ce există acum.
 
-## 12. Indicații pentru capturi de ecran
+## 12. Capturi de ecran
 
-- [ ] [SCREENSHOT: jurnal cash RO care deschide registrul de casă]
-- [ ] [SCREENSHOT: lista registrelor de casă]
-- [ ] [SCREENSHOT: formular registru cu butoanele Refresh / Add Receipt / Add Payment / Operation]
-- [ ] [SCREENSHOT: wizard Cash Register Operation]
-- [ ] [SCREENSHOT: raport PDF Cash Register]
+Capturile (`readme/screenshots/`) sunt **generate automat** din `tests/test_screenshots.py`
+(mixinul `ScreenshotCase` din `l10n_ro_doc_screenshots`, import defensiv), în **limba română**,
+pe un jurnal de casă seedat cu câteva operațiuni (sold inițial + încasare + plată):
+
+1. `01_jurnal_cash.png` — jurnalul de casă RO.
+2. `02_lista_registre.png` — lista registrelor de casă (un registru/zi, sold inițial și calculat).
+3. `03_formular_registru.png` — formularul registrului cu butoanele Împrospătare / Încasare /
+   Plată / Operație și liniile pe partener.
+4. `04_wizard_operatiune.png` — wizardul de operațiune casă (Depunere / Retragere).
+5. `05_raport_pdf.png` — raportul PDF „Registrul de casă" (sold inițial, mișcări, sold final).
+
+Regenerare:
+
+```bash
+./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_cash_register,l10n_ro_doc_screenshots \
+    --test-tags=fise_screenshots --stop-after-init
+```
+
+> Capturile necesită modulul de tooling `l10n_ro_doc_screenshots` (din suita `l10n_ro_ent`)
+> instalat în baza de date; testul se sare automat dacă lipsește.
