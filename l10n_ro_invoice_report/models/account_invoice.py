@@ -89,18 +89,17 @@ class AccountInvoice(models.Model):
                         item["payment_type"] = payment.payment_type
         return res
 
-    @api.depends("bank_partner_id")
+    @api.depends("bank_partner_id", "commercial_partner_id")
     def _compute_partner_bank_id(self):
         res = super()._compute_partner_bank_id()
         for move in self:
             # Check for any payment bank set in partner
-            if (
-                move.move_type in ["out_invoice", "in_refund"]
-                and move.commercial_partner_id
-                and move.commercial_partner_id.id
-                and move.commercial_partner_id.payment_bank_id
-            ):
-                move.partner_bank_id = move.commercial_partner_id.payment_bank_id
+            payment_bank = move.commercial_partner_id.payment_bank_id
+            # Skip transient (NewId) bank records: during create the move is
+            # still in memory and assigning a non-persisted bank breaks the
+            # inverse cache update (TypeError: unhashable type: 'dict').
+            if move.move_type in ["out_invoice", "in_refund"] and payment_bank and isinstance(payment_bank.id, int):
+                move.partner_bank_id = payment_bank
         return res
 
 
