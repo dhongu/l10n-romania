@@ -10,6 +10,8 @@
 # Rulare:
 #   ./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_cash_register \
 #       --test-tags=fise_screenshots --stop-after-init
+import unittest
+
 from dateutil.relativedelta import relativedelta
 
 from odoo import fields
@@ -30,6 +32,11 @@ class TestCashRegisterScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
     @classmethod
     @AccountTestInvoicingCommon.setup_country("ro")
     def setUpClass(cls):
+        # Tooling-ul de capturi (`l10n_ro_doc_screenshots`) trăiește în arborele `l10n_ro_ent`
+        # și poate lipsi de pe addons_path (ex. CI-ul standalone `l10n-romania`). Fără el,
+        # `ScreenshotCase` e None, deci sărim testul în loc să eșueze cu AttributeError.
+        if ScreenshotCase is None:
+            raise unittest.SkipTest("l10n_ro_doc_screenshots (tooling capturi) indisponibil")
         super().setUpClass()
         cls.prepare_ro_company(name="Demo Registru Casă SRL")  # RON, drepturi contabile + limba RO
         cls.env.company.chart_template = "ro"
