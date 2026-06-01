@@ -7,25 +7,25 @@
                             <div class="text-left">Company:
                                 <strong t-esc="res_company.name" />
                             </div>
-                            <div>
+                            <div id="address">
                                 <strong>Address:</strong>
                                 <address
                                 t-field="res_company.partner_id"
                                 t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'
                             />
                             </div>
-                            <div t-if="res_company.partner_id.vat">
+                            <div id="cif" t-if="res_company.partner_id.vat">
                                 <strong>CIF:</strong>
                                 <span t-field="res_company.partner_id.vat" />
                             </div>
-                            <div t-if="res_company.partner_id.nrc">
+                            <div id="nrc" t-if="res_company.partner_id.nrc">
                                 <strong>NRC:</strong>
                                 <span t-field="res_company.partner_id.nrc" />
                             </div>
 
                             <h2>Cash Register</h2>
 
-                            <div class="row">
+                            <div id="general_data" class="row">
                                 <div class="col-3">
                                     <strong>Name</strong>:
                                     <br />
@@ -49,7 +49,7 @@
                             </div>
                             <div class="row">
                             </div>
-                            <table class="table table-sm o_main_table">
+                            <table id="main_table" class="table table-sm o_main_table">
                                 <thead>
                                     <tr>
                                         <th>Ord</th>
@@ -63,7 +63,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-left" colspan="3">
+                                        <td id="st_balance" class="text-left" colspan="3">
                                             <strong>Starting Balance</strong>
                                         </td>
                                         <td class="text-end">
@@ -75,7 +75,7 @@
                                         <td class="text-end">
 
                                         </td>
-                                        <td class="text-end">
+                                        <td id="st_balance_value" class="text-end">
                                             <strong
                                             t-esc="o.balance_start"
                                             t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
@@ -87,20 +87,20 @@
                                     <t t-set="sold_plt" t-value="0.0" />
                                     <t t-set="index_l" t-value="1" />
                                     <tr t-foreach="o.move_line_ids" t-as="line">
-                                        <td>
+                                        <td id="index">
                                             <span t-esc="index_l" />
                                         </td>
-                                        <td>
+                                        <td id="name">
                                             <span t-field="line.move_name" />
                                         </td>
-                                        <td>
+                                        <td id="ref">
                                             <span t-field="line.ref" />
                                         </td>
-                                        <td>
+                                        <td id="partner_name">
                                             <span t-esc="line.partner_id.name" />
                                         </td>
 
-                                        <td class="text-end">
+                                        <td id="line_balance" class="text-end">
                                             <t t-if="line.balance&gt;0">
                                                 <span
                                                 t-field="line.balance"
@@ -109,7 +109,7 @@
                                                 <t t-set="sold_inc" t-value="sold_inc+line.balance" />
                                             </t>
                                         </td>
-                                        <td class="text-end">
+                                        <td id="line_balance_negative" class="text-end">
                                             <t t-if="line.balance&lt;0">
                                                 <span
                                                 t-esc="-1*line.balance"
@@ -118,7 +118,7 @@
                                                 <t t-set="sold_plt" t-value="sold_plt-line.balance" />
                                             </t>
                                         </td>
-                                        <td class="text-end">
+                                        <td id="crt_balance" class="text-end">
                                             <t t-set="sold" t-value="sold+line.balance" />
                                             <span
                                             t-esc="sold"
@@ -128,23 +128,23 @@
                                         <t t-set="index_l" t-value="index_l + 1" />
                                     </tr>
                                     <tr>
-                                        <td class="text-left" colspan="4">
+                                        <td id="final_balance" class="text-left" colspan="4">
                                             <strong>Sold Final:</strong>
                                         </td>
 
-                                        <td class="text-end">
+                                        <td id="start_balance" class="text-end">
                                             <strong
                                             t-esc="sold_inc"
                                             t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                         />
                                         </td>
-                                        <td class="text-end">
+                                        <td id="sold_plt" class="text-end">
                                             <strong
                                             t-esc="sold_plt"
                                             t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
                                         />
                                         </td>
-                                        <td class="text-end">
+                                        <td id="end_balance" class="text-end">
                                             <strong
                                             t-esc="o.balance_end"
                                             t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
