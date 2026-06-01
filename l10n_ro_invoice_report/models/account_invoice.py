@@ -24,7 +24,7 @@ class AccountInvoice(models.Model):
         defaults = super().default_get(fields_list)
         if "delegate_id" not in defaults:
             if "default_delegate_id" in self.env.context:
-                defaults["delegate_id"] = self.env.context["default_delegate_id"]
+                defaults["default_delegate_id"] = self.env.context["default_delegate_id"]
         return defaults
 
     @api.onchange("delegate_id")
@@ -101,6 +101,28 @@ class AccountInvoice(models.Model):
             if move.move_type in ["out_invoice", "in_refund"] and payment_bank and isinstance(payment_bank.id, int):
                 move.partner_bank_id = payment_bank
         return res
+
+    def is_bf_printed(self):
+        """Check if the invoice has been printed with BF (Bon Fiscal)"""
+        self.ensure_one()
+        if hasattr(self, "receipt_print"):
+            return self.receipt_print
+        return False
+
+    def _get_invoice_pdf_proforma(self):
+        self.ensure_one()
+        filename = self._get_invoice_proforma_pdf_report_filename()
+        content, report_type = self.env["ir.actions.report"]._pre_render_qweb_pdf(
+            "account.account_invoices", self.ids, data={"proforma": False}
+        )
+        content_by_id = self.env["ir.actions.report"]._get_splitted_report(
+            "account.account_invoices", content, report_type
+        )
+        return {
+            "filename": filename,
+            "filetype": "pdf",
+            "content": content_by_id[self.id],
+        }
 
 
 #

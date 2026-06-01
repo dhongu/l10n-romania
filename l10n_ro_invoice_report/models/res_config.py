@@ -62,3 +62,10 @@ class ResConfigSettings(models.TransientModel):
         string="Show undiscounted price on invoice",
         readonly=False,
     )
+
+    show_coface_logo = fields.Boolean(
+        related="company_id.show_coface_logo",
+        string="Show Coface logo",
+        readonly=False,
+        help="Display the Coface logo at the end of the invoice to signal debt insurance.",
+    )

@@ -20,3 +20,7 @@ class ResCompany(models.Model):
     remove_product_name_from_invoice_line = fields.Boolean(string="Remove product name from invoice line")
     show_invoice_delegate = fields.Boolean(string="Show invoice delegate", default=True)
     show_undiscounted_price_on_invoice = fields.Boolean(string="Show undiscounted price on invoice")
+    show_coface_logo = fields.Boolean(
+        string="Show Coface logo",
+        help="Display the Coface logo on the invoice to indicate that the debt is insured by Coface.",
+    )
