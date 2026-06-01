@@ -268,7 +268,7 @@
                         <!-- actually remove the product's display name, the description can have \n character -->
                         <t t-set="line_name" t-value="line.name"/>
                         <t t-set="product_name" t-value="line.product_id.display_name"/>
-                        <t t-if="product_name in line_name and product_name != line_name">
+                        <t t-if="product_name and product_name in line_name and product_name != line_name">
                             <t t-set="line_name" t-value="line_name.replace(product_name, '')"/>
                         </t>
                         <span t-esc="line_name">Bacon Burger</span>
@@ -277,7 +277,12 @@
                         <span t-field="line.name" t-options="{'widget': 'text'}">Bacon Burger</span>
                     </t>
                 </t>
-
+                <t t-else="">
+                    <t t-if="line.product_id">
+                        <span t-field="line.product_id.display_name" t-options="{'widget': 'text'}">--</span>
+                    </t>
+                    <t t-else="">--</t>
+                </t>
 
             </td>
         </xpath>
@@ -735,7 +740,16 @@
 
 
         <xpath expr="//div[hasclass('page')]" position="after">
-            <t t-if="print_with_payments">
+            <div t-if="o.company_id.show_coface_logo" class="text-end mt-4" style="page-break-inside: avoid;">
+                <img
+                    src="/l10n_ro_invoice_report/static/src/img/Coface_logo.svg"
+                    style="max-height: 50px;"
+                    alt="Coface Logo"
+                />
+            </div>
+            <t t-set="has_bf" t-value="o.is_bf_printed()" />
+
+            <t t-if="print_with_payments and not has_bf">
                 <t
                     t-set="payments_vals"
                     t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"

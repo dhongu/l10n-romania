@@ -97,6 +97,12 @@ class CashRegister(models.Model):
         "unique(date, journal_id)",
         "Duplicate date",
     )
+    # Index unic parțial pe câmpul de secvență, cerut de `sequence.mixin` pentru a evita
+    # numerotări duplicate sub încărcare (placeholder-ele '/' și NULL sunt excluse).
+    _unique_name = models.UniqueIndex(
+        "(name, journal_id) WHERE (name NOT IN ('/', ''))",
+        "Another cash register with the same number already exists.",
+    )
 
     @api.depends("journal_id", "date")
     def _compute_name(self):
