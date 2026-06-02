@@ -5,14 +5,11 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='line_ids']/list" position="inside">
-                <field name="storno_line" optional="show" />
-                <field name="balance" optional="show" />
+            <!-- Misc journal entries only: manual flag + computed result -->
+            <xpath expr="//page[@id='other_tab_entry']//field[@name='auto_post_until']" position="after">
+                <field name="l10n_ro_force_storno" readonly="state != 'draft'" />
+                <field name="is_storno" readonly="1" />
             </xpath>
-            <xpath expr="//field[@name='line_ids']/form//field[@name='account_id']" position="before">
-                <field name="storno_line" />
-            </xpath>
-
         </field>
     </record>
 </odoo>
