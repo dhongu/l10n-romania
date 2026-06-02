@@ -2,17 +2,28 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import models
+from odoo import api, fields, models
 
 
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    l10n_ro_force_storno = fields.Boolean(
+        string="Storno (red reversal)",
+        copy=False,
+        help="Force red storno accounting (negative debit/credit on the natural "
+        "side of each account) for all lines of this journal entry. Used to "
+        "manually record reversals in red. Applies to miscellaneous entries only.",
+    )
+
+    @api.depends("l10n_ro_force_storno")
     def _compute_is_storno(self):
         res = super()._compute_is_storno()
         for move in self:
             if move.reversed_entry_id:
                 move.is_storno = not move.reversed_entry_id.is_storno
+            if move.l10n_ro_force_storno and move.move_type == "entry":
+                move.is_storno = True
 
         return res
 
