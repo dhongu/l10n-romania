@@ -174,3 +174,29 @@ class TestL10nRoStorno(TransactionCase):
         self.env["res.company"]._l10n_ro_initialize_accounts()
         self.assertEqual(activ_account.l10n_ro_usage, "activ")
         self.assertEqual(pasiv_account.l10n_ro_usage, "pasiv")
+
+    def test_force_storno_manual(self):
+        """A manually flagged entry must post all lines in red (negative side)."""
+        move = self.env["account.move"].create(
+            {
+                "journal_id": self.journal.id,
+                "move_type": "entry",
+                "date": "2024-01-15",
+                "l10n_ro_force_storno": True,
+                "line_ids": [
+                    (0, 0, {"account_id": self.account_activ.id, "name": "debit line", "balance": 100.0}),
+                    (0, 0, {"account_id": self.account_pasiv.id, "name": "credit line", "balance": -100.0}),
+                ],
+            }
+        )
+
+        self.assertTrue(move.is_storno, "Force storno flag should set is_storno")
+
+        debit_line = move.line_ids.filtered(lambda line: line.balance > 0)
+        credit_line = move.line_ids.filtered(lambda line: line.balance < 0)
+
+        # Red storno: amounts stay on the natural side but with a negative sign
+        self.assertEqual(debit_line.debit, 0.0)
+        self.assertEqual(debit_line.credit, -100.0)
+        self.assertEqual(credit_line.debit, -100.0)
+        self.assertEqual(credit_line.credit, 0.0)
