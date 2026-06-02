@@ -127,7 +127,7 @@ class Picking(models.Model):
                         price_unit = move.product_id.standard_price
                     if not price_unit:
                         price_unit = move.product_id.list_price
-                    if not price_unit:
+                    if not price_unit and self and not self.company_id.l10n_ro_etransport_get_order_value:
                         raise UserError(_("Nu am gasit un pret pentru %s") % move.product_id.display_name)
                     item["valoareLeiFaraTva"] = price_unit
             item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)
@@ -264,7 +264,13 @@ class Picking(models.Model):
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data: dict):
         data["transport_partner_id"] = self.l10n_ro_transport_partner_id or data["transport_partner_id"]
-
+        if not self or not data["transport_partner_id"]:  # called from batch there's no self
+            # try to get the batch itself:
+            if data["stock_move_ids"]:
+                first_move = data["stock_move_ids"][0]
+                batch_id = first_move.picking_id.batch_id
+                if batch_id:
+                    data["transport_partner_id"] = batch_id.l10n_ro_transport_partner_id
         errors = super()._l10n_ro_edi_stock_validate_data(data)
 
         no_weight = self.env["product.product"]
