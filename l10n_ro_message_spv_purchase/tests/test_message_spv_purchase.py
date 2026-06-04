@@ -14,10 +14,24 @@ class TestMessageSPVPurchase(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.company = cls.env.company
         ro_country = cls.env.ref("base.ro")
+        # Folosim o companie cu plan de conturi RO (jurnale + conturi configurate).
+        ro_company = cls.env["res.company"].search([("account_fiscal_country_id.code", "=", "RO")], limit=1)
+        if ro_company:
+            cls.env.user.company_ids = [(4, ro_company.id)]
+            cls.env.user.company_id = ro_company
+            cls.env = cls.env(context=dict(cls.env.context, allowed_company_ids=[ro_company.id]))
+        cls.company = cls.env.company
         if cls.company.account_fiscal_country_id != ro_country:
             cls.company.account_fiscal_country_id = ro_country
+
+        # Asigurăm un depozit (deci picking_type-uri) pentru compania RO, altfel
+        # crearea comenzilor de achiziție eșuează (picking_type_id NOT NULL).
+        warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.company.id)], limit=1)
+        if not warehouse:
+            cls.env["stock.warehouse"].create(
+                {"name": "Depozit RO Test", "code": "ROWHT", "company_id": cls.company.id}
+            )
 
         cls.partner = cls.env["res.partner"].create(
             {
@@ -31,6 +45,9 @@ class TestMessageSPVPurchase(TransactionCase):
             {
                 "name": "Produs Test SPV",
                 "type": "consu",
+                # facturare pe cantități comandate (nu pe recepționate),
+                # ca să existe qty_to_invoice > 0 fără a primi marfa
+                "purchase_method": "purchase",
             }
         )
 
@@ -244,6 +261,262 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertEqual(result.res_model, "purchase.order")
         self.assertEqual(result.res_id, po.id)
         self.assertEqual(result.name, "test_invoice.xml")
+
+    # ------------------------------------------------------------------
+    # P1: punte factură↔PO (eliminarea facturilor duplicate)
+    # ------------------------------------------------------------------
+
+    def _expense_account(self):
+        return self.env["account.account"].search(
+            [("account_type", "=", "expense"), ("company_ids", "in", [self.company.id])],
+            limit=1,
+        )
+
+    def _confirmed_po(self, partner_ref="PO-LINK-001", price=100.0, qty=1.0):
+        po = self.env["purchase.order"].create(
+            {
+                "partner_id": self.partner.id,
+                "partner_ref": partner_ref,
+                "company_id": self.company.id,
+                "order_line": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": self.product.id,
+                            "name": self.product.name,
+                            "product_qty": qty,
+                            "price_unit": price,
+                            "tax_ids": [(6, 0, [])],
+                        },
+                    )
+                ],
+            }
+        )
+        po.button_confirm()
+        return po
+
+    def _draft_bill(self, amount=100.0):
+        return self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "partner_id": self.partner.id,
+                "company_id": self.company.id,
+                "invoice_date": "2024-05-01",
+                "invoice_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Linie din SPV",
+                            "price_unit": amount,
+                            "quantity": 1.0,
+                            "tax_ids": [(6, 0, [])],
+                            "account_id": self._expense_account().id,
+                        },
+                    )
+                ],
+            }
+        )
+
+    def _draft_bill_with_service(self, product_price=100.0, service_price=20.0):
+        """Factură cu o linie de produs (există pe PO) + o linie de serviciu (transport)
+        care NU se regăsește în comanda de achiziție."""
+        return self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "partner_id": self.partner.id,
+                "company_id": self.company.id,
+                "invoice_date": "2024-05-01",
+                "invoice_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": self.product.id,
+                            "name": self.product.name,
+                            "price_unit": product_price,
+                            "quantity": 1.0,
+                            "tax_ids": [(6, 0, [])],
+                            "account_id": self._expense_account().id,
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Transport",
+                            "price_unit": service_price,
+                            "quantity": 1.0,
+                            "tax_ids": [(6, 0, [])],
+                            "account_id": self._expense_account().id,
+                        },
+                    ),
+                ],
+            }
+        )
+
+    def test_link_preserves_extra_service_lines(self):
+        """Liniile de serviciu (transport/discount) din SPV care nu sunt pe PO se păstrează.
+
+        Linia de produs se leagă de comandă (qty_invoiced crește), iar linia de transport
+        rămâne pe factură, fără purchase_line_id și fără să umfle qty_invoiced.
+        """
+        po = self._confirmed_po(partner_ref="PO-SERVICE-001", price=100.0)
+        bill = self._draft_bill_with_service(product_price=100.0, service_price=20.0)
+
+        bill._l10n_ro_link_spv_purchase_order(po)
+
+        # Linia de produs e legată de PO
+        linked = bill.invoice_line_ids.filtered(lambda l: l.purchase_line_id)
+        self.assertTrue(linked, "Linia de produs trebuie legată de comandă")
+
+        # Linia de transport NU e legată de PO și e încă prezentă
+        transport = bill.invoice_line_ids.filtered(lambda l: not l.purchase_line_id and l.display_type == "product")
+        self.assertTrue(transport, "Linia de transport trebuie păstrată pe factură")
+        self.assertIn("Transport", transport.mapped("name"))
+
+        # qty_invoiced reflectă doar produsul comandat (1), nu transportul
+        self.env.flush_all()
+        po.order_line.invalidate_recordset(["qty_invoiced"])
+        self.assertEqual(po.order_line[0].qty_invoiced, 1.0)
+
+    def test_link_preserves_service_lines_from_real_xml(self):
+        """Flux real: liniile vin din XML-ul UBL decodat de _extend_with_attachments.
+
+        Factura SPV conține o linie de produs (există pe PO) + o linie de transport
+        (NU există pe PO). După decodarea XML și legarea de comandă, transportul trebuie
+        păstrat, iar produsul legat.
+        """
+        from odoo.tools import file_open
+
+        xml = file_open(
+            "l10n_ro_message_spv_purchase/tests/test_files/spv_in_invoice_with_service.xml",
+            "rb",
+        ).read()
+
+        bill = self.env["account.move"].create({"move_type": "in_invoice", "company_id": self.company.id})
+        attachment = self.env["ir.attachment"].create(
+            {
+                "name": "spv_service.xml",
+                "raw": xml,
+                "res_model": "account.move",
+                "res_id": bill.id,
+            }
+        )
+        # Decodarea reală a XML-ului (populează liniile facturii din UBL)
+        files_data = bill._to_files_data(attachment)
+        bill._extend_with_attachments(files_data)
+
+        product_lines = bill.invoice_line_ids.filtered(lambda l: l.display_type == "product")
+        self.assertEqual(len(product_lines), 2, "XML-ul trebuie să producă 2 linii")
+        self.assertIn("Transport", product_lines.mapped("name"))
+
+        # PO care corespunde liniei de produs (750 x 2), nu și transportului
+        po = self._confirmed_po(partner_ref="PO-XML-001", price=750.0, qty=2.0)
+        bill._l10n_ro_link_spv_purchase_order(po)
+
+        # Linia de produs e legată; transportul rămâne, fără purchase_line_id
+        linked = bill.invoice_line_ids.filtered(lambda l: l.purchase_line_id)
+        self.assertTrue(linked, "Linia de produs trebuie legată de comandă")
+        transport = bill.invoice_line_ids.filtered(
+            lambda l: l.display_type == "product" and not l.purchase_line_id and l.name == "Transport"
+        )
+        self.assertTrue(transport, "Linia de transport din XML trebuie păstrată")
+
+        self.env.flush_all()
+        po.order_line.invalidate_recordset(["qty_invoiced"])
+        self.assertEqual(po.order_line[0].qty_invoiced, 2.0, "qty_invoiced = produsul comandat, nu transportul")
+
+    def test_link_invoice_first_then_po(self):
+        """Factură creată întâi, apoi PO legat manual → purchase_line_id setat, qty_invoiced crește."""
+        po = self._confirmed_po(partner_ref="PO-LINK-AAA")
+        bill = self._draft_bill(amount=100.0)
+        msg = self._make_spv_message(ref="PO-LINK-AAA")
+        msg.invoice_id = bill
+        msg.purchase_order_id = po
+
+        # _post_spv_xml_on_purchase declanșează legarea când factura există deja
+        msg._post_spv_xml_on_purchase(po)
+
+        self.assertTrue(
+            any(line.purchase_line_id for line in bill.invoice_line_ids),
+            "Liniile facturii trebuie legate de purchase.order.line",
+        )
+        self.env.flush_all()
+        po.order_line.invalidate_recordset(["qty_invoiced"])
+        self.assertGreater(po.order_line[0].qty_invoiced, 0, "qty_invoiced trebuie să crească")
+        self.assertNotEqual(po.invoice_status, "to invoice")
+
+    def test_link_po_first_then_invoice(self):
+        """PO legat înainte, apoi create_invoice → factura nou creată e legată de PO."""
+        po = self._confirmed_po(partner_ref="PO-LINK-BBB")
+        bill = self._draft_bill(amount=100.0)
+        msg = self._make_spv_message(ref="PO-LINK-BBB")
+        msg.purchase_order_id = po
+        # Simulăm rezultatul lui super().create_invoice() care setează invoice_id,
+        # apoi rulăm doar bucla de legare din override.
+        msg.invoice_id = bill
+        for message in msg.filtered(lambda m: m.purchase_order_id and m.invoice_id):
+            message.invoice_id._l10n_ro_link_spv_purchase_order(message.purchase_order_id)
+
+        self.assertTrue(any(line.purchase_line_id for line in bill.invoice_line_ids))
+        self.env.flush_all()
+        po.order_line.invalidate_recordset(["qty_invoiced"])
+        self.assertGreater(po.order_line[0].qty_invoiced, 0)
+
+    def test_link_is_idempotent(self):
+        """A doua legare a aceleiași facturi de același PO nu schimbă nimic."""
+        po = self._confirmed_po(partner_ref="PO-LINK-CCC")
+        bill = self._draft_bill(amount=100.0)
+        bill._l10n_ro_link_spv_purchase_order(po)
+        qty_after_first = po.order_line[0].qty_invoiced
+        # A doua oară: idempotent
+        result = bill._l10n_ro_link_spv_purchase_order(po)
+        self.assertFalse(result, "A doua legare trebuie să fie no-op")
+        self.assertEqual(po.order_line[0].qty_invoiced, qty_after_first)
+
+    def test_guard_po_already_has_bill(self):
+        """Dacă PO are deja o factură proprie, a doua legare semnalează și nu dublează."""
+        po = self._confirmed_po(partner_ref="PO-LINK-DDD")
+        bill1 = self._draft_bill(amount=100.0)
+        bill1._l10n_ro_link_spv_purchase_order(po)
+
+        bill2 = self._draft_bill(amount=100.0)
+        initial_msgs = len(bill2.message_ids)
+        result = bill2._l10n_ro_link_spv_purchase_order(po)
+
+        self.assertFalse(result, "A doua factură nu trebuie legată automat")
+        self.assertGreater(len(bill2.message_ids), initial_msgs, "Trebuie postat un avertisment")
+        self.assertFalse(
+            any(line.purchase_line_id for line in bill2.invoice_line_ids),
+            "A doua factură nu trebuie să preia liniile PO",
+        )
+
+    def test_cross_stack_duplicate_flagged(self):
+        """Pasul 3: o factură cu aceeași cheie de dedup ca alta e semnalată cross-stack.
+
+        Cuplaj soft: rulăm doar dacă modulul l10n_ro_efactura_dedup e instalat
+        (câmpul l10n_ro_edi_dedup_key există pe account.move).
+        """
+        if "l10n_ro_edi_dedup_key" not in self.env["account.move"]._fields:
+            self.skipTest("Modulul l10n_ro_efactura_dedup nu este instalat")
+
+        bill1 = self._draft_bill(amount=500.0)
+        bill1.ref = "FACT-CROSS-001"
+        bill1.invoice_date = "2024-05-01"
+        bill1._compute_l10n_ro_edi_dedup_key()
+
+        bill2 = self._draft_bill(amount=500.0)
+        bill2.ref = "FACT-CROSS-001"
+        bill2.invoice_date = "2024-05-01"
+        bill2._compute_l10n_ro_edi_dedup_key()
+
+        self.assertEqual(bill1.l10n_ro_edi_dedup_key, bill2.l10n_ro_edi_dedup_key)
+
+        flagged = bill2._l10n_ro_flag_cross_stack_duplicate()
+        self.assertTrue(flagged, "A doua factură trebuie semnalată ca duplicat cross-stack")
+        self.assertTrue(bill2.l10n_ro_edi_is_duplicate)
 
     def test_clone_xml_attachment_no_duplicate(self):
         """Test că _clone_xml_attachment_for_purchase nu duplică atașamentul dacă există deja."""
