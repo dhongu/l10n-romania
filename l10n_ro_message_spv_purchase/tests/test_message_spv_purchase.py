@@ -319,6 +319,68 @@ class TestMessageSPVPurchase(TransactionCase):
             }
         )
 
+    def _draft_bill_with_service(self, product_price=100.0, service_price=20.0):
+        """Factură cu o linie de produs (există pe PO) + o linie de serviciu (transport)
+        care NU se regăsește în comanda de achiziție."""
+        return self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "partner_id": self.partner.id,
+                "company_id": self.company.id,
+                "invoice_date": "2024-05-01",
+                "invoice_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": self.product.id,
+                            "name": self.product.name,
+                            "price_unit": product_price,
+                            "quantity": 1.0,
+                            "tax_ids": [(6, 0, [])],
+                            "account_id": self._expense_account().id,
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Transport",
+                            "price_unit": service_price,
+                            "quantity": 1.0,
+                            "tax_ids": [(6, 0, [])],
+                            "account_id": self._expense_account().id,
+                        },
+                    ),
+                ],
+            }
+        )
+
+    def test_link_preserves_extra_service_lines(self):
+        """Liniile de serviciu (transport/discount) din SPV care nu sunt pe PO se păstrează.
+
+        Linia de produs se leagă de comandă (qty_invoiced crește), iar linia de transport
+        rămâne pe factură, fără purchase_line_id și fără să umfle qty_invoiced.
+        """
+        po = self._confirmed_po(partner_ref="PO-SERVICE-001", price=100.0)
+        bill = self._draft_bill_with_service(product_price=100.0, service_price=20.0)
+
+        bill._l10n_ro_link_spv_purchase_order(po)
+
+        # Linia de produs e legată de PO
+        linked = bill.invoice_line_ids.filtered(lambda l: l.purchase_line_id)
+        self.assertTrue(linked, "Linia de produs trebuie legată de comandă")
+
+        # Linia de transport NU e legată de PO și e încă prezentă
+        transport = bill.invoice_line_ids.filtered(lambda l: not l.purchase_line_id and l.display_type == "product")
+        self.assertTrue(transport, "Linia de transport trebuie păstrată pe factură")
+        self.assertIn("Transport", transport.mapped("name"))
+
+        # qty_invoiced reflectă doar produsul comandat (1), nu transportul
+        self.env.flush_all()
+        po.order_line.invalidate_recordset(["qty_invoiced"])
+        self.assertEqual(po.order_line[0].qty_invoiced, 1.0)
+
     def test_link_invoice_first_then_po(self):
         """Factură creată întâi, apoi PO legat manual → purchase_line_id setat, qty_invoiced crește."""
         po = self._confirmed_po(partner_ref="PO-LINK-AAA")

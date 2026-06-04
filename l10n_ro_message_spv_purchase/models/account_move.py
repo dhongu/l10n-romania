@@ -23,6 +23,11 @@ class AccountMove(models.Model):
         Reutilizăm ruta standard `_find_and_set_purchase_orders` (modulul `purchase`), care
         potrivește liniile și setează `purchase_line_id`. Nu reimplementăm logica de matching.
 
+        Liniile de servicii din factura SPV care NU se regăsesc pe comandă (transport,
+        discount, ambalaje) sunt păstrate de matcher prin ramura `subset_match`: linia de
+        produs se leagă de PO, iar liniile suplimentare rămân pe factură fără `purchase_line_id`
+        (deci nu umflă `qty_invoiced`). Vezi testul `test_link_preserves_extra_service_lines`.
+
         Metoda este idempotentă și ne-blocantă (semnalează duplicatele în chatter).
         """
         self.ensure_one()
