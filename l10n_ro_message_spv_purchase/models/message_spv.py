@@ -21,6 +21,21 @@ class MessageSPV(models.Model):
 
         return values
 
+    def create_invoice(self):
+        """Caz „PO legat înainte de factură": după crearea facturii din mesaj, o legăm
+        efectiv de liniile comenzii de achiziție deja împerecheate cu mesajul.
+
+        Astfel `purchase_line_id` se setează, `qty_invoiced` crește, iar comanda nu mai
+        rămâne `invoice_status='to invoice'` (sursa facturilor duplicate).
+        """
+        res = super().create_invoice()
+        for message in self.filtered(lambda m: m.invoice_id):
+            if message.purchase_order_id:
+                message.invoice_id._l10n_ro_link_spv_purchase_order(message.purchase_order_id)
+            # Aliniere cross-stack: semnalează duplicatul față de cealaltă stivă SPV.
+            message.invoice_id._l10n_ro_flag_cross_stack_duplicate()
+        return res
+
     def _get_purchase_ref(self):
         self.ensure_one()
         return self.purchase_ref or self.ref
@@ -58,6 +73,12 @@ class MessageSPV(models.Model):
             post_kwargs["attachment_ids"] = [po_xml_attachment.id]
 
         purchase.message_post(**post_kwargs)
+
+        # Caz „factura există deja, iar PO este legat ulterior": legăm efectiv factura
+        # de liniile comenzii, ca să se alimenteze qty_invoiced și PO-ul să nu mai apară
+        # ca „de facturat" (altfel se generează o a doua factură).
+        if self.invoice_id:
+            self.invoice_id._l10n_ro_link_spv_purchase_order(purchase)
 
     def _clone_xml_attachment_for_purchase(self, purchase):
         """Creează o COPIE a atașamentului XML SPV pe comanda de achiziție.
