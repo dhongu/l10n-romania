@@ -272,7 +272,7 @@ class TestMessageSPVPurchase(TransactionCase):
             limit=1,
         )
 
-    def _confirmed_po(self, partner_ref="PO-LINK-001", price=100.0):
+    def _confirmed_po(self, partner_ref="PO-LINK-001", price=100.0, qty=1.0):
         po = self.env["purchase.order"].create(
             {
                 "partner_id": self.partner.id,
@@ -285,7 +285,7 @@ class TestMessageSPVPurchase(TransactionCase):
                         {
                             "product_id": self.product.id,
                             "name": self.product.name,
-                            "product_qty": 1.0,
+                            "product_qty": qty,
                             "price_unit": price,
                             "tax_ids": [(6, 0, [])],
                         },
@@ -380,6 +380,53 @@ class TestMessageSPVPurchase(TransactionCase):
         self.env.flush_all()
         po.order_line.invalidate_recordset(["qty_invoiced"])
         self.assertEqual(po.order_line[0].qty_invoiced, 1.0)
+
+    def test_link_preserves_service_lines_from_real_xml(self):
+        """Flux real: liniile vin din XML-ul UBL decodat de _extend_with_attachments.
+
+        Factura SPV conține o linie de produs (există pe PO) + o linie de transport
+        (NU există pe PO). După decodarea XML și legarea de comandă, transportul trebuie
+        păstrat, iar produsul legat.
+        """
+        from odoo.tools import file_open
+
+        xml = file_open(
+            "l10n_ro_message_spv_purchase/tests/test_files/spv_in_invoice_with_service.xml",
+            "rb",
+        ).read()
+
+        bill = self.env["account.move"].create({"move_type": "in_invoice", "company_id": self.company.id})
+        attachment = self.env["ir.attachment"].create(
+            {
+                "name": "spv_service.xml",
+                "raw": xml,
+                "res_model": "account.move",
+                "res_id": bill.id,
+            }
+        )
+        # Decodarea reală a XML-ului (populează liniile facturii din UBL)
+        files_data = bill._to_files_data(attachment)
+        bill._extend_with_attachments(files_data)
+
+        product_lines = bill.invoice_line_ids.filtered(lambda l: l.display_type == "product")
+        self.assertEqual(len(product_lines), 2, "XML-ul trebuie să producă 2 linii")
+        self.assertIn("Transport", product_lines.mapped("name"))
+
+        # PO care corespunde liniei de produs (750 x 2), nu și transportului
+        po = self._confirmed_po(partner_ref="PO-XML-001", price=750.0, qty=2.0)
+        bill._l10n_ro_link_spv_purchase_order(po)
+
+        # Linia de produs e legată; transportul rămâne, fără purchase_line_id
+        linked = bill.invoice_line_ids.filtered(lambda l: l.purchase_line_id)
+        self.assertTrue(linked, "Linia de produs trebuie legată de comandă")
+        transport = bill.invoice_line_ids.filtered(
+            lambda l: l.display_type == "product" and not l.purchase_line_id and l.name == "Transport"
+        )
+        self.assertTrue(transport, "Linia de transport din XML trebuie păstrată")
+
+        self.env.flush_all()
+        po.order_line.invalidate_recordset(["qty_invoiced"])
+        self.assertEqual(po.order_line[0].qty_invoiced, 2.0, "qty_invoiced = produsul comandat, nu transportul")
 
     def test_link_invoice_first_then_po(self):
         """Factură creată întâi, apoi PO legat manual → purchase_line_id setat, qty_invoiced crește."""
