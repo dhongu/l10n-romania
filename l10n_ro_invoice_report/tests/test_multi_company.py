@@ -77,7 +77,7 @@ class TestL10nRoInvoiceReportMultiCompany(TransactionCase):
                 "company_id": self.company_a.id,
                 "journal_id": self.env["account.journal"]
                 .with_company(self.company_a)
-                .search([("type", "=", "sale")], limit=1)
+                .search([("type", "=", "sale"), ("company_id", "=", self.company_a.id)], limit=1)
                 .id,
                 "invoice_line_ids": [
                     (

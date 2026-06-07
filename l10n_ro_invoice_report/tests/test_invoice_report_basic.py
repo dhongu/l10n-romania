@@ -2,9 +2,10 @@
 # Basic sanity tests for l10n_ro_invoice_report
 # Goal: ensure the report action exists, templates are available, and report renders.
 
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, tagged
 
 
+@tagged("post_install", "-at_install")
 class TestL10nRoInvoiceReportBasics(TransactionCase):
     @classmethod
     def setUpClass(cls):

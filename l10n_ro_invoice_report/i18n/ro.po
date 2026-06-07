@@ -227,6 +227,11 @@ msgid "Cancelled Invoice"
 msgstr "Factura anulata"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Cancelled Sales Receipt"
+msgstr "Chitanță vânzare anulată"
+
+#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Coface Logo"
 msgstr ""
@@ -291,6 +296,11 @@ msgstr "Factura storno ciorna"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Draft Invoice"
 msgstr "Factura ciorna"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Draft Sales Receipt"
+msgstr "Chitanță vânzare ciornă"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -458,10 +468,20 @@ msgid "Representing counter value of invoice"
 msgstr "Reprezentând contravaloarea facturii"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Representing counter value of sales receipt"
+msgstr "Reprezentând contravaloarea bonului"
+
+#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Representing:"
 msgstr "Reprezentând c/v:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Sales Receipt"
+msgstr "Chitanță vânzare"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_account_invoice_filter
