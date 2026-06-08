@@ -386,7 +386,8 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         res = super()._ubl_add_accounting_customer_party_tax_scheme_nodes(vals)
         if vals["party_node"]["cac:PartyTaxScheme"]:
             if (
-                "RO" not in vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"]
+                commercial_partner.country_id.code == "RO"
+                and "RO" not in vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"]
                 and commercial_partner.is_company
                 and commercial_partner.vat
             ):

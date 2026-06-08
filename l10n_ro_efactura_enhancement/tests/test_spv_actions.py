@@ -24,17 +24,28 @@ class TestSpvActions(TransactionCase):
                 "invoice_sending_method": "email",
             }
         )
+        # Client companie din afara Romaniei (intracomunitar) cu VAT EU
+        cls.foreign_partner = cls.env["res.partner"].create(
+            {
+                "name": "Test Partner Foreign",
+                "is_company": True,
+                "country_id": cls.env.ref("base.ie").id,
+                "city": "Dublin",
+                "street": "Main Street 1",
+                "vat": "IE6388047V",
+            }
+        )
         cls.product = cls.env["product.product"].create(
             {
                 "name": "Test Product SPV",
             }
         )
 
-    def _create_posted_invoice(self):
+    def _create_posted_invoice(self, partner=None):
         invoice = self.env["account.move"].create(
             {
                 "move_type": "out_invoice",
-                "partner_id": self.partner.id,
+                "partner_id": (partner or self.partner).id,
                 "invoice_line_ids": [
                     (
                         0,
@@ -88,6 +99,35 @@ class TestSpvActions(TransactionCase):
             self.assertEqual(kwargs.get("sending_methods"), {"manual"})
         # Partenerul nu trebuie modificat
         self.assertEqual(self.partner.invoice_sending_method, "email")
+
+    def test_action_send_to_spv_only_excludes_non_ro(self):
+        """Test că facturile catre clienti non-RO sunt excluse de la trimiterea in SPV."""
+        ro_invoice = self._create_posted_invoice()
+        foreign_invoice = self._create_posted_invoice(partner=self.foreign_partner)
+        invoices = ro_invoice | foreign_invoice
+        with patch.object(
+            type(self.env["account.move.send"]),
+            "_generate_and_send_invoices",
+        ) as mock_send:
+            invoices.action_send_to_spv_only()
+            args, kwargs = mock_send.call_args
+            sent_invoices = args[0]
+            # Doar factura RO trebuie trimisa, cea straina exclusa
+            self.assertIn(ro_invoice, sent_invoices)
+            self.assertNotIn(foreign_invoice, sent_invoices)
+
+    def test_action_send_to_spv_only_all_non_ro_raises(self):
+        """Test că acțiunea ridică UserError dacă toate facturile selectate sunt non-RO."""
+        foreign_invoice = self._create_posted_invoice(partner=self.foreign_partner)
+        with self.assertRaises(UserError):
+            foreign_invoice.action_send_to_spv_only()
+
+    def test_foreign_company_vat_not_prefixed_with_ro(self):
+        """Test că VAT-ul unei companii straine nu este prefixat cu 'RO' in XML-ul e-Factura."""
+        invoice = self._create_posted_invoice(partner=self.foreign_partner)
+        xml_content, _errors = self.env["account.edi.xml.ubl_ro"]._export_invoice(invoice)
+        self.assertIn(b"IE6388047V", xml_content)
+        self.assertNotIn(b"ROIE6388047V", xml_content)
 
     def test_spv_cron_no_email_config(self):
         """Test că setarea l10n_ro_spv_cron_no_email se salvează corect pe companie."""
