@@ -229,7 +229,7 @@ msgstr "Factura anulata"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Cancelled Sales Receipt"
-msgstr "Chitanță vânzare anulată"
+msgstr "Bon vânzare anulat"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -300,7 +300,7 @@ msgstr "Factura ciorna"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Draft Sales Receipt"
-msgstr "Chitanță vânzare ciornă"
+msgstr "Bon vânzare ciornă"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
@@ -481,7 +481,7 @@ msgstr "Reprezentând c/v:"
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Sales Receipt"
-msgstr "Chitanță vânzare"
+msgstr "Bon vânzare"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_account_invoice_filter
