@@ -134,6 +134,18 @@ class AccountMove(models.Model):
         if not invoices:
             raise UserError(_("Nu exista facturi confirmate selectate pentru trimitere in SPV."))
 
+        # SPV / e-Factura se aplica doar partenerilor din Romania. Excludem facturile
+        # catre clienti non-RO ca sa nu fie trimise accidental in SPV.
+        non_ro_invoices = invoices.filtered(lambda m: m.commercial_partner_id.country_id.code != "RO")
+        if non_ro_invoices:
+            _logger.info(
+                "⏭️ Skipping non-RO invoices for SPV: %s",
+                non_ro_invoices.mapped("name"),
+            )
+        invoices = invoices - non_ro_invoices
+        if not invoices:
+            raise UserError(_("Facturile selectate au clienti din afara Romaniei si nu pot fi trimise in SPV."))
+
         self.env["account.move.send"]._generate_and_send_invoices(
             invoices,
             sending_methods={"manual"},
