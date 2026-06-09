@@ -6,6 +6,11 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
+# Maximum number of automatic SPV send retries for an invoice that keeps
+# failing. Each failed attempt creates a new ``invoice_sending_failed``
+# document, so we use that count as the natural retry counter.
+MAX_SPV_SEND_RETRIES = 3
+
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -36,7 +41,7 @@ class AccountMove(models.Model):
 
         return res
 
-    def _cron_l10n_ro_edi_fetch_status(self, limit=20, days=1, delay_days=0):
+    def _cron_l10n_ro_edi_fetch_status(self, limit=20, days=30, delay_days=0):
         need_retrigger = False
         _logger.info("⏱️ Cron job for fetch status from SPV")
         domain = [("l10n_ro_edi_access_token", "!=", False)]
@@ -67,7 +72,7 @@ class AccountMove(models.Model):
             _logger.info("⏳ Retrigger cron scheduled in 2 minutes")
             self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_fetch_status")._trigger(at)
 
-    def _cron_l10n_ro_edi_auto_send(self, limit=20, days=1, delay_days=0):
+    def _cron_l10n_ro_edi_auto_send(self, limit=20, days=30, delay_days=0):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
         _logger.info("⏱️ Cron job for sending invoices to SPV")
 
@@ -77,38 +82,56 @@ class AccountMove(models.Model):
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
-            domain = [
-                ("l10n_ro_edi_document_ids.state", "=", "invoice_sending_failed"),
-                ("company_id", "=", company.id),
-            ]
-            invoice_sending_failed = self.search(domain)
-            invoices_name = invoice_sending_failed.mapped("name")
-            _logger.info(f"❌ Invoice sending failed: {invoices_name}")
-
+            # Both never-sent invoices and previously failed ones have
+            # l10n_ro_edi_state = False (the computed state only reflects
+            # 'invoice_sent'/'invoice_validated'). We select them together and
+            # filter out failed invoices that exceeded the retry limit, so a
+            # transient failure is retried automatically on the next runs.
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
                 ("date", "<", fields.Date.today() - timedelta(days=delay_days)),
                 ("date", ">=", fields.Date.today() - timedelta(days=days + delay_days)),
-                ("partner_id.country_id.code", "=", "RO"),
+                ("commercial_partner_id.country_id.code", "=", "RO"),
                 ("l10n_ro_edi_state", "=", False),
                 ("company_id", "=", company.id),
             ]
-            if invoice_sending_failed:
-                domain.append(("id", "not in", invoice_sending_failed.ids))
 
-            invoices = self.search(domain, limit=limit + 1, order="date desc")
-            invoices_name = invoices.mapped("name")
-            _logger.info(f"📤 Invoices to send to SPV: {invoices_name}")
+            candidates = self.search(domain, order="date desc")
+
+            # Skip invoices whose send already failed MAX_SPV_SEND_RETRIES times
+            # to avoid hammering SPV with the same broken document forever.
+            def _within_retry_limit(invoice):
+                failed = invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sending_failed")
+                return len(failed) < MAX_SPV_SEND_RETRIES
+
+            exhausted = candidates.filtered(lambda inv: not _within_retry_limit(inv))
+            if exhausted:
+                _logger.info(
+                    "❌ Invoices skipped (retry limit %d reached): %s",
+                    MAX_SPV_SEND_RETRIES,
+                    exhausted.mapped("name"),
+                )
+            candidates = candidates - exhausted
+
+            retrying = candidates.filtered(
+                lambda inv: inv.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sending_failed")
+            )
+            if retrying:
+                _logger.info("🔁 Retrying previously failed invoices: %s", retrying.mapped("name"))
+
+            _logger.info(f"📤 Invoices to send to SPV: {candidates.mapped('name')}")
+
+            if len(candidates) > limit:
+                invoices = candidates[:limit]
+                need_retrigger = True
+                _logger.info("🔁 More invoices to send to SPV, retriggering cron...")
+            else:
+                invoices = candidates
 
             # daca au fost deja generate PDF-uri pentru facturi, le stergem
             invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
             invoice_pdf_report_ids.unlink()
-
-            if len(invoices) > limit:
-                invoices = invoices[:limit]
-                need_retrigger = True
-                _logger.info("🔁 More invoices to send to SPV, retriggering cron...")
 
             if invoices:
                 invoices_name = invoices.mapped("name")
@@ -117,16 +140,110 @@ class AccountMove(models.Model):
 
                 sending_methods = {"manual"} if company.l10n_ro_spv_cron_no_email else None
                 kwargs = {"sending_methods": sending_methods} if sending_methods else {}
+                # from_cron=True: errors are logged on each move's chatter instead
+                # of raising, so one broken invoice no longer aborts the batch.
                 self.env["account.move.send"]._generate_and_send_invoices(
                     invoices,
+                    from_cron=True,
                     **kwargs,
                 )
+
+            # Recompute states after the send to build the run report.
+            invoices.invalidate_recordset(["l10n_ro_edi_state"])
+            sent_ok = invoices.filtered(lambda inv: inv.l10n_ro_edi_state in ("invoice_sent", "invoice_validated"))
+            failed_now = invoices - sent_ok
+            self._l10n_ro_spv_send_cron_report(
+                company,
+                {
+                    "candidates": candidates,
+                    "attempted": invoices,
+                    "sent_ok": sent_ok,
+                    "failed_now": failed_now,
+                    "retrying": retrying,
+                    "exhausted": exhausted,
+                },
+            )
 
             if need_retrigger:
                 at = fields.Datetime.now() + timedelta(minutes=5)
                 # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
                 _logger.info("⏳ Retrigger cron scheduled in 5 minutes")
                 self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
+
+    def _l10n_ro_spv_send_cron_report(self, company, stats):
+        """Send a statistics email summarizing one SPV auto-send cron run.
+
+        Recipients come from ``company.l10n_ro_spv_cron_report_email`` (comma
+        separated), falling back to the company email. Nothing is sent on a
+        fully idle run (no candidates and no retry-exhausted invoices) to avoid
+        empty nightly emails.
+        """
+        candidates = stats["candidates"]
+        exhausted = stats["exhausted"]
+        if not candidates and not exhausted:
+            _logger.info("ℹ️ SPV cron report skipped for %s: nothing to report", company.name)
+            return
+
+        recipients = company.l10n_ro_spv_cron_report_email or company.email or company.partner_id.email
+        if not recipients:
+            _logger.warning(
+                "⚠️ SPV cron report not sent for %s: no recipient configured "
+                "(set 'Email raport cron SPV' or the company email)",
+                company.name,
+            )
+            return
+
+        def _names(records, limit=50):
+            if not records:
+                return "—"
+            names = records.mapped("name")
+            shown = ", ".join(names[:limit])
+            if len(names) > limit:
+                shown += _(" … (+%s)") % (len(names) - limit)
+            return shown
+
+        rows = [
+            (_("Trimise cu succes în SPV"), len(stats["sent_ok"]), _names(stats["sent_ok"])),
+            (_("Eșuate la această rulare"), len(stats["failed_now"]), _names(stats["failed_now"])),
+            (_("Reîncercări (eșuaseră anterior)"), len(stats["retrying"]), _names(stats["retrying"])),
+            (
+                _("Sărite — reîncercări epuizate (necesită atenție)"),
+                len(exhausted),
+                _names(exhausted),
+            ),
+        ]
+        body_rows = "".join(
+            "<tr>"
+            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{label}</td>"
+            f"<td style='padding:4px 8px;border:1px solid #ddd;text-align:right;'><b>{count}</b></td>"
+            f"<td style='padding:4px 8px;border:1px solid #ddd;color:#666;'>{names}</td>"
+            "</tr>"
+            for label, count, names in rows
+        )
+        now = fields.Datetime.now()
+        body = (
+            f"<p>{_('Raport rulare cron trimitere e-Factura în SPV')} — "
+            f"<b>{company.name}</b><br/>"
+            f"{_('Data rulării')}: {fields.Datetime.to_string(now)}</p>"
+            f"<p>{_('Total facturi procesate la această rulare')}: "
+            f"<b>{len(stats['attempted'])}</b></p>"
+            "<table style='border-collapse:collapse;font-size:13px;'>"
+            f"<tr style='background:#f5f5f5;'>"
+            f"<th style='padding:4px 8px;border:1px solid #ddd;text-align:left;'>{_('Categorie')}</th>"
+            f"<th style='padding:4px 8px;border:1px solid #ddd;'>{_('Nr.')}</th>"
+            f"<th style='padding:4px 8px;border:1px solid #ddd;text-align:left;'>{_('Facturi')}</th>"
+            f"</tr>{body_rows}</table>"
+        )
+
+        mail_values = {
+            "subject": _("[%s] Raport e-Factura SPV") % company.name,
+            "body_html": body,
+            "email_to": recipients,
+            "email_from": company.email or company.partner_id.email or recipients,
+            "auto_delete": True,
+        }
+        self.env["mail.mail"].sudo().create(mail_values).send()
+        _logger.info("📧 SPV cron report sent to %s for %s", recipients, company.name)
 
     def action_send_to_spv_only(self):
         """Trimite facturile doar in SPV, fara email."""
