@@ -14,6 +14,16 @@
                     >
                         <field name="l10n_ro_spv_cron_no_email" />
                     </setting>
+                    <setting
+                        title="Adrese de email care primesc statistica după fiecare rulare a cronului de trimitere în SPV. Dacă e gol, se folosește emailul companiei."
+                        id="l10n_ro_spv_cron_report_email"
+                        string="Email raport cron SPV"
+                    >
+                        <field
+                            name="l10n_ro_spv_cron_report_email"
+                            placeholder="contabilitate@firma.ro, manager@firma.ro"
+                        />
+                    </setting>
                 </div>
             </xpath>
         </field>
