@@ -161,15 +161,22 @@ class AccountMove(models.Model):
                 )
 
             # Recompute states after the send to build the run report.
+            # NB: 'invoice_sent' only means the XML was uploaded to the SPV and is
+            # awaiting validation — the SPV can still reject it later (async, via
+            # the fetch-status cron). Only 'invoice_validated' is a confirmed
+            # success, so we report the two separately instead of lumping them as
+            # "sent successfully".
             invoices.invalidate_recordset(["l10n_ro_edi_state"])
-            sent_ok = invoices.filtered(lambda inv: inv.l10n_ro_edi_state in ("invoice_sent", "invoice_validated"))
-            failed_now = invoices - sent_ok
+            validated = invoices.filtered(lambda inv: inv.l10n_ro_edi_state == "invoice_validated")
+            pending = invoices.filtered(lambda inv: inv.l10n_ro_edi_state == "invoice_sent")
+            failed_now = invoices - validated - pending
             self._l10n_ro_spv_send_cron_report(
                 company,
                 {
                     "candidates": candidates,
                     "attempted": invoices,
-                    "sent_ok": sent_ok,
+                    "validated": validated,
+                    "pending": pending,
                     "failed_now": failed_now,
                     "retrying": retrying,
                     "exhausted": exhausted,
@@ -215,7 +222,12 @@ class AccountMove(models.Model):
             return shown
 
         rows = [
-            (_("Trimise cu succes în SPV"), len(stats["sent_ok"]), _names(stats["sent_ok"])),
+            (_("Validate de SPV"), len(stats["validated"]), _names(stats["validated"])),
+            (
+                _("Trimise în SPV — în așteptare validare"),
+                len(stats["pending"]),
+                _names(stats["pending"]),
+            ),
             (_("Eșuate la această rulare"), len(stats["failed_now"]), _names(stats["failed_now"])),
             (_("Reîncercări (eșuaseră anterior)"), len(stats["retrying"]), _names(stats["retrying"])),
             (
