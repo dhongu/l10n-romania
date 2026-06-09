@@ -300,37 +300,33 @@ class AccountMove(models.Model):
                 _names(exhausted),
             ),
         ]
-        body_rows = "".join(
-            "<tr>"
-            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{label}</td>"
-            f"<td style='padding:4px 8px;border:1px solid #ddd;text-align:right;'><b>{count}</b></td>"
-            f"<td style='padding:4px 8px;border:1px solid #ddd;color:#666;'>{names}</td>"
-            "</tr>"
-            for label, count, names in rows
-        )
+        # Send through the standard mail.template mechanism (QWeb body + Odoo
+        # email layout) instead of a raw mail.mail. The per-run stats are passed
+        # to the template via the rendering context (exposed as ``ctx`` inside
+        # the QWeb body_html). NB: this report goes to the internal accounting
+        # team and is sent regardless of the company's "send without email"
+        # setting, which only suppresses the customer invoice email.
         now = fields.Datetime.now()
-        body = (
-            f"<p>{_('Raport rulare cron trimitere e-Factura în SPV')} — "
-            f"<b>{company.name}</b><br/>"
-            f"{_('Data rulării')}: {fields.Datetime.to_string(now)}</p>"
-            f"<p>{_('Total facturi procesate la această rulare')}: "
-            f"<b>{len(stats['attempted'])}</b></p>"
-            "<table style='border-collapse:collapse;font-size:13px;'>"
-            f"<tr style='background:#f5f5f5;'>"
-            f"<th style='padding:4px 8px;border:1px solid #ddd;text-align:left;'>{_('Categorie')}</th>"
-            f"<th style='padding:4px 8px;border:1px solid #ddd;'>{_('Nr.')}</th>"
-            f"<th style='padding:4px 8px;border:1px solid #ddd;text-align:left;'>{_('Facturi')}</th>"
-            f"</tr>{body_rows}</table>"
+        template = self.env.ref(
+            "l10n_ro_efactura_enhancement.mail_template_l10n_ro_spv_cron_report",
+            raise_if_not_found=False,
         )
-
-        mail_values = {
-            "subject": _("[%s] Raport e-Factura SPV") % company.name,
-            "body_html": body,
-            "email_to": recipients,
-            "email_from": company.email or company.partner_id.email or recipients,
-            "auto_delete": True,
-        }
-        self.env["mail.mail"].sudo().create(mail_values).send()
+        if not template:
+            _logger.warning("⚠️ SPV cron report template not found; skipping report for %s", company.name)
+            return
+        template.with_context(
+            spv_rows=rows,
+            spv_total=len(stats["attempted"]),
+            spv_run=fields.Datetime.to_string(now),
+        ).sudo().send_mail(
+            company.id,
+            force_send=True,
+            email_values={
+                "email_to": recipients,
+                "email_from": company.email or company.partner_id.email or recipients,
+                "auto_delete": True,
+            },
+        )
         _logger.info("📧 SPV cron report sent to %s for %s", recipients, company.name)
 
     def action_send_to_spv_only(self):
