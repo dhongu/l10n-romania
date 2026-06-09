@@ -11,6 +11,12 @@ class ResCompany(models.Model):
         string="Trimite in SPV fara email (cron)",
         default=False,
     )
+    l10n_ro_spv_cron_report_email = fields.Char(
+        string="Email raport cron SPV",
+        help="Adrese de email (separate prin virgula) care primesc statistica dupa "
+        "fiecare rulare a cronului de trimitere in SPV. Daca e gol, se foloseste "
+        "emailul companiei.",
+    )
 
 
 class ResConfigSettings(models.TransientModel):
@@ -20,4 +26,9 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.l10n_ro_spv_cron_no_email",
         readonly=False,
         string="Trimite in SPV fara email (cron)",
+    )
+    l10n_ro_spv_cron_report_email = fields.Char(
+        related="company_id.l10n_ro_spv_cron_report_email",
+        readonly=False,
+        string="Email raport cron SPV",
     )
