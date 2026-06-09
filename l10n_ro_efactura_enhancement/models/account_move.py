@@ -17,6 +17,16 @@ class AccountMove(models.Model):
 
     # l10n_ro_edi_state = fields.Selection( selection_add=[ ('invoice_sending_failed', 'Error')])
 
+    # Tracks whether the customer invoice email has already been sent after the
+    # SPV validated the invoice. The email is sent only once, after validation
+    # (not at upload time), so a rejected/retried invoice never emails the
+    # customer repeatedly.
+    l10n_ro_spv_validated_email_sent = fields.Boolean(
+        string="Email factură trimis după validare SPV",
+        copy=False,
+        default=False,
+    )
+
     def check_partner(self, partner):
         """Check if the partner has a country set, raise UserError if not."""
         if not partner.country_id:
@@ -47,11 +57,13 @@ class AccountMove(models.Model):
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
+            date_to = fields.Date.today() - timedelta(days=delay_days)
+            date_from = fields.Date.today() - timedelta(days=days + delay_days)
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
-                ("date", "<", fields.Date.today() - timedelta(days=delay_days)),
-                ("date", ">=", fields.Date.today() - timedelta(days=days + delay_days)),
+                ("date", "<", date_to),
+                ("date", ">=", date_from),
                 ("l10n_ro_edi_state", "=", "invoice_sent"),
                 ("company_id", "=", company.id),
             ]
@@ -66,11 +78,59 @@ class AccountMove(models.Model):
             else:
                 _logger.info("No invoices to fetch status")
 
+            # The customer invoice email is sent only AFTER the SPV validates the
+            # invoice, not at upload time. This way a rejected invoice that gets
+            # retried by the auto-send cron never emails the customer over and
+            # over. The l10n_ro_spv_validated_email_sent flag makes this
+            # idempotent and lets a failed email retry on a later run.
+            if not company.l10n_ro_spv_cron_no_email:
+                to_email = self.search(
+                    [
+                        ("move_type", "in", ("out_invoice", "out_refund")),
+                        ("state", "=", "posted"),
+                        ("date", "<", date_to),
+                        ("date", ">=", date_from),
+                        ("l10n_ro_edi_state", "=", "invoice_validated"),
+                        ("l10n_ro_spv_validated_email_sent", "=", False),
+                        ("company_id", "=", company.id),
+                    ],
+                    limit=limit,
+                )
+                if to_email:
+                    _logger.info(
+                        "📧 Sending customer email for SPV-validated invoices: %s",
+                        to_email.mapped("name"),
+                    )
+                    to_email._l10n_ro_spv_send_validated_email()
+
         if need_retrigger:
             at = fields.Datetime.now() + timedelta(minutes=2)
             # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
             _logger.info("⏳ Retrigger cron scheduled in 2 minutes")
             self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_fetch_status")._trigger(at)
+
+    def _l10n_ro_spv_send_validated_email(self):
+        """Send the customer invoice email for SPV-validated invoices, once.
+
+        The invoices are already validated, so ``account.move.send`` won't
+        re-upload them to the SPV (``_is_ro_edi_applicable`` requires an empty
+        ``l10n_ro_edi_state``); only the email is sent. Partners whose sending
+        method isn't email are flagged as done without emailing, so they aren't
+        re-queried on every run. ``allow_raising=False`` keeps send errors on the
+        move's chatter instead of aborting the batch.
+        """
+        to_mail = self.filtered(
+            lambda inv: (inv.commercial_partner_id.with_company(inv.company_id).invoice_sending_method or "email")
+            == "email"
+        )
+        if to_mail:
+            self.env["account.move.send"]._generate_and_send_invoices(
+                to_mail,
+                sending_methods={"email"},
+                allow_raising=False,
+            )
+        # Flag every processed invoice (emailed or skipped) so it isn't requeried.
+        self.l10n_ro_spv_validated_email_sent = True
 
     def _cron_l10n_ro_edi_auto_send(self, limit=20, days=30, delay_days=0):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
@@ -138,8 +198,12 @@ class AccountMove(models.Model):
                 _logger.info(f"📨 Sending invoices to SPV: {invoices_name}")
                 _logger.info(f"Count of invoices to send in SPV: {len(invoices)}")
 
-                sending_methods = {"manual"} if company.l10n_ro_spv_cron_no_email else None
-                kwargs = {"sending_methods": sending_methods} if sending_methods else {}
+                # Never email the customer at upload time. The customer invoice
+                # email is sent later, only after the SPV validates the invoice
+                # (see _cron_l10n_ro_edi_fetch_status). This avoids emailing the
+                # customer again on every retry of a rejected invoice. "manual"
+                # generates/uploads to the SPV without sending any email.
+                kwargs = {"sending_methods": {"manual"}}
 
                 # Attribute the send to OdooBot instead of whoever happens to run
                 # the cron, so the chatter/tracking shows a stable system author.
