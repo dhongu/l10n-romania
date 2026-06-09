@@ -4,7 +4,7 @@
 
 {
     "name": "eFactura Enhancement",
-    "version": "18.0.0.2.12",
+    "version": "18.0.0.2.13",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "eFactura Enhancement",
@@ -24,6 +24,7 @@
         # "wizard/account_move_send_views.xml",
         "data/ir_cron.xml",
         "data/server_action.xml",
+        "data/mail_template_spv_cron_report.xml",
         "views/account_move.xml",
         "views/res_config_settings_views.xml",
     ],
