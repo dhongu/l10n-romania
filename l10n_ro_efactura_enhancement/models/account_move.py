@@ -140,11 +140,23 @@ class AccountMove(models.Model):
 
                 sending_methods = {"manual"} if company.l10n_ro_spv_cron_no_email else None
                 kwargs = {"sending_methods": sending_methods} if sending_methods else {}
-                # from_cron=True: errors are logged on each move's chatter instead
-                # of raising, so one broken invoice no longer aborts the batch.
+
+                # Attribute the send to OdooBot instead of whoever happens to run
+                # the cron, so the chatter/tracking shows a stable system author.
+                odoobot = self.env.ref("base.user_root")
+                kwargs["author_user_id"] = odoobot.id
+                kwargs["author_partner_id"] = odoobot.partner_id.id
+
+                # allow_raising=False: errors are logged on each move's chatter
+                # instead of raising, so one broken invoice no longer aborts the
+                # batch. We must NOT use from_cron=True here: that branch reads
+                # move.sending_data (a Json field), which is only populated by the
+                # Send & Print wizard. Since this cron sends invoices directly,
+                # sending_data stays False and from_cron=True would crash with
+                # "'bool' object has no attribute 'get'".
                 self.env["account.move.send"]._generate_and_send_invoices(
                     invoices,
-                    from_cron=True,
+                    allow_raising=False,
                     **kwargs,
                 )
 
