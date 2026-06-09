@@ -1,0 +1,44 @@
+## 18.0.0.2.13 (2026-06-09)
+
+- **SPV cron report email** now uses the standard `mail.template` mechanism
+  (QWeb body + standard Odoo email layout) instead of a raw `mail.mail`. The
+  report is branded and easy to customize, with the per-run statistics passed
+  through the rendering context. The report is still sent to the accounting
+  team regardless of the "send to SPV without email" company setting.
+
+## 18.0.0.2.12 (2026-06-09)
+
+- **Customer invoice email is now sent only after SPV validation**, not at
+  upload time. Previously, a rejected invoice retried by the auto-send cron
+  emailed the customer again on every retry.
+  - The auto-send cron always uploads with `sending_methods={"manual"}` (no
+    email).
+  - The fetch-status cron sends the customer email once the invoice reaches
+    `invoice_validated`, guarded by the new `l10n_ro_spv_validated_email_sent`
+    flag (idempotent; a failed email retries on a later run). The already
+    validated invoice is not re-uploaded to the SPV.
+  - Partners whose sending method is not email are flagged as done without
+    emailing.
+- Added a post-migration that flags already-uploaded invoices as handled, so
+  the new flow does not retroactively email customers for invoices already sent
+  under the old behavior.
+
+## 18.0.0.2.11 (2026-06-09)
+
+- **SPV cron report** now splits the success bucket into two rows: "Validate de
+  SPV" (`invoice_validated`, confirmed) and "Trimise în SPV — în așteptare
+  validare" (`invoice_sent`, uploaded but not yet validated). `invoice_sent`
+  only means the XML was uploaded; the SPV can still reject it asynchronously.
+
+## 18.0.0.2.10 (2026-06-09)
+
+- **Fixed SPV auto-send cron crash** (`'bool' object has no attribute 'get'`).
+  The cron called `_generate_and_send_invoices` with `from_cron=True`, a branch
+  that reads `move.sending_data` (only populated by the Send & Print wizard).
+  Replaced with `allow_raising=False`, which keeps the "log on chatter, don't
+  abort the batch" behavior without touching `sending_data`.
+- The automatic send is now attributed to **OdooBot** instead of the user
+  running the cron.
+- **Settings layout fix**: the "eFactura SPV" section uses a `<block>` instead
+  of a raw `<div>`/`<h2>` so it aligns with the standard Settings grid; added
+  `string`/`help` on the settings.
