@@ -4,7 +4,7 @@
 
 {
     "name": "eFactura Enhancement",
-    "version": "19.0.0.3.9",
+    "version": "19.0.0.3.10",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "summary": "eFactura Enhancement",
@@ -28,6 +28,7 @@
         "data/efactura_spreadsheet_dashboard.xml",
         "data/ir_cron.xml",
         "data/server_action.xml",
+        "data/mail_template_spv_cron_report.xml",
         "views/account_move.xml",
         "views/res_config_settings_views.xml",
         # "views/efactura_dashboard_views.xml",  # TODO: re-activat după testare pe live
