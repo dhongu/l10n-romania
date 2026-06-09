@@ -6,11 +6,12 @@
         <field name="inherit_id" ref="account.res_config_settings_view_form" />
         <field name="arch" type="xml">
             <xpath expr="//block[@id='invoicing_settings']" position="after">
-                <div id="l10n_ro_efactura">
-                    <h2>eFactura SPV</h2>
+                <block title="eFactura SPV" id="l10n_ro_efactura">
                     <setting
                         title="Când este activat, cron-ul de trimitere automată în SPV nu va trimite facturile și pe email."
                         id="l10n_ro_spv_cron_no_email"
+                        string="Trimite în SPV fără email (cron)"
+                        help="Cron-ul de trimitere automată în SPV nu va trimite facturile și pe email."
                     >
                         <field name="l10n_ro_spv_cron_no_email" />
                     </setting>
@@ -18,13 +19,14 @@
                         title="Adrese de email care primesc statistica după fiecare rulare a cronului de trimitere în SPV. Dacă e gol, se folosește emailul companiei."
                         id="l10n_ro_spv_cron_report_email"
                         string="Email raport cron SPV"
+                        help="Adrese de email (separate prin virgulă) care primesc statistica după fiecare rulare a cronului. Dacă e gol, se folosește emailul companiei."
                     >
                         <field
                             name="l10n_ro_spv_cron_report_email"
                             placeholder="contabilitate@firma.ro, manager@firma.ro"
                         />
                     </setting>
-                </div>
+                </block>
             </xpath>
         </field>
     </record>
