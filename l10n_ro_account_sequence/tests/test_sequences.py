@@ -1,39 +1,40 @@
 # Copyright (C) 2025 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.tests.common import TransactionCase
+from odoo.tests import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class TestL10nRoAccountSequence(TransactionCase):
+@tagged("post_install", "-at_install")
+class TestL10nRoAccountSequence(AccountTestInvoicingCommon):
     @classmethod
     @AccountTestInvoicingCommon.setup_country("ro")
     def setUpClass(cls):
+        # Inheriting from AccountTestInvoicingCommon (instead of TransactionCase)
+        # actually loads the RO chart of accounts: the decorator only sets
+        # ``country_code`` while the chart is installed by the base setUpClass.
+        # Without it partners have no receivable/payable account and the payment
+        # counterpart line is created with account_id NULL.
         super().setUpClass()
-        cls.env.company.chart_template = "ro"
-
-    def setUp(self):
-        super().setUp()
 
         # Partners
-        self.partner_customer = self.env["res.partner"].create({"name": "Customer A", "company_type": "company"})
-        self.partner_supplier = self.env["res.partner"].create({"name": "Supplier B", "company_type": "company"})
+        cls.partner_customer = cls.env["res.partner"].create({"name": "Customer A", "company_type": "company"})
+        cls.partner_supplier = cls.env["res.partner"].create({"name": "Supplier B", "company_type": "company"})
 
         # Journals
-        self.cash_journal = self.env["account.journal"].create(
+        cls.cash_journal = cls.env["account.journal"].create(
             {
                 "name": "Cash RO",
                 "type": "cash",
             }
         )
 
-        self.bank_journal = self.env["account.journal"].create(
-            {
-                "name": "Bank RO",
-                "type": "bank",
-            }
-        )
+        # Reuse the common bank journal: its payment method lines already have an
+        # outstanding account configured, which Odoo 19 requires to generate the
+        # journal entry on posting. A freshly created bank journal would have none,
+        # so the payment would stay in 'in_process' without a move.
+        cls.bank_journal = cls.company_data["default_journal_bank"]
 
     def _post_payment(self, vals):
         payment = self.env["account.payment"].create(vals)
@@ -151,7 +152,7 @@ class TestL10nRoAccountSequence(TransactionCase):
         self.assertEqual(payment.move_id.l10n_ro_cash_document_type, "internal_transfer")
 
     def test_no_prefix_for_non_cash_journal(self):
-        payment = self._post_payment(
+        payment = self.env["account.payment"].create(
             {
                 "payment_type": "inbound",
                 "partner_type": "customer",
@@ -160,6 +161,14 @@ class TestL10nRoAccountSequence(TransactionCase):
                 "journal_id": self.bank_journal.id,
             }
         )
+        payment.action_post()
+        # In Odoo 19 a bank payment is only set to 'in_process' on posting and the
+        # journal entry is generated when it is validated (e.g. via bank
+        # reconciliation). Force validation so the move exists to assert against.
+        if not payment.move_id:
+            payment.action_validate()
+        self.assertTrue(payment.move_id, "Validated bank payment should have a move_id")
+        self.assertTrue(payment.move_id.name and payment.move_id.name != "/", "Move should have a sequence name")
         # For non-cash journals, no RO cash prefixes should be applied
         prefixes = ("CH", "PL", "DP", "DI", "IT")
         self.assertFalse(
