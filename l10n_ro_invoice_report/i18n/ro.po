@@ -168,8 +168,18 @@ msgstr "<strong>Companie</strong><br/>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<strong>Customer</strong><br/>"
+msgstr "<strong>Client</strong><br/>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 msgid "<strong>Customer:</strong><br/>"
 msgstr "<strong>Client:</strong><br/>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "<strong>Supplier</strong><br/>"
+msgstr "<strong>Furnizor</strong><br/>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -244,6 +254,11 @@ msgid "Cancelled Invoice"
 msgstr "Factura anulată"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Cancelled Sales Receipt"
+msgstr "Bon vânzare anulat"
+
+#. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_res_company
 msgid "Companies"
 msgstr "Companii"
@@ -283,6 +298,11 @@ msgstr "Notă de credit în ciornă"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "Draft Invoice"
 msgstr "Factură în ciornă"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Draft Sales Receipt"
+msgstr "Bon vânzare ciornă"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -422,6 +442,11 @@ msgid "Representing counter value of invoice"
 msgstr "Reprezentând contravaloarea facturii"
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Representing counter value of sales receipt"
+msgstr "Reprezentând contravaloarea bonului de vânzare"
+
+#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "Representing:"
@@ -551,6 +576,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "VAT:"
 msgstr "CUI"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Sales Receipt"
+msgstr "Bon vânzare"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
