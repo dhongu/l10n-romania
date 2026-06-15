@@ -105,6 +105,8 @@ class AccountInvoice(models.Model):
     def is_bf_printed(self):
         """Check if the invoice has been printed with BF (Bon Fiscal)"""
         self.ensure_one()
+        if not self.move_type == "out_invoice":
+            return False
         if hasattr(self, "receipt_print"):
             return self.receipt_print
         return False
