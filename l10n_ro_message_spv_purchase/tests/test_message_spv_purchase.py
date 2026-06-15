@@ -410,7 +410,11 @@ class TestMessageSPVPurchase(TransactionCase):
 
         product_lines = bill.invoice_line_ids.filtered(lambda l: l.display_type == "product")
         self.assertEqual(len(product_lines), 2, "XML-ul trebuie să producă 2 linii")
-        self.assertIn("Transport", product_lines.mapped("name"))
+        # Odoo UBL combină <cbc:Name> și <cbc:Description> cu '\n'; verificăm primul segment.
+        self.assertTrue(
+            any(n.split("\n")[0] == "Transport" for n in product_lines.mapped("name")),
+            "Trebuie să existe o linie al cărei name începe cu 'Transport'",
+        )
 
         # PO care corespunde liniei de produs (750 x 2), nu și transportului
         po = self._confirmed_po(partner_ref="PO-XML-001", price=750.0, qty=2.0)
@@ -420,7 +424,7 @@ class TestMessageSPVPurchase(TransactionCase):
         linked = bill.invoice_line_ids.filtered(lambda l: l.purchase_line_id)
         self.assertTrue(linked, "Linia de produs trebuie legată de comandă")
         transport = bill.invoice_line_ids.filtered(
-            lambda l: l.display_type == "product" and not l.purchase_line_id and l.name == "Transport"
+            lambda l: l.display_type == "product" and not l.purchase_line_id and l.name.split("\n")[0] == "Transport"
         )
         self.assertTrue(transport, "Linia de transport din XML trebuie păstrată")
 
