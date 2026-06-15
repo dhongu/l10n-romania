@@ -56,8 +56,15 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         # Ensure structure exists and apply safe truncation for product-based defaults
         product = vals["base_line"]["product_id"]
         item = line_node.setdefault("cac:Item", {})
-        desc = item.setdefault("cbc:Description", {})
-        name = item.setdefault("cbc:Name", {})
+        # Odoo 19 core (commit aeb41ca7) poate seta aceste noduri pe None
+        # (ca tag-ul gol să fie sărit la serializare); setdefault ar întoarce
+        # atunci None și am crăpa la atribuirea "_text". Normalizăm la dict.
+        if not isinstance(item.get("cbc:Description"), dict):
+            item["cbc:Description"] = {}
+        if not isinstance(item.get("cbc:Name"), dict):
+            item["cbc:Name"] = {}
+        desc = item["cbc:Description"]
+        name = item["cbc:Name"]
         # Default from product, truncated
         if not desc.get("_text"):
             default_desc = product.description_sale or product.name or ""
@@ -97,8 +104,14 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         use_line_desc = safe_eval(get_param("efactura.use_line_description", "False"))
         replace_unit_uom = safe_eval(get_param("efactura.replace_unit_uom", "False"))
         item = line_node.setdefault("cac:Item", {})
-        desc = item.setdefault("cbc:Description", {})
-        name = item.setdefault("cbc:Name", {})
+        # Vezi nota din _add_document_line_item_nodes: core-ul poate seta nodurile
+        # pe None, deci nu ne putem baza pe setdefault.
+        if not isinstance(item.get("cbc:Description"), dict):
+            item["cbc:Description"] = {}
+        if not isinstance(item.get("cbc:Name"), dict):
+            item["cbc:Name"] = {}
+        desc = item["cbc:Description"]
+        name = item["cbc:Name"]
         if use_line_desc:
             line = vals["base_line"]["record"]
             # Normalize and truncate the line description
@@ -111,10 +124,16 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         # When a free-text line description is used, drop additional properties
         if item.get("cac:AdditionalItemProperty"):
             item["cac:AdditionalItemProperty"] = []
-        if desc:
-            line_node["cac:Item"]["cbc:Description"]["_text"] = desc["_text"][:200]
-        if name:
-            line_node["cac:Item"]["cbc:Name"]["_text"] = name["_text"][:100]
+        # Truncare la limitele ANAF; dacă un nod a rămas gol îl punem înapoi pe
+        # None ca serializatorul să sară peste tag-ul (opțional) gol.
+        if desc.get("_text"):
+            desc["_text"] = desc["_text"][:200]
+        else:
+            item["cbc:Description"] = None
+        if name.get("_text"):
+            name["_text"] = name["_text"][:100]
+        else:
+            item["cbc:Name"] = None
         # replace line uom if parameter is set for unit
         if (
             replace_unit_uom
