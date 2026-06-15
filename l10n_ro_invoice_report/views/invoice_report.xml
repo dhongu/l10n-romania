@@ -50,7 +50,7 @@
 
             <div name="information_block" class="col-6">
                 <div>
-                    <strong t-if="o.move_type in ['out_invoice', 'out_refund']">Supplier:
+                    <strong t-if="o.move_type in ['out_invoice', 'out_refund', 'out_receipt']">Supplier:
                     </strong>
                     <strong t-if="o.move_type in ['in_invoice', 'in_refund']">Customer:
                     </strong>
@@ -117,7 +117,7 @@
             </div>
             <div class="col-5 offset-1">
                 <div>
-                    <strong t-if="o.move_type in ['out_invoice', 'out_refund']">Customer:
+                    <strong t-if="o.move_type in ['out_invoice', 'out_refund', 'out_receipt']">Customer:
                     </strong>
                     <strong t-if="o.move_type in ['in_invoice', 'in_refund']">Supplier:
                     </strong>
@@ -171,6 +171,9 @@
             <span t-elif="o.move_type == 'out_refund' and o.state == 'posted'">Credit Note</span>
             <span t-elif="o.move_type == 'out_refund' and o.state == 'draft'">Draft Credit Note</span>
             <span t-elif="o.move_type == 'out_refund' and o.state == 'cancel'">Cancelled Credit Note</span>
+            <span t-elif="o.move_type == 'out_receipt' and o.state == 'posted'">Sales Receipt</span>
+            <span t-elif="o.move_type == 'out_receipt' and o.state == 'draft'">Draft Sales Receipt</span>
+            <span t-elif="o.move_type == 'out_receipt' and o.state == 'cancel'">Cancelled Sales Receipt</span>
             <span t-elif="o.move_type == 'in_refund'">Vendor Credit Note</span>
             <span t-elif="o.move_type == 'in_invoice'">Vendor Bill</span>
             <span t-if="o.name != '/'" t-field="o.name"/>
@@ -270,9 +273,9 @@
                         <t t-set="line_name" t-value="line.name"/>
                         <t t-set="product_name" t-value="line.product_id.display_name"/>
                         <t t-if="product_name and product_name in line_name and product_name != line_name">
-                            <t t-set="line_name" t-value="line_name.replace(product_name, '')"/>
+                            <t t-set="line_name" t-value="line_name.replace(product_name, '',1).lstrip()"/>
                         </t>
-                        <span t-esc="line_name">Bacon Burger</span>
+                        <span t-esc="line_name" style="white-space: pre-wrap;">Bacon Burger</span>
                     </t>
                     <t t-if="not res_company.remove_product_name_from_invoice_line">
                         <span t-field="line.name" t-options="{'widget': 'text'}">Bacon Burger</span>
@@ -750,7 +753,7 @@
             </div>
             <t t-set="has_bf" t-value="o.is_bf_printed()" />
 
-            <t t-if="print_with_payments and not has_bf">
+            <t t-if="(print_with_payments or o.move_type == 'out_receipt') and not has_bf">
                 <t
                     t-set="payments_vals"
                     t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"
@@ -835,7 +838,8 @@
                                 )
                             </div>
                             <div>
-                                Representing counter value of invoice
+                                <t t-if="o.move_type == 'out_receipt'">Representing counter value of sales receipt</t>
+                                <t t-else="">Representing counter value of invoice</t>
                                 <span t-field="o.name"/>
                             </div>
 
