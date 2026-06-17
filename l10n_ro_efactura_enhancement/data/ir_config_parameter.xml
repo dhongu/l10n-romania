@@ -8,6 +8,14 @@
             <field name="key">efactura.use_line_description</field>
             <field name="value">False</field>
         </record>
+        <record model="ir.config_parameter" id="efactura_get_all_banks">
+            <field name="key">efactura.get_all_banks</field>
+            <field name="value">False</field>
+        </record>
+        <record model="ir.config_parameter" id="efactura_replace_unit_uom">
+            <field name="key">efactura.replace_unit_uom</field>
+            <field name="value">False</field>
+        </record>
 <!--     <record model="ir.config_parameter" id="efactura_clean_name">-->
 <!--            <field name="key">efactura.clean_name</field>-->
 <!--            <field name="value">False</field>-->
