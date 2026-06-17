@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, models
+from odoo import models
 from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
@@ -21,6 +21,19 @@ class AccountMoveSend(models.AbstractModel):
                 context.pop("lastcall", None)
 
         return alerts
+
+    def _postprocess_invoice_ubl_xml(self, invoice, invoice_data):
+        # EXTENDS account_edi_ubl_cii
+        # În O19 metoda trăiește pe modelul abstract account.move.send (nu pe
+        # wizard, ca în 18.0), iar fluxul de trimitere o apelează de pe acesta.
+        # Override-ul de pe account.move.send.wizard nu se mai declanșa, deci
+        # parametrul efactura.embed_pdf era ignorat. Îl mutăm aici ca să rămână
+        # funcțional: dacă embed_pdf e False, nu atașăm PDF-ul în XML-ul UBL.
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        embed_pdf = safe_eval(get_param("efactura.embed_pdf", "False"))
+        if not embed_pdf:
+            return
+        return super()._postprocess_invoice_ubl_xml(invoice, invoice_data)
 
 
 class AccountMoveSendWizard(models.TransientModel):
@@ -53,13 +66,3 @@ class AccountMoveSendWizard(models.TransientModel):
         }
 
     # _compute_l10n_ro_edi_send_enable nu mai exista in v19 standard
-
-    @api.model
-    def _postprocess_invoice_ubl_xml(self, invoice, invoice_data):
-        # Adding the PDF to the XML
-
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        embed_pdf = safe_eval(get_param("efactura.embed_pdf", "False"))
-        if not embed_pdf:
-            return
-        return super()._postprocess_invoice_ubl_xml(invoice, invoice_data)
