@@ -16,10 +16,10 @@
                         <field name="l10n_ro_spv_cron_no_email" />
                     </setting>
                     <setting
-                        title="Adrese de email care primesc statistica după fiecare rulare a cronului de trimitere în SPV. Dacă e gol, se folosește emailul companiei."
+                        title="Adrese de email care primesc statistica după fiecare rulare a cronului de trimitere în SPV. Dacă e gol, raportul nu se trimite."
                         id="l10n_ro_spv_cron_report_email"
                         string="Email raport cron SPV"
-                        help="Adrese de email (separate prin virgulă) care primesc statistica după fiecare rulare a cronului. Dacă e gol, se folosește emailul companiei."
+                        help="Adrese de email (separate prin virgulă) care primesc statistica după fiecare rulare a cronului. Dacă e gol, raportul nu se trimite."
                     >
                         <field
                             name="l10n_ro_spv_cron_report_email"
