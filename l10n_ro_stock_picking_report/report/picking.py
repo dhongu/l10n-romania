@@ -105,7 +105,10 @@ class ReportPickingReception(models.AbstractModel):
         value = 0
         quantity = 0
         unit_cost = 0.0
-        for valuation in move.stock_valuation_layer_ids:
+        # Read valuation layers with sudo so that standard Inventory users can
+        # print the report without needing direct access to stock.valuation.layer.
+        valuation_layers = move.sudo().stock_valuation_layer_ids
+        for valuation in valuation_layers:
             if valuation.l10n_ro_valued_type == "internal_transfer" and not valuation.account_move_id:
                 continue
             if valuation.l10n_ro_valued_type == "dropshipped" and valuation.value < 0:
@@ -114,7 +117,7 @@ class ReportPickingReception(models.AbstractModel):
             quantity += valuation.quantity
             if not unit_cost and valuation.unit_cost:
                 unit_cost = valuation.unit_cost
-        if move.stock_valuation_layer_ids:
+        if valuation_layers:
             res["price"] = (value / quantity if quantity else 0.0) or unit_cost
 
         currency = move.company_id.currency_id
