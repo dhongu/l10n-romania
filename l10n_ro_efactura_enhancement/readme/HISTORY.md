@@ -1,3 +1,10 @@
+## 18.0.0.2.14 (2026-06-18)
+
+- **SPV cron report no longer falls back to the company email.** Recipients
+  come exclusively from `l10n_ro_spv_cron_report_email`; when that field is
+  empty the report is simply not sent (previously it fell back to the company
+  email). Help texts and the settings view were updated accordingly.
+
 ## 18.0.0.2.13 (2026-06-09)
 
 - **SPV cron report email** now uses the standard `mail.template` mechanism
