@@ -14,8 +14,8 @@ class ResCompany(models.Model):
     l10n_ro_spv_cron_report_email = fields.Char(
         string="Email raport cron SPV",
         help="Adrese de email (separate prin virgula) care primesc statistica dupa "
-        "fiecare rulare a cronului de trimitere in SPV. Daca e gol, se foloseste "
-        "emailul companiei.",
+        "fiecare rulare a cronului de trimitere in SPV. Daca e gol, raportul nu se "
+        "trimite.",
     )
 
 

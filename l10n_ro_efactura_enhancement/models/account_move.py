@@ -256,10 +256,11 @@ class AccountMove(models.Model):
     def _l10n_ro_spv_send_cron_report(self, company, stats):
         """Send a statistics email summarizing one SPV auto-send cron run.
 
-        Recipients come from ``company.l10n_ro_spv_cron_report_email`` (comma
-        separated), falling back to the company email. Nothing is sent on a
-        fully idle run (no candidates and no retry-exhausted invoices) to avoid
-        empty nightly emails.
+        Recipients come exclusively from ``company.l10n_ro_spv_cron_report_email``
+        (comma separated). When that field is empty the report is not sent (no
+        fallback to the company email). Nothing is sent on a fully idle run (no
+        candidates and no retry-exhausted invoices) to avoid empty nightly
+        emails.
         """
         candidates = stats["candidates"]
         exhausted = stats["exhausted"]
@@ -267,11 +268,10 @@ class AccountMove(models.Model):
             _logger.info("ℹ️ SPV cron report skipped for %s: nothing to report", company.name)
             return
 
-        recipients = company.l10n_ro_spv_cron_report_email or company.email or company.partner_id.email
+        recipients = company.l10n_ro_spv_cron_report_email
         if not recipients:
-            _logger.warning(
-                "⚠️ SPV cron report not sent for %s: no recipient configured "
-                "(set 'Email raport cron SPV' or the company email)",
+            _logger.info(
+                "ℹ️ SPV cron report not sent for %s: 'Email raport cron SPV' not set",
                 company.name,
             )
             return
