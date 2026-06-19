@@ -419,7 +419,7 @@
                                     </td>
                                     <td class="text-end">
                                         <t t-set="line_value" t-value="0.0" />
-                                        <t t-foreach="move.stock_valuation_layer_ids" t-as="valuation_line">
+                                        <t t-foreach="move.sudo().stock_valuation_layer_ids" t-as="valuation_line">
                                             <t t-set="line_value" t-value="line_value-valuation_line.value" />
                                         </t>
                                         <span
