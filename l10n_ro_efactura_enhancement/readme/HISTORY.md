@@ -1,3 +1,27 @@
+## 18.0.0.2.16 (2026-06-24)
+
+- **No more double customer email.** Previously an invoice could be emailed
+  twice: once by the operator's manual "Send & Print" at posting time, and
+  again by the SPV fetch-status cron after the SPV validated it (the
+  `l10n_ro_spv_validated_email_sent` flag was only set by the cron, so a manual
+  send went unnoticed). `account.move.send._send_mails` is now extended to set
+  the flag for every invoice actually emailed to the customer through any path,
+  so the post-validation cron skips invoices the operator already emailed. The
+  SPV upload path uses `sending_methods={"manual"}` (no email), so cron-only
+  invoices are still emailed once after validation.
+
+## 18.0.0.2.15 (2026-06-24)
+
+- **Foreign-customer invoices are no longer uploaded to the SPV via Send &
+  Print.** The core `_is_ro_edi_applicable` only checks the issuing company is
+  Romanian (`country_code == 'RO'`), so the standard Send & Print wizard would
+  upload invoices issued to foreign customers (e.g. Shopify HU) to the SPV and
+  later re-email the customer after validation. The check now also excludes
+  invoices whose commercial partner has a country explicitly set to something
+  other than RO, matching the existing filter on the auto-send cron and
+  `action_send_to_spv_only`. Partners without a country are left untouched to
+  avoid regressions on domestic B2C invoices.
+
 ## 18.0.0.2.14 (2026-06-18)
 
 - **SPV cron report no longer falls back to the company email.** Recipients
