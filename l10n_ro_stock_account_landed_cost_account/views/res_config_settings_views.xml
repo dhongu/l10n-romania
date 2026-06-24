@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.l10n_ro_stock_account_landed_cost_account</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="l10n_ro_config.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='ro_accounting_setting_container']" position="inside">
+                <setting
+                    id="l10n_ro_landed_cost_intermediary_account"
+                    string="Landed Cost Intermediary Account"
+                    help="Technical intermediary account used to transfer service costs into products on landed cost validation (e.g. 482.99). When set, entries that would credit a class 6 account are routed through it, producing two clean balanced notes. Leave empty to keep the standard behaviour."
+                >
+                    <field name="l10n_ro_landed_cost_intermediary_account_id" />
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
