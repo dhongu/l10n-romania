@@ -42,9 +42,13 @@ class AdjustmentLines(models.Model):
         account, so a landed cost move keeps two clean balanced notes
         (stock valuation = intermediary account and intermediary account = class 6)
         instead of crediting a class 6 account directly. Class 609 is never
-        rerouted. When no intermediary account is configured on the company, the
+        rerouted. Active only when the company landed cost method is set to
+        'intermediary' and an intermediary account is configured; otherwise the
         standard behaviour is preserved."""
-        intermediary_account = self.cost_id.company_id.l10n_ro_landed_cost_intermediary_account_id
+        company = self.cost_id.company_id
+        if company.l10n_ro_landed_cost_method != "intermediary":
+            return lines
+        intermediary_account = company.l10n_ro_landed_cost_intermediary_account_id
         if not intermediary_account:
             return lines
 

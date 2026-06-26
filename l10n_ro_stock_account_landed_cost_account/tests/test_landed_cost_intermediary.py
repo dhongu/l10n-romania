@@ -91,9 +91,10 @@ class TestLandedCostIntermediary(TransactionCase):
         return landed
 
     def test_intermediary_account_reroutes_class6(self):
-        """With the intermediary account configured, the class 6 account is not
-        credited against the stock valuation directly; the intermediary account
-        nets to zero."""
+        """With the intermediary method and account configured, the class 6 account
+        is not credited against the stock valuation directly; the intermediary
+        account nets to zero."""
+        self.env.company.l10n_ro_landed_cost_method = "intermediary"
         self.env.company.l10n_ro_landed_cost_intermediary_account_id = self.intermediary_account
         landed = self._create_landed_cost(self._receive_product())
         move = landed.account_move_id
@@ -107,12 +108,23 @@ class TestLandedCostIntermediary(TransactionCase):
         class6_lines = move.line_ids.filtered(lambda line: line.account_id == self.account_expense)
         self.assertTrue(class6_lines, "Class 6 account must still be present in the move")
 
-    def test_no_intermediary_account_keeps_standard(self):
-        """Without the intermediary account, the standard behaviour is preserved
+    def test_standard_method_keeps_standard(self):
+        """With the standard method, the native behaviour is preserved
         (no intermediary account line, class 6 credited directly)."""
+        self.env.company.l10n_ro_landed_cost_method = "standard"
         self.env.company.l10n_ro_landed_cost_intermediary_account_id = False
         landed = self._create_landed_cost(self._receive_product())
         move = landed.account_move_id
         self.assertTrue(move, "Landed cost account move should be created")
         intermediary_lines = move.line_ids.filtered(lambda line: line.account_id == self.intermediary_account)
         self.assertFalse(intermediary_lines, "Intermediary account must not appear when not configured")
+
+    def test_standard_method_ignores_configured_account(self):
+        """Even if an intermediary account is configured, the standard method does
+        not reroute (the selector controls the behaviour, not the account)."""
+        self.env.company.l10n_ro_landed_cost_method = "standard"
+        self.env.company.l10n_ro_landed_cost_intermediary_account_id = self.intermediary_account
+        landed = self._create_landed_cost(self._receive_product())
+        move = landed.account_move_id
+        intermediary_lines = move.line_ids.filtered(lambda line: line.account_id == self.intermediary_account)
+        self.assertFalse(intermediary_lines, "Intermediary account must not appear under the standard method")

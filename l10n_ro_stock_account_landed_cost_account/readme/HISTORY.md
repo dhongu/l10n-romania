@@ -1,5 +1,17 @@
 # Changelog
 
+## 18.0.1.1.0
+
+- Added a **Landed Cost Class 6 Method** company selector (Accounting / Romania
+  settings) that makes the behaviour explicit and configurable per company:
+  - **Standard** (default): native Odoo behaviour (`stock valuation = class 6`);
+  - **Through intermediary account**: routes the class 6 credit through the
+    intermediary account, producing two clean balanced notes for the SAGA export.
+  The intermediary account is now shown and required only for the intermediary
+  method, and the selector — not the mere presence of the account — controls the
+  behaviour. Existing companies default to **Standard**, so behaviour is unchanged
+  on upgrade unless the method is explicitly switched.
+
 ## 18.0.1.0.0
 
 - Added an optional **Landed Cost Intermediary Account** company setting (Accounting /
