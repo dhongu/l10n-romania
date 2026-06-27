@@ -1,5 +1,18 @@
 # Roadmap
 
+## Planned
+
+- **Reconciliere automată a trimiterilor incerte cu lista de mesaje SPV.**
+  Garda actuală oprește re-trimiterea automată după un timeout
+  (`l10n_ro_edi_send_uncertain`), dar verificarea „a ajuns sau nu factura la
+  SPV?" rămâne manuală. Pas următor: la fetch-status, dacă există stiva de
+  descărcare mesaje SPV (`l10n.ro.message.spv`), să se caute automat o
+  încărcare existentă pentru factura incertă (potrivire pe CIF beneficiar +
+  sumă + dată, eventual și pe numărul facturii din XML-ul descărcat) și să se
+  adopte `index_incarcare` găsit, în loc de re-trimitere. Atenție: metadatele
+  listei ANAF nu conțin numărul nostru de factură, deci potrivirea e euristică
+  (nu 100% pentru facturi diferite cu același partener/sumă/zi).
+
 ## Known Bugs to Fix
 
 - **Missing system parameter defaults**: `efactura.get_all_banks` and `efactura.replace_unit_uom`
