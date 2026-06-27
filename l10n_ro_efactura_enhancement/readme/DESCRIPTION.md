@@ -10,6 +10,7 @@ The l10n_ro_efactura_enhancement module extends the standard Romanian e-Invoicin
     - Cron job for **fetching status** updates from SPV for sent invoices.
     - **Server action "Trimite in SPV"**: Allows sending selected invoices directly to SPV from the invoice list view, without triggering email sending.
     - **Configuration option**: A setting in the Accounting configuration page controls whether the automatic SPV cron job suppresses email sending (sends only to SPV).
+    - **Anti-duplicate protection when sending to SPV** (idempotency guard + response-timeout handling). NOTE: this replicates behaviour that is **native in Odoo 19 standard** (`l10n_ro_edi`): the `invoice_not_indexed` state, the pre-send "already sent" guard, and "Synchronise to SPV" recovery. On Odoo 19 this part of the enhancement is no longer needed for the duplicate case.
 - **Data Truncation and Sanitization**:
     - Truncates product names to 100 characters and descriptions to 200 characters to ensure compliance with UBL standards.
     - Truncates notes to 300 characters.
