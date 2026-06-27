@@ -1,6 +1,8 @@
 import logging
 from datetime import timedelta
 
+import requests
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -27,6 +29,21 @@ class AccountMove(models.Model):
         string="Email factură trimis după validare SPV",
         copy=False,
         default=False,
+    )
+
+    # Set when a send to the SPV ended in an uncertain state (typically a
+    # response timeout from ANAF): the upload MAY have reached the SPV even
+    # though Odoo did not record an index. Such an invoice must NOT be
+    # re-sent automatically by the auto-send cron, otherwise a second upload
+    # is created at ANAF for the same invoice (duplicate). It requires a
+    # manual check in the SPV and is cleared once resolved.
+    l10n_ro_edi_send_uncertain = fields.Boolean(
+        string="Trimitere SPV incertă (verificare manuală)",
+        copy=False,
+        default=False,
+        help="Trimiterea către SPV s-a încheiat fără răspuns de la ANAF "
+        "(timeout). Încărcarea poate să fi ajuns totuși în SPV. Factura nu se "
+        "retrimite automat — verificați în SPV și debifați după clarificare.",
     )
 
     def check_partner(self, partner):
@@ -156,6 +173,11 @@ class AccountMove(models.Model):
                 ("date", ">=", fields.Date.today() - timedelta(days=days + delay_days)),
                 ("commercial_partner_id.country_id.code", "=", "RO"),
                 ("l10n_ro_edi_state", "=", False),
+                # Skip invoices whose previous send ended in an uncertain state
+                # (response timeout): the upload may have reached the SPV, so an
+                # automatic re-send would create a duplicate at ANAF. These need
+                # a manual check in the SPV before being sent again.
+                ("l10n_ro_edi_send_uncertain", "=", False),
                 ("company_id", "=", company.id),
             ]
 
@@ -355,7 +377,64 @@ class AccountMove(models.Model):
         )
 
     def _l10n_ro_edi_send_invoice(self, xml_data):
-        return super(AccountMove, self.with_context(active_id=self.id))._l10n_ro_edi_send_invoice(xml_data)
+        self.ensure_one()
+
+        # Idempotency guard: never re-upload an invoice that already has a
+        # successful upload in the SPV. The ANAF 'upload' endpoint is not
+        # idempotent (each call creates a new index_incarcare for the same
+        # invoice), so a second trigger (cron + manual Send & Print at almost
+        # the same time, or a retry) would create a duplicate at ANAF.
+        already_sent = self.l10n_ro_edi_document_ids.filtered(
+            lambda d: d.state in ("invoice_sent", "invoice_validated")
+        )
+        if already_sent or self.l10n_ro_edi_index:
+            index = self.l10n_ro_edi_index or already_sent[:1].key_loading
+            _logger.warning(
+                "E-Factura %s deja încărcată în SPV (index=%s); se evită re-trimiterea.",
+                self.name,
+                index,
+            )
+            self.message_post(
+                body=_(
+                    "Trimiterea către SPV a fost evitată: factura are deja o "
+                    "încărcare în SPV (index de încărcare %s). Nu se retrimite, "
+                    "pentru a nu crea un duplicat la ANAF.",
+                    index,
+                )
+            )
+            return
+
+        try:
+            res = super(AccountMove, self.with_context(active_id=self.id))._l10n_ro_edi_send_invoice(xml_data)
+        except requests.Timeout:
+            # Response timeout from ANAF: the upload MAY have reached the SPV
+            # even though we did not receive the index. We must NOT mark this as
+            # a retriable failure (the auto-send cron would re-upload it and
+            # create a duplicate). Flag it for a manual SPV check instead.
+            self.l10n_ro_edi_send_uncertain = True
+            _logger.warning(
+                "Timeout la trimiterea E-Factura %s; marcată pentru verificare manuală în SPV.",
+                self.name,
+            )
+            self.message_post(
+                body=_(
+                    "Trimiterea către SPV a expirat (timeout) fără răspuns de la "
+                    "ANAF. Încărcarea poate să fi ajuns totuși în SPV. Factura NU "
+                    "se retrimite automat — verificați în SPV dacă a fost primită: "
+                    "dacă da, completați indexul de încărcare; dacă nu, debifați "
+                    "„Trimitere SPV incertă” și reluați trimiterea."
+                )
+            )
+            return
+        # A successful send resolves any previous uncertain state.
+        if self.l10n_ro_edi_send_uncertain:
+            self.l10n_ro_edi_send_uncertain = False
+        return res
+
+    def action_l10n_ro_edi_clear_send_uncertain(self):
+        """Clear the 'uncertain send' flag after a manual SPV check, so the
+        invoice can be picked up again by the normal send flow."""
+        self.write({"l10n_ro_edi_send_uncertain": False})
 
     @api.model
     def _cron_account_move_send(self, job_count=10):

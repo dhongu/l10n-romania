@@ -1,4 +1,21 @@
-## 18.0.0.2.16 (2026-06-24)
+## 18.0.0.3.0 (2026-06-26)
+
+- **Protecție anti-duplicat la trimiterea în SPV.** O factură putea ajunge de
+  două ori la ANAF (două `index_incarcare` pentru același număr de factură),
+  fie printr-o dublă declanșare (cron de auto-send + „Send & Print" manual
+  aproape simultan), fie după un timeout la răspunsul ANAF (încărcarea ajungea
+  la SPV, dar Odoo nu reținea indexul și o re-trimitea). Două măsuri:
+  - **Gardă de idempotență** în `_l10n_ro_edi_send_invoice`: dacă factura are
+    deja un document `invoice_sent`/`invoice_validated` sau un index de
+    încărcare, trimiterea este evitată (mesaj în chatter), pentru a nu crea un
+    al doilea upload la ANAF (API-ul `upload` nu este idempotent).
+  - **Tratarea timeout-ului** (`requests.Timeout`, inclusiv `ReadTimeout`, care
+    în core nu era prins): trimiterea nu mai e marcată drept eroare
+    re-trimitabilă; factura este marcată `l10n_ro_edi_send_uncertain` și
+    **exclusă din cronul de auto-send**, cu un mesaj care cere verificare
+    manuală în SPV. Un buton pe factură debifează marcajul după clarificare.
+
+
 
 - **No more double customer email.** Previously an invoice could be emailed
   twice: once by the operator's manual "Send & Print" at posting time, and
