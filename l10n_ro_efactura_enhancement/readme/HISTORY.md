@@ -14,6 +14,11 @@
     re-trimitabilă; factura este marcată `l10n_ro_edi_send_uncertain` și
     **exclusă din cronul de auto-send**, cu un mesaj care cere verificare
     manuală în SPV. Un buton pe factură debifează marcajul după clarificare.
+  - **Notă:** această protecție este un *backport* al comportamentului **nativ
+    din Odoo 19 standard** (`l10n_ro_edi`): pe 19 există deja starea
+    `invoice_not_indexed`, garda de pre-send „already sent" și recuperarea prin
+    „Synchronise to SPV". Pe Odoo 19 dezvoltarea de față nu mai este necesară
+    pentru cazul duplicatelor.
 
 
 
