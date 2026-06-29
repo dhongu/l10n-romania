@@ -6,7 +6,7 @@
     "name": "eTransport Batch Enhancement",
     "version": "18.0.0.1.1",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "website": "https://www.terrabit.ro",
     "summary": "eTransport Batch Enhancement",
     "countries": ["ro"],
     "category": "Localization",
