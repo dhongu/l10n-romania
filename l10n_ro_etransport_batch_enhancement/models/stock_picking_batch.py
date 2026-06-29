@@ -2,7 +2,9 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
+from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
 
 
 class StockPickingBatch(models.Model):
@@ -98,7 +100,7 @@ class StockPickingBatch(models.Model):
         errors = super()._l10n_ro_edi_stock_validate_data(data)
 
         for error in errors:
-            if error == _("The delivery carrier partner has to be located in Romania."):
+            if error == self.env._("The delivery carrier partner has to be located in Romania."):
                 errors.remove(error)
 
         return errors
@@ -107,16 +109,13 @@ class StockPickingBatch(models.Model):
         self.picking_ids.l10n_ro_compute_weight_lines()
 
     def l10n_ro_distribute_weights(self):
-        from odoo.exceptions import UserError
-        from odoo.tools import float_is_zero
-
         for batch in self:
             if not batch.l10n_ro_shipping_weight_lines:
                 continue
             if float_is_zero(batch.total_net_weight, precision_digits=4) or float_is_zero(
                 batch.total_gross_weight, precision_digits=4
             ):
-                raise UserError(_("Total net and gross weights must be greater than 0."))
+                raise UserError(self.env._("Total net and gross weights must be greater than 0."))
 
             current_net_total = sum(batch.l10n_ro_shipping_weight_lines.mapped("net_weight"))
             current_gross_total = sum(batch.l10n_ro_shipping_weight_lines.mapped("gross_weight"))
