@@ -18,8 +18,8 @@
         "l10n_ro_stock_picking_batch_report",
     ],
     "license": "LGPL-3",
-    "price": 25.00,
-    "currency": "EUR",
+    # "price": 25.00,
+    # "currency": "EUR",
     "data": [
         "views/stock_picking_batch_view.xml",
     ],
