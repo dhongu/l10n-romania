@@ -17,7 +17,7 @@
         "l10n_ro_etransport_enhancement",
         "l10n_ro_stock_picking_batch_report",
     ],
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     # "price": 25.00,
     # "currency": "EUR",
     "data": [
