@@ -194,8 +194,8 @@ class Picking(models.Model):
 
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data: dict):
-        data["transport_partner_id"] = self.l10n_ro_transport_partner_id or data["transport_partner_id"]
-        if not self or not data["transport_partner_id"]:  # called from batch there's no self
+        data["transport_partner_id"] = self.l10n_ro_transport_partner_id or data.get("transport_partner_id")
+        if not self or not data.get("transport_partner_id"):  # called from batch there's no self
             # try to get the batch itself:
             if data["stock_move_ids"]:
                 first_move = data["stock_move_ids"][0]
