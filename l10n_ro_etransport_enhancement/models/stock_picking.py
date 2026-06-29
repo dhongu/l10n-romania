@@ -18,6 +18,13 @@ class Picking(models.Model):
     l10n_ro_shipping_weight_lines = fields.One2many(
         "l10n.ro.stock.picking.weight.line", "picking_id", string="Shipping Weight Lines"
     )
+    l10n_ro_transport_partner_id = fields.Many2one("res.partner", string="Transport Partner")
+
+    @api.onchange("carrier_id")
+    def _onchange_carrier_id(self):
+        for picking in self:
+            if picking.carrier_id and picking.carrier_id.l10n_ro_edi_stock_partner_id:
+                picking.l10n_ro_transport_partner_id = picking.carrier_id.l10n_ro_edi_stock_partner_id
 
     def _compute_l10n_ro_edi_stock_enable(self):
         res = super()._compute_l10n_ro_edi_stock_enable()
@@ -176,8 +183,25 @@ class Picking(models.Model):
     #
     #     return errors
 
+    def _l10n_ro_edi_stock_validate_carrier(self):
+        pickings_without_transport_partner = self.filtered(
+            lambda p: p._l10n_ro_edi_stock_validate_carrier_filter(p) and not p.l10n_ro_transport_partner_id
+        )
+
+        # Pentru pickings fără l10n_ro_transport_partner_id, apelăm super() care verifică carrier_id
+        if pickings_without_transport_partner:
+            return super(Picking, pickings_without_transport_partner)._l10n_ro_edi_stock_validate_carrier()
+
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data: dict):
+        data["transport_partner_id"] = self.l10n_ro_transport_partner_id or data.get("transport_partner_id")
+        if not self or not data.get("transport_partner_id"):  # called from batch there's no self
+            # try to get the batch itself:
+            if data["stock_move_ids"]:
+                first_move = data["stock_move_ids"][0]
+                batch_id = first_move.picking_id.batch_id
+                if batch_id:
+                    data["transport_partner_id"] = batch_id.l10n_ro_transport_partner_id
         errors = super()._l10n_ro_edi_stock_validate_data(data)
 
         no_weight = self.env["product.product"]
