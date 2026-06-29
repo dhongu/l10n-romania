@@ -7,7 +7,7 @@
     "summary": "Rapoarte din batch: aviz",
     "license": "AGPL-3",
     "version": "19.0.0.0.1",
-    "development_status": "Beta",
+    "development_status": "Mature",
     "author": "Dan Stoica,Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
