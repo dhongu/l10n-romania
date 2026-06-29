@@ -7,8 +7,8 @@
     "summary": "Rapoarte din batch: aviz",
     "license": "AGPL-3",
     "version": "18.0.0.0.1",
-    "author": "Dan Stoica," "Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "author": "Dan Stoica,Odoo Community Association (OCA)",
+    "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],
     "depends": [
