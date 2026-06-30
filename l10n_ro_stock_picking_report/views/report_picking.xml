@@ -879,12 +879,13 @@
     </template>
     <template id="report_reception_text">
         <div id="informations" class="row mt32 mb32">
-            <div class="col-3 bm-2" t-if="o.origin or o.group_id">
+            <div class="col-3 bm-2" t-if="o.origin or ('reference_ids' in o and o.reference_ids) or ('group_id' in o and o.group_id)">
                 <strong>Origin</strong>
                 <p>
                     <span t-esc="o.origin and o.origin[:30]" />
                     <t t-if="not  o.origin">
-                        <span t-field="o.group_id" />
+                        <span t-if="'reference_ids' in o" t-field="o.reference_ids" />
+                        <span t-elif="'group_id' in o" t-field="o.group_id" />
                     </t>
                 </p>
             </div>
