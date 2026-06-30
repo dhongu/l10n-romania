@@ -231,11 +231,15 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         return res
 
     def _ubl_add_order_reference_node(self, vals):
-        # linit salesorder names
+        # limit salesorder names (BT-14) and purchase order reference (BT-13) to 200 chars
+        # ANAF rule BR-RO-L200 rejects BT-13/BT-14 longer than 200 characters
         res = super()._ubl_add_order_reference_node(vals)
         order_ref_node = vals.get("document_node", {}).get("cac:OrderReference")
-        if order_ref_node and order_ref_node.get("cbc:SalesOrderID", {}).get("_text"):
-            order_ref_node["cbc:SalesOrderID"]["_text"] = order_ref_node["cbc:SalesOrderID"]["_text"][:200]
+        if order_ref_node:
+            if order_ref_node.get("cbc:SalesOrderID", {}).get("_text"):
+                order_ref_node["cbc:SalesOrderID"]["_text"] = order_ref_node["cbc:SalesOrderID"]["_text"][:200]
+            if order_ref_node.get("cbc:ID", {}).get("_text"):
+                order_ref_node["cbc:ID"]["_text"] = order_ref_node["cbc:ID"]["_text"][:200]
         return res
 
     def _ubl_add_accounting_supplier_party_legal_entity_nodes(self, vals):
