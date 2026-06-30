@@ -11,25 +11,37 @@ class TestLandedCostIntermediary(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
 
+        cls.company = cls.env.company
+
         def account(code, name, account_type="asset_current", reconcile=False):
-            acc = cls.env["account.account"].search([("code", "=", code)], limit=1)
+            # Odoo 19: account.account is multi-company (company_ids); scope both the
+            # lookup and the creation to the active company to avoid crossover.
+            acc = cls.env["account.account"].search(
+                [("code", "=", code), ("company_ids", "in", cls.company.id)], limit=1
+            )
             if not acc:
                 acc = cls.env["account.account"].create(
-                    {"name": name, "code": code, "account_type": account_type, "reconcile": reconcile}
+                    {
+                        "name": name,
+                        "code": code,
+                        "account_type": account_type,
+                        "reconcile": reconcile,
+                        "company_ids": [(6, 0, cls.company.ids)],
+                    }
                 )
             return acc
 
         cls.account_expense = account("607000", "Expense", "expense")
         cls.account_income = account("707000", "Income", "income")
-        cls.account_input = account("371000.i", "Input")
-        cls.account_output = account("371000.o", "Output")
         cls.account_valuation = account("371000", "Valuation")
         cls.intermediary_account = account("482099", "Decontari costuri aditionale")
 
-        cls.stock_journal = cls.env["account.journal"].search([("code", "=", "STJ")], limit=1)
+        cls.stock_journal = cls.env["account.journal"].search(
+            [("code", "=", "STJ"), ("company_id", "=", cls.company.id)], limit=1
+        )
         if not cls.stock_journal:
             cls.stock_journal = cls.env["account.journal"].create(
-                {"name": "Stock Journal", "code": "STJ", "type": "general"}
+                {"name": "Stock Journal", "code": "STJ", "type": "general", "company_id": cls.company.id}
             )
 
         cls.category = cls.env["product.category"].create(
@@ -39,8 +51,6 @@ class TestLandedCostIntermediary(TransactionCase):
                 "property_valuation": "real_time",
                 "property_account_income_categ_id": cls.account_income.id,
                 "property_account_expense_categ_id": cls.account_expense.id,
-                "property_stock_account_input_categ_id": cls.account_input.id,
-                "property_stock_account_output_categ_id": cls.account_output.id,
                 "property_stock_valuation_account_id": cls.account_valuation.id,
                 "property_stock_journal": cls.stock_journal.id,
             }
@@ -64,7 +74,9 @@ class TestLandedCostIntermediary(TransactionCase):
         po.button_confirm()
         picking = po.picking_ids[0]
         picking.move_line_ids.write({"quantity": 10.0})
-        picking.button_validate()
+        # demo_mode bypasses the l10n_ro_edi_stock (e-Transport) carrier validation,
+        # the documented escape hatch for unit tests of other modules.
+        picking.with_context(demo_mode=True).button_validate()
         return picking
 
     def _create_landed_cost(self, picking):

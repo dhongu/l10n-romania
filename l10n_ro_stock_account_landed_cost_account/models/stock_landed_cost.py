@@ -7,7 +7,10 @@ from odoo import models
 class AdjustmentLines(models.Model):
     _inherit = "stock.valuation.adjustment.lines"
 
-    def _create_account_move_line(self, move, credit_account_id, debit_account_id, qty_out, already_out_account_id):
+    def _create_account_move_line(self, credit_account_id, debit_account_id, remaining_qty):
+        # Odoo 19: the core signature dropped ``move``, ``qty_out`` and
+        # ``already_out_account_id`` (the "already out" handling was moved out of
+        # this method) and renamed ``qty_out`` -> ``remaining_qty``.
         stock_move = self.move_id
 
         location_from = stock_move.location_id
@@ -21,20 +24,12 @@ class AdjustmentLines(models.Model):
         if stock_move._is_out():
             debit_account_id = from_account.id or debit_account_id
 
-        accounts = self.product_id.product_tmpl_id.get_product_accounts()
-        already_out_account_id = accounts.get("expense") and accounts["expense"].id or False
-
         fiscal_position = self.cost_id.account_journal_id.l10n_ro_fiscal_position_id
         if fiscal_position:
             credit_account_id = fiscal_position.map_account(self.env["account.account"].browse(credit_account_id)).id
             debit_account_id = fiscal_position.map_account(self.env["account.account"].browse(debit_account_id)).id
-            already_out_account_id = fiscal_position.map_account(
-                self.env["account.account"].browse(already_out_account_id)
-            ).id
 
-        lines = super()._create_account_move_line(
-            move, credit_account_id, debit_account_id, qty_out, already_out_account_id
-        )
+        lines = super()._create_account_move_line(credit_account_id, debit_account_id, remaining_qty)
         return self._l10n_ro_route_class6_through_intermediary(lines)
 
     def _l10n_ro_route_class6_through_intermediary(self, lines):
