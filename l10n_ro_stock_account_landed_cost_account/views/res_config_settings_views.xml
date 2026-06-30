@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.l10n_ro_stock_account_landed_cost_account</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="l10n_ro_config.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='ro_accounting_setting_container']" position="inside">
+                <setting
+                    id="l10n_ro_landed_cost_method"
+                    string="Landed Cost Class 6 Method"
+                    help="How the landed cost entry that would credit a class 6 (expense) account is generated. 'Standard' keeps the native Odoo behaviour (stock valuation = class 6). 'Through intermediary account' routes the class 6 credit through a technical intermediary account, producing two clean balanced notes that export correctly to SAGA."
+                >
+                    <field name="l10n_ro_landed_cost_method" />
+                    <div class="content-group mt16" invisible="l10n_ro_landed_cost_method != 'intermediary'">
+                        <label for="l10n_ro_landed_cost_intermediary_account_id" string="Intermediary Account" />
+                        <field
+                            name="l10n_ro_landed_cost_intermediary_account_id"
+                            required="l10n_ro_landed_cost_method == 'intermediary'"
+                        />
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
