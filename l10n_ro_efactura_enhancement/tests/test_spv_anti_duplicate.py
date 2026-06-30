@@ -92,6 +92,25 @@ class TestSpvAntiDuplicate(TransactionCase):
             invoice._l10n_ro_edi_send_invoice("<Invoice/>")
         mock_send.assert_not_called()
 
+    @mute_logger(LOGGER)
+    def test_resend_allowed_when_index_present_but_upload_rejected(self):
+        """Indexul rămâne pe factură și după respingerea la ANAF (documentul
+        trece pe 'invoice_sending_failed'). O factură respinsă și corectată
+        trebuie să poată fi retrimisă, nu blocată de indexul rămas."""
+        invoice = self._create_invoice()
+        invoice.l10n_ro_edi_index = "6520851057"
+        self.env["l10n_ro_edi.document"].create(
+            {
+                "invoice_id": invoice.id,
+                "state": "invoice_sending_failed",
+                "key_loading": "6520851057",
+                "datetime": fields.Datetime.now(),
+            }
+        )
+        with patch(SEND_METHOD, return_value={"key_loading": "9999999999"}) as mock_send:
+            invoice._l10n_ro_edi_send_invoice("<Invoice/>")
+        mock_send.assert_called_once()
+
     def test_clear_uncertain(self):
         """Butonul de resetare debifează marcajul incert."""
         invoice = self._create_invoice()

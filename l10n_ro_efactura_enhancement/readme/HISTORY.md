@@ -1,3 +1,15 @@
+## 18.0.0.3.2 (2026-06-30)
+
+- **Permite retrimiterea facturilor respinse de ANAF.** Garda de idempotență
+  bloca retrimiterea oricărei facturi care avea `l10n_ro_edi_index` setat. Însă
+  indexul rămâne pe factură și după ce ANAF *respinge* încărcarea (fluxul de
+  fetch/download din core trece documentul pe `invoice_sending_failed`, dar nu
+  șterge indexul). Astfel, o factură respinsă și apoi corectată nu mai putea fi
+  retrimisă. Acum indexul rămas este tratat ca risc de duplicat doar când NU
+  există un document `invoice_sending_failed` care să-l anuleze: o încărcare
+  respinsă este „moartă" la ANAF, deci factura corectată trebuie să fie
+  retrimisibilă. Modificat în `_l10n_ro_edi_send_invoice`.
+
 ## 18.0.0.3.1 (2026-06-30)
 
 - **Trunchiere referință comandă (BT-13) la 200 de caractere.** Pe facturile de

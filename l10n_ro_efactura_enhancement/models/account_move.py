@@ -387,7 +387,14 @@ class AccountMove(models.Model):
         already_sent = self.l10n_ro_edi_document_ids.filtered(
             lambda d: d.state in ("invoice_sent", "invoice_validated")
         )
-        if already_sent or self.l10n_ro_edi_index:
+        # l10n_ro_edi_index lingers on the invoice even after ANAF *rejects*
+        # the upload: the fetch/download flow switches the document to
+        # 'invoice_sending_failed' but never clears the index. A rejected
+        # upload is dead at ANAF, so a corrected invoice MUST be resendable.
+        # Treat the lingering index as a real duplicate risk only when there
+        # is no failing document overriding it.
+        rejected = self._l10n_ro_edi_get_failed_documents()
+        if already_sent or (self.l10n_ro_edi_index and not rejected):
             index = self.l10n_ro_edi_index or already_sent[:1].key_loading
             _logger.warning(
                 "E-Factura %s deja încărcată în SPV (index=%s); se evită re-trimiterea.",
