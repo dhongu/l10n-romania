@@ -1,3 +1,18 @@
+## 18.0.0.3.4 (2026-07-01)
+
+- **Emailul către client este acum un cron separat.** Trimiterea emailului
+  pentru facturile validate de SPV era executată în interiorul cron-ului de
+  fetch (`_cron_l10n_ro_edi_fetch_status`). Munca este însă complet condusă de
+  query și idempotentă (facturi `invoice_validated` cu
+  `l10n_ro_spv_validated_email_sent = False`), deci a fost mutată într-un cron
+  propriu, `E-Factura: Trimite email facturi validate`
+  (`_cron_l10n_ro_spv_send_validated_emails`, rulează la 15 minute).
+  - Emailul rulează independent de fluxul de citire/scriere SPV, pe orarul lui.
+  - Fiecare companie este izolată în propriul `savepoint`: un eșec la o companie
+    nu oprește emailurile pentru celelalte și lasă flag-ul nesetat, deci se reia
+    la rularea următoare.
+  - Necesită actualizarea modulului (`-u`) pentru a instala noul `ir.cron`.
+
 ## 18.0.0.3.3 (2026-07-01)
 
 - **Emailul este complet separat de trimiterea facturilor în SPV.** Cron-ul de

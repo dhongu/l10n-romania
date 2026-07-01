@@ -97,48 +97,10 @@ class AccountMove(models.Model):
             else:
                 _logger.info("No invoices to fetch status")
 
-            # Persist the SPV fetch results before the (decoupled) customer
-            # email step below. Emailing is isolated from the SPV read/write so
-            # a mail failure (SMTP error, serialization conflict during the
-            # send's flush, …) can never roll back the fetched statuses.
-            if not self.env.registry.in_test_mode():
-                self.env.cr.commit()  # pylint: disable=invalid-commit
-
-            # The customer invoice email is sent only AFTER the SPV validates the
-            # invoice, not at upload time. This way a rejected invoice that gets
-            # retried by the auto-send cron never emails the customer over and
-            # over. The l10n_ro_spv_validated_email_sent flag makes this
-            # idempotent and lets a failed email retry on a later run.
-            if not company.l10n_ro_spv_cron_no_email:
-                to_email = self.search(
-                    [
-                        ("move_type", "in", ("out_invoice", "out_refund")),
-                        ("state", "=", "posted"),
-                        ("date", "<", date_to),
-                        ("date", ">=", date_from),
-                        ("l10n_ro_edi_state", "=", "invoice_validated"),
-                        ("l10n_ro_spv_validated_email_sent", "=", False),
-                        ("company_id", "=", company.id),
-                    ],
-                    limit=limit,
-                )
-                if to_email:
-                    _logger.info(
-                        "📧 Sending customer email for SPV-validated invoices: %s",
-                        to_email.mapped("name"),
-                    )
-                    # Email is fully decoupled from the SPV flow: any failure is
-                    # logged and rolled back to the savepoint (so the
-                    # l10n_ro_spv_validated_email_sent flag isn't set and the
-                    # invoice is retried on a later run) without aborting the cron.
-                    try:
-                        with self.env.cr.savepoint():
-                            to_email._l10n_ro_spv_send_validated_email()
-                    except Exception:
-                        _logger.exception(
-                            "⚠️ Customer validated-email failed for %s; SPV statuses unaffected",
-                            company.name,
-                        )
+            # The customer invoice email is NOT sent here. It is fully decoupled
+            # into its own cron (_cron_l10n_ro_spv_send_validated_emails), so an
+            # email failure can never roll back the SPV statuses fetched above,
+            # and email delivery runs on its own schedule.
 
         if need_retrigger:
             at = fields.Datetime.now() + timedelta(minutes=2)
@@ -168,6 +130,53 @@ class AccountMove(models.Model):
             )
         # Flag every processed invoice (emailed or skipped) so it isn't requeried.
         self.l10n_ro_spv_validated_email_sent = True
+
+    def _cron_l10n_ro_spv_send_validated_emails(self, limit=20, days=30, delay_days=0):
+        """Send the customer invoice email for SPV-validated invoices, once.
+
+        Runs on its own schedule, fully independent of the SPV send/fetch crons.
+        The work is entirely query-driven and idempotent: it selects validated
+        invoices whose customer email hasn't been sent yet
+        (``l10n_ro_spv_validated_email_sent``), so it can safely retry on every
+        run. Kept out of the SPV read/write flow so an email failure can never
+        roll back SPV state. Each company is isolated in its own savepoint so a
+        failure for one company doesn't abort emails for the others (and leaves
+        the flag unset so those invoices retry next run).
+        """
+        _logger.info("⏱️ Cron job for sending validated-invoice emails")
+        domain = [("l10n_ro_edi_access_token", "!=", False)]
+        ro_companies = self or self.env["res.company"].sudo().search(domain)
+        for company in ro_companies:
+            if company.l10n_ro_spv_cron_no_email:
+                continue
+            date_to = fields.Date.today() - timedelta(days=delay_days)
+            date_from = fields.Date.today() - timedelta(days=days + delay_days)
+            to_email = self.search(
+                [
+                    ("move_type", "in", ("out_invoice", "out_refund")),
+                    ("state", "=", "posted"),
+                    ("date", "<", date_to),
+                    ("date", ">=", date_from),
+                    ("l10n_ro_edi_state", "=", "invoice_validated"),
+                    ("l10n_ro_spv_validated_email_sent", "=", False),
+                    ("company_id", "=", company.id),
+                ],
+                limit=limit,
+            )
+            if not to_email:
+                continue
+            _logger.info(
+                "📧 Sending customer email for SPV-validated invoices: %s",
+                to_email.mapped("name"),
+            )
+            try:
+                with self.env.cr.savepoint():
+                    to_email._l10n_ro_spv_send_validated_email()
+            except Exception:
+                _logger.exception(
+                    "⚠️ Customer validated-email failed for %s; will retry next run",
+                    company.name,
+                )
 
     def _cron_l10n_ro_edi_auto_send(self, limit=20, days=30, delay_days=0):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
