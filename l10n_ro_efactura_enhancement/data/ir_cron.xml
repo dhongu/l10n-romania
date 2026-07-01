@@ -22,5 +22,17 @@
         <field name="interval_type">hours</field>
     </record>
 
+    <record id="ir_cron_l10n_ro_spv_send_validated_emails" model="ir.cron">
+        <field name="name">E-Factura: Trimite email facturi validate</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="state">code</field>
+        <field
+            name="code"
+        >action = model._cron_l10n_ro_spv_send_validated_emails(limit=20, days=30, delay_days=0)</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+    </record>
+
 
 </odoo>
