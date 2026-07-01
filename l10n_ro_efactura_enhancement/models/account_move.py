@@ -97,30 +97,10 @@ class AccountMove(models.Model):
             else:
                 _logger.info("No invoices to fetch status")
 
-            # The customer invoice email is sent only AFTER the SPV validates the
-            # invoice, not at upload time. This way a rejected invoice that gets
-            # retried by the auto-send cron never emails the customer over and
-            # over. The l10n_ro_spv_validated_email_sent flag makes this
-            # idempotent and lets a failed email retry on a later run.
-            if not company.l10n_ro_spv_cron_no_email:
-                to_email = self.search(
-                    [
-                        ("move_type", "in", ("out_invoice", "out_refund")),
-                        ("state", "=", "posted"),
-                        ("date", "<", date_to),
-                        ("date", ">=", date_from),
-                        ("l10n_ro_edi_state", "=", "invoice_validated"),
-                        ("l10n_ro_spv_validated_email_sent", "=", False),
-                        ("company_id", "=", company.id),
-                    ],
-                    limit=limit,
-                )
-                if to_email:
-                    _logger.info(
-                        "📧 Sending customer email for SPV-validated invoices: %s",
-                        to_email.mapped("name"),
-                    )
-                    to_email._l10n_ro_spv_send_validated_email()
+            # The customer invoice email is NOT sent here. It is fully decoupled
+            # into its own cron (_cron_l10n_ro_spv_send_validated_emails), so an
+            # email failure can never roll back the SPV statuses fetched above,
+            # and email delivery runs on its own schedule.
 
         if need_retrigger:
             at = fields.Datetime.now() + timedelta(minutes=2)
@@ -150,6 +130,53 @@ class AccountMove(models.Model):
             )
         # Flag every processed invoice (emailed or skipped) so it isn't requeried.
         self.l10n_ro_spv_validated_email_sent = True
+
+    def _cron_l10n_ro_spv_send_validated_emails(self, limit=20, days=30, delay_days=0):
+        """Send the customer invoice email for SPV-validated invoices, once.
+
+        Runs on its own schedule, fully independent of the SPV send/fetch crons.
+        The work is entirely query-driven and idempotent: it selects validated
+        invoices whose customer email hasn't been sent yet
+        (``l10n_ro_spv_validated_email_sent``), so it can safely retry on every
+        run. Kept out of the SPV read/write flow so an email failure can never
+        roll back SPV state. Each company is isolated in its own savepoint so a
+        failure for one company doesn't abort emails for the others (and leaves
+        the flag unset so those invoices retry next run).
+        """
+        _logger.info("⏱️ Cron job for sending validated-invoice emails")
+        domain = [("l10n_ro_edi_access_token", "!=", False)]
+        ro_companies = self or self.env["res.company"].sudo().search(domain)
+        for company in ro_companies:
+            if company.l10n_ro_spv_cron_no_email:
+                continue
+            date_to = fields.Date.today() - timedelta(days=delay_days)
+            date_from = fields.Date.today() - timedelta(days=days + delay_days)
+            to_email = self.search(
+                [
+                    ("move_type", "in", ("out_invoice", "out_refund")),
+                    ("state", "=", "posted"),
+                    ("date", "<", date_to),
+                    ("date", ">=", date_from),
+                    ("l10n_ro_edi_state", "=", "invoice_validated"),
+                    ("l10n_ro_spv_validated_email_sent", "=", False),
+                    ("company_id", "=", company.id),
+                ],
+                limit=limit,
+            )
+            if not to_email:
+                continue
+            _logger.info(
+                "📧 Sending customer email for SPV-validated invoices: %s",
+                to_email.mapped("name"),
+            )
+            try:
+                with self.env.cr.savepoint():
+                    to_email._l10n_ro_spv_send_validated_email()
+            except Exception:
+                _logger.exception(
+                    "⚠️ Customer validated-email failed for %s; will retry next run",
+                    company.name,
+                )
 
     def _cron_l10n_ro_edi_auto_send(self, limit=20, days=30, delay_days=0):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
@@ -248,6 +275,14 @@ class AccountMove(models.Model):
                     **kwargs,
                 )
 
+            # Persist the SPV sends immediately, before the (decoupled) report
+            # email below. The report is a non-critical internal notification:
+            # a failure there (SMTP error, serialization conflict during the
+            # mail's flush/unlink, …) must never roll back the actual uploads
+            # or the cron retrigger.
+            if not self.env.registry.in_test_mode():
+                self.env.cr.commit()  # pylint: disable=invalid-commit
+
             # Recompute states after the send to build the run report.
             # NB: 'invoice_sent' only means the XML was uploaded to the SPV and is
             # awaiting validation — the SPV can still reject it later (async, via
@@ -258,18 +293,28 @@ class AccountMove(models.Model):
             validated = invoices.filtered(lambda inv: inv.l10n_ro_edi_state == "invoice_validated")
             pending = invoices.filtered(lambda inv: inv.l10n_ro_edi_state == "invoice_sent")
             failed_now = invoices - validated - pending
-            self._l10n_ro_spv_send_cron_report(
-                company,
-                {
-                    "candidates": candidates,
-                    "attempted": invoices,
-                    "validated": validated,
-                    "pending": pending,
-                    "failed_now": failed_now,
-                    "retrying": retrying,
-                    "exhausted": exhausted,
-                },
-            )
+            # Report email fully decoupled from the SPV send: isolated in a
+            # savepoint so any failure is logged instead of aborting the cron
+            # (the sends are already committed above).
+            try:
+                with self.env.cr.savepoint():
+                    self._l10n_ro_spv_send_cron_report(
+                        company,
+                        {
+                            "candidates": candidates,
+                            "attempted": invoices,
+                            "validated": validated,
+                            "pending": pending,
+                            "failed_now": failed_now,
+                            "retrying": retrying,
+                            "exhausted": exhausted,
+                        },
+                    )
+            except Exception:
+                _logger.exception(
+                    "⚠️ SPV cron report failed for %s; sends unaffected",
+                    company.name,
+                )
 
             if need_retrigger:
                 at = fields.Datetime.now() + timedelta(minutes=5)
@@ -338,20 +383,25 @@ class AccountMove(models.Model):
         if not template:
             _logger.warning("⚠️ SPV cron report template not found; skipping report for %s", company.name)
             return
+        # force_send=False: the report is queued as a mail.mail and delivered by
+        # the standard email queue cron, not sent synchronously here. This keeps
+        # SMTP delivery and the auto_delete unlink (whose flush was crashing the
+        # SPV send transaction on concurrent account_move updates) out of the
+        # SPV cron entirely — the email is fully separated from the SPV send.
         template.with_context(
             spv_rows=rows,
             spv_total=len(stats["attempted"]),
             spv_run=fields.Datetime.to_string(now),
         ).sudo().send_mail(
             company.id,
-            force_send=True,
+            force_send=False,
             email_values={
                 "email_to": recipients,
                 "email_from": company.email or company.partner_id.email or recipients,
                 "auto_delete": True,
             },
         )
-        _logger.info("📧 SPV cron report sent to %s for %s", recipients, company.name)
+        _logger.info("📧 SPV cron report queued to %s for %s", recipients, company.name)
 
     def action_send_to_spv_only(self):
         """Trimite facturile doar in SPV, fara email."""
