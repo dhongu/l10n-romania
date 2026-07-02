@@ -104,6 +104,29 @@ class TestL10nRoStockPickingReport(TransactionCase):
         self.assertIn("Price", html)
         self.assertIn("Amount", html)
 
+    def test_delivery_price_fallback_without_sale_order(self):
+        """Livrare fără comandă de vânzare (ex. aviz): prețul cade pe lista de prețuri / list_price."""
+        picking = self._create_picking(self.picking_type_out, qty=2.0, partner=self.partner_customer)
+        move = picking.move_ids[0]
+        self.assertFalse(move.sale_line_id)
+        handler = self.env["report.l10n_ro_stock_picking_report.report_delivery_price"]
+        res = handler._get_line(move)
+        self.assertAlmostEqual(res["price"], 20.0, places=2)
+        self.assertAlmostEqual(res["amount"], 40.0, places=2)
+        self.assertAlmostEqual(res["amount_tax"], res["amount"] + res["tax"], places=2)
+        totals = handler._get_totals(picking.move_ids)
+        self.assertAlmostEqual(totals["amount"], 40.0, places=2)
+
+    def test_report_delivery_notice_title(self):
+        """Livrarea marcată ca aviz se tipărește cu titlul de aviz de însoțire."""
+        if "l10n_ro_notice" not in self.env["stock.picking"]._fields:
+            self.skipTest("l10n_ro_stock_account is not installed (no l10n_ro_notice field)")
+        picking = self._create_picking(self.picking_type_out, qty=1.0, partner=self.partner_customer)
+        picking.l10n_ro_notice = True
+        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_delivery_price", picking)
+        self.assertIn("Goods Dispatch Note:", html)
+        self.assertNotIn("Delivery:", html)
+
     def test_report_reception(self):
         picking = self._create_picking(self.picking_type_in, qty=3.0, partner=self.partner_supplier)
         html = self._render_report_html("l10n_ro_stock_picking_report.action_report_reception", picking)
