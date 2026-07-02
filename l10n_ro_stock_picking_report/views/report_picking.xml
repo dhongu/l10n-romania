@@ -31,7 +31,7 @@
                 <div>
                     <t t-set="partner_id" t-value="res_company.partner_id" />
                     <t t-if="res_company.banks_on_pickings">
-                        <t t-call="l10n_ro_config.banks" />
+                        <t t-call="l10n_ro_report_common.banks" />
                     </t>
                 </div>
                 <div>
@@ -77,7 +77,7 @@
                 <div>
                     <t t-set="partner_id" t-value="o.partner_id" />
                     <t t-if="res_company.banks_on_pickings">
-                        <t t-call="l10n_ro_config.banks" />
+                        <t t-call="l10n_ro_report_common.banks" />
                     </t>
                 </div>
                 <div>

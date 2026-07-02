@@ -5,14 +5,14 @@
 {
     "name": "Terrabit Sale Order Report",
     "summary": "Formular Factura Proformae",
-    "version": "19.0.1.0.4",
+    "version": "19.0.1.0.5",
     "author": "Terrabit, Dorin Hongu, Dan Stoica, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],
     "depends": [
         "sale",
-        "l10n_ro_config",
+        "l10n_ro_report_common",
         # "deltatech_sale_payment"  # pentru ce e ?
     ],
     "license": "AGPL-3",
