@@ -52,7 +52,12 @@ msgstr "<span>Delegat:</span>"
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_title
 msgid "<span>Delivery:</span>"
-msgstr "<span>Aviz:</span>"
+msgstr "<span>Livrare:</span>"
+
+#. module: l10n_ro_stock_picking_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_title
+msgid "<span>Goods Dispatch Note:</span>"
+msgstr "<span>Aviz de însoțire a mărfii:</span>"
 
 #. module: l10n_ro_stock_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_stock_picking_report.report_delivery_sign

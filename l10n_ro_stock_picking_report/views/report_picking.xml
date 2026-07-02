@@ -461,6 +461,11 @@
     </template>
 
     <template id="report_title">
+        <!-- livrare pe aviz: câmpul l10n_ro_notice există doar cu l10n_ro_stock_account instalat -->
+        <t
+            t-set="is_notice"
+            t-value="o.fields_get(['l10n_ro_notice']) and o.l10n_ro_notice"
+        />
         <h2>
 
 
@@ -469,7 +474,12 @@
                     <span>Reverse</span>
                 </t>
                 <t t-if="doc_type == 'delivery'">
-                    <span>Delivery:</span>
+                    <t t-if="is_notice">
+                        <span>Goods Dispatch Note:</span>
+                    </t>
+                    <t t-else="">
+                        <span>Delivery:</span>
+                    </t>
                 </t>
                 <t t-else="">
                     <span>Reception:</span>
@@ -484,6 +494,9 @@
                 <t t-if="doc_type == 'reception'">
                     <span>Reception:</span>
                 </t>
+                <t t-elif="is_notice">
+                    <span>Goods Dispatch Note:</span>
+                </t>
                 <t t-else="">
                     <span>Delivery:</span>
                 </t>
@@ -492,7 +505,12 @@
 
             <t t-if="o.picking_type_code == 'internal'">
                 <t t-if="doc_type == 'delivery'">
-                    <span>Delivery:</span>
+                    <t t-if="is_notice">
+                        <span>Goods Dispatch Note:</span>
+                    </t>
+                    <t t-else="">
+                        <span>Delivery:</span>
+                    </t>
                 </t>
                 <t t-else="">
                     <span t-field="o.picking_type_id.name" />

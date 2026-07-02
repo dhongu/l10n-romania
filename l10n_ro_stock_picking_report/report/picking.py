@@ -54,6 +54,27 @@ class ReportPickingDelivery(models.AbstractModel):
             res["tax"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
             res["amount"] = taxes_sale["total_excluded"]
             res["amount_tax"] = taxes_sale["total_included"]
+        elif move_line.picking_id.picking_type_code == "outgoing" and move_line.product_id:
+            # livrare fara comanda de vanzare (ex. aviz de insotire, custodie, consignatie):
+            # pretul din lista de preturi a partenerului, altfel pretul de lista al produsului
+            product = move_line.product_id
+            partner = move_line.picking_id.partner_id
+            quantity = move_line.product_qty or move_line.product_uom_qty or 1.0
+
+            price = 0.0
+            pricelist = partner.property_product_pricelist if partner else False
+            if pricelist:
+                price = pricelist._get_product_price(product, quantity, uom=move_line.product_uom)
+            if not price:
+                price = product.list_price
+
+            taxes_ids = product.taxes_id.filtered(lambda tax: tax.company_id == move_line.company_id)
+            taxes_sale = taxes_ids.compute_all(price, quantity=quantity, product=product, partner=partner)
+
+            res["tax"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
+            res["amount"] = taxes_sale["total_excluded"]
+            res["amount_tax"] = taxes_sale["total_included"]
+            res["price"] = res["amount"] / quantity if quantity else price
 
         return res
 
