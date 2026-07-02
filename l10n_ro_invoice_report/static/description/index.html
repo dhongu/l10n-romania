@@ -370,18 +370,60 @@ ul.auto-toc {
 !! source digest: sha256:6c04f33e07ced9d59050db6fad9d359196109c6092c90df9ceb942b86d31dfd0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_invoice_report"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
-<ul>
-<li><p class="first">Functionalitati</p>
+<p>Acest modul extinde raportul de factură standard din Odoo pentru a se
+conforma cerințelor specifice din România și pentru a oferi opțiuni
+suplimentare de personalizare.</p>
+<div class="section" id="functionalitati-principale">
+<h1>Funcționalități principale:</h1>
 <ul class="simple">
-<li>factura contine: pretul fara tva, valoare si valoare tva</li>
-<li>La factura au fost adugate campurile delegat si mijloc de transport</li>
-<li>la partener se poate adauga un text aditinonal care apara pe facura</li>
-<li>tiparire plata / incasare / dispozitie de plata</li>
+<li><strong>Detalii linii factură</strong>:<ul>
+<li>Afișarea prețului unitar fără TVA.</li>
+<li>Afișarea valorii TVA pe fiecare linie.</li>
+<li>Afișarea totalului cu taxe pe fiecare linie (configurabil).</li>
+<li>Numerotarea automată a liniilor de factură (Ord).</li>
+<li>Opțiune de a elimina numele produsului de pe linie dacă există o
+descriere specifică.</li>
+<li>Afișarea prețului fără discount.</li>
 </ul>
-<p>pip3 install –force-reinstall num2words==0.5.9 pip3 install
-–force-reinstall num2words==0.5.12</p>
-<p><a class="reference external" href="https://static.anaf.ro/static/10/Anaf/legislatie/Cod_fiscal_norme_31072017.htm#A330">https://static.anaf.ro/static/10/Anaf/legislatie/Cod_fiscal_norme_31072017.htm#A330</a></p>
 </li>
+<li><strong>Informații suplimentare pe document</strong>:<ul>
+<li>Câmpuri dedicate pentru <strong>Delegat</strong> și <strong>Mijloc de transport</strong>.</li>
+<li>Afișarea textului legal privind scutirea de semnătură și ștampilă
+(conform Codului Fiscal).</li>
+<li>Posibilitatea de a adăuga un text adițional de la partener pe
+factură (<tt class="docutils literal">info_for_invoice</tt>).</li>
+<li>Vizibilitatea configurabilă pentru email, telefon și marcaje în
+adresa facturii.</li>
+<li>Afișarea informațiilor despre livrări (Pickings) și AWB-uri direct
+pe factură.</li>
+<li>Inserarea logoului <strong>Coface</strong> la finalul facturii (activabil din
+setări).</li>
+</ul>
+</li>
+<li><strong>Gestiune documente corelate</strong>:<ul>
+<li>Tipărirea automată a chitanțelor, dispozițiilor de plată sau
+încasare direct din factură pentru plățile în numerar.</li>
+<li>Gestionarea corectă a semnelor pentru stornări (Credit Notes).</li>
+</ul>
+</li>
+<li><strong>Rapoarte dedicate</strong>:<ul>
+<li>Raport de factură în limba companiei, indiferent de limba
+partenerului.</li>
+</ul>
+</li>
+<li><strong>Configurare flexibilă</strong>:<ul>
+<li>Numeroase opțiuni în setările de facturare pentru a activa sau
+dezactiva elementele menționate mai sus (Sarcini delegat, comentarii
+plată, index linii, etc.).</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="cerinte-tehnice">
+<h1>Cerințe tehnice:</h1>
+<ul class="simple">
+<li>Necesită instalarea bibliotecii <tt class="docutils literal">num2words</tt>.</li>
+<li>Recomandat: <tt class="docutils literal">pip3 install <span class="pre">num2words==0.5.12</span></tt></li>
 </ul>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
@@ -396,22 +438,22 @@ ul.auto-toc {
 </ul>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h1>
+<h2><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-2">Credits</a></h1>
+<h2><a class="toc-backref" href="#toc-entry-2">Credits</a></h2>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-3">Authors</a></h2>
+<h3><a class="toc-backref" href="#toc-entry-3">Authors</a></h3>
 <ul class="simple">
 <li>Dorin Hongu</li>
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-4">Contributors</a></h2>
+<h3><a class="toc-backref" href="#toc-entry-4">Contributors</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -422,9 +464,10 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h2>
+<h3><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h3>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_invoice_report">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
+</div>
 </div>
 </div>
 </div>
