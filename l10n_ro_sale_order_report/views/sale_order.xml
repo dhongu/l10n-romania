@@ -8,7 +8,7 @@
             <t t-set="partner_id" t-value="o.partner_id" />
             <div id="address" class="address row">
                 <div name="information_block" class="col-6">
-                    <t t-call="l10n_ro_config.report_address_company" />
+                    <t t-call="l10n_ro_report_common.report_address_company" />
                 </div>
                 <div class="col-5 offset-1">
                     <div>
