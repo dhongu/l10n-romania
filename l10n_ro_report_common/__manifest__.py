@@ -17,6 +17,6 @@
         "views/res_company_views.xml",
     ],
     "license": "LGPL-3",
-    "development_status": "Beta",
+    "development_status": "Mature",
     "installable": True,
 }
