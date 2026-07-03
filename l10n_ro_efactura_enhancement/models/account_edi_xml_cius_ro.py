@@ -28,26 +28,21 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
     def get_description(self, line):
         """
-        Returns only description
+        Returns only the additional description of the line, i.e. the line
+        name without the product name. Empty string when the line has no
+        description beyond the product itself — in that case the (optional)
+        cbc:Description tag must not be rendered at all.
         :param line: invoice line
         :return: description
         """
         line_name = line.name or ""
-        if line_name:
-            product = line.product_id
-            product_name = product.display_name or product.name or ""
-            if product and product_name and product_name in line_name:
-                if line_name != product_name:
-                    return line_name.replace(product_name, "", 1).strip()
-                else:
-                    return line_name
-            else:
-                return line_name
-        else:
-            if line.product_id:
-                return line.product_id.name or ""
-            else:
-                return line_name
+        if not line_name:
+            return ""
+        product = line.product_id
+        product_name = product.display_name or product.name or ""
+        if product and product_name and product_name in line_name:
+            return line_name.replace(product_name, "", 1).strip()
+        return line_name
 
     def _add_document_line_item_nodes(self, line_node, vals):
         # New helper extension: keep base behavior, then optionally use free-text line description
@@ -65,10 +60,12 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             item["cbc:Name"] = {}
         desc = item["cbc:Description"]
         name = item["cbc:Name"]
-        # Default from product, truncated
+        # Default from product, truncated. Fără fallback pe product.name:
+        # numele produsului merge doar în cbc:Name; dacă nu există o descriere
+        # reală, tag-ul cbc:Description (opțional, BT-154) trebuie omis —
+        # serializatorul sare nodurile fără _text.
         if not desc.get("_text"):
-            default_desc = product.description_sale or product.name or ""
-            desc["_text"] = (default_desc or "")[:200]
+            desc["_text"] = (product.description_sale or "")[:200] or None
         else:
             desc["_text"] = desc["_text"][:200]
         if not name.get("_text"):
@@ -81,13 +78,16 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
 
         if use_line_desc:
             line = vals["base_line"]["record"]
-            if getattr(line, "name", None):
-                description = self.get_description(line)
-                if description:
-                    desc["_text"] = description[:200]
-                    name["_text"] = description[:100]
-        line_node["cac:Item"]["cbc:Description"]["_text"] = desc["_text"]
-        line_node["cac:Item"]["cbc:Name"]["_text"] = name["_text"]
+            # Descrierea suplimentară a liniei merge în cbc:Name; Description
+            # rămâne doar când textul depășește 100 de caractere (Name e
+            # trunchiat) — altfel ar dubla Name-ul și e omisă mai jos.
+            description = self.get_description(line) if getattr(line, "name", None) else ""
+            desc["_text"] = description[:200] if description else None
+            if description:
+                name["_text"] = description[:100]
+        # Descrierea nu trebuie să dubleze numele articolului.
+        if desc.get("_text") and desc["_text"] == name.get("_text"):
+            desc["_text"] = None
         if item.get("cac:AdditionalItemProperty"):
             item["cac:AdditionalItemProperty"] = []
         return res
@@ -114,16 +114,23 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         name = item["cbc:Name"]
         if use_line_desc:
             line = vals["base_line"]["record"]
-            # Normalize and truncate the line description
-            if getattr(line, "name", None):
-                description = self.get_description(line)
-                if description:
-                    desc["_text"] = description[:200]
-                    name["_text"] = description[:100]
+            # Core-ul a pus deja line.name (= display_name produs) în
+            # Description, deci suprascriem inclusiv cu None ca tag-ul să fie
+            # omis când linia nu are descriere proprie. Descrierea merge în
+            # cbc:Name; Description rămâne doar când textul depășește 100 de
+            # caractere (Name e trunchiat) — altfel ar dubla Name-ul și e
+            # omisă mai jos.
+            description = self.get_description(line) if getattr(line, "name", None) else ""
+            desc["_text"] = description[:200] if description else None
+            if description:
+                name["_text"] = description[:100]
 
         # When a free-text line description is used, drop additional properties
         if item.get("cac:AdditionalItemProperty"):
             item["cac:AdditionalItemProperty"] = []
+        # Descrierea nu trebuie să dubleze numele articolului.
+        if desc.get("_text") and desc["_text"] == name.get("_text"):
+            desc["_text"] = None
         # Truncare la limitele ANAF; dacă un nod a rămas gol îl punem înapoi pe
         # None ca serializatorul să sară peste tag-ul (opțional) gol.
         if desc.get("_text"):
