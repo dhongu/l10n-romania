@@ -1,4 +1,4 @@
-## 19.0.0.3.16 (2026-07-03)
+## 19.0.0.3.18 (2026-07-03)
 
 - **Opțiune de dezactivare a importului automat de facturi primite din SPV.**
   Cron-ul nativ `E-Factura: Synchronize with ANAF` creează automat ciorne de
@@ -11,6 +11,33 @@
   - Este gardată **doar** metoda dedicată `_l10n_ro_edi_process_bill_messages`;
     procesarea răspunsurilor pentru facturile trimise (acceptat/refuzat) și
     curățarea facturilor neindexate din același cron rămân neatinse.
+=======
+## 19.0.0.3.17 (2026-07-03)
+
+- **Descrierea nu mai apare dublată în Description + Name.** Când linia avea o
+  descriere suplimentară, același text era pus atât în `cbc:Description` cât
+  și în `cbc:Name`, rezultând două tag-uri identice. Comportamentul rămâne cel
+  al parametrului (descrierea liniei merge în `cbc:Name`), dar tag-ul
+  `cbc:Description` se omite când ar fi identic cu `cbc:Name` — rămâne prezent
+  doar când descrierea depășește 100 de caractere, ca să poarte textul complet
+  (Name e trunchiat la 100, Description la 200). Doar cod Python, nu necesită
+  actualizarea modulului.
+
+## 19.0.0.3.16 (2026-07-03)
+
+- **Tag-ul `cbc:Description` este omis când linia nu are descriere proprie.**
+  Cu `efactura.use_line_description` activ, dacă numele liniei este identic cu
+  `display_name`-ul produsului (linie generată automat, fără text suplimentar),
+  în XML ajungea numele produsului (inclusiv codul `[COD]`) ca descriere.
+  `get_description` returnează acum doar descrierea suplimentară a liniei
+  (numele liniei fără numele produsului), iar când aceasta este goală nodul
+  `cbc:Description` (opțional, BT-154) este pus pe `None` și tag-ul nu mai
+  apare deloc în XML. `cbc:Name` rămâne numele produsului.
+  - Eliminat și fallback-ul pe `product.name` la descrierea implicită
+    (independent de parametru): numele produsului nu mai este duplicat în
+    Description — el există deja în `cbc:Name` și în
+    `cac:SellersItemIdentification`.
+  - Doar cod Python, nu necesită actualizarea modulului.
 
 ## 19.0.0.3.15 (2026-07-01)
 
