@@ -17,6 +17,14 @@ class ResCompany(models.Model):
         "fiecare rulare a cronului de trimitere in SPV. Daca e gol, raportul nu se "
         "trimite.",
     )
+    l10n_ro_edi_no_auto_bill = fields.Boolean(
+        string="Nu importa automat facturile primite din SPV",
+        default=False,
+        help='Cand este activat, cronul nativ „E-Factura: Synchronize with ANAF" nu '
+        "mai creeaza automat ciorne de facturi de la furnizori din mesajele primite in "
+        "SPV. Sincronizarea statusului facturilor trimise (acceptat/refuzat) ramane "
+        "activa.",
+    )
 
 
 class ResConfigSettings(models.TransientModel):
@@ -31,4 +39,9 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.l10n_ro_spv_cron_report_email",
         readonly=False,
         string="Email raport cron SPV",
+    )
+    l10n_ro_edi_no_auto_bill = fields.Boolean(
+        related="company_id.l10n_ro_edi_no_auto_bill",
+        readonly=False,
+        string="Nu importa automat facturile primite din SPV",
     )

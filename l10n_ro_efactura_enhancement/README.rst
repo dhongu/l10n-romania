@@ -10,9 +10,9 @@ eFactura Enhancement
    !! source digest: sha256:82dad9fd93fb19748471db3f4ba19840a80f821af9ff77805380aea4e6d1276b
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Mature
+    :alt: Production/Stable
 .. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
@@ -33,71 +33,281 @@ specific business needs for Romanian fiscal compliance.
 Key Features
 ------------
 
-- Automatic completion with 13 zeros for individual persons (physical
-  persons) in the VAT field
-- Ability to retransmit an invoice to the e-Factura system
-- Configurable system parameters:
+- **Automatic completion with 13 zeros** for individual persons
+  (physical persons) in the VAT field for e-invoice generation.
+- **Enhanced Address Validation**: Automatically checks that Romanian
+  partners have a country, state, city, and street defined before
+  posting an invoice.
+- **EDI Format Suggestion**: Automatically suggests the ``ciusro``
+  format for Romanian partners.
+- **Automated e-Invoice Operations**:
 
-  - 
+  - Cron job for **automatic sending** of posted invoices to SPV.
+  - Cron job for **fetching status** updates from SPV for sent invoices.
+  - **Server action "Trimite in SPV"**: Allows sending selected invoices
+    directly to SPV from the invoice list view, without triggering email
+    sending.
+  - **Configuration option**: A setting in the Accounting configuration
+    page controls whether the automatic SPV cron job suppresses email
+    sending (sends only to SPV).
+  - **Configuration option**: A per-company setting
+    (``Nu importa automat facturile primite din SPV``) lets you skip the
+    native "E-Factura: Synchronize with ANAF" auto-creation of received
+    vendor bills, while keeping the sent-invoice status synchronization
+    (accepted/refused) intact. Disabled by default, so native behavior
+    is unchanged unless explicitly enabled.
 
-    - Controls whether to include embedded PDF in the e-invoice
-      (Default: True) ``efactura.embed_pdf``
+- **Data Truncation and Sanitization**:
 
-  - 
+  - Truncates product names to 100 characters and descriptions to 200
+    characters to ensure compliance with UBL standards.
+  - Truncates notes to 300 characters.
+  - Truncates order references and despatch advice to 200 characters.
 
-    - Controls whether to clean the "/" character from invoice names in
-      the ID tag (Default: False) ``efactura.clean_name``
+- **POS Integration**: Automatically changes the document type code to
+  751 (Specialised Invoice) for invoices originating from Point of Sale.
+- **Configurable System Parameters**:
 
-  - 
+  - ``efactura.embed_pdf``: Controls whether to include the embedded PDF
+    in the e-invoice (Default: True).
+  - ``efactura.use_line_description``: If enabled, uses the invoice line
+    description instead of the product name/description in the e-invoice
+    (Default: False).
+  - ``efactura.replace_unit_uom``: Allows specifying a replacement unit
+    code for the standard 'C62' unit (Default: False).
+  - ``efactura.get_all_banks``: If enabled, includes all banks marked
+    with ``l10n_ro_print_report`` that match the invoice currency
+    (Default: False).
 
-    - Controls whether to include all banks with l10n_ro_print_report
-      and in the invoice currency (Default: False)
-      ``efactura.get_all_banks``
+- **Line Length Tracking**: Adds computed fields on invoice lines to
+  track the length of descriptions and product names, helping users
+  identify potential truncation issues.
 
 Technical Implementation
 ------------------------
 
-The module builds upon the standard Romanian localization and enhances
-the e-Factura integration with additional configuration options and data
-handling improvements.
+The module inherits and extends several base Odoo and Romanian
+localization models:
+
+- ``account.move``: Adds validation, cron jobs, and POS type handling.
+- ``account.edi.xml.ubl_ro``: Enhances UBL generation with custom logic
+  for addresses, product descriptions, and multi-bank support.
+- ``res.partner``: Overrides the EDI format suggestion for Romanian
+  entities.
+- ``account.move.line``: Adds UI helpers for label length.
 
 Business Benefits
 -----------------
 
-- Improved compliance with Romanian fiscal requirements
-- Enhanced flexibility in e-invoice generation and transmission
-- Better handling of special cases like individual customers without VAT
-  numbers
-- Support for retransmission of invoices when needed
+- **Improved Compliance**: Prevents errors by validating mandatory
+  address fields for Romanian fiscal reporting.
+- **Automation**: Reduces manual effort by automatically transmitting
+  and tracking e-invoices.
+- **Flexibility**: Provides granular control over how product
+  information and unit codes are mapped to the e-invoice.
+- **UBL Stability**: Ensures generated XML files remain within character
+  limit constraints for various fields.
 
 Usage
 -----
 
 After installation, the module automatically enhances the e-Factura
 functionality. System parameters can be configured in the technical
-settings to adjust behavior according to specific business needs. This
-module is part of the Romanian localization suite developed by Terrabit.
-
-Features:
-
-- Types can be defined for records sale.order, purchase.order,
-  account.move
-- If a model has no types defined, the type field will not be displayed
-- completare automata cu 13 de zero pt persane fizice
-- retransmiterea unei facturi
-- parametri sistem:
-
-  - "efactura.embed_pdf" - daca pune sau nu embedded pdf. Default pe
-    True
-  - "efactura.clean_name" - daca curata caracterul "/" din numele
-    facturii in tag-ul de ID. Default pe False
-  - "efactura.get_all_banks" - daca pune toate bancile cu
-    l10n_ro_print_report si in valuta facturii. Default pe False
+settings (``Settings > Technical > Parameters > System Parameters``) to
+adjust behavior according to specific business needs. This module is
+part of the Romanian localization suite developed by Terrabit.
 
 **Table of contents**
 
 .. contents::
    :local:
+
+Known issues / Roadmap
+======================
+
+Roadmap
+=======
+
+Known Bugs to Fix
+-----------------
+
+- **Missing system parameter defaults**: ``efactura.get_all_banks`` and
+  ``efactura.replace_unit_uom`` are used in the code but have no default
+  entries in ``data/ir_config_parameter.xml``. Add records with
+  ``False`` as default value.
+
+Fixed Bugs
+----------
+
+- ✅ **``_get_address_node`` tuple bug** *(v18.0.0.2.7)*: Line 41 in
+  ``models/account_edi_xml_cius_ro.py`` was assigning a tuple
+  ``({"_text": "Principala"},)`` instead of a dict
+  ``{"_text": "Principala"}``. Caused ``TypeError`` during XML
+  serialization for partners without a street address.
+
+- ✅ **``_ubl_add_accounting_supplier_party_legal_entity_nodes`` wrong
+  super call** *(v18.0.0.2.7)*: Was calling
+  ``super()._ubl_add_accounting_supplier_party_tax_scheme_nodes(vals)``
+  instead of
+  ``super()._ubl_add_accounting_supplier_party_legal_entity_nodes(vals)``.
+  When the supplier had no ``nrc``, the ``cac:PartyLegalEntity`` node
+  was omitted from the XML, producing an invalid e-invoice.
+
+- ✅ **Missing company filter in cron auto-send** *(v18.0.0.2.7)*: The
+  ``invoice_sending_failed`` domain in ``_cron_l10n_ro_edi_auto_send``
+  was not filtering by ``company_id``, causing invoices from all
+  companies to be collected instead of only the current company in the
+  loop.
+
+Planned Improvements
+--------------------
+
+Dashboard operațional eFactura (``l10n.ro.efactura.dashboard``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Obiectiv: pagină dedicată în meniul Accounting → Rapoarte → eFactura
+Dashboard care oferă o vedere rapidă a stării trimiterilor SPV cu
+navigare directă la liste filtrate.
+
+Funcționalități dorite:
+
+- **Stat buttons** pentru fiecare stare SPV:
+
+  - *De trimis* — facturi confirmate fără ``l10n_ro_edi_state`` (state
+    ``False``)
+  - *Trimise (în așteptare)* — ``invoice_sent``, trimise dar
+    neconfirmate încă de SPV
+  - *Neindexate* — ``invoice_not_indexed``, acceptate dar neindexate în
+    portalul ANAF
+  - *Validate* — ``invoice_validated``, acceptate și indexate cu succes
+  - *Refuzate* — ``invoice_refused``, respinse de SPV
+  - *Eroare trimitere* — ``invoice_sending_failed`` pe documentul EDI
+
+- **Click pe orice buton** deschide lista facturilor filtrate pe acea
+  stare
+- **Selector companie** pentru multi-company
+- **Acces**: grupurile ``account.group_account_invoice`` și
+  ``account.group_account_manager``
+
+Probleme tehnice identificate și rezolvate (de re-activat după testare):
+
+- View structurat cu ``oe_button_box`` ca prim copil al ``<sheet>``
+  (standard Odoo 19)
+- Server action returnează ``target: "current"`` în loc de ``"main"``
+  (compatibil TransientModel)
+- Atribute deprecate ``create/edit/delete`` eliminate din ``<form>``
+- Access rules adăugate în ``security/ir.model.access.csv``
+
+Codul modelului și view-ului este prezent dar **dezactivat temporar**
+(``efactura_dashboard.py``, ``views/efactura_dashboard_views.xml``) — de
+re-activat după validare pe o instanță live.
+
+Alte îmbunătățiri planificate
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **Re-enable wizard view**: Uncomment
+  ``wizard/account_move_send_views.xml`` in the manifest once the resend
+  UI flow is finalized for Odoo 18 (see TODO in
+  ``wizard/account_move_send.py``).
+
+- **UBL integration tests**: Add test cases covering XML generation for
+  invoices with and without street, with and without ``nrc``, and with
+  ``efactura.get_all_banks`` enabled, to prevent regressions in the UBL
+  override methods.
+
+- **Multi-company cron robustness**: Review both cron methods
+  (``_cron_l10n_ro_edi_auto_send`` and
+  ``_cron_l10n_ro_edi_fetch_status``) for correct company isolation
+  throughout all domain searches.
+
+- **English code comments**: Translate remaining Romanian inline
+  comments in ``models/account_move.py`` to English for consistency with
+  the project convention.
+
+- **``efactura.replace_unit_uom`` UI**: Expose the ``replace_unit_uom``
+  system parameter in the Accounting configuration page alongside the
+  existing ``l10n_ro_spv_cron_no_email`` setting.
+
+Changelog
+=========
+
+19.0.0.3.16 (2026-07-03)
+------------------------
+
+- **Opțiune de dezactivare a importului automat de facturi primite din
+  SPV.** Cron-ul nativ ``E-Factura: Synchronize with ANAF`` creează
+  automat ciorne de facturi de la furnizori din mesajele primite în SPV
+  (funcție nouă în Odoo 19, inexistentă pe 18). S-a adăugat un câmp per
+  companie ``l10n_ro_edi_no_auto_bill`` (Setări → Contabilitate →
+  secțiunea „eFactura SPV") care, când e activat, sare peste crearea
+  automată a acestor facturi.
+
+  - Implicit **dezactivat** (``False``): comportamentul nativ rămâne
+    neschimbat; activarea este o alegere explicită per companie.
+  - Este gardată **doar** metoda dedicată
+    ``_l10n_ro_edi_process_bill_messages``; procesarea răspunsurilor
+    pentru facturile trimise (acceptat/refuzat) și curățarea facturilor
+    neindexate din același cron rămân neatinse.
+
+19.0.0.3.15 (2026-07-01)
+------------------------
+
+- **Emailul către client este acum un cron separat.** Trimiterea
+  emailului pentru facturile validate de SPV era executată în interiorul
+  cron-ului de fetch (``_cron_l10n_ro_edi_fetch_status``). Munca este
+  însă complet condusă de query și idempotentă (facturi
+  ``invoice_validated`` cu
+  ``l10n_ro_spv_validated_email_sent = False``), deci a fost mutată
+  într-un cron propriu, ``E-Factura: Trimite email facturi validate``
+  (``_cron_l10n_ro_spv_send_validated_emails``, rulează la 15 minute).
+
+  - Emailul rulează independent de fluxul de citire/scriere SPV, pe
+    orarul lui.
+  - Fiecare companie este izolată în propriul ``savepoint``: un eșec la
+    o companie nu oprește emailurile pentru celelalte și lasă flag-ul
+    nesetat, deci se reia la rularea următoare.
+  - Necesită actualizarea modulului (``-u``) pentru a instala noul
+    ``ir.cron``.
+
+19.0.0.3.14 (2026-07-01)
+------------------------
+
+- **Emailul este complet separat de trimiterea facturilor în SPV.**
+  Cron-ul de trimitere (``E-Factura: Send TO SPV``) rula fetch status →
+  trimitere SPV → email de raport → reprogramare într-o singură
+  tranzacție. Când emailul de raport eșua cu
+  ``SerializationFailure: could not serialize access due to concurrent update``
+  (conflict pe ``account_move`` cu importul din marketplace, declanșat
+  de ``flush``-ul din ``unlink``-ul mailului cu ``auto_delete``), se
+  făcea rollback la **tot**: la trimiterile efective (facturile
+  reapăreau ca „de trimis") și la reprogramarea cron-ului (lanțul de
+  auto-trimitere se rupea, lăsând restul loturilor netrimise ore
+  întregi).
+
+  - Trimiterile în SPV se **comit imediat** după
+    ``_generate_and_send_invoices``, înainte de orice pas de email (fără
+    commit în modul test).
+  - Emailul de raport este izolat în ``savepoint`` + ``try/except``
+    (eșecul se loghează, nu oprește cron-ul) și trecut pe livrare prin
+    coada de mail (``force_send=False``), scoțând SMTP-ul și
+    ``unlink``-ul cu ``auto_delete`` din tranzacția cron-ului.
+  - Emailul către client (după validare SPV, în cron-ul de fetch) este
+    izolat la fel: un eșec de email nu mai poate da rollback la
+    statusurile citite din SPV, iar factura se reia la rularea următoare
+    (flag-ul ``l10n_ro_spv_validated_email_sent`` rămâne nesetat).
+
+19.0.0.3.13 (2026-06-30)
+------------------------
+
+- **Trunchiere referință comandă (BT-13) la 200 de caractere.** Pe
+  facturile de revânzare cu multe comenzi consolidate, câmpul „Referință
+  client" (``ref``) putea depăși 200 de caractere și ajungea ca atare în
+  ``cac:OrderReference/cbc:ID`` (BT-13), iar ANAF respingea transmiterea
+  cu eroarea **BR-RO-L200** („Numărul maxim permis de caractere pentru
+  Referința comenzii (BT-13) este 200"). Acum BT-13 este limitat la 200
+  de caractere la generarea XML-ului, simetric cu limitarea deja
+  existentă pe ``cbc:SalesOrderID`` (BT-14), în
+  ``_ubl_add_order_reference_node``.
 
 Bug Tracker
 ===========
