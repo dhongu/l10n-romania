@@ -27,7 +27,7 @@ addon | version | maintainers | summary
 [l10n_ro_balance_confirmation](l10n_ro_balance_confirmation/) | 19.0.0.0.8 | <a href='https://github.com/danila12'><img src='https://github.com/danila12.png' width='32' height='32' style='border-radius:50%;' alt='danila12'/></a> | Generate balance confirmation for partners
 [l10n_ro_cash_register](l10n_ro_cash_register/) | 19.0.1.1.6 |  | Romania - Cash Register
 [l10n_ro_edi_ubl_sale_store](l10n_ro_edi_ubl_sale_store/) | 19.0.1.0.5 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Sale from store
-[l10n_ro_efactura_enhancement](l10n_ro_efactura_enhancement/) | 19.0.0.0.11 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | eFactura Enhancement
+[l10n_ro_efactura_enhancement](l10n_ro_efactura_enhancement/) | 19.0.0.3.16 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | eFactura Enhancement
 [l10n_ro_etransport_enhancement](l10n_ro_etransport_enhancement/) | 19.0.0.1.1 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | eTransport enhancement
 [l10n_ro_footer_anpc](l10n_ro_footer_anpc/) | 19.0.0.0.1 | <a href='https://github.com/danila12'><img src='https://github.com/danila12.png' width='32' height='32' style='border-radius:50%;' alt='danila12'/></a> | Displays ANPC logos and links in website footer
 [l10n_ro_invoice_report](l10n_ro_invoice_report/) | 19.0.3.4.15 |  | Localizare Terrabit - Facturi, Chitanta
