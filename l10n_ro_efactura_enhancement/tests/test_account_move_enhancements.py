@@ -249,10 +249,17 @@ class TestGetDescription(TransactionCase):
         self.assertEqual(result, "Serviciu consultanta")
 
     def test_get_description_name_equals_product(self):
-        """get_description returnează numele produsului când linia = produsul."""
+        """get_description returnează gol când linia = produsul (fără descriere proprie)."""
         line = self._make_line(self.product.display_name, product=self.product)
         result = self.model.get_description(line)
-        self.assertEqual(result, self.product.display_name)
+        self.assertEqual(result, "")
+
+    def test_get_description_name_equals_product_with_code(self):
+        """get_description returnează gol și când display_name include codul intern."""
+        product = self.env["product.product"].create({"name": "Produs Cod", "default_code": "COD123"})
+        line = self._make_line(product.display_name, product=product)
+        result = self.model.get_description(line)
+        self.assertEqual(result, "")
 
     def test_get_description_name_contains_product(self):
         """get_description elimină prefixul produsului din descrierea liniei."""
@@ -262,11 +269,11 @@ class TestGetDescription(TransactionCase):
         self.assertEqual(result, "- detalii suplimentare")
 
     def test_get_description_no_name_with_product(self):
-        """get_description returnează numele produsului când linia nu are nume."""
+        """get_description returnează gol când linia nu are nume (fără descriere în XML)."""
         line = self._make_line("x", product=self.product)
         line.name = False
         result = self.model.get_description(line)
-        self.assertEqual(result, self.product.name)
+        self.assertEqual(result, "")
 
     def test_get_description_no_name_no_product(self):
         """get_description returnează string gol când nu există nici nume nici produs."""
