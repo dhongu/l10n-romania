@@ -1,3 +1,4 @@
+import base64
 import logging
 
 from odoo import _, api, fields, models
@@ -12,8 +13,8 @@ class MessageSPV(models.Model):
     purchase_ref = fields.Char(string="Purchase Reference")
     purchase_order_id = fields.Many2one("purchase.order")
 
-    def process_xml(self, xml_tree, attachment_xml):
-        values = super().process_xml(xml_tree, attachment_xml)
+    def process_xml(self, xml_tree):
+        values = super().process_xml(xml_tree)
         order_reference = xml_tree.findtext("./{*}OrderReference/{*}ID")
 
         if order_reference:
@@ -32,13 +33,10 @@ class MessageSPV(models.Model):
           nu mai atașează din nou, ci postează doar o notă informativă.
         """
         self.ensure_one()
-        xml_att = self.attachment_xml_id
 
         # Din cerință: atașamentul XML trebuie COPIAT pe comanda de achiziție, nu doar referențiat.
         # Clonăm (sau reutilizăm dacă există deja o copie cu același checksum pe PO)
-        po_xml_attachment = False
-        if xml_att and xml_att.sudo().datas:
-            po_xml_attachment = self._clone_xml_attachment_for_purchase(purchase)
+        po_xml_attachment = self._clone_xml_attachment_for_purchase(purchase)
 
         # Conținutul mesajului
         ref_to_use = self._get_purchase_ref() or "-"
@@ -60,40 +58,53 @@ class MessageSPV(models.Model):
         purchase.message_post(**post_kwargs)
 
     def _clone_xml_attachment_for_purchase(self, purchase):
-        """Creează o COPIE a atașamentului XML SPV pe comanda de achiziție.
+        """Create a COPY of the SPV XML attachment on the purchase order.
 
-        Evită dublurile verificând checksum-ul pe atașamentele deja legate de comanda respectivă.
-        Returnează atașamentul de pe PO (existent sau nou creat) sau False dacă nu se poate copia.
+        The XML is taken from the invoice attachment when the message is
+        already linked to an invoice; otherwise it is derived on the fly
+        from the stored signed ZIP (the only persisted file since
+        l10n_ro_message_spv 18.0.2.1.0).
+        Deduplicates by checksum (or name+mimetype) on the order.
+        Returns the attachment on the PO (existing or new) or False.
         """
         self.ensure_one()
+        name = datas = checksum = False
         xml_att = self.attachment_xml_id.sudo()
-        if not xml_att or not xml_att.datas:
-            return False
+        if xml_att and xml_att.datas:
+            name = xml_att.name or "spv.xml"
+            datas = xml_att.datas
+            checksum = xml_att.checksum
+        else:
+            file_name, xml_bytes = self._get_xml_bytes()
+            if not xml_bytes:
+                return False
+            name = file_name or f"{self.name}.xml"
+            datas = base64.b64encode(xml_bytes)
 
         Attachment = self.env["ir.attachment"].sudo()
 
-        # Căutăm o copie deja existentă pe comanda curentă, bazat pe checksum (preferat) sau pe nume+mimetype.
+        # Look for an existing copy on this order, by checksum (preferred) or name+mimetype.
         domain = [
             ("res_model", "=", "purchase.order"),
             ("res_id", "=", purchase.id),
         ]
         existing = False
-        if getattr(xml_att, "checksum", False):
-            existing = Attachment.search(domain + [("checksum", "=", xml_att.checksum)], limit=1)
+        if checksum:
+            existing = Attachment.search(domain + [("checksum", "=", checksum)], limit=1)
         if not existing:
-            # fallback simplu
-            name = xml_att.name or "spv.xml"
-            mimetype = xml_att.mimetype or "application/xml"
-            existing = Attachment.search(domain + [("name", "=", name), ("mimetype", "=", mimetype)], limit=1)
+            existing = Attachment.search(
+                domain + [("name", "=", name), ("mimetype", "=", "application/xml")],
+                limit=1,
+            )
 
         if existing:
             return existing
 
-        # Creăm copia pe purchase.order
+        # Create the copy on the purchase.order
         vals = {
-            "name": xml_att.name or "spv.xml",
-            "datas": xml_att.datas,
-            "mimetype": xml_att.mimetype or "application/xml",
+            "name": name,
+            "datas": datas,
+            "mimetype": "application/xml",
             "res_model": "purchase.order",
             "res_id": purchase.id,
             "company_id": purchase.company_id.id if purchase.company_id else self.env.company.id,
