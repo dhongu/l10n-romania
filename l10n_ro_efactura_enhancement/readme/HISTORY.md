@@ -1,3 +1,17 @@
+## 19.0.0.3.18 (2026-07-03)
+
+- **Opțiune de dezactivare a importului automat de facturi primite din SPV.**
+  Cron-ul nativ `E-Factura: Synchronize with ANAF` creează automat ciorne de
+  facturi de la furnizori din mesajele primite în SPV (funcție nouă în Odoo 19,
+  inexistentă pe 18). S-a adăugat un câmp per companie `l10n_ro_edi_no_auto_bill`
+  (Setări → Contabilitate → secțiunea „eFactura SPV") care, când e activat, sare
+  peste crearea automată a acestor facturi.
+  - Implicit **dezactivat** (`False`): comportamentul nativ rămâne neschimbat;
+    activarea este o alegere explicită per companie.
+  - Este gardată **doar** metoda dedicată `_l10n_ro_edi_process_bill_messages`;
+    procesarea răspunsurilor pentru facturile trimise (acceptat/refuzat) și
+    curățarea facturilor neindexate din același cron rămân neatinse.
+=======
 ## 19.0.0.3.17 (2026-07-03)
 
 - **Descrierea nu mai apare dublată în Description + Name.** Când linia avea o

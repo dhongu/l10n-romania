@@ -135,3 +135,38 @@ class TestSpvActions(TransactionCase):
         self.assertTrue(self.company.l10n_ro_spv_cron_no_email)
         self.company.l10n_ro_spv_cron_no_email = False
         self.assertFalse(self.company.l10n_ro_spv_cron_no_email)
+
+    def test_edi_no_auto_bill_default_false(self):
+        """Implicit, auto-importul facturilor primite din SPV rămâne activ (default False)."""
+        defaults = self.env["res.company"].default_get(["l10n_ro_edi_no_auto_bill"])
+        self.assertFalse(defaults.get("l10n_ro_edi_no_auto_bill"))
+
+    def test_edi_no_auto_bill_config(self):
+        """Test că setarea l10n_ro_edi_no_auto_bill se salvează corect pe companie."""
+        self.company.l10n_ro_edi_no_auto_bill = True
+        self.assertTrue(self.company.l10n_ro_edi_no_auto_bill)
+        self.company.l10n_ro_edi_no_auto_bill = False
+        self.assertFalse(self.company.l10n_ro_edi_no_auto_bill)
+
+    def test_no_auto_bill_true_skips_native_import(self):
+        """Cu flagul activ, override-ul nu mai apelează logica nativă de creare a
+        facturilor primite (restul cron-ului „Synchronize with ANAF" rămâne neatins)."""
+        from odoo.addons.l10n_ro_edi.models.account_move import (
+            AccountMove as NativeAccountMove,
+        )
+
+        self.company.l10n_ro_edi_no_auto_bill = True
+        with patch.object(NativeAccountMove, "_l10n_ro_edi_process_bill_messages") as native:
+            self.env["account.move"].with_company(self.company)._l10n_ro_edi_process_bill_messages([{"id": "1"}])
+            native.assert_not_called()
+
+    def test_no_auto_bill_false_delegates_to_native(self):
+        """Fără flag (implicit), override-ul deleagă către logica nativă de import."""
+        from odoo.addons.l10n_ro_edi.models.account_move import (
+            AccountMove as NativeAccountMove,
+        )
+
+        self.company.l10n_ro_edi_no_auto_bill = False
+        with patch.object(NativeAccountMove, "_l10n_ro_edi_process_bill_messages", return_value=None) as native:
+            self.env["account.move"].with_company(self.company)._l10n_ro_edi_process_bill_messages([{"id": "1"}])
+            native.assert_called_once()

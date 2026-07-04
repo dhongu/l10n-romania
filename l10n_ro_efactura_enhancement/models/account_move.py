@@ -431,6 +431,29 @@ class AccountMove(models.Model):
 
         return super()._cron_account_move_send(job_count=job_count)
 
+    @api.model
+    def _l10n_ro_edi_process_bill_messages(self, received_bills_messages):
+        """Opreste importul automat al facturilor de furnizor din SPV, per companie.
+
+        Cronul nativ „E-Factura: Synchronize with ANAF" ruleaza intr-o singura
+        trecere trei operatii distincte (via ``_l10n_ro_edi_fetch_invoices``):
+        procesarea raspunsurilor pentru facturile TRIMISE (acceptat/refuzat),
+        curatarea facturilor neindexate si crearea ciornelor pentru facturile
+        PRIMITE. Suprascriem doar aceasta ultima metoda dedicata, astfel incat,
+        cand ``l10n_ro_edi_no_auto_bill`` e activ pe companie (implicit), se sare
+        peste crearea automata a facturilor de furnizor, iar restul functiilor
+        cronului raman neatinse.
+        """
+        if self.env.company.l10n_ro_edi_no_auto_bill:
+            _logger.info(
+                "⏭️ Import automat facturi furnizor din SPV dezactivat pentru %s; "
+                "%d mesaj(e) de facturi primite ignorate.",
+                self.env.company.name,
+                len(received_bills_messages),
+            )
+            return
+        return super()._l10n_ro_edi_process_bill_messages(received_bills_messages)
+
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"

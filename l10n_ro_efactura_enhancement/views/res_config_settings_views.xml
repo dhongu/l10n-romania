@@ -26,6 +26,14 @@
                             placeholder="contabilitate@firma.ro, manager@firma.ro"
                         />
                     </setting>
+                    <setting
+                        title="Când este activat, cron-ul nativ „E-Factura: Synchronize with ANAF” nu mai creează automat ciorne de facturi de la furnizori din SPV. Sincronizarea statusului facturilor trimise (acceptat/refuzat) rămâne activă."
+                        id="l10n_ro_edi_no_auto_bill"
+                        string="Nu importa automat facturile primite din SPV"
+                        help="Bifați dacă nu doriți ca facturile primite în SPV să fie create automat ca ciorne. Restul sincronizării cu ANAF rămâne neschimbat."
+                    >
+                        <field name="l10n_ro_edi_no_auto_bill" />
+                    </setting>
                 </block>
             </xpath>
         </field>
