@@ -12,7 +12,7 @@
     "countries": ["ro"],
     "depends": [
         "sale",
-        "l10n_ro_config",
+        "l10n_ro_report_common",
         # "deltatech_sale_payment"  # pentru ce e ?
     ],
     "license": "LGPL-3",
