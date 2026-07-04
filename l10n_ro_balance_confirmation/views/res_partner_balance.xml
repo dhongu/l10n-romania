@@ -24,7 +24,7 @@
                     </div>
                     <div id="banks" style="margin-top: -10px;">
                         <t t-set="partner_id" t-value="res_company.partner_id" />
-                        <t t-call="l10n_ro_config.banks" />
+                        <t t-call="l10n_ro_report_common.banks" />
                     </div>
                     <div id="email">
                         <span>E-mail: </span><span t-field="res_company.partner_id.email" />

@@ -14,7 +14,7 @@
     "depends": [
         "base",
         "account",
-        "l10n_ro_config",
+        "l10n_ro_report_common",
         "purchase",
         "sale",
         "stock_delivery",

@@ -16,6 +16,7 @@
         "base",
         "stock",
         "l10n_ro_config",
+        "l10n_ro_report_common",
         "purchase_stock",
         "sale_stock",
         "l10n_ro_stock",

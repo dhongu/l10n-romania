@@ -9,7 +9,7 @@
     "website": "https://github.com/OCA/l10n-romania",
     "depends": [
         "account",
-        "l10n_ro_config",
+        "l10n_ro_report_common",
     ],
     "license": "AGPL-3",
     "data": [
