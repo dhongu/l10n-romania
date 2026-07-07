@@ -1,7 +1,7 @@
 import logging
 from datetime import timedelta
 
-from odoo import api, fields, models
+from odoo import api, fields, models, tools
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -256,7 +256,7 @@ class AccountMove(models.Model):
             # a failure there (SMTP error, serialization conflict during the
             # mail's flush/unlink, …) must never roll back the actual uploads
             # or the cron retrigger.
-            if not self.env.registry.in_test_mode():
+            if not tools.config["test_enable"]:
                 self.env.cr.commit()  # pylint: disable=invalid-commit
 
             # Recompute states after the send to build the run report.
