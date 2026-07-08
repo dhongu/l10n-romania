@@ -190,12 +190,11 @@ class Picking(models.Model):
                                 item["greutateBruta"] = round(weight_line.gross_weight, 2)
                     item_no += 1
         # remove lines with 0 quantity, it's possible when the validated qty is used
-        if move_id and move_id.company_id.l10n_ro_etransport_get_validated_qty:
-            for item in res["data"]["notificare"]["bunuriTransportate"]:
-                if float_is_zero(item["cantitate"], precision_rounding=0.01):
-                    res["data"]["notificare"]["bunuriTransportate"].pop(
-                        res["data"]["notificare"]["bunuriTransportate"].index(item)
-                    )
+        # (must run unconditionally: the XSD requires 'cantitate' on every bunuriTransportate
+        # element, and a 0 quantity is dropped silently by the QWeb template rendering)
+        for item in res["data"]["notificare"]["bunuriTransportate"][:]:
+            if float_is_zero(item["cantitate"], precision_rounding=0.01):
+                res["data"]["notificare"]["bunuriTransportate"].remove(item)
         return res
 
     def action_l10n_ro_edi_stock_fetch_status(self):
