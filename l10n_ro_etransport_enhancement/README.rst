@@ -85,6 +85,22 @@ localizare pentru România dezvoltată de Terrabit.
 Changelog
 =========
 
+18.0.0.2.4 (2026-07-08)
+-----------------------
+
+- **Fixed ANAF rejection: "Attribute 'greutateBruta' must appear on
+  element 'bunuriTransportate'".** Same root cause as the ``cantitate``
+  fix above: the QWeb template renders
+  ``greutateNeta``/``greutateBruta`` via ``t-att-*``, which silently
+  drops a falsy (``0.0``) value from the XML. Unlike ``cantitate``, a
+  zero weight does not mean the line should be removed — it usually
+  means the product's ``weight`` field (or the shipping weight line) was
+  never filled in, while the goods are genuinely being transported.
+  ``_l10n_ro_edi_stock_get_template_data`` now falls back to the other
+  known weight (``greutateNeta`` for a zero ``greutateBruta``, or vice
+  versa) as an approximation, so a missing product weight no longer
+  breaks the whole submission.
+
 18.0.0.2.3 (2026-07-08)
 -----------------------
 

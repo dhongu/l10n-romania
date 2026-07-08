@@ -435,6 +435,23 @@ localizare pentru România dezvoltată de Terrabit.</p>
 </div>
 </div>
 <div class="section" id="section-1">
+<h1>18.0.0.2.4 (2026-07-08)</h1>
+<ul class="simple">
+<li><strong>Fixed ANAF rejection: “Attribute ‘greutateBruta’ must appear on
+element ‘bunuriTransportate’”.</strong> Same root cause as the <tt class="docutils literal">cantitate</tt>
+fix above: the QWeb template renders
+<tt class="docutils literal">greutateNeta</tt>/<tt class="docutils literal">greutateBruta</tt> via <tt class="docutils literal"><span class="pre">t-att-*</span></tt>, which silently
+drops a falsy (<tt class="docutils literal">0.0</tt>) value from the XML. Unlike <tt class="docutils literal">cantitate</tt>, a
+zero weight does not mean the line should be removed — it usually
+means the product’s <tt class="docutils literal">weight</tt> field (or the shipping weight line) was
+never filled in, while the goods are genuinely being transported.
+<tt class="docutils literal">_l10n_ro_edi_stock_get_template_data</tt> now falls back to the other
+known weight (<tt class="docutils literal">greutateNeta</tt> for a zero <tt class="docutils literal">greutateBruta</tt>, or vice
+versa) as an approximation, so a missing product weight no longer
+breaks the whole submission.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
 <h1>18.0.0.2.3 (2026-07-08)</h1>
 <ul class="simple">
 <li><strong>Fixed ANAF rejection: “Attribute ‘cantitate’ must appear on element

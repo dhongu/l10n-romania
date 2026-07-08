@@ -195,6 +195,20 @@ class Picking(models.Model):
         for item in res["data"]["notificare"]["bunuriTransportate"][:]:
             if float_is_zero(item["cantitate"], precision_rounding=0.01):
                 res["data"]["notificare"]["bunuriTransportate"].remove(item)
+                continue
+            # ANAF requires both greutateNeta and greutateBruta on bunuriTransportate, and
+            # the QWeb template renders them via t-att-*, which silently drops a falsy (0.0)
+            # value from the XML. When the product/weight line has no weight recorded, one
+            # of the two can end up 0.0 while the other is known: fall back to the known one
+            # as an approximation rather than submitting an invalid document.
+            if float_is_zero(item["greutateBruta"], precision_rounding=0.01) and not float_is_zero(
+                item["greutateNeta"], precision_rounding=0.01
+            ):
+                item["greutateBruta"] = item["greutateNeta"]
+            elif float_is_zero(item["greutateNeta"], precision_rounding=0.01) and not float_is_zero(
+                item["greutateBruta"], precision_rounding=0.01
+            ):
+                item["greutateNeta"] = item["greutateBruta"]
         return res
 
     def action_l10n_ro_edi_stock_fetch_status(self):
