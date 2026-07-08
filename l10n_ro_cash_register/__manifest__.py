@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Cash Register",
-    "version": "19.0.1.1.7",
+    "version": "19.0.1.1.8",
     "summary": "Romania - Cash Register",
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
