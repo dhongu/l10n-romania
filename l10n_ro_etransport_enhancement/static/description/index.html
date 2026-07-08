@@ -435,6 +435,21 @@ localizare pentru România dezvoltată de Terrabit.</p>
 </div>
 </div>
 <div class="section" id="section-1">
+<h1>18.0.0.2.5 (2026-07-08)</h1>
+<ul class="simple">
+<li><strong>Fixed missing label on “Custom Shipping Weights” checkbox.</strong> The
+<tt class="docutils literal">weights</tt> group on the picking form’s eTransport tab nested a plain
+<tt class="docutils literal">&lt;group&gt;</tt> (holding <tt class="docutils literal">total_net_weight</tt>/<tt class="docutils literal">total_gross_weight</tt>)
+inside itself. Odoo’s form compiler renders a <tt class="docutils literal">&lt;group&gt;</tt> as an
+“OuterGroup” (a group of groups) whenever any direct child is itself a
+<tt class="docutils literal">&lt;group&gt;</tt>, and OuterGroup mode skips automatic label generation for
+every plain field in it — so <tt class="docutils literal">l10n_ro_shipping_weights</tt> showed up
+with no caption. The nested group was removed;
+<tt class="docutils literal">total_net_weight</tt>/<tt class="docutils literal">total_gross_weight</tt> are now direct fields of
+<tt class="docutils literal">weights</tt>, which renders as a normal InnerGroup with labels.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
 <h1>18.0.0.2.4 (2026-07-08)</h1>
 <ul class="simple">
 <li><strong>Fixed ANAF rejection: “Attribute ‘greutateBruta’ must appear on
@@ -451,7 +466,7 @@ versa) as an approximation, so a missing product weight no longer
 breaks the whole submission.</li>
 </ul>
 </div>
-<div class="section" id="section-2">
+<div class="section" id="section-3">
 <h1>18.0.0.2.3 (2026-07-08)</h1>
 <ul class="simple">
 <li><strong>Fixed ANAF rejection: “Attribute ‘cantitate’ must appear on element

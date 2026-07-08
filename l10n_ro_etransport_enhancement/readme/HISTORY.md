@@ -1,3 +1,15 @@
+## 18.0.0.2.5 (2026-07-08)
+
+- **Fixed missing label on "Custom Shipping Weights" checkbox.** The
+  `weights` group on the picking form's eTransport tab nested a plain
+  `<group>` (holding `total_net_weight`/`total_gross_weight`) inside itself.
+  Odoo's form compiler renders a `<group>` as an "OuterGroup" (a group of
+  groups) whenever any direct child is itself a `<group>`, and OuterGroup mode
+  skips automatic label generation for every plain field in it — so
+  `l10n_ro_shipping_weights` showed up with no caption. The nested group was
+  removed; `total_net_weight`/`total_gross_weight` are now direct fields of
+  `weights`, which renders as a normal InnerGroup with labels.
+
 ## 18.0.0.2.4 (2026-07-08)
 
 - **Fixed ANAF rejection: "Attribute 'greutateBruta' must appear on element

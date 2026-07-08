@@ -12,10 +12,8 @@
             <page name="etransport" position="inside">
                 <group name="weights">
                     <field name="l10n_ro_shipping_weights" />
-                    <group>
-                        <field name="total_net_weight" invisible="not l10n_ro_shipping_weights" />
-                        <field name="total_gross_weight" invisible="not l10n_ro_shipping_weights" />
-                    </group>
+                    <field name="total_net_weight" invisible="not l10n_ro_shipping_weights" />
+                    <field name="total_gross_weight" invisible="not l10n_ro_shipping_weights" />
                     <field
                         name="l10n_ro_shipping_weight_lines"
                         invisible="not l10n_ro_shipping_weights"
