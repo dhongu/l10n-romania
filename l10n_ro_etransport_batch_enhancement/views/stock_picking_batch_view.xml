@@ -17,11 +17,7 @@
                         <field name="total_net_weight" invisible="not l10n_ro_shipping_weights" />
                         <field name="total_gross_weight" invisible="not l10n_ro_shipping_weights" />
                     </group>
-                    <div
-                        class="alert alert-danger"
-                        role="alert"
-                        invisible="not l10n_ro_shipping_weight_lines_warning"
-                    >
+                    <div class="alert alert-danger" role="alert" invisible="not l10n_ro_shipping_weight_lines_warning">
                         <field name="l10n_ro_shipping_weight_lines_warning" nolabel="1" />
                     </div>
                     <field

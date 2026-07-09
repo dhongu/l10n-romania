@@ -42,13 +42,13 @@ class StockPickingBatch(models.Model):
             for picking in batch.picking_ids:
                 picking.l10n_ro_transport_partner_id = batch.l10n_ro_transport_partner_id
 
-    @api.depends("l10n_ro_shipping_weights", "l10n_ro_shipping_weight_lines.move_id", "move_ids.quantity")
+    @api.depends("l10n_ro_shipping_weights", "l10n_ro_shipping_weight_lines.move_id", "picking_ids.move_ids.quantity")
     def _compute_l10n_ro_shipping_weight_lines_warning(self):
         for batch in self:
             if not batch.l10n_ro_shipping_weights:
                 batch.l10n_ro_shipping_weight_lines_warning = False
                 continue
-            expected = batch.move_ids.filtered(lambda m: m.quantity > 0)
+            expected = batch.picking_ids.move_ids.filtered(lambda m: m.quantity > 0)
             missing = expected - batch.l10n_ro_shipping_weight_lines.move_id
             if missing:
                 batch.l10n_ro_shipping_weight_lines_warning = _(
