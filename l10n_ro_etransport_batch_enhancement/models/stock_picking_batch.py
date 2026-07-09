@@ -22,6 +22,7 @@ class StockPickingBatch(models.Model):
     )
     total_net_weight = fields.Float()
     total_gross_weight = fields.Float()
+    l10n_ro_shipping_weight_lines_warning = fields.Char(compute="_compute_l10n_ro_shipping_weight_lines_warning")
     l10n_ro_transport_partner_id = fields.Many2one(
         "res.partner",
         string="Transport Partner",
@@ -40,6 +41,23 @@ class StockPickingBatch(models.Model):
         for batch in self:
             for picking in batch.picking_ids:
                 picking.l10n_ro_transport_partner_id = batch.l10n_ro_transport_partner_id
+
+    @api.depends("l10n_ro_shipping_weights", "l10n_ro_shipping_weight_lines.move_id", "move_ids.quantity")
+    def _compute_l10n_ro_shipping_weight_lines_warning(self):
+        for batch in self:
+            if not batch.l10n_ro_shipping_weights:
+                batch.l10n_ro_shipping_weight_lines_warning = False
+                continue
+            expected = batch.move_ids.filtered(lambda m: m.quantity > 0)
+            missing = expected - batch.l10n_ro_shipping_weight_lines.move_id
+            if missing:
+                batch.l10n_ro_shipping_weight_lines_warning = _(
+                    "%(missing)s din %(total)s mișcări nu au linie de greutate calculată. Apăsați „Get lines”.",
+                    missing=len(missing),
+                    total=len(expected),
+                )
+            else:
+                batch.l10n_ro_shipping_weight_lines_warning = False
 
     def _compute_l10n_ro_edi_carrier_id(self):
         for batch in self:
