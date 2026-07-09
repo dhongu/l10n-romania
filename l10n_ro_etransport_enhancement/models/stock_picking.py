@@ -22,6 +22,24 @@ class Picking(models.Model):
     total_net_weight = fields.Float()
     total_gross_weight = fields.Float()
     l10n_ro_transport_partner_id = fields.Many2one("res.partner", string="Transport Partner")
+    l10n_ro_shipping_weight_lines_warning = fields.Char(compute="_compute_l10n_ro_shipping_weight_lines_warning")
+
+    @api.depends("l10n_ro_shipping_weights", "l10n_ro_shipping_weight_lines.move_id", "move_ids.quantity")
+    def _compute_l10n_ro_shipping_weight_lines_warning(self):
+        for picking in self:
+            if not picking.l10n_ro_shipping_weights:
+                picking.l10n_ro_shipping_weight_lines_warning = False
+                continue
+            expected = picking.move_ids.filtered(lambda m: m.quantity > 0)
+            missing = expected - picking.l10n_ro_shipping_weight_lines.move_id
+            if missing:
+                picking.l10n_ro_shipping_weight_lines_warning = _(
+                    "%(missing)s din %(total)s mișcări nu au linie de greutate calculată. Apăsați „Get lines”.",
+                    missing=len(missing),
+                    total=len(expected),
+                )
+            else:
+                picking.l10n_ro_shipping_weight_lines_warning = False
 
     @api.onchange("carrier_id")
     def _onchange_carrier_id(self):
