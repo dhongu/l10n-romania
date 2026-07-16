@@ -210,7 +210,10 @@ class ReportPickingReception(models.AbstractModel):
 
             # obtinere valoare pentru transferuri interne
             if not res["price"] and move.picking_id.picking_type_code == "internal":
-                res["price"] = move.value / move.product_qty or 1
+                # product_qty poate fi 0 cand e completata doar cantitatea efectuata (quantity)
+                qty = move.product_qty or move.quantity
+                if qty:
+                    res["price"] = move.value / qty or 1
 
             taxes_ids = move.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move.company_id)
             taxes = taxes_ids.compute_all(
