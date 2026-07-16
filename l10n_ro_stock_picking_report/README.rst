@@ -26,6 +26,12 @@ Romania - Terrabit - Picking Reports
    - Referinta din comanda de achizitie este copiata in NIR si factura
    - Option in settings (Romania) for printing taxes on reception
    - Option in settings (Romania) for printing banks on reports
+   - Livrarile marcate ca aviz (``l10n_ro_notice``) se tiparesc cu
+     titlul "Aviz de insotire a marfii" (14-3-6A); livrarile obisnuite
+     raman "Livrare"
+   - Pe livrarile fara comanda de vanzare (aviz, custodie, consignatie),
+     raportul "Delivery with price" preia pretul din lista de preturi a
+     partenerului sau pretul de lista al produsului
 
 **Table of contents**
 
@@ -34,6 +40,17 @@ Romania - Terrabit - Picking Reports
 
 Changelog
 =========
+
+19.0.1.3.1
+----------
+
+- **Fix:** internal transfer report no longer crashes with
+  ``ZeroDivisionError`` when a move has only the done quantity filled in
+  (``quantity``) and no demand (``product_uom_qty``), which leaves
+  ``product_qty`` at 0. The unit price now falls back to ``quantity``
+  and the division is skipped entirely when both quantities are 0. The
+  previous ``or 1`` fallback applied to the division result, not the
+  denominator, so it never protected against this case.
 
 19.0.1.2.10
 -----------

@@ -1,3 +1,13 @@
+## 19.0.1.3.1
+
+- **Fix:** internal transfer report no longer crashes with
+  `ZeroDivisionError` when a move has only the done quantity filled in
+  (`quantity`) and no demand (`product_uom_qty`), which leaves
+  `product_qty` at 0. The unit price now falls back to `quantity` and the
+  division is skipped entirely when both quantities are 0. The previous
+  `or 1` fallback applied to the division result, not the denominator, so
+  it never protected against this case.
+
 ## 19.0.1.2.10
 
 - **Fix:** reception report no longer crashes on Odoo 19. `stock.picking` lost
