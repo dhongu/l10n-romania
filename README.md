@@ -35,7 +35,7 @@ addon | version | maintainers | summary
 [l10n_ro_message_spv_purchase](l10n_ro_message_spv_purchase/) | 19.0.0.0.1 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Add SPV message on purchase orders for Romania
 [l10n_ro_partner_create_by_vat_button](l10n_ro_partner_create_by_vat_button/) | 19.0.1.1.7 |  | Partner Create by VAT Button
 [l10n_ro_partner_create_by_vat_openapi](l10n_ro_partner_create_by_vat_openapi/) | 19.0.1.0.2 |  | Romania - Partner Create by VAT from OpenAPI
-[l10n_ro_sale_order_report](l10n_ro_sale_order_report/) | 19.0.1.0.4 |  | Formular Factura Proformae
+[l10n_ro_sale_order_report](l10n_ro_sale_order_report/) | 19.0.1.0.6 |  | Formular Factura Proformae
 [l10n_ro_stock_account_enhancement](l10n_ro_stock_account_enhancement/) | 19.0.0.0.0 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Romania - Stock Accounting Enhancement
 [l10n_ro_stock_picking_report](l10n_ro_stock_picking_report/) | 19.0.1.3.1 |  | Rapoarte: NIR, aviz, bon consum
 [l10n_ro_stock_picking_report_product_expiry](l10n_ro_stock_picking_report_product_expiry/) | 19.0.1.0.1 |  | Adds product expiry date to picking reports
