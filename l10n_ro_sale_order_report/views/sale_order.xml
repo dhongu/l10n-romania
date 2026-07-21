@@ -33,11 +33,21 @@
             </div>
         </xpath>
         <!--Poze produse si nr. crt-->
-        <xpath expr="//tbody/t" position="before">
-            <t t-set="nr_crt" t-value="1" />
-        </xpath>
-        <xpath expr="//tbody//tr" position="inside">
-            <t t-set="nr_crt" t-value="nr_crt + 1" />
+         <xpath expr="//th[@name='th_discount']" position="after">
+                <th
+                t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)"
+                name="th_terms"
+                class="text-end"
+            >Lead Time (days)</th>
+            </xpath>
+        <xpath expr="//td[@name='td_product_taxes']" position="before">
+            <td
+                t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)"
+                name="td_terms"
+                class="text-end"
+            >
+                <span t-esc="round(line.customer_lead)" />
+            </td>
         </xpath>
         <xpath expr="//table/thead/tr/th" position="before">
             <t t-if="res_company.counter_on_sale_order">
@@ -50,7 +60,7 @@
         <td name="td_product_name" position="before">
              <t t-if="res_company.counter_on_sale_order">
                 <td name="td_number">
-                    <span t-esc="nr_crt" />
+                    <span t-esc="line_index + 1" />
                 </td>
              </t>
              <t t-if="res_company.include_image_line">
@@ -77,7 +87,17 @@
                         <span t-esc="line_name">Bacon Burger</span>
                     </t>
                     <t t-if="not res_company.exclude_product_name_from_description_offer">
-                        <span t-field="line.name">Bacon Burger</span>
+                        <t t-if="res_company.make_description_smaller">
+                            <span t-field="line.product_id.display_name">Bacon Burger</span>
+                            <br />
+                            <t t-set="line_name" t-value="line.name" />
+                            <t t-set="product_name" t-value="line.product_id.display_name" />
+                            <t t-set="line_name" t-value="line_name.replace(product_name, '',1)" />
+                            <span t-esc="line_name" style="font-size: 85%;">Bacon Burger</span>
+                        </t>
+                        <t t-else="not res_company.make_description_smaller">
+                            <span t-field="line.name">Bacon Burger</span>
+                        </t>
                     </t>
                 </t>
 
@@ -103,6 +123,37 @@
                 </t>
             </t>
         </p>
+
+        <xpath expr="//th[@name='th_subtotal']/span" position="after">
+            <t t-if="res_company.show_total_amount_with_taxes_on_so">
+                <br />
+                <span>(without taxes)</span>
+            </t>
+        </xpath>
+
+        <xpath expr="//th[@name='th_subtotal']" position="after">
+            <th name="th_price_taxes" class="text-end" t-if="res_company.show_total_amount_with_taxes_on_so">
+                <span>Taxes Values</span>
+            </th>
+            <th name="th_total_amount" class="text-end" t-if="res_company.show_total_amount_with_taxes_on_so">
+                <span>Total amount</span>
+                <br />
+                <span>(with taxes)</span>
+            </th>
+        </xpath>
+
+        <xpath expr="//td[@name='td_product_subtotal']" position="after">
+            <t t-if="res_company.show_total_amount_with_taxes_on_so">
+                <td name="td_price_taxes" class="text-end">
+                    <t t-set="price_taxes" t-value="(line.price_total - line.price_subtotal )" />
+                    <span id="price_taxes" t-esc="price_taxes" t-options='{"widget": "float", "precision": 2}' />
+                </td>
+                <td class="text-end" id="price_total">
+                    <t t-set="price_total" t-value="line.price_total" />
+                    <span id="price_total" t-esc="price_total" t-options='{"widget": "float", "precision": 2}' />
+                </td>
+            </t>
+        </xpath>
     </template>
 
 
@@ -190,6 +241,26 @@
                             <th name="th_subtotal" class="text-end">
                                 <t groups="account.group_show_line_subtotals_tax_excluded">Amount</t>
                                 <t groups="account.group_show_line_subtotals_tax_included">Total Price</t>
+                                <t t-if="res_company.show_total_amount_with_taxes_on_so">
+                                    <br />
+                                    <span>(without taxes)</span>
+                                </t>
+                            </th>
+                            <th
+                                name="th_price_taxes"
+                                class="text-end"
+                                t-if="res_company.show_total_amount_with_taxes_on_so"
+                            >
+                                <span>Taxes Values</span>
+                            </th>
+                            <th
+                                name="th_total_amount"
+                                class="text-end"
+                                t-if="res_company.show_total_amount_with_taxes_on_so"
+                            >
+                                <span>Total amount</span>
+                                <br />
+                                <span>(with taxes)</span>
                             </th>
                         </tr>
                     </thead>
@@ -234,6 +305,24 @@
                                     t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                 />
                             </td>
+                            <t t-if="res_company.show_total_amount_with_taxes_on_so">
+                                <td name="td_price_taxes" class="text-end">
+                                    <t t-set="price_taxes" t-value="doc.amount_tax * percent" />
+                                    <span
+                                        id="price_taxes"
+                                        t-esc="price_taxes"
+                                        t-options='{"widget": "float", "precision": 2}'
+                                    />
+                                </td>
+                                <td class="text-end" id="price_total">
+                                    <t t-set="price_total" t-value="doc.amount_total * percent" />
+                                    <span
+                                        id="price_total"
+                                        t-esc="price_total"
+                                        t-options='{"widget": "float", "precision": 2}'
+                                    />
+                                </td>
+                            </t>
                         </tr>
                         <tr name="order_details">
                             <td name="td_name_details" colspan="3" class="  o_price_total">
@@ -262,6 +351,10 @@
                             <td class="text-right o_price_total">
 
                             </td>
+                            <t t-if="res_company.show_total_amount_with_taxes_on_so">
+                                <td class="text-right o_price_total" />
+                                <td class="text-right o_price_total" />
+                            </t>
                         </tr>
                     </tbody>
                 </table>
