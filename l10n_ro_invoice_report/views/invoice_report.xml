@@ -699,7 +699,9 @@
                 </div>
             </t>
 
-            <t t-set="pickings" t-value="get_pickings(o)"/>
+            <t t-if="get_pickings">
+                <t t-set="pickings" t-value="get_pickings(o)"/>
+            </t>
             <div t-if="pickings and not res_company.hide_pickings_in_invoice" name="pickings">
                 <t t-if="o.move_type == 'in_invoice'">
                     <strong>Receptions:</strong>
