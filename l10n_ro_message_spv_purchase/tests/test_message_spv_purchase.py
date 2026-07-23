@@ -194,6 +194,17 @@ class TestMessageSPVPurchase(TransactionCase):
         with self.assertRaises(UserError):
             msg.action_find_purchase()
 
+    def test_action_find_purchase_already_linked_raises(self):
+        """Al doilea click pe 'Găsește Comanda', pe un mesaj deja legat de acea comandă,
+        trebuie să blocheze cu UserError, nu să reproceseze XML-ul (sursa duplicării de
+        produse/linii/recepție/factură - vezi tichet #9055)."""
+        po = self._make_purchase_order(partner_ref="PO-FIND-002")
+        msg = self._make_spv_message(ref="PO-FIND-002")
+        msg.action_find_purchase()
+        self.assertEqual(msg.purchase_order_id, po)
+        with self.assertRaises(UserError):
+            msg.action_find_purchase()
+
     def test_action_create_purchase_finds_existing(self):
         """Test că action_create_purchase leagă comanda existentă fără a crea una nouă."""
         po = self._make_purchase_order(partner_ref="PO-CREATE-001")
@@ -210,6 +221,17 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertEqual(result["res_model"], "purchase.order")
         created_po = msg.purchase_order_id
         self.assertEqual(created_po.partner_id, self.partner)
+
+    def test_action_create_purchase_already_linked_raises(self):
+        """Al doilea click pe 'Creează Comanda', pe un mesaj deja legat de acea comandă,
+        trebuie să blocheze cu UserError, nu să reproceseze XML-ul (sursa duplicării de
+        produse/linii/recepție/factură - vezi tichet #9055)."""
+        po = self._make_purchase_order(partner_ref="PO-CREATE-002")
+        msg = self._make_spv_message(ref="PO-CREATE-002")
+        msg.action_create_purchase()
+        self.assertEqual(msg.purchase_order_id, po)
+        with self.assertRaises(UserError):
+            msg.action_create_purchase()
 
     def test_action_create_purchase_no_partner_raises(self):
         """Test că action_create_purchase ridică UserError dacă nu există partener și nu găsește PO."""
