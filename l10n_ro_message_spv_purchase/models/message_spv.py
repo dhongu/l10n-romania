@@ -177,6 +177,10 @@ class MessageSPV(models.Model):
         - Dacă găsește exact una: o leagă, postează nota și deschide formularul.
         - Dacă găsește mai multe: deschide lista cu domeniul de căutare.
         - Dacă nu găsește: ridică un mesaj informativ (nu creează nimic).
+        - Dacă mesajul e deja legat de comanda găsită (al doilea click pe același
+          mesaj): ridică UserError în loc să reproceseze XML-ul - reprocesarea
+          declanșează importul automat din `deltatech_purchase_ubl`, care poate crea
+          produse/linii/recepție/factură duplicate (vezi tichet #9055).
         """
         self.ensure_one()
         ref_to_use = self._get_purchase_ref()
@@ -197,6 +201,14 @@ class MessageSPV(models.Model):
         found = PurchaseOrder.search(domain, limit=2)
 
         if len(found) == 1:
+            if self.purchase_order_id == found:
+                raise UserError(
+                    self.env._(
+                        "Acest mesaj SPV este deja legat de comanda de achiziție %(po)s. "
+                        "Documentul a fost deja procesat — nu-l reprocesați din nou.",
+                        po=found.display_name,
+                    )
+                )
             self.purchase_order_id = found.id
             self._post_spv_xml_on_purchase(found)
             return {
@@ -225,6 +237,10 @@ class MessageSPV(models.Model):
         - >1 rezultate: deschide lista de comenzi pentru alegere (nu creează).
         - 0 rezultate: creează un PO draft pe partenerul setat, îl leagă și deschide,
           apoi postează nota cu XML. Dacă lipsește partenerul, ridică eroare.
+        - Dacă mesajul e deja legat de comanda găsită (al doilea click pe același
+          mesaj): ridică UserError în loc să reproceseze XML-ul - reprocesarea
+          declanșează importul automat din `deltatech_purchase_ubl`, care poate crea
+          produse/linii/recepție/factură duplicate (vezi tichet #9055).
         """
         self.ensure_one()
         ref_to_use = self._get_purchase_ref()
@@ -245,6 +261,14 @@ class MessageSPV(models.Model):
         found = PurchaseOrder.search(domain, limit=2)
 
         if len(found) == 1:
+            if self.purchase_order_id == found:
+                raise UserError(
+                    self.env._(
+                        "Acest mesaj SPV este deja legat de comanda de achiziție %(po)s. "
+                        "Documentul a fost deja procesat — nu-l reprocesați din nou.",
+                        po=found.display_name,
+                    )
+                )
             self.purchase_order_id = found.id
             self._post_spv_xml_on_purchase(found)
             return {
