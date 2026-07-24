@@ -34,7 +34,7 @@ class ReportPickingDelivery(models.AbstractModel):
             line = move_line.sale_line_id
 
             taxes_ids = (
-                line.tax_id
+                line.tax_ids
             )  # line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
 
             incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
