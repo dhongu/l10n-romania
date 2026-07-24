@@ -14,6 +14,7 @@
                     type="object"
                     class="btn-secondary"
                     help="Caută o comandă de achiziție după Purchase Reference/Reference și o leagă dacă este găsită"
+                    invisible="message_type not in ('in_invoice', 'in_receipt')"
                 />
                 <button
                     name="action_create_purchase"
@@ -21,6 +22,7 @@
                     type="object"
                     class="btn-primary"
                     help="Caută o comandă de achiziție; dacă nu găsește, creează una nouă și o leagă"
+                    invisible="message_type not in ('in_invoice', 'in_receipt')"
                 />
             </xpath>
             <xpath expr="//field[@name='ref']" position="after">
