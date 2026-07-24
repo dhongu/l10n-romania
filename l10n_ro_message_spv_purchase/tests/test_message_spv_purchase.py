@@ -51,8 +51,8 @@ class TestMessageSPVPurchase(TransactionCase):
             }
         )
 
-    def _make_spv_message(self, ref="PO-TEST-001", partner=None):
-        """Helper: creează un mesaj SPV minimal."""
+    def _make_spv_message(self, ref="PO-TEST-001", partner=None, message_type="in_invoice"):
+        """Helper: creează un mesaj SPV minimal (factură de achiziție, implicit)."""
         return self.env["l10n.ro.message.spv"].create(
             {
                 "name": f"SPV-{ref}",
@@ -60,6 +60,7 @@ class TestMessageSPVPurchase(TransactionCase):
                 "partner_id": (partner or self.partner).id,
                 "company_id": self.company.id,
                 "state": "draft",
+                "message_type": message_type,
             }
         )
 
@@ -174,6 +175,7 @@ class TestMessageSPVPurchase(TransactionCase):
                 "partner_id": self.partner.id,
                 "company_id": self.company.id,
                 "state": "draft",
+                "message_type": "in_invoice",
             }
         )
         with self.assertRaises(UserError):
@@ -233,6 +235,19 @@ class TestMessageSPVPurchase(TransactionCase):
         with self.assertRaises(UserError):
             msg.action_create_purchase()
 
+    def test_action_find_purchase_blocks_sale_message(self):
+        """action_find_purchase trebuie blocat pe mesaje SPV de factură de vânzare (tichet #9055)."""
+        self._make_purchase_order(partner_ref="PO-SALE-001")
+        msg = self._make_spv_message(ref="PO-SALE-001", message_type="out_invoice")
+        with self.assertRaises(UserError):
+            msg.action_find_purchase()
+
+    def test_action_create_purchase_blocks_sale_message(self):
+        """action_create_purchase trebuie blocat pe mesaje SPV de factură de vânzare (tichet #9055)."""
+        msg = self._make_spv_message(ref="PO-SALE-002", message_type="out_receipt")
+        with self.assertRaises(UserError):
+            msg.action_create_purchase()
+
     def test_action_create_purchase_no_partner_raises(self):
         """Test că action_create_purchase ridică UserError dacă nu există partener și nu găsește PO."""
         msg = self.env["l10n.ro.message.spv"].create(
@@ -242,6 +257,7 @@ class TestMessageSPVPurchase(TransactionCase):
                 "partner_id": False,
                 "company_id": self.company.id,
                 "state": "draft",
+                "message_type": "in_invoice",
             }
         )
         with self.assertRaises(UserError):
