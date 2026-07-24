@@ -183,6 +183,10 @@ class MessageSPV(models.Model):
           produse/linii/recepție/factură duplicate (vezi tichet #9055).
         """
         self.ensure_one()
+        if self.message_type not in ("in_invoice", "in_receipt"):
+            raise UserError(
+                self.env._("Această acțiune este disponibilă doar pentru facturile de achiziție primite prin SPV.")
+            )
         ref_to_use = self._get_purchase_ref()
         if not ref_to_use:
             raise UserError(
@@ -243,6 +247,10 @@ class MessageSPV(models.Model):
           produse/linii/recepție/factură duplicate (vezi tichet #9055).
         """
         self.ensure_one()
+        if self.message_type not in ("in_invoice", "in_receipt"):
+            raise UserError(
+                self.env._("Această acțiune este disponibilă doar pentru facturile de achiziție primite prin SPV.")
+            )
         ref_to_use = self._get_purchase_ref()
         if not ref_to_use:
             raise UserError(
