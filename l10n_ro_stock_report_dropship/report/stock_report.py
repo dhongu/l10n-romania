@@ -1,7 +1,7 @@
 # Copyright (C) 2024 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
+from odoo import fields, models
 
 # Dropship detection: a move whose picking goes from a supplier (or
 # company-less transit) location to a customer (or company-less transit)
@@ -177,3 +177,12 @@ class StorageSheet(models.TransientModel):
             if line.quantity_out:
                 line.amount_out = value
                 line.unit_price_out = value / line.quantity_out
+
+
+class StorageSheetLine(models.TransientModel):
+    _inherit = "l10n.ro.stock.storage.sheet.line"
+
+    valued_type = fields.Selection(
+        selection_add=[("dropship", "Dropship")],
+        ondelete={"dropship": "cascade"},
+    )
