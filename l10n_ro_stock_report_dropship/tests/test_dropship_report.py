@@ -43,8 +43,6 @@ class TestDropshipReport(TransactionCase):
                 "name": "Dropship Category",
                 "property_cost_method": "fifo",
                 "property_valuation": "real_time",
-                "property_stock_account_input_categ_id": cls.account_valuation.id,
-                "property_stock_account_output_categ_id": cls.account_valuation.id,
                 "property_stock_valuation_account_id": cls.account_valuation.id,
                 "property_stock_journal": cls.stock_journal.id,
             }
@@ -77,7 +75,7 @@ class TestDropshipReport(TransactionCase):
         cls.location = cls.warehouse.lot_stock_id
 
         # Enable Multi-Step Routes for the user to see route_id on SO lines
-        cls.env.user.write({"groups_id": [(4, cls.env.ref("stock.group_adv_location").id)]})
+        cls.env.user.write({"group_ids": [(4, cls.env.ref("stock.group_adv_location").id)]})
         cls.env.invalidate_all()
 
     def test_dropship_stock_report(self):
@@ -89,10 +87,10 @@ class TestDropshipReport(TransactionCase):
             line.product_uom_qty = 10.0
         so = so_form.save()
 
-        # Update the route_id directly on the order line.
-        # This bypasses the Form view issue if route_id is missing from the view.
-        # In Odoo 18, it seems route_id might be hidden by default in some views.
-        so.order_line.write({"route_id": self.dropship_route.id})
+        # Update the route directly on the order line.
+        # This bypasses the Form view issue if the route field is missing from the view.
+        # In Odoo 19 the field is route_ids (Many2many) on sale.order.line.
+        so.order_line.write({"route_ids": [(6, 0, self.dropship_route.ids)]})
 
         so.action_confirm()
 
@@ -113,9 +111,16 @@ class TestDropshipReport(TransactionCase):
 
         self.assertEqual(picking.state, "done")
 
-        # Verify SVL exists for the dropship move
-        svl = self.env["stock.valuation.layer"].search([("stock_move_id", "in", picking.move_ids.ids)])
-        self.assertTrue(svl, "Stock Valuation Layer should be created for dropship move")
+        # In Odoo 19 the stock valuation layer model was removed. A dropship
+        # move is NOT valued on the stored stock.move.value field (core
+        # _set_value only writes it for is_in/is_out moves, and
+        # l10n_ro_stock_account emits no accounting entries for dropship). The
+        # value is only available on demand via stock.move._get_value(); the
+        # report recomputes it in Python from there.
+        dropship_move = picking.move_ids.filtered(lambda m: m._is_dropshipped() or m._is_dropshipped_returned())
+        self.assertTrue(dropship_move, "The picking should hold a dropship move")
+        move_value = sum(m.sudo()._get_value() for m in dropship_move)
+        self.assertTrue(move_value, "The dropship move should be valuable via _get_value()")
 
         # Now check the storage sheet wizard
         wizard_form = Form(self.env["l10n.ro.stock.storage.sheet"])
@@ -142,3 +147,8 @@ class TestDropshipReport(TransactionCase):
         # Check quantities (should be in both in and out for dropship)
         self.assertEqual(sum(dropship_lines.mapped("quantity_in")), 10.0)
         self.assertEqual(sum(dropship_lines.mapped("quantity_out")), 10.0)
+
+        # The Python post-pass must have valued the dropship lines from
+        # _get_value() (standard_price 60 x qty 10), since sm.value is 0.
+        self.assertEqual(sum(dropship_lines.mapped("amount_in")), move_value)
+        self.assertEqual(sum(dropship_lines.mapped("amount_out")), move_value)
