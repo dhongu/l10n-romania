@@ -154,6 +154,76 @@
                 </td>
             </t>
         </xpath>
+
+        <!-- The optional columns above (No., image, lead time, taxes value, total with taxes) change
+             the total number of columns in the table, so the section/combo/summary rows below - which
+             span several columns via colspan - need to grow by the same amount, otherwise they no
+             longer line up with the header. -->
+        <xpath
+            expr="//t[@t-set='section_name_colspan' and @t-value='3 + (1 if display_discount else 0) + (1 if display_taxes else 0)']"
+            position="after"
+        >
+            <t t-if="res_company.counter_on_sale_order">
+                <t t-set="section_name_colspan" t-value="section_name_colspan + 1" />
+            </t>
+            <t t-if="res_company.include_image_line">
+                <t t-set="section_name_colspan" t-value="section_name_colspan + 1" />
+            </t>
+            <t t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)">
+                <t t-set="section_name_colspan" t-value="section_name_colspan + 1" />
+            </t>
+        </xpath>
+        <xpath expr="//td[@name='td_section_price']" position="after">
+            <t t-if="res_company.show_total_amount_with_taxes_on_so">
+                <td class="text-end o_price_total" />
+                <td class="text-end o_price_total" />
+            </t>
+        </xpath>
+
+        <!-- t-set here, not between tr_note/tr_combo: those <tr> are an
+             t-if/t-elif/t-elif/t-else chain and must stay direct siblings, or the
+             t-else (tr_product) detaches from the chain and renders an extra row. -->
+        <xpath expr="//tr[@name='tr_section']" position="before">
+            <t t-set="combo_name_colspan" t-value="3 + (1 if display_discount else 0) + (1 if display_taxes else 0)" />
+            <t t-if="res_company.counter_on_sale_order">
+                <t t-set="combo_name_colspan" t-value="combo_name_colspan + 1" />
+            </t>
+            <t t-if="res_company.include_image_line">
+                <t t-set="combo_name_colspan" t-value="combo_name_colspan + 1" />
+            </t>
+            <t t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)">
+                <t t-set="combo_name_colspan" t-value="combo_name_colspan + 1" />
+            </t>
+        </xpath>
+        <xpath expr="//td[@name='td_combo_name']" position="attributes">
+            <attribute name="t-att-colspan">combo_name_colspan</attribute>
+        </xpath>
+        <xpath expr="//td[@name='td_combo_price']" position="after">
+            <t t-if="res_company.show_total_amount_with_taxes_on_so">
+                <td class="text-end o_price_total" />
+                <td class="text-end o_price_total" />
+            </t>
+        </xpath>
+
+        <xpath expr="//td[@name='td_section_group_name']" position="before">
+            <t t-if="res_company.counter_on_sale_order">
+                <td />
+            </t>
+            <t t-if="res_company.include_image_line">
+                <td />
+            </t>
+        </xpath>
+        <xpath expr="//td[@name='td_section_group_taxes']" position="before">
+            <t t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)">
+                <td />
+            </t>
+        </xpath>
+        <xpath expr="//td[@name='td_section_group_total']" position="after">
+            <t t-if="res_company.show_total_amount_with_taxes_on_so">
+                <td class="text-end o_price_total" />
+                <td class="text-end o_price_total" />
+            </t>
+        </xpath>
     </template>
 
 
