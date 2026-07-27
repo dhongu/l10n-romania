@@ -1,3 +1,24 @@
+## 19.0.0.3.22 (2026-07-29)
+
+- **Răspunsurile neașteptate de la SPV nu mai crapă interfața.** ANAF răspunde
+  frecvent cu HTTP 200 și un corp care nu este payload-ul așteptat (JSON de
+  eroare la limita de apeluri sau `id_incarcare` inexistent, text simplu, pagină
+  HTML de gateway în mentenanță). `make_efactura_request` din `l10n_ro_edi`
+  tratează doar codurile 204/400/401/403/500, așa că un asemenea corp ajungea la
+  apelanți și crăpa cu `lxml.etree.XMLSyntaxError: Start tag expected, '<' not
+  found` pe *Fetch status* (`stareMesaj`), cu `BadZipFile` pe `descarcare` sau
+  cu un PDF corupt salvat de la `transformare`.
+  - Se validează primii octeți ai răspunsului față de payload-ul așteptat pe
+    endpoint (XML pe `upload`/`uploadb2c`/`stareMesaj`, ZIP pe `descarcare`,
+    PDF pe `transformare`, JSON pe listele de mesaje).
+  - Când răspunsul nu poate fi payload-ul așteptat, se întoarce `{'error': ...}`
+    cu mesajul de eroare ANAF extras din JSON (sau un extras curățat din corpul
+    brut), care apare în chatter-ul facturii și în log — deci și diagnosticul
+    devine posibil, fără RPC_ERROR.
+  - Endpoint-urile necunoscute nu sunt validate, ca să nu blocăm fluxuri noi.
+  - Acoperă și copia funcției din `l10n_ro_message_spv`. Doar cod Python, nu
+    necesită actualizarea modulului — este suficient un restart.
+
 ## 19.0.0.3.21 (2026-07-29)
 
 Port of the 18.0 fix (18.0.0.2.15 / 18.0.0.2.16) that was never forwarded to
