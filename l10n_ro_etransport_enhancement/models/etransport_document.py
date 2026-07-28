@@ -17,13 +17,13 @@ DOCUMENT_TYPES = [
 class L10nRoEtransportDocument(models.Model):
     _name = "l10n.ro.etransport.document"
     _description = "Document însoțitor eTransport"
-    _order = "l10n_ro_document_date desc, id desc"
+    _order = "date desc, id desc"
 
     picking_id = fields.Many2one("stock.picking", string="Transfer", required=True, ondelete="cascade", index=True)
-    l10n_ro_document_type = fields.Selection(DOCUMENT_TYPES, string="Tip document", required=True, default="30")
+    document_type = fields.Selection(DOCUMENT_TYPES, string="Tip document", required=True, default="30")
     name = fields.Char(string="Număr document", required=True)
-    l10n_ro_document_date = fields.Date(string="Data documentului", required=True, default=fields.Date.context_today)
-    l10n_ro_remarks = fields.Char(string="Observații")
+    date = fields.Date(string="Data documentului", required=True, default=fields.Date.context_today)
+    remarks = fields.Char(string="Observații")
     # compute (nu related) ca modulul de batch să poată extinde sursa companiei
     # cu documentele declarate direct pe lotul de transfer
     company_id = fields.Many2one("res.company", string="Companie", compute="_compute_company_id", store=True)
@@ -33,8 +33,8 @@ class L10nRoEtransportDocument(models.Model):
         for doc in self:
             doc.company_id = doc.picking_id.company_id
 
-    @api.depends("l10n_ro_document_type", "name")
+    @api.depends("document_type", "name")
     def _compute_display_name(self):
         types = dict(DOCUMENT_TYPES)
         for doc in self:
-            doc.display_name = f"{types.get(doc.l10n_ro_document_type, '')} {doc.name or ''}".strip()
+            doc.display_name = f"{types.get(doc.document_type, '')} {doc.name or ''}".strip()
