@@ -403,6 +403,9 @@ customs supervision (border crossing point to inland customs office on
 import, customs office to border crossing point on export). The Odoo
 standard only allows the customs office at departure on import and at
 arrival on export, the other end being forced to a location.</li>
+<li>The transport date no longer breaks when the sending user has no
+timezone set (the usual case for automated sends running as OdooBot);
+it falls back to the Romanian timezone</li>
 </ul>
 </div>
 <div class="section" id="technical-implementation">

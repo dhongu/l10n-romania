@@ -30,6 +30,13 @@ _logger = logging.getLogger(__name__)
 # deci restricția e a implementării Odoo, nu a declarației.
 FULL_ROUTE_OPERATION_TYPES = ("40", "50")
 
+# Fusul folosit pentru data transportului când utilizatorul care trimite nu are
+# unul setat, nici pe cont, nici în context — cazul tipic e OdooBot din cron sau
+# dintr-o acțiune automată. `pytz.timezone(False)` aruncă AttributeError, deci
+# trimiterea cădea cu traceback. Declarația merge la ANAF, deci ora României e
+# implicitul corect.
+DECLARATION_TIMEZONE = "Europe/Bucharest"
+
 
 class Picking(models.Model):
     _inherit = "stock.picking"
@@ -139,7 +146,7 @@ class Picking(models.Model):
             res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
 
         # fix data
-        user_tz = self.env.user.tz or self.env.context.get("tz")
+        user_tz = self.env.user.tz or self.env.context.get("tz") or DECLARATION_TIMEZONE
         if self:
             scheduled_date_tz = pytz.utc.localize(self.scheduled_date or fields.Date.today()).astimezone(
                 pytz.timezone(user_tz)
