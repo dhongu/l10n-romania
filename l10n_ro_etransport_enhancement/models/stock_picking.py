@@ -10,6 +10,7 @@ import requests
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
 
 _logger = logging.getLogger(__name__)
 
@@ -130,6 +131,45 @@ class Picking(models.Model):
             return "location,bcp,customs"
         return super()._l10n_ro_edi_stock_get_available_location_types(operation_type, location)
 
+    def _l10n_ro_etransport_get_fallback_price(self, product_name):
+        """Prețul unitar pentru o linie pe care standardul o trimite cu valoare 0.
+
+        Atenție la unitatea de măsură: la ANAF `valoareLeiFaraTva` e VALOAREA liniei
+        (`cantitate` e atribut separat), dar standardul pune acolo `standard_price`,
+        adică un preț unitar. Apelantul înmulțește cu cantitatea imediat după — vezi
+        `# fix bug` — deci și aici întoarcem tot un preț UNITAR, nu o valoare.
+
+        ANAF respinge declarația cu `valoareLeiFaraTva` = 0, iar valoarea lipsește
+        ori de câte ori mișcarea nu are preț pe document — transferuri interne,
+        produse fără cost pe fișă. Ordinea de căutare e cea din 18.0: valoarea de
+        stoc a mișcării, apoi costul standard, apoi prețul de listă.
+
+        În 19.0 nu mai există `stock.valuation.layer` pe `stock.move`. Valoarea vine
+        din `_get_value_data()`, care întoarce valoarea și cantitatea valorizată;
+        raportul lor e exact prețul unitar pe care îl dădea suma straturilor SVL.
+        """
+        move = self.env["stock.move"].search(
+            [("product_id.name", "=", product_name), ("picking_id", "in", self.ids)], limit=1
+        )
+        if not move:
+            return 0.0
+
+        price_unit = 0.0
+        # `stock_account` nu e dependență a modulului: fără el mișcarea nu e
+        # valorizată deloc și rămân doar costul standard și prețul de listă.
+        if hasattr(move, "_get_value_data"):
+            value_data = move._get_value_data()
+            valued_qty = value_data["quantity"]
+            if valued_qty:
+                price_unit = value_data["value"] / valued_qty
+        if not price_unit:
+            price_unit = move.product_id.standard_price
+        if not price_unit:
+            price_unit = move.product_id.list_price
+        if not price_unit and self and not self.company_id.l10n_ro_etransport_get_order_value:
+            raise UserError(self.env._("No price found for %(product)s.", product=move.product_id.display_name))
+        return price_unit
+
     @api.model
     def _l10n_ro_edi_stock_get_template_data(self, data: dict):
         for move in self.move_ids:
@@ -162,6 +202,8 @@ class Picking(models.Model):
 
         for item in res["data"]["notificare"]["bunuriTransportate"]:
             # fix bug
+            if float_is_zero(item["valoareLeiFaraTva"], precision_rounding=0.01):
+                item["valoareLeiFaraTva"] = self._l10n_ro_etransport_get_fallback_price(item["denumireMarfa"])
             item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)
             # fix rounding - ex. 0.470000000000003
             item["greutateNeta"] = round(item["greutateNeta"], 2)
