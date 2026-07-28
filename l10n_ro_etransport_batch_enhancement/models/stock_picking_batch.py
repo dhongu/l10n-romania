@@ -115,10 +115,10 @@ class StockPickingBatch(models.Model):
         if docs:
             res["data"]["notificare"]["documenteTransport"] = [
                 {
-                    "tipDocument": doc.l10n_ro_document_type,
-                    "dataDocument": doc.l10n_ro_document_date,
+                    "tipDocument": doc.document_type,
+                    "dataDocument": doc.date,
                     "numarDocument": doc.name,
-                    "observatii": doc.l10n_ro_remarks or "",
+                    "observatii": doc.remarks or "",
                 }
                 for doc in docs
             ]
