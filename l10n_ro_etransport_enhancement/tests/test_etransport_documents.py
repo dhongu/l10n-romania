@@ -52,20 +52,20 @@ class TestEtransportDocuments(TransactionCase):
             [
                 {
                     "picking_id": self.picking.id,
-                    "l10n_ro_document_type": "30",
+                    "document_type": "30",
                     "name": self.picking.name,
-                    "l10n_ro_document_date": "2026-07-20",
+                    "date": "2026-07-20",
                 },
                 {
                     "picking_id": self.picking.id,
-                    "l10n_ro_document_type": "10",
+                    "document_type": "10",
                     "name": "MAA00123",
-                    "l10n_ro_document_date": "2026-07-21",
+                    "date": "2026-07-21",
                 },
             ]
         )
         self.assertEqual(len(self.picking.l10n_ro_etransport_document_ids), 2)
-        cmr = docs.filtered(lambda d: d.l10n_ro_document_type == "10")
+        cmr = docs.filtered(lambda d: d.document_type == "10")
         self.assertIn("CMR", cmr.display_name)
         self.assertIn("MAA00123", cmr.display_name)
 
@@ -74,7 +74,7 @@ class TestEtransportDocuments(TransactionCase):
         self.picking.l10n_ro_etransport_add_default_documents()
         docs = self.picking.l10n_ro_etransport_document_ids
         self.assertEqual(len(docs), 1)
-        self.assertEqual(docs.l10n_ro_document_type, "30")
+        self.assertEqual(docs.document_type, "30")
         self.assertEqual(docs.name, self.picking.name)
         self.picking.l10n_ro_etransport_add_default_documents()
         self.assertEqual(
@@ -87,16 +87,16 @@ class TestEtransportDocuments(TransactionCase):
             [
                 {
                     "picking_id": self.picking.id,
-                    "l10n_ro_document_type": "30",
+                    "document_type": "30",
                     "name": "AVZ-999",
-                    "l10n_ro_document_date": "2026-07-20",
+                    "date": "2026-07-20",
                 },
                 {
                     "picking_id": self.picking.id,
-                    "l10n_ro_document_type": "10",
+                    "document_type": "10",
                     "name": "CMR-555",
-                    "l10n_ro_document_date": "2026-07-21",
-                    "l10n_ro_remarks": "transport frigorific",
+                    "date": "2026-07-21",
+                    "remarks": "transport frigorific",
                 },
             ]
         )
@@ -115,10 +115,10 @@ class TestEtransportDocuments(TransactionCase):
         # simulăm doar partea de documente din override (fără apel ANAF)
         res["data"]["notificare"]["documenteTransport"] = [
             {
-                "tipDocument": d.l10n_ro_document_type,
-                "dataDocument": d.l10n_ro_document_date,
+                "tipDocument": d.document_type,
+                "dataDocument": d.date,
                 "numarDocument": d.name,
-                "observatii": d.l10n_ro_remarks or "",
+                "observatii": d.remarks or "",
             }
             for d in docs
         ]

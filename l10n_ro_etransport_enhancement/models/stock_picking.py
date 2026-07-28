@@ -40,16 +40,16 @@ class Picking(models.Model):
         Nu duplică rândurile deja existente (potrivire pe tip + număr)."""
         Document = self.env["l10n.ro.etransport.document"]
         for picking in self:
-            existing = {(d.l10n_ro_document_type, d.name) for d in picking.l10n_ro_etransport_document_ids}
+            existing = {(d.document_type, d.name) for d in picking.l10n_ro_etransport_document_ids}
             vals_list = []
             # avizul de însoțire = transferul însuși (tip 30)
             if ("30", picking.name) not in existing:
                 vals_list.append(
                     {
                         "picking_id": picking.id,
-                        "l10n_ro_document_type": "30",
+                        "document_type": "30",
                         "name": picking.name,
-                        "l10n_ro_document_date": (picking.scheduled_date or fields.Datetime.now()).date(),
+                        "date": (picking.scheduled_date or fields.Datetime.now()).date(),
                     }
                 )
             # facturile legate de livrare, prin liniile de vânzare (tip 20)
@@ -61,9 +61,9 @@ class Picking(models.Model):
                     vals_list.append(
                         {
                             "picking_id": picking.id,
-                            "l10n_ro_document_type": "20",
+                            "document_type": "20",
                             "name": invoice.name,
-                            "l10n_ro_document_date": invoice.invoice_date or invoice.date,
+                            "date": invoice.invoice_date or invoice.date,
                         }
                     )
             if vals_list:
@@ -211,10 +211,10 @@ class Picking(models.Model):
         if docs:
             res["data"]["notificare"]["documenteTransport"] = [
                 {
-                    "tipDocument": doc.l10n_ro_document_type,
-                    "dataDocument": doc.l10n_ro_document_date,
+                    "tipDocument": doc.document_type,
+                    "dataDocument": doc.date,
                     "numarDocument": doc.name,
-                    "observatii": doc.l10n_ro_remarks or "",
+                    "observatii": doc.remarks or "",
                 }
                 for doc in docs
             ]
