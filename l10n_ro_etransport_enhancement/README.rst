@@ -57,6 +57,9 @@ Key Features
   import, customs office to border crossing point on export). The Odoo
   standard only allows the customs office at departure on import and at
   arrival on export, the other end being forced to a location.
+- The transport date no longer breaks when the sending user has no
+  timezone set (the usual case for automated sends running as OdooBot);
+  it falls back to the Romanian timezone
 
 Technical Implementation
 ------------------------
