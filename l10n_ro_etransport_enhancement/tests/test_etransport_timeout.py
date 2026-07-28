@@ -7,6 +7,7 @@ import requests
 
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+from odoo.tools import mute_logger
 
 from odoo.addons.l10n_ro_edi_stock.models.etransport_api import ETransportAPI
 from odoo.addons.l10n_ro_edi_stock.models.stock_picking import Picking as CorePicking
@@ -67,6 +68,9 @@ class TestETransportTimeout(TransactionCase):
 
         self.assertEqual(mocked_request.call_args.kwargs["timeout"], DEFAULT_ETRANSPORT_TIMEOUT)
 
+    # avertismentul e chiar comportamentul testat; fără mute, `checklog-odoo` din CI
+    # tratează orice WARNING din log ca eșec
+    @mute_logger("odoo.addons.l10n_ro_etransport_enhancement.models.stock_picking")
     def test_send_timeout_creates_failed_document(self):
         """Un timeout la trimitere produce document 'stock_sending_failed', nu traceback RPC."""
         picking = self._create_picking()
@@ -79,6 +83,7 @@ class TestETransportTimeout(TransactionCase):
         self.assertTrue(document, "Trebuie creat un document eșuat, ca livrarea să nu rămână fără urmă")
         self.assertIn("SPV", document.message, "Mesajul trebuie să avertizeze despre verificarea în SPV")
 
+    @mute_logger("odoo.addons.l10n_ro_etransport_enhancement.models.stock_picking")
     def test_status_fetch_timeout_does_not_stop_the_batch(self):
         """O cădere de rețea la un picking nu oprește interogarea celorlalte."""
         pickings = self._create_picking() | self._create_picking()
