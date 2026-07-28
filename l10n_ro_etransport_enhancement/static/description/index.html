@@ -416,6 +416,8 @@ missing net or gross weight is approximated with the other one. The
 QWeb template renders all three through <tt class="docutils literal"><span class="pre">t-att-*</span></tt>, which silently
 drops a zero, while the ANAF schema requires them: a zero invalidates
 the declaration</li>
+<li>“Get lines” recomputes the shipping weight lines instead of adding to
+them, so pressing it twice no longer doubles the weights sent to ANAF</li>
 </ul>
 </div>
 <div class="section" id="technical-implementation">

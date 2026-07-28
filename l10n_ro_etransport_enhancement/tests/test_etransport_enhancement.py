@@ -304,6 +304,61 @@ class TestComputeWeightLines(TransactionCase):
         picking.l10n_ro_compute_weight_lines()
         self.assertEqual(len(picking.l10n_ro_shipping_weight_lines), 0)
 
+    def _picking_with_quantity(self, qty=2.0):
+        """Transfer confirmat, cu cantitate pe mișcare — altfel nu se creează linii."""
+        picking_type = self.env["stock.picking.type"].search(
+            [("code", "=", "outgoing"), ("warehouse_id", "=", self.warehouse.id)],
+            limit=1,
+        )
+        picking = self.env["stock.picking"].create(
+            {
+                "picking_type_id": picking_type.id,
+                "partner_id": self.partner.id,
+                "location_id": picking_type.default_location_src_id.id,
+                "location_dest_id": picking_type.default_location_dest_id.id,
+                "move_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": self.product.id,
+                            "product_uom_qty": qty,
+                            "product_uom": self.product.uom_id.id,
+                            "location_id": picking_type.default_location_src_id.id,
+                            "location_dest_id": picking_type.default_location_dest_id.id,
+                        },
+                    )
+                ],
+            }
+        )
+        picking.action_confirm()
+        picking.move_ids.quantity = qty
+        return picking
+
+    def test_compute_weight_lines_creates_one_line_per_move(self):
+        """O apăsare pe „Get lines" dă o linie pe mișcare, cu greutatea produsului."""
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_compute_weight_lines()
+        self.assertEqual(len(picking.l10n_ro_shipping_weight_lines), 1)
+        self.assertEqual(picking.l10n_ro_shipping_weight_lines.gross_weight, 6.0)  # 3 kg * 2
+
+    def test_recompute_replaces_lines_instead_of_adding(self):
+        """A doua apăsare recalculează; fără unlink greutățile ajungeau dublate."""
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_compute_weight_lines()
+        picking.l10n_ro_compute_weight_lines()
+        self.assertEqual(len(picking.l10n_ro_shipping_weight_lines), 1)
+        self.assertEqual(picking.l10n_ro_shipping_weight_lines.gross_weight, 6.0)
+
+    def test_recompute_picks_up_the_new_quantity(self):
+        """Recalcularea reflectă cantitatea curentă, nu pe cea de la prima apăsare."""
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_compute_weight_lines()
+        picking.move_ids.quantity = 5.0
+        picking.l10n_ro_compute_weight_lines()
+        self.assertEqual(len(picking.l10n_ro_shipping_weight_lines), 1)
+        self.assertEqual(picking.l10n_ro_shipping_weight_lines.gross_weight, 15.0)  # 3 kg * 5
+
 
 @tagged("post_install", "-at_install")
 class TestTemplateDataTimezone(TransactionCase):
