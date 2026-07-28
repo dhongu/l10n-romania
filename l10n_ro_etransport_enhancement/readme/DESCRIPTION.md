@@ -6,6 +6,10 @@ The l10n_ro_etransport_enhancement module extends the standard Romanian e-Transp
 - Support for different sending types through context parameters
 - Improved handling of stock valuation layer tracking for e-Transport documents
 - Streamlined integration with the Romanian e-Transport system (SPV)
+- Configurable timeout for the ANAF API (the Odoo standard hardcodes 10 seconds, often too short)
+- Network failures towards ANAF no longer raise a traceback: the transfer keeps a failed
+  document with a readable message warning to check SPV before resending, so no duplicate UIT is issued
+- Automatic retry on status requests only (GET is idempotent); document upload is never retried automatically
 
 ## Technical Implementation
 The module builds upon the standard Romanian localization and enhances the e-Transport integration through:
