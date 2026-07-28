@@ -11,12 +11,31 @@ class LandedCost(models.Model):
 
     landed_type = fields.Selection([("standard", "Standard"), ("dvi", "DVI")], default="standard")
 
+    # numărul declarației vamale de import (MRN), preluat din documentul emis de vamă
+    dvi_number = fields.Char(
+        "DVI Number",
+        copy=False,
+        index=True,
+        tracking=True,
+        help="Reference number of the customs import declaration (MRN).",
+    )
+
     tax_value = fields.Float("VAT paid at customs")
     tax_base = fields.Float("Tax base")
     tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
 
+    def _get_move_ref(self):
+        """Referința notei contabile: numărul de DVI dacă e completat, altfel secvența internă."""
+        self.ensure_one()
+        return self.dvi_number or self.name
+
     def button_validate(self):
         res = super().button_validate()
+
+        # nota principală e creată în super() cu ref = name; o corectăm cu numărul de DVI
+        for cost in self.filtered(lambda c: c.dvi_number and c.account_move_id):
+            cost.account_move_id.ref = cost.dvi_number
+
         get_param = self.env["ir.config_parameter"].sudo().get_param
 
         product_id = get_param("dvi.custom_duty_product_id")
@@ -37,7 +56,7 @@ class LandedCost(models.Model):
                     {
                         "journal_id": cost.account_journal_id.id,
                         "date": cost.date,
-                        "ref": cost.name,
+                        "ref": cost._get_move_ref(),
                         "line_ids": [],
                         "move_type": "entry",
                     }

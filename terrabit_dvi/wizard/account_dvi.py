@@ -10,6 +10,10 @@ class AccountInvoiceDVI(models.TransientModel):
     _description = "account.invoice.dvi"
 
     date = fields.Date()
+    dvi_number = fields.Char(
+        "DVI Number",
+        help="Reference number of the customs import declaration (MRN).",
+    )
     custom_duty = fields.Monetary()  # costuri vamale
     customs_commission = fields.Monetary()  # comision vamal
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
@@ -84,6 +88,7 @@ class AccountInvoiceDVI(models.TransientModel):
         values = {
             "date": self.date,
             "landed_type": "dvi",
+            "dvi_number": self.dvi_number,
             "picking_ids": [(6, 0, pickings.ids)],
             "cost_lines": [],
             "account_journal_id": invoice.journal_id.id,

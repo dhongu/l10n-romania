@@ -64,6 +64,12 @@ msgid "DVI"
 msgstr ""
 
 #. module: terrabit_dvi
+#: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__dvi_number
+#: model:ir.model.fields,field_description:terrabit_dvi.field_stock_landed_cost__dvi_number
+msgid "DVI Number"
+msgstr "Număr DVI"
+
+#. module: terrabit_dvi
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__date
 msgid "Date"
 msgstr "Data"
@@ -77,6 +83,12 @@ msgstr "Nume afișat"
 #: model:ir.model.fields,field_description:terrabit_dvi.field_account_invoice_dvi__id
 msgid "ID"
 msgstr ""
+
+#. module: terrabit_dvi
+#: model:ir.model.fields,help:terrabit_dvi.field_account_invoice_dvi__dvi_number
+#: model:ir.model.fields,help:terrabit_dvi.field_stock_landed_cost__dvi_number
+msgid "Reference number of the customs import declaration (MRN)."
+msgstr "Numărul de referință al declarației vamale de import (MRN)."
 
 #. module: terrabit_dvi
 #: model:ir.model,name:terrabit_dvi.model_account_move
