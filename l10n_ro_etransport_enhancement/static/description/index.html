@@ -411,6 +411,11 @@ zero: the unit price falls back to the stock value of the move, then
 to the product cost, then to the sales price. When no price can be
 found at all, sending stops with an explicit error instead of filing
 an invalid declaration</li>
+<li>Lines without a quantity are dropped from the declaration, and a
+missing net or gross weight is approximated with the other one. The
+QWeb template renders all three through <tt class="docutils literal"><span class="pre">t-att-*</span></tt>, which silently
+drops a zero, while the ANAF schema requires them: a zero invalidates
+the declaration</li>
 </ul>
 </div>
 <div class="section" id="technical-implementation">
