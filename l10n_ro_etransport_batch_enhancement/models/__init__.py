@@ -4,3 +4,4 @@
 
 
 from . import stock_picking_batch
+from . import etransport_document

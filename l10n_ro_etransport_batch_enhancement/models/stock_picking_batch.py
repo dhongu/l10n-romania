@@ -24,6 +24,28 @@ class StockPickingBatch(models.Model):
     )
     total_net_weight = fields.Float()
     total_gross_weight = fields.Float()
+    # documentele declarate direct pe lot (un camion = un CMR)
+    l10n_ro_etransport_document_ids = fields.One2many(
+        "l10n.ro.etransport.document",
+        "batch_id",
+        string="Documente însoțitoare (lot)",
+        copy=False,
+    )
+    # tot ce se trimite la ANAF pentru lot: documentele lotului + cele ale
+    # transferurilor din el (avizele)
+    l10n_ro_etransport_all_document_ids = fields.Many2many(
+        "l10n.ro.etransport.document",
+        string="Documente însoțitoare (toate)",
+        compute="_compute_l10n_ro_etransport_all_document_ids",
+    )
+
+    @api.depends("l10n_ro_etransport_document_ids", "picking_ids.l10n_ro_etransport_document_ids")
+    def _compute_l10n_ro_etransport_all_document_ids(self):
+        for batch in self:
+            batch.l10n_ro_etransport_all_document_ids = (
+                batch.l10n_ro_etransport_document_ids | batch.picking_ids.l10n_ro_etransport_document_ids
+            )
+
     l10n_ro_transport_partner_id = fields.Many2one(
         "res.partner",
         string="Transport Partner",
@@ -83,6 +105,25 @@ class StockPickingBatch(models.Model):
             res["data"]["notificare"]["dateTransport"]["codTaraOrgTransport"] = "EL"
         if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
             res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
+
+        # Documentele însoțitoare pentru declarația pe LOT: cele ale lotului
+        # (ex. un CMR pentru tot camionul) + cele ale transferurilor din el
+        # (avizele). Override-ul din `l10n_ro_etransport_enhancement` e pe
+        # `stock.picking`, deci nu se aplică aici — `self` e un lot.
+        native_doc = res["data"]["notificare"].get("documenteTransport")
+        docs = self.l10n_ro_etransport_all_document_ids if self else self.browse()
+        if docs:
+            res["data"]["notificare"]["documenteTransport"] = [
+                {
+                    "tipDocument": doc.l10n_ro_document_type,
+                    "dataDocument": doc.l10n_ro_document_date,
+                    "numarDocument": doc.name,
+                    "observatii": doc.l10n_ro_remarks or "",
+                }
+                for doc in docs
+            ]
+        elif isinstance(native_doc, dict):
+            res["data"]["notificare"]["documenteTransport"] = [native_doc]
         return res
 
     def action_l10n_ro_edi_stock_fetch_status(self):
