@@ -11,6 +11,7 @@
                 <group>
                     <group>
                         <field name="landed_type"/>
+                        <field name="dvi_number" invisible="landed_type == 'standard'"/>
                     </group>
                     <group invisible="landed_type == 'standard'">
                         <field name="tax_id"/>
@@ -28,12 +29,27 @@
         <field name="model">stock.landed.cost</field>
         <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_search"/>
         <field name="arch" type="xml">
+            <field name="picking_ids" position="after">
+                <field name="dvi_number"/>
+            </field>
             <filter name="done" position="after">
                 <separator/>
                 <filter name="filter_dvi"
                         string="DVI"
                         domain="[('landed_type', '=', 'dvi')]"/>
             </filter>
+        </field>
+    </record>
+
+    <!-- Extindere listă: nr. DVI ca coloană opțională -->
+    <record id="view_stock_landed_cost_tree_dvi" model="ir.ui.view">
+        <field name="name">stock.landed.cost.list.dvi</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="dvi_number" optional="show"/>
+            </field>
         </field>
     </record>
 

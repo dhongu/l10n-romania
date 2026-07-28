@@ -13,6 +13,7 @@
                             <field name="tax_value" />
                         </group>
                         <group>
+                            <field name="dvi_number" />
                             <field name="date" />
                             <field name="tax_id" />
                         </group>

@@ -224,6 +224,7 @@ class TestDVI(TransactionCase):
         wizard_form = Form(wizard.with_context(active_id=invoice.id))
         self.assertEqual(wizard_form.tax_base, 3000.0, "Tax base should be initialized from invoice amount untaxed")
         wizard_form.tax_id = self.tax_id
+        wizard_form.dvi_number = "25ROBU1234567890"
         wizard_form.custom_duty = 5.0
         wizard_form.customs_commission = 6.0
         # Simulam o modificare manuala a TVA-ului platit in vama
@@ -234,6 +235,7 @@ class TestDVI(TransactionCase):
         dvi = self.env[(action.get("res_model"))].browse(action.get("res_id"))
         self.assertEqual(dvi.tax_base, 3000.0)
         self.assertEqual(dvi.landed_type, "dvi")
+        self.assertEqual(dvi.dvi_number, "25ROBU1234567890", "DVI number should be propagated from the wizard")
 
         dvi_form = Form(dvi)
         dvi = dvi_form.save()
@@ -244,6 +246,7 @@ class TestDVI(TransactionCase):
         self.assertTrue(dvi.account_move_id, "Account move for VAT should be created")
         vat_move = dvi.account_move_id
         self.assertEqual(vat_move.state, "posted")
+        self.assertEqual(vat_move.ref, "25ROBU1234567890", "Journal entry reference should be the DVI number")
 
         # Verificam liniile notei contabile pentru TVA
         # In Odoo 18, nota contabila poate fi partajata cu intrarile de evaluare stoc.

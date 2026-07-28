@@ -4,7 +4,7 @@
     "name": "Terrabit - DVI",
     "summary": "DVI",
     "license": "AGPL-3",
-    "version": "19.0.1.1.0",
+    "version": "19.0.1.2.0",
     "countries": ["ro"],
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
