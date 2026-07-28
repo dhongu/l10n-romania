@@ -1,3 +1,26 @@
+## 19.0.0.3.20 (2026-07-28)
+
+- **Import SPV: linia se recalculează din `cbc:LineExtensionAmount` când
+  furnizorul completează greșit `cac:Price/cbc:BaseQuantity`.** Core-ul Odoo
+  derivă prețul unitar din BT-146 / BT-149 și suprascrie astfel valoarea
+  calculată din BT-131. Când furnizorul transmite `BaseQuantity` egal cu
+  `InvoicedQuantity` în loc de 1 — tipar întâlnit la mai multe programe de
+  facturare — prețul unitar rezultat este de `InvoicedQuantity` ori mai mic
+  (ex. 0,00315 lei/m în loc de 1,26 lei/m), iar diferența ajunge tăcut într-o
+  linie „Rounding" **fără TVA**. Factura intră cu total corect, dar cu **TVA
+  subevaluat**, fără nicio eroare afișată.
+  - BT-131 (`cbc:LineExtensionAmount`) este câmp obligatoriu și reprezintă
+    valoarea autoritativă a liniei, în timp ce BT-149 este opțional și
+    servește doar la exprimarea prețului. Când cele două se contrazic, linia
+    se recalculează din BT-131.
+  - Se compară subtotalul importat cu BT-131 și se corectează **doar** peste
+    toleranța de rotunjire dedusă din numărul de zecimale al BT-146; abaterile
+    mici, legitime (preț unitar transmis rotunjit la 2 zecimale), rămân pe
+    seama liniei de rotunjire din core.
+  - Fiecare linie corectată este semnalată în logurile importului, deci apare
+    în chatter-ul facturii.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
 ## 19.0.0.3.18 (2026-07-03)
 
 - **Opțiune de dezactivare a importului automat de facturi primite din SPV.**
@@ -11,7 +34,7 @@
   - Este gardată **doar** metoda dedicată `_l10n_ro_edi_process_bill_messages`;
     procesarea răspunsurilor pentru facturile trimise (acceptat/refuzat) și
     curățarea facturilor neindexate din același cron rămân neatinse.
-=======
+
 ## 19.0.0.3.17 (2026-07-03)
 
 - **Descrierea nu mai apare dublată în Description + Name.** Când linia avea o
