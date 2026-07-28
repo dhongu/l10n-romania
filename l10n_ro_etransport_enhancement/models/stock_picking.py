@@ -47,6 +47,12 @@ class Picking(models.Model):
     l10n_ro_shipping_weight_lines = fields.One2many(
         "l10n.ro.stock.picking.weight.line", "picking_id", string="Shipping Weight Lines"
     )
+    # Greutățile cântărite la rampă, pe tot transferul. Se completează manual și
+    # servesc ca țintă pentru `l10n_ro_distribute_weights`: greutățile calculate
+    # din fișele produselor rareori corespund cântarului.
+    total_net_weight = fields.Float()
+    total_gross_weight = fields.Float()
+    l10n_ro_shipping_weight_lines_warning = fields.Char(compute="_compute_l10n_ro_shipping_weight_lines_warning")
     l10n_ro_transport_partner_id = fields.Many2one("res.partner", string="Transport Partner")
     # Documentele însoțitoare declarate la ANAF (CMR, factură, aviz…). Nativ,
     # `l10n_ro_edi_stock` trimite UN SINGUR document, hardcodat ca aviz (tip 30)
@@ -93,6 +99,28 @@ class Picking(models.Model):
                     )
             if vals_list:
                 Document.create(vals_list)
+
+    @api.depends("l10n_ro_shipping_weights", "l10n_ro_shipping_weight_lines.move_id", "move_ids.quantity")
+    def _compute_l10n_ro_shipping_weight_lines_warning(self):
+        """Avertizează când unor mișcări le lipsește linia de greutate.
+
+        Fără avertisment, operatorul vede o listă de greutăți plauzibilă și trimite
+        declarația cu greutățile incomplete: liniile lipsă nu apar nicăieri.
+        """
+        for picking in self:
+            if not picking.l10n_ro_shipping_weights:
+                picking.l10n_ro_shipping_weight_lines_warning = False
+                continue
+            expected = picking.move_ids.filtered(lambda m: m.quantity > 0)
+            missing = expected - picking.l10n_ro_shipping_weight_lines.move_id
+            if missing:
+                picking.l10n_ro_shipping_weight_lines_warning = self.env._(
+                    '%(missing)s of %(total)s moves have no computed weight line. Press "Get lines".',
+                    missing=len(missing),
+                    total=len(expected),
+                )
+            else:
+                picking.l10n_ro_shipping_weight_lines_warning = False
 
     @api.onchange("carrier_id")
     def _onchange_carrier_id(self):
@@ -419,6 +447,39 @@ class Picking(models.Model):
                     )
             if vals:
                 self.env["l10n.ro.stock.picking.weight.line"].create(vals)
+
+    def l10n_ro_distribute_weights(self):
+        """Ajustează liniile de greutate ca să însumeze greutățile cântărite.
+
+        Greutățile calculate din fișele produselor rareori corespund cântarului de
+        la rampă. Diferența se împarte proporțional cu greutatea fiecărei linii,
+        iar când liniile pornesc toate de la 0 (produse fără greutate pe fișă) se
+        împarte egal, altfel proporția ar fi o împărțire la zero.
+        """
+        for picking in self:
+            if not picking.l10n_ro_shipping_weight_lines:
+                continue
+            if float_is_zero(picking.total_net_weight, precision_digits=4) or float_is_zero(
+                picking.total_gross_weight, precision_digits=4
+            ):
+                raise UserError(self.env._("Total net and gross weights must be greater than 0."))
+
+            current_net_total = sum(picking.l10n_ro_shipping_weight_lines.mapped("net_weight"))
+            current_gross_total = sum(picking.l10n_ro_shipping_weight_lines.mapped("gross_weight"))
+            net_diff = picking.total_net_weight - current_net_total
+            gross_diff = picking.total_gross_weight - current_gross_total
+
+            if not float_is_zero(net_diff, precision_digits=4) or not float_is_zero(gross_diff, precision_digits=4):
+                for line in picking.l10n_ro_shipping_weight_lines:
+                    if not float_is_zero(current_net_total, precision_digits=4):
+                        line.net_weight += net_diff * (line.net_weight / current_net_total)
+                    else:
+                        line.net_weight = picking.total_net_weight / len(picking.l10n_ro_shipping_weight_lines)
+
+                    if not float_is_zero(current_gross_total, precision_digits=4):
+                        line.gross_weight += gross_diff * (line.gross_weight / current_gross_total)
+                    else:
+                        line.gross_weight = picking.total_gross_weight / len(picking.l10n_ro_shipping_weight_lines)
 
     # @api.model
     # def _l10n_ro_edi_stock_validate_data(self, data: dict):

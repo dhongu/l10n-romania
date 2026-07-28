@@ -359,6 +359,50 @@ class TestComputeWeightLines(TransactionCase):
         self.assertEqual(len(picking.l10n_ro_shipping_weight_lines), 1)
         self.assertEqual(picking.l10n_ro_shipping_weight_lines.gross_weight, 15.0)  # 3 kg * 5
 
+    def test_warning_when_a_move_has_no_weight_line(self):
+        """Mișcările fără linie de greutate sunt semnalate, nu trecute cu vederea."""
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_shipping_weights = True
+        self.assertIn("1 of 1", picking.l10n_ro_shipping_weight_lines_warning)
+        picking.l10n_ro_compute_weight_lines()
+        self.assertFalse(picking.l10n_ro_shipping_weight_lines_warning)
+
+    def test_no_warning_when_custom_weights_are_off(self):
+        """Fără greutăți proprii, avertismentul nu are sens."""
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_shipping_weights = False
+        self.assertFalse(picking.l10n_ro_shipping_weight_lines_warning)
+
+    def test_distribute_weights_matches_the_weighed_totals(self):
+        """Distribuția ajustează liniile ca să însumeze greutățile cântărite."""
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_compute_weight_lines()
+        picking.total_net_weight = 10.0
+        picking.total_gross_weight = 12.0
+        picking.l10n_ro_distribute_weights()
+        lines = picking.l10n_ro_shipping_weight_lines
+        self.assertAlmostEqual(sum(lines.mapped("net_weight")), 10.0, places=4)
+        self.assertAlmostEqual(sum(lines.mapped("gross_weight")), 12.0, places=4)
+
+    def test_distribute_weights_without_totals_raises(self):
+        """Fără greutăți cântărite nu e nimic de distribuit."""
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_compute_weight_lines()
+        with self.assertRaises(UserError):
+            picking.l10n_ro_distribute_weights()
+
+    def test_distribute_weights_splits_evenly_from_zero(self):
+        """Când toate liniile pornesc de la 0, repartiția e egală (nu împărțire la zero)."""
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_compute_weight_lines()
+        picking.l10n_ro_shipping_weight_lines.write({"net_weight": 0.0, "gross_weight": 0.0})
+        picking.total_net_weight = 8.0
+        picking.total_gross_weight = 9.0
+        picking.l10n_ro_distribute_weights()
+        lines = picking.l10n_ro_shipping_weight_lines
+        self.assertAlmostEqual(sum(lines.mapped("net_weight")), 8.0, places=4)
+        self.assertAlmostEqual(sum(lines.mapped("gross_weight")), 9.0, places=4)
+
 
 @tagged("post_install", "-at_install")
 class TestTemplateDataTimezone(TransactionCase):
