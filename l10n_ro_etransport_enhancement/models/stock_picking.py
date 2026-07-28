@@ -171,6 +171,34 @@ class Picking(models.Model):
         return price_unit
 
     @api.model
+    def _l10n_ro_etransport_fix_quantities_and_weights(self, items):
+        """Scoate liniile fără cantitate și completează greutatea lipsă, pe loc.
+
+        Ambele sunt apărări împotriva aceleiași capcane: șablonul QWeb randează
+        `cantitate`, `greutateNeta` și `greutateBruta` prin `t-att-*`, care scapă
+        tăcut o valoare falsy. XSD-ul ANAF le cere pe toate trei, deci un 0 nu
+        lipsește doar din declarație — o invalidează.
+
+        - cantitate 0: linia nu are ce căuta în declarație, o scoatem.
+        - o singură greutate la 0: o aproximăm cu cealaltă. E preferabil unei
+          declarații respinse, iar cazul apare când produsul nu are greutate
+          netă pe fișă, doar brută (sau invers).
+
+        Rulează necondiționat, nu doar când se folosește cantitatea validată:
+        valoarea 0 poate veni și din standard.
+        """
+        for item in items[:]:
+            if float_is_zero(item["cantitate"], precision_rounding=0.01):
+                items.remove(item)
+                continue
+            neta_is_zero = float_is_zero(item["greutateNeta"], precision_rounding=0.01)
+            bruta_is_zero = float_is_zero(item["greutateBruta"], precision_rounding=0.01)
+            if bruta_is_zero and not neta_is_zero:
+                item["greutateBruta"] = item["greutateNeta"]
+            elif neta_is_zero and not bruta_is_zero:
+                item["greutateNeta"] = item["greutateBruta"]
+
+    @api.model
     def _l10n_ro_edi_stock_get_template_data(self, data: dict):
         for move in self.move_ids:
             move._cal_move_weight()
@@ -280,6 +308,8 @@ class Picking(models.Model):
                         if unit_price:
                             item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
                     item_no += 1
+
+        self._l10n_ro_etransport_fix_quantities_and_weights(res["data"]["notificare"]["bunuriTransportate"])
 
         # Documentele însoțitoare declarate pe transfer (CMR, factură, aviz…).
         # Nativ, `documenteTransport` e un DICT cu un singur document hardcodat

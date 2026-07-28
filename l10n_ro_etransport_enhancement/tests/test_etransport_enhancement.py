@@ -487,3 +487,98 @@ class TestFallbackPrice(TransactionCase):
         res = self._get_template_data(value=7.0)
         item = res["data"]["notificare"]["bunuriTransportate"][0]
         self.assertEqual(item["valoareLeiFaraTva"], 28.0)  # 7 * 4, nu 99
+
+
+@tagged("post_install", "-at_install")
+class TestQuantitiesAndWeights(TransactionCase):
+    """Cantitatea 0 și greutățile lipsă pe `bunuriTransportate`.
+
+    Șablonul QWeb randează `cantitate`, `greutateNeta` și `greutateBruta` prin
+    `t-att-*`, care scapă tăcut o valoare falsy, iar XSD-ul ANAF le cere pe toate
+    trei: un 0 nu lipsește doar din declarație, o invalidează.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.env.company.id)], limit=1)
+        cls.partner = cls.env["res.partner"].create(
+            {"name": "Partener Cantități", "country_id": cls.env.ref("base.ro").id}
+        )
+        cls.picking = cls.env["stock.picking"].create(
+            {
+                "picking_type_id": cls.warehouse.out_type_id.id,
+                "partner_id": cls.partner.id,
+                "location_id": cls.warehouse.lot_stock_id.id,
+                "location_dest_id": cls.env.ref("stock.stock_location_customers").id,
+            }
+        )
+
+    def _item(self, cantitate=1.0, neta=1.0, bruta=1.0, name="Marfă"):
+        return {
+            "denumireMarfa": name,
+            "cantitate": cantitate,
+            "greutateNeta": neta,
+            "greutateBruta": bruta,
+        }
+
+    def _fix(self, items):
+        self.env["stock.picking"]._l10n_ro_etransport_fix_quantities_and_weights(items)
+        return items
+
+    def test_zero_quantity_line_is_removed(self):
+        """O linie fără cantitate nu are ce căuta în declarație."""
+        items = self._fix([self._item(cantitate=0.0), self._item(cantitate=3.0, name="Rămâne")])
+        self.assertEqual([item["denumireMarfa"] for item in items], ["Rămâne"])
+
+    def test_all_lines_can_be_removed(self):
+        """Dacă toate liniile sunt fără cantitate, lista rămâne goală (nu crapă)."""
+        self.assertEqual(self._fix([self._item(cantitate=0.0)]), [])
+
+    def test_zero_gross_weight_falls_back_to_net(self):
+        """Greutatea brută lipsă se aproximează cu cea netă."""
+        items = self._fix([self._item(neta=12.5, bruta=0.0)])
+        self.assertEqual(items[0]["greutateBruta"], 12.5)
+        self.assertEqual(items[0]["greutateNeta"], 12.5)
+
+    def test_zero_net_weight_falls_back_to_gross(self):
+        """Și invers: greutatea netă lipsă se aproximează cu cea brută."""
+        items = self._fix([self._item(neta=0.0, bruta=8.0)])
+        self.assertEqual(items[0]["greutateNeta"], 8.0)
+        self.assertEqual(items[0]["greutateBruta"], 8.0)
+
+    def test_both_weights_zero_are_left_alone(self):
+        """Fără nicio greutate cunoscută nu se poate deduce nimic."""
+        items = self._fix([self._item(neta=0.0, bruta=0.0)])
+        self.assertEqual((items[0]["greutateNeta"], items[0]["greutateBruta"]), (0.0, 0.0))
+
+    def test_complete_line_is_untouched(self):
+        """O linie completă rămâne exact cum e."""
+        items = self._fix([self._item(cantitate=2.0, neta=3.0, bruta=4.0)])
+        self.assertEqual((items[0]["cantitate"], items[0]["greutateNeta"], items[0]["greutateBruta"]), (2.0, 3.0, 4.0))
+
+    def test_applied_when_building_the_declaration(self):
+        """Curățarea chiar rulează pe declarația generată, nu doar izolat."""
+        native = {
+            "data": {
+                "notificare": {
+                    "bunuriTransportate": [
+                        dict(self._item(cantitate=0.0, name="Fără cantitate"), valoareLeiFaraTva=5.0),
+                        dict(self._item(cantitate=2.0, neta=6.0, bruta=0.0, name="Rămâne"), valoareLeiFaraTva=5.0),
+                    ],
+                    "partenerComercial": {"codTara": "RO"},
+                    "dateTransport": {"dataTransport": fields.Date.today()},
+                    "locStartTraseuRutier": {},
+                    "locFinalTraseuRutier": {},
+                    "documenteTransport": {},
+                }
+            }
+        }
+        patch_path = "odoo.addons.l10n_ro_edi_stock.models.stock_picking.Picking._l10n_ro_edi_stock_get_template_data"
+        with patch(patch_path, return_value=native):
+            res = self.picking._l10n_ro_edi_stock_get_template_data(
+                {"transport_partner_id": self.partner, "stock_move_ids": self.picking.move_ids}
+            )
+        items = res["data"]["notificare"]["bunuriTransportate"]
+        self.assertEqual([item["denumireMarfa"] for item in items], ["Rămâne"])
+        self.assertEqual(items[0]["greutateBruta"], 6.0)

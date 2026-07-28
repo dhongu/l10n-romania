@@ -65,6 +65,11 @@ Key Features
   to the product cost, then to the sales price. When no price can be
   found at all, sending stops with an explicit error instead of filing
   an invalid declaration
+- Lines without a quantity are dropped from the declaration, and a
+  missing net or gross weight is approximated with the other one. The
+  QWeb template renders all three through ``t-att-*``, which silently
+  drops a zero, while the ANAF schema requires them: a zero invalidates
+  the declaration
 
 Technical Implementation
 ------------------------

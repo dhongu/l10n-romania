@@ -20,6 +20,9 @@ The l10n_ro_etransport_enhancement module extends the standard Romanian e-Transp
 - Lines the standard sends with a zero value no longer reach ANAF as zero: the unit price falls back
   to the stock value of the move, then to the product cost, then to the sales price. When no price can
   be found at all, sending stops with an explicit error instead of filing an invalid declaration
+- Lines without a quantity are dropped from the declaration, and a missing net or gross weight is
+  approximated with the other one. The QWeb template renders all three through `t-att-*`, which
+  silently drops a zero, while the ANAF schema requires them: a zero invalidates the declaration
 
 ## Technical Implementation
 The module builds upon the standard Romanian localization and enhances the e-Transport integration through:
