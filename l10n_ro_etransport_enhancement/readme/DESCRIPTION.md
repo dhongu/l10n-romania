@@ -10,6 +10,13 @@ The l10n_ro_etransport_enhancement module extends the standard Romanian e-Transp
 - Network failures towards ANAF no longer raise a traceback: the transfer keeps a failed
   document with a readable message warning to check SPV before resending, so no duplicate UIT is issued
 - Automatic retry on status requests only (GET is idempotent); document upload is never retried automatically
+- Road route between a border crossing point and a customs office: for import and export, both ends
+  of the route can be a border crossing point or a customs office, so a UIT can be issued for the leg
+  under customs supervision (border crossing point to inland customs office on import, customs office
+  to border crossing point on export). The Odoo standard only allows the customs office at departure
+  on import and at arrival on export, the other end being forced to a location.
+- The transport date no longer breaks when the sending user has no timezone set (the usual case for
+  automated sends running as OdooBot); it falls back to the Romanian timezone
 
 ## Technical Implementation
 The module builds upon the standard Romanian localization and enhances the e-Transport integration through:

@@ -3,6 +3,7 @@
 # See README.rst file on addons root folder for license details
 from unittest.mock import patch
 
+from odoo import fields
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -301,3 +302,76 @@ class TestComputeWeightLines(TransactionCase):
         # quantity (done qty) este 0 la draft, deci nu se creează linii
         picking.l10n_ro_compute_weight_lines()
         self.assertEqual(len(picking.l10n_ro_shipping_weight_lines), 0)
+
+
+@tagged("post_install", "-at_install")
+class TestTemplateDataTimezone(TransactionCase):
+    """Data transportului când utilizatorul care trimite nu are fus orar setat.
+
+    `pytz.timezone(False)` aruncă AttributeError, deci o trimitere din cron (OdooBot
+    nu are `tz`) cădea cu traceback în loc să genereze declarația.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.env.company.id)], limit=1)
+        cls.transport_partner = cls.env["res.partner"].create(
+            {"name": "Transportator TZ", "country_id": cls.env.ref("base.ro").id}
+        )
+        cls.picking = cls.env["stock.picking"].create(
+            {
+                "picking_type_id": cls.warehouse.out_type_id.id,
+                "partner_id": cls.transport_partner.id,
+                "location_id": cls.warehouse.lot_stock_id.id,
+                "location_dest_id": cls.env.ref("stock.stock_location_customers").id,
+                # 22:30 UTC devine ziua următoare la ora României; o dată din viitor,
+                # altfel override-ul o înlocuiește cu ziua curentă
+                "scheduled_date": "2027-07-20 22:30:00",
+            }
+        )
+
+    def _native_template_data(self):
+        """Scheletul pe care îl întoarce standardul, cât să treacă override-ul."""
+        return {
+            "data": {
+                "notificare": {
+                    "bunuriTransportate": [],
+                    "partenerComercial": {"codTara": "RO"},
+                    "dateTransport": {"dataTransport": fields.Date.to_date("2027-07-20")},
+                    "locStartTraseuRutier": {},
+                    "locFinalTraseuRutier": {},
+                    "documenteTransport": {
+                        "tipDocument": "30",
+                        "dataDocument": fields.Date.to_date("2027-07-20"),
+                        "numarDocument": "AVZ-1",
+                        "observatii": "",
+                    },
+                }
+            }
+        }
+
+    def _get_template_data(self):
+        patch_path = "odoo.addons.l10n_ro_edi_stock.models.stock_picking.Picking._l10n_ro_edi_stock_get_template_data"
+        with patch(patch_path, return_value=self._native_template_data()):
+            return self.picking._l10n_ro_edi_stock_get_template_data(
+                {"transport_partner_id": self.transport_partner, "stock_move_ids": self.picking.move_ids}
+            )
+
+    def test_missing_user_timezone_falls_back_to_romania(self):
+        """Fără fus orar pe utilizator, data se calculează la ora României."""
+        self.env.user.tz = False
+        res = self._get_template_data()
+        self.assertEqual(
+            res["data"]["notificare"]["dateTransport"]["dataTransport"],
+            fields.Date.to_date("2027-07-21"),
+        )
+
+    def test_user_timezone_is_respected(self):
+        """Când utilizatorul are fus orar, acela rămâne sursa datei."""
+        self.env.user.tz = "UTC"
+        res = self._get_template_data()
+        self.assertEqual(
+            res["data"]["notificare"]["dateTransport"]["dataTransport"],
+            fields.Date.to_date("2027-07-20"),
+        )
