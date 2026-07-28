@@ -13,11 +13,11 @@ eTransport Batch Enhancement
 .. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
     :alt: Mature
-.. |badge2| image:: https://img.shields.io/badge/licence-LGPL--3-blue.png
-    :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
-    :alt: License: LGPL-3
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
+    :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_etransport_batch_enhancement
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_etransport_batch_enhancement
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -39,6 +39,9 @@ Caracteristici Cheie
   - Calculul greutăților pe liniile de transfer din lot.
   - Distribuirea greutății totale (netă și brută) proporțional pe
     liniile lotului.
+  - Avertisment când unor mișcări din lot le lipsește linia de greutate,
+    ca declarația să nu plece la ANAF cu greutăți incomplete fără să se
+    vadă.
 
 - Validarea datelor e-Transport pentru loturi, injectând corect
   partenerul de transport în datele trimise către ANAF.
@@ -88,6 +91,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_etransport_batch_enhancement>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_etransport_batch_enhancement>`_ project on GitHub.
 
 You are welcome to contribute.

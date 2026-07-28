@@ -72,6 +72,12 @@ Key Features
   the declaration
 - "Get lines" recomputes the shipping weight lines instead of adding to
   them, so pressing it twice no longer doubles the weights sent to ANAF
+- A warning on the transfer when some moves have no weight line, so an
+  incomplete set of weights is not filed unnoticed
+- Weighed totals on the transfer (net and gross) with a "Distribute
+  weights" button that adjusts the lines to add up to them,
+  proportionally to each line, or evenly when the lines all start at
+  zero
 
 Technical Implementation
 ------------------------

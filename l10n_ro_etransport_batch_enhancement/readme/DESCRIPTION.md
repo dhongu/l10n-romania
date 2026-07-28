@@ -7,6 +7,8 @@ Extinde funcționalitatea e-Transport pentru loturile de transferuri (stock.pick
 - Gestionarea greutăților la nivel de lot:
   - Calculul greutăților pe liniile de transfer din lot.
   - Distribuirea greutății totale (netă și brută) proporțional pe liniile lotului.
+  - Avertisment când unor mișcări din lot le lipsește linia de greutate, ca declarația să nu plece
+    la ANAF cu greutăți incomplete fără să se vadă.
 - Validarea datelor e-Transport pentru loturi, injectând corect partenerul de transport în datele trimise către ANAF.
 - Afișarea numărului UIT pe raportul de livrare al lotului.
 
