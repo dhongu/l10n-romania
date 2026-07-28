@@ -394,7 +394,15 @@ class Picking(models.Model):
         return res
 
     def l10n_ro_compute_weight_lines(self):
+        """Recalculează de la zero liniile de greutate ale transferului.
+
+        Butonul „Get lines" e recalculare, nu adăugare: fără ștergerea prealabilă,
+        a doua apăsare punea încă un set de linii peste cel existent, iar greutățile
+        ajungeau dublate în declarație. Ștergerea aruncă și ajustările manuale
+        făcute cu `l10n_ro_distribute_weights` — asta e și intenția recalculării.
+        """
         for picking in self:
+            picking.l10n_ro_shipping_weight_lines.unlink()
             vals = []
             for move in picking.move_ids:
                 if move.quantity > 0:
@@ -409,7 +417,8 @@ class Picking(models.Model):
                             .id,
                         }
                     )
-            picking.l10n_ro_shipping_weight_lines.create(vals)
+            if vals:
+                self.env["l10n.ro.stock.picking.weight.line"].create(vals)
 
     # @api.model
     # def _l10n_ro_edi_stock_validate_data(self, data: dict):

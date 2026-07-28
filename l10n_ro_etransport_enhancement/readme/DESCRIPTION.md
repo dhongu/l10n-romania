@@ -23,6 +23,8 @@ The l10n_ro_etransport_enhancement module extends the standard Romanian e-Transp
 - Lines without a quantity are dropped from the declaration, and a missing net or gross weight is
   approximated with the other one. The QWeb template renders all three through `t-att-*`, which
   silently drops a zero, while the ANAF schema requires them: a zero invalidates the declaration
+- "Get lines" recomputes the shipping weight lines instead of adding to them, so pressing it twice no
+  longer doubles the weights sent to ANAF
 
 ## Technical Implementation
 The module builds upon the standard Romanian localization and enhances the e-Transport integration through:

@@ -70,6 +70,8 @@ Key Features
   QWeb template renders all three through ``t-att-*``, which silently
   drops a zero, while the ANAF schema requires them: a zero invalidates
   the declaration
+- "Get lines" recomputes the shipping weight lines instead of adding to
+  them, so pressing it twice no longer doubles the weights sent to ANAF
 
 Technical Implementation
 ------------------------
