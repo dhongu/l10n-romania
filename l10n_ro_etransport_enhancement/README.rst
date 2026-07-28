@@ -43,6 +43,20 @@ Key Features
 - Improved handling of stock valuation layer tracking for e-Transport
   documents
 - Streamlined integration with the Romanian e-Transport system (SPV)
+- Configurable timeout for the ANAF API (the Odoo standard hardcodes 10
+  seconds, often too short)
+- Network failures towards ANAF no longer raise a traceback: the
+  transfer keeps a failed document with a readable message warning to
+  check SPV before resending, so no duplicate UIT is issued
+- Automatic retry on status requests only (GET is idempotent); document
+  upload is never retried automatically
+- Road route between a border crossing point and a customs office: for
+  import and export, both ends of the route can be a border crossing
+  point or a customs office, so a UIT can be issued for the leg under
+  customs supervision (border crossing point to inland customs office on
+  import, customs office to border crossing point on export). The Odoo
+  standard only allows the customs office at departure on import and at
+  arrival on export, the other end being forced to a location.
 
 Technical Implementation
 ------------------------

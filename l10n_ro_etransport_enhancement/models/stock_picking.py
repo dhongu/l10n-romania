@@ -13,6 +13,23 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
+# Operațiunile pentru care traseul rutier poate avea la AMBELE capete un punct de
+# trecere a frontierei sau un birou vamal, nu doar o locație.
+#
+# Nativ (`l10n_ro_edi_stock`), biroul vamal e permis doar la plecare pentru import
+# (40) și doar la sosire pentru export (50), iar celălalt capăt rămâne obligatoriu
+# o locație. Asta face imposibil de declarat tocmai tronsonul sub supraveghere
+# vamală:
+#   * import  — din punctul de trecere a frontierei până la biroul vamal de
+#               interior unde se face vămuirea (PTF -> birou vamal);
+#   * export  — din biroul vamal unde s-a depus declarația de export până la
+#               punctul de trecere a frontierei (birou vamal -> PTF).
+#
+# Schema ANAF (`LocTraseuRutierType` din schema_ETR_v2) acceptă `codPtf` sau
+# `codBirouVamal` la oricare dintre `locStartTraseuRutier` / `locFinalTraseuRutier`,
+# deci restricția e a implementării Odoo, nu a declarației.
+FULL_ROUTE_OPERATION_TYPES = ("40", "50")
+
 
 class Picking(models.Model):
     _inherit = "stock.picking"
@@ -91,6 +108,20 @@ class Picking(models.Model):
                 and not picking._l10n_ro_edi_stock_get_last_document("stock_validated")
             )
         return res
+
+    @api.model
+    def _l10n_ro_edi_stock_get_available_location_types(self, operation_type, location):
+        """Deschide punctul de trecere a frontierei și biroul vamal la ambele capete
+        ale traseului, pentru import și export.
+
+        Vezi `FULL_ROUTE_OPERATION_TYPES`: fără asta nu se poate obține UIT pe
+        tronsonul PTF -> birou vamal (import) sau birou vamal -> PTF (export).
+        Metoda e folosită și de `l10n_ro_edi_stock_batch`, care o apelează pe
+        `stock.picking`, deci loturile de transfer moștenesc automat comportamentul.
+        """
+        if operation_type in FULL_ROUTE_OPERATION_TYPES:
+            return "location,bcp,customs"
+        return super()._l10n_ro_edi_stock_get_available_location_types(operation_type, location)
 
     @api.model
     def _l10n_ro_edi_stock_get_template_data(self, data: dict):

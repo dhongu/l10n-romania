@@ -4,3 +4,4 @@
 from . import test_etransport_enhancement
 from . import test_etransport_timeout
 from . import test_etransport_documents
+from . import test_etransport_customs_route
