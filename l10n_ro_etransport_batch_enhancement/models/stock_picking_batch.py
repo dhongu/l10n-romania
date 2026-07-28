@@ -24,6 +24,7 @@ class StockPickingBatch(models.Model):
     )
     total_net_weight = fields.Float()
     total_gross_weight = fields.Float()
+    l10n_ro_shipping_weight_lines_warning = fields.Char(compute="_compute_l10n_ro_shipping_weight_lines_warning")
     # documentele declarate direct pe lot (un camion = un CMR)
     l10n_ro_etransport_document_ids = fields.One2many(
         "l10n.ro.etransport.document",
@@ -38,6 +39,25 @@ class StockPickingBatch(models.Model):
         string="Documente însoțitoare (toate)",
         compute="_compute_l10n_ro_etransport_all_document_ids",
     )
+
+    @api.depends("l10n_ro_shipping_weights", "l10n_ro_shipping_weight_lines.move_id", "picking_ids.move_ids.quantity")
+    def _compute_l10n_ro_shipping_weight_lines_warning(self):
+        """Ca pe transfer, dar pe toate mișcările lotului: fără avertisment,
+        greutățile incomplete pleacă la ANAF fără să se vadă că lipsesc."""
+        for batch in self:
+            if not batch.l10n_ro_shipping_weights:
+                batch.l10n_ro_shipping_weight_lines_warning = False
+                continue
+            expected = batch.picking_ids.move_ids.filtered(lambda m: m.quantity > 0)
+            missing = expected - batch.l10n_ro_shipping_weight_lines.move_id
+            if missing:
+                batch.l10n_ro_shipping_weight_lines_warning = self.env._(
+                    '%(missing)s of %(total)s moves have no computed weight line. Press "Get lines".',
+                    missing=len(missing),
+                    total=len(expected),
+                )
+            else:
+                batch.l10n_ro_shipping_weight_lines_warning = False
 
     @api.depends("l10n_ro_etransport_document_ids", "picking_ids.l10n_ro_etransport_document_ids")
     def _compute_l10n_ro_etransport_all_document_ids(self):
