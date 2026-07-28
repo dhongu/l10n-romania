@@ -4,6 +4,7 @@
 from unittest.mock import patch
 
 from odoo import fields
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -375,3 +376,114 @@ class TestTemplateDataTimezone(TransactionCase):
             res["data"]["notificare"]["dateTransport"]["dataTransport"],
             fields.Date.to_date("2027-07-20"),
         )
+
+
+@tagged("post_install", "-at_install")
+class TestFallbackPrice(TransactionCase):
+    """Prețul liniilor pe care standardul le trimite cu `valoareLeiFaraTva` = 0.
+
+    ANAF respinge declarația cu valoare 0. Când mișcarea nu are preț pe document
+    (transfer intern, produs fără cost pe fișă), valoarea se caută în ordinea din
+    18.0: valorizarea mișcării, costul standard, prețul de listă.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.env.company.id)], limit=1)
+        cls.partner = cls.env["res.partner"].create({"name": "Partener Preț", "country_id": cls.env.ref("base.ro").id})
+        cls.product = cls.env["product.product"].create(
+            {"name": "Produs Fără Preț", "type": "consu", "weight": 2.0, "list_price": 0.0}
+        )
+        cls.picking = cls.env["stock.picking"].create(
+            {
+                "picking_type_id": cls.warehouse.out_type_id.id,
+                "partner_id": cls.partner.id,
+                "location_id": cls.warehouse.lot_stock_id.id,
+                "location_dest_id": cls.env.ref("stock.stock_location_customers").id,
+            }
+        )
+        cls.move = cls.env["stock.move"].create(
+            {
+                "product_id": cls.product.id,
+                "product_uom_qty": 4.0,
+                "product_uom": cls.product.uom_id.id,
+                "picking_id": cls.picking.id,
+                "location_id": cls.picking.location_id.id,
+                "location_dest_id": cls.picking.location_dest_id.id,
+            }
+        )
+        cls.product.standard_price = 0.0
+
+    def _native_template_data(self, value):
+        return {
+            "data": {
+                "notificare": {
+                    "bunuriTransportate": [
+                        {
+                            "denumireMarfa": self.product.name,
+                            "cantitate": 4.0,
+                            "valoareLeiFaraTva": value,
+                            "greutateNeta": 8.0,
+                            "greutateBruta": 8.0,
+                        }
+                    ],
+                    "partenerComercial": {"codTara": "RO"},
+                    "dateTransport": {"dataTransport": fields.Date.today()},
+                    "locStartTraseuRutier": {},
+                    "locFinalTraseuRutier": {},
+                    "documenteTransport": {},
+                }
+            }
+        }
+
+    def _get_template_data(self, value=0.0):
+        patch_path = "odoo.addons.l10n_ro_edi_stock.models.stock_picking.Picking._l10n_ro_edi_stock_get_template_data"
+        with patch(patch_path, return_value=self._native_template_data(value)):
+            return self.picking._l10n_ro_edi_stock_get_template_data(
+                {"transport_partner_id": self.partner, "stock_move_ids": self.picking.move_ids}
+            )
+
+    def _patch_valuation(self, value, quantity):
+        """`stock.valuation.layer` nu mai există pe stock.move în 19.0; valoarea
+        vine din `_get_value_data`, care întoarce valoarea și cantitatea valorizată."""
+        return patch.object(
+            type(self.move),
+            "_get_value_data",
+            return_value={"value": value, "quantity": quantity, "description": ""},
+        )
+
+    def test_zero_value_falls_back_to_move_valuation(self):
+        """Valoarea de stoc a mișcării are prioritate: 250 lei / 10 buc = 25 lei/buc."""
+        with self._patch_valuation(250.0, 10.0):
+            res = self._get_template_data()
+        item = res["data"]["notificare"]["bunuriTransportate"][0]
+        self.assertEqual(item["valoareLeiFaraTva"], 100.0)  # 25 * 4
+
+    def test_zero_value_falls_back_to_standard_price(self):
+        """Fără cantitate valorizată se trece pe costul standard."""
+        self.product.standard_price = 30.0
+        with self._patch_valuation(0.0, 0.0):
+            res = self._get_template_data()
+        item = res["data"]["notificare"]["bunuriTransportate"][0]
+        self.assertEqual(item["valoareLeiFaraTva"], 120.0)  # 30 * 4
+
+    def test_zero_value_falls_back_to_list_price(self):
+        """Fără cost standard rămâne prețul de listă."""
+        self.product.list_price = 12.5
+        with self._patch_valuation(0.0, 0.0):
+            res = self._get_template_data()
+        item = res["data"]["notificare"]["bunuriTransportate"][0]
+        self.assertEqual(item["valoareLeiFaraTva"], 50.0)  # 12.5 * 4
+
+    def test_no_price_anywhere_raises(self):
+        """Fără niciun preț, trimiterea se oprește explicit în loc să plece cu 0 la ANAF."""
+        with self._patch_valuation(0.0, 0.0), self.assertRaises(UserError):
+            self._get_template_data()
+
+    def test_non_zero_value_is_left_alone(self):
+        """O valoare deja completată de standard nu e rescrisă."""
+        self.product.standard_price = 99.0
+        res = self._get_template_data(value=7.0)
+        item = res["data"]["notificare"]["bunuriTransportate"][0]
+        self.assertEqual(item["valoareLeiFaraTva"], 28.0)  # 7 * 4, nu 99

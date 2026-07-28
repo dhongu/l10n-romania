@@ -60,6 +60,11 @@ Key Features
 - The transport date no longer breaks when the sending user has no
   timezone set (the usual case for automated sends running as OdooBot);
   it falls back to the Romanian timezone
+- Lines the standard sends with a zero value no longer reach ANAF as
+  zero: the unit price falls back to the stock value of the move, then
+  to the product cost, then to the sales price. When no price can be
+  found at all, sending stops with an explicit error instead of filing
+  an invalid declaration
 
 Technical Implementation
 ------------------------
