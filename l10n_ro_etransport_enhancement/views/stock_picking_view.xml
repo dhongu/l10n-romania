@@ -37,6 +37,26 @@
                         invisible="not l10n_ro_shipping_weights"
                     />
                 </group>
+                <!-- Documentele însoțitoare cerute de ANAF (CMR, factură, aviz).
+                     Fără niciun rând, se trimite documentul nativ: aviz cu
+                     numărul transferului. -->
+                <group name="l10n_ro_etransport_documents" string="Documente însoțitoare">
+                    <field name="l10n_ro_etransport_document_ids" nolabel="1" colspan="2">
+                        <list editable="bottom">
+                            <field name="document_type" />
+                            <field name="name" />
+                            <field name="date" />
+                            <field name="remarks" optional="show" />
+                        </list>
+                    </field>
+                    <button
+                        name="l10n_ro_etransport_add_default_documents"
+                        string="Preia documentele implicite"
+                        type="object"
+                        class="btn-secondary"
+                        help="Adaugă avizul (numărul transferului) și, dacă există, facturile emise pe această livrare."
+                    />
+                </group>
             </page>
         </field>
     </record>

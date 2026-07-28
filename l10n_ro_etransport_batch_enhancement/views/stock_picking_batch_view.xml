@@ -51,6 +51,25 @@
                         />
                     </div>
                 </group>
+                <!-- Un lot = un camion = de regulă UN CMR; avizele stau pe
+                     transferurile din lot și se trimit împreună cu acestea. -->
+                <group name="l10n_ro_etransport_documents" string="Documente însoțitoare (CMR etc.)">
+                    <field name="l10n_ro_etransport_document_ids" nolabel="1" colspan="2">
+                        <list editable="bottom">
+                            <field name="document_type" />
+                            <field name="name" />
+                            <field name="date" />
+                            <field name="remarks" optional="show" />
+                        </list>
+                    </field>
+                    <field
+                        name="l10n_ro_etransport_all_document_ids"
+                        string="Se trimit la ANAF"
+                        widget="many2many_tags"
+                        readonly="1"
+                        colspan="2"
+                    />
+                </group>
             </page>
         </field>
     </record>

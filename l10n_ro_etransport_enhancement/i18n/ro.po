@@ -32,3 +32,54 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_edi_stock_required
 msgid "eTransport Required"
 msgstr "eTransport necesar"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid ""
+"ANAF did not answer the eTransport request: %(error)s\n"
+"\n"
+"IMPORTANT: the notification may have reached ANAF anyway, only the answer "
+"was lost. Before sending again, check in SPV whether a UIT was already "
+"issued for this transfer, otherwise you may end up with two UITs for the "
+"same goods."
+msgstr ""
+"ANAF nu a răspuns la cererea eTransport: %(error)s\n"
+"\n"
+"IMPORTANT: notificarea poate să fi ajuns totuși la ANAF, doar răspunsul s-a "
+"pierdut. Înainte de a retrimite, verifică în SPV dacă a fost deja emis un "
+"UIT pentru acest transfer, altfel poți ajunge cu două UIT-uri pentru "
+"aceeași marfă."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid ""
+"ANAF did not answer the eTransport status request: %(error)s\n"
+"The status will be checked again later."
+msgstr ""
+"ANAF nu a răspuns la interogarea stării eTransport: %(error)s\n"
+"Starea va fi verificată din nou mai târziu."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_company__l10n_ro_etransport_timeout
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_config_settings__l10n_ro_etransport_timeout
+msgid "eTransport Timeout (s)"
+msgstr "Timp de așteptare eTransport (s)"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_res_company__l10n_ro_etransport_timeout
+msgid ""
+"Maximum time to wait for an answer from the ANAF eTransport API. The Odoo "
+"standard uses 10 seconds, which is often too short."
+msgstr ""
+"Timpul maxim de așteptare a răspunsului de la API-ul eTransport al ANAF. "
+"Standardul Odoo folosește 10 secunde, deseori insuficient."
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.res_config_settings_view_form
+msgid ""
+"How long to wait for an answer from the ANAF eTransport API before giving up"
+msgstr ""
+"Cât se așteaptă răspunsul de la API-ul eTransport al ANAF înainte de "
+"abandonare"
