@@ -1,3 +1,28 @@
+## 19.0.0.3.21 (2026-07-29)
+
+Port of the 18.0 fix (18.0.0.2.15 / 18.0.0.2.16) that was never forwarded to
+19.0: the 19.0 catch-up port of this module predates it.
+
+- **Foreign-customer invoices are no longer offered for SPV upload in "Send &
+  Print".** The core `_is_ro_edi_applicable` only checks the issuing company is
+  Romanian (`country_code == 'RO'`), so invoices issued to foreign customers
+  (e.g. the HU series of a Romanian company) were uploaded to the SPV. The
+  check now also excludes invoices whose commercial partner has a country
+  explicitly set to something other than RO, matching the filter already
+  present on the auto-send cron and on `action_send_to_spv_only`. Partners
+  without a country are left untouched to avoid regressions on domestic B2C
+  invoices. In 19.0 the wizard builds its checkboxes from
+  `_get_default_extra_edis`, so the "Send E-Factura to SPV" checkbox no longer
+  shows up at all for those invoices.
+- **No more double customer email.** An invoice could be emailed twice: once by
+  the operator's manual "Send & Print" at posting time, and again by the
+  validated-invoice cron after the SPV validated it (the
+  `l10n_ro_spv_validated_email_sent` flag was only set by the cron, so a manual
+  send went unnoticed). `account.move.send._send_mails` now sets the flag for
+  every invoice actually emailed to the customer through any path. The SPV
+  upload path uses `sending_methods={"manual"}` (no email), so cron-only
+  invoices are still emailed once, after validation.
+
 ## 19.0.0.3.20 (2026-07-28)
 
 - **Import SPV: linia se recalculează din `cbc:LineExtensionAmount` când
