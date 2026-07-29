@@ -17,10 +17,12 @@ class AccountMove(models.Model):
 
     # l10n_ro_edi_state = fields.Selection( selection_add=[ ('invoice_sending_failed', 'Error')])
 
-    # Tracks whether the customer invoice email has already been sent after the
-    # SPV validated the invoice. The email is sent only once, after validation
-    # (not at upload time), so a rejected/retried invoice never emails the
-    # customer repeatedly.
+    # Tracks whether the customer invoice email has already been sent, so it is
+    # sent at most once. It is set both when the validated-invoice cron emails
+    # the invoice after the SPV validated it AND when the invoice is emailed
+    # through account.move.send by any other path (notably the operator's manual
+    # "Send & Print"). This prevents a double email: one manual send by the
+    # operator and another by the cron after the SPV validates the invoice.
     l10n_ro_spv_validated_email_sent = fields.Boolean(
         string="Email factură trimis după validare SPV",
         copy=False,

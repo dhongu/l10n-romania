@@ -122,6 +122,51 @@ class TestSpvActions(TransactionCase):
         with self.assertRaises(UserError):
             foreign_invoice.action_send_to_spv_only()
 
+    def test_ro_edi_not_applicable_for_foreign_partner(self):
+        """Facturile catre clienti non-RO nu mai sunt eligibile pentru SPV in Send & Print."""
+        from odoo.addons.l10n_ro_edi.models.account_move_send import (
+            AccountMoveSend as NativeAccountMoveSend,
+        )
+
+        foreign_invoice = self._create_posted_invoice(partner=self.foreign_partner)
+        send = self.env["account.move.send"]
+        # Verificarea nativa e forțată pe True, ca sa fie clar ca refuzul vine
+        # din override-ul nostru, nu dintr-o alta condiție a core-ului.
+        with patch.object(NativeAccountMoveSend, "_is_ro_edi_applicable", return_value=True) as native:
+            self.assertFalse(send._is_ro_edi_applicable(foreign_invoice))
+            native.assert_not_called()
+            # In O19 bifa "Send E-Factura to SPV" din wizard vine din extra EDIs
+            # implicite, deci nu trebuie sa mai apara deloc pentru clienti non-RO.
+            self.assertNotIn("ro_edi", send._get_default_extra_edis(foreign_invoice))
+
+    def test_ro_edi_applicability_delegated_for_ro_partner(self):
+        """Pentru clientii RO, override-ul deleaga catre verificarea nativa."""
+        from odoo.addons.l10n_ro_edi.models.account_move_send import (
+            AccountMoveSend as NativeAccountMoveSend,
+        )
+
+        ro_invoice = self._create_posted_invoice()
+        send = self.env["account.move.send"]
+        with patch.object(NativeAccountMoveSend, "_is_ro_edi_applicable", return_value=True) as native:
+            self.assertTrue(send._is_ro_edi_applicable(ro_invoice))
+            native.assert_called_once()
+
+    def test_send_mails_flags_validated_email_sent(self):
+        """Un e-mail trimis prin account.move.send marcheaza factura, ca cronul
+        de dupa validarea SPV sa nu mai trimita al doilea e-mail."""
+        self.partner.email = "client@example.com"
+        invoice = self._create_posted_invoice()
+        self.assertFalse(invoice.l10n_ro_spv_validated_email_sent)
+        send = self.env["account.move.send"]
+        moves_data = {invoice: {"mail_template": self.env["mail.template"], "mail_lang": "en_US"}}
+        with (
+            patch.object(type(send), "_generate_dynamic_reports", return_value=None),
+            # Fara parametri de mail, bucla nativa sare peste trimiterea efectiva.
+            patch.object(type(send), "_get_mail_params", return_value=None),
+        ):
+            send._send_mails(moves_data)
+        self.assertTrue(invoice.l10n_ro_spv_validated_email_sent)
+
     def test_foreign_company_vat_not_prefixed_with_ro(self):
         """Test că VAT-ul unei companii straine nu este prefixat cu 'RO' in XML-ul e-Factura."""
         invoice = self._create_posted_invoice(partner=self.foreign_partner)

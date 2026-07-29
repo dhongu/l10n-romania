@@ -1,6 +1,6 @@
 import logging
 
-from odoo import models
+from odoo import api, models
 from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
@@ -8,6 +8,48 @@ _logger = logging.getLogger(__name__)
 
 class AccountMoveSend(models.AbstractModel):
     _inherit = "account.move.send"
+
+    @api.model
+    def _is_ro_edi_applicable(self, move):
+        # EXTENDS 'l10n_ro_edi'
+        # The core check only verifies the issuing company is Romanian
+        # (``move.country_code == 'RO'``), so the standard "Send & Print"
+        # wizard would also upload invoices issued to foreign customers
+        # (e.g. Shopify HU) to the SPV. Exclude invoices whose commercial
+        # partner has a country explicitly set to something other than RO.
+        # Partners without a country are left untouched to avoid regressions
+        # on domestic B2C invoices that lack the country on the contact.
+        # In O19 the wizard builds its checkboxes from
+        # ``_get_default_extra_edis`` (which filters on ``is_applicable``), so
+        # this single override also hides the "Send E-Factura to SPV" checkbox.
+        partner_country = move.commercial_partner_id.country_id
+        if partner_country and partner_country.code != "RO":
+            return False
+        return super()._is_ro_edi_applicable(move)
+
+    def _send_mails(self, moves_data):
+        # EXTENDS 'account'
+        res = super()._send_mails(moves_data)
+        # Mark every invoice that was actually emailed to the customer through
+        # account.move.send so the validated-invoice cron
+        # (_cron_l10n_ro_spv_send_validated_emails) never emails it a second
+        # time after the SPV validates it. This covers the operator's manual
+        # "Send & Print" (email at posting time) as well as our own
+        # post-validation email. The SPV upload path uses
+        # sending_methods={"manual"} (no email), so it never reaches here and
+        # the cron still emails those invoices once, after validation.
+        # We mirror the recipient condition used by the core loop above so we
+        # only flag invoices that truly had an email sent.
+        emailed = self.env["account.move"].browse(
+            move.id
+            for move, move_data in moves_data.items()
+            if move.move_type in ("out_invoice", "out_refund")
+            and (move.partner_id.email or move_data.get("mail_partner_ids"))
+        )
+        emailed = emailed.filtered(lambda m: not m.l10n_ro_spv_validated_email_sent)
+        if emailed:
+            emailed.l10n_ro_spv_validated_email_sent = True
+        return res
 
     def _get_alerts(self, moves, moves_data):
         alerts = super()._get_alerts(moves, moves_data)
