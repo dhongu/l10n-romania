@@ -11,6 +11,11 @@ _logger = logging.getLogger(__name__)
 # document, so we use that count as the natural retry counter.
 MAX_SPV_SEND_RETRIES = 3
 
+# Currency used to decide the destination of an invoice whose customer has no
+# country set: an invoice issued in RON is considered domestic. See
+# ``AccountMove._l10n_ro_is_spv_target``.
+SPV_FALLBACK_CURRENCY = "RON"
+
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -28,6 +33,51 @@ class AccountMove(models.Model):
         copy=False,
         default=False,
     )
+
+    def _l10n_ro_is_spv_target(self):
+        """Whether this customer invoice is destined for the Romanian SPV.
+
+        Single source of truth for the "does this invoice go to e-Factura?"
+        decision, shared by the "Send & Print" wizard, the manual SPV button,
+        the auto-send cron and the dashboard KPIs — those used to disagree on
+        the no-country case.
+
+        The rule, on the commercial partner (the invoiced company, not the
+        contact):
+
+        - country RO: yes;
+        - country set to anything else: no (e.g. the HU series of a Romanian
+          company, which the SPV has no business receiving);
+        - no country at all: yes only if the invoice is issued in RON, which we
+          take as evidence of a domestic invoice — typically a B2C contact
+          whose country was never filled in.
+
+        Note that being a target is not the same as being sendable: the CIUS-RO
+        export needs the customer's real country, county, city and street, so an
+        invoice matched by the currency fallback still fails loudly on the
+        export constraints until the partner is completed. That is deliberate —
+        ``check_partner`` already refuses to post such an invoice, and silently
+        dropping it from the SPV would hide a non-compliance instead.
+        """
+        self.ensure_one()
+        partner_country = self.commercial_partner_id.country_id
+        if partner_country:
+            return partner_country.code == "RO"
+        return self.currency_id.name == SPV_FALLBACK_CURRENCY
+
+    @api.model
+    def _l10n_ro_spv_target_domain(self):
+        """Search-domain counterpart of :meth:`_l10n_ro_is_spv_target`.
+
+        Kept next to it so the two never drift apart.
+        """
+        return [
+            "|",
+            ("commercial_partner_id.country_id.code", "=", "RO"),
+            "&",
+            ("commercial_partner_id.country_id", "=", False),
+            ("currency_id.name", "=", SPV_FALLBACK_CURRENCY),
+        ]
 
     def check_partner(self, partner):
         """Check if the partner has a country set, raise UserError if not."""
@@ -181,7 +231,7 @@ class AccountMove(models.Model):
                 ("state", "=", "posted"),
                 ("date", "<", fields.Date.today() - timedelta(days=delay_days)),
                 ("date", ">=", fields.Date.today() - timedelta(days=days + delay_days)),
-                ("commercial_partner_id.country_id.code", "=", "RO"),
+                *self._l10n_ro_spv_target_domain(),
                 ("l10n_ro_edi_state", "=", False),
                 ("company_id", "=", company.id),
             ]
@@ -388,8 +438,9 @@ class AccountMove(models.Model):
             raise UserError(self.env._("Nu exista facturi confirmate selectate pentru trimitere in SPV."))
 
         # SPV / e-Factura se aplica doar partenerilor din Romania. Excludem facturile
-        # catre clienti non-RO ca sa nu fie trimise accidental in SPV.
-        non_ro_invoices = invoices.filtered(lambda m: m.commercial_partner_id.country_id.code != "RO")
+        # catre clienti non-RO ca sa nu fie trimise accidental in SPV. Partenerii fara
+        # tara sunt considerati romani daca factura e in RON (_l10n_ro_is_spv_target).
+        non_ro_invoices = invoices.filtered(lambda m: not m._l10n_ro_is_spv_target())
         if non_ro_invoices:
             _logger.info(
                 "⏭️ Skipping non-RO invoices for SPV: %s",

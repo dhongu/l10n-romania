@@ -15,15 +15,13 @@ class AccountMoveSend(models.AbstractModel):
         # The core check only verifies the issuing company is Romanian
         # (``move.country_code == 'RO'``), so the standard "Send & Print"
         # wizard would also upload invoices issued to foreign customers
-        # (e.g. Shopify HU) to the SPV. Exclude invoices whose commercial
-        # partner has a country explicitly set to something other than RO.
-        # Partners without a country are left untouched to avoid regressions
-        # on domestic B2C invoices that lack the country on the contact.
+        # (e.g. Shopify HU) to the SPV. Delegate the destination decision to
+        # ``_l10n_ro_is_spv_target``, shared with the manual SPV button, the
+        # auto-send cron and the dashboard KPIs.
         # In O19 the wizard builds its checkboxes from
         # ``_get_default_extra_edis`` (which filters on ``is_applicable``), so
         # this single override also hides the "Send E-Factura to SPV" checkbox.
-        partner_country = move.commercial_partner_id.country_id
-        if partner_country and partner_country.code != "RO":
+        if not move._l10n_ro_is_spv_target():
             return False
         return super()._is_ro_edi_applicable(move)
 

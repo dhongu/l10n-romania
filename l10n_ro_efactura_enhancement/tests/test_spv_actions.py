@@ -35,11 +35,46 @@ class TestSpvActions(TransactionCase):
                 "vat": "IE6388047V",
             }
         )
+        # Client fara tara completata — cazul tipic de contact B2C intern.
+        # country_id: False explicit, ca sa nu preia o valoare implicita
+        # (ir.default pe res.partner.country_id) din baza pe care rulam.
+        cls.no_country_partner = cls.env["res.partner"].create(
+            {
+                "name": "Test Partner Fara Tara",
+                "country_id": False,
+                "city": "Bucuresti",
+                "street": "Str. Test 1",
+            }
+        )
+        cls.currency_ron = cls.env.ref("base.RON")
+        cls.currency_eur = cls.env.ref("base.EUR")
         cls.product = cls.env["product.product"].create(
             {
                 "name": "Test Product SPV",
             }
         )
+
+    def _create_draft_invoice(self, partner=None, currency=None):
+        # Facturile catre parteneri fara tara nu se pot confirma (check_partner),
+        # deci regula de destinatie se testeaza pe ciorne.
+        vals = {
+            "move_type": "out_invoice",
+            "partner_id": (partner or self.partner).id,
+            "invoice_line_ids": [
+                (
+                    0,
+                    0,
+                    {
+                        "product_id": self.product.id,
+                        "quantity": 1,
+                        "price_unit": 100,
+                    },
+                )
+            ],
+        }
+        if currency:
+            vals["currency_id"] = currency.id
+        return self.env["account.move"].create(vals)
 
     def _create_posted_invoice(self, partner=None):
         invoice = self.env["account.move"].create(
@@ -150,6 +185,67 @@ class TestSpvActions(TransactionCase):
         with patch.object(NativeAccountMoveSend, "_is_ro_edi_applicable", return_value=True) as native:
             self.assertTrue(send._is_ro_edi_applicable(ro_invoice))
             native.assert_called_once()
+
+    def test_spv_target_follows_partner_country(self):
+        """Cu tara completata pe partener, ea decide destinatia facturii."""
+        self.assertTrue(self._create_draft_invoice()._l10n_ro_is_spv_target())
+        self.assertFalse(self._create_draft_invoice(partner=self.foreign_partner)._l10n_ro_is_spv_target())
+
+    def test_spv_target_no_country_ron_is_domestic(self):
+        """Partener fara tara + factura in RON = client considerat roman."""
+        invoice = self._create_draft_invoice(partner=self.no_country_partner, currency=self.currency_ron)
+        self.assertFalse(invoice.commercial_partner_id.country_id)
+        self.assertTrue(invoice._l10n_ro_is_spv_target())
+
+    def test_spv_target_no_country_foreign_currency_is_not_domestic(self):
+        """Partener fara tara + factura in alta valuta nu se considera intern."""
+        invoice = self._create_draft_invoice(partner=self.no_country_partner, currency=self.currency_eur)
+        self.assertFalse(invoice._l10n_ro_is_spv_target())
+
+    def test_spv_target_domain_matches_python_rule(self):
+        """Domeniul de căutare selectează exact aceleași facturi ca regula Python.
+
+        Cronul si dashboard-ul filtreaza prin domeniu, iar wizardul si butonul
+        manual prin metoda; daca cele doua ar diverge, o factura ar fi trimisa
+        pe o cale si ignorata pe alta.
+        """
+        invoices = (
+            self._create_draft_invoice()
+            | self._create_draft_invoice(partner=self.foreign_partner)
+            | self._create_draft_invoice(partner=self.no_country_partner, currency=self.currency_ron)
+            | self._create_draft_invoice(partner=self.no_country_partner, currency=self.currency_eur)
+        )
+        Move = self.env["account.move"]
+        by_domain = Move.search([("id", "in", invoices.ids), *Move._l10n_ro_spv_target_domain()])
+        by_method = invoices.filtered(lambda m: m._l10n_ro_is_spv_target())
+        self.assertEqual(by_domain, by_method)
+        # Verificare de sanitate: setul nu e nici gol, nici totul.
+        self.assertEqual(len(by_method), 2)
+
+    def test_ro_edi_applicable_for_no_country_ron_invoice(self):
+        """Pentru partener fara tara facturat in RON, override-ul deleaga catre core."""
+        from odoo.addons.l10n_ro_edi.models.account_move_send import (
+            AccountMoveSend as NativeAccountMoveSend,
+        )
+
+        invoice = self._create_draft_invoice(partner=self.no_country_partner, currency=self.currency_ron)
+        send = self.env["account.move.send"]
+        with patch.object(NativeAccountMoveSend, "_is_ro_edi_applicable", return_value=True) as native:
+            self.assertTrue(send._is_ro_edi_applicable(invoice))
+            native.assert_called_once()
+
+    def test_ro_edi_not_applicable_for_no_country_foreign_currency(self):
+        """Partener fara tara facturat in valuta nu mai primeste bifa SPV."""
+        from odoo.addons.l10n_ro_edi.models.account_move_send import (
+            AccountMoveSend as NativeAccountMoveSend,
+        )
+
+        invoice = self._create_draft_invoice(partner=self.no_country_partner, currency=self.currency_eur)
+        send = self.env["account.move.send"]
+        with patch.object(NativeAccountMoveSend, "_is_ro_edi_applicable", return_value=True) as native:
+            self.assertFalse(send._is_ro_edi_applicable(invoice))
+            native.assert_not_called()
+            self.assertNotIn("ro_edi", send._get_default_extra_edis(invoice))
 
     def test_send_mails_flags_validated_email_sent(self):
         """Un e-mail trimis prin account.move.send marcheaza factura, ca cronul
