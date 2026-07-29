@@ -11,6 +11,28 @@ from odoo.tests.common import TransactionCase
 
 _logger = logging.getLogger(__name__)
 
+# Câmpurile de partener pe care le citește logica testată aici (check_partner și
+# _get_suggested_invoice_edi_format). Bazele reale de dezvoltare au adesea valori
+# implicite pe res.partner — ir.default, setate din UI cu "Set Default" pe câmp,
+# de exemplu Țară = România — iar default_get le aplică oricărui create() care
+# omite câmpul. Un partener „fără țară" ar primi tăcut RO și testul ar verifica
+# exact cazul opus celui descris. Testele își scriu deci explicit toate aceste
+# câmpuri, ca să nu depindă de starea bazei pe care rulează.
+PARTNER_BLANK_VALS = {
+    "country_id": False,
+    "state_id": False,
+    "city": False,
+    "street": False,
+    "vat": False,
+}
+
+
+def partner_vals(**kwargs):
+    """Valori de partener complet explicite, imune la ir.default din baza gazdă."""
+    vals = dict(PARTNER_BLANK_VALS)
+    vals.update(kwargs)
+    return vals
+
 
 @tagged("post_install", "-at_install")
 class TestCheckPartner(TransactionCase):
@@ -20,13 +42,13 @@ class TestCheckPartner(TransactionCase):
         cls.product = cls.env["product.product"].create({"name": "Test Product"})
 
     def _make_partner(self, **kwargs):
-        vals = {
-            "name": "Test Partner",
-            "country_id": self.env.ref("base.ro").id,
-            "state_id": self.env.ref("base.RO_B").id,
-            "city": "Bucuresti",
-            "street": "Str. Test 1",
-        }
+        vals = partner_vals(
+            name="Test Partner",
+            country_id=self.env.ref("base.ro").id,
+            state_id=self.env.ref("base.RO_B").id,
+            city="Bucuresti",
+            street="Str. Test 1",
+        )
         vals.update(kwargs)
         return self.env["res.partner"].create(vals)
 
@@ -42,7 +64,8 @@ class TestCheckPartner(TransactionCase):
 
     def test_check_partner_no_country_raises(self):
         """check_partner ridică UserError dacă partenerul nu are țară."""
-        partner = self.env["res.partner"].create({"name": "No Country Partner"})
+        partner = self.env["res.partner"].create(partner_vals(name="No Country Partner"))
+        self.assertFalse(partner.country_id, "Partenerul de test trebuie să rămână fără țară")
         invoice = self._create_invoice(partner)
         with self.assertRaises(UserError):
             invoice.action_post()
@@ -78,20 +101,21 @@ class TestCheckPartner(TransactionCase):
     def test_check_partner_non_ro_no_state_ok(self):
         """check_partner nu ridică eroare pentru partener non-RO fără județ."""
         partner = self.env["res.partner"].create(
-            {
-                "name": "Non RO Partner",
-                "country_id": self.env.ref("base.de").id,
-                "city": "Berlin",
-                "street": "Str. Test 1",
-            }
+            partner_vals(
+                name="Non RO Partner",
+                country_id=self.env.ref("base.de").id,
+                city="Berlin",
+                street="Str. Test 1",
+            )
         )
+        self.assertFalse(partner.state_id, "Partenerul non-RO de test trebuie să rămână fără județ")
         invoice = self._create_invoice(partner)
         invoice.action_post()
         self.assertEqual(invoice.state, "posted")
 
     def test_check_partner_not_called_for_vendor_bill(self):
         """check_partner nu este apelat pentru facturi de furnizor (in_invoice)."""
-        partner = self.env["res.partner"].create({"name": "Vendor No Country"})
+        partner = self.env["res.partner"].create(partner_vals(name="Vendor No Country"))
         invoice = self.env["account.move"].create(
             {
                 "move_type": "in_invoice",
@@ -115,13 +139,13 @@ class TestAccountMoveLineLabelLength(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.partner = cls.env["res.partner"].create(
-            {
-                "name": "Test Partner",
-                "country_id": cls.env.ref("base.ro").id,
-                "state_id": cls.env.ref("base.RO_B").id,
-                "city": "Bucuresti",
-                "street": "Str. Test 1",
-            }
+            partner_vals(
+                name="Test Partner",
+                country_id=cls.env.ref("base.ro").id,
+                state_id=cls.env.ref("base.RO_B").id,
+                city="Bucuresti",
+                street="Str. Test 1",
+            )
         )
         cls.product = cls.env["product.product"].create({"name": "Produs Test"})
 
@@ -175,32 +199,33 @@ class TestAccountMoveLineLabelLength(TransactionCase):
 
 @tagged("post_install", "-at_install")
 class TestResPartnerEdiFormat(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.partner_ro = cls.env["res.partner"].create(
+            partner_vals(name="Partner RO", country_id=cls.env.ref("base.ro").id)
+        )
+        cls.partner_de = cls.env["res.partner"].create(
+            partner_vals(name="Partner DE", country_id=cls.env.ref("base.de").id)
+        )
+        cls.partner_no_country = cls.env["res.partner"].create(partner_vals(name="Partner Fara Tara"))
+
     def test_suggested_edi_format_ro(self):
         """Partenerul RO sugerează formatul ciusro."""
-        partner = self.env["res.partner"].create(
-            {
-                "name": "Partner RO",
-                "country_id": self.env.ref("base.ro").id,
-            }
-        )
-        result = partner._get_suggested_invoice_edi_format()
+        self.assertEqual(self.partner_ro.country_code, "RO")
+        result = self.partner_ro._get_suggested_invoice_edi_format()
         self.assertEqual(result, "ciusro")
 
     def test_suggested_edi_format_non_ro(self):
         """Partenerul non-RO returnează formatul standard (nu ciusro)."""
-        partner = self.env["res.partner"].create(
-            {
-                "name": "Partner DE",
-                "country_id": self.env.ref("base.de").id,
-            }
-        )
-        result = partner._get_suggested_invoice_edi_format()
+        self.assertEqual(self.partner_de.country_code, "DE")
+        result = self.partner_de._get_suggested_invoice_edi_format()
         self.assertNotEqual(result, "ciusro")
 
     def test_suggested_edi_format_no_country(self):
         """Partenerul fără țară returnează formatul standard."""
-        partner = self.env["res.partner"].create({"name": "Partner Fara Tara"})
-        result = partner._get_suggested_invoice_edi_format()
+        self.assertFalse(self.partner_no_country.country_id, "Partenerul de test trebuie să rămână fără țară")
+        result = self.partner_no_country._get_suggested_invoice_edi_format()
         self.assertNotEqual(result, "ciusro")
 
 
@@ -212,13 +237,13 @@ class TestGetDescription(TransactionCase):
         cls.model = cls.env["account.edi.xml.ubl_ro"]
         cls.product = cls.env["product.product"].create({"name": "Produs Test"})
         cls.partner = cls.env["res.partner"].create(
-            {
-                "name": "Partner Test",
-                "country_id": cls.env.ref("base.ro").id,
-                "state_id": cls.env.ref("base.RO_B").id,
-                "city": "Bucuresti",
-                "street": "Str. Test 1",
-            }
+            partner_vals(
+                name="Partner Test",
+                country_id=cls.env.ref("base.ro").id,
+                state_id=cls.env.ref("base.RO_B").id,
+                city="Bucuresti",
+                street="Str. Test 1",
+            )
         )
 
     def _make_line(self, name, product=None):
