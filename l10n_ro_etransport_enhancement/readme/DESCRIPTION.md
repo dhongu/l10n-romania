@@ -17,6 +17,18 @@ The l10n_ro_etransport_enhancement module extends the standard Romanian e-Transp
   on import and at arrival on export, the other end being forced to a location.
 - The transport date no longer breaks when the sending user has no timezone set (the usual case for
   automated sends running as OdooBot); it falls back to the Romanian timezone
+- Lines the standard sends with a zero value no longer reach ANAF as zero: the unit price falls back
+  to the stock value of the move, then to the product cost, then to the sales price. When no price can
+  be found at all, sending stops with an explicit error instead of filing an invalid declaration
+- Lines without a quantity are dropped from the declaration, and a missing net or gross weight is
+  approximated with the other one. The QWeb template renders all three through `t-att-*`, which
+  silently drops a zero, while the ANAF schema requires them: a zero invalidates the declaration
+- "Get lines" recomputes the shipping weight lines instead of adding to them, so pressing it twice no
+  longer doubles the weights sent to ANAF
+- A warning on the transfer when some moves have no weight line, so an incomplete set of weights is
+  not filed unnoticed
+- Weighed totals on the transfer (net and gross) with a "Distribute weights" button that adjusts the
+  lines to add up to them, proportionally to each line, or evenly when the lines all start at zero
 
 ## Technical Implementation
 The module builds upon the standard Romanian localization and enhances the e-Transport integration through:
