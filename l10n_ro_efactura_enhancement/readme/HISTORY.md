@@ -1,3 +1,28 @@
+## 19.0.0.3.23 (2026-07-29)
+
+- **O singură regulă decide dacă factura merge în SPV.** Cele patru căi de
+  trimitere se contraziceau pe partenerul fără țară: wizardul „Send & Print" îl
+  considera eligibil, în timp ce butonul manual „Trimite în SPV", cronul de
+  auto-trimitere și indicatorii din dashboard îl excludeau — deci aceeași
+  factură era trimisă pe o cale și ignorată pe alta, iar cifrele din dashboard
+  nu corespundeau cu ce se trimitea. Decizia e acum centralizată în
+  `account.move._l10n_ro_is_spv_target()`, cu domeniul de căutare echivalent în
+  `_l10n_ro_spv_target_domain()`, folosite de toate cele patru.
+- **Partenerul fără țară facturat în RON este considerat client român.** Lipsa
+  țării pe contact e de regulă o factură internă B2C incompletă, nu un client
+  extern, așa că moneda facturii decide: RON înseamnă intern (merge în SPV),
+  orice altă monedă înseamnă extern (nu merge). Atenție la reversul regulii —
+  un client român real facturat în EUR căruia i-a scăpat țara pe fișă nu mai
+  este propus pentru SPV; țara pe partener rămâne singura sursă sigură.
+  Eligibilitatea nu înseamnă însă că factura se poate trimite: exportul CIUS-RO
+  cere țara, județul, orașul și strada clientului, deci o astfel de factură
+  eșuează zgomotos pe constrângerile de export până la completarea fișei
+  partenerului — semnalul corect, față de o neconformare ascunsă.
+- Indicatorii din dashboard filtrează acum pe partenerul comercial
+  (`commercial_partner_id`), nu pe contactul de pe factură (`partner_id`), la
+  fel ca logica de trimitere. Cifrele se pot modifica ușor pentru facturile
+  emise către un contact al unei companii.
+
 ## 19.0.0.3.22 (2026-07-29)
 
 - **Răspunsurile neașteptate de la SPV nu mai crapă interfața.** ANAF răspunde

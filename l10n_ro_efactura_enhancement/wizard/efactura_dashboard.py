@@ -45,11 +45,13 @@ class EfacturaDashboard(models.TransientModel):
             company = rec.company_id or self.env.company
             Move = self.env["account.move"]
 
+            # Aceeasi regula de destinatie ca la trimitere (_l10n_ro_is_spv_target),
+            # ca cifrele din dashboard sa reflecte exact facturile care ajung in SPV.
             base_domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
                 ("company_id", "=", company.id),
-                ("partner_id.country_id.code", "=", "RO"),
+                *Move._l10n_ro_spv_target_domain(),
             ]
 
             rec.count_to_send = Move.search_count(base_domain + [("l10n_ro_edi_state", "=", False)])
@@ -100,7 +102,7 @@ class EfacturaDashboard(models.TransientModel):
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
                 ("company_id", "=", company.id),
-                ("partner_id.country_id.code", "=", "RO"),
+                *self.env["account.move"]._l10n_ro_spv_target_domain(),
             ] + extra_domain
         return {
             "type": "ir.actions.act_window",
