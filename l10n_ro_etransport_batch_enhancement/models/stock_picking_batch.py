@@ -138,7 +138,9 @@ class StockPickingBatch(models.Model):
                     "tipDocument": doc.document_type,
                     "dataDocument": doc.date,
                     "numarDocument": doc.name,
-                    "observatii": doc.remarks or "",
+                    # `Str200` cu minLength=1: atributul gol e respins de XSD-ul
+                    # ANAF, deci fără observație nu trimitem deloc atributul.
+                    "observatii": (doc.remarks or "").strip() or False,
                 }
                 for doc in docs
             ]
