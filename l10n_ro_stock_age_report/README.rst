@@ -10,14 +10,14 @@ Romania - Stock Aged Report
    !! source digest: sha256:5e5a8bcca2341e74081b3218a6b4523fb627c4ab19b7290cbaad29c7a2c324cf
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+    :alt: Production/Stable
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_stock_age_report
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_age_report
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -55,6 +55,7 @@ Credits
 Authors
 -------
 
+* Terrabit
 * NextERP Romania
 * Dakai Soft
 * Terrabit
@@ -79,6 +80,6 @@ Current maintainers:
 
 |maintainer-feketemihai| |maintainer-mcojocaru| |maintainer-adrian-dks| |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_stock_age_report>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_age_report>`_ project on GitHub.
 
 You are welcome to contribute.
