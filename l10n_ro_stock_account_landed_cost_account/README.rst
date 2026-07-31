@@ -13,11 +13,11 @@ Romania - Stock Accounting Landed Cost Account
 .. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
     :alt: Mature
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_stock_account_landed_cost_account
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_landed_cost_account
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -28,6 +28,45 @@ Romania - Stock Accounting Landed Cost Account
 
 .. contents::
    :local:
+
+Changelog
+=========
+
+Changelog
+=========
+
+18.0.1.1.0
+----------
+
+- Added a **Landed Cost Class 6 Method** company selector (Accounting /
+  Romania settings) that makes the behaviour explicit and configurable
+  per company:
+
+  - **Standard** (default): native Odoo behaviour
+    (``stock valuation = class 6``);
+  - **Through intermediary account**: routes the class 6 credit through
+    the intermediary account, producing two clean balanced notes for the
+    SAGA export. The intermediary account is now shown and required only
+    for the intermediary method, and the selector — not the mere
+    presence of the account — controls the behaviour. Existing companies
+    default to **Standard**, so behaviour is unchanged on upgrade unless
+    the method is explicitly switched.
+
+18.0.1.0.0
+----------
+
+- Added an optional **Landed Cost Intermediary Account** company setting
+  (Accounting / Romania settings). This is the technical intermediary
+  account (e.g. ``482.99``) used to transfer service costs into products
+  on landed cost validation. When set, a landed cost entry that would
+  credit a class 6 (expense) account is routed through this account,
+  producing two clean balanced notes
+  (``stock valuation = intermediary account`` and
+  ``intermediary account = class 6``) instead of a direct
+  ``stock valuation = class 6`` entry. This keeps the notes acceptable
+  for the SAGA export. Class ``609`` is never rerouted. When the setting
+  is empty, the standard behaviour is unchanged.
+- Added dependency on ``l10n_ro_config`` (Romania settings block).
 
 Bug Tracker
 ===========
@@ -43,6 +82,7 @@ Credits
 Authors
 -------
 
+* Terrabit
 * Dorin Hongu
 
 Contributors
@@ -66,6 +106,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_stock_account_landed_cost_account>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_landed_cost_account>`_ project on GitHub.
 
 You are welcome to contribute.

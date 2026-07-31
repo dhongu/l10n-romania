@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:d9b5daa3b3c59ae9f9b2a2f54b5404dfd139f50a3d8b68f0eb319f17df8731fd
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_message_spv_purchase"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Production/Stable" src="https://img.shields.io/badge/maturity-Production%2FStable-green.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_message_spv_purchase"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <div class="section" id="purchase-message-spv-romania">
 <h1>Purchase Message SPV (Romania)</h1>
 <p>This addon extends the Romanian SPV message model
@@ -445,6 +445,37 @@ the PO.</li>
 when present to reduce false positives.</li>
 </ul>
 <p><strong>Table of contents</strong></p>
+</div>
+</div>
+<div class="section" id="changelog">
+<h1>Changelog</h1>
+<div class="section" id="section-1">
+<h2>19.0.0.0.3 (2026-07-24)</h2>
+<ul class="simple">
+<li>Hide/block the “Find Purchase Order” and “Create Purchase Order”
+buttons for SPV messages that are not purchase invoices/receipts
+(<tt class="docutils literal">message_type</tt> in <tt class="docutils literal">in_invoice</tt>/<tt class="docutils literal">in_receipt</tt>), so they no longer
+show up on sales invoice/receipt SPV messages (ticket #9055).</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2>19.0.0.0.2 (2026-07-23)</h2>
+<ul class="simple">
+<li>Block reprocessing of an SPV message already linked to a purchase
+order: a second click on “Find Purchase Order”/”Create Purchase Order”
+used to re-attach the XML and trigger the automatic import from
+<tt class="docutils literal">deltatech_purchase_ubl</tt>, which could create duplicate products,
+lines, receipts and vendor bills (ticket #9055). Now raises a
+<tt class="docutils literal">UserError</tt> instead of reprocessing the document.</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h2>19.0.0.0.1</h2>
+<ul class="simple">
+<li>Initial version: link SPV messages to purchase orders by order
+reference, find/create purchase orders from SPV messages, attach the
+SPV XML copy on the purchase order chatter.</li>
+</ul>
 </div>
 </div>
 <div class="section" id="bug-tracker">
