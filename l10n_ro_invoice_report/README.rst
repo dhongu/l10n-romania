@@ -57,6 +57,11 @@ Funcționalități principale:
 
   - Tipărirea automată a chitanțelor, dispozițiilor de plată sau
     încasare direct din factură pentru plățile în numerar.
+  - Chitanța tipărită din plată și cea adăugată la finalul facturii
+    folosesc **același șablon** (``report_cash_receipt``): aceeași
+    cutie, aceeași frază, aceeași formatare a identificatorilor și
+    adresei partenerului. Este același document legal, deci trebuie să
+    arate la fel indiferent de unde e tipărit.
   - Gestionarea corectă a semnelor pentru stornări (Credit Notes).
 
 - **Rapoarte dedicate**:
@@ -74,7 +79,9 @@ Cerințe tehnice:
 ~~~~~~~~~~~~~~~~
 
 - Necesită instalarea bibliotecii ``num2words``.
-- Recomandat: ``pip3 install num2words==0.5.12``
+- Recomandat: ``pip3 install num2words>=0.5.12``
+- Suma în litere pentru RON este formulată de ``l10n_ro_report_common``
+  (*cinci sute lei*, nu *Cinci Sute Leu*).
 
 **Table of contents**
 

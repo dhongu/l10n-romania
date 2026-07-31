@@ -154,9 +154,10 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
 
         self.assertTrue(report._with_discount(invoice))
 
-        currency = invoice.currency_id
-        text = report._amount_to_text(100.0, currency)
-        self.assertIn("One Hundred", text)  # English default likely
+        # moneda este fixată explicit: lăsând aici moneda companiei, testul
+        # depindea tacit de planul de conturi încărcat în baza de test
+        text = report._amount_to_text(100.0, self.env.ref("base.USD"))
+        self.assertIn("One Hundred", text)
 
         # _get_pickings
         report._get_pickings(invoice)
