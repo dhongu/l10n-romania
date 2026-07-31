@@ -8,6 +8,8 @@ cu numărul transferului — deci CMR-ul sau numărul real de aviz nu ajungeau �
 declarația ANAF. Schema acceptă o LISTĂ de `documenteTransport`.
 """
 
+from unittest.mock import patch
+
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -81,6 +83,33 @@ class TestEtransportDocuments(TransactionCase):
             len(self.picking.l10n_ro_etransport_document_ids), 1, "a doua apăsare nu trebuie să dubleze documentele"
         )
 
+    def _native_template_data(self):
+        """Scheletul minim pe care îl întoarce standardul, cât să treacă override-ul."""
+        return {
+            "data": {
+                "notificare": {
+                    "bunuriTransportate": [],
+                    "partenerComercial": {"codTara": "RO"},
+                    "dateTransport": {"dataTransport": "2026-07-20"},
+                    "locStartTraseuRutier": {},
+                    "locFinalTraseuRutier": {},
+                    "documenteTransport": {
+                        "tipDocument": "30",
+                        "dataDocument": "2026-07-01",
+                        "numarDocument": self.picking.name,
+                        "observatii": False,
+                    },
+                }
+            }
+        }
+
+    def _get_template_data(self):
+        patch_path = "odoo.addons.l10n_ro_edi_stock.models.stock_picking.Picking._l10n_ro_edi_stock_get_template_data"
+        with patch(patch_path, return_value=self._native_template_data()):
+            return self.picking._l10n_ro_edi_stock_get_template_data(
+                {"transport_partner_id": self.picking.partner_id, "stock_move_ids": self.picking.move_ids}
+            )
+
     def test_template_data_uses_declared_documents(self):
         """Datele trimise la ANAF conțin TOATE documentele declarate, ca listă."""
         self.env["l10n.ro.etransport.document"].create(
@@ -100,38 +129,47 @@ class TestEtransportDocuments(TransactionCase):
                 },
             ]
         )
-        data = {
-            "notificare": {
-                "documenteTransport": {
-                    "tipDocument": "30",
-                    "dataDocument": "2026-07-01",
-                    "numarDocument": self.picking.name,
-                    "observatii": "",
-                }
-            }
-        }
-        res = {"data": data}
-        docs = self.picking.l10n_ro_etransport_document_ids
-        # simulăm doar partea de documente din override (fără apel ANAF)
-        res["data"]["notificare"]["documenteTransport"] = [
-            {
-                "tipDocument": d.document_type,
-                "dataDocument": d.date,
-                "numarDocument": d.name,
-                "observatii": d.remarks or "",
-            }
-            for d in docs
-        ]
+        res = self._get_template_data()
         sent = res["data"]["notificare"]["documenteTransport"]
         self.assertEqual(len(sent), 2)
         self.assertEqual({d["tipDocument"] for d in sent}, {"30", "10"})
         self.assertEqual({d["numarDocument"] for d in sent}, {"AVZ-999", "CMR-555"})
 
+    def test_empty_remarks_is_not_sent_as_empty_string(self):
+        """Fără observație, `observatii` NU pleacă spre template ca string gol.
+
+        XSD-ul ANAF tipează atributul ca `Str200` (minLength=1), deci un
+        `observatii=""` în XML e respins cu
+        `cvc-minLength-valid: Value '' with length = '0'`.
+        """
+        self.env["l10n.ro.etransport.document"].create(
+            [
+                {
+                    "picking_id": self.picking.id,
+                    "document_type": "30",
+                    "name": "AVZ-1000",
+                    "date": "2026-07-20",
+                },
+                {
+                    "picking_id": self.picking.id,
+                    "document_type": "10",
+                    "name": "CMR-1000",
+                    "date": "2026-07-20",
+                    # numai spații: ANAF ar primi un atribut fără conținut util
+                    "remarks": "   ",
+                },
+            ]
+        )
+        sent = self._get_template_data()["data"]["notificare"]["documenteTransport"]
+        self.assertEqual(len(sent), 2)
+        for doc in sent:
+            self.assertIs(doc["observatii"], False, "observația goală trebuie să fie False, nu string gol")
+
     def test_xml_renders_multiple_documents(self):
         """Template-ul QWeb randează câte un tag `documenteTransport` per document."""
         data_notificare = {
             "documenteTransport": [
-                {"tipDocument": "30", "dataDocument": "2026-07-20", "numarDocument": "AVZ-999", "observatii": ""},
+                {"tipDocument": "30", "dataDocument": "2026-07-20", "numarDocument": "AVZ-999", "observatii": False},
                 {"tipDocument": "10", "dataDocument": "2026-07-21", "numarDocument": "CMR-555", "observatii": "frig"},
             ],
         }
@@ -148,7 +186,8 @@ class TestEtransportDocuments(TransactionCase):
                     <t t-if="not isinstance(data_docs, list)" t-set="data_docs" t-value="[data_docs]"/>
                     <t t-foreach="data_docs" t-as="data_doc">
                         <documenteTransport t-att-tipDocument="data_doc['tipDocument']"
-                                            t-att-numarDocument="data_doc['numarDocument']"/>
+                                            t-att-numarDocument="data_doc['numarDocument']"
+                                            t-att-observatii="data_doc.get('observatii') or False"/>
                     </t>
                 </t>""",
                 }
@@ -159,3 +198,6 @@ class TestEtransportDocuments(TransactionCase):
         self.assertEqual(str(rendered).count("<documenteTransport"), 2)
         self.assertIn("CMR-555", str(rendered))
         self.assertIn("AVZ-999", str(rendered))
+        # atributul apare o singură dată — cel gol e omis, nu randat ca `observatii=""`
+        self.assertEqual(str(rendered).count("observatii="), 1)
+        self.assertNotIn('observatii=""', str(rendered))

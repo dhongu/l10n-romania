@@ -352,7 +352,11 @@ class Picking(models.Model):
                     "tipDocument": doc.document_type,
                     "dataDocument": doc.date,
                     "numarDocument": doc.name,
-                    "observatii": doc.remarks or "",
+                    # `observatii` e de tip `Str200` în XSD-ul ANAF (minLength=1):
+                    # un atribut prezent, dar gol, e respins la validare. QWeb
+                    # randează string-ul gol și omite doar False/None, deci
+                    # observația lipsă trebuie să ajungă aici ca `False`.
+                    "observatii": (doc.remarks or "").strip() or False,
                 }
                 for doc in docs
             ]
