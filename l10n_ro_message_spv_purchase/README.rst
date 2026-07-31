@@ -10,9 +10,9 @@ Purchase Message SPV
    !! source digest: sha256:d9b5daa3b3c59ae9f9b2a2f54b5404dfd139f50a3d8b68f0eb319f17df8731fd
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
+    :alt: Production/Stable
 .. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
@@ -100,6 +100,34 @@ Notes
 
 .. contents::
    :local:
+
+Changelog
+=========
+
+19.0.0.0.3 (2026-07-24)
+-----------------------
+
+- Hide/block the "Find Purchase Order" and "Create Purchase Order"
+  buttons for SPV messages that are not purchase invoices/receipts
+  (``message_type`` in ``in_invoice``/``in_receipt``), so they no longer
+  show up on sales invoice/receipt SPV messages (ticket #9055).
+
+19.0.0.0.2 (2026-07-23)
+-----------------------
+
+- Block reprocessing of an SPV message already linked to a purchase
+  order: a second click on "Find Purchase Order"/"Create Purchase Order"
+  used to re-attach the XML and trigger the automatic import from
+  ``deltatech_purchase_ubl``, which could create duplicate products,
+  lines, receipts and vendor bills (ticket #9055). Now raises a
+  ``UserError`` instead of reprocessing the document.
+
+19.0.0.0.1
+----------
+
+- Initial version: link SPV messages to purchase orders by order
+  reference, find/create purchase orders from SPV messages, attach the
+  SPV XML copy on the purchase order chatter.
 
 Bug Tracker
 ===========
