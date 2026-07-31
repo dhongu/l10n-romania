@@ -457,6 +457,24 @@ the Romanian localization suite developed by Terrabit.</p>
 <p><strong>Table of contents</strong></p>
 </div>
 </div>
+<div class="section" id="changelog">
+<h1>Changelog</h1>
+<div class="section" id="section-1">
+<h2>19.0.0.7.1</h2>
+<p><strong>Corecție</strong> — documentele însoțitoare fără observație erau respinse de
+ANAF.</p>
+<p>Atributul <tt class="docutils literal">observatii</tt> este tipat <tt class="docutils literal">Str200</tt> (minLength=1) în schema
+eTransport, iar QWeb randează string-ul gol ca <tt class="docutils literal"><span class="pre">observatii=&quot;&quot;</span></tt>. Un
+document însoțitor lăsat fără observații pica la validare cu:</p>
+<pre class="literal-block">
+cvc-minLength-valid: Value '' with length = '0' is not facet-valid
+with respect to minLength '1' for type 'Str200'
+</pre>
+<p>Acum atributul este omis complet când observația lipsește (sau conține
+numai spații). Câmpul <strong>Observații</strong> de pe linia de document rămâne
+opțional.</p>
+</div>
+</div>
 <div class="section" id="bug-tracker">
 <h1>Bug Tracker</h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
