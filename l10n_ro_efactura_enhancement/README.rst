@@ -231,7 +231,119 @@ Alte îmbunătățiri planificate
 Changelog
 =========
 
-19.0.0.3.16 (2026-07-03)
+19.0.0.3.23 (2026-07-29)
+------------------------
+
+- **O singură regulă decide dacă factura merge în SPV.** Cele patru căi
+  de trimitere se contraziceau pe partenerul fără țară: wizardul „Send &
+  Print" îl considera eligibil, în timp ce butonul manual „Trimite în
+  SPV", cronul de auto-trimitere și indicatorii din dashboard îl
+  excludeau — deci aceeași factură era trimisă pe o cale și ignorată pe
+  alta, iar cifrele din dashboard nu corespundeau cu ce se trimitea.
+  Decizia e acum centralizată în
+  ``account.move._l10n_ro_is_spv_target()``, cu domeniul de căutare
+  echivalent în ``_l10n_ro_spv_target_domain()``, folosite de toate cele
+  patru.
+- **Partenerul fără țară facturat în RON este considerat client român.**
+  Lipsa țării pe contact e de regulă o factură internă B2C incompletă,
+  nu un client extern, așa că moneda facturii decide: RON înseamnă
+  intern (merge în SPV), orice altă monedă înseamnă extern (nu merge).
+  Atenție la reversul regulii — un client român real facturat în EUR
+  căruia i-a scăpat țara pe fișă nu mai este propus pentru SPV; țara pe
+  partener rămâne singura sursă sigură. Eligibilitatea nu înseamnă însă
+  că factura se poate trimite: exportul CIUS-RO cere țara, județul,
+  orașul și strada clientului, deci o astfel de factură eșuează zgomotos
+  pe constrângerile de export până la completarea fișei partenerului —
+  semnalul corect, față de o neconformare ascunsă.
+- Indicatorii din dashboard filtrează acum pe partenerul comercial
+  (``commercial_partner_id``), nu pe contactul de pe factură
+  (``partner_id``), la fel ca logica de trimitere. Cifrele se pot
+  modifica ușor pentru facturile emise către un contact al unei
+  companii.
+
+19.0.0.3.22 (2026-07-29)
+------------------------
+
+- **Răspunsurile neașteptate de la SPV nu mai crapă interfața.** ANAF
+  răspunde frecvent cu HTTP 200 și un corp care nu este payload-ul
+  așteptat (JSON de eroare la limita de apeluri sau ``id_incarcare``
+  inexistent, text simplu, pagină HTML de gateway în mentenanță).
+  ``make_efactura_request`` din ``l10n_ro_edi`` tratează doar codurile
+  204/400/401/403/500, așa că un asemenea corp ajungea la apelanți și
+  crăpa cu
+  ``lxml.etree.XMLSyntaxError: Start tag expected, '<' not found`` pe
+  *Fetch status* (``stareMesaj``), cu ``BadZipFile`` pe ``descarcare``
+  sau cu un PDF corupt salvat de la ``transformare``.
+
+  - Se validează primii octeți ai răspunsului față de payload-ul
+    așteptat pe endpoint (XML pe
+    ``upload``/``uploadb2c``/``stareMesaj``, ZIP pe ``descarcare``, PDF
+    pe ``transformare``, JSON pe listele de mesaje).
+  - Când răspunsul nu poate fi payload-ul așteptat, se întoarce
+    ``{'error': ...}`` cu mesajul de eroare ANAF extras din JSON (sau un
+    extras curățat din corpul brut), care apare în chatter-ul facturii
+    și în log — deci și diagnosticul devine posibil, fără RPC_ERROR.
+  - Endpoint-urile necunoscute nu sunt validate, ca să nu blocăm fluxuri
+    noi.
+  - Acoperă și copia funcției din ``l10n_ro_message_spv``. Doar cod
+    Python, nu necesită actualizarea modulului — este suficient un
+    restart.
+
+19.0.0.3.21 (2026-07-29)
+------------------------
+
+Port of the 18.0 fix (18.0.0.2.15 / 18.0.0.2.16) that was never
+forwarded to 19.0: the 19.0 catch-up port of this module predates it.
+
+- **Foreign-customer invoices are no longer offered for SPV upload in
+  "Send & Print".** The core ``_is_ro_edi_applicable`` only checks the
+  issuing company is Romanian (``country_code == 'RO'``), so invoices
+  issued to foreign customers (e.g. the HU series of a Romanian company)
+  were uploaded to the SPV. The check now also excludes invoices whose
+  commercial partner has a country explicitly set to something other
+  than RO, matching the filter already present on the auto-send cron and
+  on ``action_send_to_spv_only``. Partners without a country are left
+  untouched to avoid regressions on domestic B2C invoices. In 19.0 the
+  wizard builds its checkboxes from ``_get_default_extra_edis``, so the
+  "Send E-Factura to SPV" checkbox no longer shows up at all for those
+  invoices.
+- **No more double customer email.** An invoice could be emailed twice:
+  once by the operator's manual "Send & Print" at posting time, and
+  again by the validated-invoice cron after the SPV validated it (the
+  ``l10n_ro_spv_validated_email_sent`` flag was only set by the cron, so
+  a manual send went unnoticed). ``account.move.send._send_mails`` now
+  sets the flag for every invoice actually emailed to the customer
+  through any path. The SPV upload path uses
+  ``sending_methods={"manual"}`` (no email), so cron-only invoices are
+  still emailed once, after validation.
+
+19.0.0.3.20 (2026-07-28)
+------------------------
+
+- **Import SPV: linia se recalculează din ``cbc:LineExtensionAmount``
+  când furnizorul completează greșit ``cac:Price/cbc:BaseQuantity``.**
+  Core-ul Odoo derivă prețul unitar din BT-146 / BT-149 și suprascrie
+  astfel valoarea calculată din BT-131. Când furnizorul transmite
+  ``BaseQuantity`` egal cu ``InvoicedQuantity`` în loc de 1 — tipar
+  întâlnit la mai multe programe de facturare — prețul unitar rezultat
+  este de ``InvoicedQuantity`` ori mai mic (ex. 0,00315 lei/m în loc de
+  1,26 lei/m), iar diferența ajunge tăcut într-o linie „Rounding" **fără
+  TVA**. Factura intră cu total corect, dar cu **TVA subevaluat**, fără
+  nicio eroare afișată.
+
+  - BT-131 (``cbc:LineExtensionAmount``) este câmp obligatoriu și
+    reprezintă valoarea autoritativă a liniei, în timp ce BT-149 este
+    opțional și servește doar la exprimarea prețului. Când cele două se
+    contrazic, linia se recalculează din BT-131.
+  - Se compară subtotalul importat cu BT-131 și se corectează **doar**
+    peste toleranța de rotunjire dedusă din numărul de zecimale al
+    BT-146; abaterile mici, legitime (preț unitar transmis rotunjit la 2
+    zecimale), rămân pe seama liniei de rotunjire din core.
+  - Fiecare linie corectată este semnalată în logurile importului, deci
+    apare în chatter-ul facturii.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
+19.0.0.3.18 (2026-07-03)
 ------------------------
 
 - **Opțiune de dezactivare a importului automat de facturi primite din
@@ -248,6 +360,38 @@ Changelog
     ``_l10n_ro_edi_process_bill_messages``; procesarea răspunsurilor
     pentru facturile trimise (acceptat/refuzat) și curățarea facturilor
     neindexate din același cron rămân neatinse.
+
+19.0.0.3.17 (2026-07-03)
+------------------------
+
+- **Descrierea nu mai apare dublată în Description + Name.** Când linia
+  avea o descriere suplimentară, același text era pus atât în
+  ``cbc:Description`` cât și în ``cbc:Name``, rezultând două tag-uri
+  identice. Comportamentul rămâne cel al parametrului (descrierea liniei
+  merge în ``cbc:Name``), dar tag-ul ``cbc:Description`` se omite când
+  ar fi identic cu ``cbc:Name`` — rămâne prezent doar când descrierea
+  depășește 100 de caractere, ca să poarte textul complet (Name e
+  trunchiat la 100, Description la 200). Doar cod Python, nu necesită
+  actualizarea modulului.
+
+19.0.0.3.16 (2026-07-03)
+------------------------
+
+- **Tag-ul ``cbc:Description`` este omis când linia nu are descriere
+  proprie.** Cu ``efactura.use_line_description`` activ, dacă numele
+  liniei este identic cu ``display_name``-ul produsului (linie generată
+  automat, fără text suplimentar), în XML ajungea numele produsului
+  (inclusiv codul ``[COD]``) ca descriere. ``get_description``
+  returnează acum doar descrierea suplimentară a liniei (numele liniei
+  fără numele produsului), iar când aceasta este goală nodul
+  ``cbc:Description`` (opțional, BT-154) este pus pe ``None`` și tag-ul
+  nu mai apare deloc în XML. ``cbc:Name`` rămâne numele produsului.
+
+  - Eliminat și fallback-ul pe ``product.name`` la descrierea implicită
+    (independent de parametru): numele produsului nu mai este duplicat
+    în Description — el există deja în ``cbc:Name`` și în
+    ``cac:SellersItemIdentification``.
+  - Doar cod Python, nu necesită actualizarea modulului.
 
 19.0.0.3.15 (2026-07-01)
 ------------------------
