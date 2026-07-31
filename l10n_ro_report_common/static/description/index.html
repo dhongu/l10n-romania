@@ -380,6 +380,50 @@ bank accounts flagged <em>Print in Report</em>, in the document currency
 identification block: name, address, bank accounts, Tax ID, NRC and
 share capital.</li>
 </ul>
+<p>Pe lângă șabloane, modulul rescrie <strong>``res.currency.amount_to_text``</strong>
+pentru moneda <strong>RON</strong>, astfel încât suma în litere să respecte uzanța
+contabilă românească:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">sumă</th>
+<th class="head">rezultat</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal">500</tt></td>
+<td><em>cinci sute lei</em></td>
+</tr>
+<tr><td><tt class="docutils literal">8382.25</tt></td>
+<td><em>opt mii trei sute optzeci și doi lei și
+douăzeci și cinci bani</em></td>
+</tr>
+<tr><td><tt class="docutils literal">1.00</tt> / <tt class="docutils literal">1.01</tt></td>
+<td><em>un leu</em> / <em>un leu și un ban</em></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">-500</span></tt></td>
+<td><em>minus cinci sute lei</em></td>
+</tr>
+</tbody>
+</table>
+<p>Odoo standard construiește textul din denumirile unității monetare și îl
+scrie cu inițiale majuscule, rezultând <em>„Cinci Sute Leu”</em> — inutilizabil
+pe o chitanță. Particula gramaticală <em>de</em> (<em>douăzeci</em> <strong>de</strong> <em>lei</em>) este
+omisă <strong>intenționat</strong>, pentru a păstra formularea folosită de programele
+de contabilitate românești. Formularea nu depinde de limba de tipărire:
+o sumă în lei pe un document legal românesc se citește în română și pe o
+factură în engleză. Pentru orice altă monedă se păstrează comportamentul
+standard Odoo.</p>
+<div class="section" id="cerinte-tehnice">
+<h1>Cerințe tehnice</h1>
+<ul class="simple">
+<li>Necesită biblioteca <tt class="docutils literal">num2words</tt>
+(<tt class="docutils literal">pip3 install <span class="pre">num2words&gt;=0.5.12</span></tt>). Dacă lipsește, se folosește
+formularea implicită Odoo.</li>
+</ul>
 <p>The module also adds the two supporting fields:</p>
 <ul class="simple">
 <li><em>Print in Report</em> (<tt class="docutils literal">l10n_ro_print_report</tt>) on bank accounts;</li>
@@ -401,26 +445,27 @@ can be installed side by side.</p>
 </ul>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h1>
+<h2><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-2">Credits</a></h1>
+<h2><a class="toc-backref" href="#toc-entry-2">Credits</a></h2>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-3">Authors</a></h2>
+<h3><a class="toc-backref" href="#toc-entry-3">Authors</a></h3>
 <ul class="simple">
 <li>Terrabit</li>
 <li>Dorin Hongu</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-4">Maintainers</a></h2>
+<h3><a class="toc-backref" href="#toc-entry-4">Maintainers</a></h3>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_report_common">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
+</div>
 </div>
 </div>
 </div>
