@@ -369,38 +369,87 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:4c8fdebcc923e166c0d52b2ec4dcf9f3c26637332184d82bdb3f1fab9b54b8cf
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_stock_account_landed_cost_account"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_landed_cost_account"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <ul class="simple">
 <li>determinare cont din locatie</li>
 </ul>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-1">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-2">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-3">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-4">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-5">Maintainers</a></li>
+<li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a></li>
+<li><a class="reference internal" href="#changelog-1" id="toc-entry-2">Changelog</a><ul>
+<li><a class="reference internal" href="#section-1" id="toc-entry-3">18.0.1.1.0</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-4">18.0.1.0.0</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-5">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-6">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-7">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-8">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-9">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="changelog">
+<h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
+</div>
+<div class="section" id="changelog-1">
+<h1><a class="toc-backref" href="#toc-entry-2">Changelog</a></h1>
+<div class="section" id="section-1">
+<h2><a class="toc-backref" href="#toc-entry-3">18.0.1.1.0</a></h2>
+<ul class="simple">
+<li>Added a <strong>Landed Cost Class 6 Method</strong> company selector (Accounting /
+Romania settings) that makes the behaviour explicit and configurable
+per company:<ul>
+<li><strong>Standard</strong> (default): native Odoo behaviour
+(<tt class="docutils literal">stock valuation = class 6</tt>);</li>
+<li><strong>Through intermediary account</strong>: routes the class 6 credit through
+the intermediary account, producing two clean balanced notes for the
+SAGA export. The intermediary account is now shown and required only
+for the intermediary method, and the selector — not the mere
+presence of the account — controls the behaviour. Existing companies
+default to <strong>Standard</strong>, so behaviour is unchanged on upgrade unless
+the method is explicitly switched.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-4">18.0.1.0.0</a></h2>
+<ul class="simple">
+<li>Added an optional <strong>Landed Cost Intermediary Account</strong> company setting
+(Accounting / Romania settings). This is the technical intermediary
+account (e.g. <tt class="docutils literal">482.99</tt>) used to transfer service costs into products
+on landed cost validation. When set, a landed cost entry that would
+credit a class 6 (expense) account is routed through this account,
+producing two clean balanced notes
+(<tt class="docutils literal">stock valuation = intermediary account</tt> and
+<tt class="docutils literal">intermediary account = class 6</tt>) instead of a direct
+<tt class="docutils literal">stock valuation = class 6</tt> entry. This keeps the notes acceptable
+for the SAGA export. Class <tt class="docutils literal">609</tt> is never rerouted. When the setting
+is empty, the standard behaviour is unchanged.</li>
+<li>Added dependency on <tt class="docutils literal">l10n_ro_config</tt> (Romania settings block).</li>
+</ul>
+</div>
+</div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-5">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-2">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-6">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-3">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Authors</a></h2>
 <ul class="simple">
+<li>Terrabit</li>
 <li>Dorin Hongu</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-4">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-8">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -411,10 +460,10 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/18.0/l10n_ro_stock_account_landed_cost_account">dhongu/l10n-romania</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_landed_cost_account">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>
 </div>
