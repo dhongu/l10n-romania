@@ -445,7 +445,8 @@ class TestTemplateDataTimezone(TransactionCase):
                         "tipDocument": "30",
                         "dataDocument": fields.Date.to_date("2027-07-20"),
                         "numarDocument": "AVZ-1",
-                        "observatii": "",
+                        # standardul lasă câmpul Char gol ca False, nu ca string gol
+                        "observatii": False,
                     },
                 }
             }

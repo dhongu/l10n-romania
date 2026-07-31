@@ -29,7 +29,7 @@
                         t-att-tipDocument="data_doc['tipDocument']"
                         t-att-dataDocument="data_doc['dataDocument']"
                         t-att-numarDocument="data_doc['numarDocument']"
-                        t-att-observatii="data_doc['observatii']"/>
+                        t-att-observatii="data_doc.get('observatii') or False"/>
             </t>
         </xpath>
     </template>
