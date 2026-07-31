@@ -183,10 +183,13 @@ class ResPartner(models.Model):
         skip_ro_vat_change = self.env.context.get("skip_ro_vat_change", True)
         return super(ResPartner, self.with_context(skip_ro_vat_change=skip_ro_vat_change)).ro_vat_change()
 
-    def _fix_vat_number(self, vat, country_id):
-        if self.env.context.get("skip_ro_vat_change"):
-            return vat
-        return super()._fix_vat_number(vat, country_id)
+    # `_fix_vat_number(vat, country_id)` was removed from base_vat in 19.0: the
+    # normalisation moved to `_run_vat_checks` and `_format_vat_number`, which
+    # take the country code instead of its id. The override that guarded it with
+    # `skip_ro_vat_change` was therefore never called - and its `super()` call
+    # would have raised AttributeError. No replacement is needed: unlike the 18.0
+    # helper, `_format_vat_number` only formats the number and never prepends the
+    # country prefix, so there is nothing left to suppress.
 
     def write(self, vals):
         if "is_company" in vals or "vat" in vals:
