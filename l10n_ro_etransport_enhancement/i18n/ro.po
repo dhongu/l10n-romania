@@ -34,6 +34,11 @@ msgid "eTransport Required"
 msgstr "eTransport necesar"
 
 #. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_etransport_start_address
+msgid "Specific Start Location"
+msgstr "Locație de start specifică"
+
+#. module: l10n_ro_etransport_enhancement
 #. odoo-python
 #: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
 msgid ""

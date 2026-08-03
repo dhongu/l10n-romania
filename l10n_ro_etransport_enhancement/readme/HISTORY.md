@@ -1,3 +1,18 @@
+## 19.0.0.7.2
+
+**Îmbunătățire** — locație de start specifică pentru transportul pe teritoriul național.
+
+Câmpul **Specific Start Location** (`l10n_ro_etransport_start_address`) permite
+alegerea manuală a unui partener a cărui adresă să înlocuiască, în declarația
+eTransport, adresa calculată automat (depozit) pentru locația de start —
+util când transportul național (cod operațiune `30`) pleacă efectiv dintr-un
+alt loc decât depozitul (de exemplu un birou vamal de interior, după vămuire).
+
+Câmpul e vizibil doar pe livrări (`picking_type_code = 'outgoing'`), doar
+pentru operațiunea "Transport pe teritoriul național" și doar când locația de
+start e de tip "Location" (nu are sens pe BCP/birou vamal, unde declarația nu
+conține o adresă).
+
 ## 19.0.0.7.1
 
 **Corecție** — documentele însoțitoare fără observație erau respinse de ANAF.

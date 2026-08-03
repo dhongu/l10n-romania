@@ -37,47 +37,47 @@ user-friendly.
 Key Features
 ------------
 
-- Enhanced functionality for sending e-Transport documents directly from
-  stock pickings
-- Support for different sending types through context parameters
-- Improved handling of stock valuation layer tracking for e-Transport
-  documents
-- Streamlined integration with the Romanian e-Transport system (SPV)
-- Configurable timeout for the ANAF API (the Odoo standard hardcodes 10
-  seconds, often too short)
-- Network failures towards ANAF no longer raise a traceback: the
-  transfer keeps a failed document with a readable message warning to
-  check SPV before resending, so no duplicate UIT is issued
-- Automatic retry on status requests only (GET is idempotent); document
-  upload is never retried automatically
-- Road route between a border crossing point and a customs office: for
-  import and export, both ends of the route can be a border crossing
-  point or a customs office, so a UIT can be issued for the leg under
-  customs supervision (border crossing point to inland customs office on
-  import, customs office to border crossing point on export). The Odoo
-  standard only allows the customs office at departure on import and at
-  arrival on export, the other end being forced to a location.
-- The transport date no longer breaks when the sending user has no
-  timezone set (the usual case for automated sends running as OdooBot);
-  it falls back to the Romanian timezone
-- Lines the standard sends with a zero value no longer reach ANAF as
-  zero: the unit price falls back to the stock value of the move, then
-  to the product cost, then to the sales price. When no price can be
-  found at all, sending stops with an explicit error instead of filing
-  an invalid declaration
-- Lines without a quantity are dropped from the declaration, and a
-  missing net or gross weight is approximated with the other one. The
-  QWeb template renders all three through ``t-att-*``, which silently
-  drops a zero, while the ANAF schema requires them: a zero invalidates
-  the declaration
-- "Get lines" recomputes the shipping weight lines instead of adding to
-  them, so pressing it twice no longer doubles the weights sent to ANAF
-- A warning on the transfer when some moves have no weight line, so an
-  incomplete set of weights is not filed unnoticed
-- Weighed totals on the transfer (net and gross) with a "Distribute
-  weights" button that adjusts the lines to add up to them,
-  proportionally to each line, or evenly when the lines all start at
-  zero
+-  Enhanced functionality for sending e-Transport documents directly
+   from stock pickings
+-  Support for different sending types through context parameters
+-  Improved handling of stock valuation layer tracking for e-Transport
+   documents
+-  Streamlined integration with the Romanian e-Transport system (SPV)
+-  Configurable timeout for the ANAF API (the Odoo standard hardcodes 10
+   seconds, often too short)
+-  Network failures towards ANAF no longer raise a traceback: the
+   transfer keeps a failed document with a readable message warning to
+   check SPV before resending, so no duplicate UIT is issued
+-  Automatic retry on status requests only (GET is idempotent); document
+   upload is never retried automatically
+-  Road route between a border crossing point and a customs office: for
+   import and export, both ends of the route can be a border crossing
+   point or a customs office, so a UIT can be issued for the leg under
+   customs supervision (border crossing point to inland customs office
+   on import, customs office to border crossing point on export). The
+   Odoo standard only allows the customs office at departure on import
+   and at arrival on export, the other end being forced to a location.
+-  The transport date no longer breaks when the sending user has no
+   timezone set (the usual case for automated sends running as OdooBot);
+   it falls back to the Romanian timezone
+-  Lines the standard sends with a zero value no longer reach ANAF as
+   zero: the unit price falls back to the stock value of the move, then
+   to the product cost, then to the sales price. When no price can be
+   found at all, sending stops with an explicit error instead of filing
+   an invalid declaration
+-  Lines without a quantity are dropped from the declaration, and a
+   missing net or gross weight is approximated with the other one. The
+   QWeb template renders all three through ``t-att-*``, which silently
+   drops a zero, while the ANAF schema requires them: a zero invalidates
+   the declaration
+-  "Get lines" recomputes the shipping weight lines instead of adding to
+   them, so pressing it twice no longer doubles the weights sent to ANAF
+-  A warning on the transfer when some moves have no weight line, so an
+   incomplete set of weights is not filed unnoticed
+-  Weighed totals on the transfer (net and gross) with a "Distribute
+   weights" button that adjusts the lines to add up to them,
+   proportionally to each line, or evenly when the lines all start at
+   zero
 
 Technical Implementation
 ------------------------
@@ -85,19 +85,20 @@ Technical Implementation
 The module builds upon the standard Romanian localization and enhances
 the e-Transport integration through:
 
-- Extended stock picking methods for e-Transport document submission
-- Advanced tracking mechanisms for stock valuation layers
-- Improved context handling for different document sending scenarios
+-  Extended stock picking methods for e-Transport document submission
+-  Advanced tracking mechanisms for stock valuation layers
+-  Improved context handling for different document sending scenarios
 
 Business Benefits
 -----------------
 
-- Simplified compliance with Romanian e-Transport regulations
-- More flexible options for submitting transport documents to
-  authorities
-- Better tracking and management of stock movements subject to
-  e-Transport requirements
-- Reduced administrative burden for logistics and accounting departments
+-  Simplified compliance with Romanian e-Transport regulations
+-  More flexible options for submitting transport documents to
+   authorities
+-  Better tracking and management of stock movements subject to
+   e-Transport requirements
+-  Reduced administrative burden for logistics and accounting
+   departments
 
 Usage
 -----
@@ -115,6 +116,25 @@ the Romanian localization suite developed by Terrabit.
 
 Changelog
 =========
+
+19.0.0.7.2
+----------
+
+**Îmbunătățire** — locație de start specifică pentru transportul pe
+teritoriul național.
+
+Câmpul **Specific Start Location**
+(``l10n_ro_etransport_start_address``) permite alegerea manuală a unui
+partener a cărui adresă să înlocuiască, în declarația eTransport, adresa
+calculată automat (depozit) pentru locația de start — util când
+transportul național (cod operațiune ``30``) pleacă efectiv dintr-un alt
+loc decât depozitul (de exemplu un birou vamal de interior, după
+vămuire).
+
+Câmpul e vizibil doar pe livrări (``picking_type_code = 'outgoing'``),
+doar pentru operațiunea "Transport pe teritoriul național" și doar când
+locația de start e de tip "Location" (nu are sens pe BCP/birou vamal,
+unde declarația nu conține o adresă).
 
 19.0.0.7.1
 ----------
