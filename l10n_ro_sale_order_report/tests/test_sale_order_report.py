@@ -4,6 +4,8 @@
 import base64
 import logging
 
+from lxml import etree
+
 from odoo.tests.common import TransactionCase, tagged
 
 _logger = logging.getLogger(__name__)
@@ -108,6 +110,31 @@ class TestSaleOrderReport(TransactionCase):
 
         # Log for quick visual diagnostics when running tests with --log-level=info
         _logger.info("Rendered Sale Order report length: %s", len(html))
+
+    def test_line_numbering_skips_notes_and_sections(self):
+        # A section and a note interleaved with the products must not consume numbers:
+        # the three product lines have to come out numbered 1, 2, 3.
+        so = self.env["sale.order"].create(
+            {
+                "partner_id": self.partner.id,
+                "order_line": [
+                    (0, 0, {"display_type": "line_section", "name": "Section A"}),
+                    (0, 0, {"product_id": self.product.id, "product_uom_qty": 1}),
+                    (0, 0, {"display_type": "line_note", "name": "A note"}),
+                    (0, 0, {"product_id": self.product.id, "product_uom_qty": 2}),
+                    (0, 0, {"display_type": "line_section", "name": "Section B"}),
+                    (0, 0, {"product_id": self.product.id, "product_uom_qty": 3}),
+                ],
+            }
+        )
+        self.assertTrue(self.company.counter_on_sale_order, "The counter column must be on for this test")
+
+        action = self.env.ref("sale.action_report_saleorder")
+        html_bytes, _ = self.env["ir.actions.report"]._render_qweb_html(action, [so.id])
+        tree = etree.fromstring(html_bytes, etree.HTMLParser())
+
+        numbers = ["".join(td.itertext()).strip() for td in tree.xpath("//td[@name='td_number']")]
+        self.assertEqual(numbers, ["1", "2", "3"], "Only product lines should be numbered, consecutively")
 
     def test_render_custom_proforma_template(self):
         # Ensure the custom proforma template compiles with a basic context

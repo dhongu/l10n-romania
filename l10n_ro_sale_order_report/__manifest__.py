@@ -5,7 +5,7 @@
 {
     "name": "Terrabit Sale Order Report",
     "summary": "Formular Factura Proformae",
-    "version": "19.0.1.0.7",
+    "version": "19.0.1.0.8",
     "author": "Terrabit, Dorin Hongu, Dan Stoica, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
