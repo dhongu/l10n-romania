@@ -9,9 +9,10 @@ import pytz
 import requests
 
 from odoo import api, fields, models
-from odoo.addons.l10n_ro_edi_stock.models.stock_picking import STATE_CODES
 from odoo.exceptions import UserError
 from odoo.tools import float_is_zero
+
+from odoo.addons.l10n_ro_edi_stock.models.stock_picking import STATE_CODES
 
 _logger = logging.getLogger(__name__)
 
@@ -246,13 +247,15 @@ class Picking(models.Model):
             partner = self.l10n_ro_etransport_start_address
             start_locatie = res["data"]["notificare"]["locStartTraseuRutier"].get("locatie")
             if start_locatie is not None:
-                start_locatie.update({
-                    "codJudet": STATE_CODES[partner.state_id.code],
-                    "denumireLocalitate": partner.city,
-                    "denumireStrada": partner.street,
-                    "codPostal": partner.zip,
-                    "alteInfo": partner.street2,
-                })
+                start_locatie.update(
+                    {
+                        "codJudet": STATE_CODES[partner.state_id.code],
+                        "denumireLocalitate": partner.city,
+                        "denumireStrada": partner.street,
+                        "codPostal": partner.zip,
+                        "alteInfo": partner.street2,
+                    }
+                )
 
         for key in ("locStartTraseuRutier", "locFinalTraseuRutier"):
             locatie = res["data"]["notificare"][key].get("locatie", {})
