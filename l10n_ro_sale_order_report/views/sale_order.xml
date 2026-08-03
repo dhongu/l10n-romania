@@ -57,10 +57,19 @@
                 <th />
              </t>
         </xpath>
+        <!-- Numbering counts only real product lines: line_index also counts notes,
+             sections and non-rendered lines, which would leave gaps in the sequence.
+             QWeb keeps one shared values dict across t-foreach iterations, so the
+             counter survives from one line to the next (same trick core uses for
+             current_section). -->
+        <xpath expr="//t[@t-foreach='lines_to_report']" position="before">
+            <t t-set="product_line_number" t-value="0" />
+        </xpath>
         <td name="td_product_name" position="before">
              <t t-if="res_company.counter_on_sale_order">
+                <t t-set="product_line_number" t-value="product_line_number + 1" />
                 <td name="td_number">
-                    <span t-esc="line_index + 1" />
+                    <span t-esc="product_line_number" />
                 </td>
              </t>
              <t t-if="res_company.include_image_line">
