@@ -9,6 +9,13 @@
                 <field name="l10n_ro_edi_stock_required" />
                 <field name="l10n_ro_transport_partner_id" invisible="not l10n_ro_edi_stock_required" />
             </field>
+            <field name="l10n_ro_edi_stock_start_customs_office" position="after">
+                <field
+                    name="l10n_ro_etransport_start_address"
+                    readonly="l10n_ro_edi_stock_fields_readonly"
+                    invisible="picking_type_code != 'outgoing' or l10n_ro_edi_stock_operation_type != '30' or l10n_ro_edi_stock_start_loc_type != 'location'"
+                />
+            </field>
             <page name="etransport" position="inside">
                 <group name="weights">
                     <field name="l10n_ro_shipping_weights" />

@@ -383,8 +383,8 @@ user-friendly.</p>
 <div class="section" id="key-features">
 <h2>Key Features</h2>
 <ul class="simple">
-<li>Enhanced functionality for sending e-Transport documents directly from
-stock pickings</li>
+<li>Enhanced functionality for sending e-Transport documents directly
+from stock pickings</li>
 <li>Support for different sending types through context parameters</li>
 <li>Improved handling of stock valuation layer tracking for e-Transport
 documents</li>
@@ -399,10 +399,10 @@ upload is never retried automatically</li>
 <li>Road route between a border crossing point and a customs office: for
 import and export, both ends of the route can be a border crossing
 point or a customs office, so a UIT can be issued for the leg under
-customs supervision (border crossing point to inland customs office on
-import, customs office to border crossing point on export). The Odoo
-standard only allows the customs office at departure on import and at
-arrival on export, the other end being forced to a location.</li>
+customs supervision (border crossing point to inland customs office
+on import, customs office to border crossing point on export). The
+Odoo standard only allows the customs office at departure on import
+and at arrival on export, the other end being forced to a location.</li>
 <li>The transport date no longer breaks when the sending user has no
 timezone set (the usual case for automated sends running as OdooBot);
 it falls back to the Romanian timezone</li>
@@ -444,7 +444,8 @@ the e-Transport integration through:</p>
 authorities</li>
 <li>Better tracking and management of stock movements subject to
 e-Transport requirements</li>
-<li>Reduced administrative burden for logistics and accounting departments</li>
+<li>Reduced administrative burden for logistics and accounting
+departments</li>
 </ul>
 </div>
 <div class="section" id="usage">
@@ -460,6 +461,22 @@ the Romanian localization suite developed by Terrabit.</p>
 <div class="section" id="changelog">
 <h1>Changelog</h1>
 <div class="section" id="section-1">
+<h2>19.0.0.7.2</h2>
+<p><strong>Îmbunătățire</strong> — locație de start specifică pentru transportul pe
+teritoriul național.</p>
+<p>Câmpul <strong>Specific Start Location</strong>
+(<tt class="docutils literal">l10n_ro_etransport_start_address</tt>) permite alegerea manuală a unui
+partener a cărui adresă să înlocuiască, în declarația eTransport, adresa
+calculată automat (depozit) pentru locația de start — util când
+transportul național (cod operațiune <tt class="docutils literal">30</tt>) pleacă efectiv dintr-un alt
+loc decât depozitul (de exemplu un birou vamal de interior, după
+vămuire).</p>
+<p>Câmpul e vizibil doar pe livrări (<tt class="docutils literal">picking_type_code = 'outgoing'</tt>),
+doar pentru operațiunea “Transport pe teritoriul național” și doar când
+locația de start e de tip “Location” (nu are sens pe BCP/birou vamal,
+unde declarația nu conține o adresă).</p>
+</div>
+<div class="section" id="section-2">
 <h2>19.0.0.7.1</h2>
 <p><strong>Corecție</strong> — documentele însoțitoare fără observație erau respinse de
 ANAF.</p>
