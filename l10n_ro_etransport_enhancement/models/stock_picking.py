@@ -12,6 +12,8 @@ from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import float_is_zero
 
+from odoo.addons.l10n_ro_edi_stock.models.stock_picking import STATE_CODES
+
 _logger = logging.getLogger(__name__)
 
 # Operațiunile pentru care traseul rutier poate avea la AMBELE capete un punct de
@@ -63,6 +65,12 @@ class Picking(models.Model):
         "picking_id",
         string="Documente însoțitoare",
         copy=False,
+    )
+    # Când e completat, adresa acestui partener înlocuiește adresa calculată
+    # automat (depozit/client) pentru locația de START din declarația eTransport.
+    l10n_ro_etransport_start_address = fields.Many2one(
+        "res.partner",
+        string="Specific Start Location",
     )
 
     def l10n_ro_etransport_add_default_documents(self):
@@ -231,6 +239,24 @@ class Picking(models.Model):
         for move in self.move_ids:
             move._cal_move_weight()
         res = super()._l10n_ro_edi_stock_get_template_data(data)
+
+        # Suprascrie adresa de start cu cea a partenerului ales manual, dacă e
+        # completat. Se aplică doar când locația de start e de tip 'location'
+        # (adresă) — la 'bcp'/'customs' declarația nu conține o adresă, ci un cod.
+        if self and self.l10n_ro_etransport_start_address:
+            partner = self.l10n_ro_etransport_start_address
+            start_locatie = res["data"]["notificare"]["locStartTraseuRutier"].get("locatie")
+            if start_locatie is not None:
+                start_locatie.update(
+                    {
+                        "codJudet": STATE_CODES[partner.state_id.code],
+                        "denumireLocalitate": partner.city,
+                        "denumireStrada": partner.street,
+                        "codPostal": partner.zip,
+                        "alteInfo": partner.street2,
+                    }
+                )
+
         for key in ("locStartTraseuRutier", "locFinalTraseuRutier"):
             locatie = res["data"]["notificare"][key].get("locatie", {})
             if locatie and not locatie["alteInfo"]:
