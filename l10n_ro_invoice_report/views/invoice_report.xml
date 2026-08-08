@@ -768,85 +768,26 @@
                 </t>
                 <t t-if="payments_vals_cash">
                     <br/>
-                    <div
-                        t-foreach="payments_vals_cash"
-                        t-as="payment_vals"
-                        style="page-break-inside: avoid; border: 1px solid black;padding: 15px;"
-                    >
-
-
-                        <t name="payment_container">
-                            <t t-set="res_company" t-value="o.company_id"/>
-                            <div>
-                                <strong t-field="res_company.partner_id.name"/>
-                            </div>
-                            <div>
-                                VAT:
-                                <span t-field="res_company.partner_id.vat"/>
-                            </div>
-                            <div>
-                                NRC:
-                                <span t-field="res_company.partner_id.nrc"/>
-                            </div>
-                            <address
-                                t-field="res_company.partner_id"
-                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
-                            />
-                            <h4>
-                                <t t-if="payment_vals['payment_type']=='inbound'">
-                                    <span>Voucher:</span>
-                                </t>
-                                <t t-if="payment_vals['payment_type']=='outbound'">
-                                    <span>Payment disposal:</span>
-                                </t>
-
-                                <span t-esc="payment_vals['ref']"/>
-                                <span>/</span>
-                                <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/>
-                            </h4>
-                            <div name="payment_text">
-                                <t t-if="payment_vals['payment_type']=='outbound'">
-                                    <span>I payed to</span>
-                                </t>
-                                <t t-else="">
-                                    <span>I received from</span>
-                                </t>
-                                <t t-set="partner" t-value="o.partner_id.commercial_partner_id"/>
-                                <strong t-field="partner.name"/>
-
-                                <span t-if="partner.vat">
-                                    ,<span t-field="partner.vat"/>,
-                                </span>
-                                <span t-if="partner.nrc">
-                                    <span t-field="partner.nrc"/>,
-                                </span>
-
-                                <span t-if="partner.city" name="address">
-                                    from
-                                    <span t-field="partner.city"/>
-                                    <span t-field="partner.street"/>
-                                    <span t-field="partner.street2"/>
-                                </span>
-
-                                <span>amount</span>
-
-                                <strong
-                                    t-esc="payment_vals['amount']"
-                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
-                                />
-                                (
-                                <!--                                <span t-esc="convert(payment.amount)"/>-->
-                                <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])"/>
-                                )
-                            </div>
-                            <div>
-                                <t t-if="o.move_type == 'out_receipt'">Representing counter value of sales receipt</t>
-                                <t t-else="">Representing counter value of invoice</t>
-                                <span t-field="o.name"/>
-                            </div>
-
-                        </t>
-                    </div>
+                    <t t-foreach="payments_vals_cash" t-as="payment_vals">
+                        <!--
+                            Aceeași cutie ca raportul de plată. `payment_type` este
+                            adăugat în dicționar de _compute_payments_widget_reconciled_info
+                            doar când linia are un account.payment, deci se deduce din
+                            tipul facturii când lipsește.
+                        -->
+                        <t
+                            t-call="l10n_ro_invoice_report.report_cash_receipt"
+                            res_company="o.company_id"
+                            partner="o.partner_id.commercial_partner_id"
+                            payment_type="payment_vals.get('payment_type') or ('outbound' if o.move_type in ('in_invoice', 'out_refund') else 'inbound')"
+                            receipt_ref="payment_vals['ref']"
+                            receipt_date="payment_vals['date']"
+                            amount="payment_vals['amount']"
+                            currency="o.currency_id"
+                            documents="o"
+                            representing="False"
+                        />
+                    </t>
                 </t>
             </t>
         </xpath>

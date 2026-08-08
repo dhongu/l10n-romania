@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="report_cash_receipt">
+        <t t-set="l10n_ro_partner_details" t-value="', '.join([p for p in [partner.vat, partner.nrc] if p])" />
+        <t
+            t-set="l10n_ro_partner_address"
+            t-value="', '.join([p for p in [partner.city, partner.street, partner.street2] if p])"
+        />
+        <div style="page-break-inside: avoid; border: 1px solid black; padding: 15px;">
+            <div>
+                <strong t-field="res_company.partner_id.name" />
+            </div>
+            <div t-if="res_company.partner_id.vat">VAT: <span t-field="res_company.partner_id.vat" /></div>
+            <div t-if="res_company.partner_id.nrc">NRC: <span t-field="res_company.partner_id.nrc" /></div>
+            <address
+                t-field="res_company.partner_id"
+                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
+            />
+            <h4>
+                <t t-if="payment_type == 'outbound'">
+                    <span>Payment disposal:</span>
+                </t>
+                <t t-else="">
+                    <span>Voucher:</span>
+                </t>
+                <!--
+                    Doar numărul documentului de plată: facturile stinse apar mai
+                    jos, pe rândul „Reprezentând contravaloarea facturii". Din
+                    factură, `ref` vine deja compus de Odoo ca „PNUM/... (INV/...)"
+                    (account_move.py:1536), deci a le adăuga aici le-ar dubla.
+                -->
+                <span t-out="receipt_ref" />
+                <span>/</span>
+                <t t-out="receipt_date" t-options='{"widget": "date"}' />
+            </h4>
+            <div name="payment_text">
+                <t t-if="payment_type == 'outbound'">
+                    <span>I payed to</span>
+                </t>
+                <t t-else="">
+                    <span>I received from</span>
+                </t>
+                <!-- fără spațiu între noduri: ar ajunge înaintea virgulei -->
+                <strong t-field="partner.name" /><t
+                    t-if="l10n_ro_partner_details"
+                    t-out="', ' + l10n_ro_partner_details"
+                /><t t-if="l10n_ro_partner_address"><span>, from</span> <t t-out="l10n_ro_partner_address" /></t><t
+                    t-out="','"
+                />
+                <span>amount</span>
+                <strong t-out="amount" t-options='{"widget": "monetary", "display_currency": currency}' />
+                <t t-out="'(%s)' % currency.amount_to_text(amount)" />
+            </div>
+            <div t-if="documents">
+                <t t-if="documents[:1].move_type == 'out_receipt'">Representing counter value of sales receipt</t>
+                <t t-else="">Representing counter value of invoice</t>
+                <span t-out="', '.join(documents.mapped('name'))" />
+            </div>
+            <div t-elif="representing">Representing: <span t-out="representing" /></div>
+        </div>
+    </template>
+</odoo>

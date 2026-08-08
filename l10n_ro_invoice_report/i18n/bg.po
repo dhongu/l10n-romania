@@ -28,14 +28,18 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
+msgid "<span>, from</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.document_tax_totals_template
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.tax_groups_totals
 msgid "<span>-</span>"
 msgstr ""
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "<span>/</span>"
 msgstr ""
 
@@ -45,7 +49,7 @@ msgid "<span>Delegate:</span>"
 msgstr "<span>Делегат:</span>"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "<span>I received from</span>"
 msgstr "<span>Получих от</span>"
 
@@ -60,9 +64,7 @@ msgid "<span>Name:</span>"
 msgstr "<span>Име:</span>"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "<span>Payment disposal:</span>"
 msgstr "<span>Поръчка за плащане:</span>"
 
@@ -72,25 +74,17 @@ msgid "<span>Signature for receive</span>"
 msgstr "<span>Подпис за получаване</span>"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
-msgid "<span>Transfer:</span>"
-msgstr "<span>Трансфер:</span>"
-
-#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
 msgid "<span>Vat on payment</span>"
 msgstr "<span>ДДС по плащане</span>"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "<span>Voucher:</span>"
 msgstr "<span>Ваучер:</span>"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "<span>amount</span>"
 msgstr "<span>сума</span>"
 
@@ -106,8 +100,6 @@ msgstr "<strong>Сметка:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>Address:</strong>"
 msgstr "<strong>Адрес:</strong>"
 
@@ -118,20 +110,8 @@ msgstr "<strong>Банка:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>CIF:</strong>"
 msgstr "<strong>ИН:</strong>"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-msgid "<strong>Company</strong><br/>"
-msgstr "<strong>Фирма</strong><br/>"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-msgid "<strong>Customer:</strong><br/>"
-msgstr "<strong>Клиент:</strong><br/>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
@@ -145,8 +125,6 @@ msgstr "<strong>Адрес за доставка:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>NRC:</strong>"
 msgstr "<strong>ЕИК:</strong>"
 
@@ -162,8 +140,6 @@ msgstr "<strong>Приеми:</strong>"
 
 #. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
 msgid "<strong>Share Capital:</strong>"
 msgstr "<strong>Споделен капитал:</strong>"
 
@@ -183,18 +159,6 @@ msgstr "Допълнителна информация за фактура"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Amount"
 msgstr "Сума"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
-msgid "Amount (in words):"
-msgstr "Сума (на думи):"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
-msgid "Amount:"
-msgstr "Сума:"
 
 #. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_account_bank_statement
@@ -255,12 +219,6 @@ msgid "Elaborate:"
 msgstr "Изготвено:"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
-msgid "For:"
-msgstr "За:"
-
-#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Information for delivery:"
 msgstr "Информация за доставка:"
@@ -302,7 +260,7 @@ msgid "Mean transport"
 msgstr "Средство на транспорта"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "NRC:"
 msgstr "ЕИК:"
 
@@ -347,12 +305,6 @@ msgid "Quantity"
 msgstr "Количество"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
-msgid "Received from:"
-msgstr "Получено от:"
-
-#. module: l10n_ro_invoice_report
 #: model:ir.model,name:l10n_ro_invoice_report.model_report_l10n_ro_invoice_report_report_invoice_company_language
 msgid "Report Invoice in Company Language"
 msgstr "Отчет за фактура на фирмения език"
@@ -388,13 +340,12 @@ msgid "ReportVoucherPrint"
 msgstr ""
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "Representing counter value of invoice"
 msgstr "Представяне на стойността на броя на фактурата"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "Representing:"
 msgstr "Представяне:"
 
@@ -484,12 +435,6 @@ msgstr ""
 "са съпоставени. Няма нищо останало за обработка."
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_voucher
-msgid "To:"
-msgstr "До:"
-
-#. module: l10n_ro_invoice_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "Total amount"
 msgstr "Обща сума"
@@ -505,7 +450,7 @@ msgid "Unit Price"
 msgstr "Единична цена"
 
 #. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_cash_receipt
 msgid "VAT:"
 msgstr "ДДС:"
 
@@ -528,8 +473,3 @@ msgstr "Ваучер / Плащане"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.view_bank_statement_form
 msgid "e.g. BNK/2021/0001"
 msgstr "напр. BNK/2021/0001"
-
-#. module: l10n_ro_invoice_report
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
-msgid "from"
-msgstr "от"

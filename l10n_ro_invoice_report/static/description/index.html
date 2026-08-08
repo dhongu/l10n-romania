@@ -403,6 +403,11 @@ setări).</li>
 <li><strong>Gestiune documente corelate</strong>:<ul>
 <li>Tipărirea automată a chitanțelor, dispozițiilor de plată sau
 încasare direct din factură pentru plățile în numerar.</li>
+<li>Chitanța tipărită din plată și cea adăugată la finalul facturii
+folosesc <strong>același șablon</strong> (<tt class="docutils literal">report_cash_receipt</tt>): aceeași
+cutie, aceeași frază, aceeași formatare a identificatorilor și
+adresei partenerului. Este același document legal, deci trebuie să
+arate la fel indiferent de unde e tipărit.</li>
 <li>Gestionarea corectă a semnelor pentru stornări (Credit Notes).</li>
 </ul>
 </li>
@@ -423,7 +428,9 @@ plată, index linii, etc.).</li>
 <h1>Cerințe tehnice:</h1>
 <ul class="simple">
 <li>Necesită instalarea bibliotecii <tt class="docutils literal">num2words</tt>.</li>
-<li>Recomandat: <tt class="docutils literal">pip3 install <span class="pre">num2words==0.5.12</span></tt></li>
+<li>Recomandat: <tt class="docutils literal">pip3 install <span class="pre">num2words&gt;=0.5.12</span></tt></li>
+<li>Suma în litere pentru RON este formulată de <tt class="docutils literal">l10n_ro_report_common</tt>
+(<em>cinci sute lei</em>, nu <em>Cinci Sute Leu</em>).</li>
 </ul>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
