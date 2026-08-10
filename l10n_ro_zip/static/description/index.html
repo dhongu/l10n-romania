@@ -390,14 +390,15 @@ localitățile corespunzătoare.</li>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.0.0.1</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.0.0.2</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-3">19.0.0.0.1</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-6">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-7">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-7">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-8">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -405,7 +406,25 @@ localitățile corespunzătoare.</li>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-2">19.0.0.0.1</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-2">19.0.0.0.2</a></h2>
+<ul class="simple">
+<li><strong>The postal code search now matches word by word, so the word order
+no longer matters.</strong> The nomenclature spells streets named after
+people surname first (<tt class="docutils literal">Strada Balcescu Nicolae</tt>), while users type
+them the natural way round (“Nicolae Balcescu”) — and a plain
+substring match never bridged the two. The data is not even consistent
+with itself: 131 rows spell “Balcescu Nicolae” and none the reverse,
+while “Alexandru Ioan Cuza” appears both ways. Since these are largely
+the main streets of every city, a good part of the street data was
+unreachable in practice even with the search fixed in 19.0.0.0.1. A
+multi-word term is now split, and every word must match either
+<tt class="docutils literal">street_name</tt> or <tt class="docutils literal">street_type</tt>. Typing the street type along with
+the name (“Strada Mircea”) keeps working, and a single-word term
+behaves exactly as before.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-3">19.0.0.0.1</a></h2>
 <ul class="simple">
 <li><strong>Fix: searching a street name in the postal code field returned
 nothing.</strong> <tt class="docutils literal">res.zip._search_display_name()</tt> only extended the search
@@ -431,21 +450,21 @@ available on 18.0.</li>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-4">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-5">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-5">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">Authors</a></h2>
 <ul class="simple">
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-6">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -456,7 +475,7 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-8">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_zip">dhongu/l10n-romania</a> project on GitHub.</p>
