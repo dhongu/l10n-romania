@@ -6,7 +6,7 @@
     "summary": "Romania - Coduri Postale",
     "countries": ["ro"],
     "license": "AGPL-3",
-    "version": "19.0.0.0.1",
+    "version": "19.0.0.0.2",
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

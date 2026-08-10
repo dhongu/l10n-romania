@@ -32,6 +32,15 @@ class TestResZipSearch(TransactionCase):
                 "street_type": "Strada",
             }
         )
+        # spelled surname first, the way the postal nomenclature does it
+        cls.zip_3 = cls.env["res.zip"].create(
+            {
+                "name": "111222",
+                "city": "Iasi",
+                "street_name": "Zzbalcescu Nicolae",
+                "street_type": "Strada",
+            }
+        )
 
     def test_search_street_name_ilike(self):
         """The autocomplete widget searches with ilike, so the street must be found."""
@@ -53,3 +62,18 @@ class TestResZipSearch(TransactionCase):
         """Extending the domain must not break the search on the postal code."""
         zips = self.env["res.zip"].search([("display_name", "ilike", "654321")])
         self.assertIn(self.zip_2, zips)
+
+    def test_name_search_reversed_word_order(self):
+        """The nomenclature spells "Zzbalcescu Nicolae", users type it reversed."""
+        results = self.env["res.zip"].name_search("Nicolae Zzbalcescu")
+        self.assertEqual([res[0] for res in results], [self.zip_3.id])
+
+    def test_name_search_words_with_street_type(self):
+        """Typing the street type along with the name must keep working."""
+        results = self.env["res.zip"].name_search("Bulevardul Zzlibertatii")
+        self.assertIn(self.zip_1.id, [res[0] for res in results])
+
+    def test_name_search_words_must_all_match(self):
+        """Every word has to match: an extra unrelated word excludes the record."""
+        results = self.env["res.zip"].name_search("Nicolae Zzbalcescu Zzunirii")
+        self.assertNotIn(self.zip_3.id, [res[0] for res in results])
