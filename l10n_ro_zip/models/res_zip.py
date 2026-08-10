@@ -65,4 +65,27 @@ class ResZip(models.Model):
             ]
             domain = Domain.OR([domain, name_domain])
 
+        # The nomenclature spells streets named after people surname first
+        # ("Balcescu Nicolae"), while users type them the other way round
+        # ("Nicolae Balcescu") — and the data is not even consistent with itself
+        # ("Alexandru Ioan Cuza" is spelled both ways). A plain substring match
+        # therefore misses them, so match every word separately instead: the
+        # word order stops mattering, and typing the street type along with the
+        # name ("Strada Mircea") keeps working too.
+        if operator in ("ilike", "like") and isinstance(value, str):
+            words = value.split()
+            if len(words) > 1:
+                words_domain = Domain.AND(
+                    [
+                        Domain.OR(
+                            [
+                                Domain("street_name", operator, word),
+                                Domain("street_type", operator, word),
+                            ]
+                        )
+                        for word in words
+                    ]
+                )
+                domain = Domain.OR([domain, words_domain])
+
         return domain
