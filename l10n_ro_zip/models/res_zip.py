@@ -45,14 +45,24 @@ class ResZip(models.Model):
 
     @api.model
     def _search_display_name(self, operator, value):
+        # The standard domain only searches in 'name' (the postal code itself).
         domain = super()._search_display_name(operator, value)
-        if operator != "ilike":
+
+        # Extend the search to the street fields for the most common string
+        # operators. "ilike" is the operator used by the autocomplete widget,
+        # so it must be included here, otherwise typing a street name in the
+        # postal code field returns no result at all.
+        # Note: with "=" the ORM optimizes `display_name = value` into a plain
+        # `name in [value]` and never calls this method, so that branch is inert
+        # on 19.0; it is kept for symmetry with the 18.0 branch.
+        if operator in ("ilike", "like", "="):
             name_domain = [
                 "|",
                 "|",
-                ("name", "ilike", value),
-                ("street_name", "ilike", value),
-                ("street_type", "ilike", value),
+                ("name", operator, value),
+                ("street_name", operator, value),
+                ("street_type", operator, value),
             ]
             domain = Domain.OR([domain, name_domain])
+
         return domain
