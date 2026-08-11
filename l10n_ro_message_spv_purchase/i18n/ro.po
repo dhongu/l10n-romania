@@ -1,0 +1,194 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_message_spv_purchase
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-11 06:37+0000\n"
+"PO-Revision-Date: 2026-08-11 06:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid ""
+"Această acțiune este disponibilă doar pentru facturile de achiziție primite "
+"prin SPV."
+msgstr ""
+"Această acțiune este disponibilă doar pentru facturile de achiziție primite "
+"prin SPV."
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid ""
+"Acest mesaj SPV este deja legat de comanda de achiziție %(po)s. Documentul a"
+" fost deja procesat — nu-l reprocesați din nou."
+msgstr ""
+"Acest mesaj SPV este deja legat de comanda de achiziție %(po)s. Documentul a"
+" fost deja procesat — nu-l reprocesați din nou."
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/account_move.py:0
+msgid ""
+"Atenție duplicat: a fost importată din SPV factura %(inv)s pentru aceeași "
+"comandă de achiziție %(po)s."
+msgstr ""
+"Atenție duplicat: a fost importată din SPV factura %(inv)s pentru aceeași "
+"comandă de achiziție %(po)s."
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/account_move.py:0
+msgid ""
+"Atenție duplicat: comanda de achiziție %(po)s are deja factura %(inv)s. "
+"Verificați înainte de a posta factura curentă din SPV."
+msgstr ""
+"Atenție duplicat: comanda de achiziție %(po)s are deja factura %(inv)s. "
+"Verificați înainte de a posta factura curentă din SPV."
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/purchase_order.py:0
+msgid ""
+"Atenție duplicat: pentru această comandă există deja factura/facturile din "
+"SPV %(inv)s. Verificați înainte de a crea o factură nouă."
+msgstr ""
+"Atenție duplicat: pentru această comandă există deja factura/facturile din "
+"SPV %(inv)s. Verificați înainte de a crea o factură nouă."
+
+#. module: l10n_ro_message_spv_purchase
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_purchase.view_l10n_ro_message_spv_form_inherit_purchase
+msgid ""
+"Caută o comandă de achiziție după Purchase Reference/Reference și o leagă "
+"dacă este găsită"
+msgstr ""
+"Caută o comandă de achiziție după Purchase Reference/Reference și o leagă "
+"dacă este găsită"
+
+#. module: l10n_ro_message_spv_purchase
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_purchase.view_l10n_ro_message_spv_form_inherit_purchase
+msgid ""
+"Caută o comandă de achiziție; dacă nu găsește, creează una nouă și o leagă"
+msgstr ""
+"Caută o comandă de achiziție; dacă nu găsește, creează una nouă și o leagă"
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid "Copie XML din mesajul SPV %(msg)s (Ref: %(ref)s)"
+msgstr "Copie XML din mesajul SPV %(msg)s (Ref: %(ref)s)"
+
+#. module: l10n_ro_message_spv_purchase
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_purchase.view_l10n_ro_message_spv_form_inherit_purchase
+msgid "Creează Comanda"
+msgstr "Creează Comanda"
+
+#. module: l10n_ro_message_spv_purchase
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_purchase.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_purchase.field_l10n_ro_message_spv__display_name
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_purchase.field_purchase_order__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_message_spv_purchase
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_purchase.view_l10n_ro_message_spv_form_inherit_purchase
+msgid "Găsește Comanda"
+msgstr "Găsește Comanda"
+
+#. module: l10n_ro_message_spv_purchase
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_purchase.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_purchase.field_l10n_ro_message_spv__id
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_purchase.field_purchase_order__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_message_spv_purchase
+#: model:ir.model,name:l10n_ro_message_spv_purchase.model_account_move
+msgid "Journal Entry"
+msgstr "Notă contabilă"
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid "Legat din mesajul SPV %(msg)s (Ref: %(ref)s)."
+msgstr "Legat din mesajul SPV %(msg)s (Ref: %(ref)s)."
+
+#. module: l10n_ro_message_spv_purchase
+#: model:ir.model,name:l10n_ro_message_spv_purchase.model_l10n_ro_message_spv
+msgid "Message SPV"
+msgstr "Mesaj SPV"
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid "Nu a fost găsită nicio comandă de achiziție după referința '%s'."
+msgstr "Nu a fost găsită nicio comandă de achiziție după referința '%s'."
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid ""
+"Nu există o referință pentru a căuta comanda de achiziție. Completați câmpul"
+" Reference sau Purchase Reference."
+msgstr ""
+"Nu există o referință pentru a căuta comanda de achiziție. Completați câmpul"
+" Reference sau Purchase Reference."
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid ""
+"Nu există o referință pentru a căuta sau crea comanda de achiziție. "
+"Completați câmpul Reference sau Purchase Reference."
+msgstr ""
+"Nu există o referință pentru a căuta sau crea comanda de achiziție. "
+"Completați câmpul Reference sau Purchase Reference."
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid ""
+"Nu există un partener setat pe mesaj. Setați partenerul înainte de a crea "
+"comanda de achiziție."
+msgstr ""
+"Nu există un partener setat pe mesaj. Setați partenerul înainte de a crea "
+"comanda de achiziție."
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/account_move.py:0
+msgid ""
+"Posibil duplicat cross-stack SPV: există deja factura %(inv)s cu aceeași "
+"cheie de deduplicare (CUI furnizor + nr + dată + sumă). Verificați înainte "
+"de a posta."
+msgstr ""
+"Posibil duplicat cross-stack SPV: există deja factura %(inv)s cu aceeași "
+"cheie de deduplicare (CUI furnizor + nr + dată + sumă). Verificați înainte "
+"de a posta."
+
+#. module: l10n_ro_message_spv_purchase
+#: model:ir.model,name:l10n_ro_message_spv_purchase.model_purchase_order
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_purchase.field_l10n_ro_message_spv__purchase_order_id
+msgid "Purchase Order"
+msgstr "Comandă de achiziție"
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid "Purchase Orders"
+msgstr "Comenzi de achiziție"
+
+#. module: l10n_ro_message_spv_purchase
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_purchase.field_l10n_ro_message_spv__purchase_ref
+msgid "Purchase Reference"
+msgstr "Referință achiziție"
