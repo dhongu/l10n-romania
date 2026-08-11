@@ -22,9 +22,7 @@ class StockPickingWeightLine(models.Model):
         # în `move.product_uom`, care poate diferi de UoM-ul de bază al
         # produsului (ex. cutie/palet) — se convertește înainte de înmulțirea
         # cu greutățile per unitate de bază.
-        qty_base = move.product_uom._compute_quantity(
-            move.quantity, move.product_id.uom_id, raise_if_failure=False
-        )
+        qty_base = move.product_uom._compute_quantity(move.quantity, move.product_id.uom_id, raise_if_failure=False)
         self.net_weight = move.product_id.l10n_ro_net_weight * qty_base
         self.gross_weight = move.product_id.weight * qty_base
         self.weight_uom_id = self.env["product.template"]._get_weight_uom_id_from_ir_config_parameter()
