@@ -464,12 +464,21 @@ class Picking(models.Model):
             vals = []
             for move in picking.move_ids:
                 if move.quantity > 0:
+                    # `l10n_ro_net_weight`/`weight` sunt per unitate din UoM-ul
+                    # de bază al produsului, dar `move.quantity` e exprimat în
+                    # `move.product_uom`, care poate fi o UoM secundară (ex.
+                    # cutie/palet) — trebuie convertită la bază înainte de
+                    # înmulțire, altfel greutatea iese greșită cu exact
+                    # factorul de conversie dintre cele două UoM-uri.
+                    qty_base = move.product_uom._compute_quantity(
+                        move.quantity, move.product_id.uom_id, raise_if_failure=False
+                    )
                     vals.append(
                         {
                             "picking_id": picking.id,
                             "move_id": move.id,
-                            "net_weight": move.product_id.l10n_ro_net_weight * move.quantity,
-                            "gross_weight": move.product_id.weight * move.quantity,
+                            "net_weight": move.product_id.l10n_ro_net_weight * qty_base,
+                            "gross_weight": move.product_id.weight * qty_base,
                             "weight_uom_id": self.env["product.template"]
                             ._get_weight_uom_id_from_ir_config_parameter()
                             .id,
