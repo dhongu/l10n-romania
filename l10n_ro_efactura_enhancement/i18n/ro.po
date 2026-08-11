@@ -1,0 +1,425 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_efactura_enhancement
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-11 06:37+0000\n"
+"PO-Revision-Date: 2026-08-11 06:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid " … (+%s)"
+msgstr " … (+%s)"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:mail.template,body_html:l10n_ro_efactura_enhancement.mail_template_l10n_ro_spv_cron_report
+msgid ""
+"<div>\n"
+"                <p>\n"
+"                    Raport rulare cron trimitere e-Factura în SPV —\n"
+"                    <strong t-out=\"object.name\">Companie</strong>\n"
+"                    <br/>\n"
+"                    Data rulării:\n"
+"                    <t t-out=\"ctx.get('spv_run')\">—</t>\n"
+"                </p>\n"
+"                <p>\n"
+"                    Total facturi procesate la această rulare:\n"
+"                    <strong t-out=\"ctx.get('spv_total')\">0</strong>\n"
+"                </p>\n"
+"                <table style=\"border-collapse:collapse;font-size:13px;\">\n"
+"                    <tr style=\"background:#f5f5f5;\">\n"
+"                        <th style=\"padding:4px 8px;border:1px solid #ddd;text-align:left;\">Categorie</th>\n"
+"                        <th style=\"padding:4px 8px;border:1px solid #ddd;\">Nr.</th>\n"
+"                        <th style=\"padding:4px 8px;border:1px solid #ddd;text-align:left;\">Facturi</th>\n"
+"                    </tr>\n"
+"                    <t t-foreach=\"ctx.get('spv_rows', [])\" t-as=\"row\">\n"
+"                        <tr>\n"
+"                            <td style=\"padding:4px 8px;border:1px solid #ddd;\" t-out=\"row[0]\"/>\n"
+"                            <td style=\"padding:4px 8px;border:1px solid #ddd;text-align:right;\"><strong t-out=\"row[1]\">0</strong></td>\n"
+"                            <td style=\"padding:4px 8px;border:1px solid #ddd;color:#666;\" t-out=\"row[2]\"/>\n"
+"                        </tr>\n"
+"                    </t>\n"
+"                </table>\n"
+"            </div>\n"
+"        "
+msgstr ""
+"<div>\n"
+"                <p>\n"
+"                    Raport rulare cron trimitere e-Factura în SPV —\n"
+"                    <strong t-out=\"object.name\">Companie</strong>\n"
+"                    <br/>\n"
+"                    Data rulării:\n"
+"                    <t t-out=\"ctx.get('spv_run')\">—</t>\n"
+"                </p>\n"
+"                <p>\n"
+"                    Total facturi procesate la această rulare:\n"
+"                    <strong t-out=\"ctx.get('spv_total')\">0</strong>\n"
+"                </p>\n"
+"                <table style=\"border-collapse:collapse;font-size:13px;\">\n"
+"                    <tr style=\"background:#f5f5f5;\">\n"
+"                        <th style=\"padding:4px 8px;border:1px solid #ddd;text-align:left;\">Categorie</th>\n"
+"                        <th style=\"padding:4px 8px;border:1px solid #ddd;\">Nr.</th>\n"
+"                        <th style=\"padding:4px 8px;border:1px solid #ddd;text-align:left;\">Facturi</th>\n"
+"                    </tr>\n"
+"                    <t t-foreach=\"ctx.get('spv_rows', [])\" t-as=\"row\">\n"
+"                        <tr>\n"
+"                            <td style=\"padding:4px 8px;border:1px solid #ddd;\" t-out=\"row[0]\"/>\n"
+"                            <td style=\"padding:4px 8px;border:1px solid #ddd;text-align:right;\"><strong t-out=\"row[1]\">0</strong></td>\n"
+"                            <td style=\"padding:4px 8px;border:1px solid #ddd;color:#666;\" t-out=\"row[2]\"/>\n"
+"                        </tr>\n"
+"                    </t>\n"
+"                </table>\n"
+"            </div>\n"
+"        "
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_account_move_send
+msgid "Account Move Send"
+msgstr "Trimitere mișcare cont"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_account_move_send_wizard
+msgid "Account Move Send Wizard"
+msgstr "Asistent trimitere mișcare cont"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,help:l10n_ro_efactura_enhancement.field_res_company__l10n_ro_spv_cron_report_email
+#: model:ir.model.fields,help:l10n_ro_efactura_enhancement.field_res_config_settings__l10n_ro_spv_cron_report_email
+msgid ""
+"Adrese de email (separate prin virgula) care primesc statistica dupa fiecare"
+" rulare a cronului de trimitere in SPV. Daca e gol, raportul nu se trimite."
+msgstr ""
+"Adrese de email (separate prin virgulă) care primesc statistica după fiecare"
+" rulare a cronului de trimitere în SPV. Dacă e gol, raportul nu se trimite."
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid ""
+"Adrese de email (separate prin virgulă) care primesc statistica după fiecare"
+" rulare a cronului. Dacă e gol, raportul nu se trimite."
+msgstr ""
+"Adrese de email (separate prin virgulă) care primesc statistica după fiecare"
+" rulare a cronului. Dacă e gol, raportul nu se trimite."
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid ""
+"Adrese de email care primesc statistica după fiecare rulare a cronului de "
+"trimitere în SPV. Dacă e gol, raportul nu se trimite."
+msgstr ""
+"Adrese de email care primesc statistica după fiecare rulare a cronului de "
+"trimitere în SPV. Dacă e gol, raportul nu se trimite."
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_account_edi_ubl
+msgid "Base helpers for UBL"
+msgstr "Ajutoare de bază pentru UBL"
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid ""
+"Bifați dacă nu doriți ca facturile primite în SPV să fie create automat ca "
+"ciorne. Restul sincronizării cu ANAF rămâne neschimbat."
+msgstr ""
+"Bifați dacă nu doriți ca facturile primite în SPV să fie create automat ca "
+"ciorne. Restul sincronizării cu ANAF rămâne neschimbat."
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_account_edi_xml_ubl_ro
+msgid "CIUS RO"
+msgstr "CIUS RO"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,help:l10n_ro_efactura_enhancement.field_res_company__l10n_ro_edi_no_auto_bill
+#: model:ir.model.fields,help:l10n_ro_efactura_enhancement.field_res_config_settings__l10n_ro_edi_no_auto_bill
+msgid ""
+"Cand este activat, cronul nativ „E-Factura: Synchronize with ANAF” nu mai "
+"creeaza automat ciorne de facturi de la furnizori din mesajele primite in "
+"SPV. Sincronizarea statusului facturilor trimise (acceptat/refuzat) ramane "
+"activa."
+msgstr ""
+"Când este activat, cronul nativ „E-Factura: Synchronize with ANAF” nu mai "
+"creează automat ciorne de facturi de la furnizori din mesajele primite în "
+"SPV. Sincronizarea statusului facturilor trimise (acceptat/refuzat) rămâne "
+"activă."
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_res_company
+msgid "Companies"
+msgstr "Companii"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_res_config_settings
+msgid "Config Settings"
+msgstr "Setări de configurare"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid ""
+"Cron-ul de trimitere automată în SPV nu va trimite facturile și pe email."
+msgstr ""
+"Cron-ul de trimitere automată în SPV nu va trimite facturile și pe email."
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid ""
+"Când este activat, cron-ul de trimitere automată în SPV nu va trimite "
+"facturile și pe email."
+msgstr ""
+"Când este activat, cron-ul de trimitere automată în SPV nu va trimite "
+"facturile și pe email."
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid ""
+"Când este activat, cron-ul nativ „E-Factura: Synchronize with ANAF” nu mai "
+"creează automat ciorne de facturi de la furnizori din SPV. Sincronizarea "
+"statusului facturilor trimise (acceptat/refuzat) rămâne activă."
+msgstr ""
+"Când este activat, cron-ul nativ „E-Factura: Synchronize with ANAF” nu mai "
+"creează automat ciorne de facturi de la furnizori din SPV. Sincronizarea "
+"statusului facturilor trimise (acceptat/refuzat) rămâne activă."
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move_line__l10n_ro_label_length
+msgid "Desc. length"
+msgstr "Lungime desc."
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_edi_ubl__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_edi_xml_ubl_bis3__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_edi_xml_ubl_ro__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move_send__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move_send_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.actions.server,name:l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_fetch_status_ir_actions_server
+msgid "E-Factura: Fetch From SPV"
+msgstr "e-Factura: Preluare din SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.actions.server,name:l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send_ir_actions_server
+msgid "E-Factura: Send TO SPV"
+msgstr "e-Factura: Trimitere în SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.actions.server,name:l10n_ro_efactura_enhancement.ir_cron_l10n_ro_spv_send_validated_emails_ir_actions_server
+msgid "E-Factura: Trimite email facturi validate"
+msgstr "E-Factura: Trimite email facturi validate"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_bank_statement_line__l10n_ro_spv_validated_email_sent
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move__l10n_ro_spv_validated_email_sent
+msgid "Email factură trimis după validare SPV"
+msgstr "Email factură trimis după validare SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_company__l10n_ro_spv_cron_report_email
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_config_settings__l10n_ro_spv_cron_report_email
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid "Email raport cron SPV"
+msgstr "Email raport cron SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "Eșuate la această rulare"
+msgstr "Eșuate la această rulare"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid ""
+"Facturile selectate au clienti din afara Romaniei si nu pot fi trimise in "
+"SPV."
+msgstr ""
+"Facturile selectate au clienți din afara României și nu pot fi trimise în "
+"SPV."
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_edi_ubl__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_edi_xml_ubl_bis3__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_edi_xml_ubl_ro__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move_line__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move_send__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move_send_wizard__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_account_move
+msgid "Journal Entry"
+msgstr "Notă contabilă"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_account_move_line
+msgid "Journal Item"
+msgstr "Element jurnal"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_edi_ubl_import.py:0
+msgid ""
+"Line %(line)s: the unit price declared by the supplier (BT-146 %(price)s for"
+" a base quantity BT-149 of %(base_quantity)s) is inconsistent with the line "
+"net amount (BT-131 %(line_amount)s). The line was recomputed from the line "
+"net amount, which is the mandatory and authoritative value."
+msgstr ""
+"Linia %(line)s: prețul unitar declarat de furnizor (BT-146 %(price)s pentru "
+"o cantitate de bază BT-149 de %(base_quantity)s) este inconsistent cu "
+"valoarea netă a liniei (BT-131 %(line_amount)s). Linia a fost recalculată "
+"din valoarea netă a liniei, care este valoarea obligatorie și autoritară."
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "Nu exista facturi confirmate selectate pentru trimitere in SPV."
+msgstr "Nu există facturi confirmate selectate pentru trimitere în SPV."
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_company__l10n_ro_edi_no_auto_bill
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_config_settings__l10n_ro_edi_no_auto_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid "Nu importa automat facturile primite din SPV"
+msgstr "Nu importă automat facturile primite din SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_account_move_line__l10n_ro_product_length
+msgid "Prod. length"
+msgstr "Lungime prod."
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.l10n_ro_invoice_form_view
+msgid "Retrimite în SPV"
+msgstr "Retrimite în SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "Reîncercări (eșuaseră anterior)"
+msgstr "Reîncercări (eșuaseră anterior)"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "Sărite — reîncercări epuizate (necesită atenție)"
+msgstr "Sărite — reîncercări epuizate (necesită atenție)"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/spv_request.py:0
+msgid ""
+"The SPV answered with an empty body on %(endpoint)s. Please try again later."
+msgstr ""
+"SPV a răspuns cu un corp gol pe %(endpoint)s. Încercați din nou mai târziu."
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/spv_request.py:0
+msgid "The SPV answered with unexpected content on %(endpoint)s: %(detail)s"
+msgstr "SPV a răspuns cu un conținut neașteptat pe %(endpoint)s: %(detail)s"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "Trimise în SPV — în așteptare validare"
+msgstr "Trimise în SPV — în așteptare validare"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.actions.server,name:l10n_ro_efactura_enhancement.action_send_invoices_to_spv_only
+msgid "Trimite in SPV"
+msgstr "Trimite în SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_company__l10n_ro_spv_cron_no_email
+#: model:ir.model.fields,field_description:l10n_ro_efactura_enhancement.field_res_config_settings__l10n_ro_spv_cron_no_email
+msgid "Trimite in SPV fara email (cron)"
+msgstr "Trimite în SPV fără email (cron)"
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid "Trimite în SPV fără email (cron)"
+msgstr "Trimite în SPV fără email (cron)"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:ir.model,name:l10n_ro_efactura_enhancement.model_account_edi_xml_ubl_bis3
+msgid "UBL BIS Billing 3.0.12"
+msgstr "UBL BIS Facturare 3.0.12"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "Validate de SPV"
+msgstr "Validate de SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "You can not post invoice without city for partner: %s"
+msgstr "Nu puteți posta factura fără localitate pentru partenerul: %s"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "You can not post invoice without country for partner: %s"
+msgstr "Nu puteți posta factura fără țară pentru partenerul: %s"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "You can not post invoice without state for partner: %s"
+msgstr "Nu puteți posta factura fără județ pentru partenerul: %s"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid "You can not post invoice without street for partner: %s"
+msgstr "Nu puteți posta factura fără stradă pentru partenerul: %s"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:mail.template,subject:l10n_ro_efactura_enhancement.mail_template_l10n_ro_spv_cron_report
+msgid "[{{ object.name }}] Raport e-Factura SPV"
+msgstr "[{{ object.name }}] Raport e-Factura SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid "contabilitate@firma.ro, manager@firma.ro"
+msgstr "contabilitate@firma.ro, manager@firma.ro"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:mail.template,name:l10n_ro_efactura_enhancement.mail_template_l10n_ro_spv_cron_report
+msgid "e-Factura SPV: Raport rulare cron"
+msgstr "e-Factura SPV: Raport rulare cron"
+
+#. module: l10n_ro_efactura_enhancement
+#: model:spreadsheet.dashboard,name:l10n_ro_efactura_enhancement.spreadsheet_dashboard_efactura
+#: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
+msgid "eFactura SPV"
+msgstr "eFactura SPV"
