@@ -1,3 +1,16 @@
+## 19.0.0.7.3
+
+**Corecție** — greutatea netă/brută ieșea greșită când mișcarea de stoc era
+în altă UoM decât baza produsului.
+
+`net_weight`/`gross_weight` (atât la „Get lines" cât și la adăugarea manuală
+a unei linii de greutate) înmulțeau `move.quantity` direct cu
+`l10n_ro_net_weight`/`weight`, câmpuri exprimate per unitate din UoM-ul de
+bază al produsului. Când produsul era livrat într-o UoM secundară (ex.
+cutie/palet, nu kg), rezultatul ieșea greșit cu exact factorul de conversie
+dintre cele două unități. Cantitatea e convertită acum explicit la UoM-ul de
+bază al produsului înainte de înmulțire.
+
 ## 19.0.0.7.2
 
 **Îmbunătățire** — locație de start specifică pentru transportul pe teritoriul național.
