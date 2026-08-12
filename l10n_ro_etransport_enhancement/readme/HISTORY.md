@@ -1,3 +1,18 @@
+## 19.0.0.7.4
+
+**Îmbunătățire** — coloana mișcării, în lista de linii de greutate, nu identifica produsul.
+
+Coloana `move_id` din lista **Shipping Weight Lines** afișa `display_name`-ul
+standard al mișcării de stoc (`origine/cod_produs: locație>locație_destinație`),
+care nu include denumirea produsului — doar codul intern, și doar dacă produsul
+are cod setat. Când o livrare avea mai multe linii de greutate, acestea puteau
+ieși identice și imposibil de distins vizual (ex. două linii arătând ambele
+„S00011/Stoc>Customers"). Contextul `show_product_in_move`, deja transmis de
+view dar neconsumat până acum, este folosit acum într-un override al
+`stock.move._compute_display_name`: când e prezent în context, coloana arată
+direct denumirea produsului. Comportamentul standard al `display_name`-ului
+(fără acest context) rămâne neschimbat oriunde altundeva.
+
 ## 19.0.0.7.3
 
 **Corecție** — greutatea netă/brută ieșea greșită când mișcarea de stoc era
