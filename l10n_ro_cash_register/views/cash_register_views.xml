@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <list>
                 <header>
+                    <button name="action_print" string="Print" type="object" icon="fa-print" />
                     <button name="action_refresh" string="Refresh" type="object" />
                 </header>
                 <field name="name" />
@@ -26,6 +27,7 @@
         <field name="arch" type="xml">
             <form string="Cash Register">
                 <header>
+                    <button name="action_print" string="Print" type="object" icon="fa-print" />
                     <button name="action_refresh" string="Refresh" type="object" />
                     <button name="action_receipt" string="Add Receipt" type="object" />
                     <button name="action_payment" string="Add Payment" type="object" />
