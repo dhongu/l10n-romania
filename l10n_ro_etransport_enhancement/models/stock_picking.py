@@ -55,7 +55,9 @@ class Picking(models.Model):
     total_net_weight = fields.Float()
     total_gross_weight = fields.Float()
     l10n_ro_shipping_weight_lines_warning = fields.Char(compute="_compute_l10n_ro_shipping_weight_lines_warning")
-    l10n_ro_transport_partner_id = fields.Many2one("res.partner", string="Transport Partner")
+    # index=True: coloană FK spre res_partner pe stock_picking (tabelă mare). Fără index,
+    # ștergerea sau unificarea unui partener scanează secvențial toată tabela per rând.
+    l10n_ro_transport_partner_id = fields.Many2one("res.partner", string="Transport Partner", index=True)
     # Documentele însoțitoare declarate la ANAF (CMR, factură, aviz…). Nativ,
     # `l10n_ro_edi_stock` trimite UN SINGUR document, hardcodat ca aviz (tip 30)
     # cu numărul transferului — deci CMR-ul sau numărul real de aviz nu ajungeau
@@ -71,6 +73,7 @@ class Picking(models.Model):
     l10n_ro_etransport_start_address = fields.Many2one(
         "res.partner",
         string="Specific Start Location",
+        index=True,  # vezi nota de la l10n_ro_transport_partner_id
     )
 
     def l10n_ro_etransport_add_default_documents(self):

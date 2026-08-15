@@ -9,10 +9,14 @@ from odoo import api, fields, models
 class AccountInvoice(models.Model):
     _inherit = "account.move"
 
+    # index=True: coloană FK spre res_partner pe account_move (peste 400 MB la clienți cu
+    # volum). Fără index, ștergerea sau unificarea unui partener scanează secvențial toată
+    # tabela pentru fiecare rând atins.
     delegate_id = fields.Many2one(
         "res.partner",
         string="Delegate",
         domain=[("is_company", "=", False)],
+        index=True,
     )
 
     mean_transp = fields.Char(

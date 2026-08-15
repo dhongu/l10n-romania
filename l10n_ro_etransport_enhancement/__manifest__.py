@@ -4,7 +4,7 @@
 
 {
     "name": "eTransport Enhancement",
-    "version": "19.0.0.7.4",
+    "version": "19.0.0.7.5",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport enhancement",

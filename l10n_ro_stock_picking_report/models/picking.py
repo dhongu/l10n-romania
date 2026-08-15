@@ -11,7 +11,9 @@ class StockPicking(models.Model):
         self.ensure_one()
         return f"{self.picking_type_id.name} {self.name}"
 
-    delegate_id = fields.Many2one("res.partner", string="Delegate")
+    # index=True: vezi nota din deltatech_cmr_document — același câmp e definit în ambele
+    # module, deci atributul trebuie pus în amândouă (ultimul modul încărcat dictează).
+    delegate_id = fields.Many2one("res.partner", string="Delegate", index=True)
     mean_transp = fields.Char(string="Mean transport")
 
     l10n_ro_notice = fields.Boolean()  # camp definit in modulul de localizare
