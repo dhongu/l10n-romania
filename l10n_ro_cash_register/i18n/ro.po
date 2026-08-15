@@ -301,7 +301,7 @@ msgstr "Explicații"
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__balance_end
 msgid "Finished Balance"
-msgstr "Sold calculat"
+msgstr "Sold final"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_follower_ids
