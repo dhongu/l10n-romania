@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- © 2026 Terrabit
+     Dorin Hongu <dhongu(@)gmail(.)com
+     See README.rst file on addons root folder for license details -->
+<odoo>
+
+    <record id="view_account_journal_form" model="ir.ui.view">
+        <field name="name">account.journal.form.l10n.ro.self.billing</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form" />
+        <field name="arch" type="xml">
+            <field name="refund_sequence" position="after">
+                <!-- On non-Romanian companies the l10n.ro.mixin applied to
+                     account.journal by l10n_ro_config hides every l10n_ro
+                     field, so only the journal type needs gating here. -->
+                <field
+                    name="l10n_ro_spv_number_from_message"
+                    invisible="type not in ['sale', 'purchase']"
+                />
+            </field>
+        </field>
+    </record>
+
+</odoo>
