@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests import tagged
+from odoo.tools import mute_logger
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -14,7 +15,18 @@ class TestSelfBillingNumber(AccountTestInvoicingCommon):
     @AccountTestInvoicingCommon.setup_country("ro")
     def setUpClass(cls):
         super().setUpClass()
-        cls.customer = cls.env["res.partner"].create({"name": "HORNBACH Test", "country_id": cls.env.ref("base.ro").id})
+        cls.customer = cls.env["res.partner"].create(
+            {
+                "name": "HORNBACH Test",
+                "country_id": cls.env.ref("base.ro").id,
+                # l10n_ro_efactura_enhancement, in this same repo, refuses
+                # to post an invoice whose Romanian partner has no state, city
+                # or street.
+                "state_id": cls.env.ref("base.RO_TM").id,
+                "city": "Timisoara",
+                "street": "Calea Aradului 1",
+            }
+        )
         cls.journal = cls.env["account.journal"].create(
             {
                 "name": "Autofacturi",
@@ -83,6 +95,7 @@ class TestSelfBillingNumber(AccountTestInvoicingCommon):
 
         self.assertEqual(refund.name, name_before)
 
+    @mute_logger("odoo.addons.l10n_ro_message_spv_self_billing.models.message_spv")
     def test_duplicate_number_keeps_the_sequence(self):
         """If the number is already used in the journal, keep the sequence:
         writing it would only produce a draft that cannot be posted."""
