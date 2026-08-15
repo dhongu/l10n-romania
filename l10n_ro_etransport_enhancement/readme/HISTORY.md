@@ -1,3 +1,8 @@
+## 19.0.0.7.5 (2026-08-15)
+
+- Imp: `l10n_ro_transport_partner_id` and `l10n_ro_etransport_start_address` are now indexed. Both are foreign keys to `res_partner` on `stock_picking`, one of the largest tables on high-volume instances.
+  Context: `res_partner` is referenced by ~158 foreign-key columns; on a production database 77 of them had no index, so a single partner deletion triggered sequential scans over 3.180 MB of tables. Deleting 5.350 merged partner records took over 8 minutes without indexes and 190 seconds with them, foreign keys left ENABLED.
+
 ## 19.0.0.7.4
 
 **Îmbunătățire** — coloana mișcării, în lista de linii de greutate, nu identifica produsul.
