@@ -24,27 +24,24 @@
                             </div>
 
                             <h2>Cash Register</h2>
+                            <div id="form_code" class="small text-muted">Form code 14-4-7A</div>
 
                             <div id="general_data" class="row">
                                 <div class="col-3">
-                                    <strong>Name</strong>:
-                                    <br />
-                                    <span t-field="o.name" />
+                                    <div><strong>Number</strong></div>
+                                    <div><span t-field="o.name" /></div>
                                 </div>
                                 <div class="col-3">
-                                    <strong>Opening Date</strong>:
-                                    <br />
-                                    <span t-field="o.date" />
+                                    <div><strong>Opening Date</strong></div>
+                                    <div><span t-field="o.date" /></div>
                                 </div>
                                 <div class="col-3">
-                                    <strong>Journal</strong>:
-                                    <br />
-                                    <span t-field="o.journal_id" />
+                                    <div><strong>Journal</strong></div>
+                                    <div><span t-field="o.journal_id" /></div>
                                 </div>
                                 <div class="col-3">
-                                    <strong>User</strong>:
-                                    <br />
-                                    <span t-field="user.name" />
+                                    <div><strong>User</strong></div>
+                                    <div><span t-field="user.name" /></div>
                                 </div>
                             </div>
                             <div class="row">
@@ -53,8 +50,9 @@
                                 <thead>
                                     <tr>
                                         <th>Ord</th>
-                                        <th>Name</th>
-                                        <th>Ref</th>
+                                        <th>Cash Document</th>
+                                        <th class="text-center">Annexes</th>
+                                        <th>Explanations</th>
                                         <th>Partner</th>
                                         <th class="text-end">Receipts</th>
                                         <th class="text-end">Payment</th>
@@ -63,22 +61,17 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td id="st_balance" class="text-left" colspan="3">
-                                            <strong>Starting Balance</strong>
+                                        <td id="st_balance" class="text-left" colspan="5">
+                                            <strong>Balance carried forward from the previous day</strong>
                                         </td>
                                         <td class="text-end">
-
                                         </td>
                                         <td class="text-end">
-
-                                        </td>
-                                        <td class="text-end">
-
                                         </td>
                                         <td id="st_balance_value" class="text-end">
                                             <strong
                                             t-esc="o.balance_start"
-                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                         />
                                         </td>
                                     </tr>
@@ -93,8 +86,12 @@
                                         <td id="name">
                                             <span t-field="line.move_name" />
                                         </td>
+                                        <td id="annexes" class="text-center">
+                                            <t t-set="annex_count" t-value="line._l10n_ro_annex_count()" />
+                                            <span t-if="annex_count" t-esc="annex_count" />
+                                        </td>
                                         <td id="ref">
-                                            <span t-field="line.ref" />
+                                            <span t-esc="line.name or line.ref" />
                                         </td>
                                         <td id="partner_name">
                                             <span t-esc="line.partner_id.name" />
@@ -104,7 +101,7 @@
                                             <t t-if="line.balance&gt;0">
                                                 <span
                                                 t-field="line.balance"
-                                                t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                             />
                                                 <t t-set="sold_inc" t-value="sold_inc+line.balance" />
                                             </t>
@@ -113,7 +110,7 @@
                                             <t t-if="line.balance&lt;0">
                                                 <span
                                                 t-esc="-1*line.balance"
-                                                t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                             />
                                                 <t t-set="sold_plt" t-value="sold_plt-line.balance" />
                                             </t>
@@ -122,54 +119,73 @@
                                             <t t-set="sold" t-value="sold+line.balance" />
                                             <span
                                             t-esc="sold"
-                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                         />
                                         </td>
                                         <t t-set="index_l" t-value="index_l + 1" />
                                     </tr>
                                     <tr>
-                                        <td id="final_balance" class="text-left" colspan="4">
-                                            <strong>Sold Final:</strong>
+                                        <td id="total_receipts_label" class="text-left" colspan="5">
+                                            <strong>Total receipts</strong>
                                         </td>
-
-                                        <td id="start_balance" class="text-end">
+                                        <td id="total_receipts" class="text-end">
                                             <strong
                                             t-esc="sold_inc"
-                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                         />
                                         </td>
-                                        <td id="sold_plt" class="text-end">
+                                        <td class="text-end">
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="total_payments_label" class="text-left" colspan="5">
+                                            <strong>Total payments</strong>
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                        <td id="total_payments" class="text-end">
                                             <strong
                                             t-esc="sold_plt"
-                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                         />
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="final_balance" class="text-left" colspan="5">
+                                            <strong>Balance at the end of the day</strong>
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                        <td class="text-end">
                                         </td>
                                         <td id="end_balance" class="text-end">
                                             <strong
                                             t-esc="o.balance_end"
-                                            t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                         />
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-<!--                            <div class="row">-->
-<!--                                <div class="col-xs-4 pull-right">-->
-<!--                                    <table class="table table-condensed">-->
-<!--                                        <tr class="border-black">-->
-<!--                                            <td>-->
-<!--                                                <strong>Total</strong>-->
-<!--                                            </td>-->
-<!--                                            <td class="text-end">-->
-<!--                                                <span-->
-<!--                                                t-esc="sum([line.balance for line in o.move_line_ids])"-->
-<!--                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"-->
-<!--                                            />-->
-<!--                                            </td>-->
-<!--                                        </tr>-->
-<!--                                    </table>-->
-<!--                                </div>-->
-<!--                            </div>-->
+
+                            <div id="signatures" class="row mt-4">
+                                <div class="col-6">
+                                    <div><strong>Cashier</strong></div>
+                                    <div class="mt-5">..............................................</div>
+                                </div>
+                                <div class="col-6">
+                                    <div><strong>Financial-accounting department</strong></div>
+                                    <div class="mt-5">..............................................</div>
+                                </div>
+                            </div>
+
+                            <div id="software_signature" class="small text-muted mt-3">
+                                <span t-esc="o._l10n_ro_software_signature()" />
+                            </div>
                         </div>
                     </t>
                 </t>

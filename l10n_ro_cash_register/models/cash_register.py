@@ -4,7 +4,7 @@ from datetime import date
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models
+from odoo import api, fields, models, release
 from odoo.orm.identifiers import NewId
 from odoo.tools import date_utils
 
@@ -224,8 +224,13 @@ class CashRegister(models.Model):
                 [
                     ("date", "=", record.date),
                     ("account_id", "=", record.journal_id.default_account_id.id),
+                    ("company_id", "=", record.company_id.id),
                     ("move_id.state", "=", "posted"),
-                ]
+                ],
+                # Registrul de casă listează operațiunile în ordinea în care s-au petrecut;
+                # ordinea implicită a liniilor contabile este descrescătoare și ar produce
+                # solduri intermediare care nu au existat niciodată.
+                order="date, id",
             )
             record.move_line_ids = move_lines
             record.move_ids = move_lines.mapped("move_id")
@@ -282,6 +287,18 @@ class CashRegister(models.Model):
         self._compute_move_ids()
         return True
 
+    def action_print(self):
+        return self.env.ref("l10n_ro_cash_register.action_report_cash_register").report_action(self)
+
+    def _l10n_ro_software_signature(self):
+        """Programul informatic și versiunea, obligatorii pe orice listare.
+
+        OMFP 2634/2015, Anexa 1 pct. 58 lit. k).
+        """
+        self.ensure_one()
+        module = self.env["ir.module.module"].sudo().search([("name", "=", "l10n_ro_cash_register")], limit=1)
+        return f"Odoo {release.version} / l10n_ro_cash_register {module.latest_version or ''}".strip()
+
     def action_receipt(self):
         action = self.journal_id.open_payments_action("inbound", "form")
         action["context"].update(
@@ -307,15 +324,3 @@ class CashRegister(models.Model):
         }
         action["target"] = "new"
         return action
-
-    def action_recompute_from_previous_balance(self):
-        for register in self.sorted(key=lambda p: p.date, reverse=True):
-            previous_register = self.search([("journal_id", "=", register.journal_id.id)], order="date DESC", limit=1)
-            if not previous_register:
-                balance = register.balance_start
-            else:
-                balance = previous_register.balance_end
-            register.write({"balance_start": balance})
-            for line in register.move_line_ids:
-                balance += line.balance
-            register.write({"balance_end": balance})
