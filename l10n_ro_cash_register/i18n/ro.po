@@ -62,6 +62,16 @@ msgstr ""
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Balance at the end of the day</strong>"
+msgstr "<strong>Sold la sfârșitul zilei</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Balance carried forward from the previous day</strong>"
+msgstr "<strong>Sold reportat din ziua precedentă</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 msgid "<strong>Sold Final:</strong>"
 msgstr ""
 
@@ -81,6 +91,46 @@ msgid ""
 "<strong>User</strong>:\n"
 "                                    <br/>"
 msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Cashier</strong>"
+msgstr "<strong>Casier</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Financial-accounting department</strong>"
+msgstr "<strong>Compartiment financiar-contabil</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Journal</strong>"
+msgstr "<strong>Jurnal</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Number</strong>"
+msgstr "<strong>Număr</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Opening Date</strong>"
+msgstr "<strong>Data</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Total payments</strong>"
+msgstr "<strong>Total plăți</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Total receipts</strong>"
+msgstr "<strong>Total încasări</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>User</strong>"
+msgstr "<strong>Utilizator</strong>"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__counterpart_account_id
@@ -128,6 +178,11 @@ msgid "Amount"
 msgstr "Suma"
 
 #. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Annexes"
+msgstr "Nr. anexe"
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
@@ -136,6 +191,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_operation_form
 msgid "Cancel"
 msgstr "Abandon"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Cash Document"
+msgstr "Nr. act de casă"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_register_operation__operation__in
@@ -234,6 +294,11 @@ msgid "Duplicate date"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Explanations"
+msgstr "Explicații"
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__balance_end
 msgid "Finished Balance"
 msgstr "Sold calculat"
@@ -252,6 +317,11 @@ msgstr ""
 #: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
 msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Form code 14-4-7A"
+msgstr "Cod formular 14-4-7A"
 
 #. module: l10n_ro_cash_register
 #: model:ir.actions.server,name:l10n_ro_cash_register.action_generate_missing_cash_register
@@ -426,7 +496,7 @@ msgstr "Partener"
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 msgid "Payment"
-msgstr "Plată"
+msgstr "Plăți"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model,name:l10n_ro_cash_register.model_account_payment
@@ -441,7 +511,7 @@ msgstr "Tipărire"
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 msgid "Receipts"
-msgstr "Încasari"
+msgstr "Încasări"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
