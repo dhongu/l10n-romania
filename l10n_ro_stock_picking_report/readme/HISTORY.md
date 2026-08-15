@@ -1,3 +1,8 @@
+## 19.0.1.3.2 (2026-08-15)
+
+- Imp: `stock.picking.delegate_id` is now indexed. The same field is declared in `deltatech_cmr_document`, so the attribute is set in both modules — the last one loaded decides.
+  Context: `res_partner` is referenced by ~158 foreign-key columns; on a production database 77 of them had no index, so a single partner deletion triggered sequential scans over 3.180 MB of tables. Deleting 5.350 merged partner records took over 8 minutes without indexes and 190 seconds with them, foreign keys left ENABLED.
+
 ## 19.0.1.3.1
 
 - **Fix:** internal transfer report no longer crashes with
