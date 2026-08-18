@@ -72,6 +72,13 @@ class StorageSheet(models.TransientModel):
         positive magnitude so it nets to zero on the on-hand balance (it is
         intentionally excluded from the initial/final queries, which only look
         at internal locations).
+
+        ``account_id`` must carry ``sm.l10n_ro_account_id``: the storage sheet
+        groups its rows by account, so a NULL here files every dropship line
+        under a separate "no account" group instead of under the goods account
+        (371000) the movement is actually valued on. Up to 18.0 the account came
+        from the valuation layer, so dropping it on the 19.0 port silently made
+        the dropship rows disappear from the account they belong to.
         """
         field, select, join, group = self._get_lot_fields()
         amount = f"amount_{column}"
@@ -94,7 +101,7 @@ class StorageSheet(models.TransientModel):
                     THEN COALESCE(sum(sm.value),0) / NULLIF(sum(sm.quantity), 0)
                 ELSE 0
             END as {unit_price},
-            NULL::int as account_id,
+            sm.l10n_ro_account_id as account_id,
             NULL::int as invoice_id,
             sm.date as date_time,
             date_trunc('day', sm.date at time zone 'utc' at time zone %(tz)s) as date,
@@ -120,6 +127,7 @@ class StorageSheet(models.TransientModel):
                 {DROPSHIP_LOCATION_FILTER}
             GROUP BY sm.product_id, sm.date,
                      sm.reference, sp.partner_id,
+                     sm.l10n_ro_account_id,
                      pt.categ_id {group})
         a
                 """
