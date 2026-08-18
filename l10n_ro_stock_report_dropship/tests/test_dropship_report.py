@@ -152,3 +152,20 @@ class TestDropshipReport(TransactionCase):
         # _get_value() (standard_price 60 x qty 10), since sm.value is 0.
         self.assertEqual(sum(dropship_lines.mapped("amount_in")), move_value)
         self.assertEqual(sum(dropship_lines.mapped("amount_out")), move_value)
+
+        # The dropship rows must be filed under the account the movement is
+        # valued on (371000), the same one the moves carry. With account_id left
+        # NULL the storage sheet groups them under a separate "no account"
+        # bucket, so the dropship never shows up under the goods account the
+        # accountant reconciles - the report looks like the dropship line is
+        # missing even though the values are right.
+        self.assertEqual(
+            dropship_move.mapped("l10n_ro_account_id"),
+            self.account_valuation,
+            "The dropship move should be valued on the goods account",
+        )
+        self.assertEqual(
+            set(dropship_lines.mapped("account_id")),
+            {self.account_valuation},
+            "Dropship report lines must carry the move's valuation account, not fall into the 'no account' group",
+        )
