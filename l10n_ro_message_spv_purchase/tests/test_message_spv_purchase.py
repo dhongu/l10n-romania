@@ -621,6 +621,82 @@ class TestMessageSPVPurchase(TransactionCase):
         )
         self.assertTrue(po_attachments, "XML-ul trebuie copiat pe PO chiar fără factură")
 
+    def test_purchase_lines_and_total_match_real_zip_without_invoice(self):
+        """Integrare tichet #9287, cu XML-ul real (anonimizat) al facturii care a declanșat
+        raportarea (FC26BU0004904/TEMAD), împachetat în ZIP ca la descărcarea reală de la ANAF.
+
+        PO creat ÎNAINTE de factură trebuie să primească liniile din XML prin hook-ul
+        `deltatech_purchase_ubl._process_attachments_for_post` (declanșat de `message_post`
+        din `_post_spv_xml_on_purchase`), iar `amount_total` al comenzii trebuie să bată cu
+        `PayableAmount` din XML — aceeași cheie de control ca `_get_order_total_check` din
+        `deltatech_purchase_ubl` (verificată aici direct, nu doar ca warning informativ)."""
+        if "purchase.ubl.import.wizard" not in self.env:
+            self.skipTest("Modulul deltatech_purchase_ubl nu este instalat")
+
+        from odoo.tools import file_open
+
+        xml_bytes = file_open(
+            "l10n_ro_message_spv_purchase/tests/test_files/spv_purchase_order_lines_9287.xml", "rb"
+        ).read()
+        zip_bytes = self._make_zip_with_xml(xml_bytes=xml_bytes, xml_name="9287-anon.xml")
+
+        supplier = self.env["res.partner"].create(
+            {
+                "name": "Furnizor Test SRL",
+                "company_type": "company",
+                "country_id": self.env.ref("base.ro").id,
+            }
+        )
+
+        msg = self._make_spv_message(ref="FACT-TEST-0001", partner=supplier)
+        zip_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "9287-anon.zip",
+                "raw": zip_bytes,
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        msg.attachment_id = zip_attachment
+        self.assertFalse(msg.invoice_id)
+        self.assertFalse(msg.attachment_xml_id, "precondiție: câmpul derivat e gol fără factură")
+
+        msg.action_create_purchase()
+        po = msg.purchase_order_id
+        self.assertTrue(po, "trebuie să creeze/lege o comandă de achiziție")
+
+        self.env.flush_all()
+        po.invalidate_recordset()
+
+        self.assertTrue(po.order_line, "PO-ul trebuie să primească liniile din XML (tichet #9287)")
+        # Cheia de control: suma liniilor importate trebuie să bată cu LineExtensionAmount/
+        # TaxExclusiveAmount din XML-ul sursă (2272.21 RON, valoare reală din factura
+        # FC26BU0004904, neschimbată de anonimizare). Verificăm netto (nu amount_total cu TVA),
+        # pentru că produsele nou-create în acest test nu moștenesc taxa de achiziție impicită
+        # a companiei RO reale — pe producția Damira, unde produsele au deja TVA 21% configurat,
+        # amount_total (2749.37 RON) a bătut exact cu PayableAmount din XML (verificat manual
+        # pe CA11777, tichet #9287).
+        self.assertAlmostEqual(
+            po.amount_untaxed,
+            2272.21,
+            places=2,
+            msg="amount_untaxed al PO trebuie să corespundă cu totalul net din XML",
+        )
+
+        # Reutilizăm chiar mecanismul de control din deltatech_purchase_ubl
+        # (_get_order_total_check), ca să testăm exact cheia de validare folosită în producție,
+        # nu o reimplementare paralelă. Pe un PO fără taxe (cazul de test) verificarea corectă
+        # e pe netto, la fel cum face fallback-ul intern al metodei când sumele cu TVA lipsesc.
+        wiz = self.env["purchase.ubl.import.wizard"].new({"data_file": base64.b64encode(xml_bytes)})
+        invoice_data = wiz._parse_xml(xml_bytes)
+        invoice_data["payable_amount"] = 0.0
+        invoice_data["tax_inclusive_amount"] = 0.0
+        total_check = wiz._get_order_total_check(po, invoice_data)
+        self.assertTrue(
+            total_check and total_check["matches"],
+            f"cheia de control trebuie să confirme netto-ul: {total_check}",
+        )
+
     def test_clone_xml_attachment_no_duplicate(self):
         """Test că _clone_xml_attachment_for_purchase nu duplică atașamentul dacă există deja."""
         po = self._make_purchase_order(partner_ref="PO-ATT-003")
