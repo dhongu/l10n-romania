@@ -1,6 +1,8 @@
 # © 2025 Deltatech
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import base64
+import io
+import zipfile
 
 from lxml import etree
 
@@ -559,6 +561,65 @@ class TestMessageSPVPurchase(TransactionCase):
         flagged = bill2._l10n_ro_flag_cross_stack_duplicate()
         self.assertTrue(flagged, "A doua factură trebuie semnalată ca duplicat cross-stack")
         self.assertTrue(bill2.l10n_ro_edi_is_duplicate)
+
+    def _make_zip_with_xml(self, xml_bytes=b"<Invoice><ID>ZIP-TEST</ID></Invoice>", xml_name="invoice.xml"):
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            zf.writestr(xml_name, xml_bytes)
+        return buf.getvalue()
+
+    def test_clone_xml_attachment_falls_back_to_raw_zip_without_invoice(self):
+        """Tichet #9287: PO creat înainte de factură — `attachment_xml_id` e gol (compute-ul
+        depinde de `invoice_id`/`request_id`), dar ZIP-ul brut de la ANAF (`attachment_id`)
+        există deja. Clonarea trebuie să extragă XML-ul direct din ZIP (`_get_xml_bytes`),
+        nu să renunțe silențios — altfel `deltatech_purchase_ubl` nu mai primește niciun XML
+        și comanda rămâne fără linii/total."""
+        po = self._make_purchase_order(partner_ref="PO-ATT-ZIP-001")
+        msg = self._make_spv_message(ref="PO-ATT-ZIP-001")
+        zip_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "6742375571.zip",
+                "raw": self._make_zip_with_xml(),
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        msg.attachment_id = zip_attachment
+
+        # Precondiție: fără factură, câmpul derivat e gol (asta e exact ce a indus în eroare
+        # implementarea inițială, care se oprea aici).
+        self.assertFalse(msg.invoice_id)
+        self.assertFalse(msg.attachment_xml_id)
+
+        result = msg._clone_xml_attachment_for_purchase(po)
+
+        self.assertTrue(result, "trebuie să extragă XML-ul din ZIP, nu să renunțe")
+        self.assertEqual(result.res_model, "purchase.order")
+        self.assertEqual(result.res_id, po.id)
+        self.assertIn(b"ZIP-TEST", base64.b64decode(result.datas))
+
+    def test_post_spv_xml_on_purchase_attaches_zip_xml_without_invoice(self):
+        """Aceeași lipsă de factură, dar prin fluxul complet: `_post_spv_xml_on_purchase`
+        trebuie să atașeze copia XML pe PO chiar dacă mesajul nu are încă `invoice_id`."""
+        po = self._make_purchase_order(partner_ref="PO-ATT-ZIP-002")
+        msg = self._make_spv_message(ref="PO-ATT-ZIP-002")
+        zip_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "6698941346.zip",
+                "raw": self._make_zip_with_xml(xml_bytes=b"<Invoice><ID>ZIP-TEST-2</ID></Invoice>"),
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        msg.attachment_id = zip_attachment
+        msg.purchase_order_id = po
+
+        msg._post_spv_xml_on_purchase(po)
+
+        po_attachments = self.env["ir.attachment"].search(
+            [("res_model", "=", "purchase.order"), ("res_id", "=", po.id), ("mimetype", "=", "application/xml")]
+        )
+        self.assertTrue(po_attachments, "XML-ul trebuie copiat pe PO chiar fără factură")
 
     def test_clone_xml_attachment_no_duplicate(self):
         """Test că _clone_xml_attachment_for_purchase nu duplică atașamentul dacă există deja."""
