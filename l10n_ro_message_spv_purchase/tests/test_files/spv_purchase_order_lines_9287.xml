@@ -1,0 +1,923 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ns4="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice">
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+    <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:efactura.mfinante.ro:CIUS-RO:1.0.1</cbc:CustomizationID>
+    <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+    <cbc:ID>FACT-TEST-0001</cbc:ID>
+    <cbc:IssueDate>2026-08-18</cbc:IssueDate>
+    <cbc:DueDate>2026-09-17</cbc:DueDate>
+    <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+    <cbc:Note>Test note</cbc:Note>
+    <cbc:TaxPointDate>2026-08-18</cbc:TaxPointDate>
+    <cbc:DocumentCurrencyCode>RON</cbc:DocumentCurrencyCode>
+    <cbc:TaxCurrencyCode>RON</cbc:TaxCurrencyCode>
+    <cbc:AccountingCost>0</cbc:AccountingCost>
+    <cbc:BuyerReference>0</cbc:BuyerReference>
+    <cac:InvoicePeriod>
+        <cbc:StartDate>2026-08-18</cbc:StartDate>
+        <cbc:EndDate>2026-08-18</cbc:EndDate>
+    </cac:InvoicePeriod>
+    <cac:OrderReference>
+        <cbc:ID>0</cbc:ID>
+        <cbc:SalesOrderID>SO26BU005407</cbc:SalesOrderID>
+    </cac:OrderReference>
+    <cac:DespatchDocumentReference>
+        <cbc:ID>0</cbc:ID>
+    </cac:DespatchDocumentReference>
+    <cac:ReceiptDocumentReference>
+        <cbc:ID>0</cbc:ID>
+    </cac:ReceiptDocumentReference>
+    <cac:ContractDocumentReference>
+        <cbc:ID>0</cbc:ID>
+    </cac:ContractDocumentReference>
+    <cac:ProjectReference>
+        <cbc:ID>0</cbc:ID>
+    </cac:ProjectReference>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="EM">office@temad.ro</cbc:EndpointID>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="0209">5948941999999</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="0088">0</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Furnizor Test SRL</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>Str. Exemplu nr. 1</cbc:StreetName>
+                <cbc:CityName>OrasFurnizor</cbc:CityName>
+                <cbc:PostalZone>500000</cbc:PostalZone>
+                <cbc:CountrySubentity>RO-BV</cbc:CountrySubentity>
+                <cac:Country>
+                    <cbc:IdentificationCode>RO</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>RO00000001</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>Furnizor Test SRL</cbc:RegistrationName>
+                <cbc:CompanyID>J08/0001/1994</cbc:CompanyID>
+                <cbc:CompanyLegalForm>Capital social: 1000000.00 RON</cbc:CompanyLegalForm>
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>nespecificat</cbc:Name>
+                <cbc:Telephone>0040</cbc:Telephone>
+                <cbc:ElectronicMail>test@example.com</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:AccountingCustomerParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="EM">scdamira@gmail.com</cbc:EndpointID>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="0088">0</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Client Test SRL</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>Str. Test Furnizor nr. 82</cbc:StreetName>
+                <cbc:CityName>Comuna Exemplu</cbc:CityName>
+                <cbc:PostalZone>000000</cbc:PostalZone>
+                <cbc:CountrySubentity>RO-IF</cbc:CountrySubentity>
+                <cac:Country>
+                    <cbc:IdentificationCode>RO</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>RO00000002</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>Client Test SRL</cbc:RegistrationName>
+                <cbc:CompanyID>J23/0001/2008</cbc:CompanyID>
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>nespecificat</cbc:Name>
+                <cbc:Telephone>0040</cbc:Telephone>
+                <cbc:ElectronicMail>test@example.com</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingCustomerParty>
+    <cac:Delivery>
+        <cbc:ActualDeliveryDate>2026-08-18</cbc:ActualDeliveryDate>
+        <cac:DeliveryLocation>
+            <cbc:ID schemeID="0209">0</cbc:ID>
+            <cac:Address>
+                <cbc:StreetName>Str. Test Client nr. 139</cbc:StreetName>
+                <cbc:AdditionalStreetName>Str. Test Client nr. 139</cbc:AdditionalStreetName>
+                <cbc:CityName>OrasClient</cbc:CityName>
+                <cbc:PostalZone/>
+                <cbc:CountrySubentity>RO-IF</cbc:CountrySubentity>
+                <cac:AddressLine>
+                    <cbc:Line>Str. Test Client nr. 139</cbc:Line>
+                </cac:AddressLine>
+                <cac:Country>
+                    <cbc:IdentificationCode>RO</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:Address>
+        </cac:DeliveryLocation>
+        <cac:DeliveryParty>
+            <cac:PartyName>
+                <cbc:Name>Client Test SRL-CIOLPANI</cbc:Name>
+            </cac:PartyName>
+        </cac:DeliveryParty>
+    </cac:Delivery>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>42</cbc:PaymentMeansCode>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>RO00INGB0000000000000001</cbc:ID>
+            <cbc:Name>ING BANK ROMANIA</cbc:Name>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>42</cbc:PaymentMeansCode>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>RO00RZBR0000000000000002</cbc:ID>
+            <cbc:Name>RAIFFEISEN BANK ROMANIA S.A.</cbc:Name>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>42</cbc:PaymentMeansCode>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>RO00BTRLRONCRT0000000003</cbc:ID>
+            <cbc:Name>BANCA TRANSILVANIA</cbc:Name>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>42</cbc:PaymentMeansCode>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>RO00TREZ0000000XXX000004</cbc:ID>
+            <cbc:Name>TREZORERIA STATULUI</cbc:Name>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:TaxTotal>
+        <cbc:TaxAmount currencyID="RON">477.16</cbc:TaxAmount>
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="RON">2272.21</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="RON">477.16</cbc:TaxAmount>
+            <cac:TaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <cac:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="RON">2272.21</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="RON">2272.21</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="RON">2749.37</cbc:TaxInclusiveAmount>
+        <cbc:PayableAmount currencyID="RON">2749.37</cbc:PayableAmount>
+    </cac:LegalMonetaryTotal>
+    <cac:InvoiceLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">2.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">69.18</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_13</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>DUPLICOLOR Color Spray Enamel alb - 400ml cod652028</cbc:Description>
+            <cbc:Name>DUPLICOLOR Color Spray Enamel alb - 400ml cod</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>302001</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">4048500652028</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44810000-1</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32089019</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">34.590</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>2</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">5.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">105.75</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_18</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>MOTIP Car's jenti argintiu - 600ml cod 693823</cbc:Description>
+            <cbc:Name>MOTIP Car's jenti argintiu - 600ml cod 693823</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>312001</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">4048500693823</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44810000-1</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32089019</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">21.150</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>3</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">1.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">0.00</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_19</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>MOTIP Car's jenti argintiu - 600ml cod 693823</cbc:Description>
+            <cbc:Name>MOTIP Car's jenti argintiu - 600ml cod 693823</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>312001</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">4048500693823</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44810000-1</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32089019</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">0.000</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>4</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">5.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">105.75</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_14</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>MOTIP Car's negru mat - 600ml cod 693878</cbc:Description>
+            <cbc:Name>MOTIP Car's negru mat - 600ml cod 693878</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>313203</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">4048500693878</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44810000-1</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32089019</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">21.150</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>5</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">1.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">0.00</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_15</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>MOTIP Car's negru mat - 600ml cod 693878</cbc:Description>
+            <cbc:Name>MOTIP Car's negru mat - 600ml cod 693878</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>313203</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">4048500693878</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44810000-1</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32089019</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">0.000</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>6</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">5.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">105.75</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_16</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>MOTIP Car's lac transparent lucios - 600ml cod 693830</cbc:Description>
+            <cbc:Name>MOTIP Car's lac transparent lucios - 600ml cod 693830</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>314001</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">4048500693830</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44810000-1</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32089019</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">21.150</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>7</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">1.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">0.00</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_17</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>MOTIP Car's lac transparent lucios - 600ml cod 693830</cbc:Description>
+            <cbc:Name>MOTIP Car's lac transparent lucios - 600ml cod 693830</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>314001</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">4048500693830</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44810000-1</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32089019</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">0.000</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>8</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">2.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">59.26</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_6</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>DUPLICOLOR Aerosol Art Gold Efect - 400mlcod 738760</cbc:Description>
+            <cbc:Name>DUPLICOLOR Aerosol Art Gold Efect - 400ml</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>372017</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">4048500738760</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44810000-1</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32089019</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">29.630</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>9</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">12.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">42.72</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_4</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>BISON Super Glue Gel 2g*12 blistere crd</cbc:Description>
+            <cbc:Name>BISON Super Glue Gel 2g*12 blistere crd</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>401012</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">8710439235424</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">24911200-5</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">35061000</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">3.560</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>10</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">24.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">158.64</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_2</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>BISON Acrylic alb 300ml 1591230/6314658</cbc:Description>
+            <cbc:Name>BISON Acrylic alb 300ml 1591230/6314658</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>426005</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">8710439055725</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44831000-4</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32141010</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">6.610</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>11</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">12.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">240.96</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_5</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>BISON Poly Max Original alb  polimer 465g</cbc:Description>
+            <cbc:Name>BISON Poly Max Original alb  polimer 465g</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>428975</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">8710439233352</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">24911200-5</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">35061000</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">20.080</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>12</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">12.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">290.40</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_9</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>BISON Spuma  poliuretanica  polistiren 750mlc.7000443/6314697</cbc:Description>
+            <cbc:Name>BISON Spuma  poliuretanica  polistiren 750ml</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>451015</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">8710439298351</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44831000-4</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32141010</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">24.200</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>13</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">12.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">277.20</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_8</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>BISON Spuma poliuretanica  polistiren pistol700ml c.7000442/6314698</cbc:Description>
+            <cbc:Name>BISON Spuma poliuretanica  polistiren pistol</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>451016</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">8710439298337</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44831000-4</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">32141010</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">23.100</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>14</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">5.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">125.75</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_10</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>Bison Rubber Seal hidroizolatie pe baza de bitummodificat cu polimeri si cauciuc 310ml</cbc:Description>
+            <cbc:Name>Bison Rubber Seal hidroizolatie pe baza de bitum</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>470024</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">8710439268774</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44113300-8</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">27150000</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">25.150</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>16</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">5.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">174.65</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_11</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>Folie stretch manuala neagra 1,7/1,4 kg net500x0,023mm</cbc:Description>
+            <cbc:Name>Folie stretch manuala neagra 1,7/1,4 kg net</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>515549</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">5948941022581</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44170000-2</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">39201024</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">34.930</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>17</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">100.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">72.00</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_1</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>Tirant 500mm B cu ochi</cbc:Description>
+            <cbc:Name>Tirant 500mm B cu ochi</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>517653</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">5948941023007</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44330000-2</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">73089059</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">0.720</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>18</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">10.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">251.80</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_7</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>RACCORDMIGNON profil PVC portelanat alb 2,5m081V/1</cbc:Description>
+            <cbc:Name>RACCORDMIGNON profil PVC portelanat alb 2,5m</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>574027</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">8013237013387</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44334000-0</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">39259080</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">25.180</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>19</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">10.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">180.00</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_12</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>Burghiu metal DIN340 8x109x165 cod 44008000</cbc:Description>
+            <cbc:Name>Burghiu metal DIN340 8x109x165 cod 44008000</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>752049</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">5948941013541</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44512910-4</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">82075060</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">18.000</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>20</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="H87">10.000</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">12.40</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-08-18</cbc:StartDate>
+            <cbc:EndDate>2026-08-18</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:OrderLineReference>
+            <cbc:LineID>SO26BU005407_3</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cbc:Description>Burghiu SUPER PRO 1,5mm cod 41001500</cbc:Description>
+            <cbc:Name>Burghiu SUPER PRO 1,5mm cod 41001500</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>752071</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeID="0160">5948941013954</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="STI">44512910-4</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode listID="TSP">82075060</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>21.00</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="RON">1.240</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="H87">1.000</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+</Invoice>
