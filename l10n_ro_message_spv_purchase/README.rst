@@ -104,6 +104,18 @@ Notes
 Changelog
 =========
 
+19.0.0.0.5 (2026-08-19)
+-----------------------
+
+- Add an integration test for ticket #9287 using a real (anonymized) SPV
+  invoice XML, wrapped in a ZIP as downloaded from ANAF: verifies the
+  purchase order created before the bill ends up with its lines imported
+  by ``deltatech_purchase_ubl``, and cross-checks the imported total
+  against the order total using the same ``_get_order_total_check``
+  control key that ``deltatech_purchase_ubl`` already runs (confirmed
+  manually on the Damira production order that triggered the ticket:
+  order total 2749.37 RON matched the XML ``PayableAmount`` exactly).
+
 19.0.0.0.4 (2026-08-19)
 -----------------------
 
