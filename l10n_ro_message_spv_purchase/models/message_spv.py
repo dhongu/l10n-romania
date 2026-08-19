@@ -1,3 +1,4 @@
+import base64
 import logging
 
 from odoo import api, fields, models
@@ -47,13 +48,13 @@ class MessageSPV(models.Model):
           nu mai atașează din nou, ci postează doar o notă informativă.
         """
         self.ensure_one()
-        xml_att = self.attachment_xml_id
 
         # Din cerință: atașamentul XML trebuie COPIAT pe comanda de achiziție, nu doar referențiat.
-        # Clonăm (sau reutilizăm dacă există deja o copie cu același checksum pe PO)
-        po_xml_attachment = False
-        if xml_att and xml_att.sudo().datas:
-            po_xml_attachment = self._clone_xml_attachment_for_purchase(purchase)
+        # Clonăm (sau reutilizăm dacă există deja o copie cu același checksum pe PO). Nu ne oprim
+        # dacă `attachment_xml_id` e gol — acel câmp e derivat din factură (vezi
+        # `_clone_xml_attachment_for_purchase`) și e mereu gol când PO-ul se creează ÎNAINTE de
+        # factură (tichet #9287); metoda are propriul fallback pe ZIP-ul brut.
+        po_xml_attachment = self._clone_xml_attachment_for_purchase(purchase)
 
         # Conținutul mesajului
         ref_to_use = self._get_purchase_ref() or "-"
@@ -88,8 +89,21 @@ class MessageSPV(models.Model):
         """
         self.ensure_one()
         xml_att = self.attachment_xml_id.sudo()
-        if not xml_att or not xml_att.datas:
-            return False
+        xml_name = xml_att.name if xml_att else False
+        xml_mimetype = (xml_att.mimetype if xml_att else False) or "application/xml"
+        xml_datas = xml_att.datas if xml_att else False
+
+        if not xml_datas:
+            # `attachment_xml_id` e un câmp derivat din atașamentele facturii (necesită
+            # invoice_id + request_id) — rămâne gol când PO-ul se creează ÎNAINTE de factură.
+            # Extragem XML-ul direct din ZIP-ul brut descărcat de la ANAF (tichet #9287:
+            # fără acest fallback, deltatech_purchase_ubl nu primește niciodată XML-ul,
+            # deci comanda rămâne fără linii).
+            file_name, xml_bytes = self._get_xml_bytes()
+            if not xml_bytes:
+                return False
+            xml_name = file_name or "spv.xml"
+            xml_datas = base64.b64encode(xml_bytes)
 
         Attachment = self.env["ir.attachment"].sudo()
 
@@ -99,22 +113,21 @@ class MessageSPV(models.Model):
             ("res_id", "=", purchase.id),
         ]
         existing = False
-        if getattr(xml_att, "checksum", False):
+        if xml_att and getattr(xml_att, "checksum", False):
             existing = Attachment.search(domain + [("checksum", "=", xml_att.checksum)], limit=1)
         if not existing:
             # fallback simplu
-            name = xml_att.name or "spv.xml"
-            mimetype = xml_att.mimetype or "application/xml"
-            existing = Attachment.search(domain + [("name", "=", name), ("mimetype", "=", mimetype)], limit=1)
+            name = xml_name or "spv.xml"
+            existing = Attachment.search(domain + [("name", "=", name), ("mimetype", "=", xml_mimetype)], limit=1)
 
         if existing:
             return existing
 
         # Creăm copia pe purchase.order
         vals = {
-            "name": xml_att.name or "spv.xml",
-            "datas": xml_att.datas,
-            "mimetype": xml_att.mimetype or "application/xml",
+            "name": xml_name or "spv.xml",
+            "datas": xml_datas,
+            "mimetype": xml_mimetype,
             "res_model": "purchase.order",
             "res_id": purchase.id,
             "company_id": purchase.company_id.id if purchase.company_id else self.env.company.id,
