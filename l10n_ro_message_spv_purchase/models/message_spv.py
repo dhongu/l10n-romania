@@ -145,6 +145,11 @@ class MessageSPV(models.Model):
 
         domain = or_group
 
+        # O comandă deja complet facturată nu mai e candidat valid: o referință
+        # reutilizată din greșeală (ex. #9290) nu trebuie să mai lege facturi noi
+        # de o comandă epuizată.
+        domain = ["&", ("invoice_status", "!=", "invoiced")] + domain
+
         # Prepend AND conditions in flat form to avoid ValueError on nested lists
         if partner_id:
             domain = ["&", ("partner_id", "=", partner_id)] + domain
