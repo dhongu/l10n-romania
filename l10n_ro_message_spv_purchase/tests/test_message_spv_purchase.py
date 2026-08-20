@@ -168,6 +168,15 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertIn(str(self.partner.id), domain_str)
         self.assertIn(str(self.company.id), domain_str)
 
+    def test_purchase_search_domain_excludes_invoiced(self):
+        """Test că _purchase_search_domain_from_ref exclude comenzile deja complet
+        facturate (tichet #9290)."""
+        msg = self._make_spv_message()
+        domain = msg._purchase_search_domain_from_ref("PO-003")
+        domain_str = str(domain)
+        self.assertIn("invoice_status", domain_str)
+        self.assertIn("invoiced", domain_str)
+
     def test_action_find_purchase_no_ref_raises(self):
         """Test că action_find_purchase ridică UserError dacă nu există referință."""
         msg = self.env["l10n.ro.message.spv"].create(
@@ -695,6 +704,42 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertTrue(
             total_check and total_check["matches"],
             f"cheia de control trebuie să confirme netto-ul: {total_check}",
+        )
+
+    def test_action_find_purchase_skips_fully_invoiced_po(self):
+        """Tichet #9290: o comandă deja complet facturată (invoice_status='invoiced')
+        nu mai e candidat, chiar dacă referința se potrivește — evită legarea unei
+        facturi noi de o comandă epuizată (ex. referință generică reutilizată la furnizor,
+        gen 'ZILNIC' pe Ridacon)."""
+        po = self._confirmed_po(partner_ref="PO-9290-001")
+        bill = self._draft_bill(amount=100.0)
+        bill._l10n_ro_link_spv_purchase_order(po)
+        self.env.flush_all()
+        po.invalidate_recordset(["invoice_status"])
+        self.assertEqual(po.invoice_status, "invoiced")
+
+        msg = self._make_spv_message(ref="PO-9290-001")
+        with self.assertRaises(UserError):
+            msg.action_find_purchase()
+
+    def test_action_create_purchase_skips_fully_invoiced_po(self):
+        """Tichet #9290: action_create_purchase creează o comandă nouă în loc să
+        reutilizeze una deja complet facturată cu aceeași referință."""
+        po = self._confirmed_po(partner_ref="PO-9290-002")
+        bill = self._draft_bill(amount=100.0)
+        bill._l10n_ro_link_spv_purchase_order(po)
+        self.env.flush_all()
+        po.invalidate_recordset(["invoice_status"])
+        self.assertEqual(po.invoice_status, "invoiced")
+
+        msg = self._make_spv_message(ref="PO-9290-002")
+        msg.action_create_purchase()
+
+        self.assertTrue(msg.purchase_order_id)
+        self.assertNotEqual(
+            msg.purchase_order_id,
+            po,
+            "nu trebuie să reutilizeze PO-ul deja complet facturat",
         )
 
     def test_clone_xml_attachment_no_duplicate(self):

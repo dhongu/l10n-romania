@@ -1,3 +1,15 @@
+## 19.0.0.0.6 (2026-08-20)
+
+- Fix: `_purchase_search_domain_from_ref` matched purchase orders by reference
+  alone, so a generic/reused vendor reference (ticket #9290, Ridacon: 6 SPV
+  bills over 6 months all reusing the reference "ZILNIC") kept linking new
+  bills to the same, already fully-invoiced order. The domain now excludes
+  orders with `invoice_status == 'invoiced'`, so a reused reference on an
+  order that still has open invoicing keeps matching (partial invoicing is
+  unaffected), but once an order is fully invoiced a new bill with the same
+  reference falls through to creating a new order instead of piling onto a
+  closed one.
+
 ## 19.0.0.0.5 (2026-08-19)
 
 - Add an integration test for ticket #9287 using a real (anonymized) SPV
