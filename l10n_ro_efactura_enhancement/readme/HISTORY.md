@@ -1,3 +1,24 @@
+## 19.0.0.4.0 (2026-08-21)
+
+- **Importul automat al facturilor primite din SPV este acum oprit implicit.**
+  Câmpul `l10n_ro_edi_no_auto_bill` are `default=True`, deci o companie nouă nu
+  mai primește ciorne create de cronul nativ „E-Factura: Synchronize with ANAF".
+  Fluxul de referință este factura introdusă din comanda de achiziție (sau
+  creată din mesajul SPV și legată la comandă); ciorna adusă în paralel de cron
+  se dublează cu ea, iar deduplicarea nativă compară doar (CUI, total, dată) și
+  nu verifică deloc sensul invers — factura introdusă *după* ce ciorna există
+  deja. Pe un client în producție am găsit 6 astfel de dubluri, toate cu ciorna
+  creată prima.
+  - **Companiile existente nu sunt afectate**: `default` se aplică doar
+    companiilor create ulterior, valoarea stocată a celor actuale rămâne
+    neschimbată.
+  - **Atenție la instalările noi**: comportamentul nativ Odoo 19 (import
+    automat) nu mai este cel implicit. Dacă îl vreți, debifați „Nu importa
+    automat facturile primite din SPV" din Setări → Contabilitate → eFactura
+    SPV.
+  - Trimiterea facturilor și sincronizarea statusului (acceptat/refuzat) rămân
+    neatinse, ca și până acum.
+
 ## 19.0.0.3.23 (2026-07-29)
 
 - **O singură regulă decide dacă factura merge în SPV.** Cele patru căi de
