@@ -17,9 +17,16 @@ class ResCompany(models.Model):
         "fiecare rulare a cronului de trimitere in SPV. Daca e gol, raportul nu se "
         "trimite.",
     )
+    # Implicit activat: fluxul de referinta e factura introdusa din comanda de
+    # achizitie (sau creata din mesajul SPV, cu legarea la comanda), iar ciornele
+    # aduse in paralel de cronul nativ se dubleaza cu ea. Dedup-ul nativ compara
+    # doar (CUI, total, data), deci nu recunoaste factura din comanda si, in plus,
+    # nu verifica deloc sensul invers — factura introdusa DUPA ce ciorna exista
+    # deja. Companiile existente nu sunt afectate: valoarea lor stocata ramane
+    # cea de dinainte, `default` se aplica doar companiilor create ulterior.
     l10n_ro_edi_no_auto_bill = fields.Boolean(
         string="Nu importa automat facturile primite din SPV",
-        default=False,
+        default=True,
         help='Cand este activat, cronul nativ „E-Factura: Synchronize with ANAF" nu '
         "mai creeaza automat ciorne de facturi de la furnizori din mesajele primite in "
         "SPV. Sincronizarea statusului facturilor trimise (acceptat/refuzat) ramane "

@@ -277,10 +277,17 @@ class TestSpvActions(TransactionCase):
         self.company.l10n_ro_spv_cron_no_email = False
         self.assertFalse(self.company.l10n_ro_spv_cron_no_email)
 
-    def test_edi_no_auto_bill_default_false(self):
-        """Implicit, auto-importul facturilor primite din SPV rămâne activ (default False)."""
+    def test_edi_no_auto_bill_default_true(self):
+        """Implicit, auto-importul facturilor primite din SPV e oprit (default True).
+
+        Companiile existente nu sunt atinse de schimbarea default-ului: valoarea
+        lor stocată rămâne cea de dinainte, `default` se aplică doar companiilor
+        create ulterior.
+        """
         defaults = self.env["res.company"].default_get(["l10n_ro_edi_no_auto_bill"])
-        self.assertFalse(defaults.get("l10n_ro_edi_no_auto_bill"))
+        self.assertTrue(defaults.get("l10n_ro_edi_no_auto_bill"))
+        new_company = self.env["res.company"].create({"name": "Test Default No Auto Bill"})
+        self.assertTrue(new_company.l10n_ro_edi_no_auto_bill)
 
     def test_edi_no_auto_bill_config(self):
         """Test că setarea l10n_ro_edi_no_auto_bill se salvează corect pe companie."""

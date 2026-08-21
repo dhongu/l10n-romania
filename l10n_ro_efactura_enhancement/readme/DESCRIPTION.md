@@ -10,7 +10,7 @@ The l10n_ro_efactura_enhancement module extends the standard Romanian e-Invoicin
     - Cron job for **fetching status** updates from SPV for sent invoices.
     - **Server action "Trimite in SPV"**: Allows sending selected invoices directly to SPV from the invoice list view, without triggering email sending.
     - **Configuration option**: A setting in the Accounting configuration page controls whether the automatic SPV cron job suppresses email sending (sends only to SPV).
-    - **Configuration option**: A per-company setting (`Nu importa automat facturile primite din SPV`) lets you skip the native "E-Factura: Synchronize with ANAF" auto-creation of received vendor bills, while keeping the sent-invoice status synchronization (accepted/refused) intact. Disabled by default, so native behavior is unchanged unless explicitly enabled.
+    - **Configuration option**: A per-company setting (`Nu importa automat facturile primite din SPV`) lets you skip the native "E-Factura: Synchronize with ANAF" auto-creation of received vendor bills, while keeping the sent-invoice status synchronization (accepted/refused) intact. Enabled by default for newly created companies, since the reference flow is the bill entered from the purchase order and the parallel draft would duplicate it; existing companies keep their stored value. Untick it to restore the native auto-import.
 - **Data Truncation and Sanitization**:
     - Truncates product names to 100 characters and descriptions to 200 characters to ensure compliance with UBL standards.
     - Truncates notes to 300 characters.
