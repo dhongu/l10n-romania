@@ -136,6 +136,13 @@ class TestSaleOrderReport(TransactionCase):
         numbers = ["".join(td.itertext()).strip() for td in tree.xpath("//td[@name='td_number']")]
         self.assertEqual(numbers, ["1", "2", "3"], "Only product lines should be numbered, consecutively")
 
+        section_cells = tree.xpath("//td[@name='td_section_name']")
+        self.assertTrue(section_cells, "The report must render section rows")
+        self.assertTrue(
+            all(int(td.get("colspan")) >= 4 for td in section_cells),
+            "Section rows must span the custom numbering column",
+        )
+
     def test_render_custom_proforma_template(self):
         # Ensure the custom proforma template compiles with a basic context
         qweb = self.env["ir.qweb"]
