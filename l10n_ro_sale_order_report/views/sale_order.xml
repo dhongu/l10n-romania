@@ -171,7 +171,7 @@
              span several columns via colspan - need to grow by the same amount, otherwise they no
              longer line up with the header. -->
         <xpath
-            expr="//t[@t-set='section_name_colspan' and @t-value='3 + (1 if display_discount else 0) + (1 if display_taxes else 0)']"
+            expr="//tr[@name='tr_section']/t[@t-set='section_name_colspan']"
             position="after"
         >
             <t t-if="res_company.counter_on_sale_order">
