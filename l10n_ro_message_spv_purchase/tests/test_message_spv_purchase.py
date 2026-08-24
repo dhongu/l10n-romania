@@ -638,7 +638,12 @@ class TestMessageSPVPurchase(TransactionCase):
         `deltatech_purchase_ubl._process_attachments_for_post` (declanșat de `message_post`
         din `_post_spv_xml_on_purchase`), iar `amount_total` al comenzii trebuie să bată cu
         `PayableAmount` din XML — aceeași cheie de control ca `_get_order_total_check` din
-        `deltatech_purchase_ubl` (verificată aici direct, nu doar ca warning informativ)."""
+        `deltatech_purchase_ubl` (verificată aici direct, nu doar ca warning informativ).
+
+        Produsele din factură sunt PRE-CREATE cu codurile de furnizor din XML, ca în
+        realitatea Damira (unde produsele existau și se potriveau după cod): de la tichetul
+        #9315 fluxul automat SPV nu mai creează tăcut produse noi pentru liniile
+        nepotrivite, deci liniile PO apar doar prin matching."""
         if "purchase.ubl.import.wizard" not in self.env:
             self.skipTest("Modulul deltatech_purchase_ubl nu este instalat")
 
@@ -656,6 +661,24 @@ class TestMessageSPVPurchase(TransactionCase):
                 "country_id": self.env.ref("base.ro").id,
             }
         )
+
+        # Pre-creăm produsele cu codurile de furnizor din XML (scenariul real Damira).
+        parsed = self.env["purchase.ubl.import.wizard"].new({})._parse_xml(xml_bytes)
+        seen_codes = set()
+        for ln in parsed["lines"]:
+            code = ln.get("code")
+            if not code or code in seen_codes:
+                continue
+            seen_codes.add(code)
+            product = self.env["product.product"].create({"name": ln.get("name") or code, "type": "consu"})
+            self.env["product.supplierinfo"].create(
+                {
+                    "partner_id": supplier.id,
+                    "product_tmpl_id": product.product_tmpl_id.id,
+                    "product_id": product.id,
+                    "product_code": code,
+                }
+            )
 
         msg = self._make_spv_message(ref="FACT-TEST-0001", partner=supplier)
         zip_attachment = self.env["ir.attachment"].create(
@@ -704,6 +727,75 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertTrue(
             total_check and total_check["matches"],
             f"cheia de control trebuie să confirme netto-ul: {total_check}",
+        )
+
+    def test_create_purchase_does_not_duplicate_product_without_supplier_code(self):
+        """Tichet #9315 (regresie a fix-ului #9287): un PO creat din mesaj SPV ÎNAINTE de
+        factură, a cărui linie XML nu are cod de furnizor (`SellersItemIdentification/ID`) și
+        al cărei nume nu se potrivește exact cu niciun produs existent, nu mai trebuie să creeze
+        tăcut un produs nou — `_post_spv_xml_on_purchase` setează
+        `purchase_ubl_no_new_products` în context, iar linia rămâne nepotrivită."""
+        if "purchase.ubl.import.wizard" not in self.env:
+            self.skipTest("Modulul deltatech_purchase_ubl nu este instalat")
+
+        xml = b"""<?xml version="1.0" encoding="UTF-8"?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+         xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+    <cbc:ID>FACT-TEST-9315</cbc:ID>
+    <cbc:IssueDate>2026-08-21</cbc:IssueDate>
+    <cbc:DueDate>2026-09-20</cbc:DueDate>
+    <cbc:DocumentCurrencyCode>RON</cbc:DocumentCurrencyCode>
+    <cac:OrderReference><cbc:ID>PO-TEST-9315</cbc:ID></cac:OrderReference>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cac:PartyTaxScheme><cbc:CompanyID>RO00000099</cbc:CompanyID></cac:PartyTaxScheme>
+            <cac:PartyLegalEntity><cbc:RegistrationName>Furnizor Test SPV</cbc:RegistrationName></cac:PartyLegalEntity>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:InvoiceLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">10</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">500.00</cbc:LineExtensionAmount>
+        <cac:Price><cbc:PriceAmount currencyID="RON">50.00</cbc:PriceAmount></cac:Price>
+        <cac:Item>
+            <cbc:Name>Produs Fara Cod Furnizor 9315</cbc:Name>
+            <cac:ClassifiedTaxCategory><cbc:Percent>0</cbc:Percent></cac:ClassifiedTaxCategory>
+        </cac:Item>
+    </cac:InvoiceLine>
+</Invoice>
+"""
+        zip_bytes = self._make_zip_with_xml(xml_bytes=xml, xml_name="9315-anon.xml")
+
+        msg = self._make_spv_message(ref="PO-TEST-9315")
+        zip_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "9315-anon.zip",
+                "raw": zip_bytes,
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        msg.attachment_id = zip_attachment
+        self.assertFalse(msg.invoice_id)
+
+        products_before = self.env["product.product"].search_count([])
+
+        msg.action_create_purchase()
+        po = msg.purchase_order_id
+        self.assertTrue(po, "trebuie să creeze/lege o comandă de achiziție")
+
+        self.env.flush_all()
+        po.invalidate_recordset()
+
+        self.assertFalse(
+            po.order_line,
+            "linia nepotrivită (fără cod furnizor, fără nume identic) nu trebuie adăugată pe PO",
+        )
+        self.assertEqual(
+            self.env["product.product"].search_count([]),
+            products_before,
+            "nu trebuie creat niciun produs nou pentru linia nepotrivită",
         )
 
     def test_action_find_purchase_skips_fully_invoiced_po(self):

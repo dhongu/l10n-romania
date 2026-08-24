@@ -1,3 +1,16 @@
+## 19.0.0.0.7 (2026-08-24)
+
+- Fix (ticket #9315, regression from the #9287 fix in 19.0.0.0.4/0.0.5): once
+  `_post_spv_xml_on_purchase` started reliably attaching the SPV XML on a
+  purchase order created before the vendor bill exists, the headless UBL
+  import in `deltatech_purchase_ubl` started running for that scenario too —
+  and its product matching silently creates a new product when the invoice
+  line has no supplier code and the name doesn't match an existing product
+  exactly. `_post_spv_xml_on_purchase` now attaches the XML with
+  `purchase_ubl_no_new_products` in context, so the automated import leaves
+  an unmatched line (visible in the wizard's log) instead of creating a
+  duplicate product. Requires `deltatech_purchase_ubl` >= 19.0.1.2.5.
+
 ## 19.0.0.0.6 (2026-08-20)
 
 - Fix: `_purchase_search_domain_from_ref` matched purchase orders by reference

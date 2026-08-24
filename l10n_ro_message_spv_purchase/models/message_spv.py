@@ -73,7 +73,13 @@ class MessageSPV(models.Model):
             # atașăm COPIA legată de purchase.order
             post_kwargs["attachment_ids"] = [po_xml_attachment.id]
 
-        purchase.message_post(**post_kwargs)
+        # `purchase_ubl_no_new_products`: acest flux e automat, ne-supravegheat de un om în
+        # momentul rulării (spre deosebire de wizardul manual UBL) — dacă deltatech_purchase_ubl
+        # e instalat, importul headless declanșat de atașament NU trebuie să creeze tăcut
+        # produse noi când factura nu identifică fără ambiguitate produsul (lipsă cod furnizor +
+        # nume care nu se potrivește exact); linia rămâne nepotrivită, semnalată în jurnalul
+        # wizard-ului, pentru revizuire manuală (tichet #9315).
+        purchase.with_context(purchase_ubl_no_new_products=True).message_post(**post_kwargs)
 
         # Caz „factura există deja, iar PO este legat ulterior": legăm efectiv factura
         # de liniile comenzii, ca să se alimenteze qty_invoiced și PO-ul să nu mai apară
