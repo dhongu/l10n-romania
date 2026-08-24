@@ -143,6 +143,52 @@ class TestSaleOrderReport(TransactionCase):
             "Section rows must span the custom numbering column",
         )
 
+    def test_combo_row_spans_all_header_columns(self):
+        # The combo row colspan must track the real header width: it starts from
+        # the core colspan_count and grows by our custom columns, so with any
+        # combination of optional columns the combo name cell plus the price
+        # cell have to cover exactly one full table row.
+        combo = self.env["product.combo"].create(
+            {
+                "name": "Combo content",
+                "combo_item_ids": [(0, 0, {"product_id": self.product.id})],
+            }
+        )
+        combo_product = self.env["product.product"].create(
+            {
+                "name": "Test Combo",
+                "type": "combo",
+                "combo_ids": [(6, 0, combo.ids)],
+                "list_price": 10.0,
+            }
+        )
+        so = self.env["sale.order"].create({"partner_id": self.partner.id})
+        combo_line = self.env["sale.order.line"].create({"order_id": so.id, "product_id": combo_product.id})
+        self.env["sale.order.line"].create(
+            {
+                "order_id": so.id,
+                "product_id": self.product.id,
+                "combo_item_id": combo.combo_item_ids.id,
+                "linked_line_id": combo_line.id,
+            }
+        )
+        self.assertTrue(self.company.counter_on_sale_order, "The counter column must be on for this test")
+
+        action = self.env.ref("sale.action_report_saleorder")
+        html_bytes, _ = self.env["ir.actions.report"]._render_qweb_html(action, [so.id])
+        tree = etree.fromstring(html_bytes, etree.HTMLParser())
+
+        header_cols = len(tree.xpath("//table[contains(@class, 'o_main_table')]/thead/tr/th"))
+        combo_cells = tree.xpath("//td[@name='td_combo_name']")
+        self.assertTrue(combo_cells, "The report must render the combo row")
+        for td in combo_cells:
+            # combo name cell + the price cell = one full row
+            self.assertEqual(
+                int(td.get("colspan")),
+                header_cols - 1,
+                "The combo row must span all header columns, including the custom ones",
+            )
+
     def test_render_custom_proforma_template(self):
         # Ensure the custom proforma template compiles with a basic context
         qweb = self.env["ir.qweb"]

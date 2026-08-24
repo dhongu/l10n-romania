@@ -1,3 +1,24 @@
+## 19.0.1.0.10 (2026-08-24)
+
+- Combo rows: initialize `combo_name_colspan` from the core `colspan_count`
+  instead of the hardcoded `3 + discount + taxes` formula that Odoo 19 no
+  longer uses. The old formula would silently drift out of sync with the
+  header if core adds or removes optional columns. The module-specific
+  increments (numbering, image, lead time columns) are kept, since the
+  headers injected by this module do not bump the core counter.
+  Added a regression test asserting that a rendered combo row spans exactly
+  the header column count. (#518)
+
+## 19.0.1.0.9 (2026-08-24)
+
+- Fix module installation on current Odoo 19: the section colspan XPath was
+  anchored on the exact core formula `3 + (1 if display_discount else 0) +
+  (1 if display_taxes else 0)`, which core replaced with the dynamic
+  `colspan_count` variable. The anchor now targets
+  `//tr[@name='tr_section']/t[@t-set='section_name_colspan']`, independent of
+  the internal formula. Added a regression assertion on rendered section
+  colspans. (#517)
+
 ## 19.0.1.0.8 (2026-08-03)
 
 - Fix the line numbering column (`No.`): it now counts only product lines.
