@@ -1,3 +1,10 @@
+## 19.0.1.0.11 (2026-08-25)
+
+- Keep combo-row colspan calculation compatible with older Odoo 19 builds
+  where the core sale report still uses the inline colspan formula and does
+  not define `colspan_count`. Prefer the dynamic counter when available and
+  fall back to the legacy formula otherwise.
+
 ## 19.0.1.0.10 (2026-08-24)
 
 - Combo rows: initialize `combo_name_colspan` from the core `colspan_count`
