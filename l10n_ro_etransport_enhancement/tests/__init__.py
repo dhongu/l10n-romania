@@ -6,3 +6,4 @@ from . import test_etransport_timeout
 from . import test_etransport_documents
 from . import test_etransport_customs_route
 from . import test_etransport_start_address
+from . import test_etransport_uit_is_not_tracking_ref

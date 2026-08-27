@@ -446,14 +446,6 @@ class Picking(models.Model):
                     )
                 )
 
-    def action_l10n_ro_edi_stock_fetch_status(self):
-        res = super().action_l10n_ro_edi_stock_fetch_status()
-        for picking in self:
-            if picking.l10n_ro_edi_stock_state == "stock_validated":
-                picking.carrier_tracking_ref = picking.l10n_ro_edi_stock_document_uit
-
-        return res
-
     def l10n_ro_compute_weight_lines(self):
         """Recalculează de la zero liniile de greutate ale transferului.
 
