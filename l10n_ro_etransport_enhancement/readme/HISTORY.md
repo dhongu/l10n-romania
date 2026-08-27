@@ -1,3 +1,18 @@
+## 19.0.0.7.6 (2026-08-27)
+
+**Corecție** — codul UIT nu mai este scris în `carrier_tracking_ref`.
+
+La „Preluare stare", când declarația ajungea `stock_validated`, UIT-ul era copiat
+în `carrier_tracking_ref` (referința de urmărire a curierului, din `stock_delivery`).
+UIT-ul nu este un AWB: pe o livrare cu curier, scrierea suprascria sau preceda
+numărul real de AWB (tracking-ul, eticheta și evidența curierului se legau de un
+cod ANAF), iar pe orice bază care protejează referința de urmărire (module de
+curierat care permit scrierea ei doar din fluxul curierului) butonul ridica
+„Operație invalidă" și derula înapoi inclusiv starea tocmai preluată de la ANAF.
+Standardul `l10n_ro_edi_stock` nu citește nicăieri `carrier_tracking_ref`, iar
+UIT-ul rămâne disponibil în `l10n_ro_edi_stock_document_uit` (tab-ul eTransport).
+Același lucru pentru `post_init_hook`-ul de migrare din vechiul `l10n_ro_etransport`.
+
 ## 19.0.0.7.5 (2026-08-15)
 
 - Imp: `l10n_ro_transport_partner_id` and `l10n_ro_etransport_start_address` are now indexed. Both are foreign keys to `res_partner` on `stock_picking`, one of the largest tables on high-volume instances.
