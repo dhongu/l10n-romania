@@ -1,0 +1,142 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_einvoice_download
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-05 05:58+0000\n"
+"PO-Revision-Date: 2025-05-05 05:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields.selection,name:l10n_ro_einvoice_download.selection__invoice_files_export__files_to_download__all
+msgid "All"
+msgstr "Toate"
+
+#. module: l10n_ro_einvoice_download
+#: model_terms:ir.ui.view,arch_db:l10n_ro_einvoice_download.view_working_days_export_form
+msgid "Apply"
+msgstr "Aplica"
+
+#. module: l10n_ro_einvoice_download
+#: model_terms:ir.ui.view,arch_db:l10n_ro_einvoice_download.view_working_days_export_form
+msgid "Cancel"
+msgstr "Anuleaza"
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model_terms:ir.ui.view,arch_db:l10n_ro_einvoice_download.view_working_days_export_form
+msgid "Exit"
+msgstr "Iesi"
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.actions.act_window,name:l10n_ro_einvoice_download.action_invoice_files_export
+#: model_terms:ir.ui.view,arch_db:l10n_ro_einvoice_download.view_working_days_export_form
+msgid "Export Attachments"
+msgstr "Exporta atasamente"
+
+#. module: l10n_ro_einvoice_download
+#: model_terms:ir.ui.view,arch_db:l10n_ro_einvoice_download.view_working_days_export_form
+msgid "Export Complete"
+msgstr "Export finalizat"
+
+#. module: l10n_ro_einvoice_download
+#: model_terms:ir.ui.view,arch_db:l10n_ro_einvoice_download.view_working_days_export_form
+msgid "Export selected invoice attached files:"
+msgstr "Exporta atasamentele facturilor selectate:"
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__data_file
+msgid "File"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__name
+msgid "File Name"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__group_by_vat
+msgid "Group by VAT"
+msgstr "Grupa dupa CIF"
+
+#. module: l10n_ro_einvoice_download
+#: model_terms:ir.ui.view,arch_db:l10n_ro_einvoice_download.view_working_days_export_form
+msgid "Here is the exported file:"
+msgstr "Aici este fisierul exportat:"
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields.selection,name:l10n_ro_einvoice_download.selection__invoice_files_export__files_to_download__only_pdf
+msgid "Only PDF"
+msgstr "Doar PDF"
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields.selection,name:l10n_ro_einvoice_download.selection__invoice_files_export__files_to_download__only_zip
+msgid "Only zip"
+msgstr "Doar zip"
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__state
+msgid "State"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields,field_description:l10n_ro_einvoice_download.field_invoice_files_export__files_to_download
+msgid "What to download"
+msgstr "Ce se va descarca"
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields.selection,name:l10n_ro_einvoice_download.selection__invoice_files_export__state__choose
+msgid "choose"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model.fields.selection,name:l10n_ro_einvoice_download.selection__invoice_files_export__state__get
+msgid "get"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model:ir.model,name:l10n_ro_einvoice_download.model_invoice_files_export
+msgid "invoice.files.export"
+msgstr ""
+
+#. module: l10n_ro_einvoice_download
+#: model_terms:ir.ui.view,arch_db:l10n_ro_einvoice_download.view_working_days_export_form
+msgid "or"
+msgstr "sau"
