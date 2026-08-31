@@ -12,6 +12,9 @@ _logger = logging.getLogger(__name__)
 
 DEFAULT_VAT = "0000000000000"
 
+# Tichet 9369: limita de caractere impusa de ANAF pentru identificatorii de plata.
+PAYMENT_ID_MAX_LEN = 200
+
 
 def _has_vat(vat):
     return bool(vat and len(vat) > 1)
@@ -25,6 +28,46 @@ class AccountEdiUBL(models.AbstractModel):
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
+
+    def _ubl_add_payment_means_nodes(self, vals):
+        # EXTENDS account.edi.xml.ubl_ro
+        res = super()._ubl_add_payment_means_nodes(vals)
+        self._l10n_ro_truncate_payment_identifiers(vals["document_node"])
+        return res
+
+    def _l10n_ro_shorten_payment_identifier(self, value):
+        """Scurteaza o referinta de plata la PAYMENT_ID_MAX_LEN caractere.
+
+        Taie la ultimul separator " - " care mai incape, ca sa nu rupa in mijlocul
+        unui cod de comanda - referintele sunt concatenate cu acest separator, iar
+        reconcilierea automata sparge exact pe el. Daca nu exista un separator
+        rezonabil de aproape de limita, taie brut.
+        """
+        truncated = value[:PAYMENT_ID_MAX_LEN]
+        separator_index = truncated.rfind(" - ")
+        if separator_index >= PAYMENT_ID_MAX_LEN // 2:
+            return truncated[:separator_index]
+        return truncated.rstrip()
+
+    def _l10n_ro_truncate_payment_identifiers(self, document_node):
+        """ANAF respinge e-Factura daca cbc:PaymentID / cbc:InstructionID depasesc
+        PAYMENT_ID_MAX_LEN caractere.
+
+        Tichet 9369: pe facturile care consolideaza multe comenzi, ``payment_reference``
+        poate depasi singur limita (referinte concatenate pentru reconciliere), iar
+        factura ramane blocata la transmitere. Scurtam aici, in generator, ca sa nu
+        depindem de curatarea manuala a campului pe fiecare factura.
+        """
+        nodes = document_node.get("cac:PaymentMeans") or []
+        if isinstance(nodes, dict):
+            nodes = [nodes]
+        for node in nodes:
+            if not isinstance(node, dict):
+                continue
+            for tag in ("cbc:PaymentID", "cbc:InstructionID"):
+                value = (node.get(tag) or {}).get("_text")
+                if isinstance(value, str) and len(value) > PAYMENT_ID_MAX_LEN:
+                    node[tag]["_text"] = self._l10n_ro_shorten_payment_identifier(value)
 
     def get_description(self, line):
         """
