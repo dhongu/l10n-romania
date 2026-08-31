@@ -87,6 +87,14 @@
                                 /
                                 <span t-field="o.date" />
                             </h2>
+                        <div
+                            t-if="o.journal_id.type == 'cash' and o.payment_type != 'transfer'"
+                            class="text-muted mb-3"
+                            style="font-size: 9px;"
+                        >
+                            <span t-if="o.payment_type == 'outbound'">Form 14-4-4</span>
+                            <span t-else="">Form 14-4-1</span>
+                        </div>
                         <table class="table table-sm o_main_table">
                             <tr>
                                 <td t-if="o.payment_type=='inbound'">Received from:</td>
@@ -94,8 +102,17 @@
                                 <td t-if="o.payment_type=='transfer'">To:</td>
                                 <td>
                                     <span t-field="o.partner_id.name" />
-<!--                                        <span t-field="o.journal_id.name" />-->
                                 </td>
+                            </tr>
+                            <tr t-if="o.journal_id.type == 'cash'">
+                                <td>Cash desk:</td>
+                                <td>
+                                    <span t-field="o.journal_id.name" />
+                                </td>
+                            </tr>
+                            <tr t-if="o.journal_id.type == 'cash' and o.payment_type == 'outbound'">
+                                <td>Identity document:</td>
+                                <td>............................................</td>
                             </tr>
                             <tr>
                                 <td>Amount:</td>
@@ -136,6 +153,21 @@
                                 </td>
                             </tr>
                         </table>
+                        <div class="row mt-5 pt-4" t-if="o.journal_id.type == 'cash'">
+                            <div class="col-4 text-center">
+                                <div>Manager</div>
+                                <div class="mt-4">......................</div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div>Cashier</div>
+                                <div class="mt-4">......................</div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div t-if="o.payment_type == 'outbound'">Amount received</div>
+                                <div t-else="">Amount deposited</div>
+                                <div class="mt-4">......................</div>
+                            </div>
+                        </div>
                     </div>
                 </t>
             </t>
