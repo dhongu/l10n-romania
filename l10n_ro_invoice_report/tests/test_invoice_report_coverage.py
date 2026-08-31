@@ -116,6 +116,63 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
         # But we can try to call the method.
         invoice._compute_payments_widget_reconciled_info()
 
+    def test_manual_cash_reconciliation_has_payment_type(self):
+        invoice = self.create_invoice()
+        invoice.action_post()
+
+        cash_journal = self.env["account.journal"].create(
+            {
+                "name": "Test Manual Cash",
+                "code": "TMCA",
+                "type": "cash",
+                "company_id": self.company.id,
+            }
+        )
+        payment_move = self.env["account.move"].create(
+            {
+                "move_type": "entry",
+                "journal_id": cash_journal.id,
+                "line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Manual cash receipt",
+                            "account_id": cash_journal.default_account_id.id,
+                            "debit": invoice.amount_total,
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Manual cash receipt",
+                            "account_id": self.partner.property_account_receivable_id.id,
+                            "partner_id": self.partner.id,
+                            "credit": invoice.amount_total,
+                        },
+                    ),
+                ],
+            }
+        )
+        payment_move.action_post()
+
+        receivable_lines = (invoice.line_ids | payment_move.line_ids).filtered(
+            lambda line: line.account_id.account_type == "asset_receivable"
+        )
+        receivable_lines.reconcile()
+        invoice.invalidate_recordset(["invoice_payments_widget"])
+
+        payment_vals = invoice.invoice_payments_widget["content"][0]
+        self.assertFalse(payment_vals["account_payment_id"])
+        self.assertEqual(payment_vals["journal_type"], "cash")
+        self.assertEqual(payment_vals["payment_type"], "inbound")
+
+        report = self.env.ref("account.account_invoices")
+        html, report_type = report._render_qweb_html(report.report_name, invoice.ids)
+        self.assertTrue(html)
+        self.assertIn(report_type, ("html", "qweb-html"))
+
     def test_compute_partner_bank_id(self):
         bank = self.env["res.partner.bank"].create(
             {
