@@ -15,12 +15,15 @@ class TestPaymentIdLength(TransactionCase):
     multe comenzi, ``payment_reference`` conține referințele concatenate pentru
     reconciliere și depășește singur limita -- scurtăm în generator, ca facturile
     deja validate să poată fi transmise fără curățarea manuală a câmpului.
+
+    Limitarea stă pe ``account.edi.xml.ubl_ro``, nu pe ``ubl_bis3``: e o cerință
+    CIUS-RO, nu una a BIS3, deci nu trebuie să afecteze facturile Peppol non-RO.
     """
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.builder = cls.env["account.edi.xml.ubl_bis3"]
+        cls.builder = cls.env["account.edi.xml.ubl_ro"]
 
     def test_long_payment_id_truncated_on_order_separator(self):
         """Tăierea se face la ultimul " - " care încape, fără să rupă un cod."""
@@ -67,3 +70,7 @@ class TestPaymentIdLength(TransactionCase):
         self.builder._l10n_ro_truncate_payment_identifiers(
             {"cac:PaymentMeans": [{"cbc:PaymentMeansCode": {"_text": 30}}]}
         )
+
+    def test_bis3_non_ro_has_no_limit(self):
+        """Limita e CIUS-RO, nu BIS3: generatorul Peppol generic nu o moștenește."""
+        self.assertFalse(hasattr(self.env["account.edi.xml.ubl_bis3"], "_l10n_ro_truncate_payment_identifiers"))
