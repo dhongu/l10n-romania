@@ -657,3 +657,131 @@ msgstr "Act de identitate:"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
 msgid "Manager"
 msgstr "Conducătorul unității"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Beneficiary"
+msgstr "Beneficiar"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Depositor"
+msgstr "Depunător"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Payer"
+msgstr "Plătitor"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Recipient"
+msgstr "Beneficiar"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Price with disc.%</span>"
+msgstr "<span>Preț cu disc.%</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Delegate:</strong>"
+msgstr "<strong>Delegat:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Elaborate:</strong>"
+msgstr "<strong>Întocmit:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Mean Transport:</strong>"
+msgstr "<strong>Mijloc de transport:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Coface Logo"
+msgstr "Logo Coface"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__hide_invoice_payment_communication
+msgid "Hide invoice comments"
+msgstr "Ascunde comentariile de pe factură"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__hide_invoice_payment_communication
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Hide invoice payment communication"
+msgstr "Ascunde comunicarea de plată de pe factură"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__hide_pickings_in_invoice
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__hide_pickings_in_invoice
+msgid "Hide picking in invoice"
+msgstr "Ascunde livrările pe factură"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Hide picking on invoice"
+msgstr "Ascunde livrările pe factură"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Proforma"
+msgstr "Proformă"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__remove_product_name_from_invoice_line
+msgid "Remove product name from invoice line"
+msgstr "Elimină numele produsului din linia de factură"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__remove_product_name_from_invoice_line
+msgid "Remove product name from invoice line if line has description"
+msgstr "Elimină numele produsului din linia de factură dacă linia are descriere"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Remove product name from invoice lines"
+msgstr "Elimină numele produsului din liniile de factură"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__show_coface_logo
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__show_coface_logo
+msgid "Show Coface logo"
+msgstr "Afișează logo Coface"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show delegate on invoices"
+msgstr "Afișează delegatul pe facturi"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__show_invoice_delegate
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__show_invoice_delegate
+msgid "Show invoice delegate"
+msgstr "Afișează delegatul pe factură"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__show_total_amount_with_taxes
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__show_total_amount_with_taxes
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_company__show_total_amount_with_taxes
+#: model:ir.model.fields,help:l10n_ro_invoice_report.field_res_config_settings__show_total_amount_with_taxes
+msgid "Show total amount with taxes"
+msgstr "Afișează totalul cu taxe"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show total amount with taxes on invoice"
+msgstr "Afișează totalul cu taxe pe factură"
+
+#. module: l10n_ro_invoice_report
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_company__show_undiscounted_price_on_invoice
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report.field_res_config_settings__show_undiscounted_price_on_invoice
+msgid "Show undiscounted price on invoice"
+msgstr "Afișează prețul fără discount pe factură"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.res_config_settings_view_form
+msgid "Show undiscounted price on invoices"
+msgstr "Afișează prețul fără discount pe facturi"
