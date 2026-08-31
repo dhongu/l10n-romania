@@ -617,3 +617,43 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account.document_tax_totals_template
 msgid "Untaxed Amount"
 msgstr "Valoare fără TVA"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Amount deposited"
+msgstr "Am depus suma"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Amount received"
+msgstr "Am primit suma"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Cash desk:"
+msgstr "Casieria:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Cashier"
+msgstr "Casier"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Form 14-4-1"
+msgstr "Cod 14-4-1"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Form 14-4-4"
+msgstr "Cod 14-4-4"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Identity document:"
+msgstr "Act de identitate:"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.report_payment
+msgid "Manager"
+msgstr "Conducătorul unității"
