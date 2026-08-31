@@ -91,6 +91,15 @@ class AccountInvoice(models.Model):
                     if payment_id:
                         payment = self.env["account.payment"].browse(payment_id)
                         item["payment_type"] = payment.payment_type
+                    else:
+                        item["payment_type"] = {
+                            "out_invoice": "inbound",
+                            "out_receipt": "inbound",
+                            "in_refund": "inbound",
+                            "in_invoice": "outbound",
+                            "in_receipt": "outbound",
+                            "out_refund": "outbound",
+                        }.get(invoice.move_type)
         return res
 
     @api.depends("bank_partner_id", "commercial_partner_id")
