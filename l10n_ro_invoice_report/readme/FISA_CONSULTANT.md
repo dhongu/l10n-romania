@@ -135,7 +135,8 @@ Ce rămâne manual: completarea delegatului și a mijlocului de transport, compl
 | Delegatul nu apare pe documentul tipărit | Opțiunea „Afișează delegatul pe factură" e dezactivată în setări | Activați opțiunea în setările de facturare, per companie |
 | Dispoziția de plată nu are cod de formular, casierie sau semnături | Plata e pe un jurnal de bancă, nu de casă | Corect — elementele de casierie se tipăresc doar pentru jurnale de casă |
 | Rubrica „Casieria" afișează un nume în engleză | Numele jurnalului de casă provine din datele de configurare | Redenumiți jurnalul de casă |
-| Termeni în engleză rămași pe factură (ex. „without taxes", textul legal) | Provin din alt modul al localizării (`l10n_ro_report_common`), nu din acesta | Se completează în modulul respectiv; nu se rezolvă din setările acestui modul |
+| Numele taxei apare în engleză pe factură (ex. „VAT collected 21% Goods") | Este denumirea taxei din configurare, nu un text traductibil | Redenumiți taxa în planul de conturi al companiei |
+| Termeni în engleză rămași pe un document, deși `i18n/ro.po` pare complet | Traducerea există, dar `msgid`-ul nu se mai potrivește cu șablonul: acesta a fost reindentat, iar Odoo aplică traducerile prin potrivire exactă, spațiul alb inclus. Nimic nu semnalează problema | Reexportați `.pot` și resincronizați `ro.po` pe forma curentă a `msgid`-urilor |
 
 ## 10. Capturi de ecran
 
@@ -155,6 +156,13 @@ Regenerare:
 ```
 
 > Rulați pe o bază **curată**, cu doar aceste module instalate. Pe o bază cu suita completă, randarea ecranelor grele depășește timpul de așteptare al capturii.
+
+> **Notă pentru cine întreține traducerile.** Odoo aplică traducerile de șablon prin potrivire
+> **exactă** a `msgid`-ului, inclusiv newline-urile și indentarea din interiorul textului. Dacă
+> șablonul e reindentat fără a resincroniza `ro.po`, traducerea rămâne în fișier, corectă ca
+> text, dar nu se mai aplică: documentul iese în engleză, iar fișierul pare complet. Verificarea
+> utilă e compararea `msgid`-urilor din `.pot`-ul reexportat cu cele din `ro.po`, nu numărarea
+> intrărilor care au traducere.
 
 ## 11. Observații pentru manual
 
