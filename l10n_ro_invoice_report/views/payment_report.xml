@@ -7,7 +7,12 @@
                     <div class="page">
                         <div class="row">
                             <div class="col-5">
-                                <t t-if="o.payment_type=='outbound'">
+                                <t t-set="is_cash_order" t-value="o.journal_id.type == 'cash' and o.payment_type != 'transfer'" />
+                                <t t-if="is_cash_order">
+                                    <strong t-if="o.payment_type=='outbound'">Payer</strong>
+                                    <strong t-else="">Recipient</strong><br />
+                                </t>
+                                <t t-elif="o.payment_type=='outbound'">
                                     <strong>Customer</strong><br />
                                 </t>
                                 <t t-else="">
@@ -26,7 +31,11 @@
                             </div>
                             <div class="col-5 col-offset-2">
                                 <div>
-                                    <t t-if="o.payment_type=='outbound'">
+                                    <t t-if="is_cash_order">
+                                        <strong t-if="o.payment_type=='outbound'">Beneficiary</strong>
+                                        <strong t-else="">Depositor</strong><br />
+                                    </t>
+                                    <t t-elif="o.payment_type=='outbound'">
                                         <strong>Supplier</strong><br />
                                     </t>
                                     <t t-else="">
