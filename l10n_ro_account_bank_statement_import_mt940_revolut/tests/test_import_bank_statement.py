@@ -78,7 +78,7 @@ class TestImport(TestMT940BankStatementImport):
         transaction = result["statement"]["transactions"][-1]
         self.assertEqual(
             transaction["payment_ref"],
-            "BANI ADAUGATI PRIN TEST SUPPLIER SRL . ALIMENTARE " "CONT-PLATA INTERBANCARA INSTANT",
+            "BANI ADAUGATI PRIN TEST SUPPLIER SRL . ALIMENTARE CONT-PLATA INTERBANCARA INSTANT",
         )
         self.assertEqual(transaction["partner_name"], "TEST SUPPLIER SRL")
 
@@ -94,7 +94,7 @@ class TestImport(TestMT940BankStatementImport):
         wallets in the same file must be dropped rather than blocking the
         import (Odoo can't register the same IBAN on two journals)."""
         testfile = file_path(
-            "l10n_ro_account_bank_statement_import_mt940_revolut/test_files/" "test_revolut_940.txt",
+            "l10n_ro_account_bank_statement_import_mt940_revolut/test_files/test_revolut_940.txt",
         )
         self._load_statement(testfile, mt940_type="mt940_ro_revolut")
         bank_statements = self.get_statements(self.journal.id)
