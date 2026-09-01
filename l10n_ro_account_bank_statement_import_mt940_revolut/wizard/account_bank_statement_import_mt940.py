@@ -10,11 +10,11 @@ class AccountBankStatementImport(models.TransientModel):
     _inherit = "account.statement.import"
 
     def _is_revolut(self):
-        if self._context.get("journal_id"):
-            journal = self.env["account.journal"].browse(self._context["journal_id"])
+        if self.env.context.get("journal_id"):
+            journal = self.env["account.journal"].browse(self.env.context["journal_id"])
             bank_bic = journal.bank_account_id.bank_bic or ""
             return bank_bic.startswith("REVO")
-        return self._context.get("type") == "mt940_ro_revolut"
+        return self.env.context.get("type") == "mt940_ro_revolut"
 
     def _parse_file(self, data_file):
         if self._is_revolut():
