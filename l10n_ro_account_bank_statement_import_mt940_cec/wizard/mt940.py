@@ -114,7 +114,7 @@ class MT940Parser(models.AbstractModel):
                 # Verificare și extragere date
                 if parsed_data:
                     _logger.info(parsed_data)  # Afișează rezultatele extrase
-                    if transaction["amount"] > 0:
+                    if transaction.get("amount", 0) > 0:
                         transaction["partner_name"] = parsed_data.get("platitor", "").strip()
                         transaction["account_number"] = parsed_data.get("iban_p")
                         vat = parsed_data.get("codfis_p")
@@ -134,7 +134,5 @@ class MT940Parser(models.AbstractModel):
                             transaction["partner_id"] = partner.id
                     if parsed_data.get("detalii"):
                         transaction["payment_ref"] = parsed_data.get("detalii")
-
-                    transaction["ref"] = parsed_data.get("ref")
             return result
         return super().handle_tag_86(data, result)
