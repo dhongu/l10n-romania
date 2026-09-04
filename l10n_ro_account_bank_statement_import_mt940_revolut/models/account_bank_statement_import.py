@@ -63,6 +63,4 @@ class AccountBankStatementImport(models.TransientModel):
                 ("bank_account_id.sanitized_acc_number", "ilike", sanitized),
             ],
         )
-        return any(
-            (journal.currency_id or self.env.company.currency_id) == currency for journal in journals
-        )
+        return any((journal.currency_id or self.env.company.currency_id) == currency for journal in journals)
