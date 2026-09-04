@@ -31,11 +31,15 @@ class AccountBankStatementImport(models.TransientModel):
         of the parser's single (first-seen) one, so each wallet is matched
         against its own (currency-specific) bank journal.
 
-        Odoo doesn't allow registering the same account number twice on a
-        partner (see the `unique(sanitized_acc_number, partner_id)` SQL
-        constraint on `res.partner.bank`), so a single Revolut IBAN can only
-        ever be linked to one journal/currency. Wallets for which no such
-        journal exists are dropped instead of making the whole import fail.
+        Odoo's statement import requires the statement's own currency to
+        match the target journal's currency exactly (see
+        `account.statement.import._match_journal`), so a wallet can only be
+        imported into a journal of the same currency. Several journals can
+        share the same IBAN (one per currency wallet) - nothing prevents
+        that on `res.partner.bank`, which only blocks *duplicating* the IBAN
+        record, not reusing it across journals. Wallets for which no journal
+        of the matching currency exists (on that IBAN) are dropped instead
+        of making the whole import fail.
         """
         default_currency, account_number, statements = data
         grouped = {}
@@ -53,14 +57,12 @@ class AccountBankStatementImport(models.TransientModel):
         if not currency:
             return False
         sanitized = sanitize_account_number(account_number)
-        journal = self.env["account.journal"].search(
+        journals = self.env["account.journal"].search(
             [
                 ("type", "=", "bank"),
                 ("bank_account_id.sanitized_acc_number", "ilike", sanitized),
             ],
-            limit=1,
         )
-        if not journal:
-            return False
-        journal_currency = journal.currency_id or self.env.company.currency_id
-        return journal_currency == currency
+        return any(
+            (journal.currency_id or self.env.company.currency_id) == currency for journal in journals
+        )
