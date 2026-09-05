@@ -92,7 +92,7 @@ class TestImport(TestMT940BankStatementImport):
     def test_statement_import(self):
         """Only the RON wallet has a matching journal, the EUR/GBP/USD
         wallets in the same file must be dropped rather than blocking the
-        import (Odoo can't register the same IBAN on two journals)."""
+        import."""
         testfile = file_path(
             "l10n_ro_account_bank_statement_import_mt940_revolut/test_files/test_revolut_940.txt",
         )
@@ -114,3 +114,24 @@ class TestImport(TestMT940BankStatementImport):
 
         topup = lines.filtered(lambda line: line.partner_name == "TEST SUPPLIER SRL" and line.amount == 5000.0)
         self.assertEqual(len(topup), 2)
+
+    def test_statement_import_multiple_currency_journals(self):
+        """When a second journal (in another currency) is linked to the same
+        IBAN, its wallet must be imported too, instead of being dropped
+        because the currency-less journal lookup only ever found the first
+        journal on that IBAN (see _revolut_journal_exists)."""
+        eur_curr = self.env.ref("base.EUR")
+        eur_curr.write({"active": True})
+        eur_journal = self.create_journal("TBNK5MT940", self.bank, eur_curr)
+
+        testfile = file_path(
+            "l10n_ro_account_bank_statement_import_mt940_revolut/test_files/test_revolut_940.txt",
+        )
+        self._load_statement(testfile, mt940_type="mt940_ro_revolut")
+
+        ron_lines = self.get_statements(self.journal.id).line_ids
+        self.assertEqual(len(ron_lines), 14)
+
+        eur_lines = self.get_statements(eur_journal.id).line_ids
+        self.assertEqual(len(eur_lines), 3)
+        self.assertAlmostEqual(sum(eur_lines.mapped("amount")), 1249.53)
