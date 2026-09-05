@@ -8,7 +8,7 @@
     "summary": "Romania - Import bank statements from Revolut",
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],
     "license": "AGPL-3",
-    "version": "18.0.0.1.0",
+    "version": "18.0.0.1.1",
     "author": "Terrabit, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "installable": True,
