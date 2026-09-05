@@ -121,6 +121,7 @@ class TestImport(TestMT940BankStatementImport):
         because the currency-less journal lookup only ever found the first
         journal on that IBAN (see _revolut_journal_exists)."""
         eur_curr = self.env.ref("base.EUR")
+        eur_curr.write({"active": True})
         eur_journal = self.create_journal("TBNK5MT940", self.bank, eur_curr)
 
         testfile = file_path(
