@@ -5,7 +5,7 @@
     "version": "18.0.1.0.7",
     "countries": ["ro"],
     "author": "Terrabit,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "website": "https://www.terrabit.ro",
     "category": "Localization",
     "depends": [
         "l10n_ro_stock_account",
