@@ -529,3 +529,38 @@ msgstr "π.χ. BNK/2021/0001"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "from"
 msgstr "από"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"<br/>\n"
+"            <span>(without taxes)</span>"
+msgstr ""
+"<br/>\n"
+"            <span>(χωρίς ΦΠΑ)</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Taxes Values</span>"
+msgstr "<span>Αξία ΦΠΑ</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"<span>Total amount</span>\n"
+"                <br/>\n"
+"                <span>(with taxes)</span>"
+msgstr ""
+"<span>Σύνολο</span>\n"
+"                <br/>\n"
+"                <span>(με ΦΠΑ)</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Price with disc.%</span>"
+msgstr "<span>Τιμή με έκπτ. %</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong class=\"mr16 ml16\">Subtotal (with taxes)</strong>"
+msgstr "<strong class=\"mr16 ml16\">Μερικό σύνολο (με ΦΠΑ)</strong>"

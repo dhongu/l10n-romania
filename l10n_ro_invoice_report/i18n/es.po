@@ -442,3 +442,38 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "from"
 msgstr "de"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"<br/>\n"
+"            <span>(without taxes)</span>"
+msgstr ""
+"<br/>\n"
+"            <span>(sin IVA)</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Taxes Values</span>"
+msgstr "<span>Imp. IVA</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"<span>Total amount</span>\n"
+"                <br/>\n"
+"                <span>(with taxes)</span>"
+msgstr ""
+"<span>Total</span>\n"
+"                <br/>\n"
+"                <span>(con IVA)</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Price with disc.%</span>"
+msgstr "<span>Precio con dto. %</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong class=\"mr16 ml16\">Subtotal (with taxes)</strong>"
+msgstr "<strong class=\"mr16 ml16\">Subtotal (con IVA)</strong>"
