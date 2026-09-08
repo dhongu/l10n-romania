@@ -8,6 +8,8 @@ import logging
 from odoo import models
 from odoo.tools.safe_eval import safe_eval
 
+from odoo.addons.account_edi_ubl_cii.models.account_edi_common import FloatFmt
+
 _logger = logging.getLogger(__name__)
 
 DEFAULT_VAT = "0000000000000"
@@ -245,17 +247,39 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
                 return
         super()._ubl_add_payment_means_nodes(vals)
 
-    def _add_invoice_monetary_total_vals(self, vals):
+    def _ubl_add_legal_monetary_total_prepaid_payable_amount_node(self, vals, in_foreign_currency=True):
+        """Cat timp factura nu e stinsa, declara PrepaidAmount = 0 si PayableAmount = totalul.
+
+        Standardul Odoo scrie PayableAmount = amount_residual si PrepaidAmount =
+        amount_total - amount_residual, adica suma de plata din XML depinde de ce
+        plati sunt alocate in Odoo in momentul trimiterii la ANAF.
+
+        Nu e ce vrem la livrarile cu plata la ramburs (cash on delivery): incasarea
+        se inregistreaza in Odoo pe fluxul de curierat, dar factura trimisa
+        cumparatorului trebuie sa ceara tot totalul, altfel ajunge la ANAF cu o
+        suma de plata mai mica (uneori zero) decat cea pe care o plateste efectiv
+        clientul curierului.
+
+        Pe 18.0 acelasi comportament era implementat in _get_invoice_monetary_total_vals;
+        in 19.0 acel hook (si _add_invoice_monetary_total_vals) nu mai e apelat de nimeni.
+        """
         # EXTENDS account.edi.xml.ubl_bis3
-        res = super()._add_invoice_monetary_total_vals(vals)
+        super()._ubl_add_legal_monetary_total_prepaid_payable_amount_node(vals, in_foreign_currency=in_foreign_currency)
+        if not self._is_document(vals, "invoice", "credit_note", "self_invoice", "self_credit_note"):
+            return
         invoice = vals.get("invoice")
-        if invoice and invoice.payment_state != "paid":
-            document_node = vals.get("document_node", {})
-            monetary_total = document_node.get("cac:LegalMonetaryTotal", {})
-            if monetary_total:
-                monetary_total["cbc:PrepaidAmount"] = {"_text": 0.0}
-                monetary_total["cbc:PayableAmount"] = {"_text": invoice.amount_total}
-        return res
+        if not invoice or invoice.payment_state == "paid":
+            return
+
+        currency = vals["currency_id"] if in_foreign_currency else vals["company_currency"]
+        if in_foreign_currency:
+            amount_total = invoice.amount_total
+        else:
+            amount_total = invoice.amount_total_signed * -invoice.direction_sign
+
+        node = vals["legal_monetary_total_node"]
+        node["cbc:PrepaidAmount"]["_text"] = FloatFmt(0.0, min_dp=currency.decimal_places)
+        node["cbc:PayableAmount"]["_text"] = FloatFmt(amount_total, min_dp=currency.decimal_places)
 
     def _invoice_constraints_peppol_en16931_ubl(self, invoice, vals):
         res = super()._invoice_constraints_peppol_en16931_ubl(invoice, vals)

@@ -1,3 +1,26 @@
+## 19.0.0.4.2 (2026-09-08)
+
+- **Fix: `cbc:PrepaidAmount` / `cbc:PayableAmount` nu mai depind de plățile
+  alocate în Odoo.** Cât timp factura nu e stinsă, XML-ul trimis la ANAF declară
+  din nou `PrepaidAmount = 0` și `PayableAmount` = totalul facturii. E
+  comportamentul cerut de livrările cu plata la ramburs: încasarea se
+  înregistrează în Odoo pe fluxul de curierat, dar factura trebuie să ceară tot
+  totalul.
+  - **De ce se pierduse**: logica stătea pe `_add_invoice_monetary_total_vals`,
+    un hook care în Odoo 19 e `pass` în standard și nu mai e apelat de nimeni.
+    `super()` mergea, deci nu apărea nicio eroare -- valorile pur și simplu nu
+    ajungeau în XML. Am mutat-o pe hook-ul real,
+    `_ubl_add_legal_monetary_total_prepaid_payable_amount_node`.
+  - **Impact practic**: facturile parțial încasate (și cele în „în curs de
+    plată") plecau cu o sumă de plată mai mică decât cea datorată de client.
+    Facturile complet neîncasate nu erau afectate, fiindcă acolo standardul
+    ajunge la aceleași valori.
+  - Facturile stinse rămân pe comportamentul standard EN16931
+    (BT-115 = BT-112 − BT-113).
+  - Test nou (`tests/test_monetary_total_payable.py`) care verifică valorile în
+    XML-ul generat, nu metoda în izolare -- exact regresia care a trecut
+    neobservată de la migrarea pe 19.0.
+
 ## 19.0.0.4.0 (2026-08-21)
 
 - **Importul automat al facturilor primite din SPV este acum oprit implicit.**
