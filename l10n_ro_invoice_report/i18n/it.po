@@ -497,3 +497,98 @@ msgstr "<span>Prezzo scontato %</span>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong class=\"mr16 ml16\">Subtotal (with taxes)</strong>"
 msgstr "<strong class=\"mr16 ml16\">Subtotale (IVA inclusa)</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Invoice"
+msgstr "Fattura"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Draft Invoice"
+msgstr "Fattura in bozza"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Credit Note"
+msgstr "Nota di credito"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Draft Credit Note"
+msgstr "Nota di credito in bozza"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Vendor Bill"
+msgstr "Fattura fornitore"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Vendor Credit Note"
+msgstr "Nota di credito fornitore"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Sales Receipt"
+msgstr "Ricevuta di vendita"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Draft Sales Receipt"
+msgstr "Ricevuta di vendita in bozza"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "units"
+msgstr "unità"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Cancelled Invoice"
+msgstr "Fattura annullata"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Cancelled Credit Note"
+msgstr "Nota di credito annullata"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Cancelled Sales Receipt"
+msgstr "Ricevuta di vendita annullata"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Proforma"
+msgstr "Proforma"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Elaborate:</strong>"
+msgstr "<strong>Redatto da:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Delegate:</strong>"
+msgstr "<strong>Delegato:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Mean Transport:</strong>"
+msgstr "<strong>Mezzo di trasporto:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>I payed to</span>"
+msgstr "<span>Ho pagato a</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Representing counter value of sales receipt"
+msgstr "Rappresentante il controvalore della ricevuta di vendita"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Coface Logo"
+msgstr "Logo Coface"

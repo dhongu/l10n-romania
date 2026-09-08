@@ -497,3 +497,98 @@ msgstr "<span>Preis mit Rabatt %</span>"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "<strong class=\"mr16 ml16\">Subtotal (with taxes)</strong>"
 msgstr "<strong class=\"mr16 ml16\">Zwischensumme (mit MwSt.)</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Invoice"
+msgstr "Rechnung"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Draft Invoice"
+msgstr "Rechnungsentwurf"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Credit Note"
+msgstr "Gutschrift"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Draft Credit Note"
+msgstr "Gutschrift im Entwurf"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Vendor Bill"
+msgstr "Lieferantenrechnung"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Vendor Credit Note"
+msgstr "Lieferantengutschrift"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Sales Receipt"
+msgstr "Verkaufsbeleg"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Draft Sales Receipt"
+msgstr "Verkaufsbeleg im Entwurf"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "units"
+msgstr "Einheiten"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Cancelled Invoice"
+msgstr "Stornorechnung"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Cancelled Credit Note"
+msgstr "Stornierte Gutschrift"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Cancelled Sales Receipt"
+msgstr "Stornierter Verkaufsbeleg"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.header_invoice
+msgid "Proforma"
+msgstr "Proforma"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Elaborate:</strong>"
+msgstr "<strong>Erstellt von:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Delegate:</strong>"
+msgstr "<strong>Beauftragter:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong>Mean Transport:</strong>"
+msgstr "<strong>Transportmittel:</strong>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>I payed to</span>"
+msgstr "<span>Ich zahlte an</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Representing counter value of sales receipt"
+msgstr "Gegenwert des Verkaufsbelegs"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "Coface Logo"
+msgstr "Coface-Logo"
