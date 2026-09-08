@@ -54,8 +54,11 @@ Key Features
     (``Nu importa automat facturile primite din SPV``) lets you skip the
     native "E-Factura: Synchronize with ANAF" auto-creation of received
     vendor bills, while keeping the sent-invoice status synchronization
-    (accepted/refused) intact. Disabled by default, so native behavior
-    is unchanged unless explicitly enabled.
+    (accepted/refused) intact. Enabled by default for newly created
+    companies, since the reference flow is the bill entered from the
+    purchase order and the parallel draft would duplicate it; existing
+    companies keep their stored value. Untick it to restore the native
+    auto-import.
 
 - **Data Truncation and Sanitization**:
 
@@ -230,6 +233,56 @@ Alte îmbunătățiri planificate
 
 Changelog
 =========
+
+19.0.0.4.2 (2026-09-08)
+-----------------------
+
+- **Fix: ``cbc:PrepaidAmount`` / ``cbc:PayableAmount`` nu mai depind de
+  plățile alocate în Odoo.** Cât timp factura nu e stinsă, XML-ul trimis
+  la ANAF declară din nou ``PrepaidAmount = 0`` și ``PayableAmount`` =
+  totalul facturii. E comportamentul cerut de livrările cu plata la
+  ramburs: încasarea se înregistrează în Odoo pe fluxul de curierat, dar
+  factura trebuie să ceară tot totalul.
+
+  - **De ce se pierduse**: logica stătea pe
+    ``_add_invoice_monetary_total_vals``, un hook care în Odoo 19 e
+    ``pass`` în standard și nu mai e apelat de nimeni. ``super()``
+    mergea, deci nu apărea nicio eroare -- valorile pur și simplu nu
+    ajungeau în XML. Am mutat-o pe hook-ul real,
+    ``_ubl_add_legal_monetary_total_prepaid_payable_amount_node``.
+  - **Impact practic**: facturile parțial încasate (și cele în „în curs
+    de plată") plecau cu o sumă de plată mai mică decât cea datorată de
+    client. Facturile complet neîncasate nu erau afectate, fiindcă acolo
+    standardul ajunge la aceleași valori.
+  - Facturile stinse rămân pe comportamentul standard EN16931 (BT-115 =
+    BT-112 − BT-113).
+  - Test nou (``tests/test_monetary_total_payable.py``) care verifică
+    valorile în XML-ul generat, nu metoda în izolare -- exact regresia
+    care a trecut neobservată de la migrarea pe 19.0.
+
+19.0.0.4.0 (2026-08-21)
+-----------------------
+
+- **Importul automat al facturilor primite din SPV este acum oprit
+  implicit.** Câmpul ``l10n_ro_edi_no_auto_bill`` are ``default=True``,
+  deci o companie nouă nu mai primește ciorne create de cronul nativ
+  „E-Factura: Synchronize with ANAF". Fluxul de referință este factura
+  introdusă din comanda de achiziție (sau creată din mesajul SPV și
+  legată la comandă); ciorna adusă în paralel de cron se dublează cu ea,
+  iar deduplicarea nativă compară doar (CUI, total, dată) și nu verifică
+  deloc sensul invers — factura introdusă *după* ce ciorna există deja.
+  Pe un client în producție am găsit 6 astfel de dubluri, toate cu
+  ciorna creată prima.
+
+  - **Companiile existente nu sunt afectate**: ``default`` se aplică
+    doar companiilor create ulterior, valoarea stocată a celor actuale
+    rămâne neschimbată.
+  - **Atenție la instalările noi**: comportamentul nativ Odoo 19 (import
+    automat) nu mai este cel implicit. Dacă îl vreți, debifați „Nu
+    importa automat facturile primite din SPV" din Setări →
+    Contabilitate → eFactura SPV.
+  - Trimiterea facturilor și sincronizarea statusului (acceptat/refuzat)
+    rămân neatinse, ca și până acum.
 
 19.0.0.3.23 (2026-07-29)
 ------------------------
