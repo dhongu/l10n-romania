@@ -533,3 +533,38 @@ msgstr "напр. BNK/2021/0001"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
 msgid "from"
 msgstr "от"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"<br/>\n"
+"            <span>(without taxes)</span>"
+msgstr ""
+"<br/>\n"
+"            <span>(без ДДС)</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Taxes Values</span>"
+msgstr "<span>Сума ДДС</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid ""
+"<span>Total amount</span>\n"
+"                <br/>\n"
+"                <span>(with taxes)</span>"
+msgstr ""
+"<span>Общо</span>\n"
+"                <br/>\n"
+"                <span>(с ДДС)</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<span>Price with disc.%</span>"
+msgstr "<span>Цена с отст. %</span>"
+
+#. module: l10n_ro_invoice_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report.l10n_ro_report_invoice_document
+msgid "<strong class=\"mr16 ml16\">Subtotal (with taxes)</strong>"
+msgstr "<strong class=\"mr16 ml16\">Междинна сума (с ДДС)</strong>"
