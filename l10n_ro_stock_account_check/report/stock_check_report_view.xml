@@ -69,8 +69,8 @@
 
                     <button
                         name="action_fix_svl"
-                        aria-label="Fix Stock Valuation Layer"
-                        string="Fix SVL"
+                        aria-label="Fix Valuation"
+                        string="Fix Valuation"
                         type="object"
                         icon="fa-wrench"
                     />
@@ -85,7 +85,7 @@
 
                     <button
                         name="action_move_svl_to_product_account"
-                        string="Move SLV on Product Account"
+                        string="Move Valuation on Product Account"
                         type="object"
                     />
 
@@ -217,7 +217,7 @@
                 <field name="product_id" />
                 <field name="account_id" />
 <!--                <filter string="In Stock" name="in_stoc" domain="[('quantity', '>', 0)]"/>-->
-                <group expand="1" string="Group by">
+                <group name="group_by">
                     <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}" />
                 </group>
             </search>

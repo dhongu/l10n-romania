@@ -10,4 +10,7 @@ class StockPicking(models.Model):
 
     def correction_valuation(self):
         for picking in self:
-            picking.move_line_ids.correction_valuation()
+            # Up to 18.0 this called `move_line_ids`, which is stock.move.line
+            # and never carried `correction_valuation` - the picking action was
+            # a no-op that raised.  The valuation lives on the moves.
+            picking.move_ids.correction_valuation()

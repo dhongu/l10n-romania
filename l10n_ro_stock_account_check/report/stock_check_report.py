@@ -4,11 +4,33 @@ import logging
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import _, api, fields, models
+from odoo import Command, api, fields, models
+from odoo.exceptions import UserError
+from odoo.tools import SQL
 from odoo.tools.float_utils import float_is_zero, float_round
 from odoo.tools.misc import format_date
 
+from ..models.stock_move import INTERNAL_MOVE_TYPES, VALUATION_SIGN
+
 _logger = logging.getLogger(__name__)
+
+
+def _sign_case(signs, column):
+    """Build the CASE expression turning a move type into a signed amount.
+
+    In 18.0 `stock.valuation.layer.value` was already signed; in 19.0
+    `stock.move.value` is always positive, so the sign has to come from the
+    move type - see VALUATION_SIGN in models/stock_move.py.
+    """
+    sql = SQL("CASE")
+    for move_type, sign in signs.items():
+        sql = SQL(
+            "%s WHEN %s THEN %s",
+            sql,
+            SQL("sm.l10n_ro_move_type = %s", move_type),
+            SQL("%s * sm.%s", sign, SQL(column)),
+        )
+    return SQL("%s ELSE 0 END", sql)
 
 
 class StockAccountingCheck(models.TransientModel):
@@ -40,9 +62,11 @@ class StockAccountingCheck(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
+        # In 19.0 account.account is shared between companies through
+        # `company_ids`; `company_id` is no longer a searchable column on it.
         domain = [
             ("code", "=", "371000"),
-            ("company_id", "=", self.env.company.id),
+            ("company_ids", "in", self.env.company.ids),
         ]
         account = self.env["account.account"].search(domain, limit=1)
         if account:
@@ -63,137 +87,165 @@ class StockAccountingCheck(models.TransientModel):
             ],
             limit=1,
         )
-        categories = self.env["product.category"].search([])
+        categories = self.env["product.category"].search([], limit=1000)
         journals = categories.mapped("property_stock_journal")
         if journals:
             res["journal_id"] = journals[0].id
         res["picking_type_id"] = stock_picking_type.id if stock_picking_type else False
         return res
 
+    def _get_valuation_query(self, signs, where):
+        """Valuation leg of the check, read from the stock moves."""
+        details = SQL(", array[]::integer[] as move_ids, array[]::integer[] as aml_ids")
+        if self.line_details:
+            details = SQL(", array_agg(sm.id) as move_ids, array[]::integer[] as aml_ids")
+        return SQL(
+            """
+            SELECT sm.product_id,
+                   sm.l10n_ro_account_id as account_id,
+                   sum(%(value)s) as svl_value,
+                   sum(%(quantity)s) as quantity_svl,
+                   0 as aml_value,
+                   0 as quantity_aml
+                   %(details)s
+              FROM stock_move as sm
+             WHERE sm.state = 'done'
+               AND sm.company_id = %(company)s
+               AND sm.l10n_ro_move_type IS NOT NULL
+               AND sm.l10n_ro_account_id IS NOT NULL
+               AND sm.l10n_ro_move_type NOT IN %(internal)s
+               %(where)s
+             GROUP BY sm.product_id, sm.l10n_ro_account_id
+            """,
+            value=_sign_case(signs, "value"),
+            quantity=_sign_case(signs, "product_qty"),
+            details=details,
+            company=self.company_id.id,
+            internal=INTERNAL_MOVE_TYPES,
+            where=where,
+        )
+
     def do_compute_product(self):
         self.line_ids.unlink()
 
-        _select = ""
-        _select_svl = ""
-        _select_aml = ""
-        _where_svl = ""
-        _where_aml = ""
-        if self.all_products:
-            _having = ""
-        else:
-            _having = """
-                   having abs( sum(svl_value) - sum(aml_value) ) > 0.1 or
-                   abs( sum(svl_value) - sum(remaining_value) ) > 0.1 or
-                   abs( sum(quantity_svl) - sum(remaining_qty) ) > 0.1
+        _where_svl = SQL("")
+        _where_aml = SQL("")
+        _having = SQL("")
+        if not self.all_products:
+            _having = SQL(
                 """
+                having abs( sum(svl_value) - sum(aml_value) ) > 0.1
+                """
+            )
             if self.interval:
-                _where_svl = (
-                    "AND date_trunc('day',sm.date) >= %(date_from)s  AND date_trunc('day',sm.date) <= %(date_to)s"
+                _where_svl = SQL(
+                    """
+                    AND date_trunc('day', sm.date) >= %s
+                    AND date_trunc('day', sm.date) <= %s
+                    """,
+                    self.date_from,
+                    self.date_to,
                 )
-                _where_aml = (
-                    "AND date_trunc('day',aml.date) >= %(date_from)s  AND date_trunc('day',aml.date) <= %(date_to)s"
+                _where_aml = SQL(
+                    """
+                    AND date_trunc('day', aml.date) >= %s
+                    AND date_trunc('day', aml.date) <= %s
+                    """,
+                    self.date_from,
+                    self.date_to,
                 )
 
         if self.product_id:
-            _where_svl += " AND sm.product_id = %(product)s"
-            _where_aml += " AND aml.product_id = %(product)s"
-            _having = ""
-
-        accounts = self.env["account.account"].search([("code", "=like", "3%")])
-        # accounts |= self.env["account.account"].search([("code", "like", "408%")])
+            _where_svl = SQL("%s AND sm.product_id = %s", _where_svl, self.product_id.id)
+            _where_aml = SQL("%s AND aml.product_id = %s", _where_aml, self.product_id.id)
+            _having = SQL("")
 
         if self.account_id:
-            _where_svl += " AND l10n_ro_account_id = %(account)s"
-            _where_aml += " AND account_id = %(account)s "
+            _where_valuation = SQL("%s AND sm.l10n_ro_account_id = %s", _where_svl, self.account_id.id)
+            _where_aml = SQL("%s AND aml.account_id = %s", _where_aml, self.account_id.id)
         else:
-            _where_svl += " "
-            _where_aml += " AND account_id in %(accounts)s"
+            accounts = self.env["account.account"].search([("code", "=like", "3%")])
+            _where_valuation = _where_svl
+            _where_aml = SQL("%s AND aml.account_id in %s", _where_aml, tuple(accounts.ids or [0]))
 
+        # Internal moves are left out of both sides - see INTERNAL_MOVE_TYPES in
+        # models/stock_move.py.  On the accounting side that means dropping the
+        # journal items of the entries those moves generated.
+        _where_aml = SQL(
+            """%s AND aml.move_id NOT IN (
+                   SELECT account_move_id FROM stock_move
+                    WHERE account_move_id IS NOT NULL
+                      AND l10n_ro_move_type IN %s)""",
+            _where_aml,
+            INTERNAL_MOVE_TYPES,
+        )
+
+        details_select = SQL("")
+        details_aml = SQL(", array[]::integer[] as move_ids, array[]::integer[] as aml_ids")
         if self.line_details:
-            _select = ",jsonb_agg(svl_ids) as svl_ids, jsonb_agg(aml_ids) as aml_ids"
-            _select_svl = ",array_agg(svl.id) as svl_ids, array[]::integer[] as aml_ids"
-            _select_aml = ",array[]::integer[] as svl_ids, array_agg(aml.id) as aml_ids"
+            details_select = SQL(", jsonb_agg(move_ids) as move_ids, jsonb_agg(aml_ids) as aml_ids")
+            details_aml = SQL(", array[]::integer[] as move_ids, array_agg(aml.id) as aml_ids")
 
-        query = f"""
-            SELECT %(report)s as report_id, product_id, account_id,
-                    sum(svl_value) as amount_svl ,
-                    sum(quantity_svl) as quantity_svl,
-                    sum(remaining_qty) as remaining_qty,
-                    sum(remaining_value) as remaining_value,
-                    sum(aml_value) as amount_aml,
-                    sum(quantity_aml) as quantity_aml
-                    {_select}
-
-                FROM
-                 (  ( select sm.product_id, l10n_ro_account_id as account_id,
-                        sum(svl.value) as svl_value ,
-                        sum(svl.quantity) as quantity_svl,
-                        sum(svl.remaining_qty) as remaining_qty,
-                        sum(svl.remaining_value) as remaining_value,
-                        0 as aml_value,
-                        0 as quantity_aml
-                        {_select_svl}
-                     from stock_valuation_layer as svl
-                          left join stock_move as sm on svl.stock_move_id = sm.id
-                      where svl.company_id = %(company)s
-                            {_where_svl}
-                      group by sm.product_id, l10n_ro_account_id)
-                union all
-                select product_id, account_id,
-                        0 as svl_value,
-                        0 as quantity_svl,
-                        0 as remaining_qty,
-                        0 as remaining_value,
-                        sum(aml.balance) as aml_value,
-                        sum(aml.quantity) as quantity_aml
-                        {_select_aml}
-                 from account_move_line as aml
-                    where
-                            product_id is not null and
-                            parent_state = 'posted' and
-                            company_id = %(company)s
-                            {_where_aml}
-                 group by product_id, account_id
-                 ) as subq
-
-
-                 group by product_id, account_id
-                 {_having}
-                 limit %(limit)s
+        query = SQL(
             """
-
-        params = {
-            "report": self.id,
-            "company": self.company_id.id,
-            "account": self.account_id.id,
-            "accounts": tuple(accounts.ids),
-            "date_from": fields.Date.to_string(self.date_from),
-            "date_to": fields.Date.to_string(self.date_to),
-            "product": self.product_id.id,
-            "limit": self.limit,
-        }
-        self.env.cr.execute(query, params=params)  # pylint: disable=E8103
+            SELECT %(report)s as report_id, product_id, account_id,
+                   sum(svl_value) as amount_svl,
+                   sum(quantity_svl) as quantity_svl,
+                   sum(aml_value) as amount_aml,
+                   sum(quantity_aml) as quantity_aml
+                   %(details_select)s
+              FROM ( %(valuation)s
+                     UNION ALL
+                     SELECT aml.product_id, aml.account_id,
+                            0 as svl_value,
+                            0 as quantity_svl,
+                            sum(aml.balance) as aml_value,
+                            sum(aml.quantity) as quantity_aml
+                            %(details_aml)s
+                       FROM account_move_line as aml
+                      WHERE aml.product_id is not null
+                        AND aml.parent_state = 'posted'
+                        AND aml.company_id = %(company)s
+                        %(where_aml)s
+                      GROUP BY aml.product_id, aml.account_id
+                   ) as subq
+             GROUP BY product_id, account_id
+             %(having)s
+             LIMIT %(limit)s
+            """,
+            report=self.id,
+            details_select=details_select,
+            valuation=self._get_valuation_query(VALUATION_SIGN, _where_valuation),
+            details_aml=details_aml,
+            company=self.company_id.id,
+            where_aml=_where_aml,
+            having=_having,
+            limit=self.limit,
+        )
+        self.env.cr.execute(query)
         lines = self.env.cr.dictfetchall()
         for line in lines:
             if self.line_details:
-                svl_ids = list(sum(line["svl_ids"], []))
-                if svl_ids:
-                    line["svl_ids"] = [(6, 0, svl_ids)]
-                else:
-                    line["svl_ids"] = False
+                move_ids = list(sum(line["move_ids"], []))
+                line["move_ids"] = [(6, 0, move_ids)] if move_ids else False
 
                 aml_ids = list(sum(line["aml_ids"], []))
-                if aml_ids:
-                    line["aml_ids"] = [(6, 0, aml_ids)]
-                else:
-                    line["aml_ids"] = False
+                line["aml_ids"] = [(6, 0, aml_ids)] if aml_ids else False
+            else:
+                line.pop("move_ids", None)
+                line.pop("aml_ids", None)
 
         self.line_ids.create(lines)
-        query = """
+
+        # Last purchase price, used by the cost price fix.
+        self.env.cr.execute(
+            SQL(
+                """
               WITH last_purchase_price_per_product AS (
                     SELECT DISTINCT ON (aml.product_id)
                            aml.product_id,
-                           ROUND(aml.price_unit / COALESCE(cr.rate, 1), 2) AS price_unit_company_currency
+                           ROUND(aml.price_unit / COALESCE(cr.rate, 1), 2)
+                               AS price_unit_company_currency
                     FROM account_move_line aml
                     JOIN account_move am ON aml.move_id = am.id
                     LEFT JOIN LATERAL (
@@ -213,10 +265,13 @@ class StockAccountingCheck(models.TransientModel):
             UPDATE stock_accounting_check_line sacl
             SET last_purchase_price = lpp.price_unit_company_currency
             FROM last_purchase_price_per_product lpp
-            WHERE sacl.product_id = lpp.product_id;
-        """
-        # pylint: disable=E8103
-        self.env.cr.execute(query)
+            WHERE sacl.product_id = lpp.product_id
+              AND sacl.report_id = %s;
+            """,
+                self.id,
+            )
+        )
+        self.line_ids.invalidate_recordset(["last_purchase_price"])
 
     def do_check_purchases(self):
         products = self.line_ids.mapped("product_id")
@@ -227,15 +282,21 @@ class StockAccountingCheck(models.TransientModel):
             if purchase.invoice_count == 1:
                 invoice_date = purchase.invoice_ids.invoice_date or fields.Date.today()
                 for picking in purchase.picking_ids:
-                    if invoice_date != picking.date.date() and not picking.notice:
-                        new_date = picking.date.replace(
+                    # `stock.picking.date` was dropped in 19.0; the date the
+                    # valuation and the journal entry follow is `date_done`.
+                    picking_date = picking.date_done or picking.scheduled_date
+                    if not picking_date:
+                        continue
+                    if invoice_date != picking_date.date() and not picking.l10n_ro_notice:
+                        new_date = picking_date.replace(
                             year=invoice_date.year,
                             month=invoice_date.month,
                             day=invoice_date.day,
                         )
                         if new_date.hour < 3:
                             new_date = new_date.replace(hour=12)
-                        picking.write({"date": new_date})
+                        picking.write({"date_done": new_date})
+                        picking.move_ids.write({"date": new_date})
                         picking.move_line_ids.write({"date": new_date})
                         ok = False
             if (
@@ -244,8 +305,8 @@ class StockAccountingCheck(models.TransientModel):
                 and purchase.state not in ["done", "cancel"]
             ):
                 if not purchase.activity_ids:
-                    note = _("Receptie fara factura")
-                    summary = _("Factura lipsa")
+                    note = self.env._("Reception without bill")
+                    summary = self.env._("Missing bill")
                     purchase.activity_schedule(
                         "mail.mail_activity_data_warning",
                         note=note,
@@ -263,18 +324,18 @@ class StockAccountingCheck(models.TransientModel):
             if sale_order.invoice_count == 1:
                 invoice_date = sale_order.invoice_ids.invoice_date or fields.Date.today()
                 for picking in sale_order.picking_ids:
-                    if invoice_date != picking.date.date() and not picking.notice:
-                        new_date = picking.date.replace(
+                    picking_date = picking.date_done or picking.scheduled_date
+                    if not picking_date:
+                        continue
+                    if invoice_date != picking_date.date() and not picking.l10n_ro_notice:
+                        new_date = picking_date.replace(
                             year=invoice_date.year,
                             month=invoice_date.month,
                             day=invoice_date.day,
                         )
                         if new_date.hour < 3:
                             new_date = new_date.replace(hour=12)
-                        picking.write({"date": new_date})
-                        # picking.move_lines.write({"date": new_date})
-                        # account_move = picking.mapped('move_line_ids.stock_valuation_layer_ids.account_move_id')
-                        # account_move.write({'date': invoice_date})
+                        picking.write({"date_done": new_date})
                         ok = False
             if (
                 sale_order.invoice_status == "to invoice"
@@ -282,8 +343,8 @@ class StockAccountingCheck(models.TransientModel):
                 and sale_order.state not in ["done", "cancel"]
             ):
                 if not sale_order.activity_ids:
-                    note = _("Livrare fara factura")
-                    summary = _("Factura lipsa")
+                    note = self.env._("Delivery without invoice")
+                    summary = self.env._("Missing invoice")
                     sale_order.activity_schedule(
                         "mail.mail_activity_data_warning",
                         note=note,
@@ -294,14 +355,17 @@ class StockAccountingCheck(models.TransientModel):
 
     def do_check_move(self):
         products = self.line_ids.mapped("product_id")
-        stock_moves = self.env["stock.move"].search([("product_id", "in", products.ids)])
+        stock_moves = self.env["stock.move"].search([("product_id", "in", products.ids), ("state", "=", "done")])
         for stock_move in stock_moves:
             stock_move_date = stock_move.date.date()
-            account_moves = stock_move.mapped("stock_valuation_layer_ids.account_move_id")
+            account_moves = stock_move.account_move_id
+            if "l10n_ro_extra_account_move_ids" in stock_move._fields:
+                account_moves |= stock_move.l10n_ro_extra_account_move_ids
             for account_move in account_moves:
                 if account_move.date != stock_move_date and not account_move.activity_ids:
-                    note = _(" Nota contabila cu data diferita fata de data %s din miscarea de stoc") % (
-                        stock_move_date
+                    note = self.env._(
+                        "Journal entry dated differently from the stock move date %(date)s",
+                        date=stock_move_date,
                     )
 
                     if not stock_move.picking_id:
@@ -317,7 +381,7 @@ class StockAccountingCheck(models.TransientModel):
                             stock_move.picking_id.name,
                         )
 
-                    summary = _("Data gresit")
+                    summary = self.env._("Wrong date")
                     account_move.activity_schedule(
                         "mail.mail_activity_data_warning",
                         note=note,
@@ -365,24 +429,32 @@ class StockAccountingCheckLine(models.TransientModel):
     purchase_price = fields.Monetary(currency_field="currency_id", compute="_compute_price")
 
     amount = fields.Monetary(currency_field="currency_id", compute="_compute_price")
-    price_svl = fields.Monetary(currency_field="currency_id", string="Price SVL", compute="_compute_price")
+    price_svl = fields.Monetary(currency_field="currency_id", string="Valuation Price", compute="_compute_price")
 
-    price_svl_deviation = fields.Float(string="Price SVL Deviation", compute="_compute_price")
+    price_svl_deviation = fields.Float(string="Valuation Price Deviation", compute="_compute_price")
 
     price_aml = fields.Monetary(currency_field="currency_id", string="Price AML", compute="_compute_price")
     price_aml_deviation = fields.Float(string="Price AML Deviation", compute="_compute_price")
 
     quantity = fields.Float(compute="_compute_price", search="_search_quantity")
-    quantity_svl = fields.Float(string="Quantity SVL")
-    remaining_qty = fields.Float(string="Remaining Quantity SVL")
-    remaining_value = fields.Monetary(currency_field="currency_id", string="Remaining Value SVL")
+    quantity_svl = fields.Float(string="Valuation Quantity")
+    # Up to 18.0 these were stored columns on stock.valuation.layer and came
+    # straight out of the report query.  In 19.0 they are unstored computed
+    # fields on stock.move, so they are aggregated on demand here - which also
+    # keeps the cost out of the way when the columns are not displayed.
+    remaining_qty = fields.Float(string="Remaining Quantity", compute="_compute_remaining")
+    remaining_value = fields.Monetary(
+        currency_field="currency_id",
+        string="Remaining Value",
+        compute="_compute_remaining",
+    )
     quantity_aml = fields.Float(string="Quantity AML")
 
-    amount_svl = fields.Monetary(currency_field="currency_id", string="Amount SVL")
+    amount_svl = fields.Monetary(currency_field="currency_id", string="Valuation Amount")
     amount_aml = fields.Monetary(currency_field="currency_id", string="Amount AML")
 
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
-    svl_ids = fields.Many2many("stock.valuation.layer")
+    move_ids = fields.Many2many("stock.move")
     aml_ids = fields.Many2many("account.move.line")
 
     def refresh(self):
@@ -396,6 +468,33 @@ class StockAccountingCheckLine(models.TransientModel):
             "type": "ir.actions.client",
             "tag": "reload",
         }
+
+    @api.depends("product_id", "account_id")
+    def _compute_remaining(self):
+        """Aggregate the quantity/value left in the FIFO stack of the product."""
+        self.remaining_qty = 0
+        self.remaining_value = 0
+        lines = self.filtered("product_id")
+        if not lines:
+            return
+        moves = self.env["stock.move"].search(
+            [
+                ("product_id", "in", lines.product_id.ids),
+                ("state", "=", "done"),
+                ("is_in", "=", True),
+                ("l10n_ro_account_id", "in", lines.account_id.ids),
+                ("company_id", "in", lines.report_id.company_id.ids),
+            ]
+        )
+        remaining = {}
+        for move in moves:
+            key = (move.product_id.id, move.l10n_ro_account_id.id)
+            qty, value = remaining.get(key, (0.0, 0.0))
+            remaining[key] = (qty + move.remaining_qty, value + move.remaining_value)
+        for line in lines:
+            qty, value = remaining.get((line.product_id.id, line.account_id.id), (0, 0))
+            line.remaining_qty = qty
+            line.remaining_value = value
 
     def _search_quantity(self, operator, value):
         return [("product_id.qty_available", operator, value)]
@@ -423,7 +522,10 @@ class StockAccountingCheckLine(models.TransientModel):
             else:
                 line.price_svl_deviation = 0
                 line.price_aml_deviation = 0
-            line.purchase_price = product.last_purchase_price
+            # `last_purchase_price` on the product comes from
+            # deltatech_purchase_price, which is not a dependency of this
+            # module - it stays optional.
+            line.purchase_price = product.last_purchase_price if "last_purchase_price" in product._fields else 0
 
             line.standard_price = standard_price
 
@@ -431,13 +533,12 @@ class StockAccountingCheckLine(models.TransientModel):
         self.ensure_one()
 
         action = {
-            "name": _("Valuation"),
+            "name": self.env._("Valuation"),
             "type": "ir.actions.act_window",
-            "view_type": "form",
             "view_mode": "list,form",
             "context": self.env.context,
-            "res_model": "stock.valuation.layer",
-            "domain": [("id", "in", self.svl_ids.ids)],
+            "res_model": "stock.move",
+            "domain": [("id", "in", self.move_ids.ids)],
             "target": "current",
         }
 
@@ -447,9 +548,8 @@ class StockAccountingCheckLine(models.TransientModel):
         self.ensure_one()
 
         action = {
-            "name": _("Account Move Line"),
+            "name": self.env._("Account Move Line"),
             "type": "ir.actions.act_window",
-            "view_type": "form",
             "view_mode": "list,form",
             "context": self.env.context,
             "res_model": "account.move.line",
@@ -460,16 +560,13 @@ class StockAccountingCheckLine(models.TransientModel):
         return action
 
     def action_purchase(self):
-        stock_moves = self.env["stock.move"]
         purchases = self.env["purchase.order"]
-        for svl in self.svl_ids:
-            stock_moves |= svl.stock_move_id
-            purchases |= svl.stock_move_id.purchase_line_id.order_id
+        for move in self.move_ids:
+            purchases |= move.purchase_line_id.order_id
 
         action = {
-            "name": _("Purchase"),
+            "name": self.env._("Purchase"),
             "type": "ir.actions.act_window",
-            "view_type": "form",
             "view_mode": "list,form",
             "context": self.env.context,
             "res_model": "purchase.order",
@@ -478,16 +575,13 @@ class StockAccountingCheckLine(models.TransientModel):
         return action
 
     def action_sale(self):
-        stock_moves = self.env["stock.move"]
         sales = self.env["sale.order"]
-        for svl in self.svl_ids:
-            stock_moves |= svl.stock_move_id
-            sales |= svl.stock_move_id.sale_line_id.order_id
+        for move in self.move_ids:
+            sales |= move.sale_line_id.order_id
 
         action = {
-            "name": _("Sale"),
+            "name": self.env._("Sale"),
             "type": "ir.actions.act_window",
-            "view_type": "form",
             "view_mode": "list,form",
             "context": self.env.context,
             "res_model": "sale.order",
@@ -510,49 +604,80 @@ class StockAccountingCheckLine(models.TransientModel):
 
     def action_fix_aml(self):
         report = self.mapped("report_id")
+        if len(report) != 1:
+            raise UserError(self.env._("Select lines from a single report to adjust them."))
 
         account_move_values = {
             "journal_id": report.journal_id.id,
             "date": report.date_to,
-            "ref": _("Stock Accounting Adjustment"),
+            "ref": self.env._("Stock Accounting Adjustment"),
             "line_ids": [],
         }
         aml = account_move_values["line_ids"]
-        total = 0
+        label = self.env._("Stock Accounting Adjustment")
         for line in self:
-            account = line.account_id
             diff = line.amount_svl - line.amount_aml
             qty = line.quantity_svl - line.quantity_aml
             if not diff and not qty:
                 continue
-            total += diff
+            # The counterpart has to leave the stock account, otherwise the
+            # entry balances 371 against 371 and corrects nothing - which is
+            # what this action did up to 18.0.  A stock difference belongs on
+            # the expense account of the product, the way an inventory
+            # adjustment is booked (OMFP 1802/2014).
+            # `_get_product_accounts()` in l10n_ro_stock_account returns the
+            # plain product accounts unless a stock move is in the context; the
+            # accounts configured per location, and the consumption account
+            # substitution, are only applied for a given move.  Take a
+            # representative move of the product on this account so the
+            # adjustment lands on the same accounts the module uses normally.
+            sample_move = self.env["stock.move"].search(
+                [
+                    ("product_id", "=", line.product_id.id),
+                    ("state", "=", "done"),
+                    ("l10n_ro_account_id", "=", line.account_id.id),
+                    ("company_id", "=", line.report_id.company_id.id),
+                ],
+                order="date desc",
+                limit=1,
+            )
+            accounts = (
+                line.product_id.product_tmpl_id.with_company(line.report_id.company_id)
+                .with_context(l10n_ro_stock_move=sample_move or None)
+                .get_product_accounts()
+            )
+            counterpart = accounts.get("expense")
+            if not counterpart:
+                raise UserError(
+                    self.env._(
+                        "No expense account found for product %(product)s, the adjustment entry cannot be balanced.",
+                        product=line.product_id.display_name,
+                    )
+                )
             aml.append(
-                (
-                    0,
-                    0,
+                Command.create(
                     {
-                        "account_id": account.id,
+                        "account_id": line.account_id.id,
                         "product_id": line.product_id.id,
-                        "name": _("Stock Accounting Adjustment"),
-                        "debit": diff,
-                        "credit": 0,
+                        "name": label,
+                        "debit": diff if diff > 0 else 0,
+                        "credit": -diff if diff < 0 else 0,
                         "quantity": qty,
-                    },
+                    }
+                )
+            )
+            aml.append(
+                Command.create(
+                    {
+                        "account_id": counterpart.id,
+                        "product_id": line.product_id.id,
+                        "name": label,
+                        "debit": -diff if diff < 0 else 0,
+                        "credit": diff if diff > 0 else 0,
+                    }
                 )
             )
         if aml:
-            aml.append(
-                (
-                    0,
-                    0,
-                    {
-                        "account_id": account.id,
-                        "name": _("Stock Accounting Adjustment"),
-                        "debit": 0,
-                        "credit": total,
-                    },
-                )
-            )
             account_move = self.env["account.move"].create(account_move_values)
             account_move.action_post()
         for line in self:
@@ -560,184 +685,185 @@ class StockAccountingCheckLine(models.TransientModel):
             line.quantity_aml = line.quantity_svl
 
     def action_fix_svl(self):
-        picking_vals = {
-            "picking_type_id": self.report_id.picking_type_id.id,
-            "state": "done",
-            "location_id": self.report_id.picking_type_id.default_location_src_id.id,
-            "location_dest_id": self.report_id.picking_type_id.default_location_dest_id.id,
-            "company_id": self.report_id.company_id.id,
-        }
-        picking = self.env["stock.picking"].create(picking_vals)
+        """Bring the stock valuation in line with the on-hand quantity and cost.
+
+        Up to 18.0 this wrote stock.valuation.layer rows (and patched their
+        `remaining_qty` / `remaining_value`) without touching the accounting.
+        In 19.0 the valuation layer is gone: the value lives on the stock move
+        and the journal entry is generated from it, so the fix is a real
+        inventory adjustment - a move that goes through `_action_done()` so the
+        quants move too - carrying the value through `value_manual`, the 19.0
+        mechanism for forcing the value of a move.  There is no FIFO remainder
+        to patch any more, it is derived from the moves themselves.
+
+        The lines that an inventory adjustment cannot express are refused up
+        front rather than booked wrong: a difference in value with no
+        difference in quantity is a revaluation of the cost, not a plus or a
+        minus of inventory, and a quantity and a value pointing in opposite
+        directions would produce an entry with the wrong sign.
+        """
+        refused = []
+        for line in self:
+            amount = float_round(line.amount - line.amount_svl, 2)
+            qty = float_round(line.quantity - line.quantity_svl, 2)
+            if not amount and not qty:
+                continue
+            if not qty:
+                refused.append(
+                    self.env._(
+                        "%(product)s: the value differs by %(amount)s but the "
+                        "quantity matches - use Fix Cost Price instead.",
+                        product=line.product_id.display_name,
+                        amount=amount,
+                    )
+                )
+            elif amount and (amount > 0) != (qty > 0):
+                refused.append(
+                    self.env._(
+                        "%(product)s: quantity %(qty)s and value %(amount)s go in opposite directions.",
+                        product=line.product_id.display_name,
+                        qty=qty,
+                        amount=amount,
+                    )
+                )
+        if refused:
+            raise UserError(
+                self.env._(
+                    "These lines cannot be corrected by an inventory adjustment:\n%(lines)s",
+                    lines="\n".join(refused),
+                )
+            )
+
+        picking_type = self.report_id.picking_type_id
+        picking = self.env["stock.picking"].create(
+            {
+                "picking_type_id": picking_type.id,
+                "location_id": picking_type.default_location_src_id.id,
+                "location_dest_id": picking_type.default_location_dest_id.id,
+                "company_id": self.report_id.company_id.id,
+            }
+        )
         move_count = 0
         for line in self:
             post_date = line.report_id.date_to - relativedelta(hour=12)
             amount = float_round(line.amount - line.amount_svl, 2)
             qty = float_round(line.quantity - line.quantity_svl, 2)
-            remaining_value = float_round(line.amount - line.remaining_value, 2)
-            remaining_qty = float_round(line.quantity - line.remaining_qty, 2)
+            if not qty:
+                continue
 
-            if line.quantity_svl < line.remaining_qty:
-                qty_to_remove = line.remaining_qty - line.quantity_svl
-                svls = self.env["stock.valuation.layer"].search(
+            inventory_location = line.product_id.property_stock_inventory
+            if qty > 0:
+                location_id = inventory_location.id
+                location_dest_id = picking.location_dest_id.id
+            else:
+                # Take the goods out of a location that actually holds them.
+                # The default source of the operation type is a configuration
+                # choice, not a place where this product necessarily sits, and
+                # since 19.0 the adjustment is a real move that has to find the
+                # quantity it removes.
+                quant = self.env["stock.quant"].search(
                     [
                         ("product_id", "=", line.product_id.id),
-                        ("l10n_ro_account_id", "=", line.account_id.id),
-                        ("remaining_qty", ">", 0),
+                        ("location_id.usage", "=", "internal"),
+                        ("company_id", "=", line.report_id.company_id.id),
+                        ("quantity", ">", 0),
                     ],
+                    order="quantity desc",
+                    limit=1,
                 )
-                for svl in svls:
-                    if qty_to_remove > svl.remaining_qty:
-                        qty_to_remove -= svl.remaining_qty
-                        svl.write({"remaining_qty": 0})
-                    else:
-                        svl.write({"remaining_qty": svl.remaining_qty - qty_to_remove})
-                        qty_to_remove = 0
-                        break
-                remaining_qty = -qty_to_remove
+                location_id = (quant.location_id or picking.location_id).id
+                location_dest_id = inventory_location.id
 
-            if line.amount_svl < line.remaining_value:
-                amount_to_remove = line.remaining_value - line.amount_svl
-                svls = self.env["stock.valuation.layer"].search(
-                    [
-                        ("product_id", "=", line.product_id.id),
-                        ("l10n_ro_account_id", "=", line.account_id.id),
-                        ("remaining_value", ">", 0),
-                    ],
-                )
-                for svl in svls:
-                    if amount_to_remove > svl.remaining_value:
-                        amount_to_remove -= svl.remaining_value
-                        svl.write({"remaining_value": 0})
-                    else:
-                        svl.write({"remaining_value": svl.remaining_value - amount_to_remove})
-                        amount_to_remove = 0
-                        break
-                remaining_value = -amount_to_remove
+            stock_move = self.env["stock.move"].create(
+                {
+                    "date": post_date,
+                    "product_id": line.product_id.id,
+                    "product_uom_qty": abs(qty),
+                    "picking_id": picking.id,
+                    "location_id": location_id,
+                    "location_dest_id": location_dest_id,
+                    "company_id": line.report_id.company_id.id,
+                }
+            )
+            stock_move = stock_move.with_context(force_period_date=post_date)
+            stock_move._action_confirm()
+            stock_move.quantity = abs(qty)
+            stock_move.picked = True
+            stock_move._action_done()
+            stock_move.write({"date": post_date})
+            if amount:
+                # Forcing the value creates a product.value, which re-runs
+                # `_set_value()` on the move; the entry then has to be rebuilt
+                # from the new value without recomputing it again.
+                stock_move.value_manual = abs(amount)
+                stock_move.correction_valuation(recompute_value=False)
 
             line.write(
                 {
                     "amount_svl": line.amount,
                     "quantity_svl": line.quantity,
-                    "remaining_qty": line.quantity,
-                    "remaining_value": line.amount,
                 }
             )
-            if not amount and not qty and not remaining_qty and not remaining_value:
-                continue
-
-            if remaining_qty < 0:
-                remaining_qty = 0
-
-            stock_move = self.env["stock.move"].create(
-                {
-                    "name": line.product_id.name,
-                    "date": post_date,
-                    "product_id": line.product_id.id,
-                    "product_uom_qty": qty,
-                    "picking_id": picking.id,
-                    "location_id": picking.location_id.id,
-                    "location_dest_id": line.product_id.property_stock_inventory.id,
-                    "company_id": line.report_id.company_id.id,
-                    "state": "done",
-                }
-            )
-
-            svl_values = {
-                "l10n_ro_valued_type": "plus_inventory" if amount > 0 else "minus_inventory",
-                "product_id": line.product_id.id,
-                "value": amount,
-                "quantity": qty,
-                "remaining_qty": remaining_qty,
-                "remaining_value": remaining_value,
-                "stock_move_id": stock_move.id,
-                "l10n_ro_account_id": line.account_id.id,
-                "company_id": line.report_id.company_id.id,
-                "create_date": post_date,
-            }
-            svl = self.env["stock.valuation.layer"].create(svl_values)
-            svl.write({"l10n_ro_account_id": line.account_id.id})
-
             move_count += 1
 
         if not move_count:
             picking.unlink()
         else:
-            picking.write({"state": "done"})
+            picking.write({"date_done": fields.Datetime.now()})
 
     def action_move_svl_to_product_account(self):
-        picking_vals = {
-            "picking_type_id": self.report_id.picking_type_id.id,
-            "state": "done",
-            "location_id": self.report_id.picking_type_id.default_location_src_id.id,
-            "location_dest_id": self.report_id.picking_type_id.default_location_dest_id.id,
-            "company_id": self.report_id.company_id.id,
-        }
-        picking = self.env["stock.picking"].create(picking_vals)
-        move_count = 0
-        for line in self:
-            post_date = line.report_id.date_to - relativedelta(hour=12)
-            diff = -line.amount_svl
-            qty = -line.quantity_svl
+        """Re-post the valuation of the product on the account it should use.
 
+        In 18.0 the valuation account was frozen on each stock.valuation.layer,
+        so moving it meant writing two compensating layers.  In 19.0
+        `stock.move.l10n_ro_account_id` is a stored computed field: recomputing
+        it and regenerating the journal entry moves both the valuation and the
+        accounting at once.
+        """
+        for line in self:
             account = (
                 line.product_id.l10n_ro_property_stock_valuation_account_id
                 or line.product_id.categ_id.property_stock_valuation_account_id
             )
-
-            if account == line.account_id:
+            if not account or account == line.account_id:
                 continue
-
-            stock_move = self.env["stock.move"].create(
-                {
-                    "name": line.product_id.name,
-                    "date": post_date,
-                    "product_id": line.product_id.id,
-                    "product_uom_qty": qty,
-                    "picking_id": picking.id,
-                    "location_id": picking.location_id.id,
-                    "location_dest_id": line.product_id.property_stock_inventory.id,
-                    "company_id": line.report_id.company_id.id,
-                    "state": "done",
-                }
+            moves = self.env["stock.move"].search(
+                [
+                    ("product_id", "=", line.product_id.id),
+                    ("state", "=", "done"),
+                    ("l10n_ro_account_id", "=", line.account_id.id),
+                    ("company_id", "=", line.report_id.company_id.id),
+                ]
             )
-
-            svl_values = {
-                "l10n_ro_valued_type": "plus_inventory" if diff > 0 else "minus_inventory",
-                "product_id": line.product_id.id,
-                "value": diff,
-                "quantity": qty,
-                "stock_move_id": stock_move.id,
-                "l10n_ro_account_id": line.account_id.id,
-                "company_id": line.report_id.company_id.id,
-                "create_date": post_date,
-            }
-            svl = self.env["stock.valuation.layer"].create(svl_values)
-            svl.write({"l10n_ro_account_id": line.account_id.id})
-
-            svl_values = {
-                "l10n_ro_valued_type": "plus_inventory" if diff < 0 else "minus_inventory",
-                "product_id": line.product_id.id,
-                "value": -diff,
-                "quantity": -qty,
-                "stock_move_id": stock_move.id,
-                "l10n_ro_account_id": account.id,
-                "company_id": line.report_id.company_id.id,
-                "create_date": post_date,
-            }
-
-            svl = self.env["stock.valuation.layer"].create(svl_values)
-            svl.write({"l10n_ro_account_id": account.id})
+            if not moves:
+                continue
+            moves._compute_account()
+            moves.flush_recordset(["l10n_ro_account_id", "l10n_ro_transfer_account_id"])
+            # Keep the values the moves already carry: the point is to move
+            # the accounts, not to reprice history at today's cost.
+            moves.correction_valuation(recompute_value=False)
             line.write({"amount_svl": 0, "quantity_svl": 0})
-            move_count += 1
-
-        if not move_count:
-            picking.unlink()
-        else:
-            picking.write({"state": "done"})
 
     def action_fix_cost_price(self):
         for line in self:
             purchase_price = max(line.purchase_price, line.last_purchase_price)
             if not purchase_price:
                 continue
-            line.product_id.with_context(disable_auto_svl=True).write({"standard_price": purchase_price})
+            product = line.product_id
+            if product.cost_method == "fifo":
+                # `_change_standard_price` skips FIFO products, so writing the
+                # cost here would silently leave the valuation untouched.
+                raise UserError(
+                    self.env._(
+                        "%(product)s is valued in FIFO; its cost comes from the incoming moves and cannot be set here.",
+                        product=product.display_name,
+                    )
+                )
+            # `disable_auto_svl`, used up to 18.0, no longer exists; its 19.0
+            # counterpart is `disable_auto_revaluation`.  Without it a
+            # revaluation entry is booked, and it would be dated today rather
+            # than at the end of the reported period.
+            product.with_context(
+                disable_auto_revaluation=True,
+                valuation_date=line.report_id.date_to,
+            ).write({"standard_price": purchase_price})
