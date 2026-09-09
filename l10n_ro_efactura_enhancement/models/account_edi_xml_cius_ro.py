@@ -14,8 +14,12 @@ _logger = logging.getLogger(__name__)
 
 DEFAULT_VAT = "0000000000000"
 
-# Tichet 9369: limita de caractere impusa de ANAF pentru identificatorii de plata.
-PAYMENT_ID_MAX_LEN = 200
+# Limita de caractere impusa de CIUS-RO pentru Avizul de plata (BT-83), verificata de
+# schematronul ANAF prin regula BR-RO-L140: „Numarul maxim permis de caractere pentru
+# Aviz de plata (BT-83) este 140.
+# Tichet 9441: valoarea era 200, preluata din corespondenta tichetului 9369 si nu din
+# raspunsul ANAF, deci facturile lungi ramaneau respinse chiar si dupa trunchiere.
+PAYMENT_ID_MAX_LEN = 140
 
 
 def _has_vat(vat):
@@ -52,8 +56,8 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         return truncated.rstrip()
 
     def _l10n_ro_truncate_payment_identifiers(self, document_node):
-        """ANAF respinge e-Factura daca cbc:PaymentID / cbc:InstructionID depasesc
-        PAYMENT_ID_MAX_LEN caractere.
+        """ANAF respinge e-Factura (BR-RO-L140) daca cbc:PaymentID / cbc:InstructionID
+        depasesc PAYMENT_ID_MAX_LEN caractere.
 
         Tichet 9369: pe facturile care consolideaza multe comenzi, ``payment_reference``
         poate depasi singur limita (referinte concatenate pentru reconciliere), iar
