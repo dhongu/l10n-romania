@@ -10,9 +10,10 @@ from odoo.addons.l10n_ro_efactura_enhancement.models.account_edi_xml_cius_ro imp
 
 @tagged("post_install", "-at_install")
 class TestPaymentIdLength(TransactionCase):
-    """Ticket #9369: ANAF respinge e-Factura dacă ``cbc:PaymentID`` sau
-    ``cbc:InstructionID`` depășesc 200 de caractere. Pe facturile care consolidează
-    multe comenzi, ``payment_reference`` conține referințele concatenate pentru
+    """Tichetele #9369 și #9441: ANAF respinge e-Factura (BR-RO-L140) dacă
+    ``cbc:PaymentID`` sau ``cbc:InstructionID`` depășesc 140 de caractere -- limita
+    CIUS-RO pentru Avizul de plată (BT-83). Pe facturile care consolidează multe
+    comenzi, ``payment_reference`` conține referințele concatenate pentru
     reconciliere și depășește singur limita -- scurtăm în generator, ca facturile
     deja validate să poată fi transmise fără curățarea manuală a câmpului.
 
@@ -74,3 +75,68 @@ class TestPaymentIdLength(TransactionCase):
     def test_bis3_non_ro_has_no_limit(self):
         """Limita e CIUS-RO, nu BIS3: generatorul Peppol generic nu o moștenește."""
         self.assertFalse(hasattr(self.env["account.edi.xml.ubl_bis3"], "_l10n_ro_truncate_payment_identifiers"))
+
+    def test_limit_matches_anaf_rule(self):
+        """Limita e cea din BR-RO-L140, nu cea presupusă de 200 de caractere.
+
+        Tichet #9441: valoarea 200 fusese preluată din corespondența tichetului
+        #9369, nu din răspunsul ANAF, așa că facturile lungi rămâneau respinse și
+        după trunchiere. Testul ancorează limita în regula reală de schematron.
+        """
+        self.assertEqual(PAYMENT_ID_MAX_LEN, 140)
+
+    def test_real_refused_reference_passes_limit(self):
+        """Referința reală de pe PTCDRO20689 (43 de comenzi) intră sub limită."""
+        orders = [
+            "S189895",
+            "S189875",
+            "S190083",
+            "S189903",
+            "S189922",
+            "S189896",
+            "S189884",
+            "S189879",
+            "S189901",
+            "S190060",
+            "S189892",
+            "S189454",
+            "S189883",
+            "S189880",
+            "S189898",
+            "S189887",
+            "S190056",
+            "S189950",
+            "S189894",
+            "S189823",
+            "S189886",
+            "S189897",
+            "S189756",
+            "S189877",
+            "S189869",
+            "S189921",
+            "S189871",
+            "S189872",
+            "S189890",
+            "S189891",
+            "S189893",
+            "S189966",
+            "S189873",
+            "S189888",
+            "S189889",
+            "S189881",
+            "S189878",
+            "S189876",
+            "S190037",
+            "S190080",
+            "S189885",
+            "S189919",
+        ]
+        reference = " - ".join(["PTCDRO20689"] + orders)
+        self.assertGreater(len(reference), PAYMENT_ID_MAX_LEN)
+        document_node = {"cac:PaymentMeans": {"cbc:PaymentID": {"_text": reference}}}
+        self.builder._l10n_ro_truncate_payment_identifiers(document_node)
+        value = document_node["cac:PaymentMeans"]["cbc:PaymentID"]["_text"]
+        self.assertLessEqual(len(value), PAYMENT_ID_MAX_LEN)
+        # numărul facturii rămâne primul, ca reconcilierea să aibă de ce să se agațe
+        self.assertTrue(value.startswith("PTCDRO20689 - S189895"))
+        self.assertTrue(all(segment in orders or segment == "PTCDRO20689" for segment in value.split(" - ")))
