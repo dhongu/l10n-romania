@@ -7,3 +7,5 @@ from . import test_etransport_documents
 from . import test_etransport_customs_route
 from . import test_etransport_start_address
 from . import test_etransport_uit_is_not_tracking_ref
+from . import test_etransport_dropship
+from . import test_etransport_translations

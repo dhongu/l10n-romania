@@ -4,39 +4,55 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0+e\n"
+"Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 03:44+0000\n"
-"PO-Revision-Date: 2025-05-09 03:44+0000\n"
+"POT-Creation-Date: 2026-09-09 08:15+0000\n"
+"PO-Revision-Date: 2026-09-09 08:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Language: ro_RO\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);\n"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "%(location)s could not be determined from the linked orders."
+msgstr "%(location)s nu a putut fi determinată din comenzile asociate."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid ""
+"%(location)s must have a Romanian county, city, street and postal code. "
+"Check %(partner)s."
+msgstr "%(location)s trebuie să conțină județul din România, localitatea, strada și codul poștal. Verifică %(partner)s."
 
 #. module: l10n_ro_etransport_enhancement
 #. odoo-python
 #: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
-#, python-format
-msgid "The delivery carrier partner has to be located in Romania."
-msgstr ""
-"Partenerul transportatorului de livrare trebuie să fie situat în România."
+msgid ""
+"%(missing)s of %(total)s moves have no computed weight line. Press \"Get "
+"lines\"."
+msgstr "Pentru %(missing)s din %(total)s mișcări nu există greutăți calculate. Apasă „Preia liniile”."
 
 #. module: l10n_ro_etransport_enhancement
-#: model:ir.model,name:l10n_ro_etransport_enhancement.model_stock_picking
-msgid "Transfer"
-msgstr ""
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid ""
+"A dropship declaration requires one supplier, one commercial customer and "
+"one delivery address."
+msgstr "Declarația pentru livrare directă necesită un singur furnizor, un singur client comercial și o singură adresă de livrare."
 
 #. module: l10n_ro_etransport_enhancement
-#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_edi_stock_required
-msgid "eTransport Required"
-msgstr "eTransport necesar"
-
-#. module: l10n_ro_etransport_enhancement
-#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_etransport_start_address
-msgid "Specific Start Location"
-msgstr "Locație de start specifică"
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid ""
+"A dropship goods quantity is too small for the declaration's two-decimal "
+"precision."
+msgstr "O cantitate din livrarea directă este prea mică pentru precizia de două zecimale a declarației."
 
 #. module: l10n_ro_etransport_enhancement
 #. odoo-python
@@ -44,17 +60,8 @@ msgstr "Locație de start specifică"
 msgid ""
 "ANAF did not answer the eTransport request: %(error)s\n"
 "\n"
-"IMPORTANT: the notification may have reached ANAF anyway, only the answer "
-"was lost. Before sending again, check in SPV whether a UIT was already "
-"issued for this transfer, otherwise you may end up with two UITs for the "
-"same goods."
-msgstr ""
-"ANAF nu a răspuns la cererea eTransport: %(error)s\n"
-"\n"
-"IMPORTANT: notificarea poate să fi ajuns totuși la ANAF, doar răspunsul s-a "
-"pierdut. Înainte de a retrimite, verifică în SPV dacă a fost deja emis un "
-"UIT pentru acest transfer, altfel poți ajunge cu două UIT-uri pentru "
-"aceeași marfă."
+"IMPORTANT: the notification may have reached ANAF anyway, only the answer was lost. Before sending again, check in SPV whether a UIT was already issued for this transfer, otherwise you may end up with two UITs for the same goods."
+msgstr "ANAF nu a răspuns la cererea eTransport: %(error)s\n\nIMPORTANT: notificarea poate să fi ajuns totuși la ANAF, doar răspunsul s-a pierdut. Înainte de a retrimite, verifică în SPV dacă a fost deja emis un UIT pentru acest transfer, pentru a evita două UIT-uri pentru aceeași marfă."
 
 #. module: l10n_ro_etransport_enhancement
 #. odoo-python
@@ -62,9 +69,471 @@ msgstr ""
 msgid ""
 "ANAF did not answer the eTransport status request: %(error)s\n"
 "The status will be checked again later."
-msgstr ""
-"ANAF nu a răspuns la interogarea stării eTransport: %(error)s\n"
-"Starea va fi verificată din nou mai târziu."
+msgstr "ANAF nu a răspuns la interogarea stării eTransport: %(error)s\nStarea va fi verificată din nou mai târziu."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_etransport_document_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid "Accompanying Documents"
+msgstr "Documente însoțitoare"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_etransport_start_address
+msgid ""
+"Actual loading address, when different from the warehouse or dropship "
+"supplier address. For dropshipping, the destination comes from the linked "
+"orders' delivery address."
+msgstr "Adresa efectivă de încărcare, dacă diferă de adresa depozitului sau a furnizorului livrării directe. Pentru livrare directă, destinația este adresa de livrare din comenzile asociate."
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid "Add Default Documents"
+msgstr "Preia documentele implicite"
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid ""
+"Add the delivery note (transfer number) and posted customer invoices linked "
+"to this delivery, without duplicates."
+msgstr "Adaugă avizul (numărul transferului) și facturile emise către client, asociate acestei livrări, fără duplicate."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid ""
+"All dropship goods must have a positive tax-exclusive price on the declared "
+"order."
+msgstr "Toate bunurile din livrarea directă trebuie să aibă un preț pozitiv, fără TVA, în comanda declarată."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_enhancement.selection__l10n_ro_etransport_document__document_type__10
+msgid "CMR"
+msgstr "CMR"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_transport_partner_id
+msgid ""
+"Carrier declared to ANAF. If empty, use the delivery carrier's eTransport "
+"partner."
+msgstr "Transportatorul declarat la ANAF. Dacă nu este completat, se folosește partenerul eTransport al metodei de livrare."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model,name:l10n_ro_etransport_enhancement.model_res_company
+msgid "Companies"
+msgstr "Companii"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__company_id
+msgid "Company"
+msgstr "Companie"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_res_config_settings__l10n_ro_etransport_get_order_value
+msgid ""
+"Compute UIT prices from sales orders (if delivery) or purchase orders (if "
+"reception). Dropshipping always uses the order for the declared operation: "
+"purchase for AIC/import, sale for domestic/LIC/export."
+msgstr "Calculează valorile UIT din comenzile de vânzare (la livrare) sau de achiziție (la recepție). Pentru livrare directă se folosește întotdeauna comanda aferentă operațiunii declarate: achiziția pentru AIC/import, vânzarea pentru transport intern/LIC/export."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model,name:l10n_ro_etransport_enhancement.model_res_config_settings
+msgid "Config Settings"
+msgstr "Setări de configurare"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__create_uid
+msgid "Created by"
+msgstr "Creat de"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__create_date
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__create_date
+msgid "Created on"
+msgstr "Creat la"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_shipping_weights
+msgid "Custom Shipping Weights"
+msgstr "Greutăți de transport măsurate"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_enhancement.selection__l10n_ro_etransport_document__document_type__30
+msgid "Delivery Note"
+msgstr "Aviz de însoțire a mărfii"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "Delivery address"
+msgstr "Adresa de livrare"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_move__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid "Distribute the measured totals across the existing weight lines."
+msgstr "Repartizează totalurile măsurate între liniile de greutate existente."
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid "Distribute weights"
+msgstr "Repartizează greutățile"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__date
+msgid "Document Date"
+msgstr "Data documentului"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__name
+msgid "Document Number"
+msgstr "Număr document"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__document_type
+msgid "Document Type"
+msgstr "Tip document"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid ""
+"Dropship eTransport requires a supplier-to-customer transfer, not a return."
+msgstr "eTransport pentru livrare directă necesită un transfer de la furnizor la client, nu un retur."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid ""
+"Dropship eTransport supports operations 10, 20, 30, 40 and 50 only. Check "
+"the declaration type."
+msgstr "eTransport pentru livrare directă acceptă operațiunile 10, 20, 30, 40 și 50. Verifică tipul declarației."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "Each dropship goods line must be linked to both a sale and a purchase."
+msgstr "Fiecare linie de marfă din livrarea directă trebuie asociată atât unei vânzări, cât și unei achiziții."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_edi_stock_required
+msgid ""
+"Enable eTransport for this transfer after checking the declaration "
+"obligation. This does not send a declaration."
+msgstr "Activează eTransport pentru acest transfer după verificarea obligației de declarare. Bifarea nu trimite declarația."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_shipping_weights
+msgid ""
+"Enter measured weights for the goods. Get lines recalculates and replaces "
+"existing weight lines."
+msgstr "Completează greutățile măsurate ale mărfurilor. „Preia liniile” recalculează și înlocuiește liniile de greutate existente."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_etransport_document_ids
+msgid ""
+"Enter the actual documents accompanying the goods. If empty, the transfer "
+"number is used as a delivery note."
+msgstr "Completează documentele care însoțesc efectiv marfa. Dacă lista este goală, numărul transferului este folosit ca aviz."
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.res_config_settings_view_form
+msgid "Get UIT prices from sale/purchase orders"
+msgstr "Preia valorile UIT din comenzile de vânzare/achiziție"
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid "Get lines"
+msgstr "Preia liniile"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__gross_weight
+msgid "Gross Weight"
+msgstr "Greutate brută"
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.res_config_settings_view_form
+msgid ""
+"How long to wait for an answer from the ANAF eTransport API before giving up"
+msgstr "Durata maximă de așteptare a răspunsului de la API-ul eTransport al ANAF"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_move__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_enhancement.selection__l10n_ro_etransport_document__document_type__20
+msgid "Invoice"
+msgstr "Factură"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__write_uid
+msgid "Last Updated by"
+msgstr "Ultima actualizare de"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__write_date
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__write_date
+msgid "Last Updated on"
+msgstr "Ultima actualizare la"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "Loading address"
+msgstr "Adresa de încărcare"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_res_company__l10n_ro_etransport_timeout
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_res_config_settings__l10n_ro_etransport_timeout
+msgid ""
+"Maximum time to wait for an answer from the ANAF eTransport API. The Odoo "
+"standard uses 10 seconds, which is often too short."
+msgstr "Timpul maxim de așteptare a răspunsului de la API-ul eTransport al ANAF. Standardul Odoo folosește 10 secunde, deseori insuficient."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_stock_picking__total_gross_weight
+msgid ""
+"Measured total weight including packaging, in the weight unit shown below."
+msgstr "Greutatea totală măsurată, inclusiv ambalajele, în unitatea de greutate afișată mai jos."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_stock_picking__total_net_weight
+msgid ""
+"Measured total weight of the goods without packaging, in the weight unit "
+"shown below."
+msgstr "Greutatea totală măsurată a mărfii fără ambalaje, în unitatea de greutate afișată mai jos."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__move_id
+msgid "Move"
+msgstr "Mișcare de stoc"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__net_weight
+msgid "Net Weight"
+msgstr "Greutate netă"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid "No price found for %(product)s."
+msgstr "Nu a fost găsit un preț pentru %(product)s."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__name
+msgid "Number printed on the accompanying document."
+msgstr "Numărul înscris pe documentul însoțitor."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid "Only one weight line is allowed for each goods line."
+msgstr "Este permisă o singură linie de greutate pentru fiecare linie de marfă."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__remarks
+msgid ""
+"Optional information about this document. Leave empty if not applicable."
+msgstr "Informații opționale despre acest document. Lasă necompletat dacă nu este cazul."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_enhancement.selection__l10n_ro_etransport_document__document_type__9999
+msgid "Other"
+msgstr "Altele"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__picking_id
+msgid "Picking"
+msgstr "Transfer"
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid ""
+"Recalculate weight lines from the goods quantities. Existing manual line "
+"adjustments are replaced."
+msgstr "Recalculează liniile de greutate din cantitățile de marfă. Ajustările manuale existente sunt înlocuite."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__remarks
+msgid "Remarks"
+msgstr "Observații"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "Send dropship eTransport from a single transfer, not a batch."
+msgstr "Trimite eTransport pentru livrare directă dintr-un singur transfer, nu dintr-un lot."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_shipping_weight_lines
+msgid "Shipping Weight Lines"
+msgstr "Linii de greutate pentru transport"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_shipping_weight_lines_warning
+msgid "Shipping Weight Warning"
+msgstr "Avertizare privind greutățile"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_etransport_start_address
+msgid "Specific Start Location"
+msgstr "Adresă de încărcare specifică"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model,name:l10n_ro_etransport_enhancement.model_stock_move
+msgid "Stock Move"
+msgstr "Mișcare de stoc"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model,name:l10n_ro_etransport_enhancement.model_l10n_ro_stock_picking_weight_line
+msgid "Stock Picking Weight Line"
+msgstr "Linie de greutate a transferului"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid ""
+"The countries on the linked orders do not match the selected dropship "
+"operation. Triangular transactions and special fiscal territories require "
+"separate review."
+msgstr "Țările din comenzile asociate nu corespund operațiunii selectate pentru livrarea directă. Operațiunile triunghiulare și teritoriile cu regim fiscal special necesită o verificare separată."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "The dropship declarant must be a Romanian company."
+msgstr "Declarantul livrării directe trebuie să fie o companie din România."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "The dropship declared value must be positive for %(product)s."
+msgstr "Valoarea declarată pentru %(product)s în livrarea directă trebuie să fie pozitivă."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "The dropship sale and purchase must belong to the declaring company."
+msgstr "Vânzarea și achiziția livrării directe trebuie să aparțină companiei declarante."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid ""
+"The following products do not have weight defined:\n"
+"%(product_name)s\n"
+"."
+msgstr "Următoarele produse nu au greutatea definită:\n%(product_name)s\n."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "The route address belongs to another company."
+msgstr "Adresa traseului aparține altei companii."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "The route endpoint types do not match the selected dropship operation."
+msgstr "Tipurile punctelor de început și final ale traseului nu corespund operațiunii selectate."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking_dropship.py:0
+msgid "There are no goods to declare on this dropship transfer."
+msgstr "Nu există marfă de declarat pe acest transfer cu livrare directă."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__total_gross_weight
+msgid "Total Gross Weight"
+msgstr "Greutate brută totală"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__total_net_weight
+msgid "Total Net Weight"
+msgstr "Greutate netă totală"
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid "Total gross"
+msgstr "Total brut"
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.view_picking_form
+msgid "Total net"
+msgstr "Total net"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid "Total net and gross weights must be greater than 0."
+msgstr "Greutățile totale netă și brută trebuie să fie mai mari decât 0."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model,name:l10n_ro_etransport_enhancement.model_stock_picking
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_etransport_document__picking_id
+msgid "Transfer"
+msgstr "Transfer"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_transport_partner_id
+msgid "Transport Partner"
+msgstr "Transportator"
+
+#. module: l10n_ro_etransport_enhancement
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.res_config_settings_view_form
+msgid "UIT"
+msgstr "UIT"
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid "UIT lines and moves lines are not the same. Cannot get prices."
+msgstr "Liniile UIT nu corespund mișcărilor de stoc. Valorile nu pot fi preluate."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid "UIT lines and moves lines are not the same. Cannot get weights."
+msgstr "Liniile UIT nu corespund mișcărilor de stoc. Greutățile nu pot fi preluate."
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_company__l10n_ro_etransport_get_order_value
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_config_settings__l10n_ro_etransport_get_order_value
+msgid "UIT: get price from order"
+msgstr "UIT: preia valoarea din comandă"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_l10n_ro_stock_picking_weight_line__weight_uom_id
+msgid "Weight Unit of Measure"
+msgstr "Unitate de măsură a greutății"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model,name:l10n_ro_etransport_enhancement.model_l10n_ro_etransport_document
+msgid "eTransport Accompanying Document"
+msgstr "Document însoțitor eTransport"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_edi_stock_required
+msgid "eTransport Required"
+msgstr "eTransport necesar"
 
 #. module: l10n_ro_etransport_enhancement
 #: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_res_company__l10n_ro_etransport_timeout
@@ -73,18 +542,6 @@ msgid "eTransport Timeout (s)"
 msgstr "Timp de așteptare eTransport (s)"
 
 #. module: l10n_ro_etransport_enhancement
-#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_res_company__l10n_ro_etransport_timeout
-msgid ""
-"Maximum time to wait for an answer from the ANAF eTransport API. The Odoo "
-"standard uses 10 seconds, which is often too short."
-msgstr ""
-"Timpul maxim de așteptare a răspunsului de la API-ul eTransport al ANAF. "
-"Standardul Odoo folosește 10 secunde, deseori insuficient."
-
-#. module: l10n_ro_etransport_enhancement
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.res_config_settings_view_form
-msgid ""
-"How long to wait for an answer from the ANAF eTransport API before giving up"
-msgstr ""
-"Cât se așteaptă răspunsul de la API-ul eTransport al ANAF înainte de "
-"abandonare"
+msgid "s"
+msgstr "s"
