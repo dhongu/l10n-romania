@@ -9,6 +9,7 @@ from lxml import etree
 from odoo import Command, fields
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+from odoo.tools.safe_eval import safe_eval
 
 
 @tagged("post_install", "-at_install")
@@ -356,12 +357,49 @@ class TestEtransportDropship(TransactionCase):
         self.assertEqual(float(xml.xpath("//*[local-name()='bunuriTransportate']/@valoareLeiFaraTva")[0]), 900)
 
     def test_compiled_view_exposes_loading_address_for_dropship(self):
+        # OCA l10n_ro_config (installed in repository-wide CI) hides all RO
+        # fields unless Romanian accounting is enabled on the active company.
+        # Country/fiscal country alone do not enable its optional mixin.
+        if "l10n_ro_accounting" in self.company._fields:
+            self.company.l10n_ro_accounting = True
         view = self.env["stock.picking"].get_view(view_id=self.env.ref("stock.view_picking_form").id, view_type="form")
         arch = etree.fromstring(view["arch"])
-        field = arch.xpath("//field[@name='l10n_ro_etransport_start_address']")[0]
+        nodes = arch.xpath("//page[@name='etransport']//field[@name='l10n_ro_etransport_start_address']")
+        self.assertEqual(len(nodes), 1)
+        field = nodes[0]
         self.assertIn("'dropship'", field.get("invisible"))
         self.assertEqual(field.get("readonly"), "l10n_ro_edi_stock_fields_readonly")
         self.assertEqual(len(arch.xpath("//group[@name='weights']/group/field[@name='l10n_ro_shipping_weights']")), 1)
+        for picking_type, operation, endpoint, hidden in (
+            *(("dropship", operation, "location", False) for operation in ("10", "20", "30", "40", "50")),
+            ("dropship", "10", "bcp", True),
+            ("dropship", "40", "customs", True),
+            ("outgoing", "30", "location", False),
+            ("outgoing", "20", "location", True),
+            ("incoming", "10", "location", True),
+        ):
+            with self.subTest(picking_type=picking_type, operation=operation, endpoint=endpoint):
+                self.assertEqual(
+                    safe_eval(
+                        field.get("invisible"),
+                        {
+                            "picking_type_code": picking_type,
+                            "l10n_ro_edi_stock_operation_type": operation,
+                            "l10n_ro_edi_stock_start_loc_type": endpoint,
+                        },
+                    ),
+                    hidden,
+                )
+
+    def test_compiled_view_preserves_optional_oca_localization_guard(self):
+        if "l10n_ro_accounting" not in self.company._fields:
+            self.skipTest("Optional OCA l10n_ro_config is not installed.")
+        self.company.l10n_ro_accounting = False
+        view = self.env["stock.picking"].get_view(view_id=self.env.ref("stock.view_picking_form").id, view_type="form")
+        arch = etree.fromstring(view["arch"])
+        nodes = arch.xpath("//page[@name='etransport']//field[@name='l10n_ro_etransport_start_address']")
+        self.assertEqual(len(nodes), 1)
+        self.assertEqual(nodes[0].get("invisible"), "True")
 
     def test_native_sale_purchase_dropship_workflow(self):
         self.product.write(

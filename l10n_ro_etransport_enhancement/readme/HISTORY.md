@@ -1,3 +1,12 @@
+## 19.0.0.8.1 (2026-09-09)
+
+- Configure the optional OCA Romanian-accounting flag in the view test fixture;
+  preserve the localization's field-hiding behavior for other companies.
+- Check loading-address visibility for every supported dropship operation and
+  retain existing warehouse/border/customs visibility rules.
+- Document the intentional separate ORM extension and its required super() chain
+  with a scoped Pylint exception; no repository-wide checks are disabled.
+
 ## 19.0.0.7.6 (2026-08-27)
 
 **Corecție** — codul UIT nu mai este scris în `carrier_tracking_ref`.

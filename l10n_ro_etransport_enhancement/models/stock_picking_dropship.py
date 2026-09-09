@@ -7,6 +7,10 @@ from odoo.exceptions import UserError
 from odoo.addons.l10n_ro_edi_stock.models.stock_picking import STATE_CODES
 
 
+# Keep a separate ORM extension: its super() calls must run the enhancement's
+# existing validation/rendering before adapting dropship endpoints and values.
+# Merging the classes would collapse that method chain and bypass those steps.
+# pylint: disable=consider-merging-classes-inherited
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
