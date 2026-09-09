@@ -7,5 +7,6 @@ from . import etransport_api
 from . import picking_weight
 from . import stock_move
 from . import stock_picking
+from . import stock_picking_dropship
 from . import res_config
 from . import etransport_document
