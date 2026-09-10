@@ -2,7 +2,7 @@
 {
     "name": "Romania - Cash Sequence",
     "version": "19.0.1.0.3",
-    "author": "Terrabit,Odoo Community Association (OCA)",
+    "author": "Terrabit",
     "summary": "Romania - Cash Sequence",
     "development_status": "Mature",
     "website": "https://www.terrabit.ro",
