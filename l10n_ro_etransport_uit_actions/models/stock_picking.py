@@ -10,11 +10,16 @@ class StockPicking(models.Model):
 
     l10n_ro_etransport_event_ids = fields.One2many("l10n.ro.etransport.event", "picking_id", string="UIT Events")
     l10n_ro_etransport_uit_deleted = fields.Boolean(
+        string="UIT Deleted",
         compute="_compute_l10n_ro_etransport_uit_flags",
         help="The current UIT was deleted at ANAF; the notification is no longer valid.",
     )
-    l10n_ro_etransport_event_pending = fields.Boolean(compute="_compute_l10n_ro_etransport_uit_flags")
-    l10n_ro_etransport_enable_actions = fields.Boolean(compute="_compute_l10n_ro_etransport_uit_flags")
+    l10n_ro_etransport_event_pending = fields.Boolean(
+        string="UIT Event Pending", compute="_compute_l10n_ro_etransport_uit_flags"
+    )
+    l10n_ro_etransport_enable_actions = fields.Boolean(
+        string="UIT Actions Enabled", compute="_compute_l10n_ro_etransport_uit_flags"
+    )
 
     @api.depends(
         "l10n_ro_etransport_event_ids.state",

@@ -1,0 +1,400 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_etransport_uit_actions
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-10 06:56+0000\n"
+"PO-Revision-Date: 2026-09-10 06:56+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__load_id
+msgid "ANAF Load Index"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid ""
+"ANAF did not answer the request: %(error)s\n"
+"The event may have reached ANAF anyway. Check in SPV before sending it again."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__event_type
+msgid "Action"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid "Cancel"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "Change Vehicle"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "Choose the confirmation type."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "Confirm UIT"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__confirmation_type
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__confirmation_type
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__event_type__con
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__event_type__con
+msgid "Confirmation"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__confirmation_type__10
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__confirmation_type__10
+msgid "Confirmed"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__create_date
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__post_outage
+msgid ""
+"Declaration filed after an ANAF system outage (OUG 41/2022 art. 8 par. 1^3)."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "Delete UIT"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid ""
+"Deleting the notification invalidates the UIT at ANAF. The goods can no "
+"longer travel under it; a new notification is needed for the transport."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__event_type__del
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__event_type__del
+msgid "Deletion"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__state__failed
+msgid "Error"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__event_type
+msgid "Event"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "Fetch Event Status"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_event_list
+msgid "Fetch Status"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__write_date
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__message
+msgid "Message"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__modification_date
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__modification_date
+msgid "Modification Date"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid ""
+"Only events rejected by ANAF can be deleted; the others are an audit trail."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid "Optional, max. 200 characters"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__confirmation_type__20
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__confirmation_type__20
+msgid "Partially confirmed"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__post_outage
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__post_outage
+msgid "Post-outage declaration"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.actions.server,name:l10n_ro_etransport_uit_actions.ir_cron_etransport_event_fetch_status_ir_actions_server
+msgid "RO e-Transport: UIT event status update"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__confirmation_type__30
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__confirmation_type__30
+msgid "Refused"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__remarks
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__remarks
+msgid "Remarks"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid "Send to ANAF"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__state__sent
+msgid "Sent"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_event_list
+msgid "Sent On"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__state
+msgid "State"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid ""
+"The UIT is not in a state that accepts actions (deleted, or another event is"
+" pending)."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_deleted
+msgid ""
+"The current UIT was deleted at ANAF; the notification is no longer valid."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "The modification date is required."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "The new vehicle number is required."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "The transfer has no validated UIT."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "The vehicle number is the same as the one already declared."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid ""
+"This UIT was deleted at ANAF. The transport can no longer travel under it."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__post_outage
+msgid ""
+"Tick when the event is filed after an ANAF system outage (OUG 41/2022 art. 8"
+" par. 1^3)."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__trailer_1_number
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__trailer_1_number
+msgid "Trailer 1 Number"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__trailer_2_number
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__trailer_2_number
+msgid "Trailer 2 Number"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model,name:l10n_ro_etransport_uit_actions.model_stock_picking
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__picking_id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__picking_id
+msgid "Transfer"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__uit
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__uit
+msgid "UIT"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_enable_actions
+msgid "UIT Actions Enabled"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_deleted
+msgid "UIT Deleted"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_event_pending
+msgid "UIT Event Pending"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_event_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "UIT Events"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "Unhandled eTransport state for %(event)s: %(message)s"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__state__validated
+msgid "Validated"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__event_type__mvh
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__event_type__mvh
+msgid "Vehicle Modification"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__vehicle_number
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__vehicle_number
+msgid "Vehicle Number"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "Vehicle number and trailer number fields must be unique."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__attachment
+msgid "XML"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "XML contains errors."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "eTransport %(event)s was rejected: %(message)s"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid ""
+"eTransport %(event)s was sent to the authority (load index %(load_id)s)."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "eTransport %(event)s was validated by the authority."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model,name:l10n_ro_etransport_uit_actions.model_l10n_ro_etransport_action_wizard
+msgid "eTransport UIT Action"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model,name:l10n_ro_etransport_uit_actions.model_l10n_ro_etransport_event
+msgid "eTransport UIT Event"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "eTransport event rejected"
+msgstr ""
