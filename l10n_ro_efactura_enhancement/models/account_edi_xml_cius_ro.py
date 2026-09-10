@@ -4,6 +4,7 @@
 
 
 import logging
+from typing import NamedTuple
 
 from odoo import models
 from odoo.tools.safe_eval import safe_eval
@@ -14,19 +15,47 @@ _logger = logging.getLogger(__name__)
 
 DEFAULT_VAT = "0000000000000"
 
-# Limita de caractere impusa de CIUS-RO pentru Avizul de plata (BT-83), verificata de
-# schematronul ANAF prin regula BR-RO-L140: „Numarul maxim permis de caractere pentru
-# Aviz de plata (BT-83) este 140.
-# Tichet 9441: valoarea era 200, preluata din corespondenta tichetului 9369 si nu din
-# raspunsul ANAF, deci facturile lungi ramaneau respinse chiar si dupa trunchiere.
-PAYMENT_ID_MAX_LEN = 140
+# Limitele CIUS-RO de lungime maxima, indexate pe nodul UBL care le poarta.
+#
+# Fiecare intrare isi duce cu ea regula ANAF care o impune, ca orice cifra de aici sa
+# poata fi urmarita pana la sursa. Tichet 9441: limita pentru BT-83 fusese pusa la 200,
+# preluata din corespondenta tichetului 9369 si nu din raspunsul ANAF -- facturile lungi
+# ramaneau respinse chiar si dupa trunchiere. Nu adaugam aici nicio limita pentru care nu
+# avem regula scrisa in specificatie sau un mesaj real de respingere.
+#
+# ``strategy``:
+#   "plain"     - taie brut la limita
+#   "separator" - taie la ultimul " - " care incape, ca sa nu rupa in mijlocul unui cod
 
-# Limita CIUS-RO pentru Adresa - Linia 2 (BT-51 cumparator / BT-76 livrare) si pentru
-# Punctul de contact al Cumparatorului (BT-56), verificata prin regula BR-RO-L100.
-# Tichet 9441: le trunchiem doar pe acestea, fiindca doar pentru ele avem respingeri
-# reale de la ANAF -- nu presupunem limite pentru celelalte campuri de adresa.
-ADDRESS_LINE_MAX_LEN = 100
-CONTACT_NAME_MAX_LEN = 100
+
+class MaxLen(NamedTuple):
+    limit: int
+    rule: str
+    bt: str
+    strategy: str = "plain"
+
+
+# cac:PaymentMeans -- Aviz de plata
+PAYMENT_MEANS_LIMITS = {
+    "cbc:PaymentID": MaxLen(140, "BR-RO-L140", "BT-83", "separator"),
+    "cbc:InstructionID": MaxLen(140, "BR-RO-L140", "BT-83", "separator"),
+}
+
+# cac:PostalAddress -- adresa oricarei parti.
+# BT-51 la cumparator, BT-76 la adresa de livrare: acelasi nod, contexte diferite.
+ADDRESS_LIMITS = {
+    "cbc:AdditionalStreetName": MaxLen(100, "BR-RO-L100", "BT-51/BT-76"),
+}
+
+# cac:Contact -- punctul de contact
+CONTACT_LIMITS = {
+    "cbc:Name": MaxLen(100, "BR-RO-L100", "BT-56"),
+}
+
+# Aliasuri pentru limitele citate individual (teste, alte module).
+PAYMENT_ID_MAX_LEN = PAYMENT_MEANS_LIMITS["cbc:PaymentID"].limit
+ADDRESS_LINE_MAX_LEN = ADDRESS_LIMITS["cbc:AdditionalStreetName"].limit
+CONTACT_NAME_MAX_LEN = CONTACT_LIMITS["cbc:Name"].limit
 
 
 def _has_vat(vat):
@@ -51,46 +80,58 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
     def _ubl_get_partner_address_node(self, vals, partner):
         # EXTENDS account.edi.xml.ubl_ro
         node = super()._ubl_get_partner_address_node(vals, partner)
-        self._l10n_ro_truncate_node_text(node, "cbc:AdditionalStreetName", ADDRESS_LINE_MAX_LEN)
+        self._l10n_ro_apply_max_len(node, ADDRESS_LIMITS)
         return node
 
     def _ubl_add_party_contact_node(self, vals):
         # EXTENDS account.edi.xml.ubl_ro
         res = super()._ubl_add_party_contact_node(vals)
-        self._l10n_ro_truncate_node_text(vals["party_node"].get("cac:Contact"), "cbc:Name", CONTACT_NAME_MAX_LEN)
+        self._l10n_ro_apply_max_len(vals["party_node"].get("cac:Contact"), CONTACT_LIMITS)
         return res
 
-    def _l10n_ro_truncate_node_text(self, node, tag, max_len):
-        """Scurteaza la ``max_len`` textul unui nod, daca exista si e prea lung.
+    def _l10n_ro_apply_max_len(self, node, limits):
+        """Aplica pe ``node`` limitele CIUS-RO din harta ``limits``.
 
-        ANAF respinge factura cu BR-RO-L100 cand Adresa - Linia 2 (BT-51 / BT-76) sau
-        Punctul de contact al Cumparatorului (BT-56) depasesc 100 de caractere. Cazuri
-        reale intalnite: ``street2`` folosit de clientii din magazin drept camp de
-        observatii, si denumiri de institutii mai lungi de 100 de caractere.
+        ANAF respinge factura integral daca un singur camp depaseste limita lui, asa ca
+        scurtam la generarea XML-ului; datele din Odoo raman neatinse. Cazuri reale care
+        au produs respingeri: ``street2`` folosit de clientii din magazin drept camp de
+        observatii (BR-RO-L100 pe BT-51 si BT-76 deodata, cand facturarea si livrarea
+        sunt acelasi partener) si denumiri de institutii peste 100 de caractere ajunse in
+        punctul de contact (BT-56).
         """
         if not isinstance(node, dict):
             return
-        value = (node.get(tag) or {}).get("_text")
-        if isinstance(value, str) and len(value) > max_len:
-            node[tag]["_text"] = value[:max_len].rstrip()
+        for tag, spec in limits.items():
+            value = (node.get(tag) or {}).get("_text")
+            if not isinstance(value, str) or len(value) <= spec.limit:
+                continue
+            node[tag]["_text"] = self._l10n_ro_shorten_value(value, spec)
 
-    def _l10n_ro_shorten_payment_identifier(self, value):
-        """Scurteaza o referinta de plata la PAYMENT_ID_MAX_LEN caractere.
+    def _l10n_ro_shorten_value(self, value, spec):
+        """Scurteaza ``value`` la ``spec.limit``, dupa strategia din ``spec``.
 
-        Taie la ultimul separator " - " care mai incape, ca sa nu rupa in mijlocul
-        unui cod de comanda - referintele sunt concatenate cu acest separator, iar
-        reconcilierea automata sparge exact pe el. Daca nu exista un separator
-        rezonabil de aproape de limita, taie brut.
+        Strategia "separator" taie la ultimul " - " care mai incape, ca sa nu rupa in
+        mijlocul unui cod de comanda: referintele de plata sunt concatenate cu acest
+        separator, iar reconcilierea automata sparge exact pe el. Daca nu exista un
+        separator rezonabil de aproape de limita, taie brut.
         """
-        truncated = value[:PAYMENT_ID_MAX_LEN]
-        separator_index = truncated.rfind(" - ")
-        if separator_index >= PAYMENT_ID_MAX_LEN // 2:
-            return truncated[:separator_index]
+        truncated = value[: spec.limit]
+        if spec.strategy == "separator":
+            separator_index = truncated.rfind(" - ")
+            if separator_index >= spec.limit // 2:
+                return truncated[:separator_index]
         return truncated.rstrip()
 
+    def _l10n_ro_truncate_node_text(self, node, tag, max_len):
+        """Scurtare bruta a unui singur nod, la ``max_len``."""
+        self._l10n_ro_apply_max_len(node, {tag: MaxLen(max_len, "", "")})
+
+    def _l10n_ro_shorten_payment_identifier(self, value):
+        """Scurteaza o referinta de plata (BT-83) la limita ei."""
+        return self._l10n_ro_shorten_value(value, PAYMENT_MEANS_LIMITS["cbc:PaymentID"])
+
     def _l10n_ro_truncate_payment_identifiers(self, document_node):
-        """ANAF respinge e-Factura (BR-RO-L140) daca cbc:PaymentID / cbc:InstructionID
-        depasesc PAYMENT_ID_MAX_LEN caractere.
+        """Aplica limita BT-83 (BR-RO-L140) pe toate nodurile cac:PaymentMeans.
 
         Tichet 9369: pe facturile care consolideaza multe comenzi, ``payment_reference``
         poate depasi singur limita (referinte concatenate pentru reconciliere), iar
@@ -101,12 +142,7 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         if isinstance(nodes, dict):
             nodes = [nodes]
         for node in nodes:
-            if not isinstance(node, dict):
-                continue
-            for tag in ("cbc:PaymentID", "cbc:InstructionID"):
-                value = (node.get(tag) or {}).get("_text")
-                if isinstance(value, str) and len(value) > PAYMENT_ID_MAX_LEN:
-                    node[tag]["_text"] = self._l10n_ro_shorten_payment_identifier(value)
+            self._l10n_ro_apply_max_len(node, PAYMENT_MEANS_LIMITS)
 
     def get_description(self, line):
         """
