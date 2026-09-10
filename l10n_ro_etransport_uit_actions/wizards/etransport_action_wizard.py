@@ -30,24 +30,36 @@ class EtransportActionWizard(models.TransientModel):
     trailer_2_number = fields.Char(string="Trailer 2 Number", size=20)
     modification_date = fields.Datetime(string="Modification Date", default=fields.Datetime.now)
 
+    def _get_parent(self):
+        """Transferul aici; lotul în modulul de loturi. Aceleași câmpuri
+        `l10n_ro_edi_stock_*` există pe amândouă."""
+        self.ensure_one()
+        return self.picking_id
+
+    def _get_event_values(self):
+        self.ensure_one()
+        return {"picking_id": self.picking_id.id}
+
     @api.depends("picking_id")
     def _compute_uit(self):
         for wizard in self:
-            wizard.uit = wizard.picking_id.l10n_ro_edi_stock_document_uit
+            wizard.uit = wizard._get_parent().l10n_ro_edi_stock_document_uit
 
     @api.onchange("picking_id", "event_type")
     def _onchange_vehicle_defaults(self):
-        if self.event_type == "MVH" and self.picking_id and not self.vehicle_number:
-            self.vehicle_number = self.picking_id.l10n_ro_edi_stock_vehicle_number
-            self.trailer_1_number = self.picking_id.l10n_ro_edi_stock_trailer_1_number
-            self.trailer_2_number = self.picking_id.l10n_ro_edi_stock_trailer_2_number
+        parent = self._get_parent()
+        if self.event_type == "MVH" and parent and not self.vehicle_number:
+            self.vehicle_number = parent.l10n_ro_edi_stock_vehicle_number
+            self.trailer_1_number = parent.l10n_ro_edi_stock_trailer_1_number
+            self.trailer_2_number = parent.l10n_ro_edi_stock_trailer_2_number
 
     def _validate(self):
         self.ensure_one()
+        parent = self._get_parent()
         errors = []
         if not self.uit:
             errors.append(self.env._("The transfer has no validated UIT."))
-        if not self.picking_id.l10n_ro_etransport_enable_actions:
+        if not parent.l10n_ro_etransport_enable_actions:
             errors.append(
                 self.env._("The UIT is not in a state that accepts actions (deleted, or another event is pending).")
             )
@@ -62,7 +74,7 @@ class EtransportActionWizard(models.TransientModel):
             plates = [p.upper() for p in (self.vehicle_number, self.trailer_1_number, self.trailer_2_number) if p]
             if len(plates) != len(set(plates)):
                 errors.append(self.env._("Vehicle number and trailer number fields must be unique."))
-            current = (self.picking_id.l10n_ro_edi_stock_vehicle_number or "").upper()
+            current = (parent.l10n_ro_edi_stock_vehicle_number or "").upper()
             if plates and plates[0] == current and not (self.trailer_1_number or self.trailer_2_number):
                 errors.append(self.env._("The vehicle number is the same as the one already declared."))
         if errors:
@@ -73,7 +85,7 @@ class EtransportActionWizard(models.TransientModel):
         self._validate()
         event = self.env["l10n.ro.etransport.event"].create(
             {
-                "picking_id": self.picking_id.id,
+                **self._get_event_values(),
                 "event_type": self.event_type,
                 "uit": self.uit,
                 "remarks": self.remarks,
