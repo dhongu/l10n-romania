@@ -1,3 +1,33 @@
+## 19.0.0.4.4 (2026-09-10)
+
+- **Trunchiere referință aviz de expediție (BT-16) la 200 de caractere.**
+  Modulul `deltatech_account_edi_ubl_advice` (când e instalat) concatenează în
+  `cac:DespatchDocumentReference/cbc:ID` numele tuturor livrărilor (pickingurilor)
+  facturate, fără nicio limită de lungime. Pe comenzi cu multe livrări parțiale
+  acumulate în timp (tichet 9429), lista depășea cele 200 de caractere admise de
+  ANAF pentru BT-16, iar factura era respinsă la transmitere cu **BR-RO-L200**.
+  - Suprascriem `_get_invoice_node` (nu `_add_invoice_header_nodes`), ca fix-ul
+    să nu depindă de ordinea de încărcare față de
+    `deltatech_account_edi_ubl_advice`: la momentul în care `super()` se
+    termină, `document_node` e deja complet construit. Dacă acel modul nu e
+    instalat, nodul lipsește și nu se face nimic — zero dependență nouă.
+  - Trunchierea păstrează cât mai multe referințe întregi de picking, în loc să
+    taie în mijlocul unui nume (simetric cu `_l10n_ro_shorten_payment_identifier`
+    de la BT-13/14).
+  - Doar cod Python, nu necesită actualizarea modulului.
+
+## 19.0.0.4.3 (2026-09-09)
+
+- **Limita reală pentru Avizul de plată (BT-83) e 140 de caractere, nu 200.**
+  Tichet #9441. Trunchierea livrată la #9369 tăia `cbc:PaymentID` /
+  `cbc:InstructionID` la 200 de caractere, dar limita impusă de CIUS-RO pentru
+  BT-83 este 140, verificată de schematronul ANAF prin regula **BR-RO-L140**.
+  Cifra 200 fusese preluată din corespondența tichetului #9369, nu din
+  răspunsul ANAF — facturile lungi rămâneau respinse și după trunchiere (11
+  refuzuri BR-RO-L140 între 01.09 și 09.09.2026).
+  - Testele ancorează acum limita în regula de schematron și reproduc
+    referința reală respinsă (43 de comenzi pe PTCDRO20689).
+
 ## 19.0.0.4.2 (2026-09-08)
 
 - **Fix: `cbc:PrepaidAmount` / `cbc:PayableAmount` nu mai depind de plățile
