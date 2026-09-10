@@ -7,7 +7,7 @@
     "countries": ["ro"],
     "license": "AGPL-3",
     "version": "19.0.0.0.2",
-    "author": "Terrabit,Odoo Community Association (OCA)",
+    "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "depends": ["base_address_extended", "l10n_ro_city"],

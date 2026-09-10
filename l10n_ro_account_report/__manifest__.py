@@ -3,7 +3,7 @@
     "name": "Romania - Account Reports",
     "summary": "Romania - Account Reports",
     "version": "19.0.1.0.0",
-    "author": "Terrabit,Odoo Community Association (OCA)",
+    "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],

@@ -8,7 +8,7 @@
     "countries": ["ro"],
     "version": "19.0.0.2.1",
     "license": "AGPL-3",
-    "author": "NextERP Romania SRL,Terrabit,Odoo Community Association (OCA)",
+    "author": "NextERP Romania SRL, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],

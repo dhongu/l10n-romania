@@ -5,7 +5,7 @@
     "license": "AGPL-3",
     "version": "19.0.2.0.0",
     "countries": ["ro"],
-    "author": "Terrabit,NextERP Romania,Odoo Community Association (OCA)",
+    "author": "Terrabit, NextERP Romania",
     "website": "https://www.terrabit.ro",
     "category": "Warehouse",
     "depends": [

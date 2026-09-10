@@ -10,7 +10,7 @@
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],
     "license": "AGPL-3",
     "version": "19.0.0.2.0",
-    "author": "Terrabit,NextERP Romania,Forest and Biomass Romania,Odoo Community Association (OCA)",
+    "author": "Terrabit, NextERP Romania, Forest and Biomass Romania",
     "website": "https://www.terrabit.ro",
     "installable": True,
     "development_status": "Mature",
