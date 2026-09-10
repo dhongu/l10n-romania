@@ -5,3 +5,4 @@ from . import test_ubl_import_base_quantity
 from . import test_spv_request
 from . import test_payment_id_length
 from . import test_monetary_total_payable
+from . import test_address_line_length

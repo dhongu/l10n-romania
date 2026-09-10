@@ -21,6 +21,13 @@ DEFAULT_VAT = "0000000000000"
 # raspunsul ANAF, deci facturile lungi ramaneau respinse chiar si dupa trunchiere.
 PAYMENT_ID_MAX_LEN = 140
 
+# Limita CIUS-RO pentru Adresa - Linia 2 (BT-51 cumparator / BT-76 livrare) si pentru
+# Punctul de contact al Cumparatorului (BT-56), verificata prin regula BR-RO-L100.
+# Tichet 9441: le trunchiem doar pe acestea, fiindca doar pentru ele avem respingeri
+# reale de la ANAF -- nu presupunem limite pentru celelalte campuri de adresa.
+ADDRESS_LINE_MAX_LEN = 100
+CONTACT_NAME_MAX_LEN = 100
+
 
 def _has_vat(vat):
     return bool(vat and len(vat) > 1)
@@ -40,6 +47,32 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         res = super()._ubl_add_payment_means_nodes(vals)
         self._l10n_ro_truncate_payment_identifiers(vals["document_node"])
         return res
+
+    def _ubl_get_partner_address_node(self, vals, partner):
+        # EXTENDS account.edi.xml.ubl_ro
+        node = super()._ubl_get_partner_address_node(vals, partner)
+        self._l10n_ro_truncate_node_text(node, "cbc:AdditionalStreetName", ADDRESS_LINE_MAX_LEN)
+        return node
+
+    def _ubl_add_party_contact_node(self, vals):
+        # EXTENDS account.edi.xml.ubl_ro
+        res = super()._ubl_add_party_contact_node(vals)
+        self._l10n_ro_truncate_node_text(vals["party_node"].get("cac:Contact"), "cbc:Name", CONTACT_NAME_MAX_LEN)
+        return res
+
+    def _l10n_ro_truncate_node_text(self, node, tag, max_len):
+        """Scurteaza la ``max_len`` textul unui nod, daca exista si e prea lung.
+
+        ANAF respinge factura cu BR-RO-L100 cand Adresa - Linia 2 (BT-51 / BT-76) sau
+        Punctul de contact al Cumparatorului (BT-56) depasesc 100 de caractere. Cazuri
+        reale intalnite: ``street2`` folosit de clientii din magazin drept camp de
+        observatii, si denumiri de institutii mai lungi de 100 de caractere.
+        """
+        if not isinstance(node, dict):
+            return
+        value = (node.get(tag) or {}).get("_text")
+        if isinstance(value, str) and len(value) > max_len:
+            node[tag]["_text"] = value[:max_len].rstrip()
 
     def _l10n_ro_shorten_payment_identifier(self, value):
         """Scurteaza o referinta de plata la PAYMENT_ID_MAX_LEN caractere.
