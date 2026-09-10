@@ -5,7 +5,7 @@
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Landed Cost account determination",
-    "author": "Terrabit,Dorin Hongu,Odoo Community Association (OCA)",
+    "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "depends": [
         "stock_landed_costs",

@@ -7,7 +7,7 @@
     "version": "19.0.0.0.3",
     "category": "Localization",
     "summary": "Romania - Stock Aged Report",
-    "author": "Terrabit, NextERP Romania,Dakai Soft,Terrabit,Odoo Community Association (OCA)",
+    "author": "Terrabit, NextERP Romania, Dakai Soft",
     "website": "https://www.terrabit.ro",
     # doar stock_account (core) e necesar: property_stock_valuation_account_id pe
     # categorie; câmpul OCA per-produs e citit defensiv cu hasattr în wizard

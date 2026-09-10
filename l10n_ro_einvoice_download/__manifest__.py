@@ -2,7 +2,7 @@
     "name": "Invoice Files Export",
     "summary": "A zip with files form invoices",
     "version": "19.0.0.0.2",
-    "author": "Terrabit, Voicu Stefan, Odoo Community Association (OCA)",
+    "author": "Terrabit, Voicu Stefan",
     "website": "https://www.terrabit.ro",
     "license": "AGPL-3",
     "category": "Generic Modules",

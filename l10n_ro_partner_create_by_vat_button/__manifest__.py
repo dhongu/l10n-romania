@@ -7,7 +7,7 @@
     "summary": "Partner Create by VAT Button",
     "license": "AGPL-3",
     "version": "19.0.1.1.8",
-    "author": "Dorin Hongu, Terrabit, Odoo Community Association (OCA)",
+    "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],

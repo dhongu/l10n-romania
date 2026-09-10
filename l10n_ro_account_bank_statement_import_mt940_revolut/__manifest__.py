@@ -9,7 +9,7 @@
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],
     "license": "AGPL-3",
     "version": "19.0.1.0.1",
-    "author": "Terrabit, Odoo Community Association (OCA)",
+    "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "installable": True,
     "development_status": "Beta",
