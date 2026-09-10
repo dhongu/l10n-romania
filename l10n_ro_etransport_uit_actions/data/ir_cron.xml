@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="ir_cron_etransport_event_fetch_status" model="ir.cron">
+        <field name="name">RO e-Transport: UIT event status update</field>
+        <field name="model_id" ref="model_l10n_ro_etransport_event" />
+        <field name="state">code</field>
+        <field name="code">model._cron_fetch_status()</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+</odoo>
