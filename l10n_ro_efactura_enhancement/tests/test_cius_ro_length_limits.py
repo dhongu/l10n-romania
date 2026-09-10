@@ -212,21 +212,19 @@ class TestCiusRoLengthLimits(TransactionCase):
 class TestAllSchematronRulesCovered(TransactionCase):
     """Harta de limite, verificată împotriva schematronului, regulă cu regulă.
 
-    Harta din `account_edi_xml_cius_ro` vine din modulul `l10n_ro_edi_extension`
-    al NextERP Romania. Fixtura `cius_ro_length_rules.json` vine din altă sursă:
-    cele 64 de reguli de lungime extrase din schematronul CIUS-RO v1.0.9
-    (`cius-ro/RO16931-rules.sch`), verificate cu validatorul oficial
-    `ROeFacturaValidator` v1.3.0 al MF.
+    Fixtura `cius_ro_length_rules.json` ține cele 64 de reguli de lungime extrase
+    din schematronul CIUS-RO v1.0.9 (`cius-ro/RO16931-rules.sch`), verificate cu
+    validatorul oficial `ROeFacturaValidator` v1.3.0 al MF.
 
-    Testul confruntă cele două: pentru fiecare regulă construiește un document cu
-    exact acea cale populată peste limită, aplică harta și cere ca valoarea să
-    intre sub limită. Așa un câmp neacoperit iese la iveală aici, nu într-o
-    respingere ANAF la client.
+    Testul confruntă harta din `account_edi_xml_cius_ro` cu ele: pentru fiecare
+    regulă construiește un document cu exact acea cale populată peste limită,
+    aplică harta și cere ca valoarea să intre sub limită. Așa un câmp neacoperit
+    iese la iveală aici, nu într-o respingere ANAF la client.
 
-    Tichet #9441: reconcilierea a găsit 14 reguli neacoperite de harta preluată --
-    printre ele toate limitele reprezentantului fiscal și ale beneficiarului
-    plății (acele părți nu au un `cac:Party` intermediar, deci calea nu se
-    potrivea deloc) și liniile 3 de adresă.
+    Tichet #9441: reconcilierea a găsit 14 reguli neacoperite -- printre ele toate
+    limitele reprezentantului fiscal și ale beneficiarului plății (acele părți nu
+    au un `cac:Party` intermediar, deci calea nu se potrivea deloc) și liniile 3
+    de adresă.
     """
 
     @classmethod

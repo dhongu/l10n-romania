@@ -19,9 +19,11 @@ DEFAULT_VAT = "0000000000000"
 # BR-RO-L020 .. BR-RO-L1000). Valorile sunt numar de caractere Unicode, ca in
 # semantica ``string-length`` folosita de validator.
 #
-# Harta e preluata din modulul `l10n_ro_edi_extension` al NextERP Romania
-# (LGPL-3, https://github.com/NextERP-Romania/odoo-community) si verificata fata
-# de schematronul CIUS-RO v1.0.9 si de validatorul oficial ROeFacturaValidator.
+# Sursa: cele 64 de reguli de lungime din schematronul CIUS-RO v1.0.9
+# (`cius-ro/RO16931-rules.sch`), verificate cu validatorul oficial al MF,
+# ROeFacturaValidator v1.3.0. Fixtura din tests/cius_ro_length_rules.json
+# pastreaza lista completa, iar TestAllSchematronRulesCovered confrunta harta
+# cu ea la fiecare rulare.
 #
 # Tichet 9441: pana acum limitele erau constante razlete, iar cea pentru BT-83
 # statuse la 200 -- cifra venea din corespondenta unui tichet, nu din raspunsul
