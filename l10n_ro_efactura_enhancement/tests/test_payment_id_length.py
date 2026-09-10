@@ -5,7 +5,12 @@
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
-from odoo.addons.l10n_ro_efactura_enhancement.models.account_edi_xml_cius_ro import PAYMENT_ID_MAX_LEN
+from odoo.addons.l10n_ro_efactura_enhancement.models.account_edi_xml_cius_ro import (
+    ADDRESS_LIMITS,
+    CONTACT_LIMITS,
+    PAYMENT_ID_MAX_LEN,
+    PAYMENT_MEANS_LIMITS,
+)
 
 
 @tagged("post_install", "-at_install")
@@ -140,3 +145,34 @@ class TestPaymentIdLength(TransactionCase):
         # numărul facturii rămâne primul, ca reconcilierea să aibă de ce să se agațe
         self.assertTrue(value.startswith("PTCDRO20689 - S189895"))
         self.assertTrue(all(segment in orders or segment == "PTCDRO20689" for segment in value.split(" - ")))
+
+
+@tagged("post_install", "-at_install")
+class TestMaxLenMap(TransactionCase):
+    """Harta de limite CIUS-RO: fiecare cifră trebuie să-și declare sursa.
+
+    Tichet #9441: limita pentru BT-83 a stat luni de zile la 200 pentru că nimeni
+    nu putea vedea, din cod, de unde venea cifra. Testul cere ca orice intrare din
+    hartă să numească regula ANAF și identificatorul semantic pe care le impune.
+    """
+
+    def test_every_limit_declares_its_source(self):
+        for name, limits in (
+            ("PAYMENT_MEANS_LIMITS", PAYMENT_MEANS_LIMITS),
+            ("ADDRESS_LIMITS", ADDRESS_LIMITS),
+            ("CONTACT_LIMITS", CONTACT_LIMITS),
+        ):
+            for tag, spec in limits.items():
+                with self.subTest(map=name, tag=tag):
+                    self.assertGreater(spec.limit, 0)
+                    self.assertRegex(spec.rule, r"^BR-RO-", "limita trebuie legată de o regulă ANAF")
+                    self.assertRegex(spec.bt, r"^BT-", "limita trebuie legată de un identificator EN16931")
+                    self.assertIn(spec.strategy, ("plain", "separator"))
+
+    def test_rule_code_matches_the_limit_it_carries(self):
+        """Codul regulii ANAF conține chiar limita: BR-RO-L140 => 140."""
+        for limits in (PAYMENT_MEANS_LIMITS, ADDRESS_LIMITS, CONTACT_LIMITS):
+            for tag, spec in limits.items():
+                if spec.rule.startswith("BR-RO-L"):
+                    with self.subTest(tag=tag):
+                        self.assertEqual(int(spec.rule.removeprefix("BR-RO-L")), spec.limit)
