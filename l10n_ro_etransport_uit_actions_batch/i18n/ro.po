@@ -1,0 +1,116 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-10 07:20+0000\n"
+"PO-Revision-Date: 2026-09-10 07:20+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model,name:l10n_ro_etransport_uit_actions_batch.model_stock_picking_batch
+msgid "Batch Transfer"
+msgstr "Lot de transfer"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions_batch.view_picking_batch_form
+msgid "Change Vehicle"
+msgstr "Schimbă vehiculul"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions_batch.view_picking_batch_form
+msgid "Confirm UIT"
+msgstr "Confirmă UIT"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions_batch.view_picking_batch_form
+msgid "Delete UIT"
+msgstr "Șterge UIT"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_l10n_ro_etransport_action_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_l10n_ro_etransport_event__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_stock_picking_batch__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions_batch.view_picking_batch_form
+msgid "Fetch Event Status"
+msgstr "Preia starea evenimentelor"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_l10n_ro_etransport_action_wizard__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_l10n_ro_etransport_event__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_stock_picking_batch__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions_batch.field_stock_picking_batch__l10n_ro_etransport_uit_deleted
+msgid ""
+"The current UIT was deleted at ANAF; the notification is no longer valid."
+msgstr "UIT-ul curent a fost șters la ANAF; notificarea nu mai este valabilă."
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions_batch/models/etransport_event.py:0
+msgid "The event must belong to a transfer or to a transfer batch."
+msgstr ""
+"Evenimentul trebuie să aparțină unui transfer sau unui lot de transfer."
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions_batch.view_picking_batch_form
+msgid ""
+"This UIT was deleted at ANAF. The transport can no longer travel under it."
+msgstr ""
+"Acest UIT a fost șters la ANAF. Transportul nu mai poate circula sub el."
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_l10n_ro_etransport_action_wizard__picking_id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_l10n_ro_etransport_event__picking_id
+msgid "Transfer"
+msgstr "Transfer"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_l10n_ro_etransport_action_wizard__batch_id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_l10n_ro_etransport_event__batch_id
+msgid "Transfer Batch"
+msgstr "Lot de transfer"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_stock_picking_batch__l10n_ro_etransport_enable_actions
+msgid "UIT Actions Enabled"
+msgstr "Acțiuni UIT disponibile"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_stock_picking_batch__l10n_ro_etransport_uit_deleted
+msgid "UIT Deleted"
+msgstr "UIT șters"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_stock_picking_batch__l10n_ro_etransport_event_pending
+msgid "UIT Event Pending"
+msgstr "Eveniment UIT în așteptare"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions_batch.field_stock_picking_batch__l10n_ro_etransport_event_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions_batch.view_picking_batch_form
+msgid "UIT Events"
+msgstr "Evenimente UIT"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model,name:l10n_ro_etransport_uit_actions_batch.model_l10n_ro_etransport_action_wizard
+msgid "eTransport UIT Action"
+msgstr "Acțiune UIT eTransport"
+
+#. module: l10n_ro_etransport_uit_actions_batch
+#: model:ir.model,name:l10n_ro_etransport_uit_actions_batch.model_l10n_ro_etransport_event
+msgid "eTransport UIT Event"
+msgstr "Eveniment UIT eTransport"
