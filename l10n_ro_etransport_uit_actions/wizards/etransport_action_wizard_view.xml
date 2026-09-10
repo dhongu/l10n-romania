@@ -30,8 +30,7 @@
                     </group>
                 </group>
                 <div class="alert alert-warning" role="alert" invisible="event_type != 'DEL'">
-                    Deleting the notification invalidates the UIT at ANAF. The goods can no longer travel under it;
-                    a new notification is needed for the transport.
+                    Deleting the notification invalidates the UIT at ANAF. The goods can no longer travel under it; a new notification is needed for the transport.
                 </div>
                 <footer>
                     <button name="action_send" string="Send to ANAF" type="object" class="btn-primary" />
