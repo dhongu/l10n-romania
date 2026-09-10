@@ -4,6 +4,7 @@
 
 
 import logging
+from typing import NamedTuple
 
 from odoo import models
 from odoo.tools.safe_eval import safe_eval
@@ -14,12 +15,130 @@ _logger = logging.getLogger(__name__)
 
 DEFAULT_VAT = "0000000000000"
 
-# Limita de caractere impusa de CIUS-RO pentru Avizul de plata (BT-83), verificata de
-# schematronul ANAF prin regula BR-RO-L140: „Numarul maxim permis de caractere pentru
-# Aviz de plata (BT-83) este 140.
-# Tichet 9441: valoarea era 200, preluata din corespondenta tichetului 9369 si nu din
-# raspunsul ANAF, deci facturile lungi ramaneau respinse chiar si dupa trunchiere.
-PAYMENT_ID_MAX_LEN = 140
+# Limitele CIUS-RO de lungime maxima impuse de schematronul ANAF (regulile
+# BR-RO-L020 .. BR-RO-L1000). Valorile sunt numar de caractere Unicode, ca in
+# semantica ``string-length`` folosita de validator.
+#
+# Sursa: cele 64 de reguli de lungime din schematronul CIUS-RO v1.0.9
+# (`cius-ro/RO16931-rules.sch`), verificate cu validatorul oficial al MF,
+# ROeFacturaValidator v1.3.0. Fixtura din tests/cius_ro_length_rules.json
+# pastreaza lista completa, iar TestAllSchematronRulesCovered confrunta harta
+# cu ea la fiecare rulare.
+#
+# Tichet 9441: pana acum limitele erau constante razlete, iar cea pentru BT-83
+# statuse la 200 -- cifra venea din corespondenta unui tichet, nu din raspunsul
+# ANAF. Nu adaugam aici nicio limita fara regula in specificatie.
+#
+# Valoarea unei intrari e fie limita bruta, fie un MaxLen cand ne trebuie o
+# strategie de scurtare anume.
+
+
+class MaxLen(NamedTuple):
+    limit: int
+    bt: str
+    #  "plain"     - taie brut la limita
+    #  "separator" - taie la ultimul " - " care incape, ca sa nu rupa un cod
+    strategy: str = "plain"
+
+
+DOCUMENT_LIMITS = {
+    ("cbc:ID",): 200,  # BT-1
+    ("cac:ContractDocumentReference", "cbc:ID"): 200,  # BT-12
+    ("cac:OrderReference", "cbc:ID"): 200,  # BT-13
+    ("cac:OrderReference", "cbc:SalesOrderID"): 200,  # BT-14
+    ("cac:ReceiptDocumentReference", "cbc:ID"): 200,  # BT-15
+    ("cac:DespatchDocumentReference", "cbc:ID"): 200,  # BT-16
+    ("cac:OriginatorDocumentReference", "cbc:ID"): 200,  # BT-17
+    ("cbc:AccountingCost",): 100,  # BT-19
+    ("cac:PaymentTerms", "cbc:Note"): 300,  # BT-20
+}
+
+# Limitele unei parti, relative la nodul partii.
+#
+# Atentie la forma containerelor: cac:AccountingSupplierParty si
+# cac:AccountingCustomerParty invelesc partea intr-un cac:Party, pe cand
+# cac:PayeeParty si cac:TaxRepresentativeParty SUNT direct partea. De aceea
+# aplicarea adauga prefixul potrivit fiecarui container (PARTY_CONTAINERS) --
+# altfel limitele reprezentantului fiscal si ale beneficiarului nu s-ar aplica
+# niciodata, iar calea nu s-ar potrivi tacut.
+PARTY_LIMITS = {
+    ("cac:PartyLegalEntity", "cbc:RegistrationName"): 200,  # BT-27/44
+    ("cac:PartyName", "cbc:Name"): 200,  # BT-28/45/59/62
+    ("cac:PartyLegalEntity", "cbc:CompanyLegalForm"): 1000,  # BT-33
+    ("cac:PostalAddress", "cbc:StreetName"): 150,  # BT-35/50/64
+    ("cac:PostalAddress", "cbc:AdditionalStreetName"): 100,  # BT-36/51/65
+    ("cac:PostalAddress", "cac:AddressLine", "cbc:Line"): 100,  # BT-162/163/164
+    ("cac:PostalAddress", "cbc:CityName"): 50,  # BT-37/52/66
+    ("cac:PostalAddress", "cbc:PostalZone"): 20,  # BT-38/53/67
+    ("cac:Contact", "cbc:Name"): 100,  # BT-41/56
+    ("cac:Contact", "cbc:Telephone"): 100,  # BT-42/57
+    ("cac:Contact", "cbc:ElectronicMail"): 100,  # BT-43/58
+}
+
+# Containerul fiecarei parti si prefixul pana la nodul partii.
+PARTY_CONTAINERS = {
+    "cac:AccountingSupplierParty": ("cac:Party",),
+    "cac:AccountingCustomerParty": ("cac:Party",),
+    "cac:PayeeParty": (),
+    "cac:TaxRepresentativeParty": (),
+}
+
+DELIVERY_LIMITS = {
+    ("cac:DeliveryParty", "cac:PartyName", "cbc:Name"): 200,  # BT-70
+    ("cac:DeliveryLocation", "cac:Address", "cbc:StreetName"): 150,  # BT-75
+    ("cac:DeliveryLocation", "cac:Address", "cbc:AdditionalStreetName"): 100,  # BT-76
+    ("cac:DeliveryLocation", "cac:Address", "cac:AddressLine", "cbc:Line"): 100,  # BT-165
+    ("cac:DeliveryLocation", "cac:Address", "cbc:CityName"): 50,  # BT-77
+    ("cac:DeliveryLocation", "cac:Address", "cbc:PostalZone"): 20,  # BT-78
+}
+
+PAYMENT_MEANS_LIMITS = {
+    ("cbc:PaymentMeansCode", "name"): 100,  # BT-82 (atribut)
+    # Referintele de plata sunt concatenate cu " - " pentru reconciliere, iar
+    # taierea bruta ar rupe un cod de comanda la mijloc: taiem la separator.
+    ("cbc:PaymentID",): MaxLen(140, "BT-83", "separator"),
+    ("cac:PayeeFinancialAccount", "cbc:Name"): 200,  # BT-85
+    ("cac:CardAccount", "cbc:HolderName"): 200,  # BT-88
+}
+
+DOC_ALLOWANCE_LIMITS = {
+    # La nivel de document schematronul verifica ReasonCode (BR-RO-L1017/L1018),
+    # nu Reason -- pe linie e invers (BT-139/144, in LINE_LIMITS).
+    ("cbc:AllowanceChargeReasonCode",): 100,  # BT-97 / BT-104
+    ("cbc:AllowanceChargeReason",): 100,
+}
+
+ADDITIONAL_DOC_REF_LIMITS = {
+    ("cbc:ID",): 200,  # BT-18 / BT-122
+    ("cbc:DocumentDescription",): 100,  # BT-123
+    ("cac:Attachment", "cac:ExternalReference", "cbc:URI"): 200,  # BT-124
+    ("cac:Attachment", "cbc:EmbeddedDocumentBinaryObject", "filename"): 200,  # BT-125-2
+}
+
+BILLING_REF_LIMITS = {
+    ("cac:InvoiceDocumentReference", "cbc:ID"): 200,  # BT-25
+}
+
+LINE_LIMITS = {
+    ("cbc:AccountingCost",): 100,  # BT-133
+    ("cac:AllowanceCharge", "cbc:AllowanceChargeReason"): 100,  # BT-139 / BT-144
+    ("cac:Item", "cbc:Name"): 100,  # BT-153
+    ("cac:Item", "cbc:Description"): 200,  # BT-154
+}
+
+ITEM_PROPERTY_LIMITS = {
+    ("cbc:Name",): 50,  # BT-160
+    ("cbc:Value",): 100,  # BT-161
+}
+
+TAX_EXEMPTION_REASON_MAX_LEN = 100  # BT-120
+
+# BT-22 / BT-127 (cbc:Note pe document si pe linie) NU se trunchiaza: UBL permite
+# repetarea elementului, deci le spargem in mai multe noduri de cate 300 de caractere.
+NOTE_MAX_LEN = 300  # BR-RO-L300
+
+# Alias pastrat pentru codul si testele care citeau limita individual.
+PAYMENT_ID_MAX_LEN = PAYMENT_MEANS_LIMITS[("cbc:PaymentID",)].limit
 
 
 def _has_vat(vat):
@@ -35,45 +154,196 @@ class AccountEdiUBL(models.AbstractModel):
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
 
-    def _ubl_add_payment_means_nodes(self, vals):
+    def _get_invoice_node(self, vals):
         # EXTENDS account.edi.xml.ubl_ro
-        res = super()._ubl_add_payment_means_nodes(vals)
-        self._l10n_ro_truncate_payment_identifiers(vals["document_node"])
-        return res
+        document_node = super()._get_invoice_node(vals)
+        self._l10n_ro_apply_length_limits(document_node)
+        return document_node
 
-    def _l10n_ro_shorten_payment_identifier(self, value):
-        """Scurteaza o referinta de plata la PAYMENT_ID_MAX_LEN caractere.
+    # -------------------------------------------------------------------------
+    # Limitele CIUS-RO de lungime
+    # -------------------------------------------------------------------------
 
-        Taie la ultimul separator " - " care mai incape, ca sa nu rupa in mijlocul
-        unui cod de comanda - referintele sunt concatenate cu acest separator, iar
-        reconcilierea automata sparge exact pe el. Daca nu exista un separator
-        rezonabil de aproape de limita, taie brut.
+    def _l10n_ro_apply_length_limits(self, document_node):
+        """Aplica intr-o singura trecere toate limitele BR-RO-L* pe documentul gata construit.
+
+        ANAF respinge factura integral daca un singur camp isi depaseste limita, iar
+        campurile vin din date libere (nume de parteneri, adrese, note, descrieri de
+        articole), deci nu putem conta pe curatarea manuala. Scurtam la generarea
+        XML-ului; datele din Odoo raman neatinse.
+
+        Se aplica la final, pe arborele complet, nu la scrierea fiecarui nod: asa prinde
+        si nodurile scrise de alte module sau de standard, nu doar pe cele scrise aici.
         """
-        truncated = value[:PAYMENT_ID_MAX_LEN]
-        separator_index = truncated.rfind(" - ")
-        if separator_index >= PAYMENT_ID_MAX_LEN // 2:
-            return truncated[:separator_index]
+        self._l10n_ro_apply_limits(document_node, DOCUMENT_LIMITS)
+        self._l10n_ro_split_note_nodes(document_node)  # BT-22
+
+        for party_key, prefix in PARTY_CONTAINERS.items():
+            party_root = document_node.get(party_key)
+            if party_root is None:
+                continue
+            limits = {prefix + path: spec for path, spec in PARTY_LIMITS.items()}
+            self._l10n_ro_apply_limits(party_root, limits)
+
+        delivery_root = document_node.get("cac:Delivery")
+        if delivery_root is not None:
+            self._l10n_ro_apply_limits(delivery_root, DELIVERY_LIMITS)
+
+        for node in self._l10n_ro_iter_children(document_node, "cac:PaymentMeans"):
+            self._l10n_ro_apply_limits(node, PAYMENT_MEANS_LIMITS)
+
+        for node in self._l10n_ro_iter_children(document_node, "cac:AllowanceCharge"):
+            self._l10n_ro_apply_limits(node, DOC_ALLOWANCE_LIMITS)
+
+        for node in self._l10n_ro_iter_children(document_node, "cac:AdditionalDocumentReference"):
+            self._l10n_ro_apply_limits(node, ADDITIONAL_DOC_REF_LIMITS)
+
+        for node in self._l10n_ro_iter_children(document_node, "cac:BillingReference"):
+            self._l10n_ro_apply_limits(node, BILLING_REF_LIMITS)
+
+        # BT-120: motivul scutirii / al taxarii inverse, in fiecare cac:TaxCategory.
+        for tax_total in self._l10n_ro_iter_children(document_node, "cac:TaxTotal"):
+            for subtotal in self._l10n_ro_iter_children(tax_total, "cac:TaxSubtotal"):
+                exemption = {("cbc:TaxExemptionReason",): TAX_EXEMPTION_REASON_MAX_LEN}
+                # UBL il pune sub cac:TaxCategory, schematronul il ancoreaza pe
+                # cac:TaxSubtotal: acoperim ambele locuri.
+                self._l10n_ro_apply_limits(subtotal, exemption)
+                category = subtotal.get("cac:TaxCategory")
+                if isinstance(category, dict):
+                    self._l10n_ro_apply_limits(category, exemption)
+
+        for line_tag in ("cac:InvoiceLine", "cac:CreditNoteLine", "cac:DebitNoteLine"):
+            for line in self._l10n_ro_iter_children(document_node, line_tag):
+                self._l10n_ro_apply_limits(line, LINE_LIMITS)
+                self._l10n_ro_split_note_nodes(line)  # BT-127
+                item = line.get("cac:Item")
+                if isinstance(item, dict):
+                    for prop in self._l10n_ro_iter_children(item, "cac:AdditionalItemProperty"):
+                        self._l10n_ro_apply_limits(prop, ITEM_PROPERTY_LIMITS)
+
+    def _l10n_ro_apply_limits(self, root, limits):
+        """Aplica pe ``root`` harta ``limits`` (cale -> limita sau MaxLen)."""
+        for path, spec in limits.items():
+            self._l10n_ro_apply_path(root, path, self._l10n_ro_spec(spec))
+
+    @staticmethod
+    def _l10n_ro_spec(spec):
+        return spec if isinstance(spec, MaxLen) else MaxLen(spec, "")
+
+    @staticmethod
+    def _l10n_ro_iter_children(parent, key):
+        """Itereaza copiii ``key`` ai lui ``parent``, fie ca sunt un nod sau o lista."""
+        if not isinstance(parent, dict):
+            return
+        value = parent.get(key)
+        if isinstance(value, list):
+            for item in value:
+                if isinstance(item, dict):
+                    yield item
+        elif isinstance(value, dict):
+            yield value
+
+    def _l10n_ro_apply_path(self, root, path, spec):
+        """Parcurge ``path`` de la ``root`` si scurteaza valoarea din frunza.
+
+        Nodurile intermediare pot fi liste (se itereaza). Frunza e fie un nod text
+        (``{"_text": ...}``), fie un atribut XML -- caz in care calea se termina cu
+        numele atributului, iar parintele il tine ca sir.
+        """
+
+        def _walk(node, remaining):
+            if node is None:
+                return
+            if isinstance(node, list):
+                for item in node:
+                    _walk(item, remaining)
+                return
+            if not isinstance(node, dict):
+                return
+            if not remaining:
+                value = node.get("_text")
+                if isinstance(value, str):
+                    node["_text"] = self._l10n_ro_shorten_value(value, spec)
+                return
+            head, *rest = remaining
+            child = node.get(head)
+            if child is None:
+                return
+            if not rest and isinstance(child, str):
+                node[head] = self._l10n_ro_shorten_value(child, spec)
+                return
+            _walk(child, rest)
+
+        _walk(root, list(path))
+
+    def _l10n_ro_shorten_value(self, value, spec):
+        """Scurteaza ``value`` la ``spec.limit``, daca e cazul.
+
+        Schematronul masoara ``string-length(normalize-space(...))``, deci un text cu
+        spatii multiple poate fi mai lung decat limita si totusi valid -- verificam pe
+        forma normalizata, ca sa nu taiem mai mult decat cere ANAF.
+
+        Strategia "separator" taie la ultimul " - " care mai incape, ca sa nu rupa in
+        mijlocul unui cod de comanda: referintele de plata sunt concatenate cu acest
+        separator, iar reconcilierea automata sparge exact pe el. Daca nu exista un
+        separator rezonabil de aproape de limita, taie brut.
+        """
+        if len(" ".join(value.split())) <= spec.limit:
+            return value
+        truncated = value[: spec.limit]
+        if spec.strategy == "separator":
+            separator_index = truncated.rfind(" - ")
+            if separator_index >= spec.limit // 2:
+                return truncated[:separator_index]
         return truncated.rstrip()
 
-    def _l10n_ro_truncate_payment_identifiers(self, document_node):
-        """ANAF respinge e-Factura (BR-RO-L140) daca cbc:PaymentID / cbc:InstructionID
-        depasesc PAYMENT_ID_MAX_LEN caractere.
+    def _l10n_ro_split_note_nodes(self, node):
+        """Rescrie ``cbc:Note`` al lui ``node`` in bucati de cel mult NOTE_MAX_LEN.
 
-        Tichet 9369: pe facturile care consolideaza multe comenzi, ``payment_reference``
-        poate depasi singur limita (referinte concatenate pentru reconciliere), iar
-        factura ramane blocata la transmitere. Scurtam aici, in generator, ca sa nu
-        depindem de curatarea manuala a campului pe fiecare factura.
+        Aplicat pe documentul gata construit, ca sa nu depinda de hook-ul care scrie
+        nota -- narration-ul facturii, notele de linie sau orice alt modul care le
+        completeaza ajung toate aici.
         """
-        nodes = document_node.get("cac:PaymentMeans") or []
-        if isinstance(nodes, dict):
-            nodes = [nodes]
-        for node in nodes:
-            if not isinstance(node, dict):
+        notes = node.get("cbc:Note")
+        if notes is None:
+            return
+        if isinstance(notes, dict):
+            notes = [notes]
+        elif isinstance(notes, str):
+            notes = [{"_text": notes}]
+        if not isinstance(notes, list):
+            return
+        result = []
+        changed = False
+        for item in notes:
+            text = item.get("_text") if isinstance(item, dict) else item
+            if not isinstance(text, str):
+                result.append(item)
                 continue
-            for tag in ("cbc:PaymentID", "cbc:InstructionID"):
-                value = (node.get(tag) or {}).get("_text")
-                if isinstance(value, str) and len(value) > PAYMENT_ID_MAX_LEN:
-                    node[tag]["_text"] = self._l10n_ro_shorten_payment_identifier(value)
+            chunks = self._l10n_ro_split_note(text)
+            if len(chunks) != 1 or chunks[0] != text:
+                changed = True
+            result.extend({"_text": chunk} for chunk in chunks)
+        if changed:
+            node["cbc:Note"] = result
+
+    def _l10n_ro_split_note(self, text):
+        """Sparge un text in bucati de cate NOTE_MAX_LEN caractere.
+
+        BT-22 / BT-127 nu se trunchiaza: UBL permite repetarea lui ``cbc:Note``, deci
+        pastram tot textul, in mai multe noduri. Taiem pe caractere, nu pe octeti --
+        schematronul numara caractere Unicode, iar o limita pe octeti ar rupe inutil
+        textele cu diacritice.
+        """
+        chunks = []
+        remaining = text
+        while remaining:
+            chunk = remaining[:NOTE_MAX_LEN].strip()
+            if not chunk:
+                break
+            chunks.append(chunk)
+            remaining = remaining[len(chunk) :].lstrip()
+        return chunks
 
     def get_description(self, line):
         """
