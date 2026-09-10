@@ -320,6 +320,41 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
                 order_ref_node["cbc:ID"]["_text"] = order_ref_node["cbc:ID"]["_text"][:200]
         return res
 
+    def _get_invoice_node(self, vals):
+        # EXTENDS account.edi.xml.ubl_20 (prin ubl_bis3)
+        # deltatech_account_edi_ubl_advice (daca e instalat) seteaza cac:DespatchDocumentReference
+        # (BT-16) concatenand numele tuturor pickingurilor "done" ale liniilor de vanzare facturate,
+        # fara nicio limita de lungime. Pe comenzi cu multe livrari partiale acumulate in timp
+        # (tichet 9429), lista poate depasi cele 200 de caractere admise de ANAF pentru BT-16 ->
+        # factura e respinsa la transmitere cu eroarea BR-RO-L200. Aceeasi regula e deja aplicata
+        # pentru BT-13/BT-14 in _ubl_add_order_reference_node.
+        # Suprascriem aici _get_invoice_node (nu _add_invoice_header_nodes) ca sa nu depindem de
+        # ordinea de incarcare fata de deltatech_account_edi_ubl_advice: la momentul in care
+        # super() se termina, document_node e deja complet construit, inclusiv despatch reference
+        # daca acel modul e instalat; daca nu e instalat, cheia lipseste si nu facem nimic.
+        document_node = super()._get_invoice_node(vals)
+        despatch_id = document_node.get("cac:DespatchDocumentReference", {}).get("cbc:ID", {})
+        value = despatch_id.get("_text")
+        if value and len(value) > 200:
+            despatch_id["_text"] = self._l10n_ro_truncate_despatch_advice(value)
+        return document_node
+
+    def _l10n_ro_truncate_despatch_advice(self, value, max_len=200):
+        """Trunchiaza lista de referinte de pickinguri (separate prin ", ") la max_len
+        caractere, pastrand cat mai multe referinte intregi in loc sa taie in mijlocul
+        unui nume de picking.
+        """
+        names = value.split(", ")
+        kept = []
+        length = 0
+        for name in names:
+            extra = len(name) + (2 if kept else 0)
+            if length + extra > max_len:
+                break
+            kept.append(name)
+            length += extra
+        return ", ".join(kept) if kept else value[:max_len]
+
     def _ubl_add_accounting_supplier_party_legal_entity_nodes(self, vals):
         res = super()._ubl_add_accounting_supplier_party_legal_entity_nodes(vals)
         if (
