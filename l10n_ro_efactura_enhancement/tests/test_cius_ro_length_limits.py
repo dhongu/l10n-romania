@@ -2,6 +2,9 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
+import json
+import os
+
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -203,3 +206,80 @@ class TestCiusRoLengthLimits(TransactionCase):
     def test_bis3_non_ro_has_no_limits(self):
         """Limitele sunt CIUS-RO: generatorul Peppol generic nu le moștenește."""
         self.assertFalse(hasattr(self.env["account.edi.xml.ubl_bis3"], "_l10n_ro_apply_length_limits"))
+
+
+@tagged("post_install", "-at_install")
+class TestAllSchematronRulesCovered(TransactionCase):
+    """Harta de limite, verificată împotriva schematronului, regulă cu regulă.
+
+    Harta din `account_edi_xml_cius_ro` vine din modulul `l10n_ro_edi_extension`
+    al NextERP Romania. Fixtura `cius_ro_length_rules.json` vine din altă sursă:
+    cele 64 de reguli de lungime extrase din schematronul CIUS-RO v1.0.9
+    (`cius-ro/RO16931-rules.sch`), verificate cu validatorul oficial
+    `ROeFacturaValidator` v1.3.0 al MF.
+
+    Testul confruntă cele două: pentru fiecare regulă construiește un document cu
+    exact acea cale populată peste limită, aplică harta și cere ca valoarea să
+    intre sub limită. Așa un câmp neacoperit iese la iveală aici, nu într-o
+    respingere ANAF la client.
+
+    Tichet #9441: reconcilierea a găsit 14 reguli neacoperite de harta preluată --
+    printre ele toate limitele reprezentantului fiscal și ale beneficiarului
+    plății (acele părți nu au un `cac:Party` intermediar, deci calea nu se
+    potrivea deloc) și liniile 3 de adresă.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.builder = cls.env["account.edi.xml.ubl_ro"]
+        path = os.path.join(os.path.dirname(__file__), "cius_ro_length_rules.json")
+        with open(path, encoding="utf-8") as handle:
+            cls.rules = json.load(handle)
+
+    def _build(self, path, text):
+        """Construiește un document minimal cu ``path`` populat cu ``text``."""
+        if path[-1].startswith("@"):
+            # frunza e un atribut XML: parintele il tine ca sir simplu
+            node = {path[-2]: {"_text": "x", path[-1][1:]: text}}
+            rest = path[1:-2]
+        else:
+            node = {"_text": text}
+            rest = path[1:]
+        for segment in reversed(rest):
+            node = {segment: node}
+        return {path[0]: node}
+
+    def _read(self, document_node, path):
+        node = document_node
+        for segment in path[:-1]:
+            if not isinstance(node, dict):
+                return None
+            node = node.get(segment)
+        if not isinstance(node, dict):
+            return None
+        leaf = path[-1]
+        if leaf.startswith("@"):
+            return node.get(leaf[1:])
+        value = node.get(leaf)
+        if isinstance(value, dict):
+            return value.get("_text")
+        if isinstance(value, list):
+            # cbc:Note se sparge in mai multe noduri: fiecare trebuie sub limita
+            return max((chunk.get("_text", "") for chunk in value), key=len, default="")
+        return value
+
+    def test_every_schematron_rule_is_covered(self):
+        self.assertEqual(len(self.rules), 64, "fixtura schematronului s-a schimbat")
+        uncovered = []
+        for rule in self.rules:
+            path = list(rule["path"])
+            # //cac:Item/... traieste sub o linie de factura
+            if path[0] == "cac:Item":
+                path = ["cac:InvoiceLine"] + path
+            document_node = self._build(path, "X" * (rule["max"] + 60))
+            self.builder._l10n_ro_apply_length_limits(document_node)
+            value = self._read(document_node, path)
+            if not isinstance(value, str) or len(value) > rule["max"]:
+                uncovered.append(f"{rule['id']} {rule['bt']} ({rule['max']}) {'/'.join(path)}")
+        self.assertFalse(uncovered, "reguli CIUS-RO neacoperite de hartă:\n  " + "\n  ".join(uncovered))
