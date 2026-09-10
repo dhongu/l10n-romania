@@ -5,7 +5,7 @@
 {
     "name": "Deltatech Sale from Store UBL",
     "version": "19.0.1.0.6",
-    "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
+    "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Sale from store",
     "countries": ["ro"],
