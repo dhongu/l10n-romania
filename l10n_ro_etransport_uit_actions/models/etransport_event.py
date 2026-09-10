@@ -55,7 +55,8 @@ class EtransportEvent(models.Model):
     picking_id = fields.Many2one(
         "stock.picking", string="Transfer", required=True, ondelete="cascade", index=True, check_company=True
     )
-    company_id = fields.Many2one(related="picking_id.company_id", store=True)
+    # compute (nu related) ca modulul de loturi să poată lua compania de pe lot
+    company_id = fields.Many2one("res.company", compute="_compute_company_id", store=True)
     event_type = fields.Selection(EVENT_TYPES, string="Event", required=True, readonly=True)
     uit = fields.Char(string="UIT", required=True, readonly=True, size=16)
     state = fields.Selection(
@@ -86,6 +87,18 @@ class EtransportEvent(models.Model):
     trailer_2_number = fields.Char(string="Trailer 2 Number", size=20, readonly=True)
     modification_date = fields.Datetime(string="Modification Date", readonly=True)
 
+    @api.depends("picking_id.company_id")
+    def _compute_company_id(self):
+        for event in self:
+            event.company_id = event._get_parent().company_id
+
+    def _get_parent(self):
+        """Înregistrarea căreia îi aparține UIT-ul: transferul aici, lotul în
+        `l10n_ro_etransport_uit_actions_batch`. Tot ce ține de nume, companie,
+        chatter și plăcuțe trece prin ea, ca lotul să nu dubleze logica."""
+        self.ensure_one()
+        return self.picking_id
+
     @api.depends("event_type", "uit")
     def _compute_display_name(self):
         types = dict(self._fields["event_type"]._description_selection(self.env))
@@ -104,11 +117,12 @@ class EtransportEvent(models.Model):
         un string gol ca atribut prezent-dar-vid, pe care ANAF îl respinge.
         """
         self.ensure_one()
-        company = self.picking_id.company_id
+        parent = self._get_parent()
+        company = parent.company_id
         data = {
             "codDeclarant": (company.vat or "").upper().replace("RO", ""),
             # `refDeclarant` e limitat la 50 de caractere în XSD
-            "refDeclarant": (self.picking_id.name or "")[:50] or None,
+            "refDeclarant": (parent.name or "")[:50] or None,
             "declPostAvarie": "D" if self.post_outage else None,
             "uit": self.uit,
             "observatii": (self.remarks or "").strip()[:200] or None,
@@ -215,7 +229,7 @@ class EtransportEvent(models.Model):
         """
         for event in self:
             if event.event_type == "MVH":
-                event.picking_id.write(
+                event._get_parent().write(
                     {
                         "l10n_ro_edi_stock_vehicle_number": event.vehicle_number,
                         "l10n_ro_edi_stock_trailer_1_number": event.trailer_1_number or False,
@@ -231,6 +245,7 @@ class EtransportEvent(models.Model):
             "load_id": self.load_id or "",
             "message": extra.get("message", self.message or ""),
         }
+        parent = self._get_parent()
         attachment_ids = []
         if attach and self.attachment:
             attachment_ids = (
@@ -240,13 +255,13 @@ class EtransportEvent(models.Model):
                         "name": f"etransport_{self.event_type}_{self.uit}.xml",
                         "type": "binary",
                         "datas": self.attachment,
-                        "res_model": "stock.picking",
-                        "res_id": self.picking_id.id,
+                        "res_model": parent._name,
+                        "res_id": parent.id,
                     }
                 )
                 .ids
             )
-        self.picking_id._message_log(body=body_template % values, attachment_ids=attachment_ids)
+        parent._message_log(body=body_template % values, attachment_ids=attachment_ids)
 
     @api.ondelete(at_uninstall=False)
     def _unlink_only_failed(self):
