@@ -51,23 +51,41 @@ DOCUMENT_LIMITS = {
     ("cac:PaymentTerms", "cbc:Note"): 300,  # BT-20
 }
 
+# Limitele unei parti, relative la nodul partii.
+#
+# Atentie la forma containerelor: cac:AccountingSupplierParty si
+# cac:AccountingCustomerParty invelesc partea intr-un cac:Party, pe cand
+# cac:PayeeParty si cac:TaxRepresentativeParty SUNT direct partea. De aceea
+# aplicarea adauga prefixul potrivit fiecarui container (PARTY_CONTAINERS) --
+# altfel limitele reprezentantului fiscal si ale beneficiarului nu s-ar aplica
+# niciodata, iar calea nu s-ar potrivi tacut.
 PARTY_LIMITS = {
-    ("cac:Party", "cac:PartyLegalEntity", "cbc:RegistrationName"): 200,  # BT-27/44
-    ("cac:Party", "cac:PartyName", "cbc:Name"): 200,  # BT-28/45
-    ("cac:Party", "cac:PartyLegalEntity", "cbc:CompanyLegalForm"): 1000,  # BT-33
-    ("cac:Party", "cac:PostalAddress", "cbc:StreetName"): 150,  # BT-35/50/64
-    ("cac:Party", "cac:PostalAddress", "cbc:AdditionalStreetName"): 100,  # BT-36/51/65
-    ("cac:Party", "cac:PostalAddress", "cbc:CityName"): 50,  # BT-37/52/66
-    ("cac:Party", "cac:PostalAddress", "cbc:PostalZone"): 20,  # BT-38/53/67
-    ("cac:Party", "cac:Contact", "cbc:Name"): 100,  # BT-41/56
-    ("cac:Party", "cac:Contact", "cbc:Telephone"): 100,  # BT-42/57
-    ("cac:Party", "cac:Contact", "cbc:ElectronicMail"): 100,  # BT-43/58
+    ("cac:PartyLegalEntity", "cbc:RegistrationName"): 200,  # BT-27/44
+    ("cac:PartyName", "cbc:Name"): 200,  # BT-28/45/59/62
+    ("cac:PartyLegalEntity", "cbc:CompanyLegalForm"): 1000,  # BT-33
+    ("cac:PostalAddress", "cbc:StreetName"): 150,  # BT-35/50/64
+    ("cac:PostalAddress", "cbc:AdditionalStreetName"): 100,  # BT-36/51/65
+    ("cac:PostalAddress", "cac:AddressLine", "cbc:Line"): 100,  # BT-162/163/164
+    ("cac:PostalAddress", "cbc:CityName"): 50,  # BT-37/52/66
+    ("cac:PostalAddress", "cbc:PostalZone"): 20,  # BT-38/53/67
+    ("cac:Contact", "cbc:Name"): 100,  # BT-41/56
+    ("cac:Contact", "cbc:Telephone"): 100,  # BT-42/57
+    ("cac:Contact", "cbc:ElectronicMail"): 100,  # BT-43/58
+}
+
+# Containerul fiecarei parti si prefixul pana la nodul partii.
+PARTY_CONTAINERS = {
+    "cac:AccountingSupplierParty": ("cac:Party",),
+    "cac:AccountingCustomerParty": ("cac:Party",),
+    "cac:PayeeParty": (),
+    "cac:TaxRepresentativeParty": (),
 }
 
 DELIVERY_LIMITS = {
     ("cac:DeliveryParty", "cac:PartyName", "cbc:Name"): 200,  # BT-70
     ("cac:DeliveryLocation", "cac:Address", "cbc:StreetName"): 150,  # BT-75
     ("cac:DeliveryLocation", "cac:Address", "cbc:AdditionalStreetName"): 100,  # BT-76
+    ("cac:DeliveryLocation", "cac:Address", "cac:AddressLine", "cbc:Line"): 100,  # BT-165
     ("cac:DeliveryLocation", "cac:Address", "cbc:CityName"): 50,  # BT-77
     ("cac:DeliveryLocation", "cac:Address", "cbc:PostalZone"): 20,  # BT-78
 }
@@ -82,7 +100,10 @@ PAYMENT_MEANS_LIMITS = {
 }
 
 DOC_ALLOWANCE_LIMITS = {
-    ("cbc:AllowanceChargeReason",): 100,  # BT-97 / BT-104
+    # La nivel de document schematronul verifica ReasonCode (BR-RO-L1017/L1018),
+    # nu Reason -- pe linie e invers (BT-139/144, in LINE_LIMITS).
+    ("cbc:AllowanceChargeReasonCode",): 100,  # BT-97 / BT-104
+    ("cbc:AllowanceChargeReason",): 100,
 }
 
 ADDITIONAL_DOC_REF_LIMITS = {
@@ -113,14 +134,6 @@ TAX_EXEMPTION_REASON_MAX_LEN = 100  # BT-120
 # BT-22 / BT-127 (cbc:Note pe document si pe linie) NU se trunchiaza: UBL permite
 # repetarea elementului, deci le spargem in mai multe noduri de cate 300 de caractere.
 NOTE_MAX_LEN = 300  # BR-RO-L300
-
-# Partile pe care se aplica PARTY_LIMITS.
-PARTY_KEYS = (
-    "cac:AccountingSupplierParty",
-    "cac:AccountingCustomerParty",
-    "cac:PayeeParty",
-    "cac:TaxRepresentativeParty",
-)
 
 # Alias pastrat pentru codul si testele care citeau limita individual.
 PAYMENT_ID_MAX_LEN = PAYMENT_MEANS_LIMITS[("cbc:PaymentID",)].limit
@@ -163,10 +176,12 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         self._l10n_ro_apply_limits(document_node, DOCUMENT_LIMITS)
         self._l10n_ro_split_note_nodes(document_node)  # BT-22
 
-        for party_key in PARTY_KEYS:
+        for party_key, prefix in PARTY_CONTAINERS.items():
             party_root = document_node.get(party_key)
-            if party_root is not None:
-                self._l10n_ro_apply_limits(party_root, PARTY_LIMITS)
+            if party_root is None:
+                continue
+            limits = {prefix + path: spec for path, spec in PARTY_LIMITS.items()}
+            self._l10n_ro_apply_limits(party_root, limits)
 
         delivery_root = document_node.get("cac:Delivery")
         if delivery_root is not None:
@@ -187,9 +202,13 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         # BT-120: motivul scutirii / al taxarii inverse, in fiecare cac:TaxCategory.
         for tax_total in self._l10n_ro_iter_children(document_node, "cac:TaxTotal"):
             for subtotal in self._l10n_ro_iter_children(tax_total, "cac:TaxSubtotal"):
+                exemption = {("cbc:TaxExemptionReason",): TAX_EXEMPTION_REASON_MAX_LEN}
+                # UBL il pune sub cac:TaxCategory, schematronul il ancoreaza pe
+                # cac:TaxSubtotal: acoperim ambele locuri.
+                self._l10n_ro_apply_limits(subtotal, exemption)
                 category = subtotal.get("cac:TaxCategory")
                 if isinstance(category, dict):
-                    self._l10n_ro_apply_limits(category, {("cbc:TaxExemptionReason",): TAX_EXEMPTION_REASON_MAX_LEN})
+                    self._l10n_ro_apply_limits(category, exemption)
 
         for line_tag in ("cac:InvoiceLine", "cac:CreditNoteLine", "cac:DebitNoteLine"):
             for line in self._l10n_ro_iter_children(document_node, line_tag):
