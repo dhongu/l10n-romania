@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_etransport_action_wizard_form" model="ir.ui.view">
+        <field name="name">l10n.ro.etransport.action.wizard.form</field>
+        <field name="model">l10n.ro.etransport.action.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="picking_id" />
+                        <field name="uit" />
+                        <field name="event_type" widget="radio" />
+                    </group>
+                    <group>
+                        <field name="post_outage" />
+                        <field name="remarks" placeholder="Optional, max. 200 characters" />
+                    </group>
+                </group>
+                <group name="confirmation" invisible="event_type != 'CON'">
+                    <field name="confirmation_type" widget="radio" required="event_type == 'CON'" />
+                </group>
+                <group name="vehicle" invisible="event_type != 'MVH'">
+                    <group>
+                        <field name="vehicle_number" required="event_type == 'MVH'" />
+                        <field name="modification_date" required="event_type == 'MVH'" />
+                    </group>
+                    <group>
+                        <field name="trailer_1_number" />
+                        <field name="trailer_2_number" />
+                    </group>
+                </group>
+                <div class="alert alert-warning" role="alert" invisible="event_type != 'DEL'">
+                    Deleting the notification invalidates the UIT at ANAF. The goods can no longer travel under it; a new notification is needed for the transport.
+                </div>
+                <footer>
+                    <button name="action_send" string="Send to ANAF" type="object" class="btn-primary" />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
