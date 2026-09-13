@@ -1,3 +1,31 @@
+## 19.0.0.9.0 (2026-09-13)
+
+**Corecție** — liniile declarate într-o unitate de măsură secundară (cutie, bax,
+pungă) plecau la ANAF cu unitatea și valoarea greșite.
+
+Standardul `l10n_ro_edi_stock` compune linia din două surse diferite:
+`cantitate` este `move.product_qty`, prin definiție cantitatea în unitatea de
+măsură de BAZĂ a produsului, iar `codUnitateMasura` vine din `move.product_uom`,
+unitatea aleasă pe LINIE. Cât timp cele două coincid nu se vede nimic; când
+transferul e făcut într-o unitate secundară, perechea devine incoerentă. O
+recepție de import de 10 cutii × 13 kg pleca drept `cantitate="130"`
+`codUnitateMasura="C62"` — „130 de bucăți". Schema ANAF validează fiecare atribut
+separat și nu prinde nepotrivirea dintre ele, deci declarația primea UIT, iar
+eroarea rămânea tăcută. În plus, orice unitate proprie a clientului (fără XML ID
+în lista fixă din `_get_unece_code()`) cade oricum pe `C62`, deci codul liniei nu
+putea fi corect nici teoretic.
+
+Cu setarea **„UIT: get price from order"** activă, aceeași nepotrivire afecta și
+valoarea: prețul se calcula per unitate a liniei de comandă
+(`price_subtotal / product_qty` pe `purchase.order.line`, `price_reduce_taxexcl`
+pe linia de vânzare) și se înmulțea cu o cantitate exprimată în unitatea de bază,
+declarând la ANAF de 13 ori valoarea reală în exemplul de mai sus.
+
+Acum `codUnitateMasura` urmează unitatea în care e exprimată cantitatea, iar
+prețul din comandă se convertește în unitatea de bază a produsului — ambele așa
+cum face deja calea de dropship. Transferurile fără unități secundare produc
+exact aceeași declarație ca înainte.
+
 ## 19.0.0.8.1 (2026-09-09)
 
 - Configure the optional OCA Romanian-accounting flag in the view test fixture;
