@@ -9,4 +9,5 @@ from . import test_etransport_start_address
 from . import test_etransport_uit_is_not_tracking_ref
 from . import test_etransport_dropship
 from . import test_etransport_secondary_uom
+from . import test_etransport_unece_code
 from . import test_etransport_translations

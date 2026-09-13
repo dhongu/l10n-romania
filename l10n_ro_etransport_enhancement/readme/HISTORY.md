@@ -1,3 +1,17 @@
+## 19.0.0.9.1 (2026-09-13)
+
+Teste pentru sursa codului din `codUnitateMasura`. Codul vine din
+`uom.uom._get_unece_code()`, iar `deltatech_uom_unece` îl face configurabil pe
+fiecare unitate; testele arată că declarația chiar trece prin acel cod și, mai
+important, că unitatea din care îl ia e cea a **produsului**, nu cea a liniei.
+Cu produsul ținut în kilograme și linia în cutii, declarația spune „130 KGM" —
+codul de pe cutie e corect configurat și rămâne deliberat nefolosit, altfel
+declarația ar susține că se transportă 130 de cutii.
+
+Modulul NU depinde de `deltatech_uom_unece`: e altă suită, cu licență
+proprietară, iar o astfel de dependență ar face modulul neinstalabil pentru cine
+nu are suita. Testele se sar când modulul lipsește.
+
 ## 19.0.0.9.0 (2026-09-13)
 
 **Corecție** — liniile declarate într-o unitate de măsură secundară (cutie, bax,
