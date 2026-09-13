@@ -512,26 +512,34 @@ class Picking(models.Model):
             vals = []
             for move in picking.move_ids:
                 if move.quantity > 0:
-                    # `l10n_ro_net_weight`/`weight` sunt per unitate din UoM-ul
-                    # de bază al produsului, dar `move.quantity` e exprimat în
-                    # `move.product_uom`, care poate fi o UoM secundară (ex.
-                    # cutie/palet) — trebuie convertită la bază înainte de
-                    # înmulțire, altfel greutatea iese greșită cu exact
-                    # factorul de conversie dintre cele două UoM-uri.
+                    # `weight` e per unitate din UoM-ul de bază al produsului,
+                    # dar `move.quantity` e exprimat în `move.product_uom`, care
+                    # poate fi o UoM secundară (ex. cutie/palet) — trebuie
+                    # convertită la bază înainte de înmulțire, altfel greutatea
+                    # iese greșită cu exact factorul de conversie dintre cele
+                    # două UoM-uri.
                     qty_base = move.product_uom._compute_quantity(
                         move.quantity, move.product_id.uom_id, raise_if_failure=False
                     )
+                    # Greutatea netă vine din `product.weight`, nu din
+                    # `l10n_ro_net_weight`. Acela e un câmp adăugat de trei
+                    # module diferite (`l10n_ro_stock` OCA, `deltatech_invoice_weight`,
+                    # `deltatech_cmr_document`) și urmează să fie scos; până
+                    # atunci făcea mai mult rău decât bine aici, fiindcă vechea
+                    # ramificație îl alegea când câmpul EXISTA, nu când era
+                    # completat. Pe o bază cu localizarea OCA instalată și netul
+                    # necompletat — 26 din 103 produse la un client — linia
+                    # ieșea cu greutatea netă 0, iar
+                    # `_l10n_ro_etransport_fix_quantities_and_weights` o
+                    # completa apoi cu brutul: o recepție de 130 kg ar fi plecat
+                    # la ANAF declarată 6,3 kg, tăcut.
+                    weight = move.product_id.weight * qty_base
                     vals.append(
                         {
                             "picking_id": picking.id,
                             "move_id": move.id,
-                            "net_weight": (
-                                move.product_id.l10n_ro_net_weight
-                                if "l10n_ro_net_weight" in move.product_id._fields
-                                else move.product_id.weight
-                            )
-                            * qty_base,
-                            "gross_weight": move.product_id.weight * qty_base,
+                            "net_weight": weight,
+                            "gross_weight": weight,
                             "weight_uom_id": self.env["product.template"]
                             ._get_weight_uom_id_from_ir_config_parameter()
                             .id,

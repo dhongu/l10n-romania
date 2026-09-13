@@ -1,3 +1,24 @@
+## 19.0.0.9.2 (2026-09-13)
+
+**Corecție** — greutatea netă de pe liniile de expediere ieșea 0 pe bazele cu
+localizarea OCA instalată.
+
+Netul se lua din `l10n_ro_net_weight` ori de câte ori CÂMPUL exista, nu când era
+completat. Câmpul e adăugat de trei module diferite (`l10n_ro_stock` OCA,
+`deltatech_invoice_weight`, `deltatech_cmr_document`) și urmează să fie scos, iar
+pe un client 26 din 103 produse stocabile îl aveau gol, deși `weight` era
+completat. Linia ieșea atunci cu netul 0, iar
+`_l10n_ro_etransport_fix_quantities_and_weights` îl completa cu brutul: o
+recepție de 130 kg ar fi plecat la ANAF declarată 6,3 kg — greutatea
+ambalajului — fără nicio eroare.
+
+Netul vine acum din `product.weight`, singura sursă. Pe produsele unde cele două
+coincideau — toate cele verificate la client — declarația nu se schimbă.
+
+Brutul rămâne derivat de fiecare implementare: la Inedit, `terrabit_inedit` îi
+adaugă tara fiecărui nivel de ambalare, deci 10 cutii × 13 kg ies 130 kg net și
+136,3 kg brut.
+
 ## 19.0.0.9.1 (2026-09-13)
 
 Teste pentru sursa codului din `codUnitateMasura`. Codul vine din

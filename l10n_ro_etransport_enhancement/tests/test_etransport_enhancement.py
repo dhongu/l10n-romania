@@ -342,6 +342,38 @@ class TestComputeWeightLines(TransactionCase):
         self.assertEqual(len(picking.l10n_ro_shipping_weight_lines), 1)
         self.assertEqual(picking.l10n_ro_shipping_weight_lines.gross_weight, 6.0)  # 3 kg * 2
 
+    def test_net_weight_does_not_depend_on_l10n_ro_net_weight(self):
+        """Greutatea netă vine din `product.weight`, nu din `l10n_ro_net_weight`.
+
+        Câmpul acela e adăugat de trei module diferite și urmează să fie scos.
+        Cât timp a fost consultat aici, ramificația îl alegea când câmpul
+        EXISTA, nu când era completat: pe o bază cu localizarea OCA instalată și
+        netul necompletat, linia ieșea cu net 0, iar
+        `_l10n_ro_etransport_fix_quantities_and_weights` îl completa apoi cu
+        brutul. O recepție de 130 kg pleca la ANAF declarată cu greutatea
+        ambalajului, tăcut.
+        """
+        picking = self._picking_with_quantity(qty=2.0)
+        product = picking.move_ids.product_id
+        if "l10n_ro_net_weight" in product._fields:
+            product.l10n_ro_net_weight = 0.0
+        picking.l10n_ro_compute_weight_lines()
+        line = picking.l10n_ro_shipping_weight_lines
+        self.assertAlmostEqual(line.net_weight, 6.0, msg="3 kg/buc * 2 buc, din product.weight")
+        self.assertAlmostEqual(line.gross_weight, 6.0)
+
+    def test_net_weight_ignores_a_filled_l10n_ro_net_weight(self):
+        """Nici completat, câmpul nu mai influențează linia — altfel ar rămâne
+        o a doua sursă de adevăr pentru aceeași valoare, exact înainte ca el să
+        fie scos."""
+        product = self._picking_with_quantity(qty=1.0).move_ids.product_id
+        if "l10n_ro_net_weight" not in product._fields:
+            self.skipTest("l10n_ro_net_weight nu există pe această bază.")
+        product.l10n_ro_net_weight = 1.5
+        picking = self._picking_with_quantity(qty=2.0)
+        picking.l10n_ro_compute_weight_lines()
+        self.assertAlmostEqual(picking.l10n_ro_shipping_weight_lines.net_weight, 6.0)
+
     def test_recompute_replaces_lines_instead_of_adding(self):
         """A doua apăsare recalculează; fără unlink greutățile ajungeau dublate."""
         picking = self._picking_with_quantity(qty=2.0)
