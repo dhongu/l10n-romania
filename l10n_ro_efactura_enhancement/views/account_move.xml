@@ -6,6 +6,22 @@
         <field name="type">form</field>
         <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="l10n_ro_edi_send_uncertain" invisible="1" />
+                <button
+                    name="action_l10n_ro_edi_clear_send_uncertain"
+                    type="object"
+                    string="SPV: marchează verificat"
+                    invisible="not l10n_ro_edi_send_uncertain"
+                    help="Debifează „Trimitere SPV incertă” după ce ați verificat în SPV dacă factura a fost primită."
+                />
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-warning text-center" role="alert" invisible="not l10n_ro_edi_send_uncertain">
+                    Trimiterea către SPV a expirat fără răspuns de la ANAF. Verificați în SPV dacă factura a
+                    fost primită înainte de a o retrimite, pentru a evita un duplicat.
+                </div>
+            </xpath>
             <xpath expr="//field[@name='invoice_line_ids']/list/field[@name='name']" position="after">
                 <field name="l10n_ro_label_length" optional="hide" />
             </xpath>

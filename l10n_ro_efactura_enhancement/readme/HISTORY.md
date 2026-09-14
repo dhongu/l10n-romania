@@ -1,3 +1,21 @@
+## 19.0.0.6.0 (2026-09-14)
+
+- **Protecție anti-duplicat la trimiterea în SPV** (portat din 18.0). O factură
+  putea ajunge de două ori la ANAF (două `index_incarcare` pentru același
+  număr de factură), fie printr-o dublă declanșare (cron de auto-send +
+  „Send & Print" manual aproape simultan), fie după un timeout la răspunsul
+  ANAF (încărcarea ajungea la SPV, dar Odoo nu reținea indexul și o
+  re-trimitea). Două măsuri:
+  - **Gardă de idempotență** în `_l10n_ro_edi_send_invoice`: dacă factura are
+    deja un document `invoice_sent`/`invoice_validated` sau un index de
+    încărcare, trimiterea este evitată (mesaj în chatter), pentru a nu crea un
+    al doilea upload la ANAF (API-ul `upload` nu este idempotent).
+  - **Tratarea timeout-ului** (`requests.Timeout`, inclusiv `ReadTimeout`):
+    trimiterea nu mai e marcată drept eroare re-trimitabilă; factura este
+    marcată `l10n_ro_edi_send_uncertain` și **exclusă din cronul de
+    auto-send**, cu un mesaj care cere verificare manuală în SPV. Un buton pe
+    factură debifează marcajul după clarificare.
+
 ## 19.0.0.4.4 (2026-09-10)
 
 - **Trunchiere referință aviz de expediție (BT-16) la 200 de caractere.**
