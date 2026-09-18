@@ -395,28 +395,35 @@ contabilă românească:</p>
 </thead>
 <tbody valign="top">
 <tr><td><tt class="docutils literal">500</tt></td>
-<td><em>cinci sute lei</em></td>
+<td><em>cinci sute de lei</em></td>
 </tr>
 <tr><td><tt class="docutils literal">8382.25</tt></td>
-<td><em>opt mii trei sute optzeci și doi lei și
-douăzeci și cinci bani</em></td>
+<td><em>opt mii trei sute optzeci și doi de lei și
+douăzeci și cinci de bani</em></td>
 </tr>
 <tr><td><tt class="docutils literal">1.00</tt> / <tt class="docutils literal">1.01</tt></td>
 <td><em>un leu</em> / <em>un leu și un ban</em></td>
 </tr>
+<tr><td><tt class="docutils literal">101</tt></td>
+<td><em>o sută unu lei</em></td>
+</tr>
 <tr><td><tt class="docutils literal"><span class="pre">-500</span></tt></td>
-<td><em>minus cinci sute lei</em></td>
+<td><em>minus cinci sute de lei</em></td>
 </tr>
 </tbody>
 </table>
 <p>Odoo standard construiește textul din denumirile unității monetare și îl
 scrie cu inițiale majuscule, rezultând <em>„Cinci Sute Leu”</em> — inutilizabil
-pe o chitanță. Particula gramaticală <em>de</em> (<em>douăzeci</em> <strong>de</strong> <em>lei</em>) este
-omisă <strong>intenționat</strong>, pentru a păstra formularea folosită de programele
-de contabilitate românești. Formularea nu depinde de limba de tipărire:
-o sumă în lei pe un document legal românesc se citește în română și pe o
-factură în engleză. Pentru orice altă monedă se păstrează comportamentul
-standard Odoo.</p>
+pe o chitanță. Regulile aplicate sunt cele ale limbii române: numeralul
+<em>unu</em> devine <em>un</em> înaintea substantivului, substantivul se acordă la
+plural, iar particula <em>de</em> se leagă atunci când ultima grupă a
+numeralului este 20 sau peste, ori numeralul se termină într-o sută sau
+o mie întreagă (<em>cinci sute</em> <strong>de</strong> <em>lei</em>, dar <em>o sută unu lei</em> și
+<em>nouăsprezece lei</em>). Suma se rotunjește după precizia monedei, astfel
+încât litera să nu contrazică cifra tipărită alături. Formularea nu
+depinde de limba de tipărire: o sumă în lei pe un document legal
+românesc se citește în română și pe o factură în engleză. Pentru orice
+altă monedă se păstrează comportamentul standard Odoo.</p>
 <div class="section" id="cerinte-tehnice">
 <h1>Cerințe tehnice</h1>
 <ul class="simple">

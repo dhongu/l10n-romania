@@ -13,18 +13,23 @@ românească:
 
 | sumă | rezultat |
 | --- | --- |
-| `500` | *cinci sute lei* |
-| `8382.25` | *opt mii trei sute optzeci și doi lei și douăzeci și cinci bani* |
+| `500` | *cinci sute de lei* |
+| `8382.25` | *opt mii trei sute optzeci și doi de lei și douăzeci și cinci de bani* |
 | `1.00` / `1.01` | *un leu* / *un leu și un ban* |
-| `-500` | *minus cinci sute lei* |
+| `101` | *o sută unu lei* |
+| `-500` | *minus cinci sute de lei* |
 
 Odoo standard construiește textul din denumirile unității monetare și îl scrie
 cu inițiale majuscule, rezultând *„Cinci Sute Leu"* — inutilizabil pe o
-chitanță. Particula gramaticală *de* (*douăzeci **de** lei*) este omisă
-**intenționat**, pentru a păstra formularea folosită de programele de
-contabilitate românești. Formularea nu depinde de limba de tipărire: o sumă în
-lei pe un document legal românesc se citește în română și pe o factură în
-engleză. Pentru orice altă monedă se păstrează comportamentul standard Odoo.
+chitanță. Regulile aplicate sunt cele ale limbii române: numeralul *unu* devine
+*un* înaintea substantivului, substantivul se acordă la plural, iar particula
+*de* se leagă atunci când ultima grupă a numeralului este 20 sau peste, ori
+numeralul se termină într-o sută sau o mie întreagă (*cinci sute **de** lei*,
+dar *o sută unu lei* și *nouăsprezece lei*). Suma se rotunjește după precizia
+monedei, astfel încât litera să nu contrazică cifra tipărită alături.
+Formularea nu depinde de limba de tipărire: o sumă în lei pe un document legal
+românesc se citește în română și pe o factură în engleză. Pentru orice altă
+monedă se păstrează comportamentul standard Odoo.
 
 ### Cerințe tehnice
 
