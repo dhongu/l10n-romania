@@ -46,6 +46,7 @@ Authors
 -------
 
 * Terrabit
+* NextERP Romania
 
 Contributors
 ------------
@@ -53,6 +54,10 @@ Contributors
 - `Terrabit <https://www.terrabit.ro>`__:
 
   - Dorin Hongu <dhongu@gmail.com>
+
+- `NextERP Romania <https://www.nexterp.ro>`__:
+
+  - Fekete Mihai <feketemihai@nexterp.ro>
 
 Do not contact contributors directly about support or help with
 technical issues.

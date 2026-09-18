@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_etransport_action_wizard_form" model="ir.ui.view">
+        <field name="name">l10n.ro.etransport.action.wizard.form.batch</field>
+        <field name="model">l10n.ro.etransport.action.wizard</field>
+        <field name="inherit_id" ref="l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form" />
+        <field name="arch" type="xml">
+            <field name="picking_id" position="attributes">
+                <attribute name="invisible">not picking_id</attribute>
+            </field>
+            <field name="picking_id" position="after">
+                <field name="batch_id" invisible="not batch_id" />
+            </field>
+        </field>
+    </record>
+</odoo>

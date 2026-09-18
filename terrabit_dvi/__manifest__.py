@@ -6,7 +6,7 @@
     "license": "AGPL-3",
     "version": "19.0.1.2.0",
     "countries": ["ro"],
-    "author": "Terrabit,Odoo Community Association (OCA)",
+    "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "depends": [

@@ -104,6 +104,32 @@ Notes
 Changelog
 =========
 
+19.0.0.0.5 (2026-08-19)
+-----------------------
+
+- Add an integration test for ticket #9287 using a real (anonymized) SPV
+  invoice XML, wrapped in a ZIP as downloaded from ANAF: verifies the
+  purchase order created before the bill ends up with its lines imported
+  by ``deltatech_purchase_ubl``, and cross-checks the imported total
+  against the order total using the same ``_get_order_total_check``
+  control key that ``deltatech_purchase_ubl`` already runs (confirmed
+  manually on the Damira production order that triggered the ticket:
+  order total 2749.37 RON matched the XML ``PayableAmount`` exactly).
+
+19.0.0.0.4 (2026-08-19)
+-----------------------
+
+- Fix: purchase orders created from an SPV message before the vendor
+  bill existed (``action_create_purchase``/``action_find_purchase``)
+  ended up with no order lines, because the XML attachment used to
+  trigger the automatic UBL import (``deltatech_purchase_ubl``) is
+  derived from the bill's attachments (``attachment_xml_id``, which
+  needs ``invoice_id``) and was always empty in this case.
+  ``_clone_xml_attachment_for_purchase`` now falls back to extracting
+  the XML directly from the raw ANAF ZIP (``_get_xml_bytes``) when no
+  bill exists yet, so the purchase order lines get imported as expected
+  (ticket #9287).
+
 19.0.0.0.3 (2026-07-24)
 -----------------------
 

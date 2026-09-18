@@ -1,6 +1,8 @@
 # © 2025 Deltatech
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import base64
+import io
+import zipfile
 
 from lxml import etree
 
@@ -165,6 +167,15 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertIn("PO-002", domain_str)
         self.assertIn(str(self.partner.id), domain_str)
         self.assertIn(str(self.company.id), domain_str)
+
+    def test_purchase_search_domain_excludes_invoiced(self):
+        """Test că _purchase_search_domain_from_ref exclude comenzile deja complet
+        facturate (tichet #9290)."""
+        msg = self._make_spv_message()
+        domain = msg._purchase_search_domain_from_ref("PO-003")
+        domain_str = str(domain)
+        self.assertIn("invoice_status", domain_str)
+        self.assertIn("invoiced", domain_str)
 
     def test_action_find_purchase_no_ref_raises(self):
         """Test că action_find_purchase ridică UserError dacă nu există referință."""
@@ -559,6 +570,269 @@ class TestMessageSPVPurchase(TransactionCase):
         flagged = bill2._l10n_ro_flag_cross_stack_duplicate()
         self.assertTrue(flagged, "A doua factură trebuie semnalată ca duplicat cross-stack")
         self.assertTrue(bill2.l10n_ro_edi_is_duplicate)
+
+    def _make_zip_with_xml(self, xml_bytes=b"<Invoice><ID>ZIP-TEST</ID></Invoice>", xml_name="invoice.xml"):
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            zf.writestr(xml_name, xml_bytes)
+        return buf.getvalue()
+
+    def test_clone_xml_attachment_falls_back_to_raw_zip_without_invoice(self):
+        """Tichet #9287: PO creat înainte de factură — `attachment_xml_id` e gol (compute-ul
+        depinde de `invoice_id`/`request_id`), dar ZIP-ul brut de la ANAF (`attachment_id`)
+        există deja. Clonarea trebuie să extragă XML-ul direct din ZIP (`_get_xml_bytes`),
+        nu să renunțe silențios — altfel `deltatech_purchase_ubl` nu mai primește niciun XML
+        și comanda rămâne fără linii/total."""
+        po = self._make_purchase_order(partner_ref="PO-ATT-ZIP-001")
+        msg = self._make_spv_message(ref="PO-ATT-ZIP-001")
+        zip_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "6742375571.zip",
+                "raw": self._make_zip_with_xml(),
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        msg.attachment_id = zip_attachment
+
+        # Precondiție: fără factură, câmpul derivat e gol (asta e exact ce a indus în eroare
+        # implementarea inițială, care se oprea aici).
+        self.assertFalse(msg.invoice_id)
+        self.assertFalse(msg.attachment_xml_id)
+
+        result = msg._clone_xml_attachment_for_purchase(po)
+
+        self.assertTrue(result, "trebuie să extragă XML-ul din ZIP, nu să renunțe")
+        self.assertEqual(result.res_model, "purchase.order")
+        self.assertEqual(result.res_id, po.id)
+        self.assertIn(b"ZIP-TEST", base64.b64decode(result.datas))
+
+    def test_post_spv_xml_on_purchase_attaches_zip_xml_without_invoice(self):
+        """Aceeași lipsă de factură, dar prin fluxul complet: `_post_spv_xml_on_purchase`
+        trebuie să atașeze copia XML pe PO chiar dacă mesajul nu are încă `invoice_id`."""
+        po = self._make_purchase_order(partner_ref="PO-ATT-ZIP-002")
+        msg = self._make_spv_message(ref="PO-ATT-ZIP-002")
+        zip_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "6698941346.zip",
+                "raw": self._make_zip_with_xml(xml_bytes=b"<Invoice><ID>ZIP-TEST-2</ID></Invoice>"),
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        msg.attachment_id = zip_attachment
+        msg.purchase_order_id = po
+
+        msg._post_spv_xml_on_purchase(po)
+
+        po_attachments = self.env["ir.attachment"].search(
+            [("res_model", "=", "purchase.order"), ("res_id", "=", po.id), ("mimetype", "=", "application/xml")]
+        )
+        self.assertTrue(po_attachments, "XML-ul trebuie copiat pe PO chiar fără factură")
+
+    def test_purchase_lines_and_total_match_real_zip_without_invoice(self):
+        """Integrare tichet #9287, cu XML-ul real (anonimizat) al facturii care a declanșat
+        raportarea (FC26BU0004904/TEMAD), împachetat în ZIP ca la descărcarea reală de la ANAF.
+
+        PO creat ÎNAINTE de factură trebuie să primească liniile din XML prin hook-ul
+        `deltatech_purchase_ubl._process_attachments_for_post` (declanșat de `message_post`
+        din `_post_spv_xml_on_purchase`), iar `amount_total` al comenzii trebuie să bată cu
+        `PayableAmount` din XML — aceeași cheie de control ca `_get_order_total_check` din
+        `deltatech_purchase_ubl` (verificată aici direct, nu doar ca warning informativ).
+
+        Produsele din factură sunt PRE-CREATE cu codurile de furnizor din XML, ca în
+        realitatea Damira (unde produsele existau și se potriveau după cod): de la tichetul
+        #9315 fluxul automat SPV nu mai creează tăcut produse noi pentru liniile
+        nepotrivite, deci liniile PO apar doar prin matching."""
+        if "purchase.ubl.import.wizard" not in self.env:
+            self.skipTest("Modulul deltatech_purchase_ubl nu este instalat")
+
+        from odoo.tools import file_open
+
+        xml_bytes = file_open(
+            "l10n_ro_message_spv_purchase/tests/test_files/spv_purchase_order_lines_9287.xml", "rb"
+        ).read()
+        zip_bytes = self._make_zip_with_xml(xml_bytes=xml_bytes, xml_name="9287-anon.xml")
+
+        supplier = self.env["res.partner"].create(
+            {
+                "name": "Furnizor Test SRL",
+                "company_type": "company",
+                "country_id": self.env.ref("base.ro").id,
+            }
+        )
+
+        # Pre-creăm produsele cu codurile de furnizor din XML (scenariul real Damira).
+        parsed = self.env["purchase.ubl.import.wizard"].new({})._parse_xml(xml_bytes)
+        seen_codes = set()
+        for ln in parsed["lines"]:
+            code = ln.get("code")
+            if not code or code in seen_codes:
+                continue
+            seen_codes.add(code)
+            product = self.env["product.product"].create({"name": ln.get("name") or code, "type": "consu"})
+            self.env["product.supplierinfo"].create(
+                {
+                    "partner_id": supplier.id,
+                    "product_tmpl_id": product.product_tmpl_id.id,
+                    "product_id": product.id,
+                    "product_code": code,
+                }
+            )
+
+        msg = self._make_spv_message(ref="FACT-TEST-0001", partner=supplier)
+        zip_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "9287-anon.zip",
+                "raw": zip_bytes,
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        msg.attachment_id = zip_attachment
+        self.assertFalse(msg.invoice_id)
+        self.assertFalse(msg.attachment_xml_id, "precondiție: câmpul derivat e gol fără factură")
+
+        msg.action_create_purchase()
+        po = msg.purchase_order_id
+        self.assertTrue(po, "trebuie să creeze/lege o comandă de achiziție")
+
+        self.env.flush_all()
+        po.invalidate_recordset()
+
+        self.assertTrue(po.order_line, "PO-ul trebuie să primească liniile din XML (tichet #9287)")
+        # Cheia de control: suma liniilor importate trebuie să bată cu LineExtensionAmount/
+        # TaxExclusiveAmount din XML-ul sursă (2272.21 RON, valoare reală din factura
+        # FC26BU0004904, neschimbată de anonimizare). Verificăm netto (nu amount_total cu TVA),
+        # pentru că produsele nou-create în acest test nu moștenesc taxa de achiziție impicită
+        # a companiei RO reale — pe producția Damira, unde produsele au deja TVA 21% configurat,
+        # amount_total (2749.37 RON) a bătut exact cu PayableAmount din XML (verificat manual
+        # pe CA11777, tichet #9287).
+        self.assertAlmostEqual(
+            po.amount_untaxed,
+            2272.21,
+            places=2,
+            msg="amount_untaxed al PO trebuie să corespundă cu totalul net din XML",
+        )
+
+        # Reutilizăm chiar mecanismul de control din deltatech_purchase_ubl
+        # (_get_order_total_check), ca să testăm exact cheia de validare folosită în producție,
+        # nu o reimplementare paralelă. Pe un PO fără taxe (cazul de test) verificarea corectă
+        # e pe netto, la fel cum face fallback-ul intern al metodei când sumele cu TVA lipsesc.
+        wiz = self.env["purchase.ubl.import.wizard"].new({"data_file": base64.b64encode(xml_bytes)})
+        invoice_data = wiz._parse_xml(xml_bytes)
+        invoice_data["payable_amount"] = 0.0
+        invoice_data["tax_inclusive_amount"] = 0.0
+        total_check = wiz._get_order_total_check(po, invoice_data)
+        self.assertTrue(
+            total_check and total_check["matches"],
+            f"cheia de control trebuie să confirme netto-ul: {total_check}",
+        )
+
+    def test_create_purchase_does_not_duplicate_product_without_supplier_code(self):
+        """Tichet #9315 (regresie a fix-ului #9287): un PO creat din mesaj SPV ÎNAINTE de
+        factură, a cărui linie XML nu are cod de furnizor (`SellersItemIdentification/ID`) și
+        al cărei nume nu se potrivește exact cu niciun produs existent, nu mai trebuie să creeze
+        tăcut un produs nou — `_post_spv_xml_on_purchase` setează
+        `purchase_ubl_no_new_products` în context, iar linia rămâne nepotrivită."""
+        if "purchase.ubl.import.wizard" not in self.env:
+            self.skipTest("Modulul deltatech_purchase_ubl nu este instalat")
+
+        xml = b"""<?xml version="1.0" encoding="UTF-8"?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+         xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+    <cbc:ID>FACT-TEST-9315</cbc:ID>
+    <cbc:IssueDate>2026-08-21</cbc:IssueDate>
+    <cbc:DueDate>2026-09-20</cbc:DueDate>
+    <cbc:DocumentCurrencyCode>RON</cbc:DocumentCurrencyCode>
+    <cac:OrderReference><cbc:ID>PO-TEST-9315</cbc:ID></cac:OrderReference>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cac:PartyTaxScheme><cbc:CompanyID>RO00000099</cbc:CompanyID></cac:PartyTaxScheme>
+            <cac:PartyLegalEntity><cbc:RegistrationName>Furnizor Test SPV</cbc:RegistrationName></cac:PartyLegalEntity>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:InvoiceLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">10</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">500.00</cbc:LineExtensionAmount>
+        <cac:Price><cbc:PriceAmount currencyID="RON">50.00</cbc:PriceAmount></cac:Price>
+        <cac:Item>
+            <cbc:Name>Produs Fara Cod Furnizor 9315</cbc:Name>
+            <cac:ClassifiedTaxCategory><cbc:Percent>0</cbc:Percent></cac:ClassifiedTaxCategory>
+        </cac:Item>
+    </cac:InvoiceLine>
+</Invoice>
+"""
+        zip_bytes = self._make_zip_with_xml(xml_bytes=xml, xml_name="9315-anon.xml")
+
+        msg = self._make_spv_message(ref="PO-TEST-9315")
+        zip_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "9315-anon.zip",
+                "raw": zip_bytes,
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        msg.attachment_id = zip_attachment
+        self.assertFalse(msg.invoice_id)
+
+        products_before = self.env["product.product"].search_count([])
+
+        msg.action_create_purchase()
+        po = msg.purchase_order_id
+        self.assertTrue(po, "trebuie să creeze/lege o comandă de achiziție")
+
+        self.env.flush_all()
+        po.invalidate_recordset()
+
+        self.assertFalse(
+            po.order_line,
+            "linia nepotrivită (fără cod furnizor, fără nume identic) nu trebuie adăugată pe PO",
+        )
+        self.assertEqual(
+            self.env["product.product"].search_count([]),
+            products_before,
+            "nu trebuie creat niciun produs nou pentru linia nepotrivită",
+        )
+
+    def test_action_find_purchase_skips_fully_invoiced_po(self):
+        """Tichet #9290: o comandă deja complet facturată (invoice_status='invoiced')
+        nu mai e candidat, chiar dacă referința se potrivește — evită legarea unei
+        facturi noi de o comandă epuizată (ex. referință generică reutilizată la furnizor,
+        gen 'ZILNIC' pe Ridacon)."""
+        po = self._confirmed_po(partner_ref="PO-9290-001")
+        bill = self._draft_bill(amount=100.0)
+        bill._l10n_ro_link_spv_purchase_order(po)
+        self.env.flush_all()
+        po.invalidate_recordset(["invoice_status"])
+        self.assertEqual(po.invoice_status, "invoiced")
+
+        msg = self._make_spv_message(ref="PO-9290-001")
+        with self.assertRaises(UserError):
+            msg.action_find_purchase()
+
+    def test_action_create_purchase_skips_fully_invoiced_po(self):
+        """Tichet #9290: action_create_purchase creează o comandă nouă în loc să
+        reutilizeze una deja complet facturată cu aceeași referință."""
+        po = self._confirmed_po(partner_ref="PO-9290-002")
+        bill = self._draft_bill(amount=100.0)
+        bill._l10n_ro_link_spv_purchase_order(po)
+        self.env.flush_all()
+        po.invalidate_recordset(["invoice_status"])
+        self.assertEqual(po.invoice_status, "invoiced")
+
+        msg = self._make_spv_message(ref="PO-9290-002")
+        msg.action_create_purchase()
+
+        self.assertTrue(msg.purchase_order_id)
+        self.assertNotEqual(
+            msg.purchase_order_id,
+            po,
+            "nu trebuie să reutilizeze PO-ul deja complet facturat",
+        )
 
     def test_clone_xml_attachment_no_duplicate(self):
         """Test că _clone_xml_attachment_for_purchase nu duplică atașamentul dacă există deja."""

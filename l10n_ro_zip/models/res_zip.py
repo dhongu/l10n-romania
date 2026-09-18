@@ -45,14 +45,47 @@ class ResZip(models.Model):
 
     @api.model
     def _search_display_name(self, operator, value):
+        # The standard domain only searches in 'name' (the postal code itself).
         domain = super()._search_display_name(operator, value)
-        if operator != "ilike":
+
+        # Extend the search to the street fields for the most common string
+        # operators. "ilike" is the operator used by the autocomplete widget,
+        # so it must be included here, otherwise typing a street name in the
+        # postal code field returns no result at all.
+        # Note: with "=" the ORM optimizes `display_name = value` into a plain
+        # `name in [value]` and never calls this method, so that branch is inert
+        # on 19.0; it is kept for symmetry with the 18.0 branch.
+        if operator in ("ilike", "like", "="):
             name_domain = [
                 "|",
                 "|",
-                ("name", "ilike", value),
-                ("street_name", "ilike", value),
-                ("street_type", "ilike", value),
+                ("name", operator, value),
+                ("street_name", operator, value),
+                ("street_type", operator, value),
             ]
             domain = Domain.OR([domain, name_domain])
+
+        # The nomenclature spells streets named after people surname first
+        # ("Balcescu Nicolae"), while users type them the other way round
+        # ("Nicolae Balcescu") — and the data is not even consistent with itself
+        # ("Alexandru Ioan Cuza" is spelled both ways). A plain substring match
+        # therefore misses them, so match every word separately instead: the
+        # word order stops mattering, and typing the street type along with the
+        # name ("Strada Mircea") keeps working too.
+        if operator in ("ilike", "like") and isinstance(value, str):
+            words = value.split()
+            if len(words) > 1:
+                words_domain = Domain.AND(
+                    [
+                        Domain.OR(
+                            [
+                                Domain("street_name", operator, word),
+                                Domain("street_type", operator, word),
+                            ]
+                        )
+                        for word in words
+                    ]
+                )
+                domain = Domain.OR([domain, words_domain])
+
         return domain

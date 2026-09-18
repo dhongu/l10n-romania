@@ -24,7 +24,6 @@ def post_init_hook(env):
                 document_state = "stock_validated"
             picking.write(
                 {
-                    "carrier_tracking_ref": picking.l10n_ro_e_transport_uit,
                     "l10n_ro_edi_stock_vehicle_number": picking.l10n_ro_vehicle,
                     "l10n_ro_edi_stock_operation_type": picking.l10n_ro_e_transport_operation_type_id.code,
                     "l10n_ro_edi_stock_operation_scope": picking.l10n_ro_e_transport_scope_id.code,

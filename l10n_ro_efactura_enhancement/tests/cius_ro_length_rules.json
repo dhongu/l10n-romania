@@ -1,0 +1,450 @@
+[
+  {
+    "rule": "BR-RO-L020",
+    "id": "BR-RO-L0201",
+    "bt": "BT-38",
+    "max": 20,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:PostalAddress", "cbc:PostalZone"]
+  },
+  {
+    "rule": "BR-RO-L020",
+    "id": "BR-RO-L0202",
+    "bt": "BT-53",
+    "max": 20,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:PostalAddress", "cbc:PostalZone"]
+  },
+  {
+    "rule": "BR-RO-L020",
+    "id": "BR-RO-L0203",
+    "bt": "BT-67",
+    "max": 20,
+    "path": ["cac:TaxRepresentativeParty", "cac:PostalAddress", "cbc:PostalZone"]
+  },
+  {
+    "rule": "BR-RO-L020",
+    "id": "BR-RO-L0204",
+    "bt": "BT-78",
+    "max": 20,
+    "path": ["cac:Delivery", "cac:DeliveryLocation", "cac:Address", "cbc:PostalZone"]
+  },
+  {
+    "rule": "BR-RO-L050",
+    "id": "BR-RO-L0501",
+    "bt": "BT-37",
+    "max": 50,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:PostalAddress", "cbc:CityName"]
+  },
+  {
+    "rule": "BR-RO-L050",
+    "id": "BR-RO-L0502",
+    "bt": "BT-52",
+    "max": 50,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:PostalAddress", "cbc:CityName"]
+  },
+  {
+    "rule": "BR-RO-L050",
+    "id": "BR-RO-L0503",
+    "bt": "BT-66",
+    "max": 50,
+    "path": ["cac:TaxRepresentativeParty", "cac:PostalAddress", "cbc:CityName"]
+  },
+  {
+    "rule": "BR-RO-L050",
+    "id": "BR-RO-L0504",
+    "bt": "BT-77",
+    "max": 50,
+    "path": ["cac:Delivery", "cac:DeliveryLocation", "cac:Address", "cbc:CityName"]
+  },
+  {
+    "rule": "BR-RO-L050",
+    "id": "BR-RO-L0505",
+    "bt": "BT-160",
+    "max": 50,
+    "path": ["cac:Item", "cac:AdditionalItemProperty", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1001",
+    "bt": "BT-19",
+    "max": 100,
+    "path": ["cbc:AccountingCost"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1002",
+    "bt": "BT-36",
+    "max": 100,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:PostalAddress", "cbc:AdditionalStreetName"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1003",
+    "bt": "BT-162",
+    "max": 100,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:PostalAddress", "cac:AddressLine", "cbc:Line"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1004",
+    "bt": "BT-41",
+    "max": 100,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:Contact", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1005",
+    "bt": "BT-42",
+    "max": 100,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:Contact", "cbc:Telephone"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1006",
+    "bt": "BT-43",
+    "max": 100,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:Contact", "cbc:ElectronicMail"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1007",
+    "bt": "BT-51",
+    "max": 100,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:PostalAddress", "cbc:AdditionalStreetName"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1008",
+    "bt": "BT-163",
+    "max": 100,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:PostalAddress", "cac:AddressLine", "cbc:Line"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1009",
+    "bt": "BT-56",
+    "max": 100,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:Contact", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1010",
+    "bt": "BT-57",
+    "max": 100,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:Contact", "cbc:Telephone"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1011",
+    "bt": "BT-58",
+    "max": 100,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:Contact", "cbc:ElectronicMail"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1012",
+    "bt": "BT-65",
+    "max": 100,
+    "path": ["cac:TaxRepresentativeParty", "cac:PostalAddress", "cbc:AdditionalStreetName"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1013",
+    "bt": "BT-164",
+    "max": 100,
+    "path": ["cac:TaxRepresentativeParty", "cac:PostalAddress", "cac:AddressLine", "cbc:Line"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1014",
+    "bt": "BT-76",
+    "max": 100,
+    "path": ["cac:Delivery", "cac:DeliveryLocation", "cac:Address", "cbc:AdditionalStreetName"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1015",
+    "bt": "BT-165",
+    "max": 100,
+    "path": ["cac:Delivery", "cac:DeliveryLocation", "cac:Address", "cac:AddressLine", "cbc:Line"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1016",
+    "bt": "BT-82",
+    "max": 100,
+    "path": ["cac:PaymentMeans", "cbc:PaymentMeansCode", "@name"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1017",
+    "bt": "BT-97",
+    "max": 100,
+    "path": ["cac:AllowanceCharge", "cbc:AllowanceChargeReasonCode"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1018",
+    "bt": "BT-104",
+    "max": 100,
+    "path": ["cac:AllowanceCharge", "cbc:AllowanceChargeReasonCode"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1019",
+    "bt": "BT-120",
+    "max": 100,
+    "path": ["cac:TaxTotal", "cac:TaxSubtotal", "cbc:TaxExemptionReason"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1020",
+    "bt": "BT-123",
+    "max": 100,
+    "path": ["cac:AdditionalDocumentReference", "cbc:DocumentDescription"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1021",
+    "bt": "BT-133",
+    "max": 100,
+    "path": ["cac:InvoiceLine", "cbc:AccountingCost"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1022",
+    "bt": "BT-139",
+    "max": 100,
+    "path": ["cac:InvoiceLine", "cac:AllowanceCharge", "cbc:AllowanceChargeReason"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1023",
+    "bt": "BT-144",
+    "max": 100,
+    "path": ["cac:InvoiceLine", "cac:AllowanceCharge", "cbc:AllowanceChargeReason"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1024",
+    "bt": "BT-153",
+    "max": 100,
+    "path": ["cac:InvoiceLine", "cac:Item", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L100",
+    "id": "BR-RO-L1025",
+    "bt": "BT-161",
+    "max": 100,
+    "path": ["cac:Item", "cac:AdditionalItemProperty", "cbc:Value"]
+  },
+  {
+    "rule": "BR-RO-L140",
+    "id": "BR-RO-L140",
+    "bt": "BT-83",
+    "max": 140,
+    "path": ["cac:PaymentMeans", "cbc:PaymentID"]
+  },
+  {
+    "rule": "BR-RO-L150",
+    "id": "BR-RO-L151",
+    "bt": "BT-35",
+    "max": 150,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:PostalAddress", "cbc:StreetName"]
+  },
+  {
+    "rule": "BR-RO-L150",
+    "id": "BR-RO-L152",
+    "bt": "BT-50",
+    "max": 150,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:PostalAddress", "cbc:StreetName"]
+  },
+  {
+    "rule": "BR-RO-L150",
+    "id": "BR-RO-L153",
+    "bt": "BT-64",
+    "max": 150,
+    "path": ["cac:TaxRepresentativeParty", "cac:PostalAddress", "cbc:StreetName"]
+  },
+  {
+    "rule": "BR-RO-L150",
+    "id": "BR-RO-L154",
+    "bt": "BT-75",
+    "max": 150,
+    "path": ["cac:Delivery", "cac:DeliveryLocation", "cac:Address", "cbc:StreetName"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L0302",
+    "bt": "BT-12",
+    "max": 200,
+    "path": ["cac:ContractDocumentReference", "cbc:ID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L0303",
+    "bt": "BT-13",
+    "max": 200,
+    "path": ["cac:OrderReference", "cbc:ID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L0304",
+    "bt": "BT-14",
+    "max": 200,
+    "path": ["cac:OrderReference", "cbc:SalesOrderID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L0305",
+    "bt": "BT-15",
+    "max": 200,
+    "path": ["cac:ReceiptDocumentReference", "cbc:ID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L0306",
+    "bt": "BT-16",
+    "max": 200,
+    "path": ["cac:DespatchDocumentReference", "cbc:ID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L0307",
+    "bt": "BT-17",
+    "max": 200,
+    "path": ["cac:OriginatorDocumentReference", "cbc:ID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L0308",
+    "bt": "BT-18, BT-122",
+    "max": 200,
+    "path": ["cac:AdditionalDocumentReference", "cbc:ID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L155",
+    "bt": "BT-1",
+    "max": 200,
+    "path": ["cbc:ID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L156",
+    "bt": "BT-25",
+    "max": 200,
+    "path": ["cac:BillingReference", "cac:InvoiceDocumentReference", "cbc:ID"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L201",
+    "bt": "BT-27",
+    "max": 200,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:PartyLegalEntity", "cbc:RegistrationName"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L202",
+    "bt": "BT-28",
+    "max": 200,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:PartyName", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L203",
+    "bt": "BT-44",
+    "max": 200,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:PartyLegalEntity", "cbc:RegistrationName"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L204",
+    "bt": "BT-45",
+    "max": 200,
+    "path": ["cac:AccountingCustomerParty", "cac:Party", "cac:PartyName", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L205",
+    "bt": "BT-59",
+    "max": 200,
+    "path": ["cac:PayeeParty", "cac:PartyName", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L206",
+    "bt": "BT-62",
+    "max": 200,
+    "path": ["cac:TaxRepresentativeParty", "cac:PartyName", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L207",
+    "bt": "BT-70",
+    "max": 200,
+    "path": ["cac:Delivery", "cac:DeliveryParty", "cac:PartyName", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L208",
+    "bt": "BT-85",
+    "max": 200,
+    "path": ["cac:PaymentMeans", "cac:PayeeFinancialAccount", "cbc:Name"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L209",
+    "bt": "BT-88",
+    "max": 200,
+    "path": ["cac:PaymentMeans", "cac:CardAccount", "cbc:HolderName"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L210",
+    "bt": "BT-124",
+    "max": 200,
+    "path": ["cac:AdditionalDocumentReference", "cac:Attachment", "cac:ExternalReference", "cbc:URI"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L211",
+    "bt": "BT-125-2",
+    "max": 200,
+    "path": ["cac:AdditionalDocumentReference", "cac:Attachment", "cbc:EmbeddedDocumentBinaryObject", "@filename"]
+  },
+  {
+    "rule": "BR-RO-L200",
+    "id": "BR-RO-L212",
+    "bt": "BT-154",
+    "max": 200,
+    "path": ["cac:InvoiceLine", "cac:Item", "cbc:Description"]
+  },
+  {
+    "rule": "BR-RO-L300",
+    "id": "BR-RO-L301",
+    "bt": "BT-20",
+    "max": 300,
+    "path": ["cac:PaymentTerms", "cbc:Note"]
+  },
+  {
+    "rule": "BR-RO-L300",
+    "id": "BR-RO-L302",
+    "bt": "BT-22",
+    "max": 300,
+    "path": ["cbc:Note"]
+  },
+  {
+    "rule": "BR-RO-L300",
+    "id": "BR-RO-L303",
+    "bt": "BT-127",
+    "max": 300,
+    "path": ["cac:InvoiceLine", "cbc:Note"]
+  },
+  {
+    "rule": "BR-RO-L1000",
+    "id": "BR-RO-L1000",
+    "bt": "BT-33",
+    "max": 1000,
+    "path": ["cac:AccountingSupplierParty", "cac:Party", "cac:PartyLegalEntity", "cbc:CompanyLegalForm"]
+  }
+]

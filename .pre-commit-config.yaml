@@ -144,3 +144,11 @@ repos:
       - id: pylint_odoo
         args:
           - --rcfile=.pylintrc-mandatory
+  - repo: local
+    hooks:
+      - id: check-po-vs-pot
+        name: Traducerile din .po trebuie sa existe in .pot (altfel Odoo le ignora)
+        entry: scripts/check_po_vs_pot.py
+        language: python
+        files: '[a-zA-Z0-9_]*/i18n/[a-zA-Z_]*\.po$'
+        additional_dependencies: ["polib"]

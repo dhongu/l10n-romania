@@ -1,7 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    "author": "Terrabit,Odoo Community Association (OCA)",
+    "author": "Terrabit",
     "name": "Romania - Send E-Factura - legacy",
     "version": "19.0.1.0.0",
     "category": "Accounting/Localizations/EDI",

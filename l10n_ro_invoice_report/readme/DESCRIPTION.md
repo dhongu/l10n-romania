@@ -19,7 +19,8 @@ Acest modul extinde raportul de factură standard din Odoo pentru a se conforma 
     - Inserarea logoului **Coface** la finalul facturii (activabil din setări).
 
 - **Gestiune documente corelate**:
-    - Tipărirea automată a chitanțelor, dispozițiilor de plată sau încasare direct din factură pentru plățile în numerar.
+    - **Chitanță, dispoziție de plată și dispoziție de încasare** tipărite din plată (raportul „Voucher / Payment" pe `account.payment`), cu titlul potrivit tipului de plată și cu suma în cifre și în litere.
+    - Pentru plățile pe jurnal de casă, documentul iese ca formular de casierie complet: **codul formularului** (14-4-4 la plată, 14-4-1 la încasare), **casieria**, rândul pentru **actul de identitate** al beneficiarului la plăți, și **cele trei semnături** — conducătorul unității, casierul și beneficiarul. Pentru plățile bancare, aceste elemente nu se tipăresc, nefiind vorba de un document de casă.
     - Gestionarea corectă a semnelor pentru stornări (Credit Notes).
 
 - **Rapoarte dedicate**:

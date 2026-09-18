@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_etransport_event_list" model="ir.ui.view">
+        <field name="name">l10n.ro.etransport.event.list</field>
+        <field name="model">l10n.ro.etransport.event</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="create_date" string="Sent On" />
+                <field name="event_type" />
+                <field name="uit" />
+                <field name="confirmation_type" optional="hide" />
+                <field name="vehicle_number" optional="hide" />
+                <field name="state"
+                    widget="badge"
+                    decoration-success="state == 'validated'"
+                    decoration-warning="state == 'sent'"
+                    decoration-danger="state == 'failed'"
+                />
+                <field name="message" />
+                <field name="load_id" optional="hide" />
+                <field name="attachment" filename="display_name" widget="binary" optional="hide" />
+                <button name="action_fetch_status"
+                    type="object"
+                    string="Fetch Status"
+                    icon="fa-refresh"
+                    invisible="state != 'sent'"
+                />
+            </list>
+        </field>
+    </record>
+</odoo>

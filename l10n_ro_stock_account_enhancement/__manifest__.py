@@ -5,7 +5,7 @@
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Enhancement",
-    "author": "Terrabit,Dorin Hongu,Odoo Community Association (OCA)",
+    "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "depends": [
         "l10n_ro_stock_account",

@@ -23,11 +23,12 @@ acelea rămân module complementare separate.
 
 - model nou `l10n.ro.cash.register`;
 - un registru pe **zi + jurnal de casă**;
-- calcul automat de **sold inițial** și **sold final** din mișcările contabile postate;
+- calcul automat de **sold inițial** și **sold final** din mișcările contabile postate,
+  reactualizat la fiecare postare sau anulare de notă pe contul de casă;
 - acces rapid la **încasare**, **plată** și **operațiune casă** direct din registru;
 - generare automată a registrului de casă la postarea plăților pe jurnal cash;
 - acțiune de generare a registrelor lipsă pentru zilele care au mișcări;
-- raport PDF tipărit pentru registrul de casă;
+- raport PDF tipărit conform formularului **14-4-7A**, cu buton **Tipărire** în formular și listă;
 - deschidere directă a registrului de casă din jurnalul cash pentru companiile RO.
 
 ## 3. Utilizatori și roluri
@@ -85,15 +86,19 @@ unicitatea și generează numărul registrului cu secvență derivată din codul
 Registrul preia liniile contabile postate de pe contul implicit al jurnalului cash, pentru ziua
 selectată. Din ele rezultă:
 
-- **Starting Balance** = suma mișcărilor postate anterioare zilei;
-- **Finished Balance** = suma mișcărilor postate până la ziua curentă inclusiv.
+- **Sold inițial** = suma mișcărilor postate anterioare zilei, adică soldul de închidere al
+  zilei precedente;
+- **Sold final** = suma mișcărilor postate până la ziua curentă inclusiv.
 
-Butonul **Refresh** recalculează soldurile și liniile asociate.
+Soldurile se recalculează **automat** la postarea, anularea sau ștergerea unei note care atinge
+contul de casă — pentru ziua respectivă și pentru toate zilele ulterioare din același jurnal,
+pentru că reportul se propagă în lanț. Butonul **Împrospătare** rămâne disponibil pentru
+recalculul manual, dar nu mai este necesar în operarea curentă.
 
 ### Pasul 3 — Operare din registru
 
-Din formularul registrului (butoanele **Împrospătare / Încasare / Plată / Operație**) sunt
-disponibile trei acțiuni:
+Din formularul registrului (butoanele **Tipărire / Împrospătare / Încasare / Plată / Operație**)
+sunt disponibile trei acțiuni de operare:
 
 ![Formularul registrului de casă cu solduri și linii](screenshots/03_formular_registru.png)
 
@@ -127,15 +132,24 @@ Există și un cron pregătit pentru această generare, dar este livrat **inacti
 
 ### Pasul 5 — Tipărirea registrului
 
-Registrul are raport PDF dedicat, cu:
+Tipărirea se face din butonul **Tipărire** din bara formularului sau, pentru mai multe registre
+deodată, selectându-le în listă. Raportul urmează formularul **Registru de casă, cod 14-4-7A**:
 
-- date companie;
-- CIF și NRC;
-- sold inițial;
-- lista liniilor pe partener și referință;
-- total încasări;
-- total plăți;
-- sold final.
+- date companie, CIF și NRC;
+- **Sold reportat din ziua precedentă**;
+- liniile zilei, în ordine cronologică: nr. act de casă, nr. anexe, explicații, partener,
+  încasări, plăți și sold cumulat;
+- **Total încasări**, **Total plăți** și **Sold la sfârșitul zilei**, pe rânduri distincte;
+- rubrici de semnătură pentru casier și pentru compartimentul financiar-contabil;
+- mențiunea programului informatic și a versiunii, cerută pe orice listare de OMFP 2634/2015,
+  Anexa 1 pct. 58 lit. k).
+
+Coloana **Nr. anexe** afișează numărul de atașamente ale notei contabile — echivalentul digital
+al documentelor justificative anexate actului de casă.
+
+Listarea pe hârtie nu este obligatorie zilnic: obligatorie este **întocmirea** zilnică, iar
+documentele se pot păstra electronic cu condiția de a putea fi listate în orice moment
+(Anexa 1 pct. 12, 36 și 56).
 
 ![Raportul PDF „Registrul de casă"](screenshots/05_raport_pdf.png)
 
@@ -160,8 +174,10 @@ Registrul are raport PDF dedicat, cu:
 | CR-04 | Rulezi Generate Missing Cash Register pe jurnal | se creează registre pe toate datele cu mișcări |
 | CR-05 | Faci Cash In din wizard | se postează nota contabilă cu debit pe contul de casă |
 | CR-06 | Faci Cash Out din wizard | se postează nota contabilă cu credit pe contul de casă |
-| CR-07 | Apeși Refresh după mișcări noi | soldurile și liniile sunt recalculate |
-| CR-08 | Tipărești raportul PDF | apare registrul cu sold inițial, mișcări și sold final |
+| CR-07 | Postezi o mișcare într-o zi anterioară | soldurile zilei și ale tuturor zilelor următoare se actualizează singure |
+| CR-08 | Anulezi o notă postată de casă | soldurile revin la valoarea corectă, fără Împrospătare |
+| CR-09 | Tipărești raportul din butonul Tipărire | apare registrul 14-4-7A cu report, totaluri și sold final |
+| CR-10 | Verifici soldul de deschidere al unei zile | este identic cu soldul de închidere al zilei precedente |
 
 ## 9. Legături cu alte module
 
@@ -181,6 +197,7 @@ Registrul are raport PDF dedicat, cu:
 | Nu implementează explicit controalele de plafoane numerar Legea 70/2015 | consultantul nu trebuie să o vândă ca soluție de compliance complet pe plafoane |
 | Butonul de print pe linie există în view, dar metoda `print_cash_operation` este goală și butonul este ascuns | nu există tipărire individuală a operațiunii din linie |
 | Cronul de generare registre lipsă este inactiv la livrare | dacă se dorește automatizare zilnică, trebuie activat explicit |
+| Soldurile se calculează pe contul implicit al jurnalului, nu pe jurnal | două casierii care partajează același cont 5311 se contaminează reciproc; configurează un cont analitic distinct per casierie |
 
 ## 11. Mesaje-cheie pentru consultant
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- ©  2026 Deltatech / Dorin Hongu — vezi README.rst pentru licență -->
+<odoo>
+    <!-- Șabloane de sine stătătoare pentru evenimentele de după UIT (schema
+         ANAF eTransport v2: `stergere`, `confirmare`, `modifVehicul`).
+
+         Rădăcina declară explicit namespace-ul, exact ca în șablonul standard al
+         notificării: fără el lxml ar serializa `xmlns=""` și ANAF ar respinge.
+
+         Atributele opționale primesc `None` din Python când lipsesc — `t-att-*`
+         omite atributul pentru None, dar l-ar randa gol pentru "" (respins la
+         validare, minLength=1). -->
+
+    <template id="template_etransport_stergere">
+        <eTransport
+            xmlns="mfp:anaf:dgti:eTransport:declaratie:v2"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="mfp:anaf:dgti:eTransport:declaratie:v2"
+            t-att-codDeclarant="data['codDeclarant']"
+            t-att-refDeclarant="data['refDeclarant']"
+            t-att-declPostAvarie="data['declPostAvarie']"
+        >
+            <stergere t-att-uit="data['uit']" t-att-observatii="data['observatii']" />
+        </eTransport>
+    </template>
+
+    <template id="template_etransport_confirmare">
+        <eTransport
+            xmlns="mfp:anaf:dgti:eTransport:declaratie:v2"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="mfp:anaf:dgti:eTransport:declaratie:v2"
+            t-att-codDeclarant="data['codDeclarant']"
+            t-att-refDeclarant="data['refDeclarant']"
+            t-att-declPostAvarie="data['declPostAvarie']"
+        >
+            <confirmare
+                t-att-uit="data['uit']"
+                t-att-tipConfirmare="data['tipConfirmare']"
+                t-att-observatii="data['observatii']"
+            />
+        </eTransport>
+    </template>
+
+    <template id="template_etransport_modif_vehicul">
+        <eTransport
+            xmlns="mfp:anaf:dgti:eTransport:declaratie:v2"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="mfp:anaf:dgti:eTransport:declaratie:v2"
+            t-att-codDeclarant="data['codDeclarant']"
+            t-att-refDeclarant="data['refDeclarant']"
+            t-att-declPostAvarie="data['declPostAvarie']"
+        >
+            <modifVehicul
+                t-att-uit="data['uit']"
+                t-att-nrVehicul="data['nrVehicul']"
+                t-att-nrRemorca1="data['nrRemorca1']"
+                t-att-nrRemorca2="data['nrRemorca2']"
+                t-att-dataModificare="data['dataModificare']"
+                t-att-observatii="data['observatii']"
+            />
+        </eTransport>
+    </template>
+</odoo>

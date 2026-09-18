@@ -1,0 +1,413 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-10 06:56+0000\n"
+"PO-Revision-Date: 2026-09-10 06:56+0000\n"
+"Last-Translator: \n"
+"Language-Team: Romanian\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__load_id
+msgid "ANAF Load Index"
+msgstr "Index încărcare ANAF"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid ""
+"ANAF did not answer the request: %(error)s\n"
+"The event may have reached ANAF anyway. Check in SPV before sending it again."
+msgstr ""
+"ANAF nu a răspuns la cerere: %(error)s\n"
+"Evenimentul poate să fi ajuns totuși la ANAF. Verificați în SPV înainte să îl retrimiteți."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__event_type
+msgid "Action"
+msgstr "Acțiune"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid "Cancel"
+msgstr "Anulează"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "Change Vehicle"
+msgstr "Schimbă vehiculul"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "Choose the confirmation type."
+msgstr "Alegeți tipul confirmării."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__company_id
+msgid "Company"
+msgstr "Companie"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "Confirm UIT"
+msgstr "Confirmă UIT"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__confirmation_type
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__confirmation_type
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__event_type__con
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__event_type__con
+msgid "Confirmation"
+msgstr "Confirmare"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__confirmation_type__10
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__confirmation_type__10
+msgid "Confirmed"
+msgstr "Confirmat"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__create_uid
+msgid "Created by"
+msgstr "Creat de"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__create_date
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__create_date
+msgid "Created on"
+msgstr "Creat la"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__post_outage
+msgid ""
+"Declaration filed after an ANAF system outage (OUG 41/2022 art. 8 par. 1^3)."
+msgstr ""
+"Declarație depusă după o avarie a sistemului ANAF (OUG 41/2022 art. 8 alin. "
+"1^3)."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "Delete UIT"
+msgstr "Șterge UIT"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid ""
+"Deleting the notification invalidates the UIT at ANAF. The goods can no "
+"longer travel under it; a new notification is needed for the transport."
+msgstr ""
+"Ștergerea notificării invalidează UIT-ul la ANAF. Bunurile nu mai pot "
+"circula sub acest UIT; transportul are nevoie de o notificare nouă."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__event_type__del
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__event_type__del
+msgid "Deletion"
+msgstr "Ștergere"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__display_name
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__state__failed
+msgid "Error"
+msgstr "Eroare"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__event_type
+msgid "Event"
+msgstr "Eveniment"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "Fetch Event Status"
+msgstr "Preia starea evenimentelor"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_event_list
+msgid "Fetch Status"
+msgstr "Preia starea"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__write_uid
+msgid "Last Updated by"
+msgstr "Ultima actualizare de"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__write_date
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__write_date
+msgid "Last Updated on"
+msgstr "Ultima actualizare la"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__message
+msgid "Message"
+msgstr "Mesaj"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__modification_date
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__modification_date
+msgid "Modification Date"
+msgstr "Data modificării"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid ""
+"Only events rejected by ANAF can be deleted; the others are an audit trail."
+msgstr ""
+"Pot fi șterse doar evenimentele respinse de ANAF; celelalte sunt pistă de "
+"audit."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid "Optional, max. 200 characters"
+msgstr "Opțional, max. 200 de caractere"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__confirmation_type__20
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__confirmation_type__20
+msgid "Partially confirmed"
+msgstr "Confirmat parțial"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__post_outage
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__post_outage
+msgid "Post-outage declaration"
+msgstr "Declarație post-avarie"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.actions.server,name:l10n_ro_etransport_uit_actions.ir_cron_etransport_event_fetch_status_ir_actions_server
+msgid "RO e-Transport: UIT event status update"
+msgstr "RO e-Transport: actualizare stare evenimente UIT"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__confirmation_type__30
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__confirmation_type__30
+msgid "Refused"
+msgstr "Refuzat"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__remarks
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__remarks
+msgid "Remarks"
+msgstr "Observații"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid "Send to ANAF"
+msgstr "Trimite la ANAF"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__state__sent
+msgid "Sent"
+msgstr "Trimis"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_event_list
+msgid "Sent On"
+msgstr "Trimis la"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__state
+msgid "State"
+msgstr "Stare"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid ""
+"The UIT is not in a state that accepts actions (deleted, or another event is"
+" pending)."
+msgstr ""
+"UIT-ul nu este într-o stare care acceptă acțiuni (șters sau cu alt eveniment"
+" în așteptare)."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_deleted
+msgid ""
+"The current UIT was deleted at ANAF; the notification is no longer valid."
+msgstr "UIT-ul curent a fost șters la ANAF; notificarea nu mai este valabilă."
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "The modification date is required."
+msgstr "Data modificării este obligatorie."
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "The new vehicle number is required."
+msgstr "Numărul noului vehicul este obligatoriu."
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "The transfer has no validated UIT."
+msgstr "Transferul nu are un UIT validat."
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "The vehicle number is the same as the one already declared."
+msgstr "Numărul vehiculului este același cu cel deja declarat."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid ""
+"This UIT was deleted at ANAF. The transport can no longer travel under it."
+msgstr ""
+"Acest UIT a fost șters la ANAF. Transportul nu mai poate circula sub el."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__post_outage
+msgid ""
+"Tick when the event is filed after an ANAF system outage (OUG 41/2022 art. 8"
+" par. 1^3)."
+msgstr ""
+"Bifați când evenimentul se depune după o avarie a sistemului ANAF (OUG "
+"41/2022 art. 8 alin. 1^3)."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__trailer_1_number
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__trailer_1_number
+msgid "Trailer 1 Number"
+msgstr "Număr remorcă 1"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__trailer_2_number
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__trailer_2_number
+msgid "Trailer 2 Number"
+msgstr "Număr remorcă 2"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model,name:l10n_ro_etransport_uit_actions.model_stock_picking
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__picking_id
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__picking_id
+msgid "Transfer"
+msgstr "Transfer"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__uit
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__uit
+msgid "UIT"
+msgstr "UIT"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_enable_actions
+msgid "UIT Actions Enabled"
+msgstr "Acțiuni UIT disponibile"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_deleted
+msgid "UIT Deleted"
+msgstr "UIT șters"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_event_pending
+msgid "UIT Event Pending"
+msgstr "Eveniment UIT în așteptare"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_event_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
+msgid "UIT Events"
+msgstr "Evenimente UIT"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "Unhandled eTransport state for %(event)s: %(message)s"
+msgstr "Stare eTransport netratată pentru %(event)s: %(message)s"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__state__validated
+msgid "Validated"
+msgstr "Validat"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_action_wizard__event_type__mvh
+#: model:ir.model.fields.selection,name:l10n_ro_etransport_uit_actions.selection__l10n_ro_etransport_event__event_type__mvh
+msgid "Vehicle Modification"
+msgstr "Modificare vehicul"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__vehicle_number
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__vehicle_number
+msgid "Vehicle Number"
+msgstr "Număr vehicul"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "Vehicle number and trailer number fields must be unique."
+msgstr "Numerele vehiculului și ale remorcilor trebuie să fie distincte."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_event__attachment
+msgid "XML"
+msgstr "XML"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "XML contains errors."
+msgstr "XML-ul conține erori."
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "eTransport %(event)s was rejected: %(message)s"
+msgstr "eTransport %(event)s a fost respins: %(message)s"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid ""
+"eTransport %(event)s was sent to the authority (load index %(load_id)s)."
+msgstr ""
+"eTransport %(event)s a fost trimis către autoritate (index încărcare "
+"%(load_id)s)."
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "eTransport %(event)s was validated by the authority."
+msgstr "eTransport %(event)s a fost validat de autoritate."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model,name:l10n_ro_etransport_uit_actions.model_l10n_ro_etransport_action_wizard
+msgid "eTransport UIT Action"
+msgstr "Acțiune UIT eTransport"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model,name:l10n_ro_etransport_uit_actions.model_l10n_ro_etransport_event
+msgid "eTransport UIT Event"
+msgstr "Eveniment UIT eTransport"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "eTransport event rejected"
+msgstr "Eveniment eTransport respins"

@@ -762,7 +762,7 @@
                 />
                 <t t-set="payments_vals_cash" t-value="[]"/>
                 <t t-foreach="payments_vals" t-as="payment_vals">
-                    <t t-if="payment_vals['journal_type']=='cash'">
+                    <t t-if="payment_vals.get('journal_type') == 'cash'">
                         <t t-set="payments_vals_cash" t-value="payments_vals_cash + [payment_vals]"/>
                     </t>
                 </t>
@@ -793,10 +793,10 @@
                                 t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
                             />
                             <h4>
-                                <t t-if="payment_vals['payment_type']=='inbound'">
+                                <t t-if="payment_vals.get('payment_type') == 'inbound'">
                                     <span>Voucher:</span>
                                 </t>
-                                <t t-if="payment_vals['payment_type']=='outbound'">
+                                <t t-if="payment_vals.get('payment_type') == 'outbound'">
                                     <span>Payment disposal:</span>
                                 </t>
 
@@ -805,7 +805,7 @@
                                 <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/>
                             </h4>
                             <div name="payment_text">
-                                <t t-if="payment_vals['payment_type']=='outbound'">
+                                <t t-if="payment_vals.get('payment_type') == 'outbound'">
                                     <span>I payed to</span>
                                 </t>
                                 <t t-else="">

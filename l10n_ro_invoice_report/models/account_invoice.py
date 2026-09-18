@@ -9,10 +9,14 @@ from odoo import api, fields, models
 class AccountInvoice(models.Model):
     _inherit = "account.move"
 
+    # index=True: coloană FK spre res_partner pe account_move (peste 400 MB la clienți cu
+    # volum). Fără index, ștergerea sau unificarea unui partener scanează secvențial toată
+    # tabela pentru fiecare rând atins.
     delegate_id = fields.Many2one(
         "res.partner",
         string="Delegate",
         domain=[("is_company", "=", False)],
+        index=True,
     )
 
     mean_transp = fields.Char(
@@ -87,6 +91,15 @@ class AccountInvoice(models.Model):
                     if payment_id:
                         payment = self.env["account.payment"].browse(payment_id)
                         item["payment_type"] = payment.payment_type
+                    else:
+                        item["payment_type"] = {
+                            "out_invoice": "inbound",
+                            "out_receipt": "inbound",
+                            "in_refund": "inbound",
+                            "in_invoice": "outbound",
+                            "in_receipt": "outbound",
+                            "out_refund": "outbound",
+                        }.get(invoice.move_type)
         return res
 
     @api.depends("bank_partner_id", "commercial_partner_id")

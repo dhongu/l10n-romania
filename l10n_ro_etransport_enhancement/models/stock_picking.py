@@ -44,18 +44,35 @@ DECLARATION_TIMEZONE = "Europe/Bucharest"
 class Picking(models.Model):
     _inherit = "stock.picking"
 
-    l10n_ro_edi_stock_required = fields.Boolean(string="eTransport Required")
-    l10n_ro_shipping_weights = fields.Boolean(string="Custom Shipping Weights")
+    l10n_ro_edi_stock_required = fields.Boolean(
+        string="eTransport Required",
+        help="Enable eTransport for this transfer after checking the declaration obligation. This does not send a declaration.",
+    )
+    l10n_ro_shipping_weights = fields.Boolean(
+        string="Custom Shipping Weights",
+        help="Enter measured weights for the goods. Get lines recalculates and replaces existing weight lines.",
+    )
     l10n_ro_shipping_weight_lines = fields.One2many(
         "l10n.ro.stock.picking.weight.line", "picking_id", string="Shipping Weight Lines"
     )
     # Greutățile cântărite la rampă, pe tot transferul. Se completează manual și
     # servesc ca țintă pentru `l10n_ro_distribute_weights`: greutățile calculate
     # din fișele produselor rareori corespund cântarului.
-    total_net_weight = fields.Float()
-    total_gross_weight = fields.Float()
-    l10n_ro_shipping_weight_lines_warning = fields.Char(compute="_compute_l10n_ro_shipping_weight_lines_warning")
-    l10n_ro_transport_partner_id = fields.Many2one("res.partner", string="Transport Partner")
+    total_net_weight = fields.Float(
+        help="Measured total weight of the goods without packaging, in the weight unit shown below."
+    )
+    total_gross_weight = fields.Float(help="Measured total weight including packaging, in the weight unit shown below.")
+    l10n_ro_shipping_weight_lines_warning = fields.Char(
+        string="Shipping Weight Warning", compute="_compute_l10n_ro_shipping_weight_lines_warning"
+    )
+    # index=True: coloană FK spre res_partner pe stock_picking (tabelă mare). Fără index,
+    # ștergerea sau unificarea unui partener scanează secvențial toată tabela per rând.
+    l10n_ro_transport_partner_id = fields.Many2one(
+        "res.partner",
+        string="Transport Partner",
+        index=True,
+        help="Carrier declared to ANAF. If empty, use the delivery carrier's eTransport partner.",
+    )
     # Documentele însoțitoare declarate la ANAF (CMR, factură, aviz…). Nativ,
     # `l10n_ro_edi_stock` trimite UN SINGUR document, hardcodat ca aviz (tip 30)
     # cu numărul transferului — deci CMR-ul sau numărul real de aviz nu ajungeau
@@ -63,14 +80,18 @@ class Picking(models.Model):
     l10n_ro_etransport_document_ids = fields.One2many(
         "l10n.ro.etransport.document",
         "picking_id",
-        string="Documente însoțitoare",
+        string="Accompanying Documents",
         copy=False,
+        help="Enter the actual documents accompanying the goods. If empty, the transfer number is used as a delivery note.",
     )
     # Când e completat, adresa acestui partener înlocuiește adresa calculată
     # automat (depozit/client) pentru locația de START din declarația eTransport.
     l10n_ro_etransport_start_address = fields.Many2one(
         "res.partner",
         string="Specific Start Location",
+        index=True,  # vezi nota de la l10n_ro_transport_partner_id
+        help="Actual loading address, when different from the warehouse or dropship supplier address. "
+        "For dropshipping, the destination comes from the linked orders' delivery address.",
     )
 
     def l10n_ro_etransport_add_default_documents(self):
@@ -136,6 +157,7 @@ class Picking(models.Model):
             if picking.carrier_id and picking.carrier_id.l10n_ro_edi_stock_partner_id:
                 picking.l10n_ro_transport_partner_id = picking.carrier_id.l10n_ro_edi_stock_partner_id
 
+    @api.depends("l10n_ro_edi_stock_required", "company_id.account_fiscal_country_id.code")
     def _compute_l10n_ro_edi_stock_enable(self):
         res = super()._compute_l10n_ro_edi_stock_enable()
         for picking in self:
@@ -205,6 +227,45 @@ class Picking(models.Model):
         if not price_unit and self and not self.company_id.l10n_ro_etransport_get_order_value:
             raise UserError(self.env._("No price found for %(product)s.", product=move.product_id.display_name))
         return price_unit
+
+    @api.model
+    def _l10n_ro_etransport_align_uom(self, moves, items):
+        """Aliniază `codUnitateMasura` cu unitatea în care e exprimată `cantitate`.
+
+        Standardul ia cele două atribute din surse DIFERITE
+        (`l10n_ro_edi_stock/models/stock_picking.py`): `cantitate` e
+        `move.product_qty`, prin definiție cantitatea în UoM-ul de BAZĂ al
+        produsului, iar `codUnitateMasura` vine din `move.product_uom`, UoM-ul
+        ales pe LINIE. Cât timp cele două coincid nu se vede nimic; când linia e
+        într-o UoM secundară (cutie, bax, pungă) perechea minte: o recepție de
+        10 cutii × 13 kg pleacă la ANAF drept `cantitate="130"`
+        `codUnitateMasura="C62"`, adică „130 de bucăți". XSD-ul validează fiecare
+        atribut izolat și nu prinde incoerența dintre ele, deci declarația
+        primește UIT, iar eroarea rămâne tăcută.
+
+        Aliniem codul pe unitatea CANTITĂȚII, nu invers: clienții declară istoric
+        în kilograme, iar `_get_unece_code()` n-are cum să reprezinte o unitate
+        proprie ca „Cutie 13 kg" — mapează doar prin XML ID dintr-o listă fixă și
+        ar cădea tot pe `C62`.
+
+        Aceeași aliniere o face deja calea de dropship
+        (`stock_picking_dropship.py`); aici o aducem pe calea principală.
+
+        Când numărul de linii nu corespunde numărului de mișcări, `zip` ar
+        împerechea linii greșite, deci renunțăm în loc să stricăm o declarație
+        care azi pleacă corect. Logăm pe `info`, nu pe `warning`: nepotrivirea nu
+        e o eroare a declarației, iar `checklog-odoo` din CI-ul OCA pică la orice
+        WARNING din log.
+        """
+        if len(moves) != len(items):
+            _logger.info(
+                "eTransport: %d moves for %d declared goods lines; unit codes left as generated by core.",
+                len(moves),
+                len(items),
+            )
+            return
+        for move, item in zip(moves, items, strict=True):
+            item["codUnitateMasura"] = move.product_id.uom_id._get_unece_code()
 
     @api.model
     def _l10n_ro_etransport_fix_quantities_and_weights(self, items):
@@ -279,8 +340,11 @@ class Picking(models.Model):
             scheduled_date_tz = pytz.utc.localize(dt).astimezone(pytz.timezone(user_tz))
             res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
         today = fields.Date.today()
-        if res["data"]["notificare"]["dateTransport"]["dataTransport"] < today:
-            res["data"]["notificare"]["dateTransport"]["dataTransport"] = today
+        res["data"]["notificare"]["dateTransport"]["dataTransport"] = max(
+            res["data"]["notificare"]["dateTransport"]["dataTransport"], today
+        )
+
+        self._l10n_ro_etransport_align_uom(data["stock_move_ids"], res["data"]["notificare"]["bunuriTransportate"])
 
         for item in res["data"]["notificare"]["bunuriTransportate"]:
             # fix bug
@@ -293,15 +357,24 @@ class Picking(models.Model):
 
         # get prices if configured in settings
         def _get_unit_price_for_uit(move):
+            """Prețul unei unități din UoM-ul de BAZĂ al produsului.
+
+            Apelantul înmulțește rezultatul cu `item["cantitate"]`, care e
+            `move.product_qty` — exprimat în UoM-ul de bază al produsului. Prețul
+            de pe linia de comandă e însă per unitate din UoM-ul LINIEI, deci
+            trebuie convertit, altfel o linie de 10 cutii × 13 kg declară de 13
+            ori valoarea reală. Pe `purchase.order.line`, `product_qty` e
+            cantitatea în UoM-ul liniei (cea în UoM de bază e `product_uom_qty`),
+            iar `price_reduce_taxexcl` de pe linia de vânzare e tot un preț per
+            unitate a liniei. Calea de dropship face deja aceeași conversie.
+            """
             direction = move.picking_code
             if direction == "incoming" and move.purchase_line_id:
-                price = (
-                    move.purchase_line_id.price_subtotal / move.purchase_line_id.product_qty
-                    if move.purchase_line_id.product_qty
-                    else 0.00
-                )
-                if move.purchase_line_id.currency_id != move.picking_id.company_id.currency_id:
-                    price = move.purchase_line_id.currency_id._convert(
+                line = move.purchase_line_id
+                price = line.price_subtotal / line.product_qty if line.product_qty else 0.00
+                price = line.product_uom_id._compute_price(price, move.product_id.uom_id)
+                if line.currency_id != move.picking_id.company_id.currency_id:
+                    price = line.currency_id._convert(
                         price,
                         move.picking_id.company_id.currency_id,
                         move.picking_id.company_id,
@@ -309,9 +382,10 @@ class Picking(models.Model):
                     )
                 return price
             elif direction == "outgoing" and move.sale_line_id:
-                price = move.sale_line_id.price_reduce_taxexcl
-                if move.sale_line_id.currency_id != move.picking_id.company_id.currency_id:
-                    price = move.sale_line_id.currency_id._convert(
+                line = move.sale_line_id
+                price = line.product_uom_id._compute_price(line.price_reduce_taxexcl, move.product_id.uom_id)
+                if line.currency_id != move.picking_id.company_id.currency_id:
+                    price = line.currency_id._convert(
                         price,
                         move.picking_id.company_id.currency_id,
                         move.picking_id.company_id,
@@ -320,48 +394,30 @@ class Picking(models.Model):
                 return price
             return 0.00
 
-        if self and self.company_id.l10n_ro_etransport_get_order_value:
+        price_company = self.company_id if self else data.get("company_id")
+        if price_company and price_company.l10n_ro_etransport_get_order_value:
             if len(data["stock_move_ids"]) != len(res["data"]["notificare"]["bunuriTransportate"]):
                 raise UserError(self.env._("UIT lines and moves lines are not the same. Cannot get prices."))
             else:
-                item_no = 0
-                for item in res["data"]["notificare"]["bunuriTransportate"]:
-                    try:
-                        move_id = data["stock_move_ids"][item_no]
-                    except IndexError:
-                        move_id = False
-                    if move_id:
-                        unit_price = _get_unit_price_for_uit(move_id)
-                        if unit_price:
-                            item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
-                        if self.l10n_ro_shipping_weights:
-                            weight_line = self.l10n_ro_shipping_weight_lines.filtered(
-                                lambda x, move_id=move_id: x.move_id == move_id
-                            )
-                            if weight_line:
-                                item["greutateNeta"] = round(weight_line.net_weight, 2)
-                                item["greutateBruta"] = round(weight_line.gross_weight, 2)
-                    item_no += 1
-        if (
-            not self
-            and "company_id" in data
-            and data["company_id"]
-            and data["company_id"].l10n_ro_etransport_get_order_value
-        ):  # called from batch
-            if len(data["stock_move_ids"]) != len(res["data"]["notificare"]["bunuriTransportate"]):
-                raise UserError(self.env._("UIT lines and moves lines are not the same. Cannot get prices."))
-            else:
-                item_no = 0
-                for item in res["data"]["notificare"]["bunuriTransportate"]:
-                    try:
-                        move_id = data["stock_move_ids"][item_no]
-                    except IndexError:
-                        move_id = False
-                    if move_id:
-                        unit_price = _get_unit_price_for_uit(move_id)
-                        if unit_price:
-                            item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
-                    item_no += 1
+                for move, item in zip(
+                    data["stock_move_ids"], res["data"]["notificare"]["bunuriTransportate"], strict=True
+                ):
+                    unit_price = _get_unit_price_for_uit(move)
+                    if unit_price:
+                        item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
+
+        # Measured weights must not depend on the unrelated order-price setting.
+        if self and self.l10n_ro_shipping_weights:
+            items = res["data"]["notificare"]["bunuriTransportate"]
+            if len(items) != len(data["stock_move_ids"]):
+                raise UserError(self.env._("UIT lines and moves lines are not the same. Cannot get weights."))
+            for move, item in zip(data["stock_move_ids"], items, strict=True):
+                weight_line = self.l10n_ro_shipping_weight_lines.filtered(lambda line: line.move_id == move)
+                if len(weight_line) > 1:
+                    raise UserError(self.env._("Only one weight line is allowed for each goods line."))
+                if weight_line:
+                    item["greutateNeta"] = round(weight_line.net_weight, 2)
+                    item["greutateBruta"] = round(weight_line.gross_weight, 2)
 
         self._l10n_ro_etransport_fix_quantities_and_weights(res["data"]["notificare"]["bunuriTransportate"])
 
@@ -443,14 +499,6 @@ class Picking(models.Model):
                     )
                 )
 
-    def action_l10n_ro_edi_stock_fetch_status(self):
-        res = super().action_l10n_ro_edi_stock_fetch_status()
-        for picking in self:
-            if picking.l10n_ro_edi_stock_state == "stock_validated":
-                picking.carrier_tracking_ref = picking.l10n_ro_edi_stock_document_uit
-
-        return res
-
     def l10n_ro_compute_weight_lines(self):
         """Recalculează de la zero liniile de greutate ale transferului.
 
@@ -464,12 +512,26 @@ class Picking(models.Model):
             vals = []
             for move in picking.move_ids:
                 if move.quantity > 0:
+                    # `l10n_ro_net_weight`/`weight` sunt per unitate din UoM-ul
+                    # de bază al produsului, dar `move.quantity` e exprimat în
+                    # `move.product_uom`, care poate fi o UoM secundară (ex.
+                    # cutie/palet) — trebuie convertită la bază înainte de
+                    # înmulțire, altfel greutatea iese greșită cu exact
+                    # factorul de conversie dintre cele două UoM-uri.
+                    qty_base = move.product_uom._compute_quantity(
+                        move.quantity, move.product_id.uom_id, raise_if_failure=False
+                    )
                     vals.append(
                         {
                             "picking_id": picking.id,
                             "move_id": move.id,
-                            "net_weight": move.product_id.l10n_ro_net_weight * move.quantity,
-                            "gross_weight": move.product_id.weight * move.quantity,
+                            "net_weight": (
+                                move.product_id.l10n_ro_net_weight
+                                if "l10n_ro_net_weight" in move.product_id._fields
+                                else move.product_id.weight
+                            )
+                            * qty_base,
+                            "gross_weight": move.product_id.weight * qty_base,
                             "weight_uom_id": self.env["product.template"]
                             ._get_weight_uom_id_from_ir_config_parameter()
                             .id,
@@ -533,13 +595,12 @@ class Picking(models.Model):
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data: dict):
         data["transport_partner_id"] = self.l10n_ro_transport_partner_id or data.get("transport_partner_id")
-        if not self or not data.get("transport_partner_id"):  # called from batch there's no self
+        if (not self or not data.get("transport_partner_id")) and data["stock_move_ids"]:
             # try to get the batch itself:
-            if data["stock_move_ids"]:
-                first_move = data["stock_move_ids"][0]
-                batch_id = first_move.picking_id.batch_id
-                if batch_id:
-                    data["transport_partner_id"] = batch_id.l10n_ro_transport_partner_id
+            first_move = data["stock_move_ids"][0]
+            batch_id = first_move.picking_id.batch_id
+            if batch_id:
+                data["transport_partner_id"] = batch_id.l10n_ro_transport_partner_id
         errors = super()._l10n_ro_edi_stock_validate_data(data)
 
         no_weight = self.env["product.product"]

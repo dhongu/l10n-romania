@@ -8,7 +8,7 @@
     "license": "AGPL-3",
     "version": "19.0.0.0.1",
     "development_status": "Mature",
-    "author": "Dan Stoica,Terrabit,Odoo Community Association (OCA)",
+    "author": "Dan Stoica, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],

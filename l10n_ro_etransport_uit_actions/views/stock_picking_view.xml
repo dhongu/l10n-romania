@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.l10n_ro_etransport_uit_actions</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <button name="action_l10n_ro_edi_stock_fetch_status" position="after">
+                <field name="l10n_ro_etransport_enable_actions" invisible="1" />
+                <field name="l10n_ro_etransport_event_pending" invisible="1" />
+                <field name="l10n_ro_etransport_uit_deleted" invisible="1" />
+                <button name="action_l10n_ro_etransport_open_action_wizard"
+                    string="Delete UIT"
+                    type="object"
+                    context="{'default_event_type': 'DEL'}"
+                    invisible="not l10n_ro_etransport_enable_actions"
+                />
+                <button name="action_l10n_ro_etransport_open_action_wizard"
+                    string="Confirm UIT"
+                    type="object"
+                    context="{'default_event_type': 'CON'}"
+                    invisible="not l10n_ro_etransport_enable_actions"
+                />
+                <button name="action_l10n_ro_etransport_open_action_wizard"
+                    string="Change Vehicle"
+                    type="object"
+                    context="{'default_event_type': 'MVH'}"
+                    invisible="not l10n_ro_etransport_enable_actions"
+                />
+                <button name="action_l10n_ro_etransport_fetch_event_status"
+                    string="Fetch Event Status"
+                    type="object"
+                    invisible="not l10n_ro_etransport_event_pending"
+                />
+            </button>
+            <page name="etransport" position="inside">
+                <div class="alert alert-danger" role="alert" invisible="not l10n_ro_etransport_uit_deleted">
+                    This UIT was deleted at ANAF. The transport can no longer travel under it.
+                </div>
+                <group name="uit_events" string="UIT Events" invisible="not l10n_ro_etransport_event_ids">
+                    <field name="l10n_ro_etransport_event_ids" nolabel="1" colspan="2" readonly="1" />
+                </group>
+            </page>
+        </field>
+    </record>
+</odoo>

@@ -8,11 +8,10 @@
 
 /*
 :Author: David Goodger (goodger@python.org)
-:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Id: $Id: html4css1.css 8954 2022-01-20 10:10:25Z milde $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
-Despite the name, some widely supported CSS2 features are used.
 
 See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
 customize this style sheet.
@@ -275,7 +274,7 @@ pre.literal-block, pre.doctest-block, pre.math, pre.code {
   margin-left: 2em ;
   margin-right: 2em }
 
-pre.code .ln { color: gray; } /* line numbers */
+pre.code .ln { color: grey; } /* line numbers */
 pre.code, code { background-color: #eeeeee }
 pre.code .comment, code .comment { color: #5C6576 }
 pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
@@ -301,7 +300,7 @@ span.option {
 span.pre {
   white-space: pre }
 
-span.problematic, pre.problematic {
+span.problematic {
   color: red }
 
 span.section-subtitle {
@@ -370,38 +369,119 @@ ul.auto-toc {
 !! source digest: sha256:eab9b8f2fd4a1039836786adeb3436cfa3e3f46346d8b6d5d589522d93155e33
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_cash_register"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
-<p>Functionalitati</p>
+<p>Registrul de casă ca <strong>document numerotat</strong>, cod 14-4-7A (OMFP
+2634/2015).</p>
+<p><strong>Funcționalități:</strong></p>
 <ul class="simple">
-<li>Registrul de casa</li>
+<li>un document per (casierie, zi), cu numerotare proprie prin secvență,
+unic pe dată și jurnal;</li>
+<li>sold inițial preluat automat din ziua precedentă și sold final
+calculat;</li>
+<li>mișcările zilei — încasări, plăți, explicația operațiunii și
+partenerul;</li>
+<li>chatter și activități pe document, pentru urmărire și responsabil;</li>
+<li>tipărire în forma cerută de formular.</li>
 </ul>
+<p>Soldurile și mișcările se citesc din notele contabile postate de pe
+contul de casă al jurnalului (<tt class="docutils literal">default_account_id</tt>, ex. 5311).</p>
+<div class="section" id="care-varianta-alegeti">
+<h1>Care variantă alegeți</h1>
+<p>Suita oferă două forme de registru de casă, cu <strong>aceleași cifre</strong>,
+citite din aceleași linii contabile. Diferă ce puteți face cu ele:</p>
+<ul class="simple">
+<li><strong>acest modul</strong> produce <strong>documentul</strong>: numerotat, cu o filă per zi,
+arhivabil și tipăribil în forma formularului. Este varianta pentru
+evidența care se păstrează și se prezintă la control. Merge pe Odoo
+Community.</li>
+<li><strong>``l10n_ro_cash_register_report``</strong> (suita <tt class="docutils literal">l10n_ro_ent</tt>) produce
+<strong>raportul</strong>: interval de mai multe zile, filtru de jurnale, derulare
+pe niveluri, drill-down la nota contabilă și export PDF/XLSX. Este
+varianta pentru verificare și analiză, dar <strong>nu numerotează</strong> nimic.
+Cere Odoo Enterprise (<tt class="docutils literal">account_reports</tt>).</li>
+</ul>
+<p>Cele două nu se exclud și pot fi instalate împreună. Când sunt amândouă,
+folosiți documentul de aici pentru evidența oficială și raportul pentru
+verificări pe perioade.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-1">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-2">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-3">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-4">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-5">Maintainers</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a></li>
 </ul>
 </div>
+<div class="section" id="changelog">
+<h2><a class="toc-backref" href="#toc-entry-1">Changelog</a></h2>
+</div>
+</div>
+<div class="section" id="section-1">
+<h1>19.0.1.2.0</h1>
+<p><strong>Corectat</strong> — soldurile registrului nu se mai învechesc.</p>
+<p>Soldul inițial și soldul final erau calculate o singură dată, la crearea
+registrului, și nu se mai actualizau când apăreau mișcări pe contul de
+casă. Cum registrul zilei este creat automat la postarea primei plăți
+sau de acțiunea de generare, el se năștea aproape întotdeauna pe o zi
+încă goală, iar soldurile rămâneau blocate — fără niciun semnal vizibil.
+Recalculul era posibil doar manual, din butonul <strong>Refresh</strong>, și numai
+pentru registrele selectate: o corecție într-o zi lăsa greșite toate
+zilele următoare.</p>
+<p>Soldurile se recalculează acum automat la postarea, anularea sau
+ștergerea notelor care ating contul de casă, pentru ziua respectivă și
+pentru toate zilele ulterioare din același jurnal. Conform OMFP
+2634/2015, Anexa 1 pct. 58 lit. e) și n), programul trebuie să asigure
+<em>reluarea automată</em> în calcul a soldurilor obținute anterior.</p>
+<p>Registrele existente sunt recalculate la actualizarea modulului.</p>
+<p><strong>Corectat</strong> — operațiunile se listează în ordine cronologică.</p>
+<p>Liniile moșteneau ordinea implicită descrescătoare a înregistrărilor
+contabile, astfel încât coloana de sold descria o succesiune de solduri
+intermediare care nu existase niciodată.</p>
+<p><strong>Corectat</strong> — registrul unei companii nu mai preia mișcări ale altei
+companii.</p>
+<p>Selecția liniilor filtrează acum explicit pe companie.</p>
+<p><strong>Eliminat</strong> — <tt class="docutils literal">action_recompute_from_previous_balance</tt>.</p>
+<p>Metoda căuta registrul precedent fără condiție pe dată și fără să se
+excludă pe sine, deci putea prelua soldul registrului curent sau al
+unuia ulterior și scria rezultatul direct peste soldurile calculate.
+Putea produce astfel un sold de deschidere diferit de soldul de
+închidere al zilei precedente. Nu era expusă în interfață și nu avea
+niciun apelant.</p>
+<p><strong>Adăugat</strong> — buton <strong>Tipărește</strong> în formularul și în lista registrelor.</p>
+<p>Raportul exista, dar era accesibil doar din meniul de acțiuni și trecea
+neobservat.</p>
+<p><strong>Îmbunătățit</strong> — raportul tipărit urmează formularul 14-4-7A.</p>
+<p>Documentul poartă acum codul formularului și coloanele <strong>Nr. act de
+casă</strong>, <strong>Nr. anexe</strong> (numărul atașamentelor notei contabile) și
+<strong>Explicații</strong>, alături de partener. Totalurile apar pe rânduri
+distincte — <em>Total încasări</em>, <em>Total plăți</em>, <em>Sold la sfârșitul zilei</em> —
+în locul rândului unic de sold final, iar rândul de report este denumit
+explicit <em>Sold reportat din ziua precedentă</em>. S-au adăugat rubricile de
+semnătură pentru casier și pentru compartimentul financiar-contabil,
+precum și mențiunea programului informatic și a versiunii, cerută pe
+orice listare de Anexa 1 pct. 58 lit. k).</p>
+<p>Sumele se afișează în moneda registrului, nu în moneda companiei, pentru
+registrele de casă în valută.</p>
+<p>Etichetele antetului au fost restructurate ca să nu mai depindă de
+indentarea din șablon, care rupea traducerile la fiecare reformatare.</p>
+</div>
+<div class="section" id="section-2">
+<h1>19.0.1.1.8</h1>
+<p>Versiuni anterioare — vezi istoricul repozitoriului.</p>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h1>
+<h2>Bug Tracker</h2>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-2">Credits</a></h1>
+<h2>Credits</h2>
+</div>
+</div>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-3">Authors</a></h2>
+<h1>Authors</h1>
 <ul class="simple">
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-4">Contributors</a></h2>
+<h1>Contributors</h1>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -412,10 +492,9 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h2>
+<h1>Maintainers</h1>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_cash_register">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
-</div>
 </div>
 </div>
 </body>
