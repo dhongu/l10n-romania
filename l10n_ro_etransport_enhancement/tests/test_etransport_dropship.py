@@ -392,9 +392,15 @@ class TestEtransportDropship(TransactionCase):
                 )
 
     def test_compiled_view_preserves_optional_oca_localization_guard(self):
-        if "l10n_ro_accounting" not in self.company._fields:
-            self.skipTest("Optional OCA l10n_ro_config is not installed.")
-        self.company.l10n_ro_accounting = False
+        if "is_l10n_ro_record" not in self.env["stock.picking"]._fields:
+            self.skipTest("Optional OCA l10n_ro_config mixin is not applied to stock.picking.")
+        # The guard only hides the RO fields on a company that is not Romanian at
+        # all: l10n_ro_config looks at the chart template (l10n_ro_accounting) and
+        # l10n_ro_config_fix widens the check with the fiscal country, so both
+        # have to be cleared here.
+        self.company.write({"account_fiscal_country_id": self.env.ref("base.us").id})
+        if "l10n_ro_accounting" in self.company._fields:
+            self.company.l10n_ro_accounting = False
         view = self.env["stock.picking"].get_view(view_id=self.env.ref("stock.view_picking_form").id, view_type="form")
         arch = etree.fromstring(view["arch"])
         nodes = arch.xpath("//page[@name='etransport']//field[@name='l10n_ro_etransport_start_address']")
