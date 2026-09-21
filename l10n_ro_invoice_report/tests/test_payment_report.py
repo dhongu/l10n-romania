@@ -40,7 +40,7 @@ class TestL10nRoPaymentReport(TransactionCase):
         return html.decode() if isinstance(html, bytes) else html
 
     def test_cash_payment_order_is_complete(self):
-        """Dispoziția de plată în numerar poartă codul formularului, casieria și semnăturile."""
+        """Dispoziția de plată în numerar poartă codul formularului și casieria, fără semnături."""
         payment = self._payment(self.cash_journal)
         html = self._render(payment)
 
@@ -48,20 +48,26 @@ class TestL10nRoPaymentReport(TransactionCase):
         self.assertIn("Form 14-4-4", html)
         self.assertIn(self.cash_journal.name, html, "casieria trebuie să apară pe document")
         self.assertIn("Identity document", html)
-        self.assertIn("Cashier", html)
-        self.assertIn("Amount received", html)
         self.assertIn(self.partner.name, html)
+        self._assert_no_signature_block(html)
 
     def test_cash_receipt_order_uses_its_own_form_code(self):
         payment = self._payment(self.cash_journal, payment_type="inbound")
         html = self._render(payment)
 
         self.assertIn("Form 14-4-1", html)
-        self.assertIn("Amount deposited", html)
+        self.assertIn("Payer", html, "cel care aduce banii la casierie e plătitorul")
+        self.assertNotIn("Depositor", html)
         self.assertNotIn("Identity document", html, "actul de identitate se cere doar la plată")
+        self._assert_no_signature_block(html)
+
+    def _assert_no_signature_block(self, html):
+        """Blocul de semnături a fost eliminat din formular (tichet #9535)."""
+        for label in ("Manager", "Cashier", "Amount received", "Amount deposited"):
+            self.assertNotIn(label, html)
 
     def test_bank_payment_has_no_cash_desk_form(self):
-        """La bancă nu e vorba de un formular de casă: fără cod, casierie sau semnături."""
+        """La bancă nu e vorba de un formular de casă: fără cod sau casierie."""
         if not self.bank_journal:
             self.skipTest("Nu există jurnal de bancă în companie")
         payment = self._payment(self.bank_journal)
