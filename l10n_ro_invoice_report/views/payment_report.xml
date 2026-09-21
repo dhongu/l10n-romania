@@ -33,7 +33,7 @@
                                 <div>
                                     <t t-if="is_cash_order">
                                         <strong t-if="o.payment_type=='outbound'">Beneficiary</strong>
-                                        <strong t-else="">Depositor</strong><br />
+                                        <strong t-else="">Payer</strong><br />
                                     </t>
                                     <t t-elif="o.payment_type=='outbound'">
                                         <strong>Supplier</strong><br />
@@ -162,21 +162,6 @@
                                 </td>
                             </tr>
                         </table>
-                        <div class="row mt-5 pt-4" t-if="o.journal_id.type == 'cash'">
-                            <div class="col-4 text-center">
-                                <div>Manager</div>
-                                <div class="mt-4">......................</div>
-                            </div>
-                            <div class="col-4 text-center">
-                                <div>Cashier</div>
-                                <div class="mt-4">......................</div>
-                            </div>
-                            <div class="col-4 text-center">
-                                <div t-if="o.payment_type == 'outbound'">Amount received</div>
-                                <div t-else="">Amount deposited</div>
-                                <div class="mt-4">......................</div>
-                            </div>
-                        </div>
                     </div>
                 </t>
             </t>
