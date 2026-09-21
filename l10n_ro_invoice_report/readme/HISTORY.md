@@ -1,6 +1,6 @@
 ## 19.0.3.4.23 (2026-09-21)
 
-- Cash voucher / payment disposal (14-4-1 / 14-4-4): dropped the signature block (Manager, Cashier, Amount received/deposited) and renamed `Depositor` to `Payer`. The typographic layout of these forms is no longer imposed by OMFP 2634/2015 — only the minimum content is — and the signature lines were never filled in practice.
+- Cash voucher / payment disposal (14-4-1 / 14-4-4): dropped the signature block (Manager, Cashier, Amount received/deposited) and renamed `Depositor` to `Payer`. The models in Annex 3 to OMFP 2634/2015 do carry signature rows, but art. 4 (2) of the same order lets each entity adapt the models: what stays mandatory is the minimum content, which the document keeps in full. The pre-printed rows were never filled in — signatures go on the printed copy.
 
 ## 19.0.3.4.20 (2026-08-31)
 

@@ -10,12 +10,12 @@
 
 Modulul aduce documentele tipărite din Odoo la forma cerută în România. Pe factură adaugă ce lipsește din raportul standard — prețul fără TVA și valoarea TVA pe fiecare linie, numerotarea liniilor, delegatul și mijlocul de transport, mențiunea legală privind scutirea de semnătură și ștampilă — și tipărește factura în limba companiei, indiferent de limba partenerului.
 
-Pe partea de casierie, același modul produce **chitanța și dispoziția de plată/încasare** direct din plată. Pentru plățile pe jurnal de casă, documentul iese ca formular de casierie: codul formularului tipizat, casieria, rândul pentru actul de identitate al beneficiarului, suma în cifre și în litere. Rubricile de semnătură nu se tipăresc — formatul grafic nu mai este impus, iar semnăturile se dau pe exemplarul tipărit.
+Pe partea de casierie, același modul produce **chitanța și dispoziția de plată/încasare** direct din plată. Pentru plățile pe jurnal de casă, documentul iese ca formular de casierie: codul formularului tipizat, casieria, rândul pentru actul de identitate al beneficiarului, suma în cifre și în litere. Rubricile de semnătură nu se tipăresc: modelele din Anexa 3 le au, dar art. 4 alin. (2) din ordin permite adaptarea modelelor, iar semnăturile se dau pe exemplarul tipărit.
 
 ## 2. Bază legală și context
 
 - **Factura**: art. 319 din Legea 227/2015 (Codul fiscal) — elementele obligatorii ale facturii; mențiunea privind valabilitatea fără semnătură și ștampilă se sprijină pe art. V alin. (2) din OG 17/2015 și pe art. 319 alin. (29) din Codul fiscal.
-- **Documentele de casă**: OMFP 2634/2015 privind documentele financiar-contabile — **dispoziția de plată/încasare către casierie, cod 14-4-4**, respectiv **chitanța, cod 14-4-1** (chitanța pentru operațiuni în valută are cod 14-4-1/a). Ordinul a transformat aceste documente în formulare **fără regim special**: formatul grafic nu mai este impus, obligatoriu rămâne conținutul minimal — numărul, data, părțile, suma în cifre și în litere, motivul.
+- **Documentele de casă**: OMFP 2634/2015 privind documentele financiar-contabile — **dispoziția de plată/încasare către casierie, cod 14-4-4**, respectiv **chitanța, cod 14-4-1** (chitanța pentru operațiuni în valută are cod 14-4-1/a). Ordinul a transformat aceste documente în formulare **fără regim special**: modelele sunt în Anexa 3, dar **art. 4 alin. (2)** permite fiecărei entități să le adapteze; obligatoriu rămâne conținutul minimal (pct. 2 și 10 din Anexa 1) — numărul, data, părțile, suma în cifre și în litere, motivul.
 - Contextul practic care a produs completarea formularului: la restituirea în numerar a unei mărfi returnate, casieria are nevoie de un document pe care cel care primește banii semnează de primire — semnătura se dă pe exemplarul tipărit, formularul nu mai poartă rubrici preimprimate. Vezi și modulul de retururi POS, pentru cazurile în care restituirea nu trece printr-o plată contabilă.
 
 ## 3. Utilizatori și roluri
@@ -77,7 +77,7 @@ Din **Tipăriți**, alegeți raportul **Invoices in company language**. Document
 
 Din **Tipăriți → Voucher / Payment** se obține dispoziția de plată.
 
-**Găsiți pe ecran**: titlul „Dispoziție de plată", numărul și data, mențiunea **Cod 14-4-4** sub titlu, blocurile **Plătitor** (compania) și **Beneficiar** (persoana care primește banii), rubricile Casieria, Act de identitate, Suma în cifre și în litere, Reprezentând c/v. Documentul se încheie după acest tabel — nu mai are rubrici de semnătură preimprimate.
+**Găsiți pe ecran**: titlul „Dispoziție de plată", numărul și data, mențiunea **Cod 14-4-4** sub titlu, blocurile **Plătitor** (compania) și **Beneficiar** (persoana care primește banii), rubricile Casieria, Act de identitate, Suma în cifre și în litere, Reprezentând c/v. Documentul se încheie după acest tabel — rubricile de semnătură din modelul Anexei 3 nu se tipăresc.
 
 **Verificați** că: suma în litere corespunde sumei în cifre, casieria e cea din care ies efectiv banii, iar rândul de act de identitate există pentru completare la casă. Documentul se tipărește și se semnează de beneficiar la primirea banilor.
 
