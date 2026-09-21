@@ -186,6 +186,31 @@ class StockPicking(models.Model):
                 errors.append(self.env._("The route address belongs to another company."))
         return prepared, addresses, list(dict.fromkeys(errors))
 
+    def _l10n_ro_etransport_set_dropship_partner(self, notification, partner):
+        """Impune partenerul comercial ales pentru dropship.
+
+        Odoo 19 a primit ulterior suport nativ pentru dropship, iar
+        `_l10n_ro_edi_stock_get_template_data` din nucleu **ignoră**
+        `data["partner_id"]` când tipul de operațiune e `dropship`: ia mereu
+        furnizorul de pe comanda de achiziție. Pe o livrare (operațiunile 20,
+        30, 50) partenerul comercial e clientul, nu furnizorul, așa că valoarea
+        se rescrie aici, după super(). Fără rescriere declarația pleacă la ANAF
+        cu furnizorul în loc de client — greșit, dar fără nicio eroare.
+        """
+        commercial_partner = partner.commercial_partner_id
+        code = None
+        if commercial_partner.vat:
+            code = self._l10n_ro_edi_stock_get_cod(commercial_partner)
+        elif self.l10n_ro_edi_stock_operation_type == "30":
+            code = "PF"
+        country_code = commercial_partner.country_code
+        notification["partenerComercial"] = {
+            # Grecia se declară „EL", ca în restul modulului.
+            "codTara": "EL" if country_code == "GR" else country_code,
+            "denumire": commercial_partner.name,
+            "cod": code,
+        }
+
     @api.model
     def _l10n_ro_edi_stock_validate_data(self, data):
         if not self._l10n_ro_etransport_is_dropship_data(data):
@@ -208,6 +233,7 @@ class StockPicking(models.Model):
             raise UserError("\n".join(errors))
         result = super()._l10n_ro_edi_stock_get_template_data(prepared)
         notification = result["data"]["notificare"]
+        self._l10n_ro_etransport_set_dropship_partner(notification, prepared["partner_id"])
         for end, key in (("start", "locStartTraseuRutier"), ("end", "locFinalTraseuRutier")):
             if data.get(f"l10n_ro_edi_stock_{end}_loc_type") != "location":
                 continue

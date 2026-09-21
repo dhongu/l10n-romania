@@ -226,6 +226,23 @@ class TestEtransportDropship(TransactionCase):
         self.assertEqual(xml.xpath("//*[local-name()='locFinalTraseuRutier']/@codPtf"), ["35"])
         self.assertEqual(xml.xpath("//*[local-name()='partenerComercial']/@denumire"), ["Buyer"])
 
+    def test_commercial_partner_survives_native_dropship_support(self):
+        """Nucleul derivă furnizorul la dropship; pe livrare declarăm clientul.
+
+        `_l10n_ro_edi_stock_get_template_data` din Odoo ignoră `partner_id` când
+        tipul de operațiune e `dropship` și ia partenerul comenzii de achiziție.
+        Aici se verifică și codul fiscal, nu doar denumirea: dacă rescrierea
+        dispare, declarația pleacă la ANAF cu datele furnizorului.
+        """
+        self.customer.vat = "RO23456783"
+        request = self._send()
+        self.assertTrue(request.called, self.picking.l10n_ro_edi_stock_document_ids.mapped("message"))
+        xml = etree.fromstring(str(request.call_args.kwargs["data"]).encode())
+        partner = xml.xpath("//*[local-name()='partenerComercial']")[0]
+        self.assertEqual(partner.get("denumire"), "Buyer")
+        self.assertEqual(partner.get("cod"), "23456783")
+        self.assertEqual(partner.get("codTara"), "RO")
+
     def test_import_border_to_customs(self):
         self._set_international("40", self.env.ref("base.us"))
         self.picking.write(

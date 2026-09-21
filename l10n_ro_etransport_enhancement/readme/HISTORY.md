@@ -1,3 +1,13 @@
+## 19.0.0.9.2 (2026-09-21)
+
+**Fix:** partenerul comercial de pe declarația de dropship rămâne cel ales de
+modul — clientul, pe livrare. Odoo 19 a primit între timp suport nativ pentru
+dropship, iar `_l10n_ro_edi_stock_get_template_data` din nucleu **ignoră**
+`data["partner_id"]` când tipul de operațiune e `dropship`: ia mereu partenerul
+comenzii de achiziție. Codul nostru era neschimbat, dar declarația pleca la ANAF
+cu **furnizorul** în locul clientului, fără nicio eroare. Valoarea se rescrie
+acum după apelul nucleului, împreună cu codul fiscal și codul de țară.
+
 ## 19.0.0.9.1 (2026-09-13)
 
 Teste pentru sursa codului din `codUnitateMasura`. Codul vine din
