@@ -10,13 +10,13 @@
 
 Modulul aduce documentele tipărite din Odoo la forma cerută în România. Pe factură adaugă ce lipsește din raportul standard — prețul fără TVA și valoarea TVA pe fiecare linie, numerotarea liniilor, delegatul și mijlocul de transport, mențiunea legală privind scutirea de semnătură și ștampilă — și tipărește factura în limba companiei, indiferent de limba partenerului.
 
-Pe partea de casierie, același modul produce **chitanța și dispoziția de plată/încasare** direct din plată. Pentru plățile pe jurnal de casă, documentul iese ca formular de casierie complet: codul formularului tipizat, casieria, rândul pentru actul de identitate al beneficiarului și cele trei semnături. Fără semnătura beneficiarului, o dispoziție de plată nu justifică ieșirea de numerar din casă.
+Pe partea de casierie, același modul produce **chitanța și dispoziția de plată/încasare** direct din plată. Pentru plățile pe jurnal de casă, documentul iese ca formular de casierie: codul formularului tipizat, casieria, rândul pentru actul de identitate al beneficiarului, suma în cifre și în litere. Rubricile de semnătură nu se tipăresc — formatul grafic nu mai este impus, iar semnăturile se dau pe exemplarul tipărit.
 
 ## 2. Bază legală și context
 
 - **Factura**: art. 319 din Legea 227/2015 (Codul fiscal) — elementele obligatorii ale facturii; mențiunea privind valabilitatea fără semnătură și ștampilă se sprijină pe art. V alin. (2) din OG 17/2015 și pe art. 319 alin. (29) din Codul fiscal.
-- **Documentele de casă**: OMFP 2634/2015 privind documentele financiar-contabile — **dispoziția de plată/încasare către casierie, cod 14-4-4**, respectiv **chitanța, cod 14-4-1**. Formularele cer numărul, data, beneficiarul, suma în cifre și în litere, motivul și semnăturile.
-- Contextul practic care a produs completarea formularului: la restituirea în numerar a unei mărfi returnate, casieria are nevoie de un document semnat de cel care primește banii. Vezi și modulul de retururi POS, pentru cazurile în care restituirea nu trece printr-o plată contabilă.
+- **Documentele de casă**: OMFP 2634/2015 privind documentele financiar-contabile — **dispoziția de plată/încasare către casierie, cod 14-4-4**, respectiv **chitanța, cod 14-4-1** (chitanța pentru operațiuni în valută are cod 14-4-1/a). Ordinul a transformat aceste documente în formulare **fără regim special**: formatul grafic nu mai este impus, obligatoriu rămâne conținutul minimal — numărul, data, părțile, suma în cifre și în litere, motivul.
+- Contextul practic care a produs completarea formularului: la restituirea în numerar a unei mărfi returnate, casieria are nevoie de un document pe care cel care primește banii semnează de primire — semnătura se dă pe exemplarul tipărit, formularul nu mai poartă rubrici preimprimate. Vezi și modulul de retururi POS, pentru cazurile în care restituirea nu trece printr-o plată contabilă.
 
 ## 3. Utilizatori și roluri
 
@@ -77,7 +77,7 @@ Din **Tipăriți**, alegeți raportul **Invoices in company language**. Document
 
 Din **Tipăriți → Voucher / Payment** se obține dispoziția de plată.
 
-**Găsiți pe ecran**: titlul „Dispoziție de plată", numărul și data, mențiunea **Cod 14-4-4** sub titlu, blocurile **Plătitor** (compania) și **Beneficiar** (persoana care primește banii), rubricile Casieria, Act de identitate, Suma în cifre și în litere, Reprezentând c/v, apoi cele trei semnături — Conducătorul unității, Casier, Am primit suma.
+**Găsiți pe ecran**: titlul „Dispoziție de plată", numărul și data, mențiunea **Cod 14-4-4** sub titlu, blocurile **Plătitor** (compania) și **Beneficiar** (persoana care primește banii), rubricile Casieria, Act de identitate, Suma în cifre și în litere, Reprezentând c/v. Documentul se încheie după acest tabel — nu mai are rubrici de semnătură preimprimate.
 
 **Verificați** că: suma în litere corespunde sumei în cifre, casieria e cea din care ies efectiv banii, iar rândul de act de identitate există pentru completare la casă. Documentul se tipărește și se semnează de beneficiar la primirea banilor.
 
@@ -85,7 +85,7 @@ Din **Tipăriți → Voucher / Payment** se obține dispoziția de plată.
 
 ### Pasul 5 — Tipărirea chitanței / dispoziției de încasare (cod 14-4-1)
 
-Pentru o încasare în numerar, același raport produce **chitanța**, cu mențiunea **Cod 14-4-1**, blocurile Furnizor/Client, rubrica „Primit de la" și semnătura „Am depus suma". Rândul de act de identitate nu se tipărește — se cere doar la plată, unde banii ies din casă.
+Pentru o încasare în numerar, același raport produce **chitanța**, cu mențiunea **Cod 14-4-1**, blocurile Furnizor/Client și rubrica „Primit de la"; cel care aduce banii la casierie apare ca **Plătitor**. Rândul de act de identitate nu se tipărește — se cere doar la plată, unde banii ies din casă.
 
 ![Chitanța pentru încasarea în numerar, cod 14-4-1](screenshots/05_chitanta_incasare.png)
 
@@ -112,7 +112,7 @@ Documentele tipărite sunt justificativele acestor note: factura pentru prima, c
 | `l10n_ro_edi` | transmiterea facturii în SPV; documentul tipărit de aici e pentru arhivă și pentru client | independent |
 
 Ce este automat: alegerea titlului documentului după tipul plății, codul formularului și elementele de casierie pentru jurnalele de casă, suma în litere, limba facturii.
-Ce rămâne manual: completarea delegatului și a mijlocului de transport, completarea actului de identitate pe document la casă, semnăturile.
+Ce rămâne manual: completarea delegatului și a mijlocului de transport, completarea actului de identitate pe document la casă, semnăturile pe exemplarul tipărit.
 
 ## 8. Verificări pentru consultant
 
@@ -121,9 +121,10 @@ Ce rămâne manual: completarea delegatului și a mijlocului de transport, compl
 - [ ] Factura tipărită iese în limba companiei, chiar dacă partenerul are altă limbă.
 - [ ] Pe factură apar: Nr. Crt., preț fără TVA pe linie, valoare TVA pe linie, totalurile pe cotă, mențiunea legală.
 - [ ] Delegatul și mijlocul de transport completate pe factură apar pe document.
-- [ ] Dispoziția de plată pe jurnal de casă are: cod 14-4-4, Plătitor și Beneficiar corect atribuite, casieria, rândul de act de identitate, suma în cifre și în litere, cele trei semnături.
-- [ ] Chitanța pe jurnal de casă are cod 14-4-1 și semnătura „Am depus suma", fără rândul de act de identitate.
-- [ ] Pentru o plată pe jurnal de **bancă**, documentul se tipărește **fără** cod de formular, casierie și semnături — nu este document de casă.
+- [ ] Dispoziția de plată pe jurnal de casă are: cod 14-4-4, Plătitor și Beneficiar corect atribuite, casieria, rândul de act de identitate, suma în cifre și în litere.
+- [ ] Chitanța pe jurnal de casă are cod 14-4-1 și îl arată pe cel care depune banii ca **Plătitor**, fără rândul de act de identitate.
+- [ ] Niciunul dintre cele două documente nu tipărește rubrici de semnătură.
+- [ ] Pentru o plată pe jurnal de **bancă**, documentul se tipărește **fără** cod de formular și fără casierie — nu este document de casă.
 - [ ] Suma în litere corespunde sumei în cifre, inclusiv la valori cu zecimale.
 
 ## 9. Mesaje de eroare frecvente
@@ -133,7 +134,7 @@ Ce rămâne manual: completarea delegatului și a mijlocului de transport, compl
 | Suma în litere apare goală sau raportul crapă la tipărire | Biblioteca `num2words` nu e instalată în mediul Odoo | `pip3 install num2words==0.5.12` și repornire server |
 | Factura tipărită iese în engleză, deși utilizatorul e pe română | Raportul „în limba companiei" citește limba **partenerului companiei**, nu a utilizatorului | Setați limba română pe fișa partenerului companiei |
 | Delegatul nu apare pe documentul tipărit | Opțiunea „Afișează delegatul pe factură" e dezactivată în setări | Activați opțiunea în setările de facturare, per companie |
-| Dispoziția de plată nu are cod de formular, casierie sau semnături | Plata e pe un jurnal de bancă, nu de casă | Corect — elementele de casierie se tipăresc doar pentru jurnale de casă |
+| Dispoziția de plată nu are cod de formular sau casierie | Plata e pe un jurnal de bancă, nu de casă | Corect — elementele de casierie se tipăresc doar pentru jurnale de casă |
 | Rubrica „Casieria" afișează un nume în engleză | Numele jurnalului de casă provine din datele de configurare | Redenumiți jurnalul de casă |
 | Numele taxei apare în engleză pe factură (ex. „VAT collected 21% Goods") | Este denumirea taxei din configurare, nu un text traductibil | Redenumiți taxa în planul de conturi al companiei |
 | Termeni în engleză rămași pe un document, deși `i18n/ro.po` pare complet | Traducerea există, dar `msgid`-ul nu se mai potrivește cu șablonul: acesta a fost reindentat, iar Odoo aplică traducerile prin potrivire exactă, spațiul alb inclus. Nimic nu semnalează problema | Reexportați `.pot` și resincronizați `ro.po` pe forma curentă a `msgid`-urilor |
@@ -145,7 +146,7 @@ Capturile (`readme/screenshots/`) sunt **generate automat** din `tests/test_scre
 1. `01_factura_delegat.png` — factura de client, cu Delegat și Mijloc transport evidențiate în tabul „Alte informații".
 2. `02_factura_tiparita.png` — factura tipărită în limba companiei, cu numerotarea liniilor, TVA pe linie, întocmitorul, delegatul și mențiunea legală.
 3. `03_plata_numerar.png` — plata în numerar înregistrată pe jurnalul de casă.
-4. `04_dispozitie_plata.png` — dispoziția de plată către casierie (cod 14-4-4), cu Plătitor/Beneficiar, act de identitate, suma în litere și cele trei semnături.
+4. `04_dispozitie_plata.png` — dispoziția de plată către casierie (cod 14-4-4), cu Plătitor/Beneficiar, act de identitate și suma în litere.
 5. `05_chitanta_incasare.png` — chitanța pentru încasare (cod 14-4-1), cu „Am depus suma".
 
 Regenerare:
@@ -166,4 +167,4 @@ Regenerare:
 
 ## 11. Observații pentru manual
 
-Păstrați în manual distincția care contează pentru operator: **documentul de casă se tipărește din plată, nu din factură**, iar elementele de formular tipizat (cod, casierie, act de identitate, semnături) apar numai pentru plățile pe jurnal de casă. Pentru restituirile de la casa de marcat, unde nu există o plată contabilă, dispoziția se emite din registrul de dispoziții al modulului de casierie — merită o trimitere explicită, altfel operatorul caută butonul unde nu e.
+Păstrați în manual distincția care contează pentru operator: **documentul de casă se tipărește din plată, nu din factură**, iar elementele de formular tipizat (cod, casierie, act de identitate) apar numai pentru plățile pe jurnal de casă. Pentru restituirile de la casa de marcat, unde nu există o plată contabilă, dispoziția se emite din registrul de dispoziții al modulului de casierie — merită o trimitere explicită, altfel operatorul caută butonul unde nu e.

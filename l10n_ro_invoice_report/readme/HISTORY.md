@@ -1,3 +1,7 @@
+## 19.0.3.4.23 (2026-09-21)
+
+- Cash voucher / payment disposal (14-4-1 / 14-4-4): dropped the signature block (Manager, Cashier, Amount received/deposited) and renamed `Depositor` to `Payer`. The typographic layout of these forms is no longer imposed by OMFP 2634/2015 — only the minimum content is — and the signature lines were never filled in practice.
+
 ## 19.0.3.4.20 (2026-08-31)
 
 - Fix invoice reports with manual cash reconciliations that are not linked to an `account.payment` and therefore do not provide `payment_type` in Odoo's payment widget.
