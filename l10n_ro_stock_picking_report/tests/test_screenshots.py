@@ -182,6 +182,11 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
         cls.picking_cutii = cls._receive_purchase(cls.zahar, 1344.0, 37.70, cls.uom_cutie, partner_ref="F 2026-4418")
         cls.picking_cutii.write({"delegate_id": cls.delegat.id, "mean_transp": "TM 04 MBS"})
 
+        # Stoc în Magazie materiale, sursa livrării, a consumului și a transferului.
+        # Fără el, `action_assign()` nu rezervă nimic, iar mișcările se validează cu
+        # cantitate 0 — tăcut, pentru că scrierea pe un recordset gol de linii nu dă eroare.
+        cls._receive_purchase(cls.faina, 300.0, 3.10, cls.faina.uom_id, partner_ref="F 2026-4419")
+
         # 3. Livrare marcată ca aviz de însoțire (pasul 7)
         cls.picking_aviz = cls._make_internal_picking(
             cls.picking_type_out,
@@ -253,7 +258,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
             picking.move_ids.location_dest_id = location_dest.id
             picking.move_ids.move_line_ids.location_dest_id = location_dest.id
         for move in picking.move_ids:
-            move.move_line_ids.quantity = move.product_uom_qty
+            move.quantity = move.product_uom_qty
         picking.move_ids.picked = True
         picking._action_done()
         return picking
@@ -280,8 +285,10 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
             }
         )
         picking.action_confirm()
+        picking.action_assign()
         for move in picking.move_ids:
-            move.move_line_ids.quantity = move.product_uom_qty
+            move.quantity = move.product_uom_qty
+            assert move.quantity, "mișcarea s-a validat cu cantitate 0 — verificați stocul din seed"
         picking.move_ids.picked = True
         picking._action_done()
         return picking

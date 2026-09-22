@@ -98,7 +98,7 @@ Varianta de NIR **cu preț de vânzare** nu se obține niciodată prin butonul a
 
 ### Pasul 3 — NIR-ul standard (Recepție (NIR), cod 14-3-1A)
 
-**Găsiți pe ecran**, de sus în jos: antetul cu datele companiei și ale furnizorului (CIF, NRC, capital social, adrese); titlul **NIR:** cu numărul transferului și data; blocul **Comanda / Data / În locația**; textul de recepție — „Subsemnații, membri ai comisiei de recepție, am procedat la recepționarea … furnizate de …"; tabelul cu coloanele **Produs · Cantitate · Preț unitar · Valoare · Taxe · Valoare cu TVA**; totalurile; și, la subsol, rubricile **Comisia de recepție** și **Primit în gestiune**.
+**Găsiți pe ecran**, de sus în jos: antetul cu datele companiei și ale furnizorului (CIF, NRC, capital social, adrese); titlul **NIR:** cu numărul transferului și data; blocul **Comanda / Data / În locația** — „Comanda" poartă de fapt Referința furnizorului, nu numărul comenzii de achiziție; textul de recepție — „Subsemnații, membri ai comisiei de recepție, am procedat la recepționarea … furnizate de …"; tabelul cu coloanele **Produs · Cantitate · Preț unitar · Valoare · Taxe · Valoare cu TVA**; totalurile; și, la subsol, rubricile **Comisia de recepție** și **Primit în gestiune**.
 
 **Verificați** că: totalul fără taxe corespunde valorii de pe factura furnizorului; cota de TVA e cea de pe comanda de achiziție, nu cea implicită a produsului; loturile recepționate apar sub denumirea produsului; furnizorul din text e cel real; iar rubrica **„conform documentului nr."** poartă numărul facturii sau al avizului — dacă e goală, lipsește Referința furnizorului de pe comanda de achiziție (vezi pasul 5 din configurare).
 
@@ -149,7 +149,9 @@ Validați recepția ca la Pasul 1.
 
 ### Pasul 7 — Avizul de însoțire a mărfii (cod 14-3-6A)
 
-Livrarea bifată ca **aviz** se tipărește cu titlul **Aviz de însoțire a mărfii** în loc de „Livrare"; restul documentului rămâne același. Raportul **Aviz cu preț** adaugă coloanele de preț și valoare, plus rubricile **Delegat** și **Mijloc de transport** completate la Pasul 1 — singurul document al modulului care le tipărește.
+Livrarea bifată ca **aviz** se tipărește cu titlul **Aviz de însoțire a mărfii** în loc de „Livrare"; restul documentului rămâne același. Raportul **Aviz cu preț** adaugă coloanele de preț și valoare. Rubricile **Delegat** și **Mijloc de transport** completate la Pasul 1 se tipăresc pe **ambele** variante de aviz — și pe cea simplă, cea pe care o alege butonul automat — și sunt singurele documente ale modulului care le poartă.
+
+⚠️ **Fixul de unitate nu acoperă avizul.** Corecția din 19.0.1.3.4, care aduce toate coloanele pe unitatea documentului, s-a făcut pe rapoartele de recepție și de transfer. Pe un aviz cu **unitate de ambalare**, cantitatea încă iese în unitatea de referință a produsului, sub eticheta unității de pe document — aceeași eroare, netratată încă aici. Pe livrările în unitatea de referință (kg/kg) nu se vede.
 
 Pe livrările **fără comandă de vânzare** — aviz simplu, custodie, consignație — prețul nu poate veni de pe o linie de comandă, așa că raportul îl ia din **lista de prețuri a partenerului**, iar dacă nu găsește acolo, din **prețul de listă** al produsului.
 
@@ -257,6 +259,7 @@ Niciunul dintre aceste documente nu intră direct într-o declarație ANAF; ele 
 | Pe NIR, `cantitate × preț unitar` nu dă valoarea afișată | Aceeași familie de erori, pe coloana de cantitate sau pe cea de preț de vânzare (rezolvată în 19.0.1.3.4) | Actualizați modulul; verificați și `stock.propagate_uom` |
 | Rubrica „conform documentului nr." iese necompletată pe NIR | Comanda de achiziție nu are Referință furnizor; modulul suprascrie documentul sursă al recepției cu ea | Completați Referința furnizorului (nr. facturii/avizului) pe comanda de achiziție, înainte de recepție |
 | NIR-ul nu are coloană de „cantitate conform documente", deci nu se pot consemna diferențe | Raportul tipărește o singură coloană de cantitate | Limitare a modulului față de 14-3-1A; documentul de constatare a diferențelor e o dezvoltare |
+| Pe un **aviz** cu unitate de ambalare, cantitatea iese în unitatea de referință | Fixul de unitate din 19.0.1.3.4 acoperă doar rapoartele de recepție și de transfer | Netratat încă pe rapoartele de livrare; pe kg/kg problema nu apare |
 | Unitatea de măsură lipsește de pe toate rapoartele | Utilizatorul nu are grupul `uom.group_uom` | Activați grupul Unități de măsură |
 | Coloanele de taxe nu apar pe NIR, deși produsul are TVA | `taxes_on_reception` e dezactivat pe companie | Reactivați-l pe înregistrarea companiei; modulul nu livrează un ecran de setări pentru el |
 | Butonul **Tipăriți** nu scoate niciodată NIR-ul cu preț de vânzare | Indicatorul „locație de magazin" este dezactivat în modul, deci ramura respectivă nu se activează | Folosiți meniul **Tipăriți → Recepție cu preț de vânzare** |
@@ -268,7 +271,7 @@ Niciunul dintre aceste documente nu intră direct într-o declarație ANAF; ele 
 | Etichetele „Pricelist", „Manager", „Picking Type", „Report", „Start Date", „Show", „Picking cumulative Report", „Cumulative Reception with sale price" apar în engleză | Traducerile lipsesc din `i18n/ro.po` | Completați traducerea sau redenumiți în baza clientului |
 | Raportul de transfer intern crapă cu `ZeroDivisionError` | Versiune anterioară lui 19.0.1.3.1, pe o mișcare fără cantitate cerută | Actualizați modulul |
 | NIR-ul crapă cu `AttributeError: 'stock.picking' object has no attribute 'group_id'` | Versiune anterioară lui 19.0.1.2.10 pe Odoo 19, unde `group_id` a fost înlocuit de `reference_ids` | Actualizați modulul |
-| Titlul documentului rămâne „Aviz" în loc de „Aviz de însoțire a mărfii" | Livrarea nu e bifată ca aviz. Câmpul e declarat chiar în acest modul, deci există întotdeauna — nu e o problemă de module lipsă | Bifați indicatorul de aviz pe livrare |
+| Titlul documentului tipărit rămâne „Livrare" deși e aviz | Livrarea nu e bifată ca aviz — „Aviz" e doar numele raportului din meniu, nu titlul de pe hârtie. Câmpul e declarat chiar în acest modul, deci există întotdeauna — nu e o problemă de module lipsă | Bifați indicatorul de aviz pe livrare |
 | Pe raportul cumulativ nu apare nicio linie | Filtrul ia doar mișcările în stare *Efectuat*, din intervalul și tipul de operațiune alese | Lărgiți intervalul sau verificați tipul de operațiune |
 | Titlul notei de transfer e în engleză (ex. „Internal Transfers") | Titlul tipărește numele tipului de operațiune, care e dată de configurare, nu text traductibil | Redenumiți tipul de operațiune în baza clientului |
 | Documentul cumulativ nu are număr și nu numește niciun furnizor | Raportul adună mișcări de la parteneri diferiți, deci nu are un document sursă unic | Comportament normal; numerotarea dosarului se face în afara Odoo |
@@ -302,7 +305,7 @@ Regenerare — **restrângeți la clasă**, altfel se rescriu capturile tuturor 
 
 ## 11. Observații pentru manual
 
-Trei lucruri merită păstrate explicit în manualul de utilizare, pentru că fără ele operatorul caută unde nu e:
+Patru lucruri merită păstrate explicit în manualul de utilizare, pentru că fără ele operatorul caută unde nu e:
 
 1. **Butonul de tipărire nu e același lucru cu meniul de tipărire.** Butonul alege un singur raport, după tipul transferului; cele șapte rapoarte sunt în meniu. NIR-ul cu preț de vânzare se obține numai din meniu.
 2. **Prețul de vânzare de pe NIR este cel de la data recepției, nu cel de azi.** Este o decizie intenționată, nu o eroare: adaosul înregistrat atunci s-a calculat pe prețul de atunci. Merită o frază în manual, altfel primul gestionar care retipărește un NIR vechi deschide un tichet.
