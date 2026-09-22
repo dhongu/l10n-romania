@@ -151,8 +151,6 @@ Validați recepția ca la Pasul 1.
 
 Livrarea bifată ca **aviz** se tipărește cu titlul **Aviz de însoțire a mărfii** în loc de „Livrare"; restul documentului rămâne același. Raportul **Aviz cu preț** adaugă coloanele de preț și valoare. Rubricile **Delegat** și **Mijloc de transport** completate la Pasul 1 se tipăresc pe **ambele** variante de aviz — și pe cea simplă, cea pe care o alege butonul automat — și sunt singurele documente ale modulului care le poartă.
 
-⚠️ **Fixul de unitate nu acoperă avizul.** Corecția din 19.0.1.3.4, care aduce toate coloanele pe unitatea documentului, s-a făcut pe rapoartele de recepție și de transfer. Pe un aviz cu **unitate de ambalare**, cantitatea încă iese în unitatea de referință a produsului, sub eticheta unității de pe document — aceeași eroare, netratată încă aici. Pe livrările în unitatea de referință (kg/kg) nu se vede.
-
 Pe livrările **fără comandă de vânzare** — aviz simplu, custodie, consignație — prețul nu poate veni de pe o linie de comandă, așa că raportul îl ia din **lista de prețuri a partenerului**, iar dacă nu găsește acolo, din **prețul de listă** al produsului.
 
 **Verificați** că prețul afișat e cel convenit cu clientul, mai ales pe consignație, unde lista de prețuri a partenerului e singura sursă.
@@ -255,11 +253,10 @@ Niciunul dintre aceste documente nu intră direct într-o declarație ANAF; ele 
 | Mesaj / simptom | Cauză probabilă | Remediere |
 |---|---|---|
 | Butonul **Tipăriți** nu apare pe transfer | Butonul e vizibil doar în starea *Efectuat* | Validați transferul |
-| NIR-ul iese cu valoarea de *factorul unității* ori mai mică, deși prețul unitar e corect | Versiune de modul anterioară lui 19.0.1.3.3, pe o bază cu `stock.propagate_uom = 1`: prețul era per unitatea de referință, cantitatea per unitatea documentului | Actualizați modulul la 19.0.1.3.4 sau mai nou |
+| Un document iese cu valoarea de *factorul unității* ori mai mică sau mai mare, deși prețul unitar e corect | Versiune de modul veche, pe o bază cu `stock.propagate_uom = 1`: prețul și cantitatea erau în unități diferite. Recepțiile și transferurile sunt reparate din 19.0.1.3.4, avizul din 19.0.1.3.6 | Actualizați modulul la 19.0.1.3.6 sau mai nou |
 | Pe NIR, `cantitate × preț unitar` nu dă valoarea afișată | Aceeași familie de erori, pe coloana de cantitate sau pe cea de preț de vânzare (rezolvată în 19.0.1.3.4) | Actualizați modulul; verificați și `stock.propagate_uom` |
 | Rubrica „conform documentului nr." iese necompletată pe NIR | Comanda de achiziție nu are Referință furnizor; modulul suprascrie documentul sursă al recepției cu ea | Completați Referința furnizorului (nr. facturii/avizului) pe comanda de achiziție, înainte de recepție |
 | NIR-ul nu are coloană de „cantitate conform documente", deci nu se pot consemna diferențe | Raportul tipărește o singură coloană de cantitate | Limitare a modulului față de 14-3-1A; documentul de constatare a diferențelor e o dezvoltare |
-| Pe un **aviz** cu unitate de ambalare, cantitatea iese în unitatea de referință | Fixul de unitate din 19.0.1.3.4 acoperă doar rapoartele de recepție și de transfer | Netratat încă pe rapoartele de livrare; pe kg/kg problema nu apare |
 | Unitatea de măsură lipsește de pe toate rapoartele | Utilizatorul nu are grupul `uom.group_uom` | Activați grupul Unități de măsură |
 | Coloanele de taxe nu apar pe NIR, deși produsul are TVA | `taxes_on_reception` e dezactivat pe companie | Reactivați-l pe înregistrarea companiei; modulul nu livrează un ecran de setări pentru el |
 | Butonul **Tipăriți** nu scoate niciodată NIR-ul cu preț de vânzare | Indicatorul „locație de magazin" este dezactivat în modul, deci ramura respectivă nu se activează | Folosiți meniul **Tipăriți → Recepție cu preț de vânzare** |

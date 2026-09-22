@@ -30,6 +30,20 @@ class ReportPickingDelivery(models.AbstractModel):
 
     def _get_line(self, move_line):
         res = {"price": 0.0, "amount": 0.0, "tax": 0.0, "amount_tax": 0.0}
+
+        # Ca și pe rapoartele de recepție, tot ce apare pe aviz se exprimă în unitatea
+        # de pe DOCUMENT (`move.product_uom`) — cea tipărită în coloana U/M. Prețul de
+        # listă al produsului e per unitatea de REFERINȚĂ, prețul de pe linia comenzii
+        # de vânzare e per unitatea acelei linii, iar `move.product_qty` e cantitatea
+        # convertită în unitatea de referință. Cei doi factori aduc totul în unitatea
+        # documentului; când unitățile coincid, amândoi sunt 1 și nimic nu se schimbă.
+        uom = move_line.product_uom
+        ref_uom = move_line.product_id.uom_id
+        uom_factor = 1.0
+        if uom and ref_uom:
+            uom_factor = uom._compute_quantity(1, ref_uom, round=False) or 1.0
+        quantity = move_line.quantity or move_line.product_uom_qty or 0.0
+
         if move_line.sale_line_id:
             line = move_line.sale_line_id
 
@@ -39,17 +53,24 @@ class ReportPickingDelivery(models.AbstractModel):
 
             incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
 
+            # prețul de pe linia comenzii e per unitatea ei de măsură, care nu e
+            # neapărat cea de pe mișcare: îl trecem prin unitatea de referință
+            sale_factor = 1.0
+            if line.product_uom_id and ref_uom:
+                sale_factor = line.product_uom_id._compute_quantity(1, ref_uom, round=False) or 1.0
+            price_factor = uom_factor / sale_factor
+
             if line.product_uom_qty != 0:
-                res["price"] = line.price_subtotal / line.product_uom_qty
+                res["price"] = line.price_subtotal / line.product_uom_qty * price_factor
                 if incl_tax:
-                    list_price = line.price_total / line.product_uom_qty
+                    list_price = line.price_total / line.product_uom_qty * price_factor
                 else:
                     list_price = res["price"]
             else:
                 res["price"] = 0.0
                 list_price = 0.0
 
-            taxes_sale = taxes_ids.compute_all(list_price, quantity=move_line.product_qty, product=line.product_id)
+            taxes_sale = taxes_ids.compute_all(list_price, quantity=quantity, product=line.product_id)
 
             res["tax"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
             res["amount"] = taxes_sale["total_excluded"]
@@ -59,14 +80,16 @@ class ReportPickingDelivery(models.AbstractModel):
             # pretul din lista de preturi a partenerului, altfel pretul de lista al produsului
             product = move_line.product_id
             partner = move_line.picking_id.partner_id
-            quantity = move_line.product_qty or move_line.product_uom_qty or 1.0
+            quantity = quantity or 1.0
 
             price = 0.0
             pricelist = partner.property_product_pricelist if partner else False
             if pricelist:
-                price = pricelist._get_product_price(product, quantity, uom=move_line.product_uom)
+                # `uom=` cere prețul direct în unitatea documentului
+                price = pricelist._get_product_price(product, quantity, uom=uom)
             if not price:
-                price = product.list_price
+                # `list_price` e per unitatea de referință
+                price = product.list_price * uom_factor
 
             taxes_ids = product.taxes_id.filtered(lambda tax: tax.company_id == move_line.company_id)
             taxes_sale = taxes_ids.compute_all(price, quantity=quantity, product=product, partner=partner)
