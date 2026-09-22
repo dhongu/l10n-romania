@@ -1,3 +1,17 @@
+## 19.0.1.3.3 (2026-09-22)
+
+- **NIR: sumă greșită când unitatea de pe document diferă de cea de referință.**
+  Prețul de pe mișcarea de stoc (`move.price_unit`) este exprimat în unitatea de
+  referință a produsului, iar cantitatea în unitatea de pe document. Raportul le
+  înmulțea ca atare, deci coloana „Valoare" ieșea mai mică cu exact factorul
+  unității, în timp ce coloana „Preț unitar" — convertită separat, la final —
+  arăta corect. O recepție de 1.344 de cutii a 13 kg, la 2,90 lei/kg, afișa
+  3.897,60 lei în loc de 50.668,80. Conversia se face acum înaintea calculului
+  taxelor, iar cantitatea de rezervă folosește unitatea documentului.
+  Cazul apare doar cu `stock.propagate_uom = 1`; în configurația implicită Odoo
+  convertește mișcarea în unitatea de referință, deci preț și cantitate ajung
+  amândouă în aceeași unitate și eroarea nu se vede.
+
 ## 19.0.1.3.2 (2026-08-15)
 
 - Imp: `stock.picking.delegate_id` is now indexed. The same field is declared in `deltatech_cmr_document`, so the attribute is set in both modules — the last one loaded decides.
