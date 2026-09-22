@@ -125,6 +125,19 @@ class ReportPickingReception(models.AbstractModel):
 
         value = move.value
 
+        # Toate coloanele raportului se exprimă în unitatea de pe DOCUMENT
+        # (`move.product_uom`) — cea în care se face efectiv recepția și care se
+        # tipărește în coloana U/M. Prețurile din Odoo (`move.price_unit`,
+        # `product.list_price`, prețul din lista de prețuri) sunt însă exprimate în
+        # unitatea de REFERINȚĂ a produsului, la fel ca `move.product_qty`.
+        # `uom_factor` = câte unități de referință intră într-o unitate de document
+        # (13 pentru o cutie de 13 kg); îl folosim ca să aducem prețurile în unitatea
+        # documentului, iar cantitățile le luăm mereu din `move.quantity` /
+        # `move.product_uom_qty`, nu din `move.product_qty`.
+        uom_factor = 1.0
+        if move.product_uom and move.product_id.uom_id:
+            uom_factor = move.product_uom._compute_quantity(1, move.product_id.uom_id, round=False) or 1.0
+
         quantity = move.quantity
         if move.quantity:
             res["price"] = value / move.quantity
@@ -159,7 +172,6 @@ class ReportPickingReception(models.AbstractModel):
             # la 2,90 lei/kg, dădea 3.897,60 lei în loc de 50.668,80.
             # Aducem prețul în unitatea documentului ÎNAINTE de calculul
             # taxelor, ca preț și cantitate să fie în aceeași unitate.
-            uom_factor = line.product_uom_id._compute_quantity(1, line.product_id.uom_id, round=False)
             if not res["price"]:
                 res["price"] = move.price_unit * uom_factor
             if not quantity:
@@ -181,13 +193,17 @@ class ReportPickingReception(models.AbstractModel):
             )
 
             res["tax"] = taxes["total_included"] - taxes["total_excluded"]
-            res["amount"] = taxes["total_excluded"] or res["price"] * move.quantity
+            res["amount"] = taxes["total_excluded"] or res["price"] * quantity
             res["amount_tax"] = taxes["total_included"]
 
             taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
+            # prețul de vânzare vine tot în unitatea de referință (list_price și prețul
+            # din lista de prețuri sunt pe `product.uom_id`) — îl aducem în unitatea
+            # documentului, ca „Preț vânzare" să fie comparabil cu „Preț unitar"
             list_price = move.l10n_ro_sale_price or move.product_id.list_price
             if not move.l10n_ro_sale_price and move.location_dest_id.store_pricelist_id:
-                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1, False)
+                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1)
+            list_price = list_price * uom_factor
 
             res["list_price"] = list_price
             # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
@@ -199,7 +215,7 @@ class ReportPickingReception(models.AbstractModel):
             taxes_sale = taxes_ids.compute_all(
                 list_price,
                 currency=currency,
-                quantity=move.product_qty,
+                quantity=quantity,
                 product=move.product_id,
             )
 
@@ -213,21 +229,25 @@ class ReportPickingReception(models.AbstractModel):
         else:
             # receptie fara comanda de aprovizionare
 
+            if not quantity:
+                quantity = move.product_uom_qty
+
             if not res["price"]:
-                res["price"] = abs(move.price_unit)
+                # `move.price_unit` e per unitatea de referință — îl aducem pe unitatea
+                # documentului, ca să se înmulțească cu o cantitate din aceeași unitate
+                res["price"] = abs(move.price_unit) * uom_factor
 
             # obtinere valoare pentru transferuri interne
             if not res["price"] and move.picking_id.picking_type_code == "internal":
-                # product_qty poate fi 0 cand e completata doar cantitatea efectuata (quantity)
-                qty = move.product_qty or move.quantity
-                if qty:
-                    res["price"] = move.value / qty or 1
+                # quantity poate fi 0 cand e completata doar cantitatea ceruta (product_uom_qty)
+                if quantity:
+                    res["price"] = move.value / quantity
 
             taxes_ids = move.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move.company_id)
             taxes = taxes_ids.compute_all(
                 res["price"],
                 currency=currency,
-                quantity=move.product_qty,
+                quantity=quantity,
                 product=move.product_id,
                 partner=move.partner_id,
             )
@@ -243,14 +263,15 @@ class ReportPickingReception(models.AbstractModel):
 
             list_price = move.l10n_ro_sale_price or move.product_id.list_price
             if not move.l10n_ro_sale_price and move.location_dest_id.store_pricelist_id:
-                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1, False)
+                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1)
+            list_price = list_price * uom_factor
 
             res["list_price"] = list_price
 
             taxes_sale = taxes_ids.compute_all(
                 list_price,
                 currency=currency,
-                quantity=move.product_qty,
+                quantity=quantity,
                 product=move.product_id,
             )
 
