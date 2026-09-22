@@ -119,6 +119,108 @@ class TestL10nRoStockPickingReport(TransactionCase):
         totals = handler._get_totals(picking.move_ids)
         self.assertAlmostEqual(totals["amount"], 40.0, places=2)
 
+    def _make_box_uom(self, name="Cutie 13 kg (livrare)"):
+        return self.env["uom.uom"].create(
+            {"name": name, "relative_uom_id": self.product.uom_id.id, "relative_factor": 13.0}
+        )
+
+    def test_delivery_price_with_packaging_uom_without_sale_order(self):
+        """Avizul fără comandă de vânzare trebuie calculat în unitatea documentului.
+
+        `product.list_price` e per unitatea de referință (20 lei/kg), iar cantitatea
+        folosită la calculul taxelor era `move.product_qty` — tot în unitatea de
+        referință — deși prețul din lista de prețuri venea deja per cutie. Amestecul
+        dădea o valoare de 13 ori mai mare decât rândul tipărit, fără nicio eroare.
+        """
+        self.env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", "1")
+        uom_box = self._make_box_uom()
+        picking = self.env["stock.picking"].create(
+            {
+                "picking_type_id": self.picking_type_out.id,
+                "location_id": self.picking_type_out.default_location_src_id.id,
+                "location_dest_id": self.picking_type_out.default_location_dest_id.id,
+                "partner_id": self.partner_customer.id,
+            }
+        )
+        move = self.env["stock.move"].create(
+            {
+                "product_id": self.product.id,
+                "product_uom_qty": 3.0,
+                "product_uom": uom_box.id,
+                "picking_id": picking.id,
+                "location_id": picking.location_id.id,
+                "location_dest_id": picking.location_dest_id.id,
+            }
+        )
+        picking.action_confirm()
+        move.quantity = move.product_uom_qty
+        picking.move_ids.picked = True
+        picking._action_done()
+
+        self.assertAlmostEqual(move.quantity, 3.0)
+        self.assertAlmostEqual(move.product_qty, 39.0)
+
+        handler = self.env["report.l10n_ro_stock_picking_report.report_delivery_price"]
+        res = handler._get_line(move)
+        # 20 lei/kg × 13 kg = 260 lei cutia
+        self.assertAlmostEqual(res["price"], 260.0, places=2, msg="prețul trebuie exprimat per cutie")
+        self.assertAlmostEqual(res["amount"], 780.0, places=2, msg="valoarea = 3 cutii × 260 lei, nu 39 kg × 260 lei")
+        self.assertAlmostEqual(res["amount"], res["price"] * move.quantity, places=2)
+
+    def test_delivery_price_with_packaging_uom_from_sale_order(self):
+        """Și avizul emis dintr-o comandă de vânzare în cutii trebuie să se închidă.
+
+        Prețul venea de pe linia comenzii (per cutie), iar cantitatea din
+        `move.product_qty` (în kg). Testul acoperă ambele configurări de
+        `stock.propagate_uom`, fiindcă ele schimbă unitatea de pe mișcare.
+        """
+        for propagate in ("1", "0"):
+            with self.subTest(propagate_uom=propagate):
+                self.env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", propagate)
+                uom_box = self._make_box_uom(f"Cutie 13 kg (SO {propagate})")
+                order = self.env["sale.order"].create(
+                    {
+                        "partner_id": self.partner_customer.id,
+                        "order_line": [
+                            (
+                                0,
+                                0,
+                                {
+                                    "product_id": self.product.id,
+                                    "product_uom_qty": 3.0,
+                                    "product_uom_id": uom_box.id,
+                                    "price_unit": 260.0,
+                                    "tax_ids": [(6, 0, [])],
+                                },
+                            )
+                        ],
+                    }
+                )
+                order.action_confirm()
+                picking = order.picking_ids[:1]
+                self.assertTrue(picking, "comanda de vânzare nu a generat livrare")
+                for move in picking.move_ids:
+                    move.quantity = move.product_uom_qty
+                picking.move_ids.picked = True
+                picking._action_done()
+
+                move = picking.move_ids[0]
+                handler = self.env["report.l10n_ro_stock_picking_report.report_delivery_price"]
+                res = handler._get_line(move)
+                printed_qty = move.quantity or move.product_uom_qty
+                self.assertAlmostEqual(
+                    res["amount"],
+                    780.0,
+                    places=2,
+                    msg="valoarea avizului trebuie să fie 3 cutii × 260 lei, indiferent de unitatea mișcării",
+                )
+                self.assertAlmostEqual(
+                    res["amount"],
+                    res["price"] * printed_qty,
+                    places=2,
+                    msg="prețul unitar și cantitatea tipărită trebuie să fie în aceeași unitate",
+                )
+
     def test_report_delivery_notice_title(self):
         """Livrarea marcată ca aviz se tipărește cu titlul de aviz de însoțire."""
         if "l10n_ro_notice" not in self.env["stock.picking"]._fields:

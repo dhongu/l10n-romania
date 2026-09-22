@@ -769,7 +769,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-end">
-                                                    <span t-field="move.product_qty" />
+                                                    <span t-esc="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
                                                     <span t-field="move.product_uom" groups="uom.group_uom" />
                                                 </td>
                                                 <td class="text-end">
