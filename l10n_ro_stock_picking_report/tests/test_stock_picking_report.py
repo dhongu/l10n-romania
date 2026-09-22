@@ -229,6 +229,75 @@ class TestL10nRoStockPickingReport(TransactionCase):
                 msg="Raportul trebuie să folosească prețul stocat la recepție (40.0), nu cel curent (80.0)",
             )
 
+    def test_reception_amount_with_packaging_uom(self):
+        """Suma de pe NIR trebuie calculată cu prețul și cantitatea în ACEEAȘI unitate.
+
+        `move.price_unit` vine în unitatea de referință a produsului (lei/kg), iar
+        cantitatea de pe document e în unitatea liniei (cutii). Înmulțite ca atare,
+        NIR-ul ieșea mai mic cu exact factorul unității — la Inedit, o recepție de
+        1.344 de cutii a 13 kg la 2,90 lei/kg afișa 3.897,60 lei în loc de 50.668,80.
+
+        Cazul apare DOAR cu `stock.propagate_uom = 1`. Implicit, Odoo convertește
+        mișcarea în unitatea de referință a produsului (`_adjust_uom_quantities`),
+        deci preț și cantitate ajung amândouă în kg și suma iese corectă — de aceea
+        eroarea a trecut neobservată în configurația standard.
+        """
+        self.env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", "1")
+        uom_kg = self.product.uom_id
+        uom_box = self.env["uom.uom"].create(
+            {
+                "name": "Cutie 13 kg (test)",
+                "relative_uom_id": uom_kg.id,
+                "relative_factor": 13.0,
+            }
+        )
+        purchase = self.env["purchase.order"].create(
+            {
+                "partner_id": self.partner_supplier.id,
+                "order_line": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": self.product.id,
+                            "product_qty": 10.0,
+                            "product_uom_id": uom_box.id,
+                            "price_unit": 37.70,
+                            "tax_ids": [(6, 0, [])],
+                        },
+                    )
+                ],
+            }
+        )
+        purchase.button_confirm()
+        picking = purchase.picking_ids[:1]
+        self.assertTrue(picking, "comanda de achiziție nu a generat recepție")
+        for move in picking.move_ids:
+            move.move_line_ids.quantity = move.product_uom_qty
+        picking.move_ids.picked = True
+        picking._action_done()
+
+        move = picking.move_ids[0]
+        # prețul de pe mișcare e per kg (unitatea de referință)
+        self.assertAlmostEqual(move.price_unit, 37.70 / 13.0, places=4)
+        # cantitatea de pe document e în cutii
+        self.assertAlmostEqual(move.quantity, 10.0)
+        self.assertAlmostEqual(move.product_qty, 130.0)
+
+        res = self.env["report.abstract_report.reception_report"]._get_line(move)
+        self.assertAlmostEqual(
+            res["price"],
+            37.70,
+            places=2,
+            msg="Prețul afișat trebuie să fie per cutie, nu per kg",
+        )
+        self.assertAlmostEqual(
+            res["amount"],
+            377.00,
+            places=2,
+            msg="Suma trebuie să fie 10 cutii × 37,70 lei, nu 10 × 2,90",
+        )
+
     def test_sale_price_not_set_for_outgoing(self):
         """l10n_ro_sale_price nu trebuie populat pentru livrări (outgoing)."""
         self.product.list_price = 50.0
