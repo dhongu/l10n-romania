@@ -28,6 +28,6 @@ class StockMove(models.Model):
             if move.picking_id.picking_type_code == "incoming" and not move.l10n_ro_sale_price:
                 list_price = move.product_id.list_price
                 if move.location_dest_id.store_pricelist_id:
-                    list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1, False)
+                    list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1)
                 move.l10n_ro_sale_price = list_price
         return res
