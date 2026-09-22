@@ -1,3 +1,19 @@
+## 19.0.1.3.4 (2026-09-22)
+
+- **NIR: cantitatea și prețul de vânzare rămâneau în unitatea de referință.**
+  Continuarea fixului din 19.0.1.3.3, care adusese doar prețul de achiziție pe
+  unitatea documentului. Mai rămâneau trei locuri în aceeași familie de erori:
+  coloana „Cantitate" tipărea `move.product_qty` (cantitatea convertită în unitatea
+  de referință) etichetată cu unitatea documentului — recepția de 10 cutii a 13 kg
+  se citea „130 Cutie × 37,70 = 377,00", cu valoarea corectă lângă o cantitate care
+  nu se potrivea cu ea; coloana „Preț vânzare" rămânea per kg lângă un preț de
+  achiziție per cutie; iar recepțiile **fără comandă de achiziție** (inclusiv nota
+  de transfer) înmulțeau un preț per unitate de document cu `move.product_qty`.
+  Acum toate coloanele se exprimă în unitatea de pe document. Ca și înainte, cazul
+  apare doar cu `stock.propagate_uom = 1`.
+  Rapoartele de livrare (`report_delivery_price`) au aceeași problemă la calculul
+  din comanda de vânzare — se tratează separat.
+
 ## 19.0.1.3.3 (2026-09-22)
 
 - **NIR: sumă greșită când unitatea de pe document diferă de cea de referință.**
