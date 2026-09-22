@@ -150,10 +150,20 @@ class ReportPickingReception(models.AbstractModel):
             #  confirmarea transferului pentru a se actualiza cursul valutar !!
             # res["price"] = move.price_unit  # pretul caculat la genereare miscarii
 
+            # `move.price_unit` este exprimat în unitatea de REFERINȚĂ a
+            # produsului — în `stock.move` valoarea se calculează ca
+            # `product_qty * price_unit` — în timp ce `quantity` de mai jos e
+            # în unitatea de pe document (`move.quantity` se însumează în
+            # `move.product_uom`). Înmulțite ca atare, suma iese greșită cu
+            # exact factorul unității: o recepție de 1.344 de cutii a 13 kg,
+            # la 2,90 lei/kg, dădea 3.897,60 lei în loc de 50.668,80.
+            # Aducem prețul în unitatea documentului ÎNAINTE de calculul
+            # taxelor, ca preț și cantitate să fie în aceeași unitate.
+            uom_factor = line.product_uom_id._compute_quantity(1, line.product_id.uom_id, round=False)
             if not res["price"]:
-                res["price"] = move.price_unit
+                res["price"] = move.price_unit * uom_factor
             if not quantity:
-                quantity = move.product_qty
+                quantity = move.product_uom_qty
             # la loturi nu este completat move_line.price_unit
             # if move_line.price_unit == 0:
             #     if move_line.remaining_qty != 0:
@@ -196,8 +206,6 @@ class ReportPickingReception(models.AbstractModel):
             res["amount_sale"] = taxes_sale["total_excluded"]
             res["tax_sale"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
             res["amount_tax_sale"] = taxes_sale["total_included"]
-            #  conversie pret din pretul din unitatea de masura de baza in pret in unitatea de masura din document
-            res["price"] = res["price"] * line.product_uom_id._compute_quantity(1, line.product_id.uom_id)
             if res["amount_tax"] != 0.0:
                 res["margin"] = 100 * (taxes_sale["total_excluded"] - res["amount"]) / res["amount"]
             else:
