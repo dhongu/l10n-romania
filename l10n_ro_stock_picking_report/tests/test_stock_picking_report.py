@@ -430,6 +430,38 @@ class TestL10nRoStockPickingReport(TransactionCase):
         )
         self.assertAlmostEqual(res["amount"], res["price"] * move.quantity, places=2)
 
+    def test_reception_into_location_with_store_pricelist(self):
+        """Recepția într-o locație cu listă de prețuri nu trebuie să crape.
+
+        Apelul `_get_product_price(product, 1, False)` păstra al treilea argument
+        pozițional din API-ul vechi (partenerul). În Odoo 19 semnătura nu îl mai
+        acceptă, deci atât validarea recepției (`_action_done`) cât și randarea
+        raportului cădeau cu `TypeError: _compute_price_rule() takes 3 positional
+        arguments but 4 were given`.
+        """
+        pricelist = self.env["product.pricelist"].create(
+            {"name": "Preț raft magazin", "currency_id": self.env.company.currency_id.id}
+        )
+        self.env["product.pricelist.item"].create(
+            {
+                "pricelist_id": pricelist.id,
+                "applied_on": "0_product_variant",
+                "product_id": self.product.id,
+                "compute_price": "fixed",
+                "fixed_price": 33.0,
+            }
+        )
+        self.picking_type_in.default_location_dest_id.store_pricelist_id = pricelist.id
+        try:
+            picking = self._create_picking(self.picking_type_in, qty=2.0, partner=self.partner_supplier)
+            move = picking.move_ids[0]
+            # prețul de vânzare înghețat vine din lista de prețuri a locației, nu din list_price
+            self.assertAlmostEqual(move.l10n_ro_sale_price, 33.0, places=2)
+            html = self._render_report_html("l10n_ro_stock_picking_report.action_report_reception_sale_price", picking)
+            self.assertIn("Sale price", html)
+        finally:
+            self.picking_type_in.default_location_dest_id.store_pricelist_id = False
+
     def test_sale_price_not_set_for_outgoing(self):
         """l10n_ro_sale_price nu trebuie populat pentru livrări (outgoing)."""
         self.product.list_price = 50.0
