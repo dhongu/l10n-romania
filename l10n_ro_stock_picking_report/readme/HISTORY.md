@@ -1,3 +1,16 @@
+## 19.0.1.3.6 (2026-09-22)
+
+- **Avizul: aceeași eroare de unitate ca NIR-ul, acum închisă.** Fixul din 19.0.1.3.4
+  acoperise doar rapoartele de recepție și de transfer; `report_delivery_price`
+  rămăsese cu prețul și cantitatea în unități diferite. Pe ramura cu comandă de
+  vânzare prețul venea per unitatea liniei de comandă, iar cantitatea din
+  `move.product_qty`, în unitatea de referință; pe ramura fără comandă, prețul din
+  lista de prețuri venea deja per unitatea documentului, dar `product.list_price`
+  (folosit ca rezervă) e per unitatea de referință, iar cantitatea tot de acolo.
+  O livrare de 3 cutii a 13 kg la 260 lei cutia ieșea cu 10.140 lei în loc de 780.
+  Acum toate coloanele avizului se exprimă în unitatea de pe document, iar celula
+  de cantitate tipărește cantitatea mișcată, nu pe cea convertită.
+
 ## 19.0.1.3.5 (2026-09-22)
 
 - **Crash: recepția într-o locație cu listă de prețuri.** `_get_product_price` era
