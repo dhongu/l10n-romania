@@ -10,10 +10,14 @@ from odoo import models
 from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.account_edi_ubl_cii.models.account_edi_common import FloatFmt
+from odoo.addons.l10n_ro_edi.models.account_edi_xml_ubl_ciusro import SECTOR_RO_CODES, get_formatted_sector_ro
 
 _logger = logging.getLogger(__name__)
 
-DEFAULT_VAT = "0000000000000"
+# Valori puse in XML (nu pe partener) pentru persoanele fizice din Romania fara
+# strada, respectiv din Bucuresti fara sector: CIUS-RO le cere obligatoriu.
+DEFAULT_STREET = "Principala"
+DEFAULT_BUCHAREST_SECTOR = "SECTOR1"
 
 # Limitele CIUS-RO de lungime maxima impuse de schematronul ANAF (regulile
 # BR-RO-L020 .. BR-RO-L1000). Valorile sunt numar de caractere Unicode, ca in
@@ -139,10 +143,6 @@ NOTE_MAX_LEN = 300  # BR-RO-L300
 
 # Alias pastrat pentru codul si testele care citeau limita individual.
 PAYMENT_ID_MAX_LEN = PAYMENT_MEANS_LIMITS[("cbc:PaymentID",)].limit
-
-
-def _has_vat(vat):
-    return bool(vat and len(vat) > 1)
 
 
 class AccountEdiUBL(models.AbstractModel):
@@ -483,27 +483,32 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             line_node["cbc:InvoicedQuantity"]["unitCode"] = replace_unit_uom
         return res
 
-    def _export_invoice_constraints(self, invoice, vals):
-        """New helper"""
-        partner = invoice.commercial_partner_id
+    @staticmethod
+    def _l10n_ro_is_person(partner):
+        return partner.country_id.code == "RO" and not partner.commercial_partner_id.is_company
 
-        if partner.country_id.code == "RO" and not partner.is_company:
-            # if not partner.vat:
-            #     partner.with_context(no_vat_validation=True).write({"vat": "0000000000000"})
+    def _ubl_get_partner_address_node(self, vals, partner):
+        # EXTENDS account.edi.xml.ubl_ro
+        # Persoanele fizice pleaca cu adresa completata in XML, fara sa scriem pe
+        # partener: exportul ruleaza si din cron, unde nu exista rollback.
+        node = super()._ubl_get_partner_address_node(vals, partner)
+        if self._l10n_ro_is_person(partner):
             if not partner.street:
-                partner.write({"street": "Principala"})
+                node["cbc:StreetName"]["_text"] = DEFAULT_STREET
+            if partner.state_id.code == "B" and get_formatted_sector_ro(partner.city or "") not in SECTOR_RO_CODES:
+                node["cbc:CityName"]["_text"] = DEFAULT_BUCHAREST_SECTOR
+        return node
 
-            if partner.state_id and partner.state_id.code == "B":
-                if not partner.city:
-                    partner.write({"city": "SECTOR1"})
-                if "SECTOR" not in partner.city.upper():
-                    partner.write({"city": "SECTOR1"})
-
+    def _export_invoice_constraints(self, invoice, vals):
+        # EXTENDS account.edi.xml.ubl_ro
         constraints = super()._export_invoice_constraints(invoice, vals)
-
-        if not partner.is_company:
-            constraints.pop("ciusro_customer_tax_identifier_required", False)
-
+        customer = vals["customer"]
+        if self._l10n_ro_is_person(customer):
+            # Completate in XML de _ubl_get_partner_address_node.
+            constraints.pop("ciusro_customer_street_required", None)
+            if customer.state_id.code == "B":
+                constraints.pop("ciusro_customer_city_required", None)
+                constraints.pop("ciusro_customer_invalid_city_name", None)
         return constraints
 
 
@@ -579,8 +584,6 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         # EXTENDS account.edi.xml.ubl_bis3, for boolean not iterable error
         partner = vals["party_vals"]["partner"]
         commercial_partner = partner.commercial_partner_id
-        if not _has_vat(commercial_partner.vat) and not commercial_partner.is_company:
-            commercial_partner.company_registry = DEFAULT_VAT
         res = super()._ubl_add_accounting_customer_party_tax_scheme_nodes(vals)
         if vals["party_node"]["cac:PartyTaxScheme"]:
             if (

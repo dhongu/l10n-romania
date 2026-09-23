@@ -1,3 +1,20 @@
+## 19.0.0.5.3 (2026-09-23)
+
+- **Exportul e-Factura nu mai modifică partenerul.** Pentru persoanele fizice din
+  România, exportul XML scria pe partener strada „Principala”, orașul „SECTOR1”
+  (București fără sector) și `company_registry = 0000000000000`. Din cron-ul de
+  trimitere (fără rollback) valorile rămâneau definitiv în bază și ascundeau
+  datele lipsă. În plus, strada se scria abia după construirea XML-ului, așa că
+  prima trimitere pleca fără `cbc:StreetName`.
+  - Valorile implicite se pun acum direct în XML (`_ubl_get_partner_address_node`),
+    iar partenerul rămâne neatins.
+  - Constrângerile CIUS-RO de stradă/oraș se relaxează doar pentru persoanele
+    fizice din România; firmele fără stradă sunt oprite în continuare.
+  - Eliminat `pop("ciusro_customer_tax_identifier_required")`: constrângerea nu
+    mai există în `l10n_ro_edi` pe 19.0. `0000000000000` pentru clienții fără
+    CUI îl pune `l10n_ro_edi`.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
 ## 19.0.0.5.2 (2026-09-23)
 
 - **Facturile din POS pleacă din nou în e-Factura cu tipul 751.** Pe 18.0 modulul
