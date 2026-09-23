@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:82dad9fd93fb19748471db3f4ba19840a80f821af9ff77805380aea4e6d1276b
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_efactura_enhancement"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Production/Stable" src="https://img.shields.io/badge/maturity-Production%2FStable-green.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_efactura_enhancement"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <div class="section" id="overview">
 <h1>Overview</h1>
 <p>The l10n_ro_efactura_enhancement module extends the standard Romanian
@@ -380,99 +380,551 @@ specific business needs for Romanian fiscal compliance.</p>
 <div class="section" id="key-features">
 <h1>Key Features</h1>
 <ul class="simple">
-<li>Automatic completion with 13 zeros for individual persons (physical
-persons) in the VAT field</li>
-<li>Ability to retransmit an invoice to the e-Factura system</li>
-<li>Configurable system parameters:<ul>
-<li><ul class="first">
-<li>Controls whether to include embedded PDF in the e-invoice
-(Default: True) <tt class="docutils literal">efactura.embed_pdf</tt></li>
+<li><strong>Automatic completion with 13 zeros</strong> for individual persons
+(physical persons) in the VAT field for e-invoice generation.</li>
+<li><strong>Enhanced Address Validation</strong>: Automatically checks that Romanian
+partners have a country, state, city, and street defined before
+posting an invoice.</li>
+<li><strong>EDI Format Suggestion</strong>: Automatically suggests the <tt class="docutils literal">ciusro</tt>
+format for Romanian partners.</li>
+<li><strong>Automated e-Invoice Operations</strong>:<ul>
+<li>Cron job for <strong>automatic sending</strong> of posted invoices to SPV.</li>
+<li>Cron job for <strong>fetching status</strong> updates from SPV for sent invoices.</li>
+<li><strong>Server action “Trimite in SPV”</strong>: Allows sending selected invoices
+directly to SPV from the invoice list view, without triggering email
+sending.</li>
+<li><strong>Configuration option</strong>: A setting in the Accounting configuration
+page controls whether the automatic SPV cron job suppresses email
+sending (sends only to SPV).</li>
+<li><strong>Configuration option</strong>: A per-company setting
+(<tt class="docutils literal">Nu importa automat facturile primite din SPV</tt>) lets you skip the
+native “E-Factura: Synchronize with ANAF” auto-creation of received
+vendor bills, while keeping the sent-invoice status synchronization
+(accepted/refused) intact. Enabled by default for newly created
+companies, since the reference flow is the bill entered from the
+purchase order and the parallel draft would duplicate it; existing
+companies keep their stored value. Untick it to restore the native
+auto-import.</li>
 </ul>
 </li>
-<li><ul class="first">
-<li>Controls whether to clean the “/” character from invoice names in
-the ID tag (Default: False) <tt class="docutils literal">efactura.clean_name</tt></li>
+<li><strong>Data Truncation and Sanitization</strong>:<ul>
+<li>Truncates product names to 100 characters and descriptions to 200
+characters to ensure compliance with UBL standards.</li>
+<li>Truncates notes to 300 characters.</li>
+<li>Truncates order references and despatch advice to 200 characters.</li>
 </ul>
 </li>
-<li><ul class="first">
-<li>Controls whether to include all banks with l10n_ro_print_report
-and in the invoice currency (Default: False)
-<tt class="docutils literal">efactura.get_all_banks</tt></li>
+<li><strong>POS Integration</strong>: Automatically changes the document type code to
+751 (Specialised Invoice) for invoices originating from Point of Sale.</li>
+<li><strong>Configurable System Parameters</strong>:<ul>
+<li><tt class="docutils literal">efactura.embed_pdf</tt>: Controls whether to include the embedded PDF
+in the e-invoice (Default: True).</li>
+<li><tt class="docutils literal">efactura.use_line_description</tt>: If enabled, uses the invoice line
+description instead of the product name/description in the e-invoice
+(Default: False).</li>
+<li><tt class="docutils literal">efactura.replace_unit_uom</tt>: Allows specifying a replacement unit
+code for the standard ‘C62’ unit (Default: False).</li>
+<li><tt class="docutils literal">efactura.get_all_banks</tt>: If enabled, includes all banks marked
+with <tt class="docutils literal">l10n_ro_print_report</tt> that match the invoice currency
+(Default: False).</li>
 </ul>
 </li>
-</ul>
-</li>
+<li><strong>Line Length Tracking</strong>: Adds computed fields on invoice lines to
+track the length of descriptions and product names, helping users
+identify potential truncation issues.</li>
 </ul>
 </div>
 <div class="section" id="technical-implementation">
 <h1>Technical Implementation</h1>
-<p>The module builds upon the standard Romanian localization and enhances
-the e-Factura integration with additional configuration options and data
-handling improvements.</p>
+<p>The module inherits and extends several base Odoo and Romanian
+localization models:</p>
+<ul class="simple">
+<li><tt class="docutils literal">account.move</tt>: Adds validation, cron jobs, and POS type handling.</li>
+<li><tt class="docutils literal">account.edi.xml.ubl_ro</tt>: Enhances UBL generation with custom logic
+for addresses, product descriptions, and multi-bank support.</li>
+<li><tt class="docutils literal">res.partner</tt>: Overrides the EDI format suggestion for Romanian
+entities.</li>
+<li><tt class="docutils literal">account.move.line</tt>: Adds UI helpers for label length.</li>
+</ul>
 </div>
 <div class="section" id="business-benefits">
 <h1>Business Benefits</h1>
 <ul class="simple">
-<li>Improved compliance with Romanian fiscal requirements</li>
-<li>Enhanced flexibility in e-invoice generation and transmission</li>
-<li>Better handling of special cases like individual customers without VAT
-numbers</li>
-<li>Support for retransmission of invoices when needed</li>
+<li><strong>Improved Compliance</strong>: Prevents errors by validating mandatory
+address fields for Romanian fiscal reporting.</li>
+<li><strong>Automation</strong>: Reduces manual effort by automatically transmitting
+and tracking e-invoices.</li>
+<li><strong>Flexibility</strong>: Provides granular control over how product
+information and unit codes are mapped to the e-invoice.</li>
+<li><strong>UBL Stability</strong>: Ensures generated XML files remain within character
+limit constraints for various fields.</li>
 </ul>
 </div>
 <div class="section" id="usage">
 <h1>Usage</h1>
 <p>After installation, the module automatically enhances the e-Factura
 functionality. System parameters can be configured in the technical
-settings to adjust behavior according to specific business needs. This
-module is part of the Romanian localization suite developed by Terrabit.</p>
-<p>Features:</p>
+settings (<tt class="docutils literal">Settings &gt; Technical &gt; Parameters &gt; System Parameters</tt>) to
+adjust behavior according to specific business needs. This module is
+part of the Romanian localization suite developed by Terrabit.</p>
+<p><strong>Table of contents</strong></p>
+</div>
+<div class="section" id="known-issues-roadmap">
+<h1>Known issues / Roadmap</h1>
+<div class="section" id="known-bugs-to-fix">
+<h2>Known Bugs to Fix</h2>
 <ul class="simple">
-<li>Types can be defined for records sale.order, purchase.order,
-account.move</li>
-<li>If a model has no types defined, the type field will not be displayed</li>
-<li>completare automata cu 13 de zero pt persane fizice</li>
-<li>retransmiterea unei facturi</li>
-<li>parametri sistem:<ul>
-<li>“efactura.embed_pdf” - daca pune sau nu embedded pdf. Default pe
-True</li>
-<li>“efactura.clean_name” - daca curata caracterul “/” din numele
-facturii in tag-ul de ID. Default pe False</li>
-<li>“efactura.get_all_banks” - daca pune toate bancile cu
-l10n_ro_print_report si in valuta facturii. Default pe False</li>
+<li><strong>Missing system parameter defaults</strong>: <tt class="docutils literal">efactura.get_all_banks</tt> and
+<tt class="docutils literal">efactura.replace_unit_uom</tt> are used in the code but have no default
+entries in <tt class="docutils literal">data/ir_config_parameter.xml</tt>. Add records with
+<tt class="docutils literal">False</tt> as default value.</li>
+</ul>
+</div>
+<div class="section" id="fixed-bugs">
+<h2>Fixed Bugs</h2>
+<ul class="simple">
+<li>✅ <strong>``_get_address_node`` tuple bug</strong> <em>(v18.0.0.2.7)</em>: Line 41 in
+<tt class="docutils literal">models/account_edi_xml_cius_ro.py</tt> was assigning a tuple
+<tt class="docutils literal"><span class="pre">({&quot;_text&quot;:</span> <span class="pre">&quot;Principala&quot;},)</span></tt> instead of a dict
+<tt class="docutils literal">{&quot;_text&quot;: &quot;Principala&quot;}</tt>. Caused <tt class="docutils literal">TypeError</tt> during XML
+serialization for partners without a street address.</li>
+<li>✅ <strong>``_ubl_add_accounting_supplier_party_legal_entity_nodes`` wrong
+super call</strong> <em>(v18.0.0.2.7)</em>: Was calling
+<tt class="docutils literal"><span class="pre">super()._ubl_add_accounting_supplier_party_tax_scheme_nodes(vals)</span></tt>
+instead of
+<tt class="docutils literal"><span class="pre">super()._ubl_add_accounting_supplier_party_legal_entity_nodes(vals)</span></tt>.
+When the supplier had no <tt class="docutils literal">nrc</tt>, the <tt class="docutils literal">cac:PartyLegalEntity</tt> node
+was omitted from the XML, producing an invalid e-invoice.</li>
+<li>✅ <strong>Missing company filter in cron auto-send</strong> <em>(v18.0.0.2.7)</em>: The
+<tt class="docutils literal">invoice_sending_failed</tt> domain in <tt class="docutils literal">_cron_l10n_ro_edi_auto_send</tt>
+was not filtering by <tt class="docutils literal">company_id</tt>, causing invoices from all
+companies to be collected instead of only the current company in the
+loop.</li>
+</ul>
+</div>
+<div class="section" id="planned-improvements">
+<h2>Planned Improvements</h2>
+<div class="section" id="dashboard-operational-efactura-l10n-ro-efactura-dashboard">
+<h3>Dashboard operațional eFactura (<tt class="docutils literal">l10n.ro.efactura.dashboard</tt>)</h3>
+<p>Obiectiv: pagină dedicată în meniul Accounting → Rapoarte → eFactura
+Dashboard care oferă o vedere rapidă a stării trimiterilor SPV cu
+navigare directă la liste filtrate.</p>
+<p>Funcționalități dorite:</p>
+<ul class="simple">
+<li><strong>Stat buttons</strong> pentru fiecare stare SPV:<ul>
+<li><em>De trimis</em> — facturi confirmate fără <tt class="docutils literal">l10n_ro_edi_state</tt> (state
+<tt class="docutils literal">False</tt>)</li>
+<li><em>Trimise (în așteptare)</em> — <tt class="docutils literal">invoice_sent</tt>, trimise dar
+neconfirmate încă de SPV</li>
+<li><em>Neindexate</em> — <tt class="docutils literal">invoice_not_indexed</tt>, acceptate dar neindexate în
+portalul ANAF</li>
+<li><em>Validate</em> — <tt class="docutils literal">invoice_validated</tt>, acceptate și indexate cu succes</li>
+<li><em>Refuzate</em> — <tt class="docutils literal">invoice_refused</tt>, respinse de SPV</li>
+<li><em>Eroare trimitere</em> — <tt class="docutils literal">invoice_sending_failed</tt> pe documentul EDI</li>
+</ul>
+</li>
+<li><strong>Click pe orice buton</strong> deschide lista facturilor filtrate pe acea
+stare</li>
+<li><strong>Selector companie</strong> pentru multi-company</li>
+<li><strong>Acces</strong>: grupurile <tt class="docutils literal">account.group_account_invoice</tt> și
+<tt class="docutils literal">account.group_account_manager</tt></li>
+</ul>
+<p>Probleme tehnice identificate și rezolvate (de re-activat după testare):</p>
+<ul class="simple">
+<li>View structurat cu <tt class="docutils literal">oe_button_box</tt> ca prim copil al <tt class="docutils literal">&lt;sheet&gt;</tt>
+(standard Odoo 19)</li>
+<li>Server action returnează <tt class="docutils literal">target: &quot;current&quot;</tt> în loc de <tt class="docutils literal">&quot;main&quot;</tt>
+(compatibil TransientModel)</li>
+<li>Atribute deprecate <tt class="docutils literal">create/edit/delete</tt> eliminate din <tt class="docutils literal">&lt;form&gt;</tt></li>
+<li>Access rules adăugate în <tt class="docutils literal">security/ir.model.access.csv</tt></li>
+</ul>
+<p>Codul modelului și view-ului este prezent dar <strong>dezactivat temporar</strong>
+(<tt class="docutils literal">efactura_dashboard.py</tt>, <tt class="docutils literal">views/efactura_dashboard_views.xml</tt>) — de
+re-activat după validare pe o instanță live.</p>
+</div>
+<div class="section" id="alte-imbunatatiri-planificate">
+<h3>Alte îmbunătățiri planificate</h3>
+<ul class="simple">
+<li><strong>Re-enable wizard view</strong>: Uncomment
+<tt class="docutils literal">wizard/account_move_send_views.xml</tt> in the manifest once the resend
+UI flow is finalized for Odoo 18 (see TODO in
+<tt class="docutils literal">wizard/account_move_send.py</tt>).</li>
+<li><strong>UBL integration tests</strong>: Add test cases covering XML generation for
+invoices with and without street, with and without <tt class="docutils literal">nrc</tt>, and with
+<tt class="docutils literal">efactura.get_all_banks</tt> enabled, to prevent regressions in the UBL
+override methods.</li>
+<li><strong>Multi-company cron robustness</strong>: Review both cron methods
+(<tt class="docutils literal">_cron_l10n_ro_edi_auto_send</tt> and
+<tt class="docutils literal">_cron_l10n_ro_edi_fetch_status</tt>) for correct company isolation
+throughout all domain searches.</li>
+<li><strong>English code comments</strong>: Translate remaining Romanian inline
+comments in <tt class="docutils literal">models/account_move.py</tt> to English for consistency with
+the project convention.</li>
+<li><strong>``efactura.replace_unit_uom`` UI</strong>: Expose the <tt class="docutils literal">replace_unit_uom</tt>
+system parameter in the Accounting configuration page alongside the
+existing <tt class="docutils literal">l10n_ro_spv_cron_no_email</tt> setting.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="changelog">
+<h1>Changelog</h1>
+<div class="section" id="section-1">
+<h2>19.0.0.4.4 (2026-09-10)</h2>
+<ul class="simple">
+<li><strong>Trunchiere referință aviz de expediție (BT-16) la 200 de
+caractere.</strong> Modulul <tt class="docutils literal">deltatech_account_edi_ubl_advice</tt> (când e
+instalat) concatenează în <tt class="docutils literal">cac:DespatchDocumentReference/cbc:ID</tt>
+numele tuturor livrărilor (pickingurilor) facturate, fără nicio limită
+de lungime. Pe comenzi cu multe livrări parțiale acumulate în timp
+(tichet 9429), lista depășea cele 200 de caractere admise de ANAF
+pentru BT-16, iar factura era respinsă la transmitere cu
+<strong>BR-RO-L200</strong>.<ul>
+<li>Suprascriem <tt class="docutils literal">_get_invoice_node</tt> (nu
+<tt class="docutils literal">_add_invoice_header_nodes</tt>), ca fix-ul să nu depindă de ordinea
+de încărcare față de <tt class="docutils literal">deltatech_account_edi_ubl_advice</tt>: la
+momentul în care <tt class="docutils literal">super()</tt> se termină, <tt class="docutils literal">document_node</tt> e deja
+complet construit. Dacă acel modul nu e instalat, nodul lipsește și
+nu se face nimic — zero dependență nouă.</li>
+<li>Trunchierea păstrează cât mai multe referințe întregi de picking, în
+loc să taie în mijlocul unui nume (simetric cu
+<tt class="docutils literal">_l10n_ro_shorten_payment_identifier</tt> de la BT-13/14).</li>
+<li>Doar cod Python, nu necesită actualizarea modulului.</li>
 </ul>
 </li>
 </ul>
-<p><strong>Table of contents</strong></p>
-<div class="contents local topic" id="contents">
+</div>
+<div class="section" id="section-2">
+<h2>19.0.0.4.3 (2026-09-09)</h2>
 <ul class="simple">
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-1">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-2">Credits</a></li>
+<li><strong>Limita reală pentru Avizul de plată (BT-83) e 140 de caractere, nu
+200.</strong> Tichet #9441. Trunchierea livrată la #9369 tăia
+<tt class="docutils literal">cbc:PaymentID</tt> / <tt class="docutils literal">cbc:InstructionID</tt> la 200 de caractere, dar
+limita impusă de CIUS-RO pentru BT-83 este 140, verificată de
+schematronul ANAF prin regula <strong>BR-RO-L140</strong>. Cifra 200 fusese
+preluată din corespondența tichetului #9369, nu din răspunsul ANAF —
+facturile lungi rămâneau respinse și după trunchiere (11 refuzuri
+BR-RO-L140 între 01.09 și 09.09.2026).<ul>
+<li>Testele ancorează acum limita în regula de schematron și reproduc
+referința reală respinsă (43 de comenzi pe PTCDRO20689).</li>
+</ul>
+</li>
 </ul>
 </div>
+<div class="section" id="section-3">
+<h2>19.0.0.4.2 (2026-09-08)</h2>
+<ul class="simple">
+<li><strong>Fix: ``cbc:PrepaidAmount`` / ``cbc:PayableAmount`` nu mai depind de
+plățile alocate în Odoo.</strong> Cât timp factura nu e stinsă, XML-ul trimis
+la ANAF declară din nou <tt class="docutils literal">PrepaidAmount = 0</tt> și <tt class="docutils literal">PayableAmount</tt> =
+totalul facturii. E comportamentul cerut de livrările cu plata la
+ramburs: încasarea se înregistrează în Odoo pe fluxul de curierat, dar
+factura trebuie să ceară tot totalul.<ul>
+<li><strong>De ce se pierduse</strong>: logica stătea pe
+<tt class="docutils literal">_add_invoice_monetary_total_vals</tt>, un hook care în Odoo 19 e
+<tt class="docutils literal">pass</tt> în standard și nu mai e apelat de nimeni. <tt class="docutils literal">super()</tt>
+mergea, deci nu apărea nicio eroare – valorile pur și simplu nu
+ajungeau în XML. Am mutat-o pe hook-ul real,
+<tt class="docutils literal">_ubl_add_legal_monetary_total_prepaid_payable_amount_node</tt>.</li>
+<li><strong>Impact practic</strong>: facturile parțial încasate (și cele în „în curs
+de plată”) plecau cu o sumă de plată mai mică decât cea datorată de
+client. Facturile complet neîncasate nu erau afectate, fiindcă acolo
+standardul ajunge la aceleași valori.</li>
+<li>Facturile stinse rămân pe comportamentul standard EN16931 (BT-115 =
+BT-112 − BT-113).</li>
+<li>Test nou (<tt class="docutils literal">tests/test_monetary_total_payable.py</tt>) care verifică
+valorile în XML-ul generat, nu metoda în izolare – exact regresia
+care a trecut neobservată de la migrarea pe 19.0.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-4">
+<h2>19.0.0.4.0 (2026-08-21)</h2>
+<ul class="simple">
+<li><strong>Importul automat al facturilor primite din SPV este acum oprit
+implicit.</strong> Câmpul <tt class="docutils literal">l10n_ro_edi_no_auto_bill</tt> are <tt class="docutils literal">default=True</tt>,
+deci o companie nouă nu mai primește ciorne create de cronul nativ
+„E-Factura: Synchronize with ANAF”. Fluxul de referință este factura
+introdusă din comanda de achiziție (sau creată din mesajul SPV și
+legată la comandă); ciorna adusă în paralel de cron se dublează cu ea,
+iar deduplicarea nativă compară doar (CUI, total, dată) și nu verifică
+deloc sensul invers — factura introdusă <em>după</em> ce ciorna există deja.
+Pe un client în producție am găsit 6 astfel de dubluri, toate cu
+ciorna creată prima.<ul>
+<li><strong>Companiile existente nu sunt afectate</strong>: <tt class="docutils literal">default</tt> se aplică
+doar companiilor create ulterior, valoarea stocată a celor actuale
+rămâne neschimbată.</li>
+<li><strong>Atenție la instalările noi</strong>: comportamentul nativ Odoo 19 (import
+automat) nu mai este cel implicit. Dacă îl vreți, debifați „Nu
+importa automat facturile primite din SPV” din Setări →
+Contabilitate → eFactura SPV.</li>
+<li>Trimiterea facturilor și sincronizarea statusului (acceptat/refuzat)
+rămân neatinse, ca și până acum.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-5">
+<h2>19.0.0.3.23 (2026-07-29)</h2>
+<ul class="simple">
+<li><strong>O singură regulă decide dacă factura merge în SPV.</strong> Cele patru căi
+de trimitere se contraziceau pe partenerul fără țară: wizardul „Send &amp;
+Print” îl considera eligibil, în timp ce butonul manual „Trimite în
+SPV”, cronul de auto-trimitere și indicatorii din dashboard îl
+excludeau — deci aceeași factură era trimisă pe o cale și ignorată pe
+alta, iar cifrele din dashboard nu corespundeau cu ce se trimitea.
+Decizia e acum centralizată în
+<tt class="docutils literal">account.move._l10n_ro_is_spv_target()</tt>, cu domeniul de căutare
+echivalent în <tt class="docutils literal">_l10n_ro_spv_target_domain()</tt>, folosite de toate cele
+patru.</li>
+<li><strong>Partenerul fără țară facturat în RON este considerat client român.</strong>
+Lipsa țării pe contact e de regulă o factură internă B2C incompletă,
+nu un client extern, așa că moneda facturii decide: RON înseamnă
+intern (merge în SPV), orice altă monedă înseamnă extern (nu merge).
+Atenție la reversul regulii — un client român real facturat în EUR
+căruia i-a scăpat țara pe fișă nu mai este propus pentru SPV; țara pe
+partener rămâne singura sursă sigură. Eligibilitatea nu înseamnă însă
+că factura se poate trimite: exportul CIUS-RO cere țara, județul,
+orașul și strada clientului, deci o astfel de factură eșuează zgomotos
+pe constrângerile de export până la completarea fișei partenerului —
+semnalul corect, față de o neconformare ascunsă.</li>
+<li>Indicatorii din dashboard filtrează acum pe partenerul comercial
+(<tt class="docutils literal">commercial_partner_id</tt>), nu pe contactul de pe factură
+(<tt class="docutils literal">partner_id</tt>), la fel ca logica de trimitere. Cifrele se pot
+modifica ușor pentru facturile emise către un contact al unei
+companii.</li>
+</ul>
+</div>
+<div class="section" id="section-6">
+<h2>19.0.0.3.22 (2026-07-29)</h2>
+<ul class="simple">
+<li><strong>Răspunsurile neașteptate de la SPV nu mai crapă interfața.</strong> ANAF
+răspunde frecvent cu HTTP 200 și un corp care nu este payload-ul
+așteptat (JSON de eroare la limita de apeluri sau <tt class="docutils literal">id_incarcare</tt>
+inexistent, text simplu, pagină HTML de gateway în mentenanță).
+<tt class="docutils literal">make_efactura_request</tt> din <tt class="docutils literal">l10n_ro_edi</tt> tratează doar codurile
+204/400/401/403/500, așa că un asemenea corp ajungea la apelanți și
+crăpa cu
+<tt class="docutils literal">lxml.etree.XMLSyntaxError: Start tag expected, '&lt;' not found</tt> pe
+<em>Fetch status</em> (<tt class="docutils literal">stareMesaj</tt>), cu <tt class="docutils literal">BadZipFile</tt> pe <tt class="docutils literal">descarcare</tt>
+sau cu un PDF corupt salvat de la <tt class="docutils literal">transformare</tt>.<ul>
+<li>Se validează primii octeți ai răspunsului față de payload-ul
+așteptat pe endpoint (XML pe
+<tt class="docutils literal">upload</tt>/<tt class="docutils literal">uploadb2c</tt>/<tt class="docutils literal">stareMesaj</tt>, ZIP pe <tt class="docutils literal">descarcare</tt>, PDF
+pe <tt class="docutils literal">transformare</tt>, JSON pe listele de mesaje).</li>
+<li>Când răspunsul nu poate fi payload-ul așteptat, se întoarce
+<tt class="docutils literal">{'error': <span class="pre">...}</span></tt> cu mesajul de eroare ANAF extras din JSON (sau un
+extras curățat din corpul brut), care apare în chatter-ul facturii
+și în log — deci și diagnosticul devine posibil, fără RPC_ERROR.</li>
+<li>Endpoint-urile necunoscute nu sunt validate, ca să nu blocăm fluxuri
+noi.</li>
+<li>Acoperă și copia funcției din <tt class="docutils literal">l10n_ro_message_spv</tt>. Doar cod
+Python, nu necesită actualizarea modulului — este suficient un
+restart.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-7">
+<h2>19.0.0.3.21 (2026-07-29)</h2>
+<p>Port of the 18.0 fix (18.0.0.2.15 / 18.0.0.2.16) that was never
+forwarded to 19.0: the 19.0 catch-up port of this module predates it.</p>
+<ul class="simple">
+<li><strong>Foreign-customer invoices are no longer offered for SPV upload in
+“Send &amp; Print”.</strong> The core <tt class="docutils literal">_is_ro_edi_applicable</tt> only checks the
+issuing company is Romanian (<tt class="docutils literal">country_code == 'RO'</tt>), so invoices
+issued to foreign customers (e.g. the HU series of a Romanian company)
+were uploaded to the SPV. The check now also excludes invoices whose
+commercial partner has a country explicitly set to something other
+than RO, matching the filter already present on the auto-send cron and
+on <tt class="docutils literal">action_send_to_spv_only</tt>. Partners without a country are left
+untouched to avoid regressions on domestic B2C invoices. In 19.0 the
+wizard builds its checkboxes from <tt class="docutils literal">_get_default_extra_edis</tt>, so the
+“Send E-Factura to SPV” checkbox no longer shows up at all for those
+invoices.</li>
+<li><strong>No more double customer email.</strong> An invoice could be emailed twice:
+once by the operator’s manual “Send &amp; Print” at posting time, and
+again by the validated-invoice cron after the SPV validated it (the
+<tt class="docutils literal">l10n_ro_spv_validated_email_sent</tt> flag was only set by the cron, so
+a manual send went unnoticed). <tt class="docutils literal">account.move.send._send_mails</tt> now
+sets the flag for every invoice actually emailed to the customer
+through any path. The SPV upload path uses
+<tt class="docutils literal"><span class="pre">sending_methods={&quot;manual&quot;}</span></tt> (no email), so cron-only invoices are
+still emailed once, after validation.</li>
+</ul>
+</div>
+<div class="section" id="section-8">
+<h2>19.0.0.3.20 (2026-07-28)</h2>
+<ul class="simple">
+<li><strong>Import SPV: linia se recalculează din ``cbc:LineExtensionAmount``
+când furnizorul completează greșit ``cac:Price/cbc:BaseQuantity``.</strong>
+Core-ul Odoo derivă prețul unitar din BT-146 / BT-149 și suprascrie
+astfel valoarea calculată din BT-131. Când furnizorul transmite
+<tt class="docutils literal">BaseQuantity</tt> egal cu <tt class="docutils literal">InvoicedQuantity</tt> în loc de 1 — tipar
+întâlnit la mai multe programe de facturare — prețul unitar rezultat
+este de <tt class="docutils literal">InvoicedQuantity</tt> ori mai mic (ex. 0,00315 lei/m în loc de
+1,26 lei/m), iar diferența ajunge tăcut într-o linie „Rounding” <strong>fără
+TVA</strong>. Factura intră cu total corect, dar cu <strong>TVA subevaluat</strong>, fără
+nicio eroare afișată.<ul>
+<li>BT-131 (<tt class="docutils literal">cbc:LineExtensionAmount</tt>) este câmp obligatoriu și
+reprezintă valoarea autoritativă a liniei, în timp ce BT-149 este
+opțional și servește doar la exprimarea prețului. Când cele două se
+contrazic, linia se recalculează din BT-131.</li>
+<li>Se compară subtotalul importat cu BT-131 și se corectează <strong>doar</strong>
+peste toleranța de rotunjire dedusă din numărul de zecimale al
+BT-146; abaterile mici, legitime (preț unitar transmis rotunjit la 2
+zecimale), rămân pe seama liniei de rotunjire din core.</li>
+<li>Fiecare linie corectată este semnalată în logurile importului, deci
+apare în chatter-ul facturii.</li>
+<li>Doar cod Python, nu necesită actualizarea modulului.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-9">
+<h2>19.0.0.3.18 (2026-07-03)</h2>
+<ul class="simple">
+<li><strong>Opțiune de dezactivare a importului automat de facturi primite din
+SPV.</strong> Cron-ul nativ <tt class="docutils literal"><span class="pre">E-Factura:</span> Synchronize with ANAF</tt> creează
+automat ciorne de facturi de la furnizori din mesajele primite în SPV
+(funcție nouă în Odoo 19, inexistentă pe 18). S-a adăugat un câmp per
+companie <tt class="docutils literal">l10n_ro_edi_no_auto_bill</tt> (Setări → Contabilitate →
+secțiunea „eFactura SPV”) care, când e activat, sare peste crearea
+automată a acestor facturi.<ul>
+<li>Implicit <strong>dezactivat</strong> (<tt class="docutils literal">False</tt>): comportamentul nativ rămâne
+neschimbat; activarea este o alegere explicită per companie.</li>
+<li>Este gardată <strong>doar</strong> metoda dedicată
+<tt class="docutils literal">_l10n_ro_edi_process_bill_messages</tt>; procesarea răspunsurilor
+pentru facturile trimise (acceptat/refuzat) și curățarea facturilor
+neindexate din același cron rămân neatinse.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-10">
+<h2>19.0.0.3.17 (2026-07-03)</h2>
+<ul class="simple">
+<li><strong>Descrierea nu mai apare dublată în Description + Name.</strong> Când linia
+avea o descriere suplimentară, același text era pus atât în
+<tt class="docutils literal">cbc:Description</tt> cât și în <tt class="docutils literal">cbc:Name</tt>, rezultând două tag-uri
+identice. Comportamentul rămâne cel al parametrului (descrierea liniei
+merge în <tt class="docutils literal">cbc:Name</tt>), dar tag-ul <tt class="docutils literal">cbc:Description</tt> se omite când
+ar fi identic cu <tt class="docutils literal">cbc:Name</tt> — rămâne prezent doar când descrierea
+depășește 100 de caractere, ca să poarte textul complet (Name e
+trunchiat la 100, Description la 200). Doar cod Python, nu necesită
+actualizarea modulului.</li>
+</ul>
+</div>
+<div class="section" id="section-11">
+<h2>19.0.0.3.16 (2026-07-03)</h2>
+<ul class="simple">
+<li><strong>Tag-ul ``cbc:Description`` este omis când linia nu are descriere
+proprie.</strong> Cu <tt class="docutils literal">efactura.use_line_description</tt> activ, dacă numele
+liniei este identic cu <tt class="docutils literal">display_name</tt>-ul produsului (linie generată
+automat, fără text suplimentar), în XML ajungea numele produsului
+(inclusiv codul <tt class="docutils literal">[COD]</tt>) ca descriere. <tt class="docutils literal">get_description</tt>
+returnează acum doar descrierea suplimentară a liniei (numele liniei
+fără numele produsului), iar când aceasta este goală nodul
+<tt class="docutils literal">cbc:Description</tt> (opțional, BT-154) este pus pe <tt class="docutils literal">None</tt> și tag-ul
+nu mai apare deloc în XML. <tt class="docutils literal">cbc:Name</tt> rămâne numele produsului.<ul>
+<li>Eliminat și fallback-ul pe <tt class="docutils literal">product.name</tt> la descrierea implicită
+(independent de parametru): numele produsului nu mai este duplicat
+în Description — el există deja în <tt class="docutils literal">cbc:Name</tt> și în
+<tt class="docutils literal">cac:SellersItemIdentification</tt>.</li>
+<li>Doar cod Python, nu necesită actualizarea modulului.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-12">
+<h2>19.0.0.3.15 (2026-07-01)</h2>
+<ul class="simple">
+<li><strong>Emailul către client este acum un cron separat.</strong> Trimiterea
+emailului pentru facturile validate de SPV era executată în interiorul
+cron-ului de fetch (<tt class="docutils literal">_cron_l10n_ro_edi_fetch_status</tt>). Munca este
+însă complet condusă de query și idempotentă (facturi
+<tt class="docutils literal">invoice_validated</tt> cu
+<tt class="docutils literal">l10n_ro_spv_validated_email_sent = False</tt>), deci a fost mutată
+într-un cron propriu, <tt class="docutils literal"><span class="pre">E-Factura:</span> Trimite email facturi validate</tt>
+(<tt class="docutils literal">_cron_l10n_ro_spv_send_validated_emails</tt>, rulează la 15 minute).<ul>
+<li>Emailul rulează independent de fluxul de citire/scriere SPV, pe
+orarul lui.</li>
+<li>Fiecare companie este izolată în propriul <tt class="docutils literal">savepoint</tt>: un eșec la
+o companie nu oprește emailurile pentru celelalte și lasă flag-ul
+nesetat, deci se reia la rularea următoare.</li>
+<li>Necesită actualizarea modulului (<tt class="docutils literal"><span class="pre">-u</span></tt>) pentru a instala noul
+<tt class="docutils literal">ir.cron</tt>.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-13">
+<h2>19.0.0.3.14 (2026-07-01)</h2>
+<ul class="simple">
+<li><strong>Emailul este complet separat de trimiterea facturilor în SPV.</strong>
+Cron-ul de trimitere (<tt class="docutils literal"><span class="pre">E-Factura:</span> Send TO SPV</tt>) rula fetch status →
+trimitere SPV → email de raport → reprogramare într-o singură
+tranzacție. Când emailul de raport eșua cu
+<tt class="docutils literal">SerializationFailure: could not serialize access due to concurrent update</tt>
+(conflict pe <tt class="docutils literal">account_move</tt> cu importul din marketplace, declanșat
+de <tt class="docutils literal">flush</tt>-ul din <tt class="docutils literal">unlink</tt>-ul mailului cu <tt class="docutils literal">auto_delete</tt>), se
+făcea rollback la <strong>tot</strong>: la trimiterile efective (facturile
+reapăreau ca „de trimis”) și la reprogramarea cron-ului (lanțul de
+auto-trimitere se rupea, lăsând restul loturilor netrimise ore
+întregi).<ul>
+<li>Trimiterile în SPV se <strong>comit imediat</strong> după
+<tt class="docutils literal">_generate_and_send_invoices</tt>, înainte de orice pas de email (fără
+commit în modul test).</li>
+<li>Emailul de raport este izolat în <tt class="docutils literal">savepoint</tt> + <tt class="docutils literal">try/except</tt>
+(eșecul se loghează, nu oprește cron-ul) și trecut pe livrare prin
+coada de mail (<tt class="docutils literal">force_send=False</tt>), scoțând SMTP-ul și
+<tt class="docutils literal">unlink</tt>-ul cu <tt class="docutils literal">auto_delete</tt> din tranzacția cron-ului.</li>
+<li>Emailul către client (după validare SPV, în cron-ul de fetch) este
+izolat la fel: un eșec de email nu mai poate da rollback la
+statusurile citite din SPV, iar factura se reia la rularea următoare
+(flag-ul <tt class="docutils literal">l10n_ro_spv_validated_email_sent</tt> rămâne nesetat).</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-14">
+<h2>19.0.0.3.13 (2026-06-30)</h2>
+<ul class="simple">
+<li><strong>Trunchiere referință comandă (BT-13) la 200 de caractere.</strong> Pe
+facturile de revânzare cu multe comenzi consolidate, câmpul „Referință
+client” (<tt class="docutils literal">ref</tt>) putea depăși 200 de caractere și ajungea ca atare în
+<tt class="docutils literal">cac:OrderReference/cbc:ID</tt> (BT-13), iar ANAF respingea transmiterea
+cu eroarea <strong>BR-RO-L200</strong> („Numărul maxim permis de caractere pentru
+Referința comenzii (BT-13) este 200”). Acum BT-13 este limitat la 200
+de caractere la generarea XML-ului, simetric cu limitarea deja
+existentă pe <tt class="docutils literal">cbc:SalesOrderID</tt> (BT-14), în
+<tt class="docutils literal">_ubl_add_order_reference_node</tt>.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="bug-tracker">
-<h2><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h2>
+<h1>Bug Tracker</h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h2><a class="toc-backref" href="#toc-entry-2">Credits</a></h2>
-</div>
-</div>
+<h1>Credits</h1>
 <div class="section" id="authors">
-<h1>Authors</h1>
+<h2>Authors</h2>
 <ul class="simple">
 <li>Terrabit</li>
 <li>Dorin Hongu</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h1>Maintainers</h1>
+<h2>Maintainers</h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_efactura_enhancement">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
+</div>
 </div>
 </div>
 </body>
