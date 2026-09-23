@@ -504,6 +504,9 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         if not partner.is_company:
             constraints.pop("ciusro_customer_tax_identifier_required", False)
 
+        if error := invoice._l10n_ro_customer_vat_missing_error():
+            constraints["ciusro_customer_company_vat_required"] = error
+
         return constraints
 
 
