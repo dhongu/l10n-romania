@@ -14,14 +14,13 @@
                             <li><b>Tax Base</b> — the base of item <b>B00</b>, not the untaxed total of the invoice</li>
                             <li><b>VAT Paid at Customs</b> — the amount of item <b>B00</b></li>
                             <li><b>Customs Duty</b> — item <b>A00</b></li>
-                            <li><b>Customs Commission</b> — only what is owed to the customs authority</li>
                             <li><b>DVI Number</b> — the MRN in the header of the declaration</li>
                             <li><b>DVI Date</b> — the date the declaration was accepted</li>
                         </ul>
                         <p class="mb-1">
                             The proposed base is only the untaxed total of the supplier invoice, which is a
                             starting point and not the base defined by art. 289 of Law 227/2015: it leaves out
-                            the customs duty, the commission and the incidental costs up to the first place of
+                            the customs duty and the incidental costs (including commissions) up to the first place of
                             destination in Romania.
                         </p>
                         <p class="mb-0">
@@ -39,9 +38,8 @@
                             <field name="tax_base" />
                             <field name="tax_value" />
                         </group>
-                        <group string="Duties and Commissions">
+                        <group string="Customs Duties">
                             <field name="custom_duty" />
-                            <field name="customs_commission" />
                         </group>
                     </group>
                     <footer>

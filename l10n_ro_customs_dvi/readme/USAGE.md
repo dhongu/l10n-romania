@@ -186,7 +186,6 @@ din factură.
 | Câmp | Ce se pune | Sursa în DVI |
 |---|---|---|
 | **Taxă vamală** | taxa vamală datorată | poziţia **A00** |
-| **Comision vamal** | comisionul datorat autorităţii vamale, dacă există | din declaraţie |
 | **Bază de impozitare** | baza pe care vama a calculat TVA-ul | baza poziţiei **B00** |
 | **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziţiei **B00** |
 | **Cotă TVA** | cota aplicată de vamă la data acceptării declaraţiei | din declaraţie |
@@ -229,7 +228,6 @@ achiziţie, cu câte o linie pentru taxa vamală şi pentru comision.
 
 ```
 Dr 371/301  = Cr 446    taxa vamală      -> intră în costul stocului
-Dr 371/301  = Cr 446    comision vamal   -> intră în costul stocului
 Dr 4426     = Cr 446    TVA la import    -> deductibilă, NU măreşte costul
 ```
 
