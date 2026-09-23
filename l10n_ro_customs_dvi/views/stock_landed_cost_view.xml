@@ -50,6 +50,10 @@
             <field name="name" position="after">
                 <field name="dvi_number" optional="show"/>
             </field>
+            <!-- Suma repartizată, ca lista lunară să poată fi confruntată cu evidența vamală -->
+            <field name="date" position="after">
+                <field name="amount_total" optional="show" sum="Total"/>
+            </field>
         </field>
     </record>
 
