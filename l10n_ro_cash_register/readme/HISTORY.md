@@ -1,3 +1,17 @@
+## 19.0.1.2.1
+
+**Corectat** — reîmprospătarea registrului la postare cerea drepturi de contabilitate.
+
+`_l10n_ro_cash_registers_to_refresh()` aduna registrele de reîmprospătat pe rând, prin
+`registers |= register_model.sudo().search(...)`. Recordset-ul de start nu era `sudo()`, iar
+unirea `|` păstrează contextul operandului din stânga — deci rezultatul final pierdea `sudo`-ul
+căutării din dreapta, contrar intenției din cod. Orice utilizator fără grupul *Contabilitate/
+Administrator* (de exemplu un operator de vânzări cu doar drepturi de facturare) care postează
+o notă contabilă pe un cont de casă lovea de `AccessError` la reîmprospătarea soldurilor,
+pentru că accesul la modelul registrului este rezervat acelui grup.
+
+`sudo()` este acum aplicat de la recordset-ul de pornire, ca să se păstreze pe toată unirea.
+
 ## 19.0.1.2.0
 
 **Corectat** — soldurile registrului nu se mai învechesc.
