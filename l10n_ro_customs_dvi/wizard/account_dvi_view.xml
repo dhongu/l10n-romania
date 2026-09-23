@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+        <record id="view_account_invoice_dvi_form" model="ir.ui.view">
+            <field name="name">DVI</field>
+            <field name="model">account.invoice.dvi</field>
+            <field name="arch" type="xml">
+                <form>
+                    <div class="alert alert-info" role="alert">
+                        <p>
+                            <b>Enter the amounts exactly as they appear on the customs declaration (DVI).</b>
+                            They are transcribed from the declaration, not recomputed from the supplier invoice.
+                        </p>
+                        <ul class="mb-1">
+                            <li><b>Tax Base</b> — the base of item <b>B00</b>, not the untaxed total of the invoice</li>
+                            <li><b>VAT Paid at Customs</b> — the amount of item <b>B00</b></li>
+                            <li><b>Customs Duty</b> — item <b>A00</b></li>
+                            <li><b>Customs Commission</b> — only what is owed to the customs authority</li>
+                            <li><b>DVI Number</b> — the MRN in the header of the declaration</li>
+                            <li><b>DVI Date</b> — the date the declaration was accepted</li>
+                        </ul>
+                        <p class="mb-1">
+                            The proposed base is only the untaxed total of the supplier invoice, which is a
+                            starting point and not the base defined by art. 289 of Law 227/2015: it leaves out
+                            the customs duty, the commission and the incidental costs up to the first place of
+                            destination in Romania.
+                        </p>
+                        <p class="mb-0">
+                            Changing the base or the rate does not recompute the VAT amount — update it yourself.
+                            The customs broker's fee is not recorded here; it goes on their own supplier invoice.
+                        </p>
+                    </div>
+                    <group>
+                        <group string="Customs Declaration">
+                            <field name="dvi_number" />
+                            <field name="date" />
+                        </group>
+                        <group string="Import VAT">
+                            <field name="tax_id" />
+                            <field name="tax_base" />
+                            <field name="tax_value" />
+                        </group>
+                        <group string="Duties and Commissions">
+                            <field name="custom_duty" />
+                            <field name="customs_commission" />
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="do_create_dvi" string="Apply" type="object" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_account_invoice_dvi" model="ir.actions.act_window">
+            <field name="name">DVI</field>
+            <field name="res_model">account.invoice.dvi</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+</odoo>

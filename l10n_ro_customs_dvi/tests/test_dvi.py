@@ -94,12 +94,32 @@ class TestDVI(TransactionCase):
                 "country_id": cls.env.ref("base.ro").id,
             }
         )
+        # `tax_group_id` e NOT NULL pe account.tax; fără el setUpClass cădea cu
+        # NotNullViolation şi niciun test din fişier nu apuca să ruleze.
+        # Grupul trebuie să aibă aceeaşi ţară ca taxa care îl foloseşte; tag-urile de mai sus sunt
+        # create pe RO, deci fixăm explicit RO peste tot, indiferent de ţara fiscală a companiei.
+        country_ro = cls.env.ref("base.ro")
+        tax_group = cls.env["account.tax.group"].search(
+            [("company_id", "=", cls.env.company.id), ("country_id", "=", country_ro.id)],
+            limit=1,
+        )
+        if not tax_group:
+            tax_group = cls.env["account.tax.group"].create(
+                {
+                    "name": "Test Tax Group",
+                    "company_id": cls.env.company.id,
+                    "country_id": country_ro.id,
+                }
+            )
+
         cls.tax_id = cls.env["account.tax"].create(
             {
                 "name": "TVA Import Test",
                 "amount": 19.0,
                 "amount_type": "percent",
                 "type_tax_use": "purchase",
+                "tax_group_id": tax_group.id,
+                "country_id": country_ro.id,
                 "invoice_repartition_line_ids": [
                     (0, 0, {"repartition_type": "base", "factor_percent": 100, "tag_ids": [(6, 0, cls.base_tag.ids)]}),
                     (
@@ -274,3 +294,32 @@ class TestDVI(TransactionCase):
 
         action = invoice.button_dvi()
         self.assertEqual(action.get("res_id"), dvi.id)
+
+    def test_customs_products_accounts_and_landed_cost_flag(self):
+        """Comisionul vamal e datorie către bugetul de stat (446), nu fond special (447).
+
+        447 „Fonduri speciale - taxe şi vărsăminte asimilate" e rezervat de OMFP 1802/2014
+        datoriilor către alte organisme publice, creditat exclusiv prin 635. Onorariul
+        comisionarului vamal (broker) nu trece prin acest wizard — e furnizor obişnuit, cu sold
+        pe 401, iar capitalizarea se face cu butonul nativ de pe factura lui.
+        """
+        wizard = self.env["account.invoice.dvi"].create({})
+
+        duty_vals = wizard._prepare_custom_duty_product()
+        commission_vals = wizard._prepare_customs_commission_product()
+
+        for vals in (duty_vals, commission_vals):
+            account = self.env["account.account"].browse(vals["property_account_expense_id"])
+            self.assertTrue(
+                account.code.startswith("446"),
+                f"Contul aşteptat este 446*, primit {account.code}",
+            )
+            # Ambele produse trebuie să funcţioneze şi pe traseul nativ
+            # „factură furnizor -> Create Landed Costs".
+            self.assertTrue(vals["landed_cost_ok"], "Produsul trebuie marcat ca landed cost")
+            self.assertEqual(vals["split_method_landed_cost"], "by_current_cost_price")
+            self.assertEqual(vals["type"], "service")
+
+        # Produsul creat efectiv păstrează marcajul (constrângerea din core cere type == service).
+        product = self.env["product.product"].create(commission_vals)
+        self.assertTrue(product.landed_cost_ok)
