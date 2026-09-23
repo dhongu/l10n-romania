@@ -137,12 +137,21 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         cls.vat_move = cls.landed_cost.account_move_id
 
         # --- Factura brokerului: produs de serviciu marcat drept cost de aterizare ---
+        # Contul de cheltuială al onorariului: 628 „Alte cheltuieli cu serviciile executate de
+        # terți", conform recomandării din fișă. Fără el, produsul cade pe contul categoriei
+        # (607 Cheltuieli privind mărfurile), iar captura ar contrazice textul.
+        acc_628 = env["account.account"].search(
+            [("code", "=like", "628%"), ("company_ids", "in", [company.id])], order="code", limit=1
+        ) or env["account.account"].search(
+            [("code", "=like", "622%"), ("company_ids", "in", [company.id])], order="code", limit=1
+        )
         cls.broker_product = env["product.product"].create(
             {
                 "name": "Onorariu comisionar vamal",
                 "type": "service",
                 "landed_cost_ok": True,
                 "split_method_landed_cost": "by_current_cost_price",
+                "property_account_expense_id": acc_628.id if acc_628 else False,
             }
         )
         cls.broker_bill = env["account.move"].create(
