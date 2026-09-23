@@ -23,7 +23,7 @@ class AccountInvoice(models.Model):
             action["views"] = [(False, "form")]
             action["res_id"] = self.dvi_id.id
         else:
-            action = self.env.ref("terrabit_dvi.action_account_invoice_dvi")
+            action = self.env.ref("l10n_ro_customs_dvi.action_account_invoice_dvi")
             action = action.sudo().read()[0]
 
         return action

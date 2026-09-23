@@ -1,5 +1,4 @@
-# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# ©  2008-2026 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
-
-from . import models
-from . import wizard
+#
+# Modul tranzitoriu, fără cod. Vezi __manifest__.py.

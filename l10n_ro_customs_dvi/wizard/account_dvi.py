@@ -9,18 +9,58 @@ class AccountInvoiceDVI(models.TransientModel):
     _name = "account.invoice.dvi"
     _description = "account.invoice.dvi"
 
-    date = fields.Date()
+    date = fields.Date(
+        string="DVI Date",
+        help="Date on which the customs declaration was accepted. It determines the applicable VAT "
+        "rate and the date of the generated journal entry.",
+    )
     dvi_number = fields.Char(
         "DVI Number",
-        help="Reference number of the customs import declaration (MRN).",
+        help="Reference number of the customs import declaration (MRN), taken from the header of "
+        "the declaration.\n\n"
+        "It becomes the reference of the journal entry, so that the customs payment can be "
+        "reconciled on account 446 per declaration.",
     )
-    custom_duty = fields.Monetary()  # costuri vamale
-    customs_commission = fields.Monetary()  # comision vamal
+    custom_duty = fields.Monetary(
+        string="Customs Duty",
+        help="Customs duty due, item A00 of the declaration.\n\n"
+        "It is added to the cost of the received goods through a landed cost line: "
+        "Dr 371 = Cr 446.",
+    )
+    customs_commission = fields.Monetary(
+        string="Customs Commission",
+        help="Commission owed to the CUSTOMS AUTHORITY, as stated in the declaration. It is added "
+        "to the cost of the goods: Dr 371 = Cr 446.\n\n"
+        "Do not enter the customs broker's fee here. The broker is an ordinary supplier, with a VAT "
+        "number and a balance on account 401: record their invoice on a service product flagged "
+        "'Is a Landed Cost', then use the native 'Create Landed Costs' button on that invoice if "
+        "the fee is to be capitalised.",
+    )
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
-    tax_value = fields.Monetary()
-    tax_base = fields.Monetary()
-    tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
+    tax_value = fields.Monetary(
+        string="VAT Paid at Customs",
+        help="VAT actually due, the amount of item B00. Copy it from the declaration.\n\n"
+        "This is the amount posted to account 4426, as it is. It is NOT recomputed when you change "
+        "the base or the rate, so update it yourself whenever you change either.",
+    )
+    tax_base = fields.Monetary(
+        string="Tax Base",
+        help="Taxable base on which customs computed the VAT — the base of item B00. Copy it from "
+        "the declaration.\n\n"
+        "The proposed value is only the untaxed total of the supplier invoice and is NOT the base "
+        "defined by art. 289 of Law 227/2015: it leaves out the customs duty, the commission and "
+        "the incidental costs (transport, insurance) up to the first place of destination in "
+        "Romania. When the customs value already includes the external transport, the base of the "
+        "declaration is higher than the invoice total.",
+    )
+    tax_id = fields.Many2one(
+        "account.tax",
+        string="Import VAT",
+        help="VAT rate applied by customs at the date the declaration was accepted.\n\n"
+        "The proposed rate is the company default purchase tax. Check it against the declaration "
+        "for goods at a reduced rate, such as basic foodstuffs.",
+    )
 
     def _prepare_custom_duty_product(self):
         domain = [("code", "=like", "446%")]
@@ -32,10 +72,24 @@ class AccountInvoiceDVI(models.TransientModel):
             "property_account_expense_id": account.id,
             "taxes_id": False,
             "company_id": False,
+            # Produsul e utilizabil şi pe traseul nativ „factură furnizor -> landed cost",
+            # nu doar din wizardul DVI.
+            "landed_cost_ok": True,
+            "split_method_landed_cost": "by_current_cost_price",
         }
 
     def _prepare_customs_commission_product(self):
-        domain = [("code", "=like", "447%")]
+        # Comision datorat AUTORITĂŢII VAMALE, deci datorie faţă de bugetul de stat -> 446.
+        #
+        # Nu se foloseşte 447 „Fonduri speciale - taxe şi vărsăminte asimilate": funcţiunea din
+        # OMFP 1802/2014 îl rezervă datoriilor către alte organisme publice şi îl arată creditat
+        # exclusiv prin 635, niciodată prin conturi de stoc.
+        #
+        # Onorariul COMISIONARULUI VAMAL (brokerul) nu se operează prin acest wizard: el e un
+        # furnizor obişnuit, cu CUI şi sold pe 401. Se înregistrează factura lui pe un produs cu
+        # `landed_cost_ok`, iar capitalizarea în costul stocului se face — sau nu, după politica
+        # contabilă — cu butonul nativ „Create Landed Costs" de pe factură.
+        domain = [("code", "=like", "446%")]
         account = self.env["account.account"].search(domain, limit=1)
         return {
             "name": self.env._("Customs Commission"),
@@ -44,6 +98,8 @@ class AccountInvoiceDVI(models.TransientModel):
             "property_account_expense_id": account.id,
             "taxes_id": False,
             "company_id": False,
+            "landed_cost_ok": True,
+            "split_method_landed_cost": "by_current_cost_price",
         }
 
     @api.model

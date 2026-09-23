@@ -70,8 +70,17 @@ După sosirea mărfii în vamă se înregistrează manual datele din DVI.
 **Referință:** MRN (Movement Reference Number) din DVI
 
 **Monografie contabilă:**
-- **4426** (TVA Deductibil) = **446 / 401.Vama** — suma TVA B00
-- **371.tranzit** (Taxe Vamale) = **446 / 401.Vama** — suma taxă vamală A00
+- **4426** (TVA Deductibil) = **446** — suma TVA B00
+- **371.tranzit** (Taxe Vamale) = **446** — suma taxă vamală A00
+
+> **Nu este nevoie de un cont/partener „401.Vama”.** Taxele şi TVA-ul vamal se varsă la bugetul de
+> stat prin Trezorerie, nu către un furnizor; contul de decontare este **446**, al cărui sold
+> reprezintă chiar sumele datorate bugetului (OMFP 1802/2014, funcţiunea contului 446). Urmărirea per
+> declaraţie se face prin reconciliere pe 446, cu MRN-ul ca referinţă — vezi capitolul „Biroul vamal
+> nu este partener” din DESCRIPTION.
+>
+> Paşii 5 şi 6 de mai sus descriu varianta **manuală**, pentru fluxul cu locaţie de tranzit. Când se
+> foloseşte wizardul modulului, nota se generează automat — vezi „Completarea wizardului DVI” mai jos.
 
 ## Pasul 6 – Plata Datoriei către Vamă
 
@@ -83,12 +92,12 @@ Se efectuează plata efectivă a taxelor vamale și a TVA-ului la import către 
 (sau `Accounting → Journal Entries` dacă se face manual)
 
 **Monografie contabilă:**
-- **401.Vama** = **5121** (Banca în RON) — suma totală (taxă vamală A00 + TVA B00)
+- **446** = **5121** (Banca în RON) — suma totală (taxă vamală A00 + TVA B00)
 
 **Observații:**
 - Plata se face **exclusiv în RON**.
 - Nu generează diferențe de curs valutar.
-- După această plată, contul 401.Vama (sau 446) rămâne cu sold zero pentru respectivul DVI.
+- După această plată, contul 446 rămâne cu sold zero pentru respectivul DVI.
 
 ## Pasul 7 – Repartizarea Costurilor Adiționale (Landed Costs)
 
@@ -167,3 +176,96 @@ Cunoașterea Incoterm-ului este esențială pentru:
 **Notă importantă:**
 Incoterm-ul trebuie menționat explicit în comanda de achiziție (PO) și în factura furnizor. El determină direct modul în care se face recepția în Odoo și care costuri intră în landed costs.
 
+
+# Completarea wizardului DVI — ce cifră unde
+
+Wizardul se deschide cu butonul **„DVI”** de pe factura furnizorului extern. Are patru câmpuri de
+sume, toate **editabile liber**. Valorile se **transcriu din declaraţia vamală**, nu se recalculează
+din factură.
+
+| Câmp | Ce se pune | Sursa în DVI |
+|---|---|---|
+| **Taxă vamală** | taxa vamală datorată | poziţia **A00** |
+| **Comision vamal** | comisionul datorat autorităţii vamale, dacă există | din declaraţie |
+| **Bază de impozitare** | baza pe care vama a calculat TVA-ul | baza poziţiei **B00** |
+| **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziţiei **B00** |
+| **Cotă TVA** | cota aplicată de vamă la data acceptării declaraţiei | din declaraţie |
+| **Număr DVI** | MRN-ul declaraţiei | antetul declaraţiei |
+
+> ⚠️ **Valoarea propusă nu este baza legală.** La deschiderea wizardului, câmpul „Bază de impozitare”
+> este precompletat cu **netul facturii furnizorului** (`invoice.amount_untaxed_signed`). Este doar un
+> punct de plecare comod, nu o determinare conform art. 289 — nu conţine taxa vamală, comisionul şi
+> nici cheltuielile accesorii. Vezi capitolul „Baza de impozitare a TVA la import” din DESCRIPTION.
+
+## Erori frecvente şi cum se evită
+
+**Baza propusă lăsată neatinsă.** Cazul tipic: factura externă este de 58.927,59 lei, iar în DVI baza
+este 67.663 lei, pentru că valoarea în vamă include şi transportul extern. Diferenţa de 8.735,41 lei
+înseamnă TVA subevaluat, care se propagă în decont. **Comparaţi întotdeauna baza propusă cu baza din
+DVI înainte de a confirma.**
+
+**Valoarea statistică folosită ca bază.** Valoarea statistică şi baza de impozitare sunt mărimi
+diferite; pot coincide numeric, dar nu întotdeauna. Se ia baza poziţiei B00, nu valoarea statistică.
+
+**TVA nerecalculat după modificarea bazei.** Câmpul „TVA plătit în vamă” **nu se recalculează
+automat** la schimbarea bazei sau a cotei — nu există `onchange` în wizard. Dacă modificaţi baza,
+**modificaţi şi valoarea TVA**, altfel nota contabilă se postează cu suma veche, fără nicio eroare.
+
+**Cota implicită greşită.** Cota propusă este taxa de achiziţie implicită a companiei (de regulă cea
+standard). Pentru mărfuri cu cotă redusă — alimente de bază, medicamente, cărţi — cota corectă este
+cea redusă. Verificaţi câmpul înainte de confirmare.
+
+**Transportul uitat din cost.** Dacă transportul extern este facturat separat, el intră în costul de
+achiziţie al mărfii (OMFP 1802/2014 pct. 6) — printr-o linie de landed cost sau direct pe stoc, **o
+singură dată**. Faptul că aceeaşi sumă apare şi în baza TVA nu este o dublare: baza TVA nu debitează
+niciun cont de stoc.
+
+## Monografia generată de modul
+
+**La validarea wizardului** se creează un `stock.landed.cost` legat de recepţiile comenzii de
+achiziţie, cu câte o linie pentru taxa vamală şi pentru comision.
+
+**La validarea landed cost-ului:**
+
+```
+Dr 371/301  = Cr 446    taxa vamală      -> intră în costul stocului
+Dr 371/301  = Cr 446    comision vamal   -> intră în costul stocului
+Dr 4426     = Cr 446    TVA la import    -> deductibilă, NU măreşte costul
+```
+
+Nota contabilă primeşte ca referinţă **numărul de DVI** (MRN), nu secvenţa internă, astfel încât plata
+din extrasul bancar să poată fi reconciliată pe contul 446 per declaraţie.
+
+**La descărcarea gestiunii:** `Dr 607 = Cr 371`.
+
+> Din 19.0.1.3.0 comisionul vamal se creditează pe **446**, nu pe 447. Pe bazele existente contul nu se
+> schimbă automat — vezi nota de migrare din DESCRIPTION, capitolul „Biroul vamal nu este partener”.
+
+## Onorariul comisionarului vamal (brokerul)
+
+**Nu se operează prin wizardul DVI.** Brokerul e furnizor obişnuit: are CUI, emite factură cu TVA şi
+are sold pe 401.
+
+1. Creaţi un produs de tip **serviciu** cu bifa **„Is a Landed Cost”** (fila Achiziţii), cu cont de
+   cheltuială 628 (sau 622).
+2. Înregistraţi factura brokerului pe acest produs, cu TVA-ul lui. Linia se marchează automat ca linie
+   de landed cost.
+3. **Dacă politica contabilă prevede capitalizarea** onorariului în costul mărfii: apăsaţi butonul
+   **„Create Landed Costs”** de pe factură, selectaţi recepţia şi validaţi.
+   **Dacă nu se capitalizează:** nu apăsaţi nimic — factura rămâne cheltuială pe 628.
+
+```
+Factura brokerului:        Dr 628  = Cr 401     onorariu
+                           Dr 4426 = Cr 401     TVA deductibilă
+Landed cost din factură:   Dr 371  = Cr 628     doar dacă se capitalizează
+```
+
+Butonul **este** switch-ul de politică contabilă; nu există un câmp separat de configurat.
+
+## Verificări după validare
+
+- [ ] Baza din nota contabilă corespunde bazei poziţiei B00 din DVI.
+- [ ] TVA-ul din 4426 corespunde valorii B00 din DVI.
+- [ ] Costul unitar al produsului a crescut cu (taxă vamală + comision + transport) / cantitate.
+- [ ] Nota contabilă are ca referinţă MRN-ul declaraţiei.
+- [ ] Transportul extern apare o singură dată în costul stocului.

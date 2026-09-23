@@ -1,29 +1,28 @@
-# ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
+# ©  2008-2026 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
+#
+# MODUL TRANZITORIU — NU SE PORTEAZĂ PE 20.0.
+#
+# Conţinutul a fost mutat în `l10n_ro_customs_dvi`, pentru alinierea la convenţia `l10n_ro_`
+# a repo-ului. Acest modul nu mai are cod şi nici date: există doar ca manifestele care îl
+# declară ca dependenţă (ex. `proiecte/ptc/deltatech_ptc`) să continue să se încarce.
+#
+# La portarea pe 20.0: se actualizează acele manifeste direct pe `l10n_ro_customs_dvi` şi
+# modulul de faţă se abandonează pe 19.0. Decizie 2026-09-23, vezi
+# `l10n_ro_ent/readme/roadmap/ROADMAP_dvi.md` §1.
 {
-    "name": "Terrabit - DVI",
-    "summary": "DVI",
+    "name": "Terrabit - DVI (moved to l10n_ro_customs_dvi)",
+    "summary": "Transitional module, kept only so existing dependencies keep resolving. "
+    "It installs l10n_ro_customs_dvi and will NOT be ported to 20.0.",
     "license": "AGPL-3",
-    "version": "19.0.1.2.0",
+    "version": "19.0.1.3.0",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
-    "depends": [
-        "stock_account",
-        "account",
-        "sale",
-        "l10n_ro",  # pentru determinare de conturi 446. 447
-        "purchase_stock",
-        "stock_landed_costs",
-    ],
-    "excludes": ["l10n_ro_dvi"],
-    "data": [
-        "views/account_invoice_view.xml",
-        "views/stock_landed_cost_view.xml",
-        "wizard/account_dvi_view.xml",
-        "security/ir.model.access.csv",
-    ],
+    "depends": ["l10n_ro_customs_dvi"],
+    "data": [],
     "installable": True,
+    "auto_install": False,
     "development_status": "Production/Stable",
 }
