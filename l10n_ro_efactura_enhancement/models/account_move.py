@@ -6,10 +6,16 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-# Maximum number of automatic SPV send retries for an invoice that keeps
-# failing. Each failed attempt creates a new ``invoice_sending_failed``
-# document, so we use that count as the natural retry counter.
+# Maximum number of automatic SPV send attempts for an invoice that keeps
+# failing. On 19.0 a failed upload creates no ``l10n_ro_edi.document`` (the
+# ``invoice_sending_failed`` state no longer exists), so the attempts are
+# counted explicitly in ``l10n_ro_spv_send_attempts``.
 MAX_SPV_SEND_RETRIES = 3
+
+# Minimum delay between two automatic attempts on the same invoice. Without it
+# the 5-minute retrigger of the cron would burn all the attempts of a broken
+# invoice within minutes, instead of retrying it on the next nightly runs.
+SPV_SEND_RETRY_DELAY = timedelta(hours=20)
 
 # Currency used to decide the destination of an invoice whose customer has no
 # country set: an invoice issued in RON is considered domestic. See
@@ -20,7 +26,18 @@ SPV_FALLBACK_CURRENCY = "RON"
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    # l10n_ro_edi_state = fields.Selection( selection_add=[ ('invoice_sending_failed', 'Error')])
+    # Automatic SPV send attempts of the auto-send cron that ended without an
+    # upload (the invoice stayed with l10n_ro_edi_state = False). Reset when the
+    # invoice is reset to draft, i.e. after the operator corrected it.
+    l10n_ro_spv_send_attempts = fields.Integer(
+        string="Încercări automate trimitere SPV",
+        copy=False,
+        default=0,
+    )
+    l10n_ro_spv_last_send_attempt = fields.Datetime(
+        string="Ultima încercare automată trimitere SPV",
+        copy=False,
+    )
 
     # Tracks whether the customer invoice email has already been sent, so it is
     # sent at most once. It is set both when the validated-invoice cron emails
@@ -240,11 +257,7 @@ class AccountMove(models.Model):
 
             # Skip invoices whose send already failed MAX_SPV_SEND_RETRIES times
             # to avoid hammering SPV with the same broken document forever.
-            def _within_retry_limit(invoice):
-                failed = invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sending_failed")
-                return len(failed) < MAX_SPV_SEND_RETRIES
-
-            exhausted = candidates.filtered(lambda inv: not _within_retry_limit(inv))
+            exhausted = candidates.filtered(lambda inv: inv.l10n_ro_spv_send_attempts >= MAX_SPV_SEND_RETRIES)
             if exhausted:
                 _logger.info(
                     "❌ Invoices skipped (retry limit %d reached): %s",
@@ -253,9 +266,15 @@ class AccountMove(models.Model):
                 )
             candidates = candidates - exhausted
 
-            retrying = candidates.filtered(
-                lambda inv: inv.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sending_failed")
+            # A failed invoice waits for a later run: the 5-minute retrigger is
+            # meant to drain the backlog, not to retry the same broken invoices.
+            retry_after = fields.Datetime.now() - SPV_SEND_RETRY_DELAY
+            waiting = candidates.filtered(
+                lambda inv: inv.l10n_ro_spv_last_send_attempt and inv.l10n_ro_spv_last_send_attempt > retry_after
             )
+            candidates = candidates - waiting
+
+            retrying = candidates.filtered(lambda inv: inv.l10n_ro_spv_send_attempts)
             if retrying:
                 _logger.info("🔁 Retrying previously failed invoices: %s", retrying.mapped("name"))
 
@@ -302,6 +321,7 @@ class AccountMove(models.Model):
                     allow_raising=False,
                     **kwargs,
                 )
+                invoices._l10n_ro_spv_count_failed_send_attempts()
 
             # Persist the SPV sends immediately, before the (decoupled) report
             # email below. The report is a non-critical internal notification:
@@ -349,6 +369,39 @@ class AccountMove(models.Model):
                 # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
                 _logger.info("⏳ Retrigger cron scheduled in 5 minutes")
                 self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
+
+    def _l10n_ro_spv_count_failed_send_attempts(self):
+        """Count an automatic send attempt on the invoices that were not uploaded.
+
+        An invoice still without l10n_ro_edi_state after the send was not
+        uploaded (XML/partner error, SPV unreachable, ...). The cron skips it
+        once MAX_SPV_SEND_RETRIES attempts are reached; the chatter says so once.
+        """
+        self.invalidate_recordset(["l10n_ro_edi_state"])
+        now = fields.Datetime.now()
+        for invoice in self.filtered(lambda inv: not inv.l10n_ro_edi_state):
+            attempts = invoice.l10n_ro_spv_send_attempts + 1
+            invoice.write(
+                {
+                    "l10n_ro_spv_send_attempts": attempts,
+                    "l10n_ro_spv_last_send_attempt": now,
+                }
+            )
+            if attempts == MAX_SPV_SEND_RETRIES:
+                invoice.message_post(
+                    body=self.env._(
+                        "Trimiterea automată în SPV a eșuat de %s ori; cron-ul nu o mai reîncearcă. "
+                        "Corectați eroarea și trimiteți factura manual.",
+                        attempts,
+                    )
+                )
+
+    def button_draft(self):
+        # The operator is correcting the invoice: give the cron its attempts back.
+        self.filtered("l10n_ro_spv_send_attempts").write(
+            {"l10n_ro_spv_send_attempts": 0, "l10n_ro_spv_last_send_attempt": False}
+        )
+        return super().button_draft()
 
     def _l10n_ro_spv_send_cron_report(self, company, stats):
         """Send a statistics email summarizing one SPV auto-send cron run.
