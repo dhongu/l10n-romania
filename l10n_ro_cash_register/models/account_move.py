@@ -13,7 +13,10 @@ class AccountMove(models.Model):
         înregistrată în ziua N invalidează registrul zilei N și pe toate cele ulterioare
         din același jurnal, nu doar registrul zilei respective.
         """
-        register_model = self.env["l10n.ro.cash.register"]
+        # sudo() de la inceput: postarea unei note nu presupune drept de scriere/citire pe
+        # registru, iar `|=` mai jos foloseste env-ul operandului din stanga, deci sudo-ul
+        # trebuie sa fie deja prezent aici ca sa se pastreze pe tot recordset-ul unit.
+        register_model = self.env["l10n.ro.cash.register"].sudo()
         # Filtrul pe tipul contului elimină din start facturile și notele care nu ating
         # casieria, fără nicio interogare suplimentară.
         lines = self.line_ids.filtered(lambda line: line.account_id.account_type == "asset_cash")
@@ -36,9 +39,8 @@ class AccountMove(models.Model):
             dates = [date for date in dates if date]
             if not dates:
                 continue
-            # `sudo` pentru că postarea unei note nu presupune drept de scriere pe registru;
             # domeniul rămâne limitat la jurnalul atins, deci nu traversează companii.
-            registers |= register_model.sudo().search([("journal_id", "=", journal.id), ("date", ">=", min(dates))])
+            registers |= register_model.search([("journal_id", "=", journal.id), ("date", ">=", min(dates))])
         return registers
 
     def _post(self, soft=True):
