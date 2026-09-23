@@ -1,3 +1,22 @@
+## 19.0.0.5.3 (2026-09-23)
+
+- **O firmă din România fără CUI nu mai pleacă în SPV.** `l10n_ro_edi` completează
+  CUI-ul lipsă al clientului cu `0000000000000`. Valoarea e corectă pentru persoane
+  fizice fără CNP, dar nucleul o pune și pe firme: verifică doar CUI-ul
+  furnizorului, nu și pe al clientului. O factură către o firmă cu CUI-ul
+  necompletat ajungea astfel la ANAF fără cumpărător identificat.
+  - Blocajul se aplică clienților marcați ca firmă (`is_company`), cu țara România,
+    fără CUI sau cu CUI `0000000000000`.
+  - Verificarea apare la generarea XML-ului (avertisment în „Trimite și tipărește")
+    și încă o dată chiar înainte de transmiterea în SPV, pentru XML-urile generate
+    mai devreme. Motivul se scrie în chatter-ul facturii.
+  - Persoanele fizice și clienții din alte țări nu sunt afectați.
+  - Doar cod Python, nu necesită actualizarea modulului; traducerea în română a
+    mesajului se încarcă la actualizare.
+- Explicația opțiunii „Nu importa automat facturile primite din SPV" nu apărea în
+  română: în `ro.po` textul avea altă ghilimea decât în cod, iar Odoo sărea tăcut
+  traducerea.
+
 ## 19.0.0.5.2 (2026-09-23)
 
 - **Facturile din POS pleacă din nou în e-Factura cu tipul 751.** Pe 18.0 modulul
