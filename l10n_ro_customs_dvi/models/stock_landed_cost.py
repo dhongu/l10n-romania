@@ -64,28 +64,66 @@ class LandedCost(models.Model):
             tax_values = cost.tax_id.compute_all(cost.tax_base)
 
             name = self.env._("VAT paid at customs - %s", cost.tax_id.name)
-            aml = [
-                {
-                    "name": name,
-                    "debit": cost.tax_value,
-                    "credit": 0.0,
-                    "account_id": tax_values["taxes"][0]["account_id"],
-                    "move_id": cost.account_move_id.id,
-                    "tax_tag_ids": [(6, 0, tax_values["taxes"][0]["tag_ids"])],
-                },
-                {
-                    "name": name,
-                    "debit": 0.0,
-                    "credit": cost.tax_value,
-                    "account_id": accounts_data["expense"].id,
-                    "move_id": cost.account_move_id.id,
-                    # Fără tag de bază aici: linia poartă valoarea TVA, nu baza. Tag-ul de bază
-                    # merge pe perechea tehnică de mai jos, de valoare `tax_base`.
-                },
-            ]
+            aml = cost._prepare_tax_lines(name, tax_values, accounts_data)
             aml += cost._prepare_tax_base_lines(name, tax_values)
             self.env["account.move.line"].create(aml)
         return res
+
+    def _prepare_tax_lines(self, name, tax_values, accounts_data):
+        """Liniile de TVA ale notei, urmând liniile de repartiţie ale taxei alese.
+
+        Taxa **este** comutatorul între cele două regimuri de la art. 326 Cod fiscal, fiindcă
+        repartiţia ei descrie exact tratamentul:
+
+        * **plata efectivă în vamă** (art. 326 alin. (3)) — taxă obişnuită de achiziţie, cu o
+          singură linie de repartiţie, pe 4426. Contrapartida e datoria faţă de buget:
+          ``Dr 4426 = Cr 4462``, stinsă ulterior prin plată;
+
+        * **amânarea de la plată** (art. 326 alin. (4)-(5)) — taxă cu taxare inversă, cu două
+          linii de repartiţie, pe 4426 şi 4427. Cele două se soldează între ele, iar taxa se
+          evidenţiază în decont atât ca taxă deductibilă, cât şi ca taxă colectată:
+          ``Dr 4426 = Cr 4427``, **fără 446 şi fără plată**.
+
+        Nu există niciun câmp de configurare: operatorul alege în wizard taxa care corespunde
+        regimului societăţii. Contrapartida pe contul de buget se adaugă doar când repartiţia are
+        o singură linie — la taxare inversă ar dezechilibra nota.
+
+        Sumele urmează `tax_value`, transcris din declaraţie, nu recalculat; din repartiţie se
+        preiau contul, eticheta fiscală şi semnul.
+        """
+        self.ensure_one()
+        reps = [r for r in tax_values["taxes"] if r.get("account_id")]
+        if not reps:
+            return []
+
+        lines = []
+        for r in reps:
+            semn = -1.0 if r["amount"] < 0 else 1.0
+            suma = self.tax_value * semn
+            lines.append(
+                {
+                    "name": name,
+                    "debit": suma if suma > 0 else 0.0,
+                    "credit": -suma if suma < 0 else 0.0,
+                    "account_id": r["account_id"],
+                    "move_id": self.account_move_id.id,
+                    "tax_tag_ids": [(6, 0, r["tag_ids"])],
+                }
+            )
+
+        if len(reps) == 1:
+            # Fără tag de bază aici: linia poartă valoarea TVA, nu baza. Eticheta de bază merge
+            # pe perechea tehnică din `_prepare_tax_base_lines`, de valoare `tax_base`.
+            lines.append(
+                {
+                    "name": name,
+                    "debit": 0.0,
+                    "credit": self.tax_value,
+                    "account_id": accounts_data["expense"].id,
+                    "move_id": self.account_move_id.id,
+                }
+            )
+        return lines
 
     def _get_base_clearing_account(self):
         """Contul neutru pe care se poartă perechea tehnică de bază pentru decont."""
