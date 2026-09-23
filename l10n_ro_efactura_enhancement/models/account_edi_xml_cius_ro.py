@@ -160,6 +160,20 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         self._l10n_ro_apply_length_limits(document_node)
         return document_node
 
+    def _add_invoice_header_nodes(self, document_node, vals):
+        # EXTENDS account.edi.xml.ubl_20
+        # Factura din POS acopera o vanzare deja inregistrata pe bonul fiscal: se trimite cu
+        # 751 (informatii in scopuri contabile), altfel ANAF numara vanzarea si TVA-ul de doua
+        # ori. Regula exista pe 18.0 si s-a pierdut la rescrierea modulului pe 19.0.
+        # Stornourile nu au InvoiceTypeCode (381 e pe CreditNoteTypeCode), iar 389
+        # (autofacturare) ramane neschimbat.
+        res = super()._add_invoice_header_nodes(document_node, vals)
+        invoice = vals["invoice"]
+        type_code = document_node.get("cbc:InvoiceTypeCode")
+        if "pos_order_ids" in invoice._fields and invoice.pos_order_ids and type_code and type_code.get("_text") == 380:
+            document_node["cbc:InvoiceTypeCode"] = {"_text": 751}
+        return res
+
     # -------------------------------------------------------------------------
     # Limitele CIUS-RO de lungime
     # -------------------------------------------------------------------------

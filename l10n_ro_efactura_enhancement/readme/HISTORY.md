@@ -1,3 +1,16 @@
+## 19.0.0.5.2 (2026-09-23)
+
+- **Facturile din POS pleacă din nou în e-Factura cu tipul 751.** Pe 18.0 modulul
+  schimba `InvoiceTypeCode` din 380 în 751 pentru orice factură legată de o comandă
+  POS (vânzare deja înregistrată pe bonul fiscal). Regula s-a pierdut la rescrierea
+  modulului pe 19.0, iar de la migrare facturile din POS au plecat cu 380: ANAF
+  număra vânzarea și TVA-ul de două ori (casa de marcat + factura). Semnalat pe
+  Damira (INV/2026/04101), confirmat și la Valshop (751 până în mai 2026, 380 după
+  trecerea pe 19).
+  - Stornourile (381) și autofacturarea (389) rămân neschimbate.
+  - XML-urile deja trimise nu se modifică.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
 ## 19.0.0.4.4 (2026-09-10)
 
 - **Trunchiere referință aviz de expediție (BT-16) la 200 de caractere.**
