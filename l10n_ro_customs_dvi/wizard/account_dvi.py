@@ -27,15 +27,6 @@ class AccountInvoiceDVI(models.TransientModel):
         "It is added to the cost of the received goods through a landed cost line: "
         "Dr 371 = Cr 446.",
     )
-    customs_commission = fields.Monetary(
-        string="Customs Commission",
-        help="Commission owed to the CUSTOMS AUTHORITY, as stated in the declaration. It is added "
-        "to the cost of the goods: Dr 371 = Cr 446.\n\n"
-        "Do not enter the customs broker's fee here. The broker is an ordinary supplier, with a VAT "
-        "number and a balance on account 401: record their invoice on a service product flagged "
-        "'Is a Landed Cost', then use the native 'Create Landed Costs' button on that invoice if "
-        "the fee is to be capitalised.",
-    )
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
     tax_value = fields.Monetary(
@@ -88,6 +79,10 @@ class AccountInvoiceDVI(models.TransientModel):
         return Account
 
     def _prepare_custom_duty_product(self):
+        # Taxa vamală e datorie faţă de bugetul de stat -> 446 (analiticul de scadenţă îl alege
+        # `_get_customs_payable_account`). Nu se foloseşte 447 „Fonduri speciale": funcţiunea din
+        # OMFP 1802/2014 îl rezervă datoriilor către alte organisme publice, creditat exclusiv
+        # prin 635, niciodată prin conturi de stoc.
         account = self._get_customs_payable_account()
         return {
             "name": self.env._("Custom Duty"),
@@ -102,41 +97,10 @@ class AccountInvoiceDVI(models.TransientModel):
             "split_method_landed_cost": "by_current_cost_price",
         }
 
-    def _prepare_customs_commission_product(self):
-        # Comision datorat AUTORITĂŢII VAMALE, deci datorie faţă de bugetul de stat -> 446
-        # (analiticul de scadenţă îl alege `_get_customs_payable_account`).
-        #
-        # Nu se foloseşte 447 „Fonduri speciale - taxe şi vărsăminte asimilate": funcţiunea din
-        # OMFP 1802/2014 îl rezervă datoriilor către alte organisme publice şi îl arată creditat
-        # exclusiv prin 635, niciodată prin conturi de stoc.
-        #
-        # Onorariul COMISIONARULUI VAMAL (brokerul) nu se operează prin acest wizard: el e un
-        # furnizor obişnuit, cu CUI şi sold pe 401. Se înregistrează factura lui pe un produs cu
-        # `landed_cost_ok`, iar capitalizarea în costul stocului se face — sau nu, după politica
-        # contabilă — cu butonul nativ „Create Landed Costs" de pe factură.
-        account = self._get_customs_payable_account()
-        return {
-            "name": self.env._("Customs Commission"),
-            "type": "service",
-            "invoice_policy": "order",
-            "property_account_expense_id": account.id,
-            "taxes_id": False,
-            "company_id": False,
-            "landed_cost_ok": True,
-            "split_method_landed_cost": "by_current_cost_price",
-        }
-
     @api.model
     def get_custom_duty_product(self):
         get_param = self.env["ir.config_parameter"].sudo().get_param
         product_id = get_param("dvi.custom_duty_product_id")
-
-        return self.env["product.product"].browse(int(product_id)).exists()
-
-    @api.model
-    def get_customs_commission_product(self):
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        product_id = get_param("dvi.customs_commission_product_id")
 
         return self.env["product.product"].browse(int(product_id)).exists()
 
@@ -193,28 +157,6 @@ class AccountInvoiceDVI(models.TransientModel):
                         "name": custom_duty_product.name,
                         "product_id": custom_duty_product.id,
                         "price_unit": self.custom_duty,
-                        "split_method": "by_current_cost_price",
-                        "account_id": accounts_data["expense"].id,
-                    },
-                )
-            ]
-
-        if self.customs_commission:
-            customs_commission_product = self.get_customs_commission_product()
-            if not customs_commission_product:
-                vals = self._prepare_customs_commission_product()
-                customs_commission_product = self.env["product.product"].create(vals)
-                set_param("dvi.customs_commission_product_id", customs_commission_product.id)
-            accounts_data = customs_commission_product.product_tmpl_id.get_product_accounts()
-
-            values["cost_lines"] += [
-                (
-                    0,
-                    0,
-                    {
-                        "name": customs_commission_product.name,
-                        "product_id": customs_commission_product.id,
-                        "price_unit": self.customs_commission,
                         "split_method": "by_current_cost_price",
                         "account_id": accounts_data["expense"].id,
                     },

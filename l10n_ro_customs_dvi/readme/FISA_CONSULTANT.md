@@ -279,14 +279,13 @@ Butonul deschide wizardul. În capul lui se află o casetă de îndrumare cu map
 | **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziției **B00** |
 | **TVA la import** | cota aplicată de vamă | din declarație |
 | **Taxă vamală** | taxa vamală datorată | poziția **A00** |
-| **Comision vamal** | comisionul datorat autorității vamale | din declarație |
 | **Număr DVI** | MRN-ul | antetul declarației |
 | **Data DVI** | data acceptării declarației | antetul declarației |
 
 **Găsiți pe ecran:** câmpul *Bază de impozitare* vine precompletat cu **netul facturii furnizorului**.
 
 **Verificați, înainte de a confirma:** baza propusă coincide cu baza poziției B00 din declarație? Dacă
-declarația include transport, taxă vamală sau comision, **nu coincide** — vezi §2.1. Cota propusă este
+declarația include transportul extern sau taxa vamală, **nu coincide** — vezi §2.1. Cota propusă este
 cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate?
 
 **Treceți mai departe:** abia după corectarea câmpurilor, apăsați **Aplică**.
@@ -298,8 +297,8 @@ cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate?
 
 ### Pasul 6 — Validarea costului de aterizare
 
-Aplicarea creează un cost de aterizare legat de recepțiile comenzii, cu câte o linie pentru taxa vamală
-și pentru comision, plus câmpurile DVI în capul formularului. Apăsați **Calculează**, verificați
+Aplicarea creează un cost adițional legat de recepțiile comenzii, cu o linie pentru taxa vamală,
+plus câmpurile DVI în capul formularului. Apăsați **Calculează**, verificați
 repartizarea pe produse, apoi **Validează**.
 
 ![Costul de aterizare generat din DVI, cu numărul declarației](screenshots/06_landed_cost_dvi.png)
@@ -312,11 +311,18 @@ declarație.
 
 ![Nota contabilă cu MRN-ul ca referință](screenshots/07_nota_contabila_tva.png)
 
-Pe fișa produsului, costul unitar a crescut cu (taxă vamală + comision) raportat la cantitate.
+Pe fișa produsului, costul unitar a crescut cu taxa vamală raportată la cantitate.
 
 ![Costul produsului majorat cu taxele vamale](screenshots/08_cost_produs.png)
 
 ### Pasul 8 — Onorariul comisionarului vamal (broker)
+
+> **Nu există un „comision vamal" datorat autorității.** Comisionul vamal de 0,5% a dispărut odată
+> cu aderarea la UE; nu apare în Codul fiscal, în norme, în OMFP 1802/2014 și nici printre drepturile
+> de import din Codul Vamal al Uniunii. Wizardul a avut până la versiunea 19.0.2.0.0 un câmp
+> „Comision vamal”, moștenit din 2008, care în practică era folosit greșit tocmai pentru onorariul
+> brokerului — cu contul greșit (446, datorie la buget, în loc de 401) și fără TVA-ul lui. Câmpul a
+> fost eliminat; onorariul se operează exclusiv așa cum se arată mai jos.
 
 **Nu se operează prin wizardul DVI.** Brokerul este furnizor obișnuit, cu CUI, factură cu TVA și sold
 pe 401.
@@ -365,8 +371,6 @@ La validarea costului de aterizare:
 |---|---|---|---|
 | 371 / 301 | valoare stoc | taxa vamală | |
 | 446 | taxe vamale datorate bugetului | | taxa vamală |
-| 371 / 301 | valoare stoc | comision vamal | |
-| 446 | comision datorat autorității vamale | | comision vamal |
 | 4426 | TVA deductibilă la import | TVA B00 | |
 | 446 | TVA de plată în vamă | | TVA B00 |
 
@@ -423,10 +427,10 @@ transportului extern.
 - [ ] Baza introdusă în wizard **coincide cu baza poziției B00** din declarație, nu cu netul facturii.
 - [ ] Dacă baza a fost modificată, **valoarea TVA a fost actualizată** manual în același wizard.
 - [ ] Cota de TVA corespunde celei din declarație (atenție la cota redusă pentru alimente).
-- [ ] După validare, **costul unitar al produsului a crescut** cu (taxă vamală + comision) / cantitate.
+- [ ] După validare, **costul unitar al produsului a crescut** cu taxa vamală / cantitate.
 - [ ] TVA-ul de import apare pe **4426**, nu în costul mărfii.
 - [ ] Nota contabilă are ca **referință numărul de DVI**, nu secvența internă.
-- [ ] Taxa vamală și comisionul sunt creditate pe **446**.
+- [ ] Taxa vamală este creditată pe **4462**, analiticul de scadență scurtă.
 - [ ] Onorariul brokerului **nu** a fost introdus în wizard, ci pe factura lui de furnizor.
 - [ ] Transportul extern apare **o singură dată** în costul stocului.
 - [ ] Contul 446 se închide la zero pentru declarația respectivă după plata către vamă.
@@ -455,7 +459,7 @@ planul de conturi RO:
 3. `03_receptie_terminal.png` — recepția validată a mărfii importate.
 4. `04_factura_furnizor_buton_dvi.png` — factura furnizor postată, cu butonul DVI.
 5. `05_wizard_dvi.png` — wizardul DVI la deschidere, cu caseta de îndrumare; baza propusă este
-   netul facturii (60.000), nu baza din declarație (70.200).
+   netul facturii (60.000), nu baza din declarație (70.000).
 6. `06_landed_cost_dvi.png` — costul de aterizare generat, cu numărul declarației.
 7. `07_nota_contabila_tva.png` — nota contabilă cu MRN-ul ca referință.
 8. `08_cost_produs.png` — costul produsului majorat cu taxele vamale.

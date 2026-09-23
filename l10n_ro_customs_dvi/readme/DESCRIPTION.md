@@ -244,7 +244,6 @@ politică contabilă este chiar butonul:** dacă onorariul nu se capitalizează,
 Costs” şi factura rămâne cheltuială pe 628. Landed cost-urile create astfel intră automat şi sub
 protecţia FIFO din `l10n_ro_invoice_dvi_protect`, care verifică legătura `vendor_bill_id`.
 
-### Câmpul „Comision vamal” din wizard
 
 Rămâne pentru **comisionul datorat autorităţii vamale**, nu pentru onorariul brokerului. Este creditat
 pe un cont **446** — datorie faţă de bugetul de stat.

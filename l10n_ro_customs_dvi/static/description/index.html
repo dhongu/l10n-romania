@@ -712,9 +712,6 @@ dacă onorariul nu se capitalizează, nu apăsaţi „Create Landed Costs” şi
 factura rămâne cheltuială pe 628. Landed cost-urile create astfel intră
 automat şi sub protecţia FIFO din <tt class="docutils literal">l10n_ro_invoice_dvi_protect</tt>, care
 verifică legătura <tt class="docutils literal">vendor_bill_id</tt>.</p>
-</div>
-<div class="section" id="campul-comision-vamal-din-wizard">
-<h3>Câmpul „Comision vamal” din wizard</h3>
 <p>Rămâne pentru <strong>comisionul datorat autorităţii vamale</strong>, nu pentru
 onorariul brokerului. Este creditat pe un cont <strong>446</strong> — datorie faţă de
 bugetul de stat.</p>
@@ -1208,12 +1205,6 @@ se <strong>transcriu din declaraţia vamală</strong>, nu se recalculează din f
 <td>taxa vamală datorată</td>
 <td>poziţia <strong>A00</strong></td>
 </tr>
-<tr><td><strong>Comision vamal</strong></td>
-<td>comisionul datorat
-autorităţii vamale,
-dacă există</td>
-<td>din declaraţie</td>
-</tr>
 <tr><td><strong>Bază de
 impozitare</strong></td>
 <td>baza pe care vama a
@@ -1282,7 +1273,6 @@ pentru comision.</p>
 <p><strong>La validarea landed cost-ului:</strong></p>
 <pre class="literal-block">
 Dr 371/301  = Cr 446    taxa vamală      -&gt; intră în costul stocului
-Dr 371/301  = Cr 446    comision vamal   -&gt; intră în costul stocului
 Dr 4426     = Cr 446    TVA la import    -&gt; deductibilă, NU măreşte costul
 </pre>
 <p>Nota contabilă primeşte ca referinţă <strong>numărul de DVI</strong> (MRN), nu

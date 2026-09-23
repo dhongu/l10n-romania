@@ -261,7 +261,6 @@ class TestDVI(TransactionCase):
         wizard_form.tax_id = self.tax_id
         wizard_form.dvi_number = "25ROBU1234567890"
         wizard_form.custom_duty = 5.0
-        wizard_form.customs_commission = 6.0
         # Simulam o modificare manuala a TVA-ului platit in vama
         wizard_form.tax_value = wizard_form.tax_value + 1
         wizard = wizard_form.save()
@@ -320,11 +319,11 @@ class TestDVI(TransactionCase):
         valuations = self.env["stock.move"]._read_group(domain, ["product_id"], ["value:sum", "quantity:sum"])
         for product, value, _quantity in valuations:
             if product.id == self.product_1.id:
-                # 1000 + 5*1/3 (1.67) + 6*1/3 (2) = 1003.67
-                self.assertAlmostEqual(value, 10 * 100 + 1.67 + 2, places=2)
+                # 1000 + taxa vamală 5 repartizată 1/3 (1.67) = 1001.67
+                self.assertAlmostEqual(value, 10 * 100 + 1.67, places=2)
             if product.id == self.product_2.id:
-                # 2000 + 5*2/3 (3.33) + 6*2/3 (4) = 2007.33
-                self.assertAlmostEqual(value, 10 * 200 + 3.33 + 4, places=2)
+                # 2000 + taxa vamală 5 repartizată 2/3 (3.33) = 2003.33
+                self.assertAlmostEqual(value, 10 * 200 + 3.33, places=2)
 
         action = invoice.button_dvi()
         self.assertEqual(action.get("res_id"), dvi.id)
@@ -340,9 +339,8 @@ class TestDVI(TransactionCase):
         wizard = self.env["account.invoice.dvi"].create({})
 
         duty_vals = wizard._prepare_custom_duty_product()
-        commission_vals = wizard._prepare_customs_commission_product()
 
-        for vals in (duty_vals, commission_vals):
+        for vals in (duty_vals,):
             account = self.env["account.account"].browse(vals["property_account_expense_id"])
             self.assertTrue(
                 account.code.startswith("446"),
@@ -362,5 +360,5 @@ class TestDVI(TransactionCase):
             self.assertEqual(vals["type"], "service")
 
         # Produsul creat efectiv păstrează marcajul (constrângerea din core cere type == service).
-        product = self.env["product.product"].create(commission_vals)
+        product = self.env["product.product"].create(duty_vals)
         self.assertTrue(product.landed_cost_ok)
