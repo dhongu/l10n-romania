@@ -144,7 +144,7 @@ msgstr "CIUS RO"
 #: model:ir.model.fields,help:l10n_ro_efactura_enhancement.field_res_company__l10n_ro_edi_no_auto_bill
 #: model:ir.model.fields,help:l10n_ro_efactura_enhancement.field_res_config_settings__l10n_ro_edi_no_auto_bill
 msgid ""
-"Cand este activat, cronul nativ „E-Factura: Synchronize with ANAF” nu mai "
+"Cand este activat, cronul nativ „E-Factura: Synchronize with ANAF\" nu mai "
 "creeaza automat ciorne de facturi de la furnizori din mesajele primite in "
 "SPV. Sincronizarea statusului facturilor trimise (acceptat/refuzat) ramane "
 "activa."
@@ -423,3 +423,14 @@ msgstr "e-Factura SPV: Raport rulare cron"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
 msgid "eFactura SPV"
 msgstr "eFactura SPV"
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid ""
+"The customer %(partner)s is a company but has no VAT number (CUI). The "
+"e-Factura would be sent to the SPV with the placeholder %(placeholder)s. "
+"Fill in the CUI on the customer before sending."
+msgstr ""
+"Clientul %(partner)s este firmă, dar nu are CUI. Factura ar pleca în SPV cu "
+"valoarea implicită %(placeholder)s. Completați CUI-ul clientului înainte de trimitere."

@@ -16,6 +16,11 @@ MAX_SPV_SEND_RETRIES = 3
 # ``AccountMove._l10n_ro_is_spv_target``.
 SPV_FALLBACK_CURRENCY = "RON"
 
+# Placeholder VAT that l10n_ro_edi writes in BT-48 / BT-47 for a customer
+# without a tax identifier. It is meant for individuals without a CNP; on a
+# company it reaches the SPV as a real invoice issued to nobody.
+PLACEHOLDER_VAT = "0000000000000"
+
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -64,6 +69,29 @@ class AccountMove(models.Model):
         if partner_country:
             return partner_country.code == "RO"
         return self.currency_id.name == SPV_FALLBACK_CURRENCY
+
+    def _l10n_ro_customer_vat_missing_error(self):
+        """Error message when a Romanian company customer has no CUI, else False.
+
+        l10n_ro_edi fills a missing customer tax identifier with
+        ``0000000000000`` and only checks the supplier's, never the customer's.
+        The placeholder is legitimate for individuals, but a company invoiced
+        with it is declared to ANAF with no buyer and its VAT can't be deducted.
+        """
+        self.ensure_one()
+        partner = self.commercial_partner_id
+        if not partner.is_company or partner.country_id.code != "RO":
+            return False
+        vat = (partner.vat or "").strip().upper().removeprefix("RO").strip()
+        if vat and vat != PLACEHOLDER_VAT:
+            return False
+        return self.env._(
+            "The customer %(partner)s is a company but has no VAT number (CUI). "
+            "The e-Factura would be sent to the SPV with the placeholder %(placeholder)s. "
+            "Fill in the CUI on the customer before sending.",
+            partner=partner.display_name,
+            placeholder=PLACEHOLDER_VAT,
+        )
 
     @api.model
     def _l10n_ro_spv_target_domain(self):
@@ -456,6 +484,15 @@ class AccountMove(models.Model):
             invoices,
             sending_methods={"manual"},
         )
+
+    def _l10n_ro_edi_get_pre_send_errors(self, xml_data):
+        # EXTENDS l10n_ro_edi
+        # Last gate before the SPV: the XML may have been generated earlier and
+        # reused, so the export constraint alone does not cover every path.
+        errors = super()._l10n_ro_edi_get_pre_send_errors(xml_data)
+        if error := self._l10n_ro_customer_vat_missing_error():
+            errors.append(error)
+        return errors
 
     def _l10n_ro_edi_send_invoice(self, xml_data):
         return super(AccountMove, self.with_context(active_id=self.id))._l10n_ro_edi_send_invoice(xml_data)

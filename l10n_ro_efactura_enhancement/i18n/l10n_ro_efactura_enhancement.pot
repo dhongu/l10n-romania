@@ -369,3 +369,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_efactura_enhancement.res_config_settings_view_form
 msgid "eFactura SPV"
 msgstr ""
+
+#. module: l10n_ro_efactura_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_efactura_enhancement/models/account_move.py:0
+msgid ""
+"The customer %(partner)s is a company but has no VAT number (CUI). The "
+"e-Factura would be sent to the SPV with the placeholder %(placeholder)s. "
+"Fill in the CUI on the customer before sending."
+msgstr ""
