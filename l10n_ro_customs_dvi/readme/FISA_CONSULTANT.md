@@ -22,6 +22,8 @@ Modulul leagă declarația vamală de factura furnizorului printr-un **cost de a
 atașat recepției. Rezultatul: costul unitar al produsului reflectă costul real de import, iar marja de
 pe vânzare nu mai este supraevaluată.
 
+> **Terminologie.** Interfața Odoo în română numește acest mecanism **cost adițional** (`stock.landed.cost`), nu „cost de aterizare". Fișa folosește termenul consacrat în casă, dar pe ecran veți căuta etichetele din interfață: „Costuri adiționale", „Creați costuri adiționale", „Este un cost adițional".
+
 Fără acest flux, taxele vamale ar rămâne cheltuială a perioadei, iar produsul ar ieși din gestiune la
 un cost mai mic decât cel real.
 
@@ -271,12 +273,12 @@ Pe fișa produsului, costul unitar a crescut cu (taxă vamală + comision) rapor
 **Nu se operează prin wizardul DVI.** Brokerul este furnizor obișnuit, cu CUI, factură cu TVA și sold
 pe 401.
 
-1. Creați un produs de tip **serviciu** cu bifa **Este cost de aterizare** (fila Achiziții), cu cont de
+1. Creați un produs de tip **serviciu** cu bifa **Este un cost adițional** (fila Achiziții), cu cont de
    cheltuială 628 sau 622.
 2. Înregistrați factura brokerului pe acest produs, cu TVA-ul lui. Linia se marchează automat ca linie
    de cost de aterizare.
 3. **Dacă politica contabilă prevede capitalizarea** onorariului în costul mărfii, apăsați butonul
-   **Creează costuri de aterizare** de pe factură, selectați recepția și validați.
+   **Creați costuri adiționale** de pe factură, selectați recepția și validați.
    **Dacă nu se capitalizează**, nu apăsați nimic — factura rămâne cheltuială pe 628.
 
 Butonul **este** switch-ul de politică contabilă; nu există un câmp separat de configurat.
