@@ -132,22 +132,34 @@ implicită a companiei nu este cota corectă.
 
 Deducerea se exercită pe baza declarației vamale sau a actului constatator (art. 299 alin. (1) lit. c)).
 
-### 2.7 Ce NU acoperă modulul: amânarea plății TVA în vamă
+### 2.7 Cele două regimuri de plată a TVA în vamă
 
-Modulul acoperă **doar** cazul plății efective la organul vamal — art. 326 alin. (3).
+Codul fiscal prevede două tratamente, iar modulul le acoperă pe amândouă. **Taxa aleasă în wizard
+este comutatorul** — nu există niciun câmp de configurat.
 
-Persoanele impozabile care au obținut **certificat de amânare de la plată** (art. 326 alin. (4)
-lit. a), precum și cele cu vămuire centralizată sau cu înscriere în evidențele declarantului
-(lit. b) și c)), **nu fac plata efectivă la organele vamale**. Ele evidențiază taxa în decont
-**atât ca taxă colectată, cât și ca taxă deductibilă** (art. 326 alin. (5)):
+**Plata efectivă la organul vamal — art. 326 alin. (3).** Regimul obișnuit. Se alege o taxă de
+achiziție normală (o singură linie de repartiție, pe 4426):
+
+```
+Dr 4426 = Cr 4462        TVA de plată în vamă, stinsă ulterior prin plată
+```
+
+**Amânarea de la plată — art. 326 alin. (4)-(5).** Persoanele impozabile care au obținut
+**certificat de amânare de la plată** (lit. a)), cele cu vămuire centralizată (lit. b)) sau cu
+înscriere în evidențele declarantului (lit. c)) **nu fac plata efectivă la organele vamale**. Ele
+evidențiază taxa în decont **atât ca taxă colectată, cât și ca taxă deductibilă** (alin. (5)). Se
+alege o taxă cu **taxare inversă** (două linii de repartiție, pe 4426 și 4427):
 
 ```
 Dr 4426 = Cr 4427        fără 446 și fără plată
 ```
 
-Practic toți importatorii mari au acest certificat. Wizardul cere însă „TVA plătit în vamă" și
-creditează întotdeauna 446. **Pentru clienții cu certificat de amânare, nota trebuie ajustată
-manual** sau TVA-ul nu se introduce deloc în wizard, iar taxarea se face separat.
+Cele două linii se soldează între ele, deci nota nu mai are contrapartidă pe contul de buget — nu
+există nicio datorie de stins.
+
+> **De verificat înainte de prima declarație:** ce regim are societatea. Practic toți importatorii
+> mari au certificat de amânare. Dacă alegeți taxa greșită, nota iese cu o datorie la buget care nu
+> există — sau, invers, fără datoria care chiar trebuie plătită.
 
 ### 2.8 Deducerea este condiționată de plată
 
@@ -277,7 +289,7 @@ Butonul deschide wizardul. În capul lui se află o casetă de îndrumare cu map
 |---|---|---|
 | **Bază de impozitare** | baza pe care vama a calculat TVA-ul | baza poziției **B00** |
 | **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziției **B00** |
-| **TVA la import** | cota aplicată de vamă | din declarație |
+| **TVA la import** | cota aplicată de vamă — **și regimul**: taxă normală la plata efectivă, taxare inversă la amânare (§2.7) | din declarație |
 | **Taxă vamală** | taxa vamală datorată | poziția **A00** |
 | **Număr DVI** | MRN-ul | antetul declarației |
 | **Data DVI** | data acceptării declarației | antetul declarației |
@@ -427,6 +439,8 @@ transportului extern.
 - [ ] Baza introdusă în wizard **coincide cu baza poziției B00** din declarație, nu cu netul facturii.
 - [ ] Dacă baza a fost modificată, **valoarea TVA a fost actualizată** manual în același wizard.
 - [ ] Cota de TVA corespunde celei din declarație (atenție la cota redusă pentru alimente).
+- [ ] **Regimul de plată e cel corect**: taxă normală dacă TVA-ul se achită în vamă, taxă cu
+      taxare inversă dacă societatea are certificat de amânare (§2.7).
 - [ ] După validare, **costul unitar al produsului a crescut** cu taxa vamală / cantitate.
 - [ ] TVA-ul de import apare pe **4426**, nu în costul mărfii.
 - [ ] Nota contabilă are ca **referință numărul de DVI**, nu secvența internă.

@@ -328,6 +328,118 @@ class TestDVI(TransactionCase):
         action = invoice.button_dvi()
         self.assertEqual(action.get("res_id"), dvi.id)
 
+    def _build_reverse_charge_tax(self):
+        """Taxă de import cu taxare inversă: două linii de repartiţie, pe 4427 şi 4426."""
+        acc_4426 = self.env["account.account"].search([("code", "=", "442600")], limit=1)
+        if not acc_4426:
+            acc_4426 = self.env["account.account"].create(
+                {"name": "TVA deductibilă", "code": "442600", "account_type": "asset_current"}
+            )
+        acc_4427 = self.env["account.account"].search([("code", "=", "442700")], limit=1)
+        if not acc_4427:
+            acc_4427 = self.env["account.account"].create(
+                {"name": "TVA colectată", "code": "442700", "account_type": "liability_current"}
+            )
+        tag_ded = self.env["account.account.tag"].create(
+            {"name": "RC deductibil", "applicability": "taxes", "country_id": self.env.ref("base.ro").id}
+        )
+        tag_col = self.env["account.account.tag"].create(
+            {"name": "RC colectat", "applicability": "taxes", "country_id": self.env.ref("base.ro").id}
+        )
+        rep = [
+            (0, 0, {"repartition_type": "base", "factor_percent": 100}),
+            (
+                0,
+                0,
+                {
+                    "repartition_type": "tax",
+                    "factor_percent": -100,
+                    "account_id": acc_4427.id,
+                    "tag_ids": [(6, 0, tag_col.ids)],
+                },
+            ),
+            (
+                0,
+                0,
+                {
+                    "repartition_type": "tax",
+                    "factor_percent": 100,
+                    "account_id": acc_4426.id,
+                    "tag_ids": [(6, 0, tag_ded.ids)],
+                },
+            ),
+        ]
+        return (
+            self.env["account.tax"].create(
+                {
+                    "name": "TVA Import Taxare Inversă Test",
+                    "amount": 19.0,
+                    "amount_type": "percent",
+                    "type_tax_use": "purchase",
+                    "tax_group_id": self.tax_id.tax_group_id.id,
+                    "country_id": self.env.ref("base.ro").id,
+                    "invoice_repartition_line_ids": rep,
+                    "refund_repartition_line_ids": [
+                        (0, 0, {"repartition_type": "base", "factor_percent": 100}),
+                        (0, 0, {"repartition_type": "tax", "factor_percent": -100, "account_id": acc_4427.id}),
+                        (0, 0, {"repartition_type": "tax", "factor_percent": 100, "account_id": acc_4426.id}),
+                    ],
+                }
+            ),
+            acc_4426,
+            acc_4427,
+        )
+
+    def test_vat_deferred_payment_reverse_charge(self):
+        """Amânarea plăţii TVA în vamă — art. 326 alin. (4)-(5) Cod fiscal.
+
+        Cu certificat de amânare nu se face plată efectivă la organele vamale; taxa se
+        evidenţiază în decont atât ca deductibilă, cât şi ca fiind colectată. Nota trebuie să
+        fie `Dr 4426 = Cr 4427`, **fără linie pe contul de buget** — aceea ar însemna o datorie
+        care nu există.
+
+        Taxa e comutatorul: repartiţia ei cu două linii descrie chiar acest regim.
+        """
+        tax_rc, acc_4426, acc_4427 = self._build_reverse_charge_tax()
+        cost = self.env["stock.landed.cost"].create(
+            {
+                "landed_type": "dvi",
+                "dvi_number": "26ROIS0600999999",
+                "account_journal_id": self.env["account.journal"].search([("type", "=", "purchase")], limit=1).id,
+                "tax_id": tax_rc.id,
+                "tax_base": 10000.0,
+                "tax_value": 1900.0,
+            }
+        )
+        cost.account_move_id = self.env["account.move"].create(
+            {"journal_id": cost.account_journal_id.id, "date": cost.date, "move_type": "entry"}
+        )
+        accounts_data = {"expense": self.env["account.account"].search([("code", "=like", "446%")], limit=1)}
+        vals = cost._prepare_tax_lines("TVA import", tax_rc.compute_all(cost.tax_base), accounts_data)
+
+        conturi = [self.env["account.account"].browse(v["account_id"]).code for v in vals]
+        self.assertEqual(len(vals), 2, f"Taxare inversă: exact 2 linii, primit {conturi}")
+        self.assertFalse(
+            any(c.startswith("446") for c in conturi),
+            f"Nu trebuie să apară datorie la buget la amânarea de la plată; conturi: {conturi}",
+        )
+        self.assertEqual(sum(v["debit"] for v in vals), sum(v["credit"] for v in vals), "Nota se soldează")
+        debit = [v for v in vals if v["debit"]]
+        credit = [v for v in vals if v["credit"]]
+        self.assertEqual(len(debit), 1)
+        self.assertEqual(len(credit), 1)
+        self.assertEqual(debit[0]["debit"], 1900.0)
+        self.assertEqual(
+            self.env["account.account"].browse(debit[0]["account_id"]).code,
+            acc_4426.code,
+            "Debitul merge pe TVA deductibilă",
+        )
+        self.assertEqual(
+            self.env["account.account"].browse(credit[0]["account_id"]).code,
+            acc_4427.code,
+            "Creditul merge pe TVA colectată, nu pe contul de buget",
+        )
+
     def test_customs_products_accounts_and_landed_cost_flag(self):
         """Comisionul vamal e datorie către bugetul de stat (446), nu fond special (447).
 
