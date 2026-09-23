@@ -50,6 +50,14 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         company = env.company
         env.ref("base.user_admin").write({"company_ids": [(4, company.id)], "company_id": company.id})
 
+        # Listele de prețuri rămân pe moneda bazei de test, așa că pe fișa produsului
+        # „Preț vânzare" ieșea în dolari lângă „Cost" în lei. În capturile unei fișe RO,
+        # două monede pe același ecran arată a neglijență.
+        ron = env.ref("base.RON")
+        pricelists = env["product.pricelist"].search(["|", ("company_id", "=", company.id), ("company_id", "=", False)])
+        if pricelists:
+            pricelists.write({"currency_id": ron.id})
+
         cls.warehouse = env["stock.warehouse"].search([("company_id", "=", company.id)], limit=1)
         # Denumiri RO, ca în capturi să nu apară string-uri tehnice de test
         cls.warehouse.name = "Terminal Vamal"
@@ -65,10 +73,10 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         if acc_371 and acc_607:
             acc_371.account_stock_variation_id = acc_607.id
 
-        # Valorizare automată + CMP: fără ele, DVI-ul nu postează (capcana din Pasul 1 al fișei)
+        # Evaluare perpetuă (la facturare) + cost mediu: fără ele, DVI-ul nu postează (Pasul 1 din fișă)
         cls.categ = env["product.category"].create(
             {
-                "name": "Mărfuri import (CMP)",
+                "name": "Mărfuri import (AVCO)",
                 "property_cost_method": "average",
                 "property_valuation": "real_time",
                 "property_stock_valuation_account_id": acc_371.id if acc_371 else False,
@@ -106,8 +114,19 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
             [("type", "=", "general"), ("company_id", "=", company.id)], limit=1
         )
 
-        # --- Factura A: rămâne fără DVI, ca butonul și wizardul să poată fi pozate ---
-        cls.po_a = cls._seed_import_order(env)
+        # --- Factura A: rămâne fără DVI, ca wizardul să poată fi pozat în starea lui reală.
+        # Folosește un produs SEPARAT, ca fluxul principal să rămână pe o singură recepție și
+        # costul mediu al mărfii să iasă exact (60,00 + 1.200/1.000 = 61,20). ---
+        cls.product_wizard = env["product.product"].create(
+            {
+                "name": "Pere",
+                "type": "consu",
+                "is_storable": True,
+                "categ_id": cls.categ.id,
+                "standard_price": cls.PRICE,
+            }
+        )
+        cls.po_a = cls._seed_import_order(env, product=cls.product_wizard)
         cls.bill_a = cls._seed_posted_bill(cls.po_a)
 
         # --- Factura B: DVI creat și validat, pentru notă, cost de aterizare și cost produs ---
@@ -177,15 +196,16 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         cls.broker_bill.action_post()
 
     @classmethod
-    def _seed_import_order(cls, env):
+    def _seed_import_order(cls, env, product=None):
         """Comandă de achiziție confirmată + recepție validată la terminalul vamal."""
+        product = product or cls.product
         po = env["purchase.order"].create(
             {
                 "partner_id": cls.partner.id,
                 "order_line": [
                     Command.create(
                         {
-                            "product_id": cls.product.id,
+                            "product_id": product.id,
                             "product_qty": cls.QTY,
                             "price_unit": cls.PRICE,
                         }
@@ -244,7 +264,7 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                 },
                 # 4. Factura furnizorului, postată, cu butonul DVI
                 {
-                    "url": f"id={self.bill_a.id}&model=account.move&view_type=form",
+                    "url": f"id={self.bill_b.id}&model=account.move&view_type=form",
                     "name": "04_factura_furnizor_buton_dvi.png",
                     "wait": ".o_form_view",
                     "highlight": ["button[name='button_dvi']"],

@@ -41,7 +41,9 @@ cele datorate ca urmare a importului**, cu excepția TVA-ului care urmează a fi
 
 **Alin. (2):** baza cuprinde și **cheltuielile accesorii — comisioane, ambalare, transport, asigurare
 — care intervin până la primul loc de destinație a bunurilor în România**, *în măsura în care nu au
-fost deja cuprinse în baza stabilită conform alin. (1)*. Sintagma subliniată este clauza
+fost deja cuprinse în baza stabilită conform alin. (1)*, precum și cele care decurg din transportul
+către alt loc de destinație din Uniunea Europeană, dacă locul respectiv este cunoscut la momentul
+faptului generator. Sintagma subliniată este clauza
 anti-dublă-numărare: transportul deja inclus în valoarea în vamă **nu se adaugă a doua oară**.
 **Primul loc de destinație nu este frontiera**, ci destinația din documentul de transport (CMR) — în
 practică depozitul importatorului — iar în lipsa mențiunii, primul loc de descărcare în România.
@@ -164,7 +166,8 @@ Contabilitate (facturi, note) și Inventar (recepții, costuri de aterizare).
 Date minime pentru demo:
 
 - companie românească cu planul de conturi RO instalat;
-- produs **stocabil**, pe o categorie cu **valorizare automată** și metodă de cost **CMP** sau FIFO;
+- produs **stocabil**, pe o categorie cu **Evaluarea stocurilor = Perpetuă (la facturare)** și metodă
+  de cost **Costul mediu (AVCO)** sau FIFO;
 - furnizor extern (non-UE) cu **țara completată** — fără ea butonul DVI refuză să pornească;
 - comandă de achiziție cu recepție validată;
 - factură furnizor **postată**, legată de comanda de achiziție;
@@ -175,8 +178,9 @@ Date minime pentru demo:
 1. Instalați `l10n_ro_customs_dvi`. Modulul **exclude** `l10n_ro_dvi` (varianta OCA) — cele două nu pot
    coexista.
 2. **Inventar → Configurare → Categorii de produse**: pe categoria mărfurilor importate setați
-   **Valorizare = Automată** și **Metodă de cost = CMP** (sau FIFO). Pe valorizare periodică/manuală,
-   costul de aterizare **nu postează** note contabile și costul nu se îmbogățește.
+   **Evaluarea stocurilor = Perpetuă (la facturare)** și **Metodă de cost = Costul mediu (AVCO)**
+   sau FIFO. Pe **Periodic (la închidere)**, costul adițional **nu postează** note contabile și
+   costul nu se îmbogățește.
 3. Verificați că produsul este **stocabil** și are furnizorul completat în fila Achiziții.
 4. Verificați că furnizorul extern are **țara** completată.
 5. Verificați că există un cont cu codul `446…` în planul de conturi — modulul îl caută automat pentru
@@ -186,13 +190,17 @@ Date minime pentru demo:
 
 ## 6. Flux de utilizare
 
+> Capturile sunt luate pe o bază unde e instalat doar modulul de facturare, așa că aplicația apare
+> în bara de sus ca **Facturare**. Pe o instalare cu contabilitatea completă se numește
+> **Contabilitate**; meniurile și elementele finale sunt aceleași.
+
 ### Pasul 1 — Configurarea categoriei de produse
 
 **Inventar → Configurare → Categorii de produse** — deschideți categoria mărfurilor importate și
-verificați valorizarea automată și metoda de cost. Este singura configurare care poate bloca tăcut tot
-fluxul: pe valorizare periodică, DVI-ul se salvează, dar nu produce nicio notă contabilă.
+verificați **Evaluarea stocurilor = Perpetuă (la facturare)** și metoda de cost. Este singura configurare care poate bloca tăcut tot
+fluxul: pe **Periodic (la închidere)**, DVI-ul se salvează, dar nu produce nicio notă contabilă.
 
-![Categoria de produse cu valorizare automată și cost CMP](screenshots/01_config_categorie.png)
+![Categoria de produse cu evaluare perpetuă și cost mediu](screenshots/01_config_categorie.png)
 
 ### Pasul 2 — Comanda de achiziție către furnizorul extern
 
@@ -290,9 +298,6 @@ Butonul **este** switch-ul de politică contabilă; nu există un câmp separat 
 **Contabilitate → Contabilitate → DVI — Costuri vamale** deschide lista filtrată doar pe costurile de
 aterizare de tip DVI, grupate pe dată. Numărul declarației este coloană în listă și câmp de căutare.
 
-*(Pe o bază unde e instalat doar modulul de facturare, aplicația se numește **Facturare** în loc de
-Contabilitate; meniul intermediar și elementul final sunt aceleași.)*
-
 **Găsiți pe ecran:** fiecare rând este o declarație vamală, cu numărul MRN și suma repartizată.
 
 **Verificați:** toate declarațiile lunii apar în listă; fiecare are număr de DVI completat; totalul
@@ -332,7 +337,7 @@ intracomunitare).
 |---|---|---|
 | `stock_landed_costs` | mecanismul de repartizare a costurilor în valoarea stocului | dependență (manifest) |
 | `purchase_stock` | legătura comandă de achiziție ↔ recepție | dependență (manifest) |
-| `stock_account` | valorizarea stocului (CMP/FIFO) | dependență indirectă |
+| `stock_account` | valorizarea stocului (AVCO/FIFO) | dependență (manifest) |
 | `l10n_ro` | planul de conturi RO, pentru determinarea contului 446 | dependență (manifest) |
 | `l10n_ro_invoice_dvi_protect` | blochează resetarea facturii și anularea DVI după consum FIFO | complementar, recomandat |
 | `l10n_ro_dvi` (OCA) | flux DVI alternativ | **exclus** — nu pot coexista |
@@ -347,7 +352,7 @@ transportului extern.
 
 ## 8. Verificări pentru consultant
 
-- [ ] Categoria produsului are **valorizare automată** și cost CMP/FIFO — nu periodică.
+- [ ] Categoria produsului are **Evaluarea stocurilor = Perpetuă (la facturare)** și cost AVCO/FIFO.
 - [ ] Furnizorul extern are **țara** completată (altfel butonul DVI dă eroare).
 - [ ] Butonul **DVI** apare pe factura furnizor **postată**, nu în ciornă.
 - [ ] Baza introdusă în wizard **coincide cu baza poziției B00** din declarație, nu cu netul facturii.
@@ -368,7 +373,7 @@ transportului extern.
 |---|---|---|
 | „The partner has no country set." / „Partenerul nu are țara setată." | Furnizorul extern nu are țara completată | Completați țara pe fișa partenerului și reluați |
 | Butonul **DVI** nu apare pe factură | Factura e în ciornă sau nu e factură furnizor | Confirmați factura; butonul apare doar pe `in_invoice` postată |
-| DVI-ul se validează, dar **nu apare nicio notă contabilă** | Categoria produsului e pe valorizare periodică/manuală | Setați valorizare **automată** pe categorie și reluați |
+| DVI-ul se validează, dar **nu apare nicio notă contabilă** | Categoria produsului e pe **Periodic (la închidere)** | Setați **Perpetuă (la facturare)** pe categorie și reluați |
 | Costul produsului nu crește după validare | Costul de aterizare nu a fost **Validat**, doar salvat | Apăsați **Calculează**, apoi **Validează** |
 | Wizardul nu găsește nicio recepție | Fluxul a fost dropship, fără recepție | Refaceți fluxul cu recepție; dropship-ul e incompatibil cu DVI |
 | TVA-ul din notă nu corespunde bazei | Baza a fost modificată fără actualizarea valorii TVA | Corectați prin cost de aterizare de corecție; valoarea nu se recalculează automat |
@@ -380,7 +385,7 @@ Capturile din `readme/screenshots/` sunt **generate automat** din `tests/test_sc
 (mixinul `ScreenshotCase` din `l10n_ro_doc_screenshots`, import defensiv), în **limba română**, pe
 planul de conturi RO:
 
-1. `01_config_categorie.png` — categoria de produse cu valorizare automată și cost CMP.
+1. `01_config_categorie.png` — categoria de produse cu evaluare perpetuă și cost mediu (AVCO).
 2. `02_po_import.png` — comanda de achiziție către furnizorul extern.
 3. `03_receptie_terminal.png` — recepția validată a mărfii importate.
 4. `04_factura_furnizor_buton_dvi.png` — factura furnizor postată, cu butonul DVI.
