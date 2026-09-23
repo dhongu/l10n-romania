@@ -62,9 +62,33 @@ class AccountInvoiceDVI(models.TransientModel):
         "for goods at a reduced rate, such as basic foodstuffs.",
     )
 
+    def _get_customs_payable_account(self):
+        """Contul de decontare cu bugetul pentru drepturile de import.
+
+        Planul RO din `l10n_ro` desparte 446 pe scadențe, iar ordinea e contraintuitivă:
+        **4461 = reluate într-o perioadă MAI MARE de un an**, 4462 = până la un an. O căutare
+        `446%` cu `limit=1` ia determinist 4461, adică încadrează datoria vamală la datorii
+        peste un an în bilanț. Datoria vamală se stinge în zile, deci e datorie curentă —
+        OMFP 1802/2014 pct. 360 alin. (1).
+
+        Căutăm întâi 4462 și abia apoi orice 446, ca modulul să funcționeze și pe planuri
+        de conturi care nu au defalcarea pe scadențe. Filtrăm pe companie: fără filtru, pe
+        multi-company se putea prinde contul altei companii.
+        """
+        Account = self.env["account.account"]
+        company = self.env.company
+        for code in ("4462", "446"):
+            account = Account.search(
+                [("code", "=like", f"{code}%"), ("company_ids", "in", [company.id])],
+                order="code",
+                limit=1,
+            )
+            if account:
+                return account
+        return Account
+
     def _prepare_custom_duty_product(self):
-        domain = [("code", "=like", "446%")]
-        account = self.env["account.account"].search(domain, limit=1)
+        account = self._get_customs_payable_account()
         return {
             "name": self.env._("Custom Duty"),
             "type": "service",
@@ -79,7 +103,8 @@ class AccountInvoiceDVI(models.TransientModel):
         }
 
     def _prepare_customs_commission_product(self):
-        # Comision datorat AUTORITĂŢII VAMALE, deci datorie faţă de bugetul de stat -> 446.
+        # Comision datorat AUTORITĂŢII VAMALE, deci datorie faţă de bugetul de stat -> 446
+        # (analiticul de scadenţă îl alege `_get_customs_payable_account`).
         #
         # Nu se foloseşte 447 „Fonduri speciale - taxe şi vărsăminte asimilate": funcţiunea din
         # OMFP 1802/2014 îl rezervă datoriilor către alte organisme publice şi îl arată creditat
@@ -89,8 +114,7 @@ class AccountInvoiceDVI(models.TransientModel):
         # furnizor obişnuit, cu CUI şi sold pe 401. Se înregistrează factura lui pe un produs cu
         # `landed_cost_ok`, iar capitalizarea în costul stocului se face — sau nu, după politica
         # contabilă — cu butonul nativ „Create Landed Costs" de pe factură.
-        domain = [("code", "=like", "446%")]
-        account = self.env["account.account"].search(domain, limit=1)
+        account = self._get_customs_payable_account()
         return {
             "name": self.env._("Customs Commission"),
             "type": "service",

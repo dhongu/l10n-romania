@@ -79,12 +79,62 @@ class LandedCost(models.Model):
                     "credit": cost.tax_value,
                     "account_id": accounts_data["expense"].id,
                     "move_id": cost.account_move_id.id,
-                    # "tax_tag_ids": [(6, 0, tax_values["base_tags"])], nu trebuie sa fie tax_tag_ids
-                    # "tax_ids": [(6, 0, [cost.tax_id.id])],
+                    # Fără tag de bază aici: linia poartă valoarea TVA, nu baza. Tag-ul de bază
+                    # merge pe perechea tehnică de mai jos, de valoare `tax_base`.
                 },
             ]
+            aml += cost._prepare_tax_base_lines(name, tax_values)
             self.env["account.move.line"].create(aml)
         return res
+
+    def _get_base_clearing_account(self):
+        """Contul neutru pe care se poartă perechea tehnică de bază pentru decont."""
+        self.ensure_one()
+        return self.env["account.account"].search(
+            [("code", "=like", "473%"), ("company_ids", "in", [self.company_id.id])],
+            order="code",
+            limit=1,
+        )
+
+    def _prepare_tax_base_lines(self, name, tax_values):
+        """Pereche tehnică echilibrată care duce BAZA importului în decontul de TVA.
+
+        Nota de TVA vamal purta eticheta fiscală doar pe linia de taxă (4426). Rândul din
+        raportul de TVA — și, mai departe, din D300 — are însă şi expresie de bază, şi
+        expresie de taxă: fără eticheta de bază, rândul iese cu TVA şi cu bază zero, iar
+        totalul bazei achiziţiilor rămâne subevaluat.
+
+        Baza nu poate fi purtată de nicio linie existentă: ambele au ca valoare TVA-ul, nu
+        baza. De aceea se adaugă o pereche debit/credit de valoare `tax_base` pe un cont
+        neutru de clarificare (473), care se soldează şi nu atinge niciun cont de rezultat
+        sau de stoc; doar una dintre linii poartă eticheta de bază.
+
+        Fără cont 473 în plan sau fără etichete de bază pe taxă, nu se adaugă nimic —
+        comportamentul rămâne cel dinainte.
+        """
+        self.ensure_one()
+        base_tags = tax_values.get("base_tags")
+        account = self._get_base_clearing_account()
+        if not base_tags or not account or not self.tax_base:
+            return []
+        base_name = self.env._("Import VAT base - %s", self.tax_id.name)
+        return [
+            {
+                "name": base_name,
+                "debit": self.tax_base,
+                "credit": 0.0,
+                "account_id": account.id,
+                "move_id": self.account_move_id.id,
+                "tax_tag_ids": [(6, 0, base_tags)],
+            },
+            {
+                "name": base_name,
+                "debit": 0.0,
+                "credit": self.tax_base,
+                "account_id": account.id,
+                "move_id": self.account_move_id.id,
+            },
+        ]
 
     def _check_sum(self):
         res = super()._check_sum()
