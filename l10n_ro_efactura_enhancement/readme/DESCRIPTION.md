@@ -1,7 +1,7 @@
-## Overview
+# Overview
 The l10n_ro_efactura_enhancement module extends the standard Romanian e-Invoicing (e-Factura) functionality in Odoo with additional features and improvements designed to enhance user experience and accommodate specific business needs for Romanian fiscal compliance.
 
-## Key Features
+# Key Features
 - **Automatic completion with 13 zeros** for individual persons (physical persons) in the VAT field for e-invoice generation.
 - **Enhanced Address Validation**: Automatically checks that Romanian partners have a country, state, city, and street defined before posting an invoice.
 - **EDI Format Suggestion**: Automatically suggests the `ciusro` format for Romanian partners.
@@ -23,19 +23,19 @@ The l10n_ro_efactura_enhancement module extends the standard Romanian e-Invoicin
     - `efactura.get_all_banks`: If enabled, includes all banks marked with `l10n_ro_print_report` that match the invoice currency (Default: False).
 - **Line Length Tracking**: Adds computed fields on invoice lines to track the length of descriptions and product names, helping users identify potential truncation issues.
 
-## Technical Implementation
+# Technical Implementation
 The module inherits and extends several base Odoo and Romanian localization models:
 - `account.move`: Adds validation, cron jobs, and POS type handling.
 - `account.edi.xml.ubl_ro`: Enhances UBL generation with custom logic for addresses, product descriptions, and multi-bank support.
 - `res.partner`: Overrides the EDI format suggestion for Romanian entities.
 - `account.move.line`: Adds UI helpers for label length.
 
-## Business Benefits
+# Business Benefits
 - **Improved Compliance**: Prevents errors by validating mandatory address fields for Romanian fiscal reporting.
 - **Automation**: Reduces manual effort by automatically transmitting and tracking e-invoices.
 - **Flexibility**: Provides granular control over how product information and unit codes are mapped to the e-invoice.
 - **UBL Stability**: Ensures generated XML files remain within character limit constraints for various fields.
 
-## Usage
+# Usage
 After installation, the module automatically enhances the e-Factura functionality. System parameters can be configured in the technical settings (`Settings > Technical > Parameters > System Parameters`) to adjust behavior according to specific business needs.
 This module is part of the Romanian localization suite developed by Terrabit.
