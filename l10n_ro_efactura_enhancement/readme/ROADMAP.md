@@ -1,5 +1,3 @@
-  # Roadmap
-
 ## Known Bugs to Fix
 
 - **Missing system parameter defaults**: `efactura.get_all_banks` and `efactura.replace_unit_uom`
