@@ -1,3 +1,20 @@
+## 19.0.0.5.3 (2026-09-23)
+
+- **Cron-ul „E-Factura: Send TO SPV” respectă din nou limita de reîncercări.**
+  Limita de 3 încercări număra documentele `invoice_sending_failed`, stare care nu
+  mai există pe 19.0: o încărcare eșuată nu creează niciun `l10n_ro_edi.document`.
+  O factură care nu putea pleca (partener incomplet, XML invalid) era reluată în
+  fiecare noapte, iar cu peste 20 de facturi blocate cron-ul se reprograma la 5
+  minute fără oprire și întârzia facturile valide.
+  - Încercările eșuate se numără explicit pe factură
+    (`l10n_ro_spv_send_attempts`, `l10n_ro_spv_last_send_attempt`).
+  - O factură eșuată e reluată abia la o rulare ulterioară (după 20 de ore), nu la
+    reprogramarea de 5 minute.
+  - La a 3-a încercare eșuată se scrie o singură dată în chatter; factura apare în
+    raportul cron-ului la „Sărite — reîncercări epuizate”.
+  - Trecerea facturii în ciornă resetează contorul.
+  - Câmpuri noi: necesită actualizarea modulului.
+
 ## 19.0.0.5.2 (2026-09-23)
 
 - **Facturile din POS pleacă din nou în e-Factura cu tipul 751.** Pe 18.0 modulul
