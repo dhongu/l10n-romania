@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-23 03:50+0000\n"
+"POT-Creation-Date: 2026-09-23 06:33+0000\n"
 "PO-Revision-Date: 2026-04-01 04:55+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -15,11 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: l10n_ro_customs_dvi
-#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
-msgid "<b>Customs Commission</b> — only what is owed to the customs authority"
-msgstr "<b>Comision vamal</b> — doar ce se datorează autorității vamale"
 
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
@@ -39,14 +34,11 @@ msgstr "<b>Număr DVI</b> — MRN-ul din antetul declarației"
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
 msgid ""
-"<b>Enter the amounts exactly as they appear on the customs declaration (DVI)."
-"</b>\n"
-"                            They are transcribed from the declaration, not "
-"recomputed from the supplier invoice."
+"<b>Enter the amounts exactly as they appear on the customs declaration (DVI).</b>\n"
+"                            They are transcribed from the declaration, not recomputed from the supplier invoice."
 msgstr ""
 "<b>Introduceți sumele exact așa cum apar în declarația vamală (DVI).</b>\n"
-"                            Se transcriu din declarație, nu se recalculează "
-"din factura furnizorului."
+"                            Se transcriu din declarație, nu se recalculează din factura furnizorului."
 
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
@@ -74,35 +66,11 @@ msgstr "Abandonează"
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
 msgid ""
-"Changing the base or the rate does not recompute the VAT amount — update it "
-"yourself.\n"
-"                            The customs broker's fee is not recorded here; "
-"it goes on their own supplier invoice."
+"Changing the base or the rate does not recompute the VAT amount — update it yourself.\n"
+"                            The customs broker's fee is not recorded here; it goes on their own supplier invoice."
 msgstr ""
-"Modificarea bazei sau a cotei nu recalculează valoarea TVA — actualizați-o "
-"dumneavoastră.\n"
-"                            Onorariul comisionarului vamal nu se "
-"înregistrează aici; merge pe factura lui de furnizor."
-
-#. module: l10n_ro_customs_dvi
-#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__customs_commission
-msgid ""
-"Commission owed to the CUSTOMS AUTHORITY, as stated in the declaration. It "
-"is added to the cost of the goods: Dr 371 = Cr 446.\n"
-"\n"
-"Do not enter the customs broker's fee here. The broker is an ordinary "
-"supplier, with a VAT number and a balance on account 401: record their "
-"invoice on a service product flagged 'Is a Landed Cost', then use the native "
-"'Create Landed Costs' button on that invoice if the fee is to be capitalised."
-msgstr ""
-"Comisionul datorat AUTORITĂȚII VAMALE, așa cum apare în declarație. Se "
-"adaugă în costul mărfii: Dr 371 = Cr 446.\n"
-"\n"
-"Nu introduceți aici onorariul comisionarului vamal. Brokerul este un "
-"furnizor obișnuit, cu CUI și sold pe contul 401: înregistrați factura lui pe "
-"un produs de tip serviciu bifat „Is a Landed Cost”, apoi folosiți butonul "
-"nativ „Create Landed Costs” de pe acea factură, dacă onorariul se "
-"capitalizează."
+"Modificarea bazei sau a cotei nu recalculează valoarea TVA — actualizați-o dumneavoastră.\n"
+"                            Onorariul comisionarului vamal nu se înregistrează aici; merge pe factura lui de furnizor."
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__create_uid
@@ -126,16 +94,14 @@ msgid "Custom Duty"
 msgstr "Taxă vamală"
 
 #. module: l10n_ro_customs_dvi
-#. odoo-python
-#: code:addons/l10n_ro_customs_dvi/wizard/account_dvi.py:0
-#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__customs_commission
-msgid "Customs Commission"
-msgstr "Comision vamal"
-
-#. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
 msgid "Customs Declaration"
 msgstr "Declarație vamală"
+
+#. module: l10n_ro_customs_dvi
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
+msgid "Customs Duties"
+msgstr "Taxe vamale"
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__custom_duty
@@ -147,13 +113,11 @@ msgstr "Taxă vamală"
 msgid ""
 "Customs duty due, item A00 of the declaration.\n"
 "\n"
-"It is added to the cost of the received goods through a landed cost line: Dr "
-"371 = Cr 446."
+"It is added to the cost of the received goods through a landed cost line: Dr 371 = Cr 446."
 msgstr ""
 "Taxa vamală datorată, poziția A00 din declarație.\n"
 "\n"
-"Se adaugă în costul mărfii recepționate printr-o linie de landed cost: Dr "
-"371 = Cr 446."
+"Se adaugă în costul mărfii recepționate printr-o linie de landed cost: Dr 371 = Cr 446."
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.actions.act_window,name:l10n_ro_customs_dvi.action_account_invoice_dvi
@@ -199,11 +163,6 @@ msgid "Display Name"
 msgstr "Nume afișat"
 
 #. module: l10n_ro_customs_dvi
-#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
-msgid "Duties and Commissions"
-msgstr "Taxe și comisioane"
-
-#. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__id
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_move__id
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__id
@@ -215,6 +174,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
 msgid "Import VAT"
 msgstr "TVA la import"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/tests/test_dvi.py:0
+msgid "Import VAT base"
+msgstr "Bază TVA import"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid "Import VAT base - %s"
+msgstr "Bază TVA import - %s"
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.model,name:l10n_ro_customs_dvi.model_account_move
@@ -239,17 +210,13 @@ msgstr "Ultima actualizare la"
 #. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__dvi_number
 msgid ""
-"Reference number of the customs import declaration (MRN), taken from the "
-"header of the declaration.\n"
+"Reference number of the customs import declaration (MRN), taken from the header of the declaration.\n"
 "\n"
-"It becomes the reference of the journal entry, so that the customs payment "
-"can be reconciled on account 446 per declaration."
+"It becomes the reference of the journal entry, so that the customs payment can be reconciled on account 446 per declaration."
 msgstr ""
-"Numărul de referință al declarației vamale de import (MRN), preluat din "
-"antetul declarației.\n"
+"Numărul de referință al declarației vamale de import (MRN), preluat din antetul declarației.\n"
 "\n"
-"Devine referința notei contabile, astfel încât plata către vamă să poată fi "
-"reconciliată pe contul 446, per declarație."
+"Devine referința notei contabile, astfel încât plata către vamă să poată fi reconciliată pe contul 446, per declarație."
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost__dvi_number
@@ -284,24 +251,13 @@ msgstr "Bază de impozitare"
 #. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_base
 msgid ""
-"Taxable base on which customs computed the VAT — the base of item B00. Copy "
-"it from the declaration.\n"
+"Taxable base on which customs computed the VAT — the base of item B00. Copy it from the declaration.\n"
 "\n"
-"The proposed value is only the untaxed total of the supplier invoice and is "
-"NOT the base defined by art. 289 of Law 227/2015: it leaves out the customs "
-"duty, the commission and the incidental costs (transport, insurance) up to "
-"the first place of destination in Romania. When the customs value already "
-"includes the external transport, the base of the declaration is higher than "
-"the invoice total."
+"The proposed value is only the untaxed total of the supplier invoice and is NOT the base defined by art. 289 of Law 227/2015: it leaves out the customs duty, the commission and the incidental costs (transport, insurance) up to the first place of destination in Romania. When the customs value already includes the external transport, the base of the declaration is higher than the invoice total."
 msgstr ""
-"Baza de impozitare pe care vama a calculat TVA-ul — baza poziției B00. "
-"Transcrieți-o din declarație.\n"
+"Baza de impozitare pe care vama a calculat TVA-ul — baza poziției B00. Transcrieți-o din declarație.\n"
 "\n"
-"Valoarea propusă este doar netul facturii furnizorului și NU este baza "
-"definită de art. 289 din Legea 227/2015: lipsesc taxa vamală, comisionul și "
-"cheltuielile accesorii (transport, asigurare) până la primul loc de "
-"destinație din România. Când valoarea în vamă include deja transportul "
-"extern, baza din declarație este mai mare decât totalul facturii."
+"Valoarea propusă este doar netul facturii furnizorului și NU este baza definită de art. 289 din Legea 227/2015: lipsesc taxa vamală, comisionul și cheltuielile accesorii (transport, asigurare) până la primul loc de destinație din România. Când valoarea în vamă include deja transportul extern, baza din declarație este mai mare decât totalul facturii."
 
 #. module: l10n_ro_customs_dvi
 #. odoo-python
@@ -312,20 +268,20 @@ msgstr "Partenerul nu are o țară setată."
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
 msgid ""
-"The proposed base is only the untaxed total of the supplier invoice, which "
-"is a\n"
-"                            starting point and not the base defined by art. "
-"289 of Law 227/2015: it leaves out\n"
-"                            the customs duty, the commission and the "
-"incidental costs up to the first place of\n"
+"The proposed base is only the untaxed total of the supplier invoice, which is a\n"
+"                            starting point and not the base defined by art. 289 of Law 227/2015: it leaves out\n"
+"                            the customs duty and the incidental costs (including commissions) up to the first place of\n"
 "                            destination in Romania."
 msgstr ""
 "Baza propusă este doar netul facturii furnizorului, care este un\n"
-"                            punct de plecare, nu baza definită de art. 289 "
-"din Legea 227/2015: lipsesc\n"
-"                            taxa vamală, comisionul și cheltuielile "
-"accesorii până la primul loc de\n"
-"                            destinație din România."
+"                            punct de plecare, nu baza definită de art. 289 din Legea 227/2015: lipsesc\n"
+"                            taxa vamală și cheltuielile accesorii (inclusiv comisioanele) până la primul\n"
+"                            loc de destinație din România."
+
+#. module: l10n_ro_customs_dvi
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_stock_landed_cost_tree_dvi
+msgid "Total"
+msgstr "Total"
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_value
@@ -337,16 +293,11 @@ msgstr "TVA plătit în vamă"
 msgid ""
 "VAT actually due, the amount of item B00. Copy it from the declaration.\n"
 "\n"
-"This is the amount posted to account 4426, as it is. It is NOT recomputed "
-"when you change the base or the rate, so update it yourself whenever you "
-"change either."
+"This is the amount posted to account 4426, as it is. It is NOT recomputed when you change the base or the rate, so update it yourself whenever you change either."
 msgstr ""
-"TVA-ul efectiv datorat, valoarea poziției B00. Transcrieți-o din "
-"declarație.\n"
+"TVA-ul efectiv datorat, valoarea poziției B00. Transcrieți-o din declarație.\n"
 "\n"
-"Aceasta este suma înregistrată în contul 4426, ca atare. NU se recalculează "
-"la modificarea bazei sau a cotei, deci actualizați-o dumneavoastră ori de "
-"câte ori schimbați una dintre ele."
+"Aceasta este suma înregistrată în contul 4426, ca atare. NU se recalculează la modificarea bazei sau a cotei, deci actualizați-o dumneavoastră ori de câte ori schimbați una dintre ele."
 
 #. module: l10n_ro_customs_dvi
 #. odoo-python
@@ -366,13 +317,11 @@ msgstr "TVA plătit în vamă - %s"
 msgid ""
 "VAT rate applied by customs at the date the declaration was accepted.\n"
 "\n"
-"The proposed rate is the company default purchase tax. Check it against the "
-"declaration for goods at a reduced rate, such as basic foodstuffs."
+"The proposed rate is the company default purchase tax. Check it against the declaration for goods at a reduced rate, such as basic foodstuffs."
 msgstr ""
 "Cota de TVA aplicată de vamă la data acceptării declarației.\n"
 "\n"
-"Cota propusă este taxa de achiziție implicită a companiei. Verificați-o față "
-"de declarație la mărfurile cu cotă redusă, cum sunt alimentele de bază."
+"Cota propusă este taxa de achiziție implicită a companiei. Verificați-o față de declarație la mărfurile cu cotă redusă, cum sunt alimentele de bază."
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.model,name:l10n_ro_customs_dvi.model_account_invoice_dvi

@@ -43,6 +43,11 @@ cele datorate ca urmare a importului**, cu excepția TVA-ului care urmează a fi
 — care intervin până la primul loc de destinație a bunurilor în România**, *în măsura în care nu au
 fost deja cuprinse în baza stabilită conform alin. (1)*, precum și cele care decurg din transportul
 către alt loc de destinație din Uniunea Europeană, dacă locul respectiv este cunoscut la momentul
+> **TVA-ul care urmează a fi perceput nu se adaugă la bază** (art. 289 alin. (1), teza finală).
+> Baza este prin construcție o valoare fără TVA: **nu există etapă de scădere a TVA** și nu se
+> aplică niciodată calculul de tip sută mărită. O formulare de tip „minus TVA” ar duce operatorul
+> la o bază mai mică cu valoarea cotei.
+
 faptului generator. Sintagma subliniată este clauza
 anti-dublă-numărare: transportul deja inclus în valoarea în vamă **nu se adaugă a doua oară**.
 **Primul loc de destinație nu este frontiera**, ci destinația din documentul de transport (CMR) — în
@@ -55,11 +60,16 @@ prin schimb fără facturare (art. 286 alin. (4) lit. a)–d)).
 Formula practică:
 
 ```
-Bază TVA import = valoare în vamă
-                + taxa vamală (A00) + accize + alte drepturi de import
-                + cheltuieli accesorii până la primul loc de destinație în RO,
-                  DOAR dacă nu sunt deja în valoarea în vamă
-                − TVA însăși
+Bază TVA import = valoarea în vamă, stabilită conform legislației vamale
+                + taxa vamală (A00), accizele și celelalte drepturi de import
+                + alte taxe, impozite și comisioane datorate în afara României
+                  sau ca urmare a importului în România              [alin. (1)]
+                + cheltuieli accesorii (comisioane, ambalare, transport,
+                  asigurare) până la primul loc de destinație în RO — DOAR
+                  dacă nu sunt deja cuprinse în valoarea în vamă     [alin. (2)]
+                − rabaturi, remize, risturne, sconturi, daune-interese,
+                  penalități, dobânzi de întârziere, ambalaje prin
+                  schimb fără facturare                              [alin. (3)]
 ```
 
 ### 2.2 Valoarea statistică din DVI **nu** este baza de impozitare
@@ -122,6 +132,30 @@ implicită a companiei nu este cota corectă.
 
 Deducerea se exercită pe baza declarației vamale sau a actului constatator (art. 299 alin. (1) lit. c)).
 
+### 2.7 Ce NU acoperă modulul: amânarea plății TVA în vamă
+
+Modulul acoperă **doar** cazul plății efective la organul vamal — art. 326 alin. (3).
+
+Persoanele impozabile care au obținut **certificat de amânare de la plată** (art. 326 alin. (4)
+lit. a), precum și cele cu vămuire centralizată sau cu înscriere în evidențele declarantului
+(lit. b) și c)), **nu fac plata efectivă la organele vamale**. Ele evidențiază taxa în decont
+**atât ca taxă colectată, cât și ca taxă deductibilă** (art. 326 alin. (5)):
+
+```
+Dr 4426 = Cr 4427        fără 446 și fără plată
+```
+
+Practic toți importatorii mari au acest certificat. Wizardul cere însă „TVA plătit în vamă" și
+creditează întotdeauna 446. **Pentru clienții cu certificat de amânare, nota trebuie ajustată
+manual** sau TVA-ul nu se introduce deloc în wizard, iar taxarea se face separat.
+
+### 2.8 Deducerea este condiționată de plată
+
+Art. 299 alin. (1) lit. c) cere, pe lângă declarație, **documente care să ateste plata taxei**.
+Nota se generează la data DVI. Dacă declarația e pe 30 ale lunii și plata pe 2 ale lunii următoare,
+TVA-ul intră într-un decont în care condiția de deducere nu era încă îndeplinită. Verificați
+decalajul la închiderea lunii.
+
 ### 2.6 Biroul vamal nu este partener
 
 Întrebare recurentă la implementare: *se creează câte un partener pentru fiecare birou vamal, ca să i
@@ -157,10 +191,11 @@ Contabilitate (facturi, note) și Inventar (recepții, costuri de aterizare).
 | Cont | Rol în flux |
 |---|---|
 | `371` / `301` | stocul al cărui cost este majorat de taxele vamale |
-| `446` | taxe vamale și TVA de plată în vamă — decontări cu bugetul statului |
+| `4462` | taxe vamale și TVA de plată în vamă — decontare cu bugetul, datorie curentă |
 | `4426` | TVA deductibilă la import |
 | `401` | furnizorul extern și comisionarul vamal |
-| `628` / `622` | onorariul comisionarului vamal, înainte de eventuala capitalizare |
+| `622` | onorariul comisionarului vamal, dacă **nu** se capitalizează |
+| `473` | cont neutru de clarificare — tranzit pentru accesorii capitalizate și pentru baza din decont |
 | `607` | descărcarea gestiunii la ieșirea mărfii |
 
 Date minime pentru demo:
@@ -183,8 +218,13 @@ Date minime pentru demo:
    costul nu se îmbogățește.
 3. Verificați că produsul este **stocabil** și are furnizorul completat în fila Achiziții.
 4. Verificați că furnizorul extern are **țara** completată.
-5. Verificați că există un cont cu codul `446…` în planul de conturi — modulul îl caută automat pentru
-   produsele de serviciu pe care le generează (taxă vamală, comision vamal).
+5. Verificați că există contul **4462**. Atenție la ordinea din planul RO, e contraintuitivă:
+   **4461 = reluate într-o perioadă mai mare de un an**, **4462 = până la un an**. Datoria vamală se
+   stinge în zile, deci e datorie curentă (OMFP 1802/2014 pct. 360 alin. (1)). Modulul preferă 4462
+   și cade pe orice `446…` doar dacă planul nu are defalcarea pe scadențe.
+6. Verificați că există un cont **473** „Decontări din operațiuni în curs de clarificare”. Pe el se
+   poartă perechea tehnică prin care baza importului ajunge în decontul de TVA, și tot el e contul de
+   tranzit recomandat pentru accesoriile care se capitalizează.
 6. Nu există parametri proprii de configurat. Produsele de serviciu se creează automat la prima
    utilizare și se memorează în parametrii de sistem.
 
@@ -239,14 +279,13 @@ Butonul deschide wizardul. În capul lui se află o casetă de îndrumare cu map
 | **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziției **B00** |
 | **TVA la import** | cota aplicată de vamă | din declarație |
 | **Taxă vamală** | taxa vamală datorată | poziția **A00** |
-| **Comision vamal** | comisionul datorat autorității vamale | din declarație |
 | **Număr DVI** | MRN-ul | antetul declarației |
 | **Data DVI** | data acceptării declarației | antetul declarației |
 
 **Găsiți pe ecran:** câmpul *Bază de impozitare* vine precompletat cu **netul facturii furnizorului**.
 
 **Verificați, înainte de a confirma:** baza propusă coincide cu baza poziției B00 din declarație? Dacă
-declarația include transport, taxă vamală sau comision, **nu coincide** — vezi §2.1. Cota propusă este
+declarația include transportul extern sau taxa vamală, **nu coincide** — vezi §2.1. Cota propusă este
 cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate?
 
 **Treceți mai departe:** abia după corectarea câmpurilor, apăsați **Aplică**.
@@ -258,8 +297,8 @@ cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate?
 
 ### Pasul 6 — Validarea costului de aterizare
 
-Aplicarea creează un cost de aterizare legat de recepțiile comenzii, cu câte o linie pentru taxa vamală
-și pentru comision, plus câmpurile DVI în capul formularului. Apăsați **Calculează**, verificați
+Aplicarea creează un cost adițional legat de recepțiile comenzii, cu o linie pentru taxa vamală,
+plus câmpurile DVI în capul formularului. Apăsați **Calculează**, verificați
 repartizarea pe produse, apoi **Validează**.
 
 ![Costul de aterizare generat din DVI, cu numărul declarației](screenshots/06_landed_cost_dvi.png)
@@ -272,24 +311,43 @@ declarație.
 
 ![Nota contabilă cu MRN-ul ca referință](screenshots/07_nota_contabila_tva.png)
 
-Pe fișa produsului, costul unitar a crescut cu (taxă vamală + comision) raportat la cantitate.
+Pe fișa produsului, costul unitar a crescut cu taxa vamală raportată la cantitate.
 
 ![Costul produsului majorat cu taxele vamale](screenshots/08_cost_produs.png)
 
 ### Pasul 8 — Onorariul comisionarului vamal (broker)
 
+> **Nu există un „comision vamal" datorat autorității.** Comisionul vamal de 0,5% a dispărut odată
+> cu aderarea la UE; nu apare în Codul fiscal, în norme, în OMFP 1802/2014 și nici printre drepturile
+> de import din Codul Vamal al Uniunii. Wizardul a avut până la versiunea 19.0.2.0.0 un câmp
+> „Comision vamal”, moștenit din 2008, care în practică era folosit greșit tocmai pentru onorariul
+> brokerului — cu contul greșit (446, datorie la buget, în loc de 401) și fără TVA-ul lui. Câmpul a
+> fost eliminat; onorariul se operează exclusiv așa cum se arată mai jos.
+
 **Nu se operează prin wizardul DVI.** Brokerul este furnizor obișnuit, cu CUI, factură cu TVA și sold
 pe 401.
 
-1. Creați un produs de tip **serviciu** cu bifa **Este un cost adițional** (fila Achiziții), cu cont de
-   cheltuială 628 sau 622.
+1. Creați un produs de tip **serviciu** cu bifa **Este un cost adițional** (fila Achiziții). Contul de
+   cheltuială al produsului este **473** dacă onorariul se capitalizează — el e doar tranzit, se
+   soldează la validarea costului adițional — respectiv **622** „Cheltuieli privind comisioanele și
+   onorariile” dacă nu se capitalizează. **Nu 628**: acela e contul rezidual al grupei 62, iar 622
+   acoperă explicit comisioanele de intermediere și onorariile.
 2. Înregistrați factura brokerului pe acest produs, cu TVA-ul lui. Linia se marchează automat ca linie
    de cost de aterizare.
-3. **Dacă politica contabilă prevede capitalizarea** onorariului în costul mărfii, apăsați butonul
-   **Creați costuri adiționale** de pe factură, selectați recepția și validați.
-   **Dacă nu se capitalizează**, nu apăsați nimic — factura rămâne cheltuială pe 628.
+3. **Capitalizarea este regula, nu o opțiune.** OMFP 1802/2014, pct. 8 subpct. 6: „în costul de
+   achiziție se includ, de asemenea, **comisioanele**, taxele notariale, cheltuielile cu obținerea de
+   autorizații și alte cheltuieli nerecuperabile, atribuibile direct bunurilor respective”. Pentru un
+   onorariu atribuibil unei declarații identificabile, apăsați **Creați costuri adiționale** pe
+   factură, selectați recepția și validați.
 
-Butonul **este** switch-ul de politică contabilă; nu există un câmp separat de configurat.
+   **Excepția** — onorariu nesemnificativ (pragul de semnificație, pct. 8 subpct. 14) sau nealocabil
+   direct, de exemplu un abonament lunar care acoperă zeci de declarații — se justifică în politica
+   contabilă. Atunci nu apăsați butonul, iar factura rămâne cheltuială pe 622.
+
+> ⚠️ **Onorariul poate fi scutit de TVA.** Art. 294 alin. (1) lit. d) acoperă *prestările de servicii*,
+> nu doar transportul, iar art. 289 alin. (2) enumeră expres **comisioanele** printre cheltuielile
+> accesorii care intră în bază. Dacă onorariul a fost efectiv inclus în baza B00, factura brokerului
+> trebuie emisă **fără TVA**, la fel ca transportul.
 
 ![Factura brokerului cu butonul de creare a costului de aterizare](screenshots/09_factura_broker.png)
 
@@ -313,8 +371,6 @@ La validarea costului de aterizare:
 |---|---|---|---|
 | 371 / 301 | valoare stoc | taxa vamală | |
 | 446 | taxe vamale datorate bugetului | | taxa vamală |
-| 371 / 301 | valoare stoc | comision vamal | |
-| 446 | comision datorat autorității vamale | | comision vamal |
 | 4426 | TVA deductibilă la import | TVA B00 | |
 | 446 | TVA de plată în vamă | | TVA B00 |
 
@@ -324,8 +380,21 @@ La plata către vamă: **Dr 446 = Cr 5121**, exclusiv în lei, fără diferențe
 La descărcarea gestiunii: **Dr 607 = Cr 371**, la costul îmbogățit.
 
 Pentru transportul extern facturat separat, alegeți **una** dintre variante, niciodată amândouă:
-prin cost de aterizare (`Dr 628 = Cr 401`, apoi `Dr 371 = Cr 628`) sau direct pe stoc
-(`Dr 371 = Cr 401`).
+
+```
+Varianta de referință, direct pe stoc:
+    Dr 371 = Cr 401
+
+Varianta prin cost adițional, când marfa e deja recepționată:
+    Dr 473 = Cr 401     la factura transportatorului
+    Dr 371 = Cr 473     la validarea costului adițional
+```
+
+> **Nu folosiți 628 ca tranzit.** Funcțiunea contului din OMFP 1802/2014 nu prevede creditarea lui
+> prin 371, iar mișcarea în oglindă lasă rulaj debitor și creditor artificial pe un cont de clasa 6 —
+> vizibil în balanță și raportat în SAF-T, care raportează mișcările, nu soldurile. Contul 473 este
+> neutru, se soldează, iar un sold rămas la sfârșit de lună arată exact ce accesoriu a fost facturat
+> dar necapitalizat.
 
 **Raportare:** TVA-ul de la import intră în D300 prin tag-urile taxei de pe linia contului 4426.
 Importul nu generează rând în D390 (declarația recapitulativă acoperă doar operațiuni
@@ -358,10 +427,10 @@ transportului extern.
 - [ ] Baza introdusă în wizard **coincide cu baza poziției B00** din declarație, nu cu netul facturii.
 - [ ] Dacă baza a fost modificată, **valoarea TVA a fost actualizată** manual în același wizard.
 - [ ] Cota de TVA corespunde celei din declarație (atenție la cota redusă pentru alimente).
-- [ ] După validare, **costul unitar al produsului a crescut** cu (taxă vamală + comision) / cantitate.
+- [ ] După validare, **costul unitar al produsului a crescut** cu taxa vamală / cantitate.
 - [ ] TVA-ul de import apare pe **4426**, nu în costul mărfii.
 - [ ] Nota contabilă are ca **referință numărul de DVI**, nu secvența internă.
-- [ ] Taxa vamală și comisionul sunt creditate pe **446**.
+- [ ] Taxa vamală este creditată pe **4462**, analiticul de scadență scurtă.
 - [ ] Onorariul brokerului **nu** a fost introdus în wizard, ci pe factura lui de furnizor.
 - [ ] Transportul extern apare **o singură dată** în costul stocului.
 - [ ] Contul 446 se închide la zero pentru declarația respectivă după plata către vamă.
@@ -390,7 +459,7 @@ planul de conturi RO:
 3. `03_receptie_terminal.png` — recepția validată a mărfii importate.
 4. `04_factura_furnizor_buton_dvi.png` — factura furnizor postată, cu butonul DVI.
 5. `05_wizard_dvi.png` — wizardul DVI la deschidere, cu caseta de îndrumare; baza propusă este
-   netul facturii (60.000), nu baza din declarație (70.200).
+   netul facturii (60.000), nu baza din declarație (70.000).
 6. `06_landed_cost_dvi.png` — costul de aterizare generat, cu numărul declarației.
 7. `07_nota_contabila_tva.png` — nota contabilă cu MRN-ul ca referință.
 8. `08_cost_produs.png` — costul produsului majorat cu taxele vamale.

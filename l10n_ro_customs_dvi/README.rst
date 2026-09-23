@@ -378,9 +378,6 @@ factura rămâne cheltuială pe 628. Landed cost-urile create astfel intră
 automat şi sub protecţia FIFO din ``l10n_ro_invoice_dvi_protect``, care
 verifică legătura ``vendor_bill_id``.
 
-Câmpul „Comision vamal” din wizard
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Rămâne pentru **comisionul datorat autorităţii vamale**, nu pentru
 onorariul brokerului. Este creditat pe un cont **446** — datorie faţă de
 bugetul de stat.
@@ -709,10 +706,6 @@ se **transcriu din declaraţia vamală**, nu se recalculează din factură.
 +======================+======================+======================+
 | **Taxă vamală**      | taxa vamală datorată | poziţia **A00**      |
 +----------------------+----------------------+----------------------+
-| **Comision vamal**   | comisionul datorat   | din declaraţie       |
-|                      | autorităţii vamale,  |                      |
-|                      | dacă există          |                      |
-+----------------------+----------------------+----------------------+
 | **Bază de            | baza pe care vama a  | baza poziţiei        |
 | impozitare**         | calculat TVA-ul      | **B00**              |
 +----------------------+----------------------+----------------------+
@@ -778,7 +771,6 @@ pentru comision.
 ::
 
    Dr 371/301  = Cr 446    taxa vamală      -> intră în costul stocului
-   Dr 371/301  = Cr 446    comision vamal   -> intră în costul stocului
    Dr 4426     = Cr 446    TVA la import    -> deductibilă, NU măreşte costul
 
 Nota contabilă primeşte ca referinţă **numărul de DVI** (MRN), nu

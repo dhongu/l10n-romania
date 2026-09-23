@@ -5,9 +5,9 @@
 # generate în timpul testelor, în limba RO, pe planul de conturi RO.
 #
 # Seedează un import non-UE cu cifre verificabile, alese ca să arate exact capcana din fișă:
-# factura furnizorului e de 60.000 lei, dar baza de impozitare din declarație e 70.200 lei,
-# pentru că valoarea în vamă include transportul extern (9.000), taxa vamală (1.000) şi
-# comisionul (200). Odoo propune netul facturii; operatorul trebuie să transcrie baza din DVI.
+# factura furnizorului e de 60.000 lei, dar baza de impozitare din declarație e 70.000 lei,
+# pentru că valoarea în vamă include transportul extern (9.000) şi taxa vamală (1.000).
+# Odoo propune netul facturii; operatorul trebuie să transcrie baza din DVI.
 #
 # Rulare:
 #   ./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_customs_dvi,l10n_ro_doc_screenshots \
@@ -33,10 +33,9 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
     QTY = 1000.0
     PRICE = 60.0  # 1.000 kg x 60,00 = 60.000,00 lei pe factura furnizorului
     CUSTOM_DUTY = 1000.0  # poziția A00
-    CUSTOMS_COMMISSION = 200.0
-    # Baza B00 din declarație: valoarea în vamă (marfă + transport extern 9.000)
-    # + taxa vamală + comisionul. NU coincide cu netul facturii — ăsta e tot rostul capturii.
-    TAX_BASE = 70200.0
+    # Baza B00 din declarație: valoarea în vamă (marfă 60.000 + transport extern 9.000)
+    # + taxa vamală 1.000. NU coincide cu netul facturii — ăsta e tot rostul capturii.
+    TAX_BASE = 70000.0
     VAT_RATE = 11.0  # mere = aliment de bază, cotă redusă (art. 291 alin. (2))
 
     @classmethod
@@ -116,7 +115,7 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
 
         # --- Factura A: rămâne fără DVI, ca wizardul să poată fi pozat în starea lui reală.
         # Folosește un produs SEPARAT, ca fluxul principal să rămână pe o singură recepție și
-        # costul mediu al mărfii să iasă exact (60,00 + 1.200/1.000 = 61,20). ---
+        # costul mediu al mărfii să iasă exact (60,00 + 1.000/1.000 = 61,00). ---
         cls.product_wizard = env["product.product"].create(
             {
                 "name": "Pere",
@@ -142,7 +141,6 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "date": cls.bill_b.invoice_date,
                     "dvi_number": "26ROIS0600123456",
                     "custom_duty": cls.CUSTOM_DUTY,
-                    "customs_commission": cls.CUSTOMS_COMMISSION,
                     "tax_id": cls.tax_import.id,
                     "tax_base": cls.TAX_BASE,
                     "tax_value": cls.TAX_BASE * cls.VAT_RATE / 100.0,
@@ -156,11 +154,12 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         cls.vat_move = cls.landed_cost.account_move_id
 
         # --- Factura brokerului: produs de serviciu marcat drept cost de aterizare ---
-        # Contul de cheltuială al onorariului: 628 „Alte cheltuieli cu serviciile executate de
-        # terți", conform recomandării din fișă. Fără el, produsul cade pe contul categoriei
-        # (607 Cheltuieli privind mărfurile), iar captura ar contrazice textul.
-        acc_628 = env["account.account"].search(
-            [("code", "=like", "628%"), ("company_ids", "in", [company.id])], order="code", limit=1
+        # Contul produsului brokerului: 473 „Decontări din operațiuni în curs de clarificare",
+        # cont de tranzit neutru, conform recomandării din fișă — onorariul se capitalizează,
+        # deci trece prin 473 și se soldează la validarea costului adițional. Fără cont propriu,
+        # produsul ar cădea pe contul categoriei (607) și captura ar contrazice textul.
+        acc_transit = env["account.account"].search(
+            [("code", "=like", "473%"), ("company_ids", "in", [company.id])], order="code", limit=1
         ) or env["account.account"].search(
             [("code", "=like", "622%"), ("company_ids", "in", [company.id])], order="code", limit=1
         )
@@ -170,7 +169,7 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                 "type": "service",
                 "landed_cost_ok": True,
                 "split_method_landed_cost": "by_current_cost_price",
-                "property_account_expense_id": acc_628.id if acc_628 else False,
+                "property_account_expense_id": acc_transit.id if acc_transit else False,
             }
         )
         cls.broker_bill = env["account.move"].create(
