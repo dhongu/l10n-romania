@@ -50,7 +50,12 @@ class AccountInvoiceDVI(models.TransientModel):
         string="Import VAT",
         help="VAT rate applied by customs at the date the declaration was accepted.\n\n"
         "The proposed rate is the company default purchase tax. Check it against the declaration "
-        "for goods at a reduced rate, such as basic foodstuffs.",
+        "for goods at a reduced rate, such as basic foodstuffs.\n\n"
+        "THE TAX IS ALSO THE SWITCH between the two regimes of art. 326 of Law 227/2015:\n"
+        "- an ordinary purchase tax means the VAT was actually paid at customs, so the entry is "
+        "Dr 4426 = Cr 4462 and the debt is settled by payment;\n"
+        "- a reverse charge tax means deferred payment under a certificate, so the entry is "
+        "Dr 4426 = Cr 4427, with no payment and no debt to the budget.",
     )
 
     def _get_customs_payable_account(self):
