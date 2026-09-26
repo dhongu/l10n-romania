@@ -10,7 +10,7 @@ class TestL10nRoPaymentReport(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.company
-        cls.partner = cls.env["res.partner"].create({"name": "Popescu Maria", "company_type": "person"})
+        cls.partner = cls.env["res.partner"].create({"name": "Popescu Maria"})
         cls.cash_journal = cls.env["account.journal"].search(
             [("type", "=", "cash"), ("company_id", "=", cls.company.id)], limit=1
         ) or cls.env["account.journal"].create(

@@ -7,7 +7,6 @@
         <field name="model">account.move</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">l10n_ro_invoice_report.report_invoice_company_language</field>
-        <field name="report_file">l10n_ro_invoice_report.report_invoice_company_language</field>
         <field name="print_report_name">(object._get_report_base_filename())</field>
         <field name="attachment">(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')
         </field>
@@ -102,7 +101,7 @@
                     </div>
                     <div t-if="res_company.l10n_ro_share_capital">
                         <strong>Share Capital:</strong>
-                        <span t-esc="int(res_company.l10n_ro_share_capital)"/>
+                        <span t-out="int(res_company.l10n_ro_share_capital)"/>
                     </div>
                     <div t-if="'l10n_ro_vat_on_payment' in res_company.partner_id._fields">
                         <div t-if="res_company.partner_id.l10n_ro_vat_on_payment">
@@ -186,7 +185,22 @@
         <xpath expr="//t[@t-set='layout_document_title']" position="replace">
             <t t-set="layout_document_title"/>
         </xpath>
-        <xpath expr="//div" position="replace">
+        <!--
+            20.0: blocurile `information_block` și `address` nu mai stau într-un
+            <div class="row"> în corpul t-call, ci sunt t-set-uri la nivelul
+            șablonului, pasate ca atribute lui web.external_layout. Le golim (ca în
+            19, unde div-ul care le conținea era înlocuit), iar antetul RO se pune
+            la începutul corpului, înainte de div-ul invoice_main.
+            Nodurile t-set rămân (doar cu valoare goală), pentru că alte module
+            (ex. account_edi_ubl_cii, l10n_it_edi, l10n_uz) fac xpath pe ele.
+        -->
+        <xpath expr="//t[@t-set='information_block']" position="replace">
+            <t t-set="information_block"/>
+        </xpath>
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address"/>
+        </xpath>
+        <xpath expr="//div[hasclass('invoice_main')]" position="before">
             <t t-call="l10n_ro_invoice_report.header_invoice"/>
             <div style="visibility: hidden;height:1px;">
                 <div class="row"/>
@@ -258,7 +272,7 @@
         <xpath expr="//table[@name='invoice_line_table']//td[@name='account_invoice_line_name']" position="before">
             <t t-if="o.company_id.index_line_on_invoice">
                 <td class="text-start">
-                    <span t-esc="nr_crt"/>
+                    <span t-out="nr_crt"/>
                     <t t-set="nr_crt" t-value="nr_crt + 1"/>
                 </td>
             </t>
@@ -275,10 +289,11 @@
                         <t t-if="product_name and product_name in line_name and product_name != line_name">
                             <t t-set="line_name" t-value="line_name.replace(product_name, '',1).lstrip()"/>
                         </t>
-                        <span t-esc="line_name" style="white-space: pre-wrap;">Bacon Burger</span>
+                        <span t-out="line_name" style="white-space: pre-wrap;">Bacon Burger</span>
                     </t>
                     <t t-if="not res_company.remove_product_name_from_invoice_line">
-                        <span t-field="line.name" t-options="{'widget': 'text'}">Bacon Burger</span>
+                        <!-- 20.0: `name` e doar descrierea; `label` = produs + descriere (echivalentul `name` din 19) -->
+                        <span t-field="line.label" t-options="{'widget': 'text'}">Bacon Burger</span>
                     </t>
                 </t>
                 <t t-else="">
@@ -299,7 +314,7 @@
             </t>
             <td name="td_quantity" class="o_td_quantity text-end">
                 <span
-                    t-esc="signed_quantity"
+                    t-out="signed_quantity"
                     t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'
                     class="text-nowrap"
                 >3.00
@@ -316,7 +331,7 @@
                 />
                 <td>
                     <span
-                        t-esc="price_unit_undiscounted"
+                        t-out="price_unit_undiscounted"
                         t-options='{"widget": "float", "precision": 2}'
                         class="text-nowrap"
                     />
@@ -336,7 +351,7 @@
                     <span
                         class="text-nowrap"
                         id="price_unit_without_taxes"
-                        t-esc="price_unit_without_taxes"
+                        t-out="price_unit_without_taxes"
                         t-options='{"widget": "float", "precision": 2}'
                     >9.00
                     </span>
@@ -358,7 +373,7 @@
                     <span
                         class="text-nowrap"
                         id="price_unit_without_taxes"
-                        t-esc="price_unit_without_taxes"
+                        t-out="price_unit_without_taxes"
                         t-options='{"widget": "float", "precision": 2}'
                     >9.00
                     </span>
@@ -376,7 +391,7 @@
             <!--                <span-->
             <!--                    class="text-nowrap"-->
             <!--                    id="price_unit_without_taxes"-->
-            <!--                    t-esc="price_unit_without_taxes"-->
+            <!--                    t-out="price_unit_without_taxes"-->
             <!--                    t-options='{"widget": "float", "precision": 2}'-->
             <!--                >9.00-->
             <!--                </span>-->
@@ -393,7 +408,7 @@
                     <t t-set="price_taxes" t-value="-1*price_taxes"/>
                 </t>
                 <t t-set="price_taxes" t-value="o.currency_id._convert(price_taxes,currency_id,date=o.invoice_date)"/>
-                <span id="price_taxes" t-esc="price_taxes" t-options='{"widget": "float", "precision": 2}'/>
+                <span id="price_taxes" t-out="price_taxes" t-options='{"widget": "float", "precision": 2}'/>
             </td>
 
             <!-- Total (cu taxe) -->
@@ -403,7 +418,7 @@
                     <t t-set="price_total" t-value="-1*line.price_total"/>
                 </t>
                 <t t-set="price_total" t-value="o.currency_id._convert(price_total,currency_id,date=o.invoice_date)"/>
-                <span id="price_total" t-esc="price_total" t-options='{"widget": "float", "precision": 2}'/>
+                <span id="price_total" t-out="price_total" t-options='{"widget": "float", "precision": 2}'/>
             </td>
         </xpath>
 
@@ -414,7 +429,7 @@
                 <t t-set="signed_price_subtotal" t-value="-1*line.price_subtotal"/>
             </t>
             <td name="td_subtotal" class="o_td_quantity text-end">
-                <span t-esc="signed_price_subtotal" t-options='{"widget": "float", "precision": 2}' class="text-nowrap">
+                <span t-out="signed_price_subtotal" t-options='{"widget": "float", "precision": 2}' class="text-nowrap">
                     27.0
                 </span>
             </td>
@@ -480,7 +495,7 @@
                                />
                                <tr t-if="l.display_type == 'product'" id="tr_line">
                                    <td id="nr_crt">
-                                       <t t-esc="nr_crt" />
+                                       <t t-out="nr_crt" />
                                        <t t-set="nr_crt" t-value="nr_crt + 1" />
                                    </td>
                                    <td id="product_name">
@@ -493,7 +508,7 @@
                                                t-options="{'widget': 'text'}"
                                            />
                                        </t>
-                                       <span t-esc="line_name" />
+                                       <span t-out="line_name" />
                                    </td>
                                    <td class="text-end" id="quantity">
                                        <t t-set="quantity" t-value="l.quantity" />
@@ -503,7 +518,7 @@
                                        <span
                                            t-if="quantity"
                                            id="quantity"
-                                           t-esc="quantity"
+                                           t-out="quantity"
                                            t-options='{"widget": "float",
                                                    "decimal_precision": "Product Unit of Measure"}'
                                        />
@@ -521,7 +536,7 @@
                                        <t t-else="">
                                            <span
                                                id="price_unit_without_taxes"
-                                               t-esc="price_unit_without_taxes"
+                                               t-out="price_unit_without_taxes"
                                                t-options='{"widget": "float", "precision": 2}'
                                            />
                                        </t>
@@ -538,7 +553,7 @@
                                        <td style="text-align: right;" id="price_discount">
                                            <span
                                                id="price_unit_without_taxes"
-                                               t-esc="price_unit_without_taxes"
+                                               t-out="price_unit_without_taxes"
                                                t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"
                                            />
                                        </td>
@@ -555,7 +570,7 @@
                                        />
                                        <span
                                            id="price_subtotal"
-                                           t-esc="price_subtotal"
+                                           t-out="price_subtotal"
                                            t-options='{"widget": "float", "precision": 2}'
                                        />
                                    </td>
@@ -575,7 +590,7 @@
                                        />
                                        <span
                                            id="price_taxes"
-                                           t-esc="price_taxes"
+                                           t-out="price_taxes"
                                            t-options='{"widget": "float", "precision": 2}'
                                        />
                                    </td>
@@ -590,7 +605,7 @@
                                        />
                                        <span
                                            id="price_total"
-                                           t-esc="price_total"
+                                           t-out="price_total"
                                            t-options='{"widget": "float", "precision": 2}'
                                        />
                                    </td>
@@ -615,7 +630,7 @@
                                        <td colspan="99">
                                            <strong class="mr16">Subtotal</strong>
                                            <span
-                                               t-esc="current_subtotal"
+                                               t-out="current_subtotal"
                                                t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"
                                            />
                                        </td>
@@ -719,7 +734,7 @@
                 <t t-if="awbs">
                     <br/>
                     <strong>AWB:</strong>
-                    <span t-esc="', '.join(awbs)"/>
+                    <span t-out="', '.join(awbs)"/>
                 </t>
             </div>
         </xpath>
@@ -800,9 +815,9 @@
                                     <span>Payment disposal:</span>
                                 </t>
 
-                                <span t-esc="payment_vals['ref']"/>
+                                <span t-out="payment_vals['ref']"/>
                                 <span>/</span>
-                                <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/>
+                                <t t-out="payment_vals['date']" t-options='{"widget": "date"}'/>
                             </h4>
                             <div name="payment_text">
                                 <t t-if="payment_vals.get('payment_type') == 'outbound'">
@@ -831,12 +846,12 @@
                                 <span>amount</span>
 
                                 <strong
-                                    t-esc="payment_vals['amount']"
+                                    t-out="payment_vals['amount']"
                                     t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                 />
                                 (
-                                <!--                                <span t-esc="convert(payment.amount)"/>-->
-                                <span t-esc="o.currency_id.amount_to_text(payment_vals['amount'])"/>
+                                <!--                                <span t-out="convert(payment.amount)"/>-->
+                                <span t-out="o.currency_id.amount_to_text(payment_vals['amount'])"/>
                                 )
                             </div>
                             <div>

@@ -23,8 +23,8 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
         cls.delegate = cls.env["res.partner"].create(
             {
                 "name": "Test Delegate",
-                "is_company": False,
-                "mean_transp": "Auto CJ 01 AAA",
+                # deltatech_contact definește res.partner.mean_transp cu size=12
+                "mean_transp": "CJ 01 AAA",
                 "country_id": cls.country_ro.id,
                 "city": "Bacau",
                 "street": "Street Test 2",
@@ -176,7 +176,7 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
     def test_compute_partner_bank_id(self):
         bank = self.env["res.partner.bank"].create(
             {
-                "acc_number": "RO1234567890",
+                "account_number": "RO1234567890",
                 "partner_id": self.partner.commercial_partner_id.id,
             }
         )
@@ -215,7 +215,8 @@ class TestL10nRoInvoiceReportCoverage(TransactionCase):
         # pe RON l10n_ro_report_common impune formularea românească, restul
         # monedelor rămân pe implementarea nucleului
         self.assertEqual(report._amount_to_text(100.0, self.env.ref("base.RON")), "o sută de lei")
-        self.assertIn("One Hundred", report._amount_to_text(100.0, self.env.ref("base.USD")))
+        # 20.0: amount_to_text nu mai aplică .title() („one hundred dollars")
+        self.assertIn("one hundred", report._amount_to_text(100.0, self.env.ref("base.USD")).lower())
 
         # _get_pickings
         report._get_pickings(invoice)

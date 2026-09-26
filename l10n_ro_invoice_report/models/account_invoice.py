@@ -68,8 +68,11 @@ class AccountInvoice(models.Model):
     def _compute_payments_widget_reconciled_info(self):
         res = super()._compute_payments_widget_reconciled_info()
         for invoice in self:
-            if invoice.invoice_payments_widget:
-                for item in invoice.invoice_payments_widget["content"]:
+            # 20.0: invoice_payments_widget e fields.Json, iar citirea întoarce o copie
+            # (deepcopy) — modificările in-place se pierd; valoarea se rescrie la final.
+            payments_widget = invoice.invoice_payments_widget
+            if payments_widget:
+                for item in payments_widget["content"]:
                     move_id = item["move_id"]
                     move = self.env["account.move"].browse(move_id)
                     item["journal_type"] = move.journal_id.type
@@ -100,6 +103,7 @@ class AccountInvoice(models.Model):
                             "in_receipt": "outbound",
                             "out_refund": "outbound",
                         }.get(invoice.move_type)
+                invoice.invoice_payments_widget = payments_widget
         return res
 
     @api.depends("bank_partner_id", "commercial_partner_id")

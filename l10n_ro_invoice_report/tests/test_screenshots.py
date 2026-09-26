@@ -58,7 +58,6 @@ class TestInvoiceReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
         cls.customer = env["res.partner"].create(
             {
                 "name": "Ionescu Maria",
-                "is_company": False,
                 "country_id": env.ref("base.ro").id,
                 "state_id": state_ab.id,
                 "street": "Strada Zorilor 12",
@@ -66,7 +65,7 @@ class TestInvoiceReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
                 "zip": "510001",
             }
         )
-        cls.delegate = env["res.partner"].create({"name": "Vasile Pop", "is_company": False, "function": "Delegat"})
+        cls.delegate = env["res.partner"].create({"name": "Vasile Pop", "function": "Delegat"})
         today = fields.Date.context_today(env.user)
 
         # 1. Factură de client postată, cu delegat și mijloc de transport (pașii 2 și 3)

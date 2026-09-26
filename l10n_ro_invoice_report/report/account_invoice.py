@@ -50,7 +50,7 @@ class ReportInvoiceWithoutPayment(models.AbstractModel):
 
     def _get_discount(self):
         params = self.env["ir.config_parameter"].sudo()
-        show_discount = params.get_param("l10n_ro_config.show_discount", default="True")
+        show_discount = params.get_str("l10n_ro_config.show_discount", default="True")
         show_discount = safe_eval(show_discount)
 
         return show_discount

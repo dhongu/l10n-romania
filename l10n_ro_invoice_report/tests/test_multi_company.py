@@ -30,14 +30,14 @@ class TestL10nRoInvoiceReportMultiCompany(TransactionCase):
 
         cls.bank_a = cls.PartnerBank.create(
             {
-                "acc_number": "BANK_A",
+                "account_number": "BANK_A",
                 "partner_id": cls.partner.id,
                 "company_id": cls.company_a.id,
             }
         )
         cls.bank_b = cls.PartnerBank.create(
             {
-                "acc_number": "BANK_B",
+                "account_number": "BANK_B",
                 "partner_id": cls.partner.id,
                 "company_id": cls.company_b.id,
             }
