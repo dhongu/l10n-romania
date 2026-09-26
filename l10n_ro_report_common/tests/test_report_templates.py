@@ -10,35 +10,45 @@ class TestReportCommonTemplates(TransactionCase):
         super().setUpClass()
         cls.company = cls.env.company
         cls.partner = cls.company.partner_id
-        cls.bank = cls.env["res.bank"].create({"name": "Banca Test"})
         cls.eur = cls.env.ref("base.EUR")
         cls.eur.active = True
         # cont în moneda companiei, bifat pentru tipărire
         cls.bank_acc = cls.env["res.partner.bank"].create(
             {
-                "acc_number": "RO49AAAA1B31007593840000",
+                "account_number": "RO49AAAA1B31007593840000",
                 "partner_id": cls.partner.id,
-                "bank_id": cls.bank.id,
+                "bank_name": "Banca Test",
                 "l10n_ro_print_report": True,
             }
         )
         # cont nebifat — nu trebuie să apară
         cls.bank_acc_hidden = cls.env["res.partner.bank"].create(
             {
-                "acc_number": "RO12BBBB1B31007593840999",
+                "account_number": "RO12BBBB1B31007593840999",
                 "partner_id": cls.partner.id,
-                "bank_id": cls.bank.id,
+                "bank_name": "Banca Test",
                 "l10n_ro_print_report": False,
             }
         )
         # cont bifat, dar în altă monedă decât documentul — nu trebuie să apară
         cls.bank_acc_eur = cls.env["res.partner.bank"].create(
             {
-                "acc_number": "RO77CCCC1B31007593840777",
+                "account_number": "RO77CCCC1B31007593840777",
                 "partner_id": cls.partner.id,
-                "bank_id": cls.bank.id,
+                "bank_name": "Banca Test",
                 "l10n_ro_print_report": True,
+            }
+        )
+        # în 20.0 res.partner.bank nu mai are currency_id: moneda contului vine
+        # din jurnalul bancar legat (account.journal.bank_account_id)
+        cls.journal_eur = cls.env["account.journal"].create(
+            {
+                "name": "Banca Test EUR",
+                "code": "TBEUR",
+                "type": "bank",
                 "currency_id": cls.eur.id,
+                "bank_account_id": cls.bank_acc_eur.id,
+                "company_id": cls.company.id,
             }
         )
 
@@ -50,36 +60,36 @@ class TestReportCommonTemplates(TransactionCase):
             "l10n_ro_report_common.banks",
             {"partner_id": self.partner, "res_company": self.company, "o": None},
         )
-        self.assertIn(self.bank_acc.acc_number, html, "Contul bifat trebuie tipărit.")
-        self.assertNotIn(self.bank_acc_hidden.acc_number, html, "Contul nebifat nu trebuie tipărit.")
+        self.assertIn(self.bank_acc.account_number, html, "Contul bifat trebuie tipărit.")
+        self.assertNotIn(self.bank_acc_hidden.account_number, html, "Contul nebifat nu trebuie tipărit.")
         self.assertNotIn(
-            self.bank_acc_eur.acc_number,
+            self.bank_acc_eur.account_number,
             html,
             "Contul în altă monedă decât a documentului nu trebuie tipărit.",
         )
         self.assertIn("Banca Test", html)
 
     def test_02_banks_template_document_currency(self):
-        # `o` cu currency_id EUR (folosim chiar contul EUR ca document-surogat)
+        # `o` cu currency_id EUR (folosim jurnalul EUR ca document-surogat)
         # -> apare doar contul EUR, nu cel în moneda companiei
         html = self._render(
             "l10n_ro_report_common.banks",
             {
                 "partner_id": self.partner,
                 "res_company": self.company,
-                "o": self.bank_acc_eur,
+                "o": self.journal_eur,
             },
         )
-        self.assertIn(self.bank_acc_eur.acc_number, html)
-        self.assertNotIn(self.bank_acc.acc_number, html)
+        self.assertIn(self.bank_acc_eur.account_number, html)
+        self.assertNotIn(self.bank_acc.account_number, html)
 
     def test_03_banks_template_max_three(self):
         for i in range(4):
             self.env["res.partner.bank"].create(
                 {
-                    "acc_number": f"RO00DDDD1B3100759384{i:04d}",
+                    "account_number": f"RO00DDDD1B3100759384{i:04d}",
                     "partner_id": self.partner.id,
-                    "bank_id": self.bank.id,
+                    "bank_name": "Banca Test",
                     "l10n_ro_print_report": True,
                 }
             )
@@ -102,7 +112,7 @@ class TestReportCommonTemplates(TransactionCase):
         self.assertIn("RO1234567897", html)
         self.assertIn("J40/1234/2020", html)
         self.assertIn("45000", html)
-        self.assertIn(self.bank_acc.acc_number, html, "Blocul companiei include băncile.")
+        self.assertIn(self.bank_acc.account_number, html, "Blocul companiei include băncile.")
 
     def test_05_report_address_company_no_optional_fields(self):
         # setăm explicit 0 — la coexistența cu OCA l10n_ro_config, câmpul are default=200

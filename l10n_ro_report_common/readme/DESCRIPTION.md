@@ -3,7 +3,8 @@ Common QWeb building blocks shared by the Romanian printed reports
 
 - **`l10n_ro_report_common.banks`** — prints up to 3 of the partner's bank
   accounts flagged *Print in Report*, in the document currency (falling back
-  to the company currency).
+  to the company currency). The currency of a bank account is the currency
+  of its bank journal; accounts without a journal count as company currency.
 - **`l10n_ro_report_common.report_address_company`** — company identification
   block: name, address, bank accounts, Tax ID, NRC and share capital.
 

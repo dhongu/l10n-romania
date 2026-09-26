@@ -49,7 +49,8 @@ class TestResCurrencyAmountToText(TransactionCase):
         self.assertEqual(self.ron.amount_to_text(2.675), "doi lei și șaizeci și opt de bani")
 
     def test_08_other_currency_falls_back_to_core(self):
-        self.assertIn("One Hundred", self.usd.amount_to_text(100.0))
+        # Odoo 20: amount_to_text nu mai aplică .title() (19: "One Hundred Dollars")
+        self.assertIn("one hundred", self.usd.amount_to_text(100.0).lower())
 
     def test_09_wording_is_independent_of_lang(self):
         # o sumă în lei pe un document legal românesc se citește în română

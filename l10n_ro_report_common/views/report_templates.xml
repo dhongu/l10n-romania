@@ -6,6 +6,8 @@
         `res_company` din context; `o` (documentul) este opțional și dă moneda.
         Se afișează cel mult 3 conturi bifate "Print in Report", în moneda
         documentului (sau a companiei, dacă documentul nu are monedă).
+        În 20.0 res.partner.bank nu mai are currency_id: moneda contului este
+        moneda jurnalului bancar legat (journal_id), altfel moneda companiei.
     -->
     <template id="banks">
         <small>
@@ -15,16 +17,16 @@
             />
             <t
                 t-set="l10n_ro_report_banks"
-                t-value="partner_id.bank_ids.filtered(lambda b: b.l10n_ro_print_report and (b.currency_id or res_company.currency_id) == l10n_ro_doc_currency)[:3]"
+                t-value="partner_id.bank_ids.filtered(lambda b: b.l10n_ro_print_report and (b.journal_id[:1].currency_id or res_company.currency_id) == l10n_ro_doc_currency)[:3]"
             />
             <div t-foreach="l10n_ro_report_banks" t-as="bank">
                 <div t-if="bank.bank_name">
                     <strong>Bank:</strong>
                     <span t-field="bank.bank_name" />
                 </div>
-                <div t-if="bank.acc_number">
+                <div t-if="bank.account_number">
                     <strong>Account:</strong>
-                    <span t-field="bank.acc_number" />
+                    <span t-field="bank.account_number" />
                 </div>
             </div>
         </small>
@@ -59,7 +61,7 @@
         <div>
             <div t-if="res_company.partner_id.vat">
                 <strong>
-                    <t t-esc="res_company.country_id.vat_label or 'Tax ID'" />
+                    <t t-out="res_company.country_id.vat_label or 'Tax ID'" />
                     :
                 </strong>
                 <span t-field="res_company.partner_id.vat" />
@@ -70,7 +72,7 @@
             </div>
             <div t-if="res_company.l10n_ro_share_capital">
                 <strong>Share Capital:</strong>
-                <span t-esc="int(res_company.l10n_ro_share_capital)" />
+                <span t-out="int(res_company.l10n_ro_share_capital)" />
             </div>
         </div>
         <br />
