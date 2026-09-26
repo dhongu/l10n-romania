@@ -48,6 +48,7 @@ repos:
     hooks:
       # update the NOT INSTALLABLE ADDONS section above
       - id: oca-update-pre-commit-excluded-addons
+        additional_dependencies: ["manifestoo-core>=1.16.1"]
       - id: oca-fix-manifest-website
         args: ["https://www.terrabit.ro"]
       - id: oca-gen-addon-readme
@@ -61,6 +62,7 @@ repos:
           - --keep-source-digest
           - --convert-fragments-to-markdown
           - --template-filename=gen_addon_readme.rst.jinja
+        additional_dependencies: ["manifestoo-core>=1.16.1"]
 
       # This job could easily produce conflicts when it runs on every commit,
       # so it's added as a manual job. If you automate it, beware.
@@ -68,6 +70,7 @@ repos:
       - id: oca-gen-addons-table
         stages: [manual]
       - id: oca-gen-external-dependencies
+        additional_dependencies: ["manifestoo-core>=1.16.1"]
 
   - repo: https://github.com/OCA/odoo-pre-commit-hooks
     rev: v0.1.6
