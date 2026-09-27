@@ -1,0 +1,429 @@
+# ©  2008-2022 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+
+import time
+from functools import reduce
+
+from odoo import api, models
+
+
+class ReportPickingDelivery(models.AbstractModel):
+    _name = "report.abstract_report.delivery_report"
+    _description = "ReportPickingDelivery"
+    _template = None
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        report = self.env["ir.actions.report"]._get_report_from_name(self._template)
+        return {
+            "doc_ids": docids,
+            "doc_model": report.model,
+            "data": data,
+            "time": time,
+            "docs": self.env[report.model].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
+
+    def _get_line(self, move_line):
+        res = {"price": 0.0, "amount": 0.0, "tax": 0.0, "amount_tax": 0.0}
+
+        # Ca și pe rapoartele de recepție, tot ce apare pe aviz se exprimă în unitatea
+        # de pe DOCUMENT (`move.uom_id`) — cea tipărită în coloana U/M. Prețul de
+        # listă al produsului e per unitatea de REFERINȚĂ, prețul de pe linia comenzii
+        # de vânzare e per unitatea acelei linii, iar `move.product_qty` e cantitatea
+        # convertită în unitatea de referință. Cei doi factori aduc totul în unitatea
+        # documentului; când unitățile coincid, amândoi sunt 1 și nimic nu se schimbă.
+        uom = move_line.uom_id
+        ref_uom = move_line.product_id.uom_id
+        uom_factor = 1.0
+        if uom and ref_uom:
+            uom_factor = uom._compute_quantity(1, ref_uom, round=False) or 1.0
+        quantity = move_line.quantity or move_line.product_uom_qty or 0.0
+
+        if move_line.sale_line_id:
+            line = move_line.sale_line_id
+
+            taxes_ids = (
+                line.tax_ids
+            )  # line.product_id.taxes_id.filtered(lambda r: r.company_id == self.env.user.company_id)
+
+            incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+
+            # prețul de pe linia comenzii e per unitatea ei de măsură, care nu e
+            # neapărat cea de pe mișcare: îl trecem prin unitatea de referință
+            sale_factor = 1.0
+            if line.product_uom_id and ref_uom:
+                sale_factor = line.product_uom_id._compute_quantity(1, ref_uom, round=False) or 1.0
+            price_factor = uom_factor / sale_factor
+
+            if line.product_uom_qty != 0:
+                res["price"] = line.price_subtotal / line.product_uom_qty * price_factor
+                if incl_tax:
+                    list_price = line.price_total / line.product_uom_qty * price_factor
+                else:
+                    list_price = res["price"]
+            else:
+                res["price"] = 0.0
+                list_price = 0.0
+
+            taxes_sale = taxes_ids.compute_all(list_price, quantity=quantity, product=line.product_id)
+
+            res["tax"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
+            res["amount"] = taxes_sale["total_excluded"]
+            res["amount_tax"] = taxes_sale["total_included"]
+        elif move_line.picking_id.picking_type_code == "outgoing" and move_line.product_id:
+            # livrare fara comanda de vanzare (ex. aviz de insotire, custodie, consignatie):
+            # pretul din lista de preturi a partenerului, altfel pretul de lista al produsului
+            product = move_line.product_id
+            partner = move_line.picking_id.partner_id
+            quantity = quantity or 1.0
+
+            price = 0.0
+            pricelist = partner.property_product_pricelist if partner else False
+            if pricelist:
+                # `uom=` cere prețul direct în unitatea documentului
+                price = pricelist._get_product_price(product, quantity, uom=uom)
+            if not price:
+                # `list_price` e per unitatea de referință
+                price = product.list_price * uom_factor
+
+            taxes_ids = product.taxes_id.filtered(lambda tax: tax.company_id == move_line.company_id)
+            taxes_sale = taxes_ids.compute_all(price, quantity=quantity, product=product, partner=partner)
+
+            res["tax"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
+            res["amount"] = taxes_sale["total_excluded"]
+            res["amount_tax"] = taxes_sale["total_included"]
+            res["price"] = res["amount"] / quantity if quantity else price
+
+        return res
+
+    def _get_totals(self, moves):
+        res = {"amount": 0.0, "tax": 0.0, "amount_tax": 0.0}
+        for move in moves:
+            line = self._get_line(move)
+            if move.picking_id.state == "done":
+                if move.product_qty > 0.0:
+                    res["amount"] += line["amount"]
+                    res["tax"] += line["tax"]
+                    res["amount_tax"] += line["amount_tax"]
+            else:
+                res["amount"] += line["amount"]
+                res["tax"] += line["tax"]
+                res["amount_tax"] += line["amount_tax"]
+        return res
+
+
+class ReportPickingReception(models.AbstractModel):
+    _name = "report.abstract_report.reception_report"
+    _description = "ReportPickingReception"
+    _template = None
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        report = self.env["ir.actions.report"]._get_report_from_name(self._template)
+        return {
+            "doc_ids": docids,
+            "doc_model": report.model,
+            "data": data,
+            "time": time,
+            "docs": self.env[report.model].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
+
+    def _get_line(self, move):
+        res = {
+            "price": 0.0,
+            "amount": 0.0,
+            "tax": 0.0,
+            "amount_tax": 0.0,
+            "amount_sale": 0.0,
+            "margin": 0.0,
+        }
+
+        value = move.value
+
+        # Toate coloanele raportului se exprimă în unitatea de pe DOCUMENT
+        # (`move.uom_id`) — cea în care se face efectiv recepția și care se
+        # tipărește în coloana U/M. Prețurile din Odoo (`move.price_unit`,
+        # `product.list_price`, prețul din lista de prețuri) sunt însă exprimate în
+        # unitatea de REFERINȚĂ a produsului, la fel ca `move.product_qty`.
+        # `uom_factor` = câte unități de referință intră într-o unitate de document
+        # (13 pentru o cutie de 13 kg); îl folosim ca să aducem prețurile în unitatea
+        # documentului, iar cantitățile le luăm mereu din `move.quantity` /
+        # `move.product_uom_qty`, nu din `move.product_qty`.
+        uom_factor = 1.0
+        if move.uom_id and move.product_id.uom_id:
+            uom_factor = move.uom_id._compute_quantity(1, move.product_id.uom_id, round=False) or 1.0
+
+        quantity = move.quantity
+        if move.quantity:
+            res["price"] = value / move.quantity
+
+        # for valuation in move.stock_valuation_layer_ids:
+        #     if valuation.l10n_ro_valued_type == "internal_transfer" and not valuation.account_move_id:
+        #         continue
+        #     if valuation.l10n_ro_valued_type == "dropshipped" and valuation.value < 0:
+        #         continue
+        #     value += valuation.value
+        #     quantity += valuation.quantity
+        # if move.stock_valuation_layer_ids:
+        #     res["price"] = value / (quantity or 1)
+
+        currency = move.company_id.currency_id
+
+        if move.purchase_line_id:
+            # todo: ce fac cu receptii facute cu preturi diferite ????
+            line = move.purchase_line_id
+
+            # todo:
+            #  de verificat daca pretul din miscare este actualizat inainte de
+            #  confirmarea transferului pentru a se actualiza cursul valutar !!
+            # res["price"] = move.price_unit  # pretul caculat la genereare miscarii
+
+            # `move.price_unit` este exprimat în unitatea de REFERINȚĂ a
+            # produsului — în `stock.move` valoarea se calculează ca
+            # `product_qty * price_unit` — în timp ce `quantity` de mai jos e
+            # în unitatea de pe document (`move.quantity` se însumează în
+            # `move.uom_id`). Înmulțite ca atare, suma iese greșită cu
+            # exact factorul unității: o recepție de 1.344 de cutii a 13 kg,
+            # la 2,90 lei/kg, dădea 3.897,60 lei în loc de 50.668,80.
+            # Aducem prețul în unitatea documentului ÎNAINTE de calculul
+            # taxelor, ca preț și cantitate să fie în aceeași unitate.
+            if not res["price"]:
+                res["price"] = move.price_unit * uom_factor
+            if not quantity:
+                quantity = move.product_uom_qty
+            # la loturi nu este completat move_line.price_unit
+            # if move_line.price_unit == 0:
+            #     if move_line.remaining_qty != 0:
+            #         res['price'] = move_line.remaining_value /  move_line.remaining_qty
+
+            # verificare price_include
+            incl_tax = line.tax_ids.filtered(lambda tax: tax.price_include)
+            if incl_tax:
+                res["price"] = line.price_unit
+            taxes = line.tax_ids.compute_all(
+                res["price"],
+                quantity=quantity,
+                product=move.product_id,
+                partner=move.partner_id,
+            )
+
+            res["tax"] = taxes["total_included"] - taxes["total_excluded"]
+            res["amount"] = taxes["total_excluded"] or res["price"] * quantity
+            res["amount_tax"] = taxes["total_included"]
+
+            taxes_ids = line.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
+            # prețul de vânzare vine tot în unitatea de referință (list_price și prețul
+            # din lista de prețuri sunt pe `product.uom_id`) — îl aducem în unitatea
+            # documentului, ca „Preț vânzare" să fie comparabil cu „Preț unitar"
+            list_price = move.l10n_ro_sale_price or move.product_id.list_price
+            if not move.l10n_ro_sale_price and move.location_dest_id.store_pricelist_id:
+                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1)
+            list_price = list_price * uom_factor
+
+            res["list_price"] = list_price
+            # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+            # if incl_tax:
+            #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
+            # else:
+            #     list_price = move_line.product_id.list_price
+
+            taxes_sale = taxes_ids.compute_all(
+                list_price,
+                currency=currency,
+                quantity=quantity,
+                product=move.product_id,
+            )
+
+            res["amount_sale"] = taxes_sale["total_excluded"]
+            res["tax_sale"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
+            res["amount_tax_sale"] = taxes_sale["total_included"]
+            if res["amount_tax"] != 0.0:
+                res["margin"] = 100 * (taxes_sale["total_excluded"] - res["amount"]) / res["amount"]
+            else:
+                res["margin"] = 0.0
+        else:
+            # receptie fara comanda de aprovizionare
+
+            if not quantity:
+                quantity = move.product_uom_qty
+
+            if not res["price"]:
+                # `move.price_unit` e per unitatea de referință — îl aducem pe unitatea
+                # documentului, ca să se înmulțească cu o cantitate din aceeași unitate
+                res["price"] = abs(move.price_unit) * uom_factor
+
+            # obtinere valoare pentru transferuri interne
+            if not res["price"] and move.picking_id.picking_type_code == "internal":
+                # quantity poate fi 0 cand e completata doar cantitatea ceruta (product_uom_qty)
+                if quantity:
+                    res["price"] = move.value / quantity
+
+            taxes_ids = move.product_id.supplier_taxes_id.filtered(lambda r: r.company_id == move.company_id)
+            taxes = taxes_ids.compute_all(
+                res["price"],
+                currency=currency,
+                quantity=quantity,
+                product=move.product_id,
+                partner=move.partner_id,
+            )
+            res["amount"] = taxes["total_excluded"]
+            res["tax"] = taxes["total_included"] - taxes["total_excluded"]
+            res["amount_tax"] = taxes["total_included"]
+
+            taxes_ids = move.product_id.taxes_id.filtered(lambda r: r.company_id == move.company_id)
+            # incl_tax = taxes_ids.filtered(lambda tax: tax.price_include)
+            # if incl_tax:
+            #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
+            # else:
+
+            list_price = move.l10n_ro_sale_price or move.product_id.list_price
+            if not move.l10n_ro_sale_price and move.location_dest_id.store_pricelist_id:
+                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1)
+            list_price = list_price * uom_factor
+
+            res["list_price"] = list_price
+
+            taxes_sale = taxes_ids.compute_all(
+                list_price,
+                currency=currency,
+                quantity=quantity,
+                product=move.product_id,
+            )
+
+            res["amount_sale"] = taxes_sale["total_excluded"]
+            res["tax_sale"] = taxes_sale["total_included"] - taxes_sale["total_excluded"]
+            res["amount_tax_sale"] = taxes_sale["total_included"]
+
+            if taxes["total_included"] != 0.0:
+                res["margin"] = 100 * (taxes_sale["total_included"] - taxes["total_included"]) / taxes["total_included"]
+            else:
+                res["margin"] = 0.0
+
+        return res
+
+    def _get_totals(self, moves):
+        res = {
+            "amount": 0.0,
+            "tax": 0.0,
+            "amount_tax": 0.0,
+            "amount_sale": 0.0,
+            "tax_sale": 0.0,
+            "amount_tax_sale": 0.0,
+        }
+        for move in moves:
+            line = self._get_line(move)
+            if move.picking_id.state == "done":
+                if move.state == "done" and move.product_qty:
+                    res["amount"] += line["amount"]
+                    res["tax"] += line["tax"]
+                    res["amount_tax"] += line["amount_tax"]
+
+                    res["amount_sale"] += line["amount_sale"]
+                    res["tax_sale"] += line["tax_sale"]
+                    res["amount_tax_sale"] += line["amount_tax_sale"]
+            else:
+                res["amount"] += line["amount"]
+                res["tax"] += line["tax"]
+                res["amount_tax"] += line["amount_tax"]
+
+                res["amount_sale"] += line["amount_sale"]
+                res["tax_sale"] += line["tax_sale"]
+                res["amount_tax_sale"] += line["amount_tax_sale"]
+        return res
+
+
+class ReportDelivery(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_delivery"
+    _description = "Report delivery"
+    _inherit = "report.abstract_report.delivery_report"
+    _template = "l10n_ro_stock_picking_report.report_delivery"
+
+
+class ReportDeliveryPrice(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_delivery_price"
+    _description = "Report delivery from store"
+    _inherit = "report.abstract_report.delivery_report"
+    _template = "l10n_ro_stock_picking_report.report_delivery_price"
+
+
+class ReportConsumeVoucher(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_consume_voucher"
+    _description = "Report consume voucher"
+    _inherit = "report.abstract_report.delivery_report"
+    _template = "l10n_ro_stock_picking_report.report_consume_voucher"
+
+
+class ReportInternalTransfer(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_internal_transfer"
+    _description = "Report transfer"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_internal_transfer"
+
+
+class ReportReception(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_reception"
+    _description = "Report reception"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_reception"
+
+
+class ReportReceptionNoTax(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_reception_no_tax"
+    _description = "Report reception no tax"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_reception_no_tax"
+
+
+class ReportReceptionSalePrice(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_reception_sale_price"
+    _description = "Report reception in store"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_reception_sale_price"
+
+
+class ReportCumulativeSalePrice(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_c_recep_sale_price"
+    _description = "Report cumulative reception in store"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_c_recep_sale_price"
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        return {
+            "doc_ids": docids,
+            "doc_model": "stock.picking.cumulative",
+            "data": data,
+            "time": time,
+            "docs": self.env["stock.picking.cumulative"].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
+
+
+class ReportCumulativeIternalTransfer(models.AbstractModel):
+    _name = "report.l10n_ro_stock_picking_report.report_c_internal_transfer"
+    _description = "Report cumulative internal transfer"
+    _inherit = "report.abstract_report.reception_report"
+    _template = "l10n_ro_stock_picking_report.report_c_internal_transfer"
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        return {
+            "doc_ids": docids,
+            "doc_model": "stock.picking.cumulative",
+            "data": data,
+            "time": time,
+            "docs": self.env["stock.picking.cumulative"].browse(docids),
+            "get_line": self._get_line,
+            "get_totals": self._get_totals,
+            "reduce": reduce,
+        }
