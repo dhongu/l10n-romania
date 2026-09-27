@@ -14,8 +14,8 @@ class TestL10nRoStockPickingReport(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         # Basic partner for customer/supplier
-        cls.partner_customer = cls.env["res.partner"].create({"name": "Client SRL", "company_type": "company"})
-        cls.partner_supplier = cls.env["res.partner"].create({"name": "Furnizor SRL", "company_type": "company"})
+        cls.partner_customer = cls.env["res.partner"].create({"name": "Client SRL"})
+        cls.partner_supplier = cls.env["res.partner"].create({"name": "Furnizor SRL"})
         cls.env.user.group_ids += cls.env.ref("stock.group_stock_multi_locations")
         # Simple storable product
         cls.env.company.logo = False
@@ -65,7 +65,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
             {
                 "product_id": self.product.id,
                 "product_uom_qty": qty,
-                "product_uom": self.product.uom_id.id,
+                "uom_id": self.product.uom_id.id,
                 "picking_id": picking.id,
                 "location_id": picking.location_id.id,
                 "location_dest_id": picking.location_dest_id.id,
@@ -132,7 +132,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         referință — deși prețul din lista de prețuri venea deja per cutie. Amestecul
         dădea o valoare de 13 ori mai mare decât rândul tipărit, fără nicio eroare.
         """
-        self.env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", "1")
+        self.env["ir.config_parameter"].sudo().set_bool("stock.propagate_uom", True)
         uom_box = self._make_box_uom()
         picking = self.env["stock.picking"].create(
             {
@@ -146,7 +146,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
             {
                 "product_id": self.product.id,
                 "product_uom_qty": 3.0,
-                "product_uom": uom_box.id,
+                "uom_id": uom_box.id,
                 "picking_id": picking.id,
                 "location_id": picking.location_id.id,
                 "location_dest_id": picking.location_dest_id.id,
@@ -176,7 +176,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         """
         for propagate in ("1", "0"):
             with self.subTest(propagate_uom=propagate):
-                self.env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", propagate)
+                self.env["ir.config_parameter"].sudo().set_bool("stock.propagate_uom", propagate == "1")
                 uom_box = self._make_box_uom(f"Cutie 13 kg (SO {propagate})")
                 order = self.env["sale.order"].create(
                     {
@@ -346,7 +346,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         deci preț și cantitate ajung amândouă în kg și suma iese corectă — de aceea
         eroarea a trecut neobservată în configurația standard.
         """
-        self.env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", "1")
+        self.env["ir.config_parameter"].sudo().set_bool("stock.propagate_uom", True)
         uom_kg = self.product.uom_id
         uom_box = self.env["uom.uom"].create(
             {
@@ -365,7 +365,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
                         {
                             "product_id": self.product.id,
                             "product_qty": 10.0,
-                            "product_uom_id": uom_box.id,
+                            "uom_id": uom_box.id,
                             "price_unit": 37.70,
                             "tax_ids": [(6, 0, [])],
                         },
@@ -408,7 +408,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         Returnează (picking, move, uom_box). Cazul are sens doar cu
         `stock.propagate_uom = 1`; altfel Odoo convertește mișcarea în kg.
         """
-        self.env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", "1")
+        self.env["ir.config_parameter"].sudo().set_bool("stock.propagate_uom", True)
         uom_box = self.env["uom.uom"].create(
             {
                 "name": "Cutie 13 kg (test)",
@@ -426,7 +426,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
                         {
                             "product_id": self.product.id,
                             "product_qty": qty_boxes,
-                            "product_uom_id": uom_box.id,
+                            "uom_id": uom_box.id,
                             "price_unit": price_unit,
                             "tax_ids": [(6, 0, [])],
                         },
@@ -490,7 +490,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         per cutie; cantitatea folosită la calculul taxelor era însă `move.product_qty`
         (în kg), așa că valoarea ieșea de 13 ori mai mare decât rândul tipărit.
         """
-        self.env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", "1")
+        self.env["ir.config_parameter"].sudo().set_bool("stock.propagate_uom", True)
         uom_box = self.env["uom.uom"].create(
             {"name": "Cutie 13 kg (fara PO)", "relative_uom_id": self.product.uom_id.id, "relative_factor": 13.0}
         )
@@ -506,7 +506,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
             {
                 "product_id": self.product.id,
                 "product_uom_qty": 4.0,
-                "product_uom": uom_box.id,
+                "uom_id": uom_box.id,
                 "picking_id": picking.id,
                 "location_id": picking.location_id.id,
                 "location_dest_id": picking.location_dest_id.id,
@@ -588,3 +588,59 @@ class TestL10nRoStockPickingReport(TransactionCase):
         html = self._render_report_html("l10n_ro_stock_picking_report.action_report_c_recep_sale_price", wiz)
         self.assertIn("Sale price", html)
         self.assertIn("Product", html)
+
+    def test_doc_type_reaches_report_title(self):
+        """`doc_type` setat în corpul `web.external_layout` ajunge în `report_title`.
+
+        O recepție tipărită pe raportul de livrare (retur) trebuie să aibă titlul de
+        livrare, iar o livrare tipărită pe NIR titlul de recepție — în 20.0 QWeb nu mai
+        propagă `t-set`-urile imbricate direct în `t-call`, deci verificăm explicit.
+        """
+        incoming = self._create_picking(self.picking_type_in, qty=1.0, partner=self.partner_supplier)
+        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_delivery", incoming)
+        self.assertIn("Delivery:", html)
+        self.assertNotIn("Reception:", html)
+        outgoing = self._create_picking(self.picking_type_out, qty=1.0, partner=self.partner_customer)
+        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_reception_no_tax", outgoing)
+        self.assertIn("Reception:", html)
+        self.assertNotIn("Delivery:", html)
+
+    def test_reception_origin_is_vendor_reference(self):
+        """Originea recepției din comanda de achiziție e referința furnizorului."""
+        purchase = self.env["purchase.order"].create(
+            {
+                "partner_id": self.partner_supplier.id,
+                "partner_ref": "FACT-2026-001",
+                "order_line": [(0, 0, {"product_id": self.product.id, "product_qty": 2.0, "price_unit": 10.0})],
+            }
+        )
+        purchase.button_confirm()
+        self.assertEqual(purchase.picking_ids.origin, "FACT-2026-001")
+
+    def test_invoice_from_sale_wizard_takes_delegate(self):
+        """Factura creată din wizard-ul `sale.advance.payment.inv` preia delegatul livrării."""
+        self.env["stock.quant"]._update_available_quantity(
+            self.product, self.picking_type_out.default_location_src_id, 5.0
+        )
+        delegate = self.env["res.partner"].create({"name": "Delegat Test", "mean_transp": "B 01 ABC"})
+        order = self.env["sale.order"].create(
+            {
+                "partner_id": self.partner_customer.id,
+                "order_line": [(0, 0, {"product_id": self.product.id, "product_uom_qty": 2.0, "price_unit": 20.0})],
+            }
+        )
+        order.action_confirm()
+        picking = order.picking_ids
+        picking.write({"delegate_id": delegate.id, "mean_transp": "B 01 ABC"})
+        picking.move_ids.quantity = 2.0
+        picking.move_ids.picked = True
+        picking._action_done()
+        wizard = (
+            self.env["sale.advance.payment.inv"]
+            .with_context(active_model="sale.order", active_ids=order.ids)
+            .create({"advance_payment_method": "delivered"})
+        )
+        wizard.create_invoices()
+        invoice = order.invoice_ids
+        self.assertEqual(invoice.delegate_id, delegate)
+        self.assertEqual(invoice.mean_transp, "B 01 ABC")

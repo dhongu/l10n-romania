@@ -6,7 +6,7 @@
     "name": "Romania - Terrabit - Picking Reports",
     "summary": "Rapoarte: NIR, aviz, bon consum",
     "license": "AGPL-3",
-    "version": "19.0.1.3.6",
+    "version": "20.0.1.3.6",
     "development_status": "Mature",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
@@ -31,6 +31,6 @@
         # "views/res_config_view.xml",
         "views/stock_location_view.xml",
         "report/stock_picking_cumulative_view.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
     ],
 }

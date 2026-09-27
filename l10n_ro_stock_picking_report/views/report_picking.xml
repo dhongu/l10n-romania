@@ -103,7 +103,7 @@
                     </td>
                     <td class="text-end">
                         <span
-                            t-esc="totals['amount']"
+                            t-out="totals['amount']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </td>
@@ -112,7 +112,7 @@
                     <td>Taxes</td>
                     <td class="text-end">
                         <span
-                            t-esc="totals['tax']"
+                            t-out="totals['tax']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </td>
@@ -123,7 +123,7 @@
                     </td>
                     <td class="text-end">
                         <span
-                            t-esc="totals['amount_tax']"
+                            t-out="totals['amount_tax']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </td>
@@ -140,7 +140,7 @@
                     </td>
                     <td class="text-end">
                         <span
-                            t-esc="totals['amount_sale']"
+                            t-out="totals['amount_sale']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </td>
@@ -149,7 +149,7 @@
                     <td>Sale Taxes</td>
                     <td class="text-end">
                         <span
-                            t-esc="totals['tax_sale']"
+                            t-out="totals['tax_sale']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </td>
@@ -160,7 +160,7 @@
                     </td>
                     <td class="text-end">
                         <span
-                            t-esc="totals['amount_tax_sale']"
+                            t-out="totals['amount_tax_sale']"
                             t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                         />
                     </td>
@@ -174,7 +174,7 @@
             <div class="col-3 bm-2">
                 <strong>Source</strong>
                 <p>
-                    <span t-esc="o.origin and o.origin[:30]" />
+                    <span t-out="o.origin and o.origin[:30]" />
                     <t t-if="not  o.origin">
                         <span t-field="o.reference_ids" />
                     </t>
@@ -316,7 +316,7 @@
                                         </td>
                                         <td class="text-end">
                                             <span t-field="move_line.quantity" />
-                                            <span t-field="move.product_uom" groups="uom.group_uom" />
+                                            <span t-field="move.uom_id" groups="uom.group_uom" />
                                         </td>
                                     </tr>
                                 </t>
@@ -415,7 +415,7 @@
                                     </td>
                                     <td class="text-end">
                                         <span t-field="move.quantity" />
-                                        <span t-field="move.product_uom" groups="uom.group_uom" />
+                                        <span t-field="move.uom_id" groups="uom.group_uom" />
                                     </td>
                                     <td class="text-end">
                                         <t t-set="line_value" t-value="move.value" />
@@ -424,13 +424,13 @@
 <!--                                        </t>-->
 
                                         <span
-                                            t-esc="line_value/move.quantity if move.quantity else 0.0"
+                                            t-out="line_value/move.quantity if move.quantity else 0.0"
                                             t-options='{"widget": "float", "precision": 4}'
                                         />
 
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="line_value" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-out="line_value" t-options='{"widget": "float", "precision": 2}' />
                                         <t t-set="total_amount" t-value="total_amount+line_value" />
                                     </td>
                                 </tr>
@@ -443,7 +443,7 @@
                                         <strong>Total Without Taxes</strong>
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="total_amount" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-out="total_amount" t-options='{"widget": "float", "precision": 2}' />
                                     </td>
                                 </tr>
                                 <tr />
@@ -612,25 +612,25 @@
                                         </div>
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
-                                        <span t-field="move.product_uom" groups="uom.group_uom" />
+                                        <span t-out="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-field="move.uom_id" groups="uom.group_uom" />
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="line['price']" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-out="line['price']" t-options='{"widget": "float", "precision": 2}' />
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="line['amount']" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-out="line['amount']" t-options='{"widget": "float", "precision": 2}' />
                                     </td>
                                     <!--                     <td class="text-end">
                                         <t t-if="move.price_unit">
                                             <span
-                                                t-esc="move.price_unit"
+                                                t-out="move.price_unit"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </t>
                                         <t t-if="not move.price_unit">
                                             <span
-                                                t-esc="move.product_id.standard_price"
+                                                t-out="move.product_id.standard_price"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </t>
@@ -638,13 +638,13 @@
                                     <!--            <td class="text-end">
                                         <t t-if="move.price_unit">
                                             <span
-                                                t-esc="move.price_unit * product_uom_qty"
+                                                t-out="move.price_unit * product_uom_qty"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </t>
                                         <t t-if="not move.price_unit">
                                             <span
-                                                t-esc="move.product_id.standard_price * product_uom_qty"
+                                                t-out="move.product_id.standard_price * product_uom_qty"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </t>
@@ -654,17 +654,17 @@
                                     >
                                         <th class="text-end">
                                             <span
-                                                t-esc="line['list_price']"
+                                                t-out="line['list_price']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                             <!--                                                <span-->
-                                            <!--                                                    t-esc="move.product_id.list_price"-->
+                                            <!--                                                    t-out="move.product_id.list_price"-->
                                             <!--                                                    t-options='{"widget": "float", "precision": 2}'-->
                                             <!--                                                />-->
                                         </th>
                                         <th class="text-end">
                                             <span
-                                                t-esc="line['list_price'] * (move.quantity or move.product_uom_qty)"
+                                                t-out="line['list_price'] * (move.quantity or move.product_uom_qty)"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </th>
@@ -682,7 +682,7 @@
                                         </td>
                                         <td class="text-end">
                                             <span
-                                                t-esc="totals['amount']"
+                                                t-out="totals['amount']"
                                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                             />
                                         </td>
@@ -701,13 +701,13 @@
                                 <tr>
                                     <td>
                                         <span>Name:</span>
-                                        <t f-if="o.location_id.user_id.name">
+                                        <t>
                                             <span t-field="o.location_id.user_id" />
                                         </t>
                                     </td>
                                     <td>
                                         <span>Name:</span>
-                                        <t f-if="o.location_id.user_id.name">
+                                        <t>
                                             <span t-field="o.location_dest_id.user_id" />
                                         </t>
                                     </td>
@@ -769,24 +769,24 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-end">
-                                                    <span t-esc="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
-                                                    <span t-field="move.product_uom" groups="uom.group_uom" />
+                                                    <span t-out="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
+                                                    <span t-field="move.uom_id" groups="uom.group_uom" />
                                                 </td>
                                                 <td class="text-end">
                                                     <span
-                                                        t-esc="line['price']"
+                                                        t-out="line['price']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
                                                 <td class="text-end">
                                                     <span
-                                                        t-esc="line['amount']"
+                                                        t-out="line['amount']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
                                                 <td class="text-end">
                                                     <span
-                                                        t-esc="line['tax']"
+                                                        t-out="line['tax']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
@@ -807,22 +807,22 @@
                                         </td>
                                         <td class="text-end">
                                             <span t-field="move.product_uom_qty" />
-                                            <span t-field="move.product_uom" groups="uom.group_uom" />
+                                            <span t-field="move.uom_id" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-end">
                                             <span
-                                                t-esc="line['price']"
+                                                t-out="line['price']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </td>
                                         <td class="text-end">
                                             <span
-                                                t-esc="line['amount']"
+                                                t-out="line['amount']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </td>
                                         <td class="text-end">
-                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}' />
+                                            <span t-out="line['tax']" t-options='{"widget": "float", "precision": 2}' />
                                         </td>
                                     </tr>
                                 </t>
@@ -879,7 +879,7 @@
                     <td>Name</td>
                     <td>
                         <span>Name</span>
-                        <t f-if="o.location_id.user_id.name">
+                        <t>
                             <span t-field="o.location_dest_id.user_id" />
                         </t>
                     </td>
@@ -900,7 +900,7 @@
             <div class="col-3 bm-2" t-if="o.origin or ('reference_ids' in o and o.reference_ids) or ('group_id' in o and o.group_id)">
                 <strong>Origin</strong>
                 <p>
-                    <span t-esc="o.origin and o.origin[:30]" />
+                    <span t-out="o.origin and o.origin[:30]" />
                     <t t-if="not  o.origin">
                         <span t-if="'reference_ids' in o" t-field="o.reference_ids" />
                         <span t-elif="'group_id' in o" t-field="o.group_id" />
@@ -1010,30 +1010,30 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-end">
-                                                    <span t-esc="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
-                                                    <span t-field="move.product_uom" groups="uom.group_uom" />
+                                                    <span t-out="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
+                                                    <span t-field="move.uom_id" groups="uom.group_uom" />
                                                 </td>
                                                 <td class="text-end">
                                                     <span
-                                                        t-esc="line['price']"
+                                                        t-out="line['price']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
                                                 <td class="text-end">
                                                     <span
-                                                        t-esc="line['amount']"
+                                                        t-out="line['amount']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
                                                 <td t-if="res_company.taxes_on_reception" class="text-end">
                                                     <span
-                                                        t-esc="line['tax']"
+                                                        t-out="line['tax']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
                                                 <td t-if="res_company.taxes_on_reception" class="text-end">
                                                     <span
-                                                        t-esc="line['amount_tax']"
+                                                        t-out="line['amount_tax']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
@@ -1054,26 +1054,26 @@
                                         </td>
                                         <td class="text-end">
                                             <span t-field="move.product_uom_qty" />
-                                            <span t-field="move.product_uom" groups="uom.group_uom" />
+                                            <span t-field="move.uom_id" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-end">
                                             <span
-                                                t-esc="line['price']"
+                                                t-out="line['price']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </td>
                                         <td class="text-end">
                                             <span
-                                                t-esc="line['amount']"
+                                                t-out="line['amount']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </td>
                                         <td t-if="res_company.taxes_on_reception" class="text-end">
-                                            <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}' />
+                                            <span t-out="line['tax']" t-options='{"widget": "float", "precision": 2}' />
                                         </td>
                                         <td t-if="res_company.taxes_on_reception" class="text-end">
                                             <span
-                                                t-esc="line['amount_tax']"
+                                                t-out="line['amount_tax']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </td>
@@ -1096,7 +1096,7 @@
                                             </td>
                                             <td class="text-end">
                                                 <span
-                                                    t-esc="totals['amount']"
+                                                    t-out="totals['amount']"
                                                     t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                                 />
                                             </td>
@@ -1156,18 +1156,18 @@
                                                     </div>
                                                 </td>
                                                 <td class="text-end">
-                                                    <span t-esc="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
-                                                    <span t-field="move.product_uom" groups="uom.group_uom" />
+                                                    <span t-out="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
+                                                    <span t-field="move.uom_id" groups="uom.group_uom" />
                                                 </td>
                                                 <td class="text-end">
                                                     <span
-                                                        t-esc="line['price']"
+                                                        t-out="line['price']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
                                                 <td class="text-end">
                                                     <span
-                                                        t-esc="line['amount']"
+                                                        t-out="line['amount']"
                                                         t-options='{"widget": "float", "precision": 2}'
                                                     />
                                                 </td>
@@ -1188,17 +1188,17 @@
                                         </td>
                                         <td class="text-end">
                                             <span t-field="move.product_uom_qty" />
-                                            <span t-field="move.product_uom" groups="uom.group_uom" />
+                                            <span t-field="move.uom_id" groups="uom.group_uom" />
                                         </td>
                                         <td class="text-end">
                                             <span
-                                                t-esc="line['price']"
+                                                t-out="line['price']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </td>
                                         <td class="text-end">
                                             <span
-                                                t-esc="line['amount']"
+                                                t-out="line['amount']"
                                                 t-options='{"widget": "float", "precision": 2}'
                                             />
                                         </td>
@@ -1216,7 +1216,7 @@
                                         </td>
                                         <td class="text-end">
                                             <span
-                                                t-esc="totals['amount']"
+                                                t-out="totals['amount']"
                                                 t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"
                                             />
                                         </td>
@@ -1297,36 +1297,36 @@
                                         </div>
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
-                                        <span t-field="move.product_uom" groups="uom.group_uom" />
+                                        <span t-out="move.quantity or move.product_uom_qty" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-field="move.uom_id" groups="uom.group_uom" />
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="line['price']" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-out="line['price']" t-options='{"widget": "float", "precision": 2}' />
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="line['amount']" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-out="line['amount']" t-options='{"widget": "float", "precision": 2}' />
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="line['tax']" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-out="line['tax']" t-options='{"widget": "float", "precision": 2}' />
                                     </td>
                                     <td class="text-end">
                                         <span
-                                            t-esc="line['amount_tax']"
+                                            t-out="line['amount_tax']"
                                             t-options='{"widget": "float", "precision": 2}'
                                         />
                                     </td>
                                     <td class="text-end">
                                         <span
-                                            t-esc="line['list_price']"
+                                            t-out="line['list_price']"
                                             t-options='{"widget": "float", "precision": 2}'
                                         />
                                     </td>
                                     <td class="text-end">
-                                        <span t-esc="line['margin']" t-options='{"widget": "float", "precision": 2}' />
+                                        <span t-out="line['margin']" t-options='{"widget": "float", "precision": 2}' />
                                     </td>
                                     <td class="text-end">
                                         <span
-                                            t-esc="line['amount_tax_sale']"
+                                            t-out="line['amount_tax_sale']"
                                             t-options='{"widget": "float", "precision": 2}'
                                         />
                                     </td>

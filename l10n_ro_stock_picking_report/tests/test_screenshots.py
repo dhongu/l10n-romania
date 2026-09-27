@@ -50,7 +50,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
 
         # Cazul cu unități de ambalare are sens doar cu propagarea unității activă;
         # implicit Odoo convertește mișcarea în unitatea de referință a produsului.
-        env["ir.config_parameter"].sudo().set_param("stock.propagate_uom", "1")
+        env["ir.config_parameter"].sudo().set_bool("stock.propagate_uom", True)
 
         cls.warehouse = env["stock.warehouse"].search([("company_id", "=", company.id)], limit=1)
         if not cls.warehouse:
@@ -96,7 +96,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
         cls.supplier = env["res.partner"].create(
             {
                 "name": "Moara Bănățeană SRL",
-                "is_company": True,
+                "vat": "RO30012341",  # în 20 `is_company` e calculat din VAT
                 "country_id": country_ro.id,
                 "street": "Calea Lugojului 45",
                 "city": "Timișoara",
@@ -106,7 +106,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
         cls.customer = env["res.partner"].create(
             {
                 "name": "Brutăria Aurora SRL",
-                "is_company": True,
+                "vat": "RO11223342",
                 "country_id": country_ro.id,
                 "street": "Str. Morii 8",
                 "city": "Arad",
@@ -116,7 +116,6 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
         cls.delegat = env["res.partner"].create(
             {
                 "name": "Andrei Munteanu",
-                "is_company": False,
                 "function": "Șofer",
                 "mean_transp": "TM 04 MBS",
             }
@@ -241,7 +240,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
                         {
                             "product_id": product.id,
                             "product_qty": qty,
-                            "product_uom_id": uom.id,
+                            "uom_id": uom.id,
                             "price_unit": price_unit,
                             "tax_ids": [(6, 0, cls.tax_purchase.ids)],
                         },
@@ -278,7 +277,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
             {
                 "product_id": product.id,
                 "product_uom_qty": qty,
-                "product_uom": uom.id,
+                "uom_id": uom.id,
                 "picking_id": picking.id,
                 "location_id": picking.location_id.id,
                 "location_dest_id": picking.location_dest_id.id,

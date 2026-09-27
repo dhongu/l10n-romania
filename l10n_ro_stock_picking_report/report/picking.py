@@ -32,12 +32,12 @@ class ReportPickingDelivery(models.AbstractModel):
         res = {"price": 0.0, "amount": 0.0, "tax": 0.0, "amount_tax": 0.0}
 
         # Ca și pe rapoartele de recepție, tot ce apare pe aviz se exprimă în unitatea
-        # de pe DOCUMENT (`move.product_uom`) — cea tipărită în coloana U/M. Prețul de
+        # de pe DOCUMENT (`move.uom_id`) — cea tipărită în coloana U/M. Prețul de
         # listă al produsului e per unitatea de REFERINȚĂ, prețul de pe linia comenzii
         # de vânzare e per unitatea acelei linii, iar `move.product_qty` e cantitatea
         # convertită în unitatea de referință. Cei doi factori aduc totul în unitatea
         # documentului; când unitățile coincid, amândoi sunt 1 și nimic nu se schimbă.
-        uom = move_line.product_uom
+        uom = move_line.uom_id
         ref_uom = move_line.product_id.uom_id
         uom_factor = 1.0
         if uom and ref_uom:
@@ -149,7 +149,7 @@ class ReportPickingReception(models.AbstractModel):
         value = move.value
 
         # Toate coloanele raportului se exprimă în unitatea de pe DOCUMENT
-        # (`move.product_uom`) — cea în care se face efectiv recepția și care se
+        # (`move.uom_id`) — cea în care se face efectiv recepția și care se
         # tipărește în coloana U/M. Prețurile din Odoo (`move.price_unit`,
         # `product.list_price`, prețul din lista de prețuri) sunt însă exprimate în
         # unitatea de REFERINȚĂ a produsului, la fel ca `move.product_qty`.
@@ -158,8 +158,8 @@ class ReportPickingReception(models.AbstractModel):
         # documentului, iar cantitățile le luăm mereu din `move.quantity` /
         # `move.product_uom_qty`, nu din `move.product_qty`.
         uom_factor = 1.0
-        if move.product_uom and move.product_id.uom_id:
-            uom_factor = move.product_uom._compute_quantity(1, move.product_id.uom_id, round=False) or 1.0
+        if move.uom_id and move.product_id.uom_id:
+            uom_factor = move.uom_id._compute_quantity(1, move.product_id.uom_id, round=False) or 1.0
 
         quantity = move.quantity
         if move.quantity:
@@ -190,7 +190,7 @@ class ReportPickingReception(models.AbstractModel):
             # produsului — în `stock.move` valoarea se calculează ca
             # `product_qty * price_unit` — în timp ce `quantity` de mai jos e
             # în unitatea de pe document (`move.quantity` se însumează în
-            # `move.product_uom`). Înmulțite ca atare, suma iese greșită cu
+            # `move.uom_id`). Înmulțite ca atare, suma iese greșită cu
             # exact factorul unității: o recepție de 1.344 de cutii a 13 kg,
             # la 2,90 lei/kg, dădea 3.897,60 lei în loc de 50.668,80.
             # Aducem prețul în unitatea documentului ÎNAINTE de calculul
