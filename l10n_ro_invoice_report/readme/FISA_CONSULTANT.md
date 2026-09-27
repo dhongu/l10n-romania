@@ -85,7 +85,11 @@ Din **Tipăriți → Voucher / Payment** se obține dispoziția de plată.
 
 ### Pasul 5 — Tipărirea chitanței / dispoziției de încasare (cod 14-4-1)
 
-Pentru o încasare în numerar, același raport produce **chitanța**, cu mențiunea **Cod 14-4-1**, blocurile Furnizor/Client și rubrica „Primit de la"; cel care aduce banii la casierie apare ca **Plătitor**. Rândul de act de identitate nu se tipărește — se cere doar la plată, unde banii ies din casă.
+Pentru o încasare în numerar, același raport produce **chitanța**.
+
+**Găsiți pe ecran**: titlul „Chitanță", numărul și data, mențiunea **Cod 14-4-1** sub titlu, blocurile **Beneficiar** (compania, care primește banii) și **Plătitor** (cel care aduce banii la casierie), rubricile Primit de la, Casieria, Suma în cifre și în litere, Reprezentând c/v. Rândul de act de identitate nu se tipărește — se cere doar la plată, unde banii ies din casă. Ca și la dispoziție, documentul se încheie după tabel, fără rubrici de semnătură.
+
+**Verificați** că: plătitorul și rubrica „Primit de la" arată aceeași persoană, iar suma în litere corespunde sumei în cifre. Semnătura casierului se dă pe exemplarul tipărit.
 
 ![Chitanța pentru încasarea în numerar, cod 14-4-1](screenshots/05_chitanta_incasare.png)
 
@@ -146,8 +150,8 @@ Capturile (`readme/screenshots/`) sunt **generate automat** din `tests/test_scre
 1. `01_factura_delegat.png` — factura de client, cu Delegat și Mijloc transport evidențiate în tabul „Alte informații".
 2. `02_factura_tiparita.png` — factura tipărită în limba companiei, cu numerotarea liniilor, TVA pe linie, întocmitorul, delegatul și mențiunea legală.
 3. `03_plata_numerar.png` — plata în numerar înregistrată pe jurnalul de casă.
-4. `04_dispozitie_plata.png` — dispoziția de plată către casierie (cod 14-4-4), cu Plătitor/Beneficiar, act de identitate și suma în litere.
-5. `05_chitanta_incasare.png` — chitanța pentru încasare (cod 14-4-1), cu „Am depus suma".
+4. `04_dispozitie_plata.png` — dispoziția de plată către casierie (cod 14-4-4), cu Plătitor/Beneficiar, act de identitate și suma în litere, fără rubrici de semnătură.
+5. `05_chitanta_incasare.png` — chitanța pentru încasare (cod 14-4-1), cu Beneficiar/Plătitor, „Primit de la" și suma în litere, fără rubrici de semnătură.
 
 Regenerare:
 
