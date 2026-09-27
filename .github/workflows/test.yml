@@ -56,8 +56,15 @@ jobs:
       - name: Install Requests2.27.0
         run: |
           pip install "requests>=2.27.0"
+      - name: Checkout l10n-romania OCA (dependențe cross-repo)
+        # l10n_ro_config, l10n_ro_stock & co. (OCA): pe 20.0 nu există încă wheel-uri OCA,
+        # deci le luăm din fork-ul terrabit-ro/l10n-romania (branch 20.0)
+        run: git clone --depth 1 https://github.com/terrabit-ro/l10n-romania.git -b 20.0 /tmp/l10n-romania-oca
       - name: Install addons and dependencies
-        run: oca_install_addons
+        run: |
+          export ADDONS_PATH="/opt/odoo/addons,$(pwd),/tmp/l10n-romania-oca"
+          echo "ADDONS_PATH=${ADDONS_PATH}" >> $GITHUB_ENV
+          oca_install_addons
       - name: Check licenses
         run: manifestoo -d . check-licenses
       - name: Check development status
