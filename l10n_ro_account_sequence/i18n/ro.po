@@ -71,5 +71,5 @@ msgstr "Chitanță furnizor"
 
 #. module: l10n_ro_account_sequence
 #: model:ir.model.fields,field_description:l10n_ro_account_sequence.field_account_payment__l10n_ro_journal_type
-msgid "Type"
-msgstr "Tip"
+msgid "Journal Type"
+msgstr "Tip jurnal"

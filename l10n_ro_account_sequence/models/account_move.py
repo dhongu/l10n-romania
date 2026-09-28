@@ -1,4 +1,5 @@
 from odoo import fields, models
+from odoo.tools import SQL
 
 
 class AccountMove(models.Model):
@@ -9,7 +10,8 @@ class AccountMove(models.Model):
     )
 
     def _get_last_sequence_domain(self, relaxed=False):
-        where_string, param = super()._get_last_sequence_domain(relaxed=relaxed)
+        # Odoo 20: the domain is an SQL object (was a (where_string, params) tuple)
+        condition = super()._get_last_sequence_domain(relaxed=relaxed)
         if self.journal_id and self.journal_id.type == "cash" and self.company_id.chart_template == "ro":
             # During posting, origin_payment_id might not yet be set. Use context fallback.
             payment = self.origin_payment_id
@@ -18,9 +20,13 @@ class AccountMove(models.Model):
                 l10n_ro_cash_document_type = payment.l10n_ro_cash_document_type or "other"
             if not l10n_ro_cash_document_type:
                 l10n_ro_cash_document_type = self.env.context.get("l10n_ro_cash_document_type", "other")
-            where_string += " AND l10n_ro_cash_document_type = %(l10n_ro_cash_document_type)s "
-            param["l10n_ro_cash_document_type"] = l10n_ro_cash_document_type
-        return where_string, param
+            condition = SQL(
+                "%s AND %s = %s",
+                condition,
+                SQL.identifier("l10n_ro_cash_document_type", to_flush=self._fields["l10n_ro_cash_document_type"]),
+                l10n_ro_cash_document_type,
+            )
+        return condition
 
     def _get_starting_sequence(self):
         starting_sequence = super()._get_starting_sequence()

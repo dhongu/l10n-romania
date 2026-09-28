@@ -4,7 +4,8 @@ from odoo import api, fields, models
 class AccountPayment(models.Model):
     _inherit = "account.payment"
 
-    l10n_ro_journal_type = fields.Selection(related="journal_id.type", readonly=True, store=True)
+    # Odoo 20: own label, "Type" is also the label of account.payment.outstanding_account_type
+    l10n_ro_journal_type = fields.Selection(related="journal_id.type", string="Journal Type", readonly=True, store=True)
     l10n_ro_cash_document_type = fields.Selection(
         [
             ("customer_receipt", "Customer Receipt"),
@@ -19,14 +20,17 @@ class AccountPayment(models.Model):
         required=True,
     )
 
-    @api.onchange("posted_before", "state", "journal_id", "date")
+    # "posted_before" is not a field of account.payment (only of account.move):
+    # a missing name logs a WARNING when the onchange specs are built.
+    @api.onchange("state", "journal_id", "date")
     def _onchange_journal_date(self):
         # res = super()._onchange_journal_date()
         if not self.move_id.id:
             self.name = False
         # return res
 
-    @api.onchange("payment_type", "partner_type", "is_internal_transfer", "journal_id")
+    # "is_internal_transfer" no longer exists on account.payment (removed in 18.0)
+    @api.onchange("payment_type", "partner_type", "journal_id")
     def _onchange_payment_type_and_partner_type(self):
         self.l10n_ro_cash_document_type = "other"
         if not self.journal_id:
