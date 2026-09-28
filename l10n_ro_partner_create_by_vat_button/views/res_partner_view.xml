@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.vat.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('alert', 'alert-warning', 'oe_edit_only')]" position="before">
+                <header>
+                    <!-- Odoo 20: is_company e calculat (entitate comercială + CUI), deci un
+                    partener nou, cu CUI-ul scris doar în nume, nu mai e „companie”;
+                    butonul rămâne vizibil și pentru partenerii de nivel superior fără CUI -->
+                    <button
+                        name="%(action_get_partner_data)d"
+                        invisible="(not name and not vat) or not (is_company or (not parent_id and not vat))"
+                        string="Get Data"
+                        type="action"
+                    />
+                </header>
+                <field name="warning_message" invisible="1" />
+                <div class="alert alert-danger" role="alert" style="margin-bottom:0px;" invisible="not warning_message">
+                    <span>
+                        <field name="warning_message" />
+                    </span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_res_partner_filter" model="ir.ui.view">
+        <field name="name">res.partner.select</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="vat" />
+            </field>
+        </field>
+    </record>
+
+</odoo>

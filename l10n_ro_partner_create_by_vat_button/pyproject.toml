@@ -1,0 +1,11 @@
+[build-system]
+requires = ["whool"]
+build-backend = "whool.buildapi"
+
+[project]
+name = "odoo-addon-l10n-ro-partner-create-by-vat-button"
+
+# l10n_ro_config / l10n_ro_partner_create_by_vat (OCA) nu au încă wheel-uri 20.0 pe PyPI:
+# dependențele Odoo vin din clona terrabit-ro/l10n-romania@20.0 din ADDONS_PATH (vezi
+# workflow-ul CI), nu din pachetele odoo-addon-* generate automat de whool
+dependencies = []
