@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models, release
 from odoo.orm.identifiers import NewId
-from odoo.tools import date_utils
+from odoo.tools import SQL, date_utils
 
 _logger = logging.getLogger(__name__)
 
@@ -127,13 +127,23 @@ class CashRegister(models.Model):
                     item._set_next_sequence()
 
     def _get_last_sequence_domain(self, relaxed=False):
-        # pylint: disable=sql-injection
         # EXTENDS account sequence.mixin to mimic account.move behavior
+        # Odoo 20: the domain is an SQL object (was a (where_string, params) tuple);
+        # the columns are flushed through `to_flush` before the query runs.
         self.ensure_one()
         if not self.date or not self.journal_id:
-            return "WHERE FALSE", {}
-        where_string = "WHERE journal_id = %(journal_id)s AND name IS NOT NULL AND name NOT IN ('/', '')"
-        param = {"journal_id": self.journal_id.id}
+            return SQL("FALSE")
+
+        def column(fname):
+            return SQL.identifier(fname, to_flush=self._fields[fname])
+
+        condition = SQL(
+            "%s = %s AND %s IS NOT NULL AND %s NOT IN ('/', '')",
+            column("journal_id"),
+            self.journal_id.id,
+            column("name"),
+            column("name"),
+        )
 
         if not relaxed:
             # Find a reference move name close to our date to deduce the reset rule
@@ -147,23 +157,26 @@ class CashRegister(models.Model):
                 reference_name = self.sudo().search(domain, order="date asc", limit=1).name
             sequence_number_reset = self._deduce_sequence_number_reset(reference_name)
             date_start, date_end, *_ = self._get_sequence_date_range(sequence_number_reset)
-            where_string += " AND date BETWEEN %(date_start)s AND %(date_end)s"
-            param["date_start"] = date_start
-            param["date_end"] = date_end
+            condition = SQL("%s AND %s BETWEEN %s AND %s", condition, column("date"), date_start, date_end)
 
             # Exclude formats we don't want as in account.move
+            anti_regex = None
             if sequence_number_reset in ("year", "year_range"):
-                param["anti_regex"] = (
-                    self._make_regex_non_capturing(self._sequence_monthly_regex.split("(?P<seq>")[0]) + "$"
-                )
+                anti_regex = self._make_regex_non_capturing(self._sequence_monthly_regex.split("(?P<seq>")[0]) + "$"
             elif sequence_number_reset == "never":
-                param["anti_regex"] = (
-                    self._make_regex_non_capturing(self._sequence_yearly_regex.split("(?P<seq>")[0]) + "$"
-                )
-            if param.get("anti_regex"):
-                where_string += " AND sequence_prefix !~ %(anti_regex)s "
+                anti_regex = self._make_regex_non_capturing(self._sequence_yearly_regex.split("(?P<seq>")[0]) + "$"
+            if anti_regex:
+                condition = SQL("%s AND %s !~ %s", condition, column("sequence_prefix"), anti_regex)
 
-        return where_string, param
+        return condition
+
+    def _get_sequence_cache(self):
+        # The sequence.mixin cache is shared by all models of the transaction and keyed by
+        # (format with seq=0, sequence index value). A register "CASA/2025/00000" on journal
+        # CASA has the same key as the cash journal entries "CASA/2025/00000", so the
+        # registers and the journal entries would advance each other's counter (gaps in
+        # both numberings). Keep a separate cache for the cash registers.
+        return self.env.cr.cache.setdefault("l10n.ro.cash.register.sequence", {})
 
     def _get_starting_sequence(self):
         # Mirror account.move logic: cash journals use yearly numbering

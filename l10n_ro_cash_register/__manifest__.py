@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Cash Register",
-    "version": "19.0.1.2.1",
+    "version": "20.0.1.2.1",
     "summary": "Romania - Cash Register",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
@@ -11,8 +11,7 @@
     "development_status": "Mature",
     "data": [
         "views/cash_register_views.xml",
-        "security/ir.model.access.csv",
-        "security/cash_register_security.xml",
+        "security/ir.access.csv",
         "wizard/cash_register_operation_view.xml",
         "views/report_cash_register.xml",
         # "views/account_payment_view.xml",

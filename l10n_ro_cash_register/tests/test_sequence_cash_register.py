@@ -5,6 +5,7 @@ import logging
 from datetime import date
 
 from odoo.tests.common import TransactionCase, tagged
+from odoo.tools import SQL
 
 _logger = logging.getLogger(__name__)
 
@@ -114,3 +115,58 @@ class TestCashRegisterSequence(TransactionCase):
         rec.write({"currency_id": self.env.company.currency_id.id})
 
         self.assertTrue(rec.name and rec.name != "/", "Number should be (re)assigned on write when missing")
+
+    def test_sequence_names_are_identical_to_19(self):
+        """Numerotarea explicită: format `<COD>/<AN>/<5 cifre>`, reset anual, per jurnal.
+
+        În 20 `_get_last_sequence_domain` întoarce `SQL`, nu tuplul (where_string, param);
+        numerele rezultate trebuie să rămână identice cu cele din 19.
+        """
+        CashRegister = self.env["l10n.ro.cash.register"]
+        year = date.today().year
+
+        a1 = CashRegister.create({"journal_id": self.journal_a.id, "date": date(year, 1, 10)})
+        a2 = CashRegister.create({"journal_id": self.journal_a.id, "date": date(year, 1, 15)})
+        b1 = CashRegister.create({"journal_id": self.journal_b.id, "date": date(year, 1, 12)})
+        a3 = CashRegister.create({"journal_id": self.journal_a.id, "date": date(year, 2, 1)})
+        # Anul următor: numerotarea se reia de la 1 (reset anual, ca la jurnalele de casă).
+        a_next = CashRegister.create({"journal_id": self.journal_a.id, "date": date(year + 1, 1, 5)})
+        a_next2 = CashRegister.create({"journal_id": self.journal_a.id, "date": date(year + 1, 1, 6)})
+        # O zi retroactivă în anul curent continuă secvența anului ei, nu pe a anului următor.
+        a4 = CashRegister.create({"journal_id": self.journal_a.id, "date": date(year, 3, 1)})
+
+        self.assertEqual(a1.name, f"CASH/{year}/00001")
+        self.assertEqual(a2.name, f"CASH/{year}/00002")
+        self.assertEqual(a3.name, f"CASH/{year}/00003")
+        self.assertEqual(a4.name, f"CASH/{year}/00004")
+        self.assertEqual(b1.name, f"PETY/{year}/00001")
+        self.assertEqual(a_next.name, f"CASH/{year + 1}/00001")
+        self.assertEqual(a_next2.name, f"CASH/{year + 1}/00002")
+        self.assertEqual(a1.sequence_prefix, f"CASH/{year}/")
+        self.assertEqual(a_next.sequence_prefix, f"CASH/{year + 1}/")
+        self.assertEqual((a4.sequence_number, a_next2.sequence_number), (4, 2))
+
+    def test_sequence_continues_after_manual_number(self):
+        """Un număr introdus manual e respectat, iar următorul registru continuă de la el."""
+        CashRegister = self.env["l10n.ro.cash.register"]
+        year = date.today().year
+
+        first = CashRegister.create({"journal_id": self.journal_a.id, "date": date(year, 4, 1)})
+        self.assertEqual(first.name, f"CASH/{year}/00001")
+        first.write({"name": f"CASH/{year}/00010"})
+        second = CashRegister.create({"journal_id": self.journal_a.id, "date": date(year, 4, 2)})
+        self.assertEqual(second.name, f"CASH/{year}/00011")
+
+    def test_last_sequence_domain_is_sql(self):
+        """Contractul din 20: domeniul e un obiect `SQL`, care își golește câmpurile din cache."""
+        year = date.today().year
+        rec = self.env["l10n.ro.cash.register"].create({"journal_id": self.journal_a.id, "date": date(year, 5, 1)})
+        condition = rec._get_last_sequence_domain()
+        self.assertIsInstance(condition, SQL)
+        code, params, to_flush = condition._sql_tuple
+        flushed = {field.name for field in to_flush}
+        self.assertTrue({"journal_id", "name", "date", "sequence_prefix"} <= flushed)
+        self.assertIsInstance(rec._get_last_sequence_domain(relaxed=True), SQL)
+        empty = self.env["l10n.ro.cash.register"].new({"journal_id": False})
+        self.assertEqual(empty._get_last_sequence_domain()._sql_tuple[0], "FALSE")
+        self.assertIn(self.journal_a.id, params)

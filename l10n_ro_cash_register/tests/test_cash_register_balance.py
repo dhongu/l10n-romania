@@ -1,6 +1,10 @@
 # Copyright (C) 2026 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
+import re
+
+from lxml import etree
+
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
@@ -150,3 +154,63 @@ class TestL10nRoCashRegisterBalance(TransactionCase):
         self.assertEqual(action.get("type"), "ir.actions.report")
         self.assertEqual(action.get("report_name"), "l10n_ro_cash_register.report_cash_register")
         self.assertEqual(action.get("context", {}).get("active_ids"), register.ids)
+
+    def test_report_balances(self):
+        """Raportul listează soldurile identic cu 19: report, încasări, plăți, sold curent, sold final."""
+        self._cash_move("2026-03-09", 1000.0, "in", "Sold anterior")
+        self._cash_move("2026-03-10", 500.0, "in", "Chitanta 001")
+        self._cash_move("2026-03-10", 200.0, "out", "Dispozitie plata 001")
+        self._cash_move("2026-03-10", 50.0, "in", "Chitanta 002")
+        register = self._register("2026-03-10")
+
+        self.assertAlmostEqual(register.balance_start, 1000.0, places=2)
+        self.assertAlmostEqual(register.balance_end, 1350.0, places=2)
+        self.assertEqual(len(register.move_line_ids), 3)
+
+        html = self.env["ir.actions.report"]._render_qweb_html(
+            "l10n_ro_cash_register.report_cash_register", register.ids
+        )[0]
+        tree = etree.fromstring(html, etree.HTMLParser())
+
+        def amounts(xpath):
+            values = []
+            for node in tree.xpath(xpath):
+                text = "".join(node.itertext()).replace("\xa0", " ")
+                digits = re.sub(r"[^0-9,.\-]", "", text)
+                # separatorul zecimal e ultimul „.” sau „,” (indiferent de limba raportului)
+                integer, _sep, decimals = re.match(r"^(.*?)(?:([.,])(\d{1,2}))?$", digits).groups()
+                values.append(float(re.sub(r"[.,]", "", integer) + "." + (decimals or "0")))
+            return values
+
+        self.assertEqual(amounts("//td[@id='st_balance_value']"), [1000.0])
+        # Soldul curent pe fiecare rând, în ordinea cronologică a operațiunilor.
+        self.assertEqual(amounts("//td[@id='crt_balance']"), [1500.0, 1300.0, 1350.0])
+        self.assertEqual(amounts("//td[@id='total_receipts']"), [550.0])
+        self.assertEqual(amounts("//td[@id='total_payments']"), [200.0])
+        self.assertEqual(amounts("//td[@id='end_balance']"), [1350.0])
+        # Numerotarea rândurilor și explicațiile (t-out, nu t-esc ignorat în 20).
+        self.assertEqual([n.text.strip() for n in tree.xpath("//td[@id='index']/span")], ["1", "2", "3"])
+        self.assertEqual(
+            ["".join(n.itertext()).strip() for n in tree.xpath("//td[@id='ref']/span")],
+            ["Chitanta 001", "Dispozitie plata 001", "Chitanta 002"],
+        )
+        self.assertIn("l10n_ro_cash_register", "".join(tree.xpath("//div[@id='software_signature']//text()")))
+
+    def test_register_and_move_numbering_do_not_interfere(self):
+        """Registrele și notele din jurnalul de casă au numerotări independente, fără goluri.
+
+        Au același format (`<COD>/<AN>/00000`) și același index (jurnalul), deci în aceeași
+        tranzacție nu trebuie să-și avanseze reciproc contorul din cache-ul `sequence.mixin`.
+        """
+        code = self.cash_journal.code
+        move1 = self._cash_move("2026-03-10", 100.0, "in")
+        register1 = self._register("2026-03-10")
+        move2 = self._cash_move("2026-03-11", 100.0, "in")
+        register2 = self._register("2026-03-11")
+        move3 = self._cash_move("2026-03-11", 10.0, "out")
+
+        self.assertEqual(register1.name, f"{code}/2026/00001")
+        self.assertEqual(register2.name, f"{code}/2026/00002")
+        self.assertEqual(move1.name, f"{code}/2026/00001")
+        self.assertEqual(move2.name, f"{code}/2026/00002")
+        self.assertEqual(move3.name, f"{code}/2026/00003")
