@@ -406,8 +406,8 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         else:
             name["_text"] = name["_text"][:100]
         # Apply behavior only when system parameter is enabled
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        use_line_desc = safe_eval(get_param("efactura.use_line_description", "False"))
+        get_str = self.env["ir.config_parameter"].sudo().get_str
+        use_line_desc = safe_eval(get_str("efactura.use_line_description") or "False")
 
         if use_line_desc:
             line = vals["base_line"]["record"]
@@ -433,9 +433,9 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         res = super()._add_invoice_line_item_nodes(line_node, vals)
 
         # Apply behavior only when system parameter is enabled
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        use_line_desc = safe_eval(get_param("efactura.use_line_description", "False"))
-        replace_unit_uom = safe_eval(get_param("efactura.replace_unit_uom", "False"))
+        get_str = self.env["ir.config_parameter"].sudo().get_str
+        use_line_desc = safe_eval(get_str("efactura.use_line_description") or "False")
+        replace_unit_uom = safe_eval(get_str("efactura.replace_unit_uom") or "False")
         item = line_node.setdefault("cac:Item", {})
         # Vezi nota din _add_document_line_item_nodes: core-ul poate seta nodurile
         # pe None, deci nu ne putem baza pe setdefault.
@@ -475,13 +475,77 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         else:
             item["cbc:Name"] = None
         # replace line uom if parameter is set for unit
-        if (
-            replace_unit_uom
-            and line_node["cbc:InvoicedQuantity"]["unitCode"]
-            and line_node["cbc:InvoicedQuantity"]["unitCode"] == "C62"
+        # Stornourile au cbc:CreditedQuantity, nu cbc:InvoicedQuantity (pe 19.0
+        # accesul direct ridica KeyError la generarea XML-ului unui storno).
+        for quantity_tag in ("cbc:InvoicedQuantity", "cbc:CreditedQuantity"):
+            quantity_node = line_node.get(quantity_tag)
+            if replace_unit_uom and isinstance(quantity_node, dict) and quantity_node.get("unitCode") == "C62":
+                quantity_node["unitCode"] = replace_unit_uom
+        # Odoo 20: l10n_ro_edi scrie mereu cac:CommodityClassification cu codul CPV
+        # al produsului; fara cod CPV ar iesi un <cbc:ItemClassificationCode listID="STI"/>
+        # gol, care nu exista pe 19.0. Il pastram doar cand produsul are cod CPV.
+        classification = item.get("cac:CommodityClassification")
+        if isinstance(classification, dict) and not (classification.get("cbc:ItemClassificationCode") or {}).get(
+            "_text"
         ):
-            line_node["cbc:InvoicedQuantity"]["unitCode"] = replace_unit_uom
+            item["cac:CommodityClassification"] = []
         return res
+
+    def _ubl_add_line_item_name_description_nodes(self, vals):
+        # EXTENDS l10n_ro_edi
+        # Odoo 20 pune in cbc:Name (BT-153) doar product.name, iar in
+        # cbc:Description (BT-154) doar descrierea liniei (account.move.line.name nu
+        # mai contine produsul). Pe 19.0 cbc:Name era product.display_name (cu codul
+        # intern), iar descrierea era textul liniei fara numele produsului. Pastram
+        # XML-ul de pe 19.0: textul complet al liniei e acum in ``label``.
+        super()._ubl_add_line_item_name_description_nodes(vals)
+        base_line = vals["line_vals"]["base_line"]
+        product = base_line["product_id"]
+        if not product:
+            return
+        item_node = vals["item_node"]
+        record = base_line.get("record")
+        if isinstance(record, models.Model) and record._name == "account.move.line":
+            line_name = record.label or ""
+        else:
+            line_name = base_line.get("name") or ""
+        name = product.display_name
+        description = line_name.replace(name, "").strip()
+        item_node["cbc:Name"] = {"_text": name[:100]} if name else None
+        item_node["cbc:Description"] = {"_text": description[:200]} if description else None
+
+    def _ubl_add_accounting_supplier_party_legal_entity_nodes(self, vals):
+        # EXTENDS l10n_ro_edi
+        # Odoo 20: l10n_ro_edi rescrie PartyLegalEntity cu CUI-ul si cand partenerul
+        # are CUI, deci NRC-ul pus pe ubl_bis3 (BT-30) s-ar pierde. Il repunem.
+        super()._ubl_add_accounting_supplier_party_legal_entity_nodes(vals)
+        self._l10n_ro_add_nrc_legal_entity(vals)
+
+    def _ubl_add_accounting_customer_party_legal_entity_nodes(self, vals):
+        # EXTENDS l10n_ro_edi -- vezi furnizorul (BT-47)
+        super()._ubl_add_accounting_customer_party_legal_entity_nodes(vals)
+        self._l10n_ro_add_nrc_legal_entity(vals)
+
+    def _l10n_ro_add_nrc_legal_entity(self, vals):
+        """NRC-ul in PartyLegalEntity cand partenerul are CUI, ca pe 19.0.
+
+        Pe 19.0, l10n_ro_edi rescria PartyLegalEntity doar pentru partenerii fara CUI,
+        deci NRC-ul pus de ``ubl_bis3`` ramanea pentru cei cu CUI.
+        """
+        partner = vals.get("party_vals", {}).get("partner")
+        if (
+            partner
+            and vals.get("party_node", {}).get("cac:PartyTaxScheme")
+            and _has_vat(partner.commercial_partner_id.vat)
+            and "nrc" in partner._fields
+            and partner.nrc
+        ):
+            vals["party_node"]["cac:PartyLegalEntity"] = [
+                {
+                    "cbc:RegistrationName": {"_text": partner.name},
+                    "cbc:CompanyID": {"_text": partner.nrc},
+                }
+            ]
 
     def _export_invoice_constraints(self, invoice, vals):
         """New helper"""
@@ -516,12 +580,19 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
     def _ubl_add_payment_means_nodes(self, vals):
         # EXTENDS account.edi.xml.ubl_bis3
         # add accounts according to the invoice currency and l10n_ro_print_report
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        get_all_banks = safe_eval(get_param("efactura.get_all_banks", "False"))
+        get_str = self.env["ir.config_parameter"].sudo().get_str
+        get_all_banks = safe_eval(get_str("efactura.get_all_banks") or "False")
         invoice = vals.get("invoice")
         if get_all_banks and invoice and invoice.move_type == "out_invoice":
-            domain = [("l10n_ro_print_report", "=", True), ("currency_id", "=", invoice.currency_id.id)]
-            banks = self.env["res.partner.bank"].search(domain)
+            # Odoo 20: res.partner.bank nu mai are currency_id; moneda contului e
+            # cea a jurnalului bancar legat, iar un cont fara jurnal e in moneda
+            # companiei (aceeasi regula ca in l10n_ro_report_common).
+            company_currency = invoice.company_id.currency_id
+            banks = (
+                self.env["res.partner.bank"]
+                .search([("l10n_ro_print_report", "=", True)])
+                .filtered(lambda b: (b.journal_id[:1].currency_id or company_currency) == invoice.currency_id)
+            )
             if banks:
                 document_node = vals["document_node"]
                 nodes = document_node.setdefault("cac:PaymentMeans", [])
@@ -582,13 +653,15 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         # EXTENDS account.edi.xml.ubl_bis3, for boolean not iterable error
         partner = vals["party_vals"]["partner"]
         commercial_partner = partner.commercial_partner_id
-        if not _has_vat(commercial_partner.vat) and not commercial_partner.is_company:
-            commercial_partner.company_registry = DEFAULT_VAT
+        # Odoo 20: res.partner.company_registry nu mai exista (identificatorii
+        # suplimentari il inlocuiesc), iar scrierea lui pe o persoana fizica fara
+        # CUI ar ridica AttributeError. Nu mai e nevoie: pentru CIUS-RO,
+        # l10n_ro_edi pune singur 0000000000000 clientului fara CUI.
         res = super()._ubl_add_accounting_customer_party_tax_scheme_nodes(vals)
         if vals["party_node"]["cac:PartyTaxScheme"]:
             if (
                 commercial_partner.country_id.code == "RO"
-                and "RO" not in vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"]
+                and "RO" not in (vals["party_node"]["cac:PartyTaxScheme"][0]["cbc:CompanyID"]["_text"] or "")
                 and commercial_partner.is_company
                 and commercial_partner.vat
             ):

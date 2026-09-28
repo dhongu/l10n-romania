@@ -25,10 +25,10 @@ class TestSpvActions(TransactionCase):
             }
         )
         # Client companie din afara Romaniei (intracomunitar) cu VAT EU
+        # (Odoo 20: is_company e calculat din CUI, nu se mai scrie)
         cls.foreign_partner = cls.env["res.partner"].create(
             {
                 "name": "Test Partner Foreign",
-                "is_company": True,
                 "country_id": cls.env.ref("base.ie").id,
                 "city": "Dublin",
                 "street": "Main Street 1",

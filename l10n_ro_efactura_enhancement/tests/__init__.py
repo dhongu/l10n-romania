@@ -6,3 +6,4 @@ from . import test_spv_request
 from . import test_cius_ro_length_limits
 from . import test_monetary_total_payable
 from . import test_customer_company_vat
+from . import test_xml_parity_19

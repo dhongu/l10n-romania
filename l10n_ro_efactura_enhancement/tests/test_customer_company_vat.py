@@ -33,7 +33,21 @@ class TestCustomerCompanyVat(TestROEdiCommon):
             "invoice_edi_format": "ciusro",
         }
         vals.update(kwargs)
-        return self.env["res.partner"].with_context(no_vat_validation=True).create(vals)
+        # Odoo 20: is_company e calculat (entitate comerciala + CUI), deci la
+        # create o firma fara CUI iese persoana fizica. Il fortam dupa create,
+        # ca datele migrate/importate care au ramas marcate firma.
+        is_company = vals.pop("is_company")
+        partner = self.env["res.partner"].with_context(no_vat_validation=True).create(vals)
+        if is_company and not partner.is_company:
+            partner.write({"is_company": True})
+        return partner
+
+    def test_company_without_vat_is_individual_on_create(self):
+        """In 20, un partener fara CUI creat ca firma e calculat persoana fizica."""
+        partner = self.env["res.partner"].create(
+            {"name": "Firma Fara CUI SRL", "is_company": True, "country_id": self.env.ref("base.ro").id}
+        )
+        self.assertFalse(partner.is_company)
 
     def _send(self, invoice):
         with patch(SEND_PATH, return_value={"key_loading": "123"}) as send:

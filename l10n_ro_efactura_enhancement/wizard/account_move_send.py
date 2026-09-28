@@ -69,8 +69,8 @@ class AccountMoveSend(models.AbstractModel):
         # Override-ul de pe account.move.send.wizard nu se mai declanșa, deci
         # parametrul efactura.embed_pdf era ignorat. Îl mutăm aici ca să rămână
         # funcțional: dacă embed_pdf e False, nu atașăm PDF-ul în XML-ul UBL.
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        embed_pdf = safe_eval(get_param("efactura.embed_pdf", "False"))
+        get_str = self.env["ir.config_parameter"].sudo().get_str
+        embed_pdf = safe_eval(get_str("efactura.embed_pdf") or "False")
         if not embed_pdf:
             return
         return super()._postprocess_invoice_ubl_xml(invoice, invoice_data)
