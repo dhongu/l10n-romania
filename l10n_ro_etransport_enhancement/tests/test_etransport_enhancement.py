@@ -135,7 +135,7 @@ class TestStockPickingWeightLine(TransactionCase):
                         {
                             "product_id": self.product.id,
                             "product_uom_qty": 3.0,
-                            "product_uom": self.product.uom_id.id,
+                            "uom_id": self.product.uom_id.id,
                             "location_id": picking_type.default_location_src_id.id,
                             "location_dest_id": picking_type.default_location_dest_id.id,
                         },
@@ -221,7 +221,7 @@ class TestValidateDataNoWeight(TransactionCase):
                         {
                             "product_id": product.id,
                             "product_uom_qty": 1.0,
-                            "product_uom": product.uom_id.id,
+                            "uom_id": product.uom_id.id,
                             "location_id": picking_type.default_location_src_id.id,
                             "location_dest_id": picking_type.default_location_dest_id.id,
                         },
@@ -292,7 +292,7 @@ class TestComputeWeightLines(TransactionCase):
                         {
                             "product_id": self.product.id,
                             "product_uom_qty": 2.0,
-                            "product_uom": self.product.uom_id.id,
+                            "uom_id": self.product.uom_id.id,
                             "location_id": picking_type.default_location_src_id.id,
                             "location_dest_id": picking_type.default_location_dest_id.id,
                         },
@@ -323,7 +323,7 @@ class TestComputeWeightLines(TransactionCase):
                         {
                             "product_id": self.product.id,
                             "product_uom_qty": qty,
-                            "product_uom": self.product.uom_id.id,
+                            "uom_id": self.product.uom_id.id,
                             "location_id": picking_type.default_location_src_id.id,
                             "location_dest_id": picking_type.default_location_dest_id.id,
                         },
@@ -507,7 +507,7 @@ class TestFallbackPrice(TransactionCase):
             {
                 "product_id": cls.product.id,
                 "product_uom_qty": 4.0,
-                "product_uom": cls.product.uom_id.id,
+                "uom_id": cls.product.uom_id.id,
                 "picking_id": cls.picking.id,
                 "location_id": cls.picking.location_id.id,
                 "location_dest_id": cls.picking.location_dest_id.id,

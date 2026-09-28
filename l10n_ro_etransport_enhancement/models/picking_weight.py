@@ -19,10 +19,10 @@ class StockPickingWeightLine(models.Model):
     def onchange_move_id(self):
         move = self.move_id
         # vezi `stock_picking.l10n_ro_compute_weight_lines`: `move.quantity` e
-        # în `move.product_uom`, care poate diferi de UoM-ul de bază al
+        # în `move.uom_id`, care poate diferi de UoM-ul de bază al
         # produsului (ex. cutie/palet) — se convertește înainte de înmulțirea
         # cu greutățile per unitate de bază.
-        qty_base = move.product_uom._compute_quantity(move.quantity, move.product_id.uom_id, raise_if_failure=False)
+        qty_base = move.uom_id._compute_quantity(move.quantity, move.product_id.uom_id, raise_if_failure=False)
         self.net_weight = (
             move.product_id.l10n_ro_net_weight
             if "l10n_ro_net_weight" in move.product_id._fields

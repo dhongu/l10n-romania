@@ -64,7 +64,7 @@ class TestEtransportUneceCode(TransactionCase):
             {
                 "product_id": product.id,
                 "product_uom_qty": qty,
-                "product_uom": uom.id,
+                "uom_id": uom.id,
                 "picking_id": picking.id,
                 "location_id": picking.location_id.id,
                 "location_dest_id": picking.location_dest_id.id,
@@ -77,7 +77,7 @@ class TestEtransportUneceCode(TransactionCase):
                         {
                             "denumireMarfa": product.name,
                             "cantitate": move.product_qty,
-                            "codUnitateMasura": move.product_uom._get_unece_code(),
+                            "codUnitateMasura": move.uom_id._get_unece_code(),
                             "valoareLeiFaraTva": product.standard_price or 1.0,
                             "greutateNeta": move.product_qty,
                             "greutateBruta": move.product_qty,

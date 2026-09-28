@@ -38,7 +38,9 @@ class StockPicking(models.Model):
             if purchase
             else line.price_reduce_taxexcl
         )
-        price = line.product_uom_id._compute_price(price, move.product_id.uom_id)
+        # purchase.order.line: `uom_id`; sale.order.line: `product_uom_id`
+        line_uom = line.uom_id if purchase else line.product_uom_id
+        price = line_uom._compute_price(price, move.product_id.uom_id)
         return line.currency_id._convert(
             price,
             self.env.ref("base.RON"),
@@ -199,7 +201,7 @@ class StockPicking(models.Model):
         """
         commercial_partner = partner.commercial_partner_id
         code = None
-        if commercial_partner.vat:
+        if commercial_partner.has_vat:
             code = self._l10n_ro_edi_stock_get_cod(commercial_partner)
         elif self.l10n_ro_edi_stock_operation_type == "30":
             code = "PF"

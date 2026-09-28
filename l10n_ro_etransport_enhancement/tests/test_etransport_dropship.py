@@ -73,11 +73,18 @@ class TestEtransportDropship(TransactionCase):
                 "standard_price": 0,
             }
         )
+        # În 20 comanda primește mereu o listă de prețuri (moneda companiei de
+        # test), iar `currency_id` se recalculează din ea — moneda RON trebuie
+        # dată prin listă, nu direct pe comandă.
+        cls.ron_pricelist = cls.env["product.pricelist"].create(
+            {"name": "eTransport RON", "currency_id": cls.env.ref("base.RON").id, "company_id": cls.company.id}
+        )
         cls.sale = cls.env["sale.order"].create(
             {
                 "partner_id": cls.customer.id,
                 "partner_shipping_id": cls.delivery.id,
                 "company_id": cls.company.id,
+                "pricelist_id": cls.ron_pricelist.id,
                 "currency_id": cls.env.ref("base.RON").id,
                 "order_line": [
                     Command.create(
@@ -130,7 +137,7 @@ class TestEtransportDropship(TransactionCase):
             {
                 "product_id": cls.product.id,
                 "product_uom_qty": 10,
-                "product_uom": cls.product.uom_id.id,
+                "uom_id": cls.product.uom_id.id,
                 "picking_id": cls.picking.id,
                 "location_id": cls.picking.location_id.id,
                 "location_dest_id": cls.picking.location_dest_id.id,
@@ -280,13 +287,13 @@ class TestEtransportDropship(TransactionCase):
                 {
                     "currency_id": self.env.ref("base.RON").id,
                     "company_id": self.company.id,
-                    "name": fields.Date.today(),
+                    "name": fields.Date.subtract(fields.Date.today(), days=1),
                     "rate": 5,
                 },
                 {
                     "currency_id": self.env.ref("base.EUR").id,
                     "company_id": self.company.id,
-                    "name": fields.Date.today(),
+                    "name": fields.Date.subtract(fields.Date.today(), days=1),
                     "rate": 1,
                 },
             ]

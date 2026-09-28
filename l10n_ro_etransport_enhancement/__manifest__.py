@@ -4,7 +4,7 @@
 
 {
     "name": "eTransport Enhancement",
-    "version": "19.0.0.9.2",
+    "version": "20.0.0.9.2",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport enhancement",
@@ -16,7 +16,7 @@
     ],
     "license": "LGPL-3",
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "data/template_etransport.xml",
         "views/stock_picking_view.xml",
         "views/res_config_view.xml",

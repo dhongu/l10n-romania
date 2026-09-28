@@ -15,7 +15,7 @@ incoerența dintre ele.
 Testele mimează ieșirea standardului reproducând sursele lui reale (liniile
 826-827 din `l10n_ro_edi_stock/models/stock_picking.py`), ca să nu devină
 tautologice: `cantitate` din `move.product_qty`, `codUnitateMasura` din
-`move.product_uom`.
+`move.uom_id`.
 """
 
 from unittest import SkipTest
@@ -55,7 +55,7 @@ class SecondaryUomCommon(TransactionCase):
                         {
                             "denumireMarfa": move.product_id.name,
                             "cantitate": move.product_qty,
-                            "codUnitateMasura": move.product_uom._get_unece_code(),
+                            "codUnitateMasura": move.uom_id._get_unece_code(),
                             "valoareLeiFaraTva": move.product_id.standard_price,
                             "greutateNeta": move.product_qty,
                             "greutateBruta": move.product_qty,
@@ -96,7 +96,7 @@ class TestSecondaryUomUnitCode(SecondaryUomCommon):
             {
                 "product_id": self.product.id,
                 "product_uom_qty": qty,
-                "product_uom": uom.id,
+                "uom_id": uom.id,
                 "picking_id": picking.id,
                 "location_id": picking.location_id.id,
                 "location_dest_id": picking.location_dest_id.id,
@@ -110,7 +110,7 @@ class TestSecondaryUomUnitCode(SecondaryUomCommon):
         move = picking.move_ids
         self.assertEqual(move.product_qty, 130, "cantitatea nativă e în UoM-ul de bază al produsului")
         self.assertEqual(
-            move.product_uom._get_unece_code(),
+            move.uom_id._get_unece_code(),
             "C62",
             "o unitate proprie nu are mapare UNECE și cade tăcut pe bucată",
         )
@@ -169,7 +169,7 @@ class TestSecondaryUomOrderPrice(SecondaryUomCommon):
                         {
                             "product_id": self.product.id,
                             "product_qty": 10,
-                            "product_uom_id": self.box.id,
+                            "uom_id": self.box.id,
                             "price_unit": 130,
                         }
                     )
@@ -221,7 +221,7 @@ class TestSecondaryUomOrderPrice(SecondaryUomCommon):
                         {
                             "product_id": self.product.id,
                             "product_qty": 130,
-                            "product_uom_id": self.kg.id,
+                            "uom_id": self.kg.id,
                             "price_unit": 10,
                         }
                     )

@@ -3,9 +3,9 @@
 # See README.rst file on addons root folder for license details
 
 import logging
-from datetime import datetime, time
+from datetime import UTC, datetime, time
+from zoneinfo import ZoneInfo
 
-import pytz
 import requests
 
 from odoo import api, fields, models
@@ -35,7 +35,8 @@ FULL_ROUTE_OPERATION_TYPES = ("40", "50")
 
 # Fusul folosit pentru data transportului când utilizatorul care trimite nu are
 # unul setat, nici pe cont, nici în context — cazul tipic e OdooBot din cron sau
-# dintr-o acțiune automată. `pytz.timezone(False)` aruncă AttributeError, deci
+# dintr-o acțiune automată. `pytz.timezone(False)` aruncă AttributeError (în 20,
+# cu `zoneinfo`, `ZoneInfo(False)` aruncă TypeError), deci
 # trimiterea cădea cu traceback. Declarația merge la ANAF, deci ora României e
 # implicitul corect.
 DECLARATION_TIMEZONE = "Europe/Bucharest"
@@ -235,7 +236,7 @@ class Picking(models.Model):
         Standardul ia cele două atribute din surse DIFERITE
         (`l10n_ro_edi_stock/models/stock_picking.py`): `cantitate` e
         `move.product_qty`, prin definiție cantitatea în UoM-ul de BAZĂ al
-        produsului, iar `codUnitateMasura` vine din `move.product_uom`, UoM-ul
+        produsului, iar `codUnitateMasura` vine din `move.uom_id`, UoM-ul
         ales pe LINIE. Cât timp cele două coincid nu se vede nimic; când linia e
         într-o UoM secundară (cutie, bax, pungă) perechea minte: o recepție de
         10 cutii × 13 kg pleacă la ANAF drept `cantitate="130"`
@@ -331,13 +332,13 @@ class Picking(models.Model):
         # fix data
         user_tz = self.env.user.tz or self.env.context.get("tz") or DECLARATION_TIMEZONE
         if self:
-            scheduled_date_tz = pytz.utc.localize(self.scheduled_date or fields.Date.today()).astimezone(
-                pytz.timezone(user_tz)
+            scheduled_date_tz = (
+                (self.scheduled_date or fields.Date.today()).replace(tzinfo=UTC).astimezone(ZoneInfo(user_tz))
             )
             res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
         else:
             dt = datetime.combine(res["data"]["notificare"]["dateTransport"]["dataTransport"], time.min)
-            scheduled_date_tz = pytz.utc.localize(dt).astimezone(pytz.timezone(user_tz))
+            scheduled_date_tz = dt.replace(tzinfo=UTC).astimezone(ZoneInfo(user_tz))
             res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
         today = fields.Date.today()
         res["data"]["notificare"]["dateTransport"]["dataTransport"] = max(
@@ -372,7 +373,7 @@ class Picking(models.Model):
             if direction == "incoming" and move.purchase_line_id:
                 line = move.purchase_line_id
                 price = line.price_subtotal / line.product_qty if line.product_qty else 0.00
-                price = line.product_uom_id._compute_price(price, move.product_id.uom_id)
+                price = line.uom_id._compute_price(price, move.product_id.uom_id)
                 if line.currency_id != move.picking_id.company_id.currency_id:
                     price = line.currency_id._convert(
                         price,
@@ -514,11 +515,11 @@ class Picking(models.Model):
                 if move.quantity > 0:
                     # `l10n_ro_net_weight`/`weight` sunt per unitate din UoM-ul
                     # de bază al produsului, dar `move.quantity` e exprimat în
-                    # `move.product_uom`, care poate fi o UoM secundară (ex.
+                    # `move.uom_id`, care poate fi o UoM secundară (ex.
                     # cutie/palet) — trebuie convertită la bază înainte de
                     # înmulțire, altfel greutatea iese greșită cu exact
                     # factorul de conversie dintre cele două UoM-uri.
-                    qty_base = move.product_uom._compute_quantity(
+                    qty_base = move.uom_id._compute_quantity(
                         move.quantity, move.product_id.uom_id, raise_if_failure=False
                     )
                     vals.append(
@@ -599,7 +600,10 @@ class Picking(models.Model):
             # try to get the batch itself:
             first_move = data["stock_move_ids"][0]
             batch_id = first_move.picking_id.batch_id
-            if batch_id:
+            # În 20 eTransport pe lot e în `l10n_ro_edi_stock` (fost `l10n_ro_edi_stock_batch`),
+            # dar `l10n_ro_transport_partner_id` pe lot vine doar din
+            # `l10n_ro_etransport_batch_enhancement`.
+            if batch_id and "l10n_ro_transport_partner_id" in batch_id._fields:
                 data["transport_partner_id"] = batch_id.l10n_ro_transport_partner_id
         errors = super()._l10n_ro_edi_stock_validate_data(data)
 
