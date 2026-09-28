@@ -1,4 +1,3 @@
-import base64
 import logging
 
 from odoo import api, fields, models
@@ -97,9 +96,10 @@ class MessageSPV(models.Model):
         xml_att = self.attachment_xml_id.sudo()
         xml_name = xml_att.name if xml_att else False
         xml_mimetype = (xml_att.mimetype if xml_att else False) or "application/xml"
-        xml_datas = xml_att.datas if xml_att else False
+        # Odoo 20: `ir.attachment.datas` nu mai există; `raw` întoarce BinaryValue (bytes brute).
+        xml_raw = xml_att.raw.content if xml_att else b""
 
-        if not xml_datas:
+        if not xml_raw:
             # `attachment_xml_id` e un câmp derivat din atașamentele facturii (necesită
             # invoice_id + request_id) — rămâne gol când PO-ul se creează ÎNAINTE de factură.
             # Extragem XML-ul direct din ZIP-ul brut descărcat de la ANAF (tichet #9287:
@@ -109,7 +109,7 @@ class MessageSPV(models.Model):
             if not xml_bytes:
                 return False
             xml_name = file_name or "spv.xml"
-            xml_datas = base64.b64encode(xml_bytes)
+            xml_raw = xml_bytes
 
         Attachment = self.env["ir.attachment"].sudo()
 
@@ -132,7 +132,7 @@ class MessageSPV(models.Model):
         # Creăm copia pe purchase.order
         vals = {
             "name": xml_name or "spv.xml",
-            "datas": xml_datas,
+            "raw": xml_raw,
             "mimetype": xml_mimetype,
             "res_model": "purchase.order",
             "res_id": purchase.id,
@@ -155,7 +155,7 @@ class MessageSPV(models.Model):
             "type": "ir.actions.act_window",
             "name": self.env._("Purchase Orders"),
             "res_model": "purchase.order",
-            "view_mode": "tree,form",
+            "view_mode": "list,form",
             "domain": domain,
             "target": "current",
         }

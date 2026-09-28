@@ -28,9 +28,11 @@ class TestMessageSPVPurchase(TransactionCase):
             cls.company.account_fiscal_country_id = ro_country
 
         # Asigurăm un depozit (deci picking_type-uri) pentru compania RO, altfel
-        # crearea comenzilor de achiziție eșuează (picking_type_id NOT NULL).
-        warehouse = cls.env["stock.warehouse"].search([("company_id", "=", cls.company.id)], limit=1)
-        if not warehouse:
+        # crearea comenzilor de achiziție eșuează (picking_type_id NOT NULL). În 20.0
+        # `stock` nu e dependență a modulului: depozitul contează doar când e instalat.
+        if "stock.warehouse" in cls.env and not cls.env["stock.warehouse"].search(
+            [("company_id", "=", cls.company.id)], limit=1
+        ):
             cls.env["stock.warehouse"].create(
                 {"name": "Depozit RO Test", "code": "ROWHT", "company_id": cls.company.id}
             )
@@ -38,7 +40,6 @@ class TestMessageSPVPurchase(TransactionCase):
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Furnizor Test SPV",
-                "company_type": "company",
                 "country_id": ro_country.id,
             }
         )
@@ -294,11 +295,11 @@ class TestMessageSPVPurchase(TransactionCase):
         """Test că _clone_xml_attachment_for_purchase creează o copie a atașamentului pe PO."""
         po = self._make_purchase_order(partner_ref="PO-ATT-002")
         msg = self._make_spv_message(ref="PO-ATT-002")
-        xml_data = base64.b64encode(b"<Invoice><ID>TEST</ID></Invoice>")
+        xml_data = b"<Invoice><ID>TEST</ID></Invoice>"
         attachment = self.env["ir.attachment"].create(
             {
                 "name": "test_invoice.xml",
-                "datas": xml_data,
+                "raw": xml_data,
                 "mimetype": "application/xml",
                 "res_model": "l10n.ro.message.spv",
                 "res_id": msg.id,
@@ -605,7 +606,7 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertTrue(result, "trebuie să extragă XML-ul din ZIP, nu să renunțe")
         self.assertEqual(result.res_model, "purchase.order")
         self.assertEqual(result.res_id, po.id)
-        self.assertIn(b"ZIP-TEST", base64.b64decode(result.datas))
+        self.assertIn(b"ZIP-TEST", result.raw.content)
 
     def test_post_spv_xml_on_purchase_attaches_zip_xml_without_invoice(self):
         """Aceeași lipsă de factură, dar prin fluxul complet: `_post_spv_xml_on_purchase`
@@ -657,7 +658,6 @@ class TestMessageSPVPurchase(TransactionCase):
         supplier = self.env["res.partner"].create(
             {
                 "name": "Furnizor Test SRL",
-                "company_type": "company",
                 "country_id": self.env.ref("base.ro").id,
             }
         )
@@ -838,11 +838,11 @@ class TestMessageSPVPurchase(TransactionCase):
         """Test că _clone_xml_attachment_for_purchase nu duplică atașamentul dacă există deja."""
         po = self._make_purchase_order(partner_ref="PO-ATT-003")
         msg = self._make_spv_message(ref="PO-ATT-003")
-        xml_data = base64.b64encode(b"<Invoice><ID>TEST-NODUP</ID></Invoice>")
+        xml_data = b"<Invoice><ID>TEST-NODUP</ID></Invoice>"
         attachment = self.env["ir.attachment"].create(
             {
                 "name": "test_nodup.xml",
-                "datas": xml_data,
+                "raw": xml_data,
                 "mimetype": "application/xml",
                 "res_model": "l10n.ro.message.spv",
                 "res_id": msg.id,

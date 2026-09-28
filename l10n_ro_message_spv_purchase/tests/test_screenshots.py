@@ -39,14 +39,15 @@ class TestMessageSpvPurchaseScreenshots(ScreenshotCase or object):
         # Compania demo RO nu are depozit (spre deosebire de compania principală), iar fără
         # el `purchase.order.picking_type_id` rămâne null și `create` cade pe constrângerea
         # NOT NULL din bază.
-        if not cls.env["stock.warehouse"].search([("company_id", "=", company.id)], limit=1):
+        if "stock.warehouse" in cls.env and not cls.env["stock.warehouse"].search(
+            [("company_id", "=", company.id)], limit=1
+        ):
             cls.env["stock.warehouse"].create({"name": "Depozit Central", "code": "DPC", "company_id": company.id})
 
         env = cls.env
         cls.vendor = env["res.partner"].create(
             {
                 "name": "Furnizor Materiale SRL",
-                "is_company": True,
                 "vat": "RO12345674",
                 "supplier_rank": 1,
                 "country_id": env.ref("base.ro").id,
