@@ -1,0 +1,4 @@
+id,name,model_id,group_id/id,operation,domain
+access_l10n_ro_cash_register_user,cash_register user,l10n.ro.cash.register,account.group_account_manager,crud,
+cash_register_account_rule,Cash register multi-company,l10n.ro.cash.register,,crud,"['|',('company_id','=',False),('company_id', 'in', company_ids)]"
+access_l10n_ro_cash_register_operation,access_l10n_ro_cash_register_operation,l10n.ro.cash.register.operation,account.group_account_manager,crud,

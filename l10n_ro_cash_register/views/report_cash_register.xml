@@ -1,0 +1,205 @@
+<odoo>
+        <template id="report_cash_register">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.internal_layout">
+                        <div class="page">
+                            <div class="text-left">Company:
+                                <strong t-out="res_company.name" />
+                            </div>
+                            <div id="address">
+                                <strong>Address:</strong>
+                                <address
+                                t-field="res_company.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address","phone", "fax"], "no_marker": false, "no_tag_br": true}'
+                            />
+                            </div>
+                            <div id="cif" t-if="res_company.partner_id.vat">
+                                <strong>CIF:</strong>
+                                <span t-field="res_company.partner_id.vat" />
+                            </div>
+                            <div id="nrc" t-if="res_company.partner_id.nrc">
+                                <strong>NRC:</strong>
+                                <span t-field="res_company.partner_id.nrc" />
+                            </div>
+
+                            <h2>Cash Register</h2>
+                            <div id="form_code" class="small text-muted">Form code 14-4-7A</div>
+
+                            <div id="general_data" class="row">
+                                <div class="col-3">
+                                    <div><strong>Number</strong></div>
+                                    <div><span t-field="o.name" /></div>
+                                </div>
+                                <div class="col-3">
+                                    <div><strong>Opening Date</strong></div>
+                                    <div><span t-field="o.date" /></div>
+                                </div>
+                                <div class="col-3">
+                                    <div><strong>Journal</strong></div>
+                                    <div><span t-field="o.journal_id" /></div>
+                                </div>
+                                <div class="col-3">
+                                    <div><strong>User</strong></div>
+                                    <div><span t-field="user.name" /></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                            </div>
+                            <table id="main_table" class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>Ord</th>
+                                        <th>Cash Document</th>
+                                        <th class="text-center">Annexes</th>
+                                        <th>Explanations</th>
+                                        <th>Partner</th>
+                                        <th class="text-end">Receipts</th>
+                                        <th class="text-end">Payment</th>
+                                        <th class="text-end">Sold</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="st_balance" class="text-left" colspan="5">
+                                            <strong>Balance carried forward from the previous day</strong>
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                        <td id="st_balance_value" class="text-end">
+                                            <strong
+                                            t-out="o.balance_start"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                        </td>
+                                    </tr>
+                                    <t t-set="sold" t-value="o.balance_start" />
+                                    <t t-set="sold_inc" t-value="0.0" />
+                                    <t t-set="sold_plt" t-value="0.0" />
+                                    <t t-set="index_l" t-value="1" />
+                                    <tr t-foreach="o.move_line_ids" t-as="line">
+                                        <td id="index">
+                                            <span t-out="index_l" />
+                                        </td>
+                                        <td id="name">
+                                            <span t-field="line.move_name" />
+                                        </td>
+                                        <td id="annexes" class="text-center">
+                                            <t t-set="annex_count" t-value="line._l10n_ro_annex_count()" />
+                                            <span t-if="annex_count" t-out="annex_count" />
+                                        </td>
+                                        <td id="ref">
+                                            <span t-out="line.label or line.name or line.ref" />
+                                        </td>
+                                        <td id="partner_name">
+                                            <span t-out="line.partner_id.name" />
+                                        </td>
+
+                                        <td id="line_balance" class="text-end">
+                                            <t t-if="line.balance&gt;0">
+                                                <span
+                                                t-field="line.balance"
+                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                            />
+                                                <t t-set="sold_inc" t-value="sold_inc+line.balance" />
+                                            </t>
+                                        </td>
+                                        <td id="line_balance_negative" class="text-end">
+                                            <t t-if="line.balance&lt;0">
+                                                <span
+                                                t-out="-1*line.balance"
+                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                            />
+                                                <t t-set="sold_plt" t-value="sold_plt-line.balance" />
+                                            </t>
+                                        </td>
+                                        <td id="crt_balance" class="text-end">
+                                            <t t-set="sold" t-value="sold+line.balance" />
+                                            <span
+                                            t-out="sold"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                        </td>
+                                        <t t-set="index_l" t-value="index_l + 1" />
+                                    </tr>
+                                    <tr>
+                                        <td id="total_receipts_label" class="text-left" colspan="5">
+                                            <strong>Total receipts</strong>
+                                        </td>
+                                        <td id="total_receipts" class="text-end">
+                                            <strong
+                                            t-out="sold_inc"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="total_payments_label" class="text-left" colspan="5">
+                                            <strong>Total payments</strong>
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                        <td id="total_payments" class="text-end">
+                                            <strong
+                                            t-out="sold_plt"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="final_balance" class="text-left" colspan="5">
+                                            <strong>Balance at the end of the day</strong>
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                        <td class="text-end">
+                                        </td>
+                                        <td id="end_balance" class="text-end">
+                                            <strong
+                                            t-out="o.balance_end"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div id="signatures" class="row mt-4">
+                                <div class="col-6">
+                                    <div><strong>Cashier</strong></div>
+                                    <div class="mt-5">..............................................</div>
+                                </div>
+                                <div class="col-6">
+                                    <div><strong>Financial-accounting department</strong></div>
+                                    <div class="mt-5">..............................................</div>
+                                </div>
+                            </div>
+
+                            <div id="software_signature" class="small text-muted mt-3">
+                                <span t-out="o._l10n_ro_software_signature()" />
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    <record id="action_report_cash_register" model="ir.actions.report">
+        <field name="name">Cash Register</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ro_cash_register.report_cash_register</field>
+        <field name="print_report_name">"Cash Register"</field>
+        <field name="binding_model_id" ref="l10n_ro_cash_register.model_l10n_ro_cash_register" />
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
