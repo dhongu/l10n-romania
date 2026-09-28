@@ -1,0 +1,564 @@
+import logging
+from datetime import timedelta
+
+from odoo import api, fields, models, tools
+from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
+
+# Maximum number of automatic SPV send retries for an invoice that keeps
+# failing. Each failed attempt creates a new ``invoice_sending_failed``
+# document, so we use that count as the natural retry counter.
+MAX_SPV_SEND_RETRIES = 3
+
+# Currency used to decide the destination of an invoice whose customer has no
+# country set: an invoice issued in RON is considered domestic. See
+# ``AccountMove._l10n_ro_is_spv_target``.
+SPV_FALLBACK_CURRENCY = "RON"
+
+# Placeholder VAT that l10n_ro_edi writes in BT-48 / BT-47 for a customer
+# without a tax identifier. It is meant for individuals without a CNP; on a
+# company it reaches the SPV as a real invoice issued to nobody.
+PLACEHOLDER_VAT = "0000000000000"
+
+
+class AccountMove(models.Model):
+    _inherit = "account.move"
+
+    # l10n_ro_edi_state = fields.Selection( selection_add=[ ('invoice_sending_failed', 'Error')])
+
+    # Tracks whether the customer invoice email has already been sent, so it is
+    # sent at most once. It is set both when the validated-invoice cron emails
+    # the invoice after the SPV validated it AND when the invoice is emailed
+    # through account.move.send by any other path (notably the operator's manual
+    # "Send & Print"). This prevents a double email: one manual send by the
+    # operator and another by the cron after the SPV validates the invoice.
+    l10n_ro_spv_validated_email_sent = fields.Boolean(
+        string="Email factură trimis după validare SPV",
+        copy=False,
+        default=False,
+    )
+
+    def _l10n_ro_is_spv_target(self):
+        """Whether this customer invoice is destined for the Romanian SPV.
+
+        Single source of truth for the "does this invoice go to e-Factura?"
+        decision, shared by the "Send & Print" wizard, the manual SPV button,
+        the auto-send cron and the dashboard KPIs — those used to disagree on
+        the no-country case.
+
+        The rule, on the commercial partner (the invoiced company, not the
+        contact):
+
+        - country RO: yes;
+        - country set to anything else: no (e.g. the HU series of a Romanian
+          company, which the SPV has no business receiving);
+        - no country at all: yes only if the invoice is issued in RON, which we
+          take as evidence of a domestic invoice — typically a B2C contact
+          whose country was never filled in.
+
+        Note that being a target is not the same as being sendable: the CIUS-RO
+        export needs the customer's real country, county, city and street, so an
+        invoice matched by the currency fallback still fails loudly on the
+        export constraints until the partner is completed. That is deliberate —
+        ``check_partner`` already refuses to post such an invoice, and silently
+        dropping it from the SPV would hide a non-compliance instead.
+        """
+        self.ensure_one()
+        partner_country = self.commercial_partner_id.country_id
+        if partner_country:
+            return partner_country.code == "RO"
+        return self.currency_id.name == SPV_FALLBACK_CURRENCY
+
+    def _l10n_ro_customer_vat_missing_error(self):
+        """Error message when a Romanian company customer has no CUI, else False.
+
+        l10n_ro_edi fills a missing customer tax identifier with
+        ``0000000000000`` and only checks the supplier's, never the customer's.
+        The placeholder is legitimate for individuals, but a company invoiced
+        with it is declared to ANAF with no buyer and its VAT can't be deducted.
+        """
+        self.ensure_one()
+        partner = self.commercial_partner_id
+        if not partner.is_company or partner.country_id.code != "RO":
+            return False
+        vat = (partner.vat or "").strip().upper().removeprefix("RO").strip()
+        if vat and vat != PLACEHOLDER_VAT:
+            return False
+        return self.env._(
+            "The customer %(partner)s is a company but has no VAT number (CUI). "
+            "The e-Factura would be sent to the SPV with the placeholder %(placeholder)s. "
+            "Fill in the CUI on the customer before sending.",
+            partner=partner.display_name,
+            placeholder=PLACEHOLDER_VAT,
+        )
+
+    @api.model
+    def _l10n_ro_spv_target_domain(self):
+        """Search-domain counterpart of :meth:`_l10n_ro_is_spv_target`.
+
+        Kept next to it so the two never drift apart.
+        """
+        return [
+            "|",
+            ("commercial_partner_id.country_id.code", "=", "RO"),
+            "&",
+            ("commercial_partner_id.country_id", "=", False),
+            ("currency_id.name", "=", SPV_FALLBACK_CURRENCY),
+        ]
+
+    def check_partner(self, partner):
+        """Check if the partner has a country set, raise UserError if not."""
+        if not partner.country_id:
+            raise UserError(self.env._("You can not post invoice without country for partner: %s", partner.name))
+        if partner.country_id.code == "RO":
+            if not partner.state_id:
+                raise UserError(self.env._("You can not post invoice without state for partner: %s", partner.name))
+            if not partner.city:
+                raise UserError(self.env._("You can not post invoice without city for partner: %s", partner.name))
+            if not partner.street:
+                raise UserError(self.env._("You can not post invoice without street for partner: %s", partner.name))
+
+    def action_post(self):
+        for move in self:
+            if move.move_type in ["out_invoice", "out_refund"]:
+                move.check_partner(move.partner_id)
+                move.check_partner(move.partner_shipping_id)
+        return super().action_post()
+
+    def _need_ubl_cii_xml(self, ubl_cii_format=None):
+        res = super()._need_ubl_cii_xml(ubl_cii_format)
+
+        return res
+
+    def _cron_l10n_ro_edi_fetch_status(self, limit=20, days=30, delay_days=0):
+        need_retrigger = False
+        _logger.info("⏱️ Cron job for fetch status from SPV")
+        domain = [("l10n_ro_edi_access_token", "!=", False)]
+        ro_companies = self or self.env["res.company"].sudo().search(domain)
+        for company in ro_companies:
+            date_to = fields.Date.today() - timedelta(days=delay_days)
+            date_from = fields.Date.today() - timedelta(days=days + delay_days)
+            domain = [
+                ("move_type", "in", ("out_invoice", "out_refund")),
+                ("state", "=", "posted"),
+                ("date", "<", date_to),
+                ("date", ">=", date_from),
+                ("l10n_ro_edi_state", "=", "invoice_sent"),
+                ("company_id", "=", company.id),
+            ]
+
+            invoices = self.search(domain, limit=limit, order="date")
+
+            if invoices:
+                invoices_name = invoices.mapped("name")
+                _logger.info(f"🔍 Fetch status for invoices: {invoices_name}")
+                invoices._l10n_ro_edi_fetch_invoice_sent_documents()
+                need_retrigger = True
+            else:
+                _logger.info("No invoices to fetch status")
+
+            # The customer invoice email is NOT sent here. It is fully decoupled
+            # into its own cron (_cron_l10n_ro_spv_send_validated_emails), so an
+            # email failure can never roll back the SPV statuses fetched above,
+            # and email delivery runs on its own schedule.
+
+        if need_retrigger:
+            at = fields.Datetime.now() + timedelta(minutes=2)
+            # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
+            _logger.info("⏳ Retrigger cron scheduled in 2 minutes")
+            self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_fetch_status")._trigger(at)
+
+    def _l10n_ro_spv_send_validated_email(self):
+        """Send the customer invoice email for SPV-validated invoices, once.
+
+        The invoices are already validated, so ``account.move.send`` won't
+        re-upload them to the SPV (``_is_ro_edi_applicable`` requires an empty
+        ``l10n_ro_edi_state``); only the email is sent. Partners whose sending
+        method isn't email are flagged as done without emailing, so they aren't
+        re-queried on every run. ``allow_raising=False`` keeps send errors on the
+        move's chatter instead of aborting the batch.
+        """
+        to_mail = self.filtered(
+            lambda inv: (inv.commercial_partner_id.with_company(inv.company_id).invoice_sending_method or "email")
+            == "email"
+        )
+        if to_mail:
+            self.env["account.move.send"]._generate_and_send_invoices(
+                to_mail,
+                sending_methods={"email"},
+                allow_raising=False,
+            )
+        # Flag every processed invoice (emailed or skipped) so it isn't requeried.
+        self.l10n_ro_spv_validated_email_sent = True
+
+    def _cron_l10n_ro_spv_send_validated_emails(self, limit=20, days=30, delay_days=0):
+        """Send the customer invoice email for SPV-validated invoices, once.
+
+        Runs on its own schedule, fully independent of the SPV send/fetch crons.
+        The work is entirely query-driven and idempotent: it selects validated
+        invoices whose customer email hasn't been sent yet
+        (``l10n_ro_spv_validated_email_sent``), so it can safely retry on every
+        run. Kept out of the SPV read/write flow so an email failure can never
+        roll back SPV state. Each company is isolated in its own savepoint so a
+        failure for one company doesn't abort emails for the others (and leaves
+        the flag unset so those invoices retry next run).
+        """
+        _logger.info("⏱️ Cron job for sending validated-invoice emails")
+        domain = [("l10n_ro_edi_access_token", "!=", False)]
+        ro_companies = self or self.env["res.company"].sudo().search(domain)
+        for company in ro_companies:
+            if company.l10n_ro_spv_cron_no_email:
+                continue
+            date_to = fields.Date.today() - timedelta(days=delay_days)
+            date_from = fields.Date.today() - timedelta(days=days + delay_days)
+            to_email = self.search(
+                [
+                    ("move_type", "in", ("out_invoice", "out_refund")),
+                    ("state", "=", "posted"),
+                    ("date", "<", date_to),
+                    ("date", ">=", date_from),
+                    ("l10n_ro_edi_state", "=", "invoice_validated"),
+                    ("l10n_ro_spv_validated_email_sent", "=", False),
+                    ("company_id", "=", company.id),
+                ],
+                limit=limit,
+            )
+            if not to_email:
+                continue
+            _logger.info(
+                "📧 Sending customer email for SPV-validated invoices: %s",
+                to_email.mapped("name"),
+            )
+            try:
+                with self.env.cr.savepoint():
+                    to_email._l10n_ro_spv_send_validated_email()
+            except Exception:
+                _logger.exception(
+                    "⚠️ Customer validated-email failed for %s; will retry next run",
+                    company.name,
+                )
+
+    def _cron_l10n_ro_edi_auto_send(self, limit=20, days=30, delay_days=0):
+        """Trimiterea automata a facturilor din ziua precedenta in SPV"""
+        _logger.info("⏱️ Cron job for sending invoices to SPV")
+
+        need_retrigger = False
+        self._cron_l10n_ro_edi_fetch_status(limit=limit, days=days, delay_days=delay_days)
+
+        domain = [("l10n_ro_edi_access_token", "!=", False)]
+        ro_companies = self or self.env["res.company"].sudo().search(domain)
+        for company in ro_companies:
+            # Both never-sent invoices and previously failed ones have
+            # l10n_ro_edi_state = False (the computed state only reflects
+            # 'invoice_sent'/'invoice_validated'). We select them together and
+            # filter out failed invoices that exceeded the retry limit, so a
+            # transient failure is retried automatically on the next runs.
+            domain = [
+                ("move_type", "in", ("out_invoice", "out_refund")),
+                ("state", "=", "posted"),
+                ("date", "<", fields.Date.today() - timedelta(days=delay_days)),
+                ("date", ">=", fields.Date.today() - timedelta(days=days + delay_days)),
+                *self._l10n_ro_spv_target_domain(),
+                ("l10n_ro_edi_state", "=", False),
+                ("company_id", "=", company.id),
+            ]
+
+            candidates = self.search(domain, order="date desc")
+
+            # Skip invoices whose send already failed MAX_SPV_SEND_RETRIES times
+            # to avoid hammering SPV with the same broken document forever.
+            def _within_retry_limit(invoice):
+                failed = invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sending_failed")
+                return len(failed) < MAX_SPV_SEND_RETRIES
+
+            exhausted = candidates.filtered(lambda inv: not _within_retry_limit(inv))
+            if exhausted:
+                _logger.info(
+                    "❌ Invoices skipped (retry limit %d reached): %s",
+                    MAX_SPV_SEND_RETRIES,
+                    exhausted.mapped("name"),
+                )
+            candidates = candidates - exhausted
+
+            retrying = candidates.filtered(
+                lambda inv: inv.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sending_failed")
+            )
+            if retrying:
+                _logger.info("🔁 Retrying previously failed invoices: %s", retrying.mapped("name"))
+
+            _logger.info(f"📤 Invoices to send to SPV: {candidates.mapped('name')}")
+
+            if len(candidates) > limit:
+                invoices = candidates[:limit]
+                need_retrigger = True
+                _logger.info("🔁 More invoices to send to SPV, retriggering cron...")
+            else:
+                invoices = candidates
+
+            # daca au fost deja generate PDF-uri pentru facturi, le stergem
+            invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
+            invoice_pdf_report_ids.unlink()
+
+            if invoices:
+                invoices_name = invoices.mapped("name")
+                _logger.info(f"📨 Sending invoices to SPV: {invoices_name}")
+                _logger.info(f"Count of invoices to send in SPV: {len(invoices)}")
+
+                # Never email the customer at upload time. The customer invoice
+                # email is sent later, only after the SPV validates the invoice
+                # (see _cron_l10n_ro_edi_fetch_status). This avoids emailing the
+                # customer again on every retry of a rejected invoice. "manual"
+                # generates/uploads to the SPV without sending any email.
+                kwargs = {"sending_methods": {"manual"}}
+
+                # Attribute the send to OdooBot instead of whoever happens to run
+                # the cron, so the chatter/tracking shows a stable system author.
+                odoobot = self.env.ref("base.user_root")
+                kwargs["author_user_id"] = odoobot.id
+                kwargs["author_partner_id"] = odoobot.partner_id.id
+
+                # allow_raising=False: errors are logged on each move's chatter
+                # instead of raising, so one broken invoice no longer aborts the
+                # batch. We must NOT use from_cron=True here: that branch reads
+                # move.sending_data (a Json field), which is only populated by the
+                # Send & Print wizard. Since this cron sends invoices directly,
+                # sending_data stays False and from_cron=True would crash with
+                # "'bool' object has no attribute 'get'".
+                self.env["account.move.send"]._generate_and_send_invoices(
+                    invoices,
+                    allow_raising=False,
+                    **kwargs,
+                )
+
+            # Persist the SPV sends immediately, before the (decoupled) report
+            # email below. The report is a non-critical internal notification:
+            # a failure there (SMTP error, serialization conflict during the
+            # mail's flush/unlink, …) must never roll back the actual uploads
+            # or the cron retrigger.
+            if not tools.config["test_enable"]:
+                self.env.cr.commit()  # pylint: disable=invalid-commit
+
+            # Recompute states after the send to build the run report.
+            # NB: 'invoice_sent' only means the XML was uploaded to the SPV and is
+            # awaiting validation — the SPV can still reject it later (async, via
+            # the fetch-status cron). Only 'invoice_validated' is a confirmed
+            # success, so we report the two separately instead of lumping them as
+            # "sent successfully".
+            invoices.invalidate_recordset(["l10n_ro_edi_state"])
+            validated = invoices.filtered(lambda inv: inv.l10n_ro_edi_state == "invoice_validated")
+            pending = invoices.filtered(lambda inv: inv.l10n_ro_edi_state == "invoice_sent")
+            failed_now = invoices - validated - pending
+            # Report email fully decoupled from the SPV send: isolated in a
+            # savepoint so any failure is logged instead of aborting the cron
+            # (the sends are already committed above).
+            try:
+                with self.env.cr.savepoint():
+                    self._l10n_ro_spv_send_cron_report(
+                        company,
+                        {
+                            "candidates": candidates,
+                            "attempted": invoices,
+                            "validated": validated,
+                            "pending": pending,
+                            "failed_now": failed_now,
+                            "retrying": retrying,
+                            "exhausted": exhausted,
+                        },
+                    )
+            except Exception:
+                _logger.exception(
+                    "⚠️ SPV cron report failed for %s; sends unaffected",
+                    company.name,
+                )
+
+            if need_retrigger:
+                at = fields.Datetime.now() + timedelta(minutes=5)
+                # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
+                _logger.info("⏳ Retrigger cron scheduled in 5 minutes")
+                self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
+
+    def _l10n_ro_spv_send_cron_report(self, company, stats):
+        """Send a statistics email summarizing one SPV auto-send cron run.
+
+        Recipients come exclusively from ``company.l10n_ro_spv_cron_report_email``
+        (comma separated). When that field is empty the report is not sent (no
+        fallback to the company email). Nothing is sent on a fully idle run (no
+        candidates and no retry-exhausted invoices) to avoid empty nightly
+        emails.
+        """
+        candidates = stats["candidates"]
+        exhausted = stats["exhausted"]
+        if not candidates and not exhausted:
+            _logger.info("ℹ️ SPV cron report skipped for %s: nothing to report", company.name)
+            return
+
+        recipients = company.l10n_ro_spv_cron_report_email
+        if not recipients:
+            _logger.info(
+                "ℹ️ SPV cron report not sent for %s: 'Email raport cron SPV' not set",
+                company.name,
+            )
+            return
+
+        def _names(records, limit=50):
+            if not records:
+                return "—"
+            names = records.mapped("name")
+            shown = ", ".join(names[:limit])
+            if len(names) > limit:
+                shown += self.env._(" … (+%s)", len(names) - limit)
+            return shown
+
+        rows = [
+            (self.env._("Validate de SPV"), len(stats["validated"]), _names(stats["validated"])),
+            (
+                self.env._("Trimise în SPV — în așteptare validare"),
+                len(stats["pending"]),
+                _names(stats["pending"]),
+            ),
+            (self.env._("Eșuate la această rulare"), len(stats["failed_now"]), _names(stats["failed_now"])),
+            (self.env._("Reîncercări (eșuaseră anterior)"), len(stats["retrying"]), _names(stats["retrying"])),
+            (
+                self.env._("Sărite — reîncercări epuizate (necesită atenție)"),
+                len(exhausted),
+                _names(exhausted),
+            ),
+        ]
+        # Send through the standard mail.template mechanism (QWeb body + Odoo
+        # email layout) instead of a raw mail.mail. The per-run stats are passed
+        # to the template via the rendering context (exposed as ``ctx`` inside
+        # the QWeb body_html). NB: this report goes to the internal accounting
+        # team and is sent regardless of the company's "send without email"
+        # setting, which only suppresses the customer invoice email.
+        now = fields.Datetime.now()
+        template = self.env.ref(
+            "l10n_ro_efactura_enhancement.mail_template_l10n_ro_spv_cron_report",
+            raise_if_not_found=False,
+        )
+        if not template:
+            _logger.warning("⚠️ SPV cron report template not found; skipping report for %s", company.name)
+            return
+        # force_send=False: the report is queued as a mail.mail and delivered by
+        # the standard email queue cron, not sent synchronously here. This keeps
+        # SMTP delivery and the auto_delete unlink (whose flush was crashing the
+        # SPV send transaction on concurrent account_move updates) out of the
+        # SPV cron entirely — the email is fully separated from the SPV send.
+        template.with_context(
+            spv_rows=rows,
+            spv_total=len(stats["attempted"]),
+            spv_run=fields.Datetime.to_string(now),
+        ).sudo().send_mail(
+            company.id,
+            force_send=False,
+            email_values={
+                "email_to": recipients,
+                "email_from": company.email or company.partner_id.email or recipients,
+                "auto_delete": True,
+            },
+        )
+        _logger.info("📧 SPV cron report queued to %s for %s", recipients, company.name)
+
+    def action_send_to_spv_only(self):
+        """Trimite facturile doar in SPV, fara email."""
+        invoices = self.filtered(lambda m: m.move_type in ("out_invoice", "out_refund") and m.state == "posted")
+        if not invoices:
+            raise UserError(self.env._("Nu exista facturi confirmate selectate pentru trimitere in SPV."))
+
+        # SPV / e-Factura se aplica doar partenerilor din Romania. Excludem facturile
+        # catre clienti non-RO ca sa nu fie trimise accidental in SPV. Partenerii fara
+        # tara sunt considerati romani daca factura e in RON (_l10n_ro_is_spv_target).
+        non_ro_invoices = invoices.filtered(lambda m: not m._l10n_ro_is_spv_target())
+        if non_ro_invoices:
+            _logger.info(
+                "⏭️ Skipping non-RO invoices for SPV: %s",
+                non_ro_invoices.mapped("name"),
+            )
+        invoices = invoices - non_ro_invoices
+        if not invoices:
+            raise UserError(
+                self.env._("Facturile selectate au clienti din afara Romaniei si nu pot fi trimise in SPV.")
+            )
+
+        self.env["account.move.send"]._generate_and_send_invoices(
+            invoices,
+            sending_methods={"manual"},
+        )
+
+    def _l10n_ro_edi_get_pre_send_errors(self, xml_data):
+        # EXTENDS l10n_ro_edi
+        # Last gate before the SPV: the XML may have been generated earlier and
+        # reused, so the export constraint alone does not cover every path.
+        errors = super()._l10n_ro_edi_get_pre_send_errors(xml_data)
+        if error := self._l10n_ro_customer_vat_missing_error():
+            errors.append(error)
+        return errors
+
+    def _l10n_ro_edi_send_invoice(self, xml_data):
+        return super(AccountMove, self.with_context(active_id=self.id))._l10n_ro_edi_send_invoice(xml_data)
+
+    @api.model
+    def _cron_account_move_send(self, job_count=10):
+        domain = [
+            ("sending_data", "!=", False),
+            ("state", "=", "posted"),
+        ]
+        limit = job_count + 1
+
+        # fix pt facturile care au fost programate pentru trimitere in 17.0
+        # stergem sending_data pentru facturile care nu au author_partner_id (migrate din 17.0)
+        invoices = self.env["account.move"].search(domain, limit=limit)
+        invalid_moves = invoices.filtered(lambda m: m.sending_data and not m.sending_data.get("author_partner_id"))
+        if invalid_moves:
+            _logger.info(
+                "🔧 Resetting sending_data for %d invoice(s) missing 'author_partner_id': %s",
+                len(invalid_moves),
+                invalid_moves.mapped("name"),
+            )
+            invalid_moves.write({"sending_data": False})
+            self.env.cr.flush()
+            invalid_moves.invalidate_recordset(["sending_data"])
+
+        return super()._cron_account_move_send(job_count=job_count)
+
+    @api.model
+    def _l10n_ro_edi_process_bill_messages(self, received_bills_messages):
+        """Opreste importul automat al facturilor de furnizor din SPV, per companie.
+
+        Cronul nativ „E-Factura: Synchronize with ANAF" ruleaza intr-o singura
+        trecere trei operatii distincte (via ``_l10n_ro_edi_fetch_invoices``):
+        procesarea raspunsurilor pentru facturile TRIMISE (acceptat/refuzat),
+        curatarea facturilor neindexate si crearea ciornelor pentru facturile
+        PRIMITE. Suprascriem doar aceasta ultima metoda dedicata, astfel incat,
+        cand ``l10n_ro_edi_no_auto_bill`` e activ pe companie (implicit), se sare
+        peste crearea automata a facturilor de furnizor, iar restul functiilor
+        cronului raman neatinse.
+        """
+        if self.env.company.l10n_ro_edi_no_auto_bill:
+            _logger.info(
+                "⏭️ Import automat facturi furnizor din SPV dezactivat pentru %s; "
+                "%d mesaj(e) de facturi primite ignorate.",
+                self.env.company.name,
+                len(received_bills_messages),
+            )
+            return
+        return super()._l10n_ro_edi_process_bill_messages(received_bills_messages)
+
+
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    l10n_ro_label_length = fields.Integer(string="Desc. length", compute="_compute_label_length")
+    l10n_ro_product_length = fields.Integer(string="Prod. length", compute="_compute_label_length")
+
+    @api.onchange("product_id", "name")
+    def _compute_label_length(self):
+        for line in self:
+            if line.name:
+                line.l10n_ro_label_length = len(line.name)
+            else:
+                line.l10n_ro_label_length = 0
+            if line.product_id:
+                line.l10n_ro_product_length = len(line.product_id.display_name)
+            else:
+                line.l10n_ro_product_length = 0

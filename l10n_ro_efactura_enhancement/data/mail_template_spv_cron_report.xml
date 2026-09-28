@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mail_template_l10n_ro_spv_cron_report" model="mail.template">
+        <field name="name">e-Factura SPV: Raport rulare cron</field>
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="email_from">{{ object.email or (object.partner_id and object.partner_id.email) or '' }}</field>
+        <field name="subject">[{{ object.name }}] Raport e-Factura SPV</field>
+        <field name="email_layout_xmlid">mail.mail_notification_light</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>
+                    Raport rulare cron trimitere e-Factura în SPV —
+                    <strong t-out="object.name">Companie</strong>
+                    <br />
+                    Data rulării:
+                    <t t-out="ctx.get('spv_run')">—</t>
+                </p>
+                <p>
+                    Total facturi procesate la această rulare:
+                    <strong t-out="ctx.get('spv_total')">0</strong>
+                </p>
+                <table style="border-collapse:collapse;font-size:13px;">
+                    <tr style="background:#f5f5f5;">
+                        <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">Categorie</th>
+                        <th style="padding:4px 8px;border:1px solid #ddd;">Nr.</th>
+                        <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">Facturi</th>
+                    </tr>
+                    <t t-foreach="ctx.get('spv_rows', [])" t-as="row">
+                        <tr>
+                            <td style="padding:4px 8px;border:1px solid #ddd;" t-out="row[0]" />
+                            <td style="padding:4px 8px;border:1px solid #ddd;text-align:right;"><strong
+                                    t-out="row[1]"
+                                >0</strong></td>
+                            <td style="padding:4px 8px;border:1px solid #ddd;color:#666;" t-out="row[2]" />
+                        </tr>
+                    </t>
+                </table>
+            </div>
+        </field>
+    </record>
+</odoo>

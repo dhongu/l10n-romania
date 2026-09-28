@@ -1,0 +1,288 @@
+## 19.0.0.5.3 (2026-09-23)
+
+- **O firmă din România fără CUI nu mai pleacă în SPV.** `l10n_ro_edi` completează
+  CUI-ul lipsă al clientului cu `0000000000000`. Valoarea e corectă pentru persoane
+  fizice fără CNP, dar nucleul o pune și pe firme: verifică doar CUI-ul
+  furnizorului, nu și pe al clientului. O factură către o firmă cu CUI-ul
+  necompletat ajungea astfel la ANAF fără cumpărător identificat.
+  - Blocajul se aplică clienților marcați ca firmă (`is_company`), cu țara România,
+    fără CUI sau cu CUI `0000000000000`.
+  - Verificarea apare la generarea XML-ului (avertisment în „Trimite și tipărește")
+    și încă o dată chiar înainte de transmiterea în SPV, pentru XML-urile generate
+    mai devreme. Motivul se scrie în chatter-ul facturii.
+  - Persoanele fizice și clienții din alte țări nu sunt afectați.
+  - Doar cod Python, nu necesită actualizarea modulului; traducerea în română a
+    mesajului se încarcă la actualizare.
+- Explicația opțiunii „Nu importa automat facturile primite din SPV" nu apărea în
+  română: în `ro.po` textul avea altă ghilimea decât în cod, iar Odoo sărea tăcut
+  traducerea.
+
+## 19.0.0.5.2 (2026-09-23)
+
+- **Facturile din POS pleacă din nou în e-Factura cu tipul 751.** Pe 18.0 modulul
+  schimba `InvoiceTypeCode` din 380 în 751 pentru orice factură legată de o comandă
+  POS (vânzare deja înregistrată pe bonul fiscal). Regula s-a pierdut la rescrierea
+  modulului pe 19.0, iar de la migrare facturile din POS au plecat cu 380: ANAF
+  număra vânzarea și TVA-ul de două ori (casa de marcat + factura). Semnalat pe
+  Damira (INV/2026/04101), confirmat și la Valshop (751 până în mai 2026, 380 după
+  trecerea pe 19).
+  - Stornourile (381) și autofacturarea (389) rămân neschimbate.
+  - XML-urile deja trimise nu se modifică.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
+## 19.0.0.4.4 (2026-09-10)
+
+- **Trunchiere referință aviz de expediție (BT-16) la 200 de caractere.**
+  Modulul `deltatech_account_edi_ubl_advice` (când e instalat) concatenează în
+  `cac:DespatchDocumentReference/cbc:ID` numele tuturor livrărilor (pickingurilor)
+  facturate, fără nicio limită de lungime. Pe comenzi cu multe livrări parțiale
+  acumulate în timp (tichet 9429), lista depășea cele 200 de caractere admise de
+  ANAF pentru BT-16, iar factura era respinsă la transmitere cu **BR-RO-L200**.
+  - Suprascriem `_get_invoice_node` (nu `_add_invoice_header_nodes`), ca fix-ul
+    să nu depindă de ordinea de încărcare față de
+    `deltatech_account_edi_ubl_advice`: la momentul în care `super()` se
+    termină, `document_node` e deja complet construit. Dacă acel modul nu e
+    instalat, nodul lipsește și nu se face nimic — zero dependență nouă.
+  - Trunchierea păstrează cât mai multe referințe întregi de picking, în loc să
+    taie în mijlocul unui nume (simetric cu `_l10n_ro_shorten_payment_identifier`
+    de la BT-13/14).
+  - Doar cod Python, nu necesită actualizarea modulului.
+
+## 19.0.0.4.3 (2026-09-09)
+
+- **Limita reală pentru Avizul de plată (BT-83) e 140 de caractere, nu 200.**
+  Tichet #9441. Trunchierea livrată la #9369 tăia `cbc:PaymentID` /
+  `cbc:InstructionID` la 200 de caractere, dar limita impusă de CIUS-RO pentru
+  BT-83 este 140, verificată de schematronul ANAF prin regula **BR-RO-L140**.
+  Cifra 200 fusese preluată din corespondența tichetului #9369, nu din
+  răspunsul ANAF — facturile lungi rămâneau respinse și după trunchiere (11
+  refuzuri BR-RO-L140 între 01.09 și 09.09.2026).
+  - Testele ancorează acum limita în regula de schematron și reproduc
+    referința reală respinsă (43 de comenzi pe PTCDRO20689).
+
+## 19.0.0.4.2 (2026-09-08)
+
+- **Fix: `cbc:PrepaidAmount` / `cbc:PayableAmount` nu mai depind de plățile
+  alocate în Odoo.** Cât timp factura nu e stinsă, XML-ul trimis la ANAF declară
+  din nou `PrepaidAmount = 0` și `PayableAmount` = totalul facturii. E
+  comportamentul cerut de livrările cu plata la ramburs: încasarea se
+  înregistrează în Odoo pe fluxul de curierat, dar factura trebuie să ceară tot
+  totalul.
+  - **De ce se pierduse**: logica stătea pe `_add_invoice_monetary_total_vals`,
+    un hook care în Odoo 19 e `pass` în standard și nu mai e apelat de nimeni.
+    `super()` mergea, deci nu apărea nicio eroare -- valorile pur și simplu nu
+    ajungeau în XML. Am mutat-o pe hook-ul real,
+    `_ubl_add_legal_monetary_total_prepaid_payable_amount_node`.
+  - **Impact practic**: facturile parțial încasate (și cele în „în curs de
+    plată") plecau cu o sumă de plată mai mică decât cea datorată de client.
+    Facturile complet neîncasate nu erau afectate, fiindcă acolo standardul
+    ajunge la aceleași valori.
+  - Facturile stinse rămân pe comportamentul standard EN16931
+    (BT-115 = BT-112 − BT-113).
+  - Test nou (`tests/test_monetary_total_payable.py`) care verifică valorile în
+    XML-ul generat, nu metoda în izolare -- exact regresia care a trecut
+    neobservată de la migrarea pe 19.0.
+
+## 19.0.0.4.0 (2026-08-21)
+
+- **Importul automat al facturilor primite din SPV este acum oprit implicit.**
+  Câmpul `l10n_ro_edi_no_auto_bill` are `default=True`, deci o companie nouă nu
+  mai primește ciorne create de cronul nativ „E-Factura: Synchronize with ANAF".
+  Fluxul de referință este factura introdusă din comanda de achiziție (sau
+  creată din mesajul SPV și legată la comandă); ciorna adusă în paralel de cron
+  se dublează cu ea, iar deduplicarea nativă compară doar (CUI, total, dată) și
+  nu verifică deloc sensul invers — factura introdusă *după* ce ciorna există
+  deja. Pe un client în producție am găsit 6 astfel de dubluri, toate cu ciorna
+  creată prima.
+  - **Companiile existente nu sunt afectate**: `default` se aplică doar
+    companiilor create ulterior, valoarea stocată a celor actuale rămâne
+    neschimbată.
+  - **Atenție la instalările noi**: comportamentul nativ Odoo 19 (import
+    automat) nu mai este cel implicit. Dacă îl vreți, debifați „Nu importa
+    automat facturile primite din SPV" din Setări → Contabilitate → eFactura
+    SPV.
+  - Trimiterea facturilor și sincronizarea statusului (acceptat/refuzat) rămân
+    neatinse, ca și până acum.
+
+## 19.0.0.3.23 (2026-07-29)
+
+- **O singură regulă decide dacă factura merge în SPV.** Cele patru căi de
+  trimitere se contraziceau pe partenerul fără țară: wizardul „Send & Print" îl
+  considera eligibil, în timp ce butonul manual „Trimite în SPV", cronul de
+  auto-trimitere și indicatorii din dashboard îl excludeau — deci aceeași
+  factură era trimisă pe o cale și ignorată pe alta, iar cifrele din dashboard
+  nu corespundeau cu ce se trimitea. Decizia e acum centralizată în
+  `account.move._l10n_ro_is_spv_target()`, cu domeniul de căutare echivalent în
+  `_l10n_ro_spv_target_domain()`, folosite de toate cele patru.
+- **Partenerul fără țară facturat în RON este considerat client român.** Lipsa
+  țării pe contact e de regulă o factură internă B2C incompletă, nu un client
+  extern, așa că moneda facturii decide: RON înseamnă intern (merge în SPV),
+  orice altă monedă înseamnă extern (nu merge). Atenție la reversul regulii —
+  un client român real facturat în EUR căruia i-a scăpat țara pe fișă nu mai
+  este propus pentru SPV; țara pe partener rămâne singura sursă sigură.
+  Eligibilitatea nu înseamnă însă că factura se poate trimite: exportul CIUS-RO
+  cere țara, județul, orașul și strada clientului, deci o astfel de factură
+  eșuează zgomotos pe constrângerile de export până la completarea fișei
+  partenerului — semnalul corect, față de o neconformare ascunsă.
+- Indicatorii din dashboard filtrează acum pe partenerul comercial
+  (`commercial_partner_id`), nu pe contactul de pe factură (`partner_id`), la
+  fel ca logica de trimitere. Cifrele se pot modifica ușor pentru facturile
+  emise către un contact al unei companii.
+
+## 19.0.0.3.22 (2026-07-29)
+
+- **Răspunsurile neașteptate de la SPV nu mai crapă interfața.** ANAF răspunde
+  frecvent cu HTTP 200 și un corp care nu este payload-ul așteptat (JSON de
+  eroare la limita de apeluri sau `id_incarcare` inexistent, text simplu, pagină
+  HTML de gateway în mentenanță). `make_efactura_request` din `l10n_ro_edi`
+  tratează doar codurile 204/400/401/403/500, așa că un asemenea corp ajungea la
+  apelanți și crăpa cu `lxml.etree.XMLSyntaxError: Start tag expected, '<' not
+  found` pe *Fetch status* (`stareMesaj`), cu `BadZipFile` pe `descarcare` sau
+  cu un PDF corupt salvat de la `transformare`.
+  - Se validează primii octeți ai răspunsului față de payload-ul așteptat pe
+    endpoint (XML pe `upload`/`uploadb2c`/`stareMesaj`, ZIP pe `descarcare`,
+    PDF pe `transformare`, JSON pe listele de mesaje).
+  - Când răspunsul nu poate fi payload-ul așteptat, se întoarce `{'error': ...}`
+    cu mesajul de eroare ANAF extras din JSON (sau un extras curățat din corpul
+    brut), care apare în chatter-ul facturii și în log — deci și diagnosticul
+    devine posibil, fără RPC_ERROR.
+  - Endpoint-urile necunoscute nu sunt validate, ca să nu blocăm fluxuri noi.
+  - Acoperă și copia funcției din `l10n_ro_message_spv`. Doar cod Python, nu
+    necesită actualizarea modulului — este suficient un restart.
+
+## 19.0.0.3.21 (2026-07-29)
+
+Port of the 18.0 fix (18.0.0.2.15 / 18.0.0.2.16) that was never forwarded to
+19.0: the 19.0 catch-up port of this module predates it.
+
+- **Foreign-customer invoices are no longer offered for SPV upload in "Send &
+  Print".** The core `_is_ro_edi_applicable` only checks the issuing company is
+  Romanian (`country_code == 'RO'`), so invoices issued to foreign customers
+  (e.g. the HU series of a Romanian company) were uploaded to the SPV. The
+  check now also excludes invoices whose commercial partner has a country
+  explicitly set to something other than RO, matching the filter already
+  present on the auto-send cron and on `action_send_to_spv_only`. Partners
+  without a country are left untouched to avoid regressions on domestic B2C
+  invoices. In 19.0 the wizard builds its checkboxes from
+  `_get_default_extra_edis`, so the "Send E-Factura to SPV" checkbox no longer
+  shows up at all for those invoices.
+- **No more double customer email.** An invoice could be emailed twice: once by
+  the operator's manual "Send & Print" at posting time, and again by the
+  validated-invoice cron after the SPV validated it (the
+  `l10n_ro_spv_validated_email_sent` flag was only set by the cron, so a manual
+  send went unnoticed). `account.move.send._send_mails` now sets the flag for
+  every invoice actually emailed to the customer through any path. The SPV
+  upload path uses `sending_methods={"manual"}` (no email), so cron-only
+  invoices are still emailed once, after validation.
+
+## 19.0.0.3.20 (2026-07-28)
+
+- **Import SPV: linia se recalculează din `cbc:LineExtensionAmount` când
+  furnizorul completează greșit `cac:Price/cbc:BaseQuantity`.** Core-ul Odoo
+  derivă prețul unitar din BT-146 / BT-149 și suprascrie astfel valoarea
+  calculată din BT-131. Când furnizorul transmite `BaseQuantity` egal cu
+  `InvoicedQuantity` în loc de 1 — tipar întâlnit la mai multe programe de
+  facturare — prețul unitar rezultat este de `InvoicedQuantity` ori mai mic
+  (ex. 0,00315 lei/m în loc de 1,26 lei/m), iar diferența ajunge tăcut într-o
+  linie „Rounding" **fără TVA**. Factura intră cu total corect, dar cu **TVA
+  subevaluat**, fără nicio eroare afișată.
+  - BT-131 (`cbc:LineExtensionAmount`) este câmp obligatoriu și reprezintă
+    valoarea autoritativă a liniei, în timp ce BT-149 este opțional și
+    servește doar la exprimarea prețului. Când cele două se contrazic, linia
+    se recalculează din BT-131.
+  - Se compară subtotalul importat cu BT-131 și se corectează **doar** peste
+    toleranța de rotunjire dedusă din numărul de zecimale al BT-146; abaterile
+    mici, legitime (preț unitar transmis rotunjit la 2 zecimale), rămân pe
+    seama liniei de rotunjire din core.
+  - Fiecare linie corectată este semnalată în logurile importului, deci apare
+    în chatter-ul facturii.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
+## 19.0.0.3.18 (2026-07-03)
+
+- **Opțiune de dezactivare a importului automat de facturi primite din SPV.**
+  Cron-ul nativ `E-Factura: Synchronize with ANAF` creează automat ciorne de
+  facturi de la furnizori din mesajele primite în SPV (funcție nouă în Odoo 19,
+  inexistentă pe 18). S-a adăugat un câmp per companie `l10n_ro_edi_no_auto_bill`
+  (Setări → Contabilitate → secțiunea „eFactura SPV") care, când e activat, sare
+  peste crearea automată a acestor facturi.
+  - Implicit **dezactivat** (`False`): comportamentul nativ rămâne neschimbat;
+    activarea este o alegere explicită per companie.
+  - Este gardată **doar** metoda dedicată `_l10n_ro_edi_process_bill_messages`;
+    procesarea răspunsurilor pentru facturile trimise (acceptat/refuzat) și
+    curățarea facturilor neindexate din același cron rămân neatinse.
+
+## 19.0.0.3.17 (2026-07-03)
+
+- **Descrierea nu mai apare dublată în Description + Name.** Când linia avea o
+  descriere suplimentară, același text era pus atât în `cbc:Description` cât
+  și în `cbc:Name`, rezultând două tag-uri identice. Comportamentul rămâne cel
+  al parametrului (descrierea liniei merge în `cbc:Name`), dar tag-ul
+  `cbc:Description` se omite când ar fi identic cu `cbc:Name` — rămâne prezent
+  doar când descrierea depășește 100 de caractere, ca să poarte textul complet
+  (Name e trunchiat la 100, Description la 200). Doar cod Python, nu necesită
+  actualizarea modulului.
+
+## 19.0.0.3.16 (2026-07-03)
+
+- **Tag-ul `cbc:Description` este omis când linia nu are descriere proprie.**
+  Cu `efactura.use_line_description` activ, dacă numele liniei este identic cu
+  `display_name`-ul produsului (linie generată automat, fără text suplimentar),
+  în XML ajungea numele produsului (inclusiv codul `[COD]`) ca descriere.
+  `get_description` returnează acum doar descrierea suplimentară a liniei
+  (numele liniei fără numele produsului), iar când aceasta este goală nodul
+  `cbc:Description` (opțional, BT-154) este pus pe `None` și tag-ul nu mai
+  apare deloc în XML. `cbc:Name` rămâne numele produsului.
+  - Eliminat și fallback-ul pe `product.name` la descrierea implicită
+    (independent de parametru): numele produsului nu mai este duplicat în
+    Description — el există deja în `cbc:Name` și în
+    `cac:SellersItemIdentification`.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
+## 19.0.0.3.15 (2026-07-01)
+
+- **Emailul către client este acum un cron separat.** Trimiterea emailului
+  pentru facturile validate de SPV era executată în interiorul cron-ului de
+  fetch (`_cron_l10n_ro_edi_fetch_status`). Munca este însă complet condusă de
+  query și idempotentă (facturi `invoice_validated` cu
+  `l10n_ro_spv_validated_email_sent = False`), deci a fost mutată într-un cron
+  propriu, `E-Factura: Trimite email facturi validate`
+  (`_cron_l10n_ro_spv_send_validated_emails`, rulează la 15 minute).
+  - Emailul rulează independent de fluxul de citire/scriere SPV, pe orarul lui.
+  - Fiecare companie este izolată în propriul `savepoint`: un eșec la o companie
+    nu oprește emailurile pentru celelalte și lasă flag-ul nesetat, deci se reia
+    la rularea următoare.
+  - Necesită actualizarea modulului (`-u`) pentru a instala noul `ir.cron`.
+
+## 19.0.0.3.14 (2026-07-01)
+
+- **Emailul este complet separat de trimiterea facturilor în SPV.** Cron-ul de
+  trimitere (`E-Factura: Send TO SPV`) rula fetch status → trimitere SPV →
+  email de raport → reprogramare într-o singură tranzacție. Când emailul de
+  raport eșua cu `SerializationFailure: could not serialize access due to
+  concurrent update` (conflict pe `account_move` cu importul din marketplace,
+  declanșat de `flush`-ul din `unlink`-ul mailului cu `auto_delete`), se făcea
+  rollback la **tot**: la trimiterile efective (facturile reapăreau ca „de
+  trimis") și la reprogramarea cron-ului (lanțul de auto-trimitere se rupea,
+  lăsând restul loturilor netrimise ore întregi).
+  - Trimiterile în SPV se **comit imediat** după `_generate_and_send_invoices`,
+    înainte de orice pas de email (fără commit în modul test).
+  - Emailul de raport este izolat în `savepoint` + `try/except` (eșecul se
+    loghează, nu oprește cron-ul) și trecut pe livrare prin coada de mail
+    (`force_send=False`), scoțând SMTP-ul și `unlink`-ul cu `auto_delete` din
+    tranzacția cron-ului.
+  - Emailul către client (după validare SPV, în cron-ul de fetch) este izolat
+    la fel: un eșec de email nu mai poate da rollback la statusurile citite din
+    SPV, iar factura se reia la rularea următoare (flag-ul
+    `l10n_ro_spv_validated_email_sent` rămâne nesetat).
+
+## 19.0.0.3.13 (2026-06-30)
+
+- **Trunchiere referință comandă (BT-13) la 200 de caractere.** Pe facturile de
+  revânzare cu multe comenzi consolidate, câmpul „Referință client" (`ref`)
+  putea depăși 200 de caractere și ajungea ca atare în `cac:OrderReference/cbc:ID`
+  (BT-13), iar ANAF respingea transmiterea cu eroarea **BR-RO-L200** („Numărul
+  maxim permis de caractere pentru Referința comenzii (BT-13) este 200").
+  Acum BT-13 este limitat la 200 de caractere la generarea XML-ului, simetric
+  cu limitarea deja existentă pe `cbc:SalesOrderID` (BT-14), în
+  `_ubl_add_order_reference_node`.
