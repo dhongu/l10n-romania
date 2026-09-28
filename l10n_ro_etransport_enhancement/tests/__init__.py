@@ -1,0 +1,13 @@
+# © 2025 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+from . import test_etransport_enhancement
+from . import test_etransport_timeout
+from . import test_etransport_documents
+from . import test_etransport_customs_route
+from . import test_etransport_start_address
+from . import test_etransport_uit_is_not_tracking_ref
+from . import test_etransport_dropship
+from . import test_etransport_secondary_uom
+from . import test_etransport_unece_code
+from . import test_etransport_translations

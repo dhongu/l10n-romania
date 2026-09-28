@@ -1,0 +1,622 @@
+# © 2025 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+import logging
+from datetime import UTC, datetime, time
+from zoneinfo import ZoneInfo
+
+import requests
+
+from odoo import api, fields, models
+from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
+
+from odoo.addons.l10n_ro_edi_stock.models.stock_picking import STATE_CODES
+
+_logger = logging.getLogger(__name__)
+
+# Operațiunile pentru care traseul rutier poate avea la AMBELE capete un punct de
+# trecere a frontierei sau un birou vamal, nu doar o locație.
+#
+# Nativ (`l10n_ro_edi_stock`), biroul vamal e permis doar la plecare pentru import
+# (40) și doar la sosire pentru export (50), iar celălalt capăt rămâne obligatoriu
+# o locație. Asta face imposibil de declarat tocmai tronsonul sub supraveghere
+# vamală:
+#   * import  — din punctul de trecere a frontierei până la biroul vamal de
+#               interior unde se face vămuirea (PTF -> birou vamal);
+#   * export  — din biroul vamal unde s-a depus declarația de export până la
+#               punctul de trecere a frontierei (birou vamal -> PTF).
+#
+# Schema ANAF (`LocTraseuRutierType` din schema_ETR_v2) acceptă `codPtf` sau
+# `codBirouVamal` la oricare dintre `locStartTraseuRutier` / `locFinalTraseuRutier`,
+# deci restricția e a implementării Odoo, nu a declarației.
+FULL_ROUTE_OPERATION_TYPES = ("40", "50")
+
+# Fusul folosit pentru data transportului când utilizatorul care trimite nu are
+# unul setat, nici pe cont, nici în context — cazul tipic e OdooBot din cron sau
+# dintr-o acțiune automată. `pytz.timezone(False)` aruncă AttributeError (în 20,
+# cu `zoneinfo`, `ZoneInfo(False)` aruncă TypeError), deci
+# trimiterea cădea cu traceback. Declarația merge la ANAF, deci ora României e
+# implicitul corect.
+DECLARATION_TIMEZONE = "Europe/Bucharest"
+
+
+class Picking(models.Model):
+    _inherit = "stock.picking"
+
+    l10n_ro_edi_stock_required = fields.Boolean(
+        string="eTransport Required",
+        help="Enable eTransport for this transfer after checking the declaration obligation. This does not send a declaration.",
+    )
+    l10n_ro_shipping_weights = fields.Boolean(
+        string="Custom Shipping Weights",
+        help="Enter measured weights for the goods. Get lines recalculates and replaces existing weight lines.",
+    )
+    l10n_ro_shipping_weight_lines = fields.One2many(
+        "l10n.ro.stock.picking.weight.line", "picking_id", string="Shipping Weight Lines"
+    )
+    # Greutățile cântărite la rampă, pe tot transferul. Se completează manual și
+    # servesc ca țintă pentru `l10n_ro_distribute_weights`: greutățile calculate
+    # din fișele produselor rareori corespund cântarului.
+    total_net_weight = fields.Float(
+        help="Measured total weight of the goods without packaging, in the weight unit shown below."
+    )
+    total_gross_weight = fields.Float(help="Measured total weight including packaging, in the weight unit shown below.")
+    l10n_ro_shipping_weight_lines_warning = fields.Char(
+        string="Shipping Weight Warning", compute="_compute_l10n_ro_shipping_weight_lines_warning"
+    )
+    # index=True: coloană FK spre res_partner pe stock_picking (tabelă mare). Fără index,
+    # ștergerea sau unificarea unui partener scanează secvențial toată tabela per rând.
+    l10n_ro_transport_partner_id = fields.Many2one(
+        "res.partner",
+        string="Transport Partner",
+        index=True,
+        help="Carrier declared to ANAF. If empty, use the delivery carrier's eTransport partner.",
+    )
+    # Documentele însoțitoare declarate la ANAF (CMR, factură, aviz…). Nativ,
+    # `l10n_ro_edi_stock` trimite UN SINGUR document, hardcodat ca aviz (tip 30)
+    # cu numărul transferului — deci CMR-ul sau numărul real de aviz nu ajungeau
+    # în declarație. Schema ANAF acceptă o LISTĂ de `documenteTransport`.
+    l10n_ro_etransport_document_ids = fields.One2many(
+        "l10n.ro.etransport.document",
+        "picking_id",
+        string="Accompanying Documents",
+        copy=False,
+        help="Enter the actual documents accompanying the goods. If empty, the transfer number is used as a delivery note.",
+    )
+    # Când e completat, adresa acestui partener înlocuiește adresa calculată
+    # automat (depozit/client) pentru locația de START din declarația eTransport.
+    l10n_ro_etransport_start_address = fields.Many2one(
+        "res.partner",
+        string="Specific Start Location",
+        index=True,  # vezi nota de la l10n_ro_transport_partner_id
+        help="Actual loading address, when different from the warehouse or dropship supplier address. "
+        "For dropshipping, the destination comes from the linked orders' delivery address.",
+    )
+
+    def l10n_ro_etransport_add_default_documents(self):
+        """Completează documentele însoțitoare cu ce se poate deduce automat:
+        avizul (numărul transferului) și facturile emise pe livrarea respectivă.
+        Nu duplică rândurile deja existente (potrivire pe tip + număr)."""
+        Document = self.env["l10n.ro.etransport.document"]
+        for picking in self:
+            existing = {(d.document_type, d.name) for d in picking.l10n_ro_etransport_document_ids}
+            vals_list = []
+            # avizul de însoțire = transferul însuși (tip 30)
+            if ("30", picking.name) not in existing:
+                vals_list.append(
+                    {
+                        "picking_id": picking.id,
+                        "document_type": "30",
+                        "name": picking.name,
+                        "date": (picking.scheduled_date or fields.Datetime.now()).date(),
+                    }
+                )
+            # facturile legate de livrare, prin liniile de vânzare (tip 20)
+            invoices = picking.move_ids.sale_line_id.invoice_lines.move_id.filtered(
+                lambda m: m.state == "posted" and m.move_type in ("out_invoice", "out_refund")
+            )
+            for invoice in invoices:
+                if ("20", invoice.name) not in existing:
+                    vals_list.append(
+                        {
+                            "picking_id": picking.id,
+                            "document_type": "20",
+                            "name": invoice.name,
+                            "date": invoice.invoice_date or invoice.date,
+                        }
+                    )
+            if vals_list:
+                Document.create(vals_list)
+
+    @api.depends("l10n_ro_shipping_weights", "l10n_ro_shipping_weight_lines.move_id", "move_ids.quantity")
+    def _compute_l10n_ro_shipping_weight_lines_warning(self):
+        """Avertizează când unor mișcări le lipsește linia de greutate.
+
+        Fără avertisment, operatorul vede o listă de greutăți plauzibilă și trimite
+        declarația cu greutățile incomplete: liniile lipsă nu apar nicăieri.
+        """
+        for picking in self:
+            if not picking.l10n_ro_shipping_weights:
+                picking.l10n_ro_shipping_weight_lines_warning = False
+                continue
+            expected = picking.move_ids.filtered(lambda m: m.quantity > 0)
+            missing = expected - picking.l10n_ro_shipping_weight_lines.move_id
+            if missing:
+                picking.l10n_ro_shipping_weight_lines_warning = self.env._(
+                    '%(missing)s of %(total)s moves have no computed weight line. Press "Get lines".',
+                    missing=len(missing),
+                    total=len(expected),
+                )
+            else:
+                picking.l10n_ro_shipping_weight_lines_warning = False
+
+    @api.onchange("carrier_id")
+    def _onchange_carrier_id(self):
+        for picking in self:
+            if picking.carrier_id and picking.carrier_id.l10n_ro_edi_stock_partner_id:
+                picking.l10n_ro_transport_partner_id = picking.carrier_id.l10n_ro_edi_stock_partner_id
+
+    @api.depends("l10n_ro_edi_stock_required", "company_id.account_fiscal_country_id.code")
+    def _compute_l10n_ro_edi_stock_enable(self):
+        res = super()._compute_l10n_ro_edi_stock_enable()
+        for picking in self:
+            picking.l10n_ro_edi_stock_enable = picking.l10n_ro_edi_stock_required
+        return res
+
+    @api.depends("l10n_ro_edi_stock_enable", "state", "l10n_ro_edi_stock_state")
+    def _compute_l10n_ro_edi_stock_enable_send(self):
+        res = super()._compute_l10n_ro_edi_stock_enable_send()
+        for picking in self:
+            picking.l10n_ro_edi_stock_enable_send = (
+                picking.l10n_ro_edi_stock_enable
+                and picking.l10n_ro_edi_stock_state in (False, "stock_sending_failed")
+                and not picking._l10n_ro_edi_stock_get_last_document("stock_validated")
+            )
+        return res
+
+    @api.model
+    def _l10n_ro_edi_stock_get_available_location_types(self, operation_type, location):
+        """Deschide punctul de trecere a frontierei și biroul vamal la ambele capete
+        ale traseului, pentru import și export.
+
+        Vezi `FULL_ROUTE_OPERATION_TYPES`: fără asta nu se poate obține UIT pe
+        tronsonul PTF -> birou vamal (import) sau birou vamal -> PTF (export).
+        Metoda e folosită și de `l10n_ro_edi_stock_batch`, care o apelează pe
+        `stock.picking`, deci loturile de transfer moștenesc automat comportamentul.
+        """
+        if operation_type in FULL_ROUTE_OPERATION_TYPES:
+            return "location,bcp,customs"
+        return super()._l10n_ro_edi_stock_get_available_location_types(operation_type, location)
+
+    def _l10n_ro_etransport_get_fallback_price(self, product_name):
+        """Prețul unitar pentru o linie pe care standardul o trimite cu valoare 0.
+
+        Atenție la unitatea de măsură: la ANAF `valoareLeiFaraTva` e VALOAREA liniei
+        (`cantitate` e atribut separat), dar standardul pune acolo `standard_price`,
+        adică un preț unitar. Apelantul înmulțește cu cantitatea imediat după — vezi
+        `# fix bug` — deci și aici întoarcem tot un preț UNITAR, nu o valoare.
+
+        ANAF respinge declarația cu `valoareLeiFaraTva` = 0, iar valoarea lipsește
+        ori de câte ori mișcarea nu are preț pe document — transferuri interne,
+        produse fără cost pe fișă. Ordinea de căutare e cea din 18.0: valoarea de
+        stoc a mișcării, apoi costul standard, apoi prețul de listă.
+
+        În 19.0 nu mai există `stock.valuation.layer` pe `stock.move`. Valoarea vine
+        din `_get_value_data()`, care întoarce valoarea și cantitatea valorizată;
+        raportul lor e exact prețul unitar pe care îl dădea suma straturilor SVL.
+        """
+        move = self.env["stock.move"].search(
+            [("product_id.name", "=", product_name), ("picking_id", "in", self.ids)], limit=1
+        )
+        if not move:
+            return 0.0
+
+        price_unit = 0.0
+        # `stock_account` nu e dependență a modulului: fără el mișcarea nu e
+        # valorizată deloc și rămân doar costul standard și prețul de listă.
+        if hasattr(move, "_get_value_data"):
+            value_data = move._get_value_data()
+            valued_qty = value_data["quantity"]
+            if valued_qty:
+                price_unit = value_data["value"] / valued_qty
+        if not price_unit:
+            price_unit = move.product_id.standard_price
+        if not price_unit:
+            price_unit = move.product_id.list_price
+        if not price_unit and self and not self.company_id.l10n_ro_etransport_get_order_value:
+            raise UserError(self.env._("No price found for %(product)s.", product=move.product_id.display_name))
+        return price_unit
+
+    @api.model
+    def _l10n_ro_etransport_align_uom(self, moves, items):
+        """Aliniază `codUnitateMasura` cu unitatea în care e exprimată `cantitate`.
+
+        Standardul ia cele două atribute din surse DIFERITE
+        (`l10n_ro_edi_stock/models/stock_picking.py`): `cantitate` e
+        `move.product_qty`, prin definiție cantitatea în UoM-ul de BAZĂ al
+        produsului, iar `codUnitateMasura` vine din `move.uom_id`, UoM-ul
+        ales pe LINIE. Cât timp cele două coincid nu se vede nimic; când linia e
+        într-o UoM secundară (cutie, bax, pungă) perechea minte: o recepție de
+        10 cutii × 13 kg pleacă la ANAF drept `cantitate="130"`
+        `codUnitateMasura="C62"`, adică „130 de bucăți". XSD-ul validează fiecare
+        atribut izolat și nu prinde incoerența dintre ele, deci declarația
+        primește UIT, iar eroarea rămâne tăcută.
+
+        Aliniem codul pe unitatea CANTITĂȚII, nu invers: clienții declară istoric
+        în kilograme, iar `_get_unece_code()` n-are cum să reprezinte o unitate
+        proprie ca „Cutie 13 kg" — mapează doar prin XML ID dintr-o listă fixă și
+        ar cădea tot pe `C62`.
+
+        Aceeași aliniere o face deja calea de dropship
+        (`stock_picking_dropship.py`); aici o aducem pe calea principală.
+
+        Când numărul de linii nu corespunde numărului de mișcări, `zip` ar
+        împerechea linii greșite, deci renunțăm în loc să stricăm o declarație
+        care azi pleacă corect. Logăm pe `info`, nu pe `warning`: nepotrivirea nu
+        e o eroare a declarației, iar `checklog-odoo` din CI-ul OCA pică la orice
+        WARNING din log.
+        """
+        if len(moves) != len(items):
+            _logger.info(
+                "eTransport: %d moves for %d declared goods lines; unit codes left as generated by core.",
+                len(moves),
+                len(items),
+            )
+            return
+        for move, item in zip(moves, items, strict=True):
+            item["codUnitateMasura"] = move.product_id.uom_id._get_unece_code()
+
+    @api.model
+    def _l10n_ro_etransport_fix_quantities_and_weights(self, items):
+        """Scoate liniile fără cantitate și completează greutatea lipsă, pe loc.
+
+        Ambele sunt apărări împotriva aceleiași capcane: șablonul QWeb randează
+        `cantitate`, `greutateNeta` și `greutateBruta` prin `t-att-*`, care scapă
+        tăcut o valoare falsy. XSD-ul ANAF le cere pe toate trei, deci un 0 nu
+        lipsește doar din declarație — o invalidează.
+
+        - cantitate 0: linia nu are ce căuta în declarație, o scoatem.
+        - o singură greutate la 0: o aproximăm cu cealaltă. E preferabil unei
+          declarații respinse, iar cazul apare când produsul nu are greutate
+          netă pe fișă, doar brută (sau invers).
+
+        Rulează necondiționat, nu doar când se folosește cantitatea validată:
+        valoarea 0 poate veni și din standard.
+        """
+        for item in items[:]:
+            if float_is_zero(item["cantitate"], precision_rounding=0.01):
+                items.remove(item)
+                continue
+            neta_is_zero = float_is_zero(item["greutateNeta"], precision_rounding=0.01)
+            bruta_is_zero = float_is_zero(item["greutateBruta"], precision_rounding=0.01)
+            if bruta_is_zero and not neta_is_zero:
+                item["greutateBruta"] = item["greutateNeta"]
+            elif neta_is_zero and not bruta_is_zero:
+                item["greutateNeta"] = item["greutateBruta"]
+
+    @api.model
+    def _l10n_ro_edi_stock_get_template_data(self, data: dict):
+        for move in self.move_ids:
+            move._cal_move_weight()
+        res = super()._l10n_ro_edi_stock_get_template_data(data)
+
+        # Suprascrie adresa de start cu cea a partenerului ales manual, dacă e
+        # completat. Se aplică doar când locația de start e de tip 'location'
+        # (adresă) — la 'bcp'/'customs' declarația nu conține o adresă, ci un cod.
+        if self and self.l10n_ro_etransport_start_address:
+            partner = self.l10n_ro_etransport_start_address
+            start_locatie = res["data"]["notificare"]["locStartTraseuRutier"].get("locatie")
+            if start_locatie is not None:
+                start_locatie.update(
+                    {
+                        "codJudet": STATE_CODES[partner.state_id.code],
+                        "denumireLocalitate": partner.city,
+                        "denumireStrada": partner.street,
+                        "codPostal": partner.zip,
+                        "alteInfo": partner.street2,
+                    }
+                )
+
+        for key in ("locStartTraseuRutier", "locFinalTraseuRutier"):
+            locatie = res["data"]["notificare"][key].get("locatie", {})
+            if locatie and not locatie["alteInfo"]:
+                locatie["alteInfo"] = "-"
+        transport_partner = data["transport_partner_id"]
+        if transport_partner.country_code == "GR":
+            res["data"]["notificare"]["dateTransport"]["codTaraOrgTransport"] = "EL"
+        if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
+            res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
+
+        # fix data
+        user_tz = self.env.user.tz or self.env.context.get("tz") or DECLARATION_TIMEZONE
+        if self:
+            scheduled_date_tz = (
+                (self.scheduled_date or fields.Date.today()).replace(tzinfo=UTC).astimezone(ZoneInfo(user_tz))
+            )
+            res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
+        else:
+            dt = datetime.combine(res["data"]["notificare"]["dateTransport"]["dataTransport"], time.min)
+            scheduled_date_tz = dt.replace(tzinfo=UTC).astimezone(ZoneInfo(user_tz))
+            res["data"]["notificare"]["dateTransport"]["dataTransport"] = scheduled_date_tz.date()
+        today = fields.Date.today()
+        res["data"]["notificare"]["dateTransport"]["dataTransport"] = max(
+            res["data"]["notificare"]["dateTransport"]["dataTransport"], today
+        )
+
+        self._l10n_ro_etransport_align_uom(data["stock_move_ids"], res["data"]["notificare"]["bunuriTransportate"])
+
+        for item in res["data"]["notificare"]["bunuriTransportate"]:
+            # fix bug
+            if float_is_zero(item["valoareLeiFaraTva"], precision_rounding=0.01):
+                item["valoareLeiFaraTva"] = self._l10n_ro_etransport_get_fallback_price(item["denumireMarfa"])
+            item["valoareLeiFaraTva"] = round(item["valoareLeiFaraTva"] * item["cantitate"], 2)
+            # fix rounding - ex. 0.470000000000003
+            item["greutateNeta"] = round(item["greutateNeta"], 2)
+            item["greutateBruta"] = round(item["greutateBruta"], 2)
+
+        # get prices if configured in settings
+        def _get_unit_price_for_uit(move):
+            """Prețul unei unități din UoM-ul de BAZĂ al produsului.
+
+            Apelantul înmulțește rezultatul cu `item["cantitate"]`, care e
+            `move.product_qty` — exprimat în UoM-ul de bază al produsului. Prețul
+            de pe linia de comandă e însă per unitate din UoM-ul LINIEI, deci
+            trebuie convertit, altfel o linie de 10 cutii × 13 kg declară de 13
+            ori valoarea reală. Pe `purchase.order.line`, `product_qty` e
+            cantitatea în UoM-ul liniei (cea în UoM de bază e `product_uom_qty`),
+            iar `price_reduce_taxexcl` de pe linia de vânzare e tot un preț per
+            unitate a liniei. Calea de dropship face deja aceeași conversie.
+            """
+            direction = move.picking_code
+            if direction == "incoming" and move.purchase_line_id:
+                line = move.purchase_line_id
+                price = line.price_subtotal / line.product_qty if line.product_qty else 0.00
+                price = line.uom_id._compute_price(price, move.product_id.uom_id)
+                if line.currency_id != move.picking_id.company_id.currency_id:
+                    price = line.currency_id._convert(
+                        price,
+                        move.picking_id.company_id.currency_id,
+                        move.picking_id.company_id,
+                        move.picking_id.scheduled_date,
+                    )
+                return price
+            elif direction == "outgoing" and move.sale_line_id:
+                line = move.sale_line_id
+                price = line.product_uom_id._compute_price(line.price_reduce_taxexcl, move.product_id.uom_id)
+                if line.currency_id != move.picking_id.company_id.currency_id:
+                    price = line.currency_id._convert(
+                        price,
+                        move.picking_id.company_id.currency_id,
+                        move.picking_id.company_id,
+                        move.picking_id.scheduled_date,
+                    )
+                return price
+            return 0.00
+
+        price_company = self.company_id if self else data.get("company_id")
+        if price_company and price_company.l10n_ro_etransport_get_order_value:
+            if len(data["stock_move_ids"]) != len(res["data"]["notificare"]["bunuriTransportate"]):
+                raise UserError(self.env._("UIT lines and moves lines are not the same. Cannot get prices."))
+            else:
+                for move, item in zip(
+                    data["stock_move_ids"], res["data"]["notificare"]["bunuriTransportate"], strict=True
+                ):
+                    unit_price = _get_unit_price_for_uit(move)
+                    if unit_price:
+                        item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
+
+        # Measured weights must not depend on the unrelated order-price setting.
+        if self and self.l10n_ro_shipping_weights:
+            items = res["data"]["notificare"]["bunuriTransportate"]
+            if len(items) != len(data["stock_move_ids"]):
+                raise UserError(self.env._("UIT lines and moves lines are not the same. Cannot get weights."))
+            for move, item in zip(data["stock_move_ids"], items, strict=True):
+                weight_line = self.l10n_ro_shipping_weight_lines.filtered(lambda line: line.move_id == move)
+                if len(weight_line) > 1:
+                    raise UserError(self.env._("Only one weight line is allowed for each goods line."))
+                if weight_line:
+                    item["greutateNeta"] = round(weight_line.net_weight, 2)
+                    item["greutateBruta"] = round(weight_line.gross_weight, 2)
+
+        self._l10n_ro_etransport_fix_quantities_and_weights(res["data"]["notificare"]["bunuriTransportate"])
+
+        # Documentele însoțitoare declarate pe transfer (CMR, factură, aviz…).
+        # Nativ, `documenteTransport` e un DICT cu un singur document hardcodat
+        # (tip 30 = aviz, numărul transferului); schema ANAF acceptă o listă.
+        # Trecem cheia pe LISTĂ: dacă operatorul a declarat documente, le trimitem
+        # pe toate; dacă nu, păstrăm documentul nativ (compatibilitate).
+        native_doc = res["data"]["notificare"].get("documenteTransport")
+        docs = self.l10n_ro_etransport_document_ids if self else self.browse()
+        if docs:
+            res["data"]["notificare"]["documenteTransport"] = [
+                {
+                    "tipDocument": doc.document_type,
+                    "dataDocument": doc.date,
+                    "numarDocument": doc.name,
+                    # `observatii` e de tip `Str200` în XSD-ul ANAF (minLength=1):
+                    # un atribut prezent, dar gol, e respins la validare. QWeb
+                    # randează string-ul gol și omite doar False/None, deci
+                    # observația lipsă trebuie să ajungă aici ca `False`.
+                    "observatii": (doc.remarks or "").strip() or False,
+                }
+                for doc in docs
+            ]
+        elif isinstance(native_doc, dict):
+            res["data"]["notificare"]["documenteTransport"] = [native_doc]
+        return res
+
+    def _l10n_ro_edi_stock_send_etransport_document(self, send_type: str):
+        """Tratează căderile de rețea către ANAF fără să arunce traceback în interfață.
+
+        Standardul nu prinde excepțiile requests, deci un timeout urcă până la RPC
+        și anulează tranzacția: nu rămâne nicio urmă pe livrare, deși ANAF poate să
+        fi înregistrat deja notificarea.
+        """
+        self.ensure_one()
+        try:
+            return super()._l10n_ro_edi_stock_send_etransport_document(send_type=send_type)
+        except requests.exceptions.RequestException as error:
+            _logger.warning("eTransport: ANAF request failed for %s: %s", self.name, error)
+            document_values = {"message": self._l10n_ro_etransport_network_error_message(error)}
+
+            if send_type == "amend":
+                last_sent_document = self._l10n_ro_edi_stock_get_last_document("stock_validated")
+                document_values |= {
+                    "l10n_ro_edi_stock_load_id": last_sent_document.l10n_ro_edi_stock_load_id,
+                    "l10n_ro_edi_stock_uit": last_sent_document.l10n_ro_edi_stock_uit,
+                }
+
+            self._l10n_ro_edi_stock_create_document_stock_sending_failed(document_values)
+
+    def _l10n_ro_etransport_network_error_message(self, error):
+        self.ensure_one()
+        return self.env._(
+            "ANAF did not answer the eTransport request: %(error)s\n\n"
+            "IMPORTANT: the notification may have reached ANAF anyway, only the answer was lost. "
+            "Before sending again, check in SPV whether a UIT was already issued for this transfer, "
+            "otherwise you may end up with two UITs for the same goods.",
+            error=error,
+        )
+
+    # pylint: disable=missing-return
+    def _l10n_ro_edi_stock_fetch_document_status(self):
+        """Interoghează starea picking cu picking, ca o cădere de rețea să nu oprească restul lotului.
+
+        Standardul nu întoarce nimic din această metodă, deci nu avem ce propaga.
+        """
+        for picking in self:
+            try:
+                super(Picking, picking)._l10n_ro_edi_stock_fetch_document_status()
+            except requests.exceptions.RequestException as error:
+                # Starea rămâne 'stock_sent', deci următoarea interogare reia livrarea.
+                _logger.warning("eTransport: status fetch failed for %s: %s", picking.name, error)
+                picking._message_log(
+                    body=self.env._(
+                        "ANAF did not answer the eTransport status request: %(error)s\n"
+                        "The status will be checked again later.",
+                        error=error,
+                    )
+                )
+
+    def l10n_ro_compute_weight_lines(self):
+        """Recalculează de la zero liniile de greutate ale transferului.
+
+        Butonul „Get lines" e recalculare, nu adăugare: fără ștergerea prealabilă,
+        a doua apăsare punea încă un set de linii peste cel existent, iar greutățile
+        ajungeau dublate în declarație. Ștergerea aruncă și ajustările manuale
+        făcute cu `l10n_ro_distribute_weights` — asta e și intenția recalculării.
+        """
+        for picking in self:
+            picking.l10n_ro_shipping_weight_lines.unlink()
+            vals = []
+            for move in picking.move_ids:
+                if move.quantity > 0:
+                    # `l10n_ro_net_weight`/`weight` sunt per unitate din UoM-ul
+                    # de bază al produsului, dar `move.quantity` e exprimat în
+                    # `move.uom_id`, care poate fi o UoM secundară (ex.
+                    # cutie/palet) — trebuie convertită la bază înainte de
+                    # înmulțire, altfel greutatea iese greșită cu exact
+                    # factorul de conversie dintre cele două UoM-uri.
+                    qty_base = move.uom_id._compute_quantity(
+                        move.quantity, move.product_id.uom_id, raise_if_failure=False
+                    )
+                    vals.append(
+                        {
+                            "picking_id": picking.id,
+                            "move_id": move.id,
+                            "net_weight": (
+                                move.product_id.l10n_ro_net_weight
+                                if "l10n_ro_net_weight" in move.product_id._fields
+                                else move.product_id.weight
+                            )
+                            * qty_base,
+                            "gross_weight": move.product_id.weight * qty_base,
+                            "weight_uom_id": self.env["product.template"]
+                            ._get_weight_uom_id_from_ir_config_parameter()
+                            .id,
+                        }
+                    )
+            if vals:
+                self.env["l10n.ro.stock.picking.weight.line"].create(vals)
+
+    def l10n_ro_distribute_weights(self):
+        """Ajustează liniile de greutate ca să însumeze greutățile cântărite.
+
+        Greutățile calculate din fișele produselor rareori corespund cântarului de
+        la rampă. Diferența se împarte proporțional cu greutatea fiecărei linii,
+        iar când liniile pornesc toate de la 0 (produse fără greutate pe fișă) se
+        împarte egal, altfel proporția ar fi o împărțire la zero.
+        """
+        for picking in self:
+            if not picking.l10n_ro_shipping_weight_lines:
+                continue
+            if float_is_zero(picking.total_net_weight, precision_digits=4) or float_is_zero(
+                picking.total_gross_weight, precision_digits=4
+            ):
+                raise UserError(self.env._("Total net and gross weights must be greater than 0."))
+
+            current_net_total = sum(picking.l10n_ro_shipping_weight_lines.mapped("net_weight"))
+            current_gross_total = sum(picking.l10n_ro_shipping_weight_lines.mapped("gross_weight"))
+            net_diff = picking.total_net_weight - current_net_total
+            gross_diff = picking.total_gross_weight - current_gross_total
+
+            if not float_is_zero(net_diff, precision_digits=4) or not float_is_zero(gross_diff, precision_digits=4):
+                for line in picking.l10n_ro_shipping_weight_lines:
+                    if not float_is_zero(current_net_total, precision_digits=4):
+                        line.net_weight += net_diff * (line.net_weight / current_net_total)
+                    else:
+                        line.net_weight = picking.total_net_weight / len(picking.l10n_ro_shipping_weight_lines)
+
+                    if not float_is_zero(current_gross_total, precision_digits=4):
+                        line.gross_weight += gross_diff * (line.gross_weight / current_gross_total)
+                    else:
+                        line.gross_weight = picking.total_gross_weight / len(picking.l10n_ro_shipping_weight_lines)
+
+    # @api.model
+    # def _l10n_ro_edi_stock_validate_data(self, data: dict):
+    #     errors = super()._l10n_ro_edi_stock_validate_data(data)
+    #
+    #     for error in errors:
+    #         if error == _("The delivery carrier partner has to be located in Romania."):
+    #             errors.remove(error)
+    #
+    #     return errors
+
+    def _l10n_ro_edi_stock_validate_carrier(self):
+        pickings_without_transport_partner = self.filtered(
+            lambda p: p._l10n_ro_edi_stock_validate_carrier_filter(p) and not p.l10n_ro_transport_partner_id
+        )
+
+        # Pentru pickings fără l10n_ro_transport_partner_id, apelăm super() care verifică carrier_id
+        if pickings_without_transport_partner:
+            return super(Picking, pickings_without_transport_partner)._l10n_ro_edi_stock_validate_carrier()
+
+    @api.model
+    def _l10n_ro_edi_stock_validate_data(self, data: dict):
+        data["transport_partner_id"] = self.l10n_ro_transport_partner_id or data.get("transport_partner_id")
+        if (not self or not data.get("transport_partner_id")) and data["stock_move_ids"]:
+            # try to get the batch itself:
+            first_move = data["stock_move_ids"][0]
+            batch_id = first_move.picking_id.batch_id
+            # În 20 eTransport pe lot e în `l10n_ro_edi_stock` (fost `l10n_ro_edi_stock_batch`),
+            # dar `l10n_ro_transport_partner_id` pe lot vine doar din
+            # `l10n_ro_etransport_batch_enhancement`.
+            if batch_id and "l10n_ro_transport_partner_id" in batch_id._fields:
+                data["transport_partner_id"] = batch_id.l10n_ro_transport_partner_id
+        errors = super()._l10n_ro_edi_stock_validate_data(data)
+
+        no_weight = self.env["product.product"]
+        for move in data["stock_move_ids"]:
+            if not move.product_id.weight:
+                no_weight |= move.product_id
+        if no_weight:
+            product_name = no_weight.mapped("display_name")
+            errors.append(
+                self.env._(
+                    "The following products do not have weight defined:\n%(product_name)s\n.",
+                    product_name=", ".join(product_name),
+                )
+            )
+        return errors
