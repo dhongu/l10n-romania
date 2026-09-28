@@ -19,7 +19,6 @@ class TestPartnerCreateByVatButton(TransactionCase):
         cls.company = cls.env["res.partner"].create(
             {
                 "name": "Test Company",
-                "is_company": True,
                 "country_id": cls.country_ro.id,
             }
         )
@@ -27,7 +26,6 @@ class TestPartnerCreateByVatButton(TransactionCase):
     def _new_partner(self, **vals):
         data = {
             "name": "Test Partner",
-            "is_company": True,
             "country_id": self.country_ro.id,
             "parent_id": self.company.id,
         }
@@ -107,7 +105,6 @@ class TestPartnerCreateByVatButton(TransactionCase):
             partner = self.env["res.partner"].create(
                 {
                     "name": "RO14826496",
-                    "is_company": True,
                 }
             )
         # _get_Anaf and _Anaf_to_Odoo were called
@@ -151,7 +148,6 @@ class TestPartnerCreateByVatButton(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "Foo",
-                "is_company": True,
                 "vat": "14826496",
             }
         )
@@ -176,7 +172,6 @@ class TestPartnerCreateByVatButton(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "ACME RO",
-                "is_company": True,
                 "country_id": self.country_ro.id,
                 # Intentionally missing vat, street, city, state_id, zip
             }
@@ -184,8 +179,12 @@ class TestPartnerCreateByVatButton(TransactionCase):
         # Trigger compute by reading the field
         msg = partner.warning_message
         self.assertTrue(msg)
-        for label in ["VAT", "Street", "City", "State", "ZIP"]:
+        for label in ["Street", "City", "State", "ZIP"]:
             self.assertIn(label, msg)
+        # Odoo 20: is_company is computed (own commercial entity + VAT), so a partner
+        # without VAT is never a company and "VAT" is not reported as missing
+        self.assertFalse(partner.is_company)
+        self.assertNotIn("VAT", msg)
 
         # Fill all required and ensure message disappears
         partner.write(
@@ -206,8 +205,23 @@ class TestPartnerCreateByVatButton(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "ACME DE",
-                "is_company": True,
                 "country_id": country_de.id,
             }
         )
         self.assertFalse(partner.warning_message)
+
+    def test_partner_lock_with_invoice_blocks_vat_change(self):
+        self.env.company.partner_lock_with_invoice = True
+        partner = self.env["res.partner"].create(
+            {"name": "Locked SRL", "vat": "RO14826496", "country_id": self.country_ro.id}
+        )
+        # Pretend the partner already has invoices (no accounting setup needed)
+        with patch.object(type(self.env["account.move"]), "search_count", return_value=1):
+            # same digits, different formatting: allowed
+            partner.write({"vat": "14826496"})
+            with self.assertRaisesRegex(UserError, "You cannot change VAT"):
+                partner.write({"vat": "RO18189442"})
+        # without invoices the VAT can be changed
+        with patch.object(type(self.env["account.move"]), "search_count", return_value=0):
+            partner.write({"vat": "RO18189442"})
+        self.assertEqual(partner.vat, "RO18189442")

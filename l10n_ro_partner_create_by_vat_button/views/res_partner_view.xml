@@ -9,9 +9,12 @@
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('alert', 'alert-warning', 'oe_edit_only')]" position="before">
                 <header>
+                    <!-- Odoo 20: is_company e calculat (entitate comercială + CUI), deci un
+                    partener nou, cu CUI-ul scris doar în nume, nu mai e „companie”;
+                    butonul rămâne vizibil și pentru partenerii de nivel superior fără CUI -->
                     <button
                         name="%(action_get_partner_data)d"
-                        invisible="(name == False and vat == False) or is_company == False"
+                        invisible="(not name and not vat) or not (is_company or (not parent_id and not vat))"
                         string="Get Data"
                         type="action"
                     />

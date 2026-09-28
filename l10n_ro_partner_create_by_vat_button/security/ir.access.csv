@@ -1,0 +1,2 @@
+id,name,model_id,group_id/id,operation,domain
+access_get_partner_data,access_get_partner_data,get.partner.data,base.group_user,crud,
