@@ -2,10 +2,13 @@ DVI - declaraţie vamala de import
 ================================
 
 Acest modul face legătura între factura de achiziţie şi DVI (landed cost).
-Se generează automat un DVI cu două linii şi cu TVA.
+Se generează automat un cost adițional (landed cost) de tip DVI, cu o linie pentru taxa vamală (A00)
+și cu nota de TVA la import (B00), în două regimuri: plata efectivă în vamă sau amânarea de la plată
+(art. 326 din Codul fiscal).
 
-Conturile de decontare cu bugetul folosite de modul (446) trebuie să fie conturi de reconciliere,
-pentru a se putea închide prin bancă, per declaraţie vamală.
+Contul de decontare cu bugetul folosit de modul este **4462** (analiticul de scadență scurtă al lui 446;
+pe planurile fără defalcare, orice cont 446). Trebuie să fie cont de reconciliere, pentru a se putea
+închide prin bancă, per declarație vamală.
 
 Baza legală privind înregistrarea contabilă a operaţiunilor de import
 --------------------------------------------------------------------
@@ -30,7 +33,7 @@ Toate operaţiunile de import (inclusiv factura furnizor şi DVI) se înregistre
 * **Pct. 75 alin. (1) lit. a):** Bunurile se evaluează şi se înregistrează la data intrării în entitate la cost de achiziţie (care include taxele vamale plătite conform DVI).
 * **Pct. 94 lit. a):** Elementele monetare exprimate în valută se evaluează la cursul BNR la data bilanţului; diferenţele de curs se înregistrează pe conturile 665 sau 765.
 
-Taxele vamale (A00) se capitalizează în costul stocurilor (contul 327 -> 371), iar toate valorile finale rămân exclusiv în RON.
+Taxele vamale (A00) se capitalizează în costul stocurilor (contul 371 sau 301, prin costul adițional), iar toate valorile finale rămân exclusiv în RON.
 
 ### 3. Legea nr. 227/2015 – Codul Fiscal
 
@@ -89,8 +92,13 @@ Bază TVA import = valoare în vamă
                 + taxa vamală (A00) + accize + alte drepturi de import
                 + cheltuieli accesorii până la primul loc de destinaţie în RO,
                   DOAR dacă nu sunt deja în valoarea în vamă
-                − TVA însăşi
+                − rabaturi, remize, risturne, sconturi, daune-interese,
+                  penalităţi, dobânzi de întârziere (alin. (3))
 ```
+
+**TVA-ul care urmează a fi perceput nu se adaugă la bază** (alin. (1), teza finală): baza este prin
+construcţie o valoare fără TVA, deci nu există etapă de scădere a TVA şi nu se aplică calculul de tip
+sută mărită.
 
 Sintagma „**în măsura în care nu au fost cuprinse** în baza stabilită conform alin. (1)” este clauza
 anti-dublă-numărare: transportul deja inclus în valoarea în vamă **nu se mai adaugă a doua oară**.
@@ -145,14 +153,18 @@ membru şi se vămuieşte în România; (d) există reduceri cunoscute la data e
    respective […] Cheltuielile de transport sunt incluse în costul de achiziţie şi atunci când funcţia
    de aprovizionare este externalizată.”
 
+Nu se foloseşte 628 ca tranzit: funcţiunea lui din OMFP 1802/2014 nu prevede creditarea prin 371, iar
+mişcarea în oglindă lasă rulaj artificial pe un cont de clasa 6, vizibil în balanţă şi în SAF-T. Contul 473
+este neutru şi se soldează.
+
 Dubla înregistrare apare **doar** dacă transportul e capitalizat de două ori pe latura de stoc — o
 dată prin factura de transport pusă direct pe 371 şi încă o dată printr-o linie de landed cost.
 Alegeţi una dintre variante:
 
 ```
 Varianta A (prin landed cost, recomandată când marfa e deja recepţionată):
-    Dr 628/624 analitic „transport de repartizat” = Cr 401      la factura transportatorului
-    Dr 371                                        = Cr 628/624  la validarea landed cost-ului
+    Dr 473 = Cr 401     la factura transportatorului (cont neutru de clarificare)
+    Dr 371 = Cr 473     la validarea landed cost-ului
 
 Varianta B (direct pe stoc, fără landed cost):
     Dr 371 = Cr 401
@@ -186,6 +198,29 @@ alin. (1)–(2)): **21% standard**, **11% redusă** (art. 291, astfel cum a fost
 atenţie la importurile de produse alimentare, unde taxa de achiziţie implicită a companiei (de regulă
 cea standard) nu este cota corectă.
 
+Cele două regimuri de plată a TVA în vamă (art. 326)
+----------------------------------------------------
+
+Codul fiscal prevede două tratamente, iar modulul le acoperă pe amândouă. **Taxa aleasă în wizard este
+comutatorul** — nu există niciun câmp de configurat.
+
+* **Plata efectivă la organul vamal — art. 326 alin. (3).** Se alege o taxă obişnuită de achiziţie
+  (o singură linie de repartiţie, pe 4426): `Dr 4426 = Cr 4462`, stinsă ulterior prin plată.
+* **Amânarea de la plată — art. 326 alin. (4)-(5).** Persoanele impozabile cu certificat de amânare,
+  cu vămuire centralizată sau cu înscriere în evidenţele declarantului nu plătesc efectiv la organele
+  vamale; evidenţiază taxa în decont atât ca taxă colectată, cât şi ca deductibilă. Se alege o taxă cu
+  **taxare inversă** (două linii de repartiţie, pe 4426 şi 4427): `Dr 4426 = Cr 4427`, fără 446 şi fără
+  plată.
+
+Înainte de prima declaraţie trebuie stabilit ce regim are societatea: cu taxa greşită, nota iese fie cu o
+datorie la buget care nu există, fie fără datoria care chiar trebuie plătită.
+
+Deducerea rămâne condiţionată de documentele care atestă plata taxei (art. 299 alin. (1) lit. c)); nota se
+generează la data DVI, deci decalajul dintre declaraţie şi plată se verifică la închiderea lunii.
+
+Baza importului ajunge în decontul de TVA printr-o **pereche tehnică echilibrată pe contul 473**, de
+valoarea bazei, care poartă eticheta fiscală de bază; fără ea, rândul din D300 ar avea TVA şi bază zero.
+
 Biroul vamal nu este partener
 ------------------------------
 
@@ -210,7 +245,8 @@ Taxa vamală, accizele şi TVA-ul vamal se varsă la **bugetul de stat, prin Tre
 venituri bugetare. Nu există o relaţie de tip furnizor cu biroul vamal.
 
 Contrapartida este contul **446 „Alte impozite, taxe şi vărsăminte asimilate”**, cont de decontare cu
-bugetul statului. Funcţiunea din OMFP 1802/2014 este explicită: se creditează cu „valoarea **taxelor
+bugetul statului; modulul îl foloseşte prin analiticul **4462** (scadenţă până la un an — în planul RO,
+4461 este cel peste un an, ordinea fiind contraintuitivă). Funcţiunea din OMFP 1802/2014 este explicită: se creditează cu „valoarea **taxelor
 vamale aferente aprovizionărilor din import** (213, 214, 301, 302, 303, **371**, 381)”, se debitează
 cu „plăţile efectuate la bugetul de stat […] (512)”, iar „soldul contului reprezintă sumele datorate
 bugetului statului”.
@@ -225,36 +261,40 @@ Un partener „Vama” ar adăuga doar o fişă de terţ care nu se închide nic
 ### Cine este totuşi partener
 
 **Comisionarul vamal (brokerul).** El emite factură, are CUI şi are sold pe 401. Onorariul lui este o
-cheltuială cu serviciile (622/628), nu o datorie către un organism public — şi **nu se operează prin
+cheltuială cu serviciile (622), nu o datorie către un organism public — şi **nu se operează prin
 wizardul DVI**.
 
 Se foloseşte mecanismul nativ Odoo, care rezolvă deja tot ce trebuie: produs de tip serviciu cu
 **„Is a Landed Cost”** bifat, pus pe factura brokerului. Linia se marchează automat ca linie de landed
-cost, iar pe factură apare butonul **„Create Landed Costs”**, care creează un `stock.landed.cost` legat
+cost, iar pe factură apare butonul **„Create Landed Costs”** („Creați costuri adiționale” în interfaţa în română), care creează un `stock.landed.cost` legat
 de factură prin `vendor_bill_id`.
 
+Contul de cheltuială al produsului este **473** dacă onorariul se capitalizează (doar tranzit, se soldează
+la validarea costului adiţional) sau **622** „Cheltuieli privind comisioanele şi onorariile” dacă nu se
+capitalizează. Nu 628: acela e contul rezidual al grupei 62.
+
 ```
-Factura brokerului:        Dr 628  = Cr 401     onorariu
+Factura brokerului:        Dr 473  = Cr 401     onorariu (sau Dr 622, dacă nu se capitalizează)
                            Dr 4426 = Cr 401     TVA deductibilă
-Landed cost din factură:   Dr 371  = Cr 628     soldează contul de tranzit
+Landed cost din factură:   Dr 371  = Cr 473     soldează contul de tranzit
 ```
 
-Aşa obţineţi partener, scadenţar, TVA deductibilă şi reconciliere — toate native. **Switch-ul de
-politică contabilă este chiar butonul:** dacă onorariul nu se capitalizează, nu apăsaţi „Create Landed
-Costs” şi factura rămâne cheltuială pe 628. Landed cost-urile create astfel intră automat şi sub
-protecţia FIFO din `l10n_ro_invoice_dvi_protect`, care verifică legătura `vendor_bill_id`.
+Aşa obţineţi partener, scadenţar, TVA deductibilă şi reconciliere — toate native. **Capitalizarea este
+regula** (OMFP 1802/2014 pct. 8 subpct. 6: comisioanele atribuibile direct bunurilor intră în costul de
+achiziţie); excepţia este onorariul nesemnificativ sau nealocabil direct, justificat în politica
+contabilă — atunci nu apăsaţi „Create Landed Costs” şi factura rămâne cheltuială pe 622. Landed
+cost-urile create astfel intră automat şi sub protecţia FIFO din `l10n_ro_invoice_dvi_protect`, care
+verifică legătura `vendor_bill_id`.
 
+> **Onorariul poate fi scutit de TVA.** Art. 294 alin. (1) lit. d) acoperă *prestările de servicii*, iar
+> art. 289 alin. (2) enumeră expres comisioanele printre cheltuielile accesorii din bază. Dacă onorariul a
+> fost efectiv inclus în baza B00, factura brokerului se emite fără TVA, ca transportul.
 
-Rămâne pentru **comisionul datorat autorităţii vamale**, nu pentru onorariul brokerului. Este creditat
-pe un cont **446** — datorie faţă de bugetul de stat.
+### Nu există „comision vamal”
 
-> **Schimbare în 19.0.1.3.0.** Până la această versiune, comisionul era creditat pe **447**. Funcţiunea
-> contului 447 „Fonduri speciale — taxe şi vărsăminte asimilate” din OMFP 1802/2014 îl rezervă
-> datoriilor „către **alte organisme publice**” şi îl arată creditat **exclusiv prin 635**; nu apare
-> nicăieri creditat prin conturi de stoc.
->
-> ⚠️ **Migrare.** Produsul folosit pentru comision este memorat în parametrul de sistem
-> `dvi.customs_commission_product_id`, deci schimbarea se aplică **numai instalărilor noi**. Pe bazele
-> existente produsul rămâne pe 447, cu istoric pe el — contul **nu** este repoziţionat automat, ca să
-> nu se rescrie tăcut înregistrări deja făcute. Contul se schimbă manual pe produs, după ce soldul de
-> 447 a fost închis.
+Comisionul vamal de 0,5% a dispărut odată cu aderarea la UE; nu apare în Codul fiscal, în norme, în OMFP
+1802/2014 şi nici printre drepturile de import din Codul Vamal al Uniunii. Wizardul a avut până la
+versiunea 19.0.2.0.0 un câmp „Comision vamal”, moştenit din 2008, folosit în practică greşit pentru
+onorariul brokerului (cont 446 în loc de 401, fără TVA). Câmpul a fost eliminat, iar parametrul de sistem
+`dvi.customs_commission_product_id` nu mai este folosit. Onorariul se operează exclusiv prin factura
+brokerului, aşa cum s-a arătat mai sus.
