@@ -36,18 +36,18 @@ class LandedCost(models.Model):
         for cost in self.filtered(lambda c: c.dvi_number and c.account_move_id):
             cost.account_move_id.ref = cost.dvi_number
 
-        get_param = self.env["ir.config_parameter"].sudo().get_param
+        get_int = self.env["ir.config_parameter"].sudo().get_int
 
-        product_id = get_param("dvi.custom_duty_product_id")
+        product_id = get_int("dvi.custom_duty_product_id")
 
-        custom_duty_product = self.env["product.product"].browse(int(product_id)).exists()
+        custom_duty_product = self.env["product.product"].browse(product_id).exists()
 
         if not custom_duty_product:
             wizard = self.env["account.invoice.dvi"].create({})
             vals = wizard._prepare_custom_duty_product()
             custom_duty_product = self.env["product.product"].create(vals)
-            set_param = self.env["ir.config_parameter"].sudo().set_param
-            set_param("dvi.custom_duty_product_id", custom_duty_product.id)
+            set_int = self.env["ir.config_parameter"].sudo().set_int
+            set_int("dvi.custom_duty_product_id", custom_duty_product.id)
 
         for cost in self.filtered(lambda c: c.tax_value and c.tax_id):
             accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()

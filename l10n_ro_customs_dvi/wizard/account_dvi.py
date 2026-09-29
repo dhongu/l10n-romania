@@ -104,10 +104,10 @@ class AccountInvoiceDVI(models.TransientModel):
 
     @api.model
     def get_custom_duty_product(self):
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        product_id = get_param("dvi.custom_duty_product_id")
+        get_int = self.env["ir.config_parameter"].sudo().get_int
+        product_id = get_int("dvi.custom_duty_product_id")
 
-        return self.env["product.product"].browse(int(product_id)).exists()
+        return self.env["product.product"].browse(product_id).exists()
 
     @api.model
     def default_get(self, fields_list):
@@ -145,13 +145,13 @@ class AccountInvoiceDVI(models.TransientModel):
             "tax_base": self.tax_base,
             "tax_value": self.tax_value,
         }
-        set_param = self.env["ir.config_parameter"].sudo().set_param
+        set_int = self.env["ir.config_parameter"].sudo().set_int
         if self.custom_duty:
             custom_duty_product = self.get_custom_duty_product()
             if not custom_duty_product:
                 vals = self._prepare_custom_duty_product()
                 custom_duty_product = self.env["product.product"].create(vals)
-                set_param("dvi.custom_duty_product_id", custom_duty_product.id)
+                set_int("dvi.custom_duty_product_id", custom_duty_product.id)
             accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
 
             values["cost_lines"] += [
