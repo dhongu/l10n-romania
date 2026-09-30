@@ -6,7 +6,7 @@
     "name": "Romania - Terrabit - Picking batch Report",
     "summary": "Rapoarte din batch: aviz",
     "license": "AGPL-3",
-    "version": "19.0.0.0.1",
+    "version": "19.0.0.0.2",
     "development_status": "Mature",
     "author": "Dan Stoica, Terrabit",
     "website": "https://www.terrabit.ro",
