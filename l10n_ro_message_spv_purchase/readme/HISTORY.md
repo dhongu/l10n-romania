@@ -1,3 +1,7 @@
+## 20.0.0.0.8 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.0.0.7 (2026-08-24)
 
 - Fix (ticket #9315, regression from the #9287 fix in 19.0.0.0.4/0.0.5): once

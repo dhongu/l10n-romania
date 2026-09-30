@@ -1,3 +1,7 @@
+## 20.0.0.9.3 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.0.9.2 (2026-09-21)
 
 **Fix:** partenerul comercial de pe declarația de dropship rămâne cel ales de

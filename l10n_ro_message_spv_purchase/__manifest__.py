@@ -4,7 +4,7 @@
 
 {
     "name": "Purchase Message SPV",
-    "version": "20.0.0.0.7",
+    "version": "20.0.0.0.8",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Add SPV message on purchase orders for Romania",

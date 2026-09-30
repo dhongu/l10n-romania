@@ -4,7 +4,7 @@
 
 {
     "name": "Deltatech Sale from Store UBL",
-    "version": "20.0.1.0.6",
+    "version": "20.0.1.0.7",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Sale from store",

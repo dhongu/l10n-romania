@@ -1,3 +1,7 @@
+## 20.0.1.3.7 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.1.3.6 (2026-09-22)
 
 - **Avizul: aceeași eroare de unitate ca NIR-ul, acum închisă.** Fixul din 19.0.1.3.4
