@@ -1,3 +1,7 @@
+## 19.0.0.0.3
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.0.0.2
 
 - **The postal code search now matches word by word, so the word order no longer
