@@ -6,7 +6,7 @@
     "summary": "Fixes l10n_ro_config hiding unrelated l10n_ro_* fields on non-'ro' chart templates",
     "license": "AGPL-3",
     "countries": ["ro"],
-    "version": "19.0.0.0.1",
+    "version": "19.0.0.0.2",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

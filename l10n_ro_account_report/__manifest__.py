@@ -2,7 +2,7 @@
 {
     "name": "Romania - Account Reports",
     "summary": "Romania - Account Reports",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "author": "Terrabit, NextERP Romania",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

@@ -1,3 +1,7 @@
+## 19.0.0.3.2
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.0.3.1
 
 **Corecție** — la fel ca în `l10n_ro_etransport_enhancement`, documentele însoțitoare

@@ -15,7 +15,7 @@
     "summary": "Transitional module, kept only so existing dependencies keep resolving. "
     "It installs l10n_ro_customs_dvi and will NOT be ported to 20.0.",
     "license": "AGPL-3",
-    "version": "19.0.1.3.0",
+    "version": "19.0.1.3.1",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",

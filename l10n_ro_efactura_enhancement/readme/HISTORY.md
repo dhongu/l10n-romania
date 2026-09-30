@@ -1,3 +1,7 @@
+## 19.0.0.5.4 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.0.5.3 (2026-09-23)
 
 - **O firmă din România fără CUI nu mai pleacă în SPV.** `l10n_ro_edi` completează

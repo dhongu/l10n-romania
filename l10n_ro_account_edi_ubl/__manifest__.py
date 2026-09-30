@@ -3,7 +3,7 @@
 {
     "author": "Terrabit",
     "name": "Romania - Send E-Factura - legacy",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "category": "Accounting/Localizations/EDI",
     "summary": "Bridge module for sending Romanian E-Factura to the SPV",
     "development_status": "Mature",

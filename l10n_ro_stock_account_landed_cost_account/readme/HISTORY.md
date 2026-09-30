@@ -1,3 +1,7 @@
+# 19.0.1.1.1
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 # Changelog
 
 ## 18.0.1.1.0

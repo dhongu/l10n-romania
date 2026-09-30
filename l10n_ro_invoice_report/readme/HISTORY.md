@@ -1,3 +1,7 @@
+## 19.0.3.4.25 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.3.4.24 (2026-09-24)
 
 - Fix: vendor bills showed `payment_reference` twice. The `header_left_group` xpath added `delegate_id`/`mean_transp`/`payment_reference` for customer invoices only, but the `invisible` condition was set on the `<xpath>` node itself instead of on each field — Odoo's inheritance engine drops attributes on a `position="inside"` xpath and only copies its children, so the condition was silently ignored and all three fields showed on every move type, duplicating the `payment_reference` already shown (correctly) by the core view for vendor bills.

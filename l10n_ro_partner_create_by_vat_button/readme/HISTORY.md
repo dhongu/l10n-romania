@@ -1,3 +1,7 @@
+## 19.0.1.1.9 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.1.1.8 (2026-07-30)
 
 - Remove the dead `_fix_vat_number` override. That hook was removed from

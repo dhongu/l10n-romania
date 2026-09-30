@@ -1,3 +1,7 @@
+## 19.0.1.0.1
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
+
 ## 19.0.1.0.0
 
 Migrated to Odoo 19.0.
