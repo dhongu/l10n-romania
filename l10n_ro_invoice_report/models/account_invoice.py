@@ -15,7 +15,7 @@ class AccountInvoice(models.Model):
     delegate_id = fields.Many2one(
         "res.partner",
         string="Delegate",
-        domain=[("is_company", "=", False)],
+        domain=["|", ("parent_id", "!=", False), ("is_company", "=", False)],
         index=True,
     )
 
