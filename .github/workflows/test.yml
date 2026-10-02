@@ -4,6 +4,15 @@ on:
   pull_request:
     branches:
       - "19.0*"
+    # PR-urile care ating doar documentație, prezentare Apps Store sau traduceri
+    # nu pot schimba rezultatul testelor: sărim peste rulare.
+    paths-ignore:
+      - "**/*.md"
+      - "**/*.rst"
+      - "**/readme/**"
+      - "**/screenshots/**"
+      - "**/static/description/**"
+      - "**/i18n/**"
   push:
     branches:
       - "19.0"
