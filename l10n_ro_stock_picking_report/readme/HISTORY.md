@@ -1,3 +1,9 @@
+## 19.0.1.3.8 (2026-10-04)
+
+- A location marked as *Store* (`Romania - Merchandise type`, from
+  `l10n_ro_stock_account_store`) is again a store location: the reception prints the
+  NIR at sale price and the reports show the sale price columns, as in 18.0.
+
 ## 19.0.1.3.7 (2026-09-30)
 
 - Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
