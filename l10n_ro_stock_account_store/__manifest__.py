@@ -2,16 +2,18 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Accounting Store",
-    "version": "18.0.1.5.0",
+    "version": "19.0.1.0.0",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Store",
-    "author": "Terabit," "Dorin Hongu," "Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/l10n-romania",
+    "author": "Dorin Hongu, Terrabit",
+    "website": "https://www.terrabit.ro",
     "depends": ["l10n_ro_stock_account"],
     "license": "AGPL-3",
     "data": [
-        "views/stock_valuation_layer_view.xml",
+        "views/product_category_view.xml",
+        "views/stock_location_view.xml",
+        "views/stock_move_view.xml",
     ],
     "installable": True,
     "auto_install": False,
