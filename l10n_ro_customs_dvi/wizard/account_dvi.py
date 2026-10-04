@@ -54,8 +54,10 @@ class AccountInvoiceDVI(models.TransientModel):
         "THE TAX IS ALSO THE SWITCH between the two regimes of art. 326 of Law 227/2015:\n"
         "- an ordinary purchase tax means the VAT was actually paid at customs, so the entry is "
         "Dr 4426 = Cr 4462 and the debt is settled by payment;\n"
-        "- a reverse charge tax means deferred payment under a certificate, so the entry is "
-        "Dr 4426 = Cr 4427, with no payment and no debt to the budget.",
+        "- a tax with two repartition lines (collected on 4427, deductible on 4426), such as "
+        "'21% IMP AM' from l10n_ro_anaf_d300, means no VAT paid at customs (art. 326(4)-(5): "
+        "deferral certificate, centralised clearance, entry in the declarant's records), so the "
+        "entry is Dr 4426 = Cr 4427, with no payment and no debt to the budget.",
     )
 
     def _get_customs_payable_account(self):
