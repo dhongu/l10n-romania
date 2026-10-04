@@ -199,8 +199,9 @@ din factură.
 **Taxa aleasă este comutatorul între cele două regimuri de la art. 326 din Codul fiscal:**
 
 * taxă obișnuită de achiziție = TVA plătit efectiv în vamă (alin. (3)): `Dr 4426 = Cr 4462`;
-* taxă cu taxare inversă = amânare de la plată, pe baza certificatului (alin. (4)-(5)):
-  `Dr 4426 = Cr 4427`, fără datorie la buget și fără plată.
+* taxă cu două repartiții, pe 4426 și 4427 (ex. „21% IMP AM” din `l10n_ro_anaf_d300`) = fără plata
+  efectivă în vamă — certificat de amânare, vămuire centralizată etc. (alin. (4)-(5)):
+  `Dr 4426 = Cr 4427`, fără datorie la buget și fără plată; în D300, rd. 7 și 22.
 
 Verificați regimul societății înainte de prima declarație; cu taxa greșită nota iese fie cu o datorie
 inexistentă, fie fără datoria care trebuie plătită.
@@ -244,7 +245,7 @@ capul formularului.
 ```
 Dr 371/301  = Cr 4462   taxa vamală      -> intră în costul stocului
 Dr 4426     = Cr 4462   TVA la import    -> deductibilă, NU măreşte costul   (plată efectivă, art. 326 alin. (3))
-Dr 4426     = Cr 4427   TVA la import    -> fără 446 şi fără plată           (amânare, art. 326 alin. (4)-(5))
+Dr 4426     = Cr 4427   TVA la import    -> fără 446 şi fără plată           (fără plată în vamă, art. 326 alin. (4)-(5))
 ```
 
 Contul de buget este **4462** (scadenţă până la un an); modulul cade pe orice cont 446 doar dacă planul nu
@@ -292,7 +293,7 @@ Butonul **este** switch-ul de politică contabilă; nu există un câmp separat 
 - [ ] Baza din nota contabilă corespunde bazei poziţiei B00 din DVI.
 - [ ] TVA-ul din 4426 corespunde valorii B00 din DVI.
 - [ ] Costul unitar al produsului a crescut cu (taxă vamală + transport capitalizat) / cantitate.
-- [ ] Regimul de plată este cel al societății: taxă obișnuită la plata efectivă, taxă cu taxare inversă la amânare.
+- [ ] Regimul de plată este cel al societății: taxă obișnuită la plata efectivă, taxă cu două repartiții (4426 / 4427) fără plata în vamă.
 - [ ] Taxa vamală este creditată pe **4462**, iar TVA-ul de import apare pe **4426**, nu în costul mărfii.
 - [ ] Nota contabilă are ca referinţă MRN-ul declaraţiei.
 - [ ] Transportul extern apare o singură dată în costul stocului.

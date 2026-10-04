@@ -39,7 +39,7 @@ Taxele vamale (A00) se capitalizează în costul stocurilor (contul 371 sau 301,
 
 * **Art. 289 (Baza de impozitare pentru import):** vezi capitolul dedicat de mai jos — este articolul care stabileşte **ce sume intră în baza TVA la import**.
 * **Art. 290 alin. (1) (Cursul de schimb valutar):** „Dacă elementele folosite la stabilirea bazei de impozitare a unui import de bunuri se exprimă în valută, cursul de schimb valutar se stabileşte conform prevederilor europene care reglementează calculul valorii în vamă.”
-* **Art. 299 alin. (1) lit. c):** Dreptul de deducere a TVA aferente importului de bunuri se exercită pe baza Declaraţiei vamale de import (DVI) sau a actului constatator emis de organele vamale (TVA B00 calculat la cursul vamal).
+* **Art. 299 alin. (1) lit. c) și d):** Dreptul de deducere a TVA aferente importului de bunuri se exercită pe baza Declaraţiei vamale de import (DVI) sau a actului constatator emis de organele vamale (TVA B00 calculat la cursul vamal); la plata efectivă în vamă (lit. c)) şi cu documentele de plată, iar la importul fără plata efectivă (lit. d)) cu înscrierea taxei ca taxă colectată în aceeaşi perioadă.
 
 > **Corecţie (2026-09-22).** Textul despre cursul de schimb citat anterior în dreptul art. 289 aparţine de fapt **art. 290 alin. (1)**. Art. 289 reglementează cu totul altceva — componenţa bazei de impozitare — iar omisiunea lui din acest capitol a fost sursa unei confuzii reale la client (baza propusă de sistem interpretată ca bază legală). Vezi capitolul următor.
 
@@ -206,17 +206,20 @@ comutatorul** — nu există niciun câmp de configurat.
 
 * **Plata efectivă la organul vamal — art. 326 alin. (3).** Se alege o taxă obişnuită de achiziţie
   (o singură linie de repartiţie, pe 4426): `Dr 4426 = Cr 4462`, stinsă ulterior prin plată.
-* **Amânarea de la plată — art. 326 alin. (4)-(5).** Persoanele impozabile cu certificat de amânare,
-  cu vămuire centralizată sau cu înscriere în evidenţele declarantului nu plătesc efectiv la organele
-  vamale; evidenţiază taxa în decont atât ca taxă colectată, cât şi ca deductibilă. Se alege o taxă cu
-  **taxare inversă** (două linii de repartiţie, pe 4426 şi 4427): `Dr 4426 = Cr 4427`, fără 446 şi fără
-  plată.
+* **Fără plata efectivă la organul vamal — art. 326 alin. (4)-(5).** Cu certificat de amânare de la
+  plată, vămuire centralizată, înscriere în evidenţele declarantului sau pentru bunurile din art. 331
+  alin. (2) lit. b), c), i)–k) nu se face plata efectivă la organele vamale; taxa se evidenţiază în
+  decont atât ca taxă colectată, cât şi ca deductibilă (D300 rd. 7 şi 22). Se alege o taxă cu **două
+  linii de repartiţie, pe 4426 şi 4427** — cu `l10n_ro_anaf_d300` instalat, „21% IMP AM” sau
+  „11% IMP AM”: `Dr 4426 = Cr 4427`, fără 446 şi fără plată.
 
 Înainte de prima declaraţie trebuie stabilit ce regim are societatea: cu taxa greşită, nota iese fie cu o
 datorie la buget care nu există, fie fără datoria care chiar trebuie plătită.
 
-Deducerea rămâne condiţionată de documentele care atestă plata taxei (art. 299 alin. (1) lit. c)); nota se
-generează la data DVI, deci decalajul dintre declaraţie şi plată se verifică la închiderea lunii.
+La plata efectivă, deducerea rămâne condiţionată de documentele care atestă plata taxei (art. 299 alin. (1)
+lit. c)); nota se generează la data DVI, deci decalajul dintre declaraţie şi plată se verifică la închiderea
+lunii. Fără plata efectivă, condiţia e înscrierea taxei ca taxă colectată în decontul perioadei DVI (art. 299
+alin. (1) lit. d)).
 
 Baza importului ajunge în decontul de TVA printr-o **pereche tehnică echilibrată pe contul 473**, de
 valoarea bazei, care poartă eticheta fiscală de bază; fără ea, rândul din D300 ar avea TVA şi bază zero.

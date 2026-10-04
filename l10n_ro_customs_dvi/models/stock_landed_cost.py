@@ -79,14 +79,14 @@ class LandedCost(models.Model):
           singură linie de repartiţie, pe 4426. Contrapartida e datoria faţă de buget:
           ``Dr 4426 = Cr 4462``, stinsă ulterior prin plată;
 
-        * **amânarea de la plată** (art. 326 alin. (4)-(5)) — taxă cu taxare inversă, cu două
+        * **fără plata efectivă în vamă** (art. 326 alin. (4)-(5)) — taxă colectată și deductibilă, cu două
           linii de repartiţie, pe 4426 şi 4427. Cele două se soldează între ele, iar taxa se
           evidenţiază în decont atât ca taxă deductibilă, cât şi ca taxă colectată:
           ``Dr 4426 = Cr 4427``, **fără 446 şi fără plată**.
 
         Nu există niciun câmp de configurare: operatorul alege în wizard taxa care corespunde
         regimului societăţii. Contrapartida pe contul de buget se adaugă doar când repartiţia are
-        o singură linie — la taxare inversă ar dezechilibra nota.
+        o singură linie — cu două linii (4426 și 4427) ar dezechilibra nota.
 
         Sumele urmează `tax_value`, transcris din declaraţie, nu recalculat; din repartiţie se
         preiau contul, eticheta fiscală şi semnul.
