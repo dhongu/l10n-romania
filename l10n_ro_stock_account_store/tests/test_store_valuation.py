@@ -161,7 +161,8 @@ class TestStoreValuation(AccountTestInvoicingCommon):
             move,
             [
                 {
-                    "value": 240.0,
+                    # 20.0: the value of an outgoing move is negative
+                    "value": -240.0,
                     "l10n_ro_store_sale_amount": 484.0,
                     "l10n_ro_store_markup_amount": -160.0,
                     "l10n_ro_store_tax_amount": -84.0,
@@ -186,13 +187,8 @@ class TestStoreValuation(AccountTestInvoicingCommon):
     def test_return_to_supplier_is_storno(self):
         """A return to the supplier reverses in red the entry of the reception."""
         reception = self._receive_in_store()
-        wizard = (
-            self.env["stock.return.picking"]
-            .with_context(active_id=reception.picking_id.id, active_model="stock.picking")
-            .create({})
-        )
-        wizard.product_return_moves.quantity = 2
-        return_picking = wizard._create_return()
+        return_picking = reception.picking_id._create_return()
+        return_picking.move_ids.product_uom_qty = 2
         return_picking.move_ids.quantity = 2
         return_picking.move_ids.picked = True
         return_picking.button_validate()

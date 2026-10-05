@@ -1,3 +1,10 @@
 [build-system]
 requires = ["whool"]
 build-backend = "whool.buildapi"
+
+[project]
+name = "odoo-addon-l10n-ro-stock-account-store"
+
+# dependențele Odoo vin din clona terrabit-ro/l10n-romania@20.0 din ADDONS_PATH (vezi
+# workflow-ul CI), nu din pachetele odoo-addon-* generate automat de whool
+dependencies = []

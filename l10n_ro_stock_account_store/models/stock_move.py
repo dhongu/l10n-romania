@@ -62,7 +62,7 @@ class StockMove(models.Model):
             and self.state == "done"
             and self.product_id.is_storable
             and self.product_id.valuation == "real_time"
-            and not self.product_uom.is_zero(self.quantity)
+            and not self.uom_id.is_zero(self.quantity)
             and not self.l10n_ro_store_account_move_id
             and bool(self._l10n_ro_get_store_direction())
         )
@@ -124,7 +124,10 @@ class StockMove(models.Model):
             )
             sale_amount = res["total_included"]
             tax_amount = currency.round(res["total_included"] - res["total_excluded"])
-        markup = currency.round(sale_amount - tax_amount - self.value)
+        # 20.0 signs `stock.move.value` (negative on the outgoing moves); the
+        # markup is computed on the magnitude, as up to 19.0
+        value = self._get_l10n_ro_value("value")
+        markup = currency.round(sale_amount - tax_amount - value)
         return sale_amount, markup, tax_amount
 
     def _l10n_ro_get_store_account_list(self):

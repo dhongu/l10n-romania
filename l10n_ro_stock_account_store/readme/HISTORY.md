@@ -1,3 +1,11 @@
+## 20.0.1.0.0 (2026-10-05)
+
+- Migration to 20.0. Odoo 20 signs the value of the stock move (negative on the
+  outgoing moves): the markup is computed on its magnitude, so the store entries
+  are the same as on 19.0.
+- The upgrade script `19.0.1.0.0` is kept: it also runs on a direct upgrade from
+  18.0 to 20.0.
+
 ## 19.0.1.0.0 (2026-10-04)
 
 - Migration to 19.0, rewritten on the stock move: Odoo 19 no longer has
