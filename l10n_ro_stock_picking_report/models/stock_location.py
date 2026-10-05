@@ -15,4 +15,9 @@ class StockLocation(models.Model):
     is_store = fields.Boolean(string="Is a Store Location", compute="_compute_is_store")
 
     def _compute_is_store(self):
-        self.is_store = False
+        # the location type comes from l10n_ro_stock_account_store, when installed
+        if "l10n_ro_merchandise_type" not in self._fields:
+            self.is_store = False
+            return
+        for location in self:
+            location.is_store = location.usage == "internal" and location.l10n_ro_merchandise_type == "store"
