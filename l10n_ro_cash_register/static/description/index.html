@@ -8,10 +8,11 @@
 
 /*
 :Author: David Goodger (goodger@python.org)
-:Id: $Id: html4css1.css 8954 2022-01-20 10:10:25Z milde $
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
 
 See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
 customize this style sheet.
@@ -274,7 +275,7 @@ pre.literal-block, pre.doctest-block, pre.math, pre.code {
   margin-left: 2em ;
   margin-right: 2em }
 
-pre.code .ln { color: grey; } /* line numbers */
+pre.code .ln { color: gray; } /* line numbers */
 pre.code, code { background-color: #eeeeee }
 pre.code .comment, code .comment { color: #5C6576 }
 pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
@@ -300,7 +301,7 @@ span.option {
 span.pre {
   white-space: pre }
 
-span.problematic {
+span.problematic, pre.problematic {
   color: red }
 
 span.section-subtitle {
@@ -368,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:eab9b8f2fd4a1039836786adeb3436cfa3e3f46346d8b6d5d589522d93155e33
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_cash_register"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_cash_register"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <p>Registrul de casă ca <strong>document numerotat</strong>, cod 14-4-7A (OMFP
 2634/2015).</p>
 <p><strong>Funcționalități:</strong></p>
@@ -413,6 +414,30 @@ verificări pe perioade.</p>
 </div>
 </div>
 <div class="section" id="section-1">
+<h1>20.0.1.2.2</h1>
+<ul class="simple">
+<li>Own module icon in the flat style of the Terrabit modules, instead of
+the missing or generic one.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h1>19.0.1.2.1</h1>
+<p><strong>Corectat</strong> — reîmprospătarea registrului la postare cerea drepturi de
+contabilitate.</p>
+<p><tt class="docutils literal">_l10n_ro_cash_registers_to_refresh()</tt> aduna registrele de
+reîmprospătat pe rând, prin
+<tt class="docutils literal">registers |= <span class="pre">register_model.sudo().search(...)</span></tt>. Recordset-ul de
+start nu era <tt class="docutils literal">sudo()</tt>, iar unirea <tt class="docutils literal">|</tt> păstrează contextul
+operandului din stânga — deci rezultatul final pierdea <tt class="docutils literal">sudo</tt>-ul
+căutării din dreapta, contrar intenției din cod. Orice utilizator fără
+grupul <em>Contabilitate/ Administrator</em> (de exemplu un operator de vânzări
+cu doar drepturi de facturare) care postează o notă contabilă pe un cont
+de casă lovea de <tt class="docutils literal">AccessError</tt> la reîmprospătarea soldurilor, pentru
+că accesul la modelul registrului este rezervat acelui grup.</p>
+<p><tt class="docutils literal">sudo()</tt> este acum aplicat de la recordset-ul de pornire, ca să se
+păstreze pe toată unirea.</p>
+</div>
+<div class="section" id="section-3">
 <h1>19.0.1.2.0</h1>
 <p><strong>Corectat</strong> — soldurile registrului nu se mai învechesc.</p>
 <p>Soldul inițial și soldul final erau calculate o singură dată, la crearea
@@ -461,7 +486,7 @@ registrele de casă în valută.</p>
 <p>Etichetele antetului au fost restructurate ca să nu mai depindă de
 indentarea din șablon, care rupea traducerile la fiecare reformatare.</p>
 </div>
-<div class="section" id="section-2">
+<div class="section" id="section-4">
 <h1>19.0.1.1.8</h1>
 <p>Versiuni anterioare — vezi istoricul repozitoriului.</p>
 <div class="section" id="bug-tracker">
@@ -493,7 +518,7 @@ technical issues.</p>
 </div>
 <div class="section" id="maintainers">
 <h1>Maintainers</h1>
-<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_cash_register">dhongu/l10n-romania</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_cash_register">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>
 </div>

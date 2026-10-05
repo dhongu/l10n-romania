@@ -17,7 +17,7 @@ Romania - Cash Sequence
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_account_sequence
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_account_sequence
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -30,6 +30,15 @@ Functionalitati
 
 .. contents::
    :local:
+
+Changelog
+=========
+
+20.0.1.0.4 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 Bug Tracker
 ===========
@@ -60,6 +69,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_account_sequence>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_account_sequence>`_ project on GitHub.
 
 You are welcome to contribute.

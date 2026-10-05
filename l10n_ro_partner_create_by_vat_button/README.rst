@@ -17,7 +17,7 @@ Romania - Partner Create by VAT Button
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_partner_create_by_vat_button
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_partner_create_by_vat_button
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -32,6 +32,12 @@ Romania - Partner Create by VAT Button
 
 Changelog
 =========
+
+20.0.1.1.9 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 19.0.1.1.8 (2026-07-30)
 -----------------------
@@ -78,6 +84,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_partner_create_by_vat_button>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_partner_create_by_vat_button>`_ project on GitHub.
 
 You are welcome to contribute.

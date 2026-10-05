@@ -17,7 +17,7 @@ Romania - Terrabit - Picking Reports
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_report
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_picking_report
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -40,6 +40,119 @@ Romania - Terrabit - Picking Reports
 
 Changelog
 =========
+
+20.0.1.3.10 (2026-10-05)
+------------------------
+
+- The sale price of a reception is frozen on the move before the stock
+  entries are created, not after, so the store entry of
+  ``l10n_ro_stock_account_store`` (markup 378, uneligible VAT 4428) uses
+  the same price as the NIR. The price is taken from the store pricelist
+  of the location, else from the product variant price (``lst_price``,
+  which includes the variant extra) instead of the template price. A
+  backorder no longer inherits the frozen price of the first reception.
+- The NIR and the transfer note use the same price source for moves
+  without a frozen price.
+
+20.0.1.3.9 (2026-10-05)
+-----------------------
+
+- A location marked as *Store* (``Romania - Merchandise type``, from
+  ``l10n_ro_stock_account_store``) is again a store location: the
+  reception prints the NIR at sale price and the reports show the sale
+  price columns, as in 18.0.
+
+20.0.1.3.8 (2026-10-01)
+-----------------------
+
+- A contact of a company (with a parent) is accepted as delegate
+  whatever ``is_company`` says (Odoo 20 computes ``is_company`` from the
+  CUI).
+
+20.0.1.3.7 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
+19.0.1.3.6 (2026-09-22)
+-----------------------
+
+- **Avizul: aceeași eroare de unitate ca NIR-ul, acum închisă.** Fixul
+  din 19.0.1.3.4 acoperise doar rapoartele de recepție și de transfer;
+  ``report_delivery_price`` rămăsese cu prețul și cantitatea în unități
+  diferite. Pe ramura cu comandă de vânzare prețul venea per unitatea
+  liniei de comandă, iar cantitatea din ``move.product_qty``, în
+  unitatea de referință; pe ramura fără comandă, prețul din lista de
+  prețuri venea deja per unitatea documentului, dar
+  ``product.list_price`` (folosit ca rezervă) e per unitatea de
+  referință, iar cantitatea tot de acolo. O livrare de 3 cutii a 13 kg
+  la 260 lei cutia ieșea cu 10.140 lei în loc de 780. Acum toate
+  coloanele avizului se exprimă în unitatea de pe document, iar celula
+  de cantitate tipărește cantitatea mișcată, nu pe cea convertită.
+
+19.0.1.3.5 (2026-09-22)
+-----------------------
+
+- **Crash: recepția într-o locație cu listă de prețuri.**
+  ``_get_product_price`` era apelat cu al treilea argument pozițional
+  din API-ul vechi (partenerul), pe care Odoo 19 nu îl mai acceptă.
+  Orice recepție a cărei locație de destinație avea
+  ``store_pricelist_id`` completat cădea cu
+  ``TypeError: _compute_price_rule() takes 3 positional arguments but 4 were given``
+  — atât la **validarea transferului** (``_action_done``, unde se
+  îngheață prețul de vânzare), cât și la randarea NIR-ului și a notei de
+  transfer. Locațiile fără listă de prețuri nu erau afectate, de aceea
+  problema nu s-a văzut până la prima configurare de gestiune la preț de
+  vânzare.
+
+19.0.1.3.4 (2026-09-22)
+-----------------------
+
+- **NIR: cantitatea și prețul de vânzare rămâneau în unitatea de
+  referință.** Continuarea fixului din 19.0.1.3.3, care adusese doar
+  prețul de achiziție pe unitatea documentului. Mai rămâneau trei locuri
+  în aceeași familie de erori: coloana „Cantitate" tipărea
+  ``move.product_qty`` (cantitatea convertită în unitatea de referință)
+  etichetată cu unitatea documentului — recepția de 10 cutii a 13 kg se
+  citea „130 Cutie × 37,70 = 377,00", cu valoarea corectă lângă o
+  cantitate care nu se potrivea cu ea; coloana „Preț vânzare" rămânea
+  per kg lângă un preț de achiziție per cutie; iar recepțiile **fără
+  comandă de achiziție** (inclusiv nota de transfer) înmulțeau un preț
+  per unitate de document cu ``move.product_qty``. Acum toate coloanele
+  se exprimă în unitatea de pe document. Ca și înainte, cazul apare doar
+  cu ``stock.propagate_uom = 1``. Rapoartele de livrare
+  (``report_delivery_price``) au aceeași problemă la calculul din
+  comanda de vânzare — se tratează separat.
+
+19.0.1.3.3 (2026-09-22)
+-----------------------
+
+- **NIR: sumă greșită când unitatea de pe document diferă de cea de
+  referință.** Prețul de pe mișcarea de stoc (``move.price_unit``) este
+  exprimat în unitatea de referință a produsului, iar cantitatea în
+  unitatea de pe document. Raportul le înmulțea ca atare, deci coloana
+  „Valoare" ieșea mai mică cu exact factorul unității, în timp ce
+  coloana „Preț unitar" — convertită separat, la final — arăta corect. O
+  recepție de 1.344 de cutii a 13 kg, la 2,90 lei/kg, afișa 3.897,60 lei
+  în loc de 50.668,80. Conversia se face acum înaintea calculului
+  taxelor, iar cantitatea de rezervă folosește unitatea documentului.
+  Cazul apare doar cu ``stock.propagate_uom = 1``; în configurația
+  implicită Odoo convertește mișcarea în unitatea de referință, deci
+  preț și cantitate ajung amândouă în aceeași unitate și eroarea nu se
+  vede.
+
+19.0.1.3.2 (2026-08-15)
+-----------------------
+
+- Imp: ``stock.picking.delegate_id`` is now indexed. The same field is
+  declared in ``deltatech_cmr_document``, so the attribute is set in
+  both modules — the last one loaded decides. Context: ``res_partner``
+  is referenced by ~158 foreign-key columns; on a production database 77
+  of them had no index, so a single partner deletion triggered
+  sequential scans over 3.180 MB of tables. Deleting 5.350 merged
+  partner records took over 8 minutes without indexes and 190 seconds
+  with them, foreign keys left ENABLED.
 
 19.0.1.3.1
 ----------
@@ -100,6 +213,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_report>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_picking_report>`_ project on GitHub.
 
 You are welcome to contribute.

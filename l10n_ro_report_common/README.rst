@@ -17,7 +17,7 @@ Romania - Report Common
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_report_common
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_report_common
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -27,7 +27,9 @@ Common QWeb building blocks shared by the Romanian printed reports
 
 - **``l10n_ro_report_common.banks``** — prints up to 3 of the partner's
   bank accounts flagged *Print in Report*, in the document currency
-  (falling back to the company currency).
+  (falling back to the company currency). The currency of a bank account
+  is the currency of its bank journal; accounts without a journal count
+  as company currency.
 - **``l10n_ro_report_common.report_address_company``** — company
   identification block: name, address, bank accounts, Tax ID, NRC and
   share capital.
@@ -86,6 +88,15 @@ can be installed side by side.
 .. contents::
    :local:
 
+Changelog
+=========
+
+20.0.1.1.1 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
 Bug Tracker
 ===========
 
@@ -114,6 +125,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_report_common>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_report_common>`_ project on GitHub.
 
 You are welcome to contribute.

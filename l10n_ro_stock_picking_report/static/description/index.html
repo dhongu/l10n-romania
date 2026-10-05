@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:302b4fe5da876a317bb3166fef11bfdba75aebcd1b6d2d0d5e04d0d56cb71fc2
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_report"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_picking_report"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <blockquote>
 <ul class="simple">
 <li>Reports for Reception, Delivery and Internal Transfer</li>
@@ -388,15 +388,24 @@ partenerului sau pretul de lista al produsului</li>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.3.1</a></li>
-<li><a class="reference internal" href="#section-2" id="toc-entry-3">19.0.1.2.10</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-2">20.0.1.3.10 (2026-10-05)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-3">20.0.1.3.9 (2026-10-05)</a></li>
+<li><a class="reference internal" href="#section-3" id="toc-entry-4">20.0.1.3.8 (2026-10-01)</a></li>
+<li><a class="reference internal" href="#section-4" id="toc-entry-5">20.0.1.3.7 (2026-09-30)</a></li>
+<li><a class="reference internal" href="#section-5" id="toc-entry-6">19.0.1.3.6 (2026-09-22)</a></li>
+<li><a class="reference internal" href="#section-6" id="toc-entry-7">19.0.1.3.5 (2026-09-22)</a></li>
+<li><a class="reference internal" href="#section-7" id="toc-entry-8">19.0.1.3.4 (2026-09-22)</a></li>
+<li><a class="reference internal" href="#section-8" id="toc-entry-9">19.0.1.3.3 (2026-09-22)</a></li>
+<li><a class="reference internal" href="#section-9" id="toc-entry-10">19.0.1.3.2 (2026-08-15)</a></li>
+<li><a class="reference internal" href="#section-10" id="toc-entry-11">19.0.1.3.1</a></li>
+<li><a class="reference internal" href="#section-11" id="toc-entry-12">19.0.1.2.10</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-7">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-8">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-13">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-14">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-15">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-16">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-17">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -404,7 +413,129 @@ partenerului sau pretul de lista al produsului</li>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-2">19.0.1.3.1</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-2">20.0.1.3.10 (2026-10-05)</a></h2>
+<ul class="simple">
+<li>The sale price of a reception is frozen on the move before the stock
+entries are created, not after, so the store entry of
+<tt class="docutils literal">l10n_ro_stock_account_store</tt> (markup 378, uneligible VAT 4428) uses
+the same price as the NIR. The price is taken from the store pricelist
+of the location, else from the product variant price (<tt class="docutils literal">lst_price</tt>,
+which includes the variant extra) instead of the template price. A
+backorder no longer inherits the frozen price of the first reception.</li>
+<li>The NIR and the transfer note use the same price source for moves
+without a frozen price.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-3">20.0.1.3.9 (2026-10-05)</a></h2>
+<ul class="simple">
+<li>A location marked as <em>Store</em> (<tt class="docutils literal">Romania - Merchandise type</tt>, from
+<tt class="docutils literal">l10n_ro_stock_account_store</tt>) is again a store location: the
+reception prints the NIR at sale price and the reports show the sale
+price columns, as in 18.0.</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h2><a class="toc-backref" href="#toc-entry-4">20.0.1.3.8 (2026-10-01)</a></h2>
+<ul class="simple">
+<li>A contact of a company (with a parent) is accepted as delegate
+whatever <tt class="docutils literal">is_company</tt> says (Odoo 20 computes <tt class="docutils literal">is_company</tt> from the
+CUI).</li>
+</ul>
+</div>
+<div class="section" id="section-4">
+<h2><a class="toc-backref" href="#toc-entry-5">20.0.1.3.7 (2026-09-30)</a></h2>
+<ul class="simple">
+<li>Own module icon in the flat style of the Terrabit modules, instead of
+the missing or generic one.</li>
+</ul>
+</div>
+<div class="section" id="section-5">
+<h2><a class="toc-backref" href="#toc-entry-6">19.0.1.3.6 (2026-09-22)</a></h2>
+<ul class="simple">
+<li><strong>Avizul: aceeași eroare de unitate ca NIR-ul, acum închisă.</strong> Fixul
+din 19.0.1.3.4 acoperise doar rapoartele de recepție și de transfer;
+<tt class="docutils literal">report_delivery_price</tt> rămăsese cu prețul și cantitatea în unități
+diferite. Pe ramura cu comandă de vânzare prețul venea per unitatea
+liniei de comandă, iar cantitatea din <tt class="docutils literal">move.product_qty</tt>, în
+unitatea de referință; pe ramura fără comandă, prețul din lista de
+prețuri venea deja per unitatea documentului, dar
+<tt class="docutils literal">product.list_price</tt> (folosit ca rezervă) e per unitatea de
+referință, iar cantitatea tot de acolo. O livrare de 3 cutii a 13 kg
+la 260 lei cutia ieșea cu 10.140 lei în loc de 780. Acum toate
+coloanele avizului se exprimă în unitatea de pe document, iar celula
+de cantitate tipărește cantitatea mișcată, nu pe cea convertită.</li>
+</ul>
+</div>
+<div class="section" id="section-6">
+<h2><a class="toc-backref" href="#toc-entry-7">19.0.1.3.5 (2026-09-22)</a></h2>
+<ul class="simple">
+<li><strong>Crash: recepția într-o locație cu listă de prețuri.</strong>
+<tt class="docutils literal">_get_product_price</tt> era apelat cu al treilea argument pozițional
+din API-ul vechi (partenerul), pe care Odoo 19 nu îl mai acceptă.
+Orice recepție a cărei locație de destinație avea
+<tt class="docutils literal">store_pricelist_id</tt> completat cădea cu
+<tt class="docutils literal">TypeError: _compute_price_rule() takes 3 positional arguments but 4 were given</tt>
+— atât la <strong>validarea transferului</strong> (<tt class="docutils literal">_action_done</tt>, unde se
+îngheață prețul de vânzare), cât și la randarea NIR-ului și a notei de
+transfer. Locațiile fără listă de prețuri nu erau afectate, de aceea
+problema nu s-a văzut până la prima configurare de gestiune la preț de
+vânzare.</li>
+</ul>
+</div>
+<div class="section" id="section-7">
+<h2><a class="toc-backref" href="#toc-entry-8">19.0.1.3.4 (2026-09-22)</a></h2>
+<ul class="simple">
+<li><strong>NIR: cantitatea și prețul de vânzare rămâneau în unitatea de
+referință.</strong> Continuarea fixului din 19.0.1.3.3, care adusese doar
+prețul de achiziție pe unitatea documentului. Mai rămâneau trei locuri
+în aceeași familie de erori: coloana „Cantitate” tipărea
+<tt class="docutils literal">move.product_qty</tt> (cantitatea convertită în unitatea de referință)
+etichetată cu unitatea documentului — recepția de 10 cutii a 13 kg se
+citea „130 Cutie × 37,70 = 377,00”, cu valoarea corectă lângă o
+cantitate care nu se potrivea cu ea; coloana „Preț vânzare” rămânea
+per kg lângă un preț de achiziție per cutie; iar recepțiile <strong>fără
+comandă de achiziție</strong> (inclusiv nota de transfer) înmulțeau un preț
+per unitate de document cu <tt class="docutils literal">move.product_qty</tt>. Acum toate coloanele
+se exprimă în unitatea de pe document. Ca și înainte, cazul apare doar
+cu <tt class="docutils literal">stock.propagate_uom = 1</tt>. Rapoartele de livrare
+(<tt class="docutils literal">report_delivery_price</tt>) au aceeași problemă la calculul din
+comanda de vânzare — se tratează separat.</li>
+</ul>
+</div>
+<div class="section" id="section-8">
+<h2><a class="toc-backref" href="#toc-entry-9">19.0.1.3.3 (2026-09-22)</a></h2>
+<ul class="simple">
+<li><strong>NIR: sumă greșită când unitatea de pe document diferă de cea de
+referință.</strong> Prețul de pe mișcarea de stoc (<tt class="docutils literal">move.price_unit</tt>) este
+exprimat în unitatea de referință a produsului, iar cantitatea în
+unitatea de pe document. Raportul le înmulțea ca atare, deci coloana
+„Valoare” ieșea mai mică cu exact factorul unității, în timp ce
+coloana „Preț unitar” — convertită separat, la final — arăta corect. O
+recepție de 1.344 de cutii a 13 kg, la 2,90 lei/kg, afișa 3.897,60 lei
+în loc de 50.668,80. Conversia se face acum înaintea calculului
+taxelor, iar cantitatea de rezervă folosește unitatea documentului.
+Cazul apare doar cu <tt class="docutils literal">stock.propagate_uom = 1</tt>; în configurația
+implicită Odoo convertește mișcarea în unitatea de referință, deci
+preț și cantitate ajung amândouă în aceeași unitate și eroarea nu se
+vede.</li>
+</ul>
+</div>
+<div class="section" id="section-9">
+<h2><a class="toc-backref" href="#toc-entry-10">19.0.1.3.2 (2026-08-15)</a></h2>
+<ul class="simple">
+<li>Imp: <tt class="docutils literal">stock.picking.delegate_id</tt> is now indexed. The same field is
+declared in <tt class="docutils literal">deltatech_cmr_document</tt>, so the attribute is set in
+both modules — the last one loaded decides. Context: <tt class="docutils literal">res_partner</tt>
+is referenced by ~158 foreign-key columns; on a production database 77
+of them had no index, so a single partner deletion triggered
+sequential scans over 3.180 MB of tables. Deleting 5.350 merged
+partner records took over 8 minutes without indexes and 190 seconds
+with them, foreign keys left ENABLED.</li>
+</ul>
+</div>
+<div class="section" id="section-10">
+<h2><a class="toc-backref" href="#toc-entry-11">19.0.1.3.1</a></h2>
 <ul class="simple">
 <li><strong>Fix:</strong> internal transfer report no longer crashes with
 <tt class="docutils literal">ZeroDivisionError</tt> when a move has only the done quantity filled in
@@ -415,8 +546,8 @@ previous <tt class="docutils literal">or 1</tt> fallback applied to the division
 denominator, so it never protected against this case.</li>
 </ul>
 </div>
-<div class="section" id="section-2">
-<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.2.10</a></h2>
+<div class="section" id="section-11">
+<h2><a class="toc-backref" href="#toc-entry-12">19.0.1.2.10</a></h2>
 <ul class="simple">
 <li><strong>Fix:</strong> reception report no longer crashes on Odoo 19.
 <tt class="docutils literal">stock.picking</tt> lost the <tt class="docutils literal">group_id</tt> field (the procurement group
@@ -431,22 +562,22 @@ both <tt class="docutils literal">stock.picking</tt> (<tt class="docutils litera
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-13">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-5">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-14">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-6">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-15">Authors</a></h2>
 <ul class="simple">
 <li>Dorin Hongu</li>
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-7">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-16">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.nexterp.ro">NextERP Romania</a>:<ul>
 <li>Fekete Mihai &lt;<a class="reference external" href="mailto:feketemihai&#64;nexterp.ro">feketemihai&#64;nexterp.ro</a>&gt;</li>
@@ -462,8 +593,8 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-8">Maintainers</a></h2>
-<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_report">dhongu/l10n-romania</a> project on GitHub.</p>
+<h2><a class="toc-backref" href="#toc-entry-17">Maintainers</a></h2>
+<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_picking_report">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>
 </div>
