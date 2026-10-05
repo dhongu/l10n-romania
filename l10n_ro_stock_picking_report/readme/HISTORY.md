@@ -1,3 +1,12 @@
+## 20.0.1.3.10 (2026-10-05)
+
+- The sale price of a reception is frozen on the move before the stock entries are created, not
+  after, so the store entry of `l10n_ro_stock_account_store` (markup 378, uneligible VAT 4428)
+  uses the same price as the NIR. The price is taken from the store pricelist of the location,
+  else from the product variant price (`lst_price`, which includes the variant extra) instead of
+  the template price. A backorder no longer inherits the frozen price of the first reception.
+- The NIR and the transfer note use the same price source for moves without a frozen price.
+
 ## 20.0.1.3.9 (2026-10-05)
 
 - A location marked as *Store* (`Romania - Merchandise type`, from
