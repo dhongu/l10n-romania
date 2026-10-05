@@ -130,7 +130,8 @@ Cota se ia la data acceptării declarației (art. 285 alin. (1)–(2)): **21% st
 altele, alimentele de bază — atenție la importurile de produse alimentare, unde taxa de achiziție
 implicită a companiei nu este cota corectă.
 
-Deducerea se exercită pe baza declarației vamale sau a actului constatator (art. 299 alin. (1) lit. c)).
+Deducerea se exercită pe baza declarației vamale sau a actului constatator: art. 299 alin. (1) lit. c)
+la plata efectivă în vamă, lit. d) la importul fără plata efectivă (§2.8).
 
 ### 2.7 Cele două regimuri de plată a TVA în vamă
 
@@ -144,11 +145,13 @@ achiziție normală (o singură linie de repartiție, pe 4426):
 Dr 4426 = Cr 4462        TVA de plată în vamă, stinsă ulterior prin plată
 ```
 
-**Amânarea de la plată — art. 326 alin. (4)-(5).** Persoanele impozabile care au obținut
-**certificat de amânare de la plată** (lit. a)), cele cu vămuire centralizată (lit. b)) sau cu
-înscriere în evidențele declarantului (lit. c)) **nu fac plata efectivă la organele vamale**. Ele
-evidențiază taxa în decont **atât ca taxă colectată, cât și ca taxă deductibilă** (alin. (5)). Se
-alege o taxă cu **taxare inversă** (două linii de repartiție, pe 4426 și 4427):
+**Fără plata efectivă la organul vamal — art. 326 alin. (4)-(5).** Cu **certificat de amânare de la plată** (lit. a)), vămuire centralizată (lit. b)), înscriere în
+evidențele declarantului (lit. c)) sau bunurile din art. 331 alin. (2) lit. b), c), i)–k) importate
+de persoane înregistrate în scopuri de TVA (lit. d)),
+**nu se face plata efectivă la organele vamale**. Taxa se evidențiază în decont **atât ca taxă
+colectată, cât și ca taxă deductibilă** (alin. (5)), pe D300 rd. 7 și 22. Se alege o taxă cu **două
+linii de repartiție, pe 4426 și 4427** — cu `l10n_ro_anaf_d300` instalat, **„21% IMP AM”** sau
+**„11% IMP AM”**, care au și grilele rd. 7 / 22:
 
 ```
 Dr 4426 = Cr 4427        fără 446 și fără plată
@@ -161,12 +164,17 @@ există nicio datorie de stins.
 > mari au certificat de amânare. Dacă alegeți taxa greșită, nota iese cu o datorie la buget care nu
 > există — sau, invers, fără datoria care chiar trebuie plătită.
 
-### 2.8 Deducerea este condiționată de plată
+### 2.8 Condiția de deducere
 
-Art. 299 alin. (1) lit. c) cere, pe lângă declarație, **documente care să ateste plata taxei**.
-Nota se generează la data DVI. Dacă declarația e pe 30 ale lunii și plata pe 2 ale lunii următoare,
-TVA-ul intră într-un decont în care condiția de deducere nu era încă îndeplinită. Verificați
-decalajul la închiderea lunii.
+**La plata efectivă în vamă**, art. 299 alin. (1) lit. c) cere, pe lângă declarație, **documente care
+să ateste plata taxei**. Nota se generează la data DVI. Dacă declarația e pe 30 ale lunii și plata pe
+2 ale lunii următoare, TVA-ul intră într-un decont în care condiția de deducere nu era încă
+îndeplinită. Verificați decalajul la închiderea lunii.
+
+**Fără plata efectivă în vamă** (§2.7), condiția nu e plata: art. 299 alin. (1) lit. d) cere DVI-ul
+(sau actul constatator) care menționează importatorul și suma taxei datorate, plus înscrierea taxei
+ca taxă colectată în decontul perioadei în care ia naștere exigibilitatea — perioada datei DVI
+(art. 285).
 
 ### 2.6 Biroul vamal nu este partener
 
@@ -289,7 +297,7 @@ Butonul deschide wizardul. În capul lui se află o casetă de îndrumare cu map
 |---|---|---|
 | **Bază de impozitare** | baza pe care vama a calculat TVA-ul | baza poziției **B00** |
 | **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziției **B00** |
-| **TVA la import** | cota aplicată de vamă — **și regimul**: taxă normală la plata efectivă, taxare inversă la amânare (§2.7) | din declarație |
+| **TVA la import** | cota aplicată de vamă — **și regimul**: taxă normală la plata efectivă, taxă cu două repartiții (4426 / 4427, ex. „21% IMP AM”) fără plata în vamă (§2.7) | din declarație |
 | **Taxă vamală** | taxa vamală datorată | poziția **A00** |
 | **Număr DVI** | MRN-ul | antetul declarației |
 | **Data DVI** | data acceptării declarației | antetul declarației |
@@ -440,7 +448,7 @@ transportului extern.
 - [ ] Dacă baza a fost modificată, **valoarea TVA a fost actualizată** manual în același wizard.
 - [ ] Cota de TVA corespunde celei din declarație (atenție la cota redusă pentru alimente).
 - [ ] **Regimul de plată e cel corect**: taxă normală dacă TVA-ul se achită în vamă, taxă cu
-      taxare inversă dacă societatea are certificat de amânare (§2.7).
+      două repartiții (ex. „21% IMP AM”) dacă nu se face plata efectivă în vamă (§2.7).
 - [ ] După validare, **costul unitar al produsului a crescut** cu taxa vamală / cantitate.
 - [ ] TVA-ul de import apare pe **4426**, nu în costul mărfii.
 - [ ] Nota contabilă are ca **referință numărul de DVI**, nu secvența internă.
