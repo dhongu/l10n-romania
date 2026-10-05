@@ -13,11 +13,11 @@ Romania - Stock Accounting Store
 .. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
     :alt: Mature
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_store
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_store
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -109,6 +109,29 @@ Usage
 Changelog
 =========
 
+20.0.1.0.1 (2026-10-05)
+-----------------------
+
+- The markup (378) and uneligible VAT (4428) of a reception in the store
+  now use the same sale price as the reception note at sale price (NIR)
+  of ``l10n_ro_stock_picking_report``: the price frozen on the move at
+  reception, else the store pricelist of the location, else the product
+  price. Before, the entry always took the product price, so in a store
+  with its own pricelist the NIR showed one markup and VAT and the
+  accounts 378 / 4428 another (e.g. store price 120 instead of 100: NIR
+  markup 600, entry 400).
+- Tests: the NIR at sale price matches the store entry, with and without
+  a store pricelist.
+
+20.0.1.0.0 (2026-10-05)
+-----------------------
+
+- Migration to 20.0. Odoo 20 signs the value of the stock move (negative
+  on the outgoing moves): the markup is computed on its magnitude, so
+  the store entries are the same as on 19.0.
+- The upgrade script ``19.0.1.0.0`` is kept: it also runs on a direct
+  upgrade from 18.0 to 20.0.
+
 19.0.1.0.0 (2026-10-04)
 -----------------------
 
@@ -174,6 +197,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_store>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_store>`_ project on GitHub.
 
 You are welcome to contribute.

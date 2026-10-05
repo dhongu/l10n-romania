@@ -17,7 +17,7 @@ Romania - Cash Register
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_cash_register
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_cash_register
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -66,6 +66,32 @@ verificări pe perioade.
 
 Changelog
 =========
+
+20.0.1.2.2
+----------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
+19.0.1.2.1
+----------
+
+**Corectat** — reîmprospătarea registrului la postare cerea drepturi de
+contabilitate.
+
+``_l10n_ro_cash_registers_to_refresh()`` aduna registrele de
+reîmprospătat pe rând, prin
+``registers |= register_model.sudo().search(...)``. Recordset-ul de
+start nu era ``sudo()``, iar unirea ``|`` păstrează contextul
+operandului din stânga — deci rezultatul final pierdea ``sudo``-ul
+căutării din dreapta, contrar intenției din cod. Orice utilizator fără
+grupul *Contabilitate/ Administrator* (de exemplu un operator de vânzări
+cu doar drepturi de facturare) care postează o notă contabilă pe un cont
+de casă lovea de ``AccessError`` la reîmprospătarea soldurilor, pentru
+că accesul la modelul registrului este rezervat acelui grup.
+
+``sudo()`` este acum aplicat de la recordset-ul de pornire, ca să se
+păstreze pe toată unirea.
 
 19.0.1.2.0
 ----------
@@ -166,6 +192,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_cash_register>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_cash_register>`_ project on GitHub.
 
 You are welcome to contribute.

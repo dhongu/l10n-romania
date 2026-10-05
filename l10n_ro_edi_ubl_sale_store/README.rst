@@ -17,7 +17,7 @@ Deltatech Sale from Store UBL
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_edi_ubl_sale_store
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_edi_ubl_sale_store
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -30,6 +30,15 @@ Features:
 
 .. contents::
    :local:
+
+Changelog
+=========
+
+20.0.1.0.7 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 Bug Tracker
 ===========
@@ -59,6 +68,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_edi_ubl_sale_store>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_edi_ubl_sale_store>`_ project on GitHub.
 
 You are welcome to contribute.

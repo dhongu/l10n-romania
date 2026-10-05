@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:82dad9fd93fb19748471db3f4ba19840a80f821af9ff77805380aea4e6d1276b
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Production/Stable" src="https://img.shields.io/badge/maturity-Production%2FStable-green.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_efactura_enhancement"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Production/Stable" src="https://img.shields.io/badge/maturity-Production%2FStable-green.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_efactura_enhancement"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <div class="section" id="overview">
 <h1>Overview</h1>
 <p>The l10n_ro_efactura_enhancement module extends the standard Romanian
@@ -570,6 +570,56 @@ existing <tt class="docutils literal">l10n_ro_spv_cron_no_email</tt> setting.</l
 <div class="section" id="changelog">
 <h1>Changelog</h1>
 <div class="section" id="section-1">
+<h2>20.0.0.5.4 (2026-09-30)</h2>
+<ul class="simple">
+<li>Own module icon in the flat style of the Terrabit modules, instead of
+the missing or generic one.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2>19.0.0.5.3 (2026-09-23)</h2>
+<ul class="simple">
+<li><strong>O firmă din România fără CUI nu mai pleacă în SPV.</strong> <tt class="docutils literal">l10n_ro_edi</tt>
+completează CUI-ul lipsă al clientului cu <tt class="docutils literal">0000000000000</tt>. Valoarea
+e corectă pentru persoane fizice fără CNP, dar nucleul o pune și pe
+firme: verifică doar CUI-ul furnizorului, nu și pe al clientului. O
+factură către o firmă cu CUI-ul necompletat ajungea astfel la ANAF
+fără cumpărător identificat.<ul>
+<li>Blocajul se aplică clienților marcați ca firmă (<tt class="docutils literal">is_company</tt>), cu
+țara România, fără CUI sau cu CUI <tt class="docutils literal">0000000000000</tt>.</li>
+<li>Verificarea apare la generarea XML-ului (avertisment în „Trimite și
+tipărește”) și încă o dată chiar înainte de transmiterea în SPV,
+pentru XML-urile generate mai devreme. Motivul se scrie în
+chatter-ul facturii.</li>
+<li>Persoanele fizice și clienții din alte țări nu sunt afectați.</li>
+<li>Doar cod Python, nu necesită actualizarea modulului; traducerea în
+română a mesajului se încarcă la actualizare.</li>
+</ul>
+</li>
+<li>Explicația opțiunii „Nu importa automat facturile primite din SPV” nu
+apărea în română: în <tt class="docutils literal">ro.po</tt> textul avea altă ghilimea decât în cod,
+iar Odoo sărea tăcut traducerea.</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h2>19.0.0.5.2 (2026-09-23)</h2>
+<ul class="simple">
+<li><strong>Facturile din POS pleacă din nou în e-Factura cu tipul 751.</strong> Pe
+18.0 modulul schimba <tt class="docutils literal">InvoiceTypeCode</tt> din 380 în 751 pentru orice
+factură legată de o comandă POS (vânzare deja înregistrată pe bonul
+fiscal). Regula s-a pierdut la rescrierea modulului pe 19.0, iar de la
+migrare facturile din POS au plecat cu 380: ANAF număra vânzarea și
+TVA-ul de două ori (casa de marcat + factura). Semnalat pe Damira
+(INV/2026/04101), confirmat și la Valshop (751 până în mai 2026, 380
+după trecerea pe 19).<ul>
+<li>Stornourile (381) și autofacturarea (389) rămân neschimbate.</li>
+<li>XML-urile deja trimise nu se modifică.</li>
+<li>Doar cod Python, nu necesită actualizarea modulului.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-4">
 <h2>19.0.0.4.4 (2026-09-10)</h2>
 <ul class="simple">
 <li><strong>Trunchiere referință aviz de expediție (BT-16) la 200 de
@@ -594,7 +644,7 @@ loc să taie în mijlocul unui nume (simetric cu
 </li>
 </ul>
 </div>
-<div class="section" id="section-2">
+<div class="section" id="section-5">
 <h2>19.0.0.4.3 (2026-09-09)</h2>
 <ul class="simple">
 <li><strong>Limita reală pentru Avizul de plată (BT-83) e 140 de caractere, nu
@@ -611,7 +661,7 @@ referința reală respinsă (43 de comenzi pe PTCDRO20689).</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-3">
+<div class="section" id="section-6">
 <h2>19.0.0.4.2 (2026-09-08)</h2>
 <ul class="simple">
 <li><strong>Fix: ``cbc:PrepaidAmount`` / ``cbc:PayableAmount`` nu mai depind de
@@ -639,7 +689,7 @@ care a trecut neobservată de la migrarea pe 19.0.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-4">
+<div class="section" id="section-7">
 <h2>19.0.0.4.0 (2026-08-21)</h2>
 <ul class="simple">
 <li><strong>Importul automat al facturilor primite din SPV este acum oprit
@@ -665,7 +715,7 @@ rămân neatinse, ca și până acum.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-5">
+<div class="section" id="section-8">
 <h2>19.0.0.3.23 (2026-07-29)</h2>
 <ul class="simple">
 <li><strong>O singură regulă decide dacă factura merge în SPV.</strong> Cele patru căi
@@ -696,7 +746,7 @@ modifica ușor pentru facturile emise către un contact al unei
 companii.</li>
 </ul>
 </div>
-<div class="section" id="section-6">
+<div class="section" id="section-9">
 <h2>19.0.0.3.22 (2026-07-29)</h2>
 <ul class="simple">
 <li><strong>Răspunsurile neașteptate de la SPV nu mai crapă interfața.</strong> ANAF
@@ -726,7 +776,7 @@ restart.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-7">
+<div class="section" id="section-10">
 <h2>19.0.0.3.21 (2026-07-29)</h2>
 <p>Port of the 18.0 fix (18.0.0.2.15 / 18.0.0.2.16) that was never
 forwarded to 19.0: the 19.0 catch-up port of this module predates it.</p>
@@ -754,7 +804,7 @@ through any path. The SPV upload path uses
 still emailed once, after validation.</li>
 </ul>
 </div>
-<div class="section" id="section-8">
+<div class="section" id="section-11">
 <h2>19.0.0.3.20 (2026-07-28)</h2>
 <ul class="simple">
 <li><strong>Import SPV: linia se recalculează din ``cbc:LineExtensionAmount``
@@ -782,7 +832,7 @@ apare în chatter-ul facturii.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-9">
+<div class="section" id="section-12">
 <h2>19.0.0.3.18 (2026-07-03)</h2>
 <ul class="simple">
 <li><strong>Opțiune de dezactivare a importului automat de facturi primite din
@@ -802,7 +852,7 @@ neindexate din același cron rămân neatinse.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-10">
+<div class="section" id="section-13">
 <h2>19.0.0.3.17 (2026-07-03)</h2>
 <ul class="simple">
 <li><strong>Descrierea nu mai apare dublată în Description + Name.</strong> Când linia
@@ -816,7 +866,7 @@ trunchiat la 100, Description la 200). Doar cod Python, nu necesită
 actualizarea modulului.</li>
 </ul>
 </div>
-<div class="section" id="section-11">
+<div class="section" id="section-14">
 <h2>19.0.0.3.16 (2026-07-03)</h2>
 <ul class="simple">
 <li><strong>Tag-ul ``cbc:Description`` este omis când linia nu are descriere
@@ -837,7 +887,7 @@ nu mai apare deloc în XML. <tt class="docutils literal">cbc:Name</tt> rămâne 
 </li>
 </ul>
 </div>
-<div class="section" id="section-12">
+<div class="section" id="section-15">
 <h2>19.0.0.3.15 (2026-07-01)</h2>
 <ul class="simple">
 <li><strong>Emailul către client este acum un cron separat.</strong> Trimiterea
@@ -859,7 +909,7 @@ nesetat, deci se reia la rularea următoare.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-13">
+<div class="section" id="section-16">
 <h2>19.0.0.3.14 (2026-07-01)</h2>
 <ul class="simple">
 <li><strong>Emailul este complet separat de trimiterea facturilor în SPV.</strong>
@@ -888,7 +938,7 @@ statusurile citite din SPV, iar factura se reia la rularea următoare
 </li>
 </ul>
 </div>
-<div class="section" id="section-14">
+<div class="section" id="section-17">
 <h2>19.0.0.3.13 (2026-06-30)</h2>
 <ul class="simple">
 <li><strong>Trunchiere referință comandă (BT-13) la 200 de caractere.</strong> Pe
@@ -922,7 +972,7 @@ In case of trouble, please check there if your issue has already been reported.<
 <h2>Maintainers</h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_efactura_enhancement">dhongu/l10n-romania</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_efactura_enhancement">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>
 </div>
