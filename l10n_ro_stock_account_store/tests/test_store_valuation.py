@@ -278,3 +278,62 @@ class TestStoreValuation(AccountTestInvoicingCommon):
             self.skipTest("l10n_ro_stock_picking_report not installed")
         self.assertTrue(self.location_store.is_store)
         self.assertFalse(self.location_depot.is_store)
+
+    def _nir_line(self, move):
+        """The NIR at sale price line of `l10n_ro_stock_picking_report` for `move`."""
+        if "l10n_ro_sale_price" not in self.env["stock.move"]._fields:
+            self.skipTest("l10n_ro_stock_picking_report not installed")
+        return self.env["report.abstract_report.reception_report"]._get_line(move)
+
+    def _assert_nir_matches_store_entry(self, move, sale_amount, markup, tax):
+        self.assertRecordValues(
+            move,
+            [
+                {
+                    "l10n_ro_store_sale_amount": sale_amount,
+                    "l10n_ro_store_markup_amount": markup,
+                    "l10n_ro_store_tax_amount": tax,
+                }
+            ],
+        )
+        line = self._nir_line(move)
+        self.assertAlmostEqual(line["amount_tax_sale"], sale_amount, places=2)
+        self.assertAlmostEqual(line["tax_sale"], tax, places=2)
+        self.assertAlmostEqual(line["amount_sale"] - line["amount"], markup, places=2)
+
+    def test_nir_matches_store_entry(self):
+        """The NIR at sale price and the 378 / 4428 entry use the same sale price."""
+        move = self._receive_in_store()
+        self._assert_nir_matches_store_entry(move, 1210.0, 400.0, 210.0)
+
+    def test_store_pricelist_drives_nir_and_store_entry(self):
+        """A store with its own pricelist: NIR and store entry both at the store price.
+
+        Cost 60, store price 120 + 21% VAT, 10 pieces: markup 600, VAT 252, sale value 1.452,
+        not the product price of 100.
+        """
+        if "store_pricelist_id" not in self.location_store._fields:
+            self.skipTest("l10n_ro_stock_picking_report not installed")
+        self.location_store.store_pricelist_id = self.env["product.pricelist"].create(
+            {
+                "name": "Preturi magazin",
+                "item_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "applied_on": "0_product_variant",
+                            "product_id": self.product.id,
+                            "compute_price": "fixed",
+                            "fixed_price": 120.0,
+                        },
+                    )
+                ],
+            }
+        )
+        move = self._receive_in_store()
+        self.assertEqual(move.l10n_ro_sale_price, 120.0)
+        self._assert_nir_matches_store_entry(move, 1452.0, 600.0, 252.0)
+        lines = move.l10n_ro_store_account_move_id.line_ids
+        self.assertEqual(sum(lines.filtered(lambda x: x.account_id == self.account_378).mapped("balance")), -600.0)
+        self.assertEqual(sum(lines.filtered(lambda x: x.account_id == self.account_4428).mapped("balance")), -252.0)

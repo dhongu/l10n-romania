@@ -100,8 +100,18 @@ class StockMove(models.Model):
         return self.browse()
 
     def _l10n_ro_get_store_sale_price(self):
-        """Unit sale price, in the product UoM, of goods entering the store."""
+        """Unit sale price, in the product UoM, of goods entering the store.
+
+        The same price as the reception note at sale price (NIR) of
+        `l10n_ro_stock_picking_report`, when installed: the price frozen on the move
+        at reception, else the store pricelist of the location, else the product price.
+        """
         self.ensure_one()
+        if "l10n_ro_sale_price" in self._fields and self.l10n_ro_sale_price:
+            return self.l10n_ro_sale_price
+        location = self.location_dest_id
+        if "store_pricelist_id" in location._fields and location.store_pricelist_id:
+            return location.store_pricelist_id._get_product_price(self.product_id, 1)
         return self.product_id.lst_price
 
     def _l10n_ro_compute_store_amounts(self):

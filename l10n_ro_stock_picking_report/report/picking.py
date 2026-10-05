@@ -223,9 +223,7 @@ class ReportPickingReception(models.AbstractModel):
             # prețul de vânzare vine tot în unitatea de referință (list_price și prețul
             # din lista de prețuri sunt pe `product.uom_id`) — îl aducem în unitatea
             # documentului, ca „Preț vânzare" să fie comparabil cu „Preț unitar"
-            list_price = move.l10n_ro_sale_price or move.product_id.list_price
-            if not move.l10n_ro_sale_price and move.location_dest_id.store_pricelist_id:
-                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1)
+            list_price = move.l10n_ro_sale_price or move._l10n_ro_get_reception_sale_price()
             list_price = list_price * uom_factor
 
             res["list_price"] = list_price
@@ -284,9 +282,7 @@ class ReportPickingReception(models.AbstractModel):
             #     list_price = incl_tax.compute_all(move_line.product_id.list_price)['total_excluded']
             # else:
 
-            list_price = move.l10n_ro_sale_price or move.product_id.list_price
-            if not move.l10n_ro_sale_price and move.location_dest_id.store_pricelist_id:
-                list_price = move.location_dest_id.store_pricelist_id._get_product_price(move.product_id, 1)
+            list_price = move.l10n_ro_sale_price or move._l10n_ro_get_reception_sale_price()
             list_price = list_price * uom_factor
 
             res["list_price"] = list_price

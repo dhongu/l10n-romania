@@ -1,3 +1,13 @@
+## 19.0.1.0.1 (2026-10-05)
+
+- The markup (378) and uneligible VAT (4428) of a reception in the store now use the same sale
+  price as the reception note at sale price (NIR) of `l10n_ro_stock_picking_report`: the price
+  frozen on the move at reception, else the store pricelist of the location, else the product
+  price. Before, the entry always took the product price, so in a store with its own pricelist the
+  NIR showed one markup and VAT and the accounts 378 / 4428 another (e.g. store price 120 instead
+  of 100: NIR markup 600, entry 400).
+- Tests: the NIR at sale price matches the store entry, with and without a store pricelist.
+
 ## 19.0.1.0.0 (2026-10-04)
 
 - Migration to 19.0, rewritten on the stock move: Odoo 19 no longer has
