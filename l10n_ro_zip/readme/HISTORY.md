@@ -1,3 +1,12 @@
+## 19.0.0.0.4 (2026-10-06)
+
+- The postal code dropdown shows a second, greyed-out column: for a street,
+  `Strada Mircea Vulcan` followed by `010101 · Bucuresti, Sector 1, B` (postal
+  code, city, sector when filled in, county code); for a code without a street,
+  the city followed by the postal code and the county code. Empty parts are
+  left out, and the county is skipped when it repeats the city. The plain name
+  used on documents and reports is unchanged.
+
 ## 19.0.0.0.3
 
 - Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.

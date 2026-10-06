@@ -26,13 +26,36 @@ class ResZip(models.Model):
     office = fields.Char(string="Office")
     address = fields.Char(string="Address")
 
-    @api.depends("name", "city", "street_type", "street_name")
+    @api.depends("name", "city", "street_type", "street_name", "sector", "state", "state_id.code")
+    @api.depends_context("formatted_display_name")
     def _compute_display_name(self):
+        formatted = self.env.context.get("formatted_display_name")
         for zip_code in self:
-            if not zip_code.street_name:
+            if formatted:
+                zip_code.display_name = zip_code._get_formatted_display_name()
+            elif not zip_code.street_name:
                 zip_code.display_name = f"{zip_code.city} ({zip_code.name})"
             else:
                 zip_code.display_name = f"{zip_code.street_type} {zip_code.street_name} ({zip_code.name})"
+
+    def _get_formatted_display_name(self):
+        """Two columns for the many2one dropdown: the street (or the city) and,
+        greyed out, the postal code with where it is."""
+        self.ensure_one()
+        county = self.state_id.code or self.state
+        if county and county == self.city:
+            county = False
+        if self.street_name:
+            label = " ".join(part for part in (self.street_type, self.street_name) if part)
+            sector = (self.sector or "").strip()
+            if sector and not sector.lower().startswith("sector"):
+                sector = f"Sector {sector}"
+            place = ", ".join(part for part in (self.city, sector, county) if part)
+        else:
+            label = self.city
+            place = county
+        details = " · ".join(part for part in (self.name, place) if part)
+        return f"{label}\t--{details}--" if details else label
 
     # @api.model
     # def _name_search(self, name, domain=None, operator="ilike", limit=None, order=None):
