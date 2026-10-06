@@ -1,6 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models
+from odoo.exceptions import UserError
 
 
 class AccountMove(models.Model):
@@ -43,19 +44,69 @@ class AccountMove(models.Model):
             registers |= register_model.search([("journal_id", "=", journal.id), ("date", ">=", min(dates))])
         return registers
 
+    def _l10n_ro_check_closed_cash_registers(self):
+        """Refuză o înregistrare pe contul casei datată într-o zi închisă sau înaintea ei.
+
+        Soldul se reportează din zi în zi, deci o mișcare din ziua N schimbă și soldurile
+        zilelor închise de după ea (OMFP 2634/2015, Anexa 1 pct. 58 lit. d) și h)).
+        """
+        lines = self.line_ids.filtered(lambda line: line.account_id.account_type == "asset_cash")
+        if not lines:
+            return
+        journals = (
+            self.env["account.journal"]
+            .sudo()
+            .search(
+                [
+                    ("type", "=", "cash"),
+                    ("default_account_id", "in", lines.account_id.ids),
+                    ("company_id", "in", lines.company_id.ids),
+                ]
+            )
+        )
+        registers = self.env["l10n.ro.cash.register"].sudo()
+        for journal in journals:
+            dates = [
+                line.date
+                for line in lines
+                if line.date and line.account_id == journal.default_account_id and line.company_id == journal.company_id
+            ]
+            if not dates:
+                continue
+            closed = registers.search(
+                [("journal_id", "=", journal.id), ("state", "=", "closed"), ("date", ">=", min(dates))],
+                order="date",
+                limit=1,
+            )
+            if closed:
+                raise UserError(
+                    self.env._(
+                        "The cash register %(register)s of %(journal)s for %(date)s is closed. An entry "
+                        "on the cash account dated %(entry_date)s would change its balance: reopen the "
+                        "cash register first.",
+                        register=closed.name,
+                        journal=journal.name,
+                        date=closed.date,
+                        entry_date=min(dates),
+                    )
+                )
+
     def _post(self, soft=True):
+        self._l10n_ro_check_closed_cash_registers()
         posted = super()._post(soft=soft)
         posted._l10n_ro_cash_registers_to_refresh().action_refresh()
         return posted
 
     def button_draft(self):
         # Registrele se determină înainte, cât timp notele sunt încă postate.
+        self._l10n_ro_check_closed_cash_registers()
         registers = self._l10n_ro_cash_registers_to_refresh()
         res = super().button_draft()
         registers.action_refresh()
         return res
 
     def unlink(self):
+        self.filtered(lambda move: move.state == "posted")._l10n_ro_check_closed_cash_registers()
         registers = self._l10n_ro_cash_registers_to_refresh()
         res = super().unlink()
         registers.action_refresh()

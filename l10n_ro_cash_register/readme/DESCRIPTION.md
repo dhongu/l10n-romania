@@ -7,6 +7,8 @@ Registrul de casă ca **document numerotat**, cod 14-4-7A (OMFP 2634/2015).
 - mișcările zilei — încasări, plăți, explicația operațiunii și partenerul;
 - chatter și activități pe document, pentru urmărire și responsabil;
 - tipărire în forma cerută de formular.
+- **închiderea zilei**: soldul se îngheață, iar contul casei nu mai primește înregistrări în ziua
+  închisă sau înaintea ei până la redeschiderea explicită a registrului.
 
 Soldurile și mișcările se citesc din notele contabile postate de pe contul de casă al
 jurnalului (`default_account_id`, ex. 5311).
