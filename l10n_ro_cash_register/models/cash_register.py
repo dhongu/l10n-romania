@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models, release
 from odoo.exceptions import UserError
 from odoo.orm.identifiers import NewId
-from odoo.tools import date_utils
+from odoo.tools import date_utils, format_date
 from odoo.tools.misc import formatLang
 
 _logger = logging.getLogger(__name__)
@@ -190,6 +190,13 @@ class CashRegister(models.Model):
 
         return where_string, param
 
+    def _get_sequence_cache(self):
+        # Cheia cache-ului din `sequence.mixin` este (format, jurnal), iar registrul și notele
+        # jurnalului de casă au același format (CASA/2026/00000): cu cache-ul comun, un registru
+        # creat în aceeași tranzacție cu postarea unei note continua contorul notelor.
+        # `cr.cache` se golește integral la commit/rollback, deci și cheia proprie.
+        return self.env.cr.cache.setdefault("l10n.ro.cash.register.sequence", {})
+
     def _get_starting_sequence(self):
         # Mirror account.move logic: cash journals use yearly numbering
         self.ensure_one()
@@ -319,7 +326,9 @@ class CashRegister(models.Model):
             if register.state == "closed":
                 continue
             if register.date > today:
-                raise UserError(self.env._("A day in the future cannot be closed (%s).", register.date))
+                raise UserError(
+                    self.env._("A day in the future cannot be closed (%s).", format_date(self.env, register.date))
+                )
             register.action_refresh()
             if register.currency_id.compare_amounts(register.balance_end, 0.0) < 0:
                 raise UserError(

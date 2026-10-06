@@ -1,3 +1,22 @@
+## 19.0.1.3.1
+
+**Corectat** — numărul registrului de casă continua numerotarea notelor de casă.
+
+Registrul și notele jurnalului de casă au același format (`CASA/2026/00001`), iar cache-ul de
+secvență din `sequence.mixin` are cheia (format, jurnal), comună ambelor. Un registru creat în
+aceeași tranzacție cu postarea unei note — de exemplu registrul zilei, creat automat la postarea
+unei plăți pe casierie — primea următorul număr al notelor, nu pe al lui: apăreau goluri în
+numerotarea registrelor. Registrul are acum cache-ul de secvență propriu.
+
+- Mesajele de blocare la o zi închisă și de refuz al unei zile din viitor afișează data în formatul
+  limbii utilizatorului (03.09.2026), nu ISO.
+- Formularul registrului: moneda și compania stau sub dată și jurnal, fără golul de sub solduri
+  după închidere.
+- Traduceri RO pentru acțiunile „Generează registrele de casă lipsă” și „Elimină conturile de
+  plăți în curs” și pentru mesajul de registru duplicat.
+- Fișa consultant actualizată cu închiderea zilei, blocarea postării și redeschiderea; capturi
+  regenerate.
+
 ## 19.0.1.3.0
 
 **Nou** — închiderea zilei de casă.
