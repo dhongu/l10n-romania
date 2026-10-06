@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 07:27+0000\n"
+"POT-Creation-Date: 2026-10-06 07:31+0000\n"
 "PO-Revision-Date: 2024-10-29 19:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -89,8 +89,21 @@ msgstr "<strong>Utilizator</strong>"
 #. module: l10n_ro_cash_register
 #. odoo-python
 #: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "A closed cash register cannot be changed; reopen it first."
+msgstr ""
+"Un registru de casă închis nu se poate modifica; redeschideți-l întâi."
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
 msgid "A closed cash register cannot be deleted; reopen it first."
 msgstr "Un registru de casă închis nu se poate șterge; redeschideți-l întâi."
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "A day in the future cannot be closed (%s)."
+msgstr "Nu se poate închide o zi din viitor (%s)."
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__counterpart_account_id
@@ -588,6 +601,18 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid ""
+"The balance of cash register %(register)s is negative (%(balance)s): the "
+"cash desk cannot pay more than it holds. Correct the entries before closing "
+"the day."
+msgstr ""
+"Soldul registrului de casă %(register)s este negativ (%(balance)s): casieria"
+" nu poate plăti mai mult decât are. Corectați înregistrările înainte de a "
+"închide ziua."
 
 #. module: l10n_ro_cash_register
 #. odoo-python
