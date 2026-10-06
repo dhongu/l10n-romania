@@ -5,8 +5,10 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models, release
+from odoo.exceptions import UserError
 from odoo.orm.identifiers import NewId
 from odoo.tools import SQL, date_utils
+from odoo.tools.misc import formatLang
 
 _logger = logging.getLogger(__name__)
 
@@ -89,6 +91,25 @@ class CashRegister(models.Model):
         compute="_compute_balance_end",
         store=True,
     )
+
+    # Închiderea zilei (OMFP 2634/2015, Anexa 1 pct. 58 lit. d) și h)): după închidere, contul
+    # casei nu mai primește înregistrări datate în ziua închisă sau înaintea ei, până la
+    # redeschiderea explicită a registrului.
+    state = fields.Selection(
+        [("open", "Open"), ("closed", "Closed")],
+        default="open",
+        required=True,
+        copy=False,
+        tracking=True,
+    )
+    closed_balance = fields.Monetary(
+        string="Balance at Closing",
+        readonly=True,
+        copy=False,
+        help="The ending balance frozen when the day was closed.",
+    )
+    closed_by_id = fields.Many2one("res.users", string="Closed By", readonly=True, copy=False)
+    closed_on = fields.Datetime(readonly=True, copy=False)
 
     move_ids = fields.Many2many("account.move", string="Journal Item", compute="_compute_move_ids")
     move_line_ids = fields.Many2many("account.move.line", string="Journal Item Line", compute="_compute_move_ids")
@@ -299,6 +320,52 @@ class CashRegister(models.Model):
         self._compute_balance_end()
         self._compute_move_ids()
         return True
+
+    def action_close(self):
+        """Închide ziua: îngheață soldul și blochează înregistrările pe casă în urmă."""
+        for register in self.sorted("date"):
+            if register.state == "closed":
+                continue
+            register.action_refresh()
+            register.write(
+                {
+                    "state": "closed",
+                    "closed_balance": register.balance_end,
+                    "closed_by_id": self.env.user.id,
+                    "closed_on": fields.Datetime.now(),
+                }
+            )
+        return True
+
+    def action_reopen(self):
+        """Redeschide ziua și toate zilele închise de după ea, din același jurnal.
+
+        Soldul unei zile se reportează în zilele următoare: o corecție în ziua redeschisă
+        schimbă și soldurile lor, deci nu pot rămâne închise.
+        """
+        for register in self.filtered(lambda r: r.state == "closed").sorted("date"):
+            later = self.search(
+                [
+                    ("journal_id", "=", register.journal_id.id),
+                    ("date", ">=", register.date),
+                    ("state", "=", "closed"),
+                ]
+            )
+            later.write({"state": "open"})
+            for reopened in later:
+                reopened.message_post(
+                    body=self.env._(
+                        "Cash register reopened by %(user)s (closing balance was %(balance)s).",
+                        user=self.env.user.name,
+                        balance=formatLang(self.env, reopened.closed_balance, currency_obj=reopened.currency_id),
+                    )
+                )
+        return True
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_closed(self):
+        if self.filtered(lambda r: r.state == "closed"):
+            raise UserError(self.env._("A closed cash register cannot be deleted; reopen it first."))
 
     def action_print(self):
         return self.env.ref("l10n_ro_cash_register.action_report_cash_register").report_action(self)
