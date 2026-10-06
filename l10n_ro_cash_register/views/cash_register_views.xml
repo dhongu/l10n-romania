@@ -59,12 +59,12 @@
                 <sheet>
                     <div class="oe_title oe_inline">
                         <label for="name" />
-                        <h1><field name="name" placeholder="e.g. CAS/2021/0001" /></h1>
+                        <h1><field name="name" placeholder="e.g. CAS/2021/0001" readonly="state == 'closed'" /></h1>
                     </div>
                     <group>
                        <group>
-                            <field name="date" />
-                            <field name="journal_id" />
+                            <field name="date" readonly="state == 'closed'" />
+                            <field name="journal_id" readonly="state == 'closed'" />
                         </group>
                         <group>
                             <field name="balance_start" />

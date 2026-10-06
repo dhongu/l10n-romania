@@ -8,6 +8,9 @@
   ar schimba soldul reportat în ziua închisă (OMFP 2634/2015, Anexa 1 pct. 58 lit. d) și h)).
 - **Redeschide** redeschide ziua și toate zilele închise de după ea din aceeași casierie (soldul se
   reportează din zi în zi) și lasă urma în istoricul fiecărui registru.
+- Pe un registru închis nu se pot schimba data, casieria sau numărul (s-ar muta blocarea fără
+  urmă). Nu se poate închide o zi din viitor sau una cu sold negativ.
+- Corecțiile pentru o zi închisă se fac prin stornare sau notă de corecție datată în ziua curentă.
 - Un registru închis nu se poate șterge; butoanele de adăugare a încasărilor, plăților și
   operațiunilor nu mai apar pe el.
 

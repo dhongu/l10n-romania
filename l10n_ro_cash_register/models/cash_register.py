@@ -35,6 +35,10 @@ class CashRegister(models.Model):
         return records
 
     def write(self, vals):
+        locked = {"date", "journal_id", "company_id", "name"} & set(vals)
+        if locked and self.filtered(lambda r: r.state == "closed"):
+            # Mutarea datei sau a casieriei ar muta blocarea fără redeschidere și fără urmă.
+            raise UserError(self.env._("A closed cash register cannot be changed; reopen it first."))
         res = super().write(vals)
         # If the current write explicitly modifies 'name', respect that change and don't auto-assign now.
         if "name" in vals:
@@ -323,10 +327,22 @@ class CashRegister(models.Model):
 
     def action_close(self):
         """Închide ziua: îngheață soldul și blochează înregistrările pe casă în urmă."""
+        today = fields.Date.context_today(self)
         for register in self.sorted("date"):
             if register.state == "closed":
                 continue
+            if register.date > today:
+                raise UserError(self.env._("A day in the future cannot be closed (%s).", register.date))
             register.action_refresh()
+            if register.currency_id.compare_amounts(register.balance_end, 0.0) < 0:
+                raise UserError(
+                    self.env._(
+                        "The balance of cash register %(register)s is negative (%(balance)s): the cash "
+                        "desk cannot pay more than it holds. Correct the entries before closing the day.",
+                        register=register.name,
+                        balance=formatLang(self.env, register.balance_end, currency_obj=register.currency_id),
+                    )
+                )
             register.write(
                 {
                     "state": "closed",

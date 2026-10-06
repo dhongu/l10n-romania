@@ -3,6 +3,7 @@
 
 from datetime import date
 
+from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
@@ -104,3 +105,46 @@ class TestL10nRoCashRegisterClose(TransactionCase):
         )
         move.action_post()
         self.assertEqual(move.state, "posted")
+
+    def test_reversal_dated_after_the_closed_day_is_allowed(self):
+        """Corecția unei zile închise se face prin stornare cu data curentă."""
+        move = self._cash_move(date(2026, 3, 2), 100.0)
+        self._register(date(2026, 3, 2)).action_close()
+        reversal = move._reverse_moves([{"date": date(2026, 3, 10), "ref": "Storno"}])
+        reversal.action_post()
+        self.assertEqual(reversal.state, "posted")
+
+    def test_inventory_correction_dated_today_is_allowed(self):
+        self._register(date(2026, 3, 2)).action_close()
+        correction = self._cash_move(date(2026, 3, 9), 15.0)
+        self.assertEqual(correction.state, "posted")
+
+    def test_closed_register_fields_cannot_be_changed(self):
+        register = self._register(date(2026, 3, 2))
+        register.action_close()
+        with self.assertRaises(UserError):
+            register.date = date(2026, 3, 1)
+        with self.assertRaises(UserError):
+            register.journal_id = self.env["account.journal"].create(
+                {"name": "Other Cash 2", "code": "OCS2", "type": "cash"}
+            )
+
+    def test_future_day_cannot_be_closed(self):
+        register = self._register(fields.Date.add(fields.Date.context_today(self.env.user), days=5))
+        with self.assertRaises(UserError):
+            register.action_close()
+
+    def test_negative_balance_cannot_be_closed(self):
+        move = self.env["account.move"].create(
+            {
+                "journal_id": self.cash_journal.id,
+                "date": date(2026, 3, 2),
+                "line_ids": [
+                    (0, 0, {"account_id": self.cash_account.id, "credit": 40.0, "name": "Plată"}),
+                    (0, 0, {"account_id": self.counterpart.id, "debit": 40.0, "name": "Plată"}),
+                ],
+            }
+        )
+        move.action_post()
+        with self.assertRaises(UserError):
+            self._register(date(2026, 3, 2)).action_close()
