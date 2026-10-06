@@ -170,3 +170,33 @@ class TestCashRegisterSequence(TransactionCase):
         empty = self.env["l10n.ro.cash.register"].new({"journal_id": False})
         self.assertEqual(empty._get_last_sequence_domain()._sql_tuple[0], "FALSE")
         self.assertIn(self.journal_a.id, params)
+
+    def test_register_number_does_not_continue_entry_numbering(self):
+        """Registrul are contorul lui, chiar în aceeași tranzacție cu notele jurnalului.
+
+        Registrul și notele jurnalului de casă au același format (CASH/2026/00001), iar cheia
+        din cache-ul de secvență al `sequence.mixin` este (format, jurnal) — fără un cache
+        separat, registrul creat după postarea unei note continua numerotarea notelor.
+        """
+        year = date.today().year
+        counterpart = self.env["account.account"].create(
+            {"name": "Counterpart", "code": "1010C", "account_type": "asset_current"}
+        )
+        moves = self.env["account.move"].create(
+            [
+                {
+                    "move_type": "entry",
+                    "journal_id": self.journal_a.id,
+                    "date": date(year, 4, day),
+                    "line_ids": [
+                        (0, 0, {"account_id": self.acc_cash_a.id, "debit": 100.0}),
+                        (0, 0, {"account_id": counterpart.id, "credit": 100.0}),
+                    ],
+                }
+                for day in (1, 2)
+            ]
+        )
+        moves.action_post()
+        register = self.env["l10n.ro.cash.register"].create({"journal_id": self.journal_a.id, "date": date(year, 4, 2)})
+        self.assertEqual(moves.mapped("sequence_number"), [1, 2])
+        self.assertEqual(register.sequence_number, 1)

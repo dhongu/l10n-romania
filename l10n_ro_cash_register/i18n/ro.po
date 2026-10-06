@@ -223,7 +223,7 @@ msgstr "Operațiune registrul de casă"
 #. module: l10n_ro_cash_register
 #: model:ir.actions.server,name:l10n_ro_cash_register.ir_cron_generate_missing_cash_register_ir_actions_server
 msgid "Cash Register: Generate missing cash register"
-msgstr ""
+msgstr "Registru de casă: generează registrele lipsă"
 
 #. module: l10n_ro_cash_register
 #: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register
@@ -317,7 +317,7 @@ msgstr "Nume afișat"
 #. module: l10n_ro_cash_register
 #: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_register_unique_date_journal
 msgid "Duplicate date"
-msgstr ""
+msgstr "Există deja un registru de casă pentru această casierie și zi."
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
@@ -352,7 +352,7 @@ msgstr "Cod formular 14-4-7A"
 #. module: l10n_ro_cash_register
 #: model:ir.actions.server,name:l10n_ro_cash_register.action_generate_missing_cash_register
 msgid "Generate Missing Cash Register"
-msgstr ""
+msgstr "Generează registrele de casă lipsă"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__has_message
@@ -529,7 +529,7 @@ msgstr "Plăți"
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_search
 msgid "Period"
-msgstr ""
+msgstr "Perioadă"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
@@ -551,7 +551,7 @@ msgstr "Împrospătare"
 #. module: l10n_ro_cash_register
 #: model:ir.actions.server,name:l10n_ro_cash_register.action_remove_outstanding_accounts
 msgid "Remove Outstanding Accounts"
-msgstr ""
+msgstr "Elimină conturile de plăți în curs"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
