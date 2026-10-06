@@ -2,6 +2,7 @@
 
 from odoo import models
 from odoo.exceptions import UserError
+from odoo.tools import format_date
 
 
 class AccountMove(models.Model):
@@ -86,8 +87,8 @@ class AccountMove(models.Model):
                         "cash register first.",
                         register=closed.name,
                         journal=journal.name,
-                        date=closed.date,
-                        entry_date=min(dates),
+                        date=format_date(self.env, closed.date),
+                        entry_date=format_date(self.env, min(dates)),
                     )
                 )
 

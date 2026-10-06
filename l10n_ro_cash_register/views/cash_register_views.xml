@@ -65,6 +65,8 @@
                        <group>
                             <field name="date" readonly="state == 'closed'" />
                             <field name="journal_id" readonly="state == 'closed'" />
+                            <field name="currency_id" />
+                            <field name="company_id" groups="base.group_multi_company" optional="show" />
                         </group>
                         <group>
                             <field name="balance_start" />
@@ -72,10 +74,6 @@
                             <field name="closed_balance" invisible="state != 'closed'" />
                             <field name="closed_by_id" invisible="state != 'closed'" />
                             <field name="closed_on" invisible="state != 'closed'" />
-                        </group>
-                        <group>
-                            <field name="currency_id" />
-                            <field name="company_id" groups="base.group_multi_company" optional="show" />
                         </group>
                     </group>
 
