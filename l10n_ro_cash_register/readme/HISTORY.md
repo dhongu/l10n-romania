@@ -1,3 +1,22 @@
+## 20.0.1.3.0
+
+**Nou** — închiderea zilei de casă.
+
+- Butonul **Închide ziua** pe registrul de casă îngheață soldul final (cine, când, cât). După
+  închidere, contul casei nu mai primește înregistrări datate în ziua închisă sau înaintea ei:
+  postarea, trecerea în ciornă și ștergerea unei astfel de note sunt refuzate. O mișcare în urmă
+  ar schimba soldul reportat în ziua închisă (OMFP 2634/2015, Anexa 1 pct. 58 lit. d) și h)).
+- **Redeschide** redeschide ziua și toate zilele închise de după ea din aceeași casierie (soldul se
+  reportează din zi în zi) și lasă urma în istoricul fiecărui registru.
+- Pe un registru închis nu se pot schimba data, casieria sau numărul (s-ar muta blocarea fără
+  urmă). Nu se poate închide o zi din viitor sau una cu sold negativ.
+- Corecțiile pentru o zi închisă se fac prin stornare sau notă de corecție datată în ziua curentă.
+- Un registru închis nu se poate șterge; butoanele de adăugare a încasărilor, plăților și
+  operațiunilor nu mai apar pe el.
+
+Ideea vine din modulul de casă și bancă scris de Alexandru Grecu pentru MD Trade Concept SRL,
+unde închiderea doar semnala diferențele apărute după închidere; aici ea le previne.
+
 ## 20.0.1.2.2
 
 - Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.

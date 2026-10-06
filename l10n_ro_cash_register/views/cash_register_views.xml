@@ -15,6 +15,13 @@
                 <field name="balance_start" />
                 <field name="balance_end" />
                 <field name="currency_id" column_invisible="1" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-success="state == 'closed'"
+                    decoration-info="state == 'open'"
+                    optional="show"
+                />
                 <field name="activity_ids" widget="list_activity" optional="hide" />
             </list>
         </field>
@@ -29,23 +36,42 @@
                 <header>
                     <button name="action_print" string="Print" type="object" icon="print" />
                     <button name="action_refresh" string="Refresh" type="object" />
-                    <button name="action_receipt" string="Add Receipt" type="object" />
-                    <button name="action_payment" string="Add Payment" type="object" />
-                    <button name="action_operation" string="Operation" type="object" />
+                    <button name="action_receipt" string="Add Receipt" type="object" invisible="state == 'closed'" />
+                    <button name="action_payment" string="Add Payment" type="object" invisible="state == 'closed'" />
+                    <button name="action_operation" string="Operation" type="object" invisible="state == 'closed'" />
+                    <button
+                        name="action_close"
+                        string="Close Day"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state == 'closed'"
+                        confirm="After closing, no entry on the cash account can be dated on this day or earlier until the day is reopened. Close the day?"
+                    />
+                    <button
+                        name="action_reopen"
+                        string="Reopen"
+                        type="object"
+                        invisible="state != 'closed'"
+                        confirm="The later closed days of this cash desk are reopened too. Reopen?"
+                    />
+                    <field name="state" widget="statusbar" />
                 </header>
                 <sheet>
                     <div class="oe_title oe_inline">
                         <label for="name" />
-                        <h1><field name="name" placeholder="e.g. CAS/2021/0001" /></h1>
+                        <h1><field name="name" placeholder="e.g. CAS/2021/0001" readonly="state == 'closed'" /></h1>
                     </div>
                     <group>
                        <group>
-                            <field name="date" />
-                            <field name="journal_id" />
+                            <field name="date" readonly="state == 'closed'" />
+                            <field name="journal_id" readonly="state == 'closed'" />
                         </group>
                         <group>
                             <field name="balance_start" />
                             <field name="balance_end" />
+                            <field name="closed_balance" invisible="state != 'closed'" />
+                            <field name="closed_by_id" invisible="state != 'closed'" />
+                            <field name="closed_on" invisible="state != 'closed'" />
                         </group>
                         <group>
                             <field name="currency_id" />
@@ -92,6 +118,8 @@
                 />
                 <separator />
                 <field name="date" string="Period" />
+                <filter string="Open" name="open" domain="[('state', '=', 'open')]" />
+                <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]" />
 
                 <filter string="Date" name="date" date="date" />
                 <group>

@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Cash Register",
-    "version": "20.0.1.2.2",
+    "version": "20.0.1.3.0",
     "summary": "Romania - Cash Register",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
