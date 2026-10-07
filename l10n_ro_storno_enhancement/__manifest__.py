@@ -5,7 +5,7 @@
 {
     "name": "Romania - Storno Enhancements",
     "summary": "Romania - Storno Enhancements",
-    "version": "18.0.0.0.4",
+    "version": "18.0.1.0.0",
     "author": "Dorin Hongu,Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
@@ -15,5 +15,6 @@
     "license": "AGPL-3",
     "maintainers": ["dhongu"],
     "development_status": "Production/Stable",
+    "pre_init_hook": "pre_init_hook",
     "post_init_hook": "post_init_hook",
 }
