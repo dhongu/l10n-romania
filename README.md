@@ -32,6 +32,7 @@ addon | version | maintainers | summary
 [l10n_ro_report_common](l10n_ro_report_common/) | 20.0.1.1.1 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Common building blocks for Romanian printed reports: company bank accounts, company identification header and amounts in words
 [l10n_ro_stock_account_store](l10n_ro_stock_account_store/) | 20.0.1.0.1 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Romania - Stock Accounting Store
 [l10n_ro_stock_picking_report](l10n_ro_stock_picking_report/) | 20.0.1.3.10 |  | Rapoarte: NIR, aviz, bon consum
+[l10n_ro_storno_enhancement](l10n_ro_storno_enhancement/) | 20.0.1.0.0 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Romania - Storno Enhancements
 
 [//]: # (end addons)
 

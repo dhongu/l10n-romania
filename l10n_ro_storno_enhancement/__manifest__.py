@@ -1,0 +1,20 @@
+# ©  2025 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+{
+    "name": "Romania - Storno Enhancements",
+    "summary": "Romania - Storno Enhancements",
+    "version": "20.0.1.0.0",
+    "author": "Dorin Hongu, Terrabit",
+    "website": "https://www.terrabit.ro",
+    "category": "Localization",
+    "depends": ["account", "l10n_ro"],
+    "countries": ["ro"],
+    "data": ["views/account_account_view.xml", "views/account_move_view.xml"],
+    "license": "AGPL-3",
+    "maintainers": ["dhongu"],
+    "development_status": "Production/Stable",
+    "pre_init_hook": "pre_init_hook",
+    "post_init_hook": "post_init_hook",
+}
