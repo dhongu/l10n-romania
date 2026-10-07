@@ -26,7 +26,6 @@ addon | version | maintainers | summary
 [l10n_ro_account_edi_ubl](l10n_ro_account_edi_ubl/) | 19.0.1.0.0 |  | Bridge module for sending Romanian E-Factura to the SPV
 [l10n_ro_account_report](l10n_ro_account_report/) | 19.0.1.0.0 |  | Romania - Account Reports
 [l10n_ro_account_sequence](l10n_ro_account_sequence/) | 19.0.1.0.3 |  | Romania - Cash Sequence
-[l10n_ro_account_storno](l10n_ro_account_storno/) | 19.0.0.0.4 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Romania - Storno Enhancements
 [l10n_ro_cash_register](l10n_ro_cash_register/) | 19.0.1.2.0 |  | Romania - Cash Register
 [l10n_ro_config_fix](l10n_ro_config_fix/) | 19.0.0.0.1 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Fixes l10n_ro_config hiding unrelated l10n_ro_* fields on non-'ro' chart templates
 [l10n_ro_customs_dvi](l10n_ro_customs_dvi/) | 19.0.1.3.0 |  | Record the customs import declaration (DVI) as a landed cost: customs duty, commission and import VAT
@@ -56,6 +55,7 @@ addon | version | maintainers | summary
 [l10n_ro_stock_picking_report_product_expiry](l10n_ro_stock_picking_report_product_expiry/) | 19.0.1.0.1 |  | Adds product expiry date to picking reports
 [l10n_ro_stock_report](l10n_ro_stock_report/) | 19.0.2.0.0 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> <a href='https://github.com/feketemihai'><img src='https://github.com/feketemihai.png' width='32' height='32' style='border-radius:50%;' alt='feketemihai'/></a> | Stock Report (Fișă Magazie)
 [l10n_ro_stock_report_dropship](l10n_ro_stock_report_dropship/) | 19.0.1.1.0 |  | Show dropship valuation in the Romania stock storage sheet report.
+[l10n_ro_storno_enhancement](l10n_ro_storno_enhancement/) | 19.0.1.0.0 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Romania - Storno Enhancements
 [l10n_ro_zip](l10n_ro_zip/) | 19.0.0.0.2 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Romania - Coduri Postale
 [terrabit_dvi](terrabit_dvi/) | 19.0.1.3.0 |  | Transitional module, kept only so existing dependencies keep resolving. It installs l10n_ro_customs_dvi and will NOT be ported to 20.0.
 

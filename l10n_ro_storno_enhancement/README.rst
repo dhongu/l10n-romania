@@ -17,7 +17,7 @@ Romania - Storno Enhancements
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_account_storno
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_storno_enhancement
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -45,6 +45,27 @@ accounting entries according to Romanian accounting standards.
 
 .. contents::
    :local:
+
+Changelog
+=========
+
+19.0.1.0.0 (2026-10-07)
+-----------------------
+
+- Module renamed from ``l10n_ro_account_storno`` to
+  ``l10n_ro_storno_enhancement``: the former technical name is already
+  registered on Odoo Apps by another publisher.
+- Databases with the former module installed are migrated automatically
+  when the new module is installed: fields, views and the account usage
+  values are kept, and the former module is removed from the module list
+  (same steps as ``merge_module`` from Odoo upgrade-util, without
+  depending on it).
+
+19.0.0.0.5 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 Bug Tracker
 ===========
@@ -84,6 +105,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_account_storno>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_storno_enhancement>`_ project on GitHub.
 
 You are welcome to contribute.
