@@ -5,7 +5,7 @@
 {
     "name": "Romania - Storno Enhancements",
     "summary": "Romania - Storno Enhancements",
-    "version": "19.0.0.0.5",
+    "version": "19.0.1.0.0",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
@@ -15,5 +15,6 @@
     "license": "AGPL-3",
     "maintainers": ["dhongu"],
     "development_status": "Production/Stable",
+    "pre_init_hook": "pre_init_hook",
     "post_init_hook": "post_init_hook",
 }
