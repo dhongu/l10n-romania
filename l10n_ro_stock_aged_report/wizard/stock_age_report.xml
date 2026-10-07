@@ -100,7 +100,7 @@
         <field name="name">Stock Age Report</field>
         <field name="res_model">l10n.ro.stock.age.report</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="l10n_ro_stock_age_report.stock_age_report_form_view" />
+        <field name="view_id" ref="l10n_ro_stock_aged_report.stock_age_report_form_view" />
         <field name="target">new</field>
     </record>
 
@@ -117,7 +117,7 @@
         <field name="view_mode">pivot,list</field>
         <field name="domain">[('report_id','=',active_id)]</field>
         <field name="context">{'group_by':['date'], 'order_by': 'date desc'}</field>
-        <field name="view_id" ref="l10n_ro_stock_age_report.view_age_report_line_pivot" />
+        <field name="view_id" ref="l10n_ro_stock_aged_report.view_age_report_line_pivot" />
     </record>
 
 
