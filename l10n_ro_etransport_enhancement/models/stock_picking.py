@@ -3,6 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 import logging
+import re
+from collections import defaultdict
 from datetime import datetime, time
 
 import pytz
@@ -39,6 +41,18 @@ FULL_ROUTE_OPERATION_TYPES = ("40", "50")
 # trimiterea cădea cu traceback. Declarația merge la ANAF, deci ora României e
 # implicitul corect.
 DECLARATION_TIMEZONE = "Europe/Bucharest"
+
+# Operațiunile pentru care Schematron-ul ANAF v2.0.2 NU cere `codTarifar`,
+# `greutateNeta` și `valoareLeiFaraTva` (regulile BR-206/207/208).
+OPERATIONS_WITHOUT_GOODS_DATA = ("60", "70")
+
+# `CodTarifarType` din XSD și regula BR-034: 4, 6 sau 8 cifre.
+TARIFF_CODE_PATTERN = re.compile(r"\d{4}|\d{6}|\d{8}")
+
+# Codul pe care nucleul îl pune când produsul nu are cod tarifar. Formatul e
+# valid (BR-034 verifică doar cifrele), deci ANAF îl acceptă fără nicio eroare,
+# deși nu e un cod din Nomenclatura Combinată.
+NATIVE_TARIFF_CODE_FALLBACK = "00000000"
 
 
 class Picking(models.Model):
@@ -92,6 +106,15 @@ class Picking(models.Model):
         index=True,  # vezi nota de la l10n_ro_transport_partner_id
         help="Actual loading address, when different from the warehouse or dropship supplier address. "
         "For dropshipping, the destination comes from the linked orders' delivery address.",
+    )
+    # OUG 41/2022 art. 8 alin. (1^3): după o indisponibilitate a sistemului
+    # RO e-Transport, declarația se poate depune ulterior, marcată ca atare
+    # (`declPostAvarie="D"` pe elementul rădăcină, regula BR-201).
+    l10n_ro_etransport_post_outage = fields.Boolean(
+        string="Post-outage Declaration",
+        copy=False,
+        help="Check it only when the notification is submitted after an outage of the RO e-Transport system "
+        "(GEO 41/2022 art. 8 par. 1^3).",
     )
 
     def l10n_ro_etransport_add_default_documents(self):
@@ -296,10 +319,114 @@ class Picking(models.Model):
                 item["greutateNeta"] = item["greutateBruta"]
 
     @api.model
+    def _l10n_ro_etransport_declaration_record(self, data):
+        """Înregistrarea care declară: transferul sau, pe calea de lot, lotul.
+
+        `l10n_ro_edi_stock_batch` cheamă metodele de declarație pe
+        `self.env["stock.picking"]`, deci pe un recordset GOL. Tot ce citim de pe
+        `self` (greutăți cântărite, documente, declarația post-avarie) se pierde
+        tăcut pe lot. Aici întoarcem transferul; `l10n_ro_etransport_batch_enhancement`
+        întoarce lotul când `self` e gol.
+        """
+        return self
+
+    def _l10n_ro_etransport_declared_documents(self):
+        """Documentele însoțitoare trimise la ANAF pentru această înregistrare."""
+        return self.l10n_ro_etransport_document_ids
+
+    @api.model
+    def _l10n_ro_etransport_get_tariff_code(self, product):
+        """Codul tarifar declarabil al produsului sau False.
+
+        Ordinea: codul Intrastat (`account_intrastat`, dacă e instalat), apoi
+        codul HS de pe fișa produsului (`stock_delivery`). Punctele și spațiile
+        din codul HS (ex. „8471.30”) se elimină; rămâne valid doar dacă are 4, 6
+        sau 8 cifre, ca în XSD.
+        """
+        if "intrastat_code_id" in product._fields and product.intrastat_code_id.code:
+            code = re.sub(r"\D", "", product.intrastat_code_id.code)
+            if TARIFF_CODE_PATTERN.fullmatch(code):
+                return code
+        code = re.sub(r"\D", "", product.hs_code or "")
+        if TARIFF_CODE_PATTERN.fullmatch(code):
+            return code
+        return False
+
+    @api.model
+    def _l10n_ro_etransport_gross_weights(self, moves):
+        """Greutatea brută a fiecărei mișcări: greutatea netă plus tara coletelor.
+
+        Nucleul (`_l10n_ro_edi_stock_get_gross_weight`) adună la `move.weight`
+        `shipping_weight`-ul coletului pe FIECARE linie de mișcare. Dar
+        `shipping_weight` e greutatea coletului încărcat, cu tot cu marfă, deci
+        marfa se numără de două ori. În plus, coletul se mai adună o dată pentru
+        fiecare linie și fiecare mișcare din el. Regula BR-020 (brut ≥ net) trece,
+        deci ANAF acceptă declarația fără eroare.
+
+        Aici tara unui colet se numără o singură dată și se împarte pe mișcările
+        din el, proporțional cu greutatea mărfii fiecăreia:
+        - coletul cântărit (`shipping_weight`): tara = greutatea cântărită minus
+          marfa calculată din fișele produselor;
+        - altfel, greutatea tipului de colet (`package_type_id.base_weight`).
+        """
+        gross = {move: move.weight for move in moves}
+        goods_by_package = defaultdict(float)
+        goods_by_package_move = defaultdict(float)
+        for move in moves:
+            for line in move.move_line_ids:
+                package = line.result_package_id
+                if not package:
+                    continue
+                qty = line.product_uom_id._compute_quantity(
+                    line.quantity, move.product_id.uom_id, raise_if_failure=False
+                )
+                goods_weight = qty * move.product_id.weight
+                goods_by_package[package] += goods_weight
+                goods_by_package_move[package, move] += goods_weight
+        for package, goods_weight in goods_by_package.items():
+            if package.shipping_weight:
+                tare = max(package.shipping_weight - goods_weight, 0.0)
+            else:
+                tare = package.package_type_id.base_weight or 0.0
+            package_moves = [move for (pkg, move) in goods_by_package_move if pkg == package]
+            for move in package_moves:
+                if float_is_zero(goods_weight, precision_digits=4):
+                    share = 1.0 / len(package_moves)
+                else:
+                    share = goods_by_package_move[package, move] / goods_weight
+                gross[move] += tare * share
+        return gross
+
+    @api.model
     def _l10n_ro_edi_stock_get_template_data(self, data: dict):
         for move in self.move_ids:
             move._cal_move_weight()
         res = super()._l10n_ro_edi_stock_get_template_data(data)
+        record = self._l10n_ro_etransport_declaration_record(data)
+        items = res["data"]["notificare"]["bunuriTransportate"]
+        moves = data["stock_move_ids"]
+
+        # Nucleul construiește câte o linie de marfă per mișcare, în ordine. Cu
+        # alt număr de linii (date pregătite de alt modul) nu putem împerechea
+        # sigur, deci lăsăm valorile nucleului.
+        if len(moves) == len(items):
+            gross_weights = self._l10n_ro_etransport_gross_weights(moves)
+            operation_type = data.get("l10n_ro_edi_stock_operation_type")
+            for move, item in zip(moves, items, strict=True):
+                item["greutateBruta"] = max(gross_weights[move], item.get("greutateNeta") or 0.0)
+                # `00000000` e codul de rezervă al nucleului, nu un cod din
+                # Nomenclatura Combinată. Pentru operațiunile în care codul e
+                # obligatoriu, validarea blochează deja produsul fără cod; la 60/70
+                # atributul e opțional și îl omitem în loc să declarăm un cod fals.
+                if item.get("codTarifar") == NATIVE_TARIFF_CODE_FALLBACK:
+                    item["codTarifar"] = self._l10n_ro_etransport_get_tariff_code(move.product_id) or (
+                        None if operation_type in OPERATIONS_WITHOUT_GOODS_DATA else item["codTarifar"]
+                    )
+
+        # Declarație depusă după o cădere a sistemului RO e-Transport (BR-201:
+        # singura valoare permisă e „D”).
+        if record and record.l10n_ro_etransport_post_outage:
+            res["data"]["declPostAvarie"] = "D"
 
         # Suprascrie adresa de start cu cea a partenerului ales manual, dacă e
         # completat. Se aplică doar când locația de start e de tip 'location'
@@ -407,12 +534,13 @@ class Picking(models.Model):
                         item["valoareLeiFaraTva"] = round(unit_price * item["cantitate"], 2)
 
         # Measured weights must not depend on the unrelated order-price setting.
-        if self and self.l10n_ro_shipping_weights:
-            items = res["data"]["notificare"]["bunuriTransportate"]
-            if len(items) != len(data["stock_move_ids"]):
+        # Pe lot, `record` e lotul: liniile cântărite acolo trebuie să ajungă în
+        # declarație la fel ca pe transfer.
+        if record and record.l10n_ro_shipping_weights:
+            if len(items) != len(moves):
                 raise UserError(self.env._("UIT lines and moves lines are not the same. Cannot get weights."))
-            for move, item in zip(data["stock_move_ids"], items, strict=True):
-                weight_line = self.l10n_ro_shipping_weight_lines.filtered(lambda line: line.move_id == move)
+            for move, item in zip(moves, items, strict=True):
+                weight_line = record.l10n_ro_shipping_weight_lines.filtered(lambda line: line.move_id == move)
                 if len(weight_line) > 1:
                     raise UserError(self.env._("Only one weight line is allowed for each goods line."))
                 if weight_line:
@@ -427,7 +555,7 @@ class Picking(models.Model):
         # Trecem cheia pe LISTĂ: dacă operatorul a declarat documente, le trimitem
         # pe toate; dacă nu, păstrăm documentul nativ (compatibilitate).
         native_doc = res["data"]["notificare"].get("documenteTransport")
-        docs = self.l10n_ro_etransport_document_ids if self else self.browse()
+        docs = record._l10n_ro_etransport_declared_documents() if record else self.browse()
         if docs:
             res["data"]["notificare"]["documenteTransport"] = [
                 {
@@ -615,4 +743,24 @@ class Picking(models.Model):
                     product_name=", ".join(product_name),
                 )
             )
+
+        # BR-206: codul tarifar e obligatoriu, cu excepția operațiunilor 60/70.
+        # Nucleul verifică doar codul Intrastat și numai când `account_intrastat`
+        # e instalat; altfel trimite tăcut `00000000`, pe care ANAF îl acceptă.
+        if (
+            "intrastat_code_id" not in self.env["product.product"]._fields
+            and data.get("l10n_ro_edi_stock_operation_type")
+            and data["l10n_ro_edi_stock_operation_type"] not in OPERATIONS_WITHOUT_GOODS_DATA
+        ):
+            no_tariff_code = data["stock_move_ids"].product_id.filtered(
+                lambda product: not self._l10n_ro_etransport_get_tariff_code(product)
+            )
+            if no_tariff_code:
+                errors.append(
+                    self.env._(
+                        "The following products do not have a valid HS code (4, 6 or 8 digits) "
+                        "for the eTransport declaration:\n%(product_name)s",
+                        product_name=", ".join(no_tariff_code.mapped("display_name")),
+                    )
+                )
         return errors

@@ -3,3 +3,4 @@
 # See README.rst file on addons root folder for license details
 
 from . import test_weight_lines_warning
+from . import test_batch_declaration

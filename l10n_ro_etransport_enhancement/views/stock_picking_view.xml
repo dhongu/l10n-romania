@@ -16,6 +16,9 @@
                     invisible="(picking_type_code != 'dropship' and (picking_type_code != 'outgoing' or l10n_ro_edi_stock_operation_type != '30')) or l10n_ro_edi_stock_start_loc_type != 'location'"
                 />
             </field>
+            <field name="l10n_ro_edi_stock_remarks" position="after">
+                <field name="l10n_ro_etransport_post_outage" readonly="l10n_ro_edi_stock_fields_readonly" />
+            </field>
             <page name="etransport" position="inside">
                 <group name="weights">
                     <group>

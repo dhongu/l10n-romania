@@ -32,3 +32,15 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_edi_stock_required
 msgid "eTransport Required"
 msgstr "eTransport necesar"
+
+#. module: l10n_ro_etransport_batch_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_batch_enhancement.field_stock_picking_batch__l10n_ro_etransport_post_outage
+msgid "Post-outage Declaration"
+msgstr "Declarație post-avarie"
+
+#. module: l10n_ro_etransport_batch_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_batch_enhancement.field_stock_picking_batch__l10n_ro_etransport_post_outage
+msgid ""
+"Check it only when the notification is submitted after an outage of the RO e-Transport system (GEO 41/2022 art. 8 par. 1^3)."
+msgstr ""
+"Bifați doar când notificarea se depune după o indisponibilitate a sistemului RO e-Transport (OUG 41/2022 art. 8 alin. 1^3)."

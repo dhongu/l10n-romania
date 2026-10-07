@@ -1,3 +1,37 @@
+## 19.0.0.10.0 (2026-10-07)
+
+Patru defecte tăcute din XML-ul eTransport, verificate față de XSD-ul ANAF v2
+(2023-01-26) și Schematron-ul v2.0.2. ANAF accepta declarația în toate cele
+patru cazuri, deci nimeni nu primea vreo eroare.
+
+**Fix — corecția emitea un UIT nou.** Butonul „Amend” din `l10n_ro_edi_stock`
+nu trimitea elementul `<corectie uit="…"/>`. ANAF trata XML-ul ca pe o notificare
+nouă și emitea alt UIT, pe care Odoo îl ignora: în SPV rămâneau două UIT-uri
+active, iar transferul îl arăta pe cel vechi, cu datele necorectate. Corecția
+poartă acum UIT-ul corectat, ca prim copil al `notificare`, cum cere XSD-ul.
+Același fix se aplică pe loturi.
+
+**Fix — greutatea brută era dublată la colete.** Nucleul aduna la greutatea netă
+`shipping_weight`-ul coletului, care conține deja marfa, și îl aduna încă o dată
+pentru fiecare linie și mișcare din colet. Acum tara coletului (greutatea
+cântărită minus marfa sau, dacă nu e cântărit, greutatea tipului de colet) se
+numără o singură dată și se împarte pe mișcări proporțional cu marfa.
+
+**Fix — cod tarifar `00000000`.** Fără `account_intrastat`, nucleul trimitea
+`00000000` pentru orice produs. Codul vine acum din codul HS al produsului
+(4, 6 sau 8 cifre, fără puncte). Declarația e blocată la validare dacă produsul
+nu are cod, cu excepția operațiunilor 60/70, unde codul e opțional și se omite.
+**Atenție la actualizare:** produsele declarate până acum fără cod trebuie
+completate cu codul HS înainte de următoarea declarație.
+
+**Nou — declarație post-avarie.** Bifa „Post-outage Declaration” trimite
+`declPostAvarie="D"` (OUG 41/2022 art. 8 alin. 1^3), pentru notificările depuse
+după o indisponibilitate a sistemului RO e-Transport.
+
+Tehnic: noul hook `_l10n_ro_etransport_declaration_record` întoarce înregistrarea
+care declară (transferul), ca `l10n_ro_etransport_batch_enhancement` să poată
+întoarce lotul pe calea de lot.
+
 ## 19.0.0.9.3 (2026-09-30)
 
 - Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
