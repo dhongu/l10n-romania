@@ -545,3 +545,27 @@ msgstr "Timp de așteptare eTransport (s)"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.res_config_settings_view_form
 msgid "s"
 msgstr "s"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_etransport_post_outage
+msgid "Post-outage Declaration"
+msgstr "Declarație post-avarie"
+
+#. module: l10n_ro_etransport_enhancement
+#: model:ir.model.fields,help:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_etransport_post_outage
+msgid ""
+"Check it only when the notification is submitted after an outage of the RO e-Transport system (GEO 41/2022 art. 8 par. 1^3)."
+msgstr ""
+"Bifați doar când notificarea se depune după o indisponibilitate a sistemului RO e-Transport (OUG 41/2022 art. 8 alin. 1^3)."
+
+#. module: l10n_ro_etransport_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_etransport_enhancement/models/stock_picking.py:0
+msgid ""
+"The following products do not have a valid HS code (4, 6 or 8 digits) for "
+"the eTransport declaration:\n"
+"%(product_name)s"
+msgstr ""
+"Următoarele produse nu au un cod HS valid (4, 6 sau 8 cifre) pentru "
+"declarația eTransport:\n"
+"%(product_name)s"
