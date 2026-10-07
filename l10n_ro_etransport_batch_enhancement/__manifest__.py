@@ -4,7 +4,7 @@
 
 {
     "name": "eTransport Batch Enhancement",
-    "version": "19.0.0.3.2",
+    "version": "19.0.0.4.0",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport Batch Enhancement",
