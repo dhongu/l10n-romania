@@ -74,12 +74,12 @@ def pre_init_hook(env):
     cr.execute(SQL("DELETE FROM ir_module_module_dependency WHERE name = %s", OLD_MODULE))
     cr.execute(SQL("DELETE FROM ir_model_data WHERE model = 'ir.module.module' AND res_id = %s", old_id))
     cr.execute(SQL("DELETE FROM ir_module_module WHERE id = %s", old_id))
-    env["ir.config_parameter"].sudo().set_param(MIGRATED_PARAM, "1")
+    env["ir.config_parameter"].sudo().set_bool(MIGRATED_PARAM, True)
 
 
 def post_init_hook(env):
     params = env["ir.config_parameter"].sudo()
-    if params.get_param(MIGRATED_PARAM):
+    if params.get_bool(MIGRATED_PARAM):
         # keep the account usage values set while the old module was installed
         params.search([("key", "=", MIGRATED_PARAM)]).unlink()
         return

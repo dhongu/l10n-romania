@@ -1,3 +1,12 @@
+## 20.0.1.0.0 (2026-10-07)
+
+- Migration to 20.0, directly under the new name `l10n_ro_storno_enhancement` (the former
+  `l10n_ro_account_storno` never existed on 20.0).
+- The migration hooks are kept: databases that reach 20.0 with `l10n_ro_account_storno`
+  still installed are taken over when this module is installed. The migration marker
+  uses `ir.config_parameter.set_bool` / `get_bool` (`set_param` / `get_param` are removed
+  in 20.0).
+
 ## 19.0.1.0.0 (2026-10-07)
 
 - Module renamed from `l10n_ro_account_storno` to `l10n_ro_storno_enhancement`: the

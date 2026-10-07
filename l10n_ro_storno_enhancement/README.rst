@@ -17,7 +17,7 @@ Romania - Storno Enhancements
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_storno_enhancement
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_storno_enhancement
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -48,6 +48,18 @@ accounting entries according to Romanian accounting standards.
 
 Changelog
 =========
+
+20.0.1.0.0 (2026-10-07)
+-----------------------
+
+- Migration to 20.0, directly under the new name
+  ``l10n_ro_storno_enhancement`` (the former ``l10n_ro_account_storno``
+  never existed on 20.0).
+- The migration hooks are kept: databases that reach 20.0 with
+  ``l10n_ro_account_storno`` still installed are taken over when this
+  module is installed. The migration marker uses
+  ``ir.config_parameter.set_bool`` / ``get_bool`` (``set_param`` /
+  ``get_param`` are removed in 20.0).
 
 19.0.1.0.0 (2026-10-07)
 -----------------------
@@ -105,6 +117,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_storno_enhancement>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_storno_enhancement>`_ project on GitHub.
 
 You are welcome to contribute.
