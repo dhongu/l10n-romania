@@ -182,7 +182,7 @@ class StockAgeReport(models.TransientModel):
 
     def button_show_sheet(self):
         self.do_compute_report()
-        action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_stock_age_report.action_sheet_age_report_line")
+        action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_stock_aged_report.action_sheet_age_report_line")
 
         action["display_name"] = "{} {} ({})".format(action["name"], self.date_ref, self.interval_days)
         action["domain"] = [("report_id", "=", self.id)]
