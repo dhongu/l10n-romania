@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 07:31+0000\n"
+"POT-Creation-Date: 2026-10-08 13:20+0000\n"
 "PO-Revision-Date: 2024-10-29 19:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,9 +17,29 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_cash_register
+#: model:ir.actions.report,print_report_name:l10n_ro_cash_register.action_report_cash_count
+msgid "\"Cash Count - %s\" % (object.name)"
+msgstr "\"Monetar - %s\" % (object.name)"
+
+#. module: l10n_ro_cash_register
 #: model:ir.actions.report,print_report_name:l10n_ro_cash_register.action_report_cash_register
 msgid "\"Cash Register\""
 msgstr "\"Registrul de casă\""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "(shortage)"
+msgstr "(lipsă)"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "(surplus)"
+msgstr "(plus)"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<em>Subtotal</em>"
+msgstr "<em>Subtotal</em>"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
@@ -37,14 +57,51 @@ msgid "<strong>Balance carried forward from the previous day</strong>"
 msgstr "<strong>Sold reportat din ziua precedentă</strong>"
 
 #. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Balance of the cash account</strong>"
+msgstr "<strong>Sold scriptic (contul casei)</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 msgid "<strong>CIF:</strong>"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Cash Register</strong>"
+msgstr "<strong>Registrul de casă</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 msgid "<strong>Cashier</strong>"
 msgstr "<strong>Casier</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Checked by</strong>"
+msgstr "<strong>Verificat</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Counted cash</strong>"
+msgstr "<strong>Numerar numărat</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Currency</strong>"
+msgstr "<strong>Monedă</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Date</strong>"
+msgstr "<strong>Data</strong>"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Difference</strong>"
+msgstr "<strong>Diferență</strong>"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
@@ -52,6 +109,7 @@ msgid "<strong>Financial-accounting department</strong>"
 msgstr "<strong>Compartiment financiar-contabil</strong>"
 
 #. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 msgid "<strong>Journal</strong>"
 msgstr "<strong>Jurnal</strong>"
@@ -106,6 +164,11 @@ msgid "A day in the future cannot be closed (%s)."
 msgstr "Nu se poate închide o zi din viitor (%s)."
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_register_count_line_unique_denomination
+msgid "A denomination is counted only once per cash register."
+msgstr "O cupiură se numără o singură dată pe registrul de casă."
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__counterpart_account_id
 msgid "Account"
 msgstr "Cont"
@@ -114,6 +177,11 @@ msgstr "Cont"
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_needaction
 msgid "Action Needed"
 msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__active
+msgid "Active"
+msgstr "Activ"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_ids
@@ -155,7 +223,9 @@ msgstr ""
 " această zi sau înaintea ei până la redeschidere. Închideți ziua?"
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__amount
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__amount
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
 msgid "Amount"
 msgstr "Suma"
 
@@ -167,7 +237,12 @@ msgstr "Nr. anexe"
 #. module: l10n_ro_cash_register
 #: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_register_unique_name
 msgid "Another cash register with the same number already exists."
-msgstr ""
+msgstr "Există deja un registru de casă cu același număr."
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_denomination_search
+msgid "Archived"
+msgstr "Arhivat"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_attachment_count
@@ -180,9 +255,47 @@ msgid "Balance at Closing"
 msgstr "Sold la închidere"
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_denomination__kind__banknote
+msgid "Banknote"
+msgstr "Bancnotă"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Banknotes"
+msgstr "Bancnote"
+
+#. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_operation_form
 msgid "Cancel"
 msgstr "Abandon"
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.report,name:l10n_ro_cash_register.action_report_cash_count
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_line_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Cash Count"
+msgstr "Monetar"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_journal__l10n_ro_require_cash_count
+msgid "Cash Count Required at Closing"
+msgstr "Monetar obligatoriu la închiderea zilei"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Cash Count by Denomination"
+msgstr "Monetar – situația numerarului pe cupiuri"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_denomination
+msgid "Cash Denomination"
+msgstr "Cupiură"
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.act_window,name:l10n_ro_cash_register.action_cash_denomination
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_denomination
+msgid "Cash Denominations"
+msgstr "Cupiuri numerar"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
@@ -209,6 +322,11 @@ msgid "Cash Register"
 msgstr "Registrul de casă"
 
 #. module: l10n_ro_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_register_count_line
+msgid "Cash Register Count Line"
+msgstr "Rând monetar registru de casă"
+
+#. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
 msgid "Cash Register Lines"
 msgstr "Linii registrul de casă"
@@ -224,6 +342,12 @@ msgstr "Operațiune registrul de casă"
 #: model:ir.actions.server,name:l10n_ro_cash_register.ir_cron_generate_missing_cash_register_ir_actions_server
 msgid "Cash Register: Generate missing cash register"
 msgstr "Registru de casă: generează registrele lipsă"
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Cash count difference %s"
+msgstr "Diferență la monetar %s"
 
 #. module: l10n_ro_cash_register
 #: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register
@@ -260,11 +384,22 @@ msgid "Closed On"
 msgstr "Închisă la"
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_denomination__kind__coin
+msgid "Coin"
+msgstr "Monedă"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Coins"
+msgstr "Monede"
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__company_id
 msgid "Company"
 msgstr "Companie"
 
 #. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 msgid "Company:"
 msgstr "Companie:"
@@ -275,20 +410,65 @@ msgid "Confirm"
 msgstr "Confirmare"
 
 #. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Count Cash"
+msgstr "Numără numerarul"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_difference
+msgid "Count Difference"
+msgstr "Diferență la numărare"
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Count the cash by denomination before closing cash register %s."
+msgstr ""
+"Numărați numerarul pe cupiuri înainte de închiderea registrului de casă %s."
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Count the cash by denomination before printing the cash count."
+msgstr "Numărați numerarul pe cupiuri înainte de tipărirea monetarului."
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__counted_amount
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Counted Cash"
+msgstr "Numerar numărat"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__count_difference
+msgid ""
+"Counted cash minus the balance of the cash account: positive is a surplus, "
+"negative a shortage."
+msgstr ""
+"Numerarul numărat minus soldul contului casei: pozitiv înseamnă plus de "
+"casă, negativ lipsă."
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__create_uid
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__create_uid
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__create_date
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__create_date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__create_date
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__currency_id
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__currency_id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__currency_id
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__currency_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_denomination_search
 msgid "Currency"
 msgstr "Monedă"
 
@@ -300,6 +480,12 @@ msgid "Date"
 msgstr "Data"
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__denomination_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Denomination"
+msgstr "Cupiură"
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__description
 msgid "Description"
 msgstr "Descriere"
@@ -309,7 +495,9 @@ msgstr "Descriere"
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_move__display_name
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_payment__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__display_name
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__display_name
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__display_name
 msgid "Display Name"
 msgstr "Nume afișat"
@@ -364,7 +552,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_move__id
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_move_line__id
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_payment__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__id
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__id
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__id
 msgid "ID"
 msgstr ""
@@ -389,6 +579,11 @@ msgstr ""
 #: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__is_counted
+msgid "Is Counted"
+msgstr "Numărat"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_is_follower
@@ -421,13 +616,23 @@ msgid "Journal Item Line"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__kind
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__kind
+msgid "Kind"
+msgstr "Tip"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__write_uid
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__write_uid
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__write_date
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__write_date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__write_date
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__write_date
 msgid "Last Updated on"
 msgstr ""
@@ -466,6 +671,16 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_type_id
 msgid "Next Activity Type"
 msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid ""
+"No denominations are defined for %s. Add them under Accounting > "
+"Configuration > Cash Denominations."
+msgstr ""
+"Nu sunt definite cupiuri pentru %s. Adăugați-le din Contabilitate > "
+"Configurare > Cupiuri numerar."
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__name
@@ -532,10 +747,25 @@ msgid "Period"
 msgstr "Perioadă"
 
 #. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Pieces"
+msgstr "Bucăți"
+
+#. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_tree
 msgid "Print"
 msgstr "Tipărire"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Print Cash Count"
+msgstr "Tipărește monetarul"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__quantity
+msgid "Quantity"
+msgstr "Cantitate"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
@@ -544,9 +774,19 @@ msgstr "Încasări"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Record Difference"
+msgstr "Înregistrează diferența"
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_tree
 msgid "Refresh"
 msgstr "Împrospătare"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__register_id
+msgid "Register"
+msgstr "Registru"
 
 #. module: l10n_ro_cash_register
 #: model:ir.actions.server,name:l10n_ro_cash_register.action_remove_outstanding_accounts
@@ -616,6 +856,16 @@ msgstr ""
 
 #. module: l10n_ro_cash_register
 #. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+#: code:addons/l10n_ro_cash_register/models/cash_register_count.py:0
+msgid ""
+"The cash count of a closed day cannot be changed; reopen the day first."
+msgstr ""
+"Monetarul unei zile închise nu se poate modifica; redeschideți mai întâi "
+"ziua."
+
+#. module: l10n_ro_cash_register
+#. odoo-python
 #: code:addons/l10n_ro_cash_register/models/account_move.py:0
 msgid ""
 "The cash register %(register)s of %(journal)s for %(date)s is closed. An "
@@ -627,9 +877,41 @@ msgstr ""
 "soldul: redeschideți întâi registrul."
 
 #. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid ""
+"The counted cash of cash register %(register)s differs from the balance of "
+"the cash account by %(difference)s. Record the difference before closing the"
+" day."
+msgstr ""
+"Numerarul numărat în registrul de casă %(register)s diferă de soldul "
+"contului casei cu %(difference)s. Înregistrați diferența înainte de "
+"închiderea zilei."
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_register_count_line_positive_quantity
+msgid "The counted quantity cannot be negative."
+msgstr "Cantitatea numărată nu poate fi negativă."
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__currency_id
 msgid "The currency used to enter statement"
 msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "The day is closed; reopen it before recording the difference."
+msgstr "Ziua este închisă; redeschideți-o înainte de a înregistra diferența."
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_account_journal__l10n_ro_require_cash_count
+msgid ""
+"The day of this cash desk can be closed only after the cash is counted by "
+"denomination and the counted amount equals the balance of the cash account."
+msgstr ""
+"Ziua acestei casierii se poate închide doar după numărarea numerarului pe "
+"cupiuri, iar suma numărată trebuie să fie egală cu soldul contului casei."
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__closed_balance
@@ -642,6 +924,22 @@ msgid "The later closed days of this cash desk are reopened too. Reopen?"
 msgstr ""
 "Se redeschid și zilele închise de după aceasta din aceeași casierie. "
 "Redeschideți?"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_denomination_positive_value
+msgid "The value of a denomination must be positive."
+msgstr "Valoarea unei cupiuri trebuie să fie pozitivă."
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "There is no cash count difference to record."
+msgstr "Nu există o diferență la monetar de înregistrat."
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_denomination_unique_value
+msgid "This denomination already exists for the currency."
+msgstr "Cupiura există deja pentru această monedă."
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
@@ -657,6 +955,12 @@ msgstr ""
 #: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__value
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__value
+msgid "Value"
+msgstr "Valoare"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__website_message_ids

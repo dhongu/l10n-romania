@@ -14,6 +14,7 @@
                 <field name="journal_id" />
                 <field name="balance_start" />
                 <field name="balance_end" />
+                <field name="count_difference" optional="hide" />
                 <field name="currency_id" column_invisible="1" />
                 <field
                     name="state"
@@ -39,6 +40,26 @@
                     <button name="action_receipt" string="Add Receipt" type="object" invisible="state == 'closed'" />
                     <button name="action_payment" string="Add Payment" type="object" invisible="state == 'closed'" />
                     <button name="action_operation" string="Operation" type="object" invisible="state == 'closed'" />
+                    <button
+                        name="action_count_cash"
+                        string="Count Cash"
+                        type="object"
+                        icon="fa-money"
+                        invisible="state == 'closed'"
+                    />
+                    <button
+                        name="action_record_difference"
+                        string="Record Difference"
+                        type="object"
+                        invisible="state == 'closed' or not is_counted or count_difference == 0"
+                    />
+                    <button
+                        name="action_print_cash_count"
+                        string="Print Cash Count"
+                        type="object"
+                        icon="fa-print"
+                        invisible="not is_counted"
+                    />
                     <button
                         name="action_close"
                         string="Close Day"
@@ -71,6 +92,14 @@
                         <group>
                             <field name="balance_start" />
                             <field name="balance_end" />
+                            <field name="is_counted" invisible="1" />
+                            <field name="counted_amount" invisible="not is_counted" />
+                            <field
+                                name="count_difference"
+                                invisible="not is_counted"
+                                decoration-danger="count_difference &lt; 0"
+                                decoration-success="count_difference &gt; 0"
+                            />
                             <field name="closed_balance" invisible="state != 'closed'" />
                             <field name="closed_by_id" invisible="state != 'closed'" />
                             <field name="closed_on" invisible="state != 'closed'" />
@@ -93,6 +122,17 @@
                                         invisible="1"
                                     />
                                     <field name="ref" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Cash Count" name="cash_count" invisible="not is_counted">
+                            <field name="count_line_ids" readonly="state == 'closed'">
+                                <list editable="bottom" create="0">
+                                    <field name="denomination_id" readonly="1" />
+                                    <field name="kind" />
+                                    <field name="quantity" />
+                                    <field name="amount" sum="Counted Cash" decoration-bf="1" />
+                                    <field name="currency_id" column_invisible="1" />
                                 </list>
                             </field>
                         </page>

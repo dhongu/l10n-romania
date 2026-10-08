@@ -1,0 +1,141 @@
+<odoo>
+    <!-- Monetarul: situația numerarului pe cupiuri la sfârșitul zilei, semnată de casier.
+         Document de control intern (OMFP 1802/2014 pct. 83 alin. (2)), fără formular tipizat. -->
+    <template id="report_cash_count">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+                    <div class="page">
+                        <div class="text-left">Company:
+                            <strong t-out="res_company.name" />
+                        </div>
+                        <div id="cif" t-if="res_company.partner_id.vat">
+                            <strong>CIF:</strong>
+                            <span t-field="res_company.partner_id.vat" />
+                        </div>
+
+                        <h2>Cash Count by Denomination</h2>
+
+                        <div id="general_data" class="row mb-3">
+                            <div class="col-3">
+                                <div><strong>Cash Register</strong></div>
+                                <div><span t-field="o.name" /></div>
+                            </div>
+                            <div class="col-3">
+                                <div><strong>Date</strong></div>
+                                <div><span t-field="o.date" /></div>
+                            </div>
+                            <div class="col-3">
+                                <div><strong>Journal</strong></div>
+                                <div><span t-field="o.journal_id" /></div>
+                            </div>
+                            <div class="col-3">
+                                <div><strong>Currency</strong></div>
+                                <div><span t-out="o._get_count_currency().name" /></div>
+                            </div>
+                        </div>
+
+                        <table id="count_table" class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th>Denomination</th>
+                                    <th class="text-end">Pieces</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="['banknote', 'coin']" t-as="kind">
+                                    <t t-set="lines" t-value="o.count_line_ids.filtered(lambda l: l.kind == kind)" />
+                                    <t t-if="lines">
+                                        <tr>
+                                            <td colspan="3">
+                                                <strong t-if="kind == 'banknote'">Banknotes</strong>
+                                                <strong t-else="">Coins</strong>
+                                            </td>
+                                        </tr>
+                                        <tr t-foreach="lines" t-as="line">
+                                            <td><span t-field="line.denomination_id" /></td>
+                                            <td class="text-end"><span t-field="line.quantity" /></td>
+                                            <td class="text-end">
+                                                <span
+                                                    t-field="line.amount"
+                                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                                />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><em>Subtotal</em></td>
+                                            <td class="text-end">
+                                                <em
+                                                    t-out="sum(lines.mapped('amount'))"
+                                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                                />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <tr>
+                                    <td id="counted_label" colspan="2"><strong>Counted cash</strong></td>
+                                    <td id="counted_amount" class="text-end">
+                                        <strong
+                                            t-field="o.counted_amount"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="book_label" colspan="2"><strong>Balance of the cash account</strong></td>
+                                    <td id="book_balance" class="text-end">
+                                        <strong
+                                            t-field="o.balance_end"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="difference_label" colspan="2">
+                                        <strong>Difference</strong>
+                                        <t t-if="o.count_difference &gt; 0"> (surplus)</t>
+                                        <t t-elif="o.count_difference &lt; 0"> (shortage)</t>
+                                    </td>
+                                    <td id="difference" class="text-end">
+                                        <strong
+                                            t-field="o.count_difference"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div id="signatures" class="row mt-4">
+                            <div class="col-6">
+                                <div><strong>Cashier</strong></div>
+                                <div class="mt-5">..............................................</div>
+                            </div>
+                            <div class="col-6">
+                                <div><strong>Checked by</strong></div>
+                                <div class="mt-5">..............................................</div>
+                            </div>
+                        </div>
+
+                        <div id="software_signature" class="small text-muted mt-3">
+                            <span t-out="o._l10n_ro_software_signature()" />
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_cash_count" model="ir.actions.report">
+        <field name="name">Cash Count</field>
+        <field name="model">l10n.ro.cash.register</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ro_cash_register.report_cash_count</field>
+        <field name="report_file">l10n_ro_cash_register.report_cash_count</field>
+        <field name="print_report_name">"Cash Count - %s" % (object.name)</field>
+        <field name="binding_model_id" ref="l10n_ro_cash_register.model_l10n_ro_cash_register" />
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
