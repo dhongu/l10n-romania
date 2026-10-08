@@ -14,9 +14,9 @@ class CashRegisterCountLine(models.Model):
 
     register_id = fields.Many2one("l10n.ro.cash.register", required=True, ondelete="cascade", index=True)
     denomination_id = fields.Many2one("l10n.ro.cash.denomination", required=True, ondelete="restrict")
-    value = fields.Float(related="denomination_id.value", store=True)
+    value = fields.Float(related="denomination_id.value", store=True, aggregator=None)
     kind = fields.Selection(related="denomination_id.kind", store=True)
-    currency_id = fields.Many2one(related="register_id.currency_id")
+    currency_id = fields.Many2one(related="denomination_id.currency_id")
     quantity = fields.Integer()
     amount = fields.Monetary(compute="_compute_amount", store=True)
 

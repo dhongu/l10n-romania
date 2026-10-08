@@ -15,6 +15,7 @@
                 <field name="balance_start" />
                 <field name="balance_end" />
                 <field name="count_difference" optional="hide" />
+                <field name="count_currency_id" column_invisible="1" />
                 <field name="currency_id" column_invisible="1" />
                 <field
                     name="state"
@@ -93,6 +94,8 @@
                             <field name="balance_start" />
                             <field name="balance_end" />
                             <field name="is_counted" invisible="1" />
+                            <field name="count_currency_id" invisible="1" />
+                            <field name="count_book_balance" invisible="not is_counted or count_currency_id == currency_id" />
                             <field name="counted_amount" invisible="not is_counted" />
                             <field
                                 name="count_difference"
@@ -127,7 +130,7 @@
                         </page>
                         <page string="Cash Count" name="cash_count" invisible="not is_counted">
                             <field name="count_line_ids" readonly="state == 'closed'">
-                                <list editable="bottom" create="0">
+                                <list editable="bottom" create="0" delete="0">
                                     <field name="denomination_id" readonly="1" />
                                     <field name="kind" />
                                     <field name="quantity" />

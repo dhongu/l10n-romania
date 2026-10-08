@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-3">
                                 <div><strong>Currency</strong></div>
-                                <div><span t-out="o._get_count_currency().name" /></div>
+                                <div><span t-out="o.count_currency_id.name" /></div>
                             </div>
                         </div>
 
@@ -59,7 +59,7 @@
                                             <td class="text-end">
                                                 <span
                                                     t-field="line.amount"
-                                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                                    t-options='{"widget": "monetary", "display_currency": o.count_currency_id}'
                                                 />
                                             </td>
                                         </tr>
@@ -68,7 +68,7 @@
                                             <td class="text-end">
                                                 <em
                                                     t-out="sum(lines.mapped('amount'))"
-                                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                                    t-options='{"widget": "monetary", "display_currency": o.count_currency_id}'
                                                 />
                                             </td>
                                         </tr>
@@ -79,7 +79,7 @@
                                     <td id="counted_amount" class="text-end">
                                         <strong
                                             t-field="o.counted_amount"
-                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                            t-options='{"widget": "monetary", "display_currency": o.count_currency_id}'
                                         />
                                     </td>
                                 </tr>
@@ -87,8 +87,8 @@
                                     <td id="book_label" colspan="2"><strong>Balance of the cash account</strong></td>
                                     <td id="book_balance" class="text-end">
                                         <strong
-                                            t-field="o.balance_end"
-                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                            t-field="o.count_book_balance"
+                                            t-options='{"widget": "monetary", "display_currency": o.count_currency_id}'
                                         />
                                     </td>
                                 </tr>
@@ -101,7 +101,7 @@
                                     <td id="difference" class="text-end">
                                         <strong
                                             t-field="o.count_difference"
-                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                            t-options='{"widget": "monetary", "display_currency": o.count_currency_id}'
                                         />
                                     </td>
                                 </tr>

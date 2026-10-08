@@ -30,7 +30,7 @@
         <field name="name">Cash Denominations</field>
         <field name="res_model">l10n.ro.cash.denomination</field>
         <field name="view_mode">list</field>
-        <field name="context">{'search_default_group_by_currency': 1}</field>
+        <field name="context">{}</field>
     </record>
 
     <menuitem
