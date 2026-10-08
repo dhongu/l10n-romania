@@ -1,3 +1,22 @@
+## 19.0.1.4.0
+
+**Nou** — monetarul casieriei: numărarea numerarului pe cupiuri.
+
+- Cupiuri de numerar pe monedă (*Contabilitate > Configurare > Cupiuri numerar*), livrate pentru
+  leu (500 lei – 1 ban) și euro (500 € – 1 cent).
+- Pe registrul de casă, **Numără numerarul** adaugă câte un rând pe fiecare cupiură a monedei
+  casieriei; registrul arată numerarul numărat și diferența față de soldul contului casei.
+- **Înregistrează diferența** deschide operațiunea de casă precompletată: plusul pe contul de profit,
+  lipsa pe contul de pierdere al jurnalului; fără conturi pe jurnal, pe planul RO 7588 și 65882 (nu
+  conturile 999xxx de diferențe de numerar pe care Odoo le creează pentru companie). Contul se
+  poate schimba (473 în curs de clarificare, 4282 lipsă imputată casierului).
+- **Tipărește monetarul**: situația numerarului pe cupiuri, cu subtotal pe bancnote și monede,
+  sold scriptic, diferență și semnături.
+- Bifa **Monetar obligatoriu la închiderea zilei** pe jurnalul de casă: ziua nu se închide
+  nenumărată sau cu diferență neînregistrată. Monetarul unei zile închise nu se mai modifică.
+- Operațiunea de casă păstrează contul corespondent primit din context, în loc să-l înlocuiască
+  mereu cu contul de transfer al companiei.
+
 ## 19.0.1.3.1
 
 **Corectat** — numărul registrului de casă continua numerotarea notelor de casă.
