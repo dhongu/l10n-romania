@@ -16,7 +16,7 @@ class CashDenomination(models.Model):
     _description = "Cash Denomination"
     _order = "currency_id, value desc"
 
-    value = fields.Float(required=True, digits=(16, 2))
+    value = fields.Float(required=True, digits=(16, 2), aggregator=None)
     kind = fields.Selection([("banknote", "Banknote"), ("coin", "Coin")], required=True, default="banknote")
     currency_id = fields.Many2one("res.currency", required=True, default=lambda self: self.env.company.currency_id)
     active = fields.Boolean(default=True)

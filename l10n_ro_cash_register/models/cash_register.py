@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models, release
 from odoo.exceptions import UserError
 from odoo.orm.identifiers import NewId
-from odoo.tools import date_utils, format_date
+from odoo.tools import SQL, date_utils, format_date
 from odoo.tools.misc import formatLang
 
 _logger = logging.getLogger(__name__)
@@ -116,12 +116,25 @@ class CashRegister(models.Model):
     closed_on = fields.Datetime(readonly=True, copy=False)
 
     # Monetarul: numărarea fizică a numerarului pe cupiuri, comparată cu soldul scriptic.
+    # Se numără în moneda casieriei; la o casierie în valută, soldul scriptic al monetarului este
+    # soldul în valută al contului casei, nu cel în lei din `balance_end`.
+    count_currency_id = fields.Many2one("res.currency", compute="_compute_count_currency_id")
     count_line_ids = fields.One2many("l10n.ro.cash.register.count.line", "register_id", string="Cash Count", copy=False)
-    counted_amount = fields.Monetary(string="Counted Cash", compute="_compute_counted_amount", store=True)
+    count_book_balance = fields.Monetary(
+        string="Book Balance",
+        compute="_compute_counted_amount",
+        store=True,
+        currency_field="count_currency_id",
+        help="Balance of the cash account at the end of the day, in the currency of the cash desk.",
+    )
+    counted_amount = fields.Monetary(
+        string="Counted Cash", compute="_compute_counted_amount", store=True, currency_field="count_currency_id"
+    )
     count_difference = fields.Monetary(
         string="Count Difference",
         compute="_compute_counted_amount",
         store=True,
+        currency_field="count_currency_id",
         help="Counted cash minus the balance of the cash account: positive is a surplus, negative a shortage.",
     )
     is_counted = fields.Boolean(compute="_compute_counted_amount", store=True)
@@ -324,16 +337,47 @@ class CashRegister(models.Model):
             row = self.env.cr.dictfetchone()
             record.balance_end = row["amount"] or 0.0
 
-    @api.depends("count_line_ids.amount", "balance_end")
+    @api.depends("journal_id.currency_id", "company_id.currency_id")
+    def _compute_count_currency_id(self):
+        for record in self:
+            record.count_currency_id = record.journal_id.currency_id or record.company_id.currency_id
+
+    def _is_foreign_currency_count(self):
+        self.ensure_one()
+        return self.count_currency_id != self.company_id.currency_id
+
+    @api.depends("count_line_ids.amount", "balance_end", "journal_id.currency_id")
     def _compute_counted_amount(self):
         for record in self:
             record.is_counted = bool(record.count_line_ids)
             record.counted_amount = sum(record.count_line_ids.mapped("amount"))
-            record.count_difference = record.counted_amount - record.balance_end if record.is_counted else 0.0
+            record.count_book_balance = record.balance_end
+            if record.journal_id and record._is_foreign_currency_count():
+                record.count_book_balance = record._get_foreign_currency_balance()
+            record.count_difference = record.counted_amount - record.count_book_balance if record.is_counted else 0.0
 
-    def _get_count_currency(self):
+    def _get_foreign_currency_balance(self):
+        """Soldul în valută al contului casei la sfârșitul zilei (5314)."""
         self.ensure_one()
-        return self.currency_id or self.journal_id.currency_id or self.company_id.currency_id
+        self.env.cr.execute(
+            SQL(
+                """
+                SELECT SUM(aml.amount_currency)
+                  FROM account_move_line aml
+                  JOIN account_move am ON aml.move_id = am.id
+                 WHERE aml.account_id = %s
+                   AND aml.date <= %s
+                   AND aml.company_id = %s
+                   AND aml.currency_id = %s
+                   AND am.state = 'posted'
+                """,
+                self.journal_id.default_account_id.id,
+                self.date,
+                self.company_id.id,
+                self.count_currency_id.id,
+            )
+        )
+        return self.env.cr.fetchone()[0] or 0.0
 
     def action_count_cash(self):
         """Adaugă în monetar câte un rând pentru fiecare cupiură activă a monedei casieriei."""
@@ -341,14 +385,14 @@ class CashRegister(models.Model):
             if register.state == "closed":
                 raise UserError(self.env._("The cash count of a closed day cannot be changed; reopen the day first."))
             denominations = self.env["l10n.ro.cash.denomination"].search(
-                [("currency_id", "=", register._get_count_currency().id)]
+                [("currency_id", "=", register.count_currency_id.id)]
             )
             if not denominations:
                 raise UserError(
                     self.env._(
                         "No denominations are defined for %s. Add them under Accounting > Configuration > "
                         "Cash Denominations.",
-                        register._get_count_currency().name,
+                        register.count_currency_id.name,
                     )
                 )
             missing = denominations - register.count_line_ids.denomination_id
@@ -364,13 +408,15 @@ class CashRegister(models.Model):
                 raise UserError(
                     self.env._("Count the cash by denomination before closing cash register %s.", register.name)
                 )
-            if not register.currency_id.is_zero(register.count_difference):
+            if not register.count_currency_id.is_zero(register.count_difference):
                 raise UserError(
                     self.env._(
                         "The counted cash of cash register %(register)s differs from the balance of the cash "
                         "account by %(difference)s. Record the difference before closing the day.",
                         register=register.name,
-                        difference=formatLang(self.env, register.count_difference, currency_obj=register.currency_id),
+                        difference=formatLang(
+                            self.env, register.count_difference, currency_obj=register.count_currency_id
+                        ),
                     )
                 )
 
@@ -380,33 +426,43 @@ class CashRegister(models.Model):
 
         Ordinea: contul de profit/pierdere al jurnalului de casă; pe planul de conturi RO,
         7588 (plus) și 65882 (lipsă neimputabilă, nedeductibilă); altfel contul de diferențe de
-        numerar al companiei. Planul RO nu setează conturile de diferențe ale companiei, iar
-        Odoo creează atunci conturi 999xxx, care nu fac parte din planul de conturi.
+        numerar al companiei. Planul RO nu setează conturile de diferențe ale companiei: Odoo
+        creează atunci conturi 999xxx, care nu fac parte din planul de conturi, și le propune și
+        pe jurnalele de casă noi. Pe planul RO, un jurnal rămas pe ele contează ca neconfigurat.
         """
         self.ensure_one()
         journal, company = self.journal_id, self.company_id
         surplus = self.count_difference > 0
         account = journal.profit_account_id if surplus else journal.loss_account_id
-        if not account and company.chart_template == "ro":
+        company_account = (
+            company.default_cash_difference_income_account_id
+            if surplus
+            else company.default_cash_difference_expense_account_id
+        )
+        if company.chart_template == "ro" and (not account or account == company_account):
             account = (
                 self.env["account.chart.template"]
                 .with_company(company)
                 .ref("pcg_7588" if surplus else "pcg_65882", raise_if_not_found=False)
-            )
-        if not account:
-            account = (
-                company.default_cash_difference_income_account_id
-                if surplus
-                else company.default_cash_difference_expense_account_id
-            )
-        return account
+            ) or account
+        return account or company_account
 
     def action_record_difference(self):
         self.ensure_one()
         if self.state == "closed":
             raise UserError(self.env._("The day is closed; reopen it before recording the difference."))
-        if not self.is_counted or self.currency_id.is_zero(self.count_difference):
+        if not self.is_counted or self.count_currency_id.is_zero(self.count_difference):
             raise UserError(self.env._("There is no cash count difference to record."))
+        if self._is_foreign_currency_count():
+            # Operațiunea de casă înregistrează sume în lei; diferența în valută cere curs și
+            # sumă în valută pe nota contabilă.
+            raise UserError(
+                self.env._(
+                    "The difference of a foreign currency cash desk is recorded with a journal entry in %s, "
+                    "with the amount in currency.",
+                    self.count_currency_id.name,
+                )
+            )
         action = self.action_operation()
         action["context"].update(
             {

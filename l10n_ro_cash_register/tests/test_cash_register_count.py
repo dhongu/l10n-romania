@@ -79,7 +79,7 @@ class TestL10nRoCashRegisterCount(TransactionCase):
     def test_count_cash_adds_denominations_of_register_currency(self):
         register = self._register()
         register.action_count_cash()
-        currency = register._get_count_currency()
+        currency = register.count_currency_id
         self.assertTrue(register.is_counted)
         self.assertEqual(register.count_line_ids.denomination_id.currency_id, currency)
         self.assertEqual(
@@ -211,3 +211,73 @@ class TestL10nRoCashRegisterCountRoChart(AccountTestInvoicingCommon):
         self._set_counted(5)
         self.assertLess(self.register.count_difference, 0)
         self.assertTrue(self.register._get_count_difference_account().code.startswith("65882"))
+
+    def test_generic_journal_account_is_replaced_on_ro_chart(self):
+        """Jurnalul rămas pe contul generic de diferențe al companiei (999xxx) contează ca neconfigurat."""
+        company = self.register.company_id
+        if not company.default_cash_difference_income_account_id:
+            self.skipTest("No generic cash difference account on the company")
+        self.cash_journal.profit_account_id = company.default_cash_difference_income_account_id
+        self._set_counted(20)
+        self.assertTrue(self.register._get_count_difference_account().code.startswith("7588"))
+
+    def test_configured_journal_account_wins(self):
+        account = self.env["account.chart.template"].ref("pcg_473", raise_if_not_found=False)
+        if not account:
+            self.skipTest("No 473 account in the RO chart")
+        self.cash_journal.loss_account_id = account
+        self._set_counted(5)
+        self.assertEqual(self.register._get_count_difference_account(), account)
+
+    def test_foreign_currency_cash_desk_counts_in_currency(self):
+        """Casieria în euro: soldul scriptic al monetarului este soldul în euro, nu cel în lei."""
+        eur = self.setup_other_currency("EUR", rates=[("2026-01-01", 0.2)])
+        day = date(2026, 3, 2)
+        journal = self.env["account.journal"].create(
+            {"name": "Test Cash EUR", "code": "TCEU", "type": "cash", "currency_id": eur.id}
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": day,
+                "line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "account_id": journal.default_account_id.id,
+                            "currency_id": eur.id,
+                            "amount_currency": 100.0,
+                            "debit": 500.0,
+                            "name": "Test",
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "account_id": self.company_data["default_account_revenue"].id,
+                            "currency_id": eur.id,
+                            "amount_currency": -100.0,
+                            "credit": 500.0,
+                            "name": "Test",
+                        },
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        register = self.env["l10n.ro.cash.register"]
+        register = register.search([("journal_id", "=", journal.id), ("date", "=", day)]) or register.create(
+            {"journal_id": journal.id, "date": day}
+        )
+        register.action_count_cash()
+        self.assertEqual(register.count_line_ids.denomination_id.currency_id, eur)
+        register.count_line_ids.filtered(lambda line: line.value == 100).quantity = 1
+        self.assertAlmostEqual(register.balance_end, 500.0)
+        self.assertAlmostEqual(register.count_book_balance, 100.0)
+        self.assertAlmostEqual(register.count_difference, 0.0)
+        register.count_line_ids.filtered(lambda line: line.value == 5).quantity = 1
+        self.assertAlmostEqual(register.count_difference, 5.0)
+        with self.assertRaises(UserError):
+            register.action_record_difference()

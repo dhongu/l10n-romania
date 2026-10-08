@@ -34,14 +34,18 @@ stabilește conducerea entității prin procedurile proprii (inclusiv cele de in
 | Diferență în curs de clarificare | 473 = 5311 (lipsă) / 5311 = 473 (plus) |
 
 **Înregistrează diferența** deschide operațiunea de casă precompletată cu sensul, suma și contul
-implicit: contul de profit, respectiv de pierdere, al jurnalului de casă; dacă jurnalul nu le are,
-pe planul de conturi RO 7588 pentru plus și 65882 pentru lipsă, altfel contul de diferențe de
-numerar al companiei. Contabilul poate alege alt cont (473, 4282). Modulul nu impută automat
+implicit: contul de profit, respectiv de pierdere, al jurnalului de casă; dacă jurnalul nu le are
+sau a rămas pe conturile generice 999xxx propuse de Odoo, pe planul de conturi RO 7588 pentru plus
+și 65882 pentru lipsă; altfel contul de diferențe de numerar al companiei. Contabilul poate alege alt cont (473, 4282). Modulul nu impută automat
 lipsa: recuperarea de la salariat se face pe baza unei note de constatare și evaluare a pagubei,
 prin acordul părților și în limita a 5 salarii minime brute (Codul muncii, art. 254 alin. (3)–(4)),
 iar în lipsa acordului pe cale judecătorească. Lipsa de numerar neimputabilă este tratată de
 regulă ca cheltuială nedeductibilă, fiind efectuată în afara scopului activității economice (Codul
 fiscal, art. 25 alin. (1)); încadrarea finală rămâne la aprecierea consultantului fiscal.
+
+La o casierie în valută (5314) se numără cupiurile valutei, iar soldul scriptic al monetarului
+este soldul în valută al contului casei. Diferența în valută se înregistrează printr-o notă
+contabilă cu suma în valută, nu din operațiunea de casă, care lucrează în lei.
 
 Cu bifa **Monetar obligatoriu la închiderea zilei** pe jurnalul de casă, ziua se închide doar după
 numărare și doar dacă numerarul numărat este egal cu soldul contului casei. După închidere,

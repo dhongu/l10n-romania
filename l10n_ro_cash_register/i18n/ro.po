@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-08 13:20+0000\n"
+"POT-Creation-Date: 2026-10-08 13:58+0000\n"
 "PO-Revision-Date: 2024-10-29 19:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -255,6 +255,13 @@ msgid "Balance at Closing"
 msgstr "Sold la închidere"
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__count_book_balance
+msgid ""
+"Balance of the cash account at the end of the day, in the currency of the "
+"cash desk."
+msgstr "Soldul contului casei la sfârșitul zilei, în moneda casieriei."
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_denomination__kind__banknote
 msgid "Banknote"
 msgstr "Bancnotă"
@@ -263,6 +270,11 @@ msgstr "Bancnotă"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
 msgid "Banknotes"
 msgstr "Bancnote"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_book_balance
+msgid "Book Balance"
+msgstr "Sold scriptic"
 
 #. module: l10n_ro_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_operation_form
@@ -413,6 +425,11 @@ msgstr "Confirmare"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
 msgid "Count Cash"
 msgstr "Numără numerarul"
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_currency_id
+msgid "Count Currency"
+msgstr "Moneda monetarului"
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_difference
@@ -912,6 +929,16 @@ msgid ""
 msgstr ""
 "Ziua acestei casierii se poate închide doar după numărarea numerarului pe "
 "cupiuri, iar suma numărată trebuie să fie egală cu soldul contului casei."
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid ""
+"The difference of a foreign currency cash desk is recorded with a journal "
+"entry in %s, with the amount in currency."
+msgstr ""
+"Diferența unei casierii în valută se înregistrează printr-o notă contabilă "
+"în %s, cu suma în valută."
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__closed_balance
