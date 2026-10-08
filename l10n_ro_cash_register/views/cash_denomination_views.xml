@@ -1,0 +1,55 @@
+<odoo>
+    <record id="view_cash_denomination_list" model="ir.ui.view">
+        <field name="name">l10n.ro.cash.denomination.list</field>
+        <field name="model">l10n.ro.cash.denomination</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="currency_id" />
+                <field name="value" />
+                <field name="kind" />
+                <field name="active" widget="boolean_toggle" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_cash_denomination_search" model="ir.ui.view">
+        <field name="name">l10n.ro.cash.denomination.search</field>
+        <field name="model">l10n.ro.cash.denomination</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="currency_id" />
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]" />
+                <group>
+                    <filter string="Currency" name="group_by_currency" context="{'group_by': 'currency_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_cash_denomination" model="ir.actions.act_window">
+        <field name="name">Cash Denominations</field>
+        <field name="res_model">l10n.ro.cash.denomination</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem
+        id="menu_cash_denomination"
+        name="Cash Denominations"
+        parent="account.account_account_menu"
+        groups="account.group_account_manager"
+        action="action_cash_denomination"
+        sequence="6"
+    />
+
+    <record id="view_account_journal_form" model="ir.ui.view">
+        <field name="name">account.journal.form.cash.count</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form" />
+        <field name="arch" type="xml">
+            <field name="loss_account_id" position="after">
+                <field name="l10n_ro_require_cash_count" invisible="type != 'cash'" />
+            </field>
+        </field>
+    </record>
+</odoo>
