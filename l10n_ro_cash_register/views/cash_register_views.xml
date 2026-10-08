@@ -45,7 +45,7 @@
                         name="action_count_cash"
                         string="Count Cash"
                         type="object"
-                        icon="fa-money"
+                        icon="attach_money"
                         invisible="state == 'closed'"
                     />
                     <button
@@ -58,7 +58,7 @@
                         name="action_print_cash_count"
                         string="Print Cash Count"
                         type="object"
-                        icon="fa-print"
+                        icon="print"
                         invisible="not is_counted"
                     />
                     <button
