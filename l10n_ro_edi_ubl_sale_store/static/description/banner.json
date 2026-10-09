@@ -1,0 +1,10 @@
+{
+  "title": "Store Sale e-Invoice Type",
+  "summary": "e-Factura for invoices with a printed fiscal receipt",
+  "lang": "en",
+  "features": [
+    "Type 751 when a receipt was printed",
+    "Skips the UBL XML for receipt-only invoices",
+    "Works with the CIUS-RO export"
+  ]
+}
