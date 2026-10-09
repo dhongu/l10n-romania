@@ -1,3 +1,7 @@
+## 19.0.0.0.4 (2026-10-09)
+
+- Delivery batch report: removed the leftover debug line that printed the list of product IDs in the PDF.
+
 ## 19.0.0.0.3 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
