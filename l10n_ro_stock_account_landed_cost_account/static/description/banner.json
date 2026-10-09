@@ -1,0 +1,10 @@
+{
+  "title": "Landed Cost Accounts",
+  "summary": "Landed costs on the right accounts",
+  "lang": "en",
+  "features": [
+    "Account taken from the vendor bill line",
+    "Pickings suggested from the purchase",
+    "Service product accounts on bill lines"
+  ]
+}
