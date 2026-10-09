@@ -4,7 +4,7 @@
     "name": "Romania - Report Common",
     "summary": "Common building blocks for Romanian printed reports:"
     " company bank accounts, company identification header and amounts in words",
-    "version": "19.0.1.1.1",
+    "version": "19.0.1.1.2",
     "category": "Localization",
     "author": "Terrabit, Dorin Hongu",
     "maintainers": ["dhongu"],
@@ -16,6 +16,7 @@
         "views/res_partner_bank_views.xml",
         "views/res_company_views.xml",
     ],
+    "images": ["static/description/main_screenshot.png"],
     "license": "LGPL-3",
     "development_status": "Mature",
     "installable": True,

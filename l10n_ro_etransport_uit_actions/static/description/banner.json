@@ -1,6 +1,6 @@
 {
-  "title": "eTransport UIT Actions",
-  "summary": "Send ANAF eTransport events straight from the transfer",
-  "icon": "truck",
-  "features": ["Delete a UIT (DEL)", "Confirm transport (CON)", "Change vehicle (MVH)"]
+  "title": "e-Transport UIT Actions",
+  "summary": "ANAF UIT events from the transfer",
+  "lang": "en",
+  "features": ["Delete or confirm a UIT", "Change the vehicle on a UIT", "UIT event history on the transfer"]
 }

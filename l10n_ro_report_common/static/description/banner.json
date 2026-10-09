@@ -1,0 +1,10 @@
+{
+  "title": "Common Report Blocks",
+  "summary": "Shared blocks for Romanian reports",
+  "lang": "en",
+  "features": [
+    "Company ID block with bank accounts",
+    "Up to 3 bank accounts per document",
+    "Amounts in words in proper Romanian"
+  ]
+}

@@ -1,3 +1,7 @@
+## 19.0.2.1.3 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
 ## 19.0.2.1.2 (2026-10-04)
 
 - Documentation and the help of the *Import VAT* field: the regime without VAT paid at customs

@@ -1,0 +1,10 @@
+{
+  "title": "Stock Picking Reports",
+  "summary": "NIR, delivery note, consumption slip",
+  "lang": "en",
+  "features": [
+    "Reception note, delivery note, consumption",
+    "Delivery note title for notice deliveries",
+    "Optional taxes and bank accounts"
+  ]
+}

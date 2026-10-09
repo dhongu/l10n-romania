@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Accounting Enhancement",
-    "version": "19.0.0.0.1",
+    "version": "19.0.0.0.2",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Enhancement",
@@ -14,6 +14,7 @@
     "data": [
         "views/res_config_settings_views.xml",
     ],
+    "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
     "installable": True,
     "development_status": "Mature",

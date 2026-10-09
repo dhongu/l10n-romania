@@ -1,0 +1,6 @@
+{
+  "title": "Auto Language by IP",
+  "summary": "Romanian interface for visitors from Romania",
+  "lang": "en",
+  "features": ["Detects the visitor country by IP", "Sets the language to Romanian", "No manual language choice needed"]
+}

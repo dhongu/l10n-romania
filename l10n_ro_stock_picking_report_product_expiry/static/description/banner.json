@@ -1,0 +1,10 @@
+{
+  "title": "Picking Reports with Expiry",
+  "summary": "Expiry dates on delivery slips",
+  "lang": "en",
+  "features": [
+    "Expiry date column on delivery slips",
+    "Taken from the lot or serial number",
+    "Extends the Romanian delivery report"
+  ]
+}

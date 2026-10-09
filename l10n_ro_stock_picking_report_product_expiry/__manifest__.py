@@ -5,8 +5,9 @@
 {
     "name": "Romania - Picking Reports -Product Expiry",
     "summary": "Adds product expiry date to picking reports",
+    "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.1.0.2",
+    "version": "19.0.1.0.3",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

@@ -1,0 +1,10 @@
+{
+  "title": "Proforma Invoice Report",
+  "summary": "Print initial and final proforma from the quotation",
+  "lang": "en",
+  "features": [
+    "Initial proforma from payment terms",
+    "Final proforma for the remaining amount",
+    "Printed straight from the quotation"
+  ]
+}

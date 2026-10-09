@@ -1,0 +1,10 @@
+{
+  "title": "Cash Journal Document Numbering",
+  "summary": "Separate numbering for cash journal documents",
+  "lang": "en",
+  "features": [
+    "Own sequence for cash journal payments",
+    "Clear numbering per cash register",
+    "Works from the payment form"
+  ]
+}
