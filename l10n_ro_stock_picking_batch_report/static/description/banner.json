@@ -1,0 +1,6 @@
+{
+  "title": "Batch Delivery Notes",
+  "summary": "Print the delivery note from a batch",
+  "lang": "en",
+  "features": ["Delivery note from a picking batch", "Romanian-format document", "Ready to print from the batch"]
+}
