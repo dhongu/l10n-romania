@@ -1,0 +1,10 @@
+{
+  "title": "Stock Aged Report",
+  "summary": "See how long your inventory has been sitting",
+  "lang": "en",
+  "features": [
+    "Last in and last out date per quant",
+    "Configurable aging intervals",
+    "Pivot and list views per warehouse"
+  ]
+}
