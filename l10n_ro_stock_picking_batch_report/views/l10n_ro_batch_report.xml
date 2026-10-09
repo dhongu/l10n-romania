@@ -88,7 +88,6 @@
                             </t>
                         </h4>
                         <t t-set="products" t-value="batch.move_ids.product_id.ids" />
-                        <div t-esc="products" />
                         <table class="table table-sm">
                                 <thead>
                                     <tr>
@@ -114,9 +113,6 @@
                                             t-set="product_moves"
                                             t-value="batch.move_ids.filtered(lambda m: m.product_id.id == product)"
                                         />
-                                            <t t-if="with_price">
-
-                                            </t>
                                             <t t-set="product_qty" t-value="0" />
                                             <t t-set="product_value" t-value="0.0" />
                                             <t t-set="product_price_unit" t-value="0.0" />
