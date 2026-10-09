@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Hide Net Weight",
-    "version": "19.0.0.0.2",
+    "version": "19.0.0.0.3",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Ascunde campul Greutate neta (l10n_ro_net_weight) de pe produs",
@@ -16,4 +16,5 @@
     ],
     "maintainers": ["danila12"],
     "development_status": "Mature",
+    "images": ["static/description/main_screenshot.png"],
 }
