@@ -4,7 +4,7 @@
 {
     "name": "Partner Create by VAT from OpenAPI",
     "summary": "Romania - Partner Create by VAT from OpenAPI",
-    "version": "19.0.1.0.3",
+    "version": "19.0.1.0.4",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
@@ -16,6 +16,7 @@
         "l10n_ro_partner_create_by_vat_button",
     ],
     "installable": True,
+    "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
     "application": False,
     "auto_install": False,
