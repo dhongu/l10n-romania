@@ -8,10 +8,11 @@
     "summary": "Romania - Import bank statements from Revolut",
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],
     "license": "AGPL-3",
-    "version": "19.0.1.0.2",
+    "version": "19.0.1.0.3",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "installable": True,
     "development_status": "Beta",
     "maintainers": ["danila12"],
+    "images": ["static/description/main_screenshot.png"],
 }

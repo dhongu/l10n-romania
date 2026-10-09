@@ -1,0 +1,10 @@
+{
+  "title": "Dropship in Storage Sheet",
+  "summary": "Dropship moves in the storage sheet",
+  "lang": "en",
+  "features": [
+    "Includes supplier to customer moves",
+    "Includes dropship returns",
+    "Products with only dropship are listed"
+  ]
+}

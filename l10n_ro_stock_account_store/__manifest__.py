@@ -2,13 +2,14 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Accounting Store",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Store",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "depends": ["l10n_ro_stock_account"],
+    "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
     "data": [
         "views/product_category_view.xml",

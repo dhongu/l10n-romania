@@ -1,0 +1,10 @@
+{
+  "title": "BT MT940 Statement Import",
+  "summary": "Import Banca Transilvania MT940 files as bank statements",
+  "lang": "en",
+  "features": [
+    "Imports BT MT940 files in one step",
+    "Creates bank statements automatically",
+    "Built on the shared MT940 importer"
+  ]
+}

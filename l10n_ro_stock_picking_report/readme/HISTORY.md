@@ -1,3 +1,7 @@
+## 19.0.1.3.10 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
 ## 19.0.1.3.9 (2026-10-05)
 
 - The sale price of a reception is frozen on the move before the stock entries are created, not

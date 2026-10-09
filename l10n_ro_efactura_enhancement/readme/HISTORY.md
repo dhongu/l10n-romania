@@ -1,3 +1,7 @@
+## 19.0.0.5.5 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`. Removed the obsolete root `description/` folder with the old generic banner.
+
 ## 19.0.0.5.4 (2026-09-30)
 
 - Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.

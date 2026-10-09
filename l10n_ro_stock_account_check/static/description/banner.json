@@ -1,0 +1,10 @@
+{
+  "title": "Stock vs Ledger Check",
+  "summary": "Find gaps between stock and ledger",
+  "lang": "en",
+  "features": [
+    "Compare valuation with the ledger",
+    "Fix entries and valuation in one click",
+    "Flags receptions without vendor bill"
+  ]
+}

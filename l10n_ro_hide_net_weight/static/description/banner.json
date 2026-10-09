@@ -1,0 +1,6 @@
+{
+  "title": "Hide Product Net Weight",
+  "summary": "Removes a confusing field from the product form",
+  "lang": "en",
+  "features": ["Hides the Net Weight field", "Fewer misreadings on the product form", "No other product data changed"]
+}

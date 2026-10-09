@@ -1,3 +1,7 @@
+## 19.0.0.0.5 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
 ## 19.0.0.0.4 (2026-10-06)
 
 - The postal code dropdown shows a second, greyed-out column: for a street,

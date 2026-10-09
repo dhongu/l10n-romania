@@ -4,7 +4,7 @@
     "name": "Romania - Customs Import Declaration (DVI)",
     "summary": "Record the customs import declaration (DVI) as a landed cost: customs duty, commission and import VAT",
     "license": "AGPL-3",
-    "version": "19.0.2.1.2",
+    "version": "19.0.2.1.3",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
@@ -27,4 +27,5 @@
     "pre_init_hook": "pre_init_hook",
     "installable": True,
     "development_status": "Production/Stable",
+    "images": ["static/description/main_screenshot.png"],
 }
