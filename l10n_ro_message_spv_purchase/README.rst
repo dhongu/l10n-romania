@@ -104,6 +104,47 @@ Notes
 Changelog
 =========
 
+19.0.0.0.9 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.0.0.8 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
+19.0.0.0.7 (2026-08-24)
+-----------------------
+
+- Fix (ticket #9315, regression from the #9287 fix in 19.0.0.0.4/0.0.5):
+  once ``_post_spv_xml_on_purchase`` started reliably attaching the SPV
+  XML on a purchase order created before the vendor bill exists, the
+  headless UBL import in ``deltatech_purchase_ubl`` started running for
+  that scenario too — and its product matching silently creates a new
+  product when the invoice line has no supplier code and the name
+  doesn't match an existing product exactly.
+  ``_post_spv_xml_on_purchase`` now attaches the XML with
+  ``purchase_ubl_no_new_products`` in context, so the automated import
+  leaves an unmatched line (visible in the wizard's log) instead of
+  creating a duplicate product. Requires ``deltatech_purchase_ubl`` >=
+  19.0.1.2.5.
+
+19.0.0.0.6 (2026-08-20)
+-----------------------
+
+- Fix: ``_purchase_search_domain_from_ref`` matched purchase orders by
+  reference alone, so a generic/reused vendor reference (ticket #9290,
+  Ridacon: 6 SPV bills over 6 months all reusing the reference "ZILNIC")
+  kept linking new bills to the same, already fully-invoiced order. The
+  domain now excludes orders with ``invoice_status == 'invoiced'``, so a
+  reused reference on an order that still has open invoicing keeps
+  matching (partial invoicing is unaffected), but once an order is fully
+  invoiced a new bill with the same reference falls through to creating
+  a new order instead of piling onto a closed one.
+
 19.0.0.0.5 (2026-08-19)
 -----------------------
 

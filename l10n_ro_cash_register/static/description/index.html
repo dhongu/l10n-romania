@@ -8,10 +8,11 @@
 
 /*
 :Author: David Goodger (goodger@python.org)
-:Id: $Id: html4css1.css 8954 2022-01-20 10:10:25Z milde $
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
 
 See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
 customize this style sheet.
@@ -274,7 +275,7 @@ pre.literal-block, pre.doctest-block, pre.math, pre.code {
   margin-left: 2em ;
   margin-right: 2em }
 
-pre.code .ln { color: grey; } /* line numbers */
+pre.code .ln { color: gray; } /* line numbers */
 pre.code, code { background-color: #eeeeee }
 pre.code .comment, code .comment { color: #5C6576 }
 pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
@@ -300,7 +301,7 @@ span.option {
 span.pre {
   white-space: pre }
 
-span.problematic {
+span.problematic, pre.problematic {
   color: red }
 
 span.section-subtitle {
@@ -381,9 +382,83 @@ calculat;</li>
 partenerul;</li>
 <li>chatter și activități pe document, pentru urmărire și responsabil;</li>
 <li>tipărire în forma cerută de formular.</li>
+<li><strong>închiderea zilei</strong>: soldul se îngheață, iar contul casei nu mai
+primește înregistrări în ziua închisă sau înaintea ei până la
+redeschiderea explicită a registrului. Corecțiile pentru o zi închisă
+se fac prin stornare sau notă de corecție datată în ziua curentă. Nu
+se închide o zi din viitor sau cu sold negativ.</li>
+<li><strong>monetarul</strong>: numărarea fizică a numerarului pe cupiuri (bancnote și
+monede), comparată cu soldul contului casei, cu diferența afișată ca
+plus sau lipsă și tipărită în „Monetar – situația numerarului pe
+cupiuri”, semnată de casier și de cel care verifică. Se poate face
+obligatoriu la închiderea zilei, per casierie.</li>
 </ul>
+<div class="section" id="monetarul">
+<h1>Monetarul</h1>
+<p>Butonul <strong>Numără numerarul</strong> de pe registru adaugă câte un rând pentru
+fiecare cupiură activă a monedei casieriei (leu și euro sunt livrate cu
+modulul; alte valute se adaugă din <em>Contabilitate &gt; Configurare &gt;
+Cupiuri numerar</em>). Casierul completează numărul de bucăți; registrul
+arată numerarul numărat și diferența față de soldul scriptic: pozitivă =
+plus de casă, negativă = lipsă.</p>
+<p>Monetarul este un document de control intern al casieriei; forma și
+periodicitatea numărării le stabilește conducerea entității prin
+procedurile proprii (inclusiv cele de inventariere, OMFP 1802/2014, pct.
+83 alin. (2)). Efect contabil are doar diferența, înregistrată pe baza
+constatării:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Situație</th>
+<th class="head">Notă contabilă</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Plus de casă</td>
+<td>5311 = 7588</td>
+</tr>
+<tr><td>Lipsă neimputabilă</td>
+<td>6588 = 5311 (65882,
+nedeductibilă)</td>
+</tr>
+<tr><td>Lipsă imputată casierului
+(salariat)</td>
+<td>4282 = 5311</td>
+</tr>
+<tr><td>Diferență în curs de clarificare</td>
+<td>473 = 5311 (lipsă) / 5311 = 473
+(plus)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Înregistrează diferența</strong> deschide operațiunea de casă precompletată
+cu sensul, suma și contul implicit: contul de profit, respectiv de
+pierdere, al jurnalului de casă; dacă jurnalul nu le are sau a rămas pe
+conturile generice 999xxx propuse de Odoo, pe planul de conturi RO 7588
+pentru plus și 65882 pentru lipsă; altfel contul de diferențe de numerar
+al companiei. Contabilul poate alege alt cont (473, 4282). Modulul nu
+impută automat lipsa: recuperarea de la salariat se face pe baza unei
+note de constatare și evaluare a pagubei, prin acordul părților și în
+limita a 5 salarii minime brute (Codul muncii, art. 254 alin. (3)–(4)),
+iar în lipsa acordului pe cale judecătorească. Lipsa de numerar
+neimputabilă este tratată de regulă ca cheltuială nedeductibilă, fiind
+efectuată în afara scopului activității economice (Codul fiscal, art. 25
+alin. (1)); încadrarea finală rămâne la aprecierea consultantului
+fiscal.</p>
+<p>La o casierie în valută (5314) se numără cupiurile valutei, iar soldul
+scriptic al monetarului este soldul în valută al contului casei.
+Diferența în valută se înregistrează printr-o notă contabilă cu suma în
+valută, nu din operațiunea de casă, care lucrează în lei.</p>
+<p>Cu bifa <strong>Monetar obligatoriu la închiderea zilei</strong> pe jurnalul de casă,
+ziua se închide doar după numărare și doar dacă numerarul numărat este
+egal cu soldul contului casei. După închidere, monetarul nu se mai
+modifică până la redeschiderea zilei.</p>
 <p>Soldurile și mișcările se citesc din notele contabile postate de pe
 contul de casă al jurnalului (<tt class="docutils literal">default_account_id</tt>, ex. 5311).</p>
+</div>
 <div class="section" id="care-varianta-alegeti">
 <h1>Care variantă alegeți</h1>
 <p>Suita oferă două forme de registru de casă, cu <strong>aceleași cifre</strong>,
@@ -413,6 +488,114 @@ verificări pe perioade.</p>
 </div>
 </div>
 <div class="section" id="section-1">
+<h1>19.0.1.4.1 (2026-10-09)</h1>
+<ul class="simple">
+<li>Odoo Apps banner (<tt class="docutils literal">static/description/main_screenshot.png</tt>),
+generated from <tt class="docutils literal">banner.json</tt>.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h1>19.0.1.4.0</h1>
+<p><strong>Nou</strong> — monetarul casieriei: numărarea numerarului pe cupiuri.</p>
+<ul class="simple">
+<li>Cupiuri de numerar pe monedă (<em>Contabilitate &gt; Configurare &gt; Cupiuri
+numerar</em>), livrate pentru leu (500 lei – 1 ban) și euro (500 € – 1
+cent).</li>
+<li>Pe registrul de casă, <strong>Numără numerarul</strong> adaugă câte un rând pe
+fiecare cupiură a monedei casieriei; registrul arată numerarul numărat
+și diferența față de soldul contului casei.</li>
+<li><strong>Înregistrează diferența</strong> deschide operațiunea de casă
+precompletată: plusul pe contul de profit, lipsa pe contul de pierdere
+al jurnalului; fără conturi pe jurnal sau cu jurnalul rămas pe
+conturile generice 999xxx de diferențe de numerar propuse de Odoo, pe
+planul RO 7588 și 65882. Contul se poate schimba (473 în curs de
+clarificare, 4282 lipsă imputată casierului).</li>
+<li>La o casierie în valută se numără cupiurile valutei, iar soldul
+scriptic al monetarului este soldul în valută al contului casei;
+diferența se înregistrează prin notă contabilă în valută.</li>
+<li><strong>Tipărește monetarul</strong>: situația numerarului pe cupiuri, cu subtotal
+pe bancnote și monede, sold scriptic, diferență și semnături.</li>
+<li>Bifa <strong>Monetar obligatoriu la închiderea zilei</strong> pe jurnalul de casă:
+ziua nu se închide nenumărată sau cu diferență neînregistrată.
+Monetarul unei zile închise nu se mai modifică.</li>
+<li>Operațiunea de casă păstrează contul corespondent primit din context,
+în loc să-l înlocuiască mereu cu contul de transfer al companiei.</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h1>19.0.1.3.1</h1>
+<p><strong>Corectat</strong> — numărul registrului de casă continua numerotarea notelor
+de casă.</p>
+<p>Registrul și notele jurnalului de casă au același format
+(<tt class="docutils literal">CASA/2026/00001</tt>), iar cache-ul de secvență din <tt class="docutils literal">sequence.mixin</tt>
+are cheia (format, jurnal), comună ambelor. Un registru creat în aceeași
+tranzacție cu postarea unei note — de exemplu registrul zilei, creat
+automat la postarea unei plăți pe casierie — primea următorul număr al
+notelor, nu pe al lui: apăreau goluri în numerotarea registrelor.
+Registrul are acum cache-ul de secvență propriu.</p>
+<ul class="simple">
+<li>Mesajele de blocare la o zi închisă și de refuz al unei zile din
+viitor afișează data în formatul limbii utilizatorului (03.09.2026),
+nu ISO.</li>
+<li>Formularul registrului: moneda și compania stau sub dată și jurnal,
+fără golul de sub solduri după închidere.</li>
+<li>Traduceri RO pentru acțiunile „Generează registrele de casă lipsă” și
+„Elimină conturile de plăți în curs” și pentru mesajul de registru
+duplicat.</li>
+<li>Fișa consultant actualizată cu închiderea zilei, blocarea postării și
+redeschiderea; capturi regenerate.</li>
+</ul>
+</div>
+<div class="section" id="section-4">
+<h1>19.0.1.3.0</h1>
+<p><strong>Nou</strong> — închiderea zilei de casă.</p>
+<ul class="simple">
+<li>Butonul <strong>Închide ziua</strong> pe registrul de casă îngheață soldul final
+(cine, când, cât). După închidere, contul casei nu mai primește
+înregistrări datate în ziua închisă sau înaintea ei: postarea,
+trecerea în ciornă și ștergerea unei astfel de note sunt refuzate. O
+mișcare în urmă ar schimba soldul reportat în ziua închisă (OMFP
+2634/2015, Anexa 1 pct. 58 lit. d) și h)).</li>
+<li><strong>Redeschide</strong> redeschide ziua și toate zilele închise de după ea din
+aceeași casierie (soldul se reportează din zi în zi) și lasă urma în
+istoricul fiecărui registru.</li>
+<li>Pe un registru închis nu se pot schimba data, casieria sau numărul
+(s-ar muta blocarea fără urmă). Nu se poate închide o zi din viitor
+sau una cu sold negativ.</li>
+<li>Corecțiile pentru o zi închisă se fac prin stornare sau notă de
+corecție datată în ziua curentă.</li>
+<li>Un registru închis nu se poate șterge; butoanele de adăugare a
+încasărilor, plăților și operațiunilor nu mai apar pe el.</li>
+</ul>
+<p>Ideea vine din modulul de casă și bancă scris de Alexandru Grecu pentru
+MD Trade Concept SRL, unde închiderea doar semnala diferențele apărute
+după închidere; aici ea le previne.</p>
+</div>
+<div class="section" id="section-5">
+<h1>19.0.1.2.2</h1>
+<ul class="simple">
+<li>Own module icon in the flat style of the Terrabit modules, instead of
+the missing or generic one.</li>
+</ul>
+</div>
+<div class="section" id="section-6">
+<h1>19.0.1.2.1</h1>
+<p><strong>Corectat</strong> — reîmprospătarea registrului la postare cerea drepturi de
+contabilitate.</p>
+<p><tt class="docutils literal">_l10n_ro_cash_registers_to_refresh()</tt> aduna registrele de
+reîmprospătat pe rând, prin
+<tt class="docutils literal">registers |= <span class="pre">register_model.sudo().search(...)</span></tt>. Recordset-ul de
+start nu era <tt class="docutils literal">sudo()</tt>, iar unirea <tt class="docutils literal">|</tt> păstrează contextul
+operandului din stânga — deci rezultatul final pierdea <tt class="docutils literal">sudo</tt>-ul
+căutării din dreapta, contrar intenției din cod. Orice utilizator fără
+grupul <em>Contabilitate/ Administrator</em> (de exemplu un operator de vânzări
+cu doar drepturi de facturare) care postează o notă contabilă pe un cont
+de casă lovea de <tt class="docutils literal">AccessError</tt> la reîmprospătarea soldurilor, pentru
+că accesul la modelul registrului este rezervat acelui grup.</p>
+<p><tt class="docutils literal">sudo()</tt> este acum aplicat de la recordset-ul de pornire, ca să se
+păstreze pe toată unirea.</p>
+</div>
+<div class="section" id="section-7">
 <h1>19.0.1.2.0</h1>
 <p><strong>Corectat</strong> — soldurile registrului nu se mai învechesc.</p>
 <p>Soldul inițial și soldul final erau calculate o singură dată, la crearea
@@ -461,7 +644,7 @@ registrele de casă în valută.</p>
 <p>Etichetele antetului au fost restructurate ca să nu mai depindă de
 indentarea din șablon, care rupea traducerile la fiecare reformatare.</p>
 </div>
-<div class="section" id="section-2">
+<div class="section" id="section-8">
 <h1>19.0.1.1.8</h1>
 <p>Versiuni anterioare — vezi istoricul repozitoriului.</p>
 <div class="section" id="bug-tracker">
@@ -485,6 +668,10 @@ In case of trouble, please check there if your issue has already been reported.<
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
+</ul>
+</li>
+<li>MD Trade Concept SRL:<ul>
+<li>Alexandru Grecu (ideea închiderii zilei de casă)</li>
 </ul>
 </li>
 </ul>

@@ -13,7 +13,7 @@ Romania - Stock Accounting Store
 .. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
     :alt: Mature
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
@@ -108,6 +108,26 @@ Usage
 
 Changelog
 =========
+
+19.0.1.0.2 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.1.0.1 (2026-10-05)
+-----------------------
+
+- The markup (378) and uneligible VAT (4428) of a reception in the store
+  now use the same sale price as the reception note at sale price (NIR)
+  of ``l10n_ro_stock_picking_report``: the price frozen on the move at
+  reception, else the store pricelist of the location, else the product
+  price. Before, the entry always took the product price, so in a store
+  with its own pricelist the NIR showed one markup and VAT and the
+  accounts 378 / 4428 another (e.g. store price 120 instead of 100: NIR
+  markup 600, entry 400).
+- Tests: the NIR at sale price matches the store entry, with and without
+  a store pricelist.
 
 19.0.1.0.0 (2026-10-04)
 -----------------------

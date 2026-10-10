@@ -41,6 +41,15 @@ To install this module, you need to:
 - search for "Romania - Stock Report" in your addons
 - install the module
 
+Changelog
+=========
+
+19.0.2.0.1 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
 Bug Tracker
 ===========
 
