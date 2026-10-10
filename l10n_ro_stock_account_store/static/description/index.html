@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:ec17aa0c6ab9c415bdbca2a8c971d345d8b01a9d7ca3e09b0293a7013a0754d5
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_store"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_store"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <p>Stock accounting for goods kept at sale price (retail store), for
 Romanian companies.</p>
 <p>A location marked as <strong>Store</strong> (<tt class="docutils literal">Romania - Merchandise type</tt>) keeps
@@ -423,14 +423,16 @@ inventory report at sale price.</p>
 <li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a></li>
 <li><a class="reference internal" href="#usage" id="toc-entry-2">Usage</a></li>
 <li><a class="reference internal" href="#changelog" id="toc-entry-3">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-4">19.0.1.0.0 (2026-10-04)</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-4">19.0.1.0.2 (2026-10-09)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-5">19.0.1.0.1 (2026-10-05)</a></li>
+<li><a class="reference internal" href="#section-3" id="toc-entry-6">19.0.1.0.0 (2026-10-04)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-5">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-6">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-7">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-8">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-9">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-7">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-8">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-9">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-10">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-11">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -467,7 +469,29 @@ the markup and the VAT at the sale price of the entry.</li>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-3">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.0.0 (2026-10-04)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.0.2 (2026-10-09)</a></h2>
+<ul class="simple">
+<li>Odoo Apps banner (<tt class="docutils literal">static/description/main_screenshot.png</tt>),
+generated from <tt class="docutils literal">banner.json</tt>.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-5">19.0.1.0.1 (2026-10-05)</a></h2>
+<ul class="simple">
+<li>The markup (378) and uneligible VAT (4428) of a reception in the store
+now use the same sale price as the reception note at sale price (NIR)
+of <tt class="docutils literal">l10n_ro_stock_picking_report</tt>: the price frozen on the move at
+reception, else the store pricelist of the location, else the product
+price. Before, the entry always took the product price, so in a store
+with its own pricelist the NIR showed one markup and VAT and the
+accounts 378 / 4428 another (e.g. store price 120 instead of 100: NIR
+markup 600, entry 400).</li>
+<li>Tests: the NIR at sale price matches the store entry, with and without
+a store pricelist.</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h2><a class="toc-backref" href="#toc-entry-6">19.0.1.0.0 (2026-10-04)</a></h2>
 <ul class="simple">
 <li>Migration to 19.0, rewritten on the stock move: Odoo 19 no longer has
 <tt class="docutils literal">stock.valuation.layer</tt>, so the markup (378) and uneligible VAT
@@ -496,22 +520,22 @@ the NIR at sale price.</li>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-5">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-7">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-6">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-8">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-7">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Authors</a></h2>
 <ul class="simple">
 <li>Dorin Hongu</li>
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-8">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-10">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -522,7 +546,7 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-9">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-11">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_store">dhongu/l10n-romania</a> project on GitHub.</p>

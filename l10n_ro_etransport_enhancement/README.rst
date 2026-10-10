@@ -37,47 +37,47 @@ user-friendly.
 Key Features
 ------------
 
--  Enhanced functionality for sending e-Transport documents directly
-   from stock pickings
--  Support for different sending types through context parameters
--  Improved handling of stock valuation layer tracking for e-Transport
-   documents
--  Streamlined integration with the Romanian e-Transport system (SPV)
--  Configurable timeout for the ANAF API (the Odoo standard hardcodes 10
-   seconds, often too short)
--  Network failures towards ANAF no longer raise a traceback: the
-   transfer keeps a failed document with a readable message warning to
-   check SPV before resending, so no duplicate UIT is issued
--  Automatic retry on status requests only (GET is idempotent); document
-   upload is never retried automatically
--  Road route between a border crossing point and a customs office: for
-   import and export, both ends of the route can be a border crossing
-   point or a customs office, so a UIT can be issued for the leg under
-   customs supervision (border crossing point to inland customs office
-   on import, customs office to border crossing point on export). The
-   Odoo standard only allows the customs office at departure on import
-   and at arrival on export, the other end being forced to a location.
--  The transport date no longer breaks when the sending user has no
-   timezone set (the usual case for automated sends running as OdooBot);
-   it falls back to the Romanian timezone
--  Lines the standard sends with a zero value no longer reach ANAF as
-   zero: the unit price falls back to the stock value of the move, then
-   to the product cost, then to the sales price. When no price can be
-   found at all, sending stops with an explicit error instead of filing
-   an invalid declaration
--  Lines without a quantity are dropped from the declaration, and a
-   missing net or gross weight is approximated with the other one. The
-   QWeb template renders all three through ``t-att-*``, which silently
-   drops a zero, while the ANAF schema requires them: a zero invalidates
-   the declaration
--  "Get lines" recomputes the shipping weight lines instead of adding to
-   them, so pressing it twice no longer doubles the weights sent to ANAF
--  A warning on the transfer when some moves have no weight line, so an
-   incomplete set of weights is not filed unnoticed
--  Weighed totals on the transfer (net and gross) with a "Distribute
-   weights" button that adjusts the lines to add up to them,
-   proportionally to each line, or evenly when the lines all start at
-   zero
+- Enhanced functionality for sending e-Transport documents directly from
+  stock pickings
+- Support for different sending types through context parameters
+- Improved handling of stock valuation layer tracking for e-Transport
+  documents
+- Streamlined integration with the Romanian e-Transport system (SPV)
+- Configurable timeout for the ANAF API (the Odoo standard hardcodes 10
+  seconds, often too short)
+- Network failures towards ANAF no longer raise a traceback: the
+  transfer keeps a failed document with a readable message warning to
+  check SPV before resending, so no duplicate UIT is issued
+- Automatic retry on status requests only (GET is idempotent); document
+  upload is never retried automatically
+- Road route between a border crossing point and a customs office: for
+  import and export, both ends of the route can be a border crossing
+  point or a customs office, so a UIT can be issued for the leg under
+  customs supervision (border crossing point to inland customs office on
+  import, customs office to border crossing point on export). The Odoo
+  standard only allows the customs office at departure on import and at
+  arrival on export, the other end being forced to a location.
+- The transport date no longer breaks when the sending user has no
+  timezone set (the usual case for automated sends running as OdooBot);
+  it falls back to the Romanian timezone
+- Lines the standard sends with a zero value no longer reach ANAF as
+  zero: the unit price falls back to the stock value of the move, then
+  to the product cost, then to the sales price. When no price can be
+  found at all, sending stops with an explicit error instead of filing
+  an invalid declaration
+- Lines without a quantity are dropped from the declaration, and a
+  missing net or gross weight is approximated with the other one. The
+  QWeb template renders all three through ``t-att-*``, which silently
+  drops a zero, while the ANAF schema requires them: a zero invalidates
+  the declaration
+- "Get lines" recomputes the shipping weight lines instead of adding to
+  them, so pressing it twice no longer doubles the weights sent to ANAF
+- A warning on the transfer when some moves have no weight line, so an
+  incomplete set of weights is not filed unnoticed
+- Weighed totals on the transfer (net and gross) with a "Distribute
+  weights" button that adjusts the lines to add up to them,
+  proportionally to each line, or evenly when the lines all start at
+  zero
 
 Technical Implementation
 ------------------------
@@ -85,20 +85,19 @@ Technical Implementation
 The module builds upon the standard Romanian localization and enhances
 the e-Transport integration through:
 
--  Extended stock picking methods for e-Transport document submission
--  Advanced tracking mechanisms for stock valuation layers
--  Improved context handling for different document sending scenarios
+- Extended stock picking methods for e-Transport document submission
+- Advanced tracking mechanisms for stock valuation layers
+- Improved context handling for different document sending scenarios
 
 Business Benefits
 -----------------
 
--  Simplified compliance with Romanian e-Transport regulations
--  More flexible options for submitting transport documents to
-   authorities
--  Better tracking and management of stock movements subject to
-   e-Transport requirements
--  Reduced administrative burden for logistics and accounting
-   departments
+- Simplified compliance with Romanian e-Transport regulations
+- More flexible options for submitting transport documents to
+  authorities
+- Better tracking and management of stock movements subject to
+  e-Transport requirements
+- Reduced administrative burden for logistics and accounting departments
 
 Usage
 -----
@@ -114,8 +113,233 @@ the Romanian localization suite developed by Terrabit.
 .. contents::
    :local:
 
+Usage
+=====
+
+Dropshipping (factory directly to customer)
+-------------------------------------------
+
+Use the existing **Send eTransport** action on the native dropship
+transfer. There is no additional addon and no intermediate warehouse
+movement. ``stock_dropshipping`` is optional: this feature applies only
+where the native dropshipping workflow is already installed.
+
+Before sending, the responsible operator must establish the declarant's
+legal role and select the actual operation. The addon does not determine
+whether a UIT is legally required, whether a supplier already declared
+the shipment, or which transaction in a chain carries the transport.
+
++--------------------+------------------------+------------------------+
+| Selected operation | Commercial partner /   | Typical Romanian road  |
+|                    | value source           | segment                |
++====================+========================+========================+
+| 30 — domestic      | Sale customer /        | Supplier loading       |
+|                    | tax-exclusive sale     | address → customer     |
+|                    |                        | delivery address       |
++--------------------+------------------------+------------------------+
+| 10 — AIC           | Purchase supplier /    | Border crossing →      |
+|                    | tax-exclusive purchase | customer address in    |
+|                    |                        | Romania                |
++--------------------+------------------------+------------------------+
+| 20 — LIC           | Sale customer /        | Supplier address in    |
+|                    | tax-exclusive sale     | Romania → border       |
+|                    |                        | crossing               |
++--------------------+------------------------+------------------------+
+| 40 — import        | Purchase supplier /    | Border/customs →       |
+|                    | tax-exclusive purchase | Romanian destination;  |
+|                    |                        | customs legs are also  |
+|                    |                        | supported              |
++--------------------+------------------------+------------------------+
+| 50 — export        | Sale customer /        | Romanian               |
+|                    | tax-exclusive sale     | loading/customs →      |
+|                    |                        | border/customs         |
++--------------------+------------------------+------------------------+
+
+Values use the linked order's discounted, tax-exclusive price, native
+unit conversion and currency conversion to RON on the scheduled date.
+Dropships use order values even if the warehouse order-price setting is
+disabled.
+
+The supplier on the purchase is not necessarily the physical loading
+site. Use **Specific Start Location** for a different factory/gate or an
+intermodal road start in Romania. It applies only to an address
+endpoint, not a border or customs code. The final delivery address comes
+from the linked sale/purchase; conflicting addresses are rejected rather
+than guessed.
+
+Each goods line must have a sale and purchase link in the declaring
+company. One declaration must have one supplier, one commercial customer
+and one delivery address. Country/operation mismatches, missing Romanian
+address data, unsupported operation codes, returns and mixed/batch
+dropships are blocked. Foreign-to-foreign transactions, special fiscal
+territories and export intermodal road ends that differ from the
+customer's address need separate handling; do not select another
+operation simply to bypass a validation.
+
+Enter the actual accompanying documents (CMR, invoice, delivery note).
+The default-documents button adds the transfer number and posted
+customer invoices; for AIC/import, enter the supplier's accompanying
+invoice/documents explicitly. It does not prove that these documents are
+legally sufficient.
+
+Validate the generated XML and business interpretation in a test
+environment before promotion. Automated tests mock ANAF; they do not
+certify ANAF acceptance.
+
+Reference: `ANAF eTransport user
+guide <https://static.anaf.ro/static/10/Anaf/AsistentaContribuabili_r/Ghid_RO_e_Transport_2025.pdf>`__.
+
 Changelog
 =========
+
+19.0.0.9.4 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.0.9.3 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
+19.0.0.9.2 (2026-09-21)
+-----------------------
+
+**Fix:** partenerul comercial de pe declarația de dropship rămâne cel
+ales de modul — clientul, pe livrare. Odoo 19 a primit între timp suport
+nativ pentru dropship, iar ``_l10n_ro_edi_stock_get_template_data`` din
+nucleu **ignoră** ``data["partner_id"]`` când tipul de operațiune e
+``dropship``: ia mereu partenerul comenzii de achiziție. Codul nostru
+era neschimbat, dar declarația pleca la ANAF cu **furnizorul** în locul
+clientului, fără nicio eroare. Valoarea se rescrie acum după apelul
+nucleului, împreună cu codul fiscal și codul de țară.
+
+19.0.0.9.1 (2026-09-13)
+-----------------------
+
+Teste pentru sursa codului din ``codUnitateMasura``. Codul vine din
+``uom.uom._get_unece_code()``, iar ``deltatech_uom_unece`` îl face
+configurabil pe fiecare unitate; testele arată că declarația chiar trece
+prin acel cod și, mai important, că unitatea din care îl ia e cea a
+**produsului**, nu cea a liniei. Cu produsul ținut în kilograme și linia
+în cutii, declarația spune „130 KGM" — codul de pe cutie e corect
+configurat și rămâne deliberat nefolosit, altfel declarația ar susține
+că se transportă 130 de cutii.
+
+Modulul NU depinde de ``deltatech_uom_unece``: e altă suită, cu licență
+proprietară, iar o astfel de dependență ar face modulul neinstalabil
+pentru cine nu are suita. Testele se sar când modulul lipsește.
+
+19.0.0.9.0 (2026-09-13)
+-----------------------
+
+**Corecție** — liniile declarate într-o unitate de măsură secundară
+(cutie, bax, pungă) plecau la ANAF cu unitatea și valoarea greșite.
+
+Standardul ``l10n_ro_edi_stock`` compune linia din două surse diferite:
+``cantitate`` este ``move.product_qty``, prin definiție cantitatea în
+unitatea de măsură de BAZĂ a produsului, iar ``codUnitateMasura`` vine
+din ``move.product_uom``, unitatea aleasă pe LINIE. Cât timp cele două
+coincid nu se vede nimic; când transferul e făcut într-o unitate
+secundară, perechea devine incoerentă. O recepție de import de 10 cutii
+× 13 kg pleca drept ``cantitate="130"`` ``codUnitateMasura="C62"`` —
+„130 de bucăți". Schema ANAF validează fiecare atribut separat și nu
+prinde nepotrivirea dintre ele, deci declarația primea UIT, iar eroarea
+rămânea tăcută. În plus, orice unitate proprie a clientului (fără XML ID
+în lista fixă din ``_get_unece_code()``) cade oricum pe ``C62``, deci
+codul liniei nu putea fi corect nici teoretic.
+
+Cu setarea **„UIT: get price from order"** activă, aceeași nepotrivire
+afecta și valoarea: prețul se calcula per unitate a liniei de comandă
+(``price_subtotal / product_qty`` pe ``purchase.order.line``,
+``price_reduce_taxexcl`` pe linia de vânzare) și se înmulțea cu o
+cantitate exprimată în unitatea de bază, declarând la ANAF de 13 ori
+valoarea reală în exemplul de mai sus.
+
+Acum ``codUnitateMasura`` urmează unitatea în care e exprimată
+cantitatea, iar prețul din comandă se convertește în unitatea de bază a
+produsului — ambele așa cum face deja calea de dropship. Transferurile
+fără unități secundare produc exact aceeași declarație ca înainte.
+
+19.0.0.8.1 (2026-09-09)
+-----------------------
+
+- Configure the optional OCA Romanian-accounting flag in the view test
+  fixture; preserve the localization's field-hiding behavior for other
+  companies.
+- Check loading-address visibility for every supported dropship
+  operation and retain existing warehouse/border/customs visibility
+  rules.
+- Document the intentional separate ORM extension and its required
+  super() chain with a scoped Pylint exception; no repository-wide
+  checks are disabled.
+
+19.0.0.7.6 (2026-08-27)
+-----------------------
+
+**Corecție** — codul UIT nu mai este scris în ``carrier_tracking_ref``.
+
+La „Preluare stare", când declarația ajungea ``stock_validated``, UIT-ul
+era copiat în ``carrier_tracking_ref`` (referința de urmărire a
+curierului, din ``stock_delivery``). UIT-ul nu este un AWB: pe o livrare
+cu curier, scrierea suprascria sau preceda numărul real de AWB
+(tracking-ul, eticheta și evidența curierului se legau de un cod ANAF),
+iar pe orice bază care protejează referința de urmărire (module de
+curierat care permit scrierea ei doar din fluxul curierului) butonul
+ridica „Operație invalidă" și derula înapoi inclusiv starea tocmai
+preluată de la ANAF. Standardul ``l10n_ro_edi_stock`` nu citește
+nicăieri ``carrier_tracking_ref``, iar UIT-ul rămâne disponibil în
+``l10n_ro_edi_stock_document_uit`` (tab-ul eTransport). Același lucru
+pentru ``post_init_hook``-ul de migrare din vechiul
+``l10n_ro_etransport``.
+
+19.0.0.7.5 (2026-08-15)
+-----------------------
+
+- Imp: ``l10n_ro_transport_partner_id`` and
+  ``l10n_ro_etransport_start_address`` are now indexed. Both are foreign
+  keys to ``res_partner`` on ``stock_picking``, one of the largest
+  tables on high-volume instances. Context: ``res_partner`` is
+  referenced by ~158 foreign-key columns; on a production database 77 of
+  them had no index, so a single partner deletion triggered sequential
+  scans over 3.180 MB of tables. Deleting 5.350 merged partner records
+  took over 8 minutes without indexes and 190 seconds with them, foreign
+  keys left ENABLED.
+
+19.0.0.7.4
+----------
+
+**Îmbunătățire** — coloana mișcării, în lista de linii de greutate, nu
+identifica produsul.
+
+Coloana ``move_id`` din lista **Shipping Weight Lines** afișa
+``display_name``-ul standard al mișcării de stoc
+(``origine/cod_produs: locație>locație_destinație``), care nu include
+denumirea produsului — doar codul intern, și doar dacă produsul are cod
+setat. Când o livrare avea mai multe linii de greutate, acestea puteau
+ieși identice și imposibil de distins vizual (ex. două linii arătând
+ambele „S00011/Stoc>Customers"). Contextul ``show_product_in_move``,
+deja transmis de view dar neconsumat până acum, este folosit acum
+într-un override al ``stock.move._compute_display_name``: când e prezent
+în context, coloana arată direct denumirea produsului. Comportamentul
+standard al ``display_name``-ului (fără acest context) rămâne neschimbat
+oriunde altundeva.
+
+19.0.0.7.3
+----------
+
+**Corecție** — greutatea netă/brută ieșea greșită când mișcarea de stoc
+era în altă UoM decât baza produsului.
+
+``net_weight``/``gross_weight`` (atât la „Get lines" cât și la adăugarea
+manuală a unei linii de greutate) înmulțeau ``move.quantity`` direct cu
+``l10n_ro_net_weight``/``weight``, câmpuri exprimate per unitate din
+UoM-ul de bază al produsului. Când produsul era livrat într-o UoM
+secundară (ex. cutie/palet, nu kg), rezultatul ieșea greșit cu exact
+factorul de conversie dintre cele două unități. Cantitatea e convertită
+acum explicit la UoM-ul de bază al produsului înainte de înmulțire.
 
 19.0.0.7.2
 ----------
@@ -154,6 +378,27 @@ document însoțitor lăsat fără observații pica la validare cu:
 Acum atributul este omis complet când observația lipsește (sau conține
 numai spații). Câmpul **Observații** de pe linia de document rămâne
 opțional.
+
+19.0.0.8.0 (2026-09-09)
+-----------------------
+
+- Support factory-to-customer dropships (operations 10, 20, 30, 40, 50)
+  through the existing eTransport action, without a fictitious warehouse
+  or stock transfer.
+- Resolve the supplier loading address (or explicit loading override),
+  linked orders' delivery address and sale's commercial customer
+  separately.
+- Use the declared purchase (AIC/import) or sale (domestic/LIC/export)
+  value in RON with native UoM/currency conversion. Reject missing,
+  inconsistent or cross-company order links.
+- Preserve native carrier/vehicle/border/customs validation. Ambiguous
+  international transactions, returns and batch dropship declarations
+  require separate review.
+- Use native product weight when the optional legacy net-weight field is
+  absent.
+- Add translatable help, Romanian translations and language-aware
+  accompanying document names. No new addon and no change to existing
+  document type codes.
 
 Bug Tracker
 ===========

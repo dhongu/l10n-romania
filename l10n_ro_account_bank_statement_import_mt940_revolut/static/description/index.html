@@ -380,31 +380,85 @@ skipped instead of blocking the import.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-1">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-2">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-3">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-4">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-5">Maintainers</a></li>
+<li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a><ul>
+<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.0.3 (2026-10-09)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-3">19.0.1.0.2 (2026-09-30)</a></li>
+<li><a class="reference internal" href="#section-3" id="toc-entry-4">19.0.1.0.1 (2026-09-05)</a></li>
+<li><a class="reference internal" href="#section-4" id="toc-entry-5">19.0.1.0.0</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-6">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-7">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-8">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-9">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-10">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="changelog">
+<h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
+<div class="section" id="section-1">
+<h2><a class="toc-backref" href="#toc-entry-2">19.0.1.0.3 (2026-10-09)</a></h2>
+<ul class="simple">
+<li>Odoo Apps banner (<tt class="docutils literal">static/description/main_screenshot.png</tt>),
+generated from <tt class="docutils literal">banner.json</tt>.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.0.2 (2026-09-30)</a></h2>
+<ul class="simple">
+<li>Own module icon in the flat style of the Terrabit modules, instead of
+the missing or generic one.</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.0.1 (2026-09-05)</a></h2>
+<ul class="simple">
+<li>Fix: <tt class="docutils literal">_revolut_journal_exists</tt> looked up the matching journal by
+IBAN alone (<tt class="docutils literal">limit=1</tt>, no currency filter), so it always returned
+the first journal found on that IBAN regardless of which currency
+wallet was being checked. With a single journal per IBAN this happened
+to work, but as soon as a second journal (a different currency) is
+linked to the same IBAN - the intended way to import all of a Revolut
+account’s currency wallets - every wallet other than the first
+journal’s currency was silently dropped as “no matching journal”, even
+though one existed. The lookup now checks all journals sharing that
+IBAN.</li>
+<li>Fix: the same currency-blind lookup also existed in the base wizard’s
+<tt class="docutils literal">_match_journal</tt> (shared <tt class="docutils literal">account_statement_import_file</tt> module,
+not touched here) - overridden locally for Revolut imports.</li>
+<li>Fix: the currency lookup in <tt class="docutils literal">_revolut_journal_exists</tt> didn’t set
+<tt class="docutils literal">active_test=False</tt>, so a currency inactive in Settings (but still
+used by a journal) was treated as “not found” and its wallet dropped.
+Ported from 18.0 (ticket #9408, Agroamat).</li>
+</ul>
+</div>
+<div class="section" id="section-4">
+<h2><a class="toc-backref" href="#toc-entry-5">19.0.1.0.0</a></h2>
+<ul class="simple">
+<li>Initial version: MT940 parser for Revolut Business exports (multiple
+currency-wallet blocks under the same IBAN), matching each wallet to
+its own bank journal.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-6">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-2">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-7">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-3">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-8">Authors</a></h2>
 <ul class="simple">
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-4">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Danila <a class="reference external" href="mailto:danila&#64;terrabit.ro">danila&#64;terrabit.ro</a></li>
@@ -415,7 +469,7 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-10">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/danila12"><img alt="danila12" src="https://github.com/danila12.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_account_bank_statement_import_mt940_revolut">dhongu/l10n-romania</a> project on GitHub.</p>

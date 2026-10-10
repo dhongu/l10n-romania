@@ -231,6 +231,59 @@ Alte îmbunătățiri planificate
 Changelog
 =========
 
+19.0.0.5.5 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``. Removed the obsolete root
+  ``description/`` folder with the old generic banner.
+
+19.0.0.5.4 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
+19.0.0.5.3 (2026-09-23)
+-----------------------
+
+- **O firmă din România fără CUI nu mai pleacă în SPV.** ``l10n_ro_edi``
+  completează CUI-ul lipsă al clientului cu ``0000000000000``. Valoarea
+  e corectă pentru persoane fizice fără CNP, dar nucleul o pune și pe
+  firme: verifică doar CUI-ul furnizorului, nu și pe al clientului. O
+  factură către o firmă cu CUI-ul necompletat ajungea astfel la ANAF
+  fără cumpărător identificat.
+
+  - Blocajul se aplică clienților marcați ca firmă (``is_company``), cu
+    țara România, fără CUI sau cu CUI ``0000000000000``.
+  - Verificarea apare la generarea XML-ului (avertisment în „Trimite și
+    tipărește") și încă o dată chiar înainte de transmiterea în SPV,
+    pentru XML-urile generate mai devreme. Motivul se scrie în
+    chatter-ul facturii.
+  - Persoanele fizice și clienții din alte țări nu sunt afectați.
+  - Doar cod Python, nu necesită actualizarea modulului; traducerea în
+    română a mesajului se încarcă la actualizare.
+
+- Explicația opțiunii „Nu importa automat facturile primite din SPV" nu
+  apărea în română: în ``ro.po`` textul avea altă ghilimea decât în cod,
+  iar Odoo sărea tăcut traducerea.
+
+19.0.0.5.2 (2026-09-23)
+-----------------------
+
+- **Facturile din POS pleacă din nou în e-Factura cu tipul 751.** Pe
+  18.0 modulul schimba ``InvoiceTypeCode`` din 380 în 751 pentru orice
+  factură legată de o comandă POS (vânzare deja înregistrată pe bonul
+  fiscal). Regula s-a pierdut la rescrierea modulului pe 19.0, iar de la
+  migrare facturile din POS au plecat cu 380: ANAF număra vânzarea și
+  TVA-ul de două ori (casa de marcat + factura). Semnalat pe Damira
+  (INV/2026/04101), confirmat și la Valshop (751 până în mai 2026, 380
+  după trecerea pe 19).
+
+  - Stornourile (381) și autofacturarea (389) rămân neschimbate.
+  - XML-urile deja trimise nu se modifică.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
 19.0.0.4.4 (2026-09-10)
 -----------------------
 

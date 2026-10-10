@@ -35,6 +35,72 @@ Registrul de casă ca **document numerotat**, cod 14-4-7A (OMFP
   partenerul;
 - chatter și activități pe document, pentru urmărire și responsabil;
 - tipărire în forma cerută de formular.
+- **închiderea zilei**: soldul se îngheață, iar contul casei nu mai
+  primește înregistrări în ziua închisă sau înaintea ei până la
+  redeschiderea explicită a registrului. Corecțiile pentru o zi închisă
+  se fac prin stornare sau notă de corecție datată în ziua curentă. Nu
+  se închide o zi din viitor sau cu sold negativ.
+- **monetarul**: numărarea fizică a numerarului pe cupiuri (bancnote și
+  monede), comparată cu soldul contului casei, cu diferența afișată ca
+  plus sau lipsă și tipărită în „Monetar – situația numerarului pe
+  cupiuri”, semnată de casier și de cel care verifică. Se poate face
+  obligatoriu la închiderea zilei, per casierie.
+
+Monetarul
+---------
+
+Butonul **Numără numerarul** de pe registru adaugă câte un rând pentru
+fiecare cupiură activă a monedei casieriei (leu și euro sunt livrate cu
+modulul; alte valute se adaugă din *Contabilitate > Configurare >
+Cupiuri numerar*). Casierul completează numărul de bucăți; registrul
+arată numerarul numărat și diferența față de soldul scriptic: pozitivă =
+plus de casă, negativă = lipsă.
+
+Monetarul este un document de control intern al casieriei; forma și
+periodicitatea numărării le stabilește conducerea entității prin
+procedurile proprii (inclusiv cele de inventariere, OMFP 1802/2014, pct.
+83 alin. (2)). Efect contabil are doar diferența, înregistrată pe baza
+constatării:
+
++----------------------------------+----------------------------------+
+| Situație                         | Notă contabilă                   |
++==================================+==================================+
+| Plus de casă                     | 5311 = 7588                      |
++----------------------------------+----------------------------------+
+| Lipsă neimputabilă               | 6588 = 5311 (65882,              |
+|                                  | nedeductibilă)                   |
++----------------------------------+----------------------------------+
+| Lipsă imputată casierului        | 4282 = 5311                      |
+| (salariat)                       |                                  |
++----------------------------------+----------------------------------+
+| Diferență în curs de clarificare | 473 = 5311 (lipsă) / 5311 = 473  |
+|                                  | (plus)                           |
++----------------------------------+----------------------------------+
+
+**Înregistrează diferența** deschide operațiunea de casă precompletată
+cu sensul, suma și contul implicit: contul de profit, respectiv de
+pierdere, al jurnalului de casă; dacă jurnalul nu le are sau a rămas pe
+conturile generice 999xxx propuse de Odoo, pe planul de conturi RO 7588
+pentru plus și 65882 pentru lipsă; altfel contul de diferențe de numerar
+al companiei. Contabilul poate alege alt cont (473, 4282). Modulul nu
+impută automat lipsa: recuperarea de la salariat se face pe baza unei
+note de constatare și evaluare a pagubei, prin acordul părților și în
+limita a 5 salarii minime brute (Codul muncii, art. 254 alin. (3)–(4)),
+iar în lipsa acordului pe cale judecătorească. Lipsa de numerar
+neimputabilă este tratată de regulă ca cheltuială nedeductibilă, fiind
+efectuată în afara scopului activității economice (Codul fiscal, art. 25
+alin. (1)); încadrarea finală rămâne la aprecierea consultantului
+fiscal.
+
+La o casierie în valută (5314) se numără cupiurile valutei, iar soldul
+scriptic al monetarului este soldul în valută al contului casei.
+Diferența în valută se înregistrează printr-o notă contabilă cu suma în
+valută, nu din operațiunea de casă, care lucrează în lei.
+
+Cu bifa **Monetar obligatoriu la închiderea zilei** pe jurnalul de casă,
+ziua se închide doar după numărare și doar dacă numerarul numărat este
+egal cu soldul contului casei. După închidere, monetarul nu se mai
+modifică până la redeschiderea zilei.
 
 Soldurile și mișcările se citesc din notele contabile postate de pe
 contul de casă al jurnalului (``default_account_id``, ex. 5311).
@@ -66,6 +132,117 @@ verificări pe perioade.
 
 Changelog
 =========
+
+19.0.1.4.1 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.1.4.0
+----------
+
+**Nou** — monetarul casieriei: numărarea numerarului pe cupiuri.
+
+- Cupiuri de numerar pe monedă (*Contabilitate > Configurare > Cupiuri
+  numerar*), livrate pentru leu (500 lei – 1 ban) și euro (500 € – 1
+  cent).
+- Pe registrul de casă, **Numără numerarul** adaugă câte un rând pe
+  fiecare cupiură a monedei casieriei; registrul arată numerarul numărat
+  și diferența față de soldul contului casei.
+- **Înregistrează diferența** deschide operațiunea de casă
+  precompletată: plusul pe contul de profit, lipsa pe contul de pierdere
+  al jurnalului; fără conturi pe jurnal sau cu jurnalul rămas pe
+  conturile generice 999xxx de diferențe de numerar propuse de Odoo, pe
+  planul RO 7588 și 65882. Contul se poate schimba (473 în curs de
+  clarificare, 4282 lipsă imputată casierului).
+- La o casierie în valută se numără cupiurile valutei, iar soldul
+  scriptic al monetarului este soldul în valută al contului casei;
+  diferența se înregistrează prin notă contabilă în valută.
+- **Tipărește monetarul**: situația numerarului pe cupiuri, cu subtotal
+  pe bancnote și monede, sold scriptic, diferență și semnături.
+- Bifa **Monetar obligatoriu la închiderea zilei** pe jurnalul de casă:
+  ziua nu se închide nenumărată sau cu diferență neînregistrată.
+  Monetarul unei zile închise nu se mai modifică.
+- Operațiunea de casă păstrează contul corespondent primit din context,
+  în loc să-l înlocuiască mereu cu contul de transfer al companiei.
+
+19.0.1.3.1
+----------
+
+**Corectat** — numărul registrului de casă continua numerotarea notelor
+de casă.
+
+Registrul și notele jurnalului de casă au același format
+(``CASA/2026/00001``), iar cache-ul de secvență din ``sequence.mixin``
+are cheia (format, jurnal), comună ambelor. Un registru creat în aceeași
+tranzacție cu postarea unei note — de exemplu registrul zilei, creat
+automat la postarea unei plăți pe casierie — primea următorul număr al
+notelor, nu pe al lui: apăreau goluri în numerotarea registrelor.
+Registrul are acum cache-ul de secvență propriu.
+
+- Mesajele de blocare la o zi închisă și de refuz al unei zile din
+  viitor afișează data în formatul limbii utilizatorului (03.09.2026),
+  nu ISO.
+- Formularul registrului: moneda și compania stau sub dată și jurnal,
+  fără golul de sub solduri după închidere.
+- Traduceri RO pentru acțiunile „Generează registrele de casă lipsă” și
+  „Elimină conturile de plăți în curs” și pentru mesajul de registru
+  duplicat.
+- Fișa consultant actualizată cu închiderea zilei, blocarea postării și
+  redeschiderea; capturi regenerate.
+
+19.0.1.3.0
+----------
+
+**Nou** — închiderea zilei de casă.
+
+- Butonul **Închide ziua** pe registrul de casă îngheață soldul final
+  (cine, când, cât). După închidere, contul casei nu mai primește
+  înregistrări datate în ziua închisă sau înaintea ei: postarea,
+  trecerea în ciornă și ștergerea unei astfel de note sunt refuzate. O
+  mișcare în urmă ar schimba soldul reportat în ziua închisă (OMFP
+  2634/2015, Anexa 1 pct. 58 lit. d) și h)).
+- **Redeschide** redeschide ziua și toate zilele închise de după ea din
+  aceeași casierie (soldul se reportează din zi în zi) și lasă urma în
+  istoricul fiecărui registru.
+- Pe un registru închis nu se pot schimba data, casieria sau numărul
+  (s-ar muta blocarea fără urmă). Nu se poate închide o zi din viitor
+  sau una cu sold negativ.
+- Corecțiile pentru o zi închisă se fac prin stornare sau notă de
+  corecție datată în ziua curentă.
+- Un registru închis nu se poate șterge; butoanele de adăugare a
+  încasărilor, plăților și operațiunilor nu mai apar pe el.
+
+Ideea vine din modulul de casă și bancă scris de Alexandru Grecu pentru
+MD Trade Concept SRL, unde închiderea doar semnala diferențele apărute
+după închidere; aici ea le previne.
+
+19.0.1.2.2
+----------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
+19.0.1.2.1
+----------
+
+**Corectat** — reîmprospătarea registrului la postare cerea drepturi de
+contabilitate.
+
+``_l10n_ro_cash_registers_to_refresh()`` aduna registrele de
+reîmprospătat pe rând, prin
+``registers |= register_model.sudo().search(...)``. Recordset-ul de
+start nu era ``sudo()``, iar unirea ``|`` păstrează contextul
+operandului din stânga — deci rezultatul final pierdea ``sudo``-ul
+căutării din dreapta, contrar intenției din cod. Orice utilizator fără
+grupul *Contabilitate/ Administrator* (de exemplu un operator de vânzări
+cu doar drepturi de facturare) care postează o notă contabilă pe un cont
+de casă lovea de ``AccessError`` la reîmprospătarea soldurilor, pentru
+că accesul la modelul registrului este rezervat acelui grup.
+
+``sudo()`` este acum aplicat de la recordset-ul de pornire, ca să se
+păstreze pe toată unirea.
 
 19.0.1.2.0
 ----------
@@ -159,6 +336,10 @@ Contributors
 - `Terrabit <https://www.terrabit.ro>`__:
 
   - Dorin Hongu <dhongu@gmail.com>
+
+- MD Trade Concept SRL:
+
+  - Alexandru Grecu (ideea închiderii zilei de casă)
 
 Do not contact contributors directly about support or help with
 technical issues.
