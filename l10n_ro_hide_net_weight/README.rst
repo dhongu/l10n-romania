@@ -31,6 +31,39 @@ utilizatori.
 .. contents::
    :local:
 
+Known issues / Roadmap
+======================
+
+Retragerea ``l10n_ro_net_weight``
+---------------------------------
+
+Modulul există doar pentru a ascunde câmpul ``l10n_ro_net_weight`` din
+``l10n_ro_stock``.
+
+1. Se păstrează cât timp ``l10n_ro_stock`` definește câmpul.
+2. Când câmpul este scos din ``l10n_ro_stock`` (vezi ROADMAP-ul acelui
+   modul), vederile ascunse nu mai au țintă: modulul se declară învechit
+   și se elimină (inclusiv din ``depends`` ale proiectelor care îl
+   folosesc).
+3. Până atunci nu se adaugă logică nouă pe ``l10n_ro_net_weight``;
+   e-Transport folosește ``product.weight`` (vezi ``l10n_ro_edi_stock``
+   și ``l10n_ro_etransport_enhancement``).
+
+Changelog
+=========
+
+19.0.0.0.3 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.0.0.2 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
 Bug Tracker
 ===========
 
