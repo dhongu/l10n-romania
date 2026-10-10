@@ -381,15 +381,20 @@ with the Deltatech Sale Payment module)</li>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.0.8 (2026-08-03)</a></li>
-<li><a class="reference internal" href="#section-2" id="toc-entry-3">19.0.1.0.7 (2026-07-31)</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.0.13 (2026-10-09)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-3">19.0.1.0.12 (2026-09-30)</a></li>
+<li><a class="reference internal" href="#section-3" id="toc-entry-4">19.0.1.0.11 (2026-08-25)</a></li>
+<li><a class="reference internal" href="#section-4" id="toc-entry-5">19.0.1.0.10 (2026-08-24)</a></li>
+<li><a class="reference internal" href="#section-5" id="toc-entry-6">19.0.1.0.9 (2026-08-24)</a></li>
+<li><a class="reference internal" href="#section-6" id="toc-entry-7">19.0.1.0.8 (2026-08-03)</a></li>
+<li><a class="reference internal" href="#section-7" id="toc-entry-8">19.0.1.0.7 (2026-07-31)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-7">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-8">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-9">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-10">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-11">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-12">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-13">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -397,7 +402,56 @@ with the Deltatech Sale Payment module)</li>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-2">19.0.1.0.8 (2026-08-03)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-2">19.0.1.0.13 (2026-10-09)</a></h2>
+<ul class="simple">
+<li>Odoo Apps banner (<tt class="docutils literal">static/description/main_screenshot.png</tt>),
+generated from <tt class="docutils literal">banner.json</tt>.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.0.12 (2026-09-30)</a></h2>
+<ul class="simple">
+<li>Own module icon in the flat style of the Terrabit modules, instead of
+the missing or generic one.</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.0.11 (2026-08-25)</a></h2>
+<ul class="simple">
+<li>Keep combo-row colspan calculation compatible with older Odoo 19
+builds where the core sale report still uses the inline colspan
+formula and does not define <tt class="docutils literal">colspan_count</tt>. Prefer the dynamic
+counter when available and fall back to the legacy formula otherwise.</li>
+</ul>
+</div>
+<div class="section" id="section-4">
+<h2><a class="toc-backref" href="#toc-entry-5">19.0.1.0.10 (2026-08-24)</a></h2>
+<ul class="simple">
+<li>Combo rows: initialize <tt class="docutils literal">combo_name_colspan</tt> from the core
+<tt class="docutils literal">colspan_count</tt> instead of the hardcoded <tt class="docutils literal">3 + discount + taxes</tt>
+formula that Odoo 19 no longer uses. The old formula would silently
+drift out of sync with the header if core adds or removes optional
+columns. The module-specific increments (numbering, image, lead time
+columns) are kept, since the headers injected by this module do not
+bump the core counter. Added a regression test asserting that a
+rendered combo row spans exactly the header column count. (#518)</li>
+</ul>
+</div>
+<div class="section" id="section-5">
+<h2><a class="toc-backref" href="#toc-entry-6">19.0.1.0.9 (2026-08-24)</a></h2>
+<ul class="simple">
+<li>Fix module installation on current Odoo 19: the section colspan XPath
+was anchored on the exact core formula
+<tt class="docutils literal">3 + (1 if display_discount else 0) + (1 if display_taxes else 0)</tt>,
+which core replaced with the dynamic <tt class="docutils literal">colspan_count</tt> variable. The
+anchor now targets
+<tt class="docutils literal"><span class="pre">//tr[&#64;name='tr_section']/t[&#64;t-set='section_name_colspan']</span></tt>,
+independent of the internal formula. Added a regression assertion on
+rendered section colspans. (#517)</li>
+</ul>
+</div>
+<div class="section" id="section-6">
+<h2><a class="toc-backref" href="#toc-entry-7">19.0.1.0.8 (2026-08-03)</a></h2>
 <ul class="simple">
 <li>Fix the line numbering column (<tt class="docutils literal">No.</tt>): it now counts only product
 lines. The number came from <tt class="docutils literal">line_index</tt>, the index of the report
@@ -409,8 +463,8 @@ rendered product rows, which also keeps collapsed composition lines
 from consuming numbers.</li>
 </ul>
 </div>
-<div class="section" id="section-2">
-<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.0.7 (2026-07-31)</a></h2>
+<div class="section" id="section-7">
+<h2><a class="toc-backref" href="#toc-entry-8">19.0.1.0.7 (2026-07-31)</a></h2>
 <ul class="simple">
 <li>Fix <tt class="docutils literal">TypeError: replace() argument 1 must be str, not bool</tt> when
 rendering the sale order report on a line without a product.
@@ -430,15 +484,15 @@ in the same case.</li>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-9">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-5">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-10">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-6">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-11">Authors</a></h2>
 <ul class="simple">
 <li>Terrabit</li>
 <li>Dorin Hongu</li>
@@ -446,7 +500,7 @@ In case of trouble, please check there if your issue has already been reported.<
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-7">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-12">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dan Stoica</li>
@@ -458,7 +512,7 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-8">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-13">Maintainers</a></h2>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_sale_order_report">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>
