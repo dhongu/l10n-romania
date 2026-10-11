@@ -10,7 +10,7 @@ class TestNearestLang(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.website = cls.env["website"].get_current_website()
+        cls.website = cls.env.ref("base.default_website")
         cls.lang_en = cls.env.ref("base.lang_en")
         cls.lang_ro = cls.env.ref("base.lang_ro")
         cls.website.default_lang_id = cls.lang_en
