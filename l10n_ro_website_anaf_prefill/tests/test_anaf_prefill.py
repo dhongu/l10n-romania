@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import odoo
 from odoo.tests import HttpCase, new_test_user, tagged
+from odoo.tools import mute_logger
 
 from ..controllers import main
 from ..controllers.main import AnafPrefill
@@ -161,7 +162,10 @@ class TestAnafPrefill(HttpCase):
             self.assertEqual(
                 self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "18547290"})["state"], "not_found"
             )
-        with patch.object(main.requests, "post", side_effect=main.requests.ConnectTimeout("timeout")):
+        with (
+            patch.object(main.requests, "post", side_effect=main.requests.ConnectTimeout("timeout")),
+            mute_logger("odoo.addons.l10n_ro_website_anaf_prefill.controllers.main"),
+        ):
             self.assertEqual(
                 self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "14399840"})["state"], "unavailable"
             )
