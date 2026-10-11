@@ -1,6 +1,6 @@
 import {registry} from "@web/core/registry";
 
-registry.category("web_tour.tours").add("l10n_ro_website_anaf_prefill_tour", {
+registry.category("web_tour.tours").add("l10n_ro_website_anaf_tour", {
     steps: () => [
         {
             content: "The customer types a delivery street of their own",

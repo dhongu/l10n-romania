@@ -1,6 +1,6 @@
-==============================
-Romania - Website ANAF Prefill
-==============================
+======================
+Romania - Website ANAF
+======================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -17,14 +17,15 @@ Romania - Website ANAF Prefill
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_website_anaf_prefill
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_website_anaf
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
 
-Fills in the company name and address from ANAF while the customer types
-the tax code (CUI) in the address form of the website: checkout and
-customer portal.
+ANAF on the address forms of the website (checkout and customer portal),
+for a Romanian billing address.
+
+**While the tax code (CUI) is typed:**
 
 - Under the tax code, the company found at ANAF: the name the invoice is
   issued to, the address and whether it is a VAT payer
@@ -37,10 +38,23 @@ customer portal.
 - A public route with a limit per visitor (20 look-ups per 10 minutes)
   and a one-day cache per tax code: ANAF is not asked twice for the same
   company
-- If ANAF does not answer, nothing is shown and the form works as before
 
-Any form can use it: an input marked with ``data-anaf-lookup`` and a
-``data-anaf-fill`` map of the fields to fill in.
+**When the address is sent:**
+
+- A company not found or struck off at ANAF is refused; a CNP gets its
+  own message
+- A company found gives the partner its legal name (the invoice and
+  e-Factura are issued to it); the address typed by the customer is
+  kept, ANAF only fills the empty fields
+- A fiscally inactive company can order: the cart gets an internal note
+  for the salesperson (VAT code cancelled: invoice with VAT, without
+  reverse charge, check the collection)
+- ANAF not answering never stops the sale: the number is accepted as
+  typed and the cart gets a note
+
+Any form can use the look-up: an input marked with ``data-anaf-lookup``
+and a ``data-anaf-fill`` map of the fields to fill in (the B2B account
+request form of ``deltatech_b2b_portal`` does).
 
 **Table of contents**
 
@@ -54,12 +68,20 @@ No configuration. The ANAF address and the API key, if any, are those of
 ``l10n_ro_partner_create_by_vat`` (system parameters
 ``l10n_ro_partner_create_by_vat.*``).
 
-The module only fills in the form. The checks when the address is
-submitted (tax code refused when not found or struck off) are done by
-``deltatech_website_vat_validation``, when installed.
-
 Changelog
 =========
+
+19.0.1.1.0 (2026-10-12)
+-----------------------
+
+- Renamed from ``l10n_ro_website_anaf_prefill`` (not installed anywhere
+  yet): the module now also checks the tax code when the address is
+  sent, the Romanian part that was in
+  ``deltatech_website_vat_validation`` (CNP message, company not found
+  or struck off refused, legal name and empty fields from ANAF, notes on
+  the cart for an inactive company or ANAF unavailable). While an older
+  ``deltatech_website_vat_validation`` still makes that check, this one
+  stands aside.
 
 19.0.1.0.0 (2026-10-11)
 -----------------------
@@ -100,6 +122,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_website_anaf_prefill>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_website_anaf>`_ project on GitHub.
 
 You are welcome to contribute.

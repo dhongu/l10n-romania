@@ -2,9 +2,10 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Romania - Website ANAF Prefill",
-    "summary": "Fills in the company name and address from ANAF while the customer types the tax code",
-    "version": "19.0.1.0.0",
+    "name": "Romania - Website ANAF",
+    "summary": "ANAF on the website address forms: company filled in while the tax code is typed, "
+    "checked when the address is sent",
+    "version": "19.0.1.1.0",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "license": "AGPL-3",
@@ -14,10 +15,10 @@
     "data": ["views/templates.xml"],
     "assets": {
         "web.assets_frontend": [
-            "l10n_ro_website_anaf_prefill/static/src/interactions/anaf_lookup.esm.js",
+            "l10n_ro_website_anaf/static/src/interactions/anaf_lookup.esm.js",
         ],
         "web.assets_tests": [
-            "l10n_ro_website_anaf_prefill/static/tests/tours/anaf_prefill_tour.esm.js",
+            "l10n_ro_website_anaf/static/tests/tours/anaf_prefill_tour.esm.js",
         ],
     },
     "images": ["static/description/main_screenshot.png"],

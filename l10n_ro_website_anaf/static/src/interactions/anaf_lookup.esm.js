@@ -125,4 +125,4 @@ export class AnafLookup extends Interaction {
     }
 }
 
-registry.category("public.interactions").add("l10n_ro_website_anaf_prefill.anaf_lookup", AnafLookup);
+registry.category("public.interactions").add("l10n_ro_website_anaf.anaf_lookup", AnafLookup);
