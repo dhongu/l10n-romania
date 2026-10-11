@@ -48,7 +48,9 @@ def is_cnp(number):
 
 
 class AnafPrefill(http.Controller):
-    @http.route("/l10n_ro/anaf_lookup", type="jsonrpc", auth="public", website=True, methods=["POST"])
+    # not a website route: it needs no website context, and the frontend dispatch (language
+    # cookie, visitor) has nothing to add to a JSON look-up
+    @http.route("/l10n_ro/anaf_lookup", type="jsonrpc", auth="public", methods=["POST"])
     def anaf_lookup(self, vat=""):
         """The ANAF data of a Romanian tax code, for the address forms.
 

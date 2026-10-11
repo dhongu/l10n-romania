@@ -15,6 +15,13 @@ class TestAnafPrefill(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # l10n_ro_lang, installed with the other addons of the suite, sends the visitors to ro_RO:
+        # the language must be active, or every website page fails, and the website's default,
+        # or every page redirects to its /ro/ address
+        romanian = cls.env["res.lang"]._activate_lang("ro_RO")
+        website = cls.env["website"].get_current_website()
+        website.language_ids |= romanian
+        website.default_lang_id = romanian
         cls.state_cj = cls.env["res.country.state"].search(
             [("country_id", "=", cls.env.ref("base.ro").id), ("code", "=", "CJ")], limit=1
         )
