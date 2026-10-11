@@ -7,6 +7,7 @@ import odoo
 from odoo.tests import HttpCase, new_test_user, tagged
 from odoo.tools import mute_logger
 
+from .. import anaf
 from ..controllers import main
 from ..controllers.main import AnafPrefill
 
@@ -116,7 +117,7 @@ class TestAnafPrefill(HttpCase):
         with patch.object(AnafPrefill, "_anaf_lookup", return_value=("found", self._company())):
             self.start_tour(
                 f"/shop/address?partner_id={user.partner_id.id}&address_type=billing",
-                "l10n_ro_website_anaf_prefill_tour",
+                "l10n_ro_website_anaf_tour",
                 login="anaf_buyer",
             )
 
@@ -154,17 +155,17 @@ class TestAnafPrefill(HttpCase):
             def json(self):
                 return self.payload
 
-        with patch.object(main.requests, "post", return_value=Response(answer)):
+        with patch.object(anaf.requests, "post", return_value=Response(answer)):
             result = self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "RO1234567897"})
         self.assertEqual((result["state"], result["radiated"]), ("found", True))
         main._cache.clear()
-        with patch.object(main.requests, "post", return_value=Response({"found": [], "notFound": [1]})):
+        with patch.object(anaf.requests, "post", return_value=Response({"found": [], "notFound": [1]})):
             self.assertEqual(
                 self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "18547290"})["state"], "not_found"
             )
         with (
-            patch.object(main.requests, "post", side_effect=main.requests.ConnectTimeout("timeout")),
-            mute_logger("odoo.addons.l10n_ro_website_anaf_prefill.controllers.main"),
+            patch.object(anaf.requests, "post", side_effect=anaf.requests.ConnectTimeout("timeout")),
+            mute_logger("odoo.addons.l10n_ro_website_anaf.anaf"),
         ):
             self.assertEqual(
                 self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "14399840"})["state"], "unavailable"
