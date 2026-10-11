@@ -1,0 +1,319 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_partner_base
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-07 12:52+0000\n"
+"PO-Revision-Date: 2026-10-07 12:52+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__l10n_ro_get_partner_data__service__anaf
+msgid "ANAF"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "ANAF Webservice not working. Exception raised: %(error)s"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Anaf didn't find any company with VAT=%(vat)s !"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid ""
+"Anaf request error: \n"
+"response=%(response)s \n"
+"reason=%(reason)s \n"
+"text=%(text)s"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/wizard/get_partner_data.py:0
+msgid "Attention! "
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.l10n_ro_get_partner_data_form
+msgid "Back"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "City"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.l10n_ro_get_partner_data_form
+msgid "Close"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model,name:l10n_ro_partner_base.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model,name:l10n_ro_partner_base.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model,name:l10n_ro_partner_base.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__display_name
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.res_config_settings_view_form_l10n_ro_partner_base
+msgid "Do not allow two company partners with the same VAT (or VAT and NRC)"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.l10n_ro_get_partner_data_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.view_partner_form_l10n_ro_partner_base
+msgid "Get Data"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.l10n_ro_get_partner_data_form
+msgid "Get Partner Data"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.actions.act_window,name:l10n_ro_partner_base.l10n_ro_get_partner_data_action
+msgid "Get Partner's Data"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model,name:l10n_ro_partner_base.model_l10n_ro_get_partner_data
+msgid "Get partner data from ANAF / VIES"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__id
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Invalid VAT"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Missing: "
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__res_config_settings__l10n_ro_vat_nrc_unique__off
+msgid "Not checked"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__partner_id
+msgid "Partner"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/wizard/get_partner_data.py:0
+msgid "Partner data updated!"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/wizard/get_partner_data.py:0
+msgid ""
+"Partner data updated! Please check the address fields. VIES does not return "
+"the addresses in a consistent form or complete so it can not be split "
+"automatically."
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Please add the country code to the vat number or country field"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,help:l10n_ro_partner_base.field_res_config_settings__l10n_ro_vat_nrc_unique
+msgid ""
+"Prevents the creation of two company partners with the same VAT (or the same"
+" VAT and NRC) in a company with the Romanian fiscal country."
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_company__l10n_ro_caen_code
+msgid "Romania - CAEN Code"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_config_settings__l10n_ro_vat_nrc_unique
+msgid "Romania - Unique Partners"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__l10n_ro_vat_subjected
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_users__l10n_ro_vat_subjected
+msgid "Romania - VAT Subjected"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__l10n_ro_vat_number
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_users__l10n_ro_vat_number
+msgid "Romania - VAT number digits"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__l10n_ro_partner_warning
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_users__l10n_ro_partner_warning
+msgid "Romania - Warning"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__service
+msgid "Service"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__state
+msgid "State"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__status_message
+msgid "Status Message"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Street"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid ""
+"The 'zeep' library is required for VIES lookups. Install it with: pip "
+"install zeep"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner_unique.py:0
+msgid "The VAT and NRC pair (%(vat)s, %(nrc)s) must be unique!"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.res_config_settings_view_form_l10n_ro_partner_base
+msgid "Unique Partners (Romania)"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__res_config_settings__l10n_ro_vat_nrc_unique__vat
+msgid "Unique VAT"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__res_config_settings__l10n_ro_vat_nrc_unique__vat_nrc
+msgid "Unique VAT and NRC"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "VAT"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,help:l10n_ro_partner_base.field_res_partner__l10n_ro_vat_number
+#: model:ir.model.fields,help:l10n_ro_partner_base.field_res_users__l10n_ro_vat_number
+msgid "VAT number without country code."
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__l10n_ro_get_partner_data__service__vies
+msgid "VIES for non-Romanian partners"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "VIES service error: %s"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/wizard/get_partner_data.py:0
+msgid "You can't use this function on delivery contacts."
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "ZIP"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__l10n_ro_get_partner_data__state__get
+msgid "get"
+msgstr ""
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__l10n_ro_get_partner_data__state__set
+msgid "set"
+msgstr ""

@@ -1,0 +1,328 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-07 12:52+0000\n"
+"PO-Revision-Date: 2026-10-07 12:52+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__l10n_ro_get_partner_data__service__anaf
+msgid "ANAF"
+msgstr "ANAF"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "ANAF Webservice not working. Exception raised: %(error)s"
+msgstr "Serviciul web ANAF nu funcționează. Eroare: %(error)s"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Anaf didn't find any company with VAT=%(vat)s !"
+msgstr "ANAF nu a găsit nicio companie cu CUI=%(vat)s!"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid ""
+"Anaf request error: \n"
+"response=%(response)s \n"
+"reason=%(reason)s \n"
+"text=%(text)s"
+msgstr ""
+"Eroare la cererea către ANAF: \n"
+"răspuns=%(response)s \n"
+"motiv=%(reason)s \n"
+"text=%(text)s"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/wizard/get_partner_data.py:0
+msgid "Attention! "
+msgstr "Atenție! "
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.l10n_ro_get_partner_data_form
+msgid "Back"
+msgstr "Înapoi"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "City"
+msgstr "Oraș"
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.l10n_ro_get_partner_data_form
+msgid "Close"
+msgstr "Închide"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model,name:l10n_ro_partner_base.model_res_company
+msgid "Companies"
+msgstr "Companii"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model,name:l10n_ro_partner_base.model_res_config_settings
+msgid "Config Settings"
+msgstr "Setări de configurare"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model,name:l10n_ro_partner_base.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__create_uid
+msgid "Created by"
+msgstr "Creat de"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__create_date
+msgid "Created on"
+msgstr "Creat la"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__display_name
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.res_config_settings_view_form_l10n_ro_partner_base
+msgid "Do not allow two company partners with the same VAT (or VAT and NRC)"
+msgstr "Nu permite doi parteneri companie cu același CUI (sau CUI și NRC)"
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.l10n_ro_get_partner_data_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.view_partner_form_l10n_ro_partner_base
+msgid "Get Data"
+msgstr "Preia datele"
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.l10n_ro_get_partner_data_form
+msgid "Get Partner Data"
+msgstr "Preia datele partenerului"
+
+#. module: l10n_ro_partner_base
+#: model:ir.actions.act_window,name:l10n_ro_partner_base.l10n_ro_get_partner_data_action
+msgid "Get Partner's Data"
+msgstr "Preia datele partenerului"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model,name:l10n_ro_partner_base.model_l10n_ro_get_partner_data
+msgid "Get partner data from ANAF / VIES"
+msgstr "Preia datele partenerului de la ANAF / VIES"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__id
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Invalid VAT"
+msgstr "CUI invalid"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__write_uid
+msgid "Last Updated by"
+msgstr "Ultima actualizare de"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__write_date
+msgid "Last Updated on"
+msgstr "Ultima actualizare la"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Missing: "
+msgstr "Lipsesc: "
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__res_config_settings__l10n_ro_vat_nrc_unique__off
+msgid "Not checked"
+msgstr "Nu se verifică"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__partner_id
+msgid "Partner"
+msgstr "Partener"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/wizard/get_partner_data.py:0
+msgid "Partner data updated!"
+msgstr "Datele partenerului au fost actualizate!"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/wizard/get_partner_data.py:0
+msgid ""
+"Partner data updated! Please check the address fields. VIES does not return "
+"the addresses in a consistent form or complete so it can not be split "
+"automatically."
+msgstr ""
+"Datele partenerului au fost actualizate! Verificați câmpurile de adresă. "
+"VIES nu returnează adresele într-o formă consistentă sau completă, deci nu "
+"pot fi împărțite automat."
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Please add the country code to the vat number or country field"
+msgstr "Adăugați prefixul de țară la CUI sau completați câmpul țară"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,help:l10n_ro_partner_base.field_res_config_settings__l10n_ro_vat_nrc_unique
+msgid ""
+"Prevents the creation of two company partners with the same VAT (or the same"
+" VAT and NRC) in a company with the Romanian fiscal country."
+msgstr ""
+"Împiedică crearea a doi parteneri companie cu același CUI (sau același CUI "
+"și NRC) într-o companie cu țara fiscală România."
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_company__l10n_ro_caen_code
+msgid "Romania - CAEN Code"
+msgstr "România - Cod CAEN"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_config_settings__l10n_ro_vat_nrc_unique
+msgid "Romania - Unique Partners"
+msgstr "România - Parteneri unici"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__l10n_ro_vat_subjected
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_users__l10n_ro_vat_subjected
+msgid "Romania - VAT Subjected"
+msgstr "România - Plătitor de TVA"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__l10n_ro_vat_number
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_users__l10n_ro_vat_number
+msgid "Romania - VAT number digits"
+msgstr "România - Cifrele CUI"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_partner__l10n_ro_partner_warning
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_res_users__l10n_ro_partner_warning
+msgid "Romania - Warning"
+msgstr "România - Avertisment"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__service
+msgid "Service"
+msgstr "Serviciu"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__state
+msgid "State"
+msgstr "Județ"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,field_description:l10n_ro_partner_base.field_l10n_ro_get_partner_data__status_message
+msgid "Status Message"
+msgstr "Mesaj de stare"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "Street"
+msgstr "Stradă"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid ""
+"The 'zeep' library is required for VIES lookups. Install it with: pip "
+"install zeep"
+msgstr ""
+"Biblioteca „zeep” este necesară pentru interogările VIES. Instalați-o cu: "
+"pip install zeep"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner_unique.py:0
+msgid "The VAT and NRC pair (%(vat)s, %(nrc)s) must be unique!"
+msgstr "Perechea CUI și NRC (%(vat)s, %(nrc)s) trebuie să fie unică!"
+
+#. module: l10n_ro_partner_base
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_base.res_config_settings_view_form_l10n_ro_partner_base
+msgid "Unique Partners (Romania)"
+msgstr "Parteneri unici (România)"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__res_config_settings__l10n_ro_vat_nrc_unique__vat
+msgid "Unique VAT"
+msgstr "CUI unic"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__res_config_settings__l10n_ro_vat_nrc_unique__vat_nrc
+msgid "Unique VAT and NRC"
+msgstr "CUI și NRC unice"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "VAT"
+msgstr "CUI"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields,help:l10n_ro_partner_base.field_res_partner__l10n_ro_vat_number
+#: model:ir.model.fields,help:l10n_ro_partner_base.field_res_users__l10n_ro_vat_number
+msgid "VAT number without country code."
+msgstr "Numărul de TVA fără prefixul de țară."
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__l10n_ro_get_partner_data__service__vies
+msgid "VIES for non-Romanian partners"
+msgstr "VIES pentru parteneri non-români"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "VIES service error: %s"
+msgstr "Eroare serviciu VIES: %s"
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/wizard/get_partner_data.py:0
+msgid "You can't use this function on delivery contacts."
+msgstr "Nu puteți folosi această funcție pe contacte de livrare."
+
+#. module: l10n_ro_partner_base
+#. odoo-python
+#: code:addons/l10n_ro_partner_base/models/res_partner.py:0
+msgid "ZIP"
+msgstr "Cod poștal"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__l10n_ro_get_partner_data__state__get
+msgid "get"
+msgstr "get"
+
+#. module: l10n_ro_partner_base
+#: model:ir.model.fields.selection,name:l10n_ro_partner_base.selection__l10n_ro_get_partner_data__state__set
+msgid "set"
+msgstr "set"
