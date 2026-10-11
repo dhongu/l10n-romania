@@ -1,0 +1,20 @@
+# Copyright (C) 2026 Terrabit
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+from odoo import fields, models
+from odoo.addons.account.models.product import ACCOUNT_DOMAIN
+
+
+class AccountAccount(models.Model):
+    _inherit = "account.account"
+
+    l10n_ro_stock_consume_account_id = fields.Many2one(
+        "account.account",
+        string="Consume Account",
+        company_dependent=True,
+        domain=ACCOUNT_DOMAIN,
+        help="Account used for stock consume and usage giving operations",
+    )
+    l10n_ro_reception_in_progress_account_id = fields.Many2one(
+        "account.account", string="Romania - Reception in Progress Account"
+    )
