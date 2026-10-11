@@ -17,7 +17,7 @@ Romania - Set Lang to Romanian
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_lang
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_lang
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -31,6 +31,23 @@ Set language to romanian if IP is from Romania
 
 Changelog
 =========
+
+20.0.0.0.5 (2026-10-12)
+-----------------------
+
+- Migration to 20.0. ``get_nearest_lang`` keeps its signature and the
+  language lookup in ``http_routing`` (``_match``,
+  ``res.lang._get_frontend``) behaves as in 19.0, so the override is
+  unchanged; the test takes the website from ``base.default_website``
+  (the ``website`` model now lives in ``base``).
+
+19.0.0.0.5 (2026-10-11)
+-----------------------
+
+- Romanian is chosen for visitors from Romania only when it is an active
+  language of the website; otherwise every website page failed with HTTP
+  500 (``TypeError: Expected bytes`` when setting the ``frontend_lang``
+  cookie).
 
 19.0.0.0.4 (2026-10-09)
 -----------------------
@@ -82,6 +99,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_lang>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_lang>`_ project on GitHub.
 
 You are welcome to contribute.
