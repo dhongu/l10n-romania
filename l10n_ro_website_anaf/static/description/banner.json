@@ -1,0 +1,11 @@
+{
+  "title": "Website ANAF Prefill",
+  "summary": "Company details from ANAF at checkout",
+  "icon": "globe",
+  "lang": "en",
+  "features": [
+    "Name and address filled in from ANAF",
+    "Warnings for inactive or struck-off firms",
+    "Cached, rate-limited public look-up"
+  ]
+}
