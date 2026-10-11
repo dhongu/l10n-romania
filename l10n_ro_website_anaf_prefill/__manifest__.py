@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "category": "Website/Website",
     "countries": ["ro"],
-    "depends": ["deltatech_website_vat_validation", "l10n_ro_partner_create_by_vat"],
+    "depends": ["website_sale", "l10n_ro_partner_create_by_vat"],
     "data": ["views/templates.xml"],
     "assets": {
         "web.assets_frontend": [

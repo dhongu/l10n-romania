@@ -411,6 +411,9 @@ company</li>
 <p>No configuration. The ANAF address and the API key, if any, are those of
 <tt class="docutils literal">l10n_ro_partner_create_by_vat</tt> (system parameters
 <tt class="docutils literal">l10n_ro_partner_create_by_vat.*</tt>).</p>
+<p>The module only fills in the form. The checks when the address is
+submitted (tax code refused when not found or struck off) are done by
+<tt class="docutils literal">deltatech_website_vat_validation</tt>, when installed.</p>
 </div>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-2">Changelog</a></h1>

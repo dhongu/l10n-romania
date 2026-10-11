@@ -6,9 +6,8 @@ from unittest.mock import patch
 import odoo
 from odoo.tests import HttpCase, new_test_user, tagged
 
-from odoo.addons.deltatech_website_vat_validation.controllers.website_sale import WebsiteSaleVATValidation
-
 from ..controllers import main
+from ..controllers.main import AnafPrefill
 
 
 @tagged("post_install", "-at_install")
@@ -40,7 +39,7 @@ class TestAnafPrefill(HttpCase):
         }
 
     def _lookup(self, vat, answer=None):
-        with patch.object(WebsiteSaleVATValidation, "_anaf_lookup", return_value=answer) as lookup:
+        with patch.object(AnafPrefill, "_anaf_lookup", return_value=answer) as lookup:
             result = self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": vat})
         return result, lookup
 
@@ -106,9 +105,56 @@ class TestAnafPrefill(HttpCase):
         self.authenticate("anaf_buyer", "anaf_buyer")
         self.session["sale_order_id"] = cart.id
         odoo.http.root.session_store.save(self.session)
-        with patch.object(WebsiteSaleVATValidation, "_anaf_lookup", return_value=("found", self._company())):
+        with patch.object(AnafPrefill, "_anaf_lookup", return_value=("found", self._company())):
             self.start_tour(
                 f"/shop/address?partner_id={user.partner_id.id}&address_type=billing",
                 "l10n_ro_website_anaf_prefill_tour",
                 login="anaf_buyer",
+            )
+
+    def test_anaf_answers(self):
+        """The real request: found (with the struck-off state), not found, service down."""
+        answer = {
+            "found": [
+                {
+                    "date_generale": {
+                        "denumire": "FIRMA RADIATA SRL",
+                        "cui": 1234567897,
+                        "codPostal": "",
+                        "stare_inregistrare": "RADIERE din data 20.07.2016",
+                    },
+                    "stare_inactiv": {"statusInactivi": False, "dataRadiere": ""},
+                    "adresa_domiciliu_fiscal": {
+                        "ddenumire_Strada": "STR. A",
+                        "dnumar_Strada": "1",
+                        "ddetalii_Adresa": "",
+                        "ddenumire_Localitate": "MUN. CLUJ-NAPOCA",
+                        "ddenumire_Judet": "CLUJ",
+                        "dcod_JudetAuto": "CJ",
+                    },
+                }
+            ]
+        }
+
+        class Response:
+            def __init__(self, payload):
+                self.payload = payload
+
+            def raise_for_status(self):
+                return None
+
+            def json(self):
+                return self.payload
+
+        with patch.object(main.requests, "post", return_value=Response(answer)):
+            result = self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "RO1234567897"})
+        self.assertEqual((result["state"], result["radiated"]), ("found", True))
+        main._cache.clear()
+        with patch.object(main.requests, "post", return_value=Response({"found": [], "notFound": [1]})):
+            self.assertEqual(
+                self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "18547290"})["state"], "not_found"
+            )
+        with patch.object(main.requests, "post", side_effect=main.requests.ConnectTimeout("timeout")):
+            self.assertEqual(
+                self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "14399840"})["state"], "unavailable"
             )
