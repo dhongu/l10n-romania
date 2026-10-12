@@ -81,7 +81,7 @@
         id="report_batch_report_batch_delivery"
         inherit_id="l10n_ro_stock_picking_batch_report.report_batch_delivery"
     >
-        <xpath expr="//t[@t-call='l10n_ro_stock_picking_report.report_delivery_sign']" position="after">
+        <xpath expr="//t[@t-call='l10n_ro_picking_report.report_delivery_sign']" position="after">
             <span t-if="batch.l10n_ro_edi_stock_required">
                 <t
                     t-set="filtered_documents"

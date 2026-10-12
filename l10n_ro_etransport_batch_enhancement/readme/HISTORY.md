@@ -1,3 +1,7 @@
+## 19.0.0.3.4 (2026-10-12)
+
+- Depends on `l10n_ro_picking_report`, the new name of `l10n_ro_stock_picking_report`.
+
 ## 19.0.0.3.3 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.

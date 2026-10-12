@@ -54,16 +54,16 @@ class StockPicking(models.Model):
         report = False
         if self.picking_type_code == "incoming":
             if self.location_dest_id.is_store:
-                report = "l10n_ro_stock_picking_report.action_report_reception_sale_price"
+                report = "l10n_ro_picking_report.action_report_reception_sale_price"
 
             else:
-                report = "l10n_ro_stock_picking_report.action_report_reception"
+                report = "l10n_ro_picking_report.action_report_reception"
 
         elif self.picking_type_code == "outgoing":
-            report = "l10n_ro_stock_picking_report.action_report_delivery"
+            report = "l10n_ro_picking_report.action_report_delivery"
 
         else:
-            report = "l10n_ro_stock_picking_report.action_report_internal_transfer"
+            report = "l10n_ro_picking_report.action_report_internal_transfer"
 
         if report:
             res = self.env.ref(report).sudo().report_action(self)
@@ -72,7 +72,7 @@ class StockPicking(models.Model):
     def _attach_sign(self):
         """Render the delivery report in pdf and attach it to the picking in `self`."""
         self.ensure_one()
-        report = self.env["ir.actions.report"]._render_qweb_pdf("l10n_ro_stock_picking_report.report_delivery", self.id)
+        report = self.env["ir.actions.report"]._render_qweb_pdf("l10n_ro_picking_report.report_delivery", self.id)
         filename = f"{self.name}_signed_delivery_slip"
         if self.partner_id:
             message = self.env._("Order signed by %s", self.partner_id.name)
