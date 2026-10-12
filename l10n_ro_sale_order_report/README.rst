@@ -17,7 +17,7 @@ Terrabit Sale Order Report
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_sale_order_report
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_sale_order_report
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -142,6 +142,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_sale_order_report>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_sale_order_report>`_ project on GitHub.
 
 You are welcome to contribute.
