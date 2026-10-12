@@ -337,59 +337,59 @@ class ReportPickingReception(models.AbstractModel):
 
 
 class ReportDelivery(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_delivery"
+    _name = "report.l10n_ro_picking_report.report_delivery"
     _description = "Report delivery"
     _inherit = "report.abstract_report.delivery_report"
-    _template = "l10n_ro_stock_picking_report.report_delivery"
+    _template = "l10n_ro_picking_report.report_delivery"
 
 
 class ReportDeliveryPrice(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_delivery_price"
+    _name = "report.l10n_ro_picking_report.report_delivery_price"
     _description = "Report delivery from store"
     _inherit = "report.abstract_report.delivery_report"
-    _template = "l10n_ro_stock_picking_report.report_delivery_price"
+    _template = "l10n_ro_picking_report.report_delivery_price"
 
 
 class ReportConsumeVoucher(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_consume_voucher"
+    _name = "report.l10n_ro_picking_report.report_consume_voucher"
     _description = "Report consume voucher"
     _inherit = "report.abstract_report.delivery_report"
-    _template = "l10n_ro_stock_picking_report.report_consume_voucher"
+    _template = "l10n_ro_picking_report.report_consume_voucher"
 
 
 class ReportInternalTransfer(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_internal_transfer"
+    _name = "report.l10n_ro_picking_report.report_internal_transfer"
     _description = "Report transfer"
     _inherit = "report.abstract_report.reception_report"
-    _template = "l10n_ro_stock_picking_report.report_internal_transfer"
+    _template = "l10n_ro_picking_report.report_internal_transfer"
 
 
 class ReportReception(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_reception"
+    _name = "report.l10n_ro_picking_report.report_reception"
     _description = "Report reception"
     _inherit = "report.abstract_report.reception_report"
-    _template = "l10n_ro_stock_picking_report.report_reception"
+    _template = "l10n_ro_picking_report.report_reception"
 
 
 class ReportReceptionNoTax(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_reception_no_tax"
+    _name = "report.l10n_ro_picking_report.report_reception_no_tax"
     _description = "Report reception no tax"
     _inherit = "report.abstract_report.reception_report"
-    _template = "l10n_ro_stock_picking_report.report_reception_no_tax"
+    _template = "l10n_ro_picking_report.report_reception_no_tax"
 
 
 class ReportReceptionSalePrice(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_reception_sale_price"
+    _name = "report.l10n_ro_picking_report.report_reception_sale_price"
     _description = "Report reception in store"
     _inherit = "report.abstract_report.reception_report"
-    _template = "l10n_ro_stock_picking_report.report_reception_sale_price"
+    _template = "l10n_ro_picking_report.report_reception_sale_price"
 
 
 class ReportCumulativeSalePrice(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_c_recep_sale_price"
+    _name = "report.l10n_ro_picking_report.report_c_recep_sale_price"
     _description = "Report cumulative reception in store"
     _inherit = "report.abstract_report.reception_report"
-    _template = "l10n_ro_stock_picking_report.report_c_recep_sale_price"
+    _template = "l10n_ro_picking_report.report_c_recep_sale_price"
 
     @api.model
     def _get_report_values(self, docids, data=None):
@@ -406,10 +406,10 @@ class ReportCumulativeSalePrice(models.AbstractModel):
 
 
 class ReportCumulativeIternalTransfer(models.AbstractModel):
-    _name = "report.l10n_ro_stock_picking_report.report_c_internal_transfer"
+    _name = "report.l10n_ro_picking_report.report_c_internal_transfer"
     _description = "Report cumulative internal transfer"
     _inherit = "report.abstract_report.reception_report"
-    _template = "l10n_ro_stock_picking_report.report_c_internal_transfer"
+    _template = "l10n_ro_picking_report.report_c_internal_transfer"
 
     @api.model
     def _get_report_values(self, docids, data=None):
