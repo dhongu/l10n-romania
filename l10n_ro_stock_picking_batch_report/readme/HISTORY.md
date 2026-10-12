@@ -1,3 +1,7 @@
+## 19.0.0.0.5 (2026-10-12)
+
+- Depends on `l10n_ro_picking_report`, the new name of `l10n_ro_stock_picking_report`.
+
 ## 19.0.0.0.4 (2026-10-09)
 
 - Delivery batch report: removed the leftover debug line that printed the list of product IDs in the PDF.

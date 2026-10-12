@@ -8,8 +8,8 @@
 # o livrare marcată ca aviz, un consum și un transfer intern, plus un raport cumulativ.
 #
 # Rulare — RESTRÂNSĂ LA CLASĂ, altfel se rescriu capturile tuturor modulelor cu test de fișe:
-#   ./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_stock_picking_report,l10n_ro_doc_screenshots \
-#       --test-tags=/l10n_ro_stock_picking_report:TestPickingReportScreenshots --stop-after-init
+#   ./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_picking_report,l10n_ro_doc_screenshots \
+#       --test-tags=/l10n_ro_picking_report:TestPickingReportScreenshots --stop-after-init
 import unittest
 
 from odoo.tests import tagged
@@ -24,7 +24,7 @@ except ImportError:
 
 @tagged("-at_install", "post_install", "fise_screenshots")
 class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or object):
-    screenshots_module = "l10n_ro_stock_picking_report"
+    screenshots_module = "l10n_ro_picking_report"
 
     @classmethod
     @AccountTestInvoicingCommon.setup_country("ro")
@@ -209,7 +209,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
         )
 
         # 5. Raportul cumulativ pe recepții (pasul 10)
-        cls.report_cumulativ = env.ref("l10n_ro_stock_picking_report.action_report_c_recep_sale_price")
+        cls.report_cumulativ = env.ref("l10n_ro_picking_report.action_report_c_recep_sale_price")
         cls.cumulative = env["stock.picking.cumulative"].create(
             {
                 "picking_type_id": cls.picking_type_in.id,
@@ -295,7 +295,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
 
     # ------------------------------------------------------------------
     def test_capture_fise(self):
-        action_cumulativ = self.env.ref("l10n_ro_stock_picking_report.action_stock_picking_cumulative")
+        action_cumulativ = self.env.ref("l10n_ro_picking_report.action_stock_picking_cumulative")
         act_picking = self.env.ref("stock.action_picking_tree_all")
         self.capture_screenshots(
             [
@@ -339,19 +339,19 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
                 },
                 # 4. NIR-ul standard
                 self.report_shot(
-                    "l10n_ro_stock_picking_report.action_report_reception",
+                    "l10n_ro_picking_report.action_report_reception",
                     self.picking_nir,
                     "04_nir.png",
                 ),
                 # 5. NIR fără taxe
                 self.report_shot(
-                    "l10n_ro_stock_picking_report.action_report_reception_no_tax",
+                    "l10n_ro_picking_report.action_report_reception_no_tax",
                     self.picking_nir,
                     "05_nir_fara_taxe.png",
                 ),
                 # 6. NIR cu preț de vânzare
                 self.report_shot(
-                    "l10n_ro_stock_picking_report.action_report_reception_sale_price",
+                    "l10n_ro_picking_report.action_report_reception_sale_price",
                     self.picking_nir,
                     "06_nir_pret_vanzare.png",
                 ),
@@ -364,25 +364,25 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
                 },
                 # 8. NIR-ul pe recepția în unități de ambalare — cantitate, preț și valoare pe cutie
                 self.report_shot(
-                    "l10n_ro_stock_picking_report.action_report_reception",
+                    "l10n_ro_picking_report.action_report_reception",
                     self.picking_cutii,
                     "08_nir_unitate_ambalare.png",
                 ),
                 # 9. Avizul de însoțire a mărfii
                 self.report_shot(
-                    "l10n_ro_stock_picking_report.action_report_delivery_price",
+                    "l10n_ro_picking_report.action_report_delivery_price",
                     self.picking_aviz,
                     "09_aviz_insotire.png",
                 ),
                 # 10. Bonul de consum
                 self.report_shot(
-                    "l10n_ro_stock_picking_report.action_report_consume_voucher",
+                    "l10n_ro_picking_report.action_report_consume_voucher",
                     self.picking_consum,
                     "10_bon_consum.png",
                 ),
                 # 11. Nota de transfer intern
                 self.report_shot(
-                    "l10n_ro_stock_picking_report.action_report_internal_transfer",
+                    "l10n_ro_picking_report.action_report_internal_transfer",
                     self.picking_transfer,
                     "11_transfer_intern.png",
                 ),
@@ -415,7 +415,7 @@ class TestPickingReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or
                 },
                 # 13. Recepția cumulativă cu preț de vânzare
                 self.report_shot(
-                    "l10n_ro_stock_picking_report.action_report_c_recep_sale_price",
+                    "l10n_ro_picking_report.action_report_c_recep_sale_price",
                     self.cumulative,
                     "13_receptie_cumulativa.png",
                 ),

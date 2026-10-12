@@ -273,16 +273,16 @@ class TestStoreValuation(AccountTestInvoicingCommon):
         self.assertFalse(lines.filtered(lambda x: x.account_id == self.account_4428))
 
     def test_is_store_for_picking_report(self):
-        """With l10n_ro_stock_picking_report, a store location is a store."""
+        """With l10n_ro_picking_report, a store location is a store."""
         if "is_store" not in self.env["stock.location"]._fields:
-            self.skipTest("l10n_ro_stock_picking_report not installed")
+            self.skipTest("l10n_ro_picking_report not installed")
         self.assertTrue(self.location_store.is_store)
         self.assertFalse(self.location_depot.is_store)
 
     def _nir_line(self, move):
-        """The NIR at sale price line of `l10n_ro_stock_picking_report` for `move`."""
+        """The NIR at sale price line of `l10n_ro_picking_report` for `move`."""
         if "l10n_ro_sale_price" not in self.env["stock.move"]._fields:
-            self.skipTest("l10n_ro_stock_picking_report not installed")
+            self.skipTest("l10n_ro_picking_report not installed")
         return self.env["report.abstract_report.reception_report"]._get_line(move)
 
     def _assert_nir_matches_store_entry(self, move, sale_amount, markup, tax):
@@ -313,7 +313,7 @@ class TestStoreValuation(AccountTestInvoicingCommon):
         not the product price of 100.
         """
         if "store_pricelist_id" not in self.location_store._fields:
-            self.skipTest("l10n_ro_stock_picking_report not installed")
+            self.skipTest("l10n_ro_picking_report not installed")
         self.location_store.store_pricelist_id = self.env["product.pricelist"].create(
             {
                 "name": "Preturi magazin",

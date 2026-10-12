@@ -1,6 +1,6 @@
 # Fișă Modul: NIR, aviz de însoțire, bon de consum și notă de transfer
 
-**Modul:** `l10n_ro_stock_picking_report`
+**Modul:** `l10n_ro_picking_report`
 **Utilizator principal:** Gestionar, operator recepție, contabil de gestiune
 **Prioritate:** 🔴 Ridicată (documentele justifică încărcarea și descărcarea gestiunii la control)
 
@@ -62,7 +62,7 @@ Date minime pentru demo:
 
 ## 5. Configurare inițială
 
-1. Instalați modulul `l10n_ro_stock_picking_report`. El exclude `l10n_ro_stock_picking_comment_template` — cele două nu pot coexista.
+1. Instalați modulul `l10n_ro_picking_report`. El exclude `l10n_ro_stock_picking_comment_template` — cele două nu pot coexista.
 2. Activați grupul **Unități de măsură** pentru utilizatorii care tipăresc documente (Setări → Utilizatori și companii, sau Inventar → Setări → „Unități de măsură"), altfel coloana U/M lipsește de pe rapoarte.
 3. În **Inventar → Configurare → Locații**, deschideți locația de gestiune și completați cele două câmpuri adăugate de modul, în secțiunea *Informații suplimentare*: **Pricelist** — lista de prețuri din care se ia prețul de vânzare afișat pe NIR pentru gestiunile ținute la preț de vânzare — și **Manager**, persoana care apare la rubrica „Primit în gestiune" pe documentele tipărite. Managerul se completează pe **fiecare** gestiune care primește marfă, nu doar pe cea de magazin: unde lipsește, rubrica iese necompletată pe NIR. Cele două etichete apar în engleză, traducerea lor lipsește din `i18n/ro.po`.
 
@@ -300,8 +300,8 @@ Capturile (`readme/screenshots/`) sunt **generate automat** din `tests/test_scre
 Regenerare — **restrângeți la clasă**, altfel se rescriu capturile tuturor modulelor care au un test de fișe:
 
 ```bash
-./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_stock_picking_report,l10n_ro_doc_screenshots \
-    --test-tags=/l10n_ro_stock_picking_report:TestPickingReportScreenshots --stop-after-init
+./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_picking_report,l10n_ro_doc_screenshots \
+    --test-tags=/l10n_ro_picking_report:TestPickingReportScreenshots --stop-after-init
 ```
 
 > Rulați pe o bază **curată**, cu doar aceste module instalate. Pe o bază cu suita completă, randarea ecranelor grele depășește timpul de așteptare al capturii.

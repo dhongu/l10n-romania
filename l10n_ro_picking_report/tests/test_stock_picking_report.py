@@ -92,7 +92,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
     # -----------------------------
     def test_report_delivery(self):
         picking = self._create_picking(self.picking_type_out, qty=2.0, partner=self.partner_customer)
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_delivery", picking)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_delivery", picking)
         # Basic sanity checks: title and company/customer blocks from templates
         self.assertIn("Delivery:", html)
         self.assertIn("Company", html)
@@ -100,7 +100,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
 
     def test_report_delivery_with_price(self):
         picking = self._create_picking(self.picking_type_out, qty=1.0, partner=self.partner_customer)
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_delivery_price", picking)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_delivery_price", picking)
         # Presence of the same blocks; price columns may be empty without SO link, but template should render
         self.assertIn("Delivery:", html)
         self.assertIn("Price", html)
@@ -111,7 +111,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         picking = self._create_picking(self.picking_type_out, qty=2.0, partner=self.partner_customer)
         move = picking.move_ids[0]
         self.assertFalse(move.sale_line_id)
-        handler = self.env["report.l10n_ro_stock_picking_report.report_delivery_price"]
+        handler = self.env["report.l10n_ro_picking_report.report_delivery_price"]
         res = handler._get_line(move)
         self.assertAlmostEqual(res["price"], 20.0, places=2)
         self.assertAlmostEqual(res["amount"], 40.0, places=2)
@@ -160,7 +160,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         self.assertAlmostEqual(move.quantity, 3.0)
         self.assertAlmostEqual(move.product_qty, 39.0)
 
-        handler = self.env["report.l10n_ro_stock_picking_report.report_delivery_price"]
+        handler = self.env["report.l10n_ro_picking_report.report_delivery_price"]
         res = handler._get_line(move)
         # 20 lei/kg × 13 kg = 260 lei cutia
         self.assertAlmostEqual(res["price"], 260.0, places=2, msg="prețul trebuie exprimat per cutie")
@@ -205,7 +205,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
                 picking._action_done()
 
                 move = picking.move_ids[0]
-                handler = self.env["report.l10n_ro_stock_picking_report.report_delivery_price"]
+                handler = self.env["report.l10n_ro_picking_report.report_delivery_price"]
                 res = handler._get_line(move)
                 printed_qty = move.quantity or move.product_uom_qty
                 self.assertAlmostEqual(
@@ -227,25 +227,25 @@ class TestL10nRoStockPickingReport(TransactionCase):
             self.skipTest("l10n_ro_stock_account is not installed (no l10n_ro_notice field)")
         picking = self._create_picking(self.picking_type_out, qty=1.0, partner=self.partner_customer)
         picking.l10n_ro_notice = True
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_delivery_price", picking)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_delivery_price", picking)
         self.assertIn("Goods Dispatch Note:", html)
         self.assertNotIn("Delivery:", html)
 
     def test_report_reception(self):
         picking = self._create_picking(self.picking_type_in, qty=3.0, partner=self.partner_supplier)
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_reception", picking)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_reception", picking)
         self.assertIn("Reception:", html)
         self.assertIn("Supplier", html)
         self.assertIn(self.product.display_name, html)
 
     def test_report_reception_no_tax(self):
         picking = self._create_picking(self.picking_type_in, qty=1.0, partner=self.partner_supplier)
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_reception_no_tax", picking)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_reception_no_tax", picking)
         self.assertIn("Reception:", html)
 
     def test_report_reception_sale_price(self):
         picking = self._create_picking(self.picking_type_in, qty=1.0, partner=self.partner_supplier)
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_reception_sale_price", picking)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_reception_sale_price", picking)
         self.assertIn("Reception:", html)
         # Template includes Sale Price column
         self.assertIn("Sale price", html)
@@ -253,7 +253,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
     def test_report_internal_transfer(self):
         picking = self._create_picking(self.picking_type_int, qty=1.0)
         try:
-            html = self._render_report_html("l10n_ro_stock_picking_report.action_report_internal_transfer", picking)
+            html = self._render_report_html("l10n_ro_picking_report.action_report_internal_transfer", picking)
         except Exception as e:
             if "rlPyCairo" in str(e) or "_rl_renderPM" in str(e) or "barcode" in str(e).lower():
                 self.skipTest("rlPyCairo not installed, skipping barcode render test")
@@ -266,7 +266,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
     def test_report_consume_voucher(self):
         # Use internal picking; template will still render consume table/signature
         picking = self._create_picking(self.picking_type_int, qty=2.0)
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_consume_voucher", picking)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_consume_voucher", picking)
         self.assertIn("Consume", html)  # generic text in section ids/titles
         self.assertIn("Signature", html)  # signature block wording
 
@@ -280,12 +280,12 @@ class TestL10nRoStockPickingReport(TransactionCase):
         wiz = self.env["stock.picking.cumulative"].create(
             {
                 "picking_type_id": self.picking_type_int.id,
-                "report_id": self.env.ref("l10n_ro_stock_picking_report.action_report_c_internal_transfer").id,
+                "report_id": self.env.ref("l10n_ro_picking_report.action_report_c_internal_transfer").id,
             }
         )
         # Fill move_ids through button_show domain or directly
         wiz.button_show()
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_c_internal_transfer", wiz)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_c_internal_transfer", wiz)
         self.assertIn("Quantity", html)
         self.assertIn("Product", html)
 
@@ -456,7 +456,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
         self.assertAlmostEqual(move.quantity, 10.0)
         self.assertAlmostEqual(move.product_qty, 130.0)
 
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_reception", picking)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_reception", picking)
         body = re.sub(r"\s+", " ", html)
         row = re.search(r"<tbody>(.*?)</tbody>", body)
         self.assertTrue(row, "raportul nu conține niciun rând de produs")
@@ -559,7 +559,7 @@ class TestL10nRoStockPickingReport(TransactionCase):
             move = picking.move_ids[0]
             # prețul de vânzare înghețat vine din lista de prețuri a locației, nu din list_price
             self.assertAlmostEqual(move.l10n_ro_sale_price, 33.0, places=2)
-            html = self._render_report_html("l10n_ro_stock_picking_report.action_report_reception_sale_price", picking)
+            html = self._render_report_html("l10n_ro_picking_report.action_report_reception_sale_price", picking)
             self.assertIn("Sale price", html)
         finally:
             self.picking_type_in.default_location_dest_id.store_pricelist_id = False
@@ -581,10 +581,10 @@ class TestL10nRoStockPickingReport(TransactionCase):
         wiz = self.env["stock.picking.cumulative"].create(
             {
                 "picking_type_id": self.picking_type_in.id,
-                "report_id": self.env.ref("l10n_ro_stock_picking_report.action_report_c_recep_sale_price").id,
+                "report_id": self.env.ref("l10n_ro_picking_report.action_report_c_recep_sale_price").id,
             }
         )
         wiz.button_show()
-        html = self._render_report_html("l10n_ro_stock_picking_report.action_report_c_recep_sale_price", wiz)
+        html = self._render_report_html("l10n_ro_picking_report.action_report_c_recep_sale_price", wiz)
         self.assertIn("Sale price", html)
         self.assertIn("Product", html)

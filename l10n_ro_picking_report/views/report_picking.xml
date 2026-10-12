@@ -278,10 +278,10 @@
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <t t-call="l10n_ro_stock_picking_report.report_address" />
+                        <t t-call="l10n_ro_picking_report.report_address" />
                         <t t-set="doc_type" t-value="'delivery'" />
-                        <t t-call="l10n_ro_stock_picking_report.report_title" />
-                        <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
+                        <t t-call="l10n_ro_picking_report.report_title" />
+                        <t t-call="l10n_ro_picking_report.report_delivery_info" />
 
                         <t t-set="has_serial_number" t-value="False" />
                         <t
@@ -322,7 +322,7 @@
                                 </t>
                             </tbody>
                         </table>
-                        <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
+                        <t t-call="l10n_ro_picking_report.report_delivery_sign" />
                         <div t-if="o.note">
                             <span t-field="o.note" />
                         </div>
@@ -337,7 +337,7 @@
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <t t-call="l10n_ro_stock_picking_report.report_address" />
+                        <t t-call="l10n_ro_picking_report.report_address" />
                         <h2 id="title">
                             <span t-if="o.state == 'drat'">Draft</span>
                             <span t-if="o.state == 'cancel'">Cancelled</span>
@@ -449,7 +449,7 @@
                                 <tr />
                             </table>
                         </div>
-                        <t t-call="l10n_ro_stock_picking_report.report_consume_sign" />
+                        <t t-call="l10n_ro_picking_report.report_consume_sign" />
                         <div t-if="o.note">
                             <span t-field="o.note" />
                         </div>
@@ -548,8 +548,8 @@
                                 />
                             </div>
                         </div>
-                        <t t-call="l10n_ro_stock_picking_report.report_address" />
-                        <t t-call="l10n_ro_stock_picking_report.report_title" />
+                        <t t-call="l10n_ro_picking_report.report_address" />
+                        <t t-call="l10n_ro_picking_report.report_title" />
 
                         <div id="informations" class="row mt32 mb32">
                             <div class="col-3 bm-2">
@@ -728,11 +728,11 @@
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <t t-call="l10n_ro_stock_picking_report.report_address" />
+                        <t t-call="l10n_ro_picking_report.report_address" />
                         <t t-set="doc_type" t-value="'delivery'" />
-                        <t t-call="l10n_ro_stock_picking_report.report_title" />
+                        <t t-call="l10n_ro_picking_report.report_title" />
 
-                        <t t-call="l10n_ro_stock_picking_report.report_delivery_info" />
+                        <t t-call="l10n_ro_picking_report.report_delivery_info" />
 
                         <table class="table table-borderless ">
                             <thead>
@@ -830,8 +830,8 @@
                         </table>
                         <div class="row">
                             <t t-set="totals" t-value="get_totals(o.move_ids)" />
-                            <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
-                            <t t-call="l10n_ro_stock_picking_report.report_totals" />
+                            <t t-call="l10n_ro_picking_report.report_delivery_sign" />
+                            <t t-call="l10n_ro_picking_report.report_totals" />
                         </div>
                         <div t-if="o.note">
                             <span t-field="o.note" />
@@ -968,10 +968,10 @@
                                 <span t-field="o.name" />
                             </div>
                         </div>
-                        <t t-call="l10n_ro_stock_picking_report.report_address" />
+                        <t t-call="l10n_ro_picking_report.report_address" />
                         <t t-set="doc_type" t-value="'reception'" />
-                        <t t-call="l10n_ro_stock_picking_report.report_title" />
-                        <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
+                        <t t-call="l10n_ro_picking_report.report_title" />
+                        <t t-call="l10n_ro_picking_report.report_reception_text" />
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
@@ -1085,7 +1085,7 @@
                             <t t-set="totals" t-value="get_totals(o.move_ids)" />
                             <t
                                 t-if="res_company.taxes_on_reception"
-                                t-call="l10n_ro_stock_picking_report.report_totals"
+                                t-call="l10n_ro_picking_report.report_totals"
                             />
                             <t t-else="">
                                 <div class="col-4 ml-auto">
@@ -1105,7 +1105,7 @@
                                 </div>
                             </t>
                         </div>
-                        <t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
+                        <t t-call="l10n_ro_picking_report.report_reception_sign" />
                         <div t-if="o.note">
                             <span t-field="o.note" />
                         </div>
@@ -1120,10 +1120,10 @@
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <t t-call="l10n_ro_stock_picking_report.report_address" />
+                        <t t-call="l10n_ro_picking_report.report_address" />
                         <t t-set="doc_type" t-value="'reception'" />
-                        <t t-call="l10n_ro_stock_picking_report.report_title" />
-                        <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
+                        <t t-call="l10n_ro_picking_report.report_title" />
+                        <t t-call="l10n_ro_picking_report.report_reception_text" />
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
@@ -1224,7 +1224,7 @@
                                 </table>
                             </div>
                         </div>
-                        <t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
+                        <t t-call="l10n_ro_picking_report.report_reception_sign" />
                         <div t-if="o.note">
                             <span t-field="o.note" />
                         </div>
@@ -1239,10 +1239,10 @@
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <t t-call="l10n_ro_stock_picking_report.report_address" />
+                        <t t-call="l10n_ro_picking_report.report_address" />
                         <t t-set="doc_type" t-value="'reception'" />
-                        <t t-call="l10n_ro_stock_picking_report.report_title" />
-                        <t t-call="l10n_ro_stock_picking_report.report_reception_text" />
+                        <t t-call="l10n_ro_picking_report.report_title" />
+                        <t t-call="l10n_ro_picking_report.report_reception_text" />
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
@@ -1335,10 +1335,10 @@
                         </table>
                         <div id="total" class="row justify-content-end">
                             <t t-set="totals" t-value="get_totals(o.move_ids)" />
-                            <t t-call="l10n_ro_stock_picking_report.report_totals" />
-                            <t t-call="l10n_ro_stock_picking_report.report_totals_sale" />
+                            <t t-call="l10n_ro_picking_report.report_totals" />
+                            <t t-call="l10n_ro_picking_report.report_totals_sale" />
                         </div>
-                        <t t-call="l10n_ro_stock_picking_report.report_reception_sign" />
+                        <t t-call="l10n_ro_picking_report.report_reception_sign" />
                         <div t-if="o.note">
                             <span t-field="o.note" />
                         </div>
@@ -1349,10 +1349,10 @@
         </t>
     </template>
     <template id="report_c_internal_transfer">
-        <t t-call="l10n_ro_stock_picking_report.report_internal_transfer" />
+        <t t-call="l10n_ro_picking_report.report_internal_transfer" />
     </template>
     <template id="report_c_recep_sale_price">
-        <t t-call="l10n_ro_stock_picking_report.report_reception_sale_price" />
+        <t t-call="l10n_ro_picking_report.report_reception_sale_price" />
     </template>
 
 
