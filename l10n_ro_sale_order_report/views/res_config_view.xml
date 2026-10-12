@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.account</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='quotation_order_setting_container']" position="inside">
+                <setting help="Display a counter of the lines on the sale order">
+                    <field name="counter_on_sale_order" />
+                </setting>
+                <setting help="Include image on sale order">
+                    <field name="include_image_line" />
+                </setting>
+             <setting help="Exclude product name from sale order line description">
+                    <field name="exclude_product_name_from_description_offer" />
+                </setting>
+                <setting help="Make the description smaller on the sale order line if the product name is not excluded">
+                    <field name="make_description_smaller" />
+                </setting>
+                <setting help="Show Total Amount with Taxes on Sale Order Report">
+                    <field name="show_total_amount_with_taxes_on_so" />
+                </setting>
+                <setting help="Show Lead Time on Sale Order Report">
+                    <field name="show_lead_time" />
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
