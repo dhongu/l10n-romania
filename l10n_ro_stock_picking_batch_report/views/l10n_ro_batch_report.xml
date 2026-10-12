@@ -171,7 +171,7 @@
                                 </tbody>
                             </table>
                         <t t-set="o" t-value="batch.picking_ids[0]" />
-                        <t t-call="l10n_ro_stock_picking_report.report_delivery_sign" />
+                        <t t-call="l10n_ro_picking_report.report_delivery_sign" />
                     </div>
                 </t>
             </t>
