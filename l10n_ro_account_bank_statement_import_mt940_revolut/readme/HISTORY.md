@@ -23,7 +23,7 @@
 - Fix: the currency lookup in `_revolut_journal_exists` didn't set
   `active_test=False`, so a currency inactive in Settings (but still used
   by a journal) was treated as "not found" and its wallet dropped.
-  Ported from 18.0 (ticket #9408, Agroamat).
+  Ported from 18.0.
 
 ## 19.0.1.0.0
 

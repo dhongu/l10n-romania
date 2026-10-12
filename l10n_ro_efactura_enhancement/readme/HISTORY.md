@@ -32,7 +32,7 @@
   POS (vânzare deja înregistrată pe bonul fiscal). Regula s-a pierdut la rescrierea
   modulului pe 19.0, iar de la migrare facturile din POS au plecat cu 380: ANAF
   număra vânzarea și TVA-ul de două ori (casa de marcat + factura). Semnalat pe
-  Damira (INV/2026/04101), confirmat și la Valshop (751 până în mai 2026, 380 după
+  o instanță de client, confirmat și la un al doilea client (751 până în mai 2026, 380 după
   trecerea pe 19).
   - Stornourile (381) și autofacturarea (389) rămân neschimbate.
   - XML-urile deja trimise nu se modifică.
@@ -44,7 +44,7 @@
   Modulul `deltatech_account_edi_ubl_advice` (când e instalat) concatenează în
   `cac:DespatchDocumentReference/cbc:ID` numele tuturor livrărilor (pickingurilor)
   facturate, fără nicio limită de lungime. Pe comenzi cu multe livrări parțiale
-  acumulate în timp (tichet 9429), lista depășea cele 200 de caractere admise de
+  acumulate în timp, lista depășea cele 200 de caractere admise de
   ANAF pentru BT-16, iar factura era respinsă la transmitere cu **BR-RO-L200**.
   - Suprascriem `_get_invoice_node` (nu `_add_invoice_header_nodes`), ca fix-ul
     să nu depindă de ordinea de încărcare față de
@@ -59,10 +59,10 @@
 ## 19.0.0.4.3 (2026-09-09)
 
 - **Limita reală pentru Avizul de plată (BT-83) e 140 de caractere, nu 200.**
-  Tichet #9441. Trunchierea livrată la #9369 tăia `cbc:PaymentID` /
+  Trunchierea livrată anterior tăia `cbc:PaymentID` /
   `cbc:InstructionID` la 200 de caractere, dar limita impusă de CIUS-RO pentru
   BT-83 este 140, verificată de schematronul ANAF prin regula **BR-RO-L140**.
-  Cifra 200 fusese preluată din corespondența tichetului #9369, nu din
+  Cifra 200 fusese preluată din corespondența unui client, nu din
   răspunsul ANAF — facturile lungi rămâneau respinse și după trunchiere (11
   refuzuri BR-RO-L140 între 01.09 și 09.09.2026).
   - Testele ancorează acum limita în regula de schematron și reproduc

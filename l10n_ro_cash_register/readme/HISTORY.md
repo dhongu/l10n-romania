@@ -58,7 +58,7 @@ numerotarea registrelor. Registrul are acum cache-ul de secvență propriu.
 - Un registru închis nu se poate șterge; butoanele de adăugare a încasărilor, plăților și
   operațiunilor nu mai apar pe el.
 
-Ideea vine din modulul de casă și bancă scris de Alexandru Grecu pentru MD Trade Concept SRL,
+Ideea vine din modulul de casă și bancă scris de Alexandru Grecu pentru un client,
 unde închiderea doar semnala diferențele apărute după închidere; aici ea le previne.
 
 ## 19.0.1.2.2
