@@ -25,7 +25,7 @@
                         />
                     </div>
                     <div t-if="doc.partner_id.vat">
-                        <t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'" />
+                        <t t-out="doc.company_id.country_id.vat_label or 'Tax ID'" />
                         :
                         <span t-field="doc.partner_id.vat" />
                     </div>
@@ -46,7 +46,7 @@
                 name="td_terms"
                 class="text-end"
             >
-                <span t-esc="round(line.customer_lead)" />
+                <span t-out="round(line.customer_lead)" />
             </td>
         </xpath>
         <xpath expr="//table/thead/tr/th" position="before">
@@ -69,7 +69,7 @@
              <t t-if="res_company.counter_on_sale_order">
                 <t t-set="product_line_number" t-value="product_line_number + 1" />
                 <td name="td_number">
-                    <span t-esc="product_line_number" />
+                    <span t-out="product_line_number" />
                 </td>
              </t>
              <t t-if="res_company.include_image_line">
@@ -85,29 +85,31 @@
         </td>
          <td name="td_product_name" position="replace">
             <td name="td_product_name">
-                <t t-if="line.name">
+                <!-- Odoo 20: `name` is empty for a product without sales description; `label` always has the product -->
+                <t t-if="line.label">
                     <t t-if="res_company.exclude_product_name_from_description_offer">
                         <!-- actually remove the product's display name, the description can have \n character -->
-                        <t t-set="line_name" t-value="line.name" />
+                        <t t-set="line_name" t-value="line.name or ''" />
                         <t t-set="product_name" t-value="line.product_id.display_name" />
                         <t t-if="product_name and product_name in line_name and product_name != line_name">
                             <t t-set="line_name" t-value="line_name.replace(product_name, '',1)" />
                         </t>
-                        <span t-esc="line_name">Bacon Burger</span>
+                        <span t-out="line_name">Bacon Burger</span>
                     </t>
                     <t t-if="not res_company.exclude_product_name_from_description_offer">
                         <t t-if="res_company.make_description_smaller">
                             <span t-field="line.product_id.display_name">Bacon Burger</span>
                             <br />
-                            <t t-set="line_name" t-value="line.name" />
+                            <t t-set="line_name" t-value="line.name or ''" />
                             <t t-set="product_name" t-value="line.product_id.display_name" />
                             <t t-if="product_name and product_name in line_name and product_name != line_name">
                                 <t t-set="line_name" t-value="line_name.replace(product_name, '',1)" />
                             </t>
-                            <span t-esc="line_name" style="font-size: 85%;">Bacon Burger</span>
+                            <span t-out="line_name" style="font-size: 85%;">Bacon Burger</span>
                         </t>
                         <t t-else="not res_company.make_description_smaller">
-                            <span t-field="line.name">Bacon Burger</span>
+                            <!-- Odoo 20: `name` is only the description, `label` = product + description -->
+                            <span t-field="line.label">Bacon Burger</span>
                         </t>
                     </t>
                 </t>
@@ -126,9 +128,9 @@
                     />
                     <div t-foreach="doc.payment_term_id._get_amount_by_date(terms).values()" t-as="term">
                         <span>Transa:</span>
-                        <span t-esc="transa" />
+                        <span t-out="transa" />
                         Valoare:
-                        <span t-esc="term['amount']" t-options='{"widget": "float", "precision": 2}' />
+                        <span t-out="term['amount']" t-options='{"widget": "float", "precision": 2}' />
                         <t t-set="transa" t-value="transa+1" />
                     </div>
                 </t>
@@ -157,11 +159,11 @@
             <t t-if="res_company.show_total_amount_with_taxes_on_so">
                 <td name="td_price_taxes" class="text-end">
                     <t t-set="price_taxes" t-value="(line.price_total - line.price_subtotal )" />
-                    <span id="price_taxes" t-esc="price_taxes" t-options='{"widget": "float", "precision": 2}' />
+                    <span id="price_taxes" t-out="price_taxes" t-options='{"widget": "float", "precision": 2}' />
                 </td>
                 <td class="text-end" id="price_total">
                     <t t-set="price_total" t-value="line.price_total" />
-                    <span id="price_total" t-esc="price_total" t-options='{"widget": "float", "precision": 2}' />
+                    <span id="price_total" t-out="price_total" t-options='{"widget": "float", "precision": 2}' />
                 </td>
             </t>
         </xpath>
@@ -249,19 +251,19 @@
 
 
     <template id="saleorder_proforma_percent_document">
-        <t t-call="web.external_layout">
+        <t t-set="address">
+            <div
+                t-field="doc.partner_id"
+                t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
+            />
+            <p t-if="doc.partner_id.vat">
+                <t t-out="doc.company_id.country_id.vat_label or 'Tax ID'" />
+                :
+            <span t-field="doc.partner_id.vat" />
+            </p>
+        </t>
+        <t t-call="web.external_layout" address="address">
             <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)" />
-            <t t-set="address">
-                <div
-                    t-field="doc.partner_id"
-                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": true, "no_tag_br": true}'
-                />
-                <p t-if="doc.partner_id.vat">
-                    <t t-esc="doc.company_id.country_id.vat_label or 'Tax ID'" />
-                    :
-                    <span t-field="doc.partner_id.vat" />
-                </p>
-            </t>
             <t
                 t-if="doc.partner_shipping_id == doc.partner_invoice_id
                                      and doc.partner_invoice_id != doc.partner_id
@@ -360,12 +362,12 @@
                             <td name="td_name">
                                 <span>Advance</span>
                                 <t t-if="adv_type == 'percent'">
-                                    <span t-esc="round(percent * 100)" />
+                                    <span t-out="round(percent * 100)" />
                                     %
                                 </t>
                                 <t t-if="adv_type == 'fixed'">
                                     <span
-                                        t-esc="adv_value"
+                                        t-out="adv_value"
                                         t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                     />
                                 </t>
@@ -378,21 +380,21 @@
                             <td name="td_priceunit" class="text-end">
                                 <t t-set="untaxed_amount" t-value="doc.amount_untaxed * percent" />
                                 <span
-                                    t-esc="untaxed_amount"
+                                    t-out="untaxed_amount"
                                     t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                 />
                             </td>
                             <td name="td_taxes" class="text-end">
                                 <t t-set="amount_taxes" t-value="doc.amount_tax * percent" />
                                 <span
-                                    t-esc="amount_taxes"
+                                    t-out="amount_taxes"
                                     t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                 />
                             </td>
                             <td name="td_subtotal" class="text-right o_price_total">
                                 <t t-set="total_amount" t-value="doc.amount_total * percent" />
                                 <span
-                                    t-esc="total_amount"
+                                    t-out="total_amount"
                                     t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                 />
                             </td>
@@ -401,7 +403,7 @@
                                     <t t-set="price_taxes" t-value="doc.amount_tax * percent" />
                                     <span
                                         id="price_taxes"
-                                        t-esc="price_taxes"
+                                        t-out="price_taxes"
                                         t-options='{"widget": "float", "precision": 2}'
                                     />
                                 </td>
@@ -409,7 +411,7 @@
                                     <t t-set="price_total" t-value="doc.amount_total * percent" />
                                     <span
                                         id="price_total"
-                                        t-esc="price_total"
+                                        t-out="price_total"
                                         t-options='{"widget": "float", "precision": 2}'
                                     />
                                 </td>
@@ -422,7 +424,7 @@
                                         <span t-field="line.product_uom_qty" />
                                         <span t-field="line.product_uom_id" />
                                         <span>x</span>
-                                        <span t-field="line.name" />
+                                        <span t-field="line.label" />
                                         <br />
                                     </t>
                                     <span>Total amount of order:</span>
@@ -431,7 +433,7 @@
                                     <span>To pay:</span>
                                     <t t-set="total_amount" t-value="doc.amount_total * percent" />
                                     <span
-                                        t-esc="total_amount"
+                                        t-out="total_amount"
                                         t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id or doc.company_id.currency_id}"
                                     />
                                 </span>
@@ -454,10 +456,7 @@
                     <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
                         <table class="o_total_table table table-borderless">
                             <!-- Tax totals -->
-                            <t t-call="sale.document_tax_totals">
-                                <t t-set="tax_totals" t-value="doc.tax_totals" />
-                                <t t-set="currency" t-value="doc.currency_id" />
-                            </t>
+                            <t t-call="sale.document_tax_totals" tax_totals="doc.tax_totals" currency="doc.currency_id"/>
                         </table>
                     </div>
                 </div>
@@ -468,8 +467,7 @@
     </template>
 
     <template id="saleorder_proforma_percent_init">
-        <t t-call="web.html_container">
-            <t t-set="proforma_type" t-value="'init'" />
+        <t t-call="web.html_container" proforma_type.f="init">
             <t t-foreach="docs" t-as="doc">
                 <t
                     t-call="l10n_ro_sale_order_report.saleorder_proforma_percent_document"
@@ -479,8 +477,7 @@
         </t>
     </template>
     <template id="saleorder_proforma_percent_final">
-        <t t-call="web.html_container">
-            <t t-set="proforma_type" t-value="'final'" />
+        <t t-call="web.html_container" proforma_type.f="final">
             <t t-foreach="docs" t-as="doc">
                 <t
                     t-call="l10n_ro_sale_order_report.saleorder_proforma_percent_document"
@@ -496,7 +493,6 @@
         <field name="model">sale.order</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">l10n_ro_sale_order_report.saleorder_proforma_percent_init</field>
-        <field name="report_file">l10n_ro_sale_order_report.saleorder_proforma_percent_init</field>
         <field name="binding_model_id" ref="sale.model_sale_order" />
         <field name="binding_type">report</field>
     </record>
@@ -507,7 +503,6 @@
         <field name="model">sale.order</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">l10n_ro_sale_order_report.saleorder_proforma_percent_final</field>
-        <field name="report_file">l10n_ro_sale_order_report.saleorder_proforma_percent_final</field>
         <field name="binding_model_id" ref="sale.model_sale_order" />
         <field name="binding_type">report</field>
     </record>

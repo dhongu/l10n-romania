@@ -1,7 +1,6 @@
 # Copyright (C) 2025 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-import base64
 import logging
 
 from lxml import etree
@@ -30,7 +29,8 @@ class TestSaleOrderReport(TransactionCase):
         )
 
         # Simple 1x1 transparent PNG for product image_256
-        png_1x1 = base64.b64encode(
+        # Odoo 20: Binary fields take raw bytes
+        png_1x1 = (
             b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89"
             b"\x00\x00\x00\x0cIDATx\x9cc``\x00\x00\x00\x02\x00\x01\xe2!\xbc3\x00\x00\x00\x00IEND\xaeB`\x82"
         )
@@ -85,7 +85,7 @@ class TestSaleOrderReport(TransactionCase):
                             "product_id": cls.product.id,
                             "product_uom_qty": 2,
                             "price_unit": 10.0,
-                            "name": cls.product.display_name,
+                            # Odoo 20: no "name" — a product without sales description gets an empty name
                         },
                     )
                 ],
@@ -101,6 +101,15 @@ class TestSaleOrderReport(TransactionCase):
         # Our template injects a numbering column header and a Customer label block
         self.assertIn("No.", html, "Expected 'No.' column header injected by l10n_ro_sale_order_report")
         self.assertIn("Customer", html, "Expected 'Customer' block injected by l10n_ro_sale_order_report")
+        # Odoo 20: `name` is empty for a product without sales description; the product must still show
+        tree = etree.fromstring(html, etree.HTMLParser())
+        product_cells = tree.xpath("//td[@name='td_product_name']")
+        self.assertTrue(product_cells, "The report must render the product cells")
+        self.assertIn(
+            "Test Product",
+            "".join(product_cells[0].itertext()),
+            "The product name must be printed in the product cell",
+        )
 
         # # The image column should embed the product image as data URI
         # self.assertIn("data:image/", html, "Expected product image embedded as data URI in the report lines")
