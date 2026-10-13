@@ -33,6 +33,12 @@ Romania - Partner Create by VAT Button
 Changelog
 =========
 
+20.0.1.1.10 (2026-10-13)
+------------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``, with the Odoo 20 badge.
+
 20.0.1.1.9 (2026-09-30)
 -----------------------
 

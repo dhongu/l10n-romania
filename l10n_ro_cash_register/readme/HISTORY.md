@@ -1,3 +1,7 @@
+## 20.0.1.4.1 (2026-10-13)
+
+- Banner Odoo Apps (`static/description/main_screenshot.png`), generat din `banner.json`, cu insigna Odoo 20.
+
 ## 20.0.1.4.0
 
 **Nou** — monetarul casieriei: numărarea numerarului pe cupiuri.

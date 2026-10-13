@@ -93,6 +93,12 @@ Cerințe tehnice:
 Changelog
 =========
 
+20.0.3.4.27 (2026-10-13)
+------------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``, with the Odoo 20 badge.
+
 20.0.3.4.25 (2026-09-30)
 ------------------------
 

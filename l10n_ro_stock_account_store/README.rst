@@ -109,12 +109,18 @@ Usage
 Changelog
 =========
 
+20.0.1.0.2 (2026-10-13)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``, with the Odoo 20 badge.
+
 20.0.1.0.1 (2026-10-05)
 -----------------------
 
 - The markup (378) and uneligible VAT (4428) of a reception in the store
   now use the same sale price as the reception note at sale price (NIR)
-  of ``l10n_ro_picking_report``: the price frozen on the move at
+  of ``l10n_ro_stock_picking_report``: the price frozen on the move at
   reception, else the store pricelist of the location, else the product
   price. Before, the entry always took the product price, so in a store
   with its own pricelist the NIR showed one markup and VAT and the
@@ -155,7 +161,7 @@ Changelog
 - The sale amount kept on the valuation layers in 18.0 is moved to the
   stock move at upgrade.
 - Store filter and merchandise type column on the locations list.
-- With ``l10n_ro_picking_report``, a store location prints again
+- With ``l10n_ro_stock_picking_report``, a store location prints again
   the NIR at sale price.
 - Automated tests.
 

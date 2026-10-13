@@ -1,0 +1,10 @@
+{
+  "title": "Cash Register Document",
+  "summary": "Numbered daily cash register, form 14-4-7A",
+  "lang": "en",
+  "features": [
+    "One numbered document per cashier and day",
+    "Daily closing freezes the balance",
+    "Cash count by denomination"
+  ]
+}

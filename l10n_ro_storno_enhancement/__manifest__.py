@@ -5,7 +5,7 @@
 {
     "name": "Romania - Storno Enhancements",
     "summary": "Romania - Storno Enhancements",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
@@ -17,4 +17,5 @@
     "development_status": "Production/Stable",
     "pre_init_hook": "pre_init_hook",
     "post_init_hook": "post_init_hook",
+    "images": ["static/description/main_screenshot.png"],
 }
