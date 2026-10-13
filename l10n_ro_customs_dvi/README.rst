@@ -931,6 +931,12 @@ Verificări după validare
 Changelog
 =========
 
+20.0.2.1.3 (2026-10-13)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
 20.0.2.1.2 (2026-10-04)
 -----------------------
 
