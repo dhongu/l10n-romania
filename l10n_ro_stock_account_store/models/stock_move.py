@@ -103,7 +103,7 @@ class StockMove(models.Model):
         """Unit sale price, in the product UoM, of goods entering the store.
 
         The same price as the reception note at sale price (NIR) of
-        `l10n_ro_stock_picking_report`, when installed: the price frozen on the move
+        `l10n_ro_picking_report`, when installed: the price frozen on the move
         at reception, else the store pricelist of the location, else the product price.
         """
         self.ensure_one()
