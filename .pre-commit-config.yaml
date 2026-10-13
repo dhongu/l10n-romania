@@ -150,7 +150,14 @@ repos:
 
   # Hook-urile comune Terrabit (licență, pyproject, iconiță, traduceri)
   - repo: https://github.com/dhongu/terrabit-pre-commit-hooks
-    rev: v1.1.0
+    rev: v1.2.0
     hooks:
       - id: check-module-icon
       - id: check-po-vs-pot
+
+  # Pagina Apps Store (șablon Terrabit), la cerere: `pre-commit run --hook-stage manual --all-files`.
+  # Rulează după oca-gen-addon-readme și înlocuiește index.html generat de docutils.
+  - repo: https://github.com/dhongu/terrabit-pre-commit-hooks
+    rev: v1.2.0
+    hooks:
+      - id: tb-gen-index
