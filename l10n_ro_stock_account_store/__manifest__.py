@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Accounting Store",
-    "version": "20.0.1.0.1",
+    "version": "20.0.1.0.2",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Store",
@@ -19,4 +19,5 @@
     "auto_install": False,
     "development_status": "Mature",
     "maintainers": ["dhongu"],
+    "images": ["static/description/main_screenshot.png"],
 }

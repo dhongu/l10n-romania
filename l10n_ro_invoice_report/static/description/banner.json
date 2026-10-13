@@ -1,0 +1,10 @@
+{
+  "title": "Romanian Invoice Report",
+  "summary": "Invoice layout adapted to Romanian requirements",
+  "lang": "en",
+  "features": [
+    "Unit price, VAT and totals per line",
+    "Delegate and transport details",
+    "Receipts and cash payment orders"
+  ]
+}

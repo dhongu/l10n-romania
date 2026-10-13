@@ -1,3 +1,7 @@
+## 20.0.2.0.1 (2026-10-13)
+
+- Banner Odoo Apps (`static/description/main_screenshot.png`), generat din `banner.json`, cu insigna Odoo 20.
+
 ## 20.0.2.0.0 (2026-10-12)
 
 - Module renamed from `l10n_ro_stock_picking_report` to `l10n_ro_picking_report`: the

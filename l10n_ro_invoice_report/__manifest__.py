@@ -4,7 +4,7 @@
 {
     "name": "Romania - Invoice Report Terrabit",
     "summary": "Localizare Terrabit - Facturi, Chitanta",
-    "version": "20.0.3.4.26",
+    "version": "20.0.3.4.27",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "license": "AGPL-3",
@@ -30,4 +30,5 @@
         "views/account_journal_view.xml",
         "views/res_partner_view.xml",
     ],
+    "images": ["static/description/main_screenshot.png"],
 }

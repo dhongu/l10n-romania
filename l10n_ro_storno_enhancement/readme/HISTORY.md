@@ -1,3 +1,7 @@
+## 20.0.1.0.1 (2026-10-13)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`, with the Odoo 20 badge.
+
 ## 20.0.1.0.0 (2026-10-07)
 
 - Migration to 20.0, directly under the new name `l10n_ro_storno_enhancement` (the former

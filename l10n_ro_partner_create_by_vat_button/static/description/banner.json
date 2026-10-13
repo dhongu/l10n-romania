@@ -1,0 +1,6 @@
+{
+  "title": "Partner Data Refresh by VAT",
+  "summary": "Re-read partner details from the tax authority in one click",
+  "lang": "en",
+  "features": ["Refresh data from ANAF or VIES", "Button on the partner form", "Fills name, address and VAT status"]
+}

@@ -192,6 +192,12 @@ guide <https://static.anaf.ro/static/10/Anaf/AsistentaContribuabili_r/Ghid_RO_e_
 Changelog
 =========
 
+20.0.0.9.4 (2026-10-13)
+-----------------------
+
+- Banner Odoo Apps (``static/description/main_screenshot.png``), generat
+  din ``banner.json``, cu insigna Odoo 20.
+
 20.0.0.9.3 (2026-09-30)
 -----------------------
 

@@ -231,6 +231,12 @@ Alte îmbunătățiri planificate
 Changelog
 =========
 
+20.0.0.5.5 (2026-10-13)
+-----------------------
+
+- Banner Odoo Apps (``static/description/main_screenshot.png``), generat
+  din ``banner.json``, cu insigna Odoo 20.
+
 20.0.0.5.4 (2026-09-30)
 -----------------------
 
@@ -269,9 +275,9 @@ Changelog
   factură legată de o comandă POS (vânzare deja înregistrată pe bonul
   fiscal). Regula s-a pierdut la rescrierea modulului pe 19.0, iar de la
   migrare facturile din POS au plecat cu 380: ANAF număra vânzarea și
-  TVA-ul de două ori (casa de marcat + factura). Semnalat pe Damira
-  (INV/2026/04101), confirmat și la Valshop (751 până în mai 2026, 380
-  după trecerea pe 19).
+  TVA-ul de două ori (casa de marcat + factura). Semnalat pe o instanță
+  de client, confirmat și la un al doilea client (751 până în mai 2026,
+  380 după trecerea pe 19).
 
   - Stornourile (381) și autofacturarea (389) rămân neschimbate.
   - XML-urile deja trimise nu se modifică.
@@ -284,10 +290,9 @@ Changelog
   caractere.** Modulul ``deltatech_account_edi_ubl_advice`` (când e
   instalat) concatenează în ``cac:DespatchDocumentReference/cbc:ID``
   numele tuturor livrărilor (pickingurilor) facturate, fără nicio limită
-  de lungime. Pe comenzi cu multe livrări parțiale acumulate în timp
-  (tichet 9429), lista depășea cele 200 de caractere admise de ANAF
-  pentru BT-16, iar factura era respinsă la transmitere cu
-  **BR-RO-L200**.
+  de lungime. Pe comenzi cu multe livrări parțiale acumulate în timp,
+  lista depășea cele 200 de caractere admise de ANAF pentru BT-16, iar
+  factura era respinsă la transmitere cu **BR-RO-L200**.
 
   - Suprascriem ``_get_invoice_node`` (nu
     ``_add_invoice_header_nodes``), ca fix-ul să nu depindă de ordinea
@@ -304,13 +309,12 @@ Changelog
 -----------------------
 
 - **Limita reală pentru Avizul de plată (BT-83) e 140 de caractere, nu
-  200.** Tichet #9441. Trunchierea livrată la #9369 tăia
-  ``cbc:PaymentID`` / ``cbc:InstructionID`` la 200 de caractere, dar
-  limita impusă de CIUS-RO pentru BT-83 este 140, verificată de
-  schematronul ANAF prin regula **BR-RO-L140**. Cifra 200 fusese
-  preluată din corespondența tichetului #9369, nu din răspunsul ANAF —
-  facturile lungi rămâneau respinse și după trunchiere (11 refuzuri
-  BR-RO-L140 între 01.09 și 09.09.2026).
+  200.** Trunchierea livrată anterior tăia ``cbc:PaymentID`` /
+  ``cbc:InstructionID`` la 200 de caractere, dar limita impusă de
+  CIUS-RO pentru BT-83 este 140, verificată de schematronul ANAF prin
+  regula **BR-RO-L140**. Cifra 200 fusese preluată din corespondența
+  unui client, nu din răspunsul ANAF — facturile lungi rămâneau respinse
+  și după trunchiere (11 refuzuri BR-RO-L140 între 01.09 și 09.09.2026).
 
   - Testele ancorează acum limita în regula de schematron și reproduc
     referința reală respinsă (43 de comenzi pe PTCDRO20689).

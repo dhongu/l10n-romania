@@ -1,3 +1,7 @@
+## 20.0.1.0.2 (2026-10-13)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`, with the Odoo 20 badge.
+
 ## 20.0.1.0.1 (2026-10-05)
 
 - The markup (378) and uneligible VAT (4428) of a reception in the store now use the same sale
