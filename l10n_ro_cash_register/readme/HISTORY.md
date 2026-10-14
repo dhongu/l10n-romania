@@ -1,3 +1,12 @@
+## 20.0.1.4.2 (2026-10-14)
+
+**Corectat** — actualizarea modulului eșua pe bazele cu numere de registru duplicate pe aceeași
+casierie, din versiunile anterioare indexului unic (număr, casierie).
+
+- La actualizare, în fiecare grup de registre cu același număr, cel mai vechi registru își păstrează
+  numărul, iar celelalte primesc sufixul datei (de exemplu `CSH000000001/2025-01-04`). Fiecare
+  redenumire apare în jurnalul serverului.
+
 ## 20.0.1.4.1 (2026-10-13)
 
 - Banner Odoo Apps (`static/description/main_screenshot.png`), generat din `banner.json`, cu insigna Odoo 20.
