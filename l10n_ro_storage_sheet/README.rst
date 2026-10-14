@@ -1,6 +1,6 @@
-=====================================
-Romania - Stock Report (Fișă Magazie)
-=====================================
+======================================
+Romania - Storage Sheet (Fișă Magazie)
+======================================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -17,12 +17,22 @@ Romania - Stock Report (Fișă Magazie)
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_report
+    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_storage_sheet
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
 
-This module adds a stock report according to Romanian requirements.
+This module adds the Romanian storage sheet (Fișă Magazie) report:
+opening balance, receipts, deliveries and closing balance per product
+and location, as a PDF or as a pivot analysis.
+
+It works on the native Odoo stock valuation and does not depend on the
+``l10n_ro_stock_account`` valuation engine.
+
+It was previously published in this repository as
+``l10n_ro_stock_report``, which clashed with the OCA module of the same
+name. Databases that need the valued move types of the OCA engine keep
+using the OCA ``l10n_ro_stock_report``.
 
 **Table of contents**
 
@@ -32,17 +42,33 @@ This module adds a stock report according to Romanian requirements.
 Installation
 ============
 
-To install this module, you need to:
+This module is the successor of the Terrabit copy of
+``l10n_ro_stock_report``. It is not installed automatically in its
+place: the old name now resolves to the OCA ``l10n_ro_stock_report``
+module, which depends on ``l10n_ro_stock_account``.
 
-- clone the branch 15.0 of the repository
-  https://github.com/OCA/l10n-romania
-- add the path to this repository in your configuration (addons-path)
-- update the module list
-- search for "Romania - Stock Report" in your addons
-- install the module
+On a database where the storage sheet was installed without
+``l10n_ro_stock_account``, install ``l10n_ro_storage_sheet`` and
+uninstall ``l10n_ro_stock_report`` before updating, otherwise the update
+also installs the OCA stock valuation engine.
+
+The report models are transient, so no data is migrated.
 
 Changelog
 =========
+
+19.0.1.0.0 (2026-10-14)
+-----------------------
+
+- Renamed from ``l10n_ro_stock_report`` to ``l10n_ro_storage_sheet``,
+  together with its models (``l10n.ro.stock.storage.sheet`` ->
+  ``l10n.ro.storage.sheet``, ``l10n.ro.stock.storage.sheet.line`` ->
+  ``l10n.ro.storage.sheet.line``). The old name clashed with the OCA
+  module ``l10n_ro_stock_report``, and the copy that loaded depended
+  only on the order of the repositories in ``addons_path``. No migration
+  of the module record: the report models are transient, and the old
+  name now belongs to the OCA module. See ``INSTALL.md`` for databases
+  that have the storage sheet without ``l10n_ro_stock_account``.
 
 19.0.2.0.1 (2026-10-09)
 -----------------------
@@ -97,6 +123,6 @@ Current maintainers:
 
 |maintainer-dhongu| |maintainer-feketemihai| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_report>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_storage_sheet>`_ project on GitHub.
 
 You are welcome to contribute.
