@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 
 
 class StorageSheet(models.TransientModel):
-    _name = "l10n.ro.stock.storage.sheet"
+    _name = "l10n.ro.storage.sheet"
     _description = "StorageSheet"
 
     # Filters fields, used for data computation
@@ -41,7 +41,7 @@ class StorageSheet(models.TransientModel):
     company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
 
     one_product = fields.Boolean("One product per page")
-    line_product_ids = fields.One2many(comodel_name="l10n.ro.stock.storage.sheet.line", inverse_name="report_id")
+    line_product_ids = fields.One2many(comodel_name="l10n.ro.storage.sheet.line", inverse_name="report_id")
     sublocation = fields.Boolean("Include Sublocations", default=True)
     detailed_locations = fields.Boolean("Detailed by locations", default=False)
     show_locations = fields.Boolean("Show location", default=False)
@@ -163,7 +163,7 @@ class StorageSheet(models.TransientModel):
 
         self.env["account.move.line"].check_access("read")
 
-        lines = self.env["l10n.ro.stock.storage.sheet.line"].search([("report_id", "=", self.id)])
+        lines = self.env["l10n.ro.storage.sheet.line"].search([("report_id", "=", self.id)])
         lines.unlink()
 
         datetime_from = fields.Datetime.to_datetime(self.date_from)
@@ -205,19 +205,19 @@ class StorageSheet(models.TransientModel):
             params.update({"reference": "INITIAL"})
             self.env.cr.execute(query_select_sold_init, params=params)
             # res = self.env.cr.dictfetchall()
-            # self.env["l10n.ro.stock.storage.sheet.line"].create(res)
+            # self.env["l10n.ro.storage.sheet.line"].create(res)
             _logger.info("start query_select_sold_final %s", location.name)
             query_select_sold_final = self._get_sql_select_sold_final()
 
             params.update({"reference": "FINAL"})
             self.env.cr.execute(query_select_sold_final, params=params)
             # res = self.env.cr.dictfetchall()
-            # self.env["l10n.ro.stock.storage.sheet.line"].create(res)
+            # self.env["l10n.ro.storage.sheet.line"].create(res)
             _logger.info("start query_in %s", location.name)
             query_in = self._get_sql_select_in()
             self.env.cr.execute(query_in, params=params)
             # res = self.env.cr.dictfetchall()
-            # self.env["l10n.ro.stock.storage.sheet.line"].create(res)
+            # self.env["l10n.ro.storage.sheet.line"].create(res)
             _logger.info("start query_out %s", location.name)
             query_out = self._get_sql_select_out()
             self.env.cr.execute(query_out, params=params)
@@ -238,7 +238,7 @@ class StorageSheet(models.TransientModel):
         field, select, join, group = self._get_lot_fields()
 
         sql = f"""
-         insert into l10n_ro_stock_storage_sheet_line
+         insert into l10n_ro_storage_sheet_line
           (report_id, product_id, amount_initial, quantity_initial,
            account_id, date_time, date, reference, document,
            location_id, categ_id {field})
@@ -293,7 +293,7 @@ class StorageSheet(models.TransientModel):
         field, select, join, group = self._get_lot_fields()
 
         sql = f"""
-        insert into l10n_ro_stock_storage_sheet_line
+        insert into l10n_ro_storage_sheet_line
           (report_id, product_id, amount_final, quantity_final,
            account_id, date_time, date, reference, document,
            location_id, categ_id {field})
@@ -348,7 +348,7 @@ class StorageSheet(models.TransientModel):
         field, select, join, group = self._get_lot_fields()
 
         sql = f"""
-        insert into l10n_ro_stock_storage_sheet_line
+        insert into l10n_ro_storage_sheet_line
           (report_id, product_id, amount_in, quantity_in, unit_price_in,
            account_id, invoice_id, date_time, date, reference,  location_id,
            partner_id, document, valued_type, categ_id {field} )
@@ -395,7 +395,7 @@ class StorageSheet(models.TransientModel):
         field, select, join, group = self._get_lot_fields()
 
         sql = f"""
-        insert into l10n_ro_stock_storage_sheet_line
+        insert into l10n_ro_storage_sheet_line
           (report_id, product_id, amount_out, quantity_out, unit_price_out,
            account_id, invoice_id, date_time, date, reference,  location_id,
            partner_id, document, valued_type, categ_id {field})
@@ -467,7 +467,7 @@ class StorageSheet(models.TransientModel):
 
     def button_show_sheet(self):
         self.do_compute_product()
-        action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_stock_report.action_sheet_stock_report_line")
+        action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_storage_sheet.action_sheet_stock_report_line")
 
         action["display_name"] = "{} {} ({}-{})".format(
             action["name"],
@@ -487,19 +487,19 @@ class StorageSheet(models.TransientModel):
 
     def print_pdf(self):
         if self.one_product:
-            action_report_storage_sheet = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet")
+            action_report_storage_sheet = self.env.ref("l10n_ro_storage_sheet.action_report_storage_sheet")
         else:
-            action_report_storage_sheet = self.env.ref("l10n_ro_stock_report.action_report_storage_sheet_all")
+            action_report_storage_sheet = self.env.ref("l10n_ro_storage_sheet.action_report_storage_sheet_all")
         return action_report_storage_sheet.report_action(self, config=False)
 
 
 class StorageSheetLine(models.TransientModel):
-    _name = "l10n.ro.stock.storage.sheet.line"
+    _name = "l10n.ro.storage.sheet.line"
     _description = "StorageSheetLine"
     _order = "report_id, product_id, date_time"
     _rec_name = "product_id"
 
-    report_id = fields.Many2one("l10n.ro.stock.storage.sheet", index=True, ondelete="cascade")
+    report_id = fields.Many2one("l10n.ro.storage.sheet", index=True, ondelete="cascade")
     product_id = fields.Many2one("product.product", string="Product", index=True)
     amount_initial = fields.Monetary(currency_field="currency_id", string="Initial Amount", default=0.0)
     quantity_initial = fields.Float(digits="Product Unit of Measure", string="Initial Quantity", default=0.0)

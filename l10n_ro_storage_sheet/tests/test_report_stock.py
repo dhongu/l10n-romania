@@ -139,12 +139,12 @@ class TestStockReport(TransactionCase):
         self.create_po()
         self.create_invoice()
 
-        wizard = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard = Form(self.env["l10n.ro.storage.sheet"])
         wizard.location_id = self.location
         wizard = wizard.save()
 
         wizard.button_show_sheet_pdf()
-        line = self.env["l10n.ro.stock.storage.sheet.line"].search([("report_id", "=", wizard.id)], limit=1)
+        line = self.env["l10n.ro.storage.sheet.line"].search([("report_id", "=", wizard.id)], limit=1)
         self.assertTrue(line)
 
     def test_get_products_with_move(self):
@@ -160,7 +160,7 @@ class TestStockReport(TransactionCase):
 
         self._create_receipt(self.product_1, 1, fields.Datetime.now())
 
-        wizard = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard = Form(self.env["l10n.ro.storage.sheet"])
         wizard.location_id = self.location
         wizard.products_with_move = True
         wizard = wizard.save()
@@ -185,7 +185,7 @@ class TestStockReport(TransactionCase):
         exp_found_prod = wizard.get_found_products()
         self.assertEqual(exp_found_prod, prod_with_moves)
 
-        wizard_no_moves = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard_no_moves = Form(self.env["l10n.ro.storage.sheet"])
         wizard_no_moves.location_id = self.location
         wizard_no_moves.products_with_move = False
         wizard_no_moves = wizard_no_moves.save()
@@ -193,7 +193,7 @@ class TestStockReport(TransactionCase):
         self.assertEqual(exp_found_prod, products)
 
         exp_product = products[1]  # index 0 is archived
-        wizard_product = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard_product = Form(self.env["l10n.ro.storage.sheet"])
         wizard_product.location_id = self.location
         wizard_product.products_with_move = False
         wizard_product = wizard_product.save()
@@ -202,7 +202,7 @@ class TestStockReport(TransactionCase):
         self.assertEqual(exp_found_prod, exp_product)
 
         exp_product = [products - prod_with_moves][0]
-        wizard_product = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard_product = Form(self.env["l10n.ro.storage.sheet"])
         wizard_product.location_id = self.location
         wizard_product = wizard_product.save()
         wizard_product.product_ids = [(6, 0, exp_product.ids)]
@@ -213,14 +213,14 @@ class TestStockReport(TransactionCase):
         self.create_po()
         self.create_invoice()
 
-        wizard = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard = Form(self.env["l10n.ro.storage.sheet"])
         wizard.location_id = self.location
         wizard.sublocation = True
         wizard.detailed_locations = True
         wizard = wizard.save()
 
         wizard.button_show_sheet_pdf()
-        line = self.env["l10n.ro.stock.storage.sheet.line"].search(
+        line = self.env["l10n.ro.storage.sheet.line"].search(
             [("report_id", "=", wizard.id), ("location_id", "=", self.location_2.id)],
             limit=1,
         )
@@ -230,14 +230,14 @@ class TestStockReport(TransactionCase):
         self.create_po()
         self.create_invoice()
 
-        wizard = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard = Form(self.env["l10n.ro.storage.sheet"])
         wizard.location_id = self.location
         wizard.sublocation = True
         wizard.detailed_locations = False
         wizard = wizard.save()
 
         wizard.button_show_sheet_pdf()
-        line = self.env["l10n.ro.stock.storage.sheet.line"].search(
+        line = self.env["l10n.ro.storage.sheet.line"].search(
             [("report_id", "=", wizard.id), ("location_id", "=", self.location.id)],
             limit=1,
         )
@@ -304,7 +304,7 @@ class TestStockReport(TransactionCase):
         self._create_delivery(product, 2, date1_dt)
 
         # Report for period 1
-        wizard1 = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard1 = Form(self.env["l10n.ro.storage.sheet"])
         wizard1.location_id = self.location
         wizard1.product_ids = product
         wizard1.date_from = data1_from.date()
@@ -312,7 +312,7 @@ class TestStockReport(TransactionCase):
         wizard1 = wizard1.save()
         wizard1.button_show_sheet_pdf()
 
-        lines1 = self.env["l10n.ro.stock.storage.sheet.line"].search(
+        lines1 = self.env["l10n.ro.storage.sheet.line"].search(
             [
                 ("report_id", "=", wizard1.id),
                 ("product_id", "=", product.id),
@@ -334,7 +334,7 @@ class TestStockReport(TransactionCase):
         self._create_delivery(product, 4, date2_dt)
 
         # Report for period 2
-        wizard2 = Form(self.env["l10n.ro.stock.storage.sheet"])
+        wizard2 = Form(self.env["l10n.ro.storage.sheet"])
         wizard2.location_id = self.location
         wizard2.product_ids = product
         wizard2.date_from = data2_from.date()
@@ -342,7 +342,7 @@ class TestStockReport(TransactionCase):
         wizard2 = wizard2.save()
         wizard2.button_show_sheet_pdf()
 
-        lines2 = self.env["l10n.ro.stock.storage.sheet.line"].search(
+        lines2 = self.env["l10n.ro.storage.sheet.line"].search(
             [
                 ("report_id", "=", wizard2.id),
                 ("product_id", "=", product.id),

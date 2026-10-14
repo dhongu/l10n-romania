@@ -1,10 +1,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    "name": "Romania - Stock Report (Fișă Magazie)",
-    "summary": "Stock Report (Fișă Magazie)",
+    "name": "Romania - Storage Sheet (Fișă Magazie)",
+    "summary": "Storage sheet (Fișă Magazie) without the OCA stock valuation engine",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.2.0.1",
+    "version": "19.0.1.0.0",
     "countries": ["ro"],
     "author": "Terrabit, NextERP Romania",
     "website": "https://www.terrabit.ro",

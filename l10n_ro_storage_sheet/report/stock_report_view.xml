@@ -2,7 +2,7 @@
 <odoo>
     <record id="view_stock_sheet_report_form" model="ir.ui.view">
         <field name="name">stock.storage.sheet.form</field>
-        <field name="model">l10n.ro.stock.storage.sheet</field>
+        <field name="model">l10n.ro.storage.sheet</field>
         <field name="arch" type="xml">
             <form string="Report Options">
                 <group name="filters">
@@ -57,7 +57,7 @@
 
     <record id="view_sheet_stock_report_line_tree" model="ir.ui.view">
         <field name="name">stock.sheet.stock.report.line</field>
-        <field name="model">l10n.ro.stock.storage.sheet.line</field>
+        <field name="model">l10n.ro.storage.sheet.line</field>
         <field name="arch" type="xml">
             <list create="false" delete="false">
                 <field name="product_id" />
@@ -91,7 +91,7 @@
 
     <record id="view_sheet_stock_report_line_form" model="ir.ui.view">
         <field name="name">stock.sheet.stock.report.line</field>
-        <field name="model">l10n.ro.stock.storage.sheet.line</field>
+        <field name="model">l10n.ro.storage.sheet.line</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -131,7 +131,7 @@
 
     <record id="view_sheet_stock_report_line_pivot" model="ir.ui.view">
         <field name="name">stock.sheet.stock.report.line.pivot</field>
-        <field name="model">l10n.ro.stock.storage.sheet.line</field>
+        <field name="model">l10n.ro.storage.sheet.line</field>
         <field name="arch" type="xml">
             <pivot string="Stock Analysis" disable_linking="True" sample="1">
                 <field name="account_id" type="row" />
@@ -151,7 +151,7 @@
 
     <record id="view_sheet_stock_report_line_search" model="ir.ui.view">
         <field name="name">stock.sheet.stock.report.line</field>
-        <field name="model">l10n.ro.stock.storage.sheet.line</field>
+        <field name="model">l10n.ro.storage.sheet.line</field>
         <field name="arch" type="xml">
             <search>
                 <field name="product_id" />
@@ -185,9 +185,9 @@
 
     <record id="action_sheet_stock_report" model="ir.actions.act_window">
         <field name="name">Stock Sheet Report</field>
-        <field name="res_model">l10n.ro.stock.storage.sheet</field>
+        <field name="res_model">l10n.ro.storage.sheet</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="l10n_ro_stock_report.view_stock_sheet_report_form" />
+        <field name="view_id" ref="l10n_ro_storage_sheet.view_stock_sheet_report_form" />
         <field name="target">new</field>
     </record>
 
@@ -201,7 +201,7 @@
 
     <record id="action_sheet_stock_report_line" model="ir.actions.act_window">
         <field name="name">Stock Sheet Report</field>
-        <field name="res_model">l10n.ro.stock.storage.sheet.line</field>
+        <field name="res_model">l10n.ro.storage.sheet.line</field>
         <field name="view_mode">pivot,list,form</field>
         <field name="view_id" ref="view_sheet_stock_report_line_pivot" />
         <field name="domain">[('report_id','=',active_id)]</field>
