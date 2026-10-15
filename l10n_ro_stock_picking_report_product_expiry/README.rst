@@ -17,7 +17,7 @@ Romania - Picking Reports -Product Expiry
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_report_product_expiry
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_picking_report_product_expiry
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -31,6 +31,12 @@ Romania - Picking Reports -Product Expiry
 
 Changelog
 =========
+
+19.0.1.0.4 (2026-10-12)
+-----------------------
+
+- Depends on ``l10n_ro_picking_report``, the new name of
+  ``l10n_ro_stock_picking_report``.
 
 19.0.1.0.3 (2026-10-09)
 -----------------------
@@ -74,6 +80,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_report_product_expiry>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_picking_report_product_expiry>`_ project on GitHub.
 
 You are welcome to contribute.
