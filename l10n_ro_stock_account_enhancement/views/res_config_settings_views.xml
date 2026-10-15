@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.l10n_ro_stock_account_enhancement</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="l10n_ro_config.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='ro_accounting_setting_container']" position="inside">
+                <setting
+                    id="l10n_ro_check_storable_line_source"
+                    help="Check if storable product lines have a reference to a sales or purchase order line."
+                >
+                    <field name="l10n_ro_check_storable_line_source" />
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

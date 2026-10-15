@@ -1,0 +1,10 @@
+{
+  "title": "Controale evaluare stoc",
+  "summary": "Protecții la mișcările de stoc și la facturi",
+  "features": [
+    "Fără cost zero pe mișcările de stoc",
+    "Facturi stocabile doar din SO sau PO",
+    "Restricție activabilă din setări"
+  ],
+  "lang": "ro"
+}
