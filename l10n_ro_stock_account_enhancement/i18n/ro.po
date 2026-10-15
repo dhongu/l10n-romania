@@ -61,6 +61,12 @@ msgid "Journal Entry"
 msgstr "Înregistrare jurnal"
 
 #. module: l10n_ro_stock_account_enhancement
+#. odoo-python
+#: code:addons/l10n_ro_stock_account_enhancement/models/stock_move.py:0
+msgid "Price unit is not set for product %s"
+msgstr "Prețul unitar nu este setat pentru produsul %s"
+
+#. module: l10n_ro_stock_account_enhancement
 #: model:ir.model,name:l10n_ro_stock_account_enhancement.model_product_product
 msgid "Product Variant"
 msgstr "Variantă de produs"

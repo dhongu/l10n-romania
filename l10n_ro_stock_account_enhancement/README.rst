@@ -17,17 +17,40 @@ Romania - Stock Accounting Enhancement
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_enhancement
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_enhancement
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
 
-- Verificare pret de cost sa fie diferit de zero la miscarile de stoc.
-- Restricție la postarea facturilor (vânzare/achiziție) care conțin
-  produse stocabile fără referință la o comandă de vânzare (SO) sau de
-  achiziție (PO).
-- Posibilitatea de a activa/dezactiva această restricție din setările de
-  configurare (Accounting -> România).
+Modulul adaugă controale suplimentare peste evaluarea stocului din
+localizarea românească (``l10n_ro_stock_account``), ca valorile ajunse
+în contabilitate să nu fie zero sau fără sursă.
+
+Funcții principale
+------------------
+
+- **Preț de cost nenul pe mișcările de stoc**: calculul prețului unitar
+  al unei mișcări de stoc (``stock.move._get_price_unit``) se oprește cu
+  o eroare dacă mișcarea nu are valoare, în loc să ducă în contabilitate
+  o descărcare de gestiune la cost zero. Prețul folosit la costul
+  vânzării (COGS) de pe factură nu este verificat.
+- **Facturi cu produse stocabile doar din comenzi**: la validarea unei
+  facturi de vânzare sau de achiziție (inclusiv storno), fiecare linie
+  cu produs stocabil trebuie să provină dintr-o linie de comandă de
+  vânzare (SO), respectiv de achiziție (PO). Liniile cu servicii nu sunt
+  verificate.
+- **Restricția se activează din setări**: *Setări → România →
+  Contabilitate*, opțiunea *Verifică sursa liniei de produs stocabilă*
+  (implicit dezactivată).
+
+Parametri de sistem
+-------------------
+
+- ``l10n_ro_stock_account.check_storable_line_source`` — parametrul din
+  spatele opțiunii din setări (``True`` / ``False``).
+- ``l10n_ro_stock_account.skip_price_unit_check`` — pus pe ``True``,
+  dezactivează verificarea prețului de cost nenul (implicit verificarea
+  este activă).
 
 **Table of contents**
 
@@ -37,17 +60,32 @@ Romania - Stock Accounting Enhancement
 Changelog
 =========
 
+20.0.0.0.2 (2026-10-15)
+-----------------------
+
+- Migrare la Odoo 20: ``stock.move._get_price_unit`` primește noua
+  semnătură (``product``, ``include_consigned``,
+  ``include_consumable``). În 20.0 costul vânzării (COGS) de pe factură
+  trece și el prin această metodă (în 19.0 folosea
+  ``_get_cogs_price_unit``), așa că apelul cu ``include_consigned=True``
+  nu este verificat, ca înainte.
+- Parametrii de sistem se citesc cu ``get_bool`` (în 20.0 ``get_param``
+  nu mai există).
+- Teste noi pentru verificarea prețului unitar, cu notele contabile
+  Dr/Cr ale recepției cu aviz (371 / 408) și ale livrării (607 / 371).
+- Traducerea în română a mesajului „Price unit is not set for product”.
+
 19.0.0.0.2 (2026-10-09)
 -----------------------
 
-- Odoo Apps banner (``static/description/main_screenshot.png``),
-  generated from ``banner.json``.
+- Banner pentru Odoo Apps (``static/description/main_screenshot.png``),
+  generat din ``banner.json``.
 
 19.0.0.0.1 (2026-09-30)
 -----------------------
 
-- Own module icon in the flat style of the Terrabit modules, instead of
-  the missing or generic one.
+- Iconiță proprie a modulului, în stilul plat al modulelor Terrabit, în
+  locul celei lipsă sau generice.
 
 Bug Tracker
 ===========
@@ -87,6 +125,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_enhancement>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_enhancement>`_ project on GitHub.
 
 You are welcome to contribute.

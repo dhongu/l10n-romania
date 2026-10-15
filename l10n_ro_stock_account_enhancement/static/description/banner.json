@@ -1,10 +1,10 @@
 {
-  "title": "Stock Accounting Controls",
-  "summary": "Safeguards for stock moves and invoice posting",
-  "lang": "en",
+  "title": "Controale evaluare stoc",
+  "summary": "Protecții la mișcările de stoc și la facturi",
   "features": [
-    "Blocks zero cost on stock moves",
-    "Stockable invoices need an SO or PO",
-    "Restriction can be switched off"
-  ]
+    "Fără cost zero pe mișcările de stoc",
+    "Facturi stocabile doar din SO sau PO",
+    "Restricție activabilă din setări"
+  ],
+  "lang": "ro"
 }

@@ -4,16 +4,15 @@
 
 from odoo import models
 from odoo.exceptions import UserError
-from odoo.tools.convert import safe_eval
 
 
 class AccountMove(models.Model):
     _inherit = "account.move"
 
     def action_post(self):
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        check_storable_line_source = get_param("l10n_ro_stock_account.check_storable_line_source", default="False")
-        check_storable_line_source = safe_eval(check_storable_line_source)
+        check_storable_line_source = (
+            self.env["ir.config_parameter"].sudo().get_bool("l10n_ro_stock_account.check_storable_line_source")
+        )
 
         if check_storable_line_source:
             for move in self:
