@@ -1,3 +1,10 @@
+## 19.0.2.1.7 (2026-10-16)
+
+- The landed cost created by the DVI wizard is now linked to the supplier invoice through the
+  standard *Vendor Bill* field, which was left empty: the field shows the invoice, the invoice gets
+  the *Landed Costs* smart button and the stock valuation details name the invoice. Landed costs
+  created before this version keep the field empty.
+
 ## 19.0.2.1.6 (2026-10-16)
 
 - Neutral labels for the import VAT, valid in both regimes: the journal items of the DVI entry are

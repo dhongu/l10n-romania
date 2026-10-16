@@ -271,6 +271,8 @@ class TestDVI(TransactionCase):
         self.assertEqual(dvi.tax_base, 3000.0)
         self.assertEqual(dvi.landed_type, "dvi")
         self.assertEqual(dvi.dvi_number, "25ROBU1234567890", "DVI number should be propagated from the wizard")
+        self.assertEqual(dvi.vendor_bill_id, invoice, "The supplier invoice should be set as vendor bill")
+        self.assertEqual(invoice.landed_costs_ids, dvi)
 
         dvi_form = Form(dvi)
         dvi = dvi_form.save()

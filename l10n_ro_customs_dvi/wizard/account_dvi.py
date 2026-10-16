@@ -147,6 +147,9 @@ class AccountInvoiceDVI(models.TransientModel):
             "tax_base": self.tax_base,
             "tax_value": self.tax_value,
         }
+        # câmpul nativ „Factură furnizor”; domeniul lui admite doar facturi (nu note de credit)
+        if invoice.move_type == "in_invoice":
+            values["vendor_bill_id"] = invoice.id
         set_param = self.env["ir.config_parameter"].sudo().set_param
         if self.custom_duty:
             custom_duty_product = self.get_custom_duty_product()

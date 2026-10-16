@@ -367,8 +367,9 @@ cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate?
 ### Pasul 6 — Validarea costului de aterizare
 
 Aplicarea creează un cost adițional legat de recepțiile comenzii, cu o linie pentru taxa vamală,
-plus câmpurile DVI în capul formularului. Apăsați **Calculează**, verificați
-repartizarea pe produse, apoi **Validează**.
+plus câmpurile DVI în capul formularului. Câmpul **Factură furnizor** este factura de pe care ați
+pornit wizardul, iar pe factură apare butonul **Costuri adiționale**, care deschide DVI-ul. Apăsați
+**Calculează**, verificați repartizarea pe produse, apoi **Validează**.
 
 ![Costul de aterizare generat din DVI, cu numărul declarației](screenshots/06_landed_cost_dvi.png)
 
