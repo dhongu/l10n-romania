@@ -1,3 +1,11 @@
+## 20.0.2.1.5 (2026-10-16)
+
+- Neutral labels for the import VAT, valid in both regimes: the journal items of the DVI entry are
+  now labelled "Import VAT - <tax>" and the amount field "Import VAT Amount". The old label "VAT
+  paid at customs" was also used for imports without VAT paid at customs ("21% IMP AM" /
+  "11% IMP AM") and reached the general ledger and SAF-T (D406). Entries already posted keep the
+  old label.
+
 ## 20.0.2.1.4 (2026-10-16)
 
 - SAF-T (D406): the VAT lines of the DVI entry are now linked to the tax (tax distribution line),

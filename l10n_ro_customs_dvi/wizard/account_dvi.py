@@ -30,7 +30,7 @@ class AccountInvoiceDVI(models.TransientModel):
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
     tax_value = fields.Monetary(
-        string="VAT Paid at Customs",
+        string="Import VAT Amount",
         help="VAT actually due, the amount of item B00. Copy it from the declaration.\n\n"
         "This is the amount posted to account 4426, as it is. It is NOT recomputed when you change "
         "the base or the rate, so update it yourself whenever you change either.",

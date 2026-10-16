@@ -286,7 +286,7 @@ class TestDVI(TransactionCase):
         # Verificam liniile notei contabile pentru TVA
         # In Odoo 18, nota contabila poate fi partajata cu intrarile de evaluare stoc.
         # Identificam liniile de TVA dupa numele lor specific.
-        text = self.env._("VAT paid at customs")
+        text = self.env._("Import VAT - %s", dvi.tax_id.name)
         tva_lines = vat_move.line_ids.filtered(lambda l: text in l.name)
         self.assertEqual(len(tva_lines), 2, "Ar trebui sa avem exact 2 linii de TVA (debit si credit)")
         debit_line = tva_lines.filtered(lambda l: l.debit > 0)
@@ -458,8 +458,8 @@ class TestDVI(TransactionCase):
         )
         accounts_data = {"expense": self.env["account.account"].search([("code", "=", "446200")], limit=1)}
         tax_values = tax.compute_all(tax_base)
-        vals = cost._prepare_tax_lines("VAT paid at customs", tax_values, accounts_data)
-        vals += cost._prepare_tax_base_lines("VAT paid at customs", tax_values)
+        vals = cost._prepare_tax_lines("Import VAT", tax_values, accounts_data)
+        vals += cost._prepare_tax_base_lines("Import VAT", tax_values)
         self.env["account.move.line"].with_context(skip_invoice_sync=True).create(vals)
         cost.account_move_id.action_post()
         return cost.account_move_id
