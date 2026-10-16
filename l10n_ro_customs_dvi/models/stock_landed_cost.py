@@ -20,9 +20,9 @@ class LandedCost(models.Model):
         help="Reference number of the customs import declaration (MRN).",
     )
 
-    tax_value = fields.Float("VAT paid at customs")
+    tax_value = fields.Float("Import VAT Amount")
     tax_base = fields.Float("Tax base")
-    tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
+    tax_id = fields.Many2one("account.tax")  # TVA la import (plătit în vamă sau cu certificat de amânare)
 
     def _get_move_ref(self):
         """Referința notei contabile: numărul de DVI dacă e completat, altfel secvența internă."""
@@ -63,7 +63,8 @@ class LandedCost(models.Model):
                 )
             tax_values = cost.tax_id.compute_all(cost.tax_base)
 
-            name = self.env._("VAT paid at customs - %s", cost.tax_id.name)
+            # etichetă neutră: regimul (plătit în vamă / fără plată, „IMP AM") se vede din numele taxei
+            name = self.env._("Import VAT - %s", cost.tax_id.name)
             aml = cost._prepare_tax_lines(name, tax_values, accounts_data)
             aml += cost._prepare_tax_base_lines(name, tax_values)
             # Liniile sunt complete (TVA transcris din declaraţie): fără resincronizarea taxelor,

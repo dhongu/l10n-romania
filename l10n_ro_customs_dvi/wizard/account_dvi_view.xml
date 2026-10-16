@@ -12,7 +12,7 @@
                         </p>
                         <ul class="mb-1">
                             <li><b>Tax Base</b> — the base of item <b>B00</b>, not the untaxed total of the invoice</li>
-                            <li><b>VAT Paid at Customs</b> — the amount of item <b>B00</b></li>
+                            <li><b>Import VAT Amount</b> — the amount of item <b>B00</b></li>
                             <li><b>Customs Duty</b> — item <b>A00</b></li>
                             <li><b>DVI Number</b> — the MRN in the header of the declaration</li>
                             <li><b>DVI Date</b> — the date the declaration was accepted</li>

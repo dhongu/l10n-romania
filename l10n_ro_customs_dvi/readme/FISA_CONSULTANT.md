@@ -345,7 +345,7 @@ Butonul deschide wizardul. În capul lui se află o casetă de îndrumare cu map
 | Câmp | Ce se pune | Unde e în DVI |
 |---|---|---|
 | **Bază de impozitare** | baza pe care vama a calculat TVA-ul | baza poziției **B00** |
-| **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziției **B00** |
+| **Valoare TVA la import** | TVA-ul efectiv datorat | valoarea poziției **B00** |
 | **TVA la import** | cota aplicată de vamă — **și regimul**: taxă normală la plata efectivă, taxă cu două repartiții (4426 / 4427, ex. „21% IMP AM”) fără plata în vamă (§2.7) | din declarație |
 | **Taxă vamală** | taxa vamală datorată | poziția **A00** |
 | **Număr DVI** | MRN-ul | antetul declarației |
@@ -443,16 +443,16 @@ Pentru firmele cu **certificat de amânare de la plată** sau în celelalte cazu
 2. Apăsați **Aplică**, apoi pe costul adițional **Calculează** și **Validează** (Pasul 6).
 
 **Găsiți pe ecran:** pe costul adițional validat, în capul formularului, câmpul **TVA** are taxa
-„IMP AM", iar **TVA plătit în vamă** are valoarea din declarație — numele câmpului rămâne același,
-deși în acest regim TVA-ul nu se plătește. La fel, eticheta liniilor din notă rămâne „TVA plătit în
-vamă".
+„IMP AM", iar **Valoare TVA la import** are valoarea din declarație. Etichetele sunt neutre în ambele
+regimuri; regimul se recunoaște după numele taxei.
 
 ![Costul adițional DVI cu taxa „11% IMP AM"](screenshots/11_landed_cost_tva_amanat.png)
 
 Deschideți nota contabilă cu un clic pe câmpul **Notă contabilă** din capul formularului.
 
-**Găsiți pe ecran:** liniile de TVA sunt **Dr 4426** și **Cr 4427**, de aceeași valoare. Perechea
-tehnică pe **473** poartă baza importului.
+**Găsiți pe ecran:** liniile de TVA sunt **Dr 4426** și **Cr 4427**, de aceeași valoare, cu eticheta
+„TVA la import - 21% IMP AM" (sau „11% IMP AM"). Perechea tehnică pe **473** poartă baza
+importului.
 
 **Verificați:**
 

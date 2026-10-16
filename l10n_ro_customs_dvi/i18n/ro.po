@@ -50,8 +50,8 @@ msgstr ""
 
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
-msgid "<b>VAT Paid at Customs</b> — the amount of item <b>B00</b>"
-msgstr "<b>TVA plătit în vamă</b> — valoarea poziției <b>B00</b>"
+msgid "<b>Import VAT Amount</b> — the amount of item <b>B00</b>"
+msgstr "<b>Valoare TVA la import</b> — valoarea poziției <b>B00</b>"
 
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
@@ -177,6 +177,19 @@ msgstr "TVA la import"
 
 #. module: l10n_ro_customs_dvi
 #. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+#: code:addons/l10n_ro_customs_dvi/tests/test_dvi.py:0
+msgid "Import VAT - %s"
+msgstr "TVA la import - %s"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_value
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__tax_value
+msgid "Import VAT Amount"
+msgstr "Valoare TVA la import"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
 #: code:addons/l10n_ro_customs_dvi/tests/test_dvi.py:0
 msgid "Import VAT base"
 msgstr "Bază TVA import"
@@ -284,11 +297,6 @@ msgid "Total"
 msgstr "Total"
 
 #. module: l10n_ro_customs_dvi
-#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_value
-msgid "VAT Paid at Customs"
-msgstr "TVA plătit în vamă"
-
-#. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_value
 msgid ""
 "VAT actually due, the amount of item B00. Copy it from the declaration.\n"
@@ -298,19 +306,6 @@ msgstr ""
 "TVA-ul efectiv datorat, valoarea poziției B00. Transcrieți-o din declarație.\n"
 "\n"
 "Aceasta este suma înregistrată în contul 4426, ca atare. NU se recalculează la modificarea bazei sau a cotei, deci actualizați-o dumneavoastră ori de câte ori schimbați una dintre ele."
-
-#. module: l10n_ro_customs_dvi
-#. odoo-python
-#: code:addons/l10n_ro_customs_dvi/tests/test_dvi.py:0
-#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__tax_value
-msgid "VAT paid at customs"
-msgstr "TVA plătit în vamă"
-
-#. module: l10n_ro_customs_dvi
-#. odoo-python
-#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
-msgid "VAT paid at customs - %s"
-msgstr "TVA plătit în vamă - %s"
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_id
