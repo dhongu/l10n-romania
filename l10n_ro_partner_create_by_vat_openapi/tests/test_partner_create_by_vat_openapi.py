@@ -22,13 +22,12 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Test Partner OpenAPI",
-                "company_type": "company",
                 "country_id": cls.ro_country.id,
             }
         )
 
         # Setăm openapi_key în parametrii de sistem
-        cls.env["ir.config_parameter"].sudo().set_param("openapi_key", "test-api-key-123")
+        cls.env["ir.config_parameter"].sudo().set_str("openapi_key", "test-api-key-123")
 
     def _mock_openapi_response(self):
         """Returnează un dict simulat de răspuns OpenAPI."""
@@ -59,7 +58,7 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
             "odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner.urlopen",
             return_value=mock_response,
         ):
-            result = self.partner._get_Openapi("12345678")
+            result = self.partner._get_Openapi("12345607")
 
         self.assertIsInstance(result, dict)
         self.assertEqual(result["name"], "SC TEST SRL")
@@ -69,12 +68,12 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
 
     def test_get_openapi_no_api_key(self):
         """Test că _get_Openapi ridică UserError dacă lipsește openapi_key."""
-        self.env["ir.config_parameter"].sudo().set_param("openapi_key", "")
+        self.env["ir.config_parameter"].sudo().set_str("openapi_key", "")
         try:
             with self.assertRaises(UserError):
-                self.partner._get_Openapi("12345678")
+                self.partner._get_Openapi("12345607")
         finally:
-            self.env["ir.config_parameter"].sudo().set_param("openapi_key", "test-api-key-123")
+            self.env["ir.config_parameter"].sudo().set_str("openapi_key", "test-api-key-123")
 
     def test_button_get_partner_data_openapi_ro_vat(self):
         """Test că button_get_partner_data_openapi actualizează partenerul cu date de la OpenAPI."""
@@ -88,9 +87,8 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "Firma Test",
-                "vat": "RO12345678",
+                "vat": "RO12345607",
                 "country_id": self.ro_country.id,
-                "company_type": "company",
             }
         )
 
@@ -116,9 +114,8 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "Firma Radiata",
-                "vat": "RO99999999",
+                "vat": "RO99999992",
                 "country_id": self.ro_country.id,
-                "company_type": "company",
             }
         )
 
@@ -135,7 +132,6 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "Fara VAT",
-                "company_type": "company",
             }
         )
         with self.assertRaises(UserError):
@@ -150,13 +146,14 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         mock_response.getcode.return_value = 200
         mock_response.read.return_value = json.dumps(mock_response_data).encode()
 
-        partner = self.env["res.partner"].create(
-            {
-                "name": "12345678",
-                "company_type": "company",
-                "country_id": self.ro_country.id,
-            }
-        )
+        # create() from l10n_ro_partner_create_by_vat_button queries ANAF for a bare CUI
+        with patch.object(type(self.env["res.partner"]), "_get_Anaf", autospec=True, return_value=("error", {})):
+            partner = self.env["res.partner"].create(
+                {
+                    "name": "12345607",
+                    "country_id": self.ro_country.id,
+                }
+            )
 
         with patch(
             "odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner.urlopen",
@@ -171,9 +168,8 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "Firma Fara Date",
-                "vat": "RO11111111",
+                "vat": "RO11111110",
                 "country_id": self.ro_country.id,
-                "company_type": "company",
             }
         )
         original_name = partner.name
@@ -202,9 +198,8 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "Wizard Test Partner",
-                "vat": "RO22222222",
+                "vat": "RO22222229",
                 "country_id": self.ro_country.id,
-                "company_type": "company",
             }
         )
 
@@ -225,14 +220,13 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
 
     def test_wizard_do_get_data_openapi_no_api_key_raises(self):
         """Test că wizard-ul ridică UserError dacă lipsește openapi_key."""
-        self.env["ir.config_parameter"].sudo().set_param("openapi_key", "")
+        self.env["ir.config_parameter"].sudo().set_str("openapi_key", "")
 
         partner = self.env["res.partner"].create(
             {
                 "name": "No Key Partner",
-                "vat": "RO33333333",
+                "vat": "RO33333338",
                 "country_id": self.ro_country.id,
-                "company_type": "company",
             }
         )
 
@@ -246,15 +240,14 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         with self.assertRaises(UserError):
             wizard.do_get_data()
 
-        self.env["ir.config_parameter"].sudo().set_param("openapi_key", "test-api-key-123")
+        self.env["ir.config_parameter"].sudo().set_str("openapi_key", "test-api-key-123")
 
     def test_wizard_do_get_data_non_openapi_service(self):
         """Test că wizard-ul cu alt service nu apelează logica openapi."""
         partner = self.env["res.partner"].create(
             {
                 "name": "Wizard Non OpenAPI",
-                "vat": "RO44444444",
-                "company_type": "company",
+                "vat": "RO44444447",
                 "country_id": self.ro_country.id,
             }
         )
@@ -267,9 +260,12 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         )
 
         # Cu service != openapi, button_get_partner_data_openapi nu trebuie apelat
-        with patch(
-            "odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner.ResPartner.button_get_partner_data_openapi"
-        ) as mock_btn:
+        with (
+            patch(
+                "odoo.addons.l10n_ro_partner_create_by_vat_openapi.models.res_partner.ResPartner.button_get_partner_data_openapi"
+            ) as mock_btn,
+            patch.object(type(partner), "_get_Anaf", autospec=True, return_value=("error", {})),
+        ):
             try:
                 wizard.do_get_data()
             except Exception as e:
@@ -281,9 +277,8 @@ class TestPartnerCreateByVatOpenapi(TransactionCase):
         partner = self.env["res.partner"].new(
             {
                 "name": "Onchange Test",
-                "vat": "RO12345678",
+                "vat": "RO12345607",
                 "country_id": self.ro_country.id,
-                "company_type": "company",
             }
         )
         # Nu trebuie să ridice excepție

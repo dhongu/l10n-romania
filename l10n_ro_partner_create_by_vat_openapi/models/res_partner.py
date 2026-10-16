@@ -34,7 +34,7 @@ class ResPartner(models.Model):
     @api.model
     def _get_Openapi(self, cod):
         result = {}
-        openapi_key = self.env["ir.config_parameter"].sudo().get_param(key="openapi_key", default="False")
+        openapi_key = self.env["ir.config_parameter"].sudo().get_str(key="openapi_key", default="False")
 
         if not openapi_key or openapi_key == "False":
             raise UserError(self.env._("Setati openapi_key in parametrii de sistem"))
@@ -68,7 +68,6 @@ class ResPartner(models.Model):
                 "l10n_ro_vat_subjected": bool(res["tva"]),
                 "state_id": state,
                 "radiata": res["radiata"],
-                "company_type": "company",
             }
 
         return result
@@ -103,9 +102,9 @@ class ResPartner(models.Model):
         if part.l10n_ro_vat_subjected:
             self.write({"l10n_ro_vat_subjected": False})
         if vat_number and vat_country:
+            # Odoo 20: ``is_company`` is computed (own commercial entity with a VAT)
             self.write(
                 {
-                    "is_company": True,
                     "country_id": self.env["res.country"].search([("code", "ilike", vat_country)])[0].id,
                 }
             )
@@ -138,7 +137,6 @@ class ResPartner(models.Model):
                         self.write(
                             {
                                 "name": result.name,
-                                "is_company": True,
                                 "l10n_ro_vat_subjected": True,
                             }
                         )
