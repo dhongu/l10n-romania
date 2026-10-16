@@ -5,6 +5,10 @@
   "21% IMP AM" / "11% IMP AM") was exported with TaxType 000 / TaxCode 000000 and TaxAmount 0.
   The VAT return tags (rows 24/25, 7/22) are unchanged; the Odoo VAT closing now also takes the
   DVI VAT into account.
+- Consultant sheet: step-by-step flow for imports without VAT paid at customs (art. 326(4)-(5) of
+  the Romanian Fiscal Code, "21% IMP AM" / "11% IMP AM" taxes), with two new screenshots; the
+  reporting notes now cover D406 (SAF-T); new section on the refund of VAT paid at customs, with
+  the cases that have a legal basis, the journal entries and a request template (Annex A).
 
 ## 20.0.2.1.3 (2026-10-13)
 
