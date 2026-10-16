@@ -1,0 +1,10 @@
+{
+  "title": "Romanian Postal Codes",
+  "summary": "Postal codes linked to localities",
+  "lang": "en",
+  "features": [
+    "About 52,000 postal codes on install",
+    "ZIP auto-fills on the partner form",
+    "Search by code or street name"
+  ]
+}

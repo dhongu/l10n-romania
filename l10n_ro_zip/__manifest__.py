@@ -1,0 +1,24 @@
+# Copyright (C) 2020 Terrabit
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
+
+{
+    "name": "Romania - Coduri Postale",
+    "summary": "Romania - Coduri Postale",
+    "countries": ["ro"],
+    "images": ["static/description/main_screenshot.png"],
+    "license": "AGPL-3",
+    "version": "20.0.0.0.5",
+    "author": "Terrabit",
+    "website": "https://www.terrabit.ro",
+    "category": "Localization",
+    "depends": ["base_address_extended", "contacts", "l10n_ro_city"],
+    "data": [
+        "views/res_partner_view.xml",
+        "views/res_zip_view.xml",
+        "security/ir.access.csv",
+    ],
+    "development_status": "Beta",
+    "installable": True,
+    "maintainers": ["dhongu"],
+    "post_init_hook": "post_init_hook",
+}
