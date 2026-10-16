@@ -3,6 +3,7 @@
 
 
 from odoo import fields
+from odoo.exceptions import ValidationError
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
 from odoo.tools import SQL
@@ -572,3 +573,113 @@ class TestDVI(TransactionCase):
         # Produsul creat efectiv păstrează marcajul (constrângerea din core cere type == service).
         product = self.env["product.product"].create(duty_vals)
         self.assertTrue(product.landed_cost_ok)
+
+    def _build_exempt_tax(self):
+        """Taxă de achiziţie scutită, ca „0% EXEMPT” (tvatiscdeda): doar grila de bază, fără cont de TVA."""
+        self.exempt_base_tag = self.env["account.account.tag"].create(
+            {"name": "29 - Test Exempt Base", "applicability": "taxes", "country_id": self.env.ref("base.ro").id}
+        )
+        rep = [
+            (0, 0, {"repartition_type": "base", "factor_percent": 100, "tag_ids": [(6, 0, self.exempt_base_tag.ids)]}),
+            (0, 0, {"repartition_type": "tax", "factor_percent": 100}),
+        ]
+        return self.env["account.tax"].create(
+            {
+                "name": "0% EXEMPT Test",
+                "amount": 0.0,
+                "amount_type": "percent",
+                "type_tax_use": "purchase",
+                "tax_group_id": self.tax_id.tax_group_id.id,
+                "country_id": self.env.ref("base.ro").id,
+                "invoice_repartition_line_ids": rep,
+                "refund_repartition_line_ids": rep,
+            }
+        )
+
+    def _create_received_invoice(self, qty, price):
+        """Comandă de import recepţionată şi facturată (factura furnizorului din afara UE)."""
+        po = Form(self.env["purchase.order"])
+        po.partner_id = self.vendor
+        with po.order_line.new() as po_line:
+            po_line.product_id = self.product_1
+            po_line.product_qty = qty
+            po_line.price_unit = price
+            po_line.tax_ids.clear()
+        po = po.save()
+        po.button_confirm()
+        picking = po.picking_ids[0]
+        picking.move_line_ids.write({"quantity": qty})
+        picking.button_validate()
+        invoice = self.env["account.move"].browse(po.action_create_invoice().get("res_id"))
+        invoice.invoice_date = fields.Date.today()
+        invoice.action_post()
+        return invoice
+
+    def test_regime_4200_exempt_import(self):
+        """Regim 4200: import scutit de TVA (art. 293 alin. (1) lit. m) Cod fiscal), urmat de livrare
+        intracomunitară.
+
+        Cazurile reale (mere din Republica Moldova, TVA 11% reţinut de vamă ca garanţie: 6.861 /
+        6.837 / 6.881 lei; taxă vamală 0 prin preferinţa UE–MD). Garanţia nu e TVA datorat, deci
+        nota nu are nicio linie pe 4426 / 446 — doar baza, pe grila rândului 29 din D300, purtată de
+        perechea tehnică 473 cu taxa scutită (pe ea pune SAF-T informaţia de taxă).
+        """
+        exempt_tax = self._build_exempt_tax()
+        for dvi_number, base in (
+            ("26ROIS0700000001", 62372.73),
+            ("26ROIS0700000002", 62154.55),
+            ("26ROIS0700000003", 62554.55),
+        ):
+            invoice = self._create_received_invoice(10000, base / 10000)
+            action = invoice.button_dvi()
+            wizard = self.env[action["res_model"]].browse(action["res_id"])
+            wizard_form = Form(wizard.with_context(active_id=invoice.id))
+            wizard_form.dvi_number = dvi_number
+            wizard_form.customs_regime = "4200"
+            self.assertEqual(wizard_form.tax_value, 0.0, "La 4200 TVA-ul de import se propune gol")
+            if self.env.company.chart_template == "ro":
+                self.assertEqual(
+                    wizard_form.tax_id,
+                    self.env["account.chart.template"].ref("tvatiscdeda"),
+                    "Pe planul RO se propune taxa „0% EXEMPT” (rd. 29 din D300)",
+                )
+            wizard_form.tax_id = exempt_tax
+            wizard_form.tax_base = base
+            wizard = wizard_form.save()
+            dvi = self.env["stock.landed.cost"].browse(wizard.do_create_dvi()["res_id"])
+            self.assertEqual(dvi.customs_regime, "4200")
+
+            dvi.button_validate()
+
+            move = dvi.account_move_id
+            self.assertTrue(move, "Fără taxă vamală, nota bazei scutite trebuie creată tot de DVI")
+            self.assertEqual(move.state, "posted", "Nota în ciornă nu ajunge în decont")
+            self.assertEqual(move.ref, dvi_number)
+            self.assertEqual(len(move.line_ids), 2, f"Doar perechea tehnică de bază, primit {move.line_ids}")
+            self.assertEqual(set(move.line_ids.mapped("account_id.code")), {"473000"})
+            self.assertFalse(move.line_ids.tax_line_id, "La 4200 nu există linie de TVA")
+            base_line = move.line_ids.filtered("tax_tag_ids")
+            self.assertEqual(base_line.debit, base)
+            self.assertEqual(base_line.tax_tag_ids, self.exempt_base_tag, "Baza merge pe rd. 29 din D300")
+            self.assertEqual(base_line.tax_ids, exempt_tax, "Linia de bază poartă taxa scutită (SAF-T)")
+
+    def test_regime_4200_rejects_import_vat(self):
+        """La 4200 nu se poate înregistra TVA deductibil: garanţia reţinută de vamă nu e TVA datorat."""
+        with self.assertRaises(ValidationError):
+            self.env["stock.landed.cost"].create(
+                {
+                    "landed_type": "dvi",
+                    "customs_regime": "4200",
+                    "account_journal_id": self.env["account.journal"].search([("type", "=", "general")], limit=1).id,
+                    "tax_id": self.tax_id.id,
+                    "tax_base": 62372.73,
+                    "tax_value": 6861.0,
+                }
+            )
+
+    def test_regime_4000_default_unchanged(self):
+        """Implicit regimul e 4000, cu TVA calculat propus — comportamentul de până acum."""
+        invoice = self._create_received_invoice(10, 100)
+        wizard = self.env["account.invoice.dvi"].with_context(active_id=invoice.id).create({})
+        self.assertEqual(wizard.customs_regime, "4000")
+        self.assertEqual(wizard.tax_id, self.env.company.account_purchase_tax_id)

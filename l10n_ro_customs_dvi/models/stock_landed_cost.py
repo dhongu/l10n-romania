@@ -3,7 +3,15 @@
 # See README.rst file on addons root folder for license details
 
 
-from odoo import fields, models
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+
+# Regimul vamal din caseta 37 a declarației (primele 4 cifre: regim solicitat + regim anterior).
+CUSTOMS_REGIMES = [
+    ("4000", "4000 - Release for free circulation, import VAT due"),
+    ("4200", "4200 - Release for free circulation, VAT exempt, followed by an intra-Community supply"),
+    ("other", "Other"),
+]
 
 
 class LandedCost(models.Model):
@@ -20,9 +28,34 @@ class LandedCost(models.Model):
         help="Reference number of the customs import declaration (MRN).",
     )
 
+    customs_regime = fields.Selection(
+        CUSTOMS_REGIMES,
+        default="4000",
+        tracking=True,
+        help="Customs procedure code (box 37 of the declaration).\n"
+        "4200: the import is exempt from VAT (art. 293(1)(m) of Law 227/2015) because the goods are "
+        "supplied to another Member State; only the base is reported, on row 29 of the VAT return.",
+    )
     tax_value = fields.Float("Import VAT Amount")
     tax_base = fields.Float("Tax base")
     tax_id = fields.Many2one("account.tax")  # TVA la import (plătit în vamă sau cu certificat de amânare)
+
+    @api.constrains("customs_regime", "tax_id", "tax_value")
+    def _check_customs_regime_exempt(self):
+        """La 4200 importul e scutit: nu există TVA de înregistrat, nici deductibil, nici de plată.
+
+        TVA-ul calculat de vamă și reținut ca garanție nu e datorat; dacă scutirea cade, vama îl
+        execută din garanție și abia atunci devine TVA de import.
+        """
+        for cost in self.filtered(lambda c: c.customs_regime == "4200"):
+            if cost.tax_value or (cost.tax_id and cost.tax_id.amount):
+                raise ValidationError(
+                    self.env._(
+                        "Under customs regime 4200 the import is exempt from VAT: choose an exempt tax "
+                        "(0%) and leave the import VAT amount empty. The VAT held by customs as a "
+                        "guarantee is not recorded on the DVI."
+                    )
+                )
 
     def _get_move_ref(self):
         """Referința notei contabile: numărul de DVI dacă e completat, altfel secvența internă."""
@@ -49,9 +82,14 @@ class LandedCost(models.Model):
             set_param = self.env["ir.config_parameter"].sudo().set_param
             set_param("dvi.custom_duty_product_id", custom_duty_product.id)
 
-        for cost in self.filtered(lambda c: c.tax_value and c.tax_id):
+        # La 4200 nu există TVA, dar baza importului scutit trebuie să ajungă în decont (rd. 29).
+        for cost in self.filtered(lambda c: c.tax_id and (c.tax_value or c.customs_regime == "4200")):
             accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
-            if not cost.account_move_id:
+            # Fără taxă vamală (ex. preferința UE–MD), super() nu creează nicio notă: o creăm aici
+            # și o validăm la final, altfel TVA-ul / baza din DVI rămân într-o notă în ciornă,
+            # pe care decontul nu o vede.
+            new_move = not cost.account_move_id
+            if new_move:
                 cost.account_move_id = self.env["account.move"].create(
                     {
                         "journal_id": cost.account_journal_id.id,
@@ -70,6 +108,8 @@ class LandedCost(models.Model):
             # Liniile sunt complete (TVA transcris din declaraţie): fără resincronizarea taxelor,
             # care pe o notă în ciornă ar recalcula TVA-ul din bază.
             self.env["account.move.line"].with_context(skip_invoice_sync=True).create(aml)
+            if new_move and cost.account_move_id.line_ids:
+                cost.account_move_id._post()
         return res
 
     def _prepare_tax_lines(self, name, tax_values, accounts_data):

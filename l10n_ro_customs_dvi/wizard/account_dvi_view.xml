@@ -28,10 +28,16 @@
                             The customs broker's fee is not recorded here; it goes on their own supplier invoice.
                         </p>
                     </div>
+                    <div class="alert alert-warning" role="alert" invisible="customs_regime != '4200'">
+                        <b>Regime 4200 — import exempt from VAT, followed by an intra-Community supply.</b>
+                        Leave the import VAT amount empty: the VAT computed by customs is only held as a
+                        guarantee and is not deductible. Only the base is reported, on row 29 of the VAT return.
+                    </div>
                     <group>
                         <group string="Customs Declaration">
                             <field name="dvi_number" />
                             <field name="date" />
+                            <field name="customs_regime" />
                         </group>
                         <group string="Import VAT">
                             <field name="tax_id" />

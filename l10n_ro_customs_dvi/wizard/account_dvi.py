@@ -4,6 +4,8 @@
 
 from odoo import api, fields, models
 
+from ..models.stock_landed_cost import CUSTOMS_REGIMES
+
 
 class AccountInvoiceDVI(models.TransientModel):
     _name = "account.invoice.dvi"
@@ -29,6 +31,16 @@ class AccountInvoiceDVI(models.TransientModel):
     )
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
+    customs_regime = fields.Selection(
+        CUSTOMS_REGIMES,
+        default="4000",
+        help="Customs procedure code, the first four digits of box 37 of the declaration.\n\n"
+        "- 4000: import VAT due, paid at customs or deferred (see Import VAT);\n"
+        "- 4200: import exempt from VAT (art. 293(1)(m) of Law 227/2015), the goods being supplied "
+        "to a customer in another Member State. The VAT computed by customs is only held as a "
+        "guarantee and is NOT recorded: the import VAT stays empty and only the base goes to "
+        "row 29 of the VAT return.",
+    )
     tax_value = fields.Monetary(
         string="Import VAT Amount",
         help="VAT actually due, the amount of item B00. Copy it from the declaration.\n\n"
@@ -59,6 +71,23 @@ class AccountInvoiceDVI(models.TransientModel):
         "deferral certificate, centralised clearance, entry in the declarant's records), so the "
         "entry is Dr 4426 = Cr 4427, with no payment and no debt to the budget.",
     )
+
+    def _get_exempt_import_tax(self):
+        """Taxa de achiziție scutită „0% EXEMPT” din planul RO (rd. 29 din D300, SAF-T 308302)."""
+        return (
+            self.env["account.chart.template"].ref("tvatiscdeda", raise_if_not_found=False) or self.env["account.tax"]
+        )
+
+    @api.onchange("customs_regime")
+    def _onchange_customs_regime(self):
+        if self.customs_regime == "4200":
+            self.tax_id = self._get_exempt_import_tax()
+            self.tax_value = 0.0
+        elif self.tax_id and self.tax_id == self._get_exempt_import_tax():
+            # revenire de la 4200: se propune din nou TVA-ul de import calculat
+            self.tax_id = self.env.company.account_purchase_tax_id
+            tax_values = self.tax_id.compute_all(self.tax_base)
+            self.tax_value = tax_values["total_included"] - tax_values["total_excluded"]
 
     def _get_customs_payable_account(self):
         """Contul de decontare cu bugetul pentru drepturile de import.
@@ -143,6 +172,7 @@ class AccountInvoiceDVI(models.TransientModel):
             "picking_ids": [(6, 0, pickings.ids)],
             "cost_lines": [],
             "account_journal_id": invoice.journal_id.id,
+            "customs_regime": self.customs_regime,
             "tax_id": self.tax_id.id,
             "tax_base": self.tax_base,
             "tax_value": self.tax_value,

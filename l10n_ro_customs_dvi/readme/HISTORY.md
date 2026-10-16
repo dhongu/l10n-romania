@@ -1,3 +1,15 @@
+## 19.0.2.1.8 (2026-10-16)
+
+- New *Customs Regime* field on the DVI wizard and on the landed cost (4000 / 4200 / other).
+  Under regime 4200 (import exempt from VAT, art. 293(1)(m) of the Romanian Fiscal Code, followed
+  by an intra-Community supply) the wizard proposes the exempt tax "0% EXEMPT" with no import
+  VAT, and the DVI entry carries only the base, on row 29 of the VAT return (D300), through the
+  technical 473 pair. Until now an import without VAT left no trace in the VAT return. The VAT
+  held by customs as a guarantee is not recorded on the DVI; a 4200 DVI with import VAT is
+  refused.
+- When the DVI has no customs duty, the entry created for the import VAT (or the exempt base) is
+  now posted; it used to stay in draft and was left out of the VAT return.
+
 ## 19.0.2.1.7 (2026-10-16)
 
 - The landed cost created by the DVI wizard is now linked to the supplier invoice through the

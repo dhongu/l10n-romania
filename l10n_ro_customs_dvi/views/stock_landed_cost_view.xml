@@ -12,11 +12,12 @@
                     <group>
                         <field name="landed_type"/>
                         <field name="dvi_number" invisible="landed_type == 'standard'"/>
+                        <field name="customs_regime" invisible="landed_type == 'standard'"/>
                     </group>
                     <group invisible="landed_type == 'standard'">
                         <field name="tax_id"/>
                         <field name="tax_base"/>
-                        <field name="tax_value"/>
+                        <field name="tax_value" invisible="customs_regime == '4200'"/>
                     </group>
                 </group>
             </notebook>
