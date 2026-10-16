@@ -191,7 +191,7 @@ din factură.
 |---|---|---|
 | **Taxă vamală** | taxa vamală datorată | poziţia **A00** |
 | **Bază de impozitare** | baza pe care vama a calculat TVA-ul | baza poziţiei **B00** |
-| **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziţiei **B00** |
+| **Valoare TVA la import** | TVA-ul efectiv datorat | valoarea poziţiei **B00** |
 | **TVA la import** | cota aplicată de vamă la data acceptării declaraţiei **și regimul de plată** (vezi mai jos) | din declaraţie |
 | **Număr DVI** | MRN-ul declaraţiei | antetul declaraţiei |
 | **Data DVI** | data acceptării declaraţiei; determină cota și data notei | antetul declaraţiei |
@@ -221,7 +221,7 @@ DVI înainte de a confirma.**
 **Valoarea statistică folosită ca bază.** Valoarea statistică şi baza de impozitare sunt mărimi
 diferite; pot coincide numeric, dar nu întotdeauna. Se ia baza poziţiei B00, nu valoarea statistică.
 
-**TVA nerecalculat după modificarea bazei.** Câmpul „TVA plătit în vamă” **nu se recalculează
+**TVA nerecalculat după modificarea bazei.** Câmpul „Valoare TVA la import” **nu se recalculează
 automat** la schimbarea bazei sau a cotei — nu există `onchange` în wizard. Dacă modificaţi baza,
 **modificaţi şi valoarea TVA**, altfel nota contabilă se postează cu suma veche, fără nicio eroare.
 

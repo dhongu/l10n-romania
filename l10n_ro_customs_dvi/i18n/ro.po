@@ -50,8 +50,8 @@ msgstr ""
 
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
-msgid "<b>VAT Paid at Customs</b> — the amount of item <b>B00</b>"
-msgstr "<b>TVA plătit în vamă</b> — valoarea poziției <b>B00</b>"
+msgid "<b>Import VAT Amount</b> — the amount of item <b>B00</b>"
+msgstr "<b>Valoare TVA la import</b> — valoarea poziției <b>B00</b>"
 
 #. module: l10n_ro_customs_dvi
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
@@ -177,6 +177,19 @@ msgstr "TVA la import"
 
 #. module: l10n_ro_customs_dvi
 #. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+#: code:addons/l10n_ro_customs_dvi/tests/test_dvi.py:0
+msgid "Import VAT - %s"
+msgstr "TVA la import - %s"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_value
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__tax_value
+msgid "Import VAT Amount"
+msgstr "Valoare TVA la import"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
 #: code:addons/l10n_ro_customs_dvi/tests/test_dvi.py:0
 msgid "Import VAT base"
 msgstr "Bază TVA import"
@@ -284,11 +297,6 @@ msgid "Total"
 msgstr "Total"
 
 #. module: l10n_ro_customs_dvi
-#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_value
-msgid "VAT Paid at Customs"
-msgstr "TVA plătit în vamă"
-
-#. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_value
 msgid ""
 "VAT actually due, the amount of item B00. Copy it from the declaration.\n"
@@ -298,19 +306,6 @@ msgstr ""
 "TVA-ul efectiv datorat, valoarea poziției B00. Transcrieți-o din declarație.\n"
 "\n"
 "Aceasta este suma înregistrată în contul 4426, ca atare. NU se recalculează la modificarea bazei sau a cotei, deci actualizați-o dumneavoastră ori de câte ori schimbați una dintre ele."
-
-#. module: l10n_ro_customs_dvi
-#. odoo-python
-#: code:addons/l10n_ro_customs_dvi/tests/test_dvi.py:0
-#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__tax_value
-msgid "VAT paid at customs"
-msgstr "TVA plătit în vamă"
-
-#. module: l10n_ro_customs_dvi
-#. odoo-python
-#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
-msgid "VAT paid at customs - %s"
-msgstr "TVA plătit în vamă - %s"
 
 #. module: l10n_ro_customs_dvi
 #: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__tax_id
@@ -332,3 +327,135 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
 msgid "or"
 msgstr "sau"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__account_invoice_dvi__customs_regime__4000
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__stock_landed_cost__customs_regime__4000
+msgid "4000 - Import VAT due"
+msgstr "4000 - TVA datorat la import"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__account_invoice_dvi__customs_regime__4200
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__stock_landed_cost__customs_regime__4200
+msgid "4200 - VAT exempt, intra-Community supply"
+msgstr "4200 - Scutit de TVA, livrare intracomunitară"
+
+#. module: l10n_ro_customs_dvi
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_account_invoice_dvi_form
+msgid ""
+"<b>Regime 4200 — import exempt from VAT, followed by an intra-Community supply.</b>\n"
+"                        The VAT computed by customs is only held as a guarantee and is not deductible: enter it\n"
+"                        as <b>VAT Held as Guarantee</b>. Only the base is reported, on row 29 of the VAT return."
+msgstr ""
+"<b>Regim 4200 — import scutit de TVA, urmat de o livrare intracomunitară.</b>\n"
+"                        TVA-ul calculat de vamă este doar reținut ca garanție și nu este deductibil: introduceți-l\n"
+"                        la <b>TVA reținut ca garanție</b>. Se raportează doar baza, pe rândul 29 din decontul de TVA."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__stock_landed_cost__vat_guarantee_state__blocked
+msgid "Blocked"
+msgstr "Blocată"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost__vat_guarantee_state
+msgid ""
+"Blocked: customs holds the amount from the guarantee account.\n"
+"Released: customs released it after the confirmed CMR was submitted."
+msgstr ""
+"Blocată: vama reține suma din contul de garanție.\n"
+"Deblocată: vama a eliberat-o după depunerea CMR-ului confirmat."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__customs_regime
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__customs_regime
+msgid "Customs Regime"
+msgstr "Regim vamal"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost__customs_regime
+msgid ""
+"Customs procedure code (box 37 of the declaration).\n"
+"4200: the import is exempt from VAT (art. 293(1)(m) of Law 227/2015) because the goods are supplied to another Member State; only the base is reported, on row 29 of the VAT return."
+msgstr ""
+"Codul de regim vamal (caseta 37 a declarației).\n"
+"4200: importul este scutit de TVA (art. 293 alin. (1) lit. m) din Legea 227/2015), deoarece bunurile se livrează în alt stat membru; se raportează doar baza, pe rândul 29 din decontul de TVA."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__customs_regime
+msgid ""
+"Customs procedure code, the first four digits of box 37 of the declaration.\n"
+"\n"
+"- 4000: import VAT due, paid at customs or deferred (see Import VAT);\n"
+"- 4200: import exempt from VAT (art. 293(1)(m) of Law 227/2015), the goods being supplied to a customer in another Member State. The VAT computed by customs is only held as a guarantee and is NOT recorded: the import VAT stays empty and only the base goes to row 29 of the VAT return."
+msgstr ""
+"Codul de regim vamal, primele patru cifre din caseta 37 a declarației.\n"
+"\n"
+"- 4000: TVA datorat la import, plătit în vamă sau amânat (vezi TVA la import);\n"
+"- 4200: import scutit de TVA (art. 293 alin. (1) lit. m) din Legea 227/2015), bunurile fiind livrate unui client din alt stat membru. TVA-ul calculat de vamă este doar reținut ca garanție și NU se înregistrează: TVA-ul la import rămâne gol și doar baza ajunge pe rândul 29 din decontul de TVA."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__vat_guarantee_state
+msgid "Guarantee Status"
+msgstr "Stare garanție"
+
+#. module: l10n_ro_customs_dvi
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_stock_landed_cost_form
+msgid "Mark as Released"
+msgstr "Marchează ca deblocată"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__account_invoice_dvi__customs_regime__other
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__stock_landed_cost__customs_regime__other
+msgid "Other"
+msgstr "Altul"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost__vat_guarantee_amount
+msgid ""
+"Regime 4200: VAT computed by customs and held from the importer's guarantee "
+"account until the intra-Community supply is proven (CMR confirmed by the "
+"customer). Informative only: no journal entry is generated."
+msgstr ""
+"Regim 4200: TVA-ul calculat de vamă și reținut din contul de garanție al "
+"importatorului până la dovedirea livrării intracomunitare (CMR confirmat de "
+"client). Doar informativ: nu se generează nicio notă contabilă."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__vat_guarantee_amount
+msgid ""
+"Regime 4200: VAT computed by customs and held from the importer's guarantee "
+"account, as shown on the declaration. It is only recorded on the DVI, for "
+"the release request after the confirmed CMR; no journal entry is generated."
+msgstr ""
+"Regim 4200: TVA-ul calculat de vamă și reținut din contul de garanție al "
+"importatorului, așa cum apare în declarație. Se păstrează doar pe DVI, "
+"pentru cererea de deblocare după CMR-ul confirmat; nu se generează nicio "
+"notă contabilă."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__stock_landed_cost__vat_guarantee_state__released
+msgid "Released"
+msgstr "Deblocată"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid ""
+"Under customs regime 4200 the import is exempt from VAT: choose an exempt "
+"tax (0%) and leave the import VAT amount empty. The VAT held by customs as a"
+" guarantee is not recorded on the DVI."
+msgstr ""
+"În regimul vamal 4200 importul este scutit de TVA: alegeți o taxă scutită "
+"(0%) și lăsați valoarea TVA la import goală. TVA-ul reținut de vamă ca "
+"garanție nu se înregistrează pe DVI."
+
+#. module: l10n_ro_customs_dvi
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_stock_landed_cost_search_dvi
+msgid "VAT Guarantee Blocked"
+msgstr "Garanție TVA blocată"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__vat_guarantee_amount
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__vat_guarantee_amount
+msgid "VAT Held as Guarantee"
+msgstr "TVA reținut ca garanție"

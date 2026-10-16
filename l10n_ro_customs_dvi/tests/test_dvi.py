@@ -3,8 +3,10 @@
 
 
 from odoo import fields
+from odoo.exceptions import ValidationError
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
+from odoo.tools import SQL
 
 
 class TestDVI(TransactionCase):
@@ -270,6 +272,8 @@ class TestDVI(TransactionCase):
         self.assertEqual(dvi.tax_base, 3000.0)
         self.assertEqual(dvi.landed_type, "dvi")
         self.assertEqual(dvi.dvi_number, "25ROBU1234567890", "DVI number should be propagated from the wizard")
+        self.assertEqual(dvi.vendor_bill_id, invoice, "The supplier invoice should be set as vendor bill")
+        self.assertEqual(invoice.landed_costs_ids, dvi)
 
         dvi_form = Form(dvi)
         dvi = dvi_form.save()
@@ -285,7 +289,7 @@ class TestDVI(TransactionCase):
         # Verificam liniile notei contabile pentru TVA
         # In Odoo 18, nota contabila poate fi partajata cu intrarile de evaluare stoc.
         # Identificam liniile de TVA dupa numele lor specific.
-        text = self.env._("VAT paid at customs")
+        text = self.env._("Import VAT - %s", dvi.tax_id.name)
         tva_lines = vat_move.line_ids.filtered(lambda l: text in l.name)
         self.assertEqual(len(tva_lines), 2, "Ar trebui sa avem exact 2 linii de TVA (debit si credit)")
         debit_line = tva_lines.filtered(lambda l: l.debit > 0)
@@ -440,6 +444,101 @@ class TestDVI(TransactionCase):
             "Creditul merge pe TVA colectată, nu pe contul de buget",
         )
 
+    def _create_dvi_vat_move(self, tax, tax_base, tax_value):
+        """Nota de TVA vamal, construită ca în `button_validate`, pe o notă nouă."""
+        cost = self.env["stock.landed.cost"].create(
+            {
+                "landed_type": "dvi",
+                "dvi_number": "26ROBU0000000001",
+                "account_journal_id": self.env["account.journal"].search([("type", "=", "general")], limit=1).id,
+                "tax_id": tax.id,
+                "tax_base": tax_base,
+                "tax_value": tax_value,
+            }
+        )
+        cost.account_move_id = self.env["account.move"].create(
+            {"journal_id": cost.account_journal_id.id, "date": cost.date, "move_type": "entry"}
+        )
+        accounts_data = {"expense": self.env["account.account"].search([("code", "=", "446200")], limit=1)}
+        tax_values = tax.compute_all(tax_base)
+        vals = cost._prepare_tax_lines("Import VAT", tax_values, accounts_data)
+        vals += cost._prepare_tax_base_lines("Import VAT", tax_values)
+        self.env["account.move.line"].with_context(skip_invoice_sync=True).create(vals)
+        cost.account_move_id.action_post()
+        return cost.account_move_id
+
+    def _get_saft_tax_details(self, move):
+        """Detaliile de taxă exact cum le citeşte exportul SAF-T (D406).
+
+        `account_saft` (`_saft_fill_report_tax_details_values`) pune `TaxInformation` pe linia de
+        bază găsită de `_get_query_tax_details`, cu acelaşi filtru de semn; o linie fără rând aici
+        iese în D406 cu TaxType 000 / TaxCode 000000 şi TaxAmount 0.
+        """
+        query = self.env["account.move.line"]._get_query_tax_details_from_domain([("move_id", "=", move.id)])
+        self.env.cr.execute(
+            SQL(
+                """
+                SELECT tax_detail.base_line_id, tax_detail.tax_id,
+                       SUM(tax_detail.tax_amount) AS tax_amount, SUM(tax_detail.base_amount) AS base_amount
+                FROM (%s) AS tax_detail
+                WHERE SIGN(tax_detail.tax_amount) = SIGN(tax_detail.base_amount)
+                GROUP BY tax_detail.base_line_id, tax_detail.tax_id
+                """,
+                query,
+            )
+        )
+        return self.env.cr.dictfetchall()
+
+    def test_vat_paid_at_customs_saft_tax_details(self):
+        """D406: TVA plătit în vamă trebuie legat de taxă, nu doar de grilele D300.
+
+        Linia de TVA trebuie să fie linie de taxă (`tax_repartition_line_id`), iar baza să poarte
+        taxa (`tax_ids`) — altfel SAF-T nu găseşte taxa şi raportează 000 / 000000.
+        Grilele D300 (rd. 24 / 25) rămân cele de azi.
+        """
+        move = self._create_dvi_vat_move(self.tax_id, 3000.0, 570.0)
+        vat_line = move.line_ids.filtered(lambda line: line.debit == 570.0)
+        base_line = move.line_ids.filtered(lambda line: line.debit == 3000.0)
+
+        self.assertEqual(vat_line.tax_line_id, self.tax_id, "Linia de TVA trebuie să fie linie de taxă")
+        self.assertEqual(base_line.tax_ids, self.tax_id, "Linia de bază trebuie să poarte taxa")
+        self.assertEqual(vat_line.tax_tag_ids, self.tax_tag, "Grila de TVA din D300 rămâne neschimbată")
+        self.assertEqual(base_line.tax_tag_ids, self.base_tag, "Grila de bază din D300 rămâne neschimbată")
+        self.assertFalse((move.line_ids - vat_line - base_line).tax_tag_ids, "Contrapartidele nu poartă grile D300")
+
+        details = self._get_saft_tax_details(move)
+        self.assertEqual(len(details), 1, f"Un singur rând de taxă în D406, primit {details}")
+        self.assertEqual(details[0]["base_line_id"], base_line.id)
+        self.assertEqual(details[0]["tax_id"], self.tax_id.id)
+        self.assertAlmostEqual(details[0]["tax_amount"], 570.0)
+        self.assertAlmostEqual(details[0]["base_amount"], 3000.0)
+
+    def test_vat_without_payment_at_customs_saft_tax_details(self):
+        """D406 la importul fără plata TVA în vamă (art. 326 alin. (4)-(5), „21% IMP AM").
+
+        Ambele linii (4426 şi 4427) sunt linii de taxă; partea deductibilă ajunge în D406 pe linia
+        de bază. Grilele D300 (rd. 7 / 22) rămân cele de azi.
+        """
+        tax_rc, acc_4426, acc_4427 = self._build_reverse_charge_tax()
+        tax_rc.invoice_repartition_line_ids.filtered(lambda r: r.repartition_type == "base").tag_ids = self.base_tag
+        move = self._create_dvi_vat_move(tax_rc, 10000.0, 1900.0)
+        line_4426 = move.line_ids.filtered(lambda line: line.account_id == acc_4426)
+        line_4427 = move.line_ids.filtered(lambda line: line.account_id == acc_4427)
+        base_line = move.line_ids.filtered(lambda line: line.debit == 10000.0)
+
+        self.assertEqual((line_4426 | line_4427).tax_line_id, tax_rc)
+        self.assertEqual(len((line_4426 | line_4427).tax_repartition_line_id), 2)
+        self.assertEqual(base_line.tax_ids, tax_rc)
+        self.assertEqual(base_line.tax_tag_ids, self.base_tag)
+        reps = tax_rc.invoice_repartition_line_ids
+        self.assertEqual(line_4426.tax_tag_ids, reps.filtered(lambda r: r.account_id == acc_4426).tag_ids)
+        self.assertEqual(line_4427.tax_tag_ids, reps.filtered(lambda r: r.account_id == acc_4427).tag_ids)
+
+        details = self._get_saft_tax_details(move)
+        self.assertEqual(len(details), 1, f"Un singur rând de taxă în D406, primit {details}")
+        self.assertEqual(details[0]["base_line_id"], base_line.id)
+        self.assertAlmostEqual(details[0]["tax_amount"], 1900.0)
+
     def test_customs_products_accounts_and_landed_cost_flag(self):
         """Comisionul vamal e datorie către bugetul de stat (446), nu fond special (447).
 
@@ -474,3 +573,121 @@ class TestDVI(TransactionCase):
         # Produsul creat efectiv păstrează marcajul (constrângerea din core cere type == service).
         product = self.env["product.product"].create(duty_vals)
         self.assertTrue(product.landed_cost_ok)
+
+    def _build_exempt_tax(self):
+        """Taxă de achiziţie scutită, ca „0% EXEMPT” (tvatiscdeda): doar grila de bază, fără cont de TVA."""
+        self.exempt_base_tag = self.env["account.account.tag"].create(
+            {"name": "29 - Test Exempt Base", "applicability": "taxes", "country_id": self.env.ref("base.ro").id}
+        )
+        rep = [
+            (0, 0, {"repartition_type": "base", "factor_percent": 100, "tag_ids": [(6, 0, self.exempt_base_tag.ids)]}),
+            (0, 0, {"repartition_type": "tax", "factor_percent": 100}),
+        ]
+        return self.env["account.tax"].create(
+            {
+                "name": "0% EXEMPT Test",
+                "amount": 0.0,
+                "amount_type": "percent",
+                "type_tax_use": "purchase",
+                "tax_group_id": self.tax_id.tax_group_id.id,
+                "country_id": self.env.ref("base.ro").id,
+                "invoice_repartition_line_ids": rep,
+                "refund_repartition_line_ids": rep,
+            }
+        )
+
+    def _create_received_invoice(self, qty, price):
+        """Comandă de import recepţionată şi facturată (factura furnizorului din afara UE)."""
+        po = Form(self.env["purchase.order"])
+        po.partner_id = self.vendor
+        with po.order_line.new() as po_line:
+            po_line.product_id = self.product_1
+            po_line.product_qty = qty
+            po_line.price_unit = price
+            po_line.tax_ids.clear()
+        po = po.save()
+        po.button_confirm()
+        picking = po.picking_ids[0]
+        picking.move_line_ids.write({"quantity": qty})
+        picking.button_validate()
+        invoice = self.env["account.move"].browse(po.action_create_invoice().get("res_id"))
+        invoice.invoice_date = fields.Date.today()
+        invoice.action_post()
+        return invoice
+
+    def test_regime_4200_exempt_import(self):
+        """Regim 4200: import scutit de TVA (art. 293 alin. (1) lit. m) Cod fiscal), urmat de livrare
+        intracomunitară.
+
+        Cazurile reale (mere din Republica Moldova, TVA 11% reţinut de vamă ca garanţie: 6.861 /
+        6.837 / 6.881 lei; taxă vamală 0 prin preferinţa UE–MD). Garanţia nu e TVA datorat, deci
+        nota nu are nicio linie pe 4426 / 446 — doar baza, pe grila rândului 29 din D300, purtată de
+        perechea tehnică 473 cu taxa scutită (pe ea pune SAF-T informaţia de taxă).
+        """
+        exempt_tax = self._build_exempt_tax()
+        for dvi_number, base, guarantee in (
+            ("26ROIS0700000001", 62372.73, 6861.0),
+            ("26ROIS0700000002", 62154.55, 6837.0),
+            ("26ROIS0700000003", 62554.55, 6881.0),
+        ):
+            invoice = self._create_received_invoice(10000, base / 10000)
+            action = invoice.button_dvi()
+            wizard = self.env[action["res_model"]].browse(action["res_id"])
+            wizard_form = Form(wizard.with_context(active_id=invoice.id))
+            wizard_form.dvi_number = dvi_number
+            wizard_form.customs_regime = "4200"
+            self.assertEqual(wizard_form.tax_value, 0.0, "La 4200 TVA-ul de import se propune gol")
+            if self.env.company.chart_template == "ro":
+                self.assertEqual(
+                    wizard_form.tax_id,
+                    self.env["account.chart.template"].ref("tvatiscdeda"),
+                    "Pe planul RO se propune taxa „0% EXEMPT” (rd. 29 din D300)",
+                )
+            wizard_form.tax_id = exempt_tax
+            wizard_form.tax_base = base
+            wizard_form.vat_guarantee_amount = guarantee
+            wizard = wizard_form.save()
+            dvi = self.env["stock.landed.cost"].browse(wizard.do_create_dvi()["res_id"])
+            self.assertEqual(dvi.customs_regime, "4200")
+            self.assertEqual(dvi.vat_guarantee_amount, guarantee, "Garanţia din declaraţie se păstrează pe DVI")
+            self.assertEqual(dvi.vat_guarantee_state, "blocked")
+
+            dvi.button_validate()
+
+            move = dvi.account_move_id
+            self.assertTrue(move, "Fără taxă vamală, nota bazei scutite trebuie creată tot de DVI")
+            self.assertEqual(move.state, "posted", "Nota în ciornă nu ajunge în decont")
+            self.assertEqual(move.ref, dvi_number)
+            self.assertEqual(len(move.line_ids), 2, f"Doar perechea tehnică de bază, primit {move.line_ids}")
+            self.assertEqual(set(move.line_ids.mapped("account_id.code")), {"473000"})
+            self.assertFalse(move.line_ids.tax_line_id, "La 4200 nu există linie de TVA")
+            base_line = move.line_ids.filtered("tax_tag_ids")
+            self.assertEqual(base_line.debit, base)
+            self.assertEqual(base_line.tax_tag_ids, self.exempt_base_tag, "Baza merge pe rd. 29 din D300")
+            self.assertEqual(base_line.tax_ids, exempt_tax, "Linia de bază poartă taxa scutită (SAF-T)")
+
+            # Deblocarea după CMR-ul confirmat: doar starea se schimbă, fără notă contabilă.
+            dvi.action_release_vat_guarantee()
+            self.assertEqual(dvi.vat_guarantee_state, "released")
+            self.assertEqual(len(dvi.account_move_id.line_ids), 2)
+
+    def test_regime_4200_rejects_import_vat(self):
+        """La 4200 nu se poate înregistra TVA deductibil: garanţia reţinută de vamă nu e TVA datorat."""
+        with self.assertRaises(ValidationError):
+            self.env["stock.landed.cost"].create(
+                {
+                    "landed_type": "dvi",
+                    "customs_regime": "4200",
+                    "account_journal_id": self.env["account.journal"].search([("type", "=", "general")], limit=1).id,
+                    "tax_id": self.tax_id.id,
+                    "tax_base": 62372.73,
+                    "tax_value": 6861.0,
+                }
+            )
+
+    def test_regime_4000_default_unchanged(self):
+        """Implicit regimul e 4000, cu TVA calculat propus — comportamentul de până acum."""
+        invoice = self._create_received_invoice(10, 100)
+        wizard = self.env["account.invoice.dvi"].with_context(active_id=invoice.id).create({})
+        self.assertEqual(wizard.customs_regime, "4000")
+        self.assertEqual(wizard.tax_id, self.env.company.account_purchase_tax_id)

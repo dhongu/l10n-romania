@@ -135,8 +135,9 @@ la plata efectivă în vamă, lit. d) la importul fără plata efectivă (§2.8)
 
 ### 2.7 Cele două regimuri de plată a TVA în vamă
 
-Codul fiscal prevede două tratamente, iar modulul le acoperă pe amândouă. **Taxa aleasă în wizard
-este comutatorul** — nu există niciun câmp de configurat.
+Codul fiscal prevede două tratamente, iar modulul le acoperă pe amândouă. Pe regimul vamal 4000
+(câmpul **Regim vamal**, implicit), **taxa aleasă în wizard este comutatorul** între ele — nu există
+alt câmp de configurat. Importul scutit pe regimul 4200 e tratat separat, la §2.10.
 
 **Plata efectivă la organul vamal — art. 326 alin. (3).** Regimul obișnuit. Se alege o taxă de
 achiziție normală (o singură linie de repartiție, pe 4426):
@@ -158,7 +159,10 @@ Dr 4426 = Cr 4427        fără 446 și fără plată
 ```
 
 Cele două linii se soldează între ele, deci nota nu mai are contrapartidă pe contul de buget — nu
-există nicio datorie de stins.
+există nicio datorie de stins **pentru TVA**. Taxa vamală (A00) rămâne datorată și se plătește ca
+în regimul obișnuit: certificatul de amânare privește doar TVA-ul.
+
+Fluxul pas cu pas al acestui regim este în **Pasul 10**.
 
 > **De verificat înainte de prima declarație:** ce regim are societatea. Practic toți importatorii
 > mari au certificat de amânare. Dacă alegeți taxa greșită, nota iese cu o datorie la buget care nu
@@ -175,6 +179,89 @@ să ateste plata taxei**. Nota se generează la data DVI. Dacă declarația e pe
 (sau actul constatator) care menționează importatorul și suma taxei datorate, plus înscrierea taxei
 ca taxă colectată în decontul perioadei în care ia naștere exigibilitatea — perioada datei DVI
 (art. 285).
+
+### 2.9 Restituirea TVA-ului plătit în vamă
+
+Întrebare frecventă după primele importuri: *am plătit TVA în vamă, se poate „debloca"?* Răspunsul
+depinde de motiv, iar în multe cazuri cererea **nu are temei sau nu are rost economic**.
+
+**TVA-ul de import se plătește „în conformitate cu reglementările în vigoare privind plata drepturilor
+de import"** (art. 326 alin. (3) Cod fiscal). Practica este ca restituirea să urmeze procedura vamală
+de **rambursare** (Codul Vamal al Uniunii, Reg. (UE) 952/2013, art. 116–121), cu Codul de procedură
+fiscală în completare. Extinderea regulilor vamale la TVA e însă o interpretare a trimiterii din
+art. 326 alin. (3), nu un text expres: **temeiul procedural se confirmă cu biroul vamal**. Cererea se
+depune la **biroul vamal unde s-a depus declarația** (sau la direcția regională vamală de care ține),
+nu la administrația financiară.
+
+| Situația | Are temei? | Ce se face |
+|---|---|---|
+| Suma plătită e **mai mare decât cea datorată** (bază sau cotă greșită) | Da | Modificarea declarației după acordarea liberului de vamă, apoi rambursarea diferenței. Diferența **nu se deduce** — nu e taxă datorată |
+| Declarația a fost **invalidată** (marfa nu a fost pusă în liberă circulație) | Da | Invalidarea DVI și rambursarea întregii sume; nu există import, deci nici drept de deducere |
+| Firma avea **certificat de amânare valabil la data DVI**, dar vama a încasat totuși TVA-ul | Da | Rambursare; după aceea TVA-ul se evidențiază ca la §2.7 (colectată și deductibilă) |
+| Certificatul de amânare s-a obținut **după** data DVI | **Nu** | Exigibilitatea apare la data importului (art. 285), iar condițiile art. 326 alin. (4) se judecă la acea dată |
+| TVA-ul plătit **corect** și dedus integral | **Fără rost** | Suma se recuperează prin decontul de TVA (compensare sau rambursare); diferența e doar de flux de numerar |
+
+**Dacă suma a fost deja dedusă și se cere restituirea**, deducerea se ajustează în favoarea bugetului
+(art. 304 alin. (1) lit. a) Cod fiscal; art. 305 pentru bunurile de capital): restituirea plus
+deducerea ar însemna o recuperare dublă. Baza de impozitare a importului se corectează doar prin
+documentul de regularizare emis de vamă (Normele metodologice, pct. 34 alin. (2)). Cererea trebuie să
+spună explicit dacă suma a fost dedusă și în ce decont s-a regularizat.
+
+**Taxa vamală (A00) se restituie și ea** la invalidarea declarației sau la o bază greșită. Ea a intrat
+deja în costul stocului prin costul adițional: cât timp marfa e în stoc, corecția se face cu un cost
+adițional de corecție, cu valoare negativă (Dr 4482 = Cr 371). Tratamentul după vânzarea mărfii se
+confirmă cu contabilul.
+
+> ⚠️ **De confirmat cu biroul vamal înainte de prima cerere:** temeiul procedural, formularul acceptat (nu am identificat
+> un formular oficial național aprobat prin ordin), termenul de depunere (Codul Vamal al Uniunii
+> prevede, ca regulă, 3 ani de la notificarea datoriei) și lista anexelor. Modelul din **Anexa A** este
+> un model Terrabit, de adaptat la cerințele biroului vamal.
+
+Notele contabile ale restituirii sunt în **Note de monografie și raportare**.
+
+### 2.10 Regimul vamal 4200 — import scutit, urmat de livrare intracomunitară
+
+Regimul **4200** (caseta 37 a declarației) se folosește când marfa importată nu rămâne în România, ci
+se livrează direct unui client din alt stat membru. Importul e **scutit de TVA** — art. 293 alin. (1)
+lit. m) Cod fiscal, cu trimitere la art. 294 alin. (2) — dacă la data importului importatorul dă vămii
+(Normele metodologice, Titlul VII, pct. 64):
+
+- codul său de înregistrare în scopuri de TVA din România;
+- codul de TVA din alt stat membru al clientului;
+- dovada că bunurile pleacă în celălalt stat membru în aceeași stare.
+
+**Ce înseamnă pentru evidență.** Nu există TVA de import: nici deductibil, nici de plată. Pe DVI se
+alege **Regim vamal = 4200**. Wizardul propune atunci taxa **„0% EXEMPT"** (TVA Cumpărări Exempționate)
+și lasă **Valoare TVA la import** goală. Nota DVI conține doar perechea tehnică pe 473, de valoarea
+bazei, cu grila **„29 - TAX BASE"**. Baza importului scutit apare astfel în D300 pe **rd. 29**
+(achiziții scutite sau neimpozabile), coloana bază. Un DVI pe 4200 cu TVA completat **este refuzat**.
+
+**Livrarea către client** (FR, PL) se facturează ca livrare intracomunitară scutită: D300 rd. 1 și
+D390 cu cod **L**. Clientul trebuie să aibă cod de TVA valid în VIES, iar CMR-ul semnat de client este
+proba transportului. Pașii din vânzări sunt în **Pasul 12**.
+
+**Luna de declarare.** La livrarea intracomunitară, exigibilitatea TVA intervine la data emiterii
+facturii (art. 283 alin. (1) Cod fiscal); factura se emite cel târziu în ziua 15 a lunii următoare
+(art. 319 alin. (15)). Cursul valutar este cel din data exigibilității (Normele metodologice, pct. 35
+alin. (5)). Livrarea se declară deci în **luna facturii**, chiar dacă marfa pleacă luna următoare: în
+D390 (art. 325 alin. (1) lit. a)) și în D300 rd. 1 [de verificat rândul în instrucțiunile D300].
+Recomandare: factura, DVI-ul și plecarea mărfii în aceeași lună.
+
+> ⚠️ Dacă livrarea lipsește din D390 sau e declarată greșit, scutirea livrării intracomunitare nu se
+> aplică (art. 294 alin. (2^1)), cu excepția cazului în care deficiența e justificată satisfăcător (de
+> exemplu, prin rectificarea D390). Poate fi pusă în discuție și scutirea la import, condiționată de
+> existența unei livrări intracomunitare scutite (art. 293 alin. (1) lit. m); Normele, pct. 64)
+> [de verificat: procedura vamală de regularizare].
+
+**Garanția TVA.** Vama poate cere ca TVA-ul calculat (de exemplu 11% la mere) să fie **blocat din
+contul de garanție** al importatorului, până la proba livrării intracomunitare. Suma blocată **nu e
+TVA datorat** și nu se înregistrează pe 4426. Pe DVI se trece doar ca evidență, în câmpul **TVA
+reținut ca garanție**, cu starea **Blocată** / **Deblocată** (Pasul 11). Garanția însăși se ține pe
+**2678 „Alte creanțe imobilizate"** (OMFP 1802/2014 pct. 265 alin. (1): garanțiile depuse la terți).
+Notele ei sunt manuale, în **Note de monografie și raportare**.
+
+> ⚠️ **De confirmat:** textul instrucțiunilor D300 (OPANAF 174/2026) pentru rd. 29 și denumirea
+> oficială a codului D406 308302 nu au fost verificate pe sursa oficială.
 
 ### 2.6 Biroul vamal nu este partener
 
@@ -213,6 +300,9 @@ Contabilitate (facturi, note) și Inventar (recepții, costuri de aterizare).
 | `371` / `301` | stocul al cărui cost este majorat de taxele vamale |
 | `4462` | taxe vamale și TVA de plată în vamă — decontare cu bugetul, datorie curentă |
 | `4426` | TVA deductibilă la import |
+| `4427` | TVA colectată — doar la importul fără plata TVA în vamă (§2.7, Pasul 10) |
+| `4482` | alte creanțe privind bugetul statului — TVA de recuperat de la vamă (§2.9) |
+| `2678` | alte creanțe imobilizate — garanția în numerar constituită la vamă, din care se blochează TVA-ul la regimul 4200 (§2.10); partea recuperabilă sub 12 luni se prezintă în bilanț la creanțe (OMFP 1802/2014 pct. 265 alin. (3)) |
 | `401` | furnizorul extern și comisionarul vamal |
 | `622` | onorariul comisionarului vamal, dacă **nu** se capitalizează |
 | `473` | cont neutru de clarificare — tranzit pentru accesorii capitalizate și pentru baza din decont |
@@ -245,7 +335,12 @@ Date minime pentru demo:
 6. Verificați că există un cont **473** „Decontări din operațiuni în curs de clarificare”. Pe el se
    poartă perechea tehnică prin care baza importului ajunge în decontul de TVA, și tot el e contul de
    tranzit recomandat pentru accesoriile care se capitalizează.
-6. Nu există parametri proprii de configurat. Produsele de serviciu se creează automat la prima
+7. **Doar pentru importul fără plata TVA în vamă** (§2.7, Pasul 10): verificați că există taxele
+   **„21% IMP AM"** și **„11% IMP AM"** (**Contabilitate → Configurare → Taxe**). Ele vin cu
+   `l10n_ro_anaf_d300`; fără acest modul, creați o taxă de achiziție cu două repartiții (Dr 4426,
+   Cr 4427 cu −100%) și grilele D300 rd. 7 și 22. Pentru D406, completați pe taxă **Tipul fiscal SAF-T
+   românesc** și **Cod Fiscal SAF-T Roman** — vezi §9.
+8. Nu există parametri proprii de configurat. Produsele de serviciu se creează automat la prima
    utilizare și se memorează în parametrii de sistem.
 
 ## 6. Flux de utilizare
@@ -296,7 +391,7 @@ Butonul deschide wizardul. În capul lui se află o casetă de îndrumare cu map
 | Câmp | Ce se pune | Unde e în DVI |
 |---|---|---|
 | **Bază de impozitare** | baza pe care vama a calculat TVA-ul | baza poziției **B00** |
-| **TVA plătit în vamă** | TVA-ul efectiv datorat | valoarea poziției **B00** |
+| **Valoare TVA la import** | TVA-ul efectiv datorat | valoarea poziției **B00** |
 | **TVA la import** | cota aplicată de vamă — **și regimul**: taxă normală la plata efectivă, taxă cu două repartiții (4426 / 4427, ex. „21% IMP AM”) fără plata în vamă (§2.7) | din declarație |
 | **Taxă vamală** | taxa vamală datorată | poziția **A00** |
 | **Număr DVI** | MRN-ul | antetul declarației |
@@ -318,8 +413,9 @@ cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate?
 ### Pasul 6 — Validarea costului de aterizare
 
 Aplicarea creează un cost adițional legat de recepțiile comenzii, cu o linie pentru taxa vamală,
-plus câmpurile DVI în capul formularului. Apăsați **Calculează**, verificați
-repartizarea pe produse, apoi **Validează**.
+plus câmpurile DVI în capul formularului. Câmpul **Factură furnizor** este factura de pe care ați
+pornit wizardul, iar pe factură apare butonul **Costuri adiționale**, care deschide DVI-ul. Apăsați
+**Calculează**, verificați repartizarea pe produse, apoi **Validează**.
 
 ![Costul de aterizare generat din DVI, cu numărul declarației](screenshots/06_landed_cost_dvi.png)
 
@@ -383,6 +479,110 @@ corespunde cu suma taxelor vamale din evidența vamală a lunii.
 
 ![Lista DVI — Costuri vamale, grupată pe lună](screenshots/10_lista_dvi.png)
 
+### Pasul 10 — DVI fără plata TVA în vamă (TVA amânat)
+
+Pentru firmele cu **certificat de amânare de la plată** sau în celelalte cazuri din art. 326 alin. (4)
+(§2.7). Pașii 1–6 sunt identici; diferă **doar taxa aleasă în wizard**.
+
+1. În wizardul DVI (Pasul 5), la **TVA la import** alegeți **„21% IMP AM"** sau **„11% IMP AM"**, după
+   cota din declarație — nu taxa obișnuită de achiziție. Baza și valoarea TVA se transcriu din
+   declarație, exact ca la Pasul 5.
+2. Apăsați **Aplică**, apoi pe costul adițional **Calculează** și **Validează** (Pasul 6).
+
+**Găsiți pe ecran:** pe costul adițional validat, în capul formularului, câmpul **TVA** are taxa
+„IMP AM", iar **Valoare TVA la import** are valoarea din declarație. Etichetele sunt neutre în ambele
+regimuri; regimul se recunoaște după numele taxei.
+
+![Costul adițional DVI cu taxa „11% IMP AM"](screenshots/11_landed_cost_tva_amanat.png)
+
+Deschideți nota contabilă cu un clic pe câmpul **Notă contabilă** din capul formularului.
+
+**Găsiți pe ecran:** liniile de TVA sunt **Dr 4426** și **Cr 4427**, de aceeași valoare, cu eticheta
+„TVA la import - 21% IMP AM" (sau „11% IMP AM"). Perechea tehnică pe **473** poartă baza
+importului.
+
+**Verificați:**
+
+- **nu există nicio linie de TVA pe 446** — dacă apare, s-a ales taxa obișnuită, iar nota creează o
+  datorie la buget care nu există;
+- taxa vamală (A00) apare în continuare pe 446: ea se plătește normal;
+- referința notei este numărul de DVI.
+
+![Nota DVI fără plata TVA: Dr 4426 = Cr 4427](screenshots/12_nota_tva_amanat.png)
+
+**Treceți mai departe:** pentru TVA nu urmează nicio plată și nicio reconciliere pe 446. În decontul
+perioadei, TVA-ul apare **atât la colectată, cât și la deductibilă** (D300 rd. 7 și 22), cu efect net
+zero.
+
+### Pasul 11 — DVI pe regimul 4200 (import scutit, livrare intracomunitară)
+
+Pentru marfa importată și livrată direct unui client din alt stat membru (§2.10). Pașii 1–4 sunt
+identici.
+
+**Înainte de vămuire: factura intracomunitară.** La regimul 4200, vama cere factura de livrare
+intracomunitară către clientul din UE **la vămuire**; proforma și contractul nu sunt acceptate.
+Ordinea este deci:
+
+1. factura către client (Pasul 12);
+2. vămuirea și DVI-ul;
+3. recepția și costul adițional DVI.
+
+Factura poate avea data DVI-ului sau o zi înainte.
+
+După vămuire, la DVI:
+
+1. În wizardul DVI (Pasul 5), la **Regim vamal** alegeți **„4200 - Scutit de TVA, livrare
+   intracomunitară"**. Wizardul schimbă taxa în **„0% EXEMPT"** și ascunde valoarea TVA; apare o casetă
+   de avertizare.
+2. La **Bază de impozitare** transcrieți baza din declarație, ca la Pasul 5.
+3. La **TVA reținut ca garanție** transcrieți TVA-ul calculat de vamă și blocat din contul de garanție
+   (de exemplu 6.861,00 lei). Valoarea propusă e doar punctul de plecare: verificați-o pe declarație.
+4. **Taxa vamală** se completează doar dacă declarația o cere. La mărfurile cu preferință tarifară
+   (de exemplu UE–Republica Moldova) rămâne 0.
+5. Apăsați **Aplică**, apoi pe costul adițional **Validează** (Pasul 6). Fără taxă vamală, costul
+   adițional nu are linii și costul produsului nu se schimbă; nota DVI se creează și se postează
+   totuși, pentru bază.
+
+**Găsiți pe ecran:** pe costul adițional validat, **Regim vamal** este 4200, **TVA** este „0% EXEMPT",
+**TVA reținut ca garanție** are suma blocată, iar **Stare garanție** este **Blocată**.
+
+![Costul adițional DVI pe regimul 4200, cu garanția blocată](screenshots/13_landed_cost_4200.png)
+
+Deschideți nota contabilă cu un clic pe câmpul **Notă contabilă**.
+
+**Găsiți pe ecran:** două linii pe **473**, de valoarea bazei, cu eticheta „Bază TVA import - 0%
+EXEMPT". Linia de debit poartă grila **„29 - TAX BASE"**.
+
+**Verificați:**
+
+- **nu există nicio linie pe 4426 sau 446** pentru TVA — garanția nu e TVA datorat;
+- referința notei este numărul de DVI;
+- nota este **postată** (altfel baza nu ajunge în decont).
+
+![Nota DVI pe regimul 4200: doar baza, pe rd. 29](screenshots/14_nota_4200.png)
+
+**Deblocarea garanției.** După ce clientul confirmă CMR-ul, depuneți la biroul vamal cererea de
+deblocare, cu CMR-ul și factura de livrare intracomunitară. Când vama confirmă deblocarea, apăsați pe
+DVI butonul **Marchează ca deblocată**. Filtrul **Garanție TVA blocată** din lista **DVI — Costuri
+vamale** arată declarațiile pentru care cererea de deblocare e încă de făcut; coloanele opționale
+**TVA reținut ca garanție** și **Stare garanție** dau totalul blocat.
+
+**Treceți mai departe:** livrarea către client se validează după validarea tuturor costurilor
+adiționale ale recepției (Pasul 12).
+
+### Pasul 12 — Vânzarea intracomunitară pe regimul 4200
+
+1. Pe produs, setați **Politică de facturare = Cantități comandate**, ca factura să se poată emite
+   înainte de livrare. Setarea e pe produs, deci se aplică tuturor companiilor din bază.
+2. Pe client, setați poziția fiscală **intracomunitară**, care trece vânzarea pe taxa **„0% EU G"**
+   (D300 rd. 1, D390 cod L, D406 310301). Verificați codul de TVA al clientului în **VIES** la import
+   și din nou la livrare.
+3. Confirmați comanda de vânzare și emiteți factura **înainte de vămuire** (Pasul 11).
+4. Validați livrarea către client **după** ce sunt validate toate costurile adiționale ale recepției
+   (DVI, transport, broker). Astfel descărcarea din gestiune și marja au costul complet.
+5. Diferențele de cantitate față de factură se corectează prin notă de credit sau factură
+   suplimentară, tot cu „0% EU G".
+
 ### Note de monografie și raportare
 
 La validarea costului de aterizare:
@@ -393,6 +593,16 @@ La validarea costului de aterizare:
 | 446 | taxe vamale datorate bugetului | | taxa vamală |
 | 4426 | TVA deductibilă la import | TVA B00 | |
 | 446 | TVA de plată în vamă | | TVA B00 |
+| 473 | pereche tehnică pentru baza din decont | baza B00 | baza B00 |
+
+Perechea pe 473 se soldează; doar linia de debit poartă baza în decont și taxa (pentru SAF-T).
+
+Fără plata TVA în vamă (Pasul 10), liniile de TVA devin:
+
+```
+Dr 4426 = Cr 4427        TVA B00, fără 446 pentru TVA
+Dr 473  = Cr 473         baza B00 (pereche tehnică)
+```
 
 La plata către vamă: **Dr 446 = Cr 5121**, exclusiv în lei, fără diferențe de curs. După plată, contul
 446 rămâne cu sold zero pentru declarația respectivă.
@@ -416,9 +626,63 @@ Varianta prin cost adițional, când marfa e deja recepționată:
 > neutru, se soldează, iar un sold rămas la sfârșit de lună arată exact ce accesoriu a fost facturat
 > dar necapitalizat.
 
-**Raportare:** TVA-ul de la import intră în D300 prin tag-urile taxei de pe linia contului 4426.
-Importul nu generează rând în D390 (declarația recapitulativă acoperă doar operațiuni
-intracomunitare).
+Pe regimul 4200 (Pasul 11), nota DVI are doar perechea tehnică pentru bază:
+
+```
+Dr 473 = Cr 473          baza B00, grila rd. 29 (achiziții scutite), fără TVA
+```
+
+**Garanția din contul de garanție la vamă (§2.10)** — note manuale, în jurnalul de operațiuni
+diverse; modulul ține doar evidența sumei blocate pe DVI. Notele presupun o garanție depusă **în
+numerar**. Pentru o scrisoare de garanție bancară nu se face notă pe 2678; evidența în afara
+bilanțului se stabilește cu contabilul.
+
+| Moment | Notă |
+|---|---|
+| Constituirea garanției la vamă | Dr 2678 = Cr 5121 |
+| Blocarea TVA-ului pe un import 4200 | fără notă — **TVA reținut ca garanție** pe DVI, stare **Blocată** |
+| Deblocarea după CMR-ul confirmat | fără notă — garanția rămâne la vamă; pe DVI, **Marchează ca deblocată** |
+| Restituirea garanției | Dr 5121 = Cr 2678 |
+| Executarea garanției (scutirea cade, vama reține TVA-ul) | Dr 4426 = Cr 2678, cu grila TVA a taxei de import (rd. 25 la 11%), pe baza documentului emis de vamă. **Mutați și baza** de pe rd. 29 pe rândul importului taxabil: pereche Dr 473 = Cr 473 cu grila „29 - TAX BASE" negativă, plus pereche 473 cu grila bazei rândului de import. Altfel D300 raportează baza de două ori |
+
+> ⚠️ La executarea garanției, grila din D300 și eventualele accesorii (Dr 6581 = Cr 2678 sau Cr 4481)
+> se confirmă cu contabilul.
+
+**Restituirea TVA-ului plătit în vamă (§2.9)** — note manuale, în jurnalul de operațiuni diverse.
+Decontul de TVA se calculează **doar din grilele fiscale** ale liniilor: o notă pe 4426 fără grilă
+schimbă soldul contului, dar nu și D300. De aceea, liniile de TVA din notele de mai jos poartă grila
+indicată (coloana **Grile fiscale** a liniei).
+
+| Moment | Notă | Grila pe linia de TVA |
+|---|---|---|
+| La depunerea cererii, nota DVI e deja înregistrată (TVA-ul e în D300 rd. 24 / 25) | Dr 4482 = Cr 4426 | **33 - TVA** (regularizări taxă dedusă), cu semn negativ |
+| DVI-ul nu e încă înregistrat în Odoo | nu se face regularizare: DVI-ul se înregistrează cu suma corectă, iar excedentul plătit trece din 446 în 4482 (Dr 4482 = Cr 446) | — |
+| Certificat de amânare valabil la data DVI, dar vama a încasat TVA-ul | Dr 4482 = Cr 4426 (anularea deducerii TVA-ului plătit), apoi evidențierea ca la Pasul 10: pereche Dr 473 = Cr 473 de valoarea bazei, cu taxa „IMP AM" pe linia de debit — Odoo generează Dr 4426 = Cr 4427 | 33 - TVA negativ; apoi rd. 7 și 22 din taxa „IMP AM" |
+| Restituire prin compensare cu alte obligații | Dr 446 / 4423 / … = Cr 4482 | — |
+| Refuz: TVA-ul era datorat și e deductibil (ex. certificat obținut după DVI) | Dr 4426 = Cr 4482 | **33 - TVA**, cu semn pozitiv |
+| Refuz: suma nu era datorată și nu e deductibilă | Dr 635 = Cr 4482 | — (rămâne cost) |
+| Încasarea | Dr 5121 = Cr 4482 | — |
+
+> ⚠️ Rândul de regularizare (rd. 33) și perioada în care se evidențiază TVA-ul în cazul cu certificat
+> de amânare se confirmă cu contabilul, pe instrucțiunile D300 în vigoare.
+
+Puneți numărul de DVI ca referință pe aceste note, ca să poată fi urmărite per declarație.
+
+**Raportare:**
+
+- **D300** — TVA-ul de la import intră prin grilele taxei: rd. 24 / 25 la plata în vamă, rd. 7 și 22
+  fără plata în vamă (Pasul 10). Baza vine de pe linia de debit a perechii 473.
+- **D406 (SAF-T)** — informația de taxă (*TaxInformation*: tip, cod, sumă) apare pe **linia de bază**
+  a perechii 473, ca la facturi, unde taxa stă pe linia de produs; linia 4426 apare cu codul
+  000000, tot ca la facturi. La „IMP AM" se raportează partea
+  deductibilă (4426). Versiunile modulului anterioare 19.0.2.1.4 exportau nota cu cod 000000 și
+  TVA zero. Pe regimul 4200, linia de bază poartă taxa „0% EXEMPT" (cod 308302). Exportul SAF-T din
+  Odoo nu scrie însă *TaxInformation* pentru liniile cu taxă 0% — nici pe facturile obișnuite cu
+  „0% EXEMPT" —, deci linia apare fără informație de taxă.
+- **D300, regimul 4200** — baza pe rd. 29 (achiziții scutite), fără TVA; livrarea către clientul din
+  UE pe rd. 1.
+- **D390** — importul nu generează rând (declarația recapitulativă acoperă doar operațiuni
+  intracomunitare). Pe regimul 4200, livrarea intracomunitară ulterioară apare cu cod L.
 
 ## 7. Legături cu alte module / declarații
 
@@ -430,14 +694,17 @@ intracomunitare).
 | `l10n_ro` | planul de conturi RO, pentru determinarea contului 446 | dependență (manifest) |
 | `l10n_ro_invoice_dvi_protect` | blochează resetarea facturii și anularea DVI după consum FIFO | complementar, recomandat |
 | `l10n_ro_dvi` (OCA) | flux DVI alternativ | **exclus** — nu pot coexista |
-| `l10n_ro_anaf_d300` | TVA deductibilă la import, prin tag-urile taxei | integrare prin convenție |
+| `l10n_ro_anaf_d300` | TVA deductibilă la import, prin tag-urile taxei; taxele „21% IMP AM" / „11% IMP AM" pentru importul fără plata TVA în vamă | integrare prin convenție |
+| `l10n_ro_saft` (Enterprise) | D406: tipul și codul SAF-T ale taxei alese pe DVI | integrare prin convenție |
 
 **Ce este automat:** crearea costului de aterizare din factură, repartizarea taxelor în costul
 stocului, nota de TVA la import cu tag-urile pentru D300, referința MRN pe notă.
 
-**Ce rămâne manual:** transcrierea cifrelor din declarație (baza, valoarea TVA, cota), plata către
-vamă și reconcilierea ei pe 446, decizia de capitalizare a onorariului brokerului, includerea
-transportului extern.
+**Ce rămâne manual:** transcrierea cifrelor din declarație (baza, valoarea TVA, cota, garanția la
+4200), alegerea regimului vamal și a regimului de plată (prin taxă), notele garanției pe 2678 și
+cererea de deblocare, plata către vamă și reconcilierea ei pe 446, decizia de capitalizare a
+onorariului brokerului, includerea transportului extern, cererea de restituire a TVA-ului plătit în
+vamă și notele ei contabile.
 
 ## 8. Verificări pentru consultant
 
@@ -456,6 +723,18 @@ transportului extern.
 - [ ] Onorariul brokerului **nu** a fost introdus în wizard, ci pe factura lui de furnizor.
 - [ ] Transportul extern apare **o singură dată** în costul stocului.
 - [ ] Contul 446 se închide la zero pentru declarația respectivă după plata către vamă.
+- [ ] La importul fără plata TVA în vamă: nota are **Dr 4426 = Cr 4427** și **nicio linie de TVA pe
+      446**; taxa vamală apare totuși pe 446 (Pasul 10).
+- [ ] În D300, TVA-ul fără plată în vamă apare pe **rd. 7 și 22**, cu aceeași valoare.
+- [ ] Taxa aleasă pe DVI are completate **tipul și codul SAF-T**; altfel exportul D406 se oprește
+      cu eroare.
+- [ ] Înainte de o cerere de restituire: motivul are temei (§2.9) și s-a stabilit dacă suma fusese
+      dedusă.
+- [ ] La regimul **4200**: taxa e „0% EXEMPT", TVA-ul la import e gol, nota are doar perechea 473 cu
+      grila rd. 29, iar suma blocată de vamă e trecută la **TVA reținut ca garanție** (Pasul 11).
+- [ ] La 4200, garanțiile cu stare **Blocată** se urmăresc lunar, cu filtrul **Garanție TVA blocată**.
+- [ ] La 4200, factura intracomunitară există **înainte** de DVI și e din aceeași lună cu el.
+- [ ] La 4200, livrarea către client e validată după toate costurile adiționale ale recepției.
 - [ ] Declarația apare în lista **DVI — Costuri vamale**.
 
 ## 9. Mesaje de eroare frecvente
@@ -468,7 +747,10 @@ transportului extern.
 | Costul produsului nu crește după validare | Costul de aterizare nu a fost **Validat**, doar salvat | Apăsați **Calculează**, apoi **Validează** |
 | Wizardul nu găsește nicio recepție | Fluxul a fost dropship, fără recepție | Refaceți fluxul cu recepție; dropship-ul e incompatibil cu DVI |
 | TVA-ul din notă nu corespunde bazei | Baza a fost modificată fără actualizarea valorii TVA | Corectați prin cost de aterizare de corecție; valoarea nu se recalculează automat |
+| „În regimul vamal 4200 importul este scutit de TVA: alegeți o taxă scutită (0%)…" | Pe un DVI 4200 s-a completat TVA-ul la import sau s-a ales o taxă cu cotă | Lăsați **Valoare TVA la import** goală, alegeți „0% EXEMPT" și treceți TVA-ul blocat la **TVA reținut ca garanție** |
 | Modulul nu se poate instala | `l10n_ro_dvi` (OCA) este instalat | Cele două se exclud reciproc; dezinstalați varianta OCA |
+| Nota DVI fără plata TVA are o linie de TVA pe **446** | S-a ales taxa obișnuită de achiziție, nu „IMP AM" | Costul adițional validat **nu se poate anula**. Corectați doar TVA-ul, printr-o notă manuală: Dr 446 = Cr 4426, cu grila rd. 24 / 25 (cea a taxei folosite) cu semn negativ, apoi perechea 473 cu taxa „IMP AM" (ca în tabelul restituirii). Cereți confirmarea consultantului înainte de postare |
+| Exportul D406: „Unele taxe nu au completate câmpurile „Tip taxă SAF-T România” și/sau „Cod taxă SAF-T România”." | Taxa de pe DVI (de exemplu „IMP AM") nu are tipul și codul SAF-T | **Contabilitate → Configurare → Taxe**, deschideți taxa și completați **Tipul fiscal SAF-T românesc** (300 – TVA) și **Cod Fiscal SAF-T Roman**. Pentru „IMP AM", codul din nomenclatorul D406 **e de confirmat** — maparea nu e încă livrată nici de Odoo, nici de `l10n_ro_saft_fix` |
 
 ## 10. Capturi de ecran
 
@@ -487,6 +769,12 @@ planul de conturi RO:
 8. `08_cost_produs.png` — costul produsului majorat cu taxele vamale.
 9. `09_factura_broker.png` — factura brokerului cu butonul de creare a costului de aterizare.
 10. `10_lista_dvi.png` — lista DVI — Costuri vamale, grupată pe lună.
+11. `11_landed_cost_tva_amanat.png` — costul adițional DVI cu taxa „11% IMP AM" (fără plata TVA în
+    vamă).
+12. `12_nota_tva_amanat.png` — nota DVI fără plata TVA: Dr 4426 = Cr 4427, fără 446 pentru TVA.
+13. `13_landed_cost_4200.png` — costul adițional DVI pe regimul 4200, cu taxa „0% EXEMPT" și garanția
+    blocată.
+14. `14_nota_4200.png` — nota DVI pe 4200: doar perechea 473, cu baza pe rd. 29.
 
 Regenerare:
 
@@ -507,3 +795,63 @@ operează prin factura lui.
 
 A treia: valoarea TVA nu se recalculează la modificarea bazei sau a cotei. Merită o casetă de
 atenționare în manual, nu doar o propoziție în text.
+
+A patra: **taxa aleasă pe DVI decide regimul** — plata în vamă sau TVA amânat (§2.7, Pasul 10). O taxă
+greșită produce o datorie la buget care nu există, sau invers.
+
+A cincea: restituirea TVA-ului plătit în vamă (§2.9) e o procedură vamală, cu temei doar în câteva
+situații. Păstrați tabelul cu situațiile și avertismentul că formularul și termenul se confirmă cu
+biroul vamal.
+
+## Anexa A — Model de cerere de restituire a TVA-ului plătit în vamă
+
+Model Terrabit, de adaptat la cerințele biroului vamal (§2.9). Câmpurile din paranteze drepte se
+completează din DVI, din nota contabilă și din plata către vamă.
+
+```text
+Către: Biroul vamal [denumire, cod birou] / Direcția Regională Vamală [denumire]
+
+CERERE DE RAMBURSARE A TAXEI PE VALOAREA ADĂUGATĂ PLĂTITE LA IMPORT
+
+Subscrisa [denumire importator], cu sediul în [adresă], CUI [cod], EORI [cod],
+reprezentată prin [nume, funcție] [/ prin comisionarul vamal [denumire], conform
+împuternicirii anexate],
+
+solicităm rambursarea sumei de [suma] lei, reprezentând taxa pe valoarea adăugată
+plătită la import pentru declarația vamală:
+
+  - număr DVI (MRN):            [MRN]
+  - data acceptării:            [data]
+  - baza de impozitare declarată / TVA plătit:   [bază] / [TVA plătit] lei
+  - baza de impozitare corectă / TVA datorat:    [bază corectă] / [TVA datorat] lei
+  - plata:                      OP nr. [număr] din [data], suma [suma] lei
+
+Motivul cererii: [alegeți unul]
+  [ ] suma plătită depășește suma legal datorată (bază / cotă greșită);
+  [ ] declarația vamală a fost invalidată;
+  [ ] la data declarației, societatea deținea certificatul de amânare de la plată
+      a TVA în vamă nr. [număr] din [data] (art. 326 alin. (4) Cod fiscal);
+  [ ] alt motiv: [descriere].
+
+Temei legal: art. 326 alin. (3) din Legea 227/2015 privind Codul fiscal și dispozițiile
+Codului Vamal al Uniunii privind rambursarea [articolul indicat de biroul vamal].
+
+Declarăm că suma solicitată:
+  [ ] nu a fost dedusă în decontul de TVA;
+  [ ] a fost dedusă în decontul perioadei [luna/anul] și a fost regularizată
+      în decontul perioadei [luna/anul].
+
+Vă rugăm ca suma să fie [virată în contul IBAN [cont], deschis la [bancă], titular
+[denumire]] / [compensată cu obligațiile: [descriere]].
+
+Anexăm:
+  1. declarația vamală de import [MRN];
+  2. dovada plății (OP nr. [număr] din [data]);
+  3. [decizia de modificare / invalidare a declarației, dacă există];
+  4. [certificatul de amânare de la plată, dacă este cazul];
+  5. [factura comercială, documentul de transport, calculul valorii în vamă — la bază greșită];
+  6. [împuternicirea comisionarului vamal, dacă cererea e depusă de acesta];
+  7. extras din jurnalul de cumpărări și decontul de TVA al perioadei declarației.
+
+Data: [data]                                   [Nume, funcție, semnătura]
+```
