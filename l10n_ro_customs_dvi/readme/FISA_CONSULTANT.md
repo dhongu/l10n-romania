@@ -238,7 +238,20 @@ bazei, cu grila **„29 - TAX BASE"**. Baza importului scutit apare astfel în D
 
 **Livrarea către client** (FR, PL) se facturează ca livrare intracomunitară scutită: D300 rd. 1 și
 D390 cu cod **L**. Clientul trebuie să aibă cod de TVA valid în VIES, iar CMR-ul semnat de client este
-proba transportului.
+proba transportului. Pașii din vânzări sunt în **Pasul 12**.
+
+**Luna de declarare.** La livrarea intracomunitară, exigibilitatea TVA intervine la data emiterii
+facturii (art. 283 alin. (1) Cod fiscal); factura se emite cel târziu în ziua 15 a lunii următoare
+(art. 319 alin. (15)). Cursul valutar este cel din data exigibilității (Normele metodologice, pct. 35
+alin. (5)). Livrarea se declară deci în **luna facturii**, chiar dacă marfa pleacă luna următoare: în
+D390 (art. 325 alin. (1) lit. a)) și în D300 rd. 1 [de verificat rândul în instrucțiunile D300].
+Recomandare: factura, DVI-ul și plecarea mărfii în aceeași lună.
+
+> ⚠️ Dacă livrarea lipsește din D390 sau e declarată greșit, scutirea livrării intracomunitare nu se
+> aplică (art. 294 alin. (2^1)), cu excepția cazului în care deficiența e justificată satisfăcător (de
+> exemplu, prin rectificarea D390). Poate fi pusă în discuție și scutirea la import, condiționată de
+> existența unei livrări intracomunitare scutite (art. 293 alin. (1) lit. m); Normele, pct. 64)
+> [de verificat: procedura vamală de regularizare].
 
 **Garanția TVA.** Vama poate cere ca TVA-ul calculat (de exemplu 11% la mere) să fie **blocat din
 contul de garanție** al importatorului, până la proba livrării intracomunitare. Suma blocată **nu e
@@ -506,6 +519,18 @@ zero.
 Pentru marfa importată și livrată direct unui client din alt stat membru (§2.10). Pașii 1–4 sunt
 identici.
 
+**Înainte de vămuire: factura intracomunitară.** La regimul 4200, vama cere factura de livrare
+intracomunitară către clientul din UE **la vămuire**; proforma și contractul nu sunt acceptate.
+Ordinea este deci:
+
+1. factura către client (Pasul 12);
+2. vămuirea și DVI-ul;
+3. recepția și costul adițional DVI.
+
+Factura poate avea data DVI-ului sau o zi înainte.
+
+După vămuire, la DVI:
+
 1. În wizardul DVI (Pasul 5), la **Regim vamal** alegeți **„4200 - Scutit de TVA, livrare
    intracomunitară"**. Wizardul schimbă taxa în **„0% EXEMPT"** și ascunde valoarea TVA; apare o casetă
    de avertizare.
@@ -542,8 +567,21 @@ DVI butonul **Marchează ca deblocată**. Filtrul **Garanție TVA blocată** din
 vamale** arată declarațiile pentru care cererea de deblocare e încă de făcut; coloanele opționale
 **TVA reținut ca garanție** și **Stare garanție** dau totalul blocat.
 
-**Treceți mai departe:** factura către clientul din UE se emite cu taxa de livrare intracomunitară
-scutită (D300 rd. 1, D390 cod L).
+**Treceți mai departe:** livrarea către client se validează după validarea tuturor costurilor
+adiționale ale recepției (Pasul 12).
+
+### Pasul 12 — Vânzarea intracomunitară pe regimul 4200
+
+1. Pe produs, setați **Politică de facturare = Cantități comandate**, ca factura să se poată emite
+   înainte de livrare. Setarea e pe produs, deci se aplică tuturor companiilor din bază.
+2. Pe client, setați poziția fiscală **intracomunitară**, care trece vânzarea pe taxa **„0% EU G"**
+   (D300 rd. 1, D390 cod L, D406 310301). Verificați codul de TVA al clientului în **VIES** la import
+   și din nou la livrare.
+3. Confirmați comanda de vânzare și emiteți factura **înainte de vămuire** (Pasul 11).
+4. Validați livrarea către client **după** ce sunt validate toate costurile adiționale ale recepției
+   (DVI, transport, broker). Astfel descărcarea din gestiune și marja au costul complet.
+5. Diferențele de cantitate față de factură se corectează prin notă de credit sau factură
+   suplimentară, tot cu „0% EU G".
 
 ### Note de monografie și raportare
 
@@ -695,6 +733,8 @@ vamă și notele ei contabile.
 - [ ] La regimul **4200**: taxa e „0% EXEMPT", TVA-ul la import e gol, nota are doar perechea 473 cu
       grila rd. 29, iar suma blocată de vamă e trecută la **TVA reținut ca garanție** (Pasul 11).
 - [ ] La 4200, garanțiile cu stare **Blocată** se urmăresc lunar, cu filtrul **Garanție TVA blocată**.
+- [ ] La 4200, factura intracomunitară există **înainte** de DVI și e din aceeași lună cu el.
+- [ ] La 4200, livrarea către client e validată după toate costurile adiționale ale recepției.
 - [ ] Declarația apare în lista **DVI — Costuri vamale**.
 
 ## 9. Mesaje de eroare frecvente

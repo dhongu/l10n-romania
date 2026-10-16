@@ -1,3 +1,11 @@
+## 19.0.2.1.9 (2026-10-16)
+
+- Consultant sheet, regime 4200: the intra-Community invoice is issued before customs clearance (customs
+  require it), new step 12 with the sales flow (invoicing policy on ordered quantities, intra-Community
+  fiscal position with "0% EU G", VIES check, delivery validated after all landed costs, quantity
+  differences), the reporting month of the intra-Community supply and the risk of a missing or wrong
+  D390.
+
 ## 19.0.2.1.8 (2026-10-16)
 
 - New *Customs Regime* field on the DVI wizard and on the landed cost (4000 / 4200 / other).
