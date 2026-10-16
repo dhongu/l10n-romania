@@ -8,8 +8,8 @@ from odoo.exceptions import ValidationError
 
 # Regimul vamal din caseta 37 a declarației (primele 4 cifre: regim solicitat + regim anterior).
 CUSTOMS_REGIMES = [
-    ("4000", "4000 - Release for free circulation, import VAT due"),
-    ("4200", "4200 - Release for free circulation, VAT exempt, followed by an intra-Community supply"),
+    ("4000", "4000 - Import VAT due"),
+    ("4200", "4200 - VAT exempt, intra-Community supply"),
     ("other", "Other"),
 ]
 

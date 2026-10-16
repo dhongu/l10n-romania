@@ -135,8 +135,9 @@ la plata efectivă în vamă, lit. d) la importul fără plata efectivă (§2.8)
 
 ### 2.7 Cele două regimuri de plată a TVA în vamă
 
-Codul fiscal prevede două tratamente, iar modulul le acoperă pe amândouă. **Taxa aleasă în wizard
-este comutatorul** — nu există niciun câmp de configurat.
+Codul fiscal prevede două tratamente, iar modulul le acoperă pe amândouă. Pe regimul vamal 4000
+(câmpul **Regim vamal**, implicit), **taxa aleasă în wizard este comutatorul** între ele — nu există
+alt câmp de configurat. Importul scutit pe regimul 4200 e tratat separat, la §2.10.
 
 **Plata efectivă la organul vamal — art. 326 alin. (3).** Regimul obișnuit. Se alege o taxă de
 achiziție normală (o singură linie de repartiție, pe 4426):
@@ -218,6 +219,37 @@ confirmă cu contabilul.
 
 Notele contabile ale restituirii sunt în **Note de monografie și raportare**.
 
+### 2.10 Regimul vamal 4200 — import scutit, urmat de livrare intracomunitară
+
+Regimul **4200** (caseta 37 a declarației) se folosește când marfa importată nu rămâne în România, ci
+se livrează direct unui client din alt stat membru. Importul e **scutit de TVA** — art. 293 alin. (1)
+lit. m) Cod fiscal, cu trimitere la art. 294 alin. (2) — dacă la data importului importatorul dă vămii
+(Normele metodologice, Titlul VII, pct. 64):
+
+- codul său de înregistrare în scopuri de TVA din România;
+- codul de TVA din alt stat membru al clientului;
+- dovada că bunurile pleacă în celălalt stat membru în aceeași stare.
+
+**Ce înseamnă pentru evidență.** Nu există TVA de import: nici deductibil, nici de plată. Pe DVI se
+alege **Regim vamal = 4200**. Wizardul propune atunci taxa **„0% EXEMPT"** (TVA Cumpărări Exempționate)
+și lasă **Valoare TVA la import** goală. Nota DVI conține doar perechea tehnică pe 473, de valoarea
+bazei, cu grila **„29 - TAX BASE"**. Baza importului scutit apare astfel în D300 pe **rd. 29**
+(achiziții scutite sau neimpozabile), coloana bază. Un DVI pe 4200 cu TVA completat **este refuzat**.
+
+**Livrarea către client** (FR, PL) se facturează ca livrare intracomunitară scutită: D300 rd. 1 și
+D390 cu cod **L**. Clientul trebuie să aibă cod de TVA valid în VIES, iar CMR-ul semnat de client este
+proba transportului.
+
+**Garanția TVA.** Vama poate cere ca TVA-ul calculat (de exemplu 11% la mere) să fie **blocat din
+contul de garanție** al importatorului, până la proba livrării intracomunitare. Suma blocată **nu e
+TVA datorat** și nu se înregistrează pe 4426. Pe DVI se trece doar ca evidență, în câmpul **TVA
+reținut ca garanție**, cu starea **Blocată** / **Deblocată** (Pasul 11). Garanția însăși se ține pe
+**2678 „Alte creanțe imobilizate"** (OMFP 1802/2014 pct. 265 alin. (1): garanțiile depuse la terți).
+Notele ei sunt manuale, în **Note de monografie și raportare**.
+
+> ⚠️ **De confirmat:** textul instrucțiunilor D300 (OPANAF 174/2026) pentru rd. 29 și denumirea
+> oficială a codului D406 308302 nu au fost verificate pe sursa oficială.
+
 ### 2.6 Biroul vamal nu este partener
 
 Întrebare recurentă la implementare: *se creează câte un partener pentru fiecare birou vamal, ca să i
@@ -257,6 +289,7 @@ Contabilitate (facturi, note) și Inventar (recepții, costuri de aterizare).
 | `4426` | TVA deductibilă la import |
 | `4427` | TVA colectată — doar la importul fără plata TVA în vamă (§2.7, Pasul 10) |
 | `4482` | alte creanțe privind bugetul statului — TVA de recuperat de la vamă (§2.9) |
+| `2678` | alte creanțe imobilizate — garanția constituită la vamă, din care se blochează TVA-ul la regimul 4200 (§2.10) |
 | `401` | furnizorul extern și comisionarul vamal |
 | `622` | onorariul comisionarului vamal, dacă **nu** se capitalizează |
 | `473` | cont neutru de clarificare — tranzit pentru accesorii capitalizate și pentru baza din decont |
@@ -468,6 +501,50 @@ importului.
 perioadei, TVA-ul apare **atât la colectată, cât și la deductibilă** (D300 rd. 7 și 22), cu efect net
 zero.
 
+### Pasul 11 — DVI pe regimul 4200 (import scutit, livrare intracomunitară)
+
+Pentru marfa importată și livrată direct unui client din alt stat membru (§2.10). Pașii 1–4 sunt
+identici.
+
+1. În wizardul DVI (Pasul 5), la **Regim vamal** alegeți **„4200 - Scutit de TVA, livrare
+   intracomunitară"**. Wizardul schimbă taxa în **„0% EXEMPT"** și ascunde valoarea TVA; apare o casetă
+   de avertizare.
+2. La **Bază de impozitare** transcrieți baza din declarație, ca la Pasul 5.
+3. La **TVA reținut ca garanție** transcrieți TVA-ul calculat de vamă și blocat din contul de garanție
+   (de exemplu 6.861,00 lei). Valoarea propusă e doar punctul de plecare: verificați-o pe declarație.
+4. **Taxa vamală** se completează doar dacă declarația o cere. La mărfurile cu preferință tarifară
+   (de exemplu UE–Republica Moldova) rămâne 0.
+5. Apăsați **Aplică**, apoi pe costul adițional **Validează** (Pasul 6). Fără taxă vamală, costul
+   adițional nu are linii și costul produsului nu se schimbă; nota DVI se creează și se postează
+   totuși, pentru bază.
+
+**Găsiți pe ecran:** pe costul adițional validat, **Regim vamal** este 4200, **TVA** este „0% EXEMPT",
+**TVA reținut ca garanție** are suma blocată, iar **Stare garanție** este **Blocată**.
+
+![Costul adițional DVI pe regimul 4200, cu garanția blocată](screenshots/13_landed_cost_4200.png)
+
+Deschideți nota contabilă cu un clic pe câmpul **Notă contabilă**.
+
+**Găsiți pe ecran:** două linii pe **473**, de valoarea bazei, cu eticheta „Bază TVA import - 0%
+EXEMPT". Linia de debit poartă grila **„29 - TAX BASE"**.
+
+**Verificați:**
+
+- **nu există nicio linie pe 4426 sau 446** pentru TVA — garanția nu e TVA datorat;
+- referința notei este numărul de DVI;
+- nota este **postată** (altfel baza nu ajunge în decont).
+
+![Nota DVI pe regimul 4200: doar baza, pe rd. 29](screenshots/14_nota_4200.png)
+
+**Deblocarea garanției.** După ce clientul confirmă CMR-ul, depuneți la biroul vamal cererea de
+deblocare, cu CMR-ul și factura de livrare intracomunitară. Când vama confirmă deblocarea, apăsați pe
+DVI butonul **Marchează ca deblocată**. Filtrul **Garanție TVA blocată** din lista **DVI — Costuri
+vamale** arată declarațiile pentru care cererea de deblocare e încă de făcut; coloanele opționale
+**TVA reținut ca garanție** și **Stare garanție** dau totalul blocat.
+
+**Treceți mai departe:** factura către clientul din UE se emite cu taxa de livrare intracomunitară
+scutită (D300 rd. 1, D390 cod L).
+
 ### Note de monografie și raportare
 
 La validarea costului de aterizare:
@@ -511,6 +588,26 @@ Varianta prin cost adițional, când marfa e deja recepționată:
 > neutru, se soldează, iar un sold rămas la sfârșit de lună arată exact ce accesoriu a fost facturat
 > dar necapitalizat.
 
+Pe regimul 4200 (Pasul 11), nota DVI are doar perechea tehnică pentru bază:
+
+```
+Dr 473 = Cr 473          baza B00, grila rd. 29 (achiziții scutite), fără TVA
+```
+
+**Garanția din contul de garanție la vamă (§2.10)** — note manuale, în jurnalul de operațiuni
+diverse; modulul ține doar evidența sumei blocate pe DVI:
+
+| Moment | Notă |
+|---|---|
+| Constituirea garanției la vamă | Dr 2678 = Cr 5121 |
+| Blocarea TVA-ului pe un import 4200 | fără notă — **TVA reținut ca garanție** pe DVI, stare **Blocată** |
+| Deblocarea după CMR-ul confirmat | fără notă — garanția rămâne la vamă; pe DVI, **Marchează ca deblocată** |
+| Restituirea garanției | Dr 5121 = Cr 2678 |
+| Executarea garanției (scutirea cade, vama reține TVA-ul) | Dr 4426 = Cr 2678, cu grila taxei de import (rd. 25 la 11%), pe baza documentului emis de vamă |
+
+> ⚠️ La executarea garanției, grila din D300 și eventualele accesorii (Dr 6581 = Cr 2678 sau Cr 4481)
+> se confirmă cu contabilul.
+
 **Restituirea TVA-ului plătit în vamă (§2.9)** — note manuale, în jurnalul de operațiuni diverse.
 Decontul de TVA se calculează **doar din grilele fiscale** ale liniilor: o notă pe 4426 fără grilă
 schimbă soldul contului, dar nu și D300. De aceea, liniile de TVA din notele de mai jos poartă grila
@@ -539,9 +636,13 @@ Puneți numărul de DVI ca referință pe aceste note, ca să poată fi urmărit
   a perechii 473, ca la facturi, unde taxa stă pe linia de produs; linia 4426 apare cu codul
   000000, tot ca la facturi. La „IMP AM" se raportează partea
   deductibilă (4426). Versiunile modulului anterioare 19.0.2.1.4 exportau nota cu cod 000000 și
-  TVA zero.
+  TVA zero. Pe regimul 4200, linia de bază poartă taxa „0% EXEMPT" (cod 308302). Exportul SAF-T din
+  Odoo nu scrie însă *TaxInformation* pentru liniile cu taxă 0% — nici pe facturile obișnuite cu
+  „0% EXEMPT" —, deci linia apare fără informație de taxă.
+- **D300, regimul 4200** — baza pe rd. 29 (achiziții scutite), fără TVA; livrarea către clientul din
+  UE pe rd. 1.
 - **D390** — importul nu generează rând (declarația recapitulativă acoperă doar operațiuni
-  intracomunitare).
+  intracomunitare). Pe regimul 4200, livrarea intracomunitară ulterioară apare cu cod L.
 
 ## 7. Legături cu alte module / declarații
 
@@ -559,8 +660,9 @@ Puneți numărul de DVI ca referință pe aceste note, ca să poată fi urmărit
 **Ce este automat:** crearea costului de aterizare din factură, repartizarea taxelor în costul
 stocului, nota de TVA la import cu tag-urile pentru D300, referința MRN pe notă.
 
-**Ce rămâne manual:** transcrierea cifrelor din declarație (baza, valoarea TVA, cota), alegerea
-regimului de plată (prin taxă), plata către vamă și reconcilierea ei pe 446, decizia de capitalizare a
+**Ce rămâne manual:** transcrierea cifrelor din declarație (baza, valoarea TVA, cota, garanția la
+4200), alegerea regimului vamal și a regimului de plată (prin taxă), notele garanției pe 2678 și
+cererea de deblocare, plata către vamă și reconcilierea ei pe 446, decizia de capitalizare a
 onorariului brokerului, includerea transportului extern, cererea de restituire a TVA-ului plătit în
 vamă și notele ei contabile.
 
@@ -588,6 +690,9 @@ vamă și notele ei contabile.
       cu eroare.
 - [ ] Înainte de o cerere de restituire: motivul are temei (§2.9) și s-a stabilit dacă suma fusese
       dedusă.
+- [ ] La regimul **4200**: taxa e „0% EXEMPT", TVA-ul la import e gol, nota are doar perechea 473 cu
+      grila rd. 29, iar suma blocată de vamă e trecută la **TVA reținut ca garanție** (Pasul 11).
+- [ ] La 4200, garanțiile cu stare **Blocată** se urmăresc lunar, cu filtrul **Garanție TVA blocată**.
 - [ ] Declarația apare în lista **DVI — Costuri vamale**.
 
 ## 9. Mesaje de eroare frecvente
@@ -600,6 +705,7 @@ vamă și notele ei contabile.
 | Costul produsului nu crește după validare | Costul de aterizare nu a fost **Validat**, doar salvat | Apăsați **Calculează**, apoi **Validează** |
 | Wizardul nu găsește nicio recepție | Fluxul a fost dropship, fără recepție | Refaceți fluxul cu recepție; dropship-ul e incompatibil cu DVI |
 | TVA-ul din notă nu corespunde bazei | Baza a fost modificată fără actualizarea valorii TVA | Corectați prin cost de aterizare de corecție; valoarea nu se recalculează automat |
+| „În regimul vamal 4200 importul este scutit de TVA: alegeți o taxă scutită (0%)…" | Pe un DVI 4200 s-a completat TVA-ul la import sau s-a ales o taxă cu cotă | Lăsați **Valoare TVA la import** goală, alegeți „0% EXEMPT" și treceți TVA-ul blocat la **TVA reținut ca garanție** |
 | Modulul nu se poate instala | `l10n_ro_dvi` (OCA) este instalat | Cele două se exclud reciproc; dezinstalați varianta OCA |
 | Nota DVI fără plata TVA are o linie de TVA pe **446** | S-a ales taxa obișnuită de achiziție, nu „IMP AM" | Costul adițional validat **nu se poate anula**. Corectați doar TVA-ul, printr-o notă manuală: Dr 446 = Cr 4426, cu grila rd. 24 / 25 (cea a taxei folosite) cu semn negativ, apoi perechea 473 cu taxa „IMP AM" (ca în tabelul restituirii). Cereți confirmarea consultantului înainte de postare |
 | Exportul D406: „Unele taxe nu au completate câmpurile „Tip taxă SAF-T România” și/sau „Cod taxă SAF-T România”." | Taxa de pe DVI (de exemplu „IMP AM") nu are tipul și codul SAF-T | **Contabilitate → Configurare → Taxe**, deschideți taxa și completați **Tipul fiscal SAF-T românesc** (300 – TVA) și **Cod Fiscal SAF-T Roman**. Pentru „IMP AM", codul din nomenclatorul D406 **e de confirmat** — maparea nu e încă livrată nici de Odoo, nici de `l10n_ro_saft_fix` |
@@ -624,6 +730,9 @@ planul de conturi RO:
 11. `11_landed_cost_tva_amanat.png` — costul adițional DVI cu taxa „11% IMP AM" (fără plata TVA în
     vamă).
 12. `12_nota_tva_amanat.png` — nota DVI fără plata TVA: Dr 4426 = Cr 4427, fără 446 pentru TVA.
+13. `13_landed_cost_4200.png` — costul adițional DVI pe regimul 4200, cu taxa „0% EXEMPT" și garanția
+    blocată.
+14. `14_nota_4200.png` — nota DVI pe 4200: doar perechea 473, cu baza pe rd. 29.
 
 Regenerare:
 
