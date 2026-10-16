@@ -5,6 +5,7 @@
 from odoo import fields
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
+from odoo.tools import SQL
 
 
 class TestDVI(TransactionCase):
@@ -439,6 +440,101 @@ class TestDVI(TransactionCase):
             acc_4427.code,
             "Creditul merge pe TVA colectată, nu pe contul de buget",
         )
+
+    def _create_dvi_vat_move(self, tax, tax_base, tax_value):
+        """Nota de TVA vamal, construită ca în `button_validate`, pe o notă nouă."""
+        cost = self.env["stock.landed.cost"].create(
+            {
+                "landed_type": "dvi",
+                "dvi_number": "26ROBU0000000001",
+                "account_journal_id": self.env["account.journal"].search([("type", "=", "general")], limit=1).id,
+                "tax_id": tax.id,
+                "tax_base": tax_base,
+                "tax_value": tax_value,
+            }
+        )
+        cost.account_move_id = self.env["account.move"].create(
+            {"journal_id": cost.account_journal_id.id, "date": cost.date, "move_type": "entry"}
+        )
+        accounts_data = {"expense": self.env["account.account"].search([("code", "=", "446200")], limit=1)}
+        tax_values = tax.compute_all(tax_base)
+        vals = cost._prepare_tax_lines("VAT paid at customs", tax_values, accounts_data)
+        vals += cost._prepare_tax_base_lines("VAT paid at customs", tax_values)
+        self.env["account.move.line"].with_context(skip_invoice_sync=True).create(vals)
+        cost.account_move_id.action_post()
+        return cost.account_move_id
+
+    def _get_saft_tax_details(self, move):
+        """Detaliile de taxă exact cum le citeşte exportul SAF-T (D406).
+
+        `account_saft` (`_saft_fill_report_tax_details_values`) pune `TaxInformation` pe linia de
+        bază găsită de `_get_query_tax_details`, cu acelaşi filtru de semn; o linie fără rând aici
+        iese în D406 cu TaxType 000 / TaxCode 000000 şi TaxAmount 0.
+        """
+        query = self.env["account.move.line"]._get_query_tax_details_from_domain([("move_id", "=", move.id)])
+        self.env.cr.execute(
+            SQL(
+                """
+                SELECT tax_detail.base_line_id, tax_detail.tax_id,
+                       SUM(tax_detail.tax_amount) AS tax_amount, SUM(tax_detail.base_amount) AS base_amount
+                FROM (%s) AS tax_detail
+                WHERE SIGN(tax_detail.tax_amount) = SIGN(tax_detail.base_amount)
+                GROUP BY tax_detail.base_line_id, tax_detail.tax_id
+                """,
+                query,
+            )
+        )
+        return self.env.cr.dictfetchall()
+
+    def test_vat_paid_at_customs_saft_tax_details(self):
+        """D406: TVA plătit în vamă trebuie legat de taxă, nu doar de grilele D300.
+
+        Linia de TVA trebuie să fie linie de taxă (`tax_repartition_line_id`), iar baza să poarte
+        taxa (`tax_ids`) — altfel SAF-T nu găseşte taxa şi raportează 000 / 000000.
+        Grilele D300 (rd. 24 / 25) rămân cele de azi.
+        """
+        move = self._create_dvi_vat_move(self.tax_id, 3000.0, 570.0)
+        vat_line = move.line_ids.filtered(lambda line: line.debit == 570.0)
+        base_line = move.line_ids.filtered(lambda line: line.debit == 3000.0)
+
+        self.assertEqual(vat_line.tax_line_id, self.tax_id, "Linia de TVA trebuie să fie linie de taxă")
+        self.assertEqual(base_line.tax_ids, self.tax_id, "Linia de bază trebuie să poarte taxa")
+        self.assertEqual(vat_line.tax_tag_ids, self.tax_tag, "Grila de TVA din D300 rămâne neschimbată")
+        self.assertEqual(base_line.tax_tag_ids, self.base_tag, "Grila de bază din D300 rămâne neschimbată")
+        self.assertFalse((move.line_ids - vat_line - base_line).tax_tag_ids, "Contrapartidele nu poartă grile D300")
+
+        details = self._get_saft_tax_details(move)
+        self.assertEqual(len(details), 1, f"Un singur rând de taxă în D406, primit {details}")
+        self.assertEqual(details[0]["base_line_id"], base_line.id)
+        self.assertEqual(details[0]["tax_id"], self.tax_id.id)
+        self.assertAlmostEqual(details[0]["tax_amount"], 570.0)
+        self.assertAlmostEqual(details[0]["base_amount"], 3000.0)
+
+    def test_vat_without_payment_at_customs_saft_tax_details(self):
+        """D406 la importul fără plata TVA în vamă (art. 326 alin. (4)-(5), „21% IMP AM").
+
+        Ambele linii (4426 şi 4427) sunt linii de taxă; partea deductibilă ajunge în D406 pe linia
+        de bază. Grilele D300 (rd. 7 / 22) rămân cele de azi.
+        """
+        tax_rc, acc_4426, acc_4427 = self._build_reverse_charge_tax()
+        tax_rc.invoice_repartition_line_ids.filtered(lambda r: r.repartition_type == "base").tag_ids = self.base_tag
+        move = self._create_dvi_vat_move(tax_rc, 10000.0, 1900.0)
+        line_4426 = move.line_ids.filtered(lambda line: line.account_id == acc_4426)
+        line_4427 = move.line_ids.filtered(lambda line: line.account_id == acc_4427)
+        base_line = move.line_ids.filtered(lambda line: line.debit == 10000.0)
+
+        self.assertEqual((line_4426 | line_4427).tax_line_id, tax_rc)
+        self.assertEqual(len((line_4426 | line_4427).tax_repartition_line_id), 2)
+        self.assertEqual(base_line.tax_ids, tax_rc)
+        self.assertEqual(base_line.tax_tag_ids, self.base_tag)
+        reps = tax_rc.invoice_repartition_line_ids
+        self.assertEqual(line_4426.tax_tag_ids, reps.filtered(lambda r: r.account_id == acc_4426).tag_ids)
+        self.assertEqual(line_4427.tax_tag_ids, reps.filtered(lambda r: r.account_id == acc_4427).tag_ids)
+
+        details = self._get_saft_tax_details(move)
+        self.assertEqual(len(details), 1, f"Un singur rând de taxă în D406, primit {details}")
+        self.assertEqual(details[0]["base_line_id"], base_line.id)
+        self.assertAlmostEqual(details[0]["tax_amount"], 1900.0)
 
     def test_customs_products_accounts_and_landed_cost_flag(self):
         """Comisionul vamal e datorie către bugetul de stat (446), nu fond special (447).

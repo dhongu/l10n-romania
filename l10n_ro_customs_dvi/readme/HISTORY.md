@@ -1,3 +1,11 @@
+## 19.0.2.1.4 (2026-10-16)
+
+- SAF-T (D406): the VAT lines of the DVI entry are now linked to the tax (tax distribution line),
+  and the technical base line carries the tax. The VAT paid at customs (and the deductible part of
+  "21% IMP AM" / "11% IMP AM") was exported with TaxType 000 / TaxCode 000000 and TaxAmount 0.
+  The VAT return tags (rows 24/25, 7/22) are unchanged; the Odoo VAT closing now also takes the
+  DVI VAT into account.
+
 ## 19.0.2.1.3 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.

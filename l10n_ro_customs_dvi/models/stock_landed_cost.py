@@ -66,7 +66,9 @@ class LandedCost(models.Model):
             name = self.env._("VAT paid at customs - %s", cost.tax_id.name)
             aml = cost._prepare_tax_lines(name, tax_values, accounts_data)
             aml += cost._prepare_tax_base_lines(name, tax_values)
-            self.env["account.move.line"].create(aml)
+            # Liniile sunt complete (TVA transcris din declaraţie): fără resincronizarea taxelor,
+            # care pe o notă în ciornă ar recalcula TVA-ul din bază.
+            self.env["account.move.line"].with_context(skip_invoice_sync=True).create(aml)
         return res
 
     def _prepare_tax_lines(self, name, tax_values, accounts_data):
@@ -90,6 +92,10 @@ class LandedCost(models.Model):
 
         Sumele urmează `tax_value`, transcris din declaraţie, nu recalculat; din repartiţie se
         preiau contul, eticheta fiscală şi semnul.
+
+        Fiecare linie e legată de repartiţia ei (`tax_repartition_line_id`, deci şi `tax_line_id`):
+        fără legătură, SAF-T (D406) nu găseşte taxa şi raportează 000 / 000000, iar închiderea
+        TVA nu preia linia.
         """
         self.ensure_one()
         reps = [r for r in tax_values["taxes"] if r.get("account_id")]
@@ -107,6 +113,8 @@ class LandedCost(models.Model):
                     "credit": -suma if suma < 0 else 0.0,
                     "account_id": r["account_id"],
                     "move_id": self.account_move_id.id,
+                    "tax_repartition_line_id": r["tax_repartition_line_id"],
+                    "tax_base_amount": self.tax_base,
                     "tax_tag_ids": [(6, 0, r["tag_ids"])],
                 }
             )
@@ -145,7 +153,8 @@ class LandedCost(models.Model):
         Baza nu poate fi purtată de nicio linie existentă: ambele au ca valoare TVA-ul, nu
         baza. De aceea se adaugă o pereche debit/credit de valoare `tax_base` pe un cont
         neutru de clarificare (473), care se soldează şi nu atinge niciun cont de rezultat
-        sau de stoc; doar una dintre linii poartă eticheta de bază.
+        sau de stoc; doar una dintre linii poartă eticheta de bază şi taxa (`tax_ids`) — pe ea
+        pune SAF-T (D406) informaţia de taxă, ca pe linia de bază a unei facturi.
 
         Fără cont 473 în plan sau fără etichete de bază pe taxă, nu se adaugă nimic —
         comportamentul rămâne cel dinainte.
@@ -163,6 +172,7 @@ class LandedCost(models.Model):
                 "credit": 0.0,
                 "account_id": account.id,
                 "move_id": self.account_move_id.id,
+                "tax_ids": [(6, 0, self.tax_id.ids)],
                 "tax_tag_ids": [(6, 0, base_tags)],
             },
             {
