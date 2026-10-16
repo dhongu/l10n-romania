@@ -289,7 +289,7 @@ Contabilitate (facturi, note) și Inventar (recepții, costuri de aterizare).
 | `4426` | TVA deductibilă la import |
 | `4427` | TVA colectată — doar la importul fără plata TVA în vamă (§2.7, Pasul 10) |
 | `4482` | alte creanțe privind bugetul statului — TVA de recuperat de la vamă (§2.9) |
-| `2678` | alte creanțe imobilizate — garanția constituită la vamă, din care se blochează TVA-ul la regimul 4200 (§2.10) |
+| `2678` | alte creanțe imobilizate — garanția în numerar constituită la vamă, din care se blochează TVA-ul la regimul 4200 (§2.10); partea recuperabilă sub 12 luni se prezintă în bilanț la creanțe (OMFP 1802/2014 pct. 265 alin. (3)) |
 | `401` | furnizorul extern și comisionarul vamal |
 | `622` | onorariul comisionarului vamal, dacă **nu** se capitalizează |
 | `473` | cont neutru de clarificare — tranzit pentru accesorii capitalizate și pentru baza din decont |
@@ -595,7 +595,9 @@ Dr 473 = Cr 473          baza B00, grila rd. 29 (achiziții scutite), fără TVA
 ```
 
 **Garanția din contul de garanție la vamă (§2.10)** — note manuale, în jurnalul de operațiuni
-diverse; modulul ține doar evidența sumei blocate pe DVI:
+diverse; modulul ține doar evidența sumei blocate pe DVI. Notele presupun o garanție depusă **în
+numerar**. Pentru o scrisoare de garanție bancară nu se face notă pe 2678; evidența în afara
+bilanțului se stabilește cu contabilul.
 
 | Moment | Notă |
 |---|---|
@@ -603,7 +605,7 @@ diverse; modulul ține doar evidența sumei blocate pe DVI:
 | Blocarea TVA-ului pe un import 4200 | fără notă — **TVA reținut ca garanție** pe DVI, stare **Blocată** |
 | Deblocarea după CMR-ul confirmat | fără notă — garanția rămâne la vamă; pe DVI, **Marchează ca deblocată** |
 | Restituirea garanției | Dr 5121 = Cr 2678 |
-| Executarea garanției (scutirea cade, vama reține TVA-ul) | Dr 4426 = Cr 2678, cu grila taxei de import (rd. 25 la 11%), pe baza documentului emis de vamă |
+| Executarea garanției (scutirea cade, vama reține TVA-ul) | Dr 4426 = Cr 2678, cu grila TVA a taxei de import (rd. 25 la 11%), pe baza documentului emis de vamă. **Mutați și baza** de pe rd. 29 pe rândul importului taxabil: pereche Dr 473 = Cr 473 cu grila „29 - TAX BASE" negativă, plus pereche 473 cu grila bazei rândului de import. Altfel D300 raportează baza de două ori |
 
 > ⚠️ La executarea garanției, grila din D300 și eventualele accesorii (Dr 6581 = Cr 2678 sau Cr 4481)
 > se confirmă cu contabilul.
