@@ -37,6 +37,23 @@ class LandedCost(models.Model):
         "supplied to another Member State; only the base is reported, on row 29 of the VAT return.",
     )
     tax_value = fields.Float("Import VAT Amount")
+    # Regim 4200: TVA-ul calculat de vamă e reţinut din contul de garanţie al importatorului până
+    # la proba livrării intracomunitare (CMR confirmat). Evidenţă informativă, fără notă contabilă:
+    # garanţia stă pe 2678, iar notele de constituire / restituire / executare se fac manual.
+    vat_guarantee_amount = fields.Float(
+        "VAT Held as Guarantee",
+        tracking=True,
+        help="Regime 4200: VAT computed by customs and held from the importer's guarantee account until "
+        "the intra-Community supply is proven (CMR confirmed by the customer). Informative only: "
+        "no journal entry is generated.",
+    )
+    vat_guarantee_state = fields.Selection(
+        [("blocked", "Blocked"), ("released", "Released")],
+        "Guarantee Status",
+        tracking=True,
+        help="Blocked: customs holds the amount from the guarantee account.\n"
+        "Released: customs released it after the confirmed CMR was submitted.",
+    )
     tax_base = fields.Float("Tax base")
     tax_id = fields.Many2one("account.tax")  # TVA la import (plătit în vamă sau cu certificat de amânare)
 
@@ -56,6 +73,9 @@ class LandedCost(models.Model):
                         "guarantee is not recorded on the DVI."
                     )
                 )
+
+    def action_release_vat_guarantee(self):
+        self.write({"vat_guarantee_state": "released"})
 
     def _get_move_ref(self):
         """Referința notei contabile: numărul de DVI dacă e completat, altfel secvența internă."""

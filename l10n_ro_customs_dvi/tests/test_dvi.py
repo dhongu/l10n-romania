@@ -625,10 +625,10 @@ class TestDVI(TransactionCase):
         perechea tehnică 473 cu taxa scutită (pe ea pune SAF-T informaţia de taxă).
         """
         exempt_tax = self._build_exempt_tax()
-        for dvi_number, base in (
-            ("26ROIS0700000001", 62372.73),
-            ("26ROIS0700000002", 62154.55),
-            ("26ROIS0700000003", 62554.55),
+        for dvi_number, base, guarantee in (
+            ("26ROIS0700000001", 62372.73, 6861.0),
+            ("26ROIS0700000002", 62154.55, 6837.0),
+            ("26ROIS0700000003", 62554.55, 6881.0),
         ):
             invoice = self._create_received_invoice(10000, base / 10000)
             action = invoice.button_dvi()
@@ -645,9 +645,12 @@ class TestDVI(TransactionCase):
                 )
             wizard_form.tax_id = exempt_tax
             wizard_form.tax_base = base
+            wizard_form.vat_guarantee_amount = guarantee
             wizard = wizard_form.save()
             dvi = self.env["stock.landed.cost"].browse(wizard.do_create_dvi()["res_id"])
             self.assertEqual(dvi.customs_regime, "4200")
+            self.assertEqual(dvi.vat_guarantee_amount, guarantee, "Garanţia din declaraţie se păstrează pe DVI")
+            self.assertEqual(dvi.vat_guarantee_state, "blocked")
 
             dvi.button_validate()
 
@@ -662,6 +665,11 @@ class TestDVI(TransactionCase):
             self.assertEqual(base_line.debit, base)
             self.assertEqual(base_line.tax_tag_ids, self.exempt_base_tag, "Baza merge pe rd. 29 din D300")
             self.assertEqual(base_line.tax_ids, exempt_tax, "Linia de bază poartă taxa scutită (SAF-T)")
+
+            # Deblocarea după CMR-ul confirmat: doar starea se schimbă, fără notă contabilă.
+            dvi.action_release_vat_guarantee()
+            self.assertEqual(dvi.vat_guarantee_state, "released")
+            self.assertEqual(len(dvi.account_move_id.line_ids), 2)
 
     def test_regime_4200_rejects_import_vat(self):
         """La 4200 nu se poate înregistra TVA deductibil: garanţia reţinută de vamă nu e TVA datorat."""

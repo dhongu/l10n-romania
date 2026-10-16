@@ -41,6 +41,12 @@ class AccountInvoiceDVI(models.TransientModel):
         "guarantee and is NOT recorded: the import VAT stays empty and only the base goes to "
         "row 29 of the VAT return.",
     )
+    vat_guarantee_amount = fields.Monetary(
+        string="VAT Held as Guarantee",
+        help="Regime 4200: VAT computed by customs and held from the importer's guarantee account, as "
+        "shown on the declaration. It is only recorded on the DVI, for the release request after the "
+        "confirmed CMR; no journal entry is generated.",
+    )
     tax_value = fields.Monetary(
         string="Import VAT Amount",
         help="VAT actually due, the amount of item B00. Copy it from the declaration.\n\n"
@@ -81,6 +87,8 @@ class AccountInvoiceDVI(models.TransientModel):
     @api.onchange("customs_regime")
     def _onchange_customs_regime(self):
         if self.customs_regime == "4200":
+            # TVA-ul calculat devine garanţie: se propune ca punct de plecare, de confruntat cu declaraţia
+            self.vat_guarantee_amount = self.vat_guarantee_amount or self.tax_value
             self.tax_id = self._get_exempt_import_tax()
             self.tax_value = 0.0
         elif self.tax_id and self.tax_id == self._get_exempt_import_tax():
@@ -88,6 +96,8 @@ class AccountInvoiceDVI(models.TransientModel):
             self.tax_id = self.env.company.account_purchase_tax_id
             tax_values = self.tax_id.compute_all(self.tax_base)
             self.tax_value = tax_values["total_included"] - tax_values["total_excluded"]
+        if self.customs_regime != "4200":
+            self.vat_guarantee_amount = 0.0
 
     def _get_customs_payable_account(self):
         """Contul de decontare cu bugetul pentru drepturile de import.
@@ -177,6 +187,8 @@ class AccountInvoiceDVI(models.TransientModel):
             "tax_base": self.tax_base,
             "tax_value": self.tax_value,
         }
+        if self.customs_regime == "4200" and self.vat_guarantee_amount:
+            values.update(vat_guarantee_amount=self.vat_guarantee_amount, vat_guarantee_state="blocked")
         # câmpul nativ „Factură furnizor”; domeniul lui admite doar facturi (nu note de credit)
         if invoice.move_type == "in_invoice":
             values["vendor_bill_id"] = invoice.id

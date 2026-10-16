@@ -5,8 +5,11 @@
   by an intra-Community supply) the wizard proposes the exempt tax "0% EXEMPT" with no import
   VAT, and the DVI entry carries only the base, on row 29 of the VAT return (D300), through the
   technical 473 pair. Until now an import without VAT left no trace in the VAT return. The VAT
-  held by customs as a guarantee is not recorded on the DVI; a 4200 DVI with import VAT is
-  refused.
+  held by customs as a guarantee is not posted; a 4200 DVI with import VAT is refused.
+- Regime 4200: new informative fields *VAT Held as Guarantee* and *Guarantee Status*
+  (Blocked / Released) on the DVI, with a *Mark as Released* button and a *VAT Guarantee
+  Blocked* filter, to follow the release requests after the confirmed CMR. No journal entry is
+  generated: the guarantee entries on account 2678 stay manual.
 - When the DVI has no customs duty, the entry created for the import VAT (or the exempt base) is
   now posted; it used to stay in draft and was left out of the VAT return.
 
