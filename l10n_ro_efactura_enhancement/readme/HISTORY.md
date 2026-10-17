@@ -1,3 +1,15 @@
+## 19.0.0.5.6 (2026-10-17)
+
+- **Stornourile pleacă în SPV cu referința facturii corectate.** Nota de credit
+  trimisă în e-Factura nu conținea `cac:BillingReference` (BT-25 / BT-26): în 19.0
+  standardul lasă nodul gol pentru CIUS-RO. Cumpărătorul nu putea lega stornoul de
+  factura inițială, iar art. 319 alin. (20) lit. r) din Codul fiscal cere numărul și
+  data facturii corectate.
+  - Numărul și data se iau din factura stornată (`reversed_entry_id`).
+  - Stornourile create fără legătură cu o factură și facturile obișnuite nu se schimbă.
+  - Doar cod Python, nu necesită actualizarea modulului.
+  - Fixes dhongu/l10n-romania#637 (EFACTURA-001).
+
 ## 19.0.0.5.5 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`. Removed the obsolete root `description/` folder with the old generic banner.
