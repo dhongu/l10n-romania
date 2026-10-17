@@ -174,6 +174,29 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
             document_node["cbc:InvoiceTypeCode"] = {"_text": 751}
         return res
 
+    def _ubl_add_billing_reference_nodes(self, vals):
+        # EXTENDS account.edi.xml.ubl_bis3
+        # Stornoul trebuie sa poarte numarul si data facturii corectate (BT-25 / BT-26,
+        # art. 319 alin. (20) lit. r) Cod fiscal). In 19.0 standardul lasa lista goala
+        # pentru BIS3 / CIUS-RO. Luam factura din reversed_entry_id, nu din reconcilieri
+        # ca PINT: la trimitere stornoul nu e neaparat reconciliat.
+        super()._ubl_add_billing_reference_nodes(vals)
+        origin = vals["invoice"].reversed_entry_id
+        if not origin.name or origin.name == "/":
+            return
+        nodes = vals["document_node"]["cac:BillingReference"]
+        existing = {node.get("cac:InvoiceDocumentReference", {}).get("cbc:ID", {}).get("_text") for node in nodes}
+        if origin.name in existing:
+            return
+        nodes.append(
+            {
+                "cac:InvoiceDocumentReference": {
+                    "cbc:ID": {"_text": origin.name},
+                    "cbc:IssueDate": {"_text": origin.invoice_date},
+                }
+            }
+        )
+
     # -------------------------------------------------------------------------
     # Limitele CIUS-RO de lungime
     # -------------------------------------------------------------------------
