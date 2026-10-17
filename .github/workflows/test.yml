@@ -16,7 +16,9 @@ on:
   push:
     branches:
       - "19.0"
-
+  # Nightly full run: the ONLY run that measures coverage and uploads it to Codecov, once.
+  schedule:
+    - cron: "30 23 * * *"
 
 jobs:
   unreleased-deps:
@@ -73,9 +75,33 @@ jobs:
         run: manifestoo -d . check-dev-status --default-dev-status=Beta
       - name: Initialize test db
         run: oca_init_test_database
+      # Coverage only on the nightly run. Other runs execute the same command as
+      # `oca_run_tests` (OCA/oca-ci, bin/oca_run_tests) without `coverage run --branch`:
+      # the tracer slows Python down and the report would be thrown away anyway.
+      # bash, not the container's default sh (dash): dash rejects `set -o pipefail`.
       - name: Run tests
-        run: oca_run_tests
-      - uses: codecov/codecov-action@v6
+        shell: bash
+        env:
+          COVERAGE: ${{ github.event_name == 'schedule' }}
+        run: |
+          if [ "$COVERAGE" = "true" ]; then
+            oca_run_tests
+            exit 0
+          fi
+          set -o pipefail
+          oca_wait_for_postgres
+          ADDONS=$(oca_list_addons_to_test)
+          if [ -z "$ADDONS" ]; then
+            exit 0
+          fi
+          unbuffer $(which odoo) \
+            -d ${PGDATABASE} \
+            -i ${ADDONS} \
+            --test-enable \
+            --http-interface=127.0.0.1 \
+            --stop-after-init | oca_checklog_odoo
+      - if: ${{ github.event_name == 'schedule' }}
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Update .pot files
