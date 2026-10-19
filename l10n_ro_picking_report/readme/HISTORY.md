@@ -1,3 +1,11 @@
+## 20.0.2.0.2 (2026-10-19)
+
+- The settings screen is back: **Inventory > Configuration > Settings > Romanian Stock
+  Documents** shows the options *Show taxes on reception report* (tax columns on the NIR)
+  and *Show banks on picking report* (company bank accounts on stock documents). The screen
+  was lost in the migration to 19.0, so the options could only be changed on the company
+  record.
+
 ## 20.0.2.0.1 (2026-10-13)
 
 - Banner Odoo Apps (`static/description/main_screenshot.png`), generat din `banner.json`, cu insigna Odoo 20.
