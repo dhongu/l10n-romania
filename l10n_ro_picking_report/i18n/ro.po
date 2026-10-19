@@ -665,24 +665,31 @@ msgid "Show"
 msgstr ""
 
 #. module: l10n_ro_picking_report
+#: model_terms:ir.ui.view,arch_db:l10n_ro_picking_report.res_config_settings_view_form_reception_taxes
+msgid "Romanian Stock Documents"
+msgstr "Documente de stoc (România)"
+
+#. module: l10n_ro_picking_report
 #: model:ir.model.fields,field_description:l10n_ro_picking_report.field_res_company__banks_on_pickings
 #: model:ir.model.fields,field_description:l10n_ro_picking_report.field_res_config_settings__banks_on_pickings
 #: model:ir.model.fields,help:l10n_ro_picking_report.field_res_company__banks_on_pickings
 #: model:ir.model.fields,help:l10n_ro_picking_report.field_res_config_settings__banks_on_pickings
+#: model_terms:ir.ui.view,arch_db:l10n_ro_picking_report.res_config_settings_view_form_reception_taxes
 msgid "Show banks on picking report"
-msgstr "Afișare banci în rapoarte stoc"
+msgstr "Afișare bănci în rapoartele de stoc"
 
 #. module: l10n_ro_picking_report
 #: model:ir.model.fields,field_description:l10n_ro_picking_report.field_res_company__taxes_on_reception
 #: model:ir.model.fields,field_description:l10n_ro_picking_report.field_res_config_settings__taxes_on_reception
 msgid "Show taxes on reception report"
-msgstr "Afișare TVA in NIR"
+msgstr "Afișare TVA în NIR"
 
 #. module: l10n_ro_picking_report
 #: model:ir.model.fields,help:l10n_ro_picking_report.field_res_company__taxes_on_reception
 #: model:ir.model.fields,help:l10n_ro_picking_report.field_res_config_settings__taxes_on_reception
+#: model_terms:ir.ui.view,arch_db:l10n_ro_picking_report.res_config_settings_view_form_reception_taxes
 msgid "Show taxes values on reception report"
-msgstr "Afișare valoare TVA in NIR"
+msgstr "Afișare valoare TVA în NIR"
 
 #. module: l10n_ro_picking_report
 #: model_terms:ir.ui.view,arch_db:l10n_ro_picking_report.report_consume_sign
