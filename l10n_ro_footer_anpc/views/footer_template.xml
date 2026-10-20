@@ -3,16 +3,30 @@
 
     <template id="footer_anpc_data" inherit_id="web.frontend_layout" priority="500">
         <xpath expr="//div[hasclass('o_footer_copyright')]/div/div" position="inside">
-            <div class="col-sm text-center text-sm-right">
-                <a href="https://anpc.ro/ce-este-sal/" class="o_footer_logo logo" target="_blank">
-                    <img src="/l10n_ro_footer_anpc/static/src/img/anpc1.svg" width="200px;" />
+            <div class="o_footer_anpc col-md text-center text-md-end">
+                <a
+                    href="https://anpc.ro/ce-este-sal/"
+                    class="o_footer_logo logo"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <img
+                        src="/l10n_ro_footer_anpc/static/src/img/anpc1.svg"
+                        alt="ANPC - SAL"
+                        width="200"
+                    />
                 </a>
                 <a
                     href="https://ec.europa.eu/consumers/odr/main/index.cfm?event=main.home2.show&amp;lng=RO"
                     class="o_footer_logo logo"
                     target="_blank"
+                    rel="noopener"
                 >
-                    <img src="/l10n_ro_footer_anpc/static/src/img/anpc2.svg" width="200px;" />
+                    <img
+                        src="/l10n_ro_footer_anpc/static/src/img/anpc2.svg"
+                        alt="ANPC - SOL"
+                        width="200"
+                    />
                 </a>
             </div>
         </xpath>

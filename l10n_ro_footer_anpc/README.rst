@@ -17,7 +17,7 @@ Romania - ANPC footer
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_footer_anpc
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_footer_anpc
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -31,6 +31,15 @@ Poze si link-uri ANPC in footer
 
 Changelog
 =========
+
+20.0.0.0.3 (2026-10-20)
+-----------------------
+
+- Migration to Odoo 20.0: the ANPC block follows the Odoo 20 copyright
+  row (``col-md``, Bootstrap 5 ``text-md-end``); images get ``alt`` text
+  and a valid ``width``.
+- Test that the homepage rendered for a public visitor shows the ANPC
+  links.
 
 19.0.0.0.3 (2026-10-09)
 -----------------------
@@ -82,6 +91,6 @@ Current maintainer:
 
 |maintainer-danila12| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_footer_anpc>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_footer_anpc>`_ project on GitHub.
 
 You are welcome to contribute.
