@@ -1,4 +1,20 @@
-## 20.0.0.0.9 (2026-10-13)
+## 20.0.0.0.10 (2026-10-20)
+
+- Changed: "Find Purchase Order" and "Create Purchase Order" no longer run the
+  UBL import unattended when they attach the SPV XML to the order. When
+  *Purchase UBL* (`deltatech_purchase_ubl`) is installed, they open its import
+  wizard in preview instead, so the user decides for each invoice line: use a
+  product, create a new product or ignore the line. Before, the lines that
+  could not be matched were silently left out of the order. When every line
+  is matched by vendor code or barcode and the order total matches the invoice,
+  the invoice is imported without the wizard and only a notification is shown.
+  The vendor bill option is off when the SPV bill already exists. Requires
+  `deltatech_purchase_ubl` >= 20.0.1.4.14.
+- Port of 19.0.0.0.10 (dhongu/l10n-romania#651). Adapted to 20.0: the XML is
+  passed to the import wizard from `ir.attachment.raw` (`datas` no longer
+  exists).
+
+## 20.0.0.0.9 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`, with the Odoo 20 badge.
 
