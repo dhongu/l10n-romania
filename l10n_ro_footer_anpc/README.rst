@@ -22,7 +22,17 @@ Romania - ANPC footer
 
 |badge1| |badge2| |badge3|
 
-Poze si link-uri ANPC in footer
+Afișează în footer-ul site-ului, pe rândul de copyright, pictograma ANPC
+„Soluționarea alternativă a litigiilor” (SAL), cu link către platforma
+https://reclamatiisal.anpc.ro, conform Ordinului ANPC nr. 449/2022,
+modificat prin Ordinul ANPC nr. 270/2026 (Monitorul Oficial nr. 420 din
+19 mai 2026).
+
+Pictograma este cea publicată de ANPC pe https://www.anpc.ro/sal,
+afișată într-o casetă de 250 x 50 pixeli. Pictograma SOL (platforma
+europeană ODR) nu mai este afișată: platforma a fost închisă la 20 iulie
+2025 (Regulamentul (UE) 2024/3228), iar Ordinul ANPC nr. 270/2026 a
+eliminat-o din obligația de afișare.
 
 **Table of contents**
 
@@ -31,6 +41,21 @@ Poze si link-uri ANPC in footer
 
 Changelog
 =========
+
+19.0.0.0.4 (2026-10-20)
+-----------------------
+
+- Order ANPC 270/2026 (Monitorul Oficial no. 420 of 19 May 2026): only
+  the SAL pictogram remains, linked to
+  ``https://reclamatiisal.anpc.ro/`` and shown in a 250 x 50 px box with
+  the official ANPC image. The SOL pictogram and the link to the EU ODR
+  platform, closed on 20 July 2025, are removed.
+- The ANPC block follows the copyright row (``col-md``, Bootstrap 5
+  ``text-md-end`` instead of the Bootstrap 4 ``text-sm-right``); the
+  image gets ``alt`` text and a valid ``width``; the link gets
+  ``rel="noopener"``.
+- Test that the homepage rendered for a public visitor shows the SAL
+  link.
 
 19.0.0.0.3 (2026-10-09)
 -----------------------
