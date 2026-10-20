@@ -73,19 +73,47 @@ class MessageSPV(models.Model):
             # atașăm COPIA legată de purchase.order
             post_kwargs["attachment_ids"] = [po_xml_attachment.id]
 
-        # `purchase_ubl_no_new_products`: acest flux e automat, ne-supravegheat de un om în
-        # momentul rulării (spre deosebire de wizardul manual UBL) — dacă deltatech_purchase_ubl
-        # e instalat, importul headless declanșat de atașament NU trebuie să creeze tăcut
-        # produse noi când factura nu identifică fără ambiguitate produsul (lipsă cod furnizor +
-        # nume care nu se potrivește exact); linia rămâne nepotrivită, semnalată în jurnalul
-        # wizard-ului, pentru revizuire manuală (tichet #9315).
-        purchase.with_context(purchase_ubl_no_new_products=True).message_post(**post_kwargs)
+        # `purchase_ubl_skip_auto_import`: butoanele care ajung aici sunt apăsate de un om, așa
+        # că importul UBL nu mai rulează nesupravegheat la atașare (acolo liniile neidentificate
+        # se pierdeau): `_action_review_purchase_import` deschide wizard-ul de import în
+        # previzualizare, unde utilizatorul decide pentru fiecare linie.
+        purchase.with_context(purchase_ubl_skip_auto_import=True).message_post(**post_kwargs)
 
         # Caz „factura există deja, iar PO este legat ulterior": legăm efectiv factura
         # de liniile comenzii, ca să se alimenteze qty_invoiced și PO-ul să nu mai apară
         # ca „de facturat" (altfel se generează o a doua factură).
         if self.invoice_id:
             self.invoice_id._l10n_ro_link_spv_purchase_order(purchase)
+        return po_xml_attachment
+
+    def _action_review_purchase_import(self, purchase, xml_attachment):
+        """Deschide wizard-ul de import UBL (deltatech_purchase_ubl) în previzualizare, pe
+        comandă: utilizatorul alege pentru fiecare linie produsul, crearea unui produs nou sau
+        ignorarea ei. Fără modulul de import sau fără XML, deschide comanda."""
+        self.ensure_one()
+        if xml_attachment and "purchase.ubl.import.wizard" in self.env:
+            wizard = (
+                self.env["purchase.ubl.import.wizard"]
+                .with_context(active_model="purchase.order", active_id=purchase.id)
+                .create(
+                    {
+                        "data_file": xml_attachment.datas,
+                        "filename": xml_attachment.name,
+                        "order_id": purchase.id,
+                        "update_prices": True,
+                        # factura din SPV există deja: alta din import ar fi un duplicat
+                        "create_bill": not self.invoice_id,
+                    }
+                )
+            )
+            return wizard.action_preview()
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "purchase.order",
+            "res_id": purchase.id,
+            "view_mode": "form",
+            "target": "current",
+        }
 
     def _clone_xml_attachment_for_purchase(self, purchase):
         """Creează o COPIE a atașamentului XML SPV pe comanda de achiziție.
@@ -238,14 +266,8 @@ class MessageSPV(models.Model):
                     )
                 )
             self.purchase_order_id = found.id
-            self._post_spv_xml_on_purchase(found)
-            return {
-                "type": "ir.actions.act_window",
-                "res_model": "purchase.order",
-                "res_id": found.id,
-                "view_mode": "form",
-                "target": "current",
-            }
+            xml_attachment = self._post_spv_xml_on_purchase(found)
+            return self._action_review_purchase_import(found, xml_attachment)
 
         if len(found) > 1:
             return self._action_open_purchase_list(domain)
@@ -302,14 +324,8 @@ class MessageSPV(models.Model):
                     )
                 )
             self.purchase_order_id = found.id
-            self._post_spv_xml_on_purchase(found)
-            return {
-                "type": "ir.actions.act_window",
-                "res_model": "purchase.order",
-                "res_id": found.id,
-                "view_mode": "form",
-                "target": "current",
-            }
+            xml_attachment = self._post_spv_xml_on_purchase(found)
+            return self._action_review_purchase_import(found, xml_attachment)
 
         if len(found) > 1:
             return self._action_open_purchase_list(domain)
@@ -330,11 +346,5 @@ class MessageSPV(models.Model):
         }
         po = PurchaseOrder.create(po_vals)
         self.purchase_order_id = po.id
-        self._post_spv_xml_on_purchase(po)
-        return {
-            "type": "ir.actions.act_window",
-            "res_model": "purchase.order",
-            "res_id": po.id,
-            "view_mode": "form",
-            "target": "current",
-        }
+        xml_attachment = self._post_spv_xml_on_purchase(po)
+        return self._action_review_purchase_import(po, xml_attachment)
