@@ -1,0 +1,20 @@
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+{
+    "name": "Romania - ANPC footer",
+    "version": "20.0.0.0.3",
+    "category": "Localization",
+    "countries": ["ro"],
+    "summary": "Displays ANPC logos and links in website footer",
+    "author": "Terrabit, Dan Stoica",
+    "website": "https://www.terrabit.ro",
+    "depends": [
+        "website",
+    ],
+    "license": "AGPL-3",
+    "data": [
+        "views/footer_template.xml",
+    ],
+    "maintainers": ["danila12"],
+    "development_status": "Mature",
+    "images": ["static/description/main_screenshot.png"],
+}
