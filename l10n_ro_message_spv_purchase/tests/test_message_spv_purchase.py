@@ -696,12 +696,18 @@ class TestMessageSPVPurchase(TransactionCase):
         action = msg.action_create_purchase()
         po = msg.purchase_order_id
         self.assertTrue(po, "trebuie să creeze/lege o comandă de achiziție")
-        self.assertFalse(po.order_line, "importul nu mai rulează nesupravegheat la atașarea XML-ului")
-        self.assertEqual(action["res_model"], "purchase.ubl.import.wizard")
-        wizard = self.env[action["res_model"]].browse(action["res_id"])
-        self.assertEqual(wizard.state, "preview")
-        self.assertEqual(set(wizard.line_ids.mapped("line_action")), {"product"})
-        wizard.action_confirm_import()
+        if action.get("tag") == "display_notification":
+            # toate liniile găsite după cod și totalul cu TVA bate (produse cu taxa de achiziție
+            # a planului RO): importul s-a făcut direct
+            self.assertTrue(po.order_line)
+        else:
+            # totalul cu TVA nu bate (produse fără taxe): previzualizarea, confirmată de utilizator
+            self.assertFalse(po.order_line, "importul nu mai rulează nesupravegheat la atașarea XML-ului")
+            self.assertEqual(action["res_model"], "purchase.ubl.import.wizard")
+            wizard = self.env[action["res_model"]].browse(action["res_id"])
+            self.assertEqual(wizard.state, "preview")
+            self.assertEqual(set(wizard.line_ids.mapped("line_action")), {"product"})
+            wizard.action_confirm_import()
 
         self.env.flush_all()
         po.invalidate_recordset()
