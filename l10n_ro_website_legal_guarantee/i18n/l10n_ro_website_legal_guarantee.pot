@@ -1,0 +1,262 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_website_legal_guarantee
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-20 04:05+0000\n"
+"PO-Revision-Date: 2026-10-20 04:05+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"<li class=\"o_translate_inline\">\n"
+"                                    Contact us as soon as possible after you notice the problem, by phone,\n"
+"                                    e-mail or through the <a href=\"/contactus\">contact form</a>.\n"
+"                                </li>"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"<li class=\"o_translate_inline\">\n"
+"                                    If we cannot reach an agreement, you can contact the National Authority\n"
+"                                    for Consumer Protection (<a href=\"https://anpc.ro\" target=\"_blank\" rel=\"noopener\">ANPC</a>)\n"
+"                                    or an\n"
+"                                    <a href=\"https://reclamatiisal.anpc.ro/\" target=\"_blank\" rel=\"noopener\">alternative dispute resolution entity</a>.\n"
+"                                </li>"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"<p class=\"o_translate_inline\">\n"
+"                                Sellers and producers may also offer commercial guarantees. These apply in\n"
+"                                addition to the legal guarantee and do not replace it. The EU GARAN label\n"
+"                                marks a commercial guarantee of durability offered by the producer at no\n"
+"                                extra cost, covering the whole good, for more than two years.\n"
+"                                <a href=\"https://europa.eu/youreurope/commercial-guarantee-durability/index.htm\" target=\"_blank\" rel=\"noopener\">More about the GARAN label</a>.\n"
+"                            </p>"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "<span>E-mail:</span>"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "<span>Phone:</span>"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "<span>Tax ID:</span>"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"A lack of conformity which becomes apparent within one year of\n"
+"                                    delivery is presumed to have existed at delivery, unless proven\n"
+"                                    otherwise."
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_modal
+msgid "Close"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "Commercial guarantees"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.model,name:l10n_ro_website_legal_guarantee.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_website__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.module.module,summary:base.module_l10n_ro_website_legal_guarantee
+msgid ""
+"Displays the EU harmonised notice on the legal guarantee of conformity on "
+"the website"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_notice
+msgid "Download the notice (PDF)"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.res_config_settings_view_form
+msgid "EU legal guarantee notice"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "EU notice on the legal guarantee"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"For goods bought by consumers, the seller is liable for any lack of conformity\n"
+"                        which exists at the time of delivery and becomes apparent within two years.\n"
+"                        Below you can find the official notice of the European Union, a short summary\n"
+"                        of your rights and how to report a problem."
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"Harmonised notice of the European Commission (Commission Implementing\n"
+"                                Regulation (EU) 2025/1960, Annex I)."
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_notice
+msgid ""
+"Harmonised notice of the European Union on the legal guarantee of conformity"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.res_config_settings_view_form
+msgid ""
+"Harmonised notice on the legal guarantee of conformity (Regulation (EU) "
+"2025/1960), on the /garantie page"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "How to report a problem"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_website__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"In some cases you may ask for a price reduction or terminate the\n"
+"                                    contract, for example when repair or replacement was refused or not\n"
+"                                    carried out."
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_footer
+msgid "Legal guarantee"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_res_config_settings__legal_guarantee_checkout
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_website__legal_guarantee_checkout
+msgid "Legal guarantee at checkout"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_res_config_settings__legal_guarantee_footer
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_website__legal_guarantee_footer
+msgid "Legal guarantee link in footer"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_modal
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "Legal guarantee of conformity"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_res_config_settings__legal_guarantee_product
+#: model:ir.model.fields,field_description:l10n_ro_website_legal_guarantee.field_website__legal_guarantee_product
+msgid "Legal guarantee on product page"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_notice
+msgid "More information:"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"Provide proof of purchase, such as the invoice, the receipt, the bank\n"
+"                                    statement or the order number."
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.module.module,shortdesc:base.module_l10n_ro_website_legal_guarantee
+msgid "Romania - EU Legal Guarantee Notice"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "The seller"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"The seller is liable for any lack of conformity which exists at\n"
+"                                    delivery and becomes apparent within two years of delivery."
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"These rights cannot be excluded or limited by contract to your\n"
+"                                    detriment."
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"Under Government Emergency Ordinance no. 140/2021 on certain aspects of\n"
+"                                contracts for the sale of goods:"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model:ir.model,name:l10n_ro_website_legal_guarantee.model_website
+msgid "Website"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid ""
+"You may choose between repair and replacement, free of charge, within\n"
+"                                    a reasonable period agreed in writing, of no more than 15 calendar\n"
+"                                    days from the date you informed the seller."
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_link
+msgid "Your legal guarantee rights"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_modal
+msgid "Your rights and how to report a problem"
+msgstr ""
+
+#. module: l10n_ro_website_legal_guarantee
+#: model_terms:ir.ui.view,arch_db:l10n_ro_website_legal_guarantee.legal_guarantee_page
+msgid "Your rights in short"
+msgstr ""
