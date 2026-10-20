@@ -86,9 +86,12 @@ class MessageSPV(models.Model):
         return po_xml_attachment
 
     def _action_review_purchase_import(self, purchase, xml_attachment):
-        """Deschide wizard-ul de import UBL (deltatech_purchase_ubl) în previzualizare, pe
-        comandă: utilizatorul alege pentru fiecare linie produsul, crearea unui produs nou sau
-        ignorarea ei. Fără modulul de import sau fără XML, deschide comanda."""
+        """Importă factura pe comandă cu wizard-ul UBL (deltatech_purchase_ubl).
+
+        Când toate liniile sunt identificate după cod sau cod de bare și totalul comenzii bate
+        cu factura, importul se face direct și utilizatorul primește doar o notificare. Altfel
+        se deschide previzualizarea, unde alege pentru fiecare linie produsul, crearea unui
+        produs nou sau ignorarea ei. Fără modulul de import sau fără XML, deschide comanda."""
         self.ensure_one()
         if xml_attachment and "purchase.ubl.import.wizard" in self.env:
             wizard = (
@@ -105,7 +108,7 @@ class MessageSPV(models.Model):
                     }
                 )
             )
-            return wizard.action_preview()
+            return wizard.action_preview_or_import()
         return {
             "type": "ir.actions.act_window",
             "res_model": "purchase.order",

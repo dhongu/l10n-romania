@@ -5,7 +5,10 @@
   *Purchase UBL* (`deltatech_purchase_ubl`) is installed, they open its import
   wizard in preview instead, so the user decides for each invoice line: use a
   product, create a new product or ignore the line. Before, the lines that
-  could not be matched were silently left out of the order. The vendor bill
+  could not be matched were silently left out of the order. When every line
+  is matched by vendor code or barcode and the order total matches the invoice,
+  the invoice is imported without the wizard and only a notification is shown.
+  The vendor bill
   option is off when the SPV bill already exists. Requires
   `deltatech_purchase_ubl` >= 20.0.1.4.14.
 

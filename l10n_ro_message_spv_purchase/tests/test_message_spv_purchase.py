@@ -828,6 +828,37 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertRecordValues(po.order_line, [{"name": "Produs Nou Ales Explicit", "product_qty": 3}])
         self.assertEqual(po.order_line.product_id.name, "Produs Nou Ales Explicit")
 
+    def test_create_purchase_clean_invoice_only_notifies(self):
+        """Toate liniile identificate după cod și totalul bate: fără wizard, doar notificare."""
+        if "purchase.ubl.import.wizard" not in self.env:
+            self.skipTest("Modulul deltatech_purchase_ubl nu este instalat")
+        product = self.env["product.product"].create({"name": "Produs Curat", "type": "consu"})
+        self.env["product.supplierinfo"].create(
+            {
+                "partner_id": self.partner.id,
+                "product_tmpl_id": product.product_tmpl_id.id,
+                "product_id": product.id,
+                "product_code": "COD-CURAT",
+            }
+        )
+        msg = self._make_spv_message(ref="PO-TEST-CLEAN")
+        xml = self._xml_unmatched_line().replace(
+            b"<cbc:Name>Produs Nou Ales Explicit</cbc:Name>",
+            b"<cac:SellersItemIdentification><cbc:ID>COD-CURAT</cbc:ID></cac:SellersItemIdentification>"
+            b"<cbc:Name>Produs Nou Ales Explicit</cbc:Name>",
+        )
+        msg.attachment_id = self.env["ir.attachment"].create(
+            {
+                "name": "clean.zip",
+                "raw": self._make_zip_with_xml(xml_bytes=xml, xml_name="clean.xml"),
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        action = msg.action_create_purchase()
+        self.assertEqual(action["tag"], "display_notification")
+        self.assertRecordValues(msg.purchase_order_id.order_line, [{"product_id": product.id, "product_qty": 3}])
+
     def _xml_unmatched_line(self):
         return b"""<?xml version="1.0" encoding="UTF-8"?>
 <Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
