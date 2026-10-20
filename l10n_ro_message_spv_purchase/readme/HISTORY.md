@@ -8,9 +8,11 @@
   could not be matched were silently left out of the order. When every line
   is matched by vendor code or barcode and the order total matches the invoice,
   the invoice is imported without the wizard and only a notification is shown.
-  The vendor bill
-  option is off when the SPV bill already exists. Requires
+  The vendor bill option is off when the SPV bill already exists. Requires
   `deltatech_purchase_ubl` >= 20.0.1.4.14.
+- Port of 19.0.0.0.10 (dhongu/l10n-romania#651). Adapted to 20.0: the XML is
+  passed to the import wizard from `ir.attachment.raw` (`datas` no longer
+  exists).
 
 ## 20.0.0.0.9 (2026-10-09)
 

@@ -99,7 +99,7 @@ class MessageSPV(models.Model):
                 .with_context(active_model="purchase.order", active_id=purchase.id)
                 .create(
                     {
-                        "data_file": xml_attachment.datas,
+                        "data_file": xml_attachment.raw,
                         "filename": xml_attachment.name,
                         "order_id": purchase.id,
                         "update_prices": True,
