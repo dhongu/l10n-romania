@@ -53,6 +53,7 @@ class StockAgeReport(models.TransientModel):
         string="Locations",
         compute="_compute_location_ids",
         store=True,
+        readonly=False,
     )
     warehouse_id = fields.Many2one(
         "stock.warehouse",
@@ -104,6 +105,8 @@ class StockAgeReport(models.TransientModel):
 
     def _run_aged_inventory(self, products, locations):
         self = self.sudo()
+        # un recalcul pe același dialog înlocuiește liniile, nu le adaugă peste cele vechi
+        self.line_ids.unlink()
 
         def _to_str(date):
             return fields.Date.to_string(date)

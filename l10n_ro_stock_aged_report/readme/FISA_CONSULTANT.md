@@ -81,12 +81,13 @@ Se deschide un dialog de parametri. Raportul nu are o listă de rapoarte salvate
 | **Produs asociat** | Opțional: un singur produs. Gol = tot stocul din locațiile alese. |
 | **Data de referință** ② | Ziua de la care se numără vechimea. Implicit, azi. |
 | **Zile** ③ | Lungimea unui interval: 15, 30, 90, 180 sau 365 de zile. Raportul are mereu **șase** intervale. |
+| **Locații** ④ | Fila de sub parametri: locațiile interne citite de raport. Implicit, toate locațiile interne ale depozitului ales, inclusiv sublocațiile (rafturi, zone). |
 
-Raportul ia **toate locațiile interne ale depozitului ales**, inclusiv sublocațiile (rafturi, zone). Lista lor nu apare în dialog și, în versiunea actuală, nu poate fi restrânsă de aici (vezi secțiunea 11, limitări): pentru o singură zonă, filtrați rezultatul pe produse sau exportați și filtrați în Excel. Pentru alt depozit, schimbați câmpul **Depozit**.
+Pentru o singură zonă sau un singur raft, ștergeți din fila **Locații** rândurile care nu vă interesează (coșul de la capătul rândului) sau adăugați locații cu **Adaugă o linie**. Fiecare rând se citește **doar pentru locația lui**: o zonă păstrată în listă nu aduce automat și rafturile de sub ea, așa că lăsați în listă zona împreună cu sublocațiile ei. Dacă schimbați câmpul **Depozit**, lista se reface cu locațiile noului depozit.
 
 Apăsați **Calculează raportul de vechime**.
 
-![Dialogul raportului: depozit, dată de referință și interval](../static/description/02_wizard.png)
+![Dialogul raportului: depozit, dată de referință, interval și lista de locații](../static/description/02_wizard.png)
 
 > **Data de referință nu face din raport un stoc istoric.** Stocul citit este cel de azi. Mutarea datei în trecut doar mută intervalele; marfa intrată **după** data de referință nu încape în niciun interval și ajunge în ultimul, cel mai vechi. Pentru analiza curentă lăsați data de azi.
 
@@ -156,11 +157,11 @@ Valoarea din raport **nu** este baza ajustării: ea este cantitate × costul de 
 
 - Data de ultimă intrare și de ultimă ieșire pe fiecare poziție de stoc, la fiecare mișcare.
 - Completarea acestor date pentru stocul existent, la instalarea modulului.
-- Selecția tuturor locațiilor interne ale depozitului (lista nu este afișată în dialog), contul de stoc și valoarea pe linie.
+- Propunerea tuturor locațiilor interne ale depozitului în fila **Locații** (lista se poate restrânge manual), contul de stoc și valoarea pe linie.
 
 **Ce rămâne manual**
 
-- Decizia ce înseamnă „mișcare lentă" (alegerea intervalului).
+- Decizia ce înseamnă „mișcare lentă" (alegerea intervalului) și, la nevoie, restrângerea listei de locații la o zonă.
 - Analiza de depreciere și nota contabilă de ajustare.
 - Păstrarea rezultatului: liniile raportului sunt temporare și sunt șterse automat de Odoo după un timp; pentru arhivă, exportați în Excel.
 
@@ -178,7 +179,7 @@ Valoarea din raport **nu** este baza ajustării: ea este cantitate × costul de 
 - [ ] O marfă intrată acum un an, cu intervale de 30 de zile, apare în intervalul **[6]**.
 - [ ] Coloana **Ultima dată de ieșire** e goală pentru produsele fără nicio ieșire din locație.
 - [ ] La instalarea pe o bază cu istoric, pozițiile de stoc existente au datele de ultimă intrare completate din mișcări (nu toate cu data instalării).
-- [ ] Pentru fiecare analiză, raportul se pornește din meniu, într-un dialog nou (vezi secțiunea 11, limitări).
+- [ ] Fila **Locații** din dialog listează locațiile interne ale depozitului; după ștergerea unor rânduri, raportul conține doar stocul din locațiile rămase.
 
 ## 9. Mesaje de eroare frecvente
 
@@ -186,7 +187,7 @@ Valoarea din raport **nu** este baza ajustării: ea este cantitate × costul de 
 |---|---|---|
 | Câmpul **Depozit** e gol la deschidere | Compania activă nu are niciun depozit | Creați depozitul sau schimbați compania activă |
 | Raportul se deschide fără nicio linie | Depozitul nu are stoc pozitiv în locațiile interne, sau produsul ales nu are stoc acolo | Verificați stocul în **Inventar → Raportare → Stoc** sau scoateți filtrul de produs |
-| Lipsesc produse dintr-o zonă a depozitului | Locația zonei nu este internă sau aparține altui depozit | Verificați tipul și depozitul locației în **Inventar → Configurare → Locații** |
+| Lipsesc produse dintr-o zonă a depozitului | Locația zonei nu este internă, aparține altui depozit sau a fost ștearsă din fila **Locații** | Verificați fila **Locații** din dialog, apoi tipul și depozitul locației în **Inventar → Configurare → Locații** |
 | Coloana **Cont** e goală | Categoria produsului nu are cont de evaluare a stocului | Completați contul pe categorie |
 | **Valoare** 0 pe un produs cu stoc | Costul produsului este 0 | Completați costul în fișa produsului |
 | Marfă recepționată de curând apare în intervalul **[6]** | Data de referință este în trecut, înaintea intrării | Rulați raportul cu data de azi |
@@ -197,7 +198,7 @@ Valoarea din raport **nu** este baza ajustării: ea este cantitate × costul de 
 Capturile (`static/description/`) sunt **generate automat** din `tests/test_screenshots.py` (mixinul `ScreenshotCase` din `l10n_ro_doc_screenshots`, import defensiv), în **limba română**, pe planul de conturi RO, pe o companie în RON:
 
 1. `01_meniu_raport.png` — meniul **Inventar → Raportare** deschis, cu **Raport vechime stoc** evidențiat.
-2. `02_wizard.png` — dialogul raportului, cu **Depozit**, **Data de referință** și **Zile** evidențiate.
+2. `02_wizard.png` — dialogul raportului, cu **Depozit**, **Data de referință**, **Zile** și fila **Locații** evidențiate.
 3. `03_pivot_vechime.png` — pivotul raportului regrupat pe produs: cele șase intervale de 30 de zile, cu cantitate și valoare.
 4. `04_lista_linii.png` — lista liniilor, cu grupurile lunare desfășurate: intervalul, contul și data ultimei ieșiri pe fiecare poziție.
 5. `05_pivot_cont.png` — pivotul regrupat pe conturile de stoc 301 și 371.
@@ -222,7 +223,6 @@ Merită păstrate explicit în manualul de utilizare:
 
 **Limitări cunoscute**
 
-- **Lista de locații nu apare în dialog**, deși modulul o pregătește: raportul ia mereu toate locațiile interne ale depozitului ales. Nu se poate rula, de aici, doar pe o zonă sau pe un raft.
-- **Limitare tehnică:** calculul nu șterge liniile unui calcul anterior pe același dialog; dacă același dialog ar fi calculat a doua oară (de exemplu, redeschis din istoricul browserului), liniile s-ar adăuga peste cele existente, cu cantități și valori dublate. Din interfață dialogul se închide după calcul, deci cazul e rar; porniți totuși fiecare analiză din meniu, într-un dialog nou.
+- Un rând din fila **Locații** acoperă doar locația lui, nu și sublocațiile. Pe depozitele cu sute de sublocații, restrângerea la o zonă înseamnă ștergerea rândurilor celorlalte zone; pentru analize repetate pe aceeași zonă, poate fi mai simplu să rulați pe tot depozitul și să filtrați rezultatul exportat în Excel.
 - Liniile raportului sunt **temporare**: Odoo le șterge automat după un timp. Rezultatul care trebuie păstrat (de exemplu, anexa la procesul-verbal de inventariere) se exportă.
 - Raportul nu reconstituie stocul la o dată din trecut și nu urmărește vechimea pe straturi de intrare (FIFO); pentru asta este nevoie de un raport de evaluare a stocului.
