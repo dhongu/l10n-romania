@@ -72,3 +72,25 @@ class TestStockAgeReport(TransactionCase):
         self.assertIn("30 - 60", line.name, "Intervalul pentru 45 de zile ar trebui să fie 30-60.")
         self.assertEqual(line.quantity, 10.0)
         self.assertEqual(line.value, 1000.0)  # 10 * 100.0
+
+    def test_03_report_without_product_covers_all_stock(self):
+        """Fără produs ales, raportul ia toate cuantele din locații, fără plafon de produse."""
+        other = self.env["product.product"].create(
+            {"name": "Other Product", "is_storable": True, "standard_price": 5.0}
+        )
+        self.env["stock.quant"].create({"product_id": other.id, "location_id": self.location.id, "quantity": 3.0})
+
+        wizard = self.env["l10n.ro.stock.age.report"].create({"warehouse_id": self.warehouse.id})
+        wizard.do_compute_report()
+        self.assertEqual(wizard.line_ids.product_id & (self.product | other), self.product | other)
+        quants = self.env["stock.quant"].search(
+            [("location_id", "in", wizard.location_ids.location_id.ids), ("quantity", ">", 0)]
+        )
+        self.assertEqual(len(wizard.line_ids), len(quants), "O linie pentru fiecare cuantă pozitivă.")
+
+        filtered = self.env["l10n.ro.stock.age.report"].create(
+            {"warehouse_id": self.warehouse.id, "product_id": other.id}
+        )
+        filtered.do_compute_report()
+        self.assertEqual(filtered.line_ids.product_id, other)
+        self.assertEqual(filtered.line_ids.value, 15.0)
