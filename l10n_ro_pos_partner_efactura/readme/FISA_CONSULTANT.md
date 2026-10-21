@@ -93,24 +93,25 @@ completează automat de la ANAF: denumire, stradă, localitate, județ.
 
 ### Pasul 4 — ANAF nu răspunde: completarea manuală
 
-Dacă serviciul ANAF nu răspunde sau CUI-ul nu este găsit, Odoo afișează un avertisment, iar
-câmpurile rămân goale și editabile. Închideți avertismentul și completați manual stradă,
-localitate și județ, apoi **Salvează**.
+Dacă serviciul ANAF nu răspunde, Odoo afișează fereastra **Atenție** cu mesajul „Serviciul web
+ANAF nu funcționează…”, iar câmpurile de adresă rămân goale și editabile. Apăsați **Închide** și
+completați manual stradă, localitate și județ, apoi **Salvează**.
 
-![Avertisment ANAF și completarea manuală a adresei](../static/description/04_anaf_indisponibil_manual.png)
+![Avertismentul ANAF; adresa rămâne de completat manual](../static/description/04_anaf_indisponibil_manual.png)
 
 ### Pasul 5 — Salvare cu date lipsă: formularul se oprește
 
 Dacă apăsați **Salvează** cu un câmp obligatoriu gol, formularul nu se închide: câmpurile goale
-sunt marcate cu roșu și apare mesajul de câmpuri invalide. Completați-le și salvați din nou.
+sunt marcate cu roșu. Completați-le și salvați din nou.
 
 ![Câmpuri obligatorii goale marcate la salvare](../static/description/05_date_lipsa.png)
 
 ### Pasul 6 — Adresă din București: localitatea este sectorul
 
 Pentru județul **București**, localitatea trebuie scrisă ca sector (`Sector 1` … `Sector 6`). Dacă
-introduceți `București`, la salvare apare mesajul că partenerul nu poate primi o factură
-e-Factura, cu explicația pentru sector.
+introduceți `București`, la salvare apare fereastra **Eroare de validare**: partenerul nu poate
+primi o factură e-Factura, cu explicația pentru sector. Apăsați **Ok**, corectați localitatea și
+salvați din nou.
 
 ![Mesajul pentru localitatea din București care nu este sector](../static/description/06_bucuresti_sector.png)
 
@@ -162,33 +163,33 @@ fizică; completarea partenerilor vechi, creați înainte de instalare, la prima
 | Mesaj | Cauză | Remediere |
 |---|---|---|
 | Câmpuri invalide: Stradă / Localitate / Județ / Țară | Câmp obligatoriu gol la salvare din POS | Completați câmpurile marcate cu roșu |
-| „The partner … cannot receive an e-Factura invoice: … Tax ID (CUI)” | Partener de tip Companie fără CUI | Introduceți CUI-ul sau alegeți Persoană fizică |
-| „… For Bucharest the city must be the sector, e.g. 'Sector 1'” | Județul București cu localitatea `București` | Scrieți localitatea `Sector 1` … `Sector 6` |
-| Avertisment ANAF la introducerea CUI-ului | Serviciul ANAF indisponibil sau CUI inexistent | Verificați CUI-ul; completați datele manual |
+| „Partenerul … nu poate primi o factură e-Factura: - CUI” | Partener de tip Companie fără CUI | Introduceți CUI-ul sau alegeți Persoană |
+| „… Pentru București, localitatea trebuie să fie sectorul, de ex. 'Sector 1'” | Județul București cu localitatea `București` | Scrieți localitatea `Sector 1` … `Sector 6` |
+| „Serviciul web ANAF nu funcționează…” (fereastra Atenție) | Serviciul ANAF indisponibil | Închideți avertismentul; completați datele manual |
 | Partenerul vechi nu se poate salva din POS | Creat înainte de instalare, fără adresă | Completați adresa la prima editare |
 
 ## 10. Capturi de ecran
 
-Capturile **nu sunt încă generate**: trebuie rulat skill-ul `fisa-screenshots` pentru acest modul.
-Lista de mai jos stabilește numele și ordinea, aceleași cu pașii din secțiunea 6. Capturile vor fi
-generate automat din `tests/test_screenshots.py` (mixinul `ScreenshotCase` din
+Capturile sunt generate automat din `tests/test_screenshots.py` (mixinul `ScreenshotCase` din
 `l10n_ro_doc_screenshots`, import defensiv), în RO, pe planul de conturi RO, în
-`static/description/`.
+`static/description/`, în ordinea pașilor din secțiunea 6. Testul deschide POS-ul într-un browser
+real și parcurge pașii casierului; răspunsul ANAF este simulat (firmă găsită la pasul 3, serviciu
+indisponibil la pasul 4), deci rularea nu depinde de ANAF.
 
 | # | Fișier | Conținut |
 |---|--------|----------|
 | 1 | `static/description/01_pos_lista_clienti.png` | Fereastra Alege clientul din POS, cu butonul Creează |
 | 2 | `static/description/02_formular_partener_obligatorii.png` | Formular partener nou din POS, câmpurile de adresă și CUI obligatorii |
 | 3 | `static/description/03_preluare_anaf.png` | Firmă completată automat de la ANAF după CUI |
-| 4 | `static/description/04_anaf_indisponibil_manual.png` | Avertisment ANAF și adresa completată manual |
+| 4 | `static/description/04_anaf_indisponibil_manual.png` | Fereastra Atenție: serviciul ANAF nu răspunde, adresa rămâne goală |
 | 5 | `static/description/05_date_lipsa.png` | Salvare cu câmpuri goale, marcate cu roșu |
 | 6 | `static/description/06_bucuresti_sector.png` | Mesajul pentru localitatea din București care nu este sector |
 | 7 | `static/description/07_client_pe_comanda.png` | Clientul complet ales pe comanda din POS |
 
-Regenerare (după scrierea testului de capturi):
+Regenerare:
 
 ```bash
-./odoo/odoo-bin -c odoo.conf -d test19 -u l10n_ro_pos_partner_efactura --test-tags=/l10n_ro_pos_partner_efactura:TestScreenshots --stop-after-init
+./odoo/odoo-bin -c odoo.conf -d test19 -i l10n_ro_pos_partner_efactura,l10n_ro_partner_create_by_vat,l10n_ro_doc_screenshots --test-tags=fise_screenshots --stop-after-init
 ```
 
 ## 11. Observații pentru manual
