@@ -1,3 +1,11 @@
+## 19.0.1.0.4 (2026-10-21)
+
+- The report dialog shows the list of locations again, in a *Locations* tab, and the list
+  can be edited: the report can be restricted to some of the warehouse locations. The list
+  was placed directly in the notebook, without a page, so Odoo 19 did not display it.
+- Computing the report a second time on the same dialog replaces the previous lines
+  instead of adding new lines on top of them, which doubled quantities and values.
+
 ## 19.0.1.0.3 (2026-10-21)
 
 - Consultant sheet (`readme/FISA_CONSULTANT.md`, in Romanian) with screenshots in

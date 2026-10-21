@@ -15,17 +15,14 @@
                         <field name="interval_days" />
                     </group>
                     <notebook>
-
-                        <group>
+                        <page string="Locations" name="locations">
                             <field name="location_ids">
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle" />
                                     <field name="location_id" domain="[('usage', '=', 'internal')]" />
                                 </list>
-
                             </field>
-                        </group>
-
+                        </page>
                     </notebook>
                 </sheet>
                 <footer>
