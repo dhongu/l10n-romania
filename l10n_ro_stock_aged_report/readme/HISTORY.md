@@ -1,3 +1,11 @@
+## 19.0.1.0.2 (2026-10-21)
+
+- Without a product selected, the report now covers the whole stock of the chosen locations.
+  It used to read only the first 10,000 products, so on larger catalogues the remaining
+  products were left out silently and the total no longer matched the stock.
+- The report lines are created in a single batch instead of one by one, which keeps the
+  report fast on warehouses with tens of thousands of quants.
+
 ## 19.0.1.0.1 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.

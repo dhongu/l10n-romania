@@ -94,7 +94,8 @@ class StockAgeReport(models.TransientModel):
         self.location_ids = location_ids
 
     def do_compute_report(self):
-        products = self.product_id or self.env["product.product"].search([], limit=10000)
+        # fără produs ales raportul acoperă tot stocul: cuantele se filtrează doar pe locații
+        products = self.product_id
         locations = self.location_ids.mapped("location_id")
 
         self._run_aged_inventory(products, locations.ids)
@@ -131,10 +132,12 @@ class StockAgeReport(models.TransientModel):
             )
 
         # Căutăm quants
-        quants = self.env["stock.quant"].search(
-            [("product_id", "in", products.ids), ("location_id", "in", locations), ("quantity", ">", 0)]
-        )
+        domain = [("location_id", "in", locations), ("quantity", ">", 0)]
+        if products:
+            domain.append(("product_id", "in", products.ids))
+        quants = self.env["stock.quant"].search(domain)
 
+        line_vals = []
         for quant in quants:
             product = quant.product_id
             # Folosim noul câmp, sau in_date, sau create_date ca fallback
@@ -166,8 +169,7 @@ class StockAgeReport(models.TransientModel):
             # Valoarea (calculată pe baza prețului standard dacă nu avem tracking)
             value = quant.quantity * product.standard_price
 
-            # Inserăm linia
-            self.env["l10n.ro.stock.age.report.line"].create(
+            line_vals.append(
                 {
                     "report_id": self.id,
                     "name": target_interval["name"],
@@ -179,6 +181,9 @@ class StockAgeReport(models.TransientModel):
                     "last_out_date": quant.l10n_ro_last_out_date,
                 }
             )
+
+        # Inserăm liniile într-un singur create
+        self.env["l10n.ro.stock.age.report.line"].create(line_vals)
 
     def button_show_sheet(self):
         self.do_compute_report()
