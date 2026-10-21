@@ -161,6 +161,7 @@ msgstr "Locație"
 
 #. module: l10n_ro_stock_aged_report
 #: model:ir.model.fields,field_description:l10n_ro_stock_aged_report.field_l10n_ro_stock_age_report__location_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_aged_report.stock_age_report_form_view
 msgid "Locations"
 msgstr "Locații"
 

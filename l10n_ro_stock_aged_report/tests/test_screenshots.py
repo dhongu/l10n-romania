@@ -165,7 +165,7 @@ class TestStockAgeReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase o
                     ],
                     "settle": 1500,
                 },
-                # 2. Dialogul raportului: depozit, dată de referință, interval
+                # 2. Dialogul raportului: depozit, dată de referință, interval și lista de locații
                 {
                     "url": (
                         f"action={act_wizard.id}&id={self.wizard.id}&model=l10n.ro.stock.age.report&view_type=form"
@@ -189,6 +189,7 @@ class TestStockAgeReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase o
                         ".modal-content div[name='warehouse_id']",
                         ".modal-content div[name='date_ref']",
                         ".modal-content div[name='interval_days']",
+                        ".modal-content div[name='location_ids']",
                     ],
                     "settle": 2000,
                 },

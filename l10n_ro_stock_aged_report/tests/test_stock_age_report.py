@@ -94,3 +94,31 @@ class TestStockAgeReport(TransactionCase):
         filtered.do_compute_report()
         self.assertEqual(filtered.line_ids.product_id, other)
         self.assertEqual(filtered.line_ids.value, 15.0)
+
+    def test_04_recompute_replaces_lines(self):
+        """Al doilea calcul pe același dialog înlocuiește liniile, nu le dublează."""
+        wizard = self.env["l10n.ro.stock.age.report"].create(
+            {"warehouse_id": self.warehouse.id, "product_id": self.product.id}
+        )
+        wizard.do_compute_report()
+        first_lines = wizard.line_ids
+        self.assertEqual(len(first_lines), 1)
+
+        wizard.do_compute_report()
+        self.assertEqual(len(wizard.line_ids), 1, "Recalculul nu trebuie să dubleze liniile.")
+        self.assertFalse(first_lines.exists(), "Liniile calculului anterior sunt șterse.")
+        self.assertEqual(wizard.line_ids.quantity, 10.0)
+
+    def test_05_locations_editable(self):
+        """Lista de locații se poate restrânge: raportul ia doar locațiile rămase în listă."""
+        shelf = self.env["stock.location"].create(
+            {"name": "Raft test", "usage": "internal", "location_id": self.location.id}
+        )
+        self.env["stock.quant"].create({"product_id": self.product.id, "location_id": shelf.id, "quantity": 4.0})
+
+        wizard = self.env["l10n.ro.stock.age.report"].create({"warehouse_id": self.warehouse.id})
+        self.assertIn(shelf, wizard.location_ids.location_id)
+        wizard.location_ids.filtered(lambda l: l.location_id != shelf).unlink()
+        wizard.do_compute_report()
+        self.assertEqual(wizard.line_ids.product_id, self.product)
+        self.assertEqual(wizard.line_ids.quantity, 4.0)
