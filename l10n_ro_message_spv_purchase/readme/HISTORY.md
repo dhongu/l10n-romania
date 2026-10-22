@@ -1,3 +1,7 @@
+## 20.0.0.0.11 (2026-10-22)
+
+- Listed on Odoo Apps as *SPV Messages to Purchase Orders* (was *Purchase Message SPV*). The technical name `l10n_ro_message_spv_purchase` does not change.
+
 ## 20.0.0.0.10 (2026-10-20)
 
 - Changed: "Find Purchase Order" and "Create Purchase Order" no longer run the

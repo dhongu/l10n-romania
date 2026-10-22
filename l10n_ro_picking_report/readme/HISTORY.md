@@ -1,3 +1,7 @@
+## 20.0.2.0.3 (2026-10-22)
+
+- Listed on Odoo Apps as *Romania - Stock Picking Reports* (was *Romania - Terrabit - Picking Reports*). The technical name `l10n_ro_picking_report` does not change.
+
 ## 20.0.2.0.2 (2026-10-19)
 
 - The settings screen is back: **Inventory > Configuration > Settings > Romanian Stock

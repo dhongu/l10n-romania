@@ -1,3 +1,8 @@
+## 20.0.0.0.3 (2026-10-22)
+
+- Listed on Odoo Apps as *Romania - Stock Accounting Controls* (was *Romania - Stock Accounting Enhancement*), with the same title on the Apps banner.
+  The technical name `l10n_ro_stock_account_enhancement` does not change.
+
 ## 20.0.0.0.2 (2026-10-15)
 
 - Migrare la Odoo 20: `stock.move._get_price_unit` primește noua semnătură

@@ -2,9 +2,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": "Partner Create by VAT from OpenAPI",
+    "name": "Partner Data from OpenAPI",
     "summary": "Romania - Partner Create by VAT from OpenAPI",
-    "version": "20.0.1.0.4",
+    "version": "20.0.1.0.5",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
