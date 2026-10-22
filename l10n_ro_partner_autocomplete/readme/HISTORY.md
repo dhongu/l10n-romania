@@ -1,3 +1,7 @@
+## 19.0.1.0.1 (2026-10-22)
+
+- Depends on `l10n_ro_anaf_partner_lookup`, the new name of `l10n_ro_anaf_lookup`.
+
 ## 19.0.1.0.0 (2026-10-22)
 
 - Initial version: the partner autocomplete answers a Romanian CUI (with or without `RO`) from
