@@ -19,5 +19,5 @@
         ],
     },
     "auto_install": True,
-    "development_status": "Beta",
+    "development_status": "Alpha",
 }
