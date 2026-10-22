@@ -370,34 +370,57 @@ ul.auto-toc {
 !! source digest: sha256:73190119f2e448f62f527eb70ed227e98874e1c5ad6bfe153025f7cbd333f047
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_pos_partner_efactura"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
-<p>When a customer is created or edited from the Point of Sale, the partner
-form requires the data an e-Factura (CIUS-RO) invoice needs before it
-can be sent to SPV:</p>
+<p>A company buying at the till is identified by its CUI, and e-Factura
+(SPV) refuses an invoice whose customer data is incomplete. This module
+covers both at the Point of Sale.</p>
+<p><strong>The data e-Factura needs.</strong> When a customer is created or edited from
+the Point of Sale, the partner form requires the data an e-Factura
+(CIUS-RO) invoice needs before it can be sent to SPV:</p>
 <ul class="simple">
 <li>street, city, state (county) and country;</li>
 <li>the Tax ID (CUI) for companies;</li>
 <li>for Bucharest, the city must be the sector (<tt class="docutils literal">Sector 1</tt> …
 <tt class="docutils literal">Sector 6</tt>).</li>
 </ul>
-<p>The data is filled in from ANAF when a partner create-by-VAT module is
-installed. When ANAF does not answer, the fields stay editable and the
-cashier fills them in manually; the partner cannot be saved until they
-are complete.</p>
-<p>The rules apply only to the form opened from POS; partners created from
-the back office are not affected. Contact persons of a company are not
-checked, their address comes from the company.</p>
+<p>When ANAF does not answer, the fields stay editable and the cashier
+fills them in manually; the partner cannot be saved until they are
+complete. The rules apply only to the form opened from POS; partners
+created from the back office are not affected. Contact persons of a
+company are not checked, their address comes from the company.</p>
+<p><strong>The customer by CUI.</strong> Typing a CUI (with or without <tt class="docutils literal">RO</tt>) in the
+<em>Choose customer</em> search that finds nobody in the Point of Sale shows
+<strong>Search ANAF</strong>:</p>
+<ul class="simple">
+<li>a customer already on file under that CUI is offered, even when it is
+not loaded at the till;</li>
+<li>otherwise the company is fetched from ANAF and created;</li>
+<li>the partner form then opens with the data from ANAF and a warning
+listing what looks wrong: missing data, a street without a number, a
+city outside its county. The customer goes on the order only after
+<strong>Save</strong>; closing the form leaves it off the order and still to
+confirm, so picking it later from the list opens the form again;</li>
+<li>a company struck off at ANAF is refused; ANAF not answering is told
+apart from a company that does not exist.</li>
+</ul>
+<p>With <em>Romania - Partner Autocomplete from ANAF</em> installed, the same ANAF
+data is also offered while typing the CUI in the <em>Tax ID</em> of the
+customer form, as in the back office.</p>
+<p><strong>The receipt stays a receipt.</strong> Choosing a company as the customer does
+not tick the invoice: in Romania the fiscal receipt settles the sale on
+its own, and the invoice is issued only when the customer asks for it.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.0.0 (2026-10-21)</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.1.0 (2026-10-22)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-3">19.0.1.0.0 (2026-10-21)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-6">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-7">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-7">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-8">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -405,31 +428,45 @@ checked, their address comes from the company.</p>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-2">19.0.1.0.0 (2026-10-21)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-2">19.0.1.1.0 (2026-10-22)</a></h2>
+<ul class="simple">
+<li>Search by CUI in the customer list of the Point of Sale: a customer on
+file is offered, otherwise the company is fetched from ANAF
+(<tt class="docutils literal">l10n_ro_anaf_lookup</tt>, no OCA module) and the cashier confirms its
+data in the partner form before it goes on the order.</li>
+<li>Choosing a company as the customer no longer ticks the invoice.</li>
+<li>Takes over the confirmation of <tt class="docutils literal">l10n_ro_pos_partner_efactura_anaf</tt>,
+which is removed, and excludes <tt class="docutils literal">l10n_ro_pos_partner</tt> (OCA).</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.0.0 (2026-10-21)</a></h2>
 <ul class="simple">
 <li>Initial version: the partner form opened from POS requires street,
 city, state, country, the Tax ID for companies and the sector for
 Bucharest, so the invoice can be sent to e-Factura (SPV).</li>
+<li>Romanian translation of the messages; consultant sheet with
+screenshots generated from <tt class="docutils literal">tests/test_screenshots.py</tt>.</li>
 </ul>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-4">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-5">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-5">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">Authors</a></h2>
 <ul class="simple">
 <li>Dorin Hongu</li>
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-6">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -440,7 +477,7 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-8">Maintainers</a></h2>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_pos_partner_efactura">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>
