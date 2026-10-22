@@ -153,11 +153,10 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         values["city"] = self._prepare_city(
             address("ddenumire_Localitate", "sdenumire_Localitate"), state_code, zip_code
         )
-        if general.get("nrRegCom"):
-            values["company_registry"] = self._clean(general["nrRegCom"])
-            # Where the Romanian localization keeps its own trade register field, fill it too
-            if "nrc" in self.env["res.partner"]._fields:
-                values["nrc"] = values["company_registry"]
+        # The trade register number (J…) goes to its own field of the Romanian localization. The
+        # Company ID (company_registry) is the CUI, which l10n_ro computes from the Tax ID
+        if general.get("nrRegCom") and "nrc" in self.env["res.partner"]._fields:
+            values["nrc"] = self._clean(general["nrRegCom"])
         if general.get("telefon"):
             values["phone"] = self._clean(general["telefon"])
         return values
