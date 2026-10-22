@@ -1,3 +1,8 @@
+## 19.0.1.0.1 (2026-10-23)
+
+- A village is the locality without its commune or town: "Sat Filipești Com. Filipești" gives
+  "Filipești"; the "Orș." prefix of a town is removed too.
+
 ## 19.0.1.0.0 (2026-10-22)
 
 - Initial version: ANAF lookup by CUI (v9 service) returning the partner data, the VAT payer,
