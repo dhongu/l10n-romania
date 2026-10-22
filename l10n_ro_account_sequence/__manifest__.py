@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    "name": "Romania - Cash Sequence",
-    "version": "18.0.1.0.3",
+    "name": "Romania - Cash Journal Numbering",
+    "version": "18.0.1.0.4",
     "author": "Terrabit,Odoo Community Association (OCA)",
     "summary": "Romania - Cash Sequence",
     "development_status": "Mature",

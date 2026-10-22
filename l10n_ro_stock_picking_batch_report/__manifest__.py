@@ -3,10 +3,10 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Romania - Terrabit - Picking batch Report",
+    "name": "Romania - Batch Delivery Note",
     "summary": "Rapoarte din batch: aviz",
     "license": "AGPL-3",
-    "version": "18.0.0.0.1",
+    "version": "18.0.0.0.2",
     "author": "Dan Stoica," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "category": "Localization",

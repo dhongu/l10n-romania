@@ -3,8 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": "MT940 CEC Format Bank Statements Import",
-    "version": "18.0.0.1.1",
+    "name": "CEC Bank MT940 Statement Import",
+    "version": "18.0.0.1.2",
     "license": "AGPL-3",
     "author": "NextERP Romania SRL," "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
