@@ -30,7 +30,7 @@ class ResPartner(models.Model):
     @api.model
     def _l10n_ro_anaf_autocomplete(self, query, query_country_id):
         """Suggestions from ANAF for a Romanian CUI; ``None`` to leave the query to IAP"""
-        lookup = self.env["l10n.ro.anaf.lookup"]
+        lookup = self.env["l10n.ro.anaf.partner.lookup"]
         query = (query or "").strip()
         cui = lookup.normalize_cui(query)
         if not lookup.is_valid_cui(cui):

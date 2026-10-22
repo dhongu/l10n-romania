@@ -120,7 +120,7 @@ class ResPartner(models.Model):
         The cashier searched by CUI: a customer on file under it is the right one, whatever its name.
         """
         config = self.env["pos.config"].browse(config_id)
-        lookup = self.env["l10n.ro.anaf.lookup"]
+        lookup = self.env["l10n.ro.anaf.partner.lookup"]
         cui = lookup.normalize_cui(vat)
         if not lookup.is_valid_cui(cui):
             raise UserError(self.env._("%(vat)s is not a valid CUI.", vat=vat))
@@ -142,7 +142,7 @@ class ResPartner(models.Model):
 
     @api.model
     def _l10n_ro_pos_partner_from_anaf(self, cui):
-        result = self.env["l10n.ro.anaf.lookup"].lookup(cui)
+        result = self.env["l10n.ro.anaf.partner.lookup"].lookup(cui)
         if result["state"] == "unavailable":
             raise UserError(
                 self.env._("ANAF did not answer. Try again in a moment, or add the customer by hand with Create.")

@@ -1,3 +1,7 @@
+## 19.0.1.1.1 (2026-10-22)
+
+- Depends on `l10n_ro_anaf_partner_lookup`, the new name of `l10n_ro_anaf_lookup`.
+
 ## 19.0.1.1.0 (2026-10-22)
 
 - Search by CUI in the customer list of the Point of Sale: a customer on file is offered, otherwise
