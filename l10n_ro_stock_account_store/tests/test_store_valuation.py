@@ -7,8 +7,7 @@ from odoo.tests import tagged
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-@tagged("post_install", "-at_install")
-class TestStoreValuation(AccountTestInvoicingCommon):
+class StoreValuationCommon(AccountTestInvoicingCommon):
     @classmethod
     @AccountTestInvoicingCommon.setup_country("ro")
     def setUpClass(cls):
@@ -113,6 +112,9 @@ class TestStoreValuation(AccountTestInvoicingCommon):
     def _store_lines(self, move):
         return move.l10n_ro_store_account_move_id.line_ids.sorted(lambda line: (line.account_id.code, line.debit))
 
+
+@tagged("post_install", "-at_install")
+class TestStoreValuation(StoreValuationCommon):
     def test_reception_in_store(self):
         """Reception at cost 60, sale price 100 + 21% VAT.
 
@@ -145,9 +147,9 @@ class TestStoreValuation(AccountTestInvoicingCommon):
             -210.0,
         )
 
-    def test_delivery_from_store_releases_at_entry_price(self):
-        """The exit releases markup and VAT at the entry sale price, even if
-        the sale price of the product changed in between."""
+    def test_delivery_from_store_releases_at_revalued_price(self):
+        """A sale price change revaluates the stock of the store (100 -> 150),
+        so the exit releases markup and VAT at the new sale price."""
         self._receive_in_store()
         self.product.list_price = 150.0
         move = self._move(
@@ -162,24 +164,24 @@ class TestStoreValuation(AccountTestInvoicingCommon):
             [
                 {
                     "value": 240.0,
-                    "l10n_ro_store_sale_amount": 484.0,
-                    "l10n_ro_store_markup_amount": -160.0,
-                    "l10n_ro_store_tax_amount": -84.0,
+                    "l10n_ro_store_sale_amount": 726.0,
+                    "l10n_ro_store_markup_amount": -360.0,
+                    "l10n_ro_store_tax_amount": -126.0,
                 }
             ],
         )
         lines = move.l10n_ro_store_account_move_id.line_ids
         self.assertEqual(
             sum(lines.filtered(lambda x: x.account_id == self.account_371).mapped("balance")),
-            -244.0,
+            -486.0,
         )
         self.assertEqual(
             sum(lines.filtered(lambda x: x.account_id == self.account_378).mapped("balance")),
-            160.0,
+            360.0,
         )
         self.assertEqual(
             sum(lines.filtered(lambda x: x.account_id == self.account_4428).mapped("balance")),
-            84.0,
+            126.0,
         )
         self.assertFalse(lines.filtered("is_storno"))
 
@@ -238,9 +240,9 @@ class TestStoreValuation(AccountTestInvoicingCommon):
         with self.assertRaises(UserError):
             self._receive_in_store()
 
-    def test_exit_from_shelf_uses_store_entry_price(self):
+    def test_exit_from_shelf_uses_store_price(self):
         """Goods received on the store and sold from one of its shelves are
-        released at the entry price of the store."""
+        released at the price of the store, revalued after the price change."""
         shelf = self.env["stock.location"].create(
             {
                 "name": "Raft 1",
@@ -259,7 +261,7 @@ class TestStoreValuation(AccountTestInvoicingCommon):
             picking_type=self.warehouse.out_type_id,
             partner=self.customer,
         )
-        self.assertEqual(move.l10n_ro_store_sale_amount, 242.0)
+        self.assertEqual(move.l10n_ro_store_sale_amount, 363.0)
 
     def test_dedicated_uneligible_tax_account(self):
         account_44282 = self._get_or_create_account("442802", "liability_current")

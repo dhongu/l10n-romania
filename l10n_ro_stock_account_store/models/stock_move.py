@@ -99,6 +99,39 @@ class StockMove(models.Model):
             )
         return self.browse()
 
+    def _l10n_ro_get_store_revaluation(self, ref_move):
+        """Last revaluation of the product in the store left by this move, if newer than `ref_move`.
+
+        After a sale price change the goods leave the store at the revalued price, not at the
+        price of their last entry. A return keeps the amounts of the move it returns.
+        """
+        self.ensure_one()
+        if self._l10n_ro_get_store_direction() != "out" or self.origin_returned_move_id.l10n_ro_store_account_move_id:
+            return self.env["l10n.ro.store.revaluation"]
+        domain = [
+            ("product_id", "=", self.product_id.id),
+            ("location_id", "=", self._l10n_ro_get_store_root_location(self.location_id).id),
+            ("company_id", "=", self.company_id.id),
+            ("quantity", ">", 0),
+        ]
+        if ref_move:
+            domain.append(("datetime", ">=", ref_move.date))
+        if self.date:
+            # an exit dated before the revaluation leaves at the price of that date
+            domain.append(("datetime", "<=", self.date))
+        return self.env["l10n.ro.store.revaluation"].sudo().search(domain, order="datetime desc, id desc", limit=1)
+
+    def _l10n_ro_get_store_booked_balance(self):
+        """(quantity, sale value, VAT) booked in the store left by an exit, else False."""
+        self.ensure_one()
+        if self._l10n_ro_get_store_direction() != "out" or self.origin_returned_move_id.l10n_ro_store_account_move_id:
+            return False
+        store = self._l10n_ro_get_store_root_location(self.location_id)
+        balance = (
+            self.env["l10n.ro.store.revaluation"].sudo()._get_store_balance(self.product_id, store, self.company_id)
+        )
+        return balance if self.product_uom.compare(balance[0], 0.0) > 0 else False
+
     def _l10n_ro_get_store_sale_price(self):
         """Unit sale price, in the product UoM, of goods entering the store.
 
@@ -120,7 +153,16 @@ class StockMove(models.Model):
         currency = self.company_id.currency_id
         qty = self.product_qty
         ref_move = self._l10n_ro_get_store_reference_move()
-        if ref_move:
+        revaluation = self._l10n_ro_get_store_revaluation(ref_move)
+        booked = self._l10n_ro_get_store_booked_balance()
+        if booked and self.product_uom.compare(qty, booked[0]) >= 0:
+            # the move empties the stock booked at sale price: release exactly what is left
+            sale_amount, tax_amount = booked[1], abs(booked[2])
+        elif revaluation:
+            ratio = qty / revaluation.quantity
+            sale_amount = currency.round(revaluation.new_sale_amount * ratio)
+            tax_amount = currency.round(revaluation.new_tax_amount * ratio)
+        elif ref_move:
             ratio = qty / ref_move.product_qty
             sale_amount = currency.round(ref_move.l10n_ro_store_sale_amount * ratio)
             tax_amount = currency.round(abs(ref_move.l10n_ro_store_tax_amount) * ratio)
@@ -238,6 +280,13 @@ class StockMove(models.Model):
             account_move._post()
             move.l10n_ro_store_account_move_id = account_move
             account_moves |= account_move
+            if move.origin_returned_move_id:
+                # a return moves the goods at the price of the move it returns: bring the
+                # rest of the store stock back to the current store price
+                location = move.location_dest_id if move._l10n_ro_get_store_direction() == "in" else move.location_id
+                self.env["l10n.ro.store.revaluation"]._l10n_ro_revaluate_store(
+                    move.product_id, move._l10n_ro_get_store_root_location(location), move.company_id, origin_move=move
+                )
         return account_moves
 
     def _create_account_move_ro_extra(self):
