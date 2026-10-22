@@ -4,14 +4,16 @@
 
 {
     "name": "Romania - POS Partner e-Factura Check",
-    "summary": "Require the partner data needed by e-Factura (SPV) when a customer is created in POS",
+    "summary": "Customer by CUI from ANAF at the till, with the data e-Factura (SPV) needs",
     "license": "AGPL-3",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],
-    "depends": ["point_of_sale", "l10n_ro_edi"],
+    "depends": ["point_of_sale", "l10n_ro_edi", "l10n_ro_anaf_lookup"],
+    # The same search by CUI at the till, from OCA: two ANAF buttons would be one too many
+    "excludes": ["l10n_ro_pos_partner"],
     "data": ["views/res_partner_view.xml"],
     "assets": {
         "point_of_sale._assets_pos": [

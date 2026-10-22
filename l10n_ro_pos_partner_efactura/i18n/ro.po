@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 18:40+0000\n"
+"POT-Creation-Date: 2026-10-22 20:08+0000\n"
 "PO-Revision-Date: 2026-10-21 18:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -15,6 +15,63 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-python
+#: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
+msgid "%(vat)s is not a valid CUI."
+msgstr "%(vat)s nu este un CUI valid."
+
+#. module: l10n_ro_pos_partner_efactura
+#: model_terms:ir.ui.view,arch_db:l10n_ro_pos_partner_efactura.view_partner_form_pos_efactura_anaf
+msgid ""
+"<strong>Data fetched from ANAF.</strong>\n"
+"                    Check it against the customer's documents and save: the ANAF data is often\n"
+"                    incomplete or outdated, and e-Factura (SPV) refuses an invoice with a wrong address."
+msgstr ""
+"<strong>Date preluate din ANAF.</strong>\n"
+"                    Verifică-le cu documentele clientului și salvează: datele ANAF sunt adesea\n"
+"                    incomplete sau neactualizate, iar e-Factura (SPV) respinge factura cu adresă greșită."
+
+#. module: l10n_ro_pos_partner_efactura
+#: model:ir.model.fields,field_description:l10n_ro_pos_partner_efactura.field_res_partner__l10n_ro_pos_anaf_to_confirm
+#: model:ir.model.fields,field_description:l10n_ro_pos_partner_efactura.field_res_users__l10n_ro_pos_anaf_to_confirm
+msgid "ANAF data to confirm"
+msgstr "Date ANAF de confirmat"
+
+#. module: l10n_ro_pos_partner_efactura
+#: model:ir.model.fields,field_description:l10n_ro_pos_partner_efactura.field_res_partner__l10n_ro_pos_anaf_warnings
+#: model:ir.model.fields,field_description:l10n_ro_pos_partner_efactura.field_res_users__l10n_ro_pos_anaf_warnings
+msgid "ANAF data warnings"
+msgstr "Avertizări date ANAF"
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-python
+#: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
+msgid ""
+"ANAF did not answer. Try again in a moment, or add the customer by hand with"
+" Create."
+msgstr ""
+"ANAF nu a răspuns. Încercați din nou peste puțin timp sau adăugați clientul "
+"manual, cu Creează."
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-python
+#: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
+msgid "ANAF has no company registered under the CUI %(cui)s."
+msgstr "La ANAF nu există nicio firmă înregistrată cu CUI-ul %(cui)s."
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-python
+#: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
+msgid "ANAF lists the company %(name)s (CUI %(cui)s) as struck off."
+msgstr "ANAF arată firma %(name)s (CUI %(cui)s) ca radiată."
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-javascript
+#: code:addons/l10n_ro_pos_partner_efactura/static/src/app/screens/partner_list/partner_list.esm.js:0
+msgid "Check the customer data fetched from ANAF before saving."
+msgstr "Verifică datele clientului preluate din ANAF înainte de salvare."
 
 #. module: l10n_ro_pos_partner_efactura
 #. odoo-python
@@ -39,15 +96,38 @@ msgid "Display Name"
 msgstr "Nume afișat"
 
 #. module: l10n_ro_pos_partner_efactura
+#. odoo-javascript
+#: code:addons/l10n_ro_pos_partner_efactura/static/src/app/screens/partner_list/partner_list.esm.js:0
+msgid "Error fetching data from ANAF"
+msgstr "Eroare la preluarea datelor din ANAF"
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-python
+#: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
+msgid ""
+"Fetched from ANAF in the Point of Sale. ANAF lists the company as an "
+"inactive taxpayer."
+msgstr ""
+"Preluat din ANAF în Punctul de vânzare. ANAF arată firma ca și contribuabil "
+"inactiv."
+
+#. module: l10n_ro_pos_partner_efactura
 #. odoo-python
 #: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
 msgid "For Bucharest the city must be the sector, e.g. 'Sector 1'"
-msgstr "Pentru București, localitatea trebuie să fie sectorul, de ex. 'Sector 1'"
+msgstr ""
+"Pentru București, localitatea trebuie să fie sectorul, de ex. 'Sector 1'"
 
 #. module: l10n_ro_pos_partner_efactura
 #: model:ir.model.fields,field_description:l10n_ro_pos_partner_efactura.field_res_partner__id
 msgid "ID"
 msgstr "ID"
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-javascript
+#: code:addons/l10n_ro_pos_partner_efactura/static/src/app/screens/partner_list/partner_list.esm.js:0
+msgid "Search ANAF (CUI: %s)"
+msgstr "Caută în ANAF (CUI: %s)"
 
 #. module: l10n_ro_pos_partner_efactura
 #. odoo-python
@@ -70,6 +150,22 @@ msgstr "CUI"
 #. module: l10n_ro_pos_partner_efactura
 #. odoo-python
 #: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
+msgid "The city %(city)s is not in the county %(state)s"
+msgstr "Localitatea %(city)s nu este în județul %(state)s"
+
+#. module: l10n_ro_pos_partner_efactura
+#: model:ir.model.fields,help:l10n_ro_pos_partner_efactura.field_res_partner__l10n_ro_pos_anaf_to_confirm
+#: model:ir.model.fields,help:l10n_ro_pos_partner_efactura.field_res_users__l10n_ro_pos_anaf_to_confirm
+msgid ""
+"The customer was fetched from ANAF in the Point of Sale and the cashier has "
+"not confirmed its data yet."
+msgstr ""
+"Clientul a fost preluat din ANAF în Punctul de vânzare, iar casierul nu i-a "
+"confirmat încă datele."
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-python
+#: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
 msgid ""
 "The partner %(partner)s cannot receive an e-Factura invoice:\n"
 "- %(missing)s\n"
@@ -78,3 +174,9 @@ msgstr ""
 "Partenerul %(partner)s nu poate primi o factură e-Factura:\n"
 "- %(missing)s\n"
 "Dacă datele nu au putut fi preluate de la ANAF, completați-le manual."
+
+#. module: l10n_ro_pos_partner_efactura
+#. odoo-python
+#: code:addons/l10n_ro_pos_partner_efactura/models/res_partner.py:0
+msgid "The street has no number"
+msgstr "Strada nu are număr"

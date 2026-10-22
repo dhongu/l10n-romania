@@ -22,23 +22,47 @@ Romania - POS Partner e-Factura Check
 
 |badge1| |badge2| |badge3|
 
-When a customer is created or edited from the Point of Sale, the partner
-form requires the data an e-Factura (CIUS-RO) invoice needs before it
-can be sent to SPV:
+A company buying at the till is identified by its CUI, and e-Factura
+(SPV) refuses an invoice whose customer data is incomplete. This module
+covers both at the Point of Sale.
+
+**The data e-Factura needs.** When a customer is created or edited from
+the Point of Sale, the partner form requires the data an e-Factura
+(CIUS-RO) invoice needs before it can be sent to SPV:
 
 - street, city, state (county) and country;
 - the Tax ID (CUI) for companies;
 - for Bucharest, the city must be the sector (``Sector 1`` ...
   ``Sector 6``).
 
-The data is filled in from ANAF when a partner create-by-VAT module is
-installed. When ANAF does not answer, the fields stay editable and the
-cashier fills them in manually; the partner cannot be saved until they
-are complete.
+When ANAF does not answer, the fields stay editable and the cashier
+fills them in manually; the partner cannot be saved until they are
+complete. The rules apply only to the form opened from POS; partners
+created from the back office are not affected. Contact persons of a
+company are not checked, their address comes from the company.
 
-The rules apply only to the form opened from POS; partners created from
-the back office are not affected. Contact persons of a company are not
-checked, their address comes from the company.
+**The customer by CUI.** Typing a CUI (with or without ``RO``) in the
+*Choose customer* search that finds nobody in the Point of Sale shows
+**Search ANAF**:
+
+- a customer already on file under that CUI is offered, even when it is
+  not loaded at the till;
+- otherwise the company is fetched from ANAF and created;
+- the partner form then opens with the data from ANAF and a warning
+  listing what looks wrong: missing data, a street without a number, a
+  city outside its county. The customer goes on the order only after
+  **Save**; closing the form leaves it off the order and still to
+  confirm, so picking it later from the list opens the form again;
+- a company struck off at ANAF is refused; ANAF not answering is told
+  apart from a company that does not exist.
+
+With *Romania - Partner Autocomplete from ANAF* installed, the same ANAF
+data is also offered while typing the CUI in the *Tax ID* of the
+customer form, as in the back office.
+
+**The receipt stays a receipt.** Choosing a company as the customer does
+not tick the invoice: in Romania the fiscal receipt settles the sale on
+its own, and the invoice is issued only when the customer asks for it.
 
 **Table of contents**
 
@@ -48,12 +72,25 @@ checked, their address comes from the company.
 Changelog
 =========
 
+19.0.1.1.0 (2026-10-22)
+-----------------------
+
+- Search by CUI in the customer list of the Point of Sale: a customer on
+  file is offered, otherwise the company is fetched from ANAF
+  (``l10n_ro_anaf_lookup``, no OCA module) and the cashier confirms its
+  data in the partner form before it goes on the order.
+- Choosing a company as the customer no longer ticks the invoice.
+- Takes over the confirmation of ``l10n_ro_pos_partner_efactura_anaf``,
+  which is removed, and excludes ``l10n_ro_pos_partner`` (OCA).
+
 19.0.1.0.0 (2026-10-21)
 -----------------------
 
 - Initial version: the partner form opened from POS requires street,
   city, state, country, the Tax ID for companies and the sector for
   Bucharest, so the invoice can be sent to e-Factura (SPV).
+- Romanian translation of the messages; consultant sheet with
+  screenshots generated from ``tests/test_screenshots.py``.
 
 Bug Tracker
 ===========
