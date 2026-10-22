@@ -3,11 +3,11 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Romania - Terrabit - Picking Reports",
+    "name": "Romania - Stock Picking Reports",
     "summary": "Rapoarte: NIR, aviz, bon consum",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.2.0.1",
+    "version": "19.0.2.0.2",
     "development_status": "Mature",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",

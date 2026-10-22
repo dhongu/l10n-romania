@@ -1,5 +1,5 @@
 =================================
-Romania - Localization Config Fix
+Romania - Settings Visibility Fix
 =================================
 
 ..

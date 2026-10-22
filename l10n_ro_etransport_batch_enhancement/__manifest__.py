@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "eTransport Batch Enhancement",
-    "version": "19.0.0.3.4",
+    "name": "e-Transport for Transfer Batches",
+    "version": "19.0.0.3.5",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport Batch Enhancement",

@@ -5,7 +5,7 @@
     "name": "Romania - Website ANAF",
     "summary": "ANAF on the website address forms: company filled in while the tax code is typed, "
     "checked when the address is sent",
-    "version": "19.0.1.1.0",
+    "version": "19.0.1.1.1",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "license": "AGPL-3",
