@@ -1,3 +1,7 @@
+## 18.0.0.2.6 (2026-10-22)
+
+- Listed on Odoo Apps as *e-Transport Enhancements* (was *eTransport Enhancement*). The technical name `l10n_ro_etransport_enhancement` does not change.
+
 ## 18.0.0.2.4 (2026-07-08)
 
 - **Fixed ANAF rejection: "Attribute 'greutateBruta' must appear on element

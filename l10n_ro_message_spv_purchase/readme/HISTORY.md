@@ -1,3 +1,7 @@
+## 18.0.0.0.4 (2026-10-22)
+
+- Listed on Odoo Apps as *SPV Messages to Purchase Orders* (was *Purchase Message SPV*). The technical name `l10n_ro_message_spv_purchase` does not change.
+
 ## 18.0.0.0.3 (2026-08-20)
 
 - Fix: `_purchase_search_domain_from_ref` matched purchase orders by reference

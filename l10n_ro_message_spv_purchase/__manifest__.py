@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Purchase Message SPV",
-    "version": "18.0.0.0.3",
+    "name": "SPV Messages to Purchase Orders",
+    "version": "18.0.0.0.4",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "Add SPV message on purchase orders for Romania",

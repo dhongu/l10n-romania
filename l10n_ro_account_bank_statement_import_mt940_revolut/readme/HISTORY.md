@@ -1,3 +1,7 @@
+## 18.0.0.1.2 (2026-10-22)
+
+- Listed on Odoo Apps as *Revolut MT940 Statement Import* (was *MT940 Revolut Format Bank Statements Import*). The technical name `l10n_ro_account_bank_statement_import_mt940_revolut` does not change.
+
 ## 18.0.0.1.1 (2026-09-04)
 
 - Fix: `_revolut_journal_exists` looked up the matching journal by IBAN alone

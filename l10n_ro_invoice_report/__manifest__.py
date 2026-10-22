@@ -2,9 +2,9 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Romania - Invoice Report Terrabit",
+    "name": "Romania - Invoice Report",
     "summary": "Localizare Terrabit - Facturi, Chitanta",
-    "version": "18.0.3.4.28",
+    "version": "18.0.3.4.29",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",

@@ -1,8 +1,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    "name": "Romania - Stock Accounting Check",
+    "name": "Romania - Stock vs Ledger Check",
     "license": "AGPL-3",
-    "version": "18.0.1.0.7",
+    "version": "18.0.1.0.8",
     "countries": ["ro"],
     "author": "Terrabit,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",

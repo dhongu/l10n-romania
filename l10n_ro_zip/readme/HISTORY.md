@@ -1,3 +1,7 @@
+## 18.0.0.0.2 (2026-10-22)
+
+- Listed on Odoo Apps as *Romania - Postal Codes* (was *Romania - Coduri Postale*). The technical name `l10n_ro_zip` does not change.
+
 ## 18.0.0.0.1
 
 - **The postal code search now matches word by word, so the word order no longer

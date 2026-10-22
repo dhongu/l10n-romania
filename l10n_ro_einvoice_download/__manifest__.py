@@ -1,7 +1,7 @@
 {
-    "name": "Invoice Files Export",
+    "name": "e-Invoice Files Export",
     "summary": "A zip with files form invoices",
-    "version": "18.0.0.0.2",
+    "version": "18.0.0.0.3",
     "author": "Terrabit, Voicu Stefan, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",

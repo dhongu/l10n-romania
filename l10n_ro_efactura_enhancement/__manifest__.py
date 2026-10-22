@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "eFactura Enhancement",
-    "version": "18.0.0.3.4",
+    "name": "e-Factura Enhancements",
+    "version": "18.0.0.3.5",
     "author": "Terrabit, Dorin Hongu, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "summary": "eFactura Enhancement",

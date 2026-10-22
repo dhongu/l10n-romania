@@ -1,3 +1,7 @@
+## 18.0.0.3.5 (2026-10-22)
+
+- Listed on Odoo Apps as *e-Factura Enhancements* (was *eFactura Enhancement*). The technical name `l10n_ro_efactura_enhancement` does not change.
+
 ## 18.0.0.3.4 (2026-07-01)
 
 - **Emailul către client este acum un cron separat.** Trimiterea emailului
