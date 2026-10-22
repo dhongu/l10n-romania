@@ -4,7 +4,7 @@ other modules can create or check a customer without depending on other localiza
 - **CUI as typed**: with or without `RO`, with spaces or dashes; the control digit is checked
   before ANAF is asked, so a mistyped code does not cost a request.
 - **Partner data ready to save**: name, Tax ID (with `RO` only for a VAT payer), street with its
-  number, address details, locality without the `Mun.`/`Oraș`/`Com.` prefix, county, postal code,
+  number, address details, locality without the `Mun.`/`Oraș`/`Com.` prefix (a village without its commune), county, postal code,
   trade register number and phone. The fiscal domicile is used, the registered office when it is
   missing.
 - **Bucharest**: the locality is the sector (`Sector 3`), as e-Factura requires; when ANAF does

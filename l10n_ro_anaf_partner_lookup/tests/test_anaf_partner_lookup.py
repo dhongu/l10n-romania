@@ -104,6 +104,26 @@ class TestAnafPartnerLookup(TransactionCase):
         self.assertEqual(result["partner"]["zip"], "030167")
         self.assertEqual(result["partner"]["state_id"], self.env.ref("base.RO_B").id)
 
+    def test_locality_without_administrative_units(self):
+        for anaf_locality, city in (
+            ("Mun. Timişoara", "Timișoara"),
+            ("Orş. Lipova", "Lipova"),
+            ("Oraş Buziaş", "Buziaș"),
+            # A village is the locality, not the commune or the town it belongs to
+            ("Sat Filipeşti Com. Filipeşti", "Filipești"),
+            ("Sat Româneşti Com. Tomeşti", "Românești"),
+            ("Sat Bacova Orş. Buziaş", "Bacova"),
+            ("Com. Recaş", "Recaș"),
+            # A name only starting like a unit stays whole
+            ("Sat Comăneşti Com. Comăneşti", "Comănești"),
+            ("Sat Muntenii de Sus Com. Muntenii de Sus", "Muntenii de Sus"),
+            ("Sat Valea Sat Mare Com. Bistra", "Valea Sat Mare"),
+        ):
+            answer = anaf_result()
+            answer["adresa_domiciliu_fiscal"]["ddenumire_Localitate"] = anaf_locality
+            result, _request = self._lookup(answer)
+            self.assertEqual(result["partner"]["city"], city, anaf_locality)
+
     def test_bucharest_sector_from_postal_code(self):
         answer = anaf_result()
         answer["adresa_domiciliu_fiscal"].update(
