@@ -1,3 +1,8 @@
+## 19.0.0.0.6 (2026-10-22)
+
+- Listed on Odoo Apps as *Romania - Batch Delivery Note* (was *Romania - Terrabit - Picking batch Report*), with the same title on the Apps banner.
+  The technical name `l10n_ro_stock_picking_batch_report` does not change.
+
 ## 19.0.0.0.5 (2026-10-12)
 
 - Depends on `l10n_ro_picking_report`, the new name of `l10n_ro_stock_picking_report`.
