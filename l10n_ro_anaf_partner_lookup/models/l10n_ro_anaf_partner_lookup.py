@@ -27,9 +27,9 @@ BUCHAREST_ZIP_SECTOR_RE = re.compile(r"^0([1-6])\d{4}$")
 LOCALITY_PREFIX_RE = re.compile(r"^(mun\.?|municipiul|oraș|oras|or\.|com\.?|comuna|sat)\s+", re.IGNORECASE)
 
 
-class L10nRoAnafLookup(models.AbstractModel):
-    _name = "l10n.ro.anaf.lookup"
-    _description = "ANAF company lookup"
+class L10nRoAnafPartnerLookup(models.AbstractModel):
+    _name = "l10n.ro.anaf.partner.lookup"
+    _description = "ANAF partner lookup"
 
     @api.model
     def normalize_cui(self, vat):
@@ -81,9 +81,9 @@ class L10nRoAnafLookup(models.AbstractModel):
         get_param = self.env["ir.config_parameter"].sudo().get_param
         try:
             response = requests.post(
-                get_param("l10n_ro_anaf_lookup.url", ANAF_URL),
+                get_param("l10n_ro_anaf_partner_lookup.url", ANAF_URL),
                 json=[{"cui": int(cui), "data": fields.Date.to_string(fields.Date.context_today(self))}],
-                timeout=int(get_param("l10n_ro_anaf_lookup.timeout", ANAF_TIMEOUT)),
+                timeout=int(get_param("l10n_ro_anaf_partner_lookup.timeout", ANAF_TIMEOUT)),
             )
             response.raise_for_status()
             found = response.json().get("found") or []

@@ -3,7 +3,9 @@ from unittest.mock import patch
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
-REQUEST_PATH = "odoo.addons.l10n_ro_anaf_lookup.models.l10n_ro_anaf_lookup.L10nRoAnafLookup._request"
+REQUEST_PATH = (
+    "odoo.addons.l10n_ro_anaf_partner_lookup.models.l10n_ro_anaf_partner_lookup.L10nRoAnafPartnerLookup._request"
+)
 CUI = "30834857"
 
 
@@ -35,11 +37,11 @@ def anaf_result(**general):
 
 
 @tagged("post_install", "-at_install")
-class TestAnafLookup(TransactionCase):
+class TestAnafPartnerLookup(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.Lookup = cls.env["l10n.ro.anaf.lookup"]
+        cls.Lookup = cls.env["l10n.ro.anaf.partner.lookup"]
 
     def _lookup(self, answer, vat=CUI):
         with patch(REQUEST_PATH, return_value=answer) as request:

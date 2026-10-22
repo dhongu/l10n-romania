@@ -3,7 +3,7 @@ from unittest.mock import patch
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
-from odoo.addons.l10n_ro_anaf_lookup.tests.test_anaf_lookup import CUI, REQUEST_PATH, anaf_result
+from odoo.addons.l10n_ro_anaf_partner_lookup.tests.test_anaf_partner_lookup import CUI, REQUEST_PATH, anaf_result
 
 IAP_PATH = (
     "odoo.addons.partner_autocomplete.models.iap_autocomplete_api.IapAutocompleteApi._request_partner_autocomplete"

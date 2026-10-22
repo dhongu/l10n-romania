@@ -20,5 +20,5 @@ The module has no screen of its own; it is used by
 [l10n_ro_pos_partner_efactura](../l10n_ro_pos_partner_efactura) to bring a company customer in at
 the till.
 
-Optional system parameters: `l10n_ro_anaf_lookup.url` (the ANAF service) and
-`l10n_ro_anaf_lookup.timeout` (seconds, 10 by default).
+Optional system parameters: `l10n_ro_anaf_partner_lookup.url` (the ANAF service) and
+`l10n_ro_anaf_partner_lookup.timeout` (seconds, 10 by default).

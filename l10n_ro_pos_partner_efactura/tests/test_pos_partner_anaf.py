@@ -3,7 +3,7 @@ from unittest.mock import patch
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
 
-from odoo.addons.l10n_ro_anaf_lookup.tests.test_anaf_lookup import CUI, REQUEST_PATH, anaf_result
+from odoo.addons.l10n_ro_anaf_partner_lookup.tests.test_anaf_partner_lookup import CUI, REQUEST_PATH, anaf_result
 from odoo.addons.point_of_sale.tests.common import CommonPosTest
 
 
