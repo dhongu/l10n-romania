@@ -1,3 +1,7 @@
+## 20.0.0.9.5 (2026-10-22)
+
+- Listed on Odoo Apps as *e-Transport Enhancements* (was *eTransport Enhancement*). The technical name `l10n_ro_etransport_enhancement` does not change.
+
 ## 20.0.0.9.4 (2026-10-13)
 
 - Banner Odoo Apps (`static/description/main_screenshot.png`), generat din `banner.json`, cu insigna Odoo 20.

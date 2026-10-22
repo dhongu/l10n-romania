@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    "name": "Romania - Set Lang to Romanian",
-    "version": "20.0.0.0.5",
+    "name": "Romania - Website Language by Visitor IP",
+    "version": "20.0.0.0.6",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Set language to romanian if IP is from Romania",

@@ -3,9 +3,9 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Terrabit Sale Order Report",
+    "name": "Romania - Proforma Invoice Report",
     "summary": "Formular Factura Proformae",
-    "version": "20.0.1.0.13",
+    "version": "20.0.1.0.14",
     "author": "Terrabit, Dorin Hongu, Dan Stoica",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

@@ -1,3 +1,7 @@
+## 20.0.1.4.3 (2026-10-22)
+
+- Odoo Apps banner title: *Cash Register* (was *Cash Register Document*), the same as the module name.
+
 ## 20.0.1.4.2 (2026-10-14)
 
 **Corectat** — actualizarea modulului eșua pe bazele cu numere de registru duplicate pe aceeași
