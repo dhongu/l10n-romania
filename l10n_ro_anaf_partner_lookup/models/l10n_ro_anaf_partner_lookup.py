@@ -24,7 +24,13 @@ BUCHAREST_SECTOR_RE = re.compile(r"sector(?:ul)?\s*([1-6])\b", re.IGNORECASE)
 # A Bucharest postal code starts with 0 and the sector: 030167 is in Sector 3
 BUCHAREST_ZIP_SECTOR_RE = re.compile(r"^0([1-6])\d{4}$")
 # Prefixes ANAF puts before the name of the locality
-LOCALITY_PREFIX_RE = re.compile(r"^(mun\.?|municipiul|oraș|oras|or\.|com\.?|comuna|sat)\s+", re.IGNORECASE)
+# The administrative units ANAF writes around the name of the locality:
+# "Mun. Timișoara", "Orș. Lipova", "Sat Filipești Com. Filipești"
+LOCALITY_UNIT = r"(?:mun|municipiul|oraș|oras|orș|ors|or|com|comuna|sat)\.?"
+LOCALITY_PREFIX_RE = re.compile(rf"^{LOCALITY_UNIT}\s+", re.IGNORECASE)
+# The commune or town a village belongs to: only the village is the locality. Stricter than the
+# prefix (abbreviations with their dot, no "Sat"), as it is searched inside the name
+LOCALITY_PARENT_RE = re.compile(r"\s+(?:com\.|comuna|orș\.|ors\.|oraș|oras|mun\.|municipiul)\s+\S.*$", re.IGNORECASE)
 
 
 class L10nRoAnafPartnerLookup(models.AbstractModel):
@@ -147,21 +153,21 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         values["city"] = self._prepare_city(
             address("ddenumire_Localitate", "sdenumire_Localitate"), state_code, zip_code
         )
-        if general.get("nrRegCom"):
-            values["company_registry"] = self._clean(general["nrRegCom"])
-            # Where the Romanian localization keeps its own trade register field, fill it too
-            if "nrc" in self.env["res.partner"]._fields:
-                values["nrc"] = values["company_registry"]
+        # The trade register number (J…) goes to its own field of the Romanian localization. The
+        # Company ID (company_registry) is the CUI, which l10n_ro computes from the Tax ID
+        if general.get("nrRegCom") and "nrc" in self.env["res.partner"]._fields:
+            values["nrc"] = self._clean(general["nrRegCom"])
         if general.get("telefon"):
             values["phone"] = self._clean(general["telefon"])
         return values
 
     @api.model
     def _prepare_city(self, locality, state_code, zip_code=""):
-        """The locality without ``Mun.``/``Oraș``/``Com.``; for Bucharest the sector, as e-Factura wants it"""
+        """The locality without ``Mun.``/``Oraș``/``Com.``, a village without its commune; for Bucharest
+        the sector, as e-Factura wants it"""
         if state_code == BUCHAREST_STATE_CODE:
             # ANAF does not always write the sector in the locality: the postal code tells it then
             match = BUCHAREST_SECTOR_RE.search(locality) or BUCHAREST_ZIP_SECTOR_RE.match(zip_code or "")
             # Without either, the locality is left as it is for the e-Factura check to point out
             return f"Sector {match.group(1)}" if match else locality
-        return self._title(LOCALITY_PREFIX_RE.sub("", locality))
+        return self._title(LOCALITY_PARENT_RE.sub("", LOCALITY_PREFIX_RE.sub("", locality)))
