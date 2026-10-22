@@ -1,3 +1,7 @@
+## 19.0.1.1.1 (2026-10-22)
+
+- Odoo Apps banner title: *Website ANAF* (was *Website ANAF Prefill*), the same as the module name.
+
 ## 19.0.1.1.0 (2026-10-12)
 
 - Renamed from `l10n_ro_website_anaf_prefill` (not installed anywhere yet): the module now also
