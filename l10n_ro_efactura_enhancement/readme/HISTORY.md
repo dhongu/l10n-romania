@@ -1,3 +1,7 @@
+## 19.0.0.5.7 (2026-10-22)
+
+- Listed on Odoo Apps as *e-Factura Enhancements* (was *eFactura Enhancement*). The technical name `l10n_ro_efactura_enhancement` does not change.
+
 ## 19.0.0.5.6 (2026-10-17)
 
 - **Stornourile pleacă în SPV cu referința facturii corectate.** Nota de credit

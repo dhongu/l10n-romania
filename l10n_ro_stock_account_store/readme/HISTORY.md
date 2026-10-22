@@ -1,3 +1,7 @@
+## 19.0.1.1.1 (2026-10-22)
+
+- Odoo Apps banner title: *Stock Accounting Store* (was *Retail Store Stock Accounting*), the same as the module name.
+
 ## 19.0.1.1.0 (2026-10-22)
 
 - Sale price change: changing the sale price of a product (or the extra price of a variant)

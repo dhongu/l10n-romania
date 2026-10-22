@@ -1,3 +1,7 @@
+## 19.0.1.1.11 (2026-10-22)
+
+- Odoo Apps banner title: *Partner Create by VAT Button* (was *Partner Data Refresh by VAT*), the same as the module name.
+
 ## 19.0.1.1.10 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.

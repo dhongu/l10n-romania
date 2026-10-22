@@ -1,3 +1,7 @@
+## 19.0.1.4.3 (2026-10-22)
+
+- Odoo Apps banner title: *Cash Register* (was *Cash Register Document*), the same as the module name.
+
 ## 19.0.1.4.1 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.

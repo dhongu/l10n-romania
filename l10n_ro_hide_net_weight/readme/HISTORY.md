@@ -1,3 +1,7 @@
+## 19.0.0.0.4 (2026-10-22)
+
+- Odoo Apps banner title: *Hide Net Weight* (was *Hide Product Net Weight*), the same as the module name.
+
 ## 19.0.0.0.3 (2026-10-09)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
