@@ -83,20 +83,45 @@ markup (378) and for the uneligible VAT (4428).</p>
 </ol>
 <p>The sale price is taken from the product (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Sales Price</code> and <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Customer Taxes</code>)
 when the goods enter the store. A move leaving the store releases markup and VAT
-at the sale price of the last entry of the product in that store, so 378 and 4428
-close even if the product price changed in between. The amounts are kept on the
-stock move (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Store Sale Amount</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Store Markup</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Store Uneligible VAT</code>).</p>
+at the sale price of the last entry of the product in that store, or of its last
+revaluation when it is newer. The amounts are kept on the stock move (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Store Sale
+Amount</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Store Markup</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Store Uneligible VAT</code>).</p>
+<ol start="6">
+<li>
+<p>Sale price change: when the sale price of a product changes (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Sales Price</code> of the
+   product or the extra price of a variant), the stock of every store where the
+   store price changed is revalued at once, on the date of the change, with a
+   numbered <strong>Store Revaluation</strong> (<em>Inventory &gt; Reporting &gt; Store Revaluations</em>):</p>
+<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>the old value is the sale value booked for the product in that store (entries,
+ exits and previous revaluations), the new value is the booked quantity x new
+ price, VAT included, so the residual balances left until then by entries at
+ different prices are cleared; stock put in the store without a store entry
+ (e.g. before the module) has no markup and is not revalued;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>price increase: 371 = 378 (difference without VAT) and 371 = 4428 (VAT
+ difference);</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>price cut: the reverse entry in black, 378 = 371 and 4428 = 371;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>a price cut below the unit cost (product cost) is refused while there is stock
+ in the store: a sale below cost is an impairment of the stock at cost (6814 =
+ 397), which does not unlock the price change. Receptions in the store are not
+ blocked by this rule;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>a change on a date in a locked period is refused; the entry is never moved to
+ another date;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>a store with its own pricelist takes its price from the pricelist, so a change
+ of the product price revalues it only when the store price changes;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>a return (from a customer or to the supplier) moves the goods at the price of
+ the move it returns; right after it, the rest of the store stock is brought
+ back to the current store price with a revaluation linked to the return;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>the exit that empties the stock booked in the store releases exactly the markup
+ and the VAT left, so no cents remain on 378 / 4428.</div></div></li></ul>
+</li>
+</ol>
 <p>Limitations, to be handled outside the module:</p>
-<ul>
-<li>a change of the sale price of goods already in the store needs a price change
-  report (371 = 378 / 4428 for the difference on the stock on hand); without it,
-  goods entered at different prices leave residual balances on 378 and 4428;</li>
-<li>when the vendor bill comes with another cost than the reception, the stock
+<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>a change made only in the pricelist of a store, or a change of the VAT rate of
+  the product, is not revalued at the time of the change; the first return in that
+  store afterwards brings the stock to the new store price;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>the impairment of the stock at cost (6814 = 397) is booked outside the module; it
+  does not allow a sale price below cost while the goods are in the store;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>a transfer between two stores moves no markup or VAT: the store left keeps the
+  quantity and the sale value booked, and the goods are not booked at sale price in
+  the store of destination, so a revaluation of either store is wrong until the
+  goods leave it;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>the stock already in a store when the module is installed has no store entry: book
+  it first at sale price with an opening entry 371 = 378 / 4428, otherwise its exit
+  leaves equal and opposite amounts on 371 and 378;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>when the vendor bill comes with another cost than the reception, the stock
   value is corrected (371 = 401), but the markup booked at reception is not, so
-  the difference has to be regularised on 378 manually.</li>
-</ul>
+  the difference has to be regularised on 378 manually.</div></div></li></ul>
 <p>Out of scope: monthly release of the markup with the K coefficient, sales
-through the Point of Sale, sale price change reports and the store inventory
+through the Point of Sale, the printed price change report (minutes) and the store inventory
 report at sale price.</p>
 </div>
 <div class="tab-pane fade py-2" id="tb-panel-configure" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
@@ -122,11 +147,33 @@ report at sale price.</p>
    Valuation</strong> group shows the sale amount, the markup, the uneligible VAT and the
    journal entry. The same columns can be shown in the list view.</li>
 <li>When the goods leave the store, the entry 378 / 4428 = 371 releases the markup
-   and the VAT at the sale price of the entry.</li>
+   and the VAT at the sale price of the entry, or of the last revaluation.</li>
+<li>Change the sale price of a product with stock in the store: a <strong>Store
+   Revaluation</strong> is posted at once (<em>Inventory &gt; Reporting &gt; Store Revaluations</em>),
+   with the entry 371 = 378 / 4428 for an increase or 378 / 4428 = 371 for a price
+   cut. A cut below the unit cost and a change in a locked period are refused.</li>
 </ol>
 </div>
 <div class="tab-pane fade py-2" id="tb-panel-versions" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Versions</h2>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">20.0.1.1.0 (2026-10-22)</h2>
+<ul>
+<li>Sale price change: changing the sale price of a product (or the extra price of a variant)
+  revalues at once the stock of every store where the store price changed, with a numbered
+  <strong>Store Revaluation</strong> and its entry: 371 = 378 / 4428 for an increase, the reverse in black
+  (378 / 4428 = 371) for a price cut. The old value is the sale value booked in the store, so
+  the residual balances of 378 and 4428 left by entries at different prices are cleared.
+  Before, a price change had no entry and the next exit released markup and VAT at the price of
+  the last entry, leaving the difference on 378 / 4428.</li>
+<li>The exits after a revaluation release markup and VAT at the revalued price.</li>
+<li>A price cut below the unit cost is refused (impairment 6814 = 397, outside the module), and so
+  is a change in a locked period: the entry keeps the date of the price change.</li>
+<li>After a return to or from the store, which moves the goods at the price of the returned move,
+  the rest of the store stock is brought back to the current store price.</li>
+<li>The exit that empties the stock booked in the store releases exactly the markup and VAT left.</li>
+<li>An exit dated before a revaluation leaves at the price of its date.</li>
+<li>Ported from 19.0.1.1.0.</li>
+</ul>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">20.0.1.0.2 (2026-10-13)</h2>
 <ul>
 <li>Odoo Apps banner (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">static/description/main_screenshot.png</code>), generated from <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">banner.json</code>, with the Odoo 20 badge.</li>
@@ -333,6 +380,26 @@ report at sale price.</p>
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_footer_anpc" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_footer_anpc/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANPC footer</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Displays the ANPC SAL pictogram in the website footer</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
       <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_invoice_report" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
@@ -349,26 +416,6 @@ report at sale price.</p>
             </span>
           </div>
           <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Localizare Terrabit - Facturi, Chitanta</p>
-        </div>
-      </a>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_lang" target="_blank" rel="noopener"
-         class="card h-100 text-decoration-none border" style="color:#212529;">
-        <div class="card-body p-3">
-          <div class="d-flex align-items-center mb-2">
-            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
-              <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RS</span>
-              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_lang/icon.png" alt="" loading="lazy"
-                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
-            </span>
-            <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Set Lang to Romanian</span>
-              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
-            </span>
-          </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Set language to romanian if IP is from Romania</p>
         </div>
       </a>
     </div>

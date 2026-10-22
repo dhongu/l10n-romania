@@ -1,0 +1,4 @@
+id,name,model_id,group_id/id,operation,domain
+access_l10n_ro_store_revaluation_stock_user,l10n.ro.store.revaluation stock user,l10n.ro.store.revaluation,stock.group_stock_user,r,
+access_l10n_ro_store_revaluation_account,l10n.ro.store.revaluation account,l10n.ro.store.revaluation,account.group_account_readonly,r,
+rule_store_revaluation_company,Store revaluation: multi-company,l10n.ro.store.revaluation,,crud,"[('company_id', 'in', company_ids)]"
