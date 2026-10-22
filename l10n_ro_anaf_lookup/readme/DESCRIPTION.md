@@ -7,7 +7,8 @@ other modules can create or check a customer without depending on other localiza
   number, address details, locality without the `Mun.`/`Oraș`/`Com.` prefix, county, postal code,
   trade register number and phone. The fiscal domicile is used, the registered office when it is
   missing.
-- **Bucharest**: the locality is the sector (`Sector 3`), as e-Factura requires.
+- **Bucharest**: the locality is the sector (`Sector 3`), as e-Factura requires; when ANAF does
+  not write it, it is read from the postal code (`030167` is in Sector 3).
 - **Correct diacritics**: ANAF answers with the old cedilla letters (`ş`, `ţ`); they are turned into
   the comma ones (`ș`, `ț`).
 - **Status**: VAT payer, inactive and struck off, for the caller to warn about.

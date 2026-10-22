@@ -2,4 +2,4 @@
 
 - Initial version: ANAF lookup by CUI (v9 service) returning the partner data, the VAT payer,
   inactive and struck off status, with the CUI control digit checked first and the Bucharest
-  sector as the locality.
+  sector as the locality (taken from the postal code when ANAF does not write it).

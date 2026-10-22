@@ -21,6 +21,8 @@ CUI_KEY = "753217532"
 CEDILLA_FIX = str.maketrans("şţŞŢ", "șțȘȚ")
 BUCHAREST_STATE_CODE = "B"
 BUCHAREST_SECTOR_RE = re.compile(r"sector(?:ul)?\s*([1-6])\b", re.IGNORECASE)
+# A Bucharest postal code starts with 0 and the sector: 030167 is in Sector 3
+BUCHAREST_ZIP_SECTOR_RE = re.compile(r"^0([1-6])\d{4}$")
 # Prefixes ANAF puts before the name of the locality
 LOCALITY_PREFIX_RE = re.compile(r"^(mun\.?|municipiul|oraș|oras|or\.|com\.?|comuna|sat)\s+", re.IGNORECASE)
 
@@ -142,7 +144,9 @@ class L10nRoAnafLookup(models.AbstractModel):
             [("country_id.code", "=", "RO"), ("code", "=", state_code)], limit=1
         )
         values["state_id"] = state.id
-        values["city"] = self._prepare_city(address("ddenumire_Localitate", "sdenumire_Localitate"), state_code)
+        values["city"] = self._prepare_city(
+            address("ddenumire_Localitate", "sdenumire_Localitate"), state_code, zip_code
+        )
         if general.get("nrRegCom"):
             values["company_registry"] = self._clean(general["nrRegCom"])
             # Where the Romanian localization keeps its own trade register field, fill it too
@@ -153,9 +157,11 @@ class L10nRoAnafLookup(models.AbstractModel):
         return values
 
     @api.model
-    def _prepare_city(self, locality, state_code):
+    def _prepare_city(self, locality, state_code, zip_code=""):
         """The locality without ``Mun.``/``Oraș``/``Com.``; for Bucharest the sector, as e-Factura wants it"""
         if state_code == BUCHAREST_STATE_CODE:
-            match = BUCHAREST_SECTOR_RE.search(locality)
+            # ANAF does not always write the sector in the locality: the postal code tells it then
+            match = BUCHAREST_SECTOR_RE.search(locality) or BUCHAREST_ZIP_SECTOR_RE.match(zip_code or "")
+            # Without either, the locality is left as it is for the e-Factura check to point out
             return f"Sector {match.group(1)}" if match else locality
         return self._title(LOCALITY_PREFIX_RE.sub("", locality))

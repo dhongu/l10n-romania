@@ -102,6 +102,23 @@ class TestAnafLookup(TransactionCase):
         self.assertEqual(result["partner"]["zip"], "030167")
         self.assertEqual(result["partner"]["state_id"], self.env.ref("base.RO_B").id)
 
+    def test_bucharest_sector_from_postal_code(self):
+        answer = anaf_result()
+        answer["adresa_domiciliu_fiscal"].update(
+            ddenumire_Localitate="Mun. Bucureşti", dcod_JudetAuto="B", dcod_Postal="60787"
+        )
+        result, _request = self._lookup(answer)
+        self.assertEqual(result["partner"]["zip"], "060787")
+        self.assertEqual(result["partner"]["city"], "Sector 6")
+
+    def test_bucharest_without_sector_is_left_for_the_check(self):
+        answer = anaf_result()
+        answer["adresa_domiciliu_fiscal"].update(
+            ddenumire_Localitate="Mun. Bucureşti", dcod_JudetAuto="B", dcod_Postal=""
+        )
+        result, _request = self._lookup(answer)
+        self.assertEqual(result["partner"]["city"], "Mun. București")
+
     def test_address_in_capitals_and_without_street(self):
         answer = anaf_result()
         answer["adresa_domiciliu_fiscal"].update(
