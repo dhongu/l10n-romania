@@ -85,8 +85,8 @@ class TestPosPartnerEfacturaAnaf(CommonPosTest):
             self.skipTest("res.city is not installed")
         City = self.env["res.city"]
         City.create({"name": "Cluj-Napoca", "state_id": self.state_cj.id, "country_id": self.country_ro.id})
-        partner = self.Partner.create(self._complete_vals(city="Turda"))
-        self.assertIn("Turda", partner.l10n_ro_pos_anaf_warnings)
+        partner = self.Partner.create(self._complete_vals(city="Voluntari"))
+        self.assertIn("Voluntari", partner.l10n_ro_pos_anaf_warnings)
         # Diacritics and case written differently are the same city
         partner.city = "CLUJ NAPOCA"
         self.assertFalse(partner.l10n_ro_pos_anaf_warnings)
