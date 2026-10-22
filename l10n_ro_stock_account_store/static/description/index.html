@@ -400,39 +400,85 @@ the markup and VAT entry of the returned move, at its sale price.</li>
 <p>The sale price is taken from the product (<tt class="docutils literal">Sales Price</tt> and
 <tt class="docutils literal">Customer Taxes</tt>) when the goods enter the store. A move leaving the
 store releases markup and VAT at the sale price of the last entry of the
-product in that store, so 378 and 4428 close even if the product price
-changed in between. The amounts are kept on the stock move
-(<tt class="docutils literal">Store Sale Amount</tt>, <tt class="docutils literal">Store Markup</tt>, <tt class="docutils literal">Store Uneligible VAT</tt>).</p>
+product in that store, or of its last revaluation when it is newer. The
+amounts are kept on the stock move (<tt class="docutils literal">Store Sale Amount</tt>,
+<tt class="docutils literal">Store Markup</tt>, <tt class="docutils literal">Store Uneligible VAT</tt>).</p>
+<ol class="arabic simple" start="6">
+<li>Sale price change: when the sale price of a product changes
+(<tt class="docutils literal">Sales Price</tt> of the product or the extra price of a variant), the
+stock of every store where the store price changed is revalued at
+once, on the date of the change, with a numbered <strong>Store
+Revaluation</strong> (<em>Inventory &gt; Reporting &gt; Store Revaluations</em>):<ul>
+<li>the old value is the sale value booked for the product in that
+store (entries, exits and previous revaluations), the new value is
+the booked quantity x new price, VAT included, so the residual
+balances left until then by entries at different prices are
+cleared; stock put in the store without a store entry (e.g. before
+the module) has no markup and is not revalued;</li>
+<li>price increase: 371 = 378 (difference without VAT) and 371 = 4428
+(VAT difference);</li>
+<li>price cut: the reverse entry in black, 378 = 371 and 4428 = 371;</li>
+<li>a price cut below the unit cost (product cost) is refused while
+there is stock in the store: a sale below cost is an impairment of
+the stock at cost (6814 = 397), which does not unlock the price
+change. Receptions in the store are not blocked by this rule;</li>
+<li>a change on a date in a locked period is refused; the entry is
+never moved to another date;</li>
+<li>a store with its own pricelist takes its price from the pricelist,
+so a change of the product price revalues it only when the store
+price changes;</li>
+<li>a return (from a customer or to the supplier) moves the goods at
+the price of the move it returns; right after it, the rest of the
+store stock is brought back to the current store price with a
+revaluation linked to the return;</li>
+<li>the exit that empties the stock booked in the store releases
+exactly the markup and the VAT left, so no cents remain on 378 /
+4428.</li>
+</ul>
+</li>
+</ol>
 <p>Limitations, to be handled outside the module:</p>
 <ul class="simple">
-<li>a change of the sale price of goods already in the store needs a price
-change report (371 = 378 / 4428 for the difference on the stock on
-hand); without it, goods entered at different prices leave residual
-balances on 378 and 4428;</li>
+<li>a change made only in the pricelist of a store, or a change of the VAT
+rate of the product, is not revalued at the time of the change; the
+first return in that store afterwards brings the stock to the new
+store price;</li>
+<li>the impairment of the stock at cost (6814 = 397) is booked outside the
+module; it does not allow a sale price below cost while the goods are
+in the store;</li>
+<li>a transfer between two stores moves no markup or VAT: the store left
+keeps the quantity and the sale value booked, and the goods are not
+booked at sale price in the store of destination, so a revaluation of
+either store is wrong until the goods leave it;</li>
+<li>the stock already in a store when the module is installed has no store
+entry: book it first at sale price with an opening entry 371 = 378 /
+4428, otherwise its exit leaves equal and opposite amounts on 371 and
+378;</li>
 <li>when the vendor bill comes with another cost than the reception, the
 stock value is corrected (371 = 401), but the markup booked at
 reception is not, so the difference has to be regularised on 378
 manually.</li>
 </ul>
 <p>Out of scope: monthly release of the markup with the K coefficient,
-sales through the Point of Sale, sale price change reports and the store
-inventory report at sale price.</p>
+sales through the Point of Sale, the printed price change report
+(minutes) and the store inventory report at sale price.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a></li>
 <li><a class="reference internal" href="#usage" id="toc-entry-2">Usage</a></li>
 <li><a class="reference internal" href="#changelog" id="toc-entry-3">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-4">19.0.1.0.2 (2026-10-09)</a></li>
-<li><a class="reference internal" href="#section-2" id="toc-entry-5">19.0.1.0.1 (2026-10-05)</a></li>
-<li><a class="reference internal" href="#section-3" id="toc-entry-6">19.0.1.0.0 (2026-10-04)</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-4">19.0.1.1.0 (2026-10-22)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-5">19.0.1.0.2 (2026-10-09)</a></li>
+<li><a class="reference internal" href="#section-3" id="toc-entry-6">19.0.1.0.1 (2026-10-05)</a></li>
+<li><a class="reference internal" href="#section-4" id="toc-entry-7">19.0.1.0.0 (2026-10-04)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-7">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-8">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-9">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-10">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-11">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-8">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-9">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-10">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-11">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-12">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -463,24 +509,55 @@ depot. Next to the stock entry at cost, a journal entry 371 = 378 /
 uneligible VAT and the journal entry. The same columns can be shown
 in the list view.</li>
 <li>When the goods leave the store, the entry 378 / 4428 = 371 releases
-the markup and the VAT at the sale price of the entry.</li>
+the markup and the VAT at the sale price of the entry, or of the last
+revaluation.</li>
+<li>Change the sale price of a product with stock in the store: a <strong>Store
+Revaluation</strong> is posted at once (<em>Inventory &gt; Reporting &gt; Store
+Revaluations</em>), with the entry 371 = 378 / 4428 for an increase or
+378 / 4428 = 371 for a price cut. A cut below the unit cost and a
+change in a locked period are refused.</li>
 </ol>
 </div>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-3">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.0.2 (2026-10-09)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.1.0 (2026-10-22)</a></h2>
+<ul class="simple">
+<li>Sale price change: changing the sale price of a product (or the extra
+price of a variant) revalues at once the stock of every store where
+the store price changed, with a numbered <strong>Store Revaluation</strong> and its
+entry: 371 = 378 / 4428 for an increase, the reverse in black (378 /
+4428 = 371) for a price cut. The old value is the sale value booked in
+the store, so the residual balances of 378 and 4428 left by entries at
+different prices are cleared. Before, a price change had no entry and
+the next exit released markup and VAT at the price of the last entry,
+leaving the difference on 378 / 4428.</li>
+<li>The exits after a revaluation release markup and VAT at the revalued
+price.</li>
+<li>A price cut below the unit cost is refused (impairment 6814 = 397,
+outside the module), and so is a change in a locked period: the entry
+keeps the date of the price change.</li>
+<li>After a return to or from the store, which moves the goods at the
+price of the returned move, the rest of the store stock is brought
+back to the current store price.</li>
+<li>The exit that empties the stock booked in the store releases exactly
+the markup and VAT left.</li>
+<li>An exit dated before a revaluation leaves at the price of its date.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-5">19.0.1.0.2 (2026-10-09)</a></h2>
 <ul class="simple">
 <li>Odoo Apps banner (<tt class="docutils literal">static/description/main_screenshot.png</tt>),
 generated from <tt class="docutils literal">banner.json</tt>.</li>
 </ul>
 </div>
-<div class="section" id="section-2">
-<h2><a class="toc-backref" href="#toc-entry-5">19.0.1.0.1 (2026-10-05)</a></h2>
+<div class="section" id="section-3">
+<h2><a class="toc-backref" href="#toc-entry-6">19.0.1.0.1 (2026-10-05)</a></h2>
 <ul class="simple">
 <li>The markup (378) and uneligible VAT (4428) of a reception in the store
 now use the same sale price as the reception note at sale price (NIR)
-of <tt class="docutils literal">l10n_ro_picking_report</tt>: the price frozen on the move at
+of <tt class="docutils literal">l10n_ro_stock_picking_report</tt>: the price frozen on the move at
 reception, else the store pricelist of the location, else the product
 price. Before, the entry always took the product price, so in a store
 with its own pricelist the NIR showed one markup and VAT and the
@@ -490,8 +567,8 @@ markup 600, entry 400).</li>
 a store pricelist.</li>
 </ul>
 </div>
-<div class="section" id="section-3">
-<h2><a class="toc-backref" href="#toc-entry-6">19.0.1.0.0 (2026-10-04)</a></h2>
+<div class="section" id="section-4">
+<h2><a class="toc-backref" href="#toc-entry-7">19.0.1.0.0 (2026-10-04)</a></h2>
 <ul class="simple">
 <li>Migration to 19.0, rewritten on the stock move: Odoo 19 no longer has
 <tt class="docutils literal">stock.valuation.layer</tt>, so the markup (378) and uneligible VAT
@@ -513,29 +590,29 @@ in red the entry of the returned move.</li>
 <li>The sale amount kept on the valuation layers in 18.0 is moved to the
 stock move at upgrade.</li>
 <li>Store filter and merchandise type column on the locations list.</li>
-<li>With <tt class="docutils literal">l10n_ro_picking_report</tt>, a store location prints again
+<li>With <tt class="docutils literal">l10n_ro_stock_picking_report</tt>, a store location prints again
 the NIR at sale price.</li>
 <li>Automated tests.</li>
 </ul>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-7">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-8">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-8">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-9">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-9">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-10">Authors</a></h2>
 <ul class="simple">
 <li>Dorin Hongu</li>
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-10">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-11">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -546,7 +623,7 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-11">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-12">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_store">dhongu/l10n-romania</a> project on GitHub.</p>

@@ -7,6 +7,12 @@ from odoo import models
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
+    def write(self, vals):
+        res = super().write(vals)
+        if "list_price" in vals:
+            self.env["l10n.ro.store.revaluation"]._l10n_ro_revaluate_products(self.product_variant_ids)
+        return res
+
     def _get_product_accounts(self):
         accounts = super()._get_product_accounts()
         company = self.company_id or self.env.company
