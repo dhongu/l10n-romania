@@ -1,3 +1,8 @@
+## 19.0.1.1.2 (2026-10-23)
+
+- A note under *Partner Autocomplete* in the settings says that Romanian companies are filled in
+  from ANAF without IAP credits, and what the credits are still used for.
+
 ## 19.0.1.1.1 (2026-10-23)
 
 - A partner created with a CUI as its name is filled in from ANAF also when its Tax ID is that
