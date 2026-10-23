@@ -6,7 +6,7 @@
     "name": "Romania - ANAF Partner Lookup",
     "summary": "Look a Romanian company up at ANAF by its CUI and get the partner data, without other localization modules",
     "license": "AGPL-3",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

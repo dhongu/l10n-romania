@@ -67,7 +67,7 @@ class TestAnafPartnerLookup(TransactionCase):
 
     def test_company_found(self):
         result, request = self._lookup(anaf_result(), vat="RO " + CUI)
-        request.assert_called_once_with(CUI)
+        request.assert_called_once_with(CUI, None)
         self.assertEqual(result["state"], "found")
         self.assertTrue(result["vat_payer"])
         self.assertFalse(result["inactive"])
@@ -173,10 +173,17 @@ class TestAnafPartnerLookup(TransactionCase):
 
     def test_struck_off_and_inactive(self):
         answer = anaf_result(stare_inregistrare="RADIERE din data 03.04.2026")
-        answer["stare_inactiv"]["statusInactivi"] = True
+        answer["stare_inactiv"].update(statusInactivi=True, dataInactivare="2026-05-04")
         result, _request = self._lookup(answer)
         self.assertTrue(result["struck_off"])
         self.assertTrue(result["inactive"])
+        self.assertEqual(result["inactive_date"], "2026-05-04")
+
+    def test_trade_register_and_timeout(self):
+        with patch(REQUEST_PATH, return_value=anaf_result()) as request:
+            result = self.Lookup.lookup(CUI, timeout=5)
+        request.assert_called_once_with(CUI, 5)
+        self.assertEqual(result["trade_register"], "J35/2622/2012")
 
     def test_not_found_and_unavailable(self):
         self.assertEqual(self._lookup({})[0]["state"], "not_found")
