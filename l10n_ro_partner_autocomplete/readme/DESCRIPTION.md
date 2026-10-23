@@ -10,6 +10,17 @@ Point of Sale — shows the company found at ANAF. Choosing it fills the partner
 - for Bucharest, the sector as the locality, as e-Factura requires;
 - a note in the chatter that the data was taken from ANAF, with the date.
 
+**Update from ANAF.** On a Romanian company with a Tax ID, the **Update from ANAF** button below
+the Tax ID reloads the data from ANAF: name, address, Tax ID and trade register number are
+rewritten, a phone already on the partner is kept. The chatter lists every field changed, with
+its old and new value, and says when ANAF lists the company as struck off or inactive.
+
+**A partner created with its CUI as the name.** Typing a CUI in a field such as *Customer* and
+choosing *Create*, or importing partners whose name is a CUI, fills them in from ANAF too. Values
+given explicitly are kept; a partner that already has a Tax ID, a contact person or a partner
+from another country is left as it is. The `l10n_ro_anaf_no_autofill` context key turns it off,
+for instance for a bulk import.
+
 No IAP credit is used for a Romanian CUI: neither the search nor the enrichment goes to IAP.
 
 The CUI is recognised with or without `RO`. The rest is left to IAP as before: a search by company
