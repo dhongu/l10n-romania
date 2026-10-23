@@ -63,10 +63,43 @@ class ResPartner(models.Model):
     def _l10n_ro_anaf_suggestion(self, values):
         """The partner values in the shape of an IAP suggestion"""
         suggestion = dict(values, entity_type=ANAF_ENTITY_TYPE, duns=False)
-        for field_name in ("country_id", "state_id"):
-            record = self.env[self._fields[field_name].comodel_name].browse(values.get(field_name))
+        # city_id only where base_address_extended adds it (with the cities of l10n_ro_city)
+        for field_name in ("country_id", "state_id", "city_id"):
+            if field_name not in values:
+                continue
+            record = self.env[self._fields[field_name].comodel_name].browse(values[field_name])
             suggestion[field_name] = {"id": record.id, "display_name": record.display_name} if record else False
         return suggestion
+
+    def onchange(self, values, field_names, fields_spec):
+        """Choosing the city of a Romanian partner keeps the postal code it already has, and a city
+        set together with its postal code (the ANAF data) is not replaced from that postal code.
+
+        base_address_extended replaces the postal code with the city's, which for a town is empty
+        or a generic one: the street postal code from ANAF, or one typed in, would be lost.
+        l10n_ro_city picks the Bucharest sector from the postal code, and ANAF sometimes gives a
+        postal code of another sector than the address.
+        """
+        result = super().onchange(values, field_names, fields_spec)
+        changed = result.get("value") or {}
+        if "city_id" not in field_names or not changed or self._l10n_ro_onchange_country(values) != "RO":
+            return result
+        if values.get("zip") and "zip" in changed and changed["zip"] != values["zip"]:
+            changed.pop("zip")
+        city = values.get("city_id")
+        city_id = city.get("id") if isinstance(city, dict) else city
+        if city_id and "zip" in field_names and "city_id" in changed:
+            new = changed["city_id"]
+            if (new.get("id") if isinstance(new, dict) else new) != city_id:
+                changed.pop("city_id")
+                changed.pop("city", None)
+        return result
+
+    @api.model
+    def _l10n_ro_onchange_country(self, values):
+        country = values.get("country_id")
+        country_id = country.get("id") if isinstance(country, dict) else country
+        return self.env["res.country"].browse(country_id).code
 
     @api.model
     def enrich_by_duns(self, duns, timeout=15):

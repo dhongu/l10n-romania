@@ -178,3 +178,51 @@ class TestPartnerAutocomplete(TransactionCase):
         with patch(REQUEST_PATH, return_value=anaf_result()):
             partner = self.Partner.create({"name": CUI, "vat": "RO" + CUI})
         self.assertEqual(partner.name, "FOREST AND BIOMASS ROMÂNIA S.A.")
+
+    # -- city_id, where base_address_extended adds it ---------------------
+
+    def _test_city(self):
+        if "city_id" not in self.Partner._fields:
+            self.skipTest("res.partner has no city_id (base_address_extended)")
+        return self.env["res.city"].create(
+            {
+                "name": "Testoara",
+                "zipcode": "300001",
+                "state_id": self.env.ref("base.RO_TM").id,
+                "country_id": self.ro.id,
+            }
+        )
+
+    def test_suggestion_carries_the_city(self):
+        city = self._test_city()
+        answer = anaf_result()
+        answer["adresa_domiciliu_fiscal"]["ddenumire_Localitate"] = "Mun. Testoara"
+        with patch(REQUEST_PATH, return_value=answer), self._iap():
+            suggestion = self.Partner.autocomplete_by_vat("RO" + CUI, self.ro.id)[0]
+        self.assertEqual(suggestion["city_id"], {"id": city.id, "display_name": city.display_name})
+
+    def test_choosing_the_city_keeps_the_postal_code(self):
+        city = self._test_city()
+        spec = {"zip": {}, "city": {}, "city_id": {}, "state_id": {}, "country_id": {}}
+        values = {"country_id": self.ro.id, "zip": "300045", "city_id": city.id}
+        result = self.Partner.onchange(values, ["city_id"], spec)
+        self.assertNotIn("zip", result["value"])
+        # Without a postal code, the city's is taken as usual
+        result = self.Partner.onchange(dict(values, zip=False), ["city_id"], spec)
+        self.assertEqual(result["value"].get("zip"), "300001")
+
+    def test_city_and_postal_code_together_keep_the_city(self):
+        self._test_city()
+        state_b = self.env.ref("base.RO_B")
+        City = self.env["res.city"]
+        sectors = {
+            n: City.search([("state_id", "=", state_b.id), ("name", "in", [f"Sector{n}", f"Sector {n}"])], limit=1)
+            or City.create({"name": f"Sector{n}", "state_id": state_b.id, "country_id": self.ro.id})
+            for n in (2, 6)
+        }
+        spec = {"zip": {}, "city": {}, "city_id": {}, "state_id": {}, "country_id": {}}
+        # The address is in Sector 2, the postal code ANAF gives is one of Sector 6
+        values = {"country_id": self.ro.id, "state_id": state_b.id, "zip": "060787", "city_id": sectors[2].id}
+        result = self.Partner.onchange(values, ["zip", "city_id", "state_id"], spec)
+        self.assertNotIn("city_id", result["value"])
+        self.assertNotIn("zip", result["value"])
