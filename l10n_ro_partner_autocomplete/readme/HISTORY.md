@@ -1,3 +1,7 @@
+## 19.0.1.1.3 (2026-10-23)
+
+- Main image for the Odoo Apps Store (banner); the manifest points to it in `images`.
+
 ## 19.0.1.1.2 (2026-10-23)
 
 - A note under *Partner Autocomplete* in the settings says that Romanian companies are filled in
