@@ -1,3 +1,16 @@
+## 19.0.0.5.8 (2026-10-23)
+
+- **Buton „Resetează trimiterea SPV” pentru facturile rămase fără index.** Când SPV
+  nu returnează indexul la trimitere, factura rămâne în „așteaptă răspunsul de la
+  SPV” și nu poate fi retrimisă. Standardul o deblochează abia după 3 zile, la
+  sincronizare.
+  - Butonul apare doar în această stare, pentru utilizatorii cu drept de facturare.
+  - Cere confirmare, apoi sincronizează întâi cu ANAF. Dacă factura e găsită în SPV,
+    i se completează starea și nu se resetează nimic, deci nu apare un dublet.
+  - Altfel, trimiterea e marcată ca eșuată, cu nota în chatter, iar factura se
+    retrimite din „Trimite” sau din „Retrimite în SPV”.
+  - Necesită actualizarea modulului (buton nou în formularul facturii).
+
 ## 19.0.0.5.7 (2026-10-22)
 
 - Listed on Odoo Apps as *e-Factura Enhancements* (was *eFactura Enhancement*). The technical name `l10n_ro_efactura_enhancement` does not change.
