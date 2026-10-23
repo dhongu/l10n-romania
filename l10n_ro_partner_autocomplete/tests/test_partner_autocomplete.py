@@ -156,7 +156,6 @@ class TestPartnerAutocomplete(TransactionCase):
     def test_create_left_alone(self):
         with patch(REQUEST_PATH) as request:
             self.Partner.create({"name": "Forest and Biomass"})
-            self.Partner.create({"name": CUI, "vat": "RO" + CUI})
             self.Partner.create({"name": "30834858"})
             self.Partner.create({"name": CUI, "country_id": self.be.id})
             self.Partner.with_context(l10n_ro_anaf_no_autofill=True).create({"name": CUI})
@@ -166,4 +165,16 @@ class TestPartnerAutocomplete(TransactionCase):
         with patch(REQUEST_PATH, return_value=None):
             partner = self.Partner.create({"name": CUI})
         self.assertEqual(partner.name, CUI)
-        self.assertFalse(partner.vat)
+
+    def test_create_with_another_tax_id(self):
+        if self.env["ir.module.module"]._get("l10n_ro_partner_create_by_vat_button").state == "installed":
+            self.skipTest("l10n_ro_partner_create_by_vat_button replaces the Tax ID with the name")
+        with patch(REQUEST_PATH) as request:
+            self.Partner.create({"name": CUI, "vat": "RO1234567897"})
+        request.assert_not_called()
+
+    def test_create_with_the_same_cui_as_tax_id(self):
+        # The Tax ID derived from the name, as l10n_ro_partner_create_by_vat_button sets it
+        with patch(REQUEST_PATH, return_value=anaf_result()):
+            partner = self.Partner.create({"name": CUI, "vat": "RO" + CUI})
+        self.assertEqual(partner.name, "FOREST AND BIOMASS ROMÂNIA S.A.")
