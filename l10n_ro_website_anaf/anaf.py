@@ -2,15 +2,6 @@
 # See README.rst file on addons root folder for license details
 """ANAF look-up and Romanian tax code helpers, shared by the public route and the address check."""
 
-import logging
-
-import requests
-
-from odoo import fields
-
-_logger = logging.getLogger(__name__)
-
-ANAF_URL = "https://webservicesp.anaf.ro/api/PlatitorTvaRest/v9/tva"
 # a customer is waiting, typing or submitting: better no answer than a long wait
 ANAF_TIMEOUT = 5
 # check digit weights of the Romanian personal numeric code (CNP)
@@ -35,42 +26,25 @@ def is_cnp(number):
 
 
 def anaf_lookup(env, number):
-    """Look ``number`` up at ANAF, with the settings of ``l10n_ro_partner_create_by_vat``.
+    """Look ``number`` up at ANAF, through ``l10n_ro_anaf_partner_lookup``.
 
-    Its own request rather than ``_get_Anaf``: that one waits up to 30 s and answers the same text
-    for a company not found and for a service down.
-
-    :return: ``(state, values)``: ``found`` with the partner values (plus ``anaf_radiated``,
-        ``anaf_inactive`` and ``anaf_inactive_date``), ``not_found`` or ``unavailable``
+    :return: ``(state, values)``: ``found`` with the partner values (``state_id`` as a record, plus
+        ``nrc``, ``company_type``, ``l10n_ro_vat_subjected``, ``anaf_radiated``, ``anaf_inactive``
+        and ``anaf_inactive_date``), ``not_found`` or ``unavailable``
     """
-    get_param = env["ir.config_parameter"].sudo().get_param
-    headers = {"Content-Type": "application/json"}
-    api_key = get_param("l10n_ro_partner_create_by_vat.anaf_api_key", "")
-    if api_key:
-        headers[get_param("l10n_ro_partner_create_by_vat.anaf_api_key_header_tag", "x-api-key")] = api_key
-    try:
-        response = requests.post(
-            get_param("l10n_ro_partner_create_by_vat.anaf_url", ANAF_URL),
-            json=[{"cui": number, "data": fields.Date.to_string(fields.Date.today())}],
-            headers=headers,
-            timeout=ANAF_TIMEOUT,
-        )
-        response.raise_for_status()
-        found = response.json().get("found") or []
-    except (requests.RequestException, ValueError) as error:
-        _logger.warning("ANAF did not answer for the tax code %s: %s", number, error)
+    result = env["l10n.ro.anaf.partner.lookup"].sudo().lookup(number, timeout=ANAF_TIMEOUT)
+    if result["state"] == "unavailable":
         return "unavailable", {}
-    result = found[0] if found else {}
-    if not result.get("date_generale"):
+    if result["state"] != "found":
         return "not_found", {}
-    general = result["date_generale"]
-    status = result.get("stare_inactiv") or {}
-    # struck off: read from the registration state, `dataRadiere` is often empty
-    radiated = "RADIERE" in (general.get("stare_inregistrare") or "").upper()
-    inactive = bool(status.get("statusInactivi"))
-    inactive_date = (status.get("dataInactivare") or "").strip()
-    values = env["res.partner"].sudo()._Anaf_to_Odoo(result)
-    if not values:
-        return "not_found", {}
-    values.update(anaf_radiated=radiated, anaf_inactive=inactive, anaf_inactive_date=inactive_date)
+    values = dict(result["partner"])
+    values.update(
+        state_id=env["res.country.state"].sudo().browse(values.get("state_id")),
+        nrc=result["trade_register"],
+        company_type="company",
+        l10n_ro_vat_subjected=result["vat_payer"],
+        anaf_radiated=result["struck_off"],
+        anaf_inactive=result["inactive"],
+        anaf_inactive_date=result["inactive_date"],
+    )
     return "found", values
