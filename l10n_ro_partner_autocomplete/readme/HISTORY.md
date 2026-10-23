@@ -1,3 +1,11 @@
+## 19.0.1.2.0 (2026-10-23)
+
+- The ANAF suggestion carries the `city_id` found by `l10n_ro_anaf_partner_lookup`.
+- For a Romanian partner, choosing the city keeps the postal code already there (base_address_extended
+  would replace it with the city's, often empty for a town), and a city set together with its postal
+  code is not replaced from that postal code (`l10n_ro_city` picks the Bucharest sector from it, and
+  ANAF sometimes gives a postal code of another sector).
+
 ## 19.0.1.1.3 (2026-10-23)
 
 - Main image for the Odoo Apps Store (banner); the manifest points to it in `images`.
