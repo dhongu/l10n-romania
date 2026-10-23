@@ -162,12 +162,16 @@ class ResPartner(models.Model):
     def _l10n_ro_anaf_autofill_values(self, vals):
         """The ANAF data for a partner whose name is a Romanian CUI; ``{}`` otherwise"""
         name = (vals.get("name") or "").strip()
-        if not name or vals.get("vat") or vals.get("parent_id"):
+        if not name or vals.get("parent_id"):
             return {}
         lookup = self.env["l10n.ro.anaf.partner.lookup"]
         # A name holding anything but digits after an optional RO is not a CUI
         cui = lookup.normalize_cui(name)
         if not lookup.is_valid_cui(cui):
+            return {}
+        # A Tax ID given with the partner wins, unless it is this same CUI: that one is derived from
+        # the name (l10n_ro_partner_create_by_vat_button writes it before this override runs)
+        if vals.get("vat") and lookup.normalize_cui(vals["vat"]) != cui:
             return {}
         country = self.env["res.country"].browse(vals.get("country_id"))
         if country and country.code != "RO":
@@ -176,9 +180,9 @@ class ResPartner(models.Model):
         if result["state"] != "found":
             _logger.info("ANAF: no data for the new partner %s (%s)", name, result["state"])
             return {}
-        # What the caller set explicitly wins, except the name, which was the CUI
+        # What the caller set explicitly wins, except the name and the Tax ID, which were the CUI
         return {
             key: value
             for key, value in result["partner"].items()
-            if key in self._fields and (key == "name" or not vals.get(key))
+            if key in self._fields and (key in ("name", "vat") or not vals.get(key))
         }
