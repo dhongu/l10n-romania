@@ -1,3 +1,7 @@
+## 19.0.1.0.3 (2026-10-23)
+
+- Main image for the Odoo Apps Store (banner); the manifest points to it in `images`.
+
 ## 19.0.1.0.2 (2026-10-23)
 
 - The caller can choose how long to wait for ANAF (`timeout`); the result also gives the date the

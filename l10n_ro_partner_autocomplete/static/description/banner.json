@@ -1,0 +1,12 @@
+{
+  "title": "Partner Autocomplete from ANAF",
+  "summary": "Romanian CUI answered from ANAF instead of IAP, without credits",
+  "icon": "people",
+  "edition": "community",
+  "lang": "en",
+  "features": [
+    "Fills the partner in from the CUI",
+    "Update from ANAF button with chatter log",
+    "No IAP credits for a Romanian CUI"
+  ]
+}

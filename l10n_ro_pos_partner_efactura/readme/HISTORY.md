@@ -1,3 +1,7 @@
+## 19.0.1.1.2 (2026-10-23)
+
+- Main image for the Odoo Apps Store (banner); the manifest points to it in `images`.
+
 ## 19.0.1.1.1 (2026-10-22)
 
 - Depends on `l10n_ro_anaf_partner_lookup`, the new name of `l10n_ro_anaf_lookup`.

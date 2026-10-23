@@ -1,0 +1,12 @@
+{
+  "title": "POS Partner e-Factura Check",
+  "summary": "Customer by CUI from ANAF at the till, ready for e-Factura",
+  "icon": "bag",
+  "edition": "community",
+  "lang": "en",
+  "features": [
+    "Search ANAF by CUI at the till",
+    "Requires the data e-Factura needs",
+    "Receipt stays a receipt, no forced invoice"
+  ]
+}

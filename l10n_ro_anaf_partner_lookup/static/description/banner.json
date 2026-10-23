@@ -1,0 +1,12 @@
+{
+  "title": "ANAF Partner Lookup",
+  "summary": "Company data from ANAF by CUI",
+  "icon": "globe",
+  "edition": "community",
+  "lang": "en",
+  "features": [
+    "CUI checked before asking ANAF",
+    "Address, county and Bucharest sector",
+    "Clear answer: found, invalid, unavailable"
+  ]
+}
