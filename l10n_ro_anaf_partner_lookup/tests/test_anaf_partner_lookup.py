@@ -1,3 +1,4 @@
+import unittest
 from unittest.mock import patch
 
 from odoo.tests import tagged
@@ -188,3 +189,60 @@ class TestAnafPartnerLookup(TransactionCase):
     def test_not_found_and_unavailable(self):
         self.assertEqual(self._lookup({})[0]["state"], "not_found")
         self.assertEqual(self._lookup(None)[0]["state"], "unavailable")
+
+
+@tagged("post_install", "-at_install")
+class TestAnafPartnerLookupCity(TransactionCase):
+    """city_id, where base_address_extended adds it (with the cities of l10n_ro_city)"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if "city_id" not in cls.env["res.partner"]._fields:
+            raise unittest.SkipTest("res.partner has no city_id (base_address_extended)")
+        cls.Lookup = cls.env["l10n.ro.anaf.partner.lookup"]
+        cls.City = cls.env["res.city"]
+        cls.ro = cls.env.ref("base.ro")
+        cls.state_bc = cls.env.ref("base.RO_BC")
+
+    def _city(self, name, zipcode, municipality="", state=None):
+        vals = {"name": name, "zipcode": zipcode, "state_id": (state or self.state_bc).id, "country_id": self.ro.id}
+        if "l10n_ro_municipality" in self.City._fields:
+            vals["l10n_ro_municipality"] = municipality
+        return self.City.create(vals)
+
+    def _lookup(self, locality, zip_code, state_code="BC"):
+        answer = anaf_result()
+        answer["adresa_domiciliu_fiscal"].update(
+            ddenumire_Localitate=locality, dcod_Postal=zip_code, dcod_JudetAuto=state_code
+        )
+        with patch(REQUEST_PATH, return_value=answer):
+            return self.Lookup.lookup(CUI)["partner"]
+
+    def test_city_by_name(self):
+        city = self._city("Satul Testului", "607901", "Testeni")
+        self.assertEqual(self._lookup("Sat Satul Testului Com. Testeni", "607901")["city_id"], city.id)
+
+    def test_same_name_told_apart(self):
+        self._city("Valea Testului", "607902", "Prima Comună")
+        second = self._city("Valea Testului", "607903", "Testeni")
+        # By the commune where the cities know it, else by the postal code
+        self.assertEqual(self._lookup("Sat Valea Testului Com. Testeni", "607903")["city_id"], second.id)
+
+    def test_same_name_not_told_apart(self):
+        self._city("Lunca Testului", "607904", "Testeni")
+        self._city("Lunca Testului", "607904", "Testeni")
+        self.assertNotIn("city_id", self._lookup("Sat Lunca Testului Com. Testeni", "607904"))
+
+    def test_city_by_postal_code(self):
+        city = self._city("Testopolis", "607905")
+        self.assertEqual(self._lookup("Sat Necunoscut Com. Nicăieri", "607905")["city_id"], city.id)
+
+    def test_bucharest_sector(self):
+        state_b = self.env.ref("base.RO_B")
+        sector = self.City.search([("state_id", "=", state_b.id), ("name", "in", ["Sector3", "Sector 3"])], limit=1)
+        sector = sector or self._city("Sector3", "", state=state_b)
+        self.assertEqual(self._lookup("Sector 3 Mun. Bucureşti", "030167", "B")["city_id"], sector.id)
+
+    def test_no_city_left_empty(self):
+        self.assertNotIn("city_id", self._lookup("Sat Nicaieri Com. Nicaieri", "607999"))

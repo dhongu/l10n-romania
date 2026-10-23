@@ -4,6 +4,7 @@
 
 import logging
 import re
+import unicodedata
 
 import requests
 
@@ -30,7 +31,14 @@ LOCALITY_UNIT = r"(?:mun|municipiul|oraș|oras|orș|ors|or|com|comuna|sat)\.?"
 LOCALITY_PREFIX_RE = re.compile(rf"^{LOCALITY_UNIT}\s+", re.IGNORECASE)
 # The commune or town a village belongs to: only the village is the locality. Stricter than the
 # prefix (abbreviations with their dot, no "Sat"), as it is searched inside the name
-LOCALITY_PARENT_RE = re.compile(r"\s+(?:com\.|comuna|orș\.|ors\.|oraș|oras|mun\.|municipiul)\s+\S.*$", re.IGNORECASE)
+LOCALITY_PARENT_RE = re.compile(r"\s+(?:com\.|comuna|orș\.|ors\.|oraș|oras|mun\.|municipiul)\s+(\S.*)$", re.IGNORECASE)
+
+
+def _normalize_name(name):
+    """A locality name without diacritics, case, spaces, dots or dashes: ANAF and res.city write it
+    differently ("Sector 3" and "Sector3", "Timişoara" and "Timișoara")"""
+    name = unicodedata.normalize("NFKD", name or "").encode("ascii", "ignore").decode()
+    return re.sub(r"[\s\-.]+", "", name).lower()
 
 
 class L10nRoAnafPartnerLookup(models.AbstractModel):
@@ -154,9 +162,11 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
             [("country_id.code", "=", "RO"), ("code", "=", state_code)], limit=1
         )
         values["state_id"] = state.id
-        values["city"] = self._prepare_city(
-            address("ddenumire_Localitate", "sdenumire_Localitate"), state_code, zip_code
-        )
+        locality = address("ddenumire_Localitate", "sdenumire_Localitate")
+        values["city"] = self._prepare_city(locality, state_code, zip_code)
+        city_id = self._prepare_city_id(values["city"], state, zip_code, self._locality_commune(locality))
+        if city_id:
+            values["city_id"] = city_id
         # The trade register number (J…) goes to its own field of the Romanian localization. The
         # Company ID (company_registry) is the CUI, which l10n_ro computes from the Tax ID
         if general.get("nrRegCom") and "nrc" in self.env["res.partner"]._fields:
@@ -164,6 +174,40 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         if general.get("telefon"):
             values["phone"] = self._clean(general["telefon"])
         return values
+
+    @api.model
+    def _locality_commune(self, locality):
+        """The commune or town a village belongs to: ``Sat Filipești Com. Filipești`` gives ``Filipești``"""
+        match = LOCALITY_PARENT_RE.search(locality or "")
+        return match.group(1).strip() if match else ""
+
+    @api.model
+    def _prepare_city_id(self, city, state, zip_code="", commune=""):
+        """The ``res.city`` of the locality, where the partner has a ``city_id`` (base_address_extended,
+        with the cities of l10n_ro_city); ``False`` when no single city matches"""
+        if not state or not city or "city_id" not in self.env["res.partner"]._fields or "res.city" not in self.env:
+            return False
+        City = self.env["res.city"].sudo()
+        cities = City.search([("state_id", "=", state.id)])
+        named = cities.filtered(lambda c: _normalize_name(c.name) == _normalize_name(city))
+        # Several villages of the same name in a county: the commune, then the postal code tell them apart
+        if len(named) > 1 and commune and "l10n_ro_municipality" in City._fields:
+            narrowed = named.filtered(lambda c: _normalize_name(c.l10n_ro_municipality) == _normalize_name(commune))
+            named = narrowed or named
+        if len(named) > 1 and zip_code:
+            named = named.filtered(lambda c: c.zipcode == zip_code) or named
+        if len(named) == 1:
+            return named.id
+        if named or not zip_code:
+            return False
+        # The name is not in the list: the postal code, street by street (l10n_ro_zip), then of the city
+        if "res.zip" in self.env:
+            by_street = self.env["res.zip"].sudo().search([("name", "=", zip_code)]).city_id
+            by_street = by_street.filtered(lambda c: c.state_id == state)
+            if len(by_street) == 1:
+                return by_street.id
+        by_zip = cities.filtered(lambda c: c.zipcode == zip_code)
+        return by_zip.id if len(by_zip) == 1 else False
 
     @api.model
     def _prepare_city(self, locality, state_code, zip_code=""):

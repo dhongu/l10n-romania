@@ -1,3 +1,10 @@
+## 19.0.1.1.0 (2026-10-23)
+
+- Where the partner has a `city_id` (base_address_extended, with the cities of `l10n_ro_city`),
+  it is filled in too: the Bucharest sector, else the locality by name in its county, told apart
+  by the commune ANAF writes next to a village and then by the postal code, else by the postal
+  code (street by street with `l10n_ro_zip`). Without a single match it is left empty.
+
 ## 19.0.1.0.3 (2026-10-23)
 
 - Main image for the Odoo Apps Store (banner); the manifest points to it in `images`.

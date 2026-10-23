@@ -21,6 +21,10 @@ given explicitly are kept; a partner that already has a Tax ID, a contact person
 from another country is left as it is. The `l10n_ro_anaf_no_autofill` context key turns it off,
 for instance for a bulk import.
 
+**City and postal code.** With the list of Romanian cities (`l10n_ro_city`), the city is chosen
+from it as well. Choosing a city then keeps the postal code the partner already has, instead of
+replacing it with the city's.
+
 No IAP credit is used for a Romanian CUI: neither the search nor the enrichment goes to IAP.
 
 The CUI is recognised with or without `RO`. The rest is left to IAP as before: a search by company

@@ -9,6 +9,9 @@ other modules can create or check a customer without depending on other localiza
   missing.
 - **Bucharest**: the locality is the sector (`Sector 3`), as e-Factura requires; when ANAF does
   not write it, it is read from the postal code (`030167` is in Sector 3).
+- **The city from the list**: where the partner has a `city_id` (with the cities of `l10n_ro_city`),
+  it is chosen too, by name and county, the commune of a village or the postal code; without a
+  single match it stays empty.
 - **Correct diacritics**: ANAF answers with the old cedilla letters (`ş`, `ţ`); they are turned into
   the comma ones (`ș`, `ț`).
 - **Status**: VAT payer, inactive and struck off, for the caller to warn about.
