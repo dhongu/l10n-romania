@@ -5,9 +5,9 @@ from unittest.mock import patch
 
 import odoo
 from odoo.tests import HttpCase, new_test_user, tagged
-from odoo.tools import mute_logger
 
-from .. import anaf
+from odoo.addons.l10n_ro_anaf_partner_lookup.tests.test_anaf_partner_lookup import REQUEST_PATH
+
 from ..controllers import main
 from ..controllers.main import AnafPrefill
 
@@ -145,28 +145,16 @@ class TestAnafPrefill(HttpCase):
             ]
         }
 
-        class Response:
-            def __init__(self, payload):
-                self.payload = payload
-
-            def raise_for_status(self):
-                return None
-
-            def json(self):
-                return self.payload
-
-        with patch.object(anaf.requests, "post", return_value=Response(answer)):
+        # the ANAF request itself is made by l10n_ro_anaf_partner_lookup
+        with patch(REQUEST_PATH, return_value=answer["found"][0]):
             result = self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "RO1234567897"})
         self.assertEqual((result["state"], result["radiated"]), ("found", True))
         main._cache.clear()
-        with patch.object(anaf.requests, "post", return_value=Response({"found": [], "notFound": [1]})):
+        with patch(REQUEST_PATH, return_value={}):
             self.assertEqual(
                 self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "18547290"})["state"], "not_found"
             )
-        with (
-            patch.object(anaf.requests, "post", side_effect=anaf.requests.ConnectTimeout("timeout")),
-            mute_logger("odoo.addons.l10n_ro_website_anaf.anaf"),
-        ):
+        with patch(REQUEST_PATH, return_value=None):
             self.assertEqual(
                 self.make_jsonrpc_request("/l10n_ro/anaf_lookup", {"vat": "14399840"})["state"], "unavailable"
             )

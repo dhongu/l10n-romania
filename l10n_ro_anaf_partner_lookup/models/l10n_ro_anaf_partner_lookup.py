@@ -55,17 +55,19 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         return int(cui[-1]) == control % 10
 
     @api.model
-    def lookup(self, vat):
+    def lookup(self, vat, timeout=None):
         """Look ``vat`` up at ANAF.
 
+        :param timeout: seconds to wait for ANAF; the system parameter, else 10, when not given
         :return: dict with ``state`` (``found``, ``not_found``, ``invalid`` or ``unavailable``) and,
             when found, ``partner`` (values ready for ``res.partner.create``), ``vat_payer``,
-            ``inactive`` and ``struck_off``
+            ``inactive``, ``inactive_date``, ``struck_off`` and ``trade_register`` (the J… number,
+            also there when the partner has no field for it)
         """
         cui = self.normalize_cui(vat)
         if not self.is_valid_cui(cui):
             return {"state": "invalid"}
-        result = self._request(cui)
+        result = self._request(cui, timeout)
         if result is None:
             return {"state": "unavailable"}
         if not result or not (result.get("date_generale") or {}).get("denumire"):
@@ -77,19 +79,21 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
             "partner": self._prepare_partner_values(result),
             "vat_payer": bool((result.get("inregistrare_scop_Tva") or {}).get("scpTVA")),
             "inactive": bool(status.get("statusInactivi")),
+            "inactive_date": self._clean(status.get("dataInactivare")),
+            "trade_register": self._clean(general.get("nrRegCom")),
             "struck_off": bool(status.get("dataRadiere"))
             or "RADIERE" in (general.get("stare_inregistrare") or "").upper(),
         }
 
     @api.model
-    def _request(self, cui):
+    def _request(self, cui, timeout=None):
         """Ask ANAF about one CUI: the record found, ``{}`` when not found, ``None`` when ANAF did not answer"""
         get_param = self.env["ir.config_parameter"].sudo().get_param
         try:
             response = requests.post(
                 get_param("l10n_ro_anaf_partner_lookup.url", ANAF_URL),
                 json=[{"cui": int(cui), "data": fields.Date.to_string(fields.Date.context_today(self))}],
-                timeout=int(get_param("l10n_ro_anaf_partner_lookup.timeout", ANAF_TIMEOUT)),
+                timeout=timeout or int(get_param("l10n_ro_anaf_partner_lookup.timeout", ANAF_TIMEOUT)),
             )
             response.raise_for_status()
             found = response.json().get("found") or []

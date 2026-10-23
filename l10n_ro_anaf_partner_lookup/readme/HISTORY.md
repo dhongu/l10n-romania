@@ -1,3 +1,9 @@
+## 19.0.1.0.2 (2026-10-23)
+
+- The caller can choose how long to wait for ANAF (`timeout`); the result also gives the date the
+  company became inactive and the trade register number, even when the partner has no field for
+  it.
+
 ## 19.0.1.0.1 (2026-10-23)
 
 - A village is the locality without its commune or town: "Sat Filipești Com. Filipești" gives
