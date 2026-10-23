@@ -2,11 +2,21 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
+import logging
+
+from markupsafe import Markup, escape
+
 from odoo import api, fields, models
+from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 # Marks a suggestion that came from ANAF; it travels back to the server in the
 # `entity_type` the autocomplete widget hands over after the partner is saved
 ANAF_ENTITY_TYPE = "l10n_ro_anaf"
+
+# Kept on refresh when the partner already has one: a local phone is usually the better one
+ANAF_FILL_IF_EMPTY = ("phone",)
 
 
 class ResPartner(models.Model):
@@ -77,3 +87,98 @@ class ResPartner(models.Model):
                 ),
                 subtype_xmlid="mail.mt_note",
             )
+
+    # ------------------------------------------------------------------
+    # Update an existing partner from ANAF
+    # ------------------------------------------------------------------
+
+    def action_l10n_ro_anaf_refresh(self):
+        lookup = self.env["l10n.ro.anaf.partner.lookup"]
+        for partner in self:
+            result = lookup.lookup(partner.vat or "")
+            if result["state"] == "invalid":
+                raise UserError(self.env._("%(vat)s is not a valid CUI.", vat=partner.vat or ""))
+            if result["state"] == "unavailable":
+                raise UserError(self.env._("ANAF did not answer. Try again in a moment."))
+            if result["state"] != "found":
+                raise UserError(self.env._("ANAF has no company registered under %(vat)s.", vat=partner.vat))
+            values = {
+                name: value
+                for name, value in result["partner"].items()
+                if name in partner._fields and not (name in ANAF_FILL_IF_EMPTY and partner[name])
+            }
+            changes = partner._l10n_ro_anaf_changes(values)
+            partner.write(values)
+            partner._l10n_ro_anaf_post_refresh(changes, result)
+        return True
+
+    def _l10n_ro_anaf_changes(self, values):
+        """``[(label, old, new)]`` for the values that differ from the partner's"""
+        self.ensure_one()
+        changes = []
+        for name, value in values.items():
+            field = self._fields[name]
+            old = self[name]
+            if field.type == "many2one":
+                new = self.env[field.comodel_name].browse(value)
+                if old == new:
+                    continue
+                old, new = old.display_name, new.display_name
+            elif (old or False) == (value or False):
+                continue
+            else:
+                new = value
+            changes.append((field._description_string(self.env), old or "", new or ""))
+        return changes
+
+    def _l10n_ro_anaf_post_refresh(self, changes, result):
+        self.ensure_one()
+        if changes:
+            lines = Markup("").join(Markup("<li>%s: %s → %s</li>") % (label, old, new) for label, old, new in changes)
+            body = Markup("%s<ul>%s</ul>") % (self.env._("Updated from ANAF:"), lines)
+        else:
+            body = escape(self.env._("Checked against ANAF: no change."))
+        status = []
+        if result.get("struck_off"):
+            status.append(self.env._("ANAF lists the company as struck off."))
+        if result.get("inactive"):
+            status.append(self.env._("ANAF lists the company as an inactive taxpayer."))
+        for line in status:
+            body += Markup("<p><b>%s</b></p>") % line
+        self.message_post(body=body, subtype_xmlid="mail.mt_note")
+
+    # ------------------------------------------------------------------
+    # A partner created with its CUI as the name (quick create, import, API)
+    # ------------------------------------------------------------------
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        if not self.env.context.get("l10n_ro_anaf_no_autofill"):
+            for vals in vals_list:
+                vals.update(self._l10n_ro_anaf_autofill_values(vals))
+        return super().create(vals_list)
+
+    @api.model
+    def _l10n_ro_anaf_autofill_values(self, vals):
+        """The ANAF data for a partner whose name is a Romanian CUI; ``{}`` otherwise"""
+        name = (vals.get("name") or "").strip()
+        if not name or vals.get("vat") or vals.get("parent_id"):
+            return {}
+        lookup = self.env["l10n.ro.anaf.partner.lookup"]
+        # A name holding anything but digits after an optional RO is not a CUI
+        cui = lookup.normalize_cui(name)
+        if not lookup.is_valid_cui(cui):
+            return {}
+        country = self.env["res.country"].browse(vals.get("country_id"))
+        if country and country.code != "RO":
+            return {}
+        result = lookup.lookup(cui)
+        if result["state"] != "found":
+            _logger.info("ANAF: no data for the new partner %s (%s)", name, result["state"])
+            return {}
+        # What the caller set explicitly wins, except the name, which was the CUI
+        return {
+            key: value
+            for key, value in result["partner"].items()
+            if key in self._fields and (key == "name" or not vals.get(key))
+        }

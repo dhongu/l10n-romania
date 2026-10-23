@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -70,3 +71,99 @@ class TestPartnerAutocomplete(TransactionCase):
         partner = self.Partner.create({"name": "TEST ANAF"})
         partner.enrich_company_message_post({"entity_type": "l10n_ro_anaf"})
         self.assertIn("ANAF", partner.message_ids[0].body)
+
+    # -- update an existing partner from ANAF ---------------------------
+
+    def _partner(self, **vals):
+        values = {
+            "name": "Forest Vechi",
+            "is_company": True,
+            "vat": "RO" + CUI,
+            "country_id": self.ro.id,
+            "street": "Str. Veche 1",
+            "city": "Arad",
+            "phone": "0700000000",
+        }
+        values.update(vals)
+        return self.Partner.with_context(l10n_ro_anaf_no_autofill=True).create(values)
+
+    def test_refresh_updates_and_logs_the_changes(self):
+        partner = self._partner()
+        with patch(REQUEST_PATH, return_value=anaf_result()):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertEqual(partner.name, "FOREST AND BIOMASS ROMÂNIA S.A.")
+        self.assertEqual(partner.street, "Str. Ciprian Porumbescu Nr. 12")
+        self.assertEqual(partner.city, "Timișoara")
+        self.assertEqual(partner.state_id, self.env.ref("base.RO_TM"))
+        # A phone already on the partner stays
+        self.assertEqual(partner.phone, "0700000000")
+        body = partner.message_ids[0].body
+        self.assertIn("Str. Veche 1", body)
+        self.assertIn("Str. Ciprian Porumbescu Nr. 12", body)
+
+    def test_refresh_fills_an_empty_phone(self):
+        partner = self._partner(phone=False)
+        with patch(REQUEST_PATH, return_value=anaf_result()):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertEqual(partner.phone, "0356179038")
+
+    def test_refresh_without_change(self):
+        partner = self._partner()
+        with patch(REQUEST_PATH, return_value=anaf_result()):
+            partner.action_l10n_ro_anaf_refresh()
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertIn("no change", partner.message_ids[0].body)
+
+    def test_refresh_warns_about_struck_off(self):
+        partner = self._partner()
+        with patch(REQUEST_PATH, return_value=anaf_result(stare_inregistrare="RADIERE din data 03.04.2026")):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertIn("struck off", partner.message_ids[0].body)
+
+    def test_refresh_errors(self):
+        partner = self._partner()
+        with patch(REQUEST_PATH, return_value={}), self.assertRaisesRegex(UserError, "no company registered"):
+            partner.action_l10n_ro_anaf_refresh()
+        with patch(REQUEST_PATH, return_value=None), self.assertRaisesRegex(UserError, "did not answer"):
+            partner.action_l10n_ro_anaf_refresh()
+        # base_vat refuses a wrong control digit on write; a partner imported before can still have one
+        self.env.cr.execute("UPDATE res_partner SET vat = 'RO30834858' WHERE id = %s", [partner.id])
+        partner.invalidate_recordset(["vat"])
+        with self.assertRaisesRegex(UserError, "not a valid CUI"):
+            partner.action_l10n_ro_anaf_refresh()
+
+    # -- a partner created with its CUI as the name ---------------------
+
+    def test_create_with_cui_as_name(self):
+        for name in (CUI, "RO" + CUI, " ro 30834857 "):
+            with patch(REQUEST_PATH, return_value=anaf_result()):
+                partner = self.Partner.create({"name": name})
+            self.assertEqual(partner.name, "FOREST AND BIOMASS ROMÂNIA S.A.")
+            self.assertEqual(partner.vat, "RO" + CUI)
+            self.assertTrue(partner.is_company)
+            partner.vat = False
+
+    def test_name_create_from_a_many2one(self):
+        with patch(REQUEST_PATH, return_value=anaf_result()):
+            partner_id, _name = self.Partner.name_create(CUI)
+        self.assertEqual(self.Partner.browse(partner_id).city, "Timișoara")
+
+    def test_create_explicit_values_win(self):
+        with patch(REQUEST_PATH, return_value=anaf_result()):
+            partner = self.Partner.create({"name": CUI, "phone": "0700000000"})
+        self.assertEqual(partner.phone, "0700000000")
+
+    def test_create_left_alone(self):
+        with patch(REQUEST_PATH) as request:
+            self.Partner.create({"name": "Forest and Biomass"})
+            self.Partner.create({"name": CUI, "vat": "RO" + CUI})
+            self.Partner.create({"name": "30834858"})
+            self.Partner.create({"name": CUI, "country_id": self.be.id})
+            self.Partner.with_context(l10n_ro_anaf_no_autofill=True).create({"name": CUI})
+        request.assert_not_called()
+
+    def test_create_when_anaf_is_down(self):
+        with patch(REQUEST_PATH, return_value=None):
+            partner = self.Partner.create({"name": CUI})
+        self.assertEqual(partner.name, CUI)
+        self.assertFalse(partner.vat)
