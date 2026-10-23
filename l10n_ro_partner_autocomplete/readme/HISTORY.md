@@ -1,3 +1,9 @@
+## 19.0.1.1.1 (2026-10-23)
+
+- A partner created with a CUI as its name is filled in from ANAF also when its Tax ID is that
+  same CUI, as `l10n_ro_partner_create_by_vat_button` sets it before this module runs; a Tax ID
+  of another company still leaves the partner as it is.
+
 ## 19.0.1.1.0 (2026-10-23)
 
 - **Update from ANAF** button on a Romanian company: the data is reloaded from ANAF, a phone
