@@ -40,7 +40,7 @@ addon | version | maintainers | summary
 [l10n_ro_lang](l10n_ro_lang/) | 19.0.0.0.4 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Set language to romanian if IP is from Romania
 [l10n_ro_message_spv_purchase](l10n_ro_message_spv_purchase/) | 19.0.0.0.9 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Add SPV message on purchase orders for Romania
 [l10n_ro_message_spv_self_billing](l10n_ro_message_spv_self_billing/) | 19.0.1.0.2 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Number self-billed documents with the number allocated by the customer, taken from the SPV message
-[l10n_ro_partner_create_by_vat_button](l10n_ro_partner_create_by_vat_button/) | 19.0.1.1.10 |  | Partner Create by VAT Button
+[l10n_ro_partner_create_by_vat_button](l10n_ro_partner_create_by_vat_button/) | 19.0.1.1.12 |  | Partner Create by VAT Button
 [l10n_ro_partner_create_by_vat_openapi](l10n_ro_partner_create_by_vat_openapi/) | 19.0.1.0.4 |  | Romania - Partner Create by VAT from OpenAPI
 [l10n_ro_report_common](l10n_ro_report_common/) | 19.0.1.1.2 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Common building blocks for Romanian printed reports: company bank accounts, company identification header and amounts in words
 [l10n_ro_sale_order_report](l10n_ro_sale_order_report/) | 19.0.1.0.13 |  | Formular Factura Proformae
