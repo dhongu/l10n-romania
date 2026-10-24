@@ -1,3 +1,9 @@
+## 19.0.2.1.11 (2026-10-24)
+
+- Consultant sheet: the DVI journal entry carries the foreign supplier on its header (step 7, §2.6),
+  the purchase VAT journal shows the import once, on the DVI entry, and D394 leaves it out (§7), with
+  two new checks for the consultant (§8).
+
 ## 19.0.2.1.10 (2026-10-24)
 
 - The DVI journal entry now carries the foreign supplier of the vendor bill on its header, so the
