@@ -151,6 +151,39 @@ class AccountInvoiceDVI(models.TransientModel):
         return self.env["product.product"].browse(int(product_id)).exists()
 
     @api.model
+    def _get_or_create_custom_duty_product(self):
+        """Produsul „Taxă vamală”, cu contul de cheltuieli completat pe compania curentă.
+
+        Produsul e unul pe bază (`company_id` gol, id-ul în parametrul de sistem), dar
+        `property_account_expense_id` e proprietate pe companie: se setează la creare doar pentru
+        compania care l-a creat. Pe celelalte companii îl completăm la prima folosire, ca traseul
+        nativ „factură furnizor -> landed cost” să nu cadă pe contul de cheltuieli al categoriei.
+        """
+        product = self.get_custom_duty_product()
+        if not product:
+            product = self.env["product.product"].create(self._prepare_custom_duty_product())
+            self.env["ir.config_parameter"].sudo().set_param("dvi.custom_duty_product_id", product.id)
+        template = product.product_tmpl_id.with_company(self.env.company)
+        if not template.property_account_expense_id:
+            account = self._get_customs_payable_account()
+            if account:
+                template.sudo().property_account_expense_id = account
+        return product
+
+    @api.model
+    def _get_customs_account(self, product):
+        """Contul creditat cu drepturile de import (taxa vamală, TVA-ul plătit în vamă).
+
+        Se ia direct contul de decontare cu bugetul al companiei curente, nu proprietatea
+        produsului: pe multi-company aceasta putea lipsi și nota se posta tăcut pe 607.
+        Fără 446 în plan, rămâne contul de cheltuieli al produsului.
+        """
+        account = self._get_customs_payable_account()
+        if not account:
+            account = product.product_tmpl_id.with_company(self.env.company).get_product_accounts()["expense"]
+        return account
+
+    @api.model
     def default_get(self, fields_list):
         defaults = super().default_get(fields_list)
         active_id = self.env.context.get("active_id", False)
@@ -192,14 +225,8 @@ class AccountInvoiceDVI(models.TransientModel):
         # câmpul nativ „Factură furnizor”; domeniul lui admite doar facturi (nu note de credit)
         if invoice.move_type == "in_invoice":
             values["vendor_bill_id"] = invoice.id
-        set_param = self.env["ir.config_parameter"].sudo().set_param
         if self.custom_duty:
-            custom_duty_product = self.get_custom_duty_product()
-            if not custom_duty_product:
-                vals = self._prepare_custom_duty_product()
-                custom_duty_product = self.env["product.product"].create(vals)
-                set_param("dvi.custom_duty_product_id", custom_duty_product.id)
-            accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
+            custom_duty_product = self._get_or_create_custom_duty_product()
 
             values["cost_lines"] += [
                 (
@@ -210,7 +237,7 @@ class AccountInvoiceDVI(models.TransientModel):
                         "product_id": custom_duty_product.id,
                         "price_unit": self.custom_duty,
                         "split_method": "by_current_cost_price",
-                        "account_id": accounts_data["expense"].id,
+                        "account_id": self._get_customs_account(custom_duty_product).id,
                     },
                 )
             ]
