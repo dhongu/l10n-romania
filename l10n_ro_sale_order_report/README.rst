@@ -37,6 +37,13 @@ Two kind of proforma invoice can be printed from the quotation:
 Changelog
 =========
 
+19.0.1.0.14 (2026-10-22)
+------------------------
+
+- Listed on Odoo Apps as *Romania - Proforma Invoice Report* (was
+  *Terrabit Sale Order Report*). The technical name
+  ``l10n_ro_sale_order_report`` does not change.
+
 19.0.1.0.13 (2026-10-09)
 ------------------------
 

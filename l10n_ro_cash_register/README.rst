@@ -133,6 +133,12 @@ verificări pe perioade.
 Changelog
 =========
 
+19.0.1.4.3 (2026-10-22)
+-----------------------
+
+- Odoo Apps banner title: *Cash Register* (was *Cash Register
+  Document*), the same as the module name.
+
 19.0.1.4.1 (2026-10-09)
 -----------------------
 
@@ -215,8 +221,8 @@ Registrul are acum cache-ul de secvență propriu.
   încasărilor, plăților și operațiunilor nu mai apar pe el.
 
 Ideea vine din modulul de casă și bancă scris de Alexandru Grecu pentru
-MD Trade Concept SRL, unde închiderea doar semnala diferențele apărute
-după închidere; aici ea le previne.
+un client, unde închiderea doar semnala diferențele apărute după
+închidere; aici ea le previne.
 
 19.0.1.2.2
 ----------

@@ -34,6 +34,14 @@ Features:
 Changelog
 =========
 
+19.0.1.0.10 (2026-10-22)
+------------------------
+
+- Listed on Odoo Apps as *Romania - e-Factura for Store Sales* (was
+  *Deltatech Sale from Store UBL*), with the same title on the Apps
+  banner. The technical name ``l10n_ro_edi_ubl_sale_store`` does not
+  change.
+
 19.0.1.0.9 (2026-10-09)
 -----------------------
 

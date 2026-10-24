@@ -32,6 +32,12 @@ Romania - Stock Accounting Landed Cost Account
 Changelog
 =========
 
+19.0.1.1.3 (2026-10-22)
+-----------------------
+
+- Odoo Apps banner title: *Stock Accounting Landed Cost Account* (was
+  *Landed Cost Accounts*), the same as the module name.
+
 19.0.1.1.2 (2026-10-09)
 -----------------------
 
