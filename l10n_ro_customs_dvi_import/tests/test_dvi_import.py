@@ -113,6 +113,18 @@ class TestDviImport(TransactionCase):
         wizard_form = self._wizard_form(bill, "dvi_4000_one_item")
         self.assertIn("is not among the invoices", wizard_form.dvi_import_info)
 
+    def test_different_vat_rates(self):
+        """One DVI holds one tax: a declaration with 11% and 21% articles must not be filled in."""
+        lines = load_lines("dvi_4000_two_items")
+        for line in lines:
+            # second article at 21%: amounts unchanged, so the totals still match
+            if line.text.startswith("Tip taxă: B00") and "Cuantumul: 7202.12" in line.text:
+                line.text = line.text.replace("Cota de impozitare: 0.11", "Cota de impozitare: 0.21")
+        wizard_form = Form(self.env["account.invoice.dvi"].with_context(active_id=self._create_bill("X").id))
+        with patch(EXTRACT_LINES, return_value=lines), self.assertRaisesRegex(UserError, "different VAT rates"):
+            wizard_form.dvi_file = PDF
+        self.assertFalse(wizard_form.dvi_number, "Nothing is filled in")
+
     def test_other_importer(self):
         self.company.vat = "RO76543210"
         with self.assertRaisesRegex(UserError, "is not the current company"):
