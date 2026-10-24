@@ -32,6 +32,12 @@ Romania - Picking Reports -Product Expiry
 Changelog
 =========
 
+19.0.1.0.4 (2026-10-12)
+-----------------------
+
+- Depends on ``l10n_ro_picking_report``, the new name of
+  ``l10n_ro_stock_picking_report``.
+
 19.0.1.0.3 (2026-10-09)
 -----------------------
 

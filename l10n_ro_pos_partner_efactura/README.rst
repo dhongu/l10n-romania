@@ -72,6 +72,12 @@ its own, and the invoice is issued only when the customer asks for it.
 Changelog
 =========
 
+19.0.1.1.2 (2026-10-23)
+-----------------------
+
+- Main image for the Odoo Apps Store (banner); the manifest points to it
+  in ``images``.
+
 19.0.1.1.1 (2026-10-22)
 -----------------------
 

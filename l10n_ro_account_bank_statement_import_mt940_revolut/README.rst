@@ -39,6 +39,14 @@ skipped instead of blocking the import.
 Changelog
 =========
 
+19.0.1.0.4 (2026-10-22)
+-----------------------
+
+- Listed on Odoo Apps as *Revolut MT940 Statement Import* (was *MT940
+  Revolut Format Bank Statements Import*). The technical name
+  ``l10n_ro_account_bank_statement_import_mt940_revolut`` does not
+  change.
+
 19.0.1.0.3 (2026-10-09)
 -----------------------
 
@@ -70,7 +78,7 @@ Changelog
 - Fix: the currency lookup in ``_revolut_journal_exists`` didn't set
   ``active_test=False``, so a currency inactive in Settings (but still
   used by a journal) was treated as "not found" and its wallet dropped.
-  Ported from 18.0 (ticket #9408, Agroamat).
+  Ported from 18.0.
 
 19.0.1.0.0
 ----------
