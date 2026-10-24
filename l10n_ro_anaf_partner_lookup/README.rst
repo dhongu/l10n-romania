@@ -33,8 +33,11 @@ without depending on other localization modules.
   VAT payer), street with its number, address details, locality without
   the ``Mun.``/``Oraș``/``Com.`` prefix (a village without its commune),
   county, postal code, trade register number (in the NRC field) and
-  phone. The fiscal domicile is used, the registered office when it is
-  missing.
+  phone. The whole address comes from one block: the fiscal domicile,
+  the registered office when it is missing.
+- **Postal code by street**: when ANAF gives none and ``l10n_ro_zip`` is
+  installed, it is found in ``res.zip`` by street and number (with the
+  ranges of long streets), or the one of the village.
 - **Bucharest**: the locality is the sector (``Sector 3``), as e-Factura
   requires; when ANAF does not write it, it is read from the postal code
   (``030167`` is in Sector 3).
@@ -66,6 +69,19 @@ by default).
 
 Changelog
 =========
+
+19.0.1.2.0 (2026-10-24)
+-----------------------
+
+- The whole address comes from one ANAF block: the fiscal domicile, else
+  the registered office. The postal code is no longer taken from the
+  other block or from the general data, which gave addresses that do not
+  exist (a street in Sector 2 with a postal code from Sector 6).
+- When the block has no postal code and ``l10n_ro_zip`` is installed, it
+  is looked up in ``res.zip`` by street, locality and county, with the
+  number ranges of long streets (odd and even apart); a village without
+  streets gets the postal code of the locality. Without a single match
+  it stays empty.
 
 19.0.1.1.0 (2026-10-23)
 -----------------------
