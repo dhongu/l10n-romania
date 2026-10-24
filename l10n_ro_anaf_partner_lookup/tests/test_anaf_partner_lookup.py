@@ -172,6 +172,30 @@ class TestAnafPartnerLookup(TransactionCase):
         self.assertEqual(result["partner"]["city"], "Cluj-Napoca")
         self.assertEqual(result["partner"]["state_id"], self.env.ref("base.RO_CJ").id)
 
+    def test_address_from_one_block(self):
+        # DANTE INTERNATIONAL: the fiscal domicile in Sector 2 without a postal code, the registered
+        # office in Sector 6 with one. The postal code of the office is not the one of the domicile
+        answer = anaf_result(codPostal="")
+        answer["adresa_domiciliu_fiscal"].update(
+            ddenumire_Strada="Str. Strada Testului Inexistentă",
+            dnumar_Strada="6",
+            ddenumire_Localitate="Sector 2 Mun. Bucureşti",
+            dcod_JudetAuto="B",
+            ddetalii_Adresa="",
+            dcod_Postal="",
+        )
+        answer["adresa_sediu_social"] = {
+            "sdenumire_Strada": "Şos. Virtuţii",
+            "snumar_Strada": "148",
+            "sdenumire_Localitate": "Sector 6 Mun. Bucureşti",
+            "scod_JudetAuto": "B",
+            "scod_Postal": "60787",
+        }
+        partner = self._lookup(answer)[0]["partner"]
+        self.assertEqual(partner["street"], "Str. Strada Testului Inexistentă Nr. 6")
+        self.assertEqual(partner["city"], "Sector 2")
+        self.assertEqual(partner["zip"], "")
+
     def test_struck_off_and_inactive(self):
         answer = anaf_result(stare_inregistrare="RADIERE din data 03.04.2026")
         answer["stare_inactiv"].update(statusInactivi=True, dataInactivare="2026-05-04")
@@ -246,3 +270,61 @@ class TestAnafPartnerLookupCity(TransactionCase):
 
     def test_no_city_left_empty(self):
         self.assertNotIn("city_id", self._lookup("Sat Nicaieri Com. Nicaieri", "607999"))
+
+
+@tagged("post_install", "-at_install")
+class TestAnafPartnerLookupZip(TransactionCase):
+    """The postal code of the street, where l10n_ro_zip has them, when ANAF gives none"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if "res.zip" not in cls.env:
+            raise unittest.SkipTest("No res.zip (l10n_ro_zip)")
+        cls.Lookup = cls.env["l10n.ro.anaf.partner.lookup"]
+        cls.state_bc = cls.env.ref("base.RO_BC")
+        Zip = cls.env["res.zip"]
+        for name, street_type, street_name in [
+            ("607911", "Strada", "Testului"),
+            ("607912", "Bulevard", "Lung de Test nr. 1-19"),
+            ("607913", "Bulevard", "Lung de Test nr. 2-22"),
+            ("607914", "Bulevard", "Lung de Test nr. 21-T"),
+            ("607915", "", ""),
+        ]:
+            Zip.create(
+                {
+                    "name": name,
+                    "city": "Testopolis",
+                    "state_id": cls.state_bc.id,
+                    "country_id": cls.env.ref("base.ro").id,
+                    "street_type": street_type,
+                    "street_name": street_name,
+                }
+            )
+
+    def _zip(self, street, number=""):
+        answer = anaf_result()
+        answer["adresa_domiciliu_fiscal"].update(
+            ddenumire_Strada=street,
+            dnumar_Strada=number,
+            ddenumire_Localitate="Testopolis",
+            dcod_JudetAuto="BC",
+            dcod_Postal="",
+        )
+        with patch(REQUEST_PATH, return_value=answer):
+            return self.Lookup.lookup(CUI)["partner"]["zip"]
+
+    def test_zip_by_street(self):
+        self.assertEqual(self._zip("Str. Testului", "3"), "607911")
+
+    def test_zip_by_number_range(self):
+        self.assertEqual(self._zip("Bd. Lung de Test", "7"), "607912")
+        self.assertEqual(self._zip("Bulevardul Lung de Test", "8"), "607913")
+        self.assertEqual(self._zip("Bd. Lung de Test", "45"), "607914")
+        self.assertEqual(self._zip("Bd. Lung de Test", "40"), "")
+
+    def test_zip_of_the_locality(self):
+        self.assertEqual(self._zip(""), "607915")
+
+    def test_unknown_street_has_no_zip(self):
+        self.assertEqual(self._zip("Str. Nicăieri", "1"), "")

@@ -34,6 +34,29 @@ LOCALITY_PREFIX_RE = re.compile(rf"^{LOCALITY_UNIT}\s+", re.IGNORECASE)
 LOCALITY_PARENT_RE = re.compile(r"\s+(?:com\.|comuna|orș\.|ors\.|oraș|oras|mun\.|municipiul)\s+(\S.*)$", re.IGNORECASE)
 
 
+# The type ANAF writes before the name of the street, which res.zip keeps apart
+STREET_TYPE_RE = re.compile(
+    r"^(?:str\.?|strada|bd\.?|b-dul|bulevardul|cal\.?|calea|șos\.?|sos\.?|șoseaua|soseaua|al\.?|aleea|"
+    r"intr\.?|intrarea|p-ța|pța\.?|piața|piata|spl\.?|splaiul|dr\.?|drumul|prel\.?|prelungirea|"
+    r"fund\.?|fundătura|fundatura|pasajul)\s+",
+    re.IGNORECASE,
+)
+
+
+def _number_in_range(number, numbers):
+    """Whether the street number is in a res.zip range such as "1-19", "2-22" or "21-T" (odd and
+    even numbers are on separate ranges); a row without a range holds the whole street"""
+    if not numbers:
+        return True
+    match = re.match(r"(\d+)", number or "")
+    bounds = re.match(r"(\d+)\s*-\s*(\d+|T)", numbers, re.IGNORECASE)
+    if not match or not bounds:
+        return False
+    value, low = int(match.group(1)), int(bounds.group(1))
+    high = bounds.group(2)
+    return value % 2 == low % 2 and low <= value and (high.upper() == "T" or value <= int(high))
+
+
 def _normalize_name(name):
     """A locality name without diacritics, case, spaces, dots or dashes: ANAF and res.city write it
     differently ("Sector 3" and "Sector3", "Timişoara" and "Timișoara")"""
@@ -122,12 +145,17 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
     @api.model
     def _prepare_partner_values(self, result):
         general = result.get("date_generale") or {}
-        # The fiscal domicile is where the invoice goes; the registered office is the fallback
+        # The whole address comes from one block: the fiscal domicile, where the invoice goes, else
+        # the registered office. Mixing them gives an address that does not exist (the street of
+        # one with the postal code of the other)
         fiscal = result.get("adresa_domiciliu_fiscal") or {}
-        office = result.get("adresa_sediu_social") or {}
+        if fiscal.get("ddenumire_Localitate") or fiscal.get("ddenumire_Strada"):
+            block, prefix = fiscal, "d"
+        else:
+            block, prefix = result.get("adresa_sediu_social") or {}, "s"
 
-        def address(fiscal_key, office_key):
-            return self._clean(fiscal.get(fiscal_key)) or self._clean(office.get(office_key))
+        def address(key):
+            return self._clean(block.get(prefix + key))
 
         vat_payer = bool((result.get("inregistrare_scop_Tva") or {}).get("scpTVA"))
         cui = str(general.get("cui") or "")
@@ -142,31 +170,33 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         # the RO prefix would be stripped again when the partner is saved
         if "l10n_ro_vat_subjected" in self.env["res.partner"]._fields:
             values["l10n_ro_vat_subjected"] = vat_payer
-        street = self._title(address("ddenumire_Strada", "sdenumire_Strada"))
-        number = address("dnumar_Strada", "snumar_Strada")
-        if number:
-            street = f"{street} Nr. {number}".strip()
-        details = self._title(address("ddetalii_Adresa", "sdetalii_Adresa"))
+        street_name = self._title(address("denumire_Strada"))
+        number = address("numar_Strada")
+        street = f"{street_name} Nr. {number}".strip() if number else street_name
+        details = self._title(address("detalii_Adresa"))
         if not street:
             street, details = details, ""
         values["street"] = street
         values["street2"] = details
-        zip_code = address("dcod_Postal", "scod_Postal") or self._clean(general.get("codPostal"))
+        zip_code = address("cod_Postal")
         # Romanian postal codes have 6 digits; ANAF drops the leading 0 of the Bucharest ones
         if zip_code.isdigit() and len(zip_code) == 5:
             zip_code = "0" + zip_code
-        values["zip"] = zip_code
 
-        state_code = address("dcod_JudetAuto", "scod_JudetAuto")
+        state_code = address("cod_JudetAuto")
         state = self.env["res.country.state"].search(
             [("country_id.code", "=", "RO"), ("code", "=", state_code)], limit=1
         )
         values["state_id"] = state.id
-        locality = address("ddenumire_Localitate", "sdenumire_Localitate")
+        locality = address("denumire_Localitate")
         values["city"] = self._prepare_city(locality, state_code, zip_code)
         city_id = self._prepare_city_id(values["city"], state, zip_code, self._locality_commune(locality))
         if city_id:
             values["city_id"] = city_id
+        if not zip_code:
+            # The block has no postal code: the one of the street, where l10n_ro_zip has them
+            zip_code = self._zip_from_street(street_name, number, values["city"], city_id, state)
+        values["zip"] = zip_code
         # The trade register number (J…) goes to its own field of the Romanian localization. The
         # Company ID (company_registry) is the CUI, which l10n_ro computes from the Tax ID
         if general.get("nrRegCom") and "nrc" in self.env["res.partner"]._fields:
@@ -174,6 +204,37 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         if general.get("telefon"):
             values["phone"] = self._clean(general["telefon"])
         return values
+
+    @api.model
+    def _zip_from_street(self, street, number, city, city_id, state):
+        """The postal code of a street in ``res.zip`` (l10n_ro_zip); ``""`` without a single match.
+
+        ``res.zip`` writes the street without its type ("Gara Herastrau") and splits a long street
+        by number ranges, odd and even apart ("Herastrau nr. 1-19", "Herastrau nr. 2-22",
+        "Herastrau nr. 21-T", T for up to the end).
+        """
+        if "res.zip" not in self.env or not state:
+            return ""
+        domain = [("state_id", "=", state.id)]
+        if city_id:
+            domain.append(("city_id", "=", city_id))
+        rows = self.env["res.zip"].sudo().search(domain)
+        if not city_id:
+            rows = rows.filtered(lambda z: _normalize_name(z.city) == _normalize_name(city))
+        if street:
+            name = _normalize_name(STREET_TYPE_RE.sub("", street))
+            matches = []
+            for row in rows.filtered("street_name"):
+                base, _sep, numbers = row.street_name.partition(" nr.")
+                if _normalize_name(base) == name:
+                    matches.append((row, numbers.strip()))
+            if len(matches) > 1 and number:
+                matches = [(row, numbers) for row, numbers in matches if _number_in_range(number, numbers)]
+            zips = {row.name for row, _numbers in matches}
+        else:
+            # A village without streets: the postal code of the whole locality
+            zips = set(rows.filtered(lambda z: not z.street_name).mapped("name"))
+        return zips.pop() if len(zips) == 1 else ""
 
     @api.model
     def _locality_commune(self, locality):
