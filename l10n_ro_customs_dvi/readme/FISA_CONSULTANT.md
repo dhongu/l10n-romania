@@ -394,6 +394,16 @@ Butonul e vizibil doar pe facturi furnizor în stare **Postat**.
 Butonul deschide wizardul. În capul lui se află o casetă de îndrumare cu maparea declarație → câmp.
 **Sumele se transcriu din declarație**, nu se recalculează din factură.
 
+> **Declarația primită ca PDF din SNI?** Cu modulul `l10n_ro_customs_dvi_import`, wizardul are în
+> plus câmpul **PDF DVI (SNI)**. Încărcați în el PDF-ul primit de la comisionar, iar câmpurile de mai
+> jos se completează singure din declarație: MRN-ul, data, regimul vamal, A00, baza și valoarea B00,
+> sau garanția la regimul 4200. Modulul verifică întâi că declarația e a companiei, că nu e deja
+> înregistrată, că articolele au aceeași cotă de TVA și că sumele de pe articole dau totalurile,
+> apoi atașează PDF-ul pe DVI. Rămâne la
+> operator alegerea taxei: TVA plătit în vamă sau amânat (Pasul 10). Fluxul, cu capturi, e în fișa
+> modulului `l10n_ro_customs_dvi_import`. Transcrierea manuală de mai jos rămâne pentru declarațiile
+> primite fără PDF-ul SNI.
+
 | Câmp | Ce se pune | Unde e în DVI |
 |---|---|---|
 | **Bază de impozitare** | baza pe care vama a calculat TVA-ul | baza poziției **B00** |
@@ -707,6 +717,7 @@ Puneți numărul de DVI ca referință pe aceste note, ca să poată fi urmărit
 | `stock_account` | valorizarea stocului (AVCO/FIFO) | dependență (manifest) |
 | `l10n_ro` | planul de conturi RO, pentru determinarea contului 446 | dependență (manifest) |
 | `l10n_ro_invoice_dvi_protect` | blochează resetarea facturii și anularea DVI după consum FIFO | complementar, recomandat |
+| `l10n_ro_customs_dvi_import` | completează wizardul DVI din PDF-ul declarației tipărit de SNI (Pasul 5) | complementar, opțional |
 | `l10n_ro_dvi` (OCA) | flux DVI alternativ | **exclus** — nu pot coexista |
 | `l10n_ro_anaf_d300` | TVA deductibilă la import, prin tag-urile taxei; taxele „21% IMP AM" / „11% IMP AM" pentru importul fără plata TVA în vamă | integrare prin convenție |
 | `l10n_ro_saft` (Enterprise) | D406: tipul și codul SAF-T ale taxei alese pe DVI | integrare prin convenție |
@@ -717,8 +728,8 @@ Puneți numărul de DVI ca referință pe aceste note, ca să poată fi urmărit
 stocului, nota de TVA la import cu tag-urile pentru D300, referința MRN și furnizorul extern pe notă.
 
 **Ce rămâne manual:** transcrierea cifrelor din declarație (baza, valoarea TVA, cota, garanția la
-4200), alegerea regimului vamal și a regimului de plată (prin taxă), notele garanției pe 2678 și
-cererea de deblocare, plata către vamă și reconcilierea ei pe 446, decizia de capitalizare a
+4200) și alegerea regimului vamal, dacă nu e instalat `l10n_ro_customs_dvi_import`; apoi alegerea
+regimului de plată (prin taxă), notele garanției pe 2678 și cererea de deblocare, plata către vamă și reconcilierea ei pe 446, decizia de capitalizare a
 onorariului brokerului, includerea transportului extern, cererea de restituire a TVA-ului plătit în
 vamă și notele ei contabile.
 

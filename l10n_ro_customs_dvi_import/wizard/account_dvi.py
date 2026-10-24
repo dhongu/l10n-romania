@@ -8,6 +8,7 @@ from markupsafe import Markup, escape
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import format_date, formatLang
 
 from ..tools import SniDviError, parse_pdf
 
@@ -80,6 +81,16 @@ class AccountInvoiceDVI(models.TransientModel):
             raise UserError(
                 self.env._("The declaration %(mrn)s is already recorded on %(dvi)s.", mrn=dvi.mrn, dvi=existing.name)
             )
+        # A DVI holds a single import VAT tax: with two rates, the whole B00 would be reported on the
+        # row of one of them in the VAT return. Under 4200 there is no VAT, so the rates do not matter.
+        if len(dvi.vat_rates) > 1 and dvi.regimes != ["4200"]:
+            raise UserError(
+                self.env._(
+                    "The articles of the declaration have different VAT rates (%s), and a DVI holds a single "
+                    "tax. Record the declaration by hand, one DVI per rate, with the same MRN.",
+                    ", ".join(f"{rate:.0%}" for rate in dvi.vat_rates),
+                )
+            )
         return dvi
 
     def _find_import_vat_tax(self, rate):
@@ -106,22 +117,28 @@ class AccountInvoiceDVI(models.TransientModel):
     def _dvi_import_info(self, dvi, warnings):
         rows = [
             (self.env._("LRN"), dvi.lrn),
-            (self.env._("Customs Release"), dvi.release_date and fields.Date.to_string(dvi.release_date)),
+            (self.env._("Customs Release"), dvi.release_date and format_date(self.env, dvi.release_date)),
             (
                 self.env._("Invoiced Amount"),
                 self.env._(
                     "%(amount)s %(currency)s, exchange rate %(rate)s",
-                    amount=f"{dvi.invoiced_amount:g}",
+                    amount=formatLang(self.env, dvi.invoiced_amount),
                     currency=dvi.currency,
-                    rate=f"{dvi.exchange_rate:g}",
+                    rate=formatLang(self.env, dvi.exchange_rate, digits=4),
                 ),
             ),
             (self.env._("Invoices on the Declaration"), ", ".join(ref.number for ref in dvi.invoice_refs)),
             (self.env._("Articles"), len(dvi.items)),
             (
                 self.env._("Payment Method"),
-                ", ".join(
-                    f"{code} {total['method'] or '-'} ({total['payment_type']})" for code, total in dvi.totals.items()
+                "; ".join(
+                    self.env._(
+                        "%(code)s: method %(method)s, payment type %(type)s",
+                        code=code,
+                        method=total["method"] or "-",
+                        type=total["payment_type"] or "-",
+                    )
+                    for code, total in dvi.totals.items()
                 ),
             ),
         ]
@@ -159,14 +176,6 @@ class AccountInvoiceDVI(models.TransientModel):
             # exempt import: the B00 rate is irrelevant, the base module proposes the exempt tax
             self._onchange_customs_regime()
         else:
-            if len(dvi.vat_rates) > 1:
-                warnings.append(
-                    self.env._(
-                        "The articles have different VAT rates (%s): a single tax is recorded, "
-                        "split the DVI if needed.",
-                        ", ".join(f"{rate:.0%}" for rate in dvi.vat_rates),
-                    )
-                )
             tax = self._find_import_vat_tax(dvi.vat_rates[0]) if dvi.vat_rates else self.tax_id
             if tax:
                 self.tax_id = tax

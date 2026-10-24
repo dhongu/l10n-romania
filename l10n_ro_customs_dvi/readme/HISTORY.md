@@ -1,3 +1,9 @@
+## 19.0.2.1.12 (2026-10-24)
+
+- Consultant sheet, step 5: the DVI can be filled in from the PDF of the customs declaration
+  printed by the SNI, with the `l10n_ro_customs_dvi_import` module; manual transcription stays for
+  declarations received without that PDF.
+
 ## 19.0.2.1.11 (2026-10-24)
 
 - Consultant sheet: the DVI journal entry carries the foreign supplier on its header (step 7, §2.6),
