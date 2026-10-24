@@ -89,22 +89,13 @@ class LandedCost(models.Model):
         for cost in self.filtered(lambda c: c.dvi_number and c.account_move_id):
             cost.account_move_id.ref = cost.dvi_number
 
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-
-        product_id = get_param("dvi.custom_duty_product_id")
-
-        custom_duty_product = self.env["product.product"].browse(int(product_id)).exists()
-
-        if not custom_duty_product:
-            wizard = self.env["account.invoice.dvi"].create({})
-            vals = wizard._prepare_custom_duty_product()
-            custom_duty_product = self.env["product.product"].create(vals)
-            set_param = self.env["ir.config_parameter"].sudo().set_param
-            set_param("dvi.custom_duty_product_id", custom_duty_product.id)
-
         # La 4200 nu există TVA, dar baza importului scutit trebuie să ajungă în decont (rd. 29).
         for cost in self.filtered(lambda c: c.tax_id and (c.tax_value or c.customs_regime == "4200")):
-            accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
+            # Contul de buget al companiei DVI-ului, nu proprietatea produsului „Taxă vamală”
+            # (setată doar pe compania care l-a creat; pe celelalte nota cădea tăcut pe 607).
+            dvi_wizard = self.env["account.invoice.dvi"].with_company(cost.company_id)
+            custom_duty_product = dvi_wizard._get_or_create_custom_duty_product()
+            payable_account = dvi_wizard._get_customs_account(custom_duty_product)
             # Fără taxă vamală (ex. preferința UE–MD), super() nu creează nicio notă: o creăm aici
             # și o validăm la final, altfel TVA-ul / baza din DVI rămân într-o notă în ciornă,
             # pe care decontul nu o vede.
@@ -123,7 +114,7 @@ class LandedCost(models.Model):
 
             # etichetă neutră: regimul (plătit în vamă / fără plată, „IMP AM") se vede din numele taxei
             name = self.env._("Import VAT - %s", cost.tax_id.name)
-            aml = cost._prepare_tax_lines(name, tax_values, accounts_data)
+            aml = cost._prepare_tax_lines(name, tax_values, payable_account)
             aml += cost._prepare_tax_base_lines(name, tax_values)
             # Liniile sunt complete (TVA transcris din declaraţie): fără resincronizarea taxelor,
             # care pe o notă în ciornă ar recalcula TVA-ul din bază.
@@ -148,7 +139,7 @@ class LandedCost(models.Model):
                 with self.env.protecting([move._fields["fiscal_position_id"]], move):
                     move.with_context(skip_readonly_check=True).partner_id = cost.vendor_bill_id.commercial_partner_id
 
-    def _prepare_tax_lines(self, name, tax_values, accounts_data):
+    def _prepare_tax_lines(self, name, tax_values, payable_account):
         """Liniile de TVA ale notei, urmând liniile de repartiţie ale taxei alese.
 
         Taxa **este** comutatorul între cele două regimuri de la art. 326 Cod fiscal, fiindcă
@@ -204,7 +195,7 @@ class LandedCost(models.Model):
                     "name": name,
                     "debit": 0.0,
                     "credit": self.tax_value,
-                    "account_id": accounts_data["expense"].id,
+                    "account_id": payable_account.id,
                     "move_id": self.account_move_id.id,
                 }
             )
