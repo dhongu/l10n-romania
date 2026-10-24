@@ -282,6 +282,12 @@ facturi.
 
 **Comisionarul vamal (brokerul) este însă partener real**, cu CUI și sold pe 401 — vezi Pasul 8.
 
+**Partenerul de pe nota DVI este furnizorul extern, nu vama.** La validare, antetul notei preia
+furnizorul de pe factura legată de DVI (câmpul *Factură furnizor*), ca jurnalul de TVA pentru
+cumpărări să arate importul cu numele lui (Pasul 7). Liniile notei — TVA pe 4426 / 4427, taxa
+vamală și TVA-ul pe 446 — rămân fără partener: fișa furnizorului pe 401 nu se schimbă, iar 446 se
+urmărește în continuare pe numărul de DVI.
+
 ## 3. Utilizatori și roluri
 
 - **Operator achiziții** — creează comanda de achiziție către furnizorul extern și urmărește recepția.
@@ -424,6 +430,14 @@ pornit wizardul, iar pe factură apare butonul **Costuri adiționale**, care des
 Din costul de aterizare validat deschideți nota contabilă. **Referința notei este numărul de DVI**, nu
 secvența internă — astfel plata către vamă din extrasul bancar se poate reconcilia pe contul 446, per
 declarație.
+
+**Partenerul notei este furnizorul extern** de pe factura legată de DVI, completat automat la
+validare, doar pe antet (§2.6). Jurnalul de TVA pentru cumpărări îl preia de acolo: importul apare
+**o singură dată**, pe nota DVI, cu numele furnizorului, achizițiile pe cotă și rândul D300 (24 sau
+25). Factura furnizorului extern, cu taxa „0% EX G”, nu apare în jurnal, pentru că baza și TVA-ul
+importului se înscriu din declarația vamală (art. 299 alin. (1) lit. c) și d) Cod fiscal). Notele
+DVI validate înainte de versiunea 19.0.2.1.10 primesc furnizorul la actualizarea modulului, cu
+excepția celor din perioadele blocate.
 
 ![Nota contabilă cu MRN-ul ca referință](screenshots/07_nota_contabila_tva.png)
 
@@ -696,9 +710,11 @@ Puneți numărul de DVI ca referință pe aceste note, ca să poată fi urmărit
 | `l10n_ro_dvi` (OCA) | flux DVI alternativ | **exclus** — nu pot coexista |
 | `l10n_ro_anaf_d300` | TVA deductibilă la import, prin tag-urile taxei; taxele „21% IMP AM" / „11% IMP AM" pentru importul fără plata TVA în vamă | integrare prin convenție |
 | `l10n_ro_saft` (Enterprise) | D406: tipul și codul SAF-T ale taxei alese pe DVI | integrare prin convenție |
+| `l10n_ro_account_vat_journal` | jurnalul de TVA pentru cumpărări: importul apare o dată, pe nota DVI, cu furnizorul din antetul ei; liniile „0% EX G” ale facturii externe nu intră în jurnal | integrare prin convenție |
+| `l10n_ro_anaf_d394` | nota DVI are partener străin, deci nu intră în D394 (importurile nu se raportează pe partener) | integrare prin convenție |
 
 **Ce este automat:** crearea costului de aterizare din factură, repartizarea taxelor în costul
-stocului, nota de TVA la import cu tag-urile pentru D300, referința MRN pe notă.
+stocului, nota de TVA la import cu tag-urile pentru D300, referința MRN și furnizorul extern pe notă.
 
 **Ce rămâne manual:** transcrierea cifrelor din declarație (baza, valoarea TVA, cota, garanția la
 4200), alegerea regimului vamal și a regimului de plată (prin taxă), notele garanției pe 2678 și
@@ -719,6 +735,10 @@ vamă și notele ei contabile.
 - [ ] După validare, **costul unitar al produsului a crescut** cu taxa vamală / cantitate.
 - [ ] TVA-ul de import apare pe **4426**, nu în costul mărfii.
 - [ ] Nota contabilă are ca **referință numărul de DVI**, nu secvența internă.
+- [ ] Nota contabilă are ca **partener furnizorul extern** de pe factură, iar liniile ei de TVA și de
+      pe 446 sunt fără partener.
+- [ ] În jurnalul de TVA pentru cumpărări, importul apare **o singură dată**, pe nota DVI, cu numele
+      furnizorului; factura cu „0% EX G” nu apare.
 - [ ] Taxa vamală este creditată pe **4462**, analiticul de scadență scurtă.
 - [ ] Onorariul brokerului **nu** a fost introdus în wizard, ci pe factura lui de furnizor.
 - [ ] Transportul extern apare **o singură dată** în costul stocului.
