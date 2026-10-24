@@ -6,3 +6,6 @@
   value was copied by hand from the PDF. The declaration is checked before anything is filled in
   (SNI document, importer = current company, not already recorded, articles and totals consistent)
   and is attached to the DVI.
+- Installation note: on a server with an older `cryptography` (Ubuntu 22.04 packages), installing
+  `pdfminer.six` upgrades it and breaks pyOpenSSL; keep the installed version and let pip pick a
+  compatible `pdfminer.six`.
