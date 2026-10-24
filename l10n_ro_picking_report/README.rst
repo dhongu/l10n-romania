@@ -41,6 +41,35 @@ Romania - Stock Picking Reports
 Changelog
 =========
 
+19.0.2.0.2 (2026-10-22)
+-----------------------
+
+- Listed on Odoo Apps as *Romania - Stock Picking Reports* (was *Romania
+  - Terrabit - Picking Reports*). The technical name
+  ``l10n_ro_picking_report`` does not change.
+
+19.0.2.0.1 (2026-10-19)
+-----------------------
+
+- The settings screen is back: **Inventory > Configuration > Settings >
+  Romanian Stock Documents** shows the options *Show taxes on reception
+  report* (tax columns on the NIR) and *Show banks on picking report*
+  (company bank accounts on stock documents). The screen was lost in the
+  migration to 19.0, so the options could only be changed on the company
+  record.
+
+19.0.2.0.0 (2026-10-12)
+-----------------------
+
+- Module renamed from ``l10n_ro_stock_picking_report`` to
+  ``l10n_ro_picking_report``: the former technical name is already
+  registered on Odoo Apps by another publisher.
+- Databases with the former module installed are migrated automatically
+  when the new module is installed: fields, views, reports and settings
+  are kept, and the former module is removed from the module list.
+  Custom modules that inherit its templates or reports must use the new
+  prefix ``l10n_ro_picking_report.``.
+
 19.0.1.3.10 (2026-10-09)
 ------------------------
 

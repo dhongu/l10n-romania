@@ -42,6 +42,12 @@ eliminat-o din obligația de afișare.
 Changelog
 =========
 
+19.0.0.0.5 (2026-10-22)
+-----------------------
+
+- Odoo Apps banner title: *ANPC footer* (was *ANPC Website Footer*), the
+  same as the module name.
+
 19.0.0.0.4 (2026-10-20)
 -----------------------
 
