@@ -6,7 +6,7 @@ other modules can create or check a customer without depending on other localiza
 - **Partner data ready to save**: name, Tax ID (with `RO` only for a VAT payer), street with its
   number, address details, locality without the `Mun.`/`Oraș`/`Com.` prefix (a village without its commune), county, postal code,
   trade register number (in the NRC field) and phone. The whole address comes from one block: the
-  fiscal domicile, the registered office when it is missing.
+  registered office, the one the invoice must show, the fiscal domicile when it is missing.
 - **Postal code by street**: when ANAF gives none and `l10n_ro_zip` is installed, it is found in
   `res.zip` by street and number (with the ranges of long streets), or the one of the village.
 - **Bucharest**: the locality is the sector (`Sector 3`), as e-Factura requires; when ANAF does

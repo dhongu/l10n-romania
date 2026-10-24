@@ -145,14 +145,14 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
     @api.model
     def _prepare_partner_values(self, result):
         general = result.get("date_generale") or {}
-        # The whole address comes from one block: the fiscal domicile, where the invoice goes, else
-        # the registered office. Mixing them gives an address that does not exist (the street of
-        # one with the postal code of the other)
-        fiscal = result.get("adresa_domiciliu_fiscal") or {}
-        if fiscal.get("ddenumire_Localitate") or fiscal.get("ddenumire_Strada"):
-            block, prefix = fiscal, "d"
+        # The whole address comes from one block: the registered office, the one the invoice must
+        # show (Law 31/1990, art. 74), else the fiscal domicile. Mixing them gives an address that
+        # does not exist (the street of one with the postal code of the other)
+        office = result.get("adresa_sediu_social") or {}
+        if office.get("sdenumire_Localitate") or office.get("sdenumire_Strada"):
+            block, prefix = office, "s"
         else:
-            block, prefix = result.get("adresa_sediu_social") or {}, "s"
+            block, prefix = result.get("adresa_domiciliu_fiscal") or {}, "d"
 
         def address(key):
             return self._clean(block.get(prefix + key))
