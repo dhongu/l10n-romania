@@ -5,6 +5,12 @@
   journal or the 446200 account of another company and the DVI entry failed on posting ("company
   inconsistencies"); the tests passed only on a database with a single company.
 
+## 19.0.2.1.13 (2026-10-24)
+
+- Consultant sheet, step 5: the DVI can be filled in from the PDF of the customs declaration
+  printed by the SNI, with the `l10n_ro_customs_dvi_import` module; manual transcription stays for
+  declarations received without that PDF.
+
 ## 19.0.2.1.12 (2026-10-24)
 
 - Fix (#685): on a database with several companies, the DVI entry of a company other than the one
