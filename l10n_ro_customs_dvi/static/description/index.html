@@ -1426,6 +1426,17 @@ pe <strong>4426</strong>, nu în costul mărfii.</li>
 <div class="section" id="changelog">
 <h1>Changelog</h1>
 <div class="section" id="section-1">
+<h2>19.0.2.1.14 (2026-10-24)</h2>
+<ul class="simple">
+<li>Tests only: the journal and the accounts looked up by code in the test
+methods are restricted to the company of the test. On a database with
+several Romanian companies, the lookup took the journal or the 446200
+account of another company and the DVI entry failed on posting
+(“company inconsistencies”); the tests passed only on a database with
+a single company.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
 <h2>19.0.2.1.12 (2026-10-24)</h2>
 <ul class="simple">
 <li>Fix (#685): on a database with several companies, the DVI entry of a
@@ -1437,7 +1448,7 @@ DVI company, and the expense account of the product is filled in for
 that company on first use.</li>
 </ul>
 </div>
-<div class="section" id="section-2">
+<div class="section" id="section-3">
 <h2>19.0.2.1.11 (2026-10-24)</h2>
 <ul class="simple">
 <li>Consultant sheet: the DVI journal entry carries the foreign supplier
@@ -1446,7 +1457,7 @@ import once, on the DVI entry, and D394 leaves it out (§7), with two
 new checks for the consultant (§8).</li>
 </ul>
 </div>
-<div class="section" id="section-3">
+<div class="section" id="section-4">
 <h2>19.0.2.1.10 (2026-10-24)</h2>
 <ul class="simple">
 <li>The DVI journal entry now carries the foreign supplier of the vendor
@@ -1457,7 +1468,7 @@ entries without a partner are completed, except those in locked
 periods.</li>
 </ul>
 </div>
-<div class="section" id="section-4">
+<div class="section" id="section-5">
 <h2>19.0.2.1.9 (2026-10-16)</h2>
 <ul class="simple">
 <li>Consultant sheet, regime 4200: the intra-Community invoice is issued
@@ -1468,7 +1479,7 @@ all landed costs, quantity differences), the reporting month of the
 intra-Community supply and the risk of a missing or wrong D390.</li>
 </ul>
 </div>
-<div class="section" id="section-5">
+<div class="section" id="section-6">
 <h2>19.0.2.1.8 (2026-10-16)</h2>
 <ul class="simple">
 <li>New <em>Customs Regime</em> field on the DVI wizard and on the landed cost
@@ -1489,7 +1500,7 @@ generated: the guarantee entries on account 2678 stay manual.</li>
 left out of the VAT return.</li>
 </ul>
 </div>
-<div class="section" id="section-6">
+<div class="section" id="section-7">
 <h2>19.0.2.1.7 (2026-10-16)</h2>
 <ul class="simple">
 <li>The landed cost created by the DVI wizard is now linked to the
@@ -1499,7 +1510,7 @@ Costs</em> smart button and the stock valuation details name the invoice.
 Landed costs created before this version keep the field empty.</li>
 </ul>
 </div>
-<div class="section" id="section-7">
+<div class="section" id="section-8">
 <h2>19.0.2.1.6 (2026-10-16)</h2>
 <ul class="simple">
 <li>Neutral labels for the import VAT, valid in both regimes: the journal
@@ -1510,7 +1521,7 @@ IMP AM”) and reached the general ledger and SAF-T (D406). Entries
 already posted keep the old label.</li>
 </ul>
 </div>
-<div class="section" id="section-8">
+<div class="section" id="section-9">
 <h2>19.0.2.1.5 (2026-10-16)</h2>
 <ul class="simple">
 <li>Consultant sheet: step-by-step flow for imports without VAT paid at
@@ -1521,7 +1532,7 @@ with the cases that have a legal basis, the journal entries and a
 request template (Annex A).</li>
 </ul>
 </div>
-<div class="section" id="section-9">
+<div class="section" id="section-10">
 <h2>19.0.2.1.4 (2026-10-16)</h2>
 <ul class="simple">
 <li>SAF-T (D406): the VAT lines of the DVI entry are now linked to the tax
@@ -1532,14 +1543,14 @@ TaxAmount 0. The VAT return tags (rows 24/25, 7/22) are unchanged; the
 Odoo VAT closing now also takes the DVI VAT into account.</li>
 </ul>
 </div>
-<div class="section" id="section-10">
+<div class="section" id="section-11">
 <h2>19.0.2.1.3 (2026-10-09)</h2>
 <ul class="simple">
 <li>Odoo Apps banner (<tt class="docutils literal">static/description/main_screenshot.png</tt>),
 generated from <tt class="docutils literal">banner.json</tt>.</li>
 </ul>
 </div>
-<div class="section" id="section-11">
+<div class="section" id="section-12">
 <h2>19.0.2.1.2 (2026-10-04)</h2>
 <ul class="simple">
 <li>Documentation and the help of the <em>Import VAT</em> field: the regime
@@ -1556,7 +1567,7 @@ customs, the declaration with the importer and the VAT due, plus the
 VAT recorded as collected in the same period (art. 299(1)(d)).</li>
 </ul>
 </div>
-<div class="section" id="section-12">
+<div class="section" id="section-13">
 <h2>19.0.2.1.1 (2026-09-30)</h2>
 <ul class="simple">
 <li>Own module icon in the flat style of the Terrabit modules, instead of

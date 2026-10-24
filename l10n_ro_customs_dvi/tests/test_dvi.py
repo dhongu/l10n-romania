@@ -216,6 +216,11 @@ class TestDVI(TransactionCase):
             cls.vendor = cls.env["res.partner"].create({"name": "vendor1"})
         cls.vendor.country_id = cls.env.ref("base.de")
 
+    def _company_domain(self, model, *leaves):
+        """Domeniu restrâns la compania testului: pe o bază cu mai multe companii RO, o căutare
+        după cod fără filtru ia contul sau jurnalul altei companii, iar nota pică la postare."""
+        return [*leaves, *self.env[model]._check_company_domain(self.env.company)]
+
     def test_call_wizard(self):
         po = Form(self.env["purchase.order"])
         po.partner_id = self.vendor
@@ -337,12 +342,16 @@ class TestDVI(TransactionCase):
 
     def _build_reverse_charge_tax(self):
         """Taxă de import cu taxare inversă: două linii de repartiţie, pe 4427 şi 4426."""
-        acc_4426 = self.env["account.account"].search([("code", "=", "442600")], limit=1)
+        acc_4426 = self.env["account.account"].search(
+            self._company_domain("account.account", ("code", "=", "442600")), limit=1
+        )
         if not acc_4426:
             acc_4426 = self.env["account.account"].create(
                 {"name": "TVA deductibilă", "code": "442600", "account_type": "asset_current"}
             )
-        acc_4427 = self.env["account.account"].search([("code", "=", "442700")], limit=1)
+        acc_4427 = self.env["account.account"].search(
+            self._company_domain("account.account", ("code", "=", "442700")), limit=1
+        )
         if not acc_4427:
             acc_4427 = self.env["account.account"].create(
                 {"name": "TVA colectată", "code": "442700", "account_type": "liability_current"}
@@ -421,7 +430,9 @@ class TestDVI(TransactionCase):
         cost.account_move_id = self.env["account.move"].create(
             {"journal_id": cost.account_journal_id.id, "date": cost.date, "move_type": "entry"}
         )
-        payable_account = self.env["account.account"].search([("code", "=like", "446%")], limit=1)
+        payable_account = self.env["account.account"].search(
+            self._company_domain("account.account", ("code", "=like", "446%")), limit=1
+        )
         vals = cost._prepare_tax_lines("TVA import", tax_rc.compute_all(cost.tax_base), payable_account)
 
         conturi = [self.env["account.account"].browse(v["account_id"]).code for v in vals]
@@ -453,7 +464,9 @@ class TestDVI(TransactionCase):
             {
                 "landed_type": "dvi",
                 "dvi_number": "26ROBU0000000001",
-                "account_journal_id": self.env["account.journal"].search([("type", "=", "general")], limit=1).id,
+                "account_journal_id": self.env["account.journal"]
+                .search(self._company_domain("account.journal", ("type", "=", "general")), limit=1)
+                .id,
                 "tax_id": tax.id,
                 "tax_base": tax_base,
                 "tax_value": tax_value,
@@ -462,7 +475,9 @@ class TestDVI(TransactionCase):
         cost.account_move_id = self.env["account.move"].create(
             {"journal_id": cost.account_journal_id.id, "date": cost.date, "move_type": "entry"}
         )
-        payable_account = self.env["account.account"].search([("code", "=", "446200")], limit=1)
+        payable_account = self.env["account.account"].search(
+            self._company_domain("account.account", ("code", "=", "446200")), limit=1
+        )
         tax_values = tax.compute_all(tax_base)
         vals = cost._prepare_tax_lines("Import VAT", tax_values, payable_account)
         vals += cost._prepare_tax_base_lines("Import VAT", tax_values)
@@ -681,7 +696,9 @@ class TestDVI(TransactionCase):
                 {
                     "landed_type": "dvi",
                     "customs_regime": "4200",
-                    "account_journal_id": self.env["account.journal"].search([("type", "=", "general")], limit=1).id,
+                    "account_journal_id": self.env["account.journal"]
+                    .search(self._company_domain("account.journal", ("type", "=", "general")), limit=1)
+                    .id,
                     "tax_id": self.tax_id.id,
                     "tax_base": 62372.73,
                     "tax_value": 6861.0,
