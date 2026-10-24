@@ -931,6 +931,16 @@ Verificări după validare
 Changelog
 =========
 
+19.0.2.1.14 (2026-10-24)
+------------------------
+
+- Tests only: the journal and the accounts looked up by code in the test
+  methods are restricted to the company of the test. On a database with
+  several Romanian companies, the lookup took the journal or the 446200
+  account of another company and the DVI entry failed on posting
+  ("company inconsistencies"); the tests passed only on a database with
+  a single company.
+
 19.0.2.1.13 (2026-10-24)
 ------------------------
 
