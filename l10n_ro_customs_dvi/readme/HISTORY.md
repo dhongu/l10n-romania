@@ -1,3 +1,10 @@
+## 19.0.2.1.10 (2026-10-24)
+
+- The DVI journal entry now carries the foreign supplier of the vendor bill on its header, so the
+  purchase VAT journal shows the import with the supplier name and tax ID. Only the header changes:
+  the VAT and customs duty lines keep their partner. On update, the posted 2026 DVI entries without
+  a partner are completed, except those in locked periods.
+
 ## 19.0.2.1.9 (2026-10-16)
 
 - Consultant sheet, regime 4200: the intra-Community invoice is issued before customs clearance (customs
