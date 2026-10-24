@@ -421,8 +421,8 @@ class TestDVI(TransactionCase):
         cost.account_move_id = self.env["account.move"].create(
             {"journal_id": cost.account_journal_id.id, "date": cost.date, "move_type": "entry"}
         )
-        accounts_data = {"expense": self.env["account.account"].search([("code", "=like", "446%")], limit=1)}
-        vals = cost._prepare_tax_lines("TVA import", tax_rc.compute_all(cost.tax_base), accounts_data)
+        payable_account = self.env["account.account"].search([("code", "=like", "446%")], limit=1)
+        vals = cost._prepare_tax_lines("TVA import", tax_rc.compute_all(cost.tax_base), payable_account)
 
         conturi = [self.env["account.account"].browse(v["account_id"]).code for v in vals]
         self.assertEqual(len(vals), 2, f"Taxare inversă: exact 2 linii, primit {conturi}")
@@ -462,9 +462,9 @@ class TestDVI(TransactionCase):
         cost.account_move_id = self.env["account.move"].create(
             {"journal_id": cost.account_journal_id.id, "date": cost.date, "move_type": "entry"}
         )
-        accounts_data = {"expense": self.env["account.account"].search([("code", "=", "446200")], limit=1)}
+        payable_account = self.env["account.account"].search([("code", "=", "446200")], limit=1)
         tax_values = tax.compute_all(tax_base)
-        vals = cost._prepare_tax_lines("Import VAT", tax_values, accounts_data)
+        vals = cost._prepare_tax_lines("Import VAT", tax_values, payable_account)
         vals += cost._prepare_tax_base_lines("Import VAT", tax_values)
         self.env["account.move.line"].with_context(skip_invoice_sync=True).create(vals)
         cost.account_move_id.action_post()
@@ -694,3 +694,59 @@ class TestDVI(TransactionCase):
         wizard = self.env["account.invoice.dvi"].with_context(active_id=invoice.id).create({})
         self.assertEqual(wizard.customs_regime, "4000")
         self.assertEqual(wizard.tax_id, self.env.company.account_purchase_tax_id)
+
+    def test_custom_duty_product_created_by_other_company(self):
+        """Produsul „Taxă vamală” creat de altă companie nu mută drepturile de import pe 607.
+
+        Produsul e unul pe bază, dar contul lui de cheltuieli e proprietate pe companie, setată
+        doar pentru compania care l-a creat. Pe compania DVI-ului, creditul TVA-ului plătit în
+        vamă şi linia de taxă vamală trebuie să meargă pe 4462 al ei, nu pe contul categoriei.
+        """
+        company = self.env.company
+        other_company = self.env["res.company"].create({"name": "DVI Other Company"})
+        other_payable = self.env["account.account"].create(
+            {
+                "name": "Alte impozite - până la un an",
+                "code": "446200",
+                "account_type": "liability_payable",
+                "reconcile": True,
+                "company_ids": [(6, 0, other_company.ids)],
+            }
+        )
+        # Produsul creat de cealaltă companie, cum îl lasă prima ei folosire a wizardului.
+        wizard_other = self.env["account.invoice.dvi"].with_company(other_company)
+        duty_product = (
+            self.env["product.product"].with_company(other_company).create(wizard_other._prepare_custom_duty_product())
+        )
+        self.env["ir.config_parameter"].sudo().set_param("dvi.custom_duty_product_id", duty_product.id)
+        template = duty_product.product_tmpl_id
+        self.assertEqual(template.with_company(other_company).property_account_expense_id, other_payable)
+        self.assertFalse(template.with_company(company).property_account_expense_id)
+
+        payable = self.env["account.invoice.dvi"]._get_customs_payable_account()
+        self.assertEqual(payable.code[:4], "4462")
+
+        invoice = self._create_received_invoice(10, 100)
+        action = invoice.button_dvi()
+        wizard = self.env[action["res_model"]].browse(action["res_id"])
+        wizard_form = Form(wizard.with_context(active_id=invoice.id))
+        wizard_form.tax_id = self.tax_id
+        wizard_form.dvi_number = "26ROBU0000000685"
+        wizard_form.custom_duty = 5.0
+        wizard = wizard_form.save()
+        dvi = self.env["stock.landed.cost"].browse(wizard.do_create_dvi()["res_id"])
+        self.assertEqual(dvi.cost_lines.product_id, duty_product)
+        self.assertEqual(dvi.cost_lines.account_id, payable, "Taxa vamală se datorează bugetului (4462)")
+
+        dvi.compute_landed_cost()
+        dvi.button_validate()
+
+        text = self.env._("Import VAT - %s", dvi.tax_id.name)
+        vat_credit = dvi.account_move_id.line_ids.filtered(lambda line: text in line.name and line.credit)
+        self.assertEqual(
+            vat_credit.account_id, payable, "TVA-ul plătit în vamă: Dr 4426 = Cr 4462, nu contul categoriei"
+        )
+        # Proprietatea se completează şi pe compania curentă, pentru traseul nativ
+        # „factură furnizor -> landed cost”; cea a companiei care l-a creat rămâne neschimbată.
+        self.assertEqual(template.with_company(company).property_account_expense_id, payable)
+        self.assertEqual(template.with_company(other_company).property_account_expense_id, other_payable)

@@ -931,13 +931,24 @@ Verificări după validare
 Changelog
 =========
 
-19.0.2.1.12 (2026-10-24)
+19.0.2.1.13 (2026-10-24)
 ------------------------
 
 - Consultant sheet, step 5: the DVI can be filled in from the PDF of the
   customs declaration printed by the SNI, with the
   ``l10n_ro_customs_dvi_import`` module; manual transcription stays for
   declarations received without that PDF.
+
+19.0.2.1.12 (2026-10-24)
+------------------------
+
+- Fix (#685): on a database with several companies, the DVI entry of a
+  company other than the one that created the *Custom Duty* product
+  credited the import VAT paid at customs and the custom duty to the
+  expense account of the product category (607) instead of 4462. The
+  budget settlement account is now taken directly from the chart of the
+  DVI company, and the expense account of the product is filled in for
+  that company on first use.
 
 19.0.2.1.11 (2026-10-24)
 ------------------------

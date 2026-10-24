@@ -77,10 +77,9 @@ Date minime pentru demo:
    473, taxele „IMP AM” pentru TVA amânat).
 4. **Setări → Companii**: verificați că firma are codul fiscal completat, cu sau fără prefixul `RO`.
    Fără cod fiscal pe companie, verificarea importatorului nu se face.
-5. Pe o bază cu mai multe companii, verificați la produsul **Taxă vamală** (creat automat la primul
-   DVI cu taxă vamală) că, pe compania curentă, contul de cheltuieli este **4462**. Produsul e unic pe
-   bază, iar contul se setează doar pe compania care l-a creat. Pe altă companie, TVA-ul și taxa
-   vamală s-ar credita pe contul categoriei, nu pe 4462.
+5. Pe o bază cu mai multe companii, folosiți `l10n_ro_customs_dvi` cel puțin 19.0.2.1.12. În
+   versiunile anterioare, pe altă companie decât cea care a creat produsul **Taxă vamală**, TVA-ul
+   și taxa vamală se creditau pe contul categoriei (607) în loc de 4462.
 
 ## 6. Flux de utilizare
 
