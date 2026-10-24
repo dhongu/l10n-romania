@@ -130,7 +130,23 @@ class LandedCost(models.Model):
             self.env["account.move.line"].with_context(skip_invoice_sync=True).create(aml)
             if new_move and cost.account_move_id.line_ids:
                 cost.account_move_id._post()
+        self._set_dvi_move_partner()
         return res
+
+    def _set_dvi_move_partner(self):
+        """Furnizorul extern de pe factură, pe antetul notei DVI.
+
+        Jurnalul de TVA pentru cumpărări înscrie importul pe nota DVI și ia furnizorul din antetul
+        ei; fără partener, rândul importului rămânea fără nume și CUI. Doar antetul: liniile de
+        TVA și de taxe vamale (446, 4426, 4427) își păstrează partenerul. Poziția fiscală rămâne cea
+        a notei: recalculată din furnizorul extern, ar fi una extra-UE, incompatibilă cu taxa de
+        import din țară.
+        """
+        for cost in self.filtered(lambda c: c.vendor_bill_id and c.account_move_id):
+            move = cost.account_move_id
+            if not move.partner_id:
+                with self.env.protecting([move._fields["fiscal_position_id"]], move):
+                    move.with_context(skip_readonly_check=True).partner_id = cost.vendor_bill_id.commercial_partner_id
 
     def _prepare_tax_lines(self, name, tax_values, accounts_data):
         """Liniile de TVA ale notei, urmând liniile de repartiţie ale taxei alese.
