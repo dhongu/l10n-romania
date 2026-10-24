@@ -67,6 +67,13 @@ jobs:
       - name: Install Requests2.27.0
         run: |
           pip install "requests>=2.27.0"
+      # pdfminer.six (l10n_ro_customs_dvi_import) asks for cryptography>=36: pip would upgrade the
+      # image's cryptography 3.4.8 and break its pyOpenSSL ("module 'lib' has no attribute
+      # 'GEN_EMAIL'"), so Odoo no longer starts. Keeping the image's cryptography makes pip pick a
+      # compatible pdfminer.six instead. oca_install_addons appends to test-requirements.txt and
+      # refuses an existing test-constraints.txt, so the pin goes into test-requirements.txt.
+      - name: Keep the cryptography of the image
+        run: pip freeze | grep -i '^cryptography==' >> test-requirements.txt
       - name: Install addons and dependencies
         run: oca_install_addons
       - name: Check licenses

@@ -1,0 +1,11 @@
+{
+  "title": "Import DVI from the SNI PDF",
+  "summary": "Fill in the DVI wizard from the customs import declaration PDF",
+  "lang": "en",
+  "edition": "community",
+  "features": [
+    "MRN, regime 4000/4200, duty A00, VAT B00",
+    "Consistency checks before filling in",
+    "Declaration PDF attached to the DVI"
+  ]
+}
