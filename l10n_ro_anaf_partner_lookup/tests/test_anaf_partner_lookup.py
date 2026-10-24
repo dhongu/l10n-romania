@@ -158,7 +158,7 @@ class TestAnafPartnerLookup(TransactionCase):
         self.assertEqual(result["partner"]["street2"], "")
         self.assertEqual(result["partner"]["city"], "Recas")
 
-    def test_registered_office_when_no_fiscal_domicile(self):
+    def test_registered_office_first(self):
         answer = anaf_result()
         answer["adresa_domiciliu_fiscal"] = {}
         answer["adresa_sediu_social"] = {
@@ -173,11 +173,11 @@ class TestAnafPartnerLookup(TransactionCase):
         self.assertEqual(result["partner"]["state_id"], self.env.ref("base.RO_CJ").id)
 
     def test_address_from_one_block(self):
-        # DANTE INTERNATIONAL: the fiscal domicile in Sector 2 without a postal code, the registered
-        # office in Sector 6 with one. The postal code of the office is not the one of the domicile
+        # DANTE INTERNATIONAL: the registered office in Sector 6 with a postal code, the fiscal
+        # domicile in Sector 2 without one. The invoice shows the registered office, whole
         answer = anaf_result(codPostal="")
         answer["adresa_domiciliu_fiscal"].update(
-            ddenumire_Strada="Str. Strada Testului Inexistentă",
+            ddenumire_Strada="Str. Gara Herăstrău",
             dnumar_Strada="6",
             ddenumire_Localitate="Sector 2 Mun. Bucureşti",
             dcod_JudetAuto="B",
@@ -192,7 +192,24 @@ class TestAnafPartnerLookup(TransactionCase):
             "scod_Postal": "60787",
         }
         partner = self._lookup(answer)[0]["partner"]
-        self.assertEqual(partner["street"], "Str. Strada Testului Inexistentă Nr. 6")
+        self.assertEqual(partner["street"], "Șos. Virtuții Nr. 148")
+        self.assertEqual(partner["street2"], "")
+        self.assertEqual(partner["city"], "Sector 6")
+        self.assertEqual(partner["zip"], "060787")
+
+    def test_no_postal_code_from_the_other_block(self):
+        answer = anaf_result(codPostal="")
+        answer["adresa_sediu_social"] = {
+            "sdenumire_Strada": "Str. Strada Testului Inexistentă",
+            "snumar_Strada": "6",
+            "sdenumire_Localitate": "Sector 2 Mun. Bucureşti",
+            "scod_JudetAuto": "B",
+            "scod_Postal": "",
+        }
+        answer["adresa_domiciliu_fiscal"].update(
+            ddenumire_Localitate="Sector 6 Mun. Bucureşti", dcod_JudetAuto="B", dcod_Postal="60787"
+        )
+        partner = self._lookup(answer)[0]["partner"]
         self.assertEqual(partner["city"], "Sector 2")
         self.assertEqual(partner["zip"], "")
 

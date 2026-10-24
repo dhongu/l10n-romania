@@ -1,3 +1,9 @@
+## 19.0.1.2.1 (2026-10-24)
+
+- The registered office comes first, the fiscal domicile only when ANAF gives no registered office:
+  the invoice must show the registered office (Law 31/1990, art. 74). The address still comes
+  whole from one block.
+
 ## 19.0.1.2.0 (2026-10-24)
 
 - The whole address comes from one ANAF block: the fiscal domicile, else the registered office.

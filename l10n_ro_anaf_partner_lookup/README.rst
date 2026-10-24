@@ -33,8 +33,8 @@ without depending on other localization modules.
   VAT payer), street with its number, address details, locality without
   the ``Mun.``/``Oraș``/``Com.`` prefix (a village without its commune),
   county, postal code, trade register number (in the NRC field) and
-  phone. The whole address comes from one block: the fiscal domicile,
-  the registered office when it is missing.
+  phone. The whole address comes from one block: the registered office,
+  the one the invoice must show, the fiscal domicile when it is missing.
 - **Postal code by street**: when ANAF gives none and ``l10n_ro_zip`` is
   installed, it is found in ``res.zip`` by street and number (with the
   ranges of long streets), or the one of the village.
@@ -69,6 +69,14 @@ by default).
 
 Changelog
 =========
+
+19.0.1.2.1 (2026-10-24)
+-----------------------
+
+- The registered office comes first, the fiscal domicile only when ANAF
+  gives no registered office: the invoice must show the registered
+  office (Law 31/1990, art. 74). The address still comes whole from one
+  block.
 
 19.0.1.2.0 (2026-10-24)
 -----------------------
