@@ -1,0 +1,206 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_customs_dvi_import
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 05:38+0000\n"
+"PO-Revision-Date: 2026-10-24 05:38+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "%(amount)s %(currency)s, exchange rate %(rate)s"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Articles"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"Check the tax: VAT paid at customs, or deferred (VAT deferral certificate). "
+"The declaration does not tell them apart."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Customs Release"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,help:l10n_ro_customs_dvi_import.field_account_invoice_dvi__dvi_file
+msgid ""
+"Customs import declaration as printed by the National Import System (SNI). "
+"When it is uploaded, the wizard is filled in with the values of the "
+"declaration: MRN, acceptance date, customs regime, customs duty (A00), "
+"import VAT and its base (B00). Check them and apply."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Customs regime %s is not handled: check the declaration."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__dvi_file
+msgid "DVI PDF (SNI)"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__dvi_filename
+msgid "Dvi Filename"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Filled in from the SNI declaration %s."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Invoiced Amount"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Invoices on the Declaration"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "LRN"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "No purchase tax with the rate %s was found."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Payment Method"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__dvi_import_info
+msgid "Read from the Declaration"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The %(code)s amounts of the articles (%(amount)s) do not add up to the total"
+" of the declaration (%(total)s)."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The DVI cannot be imported: %s"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The MRN of the declaration was not found."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The articles have different VAT rates (%s): a single tax is recorded, split "
+"the DVI if needed."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The articles have different customs regimes (%s)."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The declaration %(mrn)s is already recorded on %(dvi)s."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The declaration has %(count)s articles, but %(read)s were read from the "
+"document."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The document is not an import customs declaration (DVI) printed by the SNI."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The file cannot be read as a PDF: %s"
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The importer of the declaration (%(importer)s) is not the current company "
+"(%(company)s)."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The pdfminer.six Python library is required to read the declaration."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The vendor reference of the bill (%(ref)s) is not among the invoices of the "
+"declaration."
+msgstr ""
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model,name:l10n_ro_customs_dvi_import.model_account_invoice_dvi
+msgid "account.invoice.dvi"
+msgstr ""
