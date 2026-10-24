@@ -1,3 +1,13 @@
+## 19.0.1.2.0 (2026-10-24)
+
+- The whole address comes from one ANAF block: the fiscal domicile, else the registered office.
+  The postal code is no longer taken from the other block or from the general data, which gave
+  addresses that do not exist (a street in Sector 2 with a postal code from Sector 6).
+- When the block has no postal code and `l10n_ro_zip` is installed, it is looked up in `res.zip`
+  by street, locality and county, with the number ranges of long streets (odd and even apart); a
+  village without streets gets the postal code of the locality. Without a single match it stays
+  empty.
+
 ## 19.0.1.1.0 (2026-10-23)
 
 - Where the partner has a `city_id` (base_address_extended, with the cities of `l10n_ro_city`),
