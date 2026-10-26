@@ -147,7 +147,10 @@ repos:
 
   # Hook-urile comune Terrabit (licență, pyproject, iconiță, traduceri)
   - repo: https://github.com/dhongu/terrabit-pre-commit-hooks
-    rev: v1.1.0
+    rev: v1.5.0
     hooks:
       - id: check-module-icon
       - id: check-po-vs-pot
+      # API Odoo 19/20 eliminate; deocamdată doar avertizează (faza 3)
+      - id: tb-odoo-lint
+        args: [--warn-only]
