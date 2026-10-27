@@ -13,9 +13,6 @@ on:
       - "**/screenshots/**"
       - "**/static/description/**"
       - "**/i18n/**"
-  push:
-    branches:
-      - "19.0"
   # Nightly full run: the ONLY run that measures coverage and uploads it to Codecov, once.
   schedule:
     - cron: "30 23 * * *"
