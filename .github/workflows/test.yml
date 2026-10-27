@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - "20.0*"
-  push:
-    branches:
-      - "20.0"
   # Weekly full run (Sunday): the ONLY run that measures coverage and uploads it
   # to Codecov, once.
   schedule:
