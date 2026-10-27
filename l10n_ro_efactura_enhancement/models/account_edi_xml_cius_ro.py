@@ -6,6 +6,8 @@
 import logging
 from typing import NamedTuple
 
+from stdnum.ro import cf
+
 from odoo import models
 from odoo.tools.safe_eval import safe_eval
 
@@ -153,6 +155,25 @@ class AccountEdiUBL(models.AbstractModel):
 
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
+
+    def _vat_is_equal(self, partner_vat, other_vat, country=False):
+        if country and country.code == "RO":
+            identifiers = []
+            for vat in (partner_vat, other_vat):
+                cui = "".join((vat or "").upper().split()).removeprefix("RO")
+                if not (
+                    cui.isascii()
+                    and cui.isdigit()
+                    and 2 <= len(cui) <= 10
+                    and not cui.startswith("0")
+                    and cf.is_valid(cui)
+                ):
+                    break
+                identifiers.append(cui)
+            # The RO prefix describes VAT registration, not a different legal entity.
+            if len(identifiers) == 2 and identifiers[0] == identifiers[1]:
+                return True
+        return super()._vat_is_equal(partner_vat, other_vat, country=country)
 
     def _get_invoice_node(self, vals):
         # EXTENDS account.edi.xml.ubl_ro
