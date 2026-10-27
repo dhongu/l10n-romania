@@ -231,6 +231,19 @@ Alte îmbunătățiri planificate
 Changelog
 =========
 
+19.0.0.5.9 (2026-10-27)
+-----------------------
+
+- **Furnizorul nu se mai dublează la importul e-Factura când CUI-ul
+  diferă doar prin prefixul RO.** Dacă partenerul are CUI-ul salvat cu
+  ``RO`` și factura vine fără (sau invers), importul XML (inclusiv din
+  SPV) folosește partenerul existent în loc să creeze unul nou.
+
+  - Se compară doar CUI-uri românești valide (cifră de control corectă),
+    indiferent de majuscule și spații; CUI-urile diferite sau invalide
+    rămân distincte.
+  - Partenerii, facturile și reconcilierile existente nu se modifică.
+
 19.0.0.5.8 (2026-10-23)
 -----------------------
 
