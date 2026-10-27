@@ -73,6 +73,15 @@ Romanian CUI when ANAF does not answer.
 Changelog
 =========
 
+19.0.1.3.0 (2026-10-27)
+-----------------------
+
+- It cannot be installed together with the OCA
+  ``l10n_ro_partner_create_by_vat`` (``excludes``): both fill the
+  partner from ANAF, each its own way. Uninstall it first, with the
+  modules that depend on it (``l10n_ro_partner_create_by_vat_button``,
+  ``l10n_ro_fiscal_validation``).
+
 19.0.1.2.0 (2026-10-23)
 -----------------------
 
