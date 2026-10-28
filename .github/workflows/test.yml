@@ -29,7 +29,11 @@ jobs:
           done
   test:
     runs-on: ubuntu-22.04
-    container: ${{ matrix.container }}
+    # `--init`: tini ca PID 1 culege procesele Chrome orfane din tour-uri; fără el rămân zombie,
+    # iar Odoo le raportează cu WARNING („Killing chrome descendants-or-self ... (zombie)”).
+    container:
+      image: ${{ matrix.container }}
+      options: --init
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
