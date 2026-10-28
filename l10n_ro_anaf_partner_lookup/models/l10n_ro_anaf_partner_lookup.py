@@ -119,12 +119,12 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
     @api.model
     def _request(self, cui, timeout=None):
         """Ask ANAF about one CUI: the record found, ``{}`` when not found, ``None`` when ANAF did not answer"""
-        get_param = self.env["ir.config_parameter"].sudo().get_param
+        params = self.env["ir.config_parameter"].sudo()
         try:
             response = requests.post(
-                get_param("l10n_ro_anaf_partner_lookup.url", ANAF_URL),
+                params.get_str("l10n_ro_anaf_partner_lookup.url", ANAF_URL),
                 json=[{"cui": int(cui), "data": fields.Date.to_string(fields.Date.context_today(self))}],
-                timeout=timeout or int(get_param("l10n_ro_anaf_partner_lookup.timeout", ANAF_TIMEOUT)),
+                timeout=timeout or params.get_int("l10n_ro_anaf_partner_lookup.timeout", ANAF_TIMEOUT),
             )
             response.raise_for_status()
             found = response.json().get("found") or []
@@ -160,8 +160,8 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         vat_payer = bool((result.get("inregistrare_scop_Tva") or {}).get("scpTVA"))
         cui = str(general.get("cui") or "")
         values = {
+            # No is_company: Odoo computes it from the Tax ID (a commercial entity with a VAT is a company)
             "name": self._clean(general.get("denumire")),
-            "is_company": True,
             # The RO prefix only for a VAT payer, as on the invoice
             "vat": f"RO{cui}" if vat_payer else cui,
             "country_id": self.env.ref("base.ro").id,
@@ -198,7 +198,7 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
             zip_code = self._zip_from_street(street_name, number, values["city"], city_id, state)
         values["zip"] = zip_code
         # The trade register number (J…) goes to its own field of the Romanian localization. The
-        # Company ID (company_registry) is the CUI, which l10n_ro computes from the Tax ID
+        # Company ID (the RO_EN identifier) is the CUI, which Odoo deduces from the Tax ID
         if general.get("nrRegCom") and "nrc" in self.env["res.partner"]._fields:
             values["nrc"] = self._clean(general["nrRegCom"])
         if general.get("telefon"):

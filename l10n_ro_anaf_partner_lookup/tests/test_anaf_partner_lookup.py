@@ -84,13 +84,13 @@ class TestAnafPartnerLookup(TransactionCase):
         self.assertEqual(partner["country_id"], self.env.ref("base.ro").id)
         self.assertEqual(partner["zip"], "300045")
         # The trade register number is not the Company ID, which is the CUI
-        self.assertNotIn("company_registry", partner)
+        self.assertNotIn("additional_identifiers", partner)
         if "nrc" in self.env["res.partner"]._fields:
             self.assertEqual(partner["nrc"], "J35/2622/2012")
-        # The values create a partner as they are
+        # The values create a partner as they are: a company, with the CUI as its Company ID
         created = self.env["res.partner"].create(partner)
-        if self.env["ir.module.module"]._get("l10n_ro").state == "installed":
-            self.assertEqual(created.company_registry, CUI)
+        self.assertTrue(created.is_company)
+        self.assertEqual(created._get_additional_identifier("RO_EN"), CUI)
 
     def test_not_vat_payer_has_no_ro_prefix(self):
         answer = anaf_result()
@@ -98,6 +98,10 @@ class TestAnafPartnerLookup(TransactionCase):
         result, _request = self._lookup(answer)
         self.assertFalse(result["vat_payer"])
         self.assertEqual(result["partner"]["vat"], CUI)
+        # A company without the RO prefix all the same
+        created = self.env["res.partner"].create(result["partner"])
+        self.assertTrue(created.is_company)
+        self.assertEqual(created._get_additional_identifier("RO_EN"), CUI)
 
     def test_bucharest_city_is_the_sector(self):
         answer = anaf_result()
