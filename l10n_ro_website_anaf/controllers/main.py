@@ -61,6 +61,9 @@ class AnafPrefill(http.Controller):
             "street": values.get("street") or "",
             "city": values.get("city") or "",
             "zip": values.get("zip") or "",
+            # the trade register number (J…); `company_registry` is its 19.0 key, kept for the forms
+            # that still map it (res.partner has no company_registry field in 20.0)
+            "nrc": values.get("nrc") or "",
             "company_registry": values.get("nrc") or "",
             "state_id": state.id if state else False,
             "vat_payer": bool(values.get("l10n_ro_vat_subjected")),

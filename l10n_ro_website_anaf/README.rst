@@ -17,7 +17,7 @@ Romania - Website ANAF
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_website_anaf
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_website_anaf
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -29,9 +29,10 @@ for a Romanian billing address.
 
 - Under the tax code, the company found at ANAF: the name the invoice is
   issued to, the address and whether it is a VAT payer
-- The empty fields (company name, trade register number, street, city,
-  zip, county) are filled in at once; the **Fill in from ANAF** button
-  also replaces what the customer typed, only when they ask
+- The empty fields (company, street, city, zip, county, and the trade
+  register number on the forms that have it) are filled in at once; the
+  **Fill in from ANAF** button also replaces what the customer typed,
+  only when they ask
 - A fiscally inactive company gets a warning, a struck-off company is
   told it cannot order, and a personal numeric code (CNP) typed by
   mistake gets its own message
@@ -43,9 +44,11 @@ for a Romanian billing address.
 
 - A company not found or struck off at ANAF is refused; a CNP gets its
   own message
-- A company found gives the partner its legal name (the invoice and
-  e-Factura are issued to it); the address typed by the customer is
-  kept, ANAF only fills the empty fields
+- A company found gets its legal name: the *Company* of the form, the
+  commercial entity the invoice and e-Factura are issued to (the contact
+  keeps the name typed by the customer), or the partner itself when it
+  already is the company; the address typed by the customer is kept,
+  ANAF only fills the empty fields
 - A fiscally inactive company can order: the cart gets an internal note
   for the salesperson (VAT code cancelled: invoice with VAT, without
   reverse charge, check the collection)
@@ -71,6 +74,17 @@ seconds for an answer.
 
 Changelog
 =========
+
+20.0.1.2.0 (2026-10-28)
+-----------------------
+
+- Migration to Odoo 20.0. The *Company* field of the address form is
+  ``parent_name``: the look-up fills it in, and the ANAF legal name goes
+  to the company (the commercial entity of the invoice) instead of
+  renaming the contact. No ``is_company`` is written: Odoo computes it
+  from the Tax ID, and deduces the CUI (``RO_EN`` identifier) from it.
+  The look-up answer has the trade register number under ``nrc``;
+  ``company_registry`` is kept for the forms that still map it.
 
 19.0.1.2.0 (2026-10-23)
 -----------------------
@@ -139,6 +153,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_website_anaf>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_website_anaf>`_ project on GitHub.
 
 You are welcome to contribute.

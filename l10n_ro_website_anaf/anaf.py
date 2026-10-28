@@ -29,8 +29,10 @@ def anaf_lookup(env, number):
     """Look ``number`` up at ANAF, through ``l10n_ro_anaf_partner_lookup``.
 
     :return: ``(state, values)``: ``found`` with the partner values (``state_id`` as a record, plus
-        ``nrc``, ``company_type``, ``l10n_ro_vat_subjected``, ``anaf_radiated``, ``anaf_inactive``
-        and ``anaf_inactive_date``), ``not_found`` or ``unavailable``
+        ``nrc``, ``l10n_ro_vat_subjected``, ``anaf_radiated``, ``anaf_inactive`` and
+        ``anaf_inactive_date``), ``not_found`` or ``unavailable``. No ``is_company``: Odoo computes
+        it (its own commercial entity with a Tax ID); the CUI is the ``RO_EN`` identifier, which
+        Odoo deduces from the Tax ID.
     """
     result = env["l10n.ro.anaf.partner.lookup"].sudo().lookup(number, timeout=ANAF_TIMEOUT)
     if result["state"] == "unavailable":
@@ -41,7 +43,6 @@ def anaf_lookup(env, number):
     values.update(
         state_id=env["res.country.state"].sudo().browse(values.get("state_id")),
         nrc=result["trade_register"],
-        company_type="company",
         l10n_ro_vat_subjected=result["vat_payer"],
         anaf_radiated=result["struck_off"],
         anaf_inactive=result["inactive"],

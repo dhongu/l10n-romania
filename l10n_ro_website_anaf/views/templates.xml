@@ -5,7 +5,7 @@
         <xpath expr="//input[@name='vat']" position="attributes">
             <attribute name="data-anaf-lookup">1</attribute>
             <attribute name="t-att-data-anaf-country-id">request.env.ref('base.ro').id</attribute>
-            <attribute name="data-anaf-fill">{"name": "company_name", "street": "street", "city": "city", "zip": "zip", "state_id": "state_id"}</attribute>
+            <attribute name="data-anaf-fill">{"name": "parent_name", "street": "street", "city": "city", "zip": "zip", "state_id": "state_id"}</attribute>
         </xpath>
     </template>
 </odoo>

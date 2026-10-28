@@ -1,3 +1,11 @@
+## 20.0.1.2.0 (2026-10-28)
+
+- Migration to Odoo 20.0. The *Company* field of the address form is `parent_name`: the look-up
+  fills it in, and the ANAF legal name goes to the company (the commercial entity of the invoice)
+  instead of renaming the contact. No `is_company` is written: Odoo computes it from the Tax ID,
+  and deduces the CUI (`RO_EN` identifier) from it. The look-up answer has the trade register
+  number under `nrc`; `company_registry` is kept for the forms that still map it.
+
 ## 19.0.1.2.0 (2026-10-23)
 
 - The ANAF look-up goes through `l10n_ro_anaf_partner_lookup` instead of

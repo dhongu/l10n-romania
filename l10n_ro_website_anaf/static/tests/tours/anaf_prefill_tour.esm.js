@@ -18,7 +18,7 @@ registry.category("web_tour.tours").add("l10n_ro_website_anaf_tour", {
         },
         {
             content: "The empty company name was filled in",
-            trigger: "input[name='company_name']:value(FIRMA ANAF SRL)",
+            trigger: "input[name='parent_name']:value(FIRMA ANAF SRL)",
         },
         {
             content: "The street typed by the customer was kept",

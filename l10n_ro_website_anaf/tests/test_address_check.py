@@ -36,7 +36,6 @@ class TestAddressCheck(TransactionCase):
             "city": "Cluj-Napoca",
             "zip": "400001",
             "state_id": self.state_cj,
-            "company_type": "company",
             "anaf_radiated": False,
             "anaf_inactive": False,
             "anaf_inactive_date": "",
@@ -81,7 +80,33 @@ class TestAddressCheck(TransactionCase):
         self.assertEqual(address_values["street"], "Depozit, Str. Fabricii 3", "what the customer typed stays")
         self.assertEqual(address_values["zip"], "400001", "an empty field is filled from ANAF")
         self.assertEqual(address_values["state_id"], self.state_cj.id)
-        self.assertTrue(address_values["is_company"])
+        self.assertNotIn("is_company", address_values, "Odoo computes is_company from the Tax ID")
+
+    def test_found_legal_name_on_the_company(self):
+        """With the Company field of the form, the legal name goes to the company (the commercial
+        entity of the invoice); the contact keeps the name typed by the customer."""
+        address_values = {"country_id": self.ro.id, "name": "Ion Popescu", "parent_name": "", "vat": "RO1234567897"}
+        with patch.object(anaf, "anaf_lookup", return_value=("found", self._company())), MockRequest(self.env):
+            invalid_fields, _missing, _messages = self.controller._validate_address_values(
+                address_values=address_values,
+                partner_sudo=self.env["res.partner"].sudo(),
+                address_type="billing",
+                use_delivery_as_billing=False,
+                required_fields="vat",
+            )
+        self.assertNotIn("vat", invalid_fields)
+        self.assertEqual(address_values["parent_name"], "FIRMA ANAF SRL")
+        self.assertEqual(address_values["name"], "Ion Popescu")
+
+    def test_legal_name_partner_already_the_company(self):
+        """A partner that already is the company is renamed, no second company above it."""
+        company = self.env["res.partner"].create(
+            {"name": "Firma veche", "vat": "RO1234567897", "country_id": self.ro.id}
+        )
+        self.assertTrue(company.is_company)
+        address_values = {"name": "Firma veche", "parent_name": "FIRMA ANAF SRL"}
+        self.controller._l10n_ro_set_legal_name("FIRMA ANAF SRL", address_values, company)
+        self.assertEqual(address_values, {"name": "FIRMA ANAF SRL"})
 
     def test_not_found_refused(self):
         invalid_fields, messages, _lookup = self._validate({"vat": "RO1234567897"})

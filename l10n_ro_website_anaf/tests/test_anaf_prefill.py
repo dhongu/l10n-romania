@@ -3,7 +3,7 @@
 
 from unittest.mock import patch
 
-import odoo
+from odoo.http.session import session_store
 from odoo.tests import HttpCase, new_test_user, tagged
 
 from odoo.addons.l10n_ro_anaf_partner_lookup.tests.test_anaf_partner_lookup import REQUEST_PATH
@@ -21,7 +21,7 @@ class TestAnafPrefill(HttpCase):
         # the language must be active, or every website page fails, and the website's default,
         # or every page redirects to its /ro/ address
         romanian = cls.env["res.lang"]._activate_lang("ro_RO")
-        website = cls.env["website"].get_current_website()
+        website = cls.env.ref("base.default_website")
         website.language_ids |= romanian
         website.default_lang_id = romanian
         cls.state_cj = cls.env["res.country.state"].search(
@@ -57,7 +57,8 @@ class TestAnafPrefill(HttpCase):
         self.assertEqual(result["state"], "found")
         self.assertEqual(result["name"], "FIRMA ANAF SRL")
         self.assertEqual(result["state_id"], self.state_cj.id)
-        self.assertEqual(result["company_registry"], "J12/345/2020")
+        self.assertEqual(result["nrc"], "J12/345/2020")
+        self.assertEqual(result["company_registry"], "J12/345/2020", "the 19.0 key, for the forms that map it")
         self.assertTrue(result["vat_payer"])
         self.assertTrue(result["inactive"])
         self.assertFalse(result["radiated"])
@@ -98,7 +99,7 @@ class TestAnafPrefill(HttpCase):
     def test_prefill_tour(self):
         """On the checkout address form, the company found fills the empty fields and replaces the
         typed ones only on request."""
-        website = self.env["website"].get_current_website()
+        website = self.env.ref("base.default_website")
         user = new_test_user(self.env, login="anaf_buyer", groups="base.group_portal", name="Ion Popescu")
         user.partner_id.write({"country_id": self.env.ref("base.ro").id, "email": "ion@example.com"})
         product = self.env["product.product"].create(
@@ -113,7 +114,7 @@ class TestAnafPrefill(HttpCase):
         )
         self.authenticate("anaf_buyer", "anaf_buyer")
         self.session["sale_order_id"] = cart.id
-        odoo.http.root.session_store.save(self.session)
+        session_store().save(self.session)
         with patch.object(AnafPrefill, "_anaf_lookup", return_value=("found", self._company())):
             self.start_tour(
                 f"/shop/address?partner_id={user.partner_id.id}&address_type=billing",
