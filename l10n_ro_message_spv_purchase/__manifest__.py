@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Purchase Message SPV",
-    "version": "19.0.0.0.8",
+    "name": "SPV Messages to Purchase Orders",
+    "version": "19.0.0.0.12",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Add SPV message on purchase orders for Romania",

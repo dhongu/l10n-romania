@@ -1,0 +1,8 @@
+{
+  "title": "Stock Storage Sheet",
+  "summary": "Romanian storage sheet per product",
+  "lang": "en",
+  "features": ["Per-product storage sheet", "Stock value by account and location", "PDF output and pivot analysis"],
+  "icon": "clipboard",
+  "module_icon": false
+}

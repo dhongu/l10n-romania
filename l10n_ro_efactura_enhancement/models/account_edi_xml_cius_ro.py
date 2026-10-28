@@ -6,6 +6,8 @@
 import logging
 from typing import NamedTuple
 
+from stdnum.ro import cf
+
 from odoo import models
 from odoo.tools.safe_eval import safe_eval
 
@@ -154,6 +156,25 @@ class AccountEdiUBL(models.AbstractModel):
 class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
 
+    def _vat_is_equal(self, partner_vat, other_vat, country=False):
+        if country and country.code == "RO":
+            identifiers = []
+            for vat in (partner_vat, other_vat):
+                cui = "".join((vat or "").upper().split()).removeprefix("RO")
+                if not (
+                    cui.isascii()
+                    and cui.isdigit()
+                    and 2 <= len(cui) <= 10
+                    and not cui.startswith("0")
+                    and cf.is_valid(cui)
+                ):
+                    break
+                identifiers.append(cui)
+            # The RO prefix describes VAT registration, not a different legal entity.
+            if len(identifiers) == 2 and identifiers[0] == identifiers[1]:
+                return True
+        return super()._vat_is_equal(partner_vat, other_vat, country=country)
+
     def _get_invoice_node(self, vals):
         # EXTENDS account.edi.xml.ubl_ro
         document_node = super()._get_invoice_node(vals)
@@ -173,6 +194,29 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         if "pos_order_ids" in invoice._fields and invoice.pos_order_ids and type_code and type_code.get("_text") == 380:
             document_node["cbc:InvoiceTypeCode"] = {"_text": 751}
         return res
+
+    def _ubl_add_billing_reference_nodes(self, vals):
+        # EXTENDS account.edi.xml.ubl_bis3
+        # Stornoul trebuie sa poarte numarul si data facturii corectate (BT-25 / BT-26,
+        # art. 319 alin. (20) lit. r) Cod fiscal). In 19.0 standardul lasa lista goala
+        # pentru BIS3 / CIUS-RO. Luam factura din reversed_entry_id, nu din reconcilieri
+        # ca PINT: la trimitere stornoul nu e neaparat reconciliat.
+        super()._ubl_add_billing_reference_nodes(vals)
+        origin = vals["invoice"].reversed_entry_id
+        if not origin.name or origin.name == "/":
+            return
+        nodes = vals["document_node"]["cac:BillingReference"]
+        existing = {node.get("cac:InvoiceDocumentReference", {}).get("cbc:ID", {}).get("_text") for node in nodes}
+        if origin.name in existing:
+            return
+        nodes.append(
+            {
+                "cac:InvoiceDocumentReference": {
+                    "cbc:ID": {"_text": origin.name},
+                    "cbc:IssueDate": {"_text": origin.invoice_date},
+                }
+            }
+        )
 
     # -------------------------------------------------------------------------
     # Limitele CIUS-RO de lungime

@@ -13,10 +13,9 @@ on:
       - "**/screenshots/**"
       - "**/static/description/**"
       - "**/i18n/**"
-  push:
-    branches:
-      - "19.0"
-
+  # Nightly full run: the ONLY run that measures coverage and uploads it to Codecov, once.
+  schedule:
+    - cron: "30 23 * * *"
 
 jobs:
   unreleased-deps:
@@ -46,6 +45,12 @@ jobs:
         include:
           - container: ghcr.io/oca/oca-ci/py3.10-odoo19.0:latest
             name: test with Odoo
+            # l10n_ro_partner_autocomplete excludes the OCA l10n_ro_partner_create_by_vat, which
+            # these two depend on: they are tested on their own below
+            exclude: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi
+          - container: ghcr.io/oca/oca-ci/py3.10-odoo19.0:latest
+            name: test with Odoo (OCA create_by_vat)
+            include: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi
 
     services:
       postgres:
@@ -58,6 +63,8 @@ jobs:
           - 5432:5432
     env:
       OCA_ENABLE_CHECKLOG_ODOO: "1"
+      INCLUDE: ${{ matrix.include }}
+      EXCLUDE: ${{ matrix.exclude }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,6 +72,13 @@ jobs:
       - name: Install Requests2.27.0
         run: |
           pip install "requests>=2.27.0"
+      # pdfminer.six (l10n_ro_customs_dvi_import) asks for cryptography>=36: pip would upgrade the
+      # image's cryptography 3.4.8 and break its pyOpenSSL ("module 'lib' has no attribute
+      # 'GEN_EMAIL'"), so Odoo no longer starts. Keeping the image's cryptography makes pip pick a
+      # compatible pdfminer.six instead. oca_install_addons appends to test-requirements.txt and
+      # refuses an existing test-constraints.txt, so the pin goes into test-requirements.txt.
+      - name: Keep the cryptography of the image
+        run: pip freeze | grep -i '^cryptography==' >> test-requirements.txt
       - name: Install addons and dependencies
         run: oca_install_addons
       - name: Check licenses
@@ -73,9 +87,33 @@ jobs:
         run: manifestoo -d . check-dev-status --default-dev-status=Beta
       - name: Initialize test db
         run: oca_init_test_database
+      # Coverage only on the nightly run. Other runs execute the same command as
+      # `oca_run_tests` (OCA/oca-ci, bin/oca_run_tests) without `coverage run --branch`:
+      # the tracer slows Python down and the report would be thrown away anyway.
+      # bash, not the container's default sh (dash): dash rejects `set -o pipefail`.
       - name: Run tests
-        run: oca_run_tests
-      - uses: codecov/codecov-action@v6
+        shell: bash
+        env:
+          COVERAGE: ${{ github.event_name == 'schedule' }}
+        run: |
+          if [ "$COVERAGE" = "true" ]; then
+            oca_run_tests
+            exit 0
+          fi
+          set -o pipefail
+          oca_wait_for_postgres
+          ADDONS=$(oca_list_addons_to_test)
+          if [ -z "$ADDONS" ]; then
+            exit 0
+          fi
+          unbuffer $(which odoo) \
+            -d ${PGDATABASE} \
+            -i ${ADDONS} \
+            --test-enable \
+            --http-interface=127.0.0.1 \
+            --stop-after-init | oca_checklog_odoo
+      - if: ${{ github.event_name == 'schedule' }}
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Update .pot files

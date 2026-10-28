@@ -1,9 +1,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    "name": "Romania - Stock Accounting Check",
+    "name": "Romania - Stock vs Ledger Check",
     "summary": "Check the stock valuation against the general ledger",
+    "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.3",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",

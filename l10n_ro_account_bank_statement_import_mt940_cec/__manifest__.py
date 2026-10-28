@@ -3,10 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": "MT940 CEC Format Bank Statements Import",
+    "name": "CEC Bank MT940 Statement Import",
     "summary": "Romania - Import bank statements from CEC",
     "countries": ["ro"],
-    "version": "19.0.0.2.2",
+    "version": "19.0.0.2.4",
     "license": "AGPL-3",
     "author": "NextERP Romania SRL, Terrabit",
     "website": "https://www.terrabit.ro",
@@ -15,4 +15,5 @@
     "installable": True,
     "development_status": "Mature",
     "maintainers": ["feketemihai", "dhongu"],
+    "images": ["static/description/main_screenshot.png"],
 }

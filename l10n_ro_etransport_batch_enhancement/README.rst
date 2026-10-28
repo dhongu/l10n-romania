@@ -1,6 +1,6 @@
-============================
-eTransport Batch Enhancement
-============================
+================================
+e-Transport for Transfer Batches
+================================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -65,6 +65,31 @@ Implementare Tehnică
 
 Changelog
 =========
+
+19.0.0.3.5 (2026-10-22)
+-----------------------
+
+- Listed on Odoo Apps as *e-Transport for Transfer Batches* (was
+  *eTransport Batch Enhancement*). The technical name
+  ``l10n_ro_etransport_batch_enhancement`` does not change.
+
+19.0.0.3.4 (2026-10-12)
+-----------------------
+
+- Depends on ``l10n_ro_picking_report``, the new name of
+  ``l10n_ro_stock_picking_report``.
+
+19.0.0.3.3 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.0.3.2
+----------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 19.0.0.3.1
 ----------

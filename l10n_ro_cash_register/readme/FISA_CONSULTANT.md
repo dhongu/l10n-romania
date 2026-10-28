@@ -1,4 +1,4 @@
-# Fișă Modul: Registrul de casă zilnic, cu închiderea zilei (14-4-7A)
+# Fișă Modul: Registrul de casă zilnic, cu închiderea zilei și monetarul (14-4-7A)
 
 **Poziție plan:** C20  
 **Modul:** `l10n_ro_cash_register`  
@@ -20,6 +20,12 @@ sfârșitul zilei, tipărit în forma formularului **14-4-7A**. Din registru, ca
 o dată din ziua închisă sau dinaintea ei. Contabilul-șef poate **redeschide** ziua, cu urmă în
 istoric.
 
+Înainte de închidere, casierul poate face **monetarul**: numără numerarul din casă pe cupiuri
+(bancnote și monede), vede pe registru diferența față de soldul contului casei (plus sau lipsă de
+casă), tipărește situația numerarului pe cupiuri, semnată, și înregistrează diferența printr-o
+operațiune de casă precompletată. Pe casieriile unde monetarul este obligatoriu, ziua nu se închide
+nenumărată sau cu diferență neînregistrată.
+
 Modulul nu acoperă importul extraselor bancare (MT940) și nici reconcilierea bancară; acestea sunt
 module complementare.
 
@@ -40,6 +46,17 @@ module complementare.
 - **Anexa 1 pct. 12, 36 și 56** — listarea pe hârtie nu este obligatorie zilnic: obligatorie este
   **întocmirea** zilnică; documentele se pot păstra electronic, cu condiția să poată fi listate
   oricând.
+- **Monetarul** este un document de **control intern** al casieriei: forma și periodicitatea
+  numărării le stabilește conducerea entității prin procedurile proprii, inclusiv cele de
+  inventariere (**OMFP 1802/2014, pct. 83 alin. (2)**). Elementele se reflectă în contabilitate la
+  valoarea pusă de acord cu rezultatele inventarierii (pct. 82 alin. (2)); efect contabil are deci
+  doar **diferența** constatată, nu numărarea în sine.
+- **Imputarea lipsei** către casierul salariat se face pe baza unei note de constatare și evaluare a
+  pagubei, prin acordul părților și în limita a 5 salarii minime brute (**Codul muncii, art. 254
+  alin. (3)–(4)**), iar fără acord pe cale judecătorească. De aceea modulul **nu impută automat**.
+- **Lipsa de numerar neimputabilă** este tratată de regulă ca cheltuială nedeductibilă, fiind
+  efectuată în afara scopului activității economice (**Codul fiscal, art. 25 alin. (1)**);
+  încadrarea finală rămâne la aprecierea consultantului fiscal.
 - **Legea 70/2015** (plafoanele de încasări și plăți în numerar) — **nu** este verificată de modul;
   vezi secțiunea 11.
 
@@ -51,8 +68,8 @@ module complementare.
 
 | Rol | Ce face în modul |
 |---|---|
-| **Casier** | înregistrează încasările, plățile și operațiunile de casă din registru; închide ziua |
-| **Contabil** | verifică soldurile, tipărește registrul, corelează cu notele contabile |
+| **Casier** | înregistrează încasările, plățile și operațiunile de casă din registru; numără numerarul (monetarul) și semnează situația pe cupiuri; închide ziua |
+| **Contabil** | verifică soldurile, tipărește registrul, corelează cu notele contabile; verifică monetarul și înregistrează diferența pe contul potrivit |
 | **Contabil-șef** | redeschide o zi închisă, când o corecție nu se poate face printr-o notă datată azi |
 | **Consultant implementare** | configurează jurnalul de numerar și explică regula închiderii |
 
@@ -74,7 +91,10 @@ contabil-șef — ca să vedeți în registru cine a închis și cine a redeschi
 | **4111** | Clienți | încasări de la clienți |
 | **401** | Furnizori | plăți către furnizori |
 | **542** | Avansuri de trezorerie | avansuri în numerar date angajaților |
-| **7588** / **6588** | Alte venituri / cheltuieli din exploatare (în planul Odoo RO: 758800 / 658810) | **Cont profit** / **Cont pierderi** pe jurnal, pentru plusurile și minusurile de casă constatate |
+| **7588** / **6588** | Alte venituri / cheltuieli din exploatare (în planul Odoo RO: 758800 / 658810) | **Cont profit** / **Cont pierderi** pe jurnal, pentru plusurile și minusurile de casă constatate; contul propus la **Înregistrează diferența** |
+| **65882** | Alte cheltuieli de exploatare nedeductibile (658820) | contul propus pentru lipsă când jurnalul nu are **Cont pierderi** sau a rămas pe contul generic 999xxx |
+| **473** | Decontări din operațiuni în curs de clarificare | diferența de casă încă nelămurită (lipsă: 473 = 5311; plus: 5311 = 473), închisă ulterior pe 6588 / 4282 / 7588 |
+| **4282** | Alte creanțe în legătură cu personalul | lipsa imputată casierului salariat (4282 = 5311), recuperată prin încasare (5311 = 4282) sau reținere din salariu (421 = 4282) |
 
 Date minime pentru demo (sunt cele din capturi):
 
@@ -85,7 +105,9 @@ Date minime pentru demo (sunt cele din capturi):
   300,00 lei) și factura de rechizite PC-2291 de la Papetăria (165,29 + TVA = 200,00 lei);
 - trei zile consecutive de operațiuni (vezi „Note de monografie”): ziua 1 alimentare 1.000 lei,
   ziua 2 încasare 500 / plată 200 / avans 150, ziua 3 încasare 300;
-- utilizatorii **Maria Popescu** (casier) și **Elena Dumitrescu** (contabil-șef).
+- utilizatorii **Maria Popescu** (casier) și **Elena Dumitrescu** (contabil-șef);
+- monetarul zilei 3: în casă se numără 1.445 lei (2 × 500, 2 × 200, 4 × 10, 1 × 5), față de soldul
+  scriptic de 1.450 lei — **lipsă de 5 lei**.
 
 ## 5. Configurare inițială
 
@@ -98,8 +120,11 @@ Date minime pentru demo (sunt cele din capturi):
    - **Prefix secvență** (codul jurnalului) — dă și numărul registrului, ex. `CASA/2026/00002`;
    - **Cont profit** / **Cont pierderi** = 7588 / 6588 (plusuri / minusuri de casă). Planul Odoo RO
      propune la crearea jurnalului conturile generice **999001 / 999002**, care nu există în planul
-     de conturi românesc și trebuie înlocuite; minusul imputabil casierului se trece ulterior pe
-     4282 printr-o notă separată.
+     de conturi românesc și trebuie înlocuite. Dacă au rămas pe jurnal, monetarul nu le folosește:
+     propune 7588 pentru plus și 65882 pentru lipsă. Minusul imputabil casierului se trece pe 4282,
+     alegând contul în operațiunea de casă;
+   - **Monetar obligatoriu la închiderea zilei** — bifați-l pe casieriile unde procedura internă cere
+     numărarea zilnică: ziua nu se mai închide fără monetar sau cu diferență neînregistrată.
 
    ![Jurnalul de casă](screenshots/01_jurnal_cash.png)
 
@@ -117,6 +142,9 @@ Date minime pentru demo (sunt cele din capturi):
    mișcări pe contul casei, plus ziua curentă. Există și un cron cu aceeași acțiune, livrat
    **inactiv**.
 5. Atribuiți utilizatorilor grupul **Administrator** pe Facturare / Contabilitate (vezi secțiunea 3).
+6. **Facturare / Contabilitate → Configurare → Contabilitate → Cupiuri numerar** — verificați
+   cupiurile active. Modulul livrează leul și euro; o cupiură scoasă din circulație se arhivează, o
+   valută nouă se adaugă aici (pasul 9).
 
 ## 6. Flux de utilizare
 
@@ -152,7 +180,8 @@ documente diferite.
 ### Pasul 2 — Formularul registrului și operarea zilei
 
 Deschideți registrul zilei. Bara de sus are butoanele **Tipărire**, **Împrospătare**, **Încasare**
-①, **Plată** ②, **Operație** ③ și **Închide ziua**; în dreapta, starea (*Deschisă* / *Închisă*).
+①, **Plată** ②, **Operație** ③, **Numără numerarul** (monetarul, pașii 10–13) și **Închide ziua**;
+în dreapta, starea (*Deschisă* / *Închisă*).
 
 ![Formularul registrului de casă, cu butoanele de operare](screenshots/03_formular_registru.png)
 
@@ -282,6 +311,89 @@ fiecărui registru redeschis păstrează urma: cine a închis, cine a redeschis 
 cu numele contabilului-șef. După corecție, **închideți din nou** ziua și toate zilele redeschise,
 în ordine.
 
+### Pasul 9 — Cupiurile de numerar
+
+**Facturare / Contabilitate → Configurare → Contabilitate → Cupiuri numerar** listează bancnotele și
+monedele numărate la monetar, pe monedă: **Monedă**, **Valoare**, **Tip** (*Bancnotă* / *Monedă*),
+**Activ**.
+
+![Cupiurile de numerar](screenshots/11_cupiuri.png)
+
+**Găsiți pe ecran:** cupiurile leului (500 lei → 1 ban) și ale euro (500 € → 1 cent).
+**Verificați:** fiecare cupiură în circulație din moneda casieriei este activă; o cupiură apare o
+singură dată pe monedă. Lista se editează direct în tabel.
+
+### Pasul 10 — Numărarea numerarului (monetarul)
+
+La sfârșitul zilei, înainte de închidere, casierul deschide registrul zilei și apasă **Numără
+numerarul**. Apare fila **Monetar**, cu câte un rând pentru fiecare cupiură activă a monedei
+casieriei; casierul completează **Cantitatea** (bucățile numărate), iar **Suma** se calculează pe
+rând.
+
+![Monetarul pe registrul zilei](screenshots/12_monetar_numarare.png)
+
+**Găsiți pe ecran:** ② în dreapta, sub soldurile zilei, **Numerar numărat** și **Diferență la
+numărare**; în fila **Monetar**, bucățile pe fiecare cupiură.
+**Verificați:** *Numerar numărat* = totalul coloanei *Suma*; *Diferență la numărare* = *Numerar
+numărat* − *Sold final* (în captură: 1.445 − 1.450 = **−5,00 lei**, lipsă de casă, în roșu; un plus
+apare în verde). Butonul ① **Înregistrează diferența** apare doar cât diferența nu este zero.
+
+Apăsat din nou, **Numără numerarul** adaugă doar cupiurile lipsă (de exemplu una activată ulterior),
+fără să dubleze rândurile. La o casierie în valută (5314) se numără cupiurile valutei, iar diferența
+se calculează față de soldul **în valută** al contului casei.
+
+### Pasul 11 — Tipărirea monetarului
+
+**Tipărește monetarul** produce situația numerarului pe cupiuri, care se semnează de casier și de
+cel care verifică și se păstrează lângă registrul zilei:
+
+![Monetarul tipărit](screenshots/13_monetar_pdf.png)
+
+**Găsiți pe ecran:** antetul cu compania și CIF; registrul, data, casieria și moneda; cupiurile
+grupate pe **Bancnote** și **Monede**, fiecare grup cu subtotal; rândurile **Numerar numărat**,
+**Sold scriptic (contul casei)** și **Diferență** (cu mențiunea *lipsă* / *plus*); semnăturile; în
+subsol, programul și versiunea.
+**Verificați:** subtotal bancnote + subtotal monede = numerar numărat (1.445,00); numerar numărat −
+sold scriptic = diferență (−5,00); soldul scriptic este soldul final din registru.
+
+Tipărită **înainte** de înregistrarea diferenței, situația este documentul de constatare al lipsei
+sau plusului.
+
+### Pasul 12 — Înregistrarea diferenței
+
+**Înregistrează diferența** deschide operațiunea de casă (pasul 3) precompletată:
+
+![Operațiunea de casă precompletată cu diferența](screenshots/14_inregistrare_diferenta.png)
+
+- **Operație**: *Retragere* pentru lipsă, *Depunere* pentru plus;
+- **Suma**: valoarea absolută a diferenței (5,00);
+- **Descriere**: „Diferență la monetar” urmat de numărul registrului;
+- **Cont**: **Cont pierderi** al jurnalului pentru lipsă (658810), **Cont profit** pentru plus
+  (758800). Dacă jurnalul nu le are sau a rămas pe conturile generice 999xxx, se propun 65882,
+  respectiv 7588.
+
+**Verificați contul înainte de Confirmare** și schimbați-l după constatare: **473** cât diferența
+este în curs de clarificare, **4282** pentru lipsa imputată casierului cu acordul acestuia. Modulul
+nu alege singur între ele.
+
+La o casierie în valută butonul refuză: diferența se înregistrează printr-o notă contabilă cu suma
+în valută, fiindcă operațiunea de casă lucrează în lei.
+
+### Pasul 13 — Monetarul după înregistrare și închiderea zilei
+
+După **Confirmare**, nota contabilă apare în **Linii registrul de casă**, iar soldul final se
+recalculează:
+
+![Registrul după înregistrarea diferenței](screenshots/15_monetar_inregistrat.png)
+
+**Verificați:** linia nouă (−5,00, „Diferență la monetar …”); *Sold final* = *Numerar numărat*
+(1.445,00); *Diferență la numărare* = 0,00, iar butonul **Înregistrează diferența** a dispărut.
+Ziua se poate închide acum (pasul 5).
+
+Pe o casierie cu **Monetar obligatoriu la închiderea zilei**, **Închide ziua** refuză ziua fără
+monetar sau cu diferență nenulă (secțiunea 9). După închidere, cantitățile din monetar nu se mai pot
+modifica până la redeschiderea zilei.
+
 ### Note de monografie și raportare
 
 Notele din capturi (casieria **Casa lei**, cont 5311, analitic 531102):
@@ -293,9 +405,26 @@ Ziua 2  Chitanța CHCASA/2026/00001 — Alfa       Dr 5311     500  =  Cr 4111  
         Dispoziția PLCASA/2026/00001 — Papetăria Dr 401      200  =  Cr 5311     200   (factura PC-2291)
         Avans deplasare Cluj — Ionescu Andrei   Dr 542      150  =  Cr 5311     150   (wizard)
 Ziua 3  Chitanța următoare — Alfa               Dr 5311     300  =  Cr 4111     300   (a doua factură)
+Ziua 3  Lipsă la monetar (pasul 12)              Dr 6588       5  =  Cr 5311       5   (wizard, cont pierderi al jurnalului)
 ```
 
-Solduri: ziua 1: 0 → 1.000; ziua 2: 1.000 → 1.150; ziua 3: 1.150 → 1.450.
+Solduri: ziua 1: 0 → 1.000; ziua 2: 1.000 → 1.150; ziua 3: 1.150 → 1.450 înainte de monetar, 1.445
+după înregistrarea lipsei.
+
+Diferențele la monetar, după constatare:
+
+```
+Plus de casă                                   Dr 5311 = Cr 7588
+Sumă încasată necuvenită (ex. rest nedat)      Dr 5311 = Cr 473
+Lipsă neimputabilă                             Dr 6588 (65882, nedeductibilă) = Cr 5311
+Lipsă imputată casierului, cu acord            Dr 4282 = Cr 5311
+Lipsă constatată acum, imputată ulterior       Dr 6588 = Cr 5311, apoi Dr 4282 = Cr 7581 / 7588
+Diferență în curs de clarificare               Dr 473 = Cr 5311 (lipsă) / Dr 5311 = Cr 473 (plus)
+  — închidere ulterioară                       Dr 6588 / Dr 4282 = Cr 473; Dr 473 = Cr 7588
+Recuperarea lipsei de la casier                Dr 5311 = Cr 4282 sau Dr 421 = Cr 4282
+```
+
+Contul 473 trebuie să ajungă la sold zero până la bilanț.
 
 - Avansul de trezorerie se justifică ulterior prin decont (Dr 6xx / Dr 4426 = Cr 542), iar restul
   nefolosit se restituie în casă (Dr 5311 = Cr 542) — notele de decont nu sunt generate de modul.
@@ -321,12 +450,16 @@ Solduri: ziua 1: 0 → 1.000; ziua 2: 1.000 → 1.150; ziua 3: 1.150 → 1.450.
 **Ce e automat:** crearea registrului zilei la postarea unei plăți pe casierie; calculul și
 recalcularea soldurilor în lanț; nota contabilă din wizardul de operațiune; blocarea postării,
 trecerii în ciornă și ștergerii notelor pe casă datate într-o zi închisă sau înaintea ei;
-redeschiderea în cascadă a zilelor închise ulterioare; urma în istoric.
+redeschiderea în cascadă a zilelor închise ulterioare; urma în istoric; rândurile monetarului pe
+cupiurile monedei casieriei, totalul numărat și diferența față de soldul scriptic; precompletarea
+operațiunii de casă cu diferența; blocarea închiderii fără monetar, pe casieriile unde e obligatoriu.
 
 **Ce rămâne manual:** apăsarea **Închide ziua** în fiecare zi (nu există închidere automată);
 tipărirea și semnarea registrului; activarea cronului de generare a registrelor lipsă, dacă se
 dorește; corecțiile (stornare / notă datată azi / redeschidere aprobată); respectarea plafoanelor
-de numerar.
+de numerar; numărarea fizică și completarea bucăților; alegerea contului diferenței (473 / 4282 /
+6588 / 7588) și imputarea către casier; semnarea monetarului tipărit; diferența unei casierii în
+valută (notă contabilă manuală, cu suma în valută).
 
 ## 8. Verificări pentru consultant
 
@@ -352,6 +485,23 @@ de numerar.
 - [ ] Un utilizator fără acces de Administrator contabilitate nu vede meniul registrului.
 - [ ] **Redeschide** pe ziua 2, cu ziua 3 tot închisă: ambele devin *Deschisă*, fiecare cu mesajul
       de redeschidere în istoric.
+- [ ] **Numără numerarul** pe un registru în lei adaugă câte un rând pe fiecare cupiură activă a
+      leului; apăsat a doua oară nu dublează rândurile.
+- [ ] *Diferență la numărare* = *Numerar numărat* − *Sold final*; negativă (lipsă) în roșu, pozitivă
+      (plus) în verde.
+- [ ] **Tipărește monetarul**: subtotalurile pe bancnote și monede dau numerarul numărat; numerar
+      numărat − sold scriptic = diferența; subsolul are programul și versiunea.
+- [ ] **Înregistrează diferența** la o lipsă propune *Retragere*, suma diferenței și **Cont
+      pierderi** al jurnalului; la un plus, *Depunere* și **Cont profit**.
+- [ ] Cu jurnalul fără conturi de profit / pierderi sau rămas pe 999xxx, contul propus este 7588
+      (plus), respectiv 65882 (lipsă).
+- [ ] După **Confirmare**, diferența devine 0 și butonul **Înregistrează diferența** dispare.
+- [ ] Cu **Monetar obligatoriu la închiderea zilei** bifat: **Închide ziua** este refuzată fără
+      monetar și cu diferență nenulă; după înregistrarea diferenței, ziua se închide.
+- [ ] Pe un registru închis, cantitățile din monetar nu se pot modifica, iar **Numără numerarul** nu
+      mai apare.
+- [ ] La o casierie în euro, monetarul numără cupiurile euro și compară cu soldul în euro al
+      contului casei; **Înregistrează diferența** refuză.
 
 ## 9. Mesaje de eroare frecvente
 
@@ -363,6 +513,11 @@ de numerar.
 | Un registru de casă închis nu se poate modifica; redeschideți-l întâi. | schimbarea datei, casieriei sau numărului pe un registru închis | **Redeschide**, modificați, închideți din nou |
 | Un registru de casă închis nu se poate șterge; redeschideți-l întâi. | ștergerea unui registru închis | **Redeschide** înainte de ștergere |
 | Există deja un registru de casă pentru această casierie și zi. | al doilea registru pentru aceeași casierie și zi | folosiți registrul existent al zilei |
+| Numărați numerarul pe cupiuri înainte de închiderea registrului de casă …. | **Închide ziua** pe o casierie cu monetar obligatoriu, fără monetar | **Numără numerarul**, completați bucățile, apoi închideți |
+| Numerarul numărat în registrul de casă … diferă de soldul contului casei cu …. Înregistrați diferența înainte de închiderea zilei. | monetar obligatoriu și diferență nenulă | verificați numărarea; dacă diferența se confirmă, **Înregistrează diferența**, apoi închideți |
+| Monetarul unei zile închise nu se poate modifica; redeschideți mai întâi ziua. | modificarea bucăților sau **Numără numerarul** pe o zi închisă | **Redeschide**, corectați, închideți din nou |
+| Nu sunt definite cupiuri pentru …. Adăugați-le din Contabilitate > Configurare > Cupiuri numerar. | casieria are o monedă fără cupiuri (alta decât leu sau euro) | adăugați cupiurile valutei (pasul 9) |
+| Diferența unei casierii în valută se înregistrează printr-o notă contabilă în …, cu suma în valută. | **Înregistrează diferența** pe o casierie în valută | notă contabilă pe 5314 cu suma în valută și contul diferenței |
 | Încasarea / plata nu apare în registru | metoda de plată a jurnalului folosește un cont de plăți în curs, nu contul casei | **Elimină conturile de plăți în curs** pe jurnal (secțiunea 5), apoi verificați registrul |
 
 ## 10. Capturi de ecran
@@ -383,6 +538,13 @@ Capturile din `readme/screenshots/` sunt **generate automat** de `tests/test_scr
 8. `08_blocare_postare.png` — mesajul de blocare la postarea unei note pe casă în ziua închisă.
 9. `09_confirmare_redeschidere.png` — confirmarea de la **Redeschide**.
 10. `10_registru_redeschis.png` — registrul redeschis, cu urma închiderii și redeschiderii în istoric.
+11. `11_cupiuri.png` — cupiurile de numerar ale leului și euro (Configurare).
+12. `12_monetar_numarare.png` — monetarul zilei 3: bucățile pe cupiuri, numerar numărat 1.445 lei,
+    diferență −5,00 lei.
+13. `13_monetar_pdf.png` — monetarul tipărit: situația numerarului pe cupiuri, cu semnături.
+14. `14_inregistrare_diferenta.png` — operațiunea de casă precompletată cu lipsa (Retragere, 5,00,
+    cont 658810).
+15. `15_monetar_inregistrat.png` — registrul după înregistrarea lipsei: linia de −5,00, diferență zero.
 
 Regenerare (testele modulului rulează pe o bază cu date demo):
 
@@ -409,6 +571,11 @@ Regenerare (testele modulului rulează pe o bază cu date demo):
   registrelor lipsă este livrat inactiv; închiderea zilei nu este automată și nu se impune ordinea
   zilelor; redeschiderea nu este restricționată pe rol; registrul este corect **doar pentru
   casieriile în moneda companiei (lei)** — soldurile se calculează în lei, deci o casierie în
-  valută (5314, formularul 14-4-7/aA) nu este suportată.
+  valută (5314, formularul 14-4-7/aA) nu este suportată. Excepție: **monetarul** unei casierii în
+  valută numără cupiurile valutei și compară cu soldul în valută; diferența se înregistrează manual.
+- Prezentați **monetarul** ca procedură de control intern: numărarea și semnarea situației pe cupiuri
+  la sfârșitul zilei, apoi înregistrarea diferenței constatate. Insistați că alegerea contului
+  (473 / 4282 / 6588 / 7588) e o decizie a contabilului, nu a casierului, și că imputarea către
+  casier cere nota de constatare și acordul lui.
 - Pentru analiză pe perioade (mai multe zile, export XLSX), recomandați în paralel raportul
   `l10n_ro_cash_register_report` (Enterprise); cifrele sunt aceleași.

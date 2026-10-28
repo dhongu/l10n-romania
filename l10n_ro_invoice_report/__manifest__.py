@@ -2,9 +2,9 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Romania - Invoice Report Terrabit",
+    "name": "Romania - Invoice Report",
     "summary": "Localizare Terrabit - Facturi, Chitanta",
-    "version": "19.0.3.4.25",
+    "version": "19.0.3.4.27",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "license": "AGPL-3",
@@ -30,4 +30,5 @@
         "views/account_journal_view.xml",
         "views/res_partner_view.xml",
     ],
+    "images": ["static/description/main_screenshot.png"],
 }

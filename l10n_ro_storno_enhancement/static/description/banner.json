@@ -1,0 +1,10 @@
+{
+  "title": "Storno Enhancements",
+  "summary": "Corrections booked in red",
+  "lang": "en",
+  "features": [
+    "Storno on every reversed entry",
+    "Manual storno on journal entries",
+    "Account usage: Asset or Liability"
+  ]
+}

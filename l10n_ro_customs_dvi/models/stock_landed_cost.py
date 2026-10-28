@@ -3,7 +3,15 @@
 # See README.rst file on addons root folder for license details
 
 
-from odoo import fields, models
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+
+# Regimul vamal din caseta 37 a declarației (primele 4 cifre: regim solicitat + regim anterior).
+CUSTOMS_REGIMES = [
+    ("4000", "4000 - Import VAT due"),
+    ("4200", "4200 - VAT exempt, intra-Community supply"),
+    ("other", "Other"),
+]
 
 
 class LandedCost(models.Model):
@@ -20,9 +28,54 @@ class LandedCost(models.Model):
         help="Reference number of the customs import declaration (MRN).",
     )
 
-    tax_value = fields.Float("VAT paid at customs")
+    customs_regime = fields.Selection(
+        CUSTOMS_REGIMES,
+        default="4000",
+        tracking=True,
+        help="Customs procedure code (box 37 of the declaration).\n"
+        "4200: the import is exempt from VAT (art. 293(1)(m) of Law 227/2015) because the goods are "
+        "supplied to another Member State; only the base is reported, on row 29 of the VAT return.",
+    )
+    tax_value = fields.Float("Import VAT Amount")
+    # Regim 4200: TVA-ul calculat de vamă e reţinut din contul de garanţie al importatorului până
+    # la proba livrării intracomunitare (CMR confirmat). Evidenţă informativă, fără notă contabilă:
+    # garanţia stă pe 2678, iar notele de constituire / restituire / executare se fac manual.
+    vat_guarantee_amount = fields.Float(
+        "VAT Held as Guarantee",
+        tracking=True,
+        help="Regime 4200: VAT computed by customs and held from the importer's guarantee account until "
+        "the intra-Community supply is proven (CMR confirmed by the customer). Informative only: "
+        "no journal entry is generated.",
+    )
+    vat_guarantee_state = fields.Selection(
+        [("blocked", "Blocked"), ("released", "Released")],
+        "Guarantee Status",
+        tracking=True,
+        help="Blocked: customs holds the amount from the guarantee account.\n"
+        "Released: customs released it after the confirmed CMR was submitted.",
+    )
     tax_base = fields.Float("Tax base")
-    tax_id = fields.Many2one("account.tax")  # TVA platit in Vama
+    tax_id = fields.Many2one("account.tax")  # TVA la import (plătit în vamă sau cu certificat de amânare)
+
+    @api.constrains("customs_regime", "tax_id", "tax_value")
+    def _check_customs_regime_exempt(self):
+        """La 4200 importul e scutit: nu există TVA de înregistrat, nici deductibil, nici de plată.
+
+        TVA-ul calculat de vamă și reținut ca garanție nu e datorat; dacă scutirea cade, vama îl
+        execută din garanție și abia atunci devine TVA de import.
+        """
+        for cost in self.filtered(lambda c: c.customs_regime == "4200"):
+            if cost.tax_value or (cost.tax_id and cost.tax_id.amount):
+                raise ValidationError(
+                    self.env._(
+                        "Under customs regime 4200 the import is exempt from VAT: choose an exempt tax "
+                        "(0%) and leave the import VAT amount empty. The VAT held by customs as a "
+                        "guarantee is not recorded on the DVI."
+                    )
+                )
+
+    def action_release_vat_guarantee(self):
+        self.write({"vat_guarantee_state": "released"})
 
     def _get_move_ref(self):
         """Referința notei contabile: numărul de DVI dacă e completat, altfel secvența internă."""
@@ -36,22 +89,18 @@ class LandedCost(models.Model):
         for cost in self.filtered(lambda c: c.dvi_number and c.account_move_id):
             cost.account_move_id.ref = cost.dvi_number
 
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-
-        product_id = get_param("dvi.custom_duty_product_id")
-
-        custom_duty_product = self.env["product.product"].browse(int(product_id)).exists()
-
-        if not custom_duty_product:
-            wizard = self.env["account.invoice.dvi"].create({})
-            vals = wizard._prepare_custom_duty_product()
-            custom_duty_product = self.env["product.product"].create(vals)
-            set_param = self.env["ir.config_parameter"].sudo().set_param
-            set_param("dvi.custom_duty_product_id", custom_duty_product.id)
-
-        for cost in self.filtered(lambda c: c.tax_value and c.tax_id):
-            accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
-            if not cost.account_move_id:
+        # La 4200 nu există TVA, dar baza importului scutit trebuie să ajungă în decont (rd. 29).
+        for cost in self.filtered(lambda c: c.tax_id and (c.tax_value or c.customs_regime == "4200")):
+            # Contul de buget al companiei DVI-ului, nu proprietatea produsului „Taxă vamală”
+            # (setată doar pe compania care l-a creat; pe celelalte nota cădea tăcut pe 607).
+            dvi_wizard = self.env["account.invoice.dvi"].with_company(cost.company_id)
+            custom_duty_product = dvi_wizard._get_or_create_custom_duty_product()
+            payable_account = dvi_wizard._get_customs_account(custom_duty_product)
+            # Fără taxă vamală (ex. preferința UE–MD), super() nu creează nicio notă: o creăm aici
+            # și o validăm la final, altfel TVA-ul / baza din DVI rămân într-o notă în ciornă,
+            # pe care decontul nu o vede.
+            new_move = not cost.account_move_id
+            if new_move:
                 cost.account_move_id = self.env["account.move"].create(
                     {
                         "journal_id": cost.account_journal_id.id,
@@ -63,13 +112,34 @@ class LandedCost(models.Model):
                 )
             tax_values = cost.tax_id.compute_all(cost.tax_base)
 
-            name = self.env._("VAT paid at customs - %s", cost.tax_id.name)
-            aml = cost._prepare_tax_lines(name, tax_values, accounts_data)
+            # etichetă neutră: regimul (plătit în vamă / fără plată, „IMP AM") se vede din numele taxei
+            name = self.env._("Import VAT - %s", cost.tax_id.name)
+            aml = cost._prepare_tax_lines(name, tax_values, payable_account)
             aml += cost._prepare_tax_base_lines(name, tax_values)
-            self.env["account.move.line"].create(aml)
+            # Liniile sunt complete (TVA transcris din declaraţie): fără resincronizarea taxelor,
+            # care pe o notă în ciornă ar recalcula TVA-ul din bază.
+            self.env["account.move.line"].with_context(skip_invoice_sync=True).create(aml)
+            if new_move and cost.account_move_id.line_ids:
+                cost.account_move_id._post()
+        self._set_dvi_move_partner()
         return res
 
-    def _prepare_tax_lines(self, name, tax_values, accounts_data):
+    def _set_dvi_move_partner(self):
+        """Furnizorul extern de pe factură, pe antetul notei DVI.
+
+        Jurnalul de TVA pentru cumpărări înscrie importul pe nota DVI și ia furnizorul din antetul
+        ei; fără partener, rândul importului rămânea fără nume și CUI. Doar antetul: liniile de
+        TVA și de taxe vamale (446, 4426, 4427) își păstrează partenerul. Poziția fiscală rămâne cea
+        a notei: recalculată din furnizorul extern, ar fi una extra-UE, incompatibilă cu taxa de
+        import din țară.
+        """
+        for cost in self.filtered(lambda c: c.vendor_bill_id and c.account_move_id):
+            move = cost.account_move_id
+            if not move.partner_id:
+                with self.env.protecting([move._fields["fiscal_position_id"]], move):
+                    move.with_context(skip_readonly_check=True).partner_id = cost.vendor_bill_id.commercial_partner_id
+
+    def _prepare_tax_lines(self, name, tax_values, payable_account):
         """Liniile de TVA ale notei, urmând liniile de repartiţie ale taxei alese.
 
         Taxa **este** comutatorul între cele două regimuri de la art. 326 Cod fiscal, fiindcă
@@ -90,6 +160,10 @@ class LandedCost(models.Model):
 
         Sumele urmează `tax_value`, transcris din declaraţie, nu recalculat; din repartiţie se
         preiau contul, eticheta fiscală şi semnul.
+
+        Fiecare linie e legată de repartiţia ei (`tax_repartition_line_id`, deci şi `tax_line_id`):
+        fără legătură, SAF-T (D406) nu găseşte taxa şi raportează 000 / 000000, iar închiderea
+        TVA nu preia linia.
         """
         self.ensure_one()
         reps = [r for r in tax_values["taxes"] if r.get("account_id")]
@@ -107,6 +181,8 @@ class LandedCost(models.Model):
                     "credit": -suma if suma < 0 else 0.0,
                     "account_id": r["account_id"],
                     "move_id": self.account_move_id.id,
+                    "tax_repartition_line_id": r["tax_repartition_line_id"],
+                    "tax_base_amount": self.tax_base,
                     "tax_tag_ids": [(6, 0, r["tag_ids"])],
                 }
             )
@@ -119,7 +195,7 @@ class LandedCost(models.Model):
                     "name": name,
                     "debit": 0.0,
                     "credit": self.tax_value,
-                    "account_id": accounts_data["expense"].id,
+                    "account_id": payable_account.id,
                     "move_id": self.account_move_id.id,
                 }
             )
@@ -145,7 +221,8 @@ class LandedCost(models.Model):
         Baza nu poate fi purtată de nicio linie existentă: ambele au ca valoare TVA-ul, nu
         baza. De aceea se adaugă o pereche debit/credit de valoare `tax_base` pe un cont
         neutru de clarificare (473), care se soldează şi nu atinge niciun cont de rezultat
-        sau de stoc; doar una dintre linii poartă eticheta de bază.
+        sau de stoc; doar una dintre linii poartă eticheta de bază şi taxa (`tax_ids`) — pe ea
+        pune SAF-T (D406) informaţia de taxă, ca pe linia de bază a unei facturi.
 
         Fără cont 473 în plan sau fără etichete de bază pe taxă, nu se adaugă nimic —
         comportamentul rămâne cel dinainte.
@@ -163,6 +240,7 @@ class LandedCost(models.Model):
                 "credit": 0.0,
                 "account_id": account.id,
                 "move_id": self.account_move_id.id,
+                "tax_ids": [(6, 0, self.tax_id.ids)],
                 "tax_tag_ids": [(6, 0, base_tags)],
             },
             {

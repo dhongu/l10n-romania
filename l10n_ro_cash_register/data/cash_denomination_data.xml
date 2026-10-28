@@ -1,0 +1,85 @@
+<odoo noupdate="1">
+    <!-- Bancnotele și monedele în circulație: leu (BNR) și euro (BCE) -->
+    <record id="denomination_ron_500" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">500</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_ron_200" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">200</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_ron_100" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">100</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_ron_50" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">50</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_ron_20" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">20</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_ron_10" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">10</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_ron_5" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">5</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_ron_1" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">1</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_ron_0_50" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">0.50</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_ron_0_10" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">0.10</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_ron_0_05" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">0.05</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_ron_0_01" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.RON" /><field name="value">0.01</field><field name="kind">coin</field>
+    </record>
+
+    <record id="denomination_eur_500" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">500</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_eur_200" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">200</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_eur_100" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">100</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_eur_50" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">50</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_eur_20" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">20</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_eur_10" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">10</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_eur_5" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">5</field><field name="kind">banknote</field>
+    </record>
+    <record id="denomination_eur_2" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">2</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_eur_1" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">1</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_eur_0_50" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">0.50</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_eur_0_20" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">0.20</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_eur_0_10" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">0.10</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_eur_0_05" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">0.05</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_eur_0_02" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">0.02</field><field name="kind">coin</field>
+    </record>
+    <record id="denomination_eur_0_01" model="l10n.ro.cash.denomination">
+        <field name="currency_id" ref="base.EUR" /><field name="value">0.01</field><field name="kind">coin</field>
+    </record>
+</odoo>

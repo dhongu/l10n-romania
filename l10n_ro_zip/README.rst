@@ -1,6 +1,6 @@
-========================
-Romania - Coduri Postale
-========================
+======================
+Romania - Postal Codes
+======================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -46,6 +46,36 @@ Funcționalități principale:
 
 Changelog
 =========
+
+19.0.0.0.6 (2026-10-22)
+-----------------------
+
+- Listed on Odoo Apps as *Romania - Postal Codes* (was *Romania - Coduri
+  Postale*), with the same title on the Apps banner. The technical name
+  ``l10n_ro_zip`` does not change.
+
+19.0.0.0.5 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.0.0.4 (2026-10-06)
+-----------------------
+
+- The postal code dropdown shows a second, greyed-out column: for a
+  street, ``Strada Mircea Vulcan`` followed by
+  ``010101 · Bucuresti, Sector 1, B`` (postal code, city, sector when
+  filled in, county code); for a code without a street, the city
+  followed by the postal code and the county code. Empty parts are left
+  out, and the county is skipped when it repeats the city. The plain
+  name used on documents and reports is unchanged.
+
+19.0.0.0.3
+----------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 19.0.0.0.2
 ----------

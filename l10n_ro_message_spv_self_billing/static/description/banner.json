@@ -1,0 +1,10 @@
+{
+  "title": "SPV Self-Billing Numbering",
+  "summary": "Number self-billed documents from the SPV message",
+  "lang": "en",
+  "features": [
+    "Journal option: number from SPV",
+    "Draft numbered at invoice matching",
+    "Posted documents never renumbered"
+  ]
+}

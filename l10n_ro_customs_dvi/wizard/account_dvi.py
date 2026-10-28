@@ -4,6 +4,8 @@
 
 from odoo import api, fields, models
 
+from ..models.stock_landed_cost import CUSTOMS_REGIMES
+
 
 class AccountInvoiceDVI(models.TransientModel):
     _name = "account.invoice.dvi"
@@ -29,8 +31,24 @@ class AccountInvoiceDVI(models.TransientModel):
     )
     currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
+    customs_regime = fields.Selection(
+        CUSTOMS_REGIMES,
+        default="4000",
+        help="Customs procedure code, the first four digits of box 37 of the declaration.\n\n"
+        "- 4000: import VAT due, paid at customs or deferred (see Import VAT);\n"
+        "- 4200: import exempt from VAT (art. 293(1)(m) of Law 227/2015), the goods being supplied "
+        "to a customer in another Member State. The VAT computed by customs is only held as a "
+        "guarantee and is NOT recorded: the import VAT stays empty and only the base goes to "
+        "row 29 of the VAT return.",
+    )
+    vat_guarantee_amount = fields.Monetary(
+        string="VAT Held as Guarantee",
+        help="Regime 4200: VAT computed by customs and held from the importer's guarantee account, as "
+        "shown on the declaration. It is only recorded on the DVI, for the release request after the "
+        "confirmed CMR; no journal entry is generated.",
+    )
     tax_value = fields.Monetary(
-        string="VAT Paid at Customs",
+        string="Import VAT Amount",
         help="VAT actually due, the amount of item B00. Copy it from the declaration.\n\n"
         "This is the amount posted to account 4426, as it is. It is NOT recomputed when you change "
         "the base or the rate, so update it yourself whenever you change either.",
@@ -59,6 +77,27 @@ class AccountInvoiceDVI(models.TransientModel):
         "deferral certificate, centralised clearance, entry in the declarant's records), so the "
         "entry is Dr 4426 = Cr 4427, with no payment and no debt to the budget.",
     )
+
+    def _get_exempt_import_tax(self):
+        """Taxa de achiziție scutită „0% EXEMPT” din planul RO (rd. 29 din D300, SAF-T 308302)."""
+        return (
+            self.env["account.chart.template"].ref("tvatiscdeda", raise_if_not_found=False) or self.env["account.tax"]
+        )
+
+    @api.onchange("customs_regime")
+    def _onchange_customs_regime(self):
+        if self.customs_regime == "4200":
+            # TVA-ul calculat devine garanţie: se propune ca punct de plecare, de confruntat cu declaraţia
+            self.vat_guarantee_amount = self.vat_guarantee_amount or self.tax_value
+            self.tax_id = self._get_exempt_import_tax()
+            self.tax_value = 0.0
+        elif self.tax_id and self.tax_id == self._get_exempt_import_tax():
+            # revenire de la 4200: se propune din nou TVA-ul de import calculat
+            self.tax_id = self.env.company.account_purchase_tax_id
+            tax_values = self.tax_id.compute_all(self.tax_base)
+            self.tax_value = tax_values["total_included"] - tax_values["total_excluded"]
+        if self.customs_regime != "4200":
+            self.vat_guarantee_amount = 0.0
 
     def _get_customs_payable_account(self):
         """Contul de decontare cu bugetul pentru drepturile de import.
@@ -112,6 +151,39 @@ class AccountInvoiceDVI(models.TransientModel):
         return self.env["product.product"].browse(int(product_id)).exists()
 
     @api.model
+    def _get_or_create_custom_duty_product(self):
+        """Produsul „Taxă vamală”, cu contul de cheltuieli completat pe compania curentă.
+
+        Produsul e unul pe bază (`company_id` gol, id-ul în parametrul de sistem), dar
+        `property_account_expense_id` e proprietate pe companie: se setează la creare doar pentru
+        compania care l-a creat. Pe celelalte companii îl completăm la prima folosire, ca traseul
+        nativ „factură furnizor -> landed cost” să nu cadă pe contul de cheltuieli al categoriei.
+        """
+        product = self.get_custom_duty_product()
+        if not product:
+            product = self.env["product.product"].create(self._prepare_custom_duty_product())
+            self.env["ir.config_parameter"].sudo().set_param("dvi.custom_duty_product_id", product.id)
+        template = product.product_tmpl_id.with_company(self.env.company)
+        if not template.property_account_expense_id:
+            account = self._get_customs_payable_account()
+            if account:
+                template.sudo().property_account_expense_id = account
+        return product
+
+    @api.model
+    def _get_customs_account(self, product):
+        """Contul creditat cu drepturile de import (taxa vamală, TVA-ul plătit în vamă).
+
+        Se ia direct contul de decontare cu bugetul al companiei curente, nu proprietatea
+        produsului: pe multi-company aceasta putea lipsi și nota se posta tăcut pe 607.
+        Fără 446 în plan, rămâne contul de cheltuieli al produsului.
+        """
+        account = self._get_customs_payable_account()
+        if not account:
+            account = product.product_tmpl_id.with_company(self.env.company).get_product_accounts()["expense"]
+        return account
+
+    @api.model
     def default_get(self, fields_list):
         defaults = super().default_get(fields_list)
         active_id = self.env.context.get("active_id", False)
@@ -143,18 +215,18 @@ class AccountInvoiceDVI(models.TransientModel):
             "picking_ids": [(6, 0, pickings.ids)],
             "cost_lines": [],
             "account_journal_id": invoice.journal_id.id,
+            "customs_regime": self.customs_regime,
             "tax_id": self.tax_id.id,
             "tax_base": self.tax_base,
             "tax_value": self.tax_value,
         }
-        set_param = self.env["ir.config_parameter"].sudo().set_param
+        if self.customs_regime == "4200" and self.vat_guarantee_amount:
+            values.update(vat_guarantee_amount=self.vat_guarantee_amount, vat_guarantee_state="blocked")
+        # câmpul nativ „Factură furnizor”; domeniul lui admite doar facturi (nu note de credit)
+        if invoice.move_type == "in_invoice":
+            values["vendor_bill_id"] = invoice.id
         if self.custom_duty:
-            custom_duty_product = self.get_custom_duty_product()
-            if not custom_duty_product:
-                vals = self._prepare_custom_duty_product()
-                custom_duty_product = self.env["product.product"].create(vals)
-                set_param("dvi.custom_duty_product_id", custom_duty_product.id)
-            accounts_data = custom_duty_product.product_tmpl_id.get_product_accounts()
+            custom_duty_product = self._get_or_create_custom_duty_product()
 
             values["cost_lines"] += [
                 (
@@ -165,7 +237,7 @@ class AccountInvoiceDVI(models.TransientModel):
                         "product_id": custom_duty_product.id,
                         "price_unit": self.custom_duty,
                         "split_method": "by_current_cost_price",
-                        "account_id": accounts_data["expense"].id,
+                        "account_id": self._get_customs_account(custom_duty_product).id,
                     },
                 )
             ]

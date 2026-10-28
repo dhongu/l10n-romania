@@ -12,11 +12,20 @@
                     <group>
                         <field name="landed_type"/>
                         <field name="dvi_number" invisible="landed_type == 'standard'"/>
+                        <field name="customs_regime" invisible="landed_type == 'standard'"/>
                     </group>
                     <group invisible="landed_type == 'standard'">
                         <field name="tax_id"/>
                         <field name="tax_base"/>
-                        <field name="tax_value"/>
+                        <field name="tax_value" invisible="customs_regime == '4200'"/>
+                        <field name="vat_guarantee_amount" invisible="customs_regime != '4200'"/>
+                        <label for="vat_guarantee_state" invisible="customs_regime != '4200'"/>
+                        <div class="o_row" invisible="customs_regime != '4200'">
+                            <field name="vat_guarantee_state"/>
+                            <button name="action_release_vat_guarantee" type="object" string="Mark as Released"
+                                    class="btn-link" icon="fa-unlock"
+                                    invisible="vat_guarantee_state != 'blocked'"/>
+                        </div>
                     </group>
                 </group>
             </notebook>
@@ -37,6 +46,9 @@
                 <filter name="filter_dvi"
                         string="DVI"
                         domain="[('landed_type', '=', 'dvi')]"/>
+                <filter name="filter_vat_guarantee_blocked"
+                        string="VAT Guarantee Blocked"
+                        domain="[('vat_guarantee_state', '=', 'blocked')]"/>
             </filter>
         </field>
     </record>
@@ -53,6 +65,8 @@
             <!-- Suma repartizată, ca lista lunară să poată fi confruntată cu evidența vamală -->
             <field name="date" position="after">
                 <field name="amount_total" optional="show" sum="Total"/>
+                <field name="vat_guarantee_amount" optional="hide" sum="Total"/>
+                <field name="vat_guarantee_state" optional="hide"/>
             </field>
         </field>
     </record>

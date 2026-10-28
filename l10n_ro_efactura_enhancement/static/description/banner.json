@@ -1,0 +1,10 @@
+{
+  "title": "e-Factura Enhancements",
+  "summary": "Safer, more automated e-Invoice sending to SPV",
+  "lang": "en",
+  "features": [
+    "Automatic sending and status sync",
+    "Address checks before posting",
+    "UBL fields kept within size limits"
+  ]
+}

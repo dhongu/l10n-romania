@@ -3,7 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "eTransport Enhancement",
+    "name": "e-Transport Enhancements",
     "version": "19.0.0.10.0",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",

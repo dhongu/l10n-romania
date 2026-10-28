@@ -485,6 +485,41 @@ class AccountMove(models.Model):
             sending_methods={"manual"},
         )
 
+    def action_l10n_ro_edi_reset_not_indexed(self):
+        """Deblochează manual o factură trimisă în SPV care nu a primit index.
+
+        Nucleul o lasă în ``invoice_not_indexed`` și o marchează refuzată abia la
+        sincronizarea de după ``HOLDING_DAYS`` zile; până atunci nu poate fi
+        retrimisă. Sincronizăm întâi cu ANAF: dacă SPV-ul a procesat totuși
+        factura, ea e regăsită după număr și nu se resetează nimic (fără dublet).
+        Altfel, operatorul a confirmat în buton că factura nu există în SPV, deci
+        o marcăm refuzată, ca în nucleu, și poate fi retrimisă.
+        """
+        invoices = self.filtered(lambda m: m.l10n_ro_edi_state == "invoice_not_indexed")
+        if not invoices:
+            raise UserError(self.env._("Factura nu este în așteptarea indexului SPV."))
+
+        for company in invoices.company_id:
+            self.env["account.move"].with_company(company)._l10n_ro_edi_fetch_invoices()
+        invoices.invalidate_recordset(["l10n_ro_edi_state", "l10n_ro_edi_document_ids"])
+
+        for invoice in invoices.filtered(lambda m: m.l10n_ro_edi_state == "invoice_not_indexed"):
+            message = self.env._(
+                "Trimiterea în SPV a fost resetată manual de %(user)s: factura nu a primit index "
+                "și nu a fost găsită în SPV la sincronizare. Poate fi trimisă din nou.",
+                user=self.env.user.name,
+            )
+            invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sent").sudo().unlink()
+            self.env["l10n_ro_edi.document"].sudo().create(
+                {
+                    "invoice_id": invoice.id,
+                    "state": "invoice_refused",
+                    "message": message,
+                }
+            )
+            invoice.message_post(body=message)
+        return {"type": "ir.actions.client", "tag": "reload"}
+
     def _l10n_ro_edi_get_pre_send_errors(self, xml_data):
         # EXTENDS l10n_ro_edi
         # Last gate before the SPV: the XML may have been generated earlier and

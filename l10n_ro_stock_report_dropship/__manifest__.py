@@ -1,10 +1,11 @@
 {
     "name": "Romania - Stock Storage Sheet Dropship",
-    "version": "19.0.1.1.1",
+    "version": "19.0.1.1.2",
     "category": "Inventory/Localizations",
     "summary": "Show dropship valuation in the Romania stock storage sheet report.",
     "author": "Dan Stoica, Terrabit",
     "website": "https://www.terrabit.ro",
+    "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
     "development_status": "Beta",
     "depends": ["l10n_ro_stock_report", "l10n_ro_stock_account", "stock_dropshipping"],

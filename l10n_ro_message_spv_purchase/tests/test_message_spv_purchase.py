@@ -693,9 +693,21 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertFalse(msg.invoice_id)
         self.assertFalse(msg.attachment_xml_id, "precondiție: câmpul derivat e gol fără factură")
 
-        msg.action_create_purchase()
+        action = msg.action_create_purchase()
         po = msg.purchase_order_id
         self.assertTrue(po, "trebuie să creeze/lege o comandă de achiziție")
+        if action.get("tag") == "display_notification":
+            # toate liniile găsite după cod și totalul cu TVA bate (produse cu taxa de achiziție
+            # a planului RO): importul s-a făcut direct
+            self.assertTrue(po.order_line)
+        else:
+            # totalul cu TVA nu bate (produse fără taxe): previzualizarea, confirmată de utilizator
+            self.assertFalse(po.order_line, "importul nu mai rulează nesupravegheat la atașarea XML-ului")
+            self.assertEqual(action["res_model"], "purchase.ubl.import.wizard")
+            wizard = self.env[action["res_model"]].browse(action["res_id"])
+            self.assertEqual(wizard.state, "preview")
+            self.assertEqual(set(wizard.line_ids.mapped("line_action")), {"product"})
+            wizard.action_confirm_import()
 
         self.env.flush_all()
         po.invalidate_recordset()
@@ -781,9 +793,12 @@ class TestMessageSPVPurchase(TransactionCase):
 
         products_before = self.env["product.product"].search_count([])
 
-        msg.action_create_purchase()
+        action = msg.action_create_purchase()
         po = msg.purchase_order_id
         self.assertTrue(po, "trebuie să creeze/lege o comandă de achiziție")
+        wizard = self.env[action["res_model"]].browse(action["res_id"])
+        self.assertRecordValues(wizard.line_ids, [{"product_id": False, "line_action": "skip"}])
+        wizard.action_confirm_import()
 
         self.env.flush_all()
         po.invalidate_recordset()
@@ -797,6 +812,86 @@ class TestMessageSPVPurchase(TransactionCase):
             products_before,
             "nu trebuie creat niciun produs nou pentru linia nepotrivită",
         )
+
+    def test_create_purchase_unmatched_line_create_product_on_request(self):
+        """Utilizatorul alege explicit „Creează produs nou" pe linia neidentificată."""
+        if "purchase.ubl.import.wizard" not in self.env:
+            self.skipTest("Modulul deltatech_purchase_ubl nu este instalat")
+        msg = self._make_spv_message(ref="PO-TEST-CREATE")
+        msg.attachment_id = self.env["ir.attachment"].create(
+            {
+                "name": "create.zip",
+                "raw": self._make_zip_with_xml(xml_bytes=self._xml_unmatched_line(), xml_name="create.xml"),
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        action = msg.action_create_purchase()
+        wizard = self.env[action["res_model"]].browse(action["res_id"])
+        wizard.line_ids.line_action = "create"
+        wizard.action_confirm_import()
+        po = msg.purchase_order_id
+        self.assertRecordValues(po.order_line, [{"name": "Produs Nou Ales Explicit", "product_qty": 3}])
+        self.assertEqual(po.order_line.product_id.name, "Produs Nou Ales Explicit")
+
+    def test_create_purchase_clean_invoice_only_notifies(self):
+        """Toate liniile identificate după cod și totalul bate: fără wizard, doar notificare."""
+        if "purchase.ubl.import.wizard" not in self.env:
+            self.skipTest("Modulul deltatech_purchase_ubl nu este instalat")
+        product = self.env["product.product"].create({"name": "Produs Curat", "type": "consu"})
+        self.env["product.supplierinfo"].create(
+            {
+                "partner_id": self.partner.id,
+                "product_tmpl_id": product.product_tmpl_id.id,
+                "product_id": product.id,
+                "product_code": "COD-CURAT",
+            }
+        )
+        msg = self._make_spv_message(ref="PO-TEST-CLEAN")
+        xml = self._xml_unmatched_line().replace(
+            b"<cbc:Name>Produs Nou Ales Explicit</cbc:Name>",
+            b"<cac:SellersItemIdentification><cbc:ID>COD-CURAT</cbc:ID></cac:SellersItemIdentification>"
+            b"<cbc:Name>Produs Nou Ales Explicit</cbc:Name>",
+        )
+        msg.attachment_id = self.env["ir.attachment"].create(
+            {
+                "name": "clean.zip",
+                "raw": self._make_zip_with_xml(xml_bytes=xml, xml_name="clean.xml"),
+                "res_model": "l10n.ro.message.spv",
+                "res_id": msg.id,
+            }
+        )
+        action = msg.action_create_purchase()
+        self.assertEqual(action["tag"], "display_notification")
+        self.assertRecordValues(msg.purchase_order_id.order_line, [{"product_id": product.id, "product_qty": 3}])
+
+    def _xml_unmatched_line(self):
+        return b"""<?xml version="1.0" encoding="UTF-8"?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+         xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+    <cbc:ID>FACT-TEST-CREATE</cbc:ID>
+    <cbc:IssueDate>2026-10-20</cbc:IssueDate>
+    <cbc:DocumentCurrencyCode>RON</cbc:DocumentCurrencyCode>
+    <cac:OrderReference><cbc:ID>PO-TEST-CREATE</cbc:ID></cac:OrderReference>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cac:PartyTaxScheme><cbc:CompanyID>RO00000099</cbc:CompanyID></cac:PartyTaxScheme>
+            <cac:PartyLegalEntity><cbc:RegistrationName>Furnizor Test SPV</cbc:RegistrationName></cac:PartyLegalEntity>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:InvoiceLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">3</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="RON">30.00</cbc:LineExtensionAmount>
+        <cac:Price><cbc:PriceAmount currencyID="RON">10.00</cbc:PriceAmount></cac:Price>
+        <cac:Item>
+            <cbc:Name>Produs Nou Ales Explicit</cbc:Name>
+            <cac:ClassifiedTaxCategory><cbc:Percent>0</cbc:Percent></cac:ClassifiedTaxCategory>
+        </cac:Item>
+    </cac:InvoiceLine>
+</Invoice>
+"""
 
     def test_action_find_purchase_skips_fully_invoiced_po(self):
         """Tichet #9290: o comandă deja complet facturată (invoice_status='invoiced')

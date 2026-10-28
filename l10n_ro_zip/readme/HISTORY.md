@@ -1,3 +1,12 @@
+## 19.0.0.0.6 (2026-10-22)
+
+- Listed on Odoo Apps as *Romania - Postal Codes* (was *Romania - Coduri Postale*), with the same title on the Apps banner.
+  The technical name `l10n_ro_zip` does not change.
+
+## 19.0.0.0.5 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
 ## 19.0.0.0.4 (2026-10-06)
 
 - The postal code dropdown shows a second, greyed-out column: for a street,

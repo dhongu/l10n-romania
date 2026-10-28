@@ -1,4 +1,4 @@
-## 19.0.0.10.0 (2026-10-07)
+## 19.0.0.10.0 (2026-10-29)
 
 Patru defecte tăcute din XML-ul eTransport, verificate față de XSD-ul ANAF v2
 (2023-01-26) și Schematron-ul v2.0.2. ANAF accepta declarația în toate cele
@@ -31,6 +31,14 @@ după o indisponibilitate a sistemului RO e-Transport.
 Tehnic: noul hook `_l10n_ro_etransport_declaration_record` întoarce înregistrarea
 care declară (transferul), ca `l10n_ro_etransport_batch_enhancement` să poată
 întoarce lotul pe calea de lot.
+
+## 19.0.0.9.5 (2026-10-22)
+
+- Listed on Odoo Apps as *e-Transport Enhancements* (was *eTransport Enhancement*). The technical name `l10n_ro_etransport_enhancement` does not change.
+
+## 19.0.0.9.4 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
 
 ## 19.0.0.9.3 (2026-09-30)
 

@@ -4,6 +4,12 @@ from odoo import fields, models
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
+    l10n_ro_require_cash_count = fields.Boolean(
+        string="Cash Count Required at Closing",
+        help="The day of this cash desk can be closed only after the cash is counted by denomination "
+        "and the counted amount equals the balance of the cash account.",
+    )
+
     def open_action_with_context(self):
         if self.type == "cash" and self.company_id.country_id.code == "RO":
             action = self.env["ir.actions.actions"]._for_xml_id("l10n_ro_cash_register.action_cash_register")

@@ -7,7 +7,7 @@
 # dacă tooling-ul lipsește, testul nu se definește). Seedează un jurnal de casă, trei zile de
 # operațiuni pe planul de conturi RO (alimentare din bancă, încasare client, plată furnizor,
 # avans de trezorerie) și o zi deja închisă, apoi parcurge închiderea zilei, blocarea unei
-# postări în ziua închisă și redeschiderea.
+# postări în ziua închisă, redeschiderea și monetarul zilei 3 (numărare pe cupiuri, lipsă de casă).
 #
 # Rulare:
 #   ./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_cash_register,l10n_ro_doc_screenshots \
@@ -113,6 +113,7 @@ class TestCashRegisterScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
         registers.action_refresh()
         cls.register_d1 = registers.filtered(lambda r: r.date == cls.date_d1)
         cls.register = registers.filtered(lambda r: r.date == cls.date_d2)
+        cls.register_d3 = registers.filtered(lambda r: r.date == cls.date_d3)
         # rutina zilnică: ziua precedentă e deja închisă
         cls._as(cls.cashier, cls.register_d1).action_close()
 
@@ -150,6 +151,7 @@ class TestCashRegisterScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
         )
 
         cls.act_list = cls.env.ref("l10n_ro_cash_register.action_cash_register").id
+        cls.act_denominations = cls.env.ref("l10n_ro_cash_register.action_cash_denomination").id
 
     @classmethod
     def _invoice(cls, move_type, partner, price, tax, label, ref=None):
@@ -202,9 +204,9 @@ class TestCashRegisterScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
         self.env.flush_all()
         self.env.cr.precommit.run()
 
-    def _register_form(self, name, **extra):
+    def _register_form(self, name, register=None, **extra):
         shot = {
-            "url": f"action={self.act_list}&id={self.register.id}&view_type=form",
+            "url": f"action={self.act_list}&id={(register or self.register).id}&view_type=form",
             "name": name,
             "wait": ".o_form_view",
             "settle": 2000,
@@ -310,4 +312,69 @@ class TestCashRegisterScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                 self._register_form("10_registru_redeschis.png", hide_chatter=False),
             ],
             viewport=(1800, 1000),
+        )
+
+        # Partea 4 — monetarul zilei 3: sold scriptic 1.450 lei, numărat 1.445 lei (lipsă 5 lei).
+        register = self._as(self.cashier, self.register_d3)
+        register.action_count_cash()
+        counted = {500: 2, 200: 2, 10: 4, 5: 1}
+        for line in register.count_line_ids:
+            line.quantity = counted.get(line.value, 0)
+        self.capture_screenshots(
+            [
+                # 11. Cupiurile de numerar (Configurare)
+                {
+                    "url": f"action={self.act_denominations}",
+                    "name": "11_cupiuri.png",
+                    "wait": ".o_list_view",
+                    "settle": 2000,
+                },
+                # 12. Monetarul pe registrul zilei 3: numărat, sold scriptic, diferență
+                self._register_form(
+                    "12_monetar_numarare.png",
+                    register=self.register_d3,
+                    click_tab="Monetar",
+                    full=True,
+                    highlight=[
+                        "button[name='action_record_difference']",
+                        ".o_inner_group:has(div[name='count_difference'])",
+                    ],
+                ),
+                # 13. Monetarul tipărit
+                {
+                    "path": f"/report/html/l10n_ro_cash_register.report_cash_count/{self.register_d3.id}",
+                    "name": "13_monetar_pdf.png",
+                    "wait": "body",
+                    "settle": 2000,
+                    "full": True,
+                    "hide_chatter": False,
+                },
+                # 14. Înregistrează diferența → operațiunea de casă precompletată
+                self._register_form(
+                    "14_inregistrare_diferenta.png",
+                    register=self.register_d3,
+                    click_btn="button[name='action_record_difference']",
+                    wait_after=".modal-content",
+                    trim=False,
+                ),
+            ],
+            viewport=viewport,
+        )
+
+        # Lipsa se înregistrează pe contul de pierdere al jurnalului; monetarul ajunge la diferență zero.
+        action = register.action_record_difference()
+        wizard = self.env["l10n.ro.cash.register.operation"].with_context(**action["context"]).create({})
+        wizard.action_confirm()
+        self.register_d3.action_refresh()
+        self.capture_screenshots(
+            [
+                # 15. Registrul după înregistrarea lipsei: linia de 5 lei, diferență zero
+                self._register_form(
+                    "15_monetar_inregistrat.png",
+                    register=self.register_d3,
+                    full=True,
+                    highlight=[".o_inner_group:has(div[name='count_difference'])"],
+                ),
+            ],
+            viewport=viewport,
         )

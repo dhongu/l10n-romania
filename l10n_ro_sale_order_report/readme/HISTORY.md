@@ -1,3 +1,11 @@
+## 19.0.1.0.14 (2026-10-22)
+
+- Listed on Odoo Apps as *Romania - Proforma Invoice Report* (was *Terrabit Sale Order Report*). The technical name `l10n_ro_sale_order_report` does not change.
+
+## 19.0.1.0.13 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
 ## 19.0.1.0.12 (2026-09-30)
 
 - Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.

@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Self-Billing Message SPV",
-    "version": "19.0.1.0.1",
+    "name": "SPV Self-Billing Numbering",
+    "version": "19.0.1.0.3",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Number self-billed documents with the number allocated by the customer, taken from the SPV message",
@@ -18,4 +18,5 @@
     ],
     "development_status": "Production/Stable",
     "maintainers": ["dhongu"],
+    "images": ["static/description/main_screenshot.png"],
 }

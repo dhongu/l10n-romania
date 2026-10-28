@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Deltatech Sale from Store UBL",
-    "version": "19.0.1.0.7",
+    "name": "Romania - e-Factura for Store Sales",
+    "version": "19.0.1.0.10",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Sale from store",

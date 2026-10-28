@@ -37,6 +37,9 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
     # + taxa vamală 1.000. NU coincide cu netul facturii — ăsta e tot rostul capturii.
     TAX_BASE = 70000.0
     VAT_RATE = 11.0  # mere = aliment de bază, cotă redusă (art. 291 alin. (2))
+    # Regim 4200: baza din declarație și TVA-ul de 11% reținut ca garanție (caz real, mere din RM)
+    EXEMPT_TAX_BASE = 62372.73
+    EXEMPT_GUARANTEE = 6861.0
 
     @classmethod
     @AccountTestInvoicingCommon.setup_country("ro")
@@ -153,6 +156,75 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         cls.landed_cost.with_context(lang="ro_RO").button_validate()
         cls.vat_move = cls.landed_cost.account_move_id
 
+        # --- Factura C: import fără plata TVA în vamă (art. 326 alin. (4)-(5)), pe „11% IMP AM".
+        # Produs separat, ca fluxul principal să-și păstreze costul mediu exact. ---
+        cls.tax_deferred = cls._get_deferred_import_tax(env, company)
+        cls.product_deferred = env["product.product"].create(
+            {
+                "name": "Gutui",
+                "type": "consu",
+                "is_storable": True,
+                "categ_id": cls.categ.id,
+                "standard_price": cls.PRICE,
+            }
+        )
+        cls.po_c = cls._seed_import_order(env, product=cls.product_deferred)
+        cls.bill_c = cls._seed_posted_bill(cls.po_c)
+        wizard = (
+            env["account.invoice.dvi"]
+            .with_context(active_id=cls.bill_c.id, lang="ro_RO")
+            .create(
+                {
+                    "date": cls.bill_c.invoice_date,
+                    "dvi_number": "26ROIS0600123457",
+                    "custom_duty": cls.CUSTOM_DUTY,
+                    "tax_id": cls.tax_deferred.id,
+                    "tax_base": cls.TAX_BASE,
+                    "tax_value": cls.TAX_BASE * cls.VAT_RATE / 100.0,
+                }
+            )
+        )
+        wizard.with_context(active_id=cls.bill_c.id, lang="ro_RO").do_create_dvi()
+        cls.landed_cost_deferred = cls.bill_c.dvi_id
+        cls.landed_cost_deferred.compute_landed_cost()
+        cls.landed_cost_deferred.with_context(lang="ro_RO").button_validate()
+        cls.vat_move_deferred = cls.landed_cost_deferred.account_move_id
+
+        # --- Factura D: regim 4200, import scutit de TVA urmat de livrare intracomunitară
+        # (art. 293 alin. (1) lit. m)). Fără taxă vamală (preferința UE–MD); TVA-ul calculat de
+        # vamă (11%) e doar reținut din contul de garanție. ---
+        cls.product_exempt = env["product.product"].create(
+            {
+                "name": "Mere export",
+                "type": "consu",
+                "is_storable": True,
+                "categ_id": cls.categ.id,
+                "standard_price": cls.PRICE,
+            }
+        )
+        cls.po_d = cls._seed_import_order(env, product=cls.product_exempt)
+        cls.bill_d = cls._seed_posted_bill(cls.po_d)
+        wizard = (
+            env["account.invoice.dvi"]
+            .with_context(active_id=cls.bill_d.id, lang="ro_RO")
+            .create(
+                {
+                    "date": cls.bill_d.invoice_date,
+                    "dvi_number": "26ROIS0700000001",
+                    "customs_regime": "4200",
+                    "tax_id": env["account.chart.template"].ref("tvatiscdeda").id,
+                    "tax_base": cls.EXEMPT_TAX_BASE,
+                    "tax_value": 0.0,
+                    "vat_guarantee_amount": cls.EXEMPT_GUARANTEE,
+                }
+            )
+        )
+        wizard.with_context(active_id=cls.bill_d.id, lang="ro_RO").do_create_dvi()
+        cls.landed_cost_exempt = cls.bill_d.dvi_id
+        cls.landed_cost_exempt.compute_landed_cost()
+        cls.landed_cost_exempt.with_context(lang="ro_RO").button_validate()
+        cls.vat_move_exempt = cls.landed_cost_exempt.account_move_id
+
         # --- Factura brokerului: produs de serviciu marcat drept cost de aterizare ---
         # Contul produsului brokerului: 473 „Decontări din operațiuni în curs de clarificare",
         # cont de tranzit neutru, conform recomandării din fișă — onorariul se capitalizează,
@@ -193,6 +265,71 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
             }
         )
         cls.broker_bill.action_post()
+
+    @classmethod
+    def _get_deferred_import_tax(cls, env, company):
+        """„11% IMP AM": taxa din `l10n_ro_anaf_d300`, sau una echivalentă, dacă modulul lipsește.
+
+        Două repartiții, Dr 4426 / Cr 4427, cu baza și TVA-ul pe D300 rd. 7 și 22.
+        """
+        tax = env.ref(f"account.{company.id}_tvati_import11am", raise_if_not_found=False)
+        if tax:
+            return tax
+        country = env.ref("base.ro")
+        tags = env["account.account.tag"]
+
+        def tag(name):
+            return tags._get_tax_tags(name, country.id)
+
+        def account(code):
+            return env["account.account"].search(
+                [("code", "=like", f"{code}%"), ("company_ids", "in", [company.id])], order="code", limit=1
+            )
+
+        acc_4426, acc_4427 = account("4426"), account("4427")
+        lines = []
+        for document_type, collected, deductible in (
+            ("invoice", acc_4427, acc_4426),
+            ("refund", acc_4426, acc_4427),
+        ):
+            lines += [
+                Command.create(
+                    {
+                        "repartition_type": "base",
+                        "document_type": document_type,
+                        "tag_ids": [Command.set((tag("07 - TAX BASE") | tag("22 - TAX BASE")).ids)],
+                    }
+                ),
+                Command.create(
+                    {
+                        "repartition_type": "tax",
+                        "document_type": document_type,
+                        "factor_percent": -100,
+                        "account_id": collected.id,
+                        "tag_ids": [Command.set(tag("07 - VAT").ids)],
+                    }
+                ),
+                Command.create(
+                    {
+                        "repartition_type": "tax",
+                        "document_type": document_type,
+                        "account_id": deductible.id,
+                        "tag_ids": [Command.set(tag("22 - VAT").ids)],
+                    }
+                ),
+            ]
+        return env["account.tax"].create(
+            {
+                "name": "11% IMP AM",
+                "description": "Import fără plata TVA în vamă 11% (art. 326 alin. (4)-(5))",
+                "amount": cls.VAT_RATE,
+                "amount_type": "percent",
+                "type_tax_use": "purchase",
+                "company_id": company.id,
+                "country_id": country.id,
+                "repartition_line_ids": lines,
+            }
+        )
 
     @classmethod
     def _seed_import_order(cls, env, product=None):
@@ -323,5 +460,40 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "settle": 2500,
                     "full": True,
                 },
+                # 11. DVI fără plata TVA în vamă: taxa „11% IMP AM" este comutatorul de regim
+                {
+                    "url": f"id={self.landed_cost_deferred.id}&model=stock.landed.cost&view_type=form",
+                    "name": "11_landed_cost_tva_amanat.png",
+                    "wait": ".o_form_view",
+                    "highlight": ["div[name='tax_id']", "div[name='tax_value']"],
+                    # insigna stă în colțul câmpului: fără spațiu, acoperă prima cifră a valorii
+                    "eval": (
+                        "document.querySelectorAll(\"div[name='tax_id'], div[name='tax_value']\")"
+                        ".forEach(e => { e.style.paddingLeft = '18px'; });"
+                    ),
+                    "settle": 2000,
+                    "full": True,
+                },
+                # 12. Nota: Dr 4426 = Cr 4427, fără datorie la buget pentru TVA
+                self.account_move_shot(self.vat_move_deferred, "12_nota_tva_amanat.png"),
+                # 13. Regim 4200: fără TVA de import, garanția reținută de vamă doar ca evidență
+                {
+                    "url": f"id={self.landed_cost_exempt.id}&model=stock.landed.cost&view_type=form",
+                    "name": "13_landed_cost_4200.png",
+                    "wait": ".o_form_view",
+                    "highlight": [
+                        "div[name='customs_regime']",
+                        "div[name='tax_id']",
+                        "div[name='vat_guarantee_amount']",
+                    ],
+                    "eval": (
+                        "document.querySelectorAll(\"div[name='customs_regime'], div[name='tax_id'], "
+                        "div[name='vat_guarantee_amount']\").forEach(e => { e.style.paddingLeft = '18px'; });"
+                    ),
+                    "settle": 2000,
+                    "full": True,
+                },
+                # 14. Nota DVI pe 4200: doar perechea 473 cu baza pe rd. 29, fără 4426 / 446
+                self.account_move_shot(self.vat_move_exempt, "14_nota_4200.png"),
             ]
         )

@@ -1,3 +1,28 @@
+## 19.0.1.1.1 (2026-10-22)
+
+- Odoo Apps banner title: *Stock Accounting Store* (was *Retail Store Stock Accounting*), the same as the module name.
+
+## 19.0.1.1.0 (2026-10-22)
+
+- Sale price change: changing the sale price of a product (or the extra price of a variant)
+  revalues at once the stock of every store where the store price changed, with a numbered
+  **Store Revaluation** and its entry: 371 = 378 / 4428 for an increase, the reverse in black
+  (378 / 4428 = 371) for a price cut. The old value is the sale value booked in the store, so
+  the residual balances of 378 and 4428 left by entries at different prices are cleared.
+  Before, a price change had no entry and the next exit released markup and VAT at the price of
+  the last entry, leaving the difference on 378 / 4428.
+- The exits after a revaluation release markup and VAT at the revalued price.
+- A price cut below the unit cost is refused (impairment 6814 = 397, outside the module), and so
+  is a change in a locked period: the entry keeps the date of the price change.
+- After a return to or from the store, which moves the goods at the price of the returned move,
+  the rest of the store stock is brought back to the current store price.
+- The exit that empties the stock booked in the store releases exactly the markup and VAT left.
+- An exit dated before a revaluation leaves at the price of its date.
+
+## 19.0.1.0.2 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
 ## 19.0.1.0.1 (2026-10-05)
 
 - The markup (378) and uneligible VAT (4428) of a reception in the store now use the same sale

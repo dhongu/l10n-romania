@@ -22,7 +22,8 @@ class CashRegisterOperation(models.TransientModel):
 
     def default_get(self, fields_list):
         defaults = super().default_get(fields_list)
-        defaults["counterpart_account_id"] = self.env.company.transfer_account_id.id
+        if not defaults.get("counterpart_account_id"):
+            defaults["counterpart_account_id"] = self.env.company.transfer_account_id.id
         return defaults
 
     def action_confirm(self):

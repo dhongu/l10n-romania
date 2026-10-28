@@ -1,0 +1,10 @@
+{
+  "title": "CEC Bank MT940 Statement Import",
+  "summary": "Import CEC Bank MT940 files as bank statements",
+  "lang": "en",
+  "features": [
+    "Imports CEC Bank MT940 files",
+    "Creates bank statements automatically",
+    "Built on the shared MT940 importer"
+  ]
+}

@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "eTransport UIT Actions",
-    "version": "19.0.1.1.1",
+    "name": "e-Transport UIT Actions",
+    "version": "19.0.1.1.3",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Delete, confirm or change the vehicle of an ANAF eTransport UIT",

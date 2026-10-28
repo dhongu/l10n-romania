@@ -1,0 +1,20 @@
+# ©  2026 Terrabit
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+{
+    "name": "Romania - Partner Autocomplete from ANAF",
+    "summary": "Partner autocomplete answers a Romanian CUI from ANAF instead of IAP, without credits",
+    "license": "AGPL-3",
+    "version": "19.0.1.3.0",
+    "images": ["static/description/main_screenshot.png"],
+    "author": "Dorin Hongu, Terrabit",
+    "website": "https://www.terrabit.ro",
+    "category": "Localization",
+    "countries": ["ro"],
+    "depends": ["partner_autocomplete", "l10n_ro_anaf_partner_lookup"],
+    # Both fill the partner from ANAF, each its own way: one of them at a time
+    "excludes": ["l10n_ro_partner_create_by_vat"],
+    "data": ["views/res_partner_views.xml", "views/res_config_settings_views.xml"],
+    "development_status": "Beta",
+}

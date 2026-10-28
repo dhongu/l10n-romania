@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <!-- A CUI not found in POS: offer to bring the company in from ANAF -->
+    <t
+        t-name="l10n_ro_pos_partner_efactura.PartnerList"
+        t-inherit="point_of_sale.PartnerList"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//div[hasclass('text-center')]/div[hasclass('text-muted')]" position="after">
+            <button
+                t-if="l10nRoCuiQuery"
+                class="btn btn-primary btn-lg mt-3 o_l10n_ro_search_anaf"
+                t-on-click="() => this.l10nRoSearchAnaf()"
+            >
+                <i class="fa fa-download me-2" />
+                <t t-esc="l10nRoAnafButtonLabel" />
+            </button>
+        </xpath>
+    </t>
+</templates>
