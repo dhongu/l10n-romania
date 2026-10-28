@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:23bfcb287f34d69dfeb5001fa2c464a42f32a0b7836fb93dfc276fd96058f1dd
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_partner_autocomplete"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_partner_autocomplete"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <p>The standard partner autocomplete of Odoo suggests companies from IAP
 and spends credits to fill the partner in. For a Romanian company the
 authoritative source is ANAF, and it is free.</p>
@@ -407,25 +407,29 @@ enrichment goes to IAP.</p>
 <p>The CUI is recognised with or without <tt class="docutils literal">RO</tt>. The rest is left to IAP as
 before: a search by company name, a company from another country, and a
 Romanian CUI when ANAF does not answer.</p>
+<p>The <strong>Enrich</strong> action of the partner list and form (Odoo 20) asks ANAF
+as well for a Romanian company, by its Tax ID or its Company ID, and
+fills only the fields the partner does not have yet.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.3.0 (2026-10-27)</a></li>
-<li><a class="reference internal" href="#section-2" id="toc-entry-3">19.0.1.2.0 (2026-10-23)</a></li>
-<li><a class="reference internal" href="#section-3" id="toc-entry-4">19.0.1.1.3 (2026-10-23)</a></li>
-<li><a class="reference internal" href="#section-4" id="toc-entry-5">19.0.1.1.2 (2026-10-23)</a></li>
-<li><a class="reference internal" href="#section-5" id="toc-entry-6">19.0.1.1.1 (2026-10-23)</a></li>
-<li><a class="reference internal" href="#section-6" id="toc-entry-7">19.0.1.1.0 (2026-10-23)</a></li>
-<li><a class="reference internal" href="#section-7" id="toc-entry-8">19.0.1.0.1 (2026-10-22)</a></li>
-<li><a class="reference internal" href="#section-8" id="toc-entry-9">19.0.1.0.0 (2026-10-22)</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-2">20.0.1.3.0 (2026-10-28)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-3">19.0.1.3.0 (2026-10-27)</a></li>
+<li><a class="reference internal" href="#section-3" id="toc-entry-4">19.0.1.2.0 (2026-10-23)</a></li>
+<li><a class="reference internal" href="#section-4" id="toc-entry-5">19.0.1.1.3 (2026-10-23)</a></li>
+<li><a class="reference internal" href="#section-5" id="toc-entry-6">19.0.1.1.2 (2026-10-23)</a></li>
+<li><a class="reference internal" href="#section-6" id="toc-entry-7">19.0.1.1.1 (2026-10-23)</a></li>
+<li><a class="reference internal" href="#section-7" id="toc-entry-8">19.0.1.1.0 (2026-10-23)</a></li>
+<li><a class="reference internal" href="#section-8" id="toc-entry-9">19.0.1.0.1 (2026-10-22)</a></li>
+<li><a class="reference internal" href="#section-9" id="toc-entry-10">19.0.1.0.0 (2026-10-22)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-10">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-11">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-12">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-13">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-14">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-11">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-12">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-13">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-14">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-15">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -433,7 +437,19 @@ Romanian CUI when ANAF does not answer.</p>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-2">19.0.1.3.0 (2026-10-27)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-2">20.0.1.3.0 (2026-10-28)</a></h2>
+<ul class="simple">
+<li>Migration to 20.0. <tt class="docutils literal">is_company</tt> is computed from the Tax ID and the
+CUI is the Company ID (<tt class="docutils literal">RO_EN</tt>) deduced from it: the ANAF data no
+longer carries either.</li>
+<li>The <strong>Update from ANAF</strong> link sits below the Tax ID row, next to which
+20.0 shows the identifiers.</li>
+<li>The <strong>Enrich</strong> action (new in 20.0) answers a Romanian CUI from ANAF,
+without IAP credit.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.3.0 (2026-10-27)</a></h2>
 <ul class="simple">
 <li>It cannot be installed together with the OCA
 <tt class="docutils literal">l10n_ro_partner_create_by_vat</tt> (<tt class="docutils literal">excludes</tt>): both fill the
@@ -442,8 +458,8 @@ modules that depend on it (<tt class="docutils literal">l10n_ro_partner_create_b
 <tt class="docutils literal">l10n_ro_fiscal_validation</tt>).</li>
 </ul>
 </div>
-<div class="section" id="section-2">
-<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.2.0 (2026-10-23)</a></h2>
+<div class="section" id="section-3">
+<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.2.0 (2026-10-23)</a></h2>
 <ul class="simple">
 <li>The ANAF suggestion carries the <tt class="docutils literal">city_id</tt> found by
 <tt class="docutils literal">l10n_ro_anaf_partner_lookup</tt>.</li>
@@ -455,23 +471,23 @@ Bucharest sector from it, and ANAF sometimes gives a postal code of
 another sector).</li>
 </ul>
 </div>
-<div class="section" id="section-3">
-<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.1.3 (2026-10-23)</a></h2>
+<div class="section" id="section-4">
+<h2><a class="toc-backref" href="#toc-entry-5">19.0.1.1.3 (2026-10-23)</a></h2>
 <ul class="simple">
 <li>Main image for the Odoo Apps Store (banner); the manifest points to it
 in <tt class="docutils literal">images</tt>.</li>
 </ul>
 </div>
-<div class="section" id="section-4">
-<h2><a class="toc-backref" href="#toc-entry-5">19.0.1.1.2 (2026-10-23)</a></h2>
+<div class="section" id="section-5">
+<h2><a class="toc-backref" href="#toc-entry-6">19.0.1.1.2 (2026-10-23)</a></h2>
 <ul class="simple">
 <li>A note under <em>Partner Autocomplete</em> in the settings says that Romanian
 companies are filled in from ANAF without IAP credits, and what the
 credits are still used for.</li>
 </ul>
 </div>
-<div class="section" id="section-5">
-<h2><a class="toc-backref" href="#toc-entry-6">19.0.1.1.1 (2026-10-23)</a></h2>
+<div class="section" id="section-6">
+<h2><a class="toc-backref" href="#toc-entry-7">19.0.1.1.1 (2026-10-23)</a></h2>
 <ul class="simple">
 <li>A partner created with a CUI as its name is filled in from ANAF also
 when its Tax ID is that same CUI, as
@@ -479,8 +495,8 @@ when its Tax ID is that same CUI, as
 runs; a Tax ID of another company still leaves the partner as it is.</li>
 </ul>
 </div>
-<div class="section" id="section-6">
-<h2><a class="toc-backref" href="#toc-entry-7">19.0.1.1.0 (2026-10-23)</a></h2>
+<div class="section" id="section-7">
+<h2><a class="toc-backref" href="#toc-entry-8">19.0.1.1.0 (2026-10-23)</a></h2>
 <ul class="simple">
 <li><strong>Update from ANAF</strong> button on a Romanian company: the data is
 reloaded from ANAF, a phone already set is kept, and the chatter lists
@@ -490,15 +506,15 @@ import, API) is filled in from ANAF; the <tt class="docutils literal">l10n_ro_an
 context key turns it off.</li>
 </ul>
 </div>
-<div class="section" id="section-7">
-<h2><a class="toc-backref" href="#toc-entry-8">19.0.1.0.1 (2026-10-22)</a></h2>
+<div class="section" id="section-8">
+<h2><a class="toc-backref" href="#toc-entry-9">19.0.1.0.1 (2026-10-22)</a></h2>
 <ul class="simple">
 <li>Depends on <tt class="docutils literal">l10n_ro_anaf_partner_lookup</tt>, the new name of
 <tt class="docutils literal">l10n_ro_anaf_lookup</tt>.</li>
 </ul>
 </div>
-<div class="section" id="section-8">
-<h2><a class="toc-backref" href="#toc-entry-9">19.0.1.0.0 (2026-10-22)</a></h2>
+<div class="section" id="section-9">
+<h2><a class="toc-backref" href="#toc-entry-10">19.0.1.0.0 (2026-10-22)</a></h2>
 <ul class="simple">
 <li>Initial version: the partner autocomplete answers a Romanian CUI (with
 or without <tt class="docutils literal">RO</tt>) from ANAF instead of IAP, search and enrichment,
@@ -508,22 +524,22 @@ and the case when ANAF does not answer.</li>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-10">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-11">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-11">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-12">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-12">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-13">Authors</a></h2>
 <ul class="simple">
 <li>Dorin Hongu</li>
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-13">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-14">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -534,8 +550,8 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-14">Maintainers</a></h2>
-<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_partner_autocomplete">dhongu/l10n-romania</a> project on GitHub.</p>
+<h2><a class="toc-backref" href="#toc-entry-15">Maintainers</a></h2>
+<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_partner_autocomplete">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>
 </div>

@@ -24,7 +24,7 @@ msgstr ""
 #. module: l10n_ro_partner_autocomplete
 #: model_terms:ir.ui.view,arch_db:l10n_ro_partner_autocomplete.res_config_settings_view_form_anaf
 msgid ""
-"<i class=\"fa fa-info-circle me-1\" title=\"Info\"/>\n"
+"<i class=\"oi oi-filled me-1\" data-icon=\"info\" title=\"Info\"/>\n"
 "                    Romanian companies (a CUI, with or without RO) are filled in from ANAF, without\n"
 "                    IAP credits. The credits are used only for a search by name and for companies\n"
 "                    from other countries."

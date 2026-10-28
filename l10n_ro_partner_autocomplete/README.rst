@@ -17,7 +17,7 @@ Romania - Partner Autocomplete from ANAF
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_partner_autocomplete
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_partner_autocomplete
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -65,6 +65,10 @@ The CUI is recognised with or without ``RO``. The rest is left to IAP as
 before: a search by company name, a company from another country, and a
 Romanian CUI when ANAF does not answer.
 
+The **Enrich** action of the partner list and form (Odoo 20) asks ANAF
+as well for a Romanian company, by its Tax ID or its Company ID, and
+fills only the fields the partner does not have yet.
+
 **Table of contents**
 
 .. contents::
@@ -72,6 +76,17 @@ Romanian CUI when ANAF does not answer.
 
 Changelog
 =========
+
+20.0.1.3.0 (2026-10-28)
+-----------------------
+
+- Migration to 20.0. ``is_company`` is computed from the Tax ID and the
+  CUI is the Company ID (``RO_EN``) deduced from it: the ANAF data no
+  longer carries either.
+- The **Update from ANAF** link sits below the Tax ID row, next to which
+  20.0 shows the identifiers.
+- The **Enrich** action (new in 20.0) answers a Romanian CUI from ANAF,
+  without IAP credit.
 
 19.0.1.3.0 (2026-10-27)
 -----------------------
@@ -169,6 +184,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_partner_autocomplete>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_partner_autocomplete>`_ project on GitHub.
 
 You are welcome to contribute.

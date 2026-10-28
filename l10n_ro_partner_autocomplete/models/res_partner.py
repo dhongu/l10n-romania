@@ -38,8 +38,30 @@ class ResPartner(models.Model):
         return suggestions
 
     @api.model
+    def enrich_by_vat(self, vat, timeout=15):
+        # The Enrich action (new in 20.0) asks by the Tax ID or by the Company ID (RO_EN): a Romanian
+        # CUI is answered by ANAF, without IAP credit. Only the empty fields of the partner are filled
+        country = self.country_id if len(self) == 1 else self.env["res.country"]
+        result = self._l10n_ro_anaf_lookup(vat, country.id or False)
+        if result is None:
+            return super().enrich_by_vat(vat, timeout=timeout)
+        if result["state"] != "found":
+            return {}
+        return dict(result["partner"], entity_type=ANAF_ENTITY_TYPE)
+
+    @api.model
     def _l10n_ro_anaf_autocomplete(self, query, query_country_id):
         """Suggestions from ANAF for a Romanian CUI; ``None`` to leave the query to IAP"""
+        result = self._l10n_ro_anaf_lookup(query, query_country_id)
+        if result is None:
+            return None
+        if result["state"] != "found":
+            return []
+        return [self._l10n_ro_anaf_suggestion(result["partner"])]
+
+    @api.model
+    def _l10n_ro_anaf_lookup(self, query, query_country_id):
+        """The ANAF answer for a Romanian CUI; ``None`` to leave the query to IAP"""
         lookup = self.env["l10n.ro.anaf.partner.lookup"]
         query = (query or "").strip()
         cui = lookup.normalize_cui(query)
@@ -55,9 +77,7 @@ class ResPartner(models.Model):
         if result["state"] == "unavailable":
             # ANAF is down: IAP may still know the company
             return None
-        if result["state"] != "found":
-            return []
-        return [self._l10n_ro_anaf_suggestion(result["partner"])]
+        return result
 
     @api.model
     def _l10n_ro_anaf_suggestion(self, values):

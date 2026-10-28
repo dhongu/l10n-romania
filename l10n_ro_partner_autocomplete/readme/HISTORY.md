@@ -1,3 +1,10 @@
+## 20.0.1.3.0 (2026-10-28)
+
+- Migration to 20.0. `is_company` is computed from the Tax ID and the CUI is the Company ID
+  (`RO_EN`) deduced from it: the ANAF data no longer carries either.
+- The **Update from ANAF** link sits below the Tax ID row, next to which 20.0 shows the identifiers.
+- The **Enrich** action (new in 20.0) answers a Romanian CUI from ANAF, without IAP credit.
+
 ## 19.0.1.3.0 (2026-10-27)
 
 - It cannot be installed together with the OCA `l10n_ro_partner_create_by_vat` (`excludes`): both

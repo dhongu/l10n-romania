@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <setting id="partner_autocomplete" position="inside">
                 <div class="text-muted mt-2">
-                    <i class="fa fa-info-circle me-1" title="Info" />
+                    <i class="oi oi-filled me-1" data-icon="info" title="Info" />
                     Romanian companies (a CUI, with or without RO) are filled in from ANAF, without
                     IAP credits. The credits are used only for a search by name and for companies
                     from other countries.

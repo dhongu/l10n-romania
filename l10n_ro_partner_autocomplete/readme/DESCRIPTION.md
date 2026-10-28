@@ -29,3 +29,6 @@ No IAP credit is used for a Romanian CUI: neither the search nor the enrichment 
 
 The CUI is recognised with or without `RO`. The rest is left to IAP as before: a search by company
 name, a company from another country, and a Romanian CUI when ANAF does not answer.
+
+The **Enrich** action of the partner list and form (Odoo 20) asks ANAF as well for a Romanian
+company, by its Tax ID or its Company ID, and fills only the fields the partner does not have yet.

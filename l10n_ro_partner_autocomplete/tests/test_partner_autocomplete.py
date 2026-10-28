@@ -72,12 +72,46 @@ class TestPartnerAutocomplete(TransactionCase):
         partner.enrich_company_message_post({"entity_type": "l10n_ro_anaf"})
         self.assertIn("ANAF", partner.message_ids[0].body)
 
+    def test_suggestion_has_no_is_company(self):
+        # Odoo 20 computes is_company from the Tax ID: the suggestion does not carry it
+        with patch(REQUEST_PATH, return_value=anaf_result()), self._iap():
+            suggestion = self.Partner.autocomplete_by_vat("RO" + CUI, self.ro.id)[0]
+        self.assertNotIn("is_company", suggestion)
+
+    def test_company_id_searched_from_anaf(self):
+        # The Company ID (RO_EN) typed in the identifiers list reaches autocomplete_by_field
+        with patch(REQUEST_PATH, return_value=anaf_result()), self._iap():
+            suggestions = self.Partner.autocomplete_by_field("ro_en", CUI, self.ro.id)
+        self.assertEqual(suggestions[0]["vat"], "RO" + CUI)
+
+    # -- the Enrich action of Odoo 20 ---------------------------------------
+
+    def test_enrich_action_from_anaf_without_iap(self):
+        partner = self._partner(street=False, city=False, phone=False)
+        with patch(REQUEST_PATH, return_value=anaf_result()), self._iap():
+            data = partner.enrich_by_vat(partner.vat)
+        self.assertEqual(data["street"], "Str. Ciprian Porumbescu Nr. 12")
+        self.assertEqual(data["state_id"], self.env.ref("base.RO_TM").id)
+        self.assertEqual(data["entity_type"], "l10n_ro_anaf")
+        self.assertFalse(data.get("error"))
+
+    def test_enrich_action_company_not_at_anaf(self):
+        partner = self._partner()
+        with patch(REQUEST_PATH, return_value={}), self._iap():
+            self.assertEqual(partner.enrich_by_vat(partner.vat), {})
+
+    def test_enrich_action_anaf_down_falls_back_to_iap(self):
+        partner = self._partner()
+        with patch(REQUEST_PATH, return_value=None), patch(IAP_PATH, return_value=({}, False)) as iap:
+            partner.enrich_by_vat(partner.vat)
+        iap.assert_called_once()
+
     # -- update an existing partner from ANAF ---------------------------
 
     def _partner(self, **vals):
         values = {
+            # No is_company: Odoo 20 computes it, a partner with a Tax ID and no parent is a company
             "name": "Forest Vechi",
-            "is_company": True,
             "vat": "RO" + CUI,
             "country_id": self.ro.id,
             "street": "Str. Veche 1",
@@ -140,7 +174,9 @@ class TestPartnerAutocomplete(TransactionCase):
                 partner = self.Partner.create({"name": name})
             self.assertEqual(partner.name, "FOREST AND BIOMASS ROMÂNIA S.A.")
             self.assertEqual(partner.vat, "RO" + CUI)
+            # Computed in Odoo 20 from the Tax ID; the CUI is the Company ID (RO_EN) deduced from it
             self.assertTrue(partner.is_company)
+            self.assertEqual(partner._get_additional_identifier("RO_EN"), CUI)
             partner.vat = False
 
     def test_name_create_from_a_many2one(self):
