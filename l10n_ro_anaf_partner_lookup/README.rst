@@ -70,6 +70,15 @@ by default).
 Changelog
 =========
 
+20.0.1.2.1 (2026-10-28)
+-----------------------
+
+- Migration to 20.0. ``is_company`` is computed from the Tax ID and the
+  CUI is the Company ID (``RO_EN``) deduced from it: the partner values
+  returned by ``lookup`` no longer carry ``is_company``.
+- The request timeout is read with ``get_int``: an invalid value falls
+  back to the 10 s default.
+
 19.0.1.2.1 (2026-10-24)
 -----------------------
 
