@@ -29,7 +29,11 @@ jobs:
           done
   test:
     runs-on: ubuntu-22.04
-    container: ${{ matrix.container }}
+    # `--init`: tini ca PID 1 culege procesele Chrome orfane din tour-uri; fără el rămân zombie,
+    # iar Odoo le raportează cu WARNING („Killing chrome descendants-or-self ... (zombie)”).
+    container:
+      image: ${{ matrix.container }}
+      options: --init
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
@@ -37,6 +41,12 @@ jobs:
         include:
           - container: ghcr.io/oca/oca-ci/py3.12-odoo20.0:latest
             name: test with Odoo
+            # l10n_ro_partner_autocomplete excludes the OCA l10n_ro_partner_create_by_vat, which
+            # these two depend on: they are tested on their own below
+            exclude: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi
+          - container: ghcr.io/oca/oca-ci/py3.12-odoo20.0:latest
+            name: test with Odoo (OCA create_by_vat)
+            include: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi
 
     services:
       postgres:
@@ -49,6 +59,8 @@ jobs:
           - 5432:5432
     env:
       OCA_ENABLE_CHECKLOG_ODOO: "1"
+      INCLUDE: ${{ matrix.include }}
+      EXCLUDE: ${{ matrix.exclude }}
     steps:
       - uses: actions/checkout@v4
         with:
