@@ -495,7 +495,7 @@ msgstr "Transfer"
 #. module: l10n_ro_etransport_enhancement
 #: model:ir.model.fields,field_description:l10n_ro_etransport_enhancement.field_stock_picking__l10n_ro_transport_partner_id
 msgid "Transport Partner"
-msgstr "Transportator"
+msgstr "Transportator eTransport"
 
 #. module: l10n_ro_etransport_enhancement
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_enhancement.res_config_settings_view_form
@@ -566,6 +566,6 @@ msgid ""
 "the eTransport declaration:\n"
 "%(product_name)s"
 msgstr ""
-"Următoarele produse nu au un cod HS valid (4, 6 sau 8 cifre) pentru "
+"Următoarele produse nu au un cod SH valid (4, 6 sau 8 cifre) pentru "
 "declarația eTransport:\n"
 "%(product_name)s"
