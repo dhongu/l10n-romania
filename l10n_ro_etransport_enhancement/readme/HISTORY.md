@@ -9,7 +9,7 @@ nu trimitea elementul `<corectie uit="…"/>`. ANAF trata XML-ul ca pe o notific
 nouă și emitea alt UIT, pe care Odoo îl ignora: în SPV rămâneau două UIT-uri
 active, iar transferul îl arăta pe cel vechi, cu datele necorectate. Corecția
 poartă acum UIT-ul corectat, ca prim copil al `notificare`, cum cere XSD-ul.
-Același fix se aplică pe loturi.
+Pe loturi, fixul ajunge la migrarea `l10n_ro_etransport_batch_enhancement`, încă nemigrat pe 20.0.
 
 **Fix — greutatea brută era dublată la colete.** Nucleul aduna la greutatea netă
 `shipping_weight`-ul coletului, care conține deja marfa, și îl aduna încă o dată
