@@ -1,3 +1,11 @@
+## 20.0.0.0.8 (2026-10-29)
+
+- Migrare pe Odoo 20:
+  - dependența `stock_picking_batch` devine `stock`, unde au trecut loturile;
+  - pe aviz, `t-esc` devine `t-out`;
+  - unitatea mișcării se citește din `uom_id`, iar unitatea liniei de achiziție tot din
+    `uom_id`; pe linia de vânzare rămâne `product_uom_id`.
+
 ## 19.0.0.0.7 (2026-10-29)
 
 - Fișa consultant (`readme/FISA_CONSULTANT.md`) cu capturi generate din `tests/test_screenshots.py`.
