@@ -208,7 +208,7 @@ class TestEtransportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "url": (f"id={self.laptop.product_tmpl_id.id}&model=product.template&view_type=form"),
                     "name": "02_produs_cod_sh.png",
                     "wait": ".o_form_view",
-                    "click_btn": "a.nav-link:has-text('Inventar')",
+                    "click_btn": ".nav-link:has-text('Inventar')",
                     "wait_after": "div[name='hs_code']",
                     # responsabilul vine din utilizatorul de test, irelevant aici
                     "hide_fields": ["responsible_id"],
@@ -224,7 +224,7 @@ class TestEtransportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "url": self._picking_url(self.picking),
                     "name": "03_transportator.png",
                     "wait": ".o_form_view",
-                    "click_btn": "a.nav-link:has-text('Informații suplimentare')",
+                    "click_btn": ".nav-link:has-text('Informații suplimentare')",
                     "wait_after": "div[name='l10n_ro_transport_partner_id']",
                     # responsabilul și lotul vin din datele de test, irelevante aici
                     "hide_fields": ["user_id", "batch_id"],
@@ -239,7 +239,7 @@ class TestEtransportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "url": self._picking_url(self.picking),
                     "name": "04_date_declaratie.png",
                     "wait": ".o_form_view",
-                    "click_btn": "a.nav-link:has-text('eTransport')",
+                    "click_btn": ".nav-link:has-text('eTransport')",
                     "wait_after": "div[name='l10n_ro_edi_stock_operation_type']",
                     "highlight": [
                         "div[name='l10n_ro_edi_stock_operation_type']",
@@ -254,7 +254,7 @@ class TestEtransportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "url": self._picking_url(self.picking_weights),
                     "name": "05_greutati_masurate.png",
                     "wait": ".o_form_view",
-                    "click_btn": "a.nav-link:has-text('eTransport')",
+                    "click_btn": ".nav-link:has-text('eTransport')",
                     "wait_after": "div[name='l10n_ro_edi_stock_operation_type']",
                     "eval": self._scroll_to("div[name='l10n_ro_shipping_weight_lines']"),
                     "highlight": [
@@ -269,7 +269,7 @@ class TestEtransportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "url": self._picking_url(self.picking_weights),
                     "name": "06_documente_insotitoare.png",
                     "wait": ".o_form_view",
-                    "click_btn": "a.nav-link:has-text('eTransport')",
+                    "click_btn": ".nav-link:has-text('eTransport')",
                     "wait_after": "div[name='l10n_ro_edi_stock_operation_type']",
                     "eval": self._scroll_to("button[name='l10n_ro_etransport_add_default_documents']"),
                     "highlight": [
@@ -283,12 +283,12 @@ class TestEtransportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "url": self._picking_url(self.picking_blocked),
                     "name": "07_blocaj_cod_sh.png",
                     "wait": ".o_form_view",
-                    "click_btn": "a.nav-link:has-text('Documente eTransport')",
+                    "click_btn": ".nav-link:has-text('Documente eTransport')",
                     "wait_after": "div[name='l10n_ro_edi_stock_document_ids']",
                     "eval": (
                         "(async () => {"
                         " for (let i = 0; i < 40; i++) {"
-                        "  const e = document.querySelector(\"td[name='state'] i, td[name='state'] .fa\");"
+                        "  const e = document.querySelector(\"td[name='state'] a, td[name='state'] i, td[name='state'] .fa\");"
                         "  if (e) { e.click(); return; }"
                         "  await new Promise(r => setTimeout(r, 200));"
                         " }"
@@ -302,7 +302,7 @@ class TestEtransportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "url": self._picking_url(self.picking_amend),
                     "name": "08_corectie_uit.png",
                     "wait": ".o_form_view",
-                    "click_btn": "a.nav-link:has-text('Documente eTransport')",
+                    "click_btn": ".nav-link:has-text('Documente eTransport')",
                     "wait_after": "div[name='l10n_ro_edi_stock_document_ids']",
                     "highlight": ["button:has-text('Modificați eTransport')"],
                     "settle": 2500,
