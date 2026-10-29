@@ -141,7 +141,7 @@ Faceți clic pe sugestie. Formularul se completează și partenerul se salvează
 - **Telefon**, dacă ANAF îl are.
 
 În istoric (dreapta) apare nota **„Datele firmei au fost preluate din ANAF la …”**, cu data
-preluării. Sub rândul **TVA** apare linkul **Actualizează din ANAF** (folosit la pasul 6).
+preluării în formatul limbii utilizatorului (în română, de exemplu 28.10.2026). Sub rândul **TVA** apare linkul **Actualizează din ANAF** (folosit la pasul 6).
 
 ![Partenerul completat din ANAF, cu nota în istoric](../static/description/03_partener_completat.png)
 
@@ -292,6 +292,8 @@ duplicatelor.
       editează...** → **Salvează** pe factură) se completează din ANAF.
 - [ ] **Actualizează din ANAF** apare doar pe companiile românești fără firmă-mamă și cu cod
       fiscal.
+- [ ] La un partener nou creat din sugestia ANAF, nota „Datele firmei au fost preluate din ANAF la …”
+  are data în formatul limbii utilizatorului (zz.ll.aaaa în română), nu în format ISO.
 - [ ] După **Actualizează din ANAF**, nota din istoric listează fiecare câmp schimbat (vechi →
       nou), iar telefonul existent rămâne.
 - [ ] **Enrich** pe mai mulți parteneri cu cod fiscal românesc completează doar câmpurile goale.
