@@ -34,4 +34,34 @@
         </xpath>
     </template>
 
+    <!-- Corecția unei notificări și declarația post-avarie.
+
+         Nativ, butonul „Amend” pune UIT-ul în `data['notificare']['uit']`, dar
+         template-ul nu-l randează nicăieri. Fără elementul `corectie`, ANAF
+         tratează XML-ul ca pe o notificare NOUĂ (Schematron BT-TY-002) și emite
+         alt UIT, pe care nucleul îl ignoră: în SPV rămân două UIT-uri active, iar
+         transferul îl arată pe cel vechi, cu datele necorectate.
+
+         XSD-ul (`NotificareType`) cere `corectie` ca PRIM copil al `notificare`,
+         deci îl inserăm înaintea primului copil existent; `position="inside"` l-ar
+         pune la final și XML-ul ar fi respins de XSD.
+
+         `declPostAvarie` e atribut pe rădăcina `eTransport` (BR-201: doar „D”). -->
+    <template
+        id="l10n_ro_template_etransport_corectie"
+        inherit_id="l10n_ro_edi_stock.l10n_ro_template_etransport"
+        priority="99"
+    >
+        <xpath expr="//*[local-name()='eTransport']" position="attributes">
+            <attribute name="t-att-declPostAvarie">data.get('declPostAvarie')</attribute>
+        </xpath>
+        <xpath expr="//*[local-name()='notificare']/*[1]" position="before">
+            <corectie
+                xmlns="mfp:anaf:dgti:eTransport:declaratie:v2"
+                t-if="data['send_type'] == 'amend' and data_notificare.get('uit')"
+                t-att-uit="data_notificare['uit']"
+            />
+        </xpath>
+    </template>
+
 </odoo>

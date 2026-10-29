@@ -4,7 +4,7 @@
 
 {
     "name": "e-Transport Enhancements",
-    "version": "20.0.0.9.5",
+    "version": "20.0.0.10.0",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport enhancement",

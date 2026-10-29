@@ -71,6 +71,7 @@ class TestEtransportDropship(TransactionCase):
                 "type": "consu",
                 "weight": 2,
                 "standard_price": 0,
+                "hs_code": "84713000",
             }
         )
         # În 20 comanda primește mereu o listă de prețuri (moneda companiei de

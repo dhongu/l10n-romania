@@ -55,6 +55,8 @@ class TestETransportCustomsRoute(TestL10nRoEdiStockCommon):
             }
         )
         cls.product_a.weight = 1
+        # fără `account_intrastat`, codul tarifar declarat vine din codul HS
+        cls.product_a.hs_code = "01012100"
         if "intrastat_code_id" in cls.env["product.product"]._fields:
             cls.product_a.intrastat_code_id = cls.env.ref("account_intrastat.commodity_code_2018_1012100")
 
