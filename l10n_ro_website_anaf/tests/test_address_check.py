@@ -61,6 +61,12 @@ class TestAddressCheck(TransactionCase):
     def _notes(self, text):
         return self.cart.message_ids.filtered(lambda m: text in (m.body or ""))
 
+    def test_cui_with_spaces_accepted(self):
+        # la tastare CUI-ul cu spații găsește firma; la salvare nu trebuie refuzat
+        invalid_fields, messages, lookup = self._validate({"vat": "RO 1234 567 897"}, ("found", self._company()))
+        self.assertNotIn("vat", invalid_fields, messages)
+        self.assertEqual(lookup.call_args.args[1], "1234567897")
+
     def test_found_values(self):
         address_values = {
             "country_id": self.ro.id,

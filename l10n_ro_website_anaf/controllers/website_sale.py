@@ -45,9 +45,8 @@ class WebsiteSaleAnaf(WebsiteSale):
         if country.code != "RO":
             return invalid_fields, missing_fields, error_messages
 
-        number = vat.upper()
-        if number.startswith("RO"):
-            number = number[2:]
+        # same normalisation as the look-up while typing: spaces, dots and dashes are ignored
+        number = request.env["l10n.ro.anaf.partner.lookup"].normalize_cui(vat)
         if is_cnp(number):
             # a person who buys for themselves types their CNP here
             invalid_fields.add("vat")

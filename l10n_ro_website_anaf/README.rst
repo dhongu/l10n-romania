@@ -75,6 +75,13 @@ seconds for an answer.
 Changelog
 =========
 
+20.0.1.2.1 (2026-10-29)
+-----------------------
+
+- The tax code is normalised on save as while typing: spaces, dots and
+  dashes between the digits no longer reject an address whose company
+  was found at ANAF. Consultant sheet with screenshots.
+
 20.0.1.2.0 (2026-10-28)
 -----------------------
 
