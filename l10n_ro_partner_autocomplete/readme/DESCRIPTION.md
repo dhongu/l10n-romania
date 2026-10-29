@@ -13,7 +13,8 @@ Point of Sale — shows the company found at ANAF. Choosing it fills the partner
 **Update from ANAF.** On a Romanian company with a Tax ID, the **Update from ANAF** button below
 the Tax ID reloads the data from ANAF: name, address, Tax ID and trade register number are
 rewritten, a phone already on the partner is kept. The chatter lists every field changed, with
-its old and new value, and says when ANAF lists the company as struck off or inactive.
+its old and new value, and says when ANAF lists the company as struck off or inactive. With
+`l10n_ro_anaf_partner`, the *VAT on Payment (RTVAI)* flag is filled in and updated the same way.
 
 **A partner created with its CUI as the name.** Typing a CUI in a field such as *Customer* and
 choosing *Create*, or importing partners whose name is a CUI, fills them in from ANAF too. Values

@@ -1,3 +1,9 @@
+## 20.0.1.3.0 (2026-10-29)
+
+- The answer also says whether the company applies VAT on payment (`vat_on_payment`, from the ANAF
+  RTVAI register). Where `l10n_ro_anaf_partner` defines the *VAT on Payment (RTVAI)* flag, the
+  partner values carry it too; an answer without the RTVAI block leaves it untouched.
+
 ## 20.0.1.2.1 (2026-10-28)
 
 - Migration to 20.0. `is_company` is computed from the Tax ID and the CUI is the Company ID

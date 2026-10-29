@@ -56,9 +56,12 @@ Modulul nu generează note contabile și nu atinge conturi. Întoarce valorile p
 | Nr. registrul comerțului | NRC | doar dacă există câmpul NRC (localizarea RO) |
 | Telefon | Telefon | |
 | Localitatea din listă | Oraș (listă) | doar cu orașele din `l10n_ro_city` |
+| TVA la încasare (RTVAI) | TVA la încasare (RTVAI) | doar dacă există câmpul (`l10n_ro_anaf_partner`); neatins când ANAF nu trimite blocul RTVAI |
 
-Pe lângă valorile partenerului, rezultatul spune dacă firma este **plătitoare de TVA**, **inactivă**
-(cu data) sau **radiată**, ca modulul consumator să avertizeze.
+Pe lângă valorile partenerului, rezultatul spune dacă firma este **plătitoare de TVA**, dacă aplică
+**TVA la încasare** (registrul RTVAI), dacă e **inactivă** (cu data) sau **radiată**, ca modulul
+consumator să avertizeze. Poziția fiscală *Sistem de colectare TVA* pe furnizor nu o pune acest
+modul: o pune `l10n_ro_anaf_partner`, care cunoaște regimul companiei (`l10n_ro_caba`).
 
 Date minime pentru demo: un CUI valid al unei firme active (pentru un răspuns real) sau, în teste,
 răspunsul ANAF simulat.
