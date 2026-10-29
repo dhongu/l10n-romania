@@ -310,3 +310,21 @@ Regenerare:
 
 > Capturile cer modulul de tooling `l10n_ro_doc_screenshots` (suita `l10n_ro_ent`) pe
 > `addons_path` și Playwright; dacă lipsesc, testul se sare.
+
+## 11. Observații pentru manual
+
+- Prezentați modulul ca **„tastați CUI-ul, nu denumirea”**: sugestiile după denumire vin tot din
+  IAP, iar alegerea uneia consumă un credit; CUI-ul merge la ANAF, gratuit, și aduce datele oficiale.
+  În **Nume** și în **TVA**, CUI-ul se poate tasta cu sau fără `RO`.
+- La alegerea unei sugestii ANAF, tipul partenerului devine **Companie**; linkul **Actualizează din
+  ANAF** apare doar pe partenerii de tip *Companie*. Un partener lăsat pe *Persoană* nu are linkul.
+- **Actualizează din ANAF** rescrie numele și adresa (păstrează doar telefonul) și lasă urmă în
+  istoric. Pe 19.0 nu există actualizare în masă: fiecare partener se actualizează din fișa lui.
+- Prefixul `RO` la TVA este o informație fiscală, nu de formatare: îl are doar firma plătitoare de
+  TVA. Nu-l adăugați manual la un neplătitor.
+- Mențiunea de **radiere / inactivitate** apare doar la **Actualizează din ANAF**, nu la sugestie;
+  recomandați clientului o reverificare periodică a furnizorilor importanți.
+- Limitări de spus clientului: nota „Datele firmei au fost preluate din ANAF” apare doar când
+  sugestia e aleasă în formularul partenerului, nu și la partenerul creat din câmpul **Client** sau
+  cu **Creează**; data din notă e în format ISO (aaaa-ll-zz); modulul nu se instalează împreună cu
+  `l10n_ro_partner_create_by_vat` (OCA).
