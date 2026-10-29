@@ -1,3 +1,10 @@
+## 20.0.0.10.1 (2026-10-29)
+
+Fișa consultant (`readme/FISA_CONSULTANT.md`) cu 8 capturi generate de `tests/test_screenshots.py`.
+Câmpul transportatorului se numește în română **Transportator eTransport**, ca să nu se confunde cu
+metoda de livrare din standard (tot „Transportator”). Mesajul de blocare vorbește de **cod SH**, ca
+eticheta câmpului de pe produs.
+
 ## 20.0.0.10.0 (2026-10-29)
 
 Patru defecte tăcute din XML-ul eTransport, verificate față de XSD-ul ANAF v2
