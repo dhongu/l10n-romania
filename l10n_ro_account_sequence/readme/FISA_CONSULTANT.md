@@ -213,8 +213,8 @@ plata e în ciornă.
 | Mesaj | Cauză | Remediere |
 |---|---|---|
 | Câmpul **Tip document** nu apare pe plată | Jurnalul plății nu e de tip casă | Normal; pe bancă numerotarea rămâne cea standard |
-| **Tip document** nu se poate modifica | Plata e confirmată; numărul din serie e deja dat | Schimbarea tipului pe o plată deja confirmată nu schimbă numărul. Anulați plata (**Anulează**); numărul rămâne în serie ca document anulat. Înregistrați o plată nouă cu tipul corect |
-| Plata din casă a primit tipul **Altele** și numărul fără prefix | Plata a fost creată fără jurnal de casă sau importată cu tipul „Altele” | Anulați plata și înregistrați-o din nou pe jurnalul de casă, cu tipul corect |
+| **Tip document** nu se poate modifica | Plata e confirmată; numărul din serie e deja dat | Schimbarea tipului pe o plată deja confirmată nu schimbă numărul. Pe plata confirmată apăsați **Resetare la Ciornă**, apoi **Anulează**; numărul rămâne în serie ca document anulat. Înregistrați o plată nouă cu tipul corect |
+| Plata din casă a primit tipul **Altele** și numărul fără prefix | Plata a fost creată fără jurnal de casă sau importată cu tipul „Altele” | Apăsați **Resetare la Ciornă**, apoi **Anulează**, și înregistrați plata din nou pe jurnalul de casă, cu tipul corect |
 | Nota plății trece prin contul de plăți în curs, nu direct în 5311 | Jurnalul de casă exista înainte de instalare sau metoda de plată a primit alt cont | Cu acordul contabilului, puneți contul casei pe metoda de plată din jurnal (vezi avertismentul din secțiunea 5): liniile deja înregistrate pe contul vechi se mută și ele pe 5311 |
 
 ## 10. Capturi de ecran
