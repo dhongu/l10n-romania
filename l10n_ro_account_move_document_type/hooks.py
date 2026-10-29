@@ -16,6 +16,11 @@ def pre_init_hook(env):
     if column_exists(cr, "account_move", "l10n_ro_document_type"):
         return
     create_column(cr, "account_move", "l10n_ro_document_type", "varchar")
+    fill_document_type(cr)
+
+
+def fill_document_type(cr, where=None):
+    """Completează tipul în SQL pe notele date de `where` (implicit toate), după regulile modelului."""
     move_type_cases = SQL(" ").join(
         SQL("WHEN %s THEN %s", move_type, doc_type) for move_type, doc_type in MOVE_TYPE_DOCUMENT_TYPE.items()
     )
@@ -39,9 +44,11 @@ def pre_init_hook(env):
                END
               FROM account_journal journal
              WHERE journal.id = move.journal_id
+               AND %(where)s
             """,
             move_type_cases=move_type_cases,
             statement_cases=statement_cases,
             payment_cases=payment_cases,
+            where=where or SQL("TRUE"),
         )
     )
