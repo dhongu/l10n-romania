@@ -1,6 +1,4 @@
 from odoo import api, fields, models
-from odoo.tools import SQL
-from odoo.tools.sql import column_exists, create_column
 
 DOCUMENT_TYPES = [
     ("invoice", "Invoice"),
@@ -53,37 +51,6 @@ class AccountMove(models.Model):
         "Invoices take it from their type; on journal entries it is set by the module that creates "
         "them (customs declaration, cash register) or chosen by the accountant.",
     )
-
-    def _auto_init(self):
-        # Pe o bază cu multe note, calculul în Python la instalare ar dura; coloana se umple în SQL,
-        # după aceleași reguli ca `_l10n_ro_get_document_type`.
-        if not column_exists(self.env.cr, "account_move", "l10n_ro_document_type"):
-            create_column(self.env.cr, "account_move", "l10n_ro_document_type", "varchar")
-            move_type_cases = SQL(" ").join(
-                SQL("WHEN %s THEN %s", move_type, doc_type) for move_type, doc_type in MOVE_TYPE_DOCUMENT_TYPE.items()
-            )
-            journal_type_cases = SQL(" ").join(
-                SQL("WHEN %s THEN %s", journal_type, doc_type)
-                for journal_type, doc_type in JOURNAL_TYPE_DOCUMENT_TYPE.items()
-            )
-            self.env.cr.execute(
-                SQL(
-                    """
-                    UPDATE account_move move
-                       SET l10n_ro_document_type = CASE
-                           WHEN move.move_type != 'entry' THEN CASE move.move_type %(move_type_cases)s END
-                           WHEN move.origin_payment_id IS NOT NULL OR move.statement_line_id IS NOT NULL
-                           THEN COALESCE(CASE journal.type %(journal_type_cases)s END, 'journal_entry')
-                           ELSE 'journal_entry'
-                       END
-                      FROM account_journal journal
-                     WHERE journal.id = move.journal_id
-                    """,
-                    move_type_cases=move_type_cases,
-                    journal_type_cases=journal_type_cases,
-                )
-            )
-        return super()._auto_init()
 
     @api.depends("move_type", "journal_id.type", "origin_payment_id", "statement_line_id")
     def _compute_l10n_ro_document_type(self):

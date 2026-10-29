@@ -52,3 +52,33 @@ class TestL10nRoDocumentType(AccountTestInvoicingCommon):
         )
         payment.action_post()
         self.assertEqual(payment.move_id.l10n_ro_document_type, "bank_statement")
+
+    def test_manual_import_vat_entry_gets_tax_line(self):
+        """Fișa, pasul 2: taxa pe linia de bază (473) generează singură linia de TVA cu grila."""
+        tax = self.env["account.chart.template"].ref("tvad_21")
+        account_473 = self.env["account.account"].search(
+            [("code", "=like", "473%"), ("company_ids", "in", [self.env.company.id])], limit=1
+        )
+        account_446 = self.env["account.account"].search(
+            [("code", "=like", "4462%"), ("company_ids", "in", [self.env.company.id])], limit=1
+        )
+        move = self.env["account.move"].create(
+            {
+                "move_type": "entry",
+                "journal_id": self.company_data["default_journal_misc"].id,
+                "ref": "26ROBU100000012345",
+                "l10n_ro_document_type": "customs_declaration",
+                "line_ids": [
+                    (0, 0, {"account_id": account_473.id, "debit": 10000.0, "tax_ids": [(6, 0, tax.ids)]}),
+                    (0, 0, {"account_id": account_446.id, "credit": 2100.0}),
+                    (0, 0, {"account_id": account_473.id, "credit": 10000.0}),
+                ],
+            }
+        )
+        tax_line = move.line_ids.filtered("tax_line_id")
+        self.assertEqual(len(tax_line), 1)
+        self.assertEqual(tax_line.debit, 2100.0)
+        self.assertTrue(tax_line.account_id.code.startswith("4426"))
+        self.assertTrue(tax_line.tax_tag_ids)
+        move.action_post()
+        self.assertEqual(move.l10n_ro_document_type, "customs_declaration")

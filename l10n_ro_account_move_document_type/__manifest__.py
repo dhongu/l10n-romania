@@ -4,7 +4,7 @@
     "version": "19.0.1.0.0",
     "author": "Terrabit",
     "summary": "Supporting document type on journal entries: invoice, DVI, receipt, bank statement, journal entry",
-    "development_status": "Beta",
+    "development_status": "Mature",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "depends": ["account", "l10n_ro"],
@@ -13,6 +13,7 @@
         "views/account_move_view.xml",
     ],
     "images": ["static/description/main_screenshot.png"],
+    "pre_init_hook": "pre_init_hook",
     "license": "AGPL-3",
     "installable": True,
 }

@@ -4,6 +4,9 @@
   installed as a dependency), so the VAT purchase journal shows the customs declaration as the
   supporting document of the import VAT instead of *Journal Entry* (helpdesk ticket #9568). The
   entries of the DVIs already validated are updated on upgrade.
+- Consultant sheet: step 7 shows the *Import (DVI)* document type on the DVI entry (highlighted in
+  the screenshot) and in the VAT purchase journal, and its update on upgrade; new dependency in §7,
+  new check in §8; step 12 gets a screenshot of the intra-Community invoice with "0% EU G".
 
 ## 19.0.2.1.14 (2026-10-24)
 

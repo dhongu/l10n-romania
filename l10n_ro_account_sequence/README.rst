@@ -43,6 +43,7 @@ Changelog
   shown in the Romanian journals instead of *Journal Entry*. The new
   module is installed as a dependency; the entries already posted are
   updated on upgrade.
+- Consultant sheet (``readme/FISA_CONSULTANT.md``) with screenshots.
 
 19.0.1.0.6 (2026-10-22)
 -----------------------

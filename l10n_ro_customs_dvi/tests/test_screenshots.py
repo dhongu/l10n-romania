@@ -225,6 +225,46 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         cls.landed_cost_exempt.with_context(lang="ro_RO").button_validate()
         cls.vat_move_exempt = cls.landed_cost_exempt.account_move_id
 
+        # --- Pasul 12: vânzarea intracomunitară a mărfii de pe 4200, facturată înainte de livrare
+        # (politica pe cantități comandate), pe poziția fiscală intracomunitară și taxa „0% EU G".
+        # Livrarea rămâne nevalidată: se validează după toate costurile adiționale ale recepției. ---
+        chart = env["account.chart.template"]
+        cls.fpos_eu = chart.ref("fiscal_position_template_3", raise_if_not_found=False)
+        tax_eu = chart.ref("tvati_intrab", raise_if_not_found=False)
+        cls.product_exempt.invoice_policy = "order"
+        cls.customer_eu = (
+            env["res.partner"]
+            .with_context(no_vat_validation=True)
+            .create(
+                {
+                    "name": "Fruits du Sud SARL",
+                    "is_company": True,
+                    "country_id": env.ref("base.fr").id,
+                    "vat": "FR23334175221",
+                    "property_account_position_id": cls.fpos_eu.id if cls.fpos_eu else False,
+                }
+            )
+        )
+        line_vals = {"product_id": cls.product_exempt.id, "product_uom_qty": cls.QTY, "price_unit": 68.0}
+        if tax_eu:
+            line_vals["tax_ids"] = [Command.set(tax_eu.ids)]
+        # utilizatorul de test al AccountTestInvoicingCommon nu are drepturi pe vânzări
+        cls.sale_eu = (
+            env["sale.order"]
+            .sudo()
+            .create(
+                {
+                    "partner_id": cls.customer_eu.id,
+                    "fiscal_position_id": cls.fpos_eu.id if cls.fpos_eu else False,
+                    "order_line": [Command.create(line_vals)],
+                }
+            )
+        )
+        cls.sale_eu.action_confirm()
+        cls.invoice_eu = cls.sale_eu._create_invoices()
+        cls.invoice_eu.invoice_date = cls.bill_d.invoice_date
+        cls.invoice_eu.action_post()
+
         # --- Factura brokerului: produs de serviciu marcat drept cost de aterizare ---
         # Contul produsului brokerului: 473 „Decontări din operațiuni în curs de clarificare",
         # cont de tranzit neutru, conform recomandării din fișă — onorariul se capitalizează,
@@ -426,8 +466,17 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                     "settle": 2000,
                     "full": True,
                 },
-                # 7. Nota contabilă — referința este MRN-ul, nu secvența internă
-                self.account_move_shot(self.vat_move, "07_nota_contabila_tva.png"),
+                # 7. Nota contabilă — referința este MRN-ul, nu secvența internă, iar tipul
+                #    documentului este „Import (DVI)", ca în jurnalul de TVA pentru cumpărări
+                dict(
+                    self.account_move_shot(self.vat_move, "07_nota_contabila_tva.png"),
+                    highlight=["div[name='l10n_ro_document_type']"],
+                    eval=(
+                        "document.querySelectorAll(\"div[name='l10n_ro_document_type']\")"
+                        ".forEach(e => { e.style.paddingLeft = '18px'; });"
+                    ),
+                    settle=2000,
+                ),
                 # 8. Costul produsului, majorat cu taxa vamală și comisionul
                 {
                     "url": f"id={self.product.product_tmpl_id.id}&model=product.template&view_type=form",
@@ -495,5 +544,21 @@ class TestCustomsDviScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                 },
                 # 14. Nota DVI pe 4200: doar perechea 473 cu baza pe rd. 29, fără 4426 / 446
                 self.account_move_shot(self.vat_move_exempt, "14_nota_4200.png"),
+                # 15. Factura intracomunitară către clientul din UE, emisă înainte de livrare,
+                #     pe taxa „0% EU G" (D300 rd. 1, D390 cod L)
+                {
+                    "url": (
+                        f"action={self.env.ref('account.action_move_out_invoice_type').id}"
+                        f"&id={self.invoice_eu.id}&model=account.move&view_type=form"
+                    ),
+                    "name": "15_factura_intracomunitara_4200.png",
+                    "wait": ".o_form_view",
+                    # un singur selector: insigna numerotată ar fi tăiată de celula din tabel,
+                    # așa că doar clientul o primește, iar coloana „Taxe" rămâne cu contur
+                    "highlight": ["div[name='partner_id'], div[name='invoice_line_ids'] td[name='tax_ids']"],
+                    "eval": "document.querySelectorAll(\"div[name='partner_id']\").forEach(e => { e.style.paddingLeft = '18px'; });",
+                    "settle": 2500,
+                    "full": True,
+                },
             ]
         )
