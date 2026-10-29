@@ -237,6 +237,8 @@ indisponibil. Starea de plătitor de TVA apare doar în mesajul de sub cod — m
 
 - [ ] Cu țara **România** în formular, tastarea unui CUI existent afișează în verde firma, adresa și
   „plătitor de TVA”/„neplătitor de TVA”.
+- [ ] O adresă cu CUI tastat cu spații (de exemplu „RO 1234 567 897”) găsește firma la tastare și se
+  salvează la **Confirmă**, fără mesajul „Codul fiscal trebuie să conțină doar cifre”.
 - [ ] Câmpurile goale (firmă, stradă, localitate, cod poștal, județ) se completează; o stradă tastată
   înainte rămâne neschimbată.
 - [ ] **Completează din ANAF** înlocuiește strada tastată cu adresa de la ANAF.
