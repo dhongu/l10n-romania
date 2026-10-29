@@ -62,7 +62,7 @@ Date minime pentru demo:
 ## 5. Configurare inițială
 
 1. Instalați modulul `l10n_ro_stock_picking_batch_report`. Se instalează automat și
-   `l10n_ro_picking_report` și loturile de transferuri (`stock_picking_batch`).
+   `l10n_ro_picking_report`. Loturile de transferuri fac parte, în Odoo 20, din aplicația Inventar.
 2. Modulul nu poate fi instalat împreună cu `l10n_ro_stock_picking_comment_template`.
 3. Activați **Inventar → Configurare → Setări**, bifa **Unități de măsură**. Fără ea, avizul nu
    tipărește unitatea de măsură lângă cantitate.
@@ -146,7 +146,7 @@ Butonul **Tipăriți** din antetul formularului scoate alt document: fișa de op
 | Modul / proces | Rol în flux | Tip legătură |
 |---|---|---|
 | `l10n_ro_picking_report` | avizul pe transfer și blocul de semnături folosit și pe lot | dependență (manifest) |
-| `stock_picking_batch` | loturile de transferuri | dependență (manifest) |
+| `stock` | loturile de transferuri (în Odoo 20 fac parte din Inventar) | dependență (manifest) |
 | `sale_stock` / `purchase_stock` | liniile de comandă din care vin prețurile | dependență (prin `l10n_ro_picking_report`) |
 | `l10n_ro_etransport_batch_enhancement` | afișează pe acest aviz UIT-ul declarației eTransport a lotului | modul separat |
 | `l10n_ro_stock_picking_comment_template` | incompatibil | `excludes` |

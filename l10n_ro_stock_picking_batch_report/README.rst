@@ -17,7 +17,7 @@ Romania - Batch Delivery Note
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_batch_report
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_picking_batch_report
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -31,6 +31,27 @@ Romania - Batch Delivery Note
 
 Changelog
 =========
+
+19.0.0.0.7 (2026-10-29)
+-----------------------
+
+- Fișa consultant (``readme/FISA_CONSULTANT.md``) cu capturi generate
+  din ``tests/test_screenshots.py``.
+- **Avizul lotului: cantitățile și valorile în unități diferite.**
+  Cantitățile mișcărilor se adunau așa cum erau, deci 2 duzini + 6
+  bucăți ieșeau „8”, iar prețul din comandă se înmulțea cu cantitatea
+  mișcării, chiar dacă linia de comandă avea altă unitate. Acum
+  cantitățile se cumulează în unitatea produsului, iar valoarea se
+  calculează în unitatea liniei de comandă, ca pe avizul din transfer
+  (``l10n_ro_picking_report`` 19.0.1.3.6).
+- CIF-ul și NRC-ul destinatarului apar și când livrarea merge la o
+  adresă de livrare (contact al firmei); condiția se verifica pe
+  contact, nu pe firmă.
+- Valorile din comenzile în altă monedă se convertesc în moneda
+  companiei, la cursul de la data lotului; înainte se afișa aceeași
+  cifră, cu simbolul monedei companiei.
+- Cantitatea apare în formatul limbii, cu precizia unității de produs
+  („15,00”, nu „15.0”).
 
 19.0.0.0.6 (2026-10-22)
 -----------------------
@@ -94,6 +115,6 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_picking_batch_report>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_picking_batch_report>`_ project on GitHub.
 
 You are welcome to contribute.

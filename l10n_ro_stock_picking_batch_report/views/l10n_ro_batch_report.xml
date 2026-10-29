@@ -5,8 +5,7 @@
         <field name="model">stock.picking.batch</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">l10n_ro_stock_picking_batch_report.report_batch_delivery</field>
-        <field name="report_file">l10n_ro_stock_picking_batch_report.report_batch_delivery</field>
-        <field name="binding_model_id" ref="stock_picking_batch.model_stock_picking_batch" />
+        <field name="binding_model_id" ref="stock.model_stock_picking_batch" />
         <field name="binding_type">report</field>
     </record>
 
@@ -51,7 +50,7 @@
                     <div id="recipient_address">
                         <strong>Address:</strong>
                         <address
-                            t-esc="partner_id"
+                            t-out="partner_id"
                             t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": false, "no_tag_br": true}'
                         />
                     </div>
@@ -122,13 +121,13 @@
                                             <t t-foreach="product_moves" t-as="move">
                                                 <t
                                                 t-set="product_qty"
-                                                t-value="product_qty + move.product_uom._compute_quantity(move.quantity, product_uom, raise_if_failure=False)"
+                                                t-value="product_qty + move.uom_id._compute_quantity(move.quantity, product_uom, raise_if_failure=False)"
                                             />
                                                 <t t-set="order_line" t-value="move.purchase_line_id or move.sale_line_id" />
                                                 <t t-if="order_line">
                                                     <t
                                                     t-set="line_value"
-                                                    t-value="order_line.price_unit * move.product_uom._compute_quantity(move.quantity, order_line.product_uom_id, round=False, raise_if_failure=False)"
+                                                    t-value="order_line.price_unit * move.uom_id._compute_quantity(move.quantity, order_line.product_uom_id if order_line._name == 'sale.order.line' else order_line.uom_id, round=False, raise_if_failure=False)"
                                                 />
                                                     <!-- prețul e în moneda comenzii; avizul e în moneda companiei,
                                                          la cursul de la data lotului -->
@@ -154,13 +153,13 @@
                                             </td>
                                             <td class="text-end" t-if="with_price">
                                                 <span
-                                                t-esc="product_price_unit"
+                                                t-out="product_price_unit"
                                                 t-options="{'widget': 'monetary', 'display_currency': batch.company_id.currency_id}"
                                             />
                                             </td>
                                             <td class="text-end" t-if="with_price">
                                                 <span
-                                                t-esc="product_value"
+                                                t-out="product_value"
                                                 t-options="{'widget': 'monetary', 'display_currency': batch.company_id.currency_id}"
                                             />
                                             </td>
@@ -173,7 +172,7 @@
                                         </td>
                                         <td class="text-end">
                                             <strong><span
-                                                t-esc="total_value"
+                                                t-out="total_value"
                                                 t-options="{'widget': 'monetary', 'display_currency': batch.company_id.currency_id}"
                                             /></strong>
                                         </td>

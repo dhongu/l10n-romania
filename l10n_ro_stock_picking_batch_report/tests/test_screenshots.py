@@ -119,7 +119,7 @@ class TestBatchReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or o
         return batch
 
     def _batch_url(self, batch):
-        action = self.env.ref("stock_picking_batch.stock_picking_batch_action")
+        action = self.env.ref("stock.stock_picking_batch_action")
         return f"action={action.id}&id={batch.id}&model=stock.picking.batch&view_type=form"
 
     # ------------------------------------------------------------------
@@ -146,12 +146,12 @@ class TestBatchReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or o
                     "url": self._batch_url(self.batch),
                     "name": "02_tiparire_aviz.png",
                     "wait": ".o_form_view",
-                    "click_btn": ".o_cp_action_menus button:has(i.fa-cog)",
+                    "click_btn": ".o_cp_action_menus button:has(i[data-icon='more_vert'])",
                     "wait_after": ".o-dropdown--menu",
                     "eval": (
                         "(async () => {"
                         " for (let i = 0; i < 40; i++) {"
-                        "  const e = document.querySelector('.o-dropdown--menu button:has(i.fa-print)');"
+                        "  const e = document.querySelector('.o-dropdown--menu button:has(i[data-icon=\"print\"])');"
                         "  if (e) { e.click(); return; }"
                         "  await new Promise(r => setTimeout(r, 200));"
                         " }"
@@ -160,8 +160,8 @@ class TestBatchReportScreenshots(AccountTestInvoicingCommon, ScreenshotCase or o
                     "eval_wait": 1500,
                     "hide_fields": ["user_id", "l10n_ro_edi_stock_required"],
                     "highlight": [
-                        ".o_cp_action_menus button:has(i.fa-cog)",
-                        ".o-dropdown--menu button:has(i.fa-print)",
+                        ".o_cp_action_menus button:has(i[data-icon='more_vert'])",
+                        '.o-dropdown--menu button:has(i[data-icon="print"])',
                         ".o-dropdown-item:text-is('Aviz')",
                     ],
                     "settle": 2000,
