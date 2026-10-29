@@ -1,3 +1,10 @@
+## 20.0.1.3.1 (2026-10-29)
+
+- The **Update from ANAF** link takes a whole row, so the identifiers keep their labels; the
+  chatter note of an ANAF suggestion shows the date in the user's language format.
+- The settings note says that the Tax ID field needs the `RO` prefix for the suggestions.
+  Consultant sheet with screenshots.
+
 ## 20.0.1.3.0 (2026-10-28)
 
 - Migration to 20.0. `is_company` is computed from the Tax ID and the CUI is the Company ID

@@ -6,7 +6,7 @@
     "name": "Romania - Partner Autocomplete from ANAF",
     "summary": "Partner autocomplete answers a Romanian CUI from ANAF instead of IAP, without credits",
     "license": "AGPL-3",
-    "version": "20.0.1.3.0",
+    "version": "20.0.1.3.1",
     "images": ["static/description/main_screenshot.png"],
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
