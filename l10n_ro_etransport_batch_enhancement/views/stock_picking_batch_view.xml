@@ -14,8 +14,10 @@
                 <field name="l10n_ro_etransport_post_outage" readonly="l10n_ro_edi_stock_fields_readonly" />
             </field>
             <page name="etransport" position="inside">
-                <group name="weights">
-                    <field name="l10n_ro_shipping_weights" />
+                <group name="weights" string="Greutăți cântărite">
+                    <group>
+                        <field name="l10n_ro_shipping_weights" />
+                    </group>
                     <group>
                         <field name="total_net_weight" invisible="not l10n_ro_shipping_weights" />
                         <field name="total_gross_weight" invisible="not l10n_ro_shipping_weights" />
@@ -92,7 +94,7 @@
                 />
                 <t t-if="filtered_documents">
                     <span>
-                        <strong>UIT:</strong><span t-field="filtered_documents[0].l10n_ro_edi_stock_uit" />
+                        <strong>UIT:</strong> <span t-field="filtered_documents[0].l10n_ro_edi_stock_uit" />
                     </span>
                 </t>
             </span>

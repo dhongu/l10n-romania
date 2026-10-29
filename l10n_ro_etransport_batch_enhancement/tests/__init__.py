@@ -4,3 +4,4 @@
 
 from . import test_weight_lines_warning
 from . import test_batch_declaration
+from . import test_screenshots
