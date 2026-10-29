@@ -1,4 +1,7 @@
-from odoo import fields, models
+from odoo import api, fields, models
+
+# Tipurile documentelor de casă care sunt și documentul justificativ al notei (aceleași chei)
+CASH_DOCUMENT_TYPES = ("customer_receipt", "supplier_receipt", "payment_disposal", "cash_collection")
 
 
 class AccountMove(models.Model):
@@ -7,6 +10,15 @@ class AccountMove(models.Model):
     l10n_ro_cash_document_type = fields.Selection(
         related="origin_payment_id.l10n_ro_cash_document_type", readonly=True, store=True
     )
+
+    @api.depends("l10n_ro_cash_document_type")
+    def _compute_l10n_ro_document_type(self):
+        return super()._compute_l10n_ro_document_type()
+
+    def _l10n_ro_get_document_type(self):
+        if self.move_type == "entry" and self.l10n_ro_cash_document_type in CASH_DOCUMENT_TYPES:
+            return self.l10n_ro_cash_document_type
+        return super()._l10n_ro_get_document_type()
 
     def _get_last_sequence_domain(self, relaxed=False):
         where_string, param = super()._get_last_sequence_domain(relaxed=relaxed)

@@ -449,7 +449,24 @@ importului se înscriu din declarația vamală (art. 299 alin. (1) lit. c) și d
 DVI validate înainte de versiunea 19.0.2.1.10 primesc furnizorul la actualizarea modulului, cu
 excepția celor din perioadele blocate.
 
-![Nota contabilă cu MRN-ul ca referință](screenshots/07_nota_contabila_tva.png)
+**Tipul documentului notei este „Import (DVI)”.** Câmpul **Tip document**, sub referință, se
+completează automat la validare (câmpul vine din `l10n_ro_account_move_document_type`, instalat
+odată cu modulul). În jurnalul de TVA pentru cumpărări (`l10n_ro_account_vat_journal` de la
+versiunea 19.0.1.7.0), coloana **Tip document** arată pe rândul importului **„Import (DVI)”**, nu
+„Notă contabilă”: declarația vamală este documentul justificativ
+al TVA-ului de import (art. 299 alin. (1) lit. c) și d) Cod fiscal). Nu modificați manual câmpul pe
+nota DVI.
+
+La actualizarea modulului la versiunea 19.0.2.2.0, **toate notele DVI deja validate** primesc tipul
+„Import (DVI)”, **inclusiv cele din perioadele blocate**: se schimbă doar eticheta documentului, nu
+sumele, conturile sau grilele de TVA, deci deconturile depuse rămân neatinse. Un jurnal de TVA
+regenerat pentru o perioadă închisă arată „Import (DVI)”, iar exemplarul tipărit înainte arată
+„Notă contabilă”: diferența e doar de etichetă și nu cere retipărire sau rectificare.
+
+**Găsiți pe ecran:** **Referință** = numărul DVI, **Tip document** = „Import (DVI)” (evidențiat),
+liniile pe 371 / 4462 / 4426 / 473.
+
+![Nota contabilă cu MRN-ul ca referință și tipul documentului „Import (DVI)”](screenshots/07_nota_contabila_tva.png)
 
 Pe fișa produsului, costul unitar a crescut cu taxa vamală raportată la cantitate.
 
@@ -607,6 +624,14 @@ adiționale ale recepției (Pasul 12).
 5. Diferențele de cantitate față de factură se corectează prin notă de credit sau factură
    suplimentară, tot cu „0% EU G".
 
+**Găsiți pe ecran:** pe factura clientului postată, **Client** este firma din UE, cu țara și codul
+de TVA (de exemplu FR…), iar coloana **Taxe** a liniei are **„0% EU G”**, cu TVA 0 în totaluri.
+
+**Verificați:** livrarea e încă nevalidată (pe comanda de vânzare, butonul **Livrare**); codul de TVA al clientului e valid în VIES; data facturii nu e după data DVI și e în
+aceeași lună cu el; linia nu are o taxă cu cotă (21% / 11%).
+
+![Factura intracomunitară către clientul din UE, cu taxa „0% EU G”](screenshots/15_factura_intracomunitara_4200.png)
+
 ### Note de monografie și raportare
 
 La validarea costului de aterizare:
@@ -716,16 +741,18 @@ Puneți numărul de DVI ca referință pe aceste note, ca să poată fi urmărit
 | `purchase_stock` | legătura comandă de achiziție ↔ recepție | dependență (manifest) |
 | `stock_account` | valorizarea stocului (AVCO/FIFO) | dependență (manifest) |
 | `l10n_ro` | planul de conturi RO, pentru determinarea contului 446 | dependență (manifest) |
+| `l10n_ro_account_move_document_type` | câmpul **Tip document** al notei; nota DVI primește „Import (DVI)” la validare (Pasul 7); se instalează automat la actualizarea la 19.0.2.2.0 | dependență (manifest) |
 | `l10n_ro_invoice_dvi_protect` | blochează resetarea facturii și anularea DVI după consum FIFO | complementar, recomandat |
 | `l10n_ro_customs_dvi_import` | completează wizardul DVI din PDF-ul declarației tipărit de SNI (Pasul 5) | complementar, opțional |
 | `l10n_ro_dvi` (OCA) | flux DVI alternativ | **exclus** — nu pot coexista |
 | `l10n_ro_anaf_d300` | TVA deductibilă la import, prin tag-urile taxei; taxele „21% IMP AM" / „11% IMP AM" pentru importul fără plata TVA în vamă | integrare prin convenție |
 | `l10n_ro_saft` (Enterprise) | D406: tipul și codul SAF-T ale taxei alese pe DVI | integrare prin convenție |
-| `l10n_ro_account_vat_journal` | jurnalul de TVA pentru cumpărări: importul apare o dată, pe nota DVI, cu furnizorul din antetul ei; liniile „0% EX G” ale facturii externe nu intră în jurnal | integrare prin convenție |
+| `l10n_ro_account_vat_journal` | jurnalul de TVA pentru cumpărări: importul apare o dată, pe nota DVI, cu furnizorul din antetul ei și, de la versiunea 19.0.1.7.0, **Tip document** = „Import (DVI)”; liniile „0% EX G” ale facturii externe nu intră în jurnal | integrare prin convenție |
 | `l10n_ro_anaf_d394` | nota DVI are partener străin, deci nu intră în D394 (importurile nu se raportează pe partener) | integrare prin convenție |
 
 **Ce este automat:** crearea costului de aterizare din factură, repartizarea taxelor în costul
-stocului, nota de TVA la import cu tag-urile pentru D300, referința MRN și furnizorul extern pe notă.
+stocului, nota de TVA la import cu tag-urile pentru D300, referința MRN, furnizorul extern și tipul
+documentului „Import (DVI)” pe notă.
 
 **Ce rămâne manual:** transcrierea cifrelor din declarație (baza, valoarea TVA, cota, garanția la
 4200) și alegerea regimului vamal, dacă nu e instalat `l10n_ro_customs_dvi_import`; apoi alegerea
@@ -750,6 +777,9 @@ vamă și notele ei contabile.
       pe 446 sunt fără partener.
 - [ ] În jurnalul de TVA pentru cumpărări, importul apare **o singură dată**, pe nota DVI, cu numele
       furnizorului; factura cu „0% EX G” nu apare.
+- [ ] Nota DVI are **Tip document = „Import (DVI)”**, iar în jurnalul de TVA pentru cumpărări
+      coloana **Tip document** arată „Import (DVI)” pe rândul importului, nu „Notă contabilă”
+      (cere `l10n_ro_account_vat_journal` 19.0.1.7.0 sau mai nou).
 - [ ] Taxa vamală este creditată pe **4462**, analiticul de scadență scurtă.
 - [ ] Onorariul brokerului **nu** a fost introdus în wizard, ci pe factura lui de furnizor.
 - [ ] Transportul extern apare **o singură dată** în costul stocului.
@@ -796,7 +826,8 @@ planul de conturi RO:
 5. `05_wizard_dvi.png` — wizardul DVI la deschidere, cu caseta de îndrumare; baza propusă este
    netul facturii (60.000), nu baza din declarație (70.000).
 6. `06_landed_cost_dvi.png` — costul de aterizare generat, cu numărul declarației.
-7. `07_nota_contabila_tva.png` — nota contabilă cu MRN-ul ca referință.
+7. `07_nota_contabila_tva.png` — nota contabilă cu MRN-ul ca referință și **Tip document** =
+   „Import (DVI)” evidențiat.
 8. `08_cost_produs.png` — costul produsului majorat cu taxele vamale.
 9. `09_factura_broker.png` — factura brokerului cu butonul de creare a costului de aterizare.
 10. `10_lista_dvi.png` — lista DVI — Costuri vamale, grupată pe lună.
@@ -806,6 +837,8 @@ planul de conturi RO:
 13. `13_landed_cost_4200.png` — costul adițional DVI pe regimul 4200, cu taxa „0% EXEMPT" și garanția
     blocată.
 14. `14_nota_4200.png` — nota DVI pe 4200: doar perechea 473, cu baza pe rd. 29.
+15. `15_factura_intracomunitara_4200.png` — factura intracomunitară către clientul din UE, emisă
+    înainte de livrare, cu taxa „0% EU G” (Pasul 12).
 
 Regenerare:
 
