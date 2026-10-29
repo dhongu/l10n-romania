@@ -16,7 +16,9 @@ other modules can create or check a customer without depending on other localiza
   single match it stays empty.
 - **Correct diacritics**: ANAF answers with the old cedilla letters (`ş`, `ţ`); they are turned into
   the comma ones (`ș`, `ț`).
-- **Status**: VAT payer, inactive and struck off, for the caller to warn about.
+- **Status**: VAT payer, VAT on payment (RTVAI), inactive and struck off, for the caller to warn
+  about. Where `l10n_ro_anaf_partner` is installed, the partner values also carry its *VAT on
+  Payment (RTVAI)* flag, as they carry the VAT payer flag.
 - **A clear answer**: found, not found, invalid CUI, or ANAF unavailable — the caller can tell a
   company that does not exist from a service that is down. The wait is short, since somebody is
   usually waiting for the answer.

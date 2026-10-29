@@ -92,7 +92,7 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         :param timeout: seconds to wait for ANAF; the system parameter, else 10, when not given
         :return: dict with ``state`` (``found``, ``not_found``, ``invalid`` or ``unavailable``) and,
             when found, ``partner`` (values ready for ``res.partner.create``), ``vat_payer``,
-            ``inactive``, ``inactive_date``, ``struck_off`` and ``trade_register`` (the J… number,
+            ``vat_on_payment`` (VAT on payment, RTVAI), ``inactive``, ``inactive_date``, ``struck_off`` and ``trade_register`` (the J… number,
             also there when the partner has no field for it)
         """
         cui = self.normalize_cui(vat)
@@ -109,6 +109,7 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
             "state": "found",
             "partner": self._prepare_partner_values(result),
             "vat_payer": bool((result.get("inregistrare_scop_Tva") or {}).get("scpTVA")),
+            "vat_on_payment": bool((result.get("inregistrare_RTVAI") or {}).get("statusTvaIncasare")),
             "inactive": bool(status.get("statusInactivi")),
             "inactive_date": self._clean(status.get("dataInactivare")),
             "trade_register": self._clean(general.get("nrRegCom")),
@@ -170,6 +171,11 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         # the RO prefix would be stripped again when the partner is saved
         if "l10n_ro_vat_subjected" in self.env["res.partner"]._fields:
             values["l10n_ro_vat_subjected"] = vat_payer
+        # VAT on payment (RTVAI), where l10n_ro_anaf_partner defines it; not touched when ANAF
+        # gives no RTVAI block, as an answer without it says nothing about the regime
+        rtvai = result.get("inregistrare_RTVAI")
+        if isinstance(rtvai, dict) and "l10n_ro_vat_on_payment" in self.env["res.partner"]._fields:
+            values["l10n_ro_vat_on_payment"] = bool(rtvai.get("statusTvaIncasare"))
         street_name = self._title(address("denumire_Strada"))
         number = address("numar_Strada")
         street = f"{street_name} Nr. {number}".strip() if number else street_name

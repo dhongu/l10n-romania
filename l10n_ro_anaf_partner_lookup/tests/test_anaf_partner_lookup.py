@@ -22,6 +22,7 @@ def anaf_result(**general):
             "stare_inregistrare": "INREGISTRAT din data 02.10.2012",
         },
         "inregistrare_scop_Tva": {"scpTVA": True},
+        "inregistrare_RTVAI": {"statusTvaIncasare": False},
         "stare_inactiv": {"statusInactivi": False, "dataRadiere": ""},
         "adresa_domiciliu_fiscal": {
             "ddenumire_Strada": "Str. Ciprian Porumbescu",
@@ -224,6 +225,26 @@ class TestAnafPartnerLookup(TransactionCase):
         self.assertTrue(result["struck_off"])
         self.assertTrue(result["inactive"])
         self.assertEqual(result["inactive_date"], "2026-05-04")
+
+    def test_vat_on_payment(self):
+        result = self._lookup(anaf_result())[0]
+        self.assertFalse(result["vat_on_payment"])
+        answer = anaf_result()
+        answer["inregistrare_RTVAI"].update(statusTvaIncasare=True, dataInceputTvaInc="2026-01-01")
+        result = self._lookup(answer)[0]
+        self.assertTrue(result["vat_on_payment"])
+        # The partner flag only where l10n_ro_anaf_partner defines it
+        if "l10n_ro_vat_on_payment" in self.env["res.partner"]._fields:
+            self.assertTrue(result["partner"]["l10n_ro_vat_on_payment"])
+        else:
+            self.assertNotIn("l10n_ro_vat_on_payment", result["partner"])
+
+    def test_no_rtvai_block_leaves_vat_on_payment(self):
+        answer = anaf_result()
+        del answer["inregistrare_RTVAI"]
+        result = self._lookup(answer)[0]
+        self.assertFalse(result["vat_on_payment"])
+        self.assertNotIn("l10n_ro_vat_on_payment", result["partner"])
 
     def test_trade_register_and_timeout(self):
         with patch(REQUEST_PATH, return_value=anaf_result()) as request:

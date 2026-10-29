@@ -21,7 +21,8 @@ recunoaște acolo drept cod fiscal și nu caută nimic. Alegerea ei completează
 doar pentru plătitorii de TVA), stradă și număr, detalii de adresă, localitate (pentru București,
 sectorul), județ, cod poștal, număr de înregistrare la Registrul Comerțului (NRC) și telefon. Când
 sugestia e aleasă în formularul partenerului (Nume, TVA, ID Companie), istoricul primește o notă că
-datele vin de la ANAF.
+datele vin de la ANAF. Cu `l10n_ro_anaf_partner` instalat se completează și bifa **TVA la încasare
+(RTVAI)**, după registrul ANAF.
 
 Pe un partener deja existent, linkul **Actualizează din ANAF** reîncarcă datele și lasă în istoric
 lista câmpurilor modificate (valoarea veche → valoarea nouă), plus avertismentul când ANAF arată
