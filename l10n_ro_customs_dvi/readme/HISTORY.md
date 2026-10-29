@@ -1,3 +1,10 @@
+## 19.0.2.2.0 (2026-10-29)
+
+- The entry of a DVI has the document type *Import (DVI)* (`l10n_ro_account_move_document_type`,
+  installed as a dependency), so the VAT purchase journal shows the customs declaration as the
+  supporting document of the import VAT instead of *Journal Entry* (helpdesk ticket #9568). The
+  entries of the DVIs already validated are updated on upgrade.
+
 ## 19.0.2.1.14 (2026-10-24)
 
 - Tests only: the journal and the accounts looked up by code in the test methods are restricted to

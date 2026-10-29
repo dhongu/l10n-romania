@@ -122,7 +122,13 @@ class LandedCost(models.Model):
             if new_move and cost.account_move_id.line_ids:
                 cost.account_move_id._post()
         self._set_dvi_move_partner()
+        self._set_dvi_move_document_type()
         return res
+
+    def _set_dvi_move_document_type(self):
+        """DVI-ul e documentul justificativ al notei (TVA la import, taxe vamale), nu o notă contabilă."""
+        moves = self.filtered(lambda c: c.landed_type == "dvi").account_move_id
+        moves.write({"l10n_ro_document_type": "customs_declaration"})
 
     def _set_dvi_move_partner(self):
         """Furnizorul extern de pe factură, pe antetul notei DVI.

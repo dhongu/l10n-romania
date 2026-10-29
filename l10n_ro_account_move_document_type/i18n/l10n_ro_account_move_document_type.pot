@@ -1,0 +1,124 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_account_move_document_type
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 17:32+0000\n"
+"PO-Revision-Date: 2026-10-29 17:32+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__bank_statement
+msgid "Bank Statement"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__cash_collection
+msgid "Cash Collection Disposal"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__cash_document
+msgid "Cash Document"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__credit_note
+msgid "Credit Note"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields,field_description:l10n_ro_account_move_document_type.field_account_move__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields,field_description:l10n_ro_account_move_document_type.field_account_bank_statement_line__l10n_ro_document_type
+#: model:ir.model.fields,field_description:l10n_ro_account_move_document_type.field_account_move__l10n_ro_document_type
+#: model_terms:ir.ui.view,arch_db:l10n_ro_account_move_document_type.view_account_move_filter
+msgid "Document Type"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__expense_report
+msgid "Expense Report"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields,field_description:l10n_ro_account_move_document_type.field_account_move__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__customs_declaration
+msgid "Import (DVI)"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__invoice
+msgid "Invoice"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model,name:l10n_ro_account_move_document_type.model_account_move
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__journal_entry
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__payment_disposal
+msgid "Payment Disposal"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__payroll
+msgid "Payroll"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__purchase_receipt
+msgid "Purchase Receipt"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__customer_receipt
+msgid "Customer Receipt"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__sales_receipt
+msgid "Sales Receipt"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__supplier_receipt
+msgid "Supplier Receipt"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields,help:l10n_ro_account_move_document_type.field_account_bank_statement_line__l10n_ro_document_type
+#: model:ir.model.fields,help:l10n_ro_account_move_document_type.field_account_move__l10n_ro_document_type
+msgid ""
+"Supporting document of the entry, shown in the Romanian journals and "
+"registers. Invoices take it from their type; on journal entries it is set by"
+" the module that creates them (customs declaration, cash register) or chosen"
+" by the accountant."
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__vendor_bill
+msgid "Vendor Bill"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__vendor_credit_note
+msgid "Vendor Credit Note"
+msgstr ""

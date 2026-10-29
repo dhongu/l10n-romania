@@ -84,6 +84,7 @@ class TestL10nRoAccountSequence(AccountTestInvoicingCommon):
         self.assertEqual(payment.l10n_ro_cash_document_type, "customer_receipt")
         self.assertTrue(payment.move_id.name.startswith("CH"), f"Expected CH prefix, got {payment.move_id.name}")
         self.assertEqual(payment.move_id.l10n_ro_cash_document_type, "customer_receipt")
+        self.assertEqual(payment.move_id.l10n_ro_document_type, "customer_receipt")
 
     def test_prefix_supplier_receipt_PL(self):
         payment = self._post_payment(
@@ -98,6 +99,7 @@ class TestL10nRoAccountSequence(AccountTestInvoicingCommon):
         self.assertEqual(payment.l10n_ro_cash_document_type, "supplier_receipt")
         self.assertTrue(payment.move_id.name.startswith("PL"), f"Expected PL prefix, got {payment.move_id.name}")
         self.assertEqual(payment.move_id.l10n_ro_cash_document_type, "supplier_receipt")
+        self.assertEqual(payment.move_id.l10n_ro_document_type, "supplier_receipt")
 
     def test_prefix_payment_disposal_DP(self):
         payment = self._post_payment(
@@ -112,6 +114,7 @@ class TestL10nRoAccountSequence(AccountTestInvoicingCommon):
         self.assertEqual(payment.l10n_ro_cash_document_type, "payment_disposal")
         self.assertTrue(payment.move_id.name.startswith("DP"), f"Expected DP prefix, got {payment.move_id.name}")
         self.assertEqual(payment.move_id.l10n_ro_cash_document_type, "payment_disposal")
+        self.assertEqual(payment.move_id.l10n_ro_document_type, "payment_disposal")
 
     def test_prefix_cash_collection_DI(self):
         # Inbound with partner_type supplier falls under cash_collection per module logic
@@ -127,6 +130,7 @@ class TestL10nRoAccountSequence(AccountTestInvoicingCommon):
         self.assertEqual(payment.l10n_ro_cash_document_type, "cash_collection")
         self.assertTrue(payment.move_id.name.startswith("DI"), f"Expected DI prefix, got {payment.move_id.name}")
         self.assertEqual(payment.move_id.l10n_ro_cash_document_type, "cash_collection")
+        self.assertEqual(payment.move_id.l10n_ro_document_type, "cash_collection")
 
     def test_prefix_internal_transfer_IT(self):
         # For internal transfer, explicitly set the document type on create to avoid UI onchange reliance
@@ -150,6 +154,7 @@ class TestL10nRoAccountSequence(AccountTestInvoicingCommon):
         self.assertEqual(payment.l10n_ro_cash_document_type, "internal_transfer")
         self.assertTrue(payment.move_id.name.startswith("IT"), f"Expected IT prefix, got {payment.move_id.name}")
         self.assertEqual(payment.move_id.l10n_ro_cash_document_type, "internal_transfer")
+        self.assertEqual(payment.move_id.l10n_ro_document_type, "cash_document")
 
     def test_no_prefix_for_non_cash_journal(self):
         payment = self.env["account.payment"].create(

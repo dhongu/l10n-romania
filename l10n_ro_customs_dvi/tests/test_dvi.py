@@ -290,6 +290,7 @@ class TestDVI(TransactionCase):
         vat_move = dvi.account_move_id
         self.assertEqual(vat_move.state, "posted")
         self.assertEqual(vat_move.ref, "25ROBU1234567890", "Journal entry reference should be the DVI number")
+        self.assertEqual(vat_move.l10n_ro_document_type, "customs_declaration")
         # Furnizorul extern pe antetul notei (jurnalul de TVA îl ia de acolo), nu pe liniile de TVA.
         self.assertEqual(vat_move.partner_id, invoice.commercial_partner_id)
         self.assertFalse(vat_move.line_ids.filtered(lambda l: l.tax_line_id).partner_id)
