@@ -79,6 +79,11 @@ msgid "Payment Disposal"
 msgstr ""
 
 #. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__bank_document
+msgid "Payment Order / Bank Document"
+msgstr ""
+
+#. module: l10n_ro_account_move_document_type
 #: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__payroll
 msgid "Payroll"
 msgstr ""

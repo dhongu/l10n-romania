@@ -80,6 +80,11 @@ msgid "Payment Disposal"
 msgstr "Dispoziție de plată"
 
 #. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__bank_document
+msgid "Payment Order / Bank Document"
+msgstr "Ordin de plată / Document de bancă"
+
+#. module: l10n_ro_account_move_document_type
 #: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__payroll
 msgid "Payroll"
 msgstr "Stat de salarii"
@@ -87,7 +92,7 @@ msgstr "Stat de salarii"
 #. module: l10n_ro_account_move_document_type
 #: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__purchase_receipt
 msgid "Purchase Receipt"
-msgstr "Chitanță achiziție"
+msgstr "Bon de achiziție"
 
 #. module: l10n_ro_account_move_document_type
 #: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__customer_receipt
@@ -97,7 +102,7 @@ msgstr "Chitanță client"
 #. module: l10n_ro_account_move_document_type
 #: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__sales_receipt
 msgid "Sales Receipt"
-msgstr "Bon fiscal"
+msgstr "Bon de vânzare"
 
 #. module: l10n_ro_account_move_document_type
 #: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__supplier_receipt

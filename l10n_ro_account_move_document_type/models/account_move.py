@@ -9,6 +9,7 @@ DOCUMENT_TYPES = [
     ("purchase_receipt", "Purchase Receipt"),
     ("customs_declaration", "Import (DVI)"),
     ("bank_statement", "Bank Statement"),
+    ("bank_document", "Payment Order / Bank Document"),
     ("cash_document", "Cash Document"),
     ("customer_receipt", "Customer Receipt"),
     ("supplier_receipt", "Supplier Receipt"),
@@ -28,8 +29,14 @@ MOVE_TYPE_DOCUMENT_TYPE = {
     "in_receipt": "purchase_receipt",
 }
 
-JOURNAL_TYPE_DOCUMENT_TYPE = {
+# Nota rândului de extras se justifică prin extras; nota plății, postată pe contul de plăți în curs
+# înainte de extras (uneori fără să fie reconciliată cu el), prin ordinul de plată / avizul băncii.
+STATEMENT_DOCUMENT_TYPE = {
     "bank": "bank_statement",
+    "cash": "cash_document",
+}
+PAYMENT_DOCUMENT_TYPE = {
+    "bank": "bank_document",
     "cash": "cash_document",
 }
 
@@ -62,6 +69,8 @@ class AccountMove(models.Model):
         self.ensure_one()
         if self.move_type in MOVE_TYPE_DOCUMENT_TYPE:
             return MOVE_TYPE_DOCUMENT_TYPE[self.move_type]
-        if self.origin_payment_id or self.statement_line_id:
-            return JOURNAL_TYPE_DOCUMENT_TYPE.get(self.journal_id.type, "journal_entry")
+        if self.statement_line_id:
+            return STATEMENT_DOCUMENT_TYPE.get(self.journal_id.type, "journal_entry")
+        if self.origin_payment_id:
+            return PAYMENT_DOCUMENT_TYPE.get(self.journal_id.type, "journal_entry")
         return "journal_entry"

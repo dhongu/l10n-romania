@@ -3,7 +3,7 @@
 from odoo.tools import SQL
 from odoo.tools.sql import column_exists, create_column
 
-from .models.account_move import JOURNAL_TYPE_DOCUMENT_TYPE, MOVE_TYPE_DOCUMENT_TYPE
+from .models.account_move import MOVE_TYPE_DOCUMENT_TYPE, PAYMENT_DOCUMENT_TYPE, STATEMENT_DOCUMENT_TYPE
 
 
 def pre_init_hook(env):
@@ -19,8 +19,11 @@ def pre_init_hook(env):
     move_type_cases = SQL(" ").join(
         SQL("WHEN %s THEN %s", move_type, doc_type) for move_type, doc_type in MOVE_TYPE_DOCUMENT_TYPE.items()
     )
-    journal_type_cases = SQL(" ").join(
-        SQL("WHEN %s THEN %s", journal_type, doc_type) for journal_type, doc_type in JOURNAL_TYPE_DOCUMENT_TYPE.items()
+    statement_cases = SQL(" ").join(
+        SQL("WHEN %s THEN %s", journal_type, doc_type) for journal_type, doc_type in STATEMENT_DOCUMENT_TYPE.items()
+    )
+    payment_cases = SQL(" ").join(
+        SQL("WHEN %s THEN %s", journal_type, doc_type) for journal_type, doc_type in PAYMENT_DOCUMENT_TYPE.items()
     )
     cr.execute(
         SQL(
@@ -28,14 +31,17 @@ def pre_init_hook(env):
             UPDATE account_move move
                SET l10n_ro_document_type = CASE
                    WHEN move.move_type != 'entry' THEN CASE move.move_type %(move_type_cases)s END
-                   WHEN move.origin_payment_id IS NOT NULL OR move.statement_line_id IS NOT NULL
-                   THEN COALESCE(CASE journal.type %(journal_type_cases)s END, 'journal_entry')
+                   WHEN move.statement_line_id IS NOT NULL
+                   THEN COALESCE(CASE journal.type %(statement_cases)s END, 'journal_entry')
+                   WHEN move.origin_payment_id IS NOT NULL
+                   THEN COALESCE(CASE journal.type %(payment_cases)s END, 'journal_entry')
                    ELSE 'journal_entry'
                END
               FROM account_journal journal
              WHERE journal.id = move.journal_id
             """,
             move_type_cases=move_type_cases,
-            journal_type_cases=journal_type_cases,
+            statement_cases=statement_cases,
+            payment_cases=payment_cases,
         )
     )
