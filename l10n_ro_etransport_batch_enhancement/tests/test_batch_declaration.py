@@ -3,7 +3,7 @@
 # See README.rst file on addons root folder for license details
 """Declarația pe LOT poartă greutățile cântărite, documentele și marcajul lotului.
 
-`l10n_ro_edi_stock_batch` construiește declarația lotului pe un `stock.picking`
+`l10n_ro_edi_stock` construiește declarația lotului pe un `stock.picking`
 GOL, deci override-urile de pe `stock.picking.batch` nu rulau niciodată: XML-ul
 pleca tăcut cu greutățile nucleului și un singur aviz cu numele lotului.
 """

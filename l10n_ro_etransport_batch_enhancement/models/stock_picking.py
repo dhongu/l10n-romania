@@ -12,7 +12,7 @@ class StockPicking(models.Model):
     def _l10n_ro_etransport_declaration_record(self, data):
         """Pe calea de lot, înregistrarea care declară e lotul.
 
-        `l10n_ro_edi_stock_batch` construiește declarația lotului apelând
+        `l10n_ro_edi_stock` construiește declarația lotului apelând
         `self.env["stock.picking"]._l10n_ro_edi_stock_get_template_data(data)`,
         cu `self` GOL. Override-urile definite pe `stock.picking.batch` nu sunt
         apelate niciodată, iar cele de pe transfer nu au de unde citi greutățile

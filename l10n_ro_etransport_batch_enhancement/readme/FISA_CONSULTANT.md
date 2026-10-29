@@ -10,7 +10,7 @@
 
 Când mai multe livrări pleacă în **același camion**, ele se grupează într-un **lot de transferuri**,
 iar declarația RO e-Transport se face o singură dată, din lot. Modulul standard Odoo
-`l10n_ro_edi_stock_batch` permite trimiterea din lot, dar declara doar greutățile calculate din
+`l10n_ro_edi_stock` permite trimiterea din lot, dar declara doar greutățile calculate din
 fișele produselor și un singur aviz, cu numele lotului. Modulul aduce pe lot aceleași completări pe
 care `l10n_ro_etransport_enhancement` le aduce pe transfer:
 
@@ -78,7 +78,7 @@ Date minime pentru demo:
 ## 5. Configurare inițială
 
 1. Instalați modulul `l10n_ro_etransport_batch_enhancement`. Se instalează automat și
-   `l10n_ro_etransport_enhancement`, `l10n_ro_edi_stock_batch` și raportul de aviz pentru lot
+   `l10n_ro_etransport_enhancement` și raportul de aviz pentru lot
    (`l10n_ro_stock_picking_batch_report`).
 2. Configurați conexiunea ANAF, setările UIT și produsele ca în fișa modulului
    `l10n_ro_etransport_enhancement` (secțiunea 5): token ANAF, **UIT: preia valoarea din
@@ -225,11 +225,10 @@ Verificați că codul de pe aviz este cel din tab-ul **Documente eTransport**, c
 
 | Modul / proces | Rol în flux | Tip legătură |
 |---|---|---|
-| `l10n_ro_edi_stock_batch` | trimiterea declarației RO e-Transport din lot, stări, UIT | dependență (manifest) |
 | `l10n_ro_etransport_enhancement` | completările declarației: cod SH, greutăți, documente, corecție, post-avarie | dependență (manifest) |
-| `l10n_ro_edi_stock`, `l10n_ro_edi` | declarația standard din transfer și conexiunea ANAF | dependență (manifest) |
+| `l10n_ro_edi_stock`, `l10n_ro_edi` | declarația standard din transfer și din lot, conexiunea ANAF | dependență (manifest) |
 | `l10n_ro_stock_picking_batch_report` | avizul de însoțire al lotului, pe care apare UIT-ul | dependență (manifest) |
-| `stock_picking_batch` | loturile de transferuri | prin `l10n_ro_edi_stock_batch` |
+| `stock` | loturile de transferuri (în Odoo 20 fac parte din Inventar) | prin `l10n_ro_edi_stock` |
 | `l10n_ro_stock` | câmpul **Greutate netă** de pe produs | opțional |
 | `l10n_ro_etransport_uit_actions_batch` | ștergerea sau confirmarea UIT-ului unui lot, schimbarea vehiculului | modul separat |
 

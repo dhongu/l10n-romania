@@ -4,7 +4,7 @@
 
 {
     "name": "e-Transport for Transfer Batches",
-    "version": "19.0.0.4.1",
+    "version": "20.0.0.4.1",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport Batch Enhancement",
@@ -13,7 +13,6 @@
     "depends": [
         "l10n_ro_edi",
         "l10n_ro_edi_stock",
-        "l10n_ro_edi_stock_batch",
         "l10n_ro_etransport_enhancement",
         "l10n_ro_stock_picking_batch_report",
     ],

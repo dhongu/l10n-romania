@@ -149,7 +149,7 @@ class TestEtransportBatchScreenshots(AccountTestInvoicingCommon, ScreenshotCase 
                                 {
                                     "product_id": product.id,
                                     "product_uom_qty": qty,
-                                    "product_uom": product.uom_id.id,
+                                    "uom_id": product.uom_id.id,
                                     "location_id": cls.warehouse.lot_stock_id.id,
                                     "location_dest_id": customers.id,
                                 },
@@ -198,7 +198,7 @@ class TestEtransportBatchScreenshots(AccountTestInvoicingCommon, ScreenshotCase 
         )
 
     def _batch_url(self, batch):
-        action = self.env.ref("stock_picking_batch.stock_picking_batch_action")
+        action = self.env.ref("stock.stock_picking_batch_action")
         return f"action={action.id}&id={batch.id}&model=stock.picking.batch&view_type=form"
 
     # ------------------------------------------------------------------

@@ -38,7 +38,7 @@ class TestBatchWeightLinesWarning(TransactionCase):
                         {
                             "product_id": self.product.id,
                             "product_uom_qty": qty,
-                            "product_uom": self.product.uom_id.id,
+                            "uom_id": self.product.uom_id.id,
                             "location_id": picking_type.default_location_src_id.id,
                             "location_dest_id": picking_type.default_location_dest_id.id,
                         },
