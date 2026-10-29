@@ -64,16 +64,19 @@ Date minime pentru demo:
 1. Instalați modulul `l10n_ro_stock_picking_batch_report`. Se instalează automat și
    `l10n_ro_picking_report`. Loturile de transferuri fac parte, în Odoo 20, din aplicația Inventar.
 2. Modulul nu poate fi instalat împreună cu `l10n_ro_stock_picking_comment_template`.
-3. Activați **Inventar → Configurare → Setări**, bifa **Unități de măsură**. Fără ea, avizul nu
+3. Activați loturile: **Inventar → Configurare → Setări**, bifa **Transferuri batch, val și
+   cluster**. În Odoo 20, loturile fac parte din Inventar și apar doar cu această setare.
+4. Activați **Inventar → Configurare → Setări**, bifa **Unități de măsură**. Fără ea, avizul nu
    tipărește unitatea de măsură lângă cantitate.
-4. Modulul nu are setări proprii. Antetul (sigla, adresa firmei) vine din aspectul documentelor companiei:
+5. Modulul nu are setări proprii. Antetul (sigla, adresa firmei) vine din aspectul documentelor companiei:
    **Setări → Setări generale**, legătura **Configurare aspect document**.
 
 ## 6. Flux de utilizare
 
 ### Pasul 1 — Lotul cu livrările care pleacă împreună
 
-**Inventar → Operații → Locuri de muncă → Transferuri în lot**, deschideți lotul. Tab-ul
+**Inventar → Operații → Jobs → Batch Transfers** (în Odoo 20, aceste meniuri nu sunt încă
+traduse), deschideți lotul. Tab-ul
 **Operații** arată fiecare mișcare, cu livrarea din care vine (coloana **Transfer**).
 
 În exemplu, laptopul apare în ambele livrări ① ②: 5 bucăți în `DC/OUT/00002` și 10 în
@@ -93,11 +96,11 @@ Date minime pentru demo:
 
 ### Pasul 2 — Tipărirea avizului
 
-Pe lot, apăsați rotița ⚙ de lângă nume ①, apoi **Tipăriți** ② → **Aviz** ③. Se descarcă PDF-ul
+Pe lot, apăsați meniul ⋮ de lângă nume ①, apoi **Tipăriți** ② → **Aviz** ③. Se descarcă PDF-ul
 avizului pentru tot lotul.
 
 Butonul **Tipăriți** din antetul formularului scoate alt document: fișa de operații a lotului
-(raportul **Transfer în lot** din același meniu), fără prețuri și fără date fiscale.
+(raportul **Batch Transfer** din același meniu), fără prețuri și fără date fiscale.
 
 ![Meniul de tipărire al lotului, cu raportul Aviz](../static/description/02_tiparire_aviz.png)
 
@@ -160,7 +163,7 @@ verificarea valorilor la comenzile cu reducere sau cu taxe incluse.
 
 ## 8. Verificări pentru consultant
 
-- [ ] Rotița ⚙ a lotului are, sub **Tipăriți**, raportul **Aviz**.
+- [ ] Meniul ⋮ al lotului are, sub **Tipăriți**, raportul **Aviz**.
 - [ ] Toate livrările din lot au același destinatar, iar acesta apare pe aviz.
 - [ ] La o livrare către o adresă de livrare, avizul tipărește CIF-ul și NRC-ul firmei clientului.
 - [ ] Un produs prezent în mai multe livrări apare o singură dată pe aviz, cu suma cantităților.
@@ -189,7 +192,7 @@ Capturile (`static/description/`) sunt **generate automat** din `tests/test_scre
 pe planul de conturi RO (`setup_country("ro")`):
 
 1. `01_lot_livrari.png`: lotul cu două livrări și același produs în amândouă.
-2. `02_tiparire_aviz.png`: meniul rotiței ⚙ → **Tipăriți** → **Aviz**.
+2. `02_tiparire_aviz.png`: meniul ⋮ → **Tipăriți** → **Aviz**.
 3. `03_aviz_lot.png`: avizul lotului, cu destinatarul, produsele cumulate, valorile din comenzi,
    delegatul și mijlocul de transport.
 
@@ -204,7 +207,7 @@ Regenerare (restrânsă la clasă):
 
 - **Un lot = un camion = un aviz.** Avizul are un singur destinatar, deci în același lot intră doar
   livrări către același client.
-- **Avizul din rotița ⚙, nu din butonul Tipăriți.** Butonul din antet scoate fișa de operații.
+- **Avizul din meniul ⋮, nu din butonul Tipăriți.** Butonul din antet scoate fișa de operații.
 - **Prețurile vin din comenzi.** Livrările create manual, fără comandă, apar cu valoare 0.
 - **Delegatul și mașina se completează pe prima livrare din lot,** nu pe lot.
 - Pentru avizul unei singure livrări folosiți raportul din transfer (`l10n_ro_picking_report`).

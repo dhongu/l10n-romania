@@ -80,16 +80,19 @@ Date minime pentru demo:
 1. Instalați modulul `l10n_ro_etransport_batch_enhancement`. Se instalează automat și
    `l10n_ro_etransport_enhancement` și raportul de aviz pentru lot
    (`l10n_ro_stock_picking_batch_report`).
-2. Configurați conexiunea ANAF, setările UIT și produsele ca în fișa modulului
+2. Activați loturile: **Inventar → Configurare → Setări**, bifa **Transferuri batch, val și
+   cluster**. În Odoo 20, loturile fac parte din Inventar și apar doar cu această setare.
+3. Configurați conexiunea ANAF, setările UIT și produsele ca în fișa modulului
    `l10n_ro_etransport_enhancement` (secțiunea 5): token ANAF, **UIT: preia valoarea din
    comandă**, **Timp de așteptare eTransport**, **Masă** și **Cod SH** pe produse.
 
 ## 6. Flux de utilizare
 
-Loturile se găsesc în **Inventar → Operații → Locuri de muncă → Transferuri în lot**. Un lot nou
-se creează cu **Nou**, sau din lista **Livrări**: selectați livrările, apoi **Acțiuni → Adăugați la
-lot**. Butonul de trimitere apare imediat ce lotul are **eTransport necesar** bifat, chiar și în
-starea **Ciornă**. Recomandăm trimiterea după confirmarea lotului (starea **În desfășurare**), când
+Loturile se găsesc în **Inventar → Operații → Jobs → Batch Transfers** (în Odoo 20, aceste
+meniuri nu sunt încă traduse). Un lot nou
+se creează cu **Nou**, sau din lista **Livrări**: selectați livrările, apoi **Acțiuni → Add to
+batch**. Butonul de trimitere apare imediat ce lotul are **eTransport necesar** bifat, chiar și în
+starea **Ciornă**. Recomandăm trimiterea după confirmarea lotului (starea **In progress**), când
 componența lui e definitivă.
 
 ### Pasul 1 — Lotul: eTransport necesar și transportatorul
@@ -108,17 +111,16 @@ același camion.
 ### Pasul 2 — Datele declarației și trimiterea
 
 Pe același lot, tab-ul **eTransport**:
-- **Tip Operațiune** ① (ex. „Transport pe teritoriul national”) și **Domeniul de Aplicare**. Pe
-  lot, codul 101 apare ca „Marketing”: este **Comercializare** din nomenclatorul ANAF, eticheta
-  netradusă a modulului standard;
+- **Tip operațiune** ① (ex. „Transport pe teritoriul național”) și **Domeniul de aplicare** (ex.
+  „Comercializare”);
 - **Numărul vehiculului** ②;
 - **Declarație post-avarie** ③: bifați **doar** când notificarea se depune după o indisponibilitate
   a sistemului RO e-Transport;
 - locația de pornire și cea finală.
 
-Apăsați **Trimite eTransport** ④. Se trimite **o singură declarație** pentru tot lotul, cu toate
+Apăsați **Trimiteți eTransport** ④. Se trimite **o singură declarație** pentru tot lotul, cu toate
 produsele din livrările lui. Declarația poartă numele lotului ca referință. În tab-ul **Documente
-eTransport** apare documentul cu starea **Trimis** și cu UIT-ul. **Preluare Stare** trece
+eTransport** apare documentul cu starea **Trimis** și cu UIT-ul. **Preluare stare** trece
 documentul în **Validat** sau **Eroare**, după răspunsul ANAF. Cât timp ANAF încă prelucrează
 declarația, documentul rămâne **Trimis**: reveniți mai târziu.
 
@@ -176,7 +178,7 @@ lotului, ca în standard.
 Extras din declarația lotului, cu greutățile cântărite și cele trei documente:
 
 ```xml
-<eTransport xmlns="mfp:anaf:dgti:eTransport:declaratie:v2" ... refDeclarant="BATCH/OUT/00036">
+<eTransport xmlns="mfp:anaf:dgti:eTransport:declaratie:v2" ... refDeclarant="BATCH/DC/OUT/00010">
   <notificare codTipOperatiune="30">
     <bunuriTransportate codTarifar="84713000" ... greutateNeta="18.56" greutateBruta="20.91"/>
     <bunuriTransportate codTarifar="852852" ... greutateNeta="21.44" greutateBruta="25.09"/>
@@ -192,7 +194,7 @@ Extras din declarația lotului, cu greutățile cântărite și cele trei docume
 
 Pe un lot cu UIT **Validat**, modificați datele declarate greșit (ex. greutățile sau
 documentele) și apăsați **Modificați eTransport** ①. Corecția poartă UIT-ul inițial al lotului
-(`<corectie uit="..."/>`), fără să se emită un UIT nou. Apăsați apoi din nou **Preluare Stare**,
+(`<corectie uit="..."/>`), fără să se emită un UIT nou. Apăsați apoi din nou **Preluare stare**,
 ca să confirmați că ANAF a validat corecția.
 
 Schimbarea vehiculului după plecarea camionului nu e o corecție, ci o operațiune ANAF separată,
@@ -202,7 +204,7 @@ disponibilă în modulul `l10n_ro_etransport_uit_actions_batch`.
 
 ### Pasul 7 — UIT-ul pe avizul lotului
 
-Din lot, rotița ⚙ de lângă nume → **Tipăriți** → **Aviz** generează avizul de însoțire a mărfii
+Din lot, meniul ⋮ de lângă nume → **Tipăriți** → **Aviz** generează avizul de însoțire a mărfii
 pentru tot lotul. Butonul **Tipăriți** din antet scoate altceva: fișa de operații a lotului.
 
 Când lotul are o declarație validată, sub semnături apare **UIT** ① cu codul primit de la ANAF.
@@ -245,7 +247,7 @@ trimitere), cântărirea, CMR-ul, bifa post-avarie și verificarea în SPV.
 - [ ] Lotul are **eTransport necesar** bifat, iar tab-ul **eTransport** este vizibil.
 - [ ] **Transportator eTransport** e completat pe lot și apare pe fiecare livrare din el.
 - [ ] Toate livrările din lot merg la același client și la aceeași adresă.
-- [ ] Lotul este **În desfășurare** (componența e definitivă) înainte de **Trimite eTransport**.
+- [ ] Lotul este **In progress** (componența e definitivă) înainte de **Trimiteți eTransport**.
 - [ ] Tab-ul **eTransport** are operațiunea, domeniul, vehiculul și locațiile.
 - [ ] Cu greutăți cântărite, fiecare mișcare a lotului are o linie, suma liniilor este egală cu
       totalurile introduse și nu apare avertismentul roșu.
@@ -261,7 +263,7 @@ trimitere), cântărirea, CMR-ul, bifa post-avarie și verificarea în SPV.
 | Avertisment roșu „Pentru N din M mișcări nu există greutăți calculate. Apasă „Preia liniile”.” | Liniile de greutate nu au fost preluate, sau s-a adăugat o livrare în lot după preluare | **Preia liniile**, apoi **Repartizează greutățile** |
 | „Greutățile totale netă și brută trebuie să fie mai mari decât 0.” | **Repartizează greutățile** fără totaluri introduse | Introduceți totalurile de pe cântar |
 | „Documentul însoțitor trebuie legat de un transfer sau de un lot de transfer.” | Document însoțitor creat fără lot și fără transfer | Adăugați documentul din lot sau din livrare |
-| Tab-ul **eTransport** și butonul **Trimite eTransport** lipsesc | **eTransport necesar** nebifat | Bifați **eTransport necesar** |
+| Tab-ul **eTransport** și butonul **Trimiteți eTransport** lipsesc | **eTransport necesar** nebifat | Bifați **eTransport necesar** |
 | „Toate Picking-urile dintr-un Transfer ar trebui să aibă același Livrator” (la **Validează**) | Livrările din lot au metode de livrare diferite | Alegeți **Metodă de livrare** pe lot: se copiază pe toate livrările |
 | „Toate alegerile dintr-un transfer de lot ar trebui să aibă același partener comercial” (la **Validează**) | Lotul conține livrări către clienți diferiți | Scoateți din lot livrările altor clienți. Dacă declarația a plecat deja, verificați partenerul declarat și corectați-o |
 | Documentul eTransport al lotului are starea **Eroare** | Datele declarației nu trec validarea (ex. produs fără cod SH sau fără masă) | Citiți mesajul din pictograma stării, corectați și retrimiteți. Mesajele sunt cele din fișa `l10n_ro_etransport_enhancement`, secțiunea 9 |
