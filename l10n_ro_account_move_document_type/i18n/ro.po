@@ -1,0 +1,129 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_account_move_document_type
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 17:32+0000\n"
+"PO-Revision-Date: 2026-10-29 17:32+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__bank_statement
+msgid "Bank Statement"
+msgstr "Extras de cont"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__cash_collection
+msgid "Cash Collection Disposal"
+msgstr "Dispoziție de încasare"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__cash_document
+msgid "Cash Document"
+msgstr "Document de casă"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__credit_note
+msgid "Credit Note"
+msgstr "Factură storno"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields,field_description:l10n_ro_account_move_document_type.field_account_move__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields,field_description:l10n_ro_account_move_document_type.field_account_bank_statement_line__l10n_ro_document_type
+#: model:ir.model.fields,field_description:l10n_ro_account_move_document_type.field_account_move__l10n_ro_document_type
+#: model_terms:ir.ui.view,arch_db:l10n_ro_account_move_document_type.view_account_move_filter
+msgid "Document Type"
+msgstr "Tip document"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__expense_report
+msgid "Expense Report"
+msgstr "Decont de cheltuieli"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields,field_description:l10n_ro_account_move_document_type.field_account_move__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__customs_declaration
+msgid "Import (DVI)"
+msgstr "Import (DVI)"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__invoice
+msgid "Invoice"
+msgstr "Factură"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model,name:l10n_ro_account_move_document_type.model_account_move
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__journal_entry
+msgid "Journal Entry"
+msgstr "Notă contabilă"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__payment_disposal
+msgid "Payment Disposal"
+msgstr "Dispoziție de plată"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__payroll
+msgid "Payroll"
+msgstr "Stat de salarii"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__purchase_receipt
+msgid "Purchase Receipt"
+msgstr "Chitanță achiziție"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__customer_receipt
+msgid "Customer Receipt"
+msgstr "Chitanță client"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__sales_receipt
+msgid "Sales Receipt"
+msgstr "Bon fiscal"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__supplier_receipt
+msgid "Supplier Receipt"
+msgstr "Chitanță furnizor"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields,help:l10n_ro_account_move_document_type.field_account_bank_statement_line__l10n_ro_document_type
+#: model:ir.model.fields,help:l10n_ro_account_move_document_type.field_account_move__l10n_ro_document_type
+msgid ""
+"Supporting document of the entry, shown in the Romanian journals and "
+"registers. Invoices take it from their type; on journal entries it is set by"
+" the module that creates them (customs declaration, cash register) or chosen"
+" by the accountant."
+msgstr ""
+"Documentul justificativ al notei, afișat în jurnalele și registrele din "
+"România. Facturile îl iau din tipul lor; pe notele contabile îl completează "
+"modulul care le creează (declarația vamală, registrul de casă) sau îl alege "
+"contabilul."
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__vendor_bill
+msgid "Vendor Bill"
+msgstr "Factură furnizor"
+
+#. module: l10n_ro_account_move_document_type
+#: model:ir.model.fields.selection,name:l10n_ro_account_move_document_type.selection__account_move__l10n_ro_document_type__vendor_credit_note
+msgid "Vendor Credit Note"
+msgstr "Storno furnizor"
