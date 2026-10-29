@@ -1,3 +1,13 @@
+## 20.0.0.4.2 (2026-10-29)
+
+- Migrare pe Odoo 20: trimiterea din lot vine acum din `l10n_ro_edi_stock`, deoarece
+  `l10n_ro_edi_stock_batch` nu mai există.
+- **Metoda de livrare a lotului** se calcula din transferurile primului lot din selecție,
+  nu din ale lotului curent. Într-o listă cu mai multe loturi, toate primeau aceeași metodă.
+  Câmpul nu avea nici `@api.depends`, deci nu se recalcula când se schimbau transferurile.
+- **Transportatorul eTransport** al lotului se golește când lotul rămâne fără transferuri.
+  Înainte păstra valoarea veche.
+
 ## 19.0.0.4.1 (2026-10-29)
 
 - Fișa consultant (`readme/FISA_CONSULTANT.md`) cu capturi generate din `tests/test_screenshots.py`.

@@ -4,7 +4,7 @@
 
 {
     "name": "e-Transport for Transfer Batches",
-    "version": "20.0.0.4.1",
+    "version": "20.0.0.4.2",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport Batch Enhancement",

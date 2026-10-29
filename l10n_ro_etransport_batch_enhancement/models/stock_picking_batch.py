@@ -84,19 +84,19 @@ class StockPickingBatch(models.Model):
     @api.depends("picking_ids.l10n_ro_transport_partner_id")
     def _compute_l10n_ro_transport_partner_id(self):
         for batch in self:
-            if batch.picking_ids:
-                batch.l10n_ro_transport_partner_id = batch.picking_ids[0].l10n_ro_transport_partner_id
+            # fără transferuri câmpul se golește, altfel păstra valoarea veche (e stocat)
+            batch.l10n_ro_transport_partner_id = batch.picking_ids[:1].l10n_ro_transport_partner_id
 
     def _inverse_l10n_ro_transport_partner_id(self):
         for batch in self:
             for picking in batch.picking_ids:
                 picking.l10n_ro_transport_partner_id = batch.l10n_ro_transport_partner_id
 
+    @api.depends("picking_ids.carrier_id")
     def _compute_l10n_ro_edi_carrier_id(self):
         for batch in self:
-            if self.picking_ids:
-                first_carrier = self.picking_ids[0].carrier_id
-                batch.l10n_ro_edi_carrier_id = first_carrier
+            # transferurile lotului curent, nu ale primului lot din `self`
+            batch.l10n_ro_edi_carrier_id = batch.picking_ids[:1].carrier_id
 
     def _inverse_l10n_ro_edi_carrier_id(self):
         for batch in self:
