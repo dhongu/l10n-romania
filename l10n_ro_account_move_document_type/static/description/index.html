@@ -47,7 +47,7 @@
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Overview</h2>
 <p class="mb-4" style="font-size:16px;line-height:1.65;max-width:780px;">Adds the <strong>supporting document type</strong> (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_document_type</code>) to journal entries, so that the
 Romanian journals and registers can show which document justifies each entry: invoice, credit note,
-vendor bill, customs import declaration (DVI), receipt, cash disposal, bank statement, payroll,
+vendor bill, customs import declaration (DVI), cash receipt, cash disposal, bank statement, payroll,
 expense report or a plain journal entry.</p>
 <ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>Invoices and receipts take the type from the kind of document.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>Payments and bank statement lines take it from the journal: <em>Bank Statement</em> on bank journals,
   <em>Cash Document</em> on cash journals.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>Every other entry is a <em>Journal Entry</em> until the module that creates it says otherwise (the DVI
@@ -74,7 +74,8 @@ automatically.</p>
 <ul>
 <li>New module (helpdesk ticket #9568): document type on journal entries, filled in automatically for
   invoices, receipts and payments and editable on journal entries. Existing entries are filled in
-  at installation directly in SQL.</li>
+  at installation directly in SQL (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">pre_init_hook</code>), without recomputing the field in Python.</li>
+<li>Consultant sheet (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">readme/FISA_CONSULTANT.md</code>) with screenshots.</li>
 </ul>
 </div>
 </div>

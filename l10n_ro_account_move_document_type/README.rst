@@ -10,9 +10,9 @@ Romania - Accounting Document Type
    !! source digest: sha256:11c3f813482cccb9f193cdbdb54f84e8638ff8f67b45e87f5cdc9fc708ed3ef2
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Beta
+    :alt: Mature
 .. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
@@ -68,7 +68,9 @@ Changelog
 - New module (helpdesk ticket #9568): document type on journal entries,
   filled in automatically for invoices, receipts and payments and
   editable on journal entries. Existing entries are filled in at
-  installation directly in SQL.
+  installation directly in SQL (``pre_init_hook``), without recomputing
+  the field in Python.
+- Consultant sheet (``readme/FISA_CONSULTANT.md``) with screenshots.
 
 Bug Tracker
 ===========
