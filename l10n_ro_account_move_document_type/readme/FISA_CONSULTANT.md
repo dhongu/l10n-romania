@@ -56,9 +56,10 @@ existente:
 |---|---|
 | Factură client / factură storno | Factură / Factură storno |
 | Factură furnizor / storno furnizor | Factură furnizor / Storno furnizor |
-| Plată sau rând de extras în jurnal de bancă | Extras de cont |
+| Rând de extras de cont (jurnal de bancă) | Extras de cont |
+| Plată înregistrată în jurnal de bancă | Ordin de plată / Document de bancă (nota stă pe contul de plăți în curs până la reconciliere) |
 | Plată în jurnal de casă | Document de casă (sau chitanța / dispoziția, cu `l10n_ro_account_sequence`) |
-| Bon de vânzare / bon de achiziție | Bon fiscal / Chitanță achiziție |
+| Bon de vânzare / bon de achiziție (Odoo) | Bon de vânzare / Bon de achiziție |
 | Notă din DVI (`l10n_ro_customs_dvi`) | Import (DVI) |
 | Orice altă notă | Notă contabilă, până când contabilul alege alt tip |
 
@@ -116,6 +117,12 @@ grilele și cu tipul **Import (DVI)**. Pentru o notă de TVA la import introdus�
    ele, nota nu intră în D300 (vezi nota din secțiunea 4).
 5. Apăsați **Postează**.
 
+> Pașii de mai sus sunt pentru TVA-ul **plătit în vamă** (art. 326 alin. (3) Cod fiscal; deducere
+> cf. art. 299 alin. (1) lit. c)). Cu **certificat de amânare** (art. 326 alin. (4)–(5); deducere cf.
+> art. 299 alin. (1) lit. d)), nota este Dr 4426 = Cr 4427, cu taxa de import cu amânare
+> („21% IMP AM”, din `l10n_ro_anaf_d300`), care alimentează rândurile 7 și 22 din D300; vezi și fișa `l10n_ro_customs_dvi`,
+> pasul 10.
+
 Tipul se poate schimba și pe nota postată, chiar după închiderea perioadei: schimbarea nu atinge
 sumele, doar eticheta din jurnale.
 
@@ -129,11 +136,13 @@ acesta e doar pentru notele introduse de mână.
 În **Contabilitate → Contabilitate → Note contabile**, din lista de filtre deschideți **Grupează după → Tip document**.
 
 1. **Găsiți pe ecran:** câte un grup pentru fiecare tip: **Factură**, **Factură furnizor**,
-   **Extras de cont**, **Import (DVI)**, **Notă contabilă** etc., cu numărul de note din fiecare.
+   **Ordin de plată / Document de bancă**, **Import (DVI)**, **Notă contabilă** etc., cu numărul de
+   note din fiecare.
 2. **Verificați:**
    - lista din meniu pornește cu filtrul **Postat**: notele în ciornă apar doar după ce scoateți filtrul;
    - facturile nu apar în grupul **Notă contabilă**;
-   - plățile prin bancă sunt la **Extras de cont**;
+   - plățile prin bancă sunt la **Ordin de plată / Document de bancă**, iar rândurile de extras la
+     **Extras de cont**;
    - notele de TVA la import sunt la **Import (DVI)**. Totalul notei de import (12.100 lei) cuprinde
      și perechea tehnică pe 473; TVA-ul este doar linia 4426 (2.100 lei).
 
@@ -154,7 +163,8 @@ de 10.000 lei la 21%, plătit în vamă, înregistrat manual cu grilele taxei:
 | 473 Decontări din operațiuni în curs de clarificare | — | 10.000 | bază rd. 24 |
 | — | 473 Decontări din operațiuni în curs de clarificare | 10.000 | — |
 
-Perechea pe 473 e tehnică: se soldează și duce doar baza în D300. Tipul documentului este al notei
+Perechea pe 473 e tehnică: se soldează și duce doar baza în D300. Monografia e pentru TVA-ul plătit
+în vamă; cu certificat de amânare, contrapartida lui 4426 este 4427 (vezi nota de la pasul 2). Tipul documentului este al notei
 întregi: **Import (DVI)**.
 
 În jurnalul de TVA pentru cumpărări (`l10n_ro_account_vat_journal`), rândul acestei note are în
@@ -179,7 +189,8 @@ salarii, decont de cheltuieli).
 
 - [ ] După instalare, nicio notă nu are **Tip document** gol (grupare după tip în lista notelor).
 - [ ] O factură client nouă are tipul **Factură**, iar o factură furnizor are **Factură furnizor**.
-- [ ] O plată prin bancă are tipul **Extras de cont**.
+- [ ] O plată prin bancă are tipul **Ordin de plată / Document de bancă**, iar nota unui rând de
+      extras are **Extras de cont**.
 - [ ] O notă nouă în **Diverse operații** are tipul **Notă contabilă** și se poate schimba în
       **Import (DVI)** înainte și după postare.
 - [ ] Cu `l10n_ro_customs_dvi`: nota unui DVI validat are tipul **Import (DVI)**.

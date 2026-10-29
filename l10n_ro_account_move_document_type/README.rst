@@ -29,8 +29,11 @@ customs import declaration (DVI), cash receipt, cash disposal, bank
 statement, payroll, expense report or a plain journal entry.
 
 - Invoices and receipts take the type from the kind of document.
-- Payments and bank statement lines take it from the journal: *Bank
-  Statement* on bank journals, *Cash Document* on cash journals.
+- Bank statement lines are *Bank Statement*. A payment in a bank journal
+  is *Payment Order / Bank Document*: its entry is posted on the
+  outstanding account, before the statement and sometimes without being
+  reconciled with it, so the statement does not justify it. On cash
+  journals both are *Cash Document*.
 - Every other entry is a *Journal Entry* until the module that creates
   it says otherwise (the DVI entry of ``l10n_ro_customs_dvi``, the cash
   receipts and disposals of ``l10n_ro_account_sequence``).
@@ -70,6 +73,10 @@ Changelog
   editable on journal entries. Existing entries are filled in at
   installation directly in SQL (``pre_init_hook``), without recomputing
   the field in Python.
+- A payment in a bank journal is *Payment Order / Bank Document*: its
+  entry is posted on the outstanding account and is justified by the
+  payment order, not by the statement. Only the entries of bank
+  statement lines are *Bank Statement* (Pacioli review).
 - Consultant sheet (``readme/FISA_CONSULTANT.md``) with screenshots.
 
 Bug Tracker

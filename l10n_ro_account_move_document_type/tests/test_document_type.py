@@ -51,7 +51,19 @@ class TestL10nRoDocumentType(AccountTestInvoicingCommon):
             }
         )
         payment.action_post()
-        self.assertEqual(payment.move_id.l10n_ro_document_type, "bank_statement")
+        # nota plății stă pe contul de plăți în curs: o justifică ordinul de plată, nu extrasul
+        self.assertEqual(payment.move_id.l10n_ro_document_type, "bank_document")
+
+    def test_bank_statement_line(self):
+        line = self.env["account.bank.statement.line"].create(
+            {
+                "journal_id": self.company_data["default_journal_bank"].id,
+                "payment_ref": "Încasare client",
+                "partner_id": self.partner_a.id,
+                "amount": 50.0,
+            }
+        )
+        self.assertEqual(line.move_id.l10n_ro_document_type, "bank_statement")
 
     def test_manual_import_vat_entry_gets_tax_line(self):
         """Fișa, pasul 2: taxa pe linia de bază (473) generează singură linia de TVA cu grila."""
