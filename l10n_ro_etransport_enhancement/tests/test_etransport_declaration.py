@@ -7,6 +7,8 @@ Toate cele patru defecte erau tăcute: ANAF accepta declarația, iar datele
 declarate erau greșite (verificat față de XSD v2 și Schematron v2.0.2).
 """
 
+from lxml import etree
+
 from odoo.tests import tagged
 
 from .common import NS, SENT_UIT, EtransportDeclarationCommon
@@ -111,6 +113,25 @@ class TestEtransportDeclaration(EtransportDeclarationCommon):
         picking.l10n_ro_edi_stock_operation_type = "70"
         errors = picking._l10n_ro_edi_stock_validate_data(self._declaration_data(picking))
         self.assertFalse([error for error in errors if product.display_name in error])
+
+    def test_tariff_code_omitted_from_xml_for_operation_70(self):
+        """La 60/70, produsul fără cod HS pleacă fără `codTarifar`, nu cu `00000000`.
+
+        Randăm XML-ul ca nucleul în `_l10n_ro_edi_stock_send_etransport_document`,
+        fără validare: o operațiune 70 completă cere și date vamale, irelevante aici.
+        """
+        self._skip_with_intrastat()
+        product = self.env["product.product"].create({"name": "Fara cod 70 XML", "type": "consu", "weight": 1.0})
+        picking = self._create_delivery([(product, 5)])
+        picking.l10n_ro_edi_stock_operation_type = "70"
+        data = self._declaration_data(picking)
+        data["transport_partner_id"] = picking.l10n_ro_transport_partner_id
+        raw_xml = self.env["ir.qweb"]._render(
+            "l10n_ro_edi_stock.l10n_ro_template_etransport",
+            values=picking._l10n_ro_edi_stock_get_template_data(data),
+        )
+        goods = self._goods(etree.fromstring(str(raw_xml).encode()))[0]
+        self.assertIsNone(goods.get("codTarifar"))
 
     # -------------------------------------------------------------- post-avarie
 
