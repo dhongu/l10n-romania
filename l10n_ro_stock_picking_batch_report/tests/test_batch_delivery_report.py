@@ -61,3 +61,31 @@ class TestBatchDeliveryReport(TransactionCase):
         self.assertEqual(re.sub(r"\D", "", qty), "3000")
         # preț unitar mediu 2,00, valoarea liniei 60,00, totalul 60,00
         self.assertEqual([re.sub(r"\D", "", v) for v in values], ["200", "6000", "6000"])
+
+    def test_value_is_converted_to_company_currency(self):
+        """O recepție din comandă în altă monedă apare pe aviz în moneda companiei."""
+        company = self.env.company
+        foreign = self.env["res.currency"].search(
+            [("id", "!=", company.currency_id.id), ("active", "in", (True, False))], limit=1
+        )
+        foreign.active = True
+        # 1 unitate din moneda companiei = 0,5 unități străine: 10 străine = 20 ale companiei
+        self.env["res.currency.rate"].create(
+            {"currency_id": foreign.id, "company_rate": 0.5, "name": "2000-01-01", "company_id": company.id}
+        )
+        vendor = self.env["res.partner"].create({"name": "Furnizor Aviz Lot"})
+        order = self.env["purchase.order"].create(
+            {
+                "partner_id": vendor.id,
+                "currency_id": foreign.id,
+                "picking_type_id": self.warehouse.in_type_id.id,
+                "order_line": [(0, 0, {"product_id": self.product.id, "product_qty": 3, "price_unit": 10.0})],
+            }
+        )
+        order.button_confirm()
+        picking = order.picking_ids
+        picking.move_ids.quantity = 3
+        batch = self.env["stock.picking.batch"].create({"picking_ids": [(6, 0, picking.ids)]})
+        values = re.findall(r'oe_currency_value">([^<]+)<', self._render(batch))
+        # preț unitar 20,00, valoarea 60,00, totalul 60,00 în moneda companiei
+        self.assertEqual([re.sub(r"\D", "", v) for v in values], ["2000", "6000", "6000"])

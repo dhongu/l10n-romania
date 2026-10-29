@@ -127,8 +127,14 @@
                                                 <t t-set="order_line" t-value="move.purchase_line_id or move.sale_line_id" />
                                                 <t t-if="order_line">
                                                     <t
+                                                    t-set="line_value"
+                                                    t-value="order_line.price_unit * move.product_uom._compute_quantity(move.quantity, order_line.product_uom_id, round=False, raise_if_failure=False)"
+                                                />
+                                                    <!-- prețul e în moneda comenzii; avizul e în moneda companiei,
+                                                         la cursul de la data lotului -->
+                                                    <t
                                                     t-set="product_value"
-                                                    t-value="product_value + order_line.price_unit * move.product_uom._compute_quantity(move.quantity, order_line.product_uom_id, round=False, raise_if_failure=False)"
+                                                    t-value="product_value + order_line.currency_id._convert(line_value, batch.company_id.currency_id, batch.company_id, batch.scheduled_date or datetime.datetime.now())"
                                                 />
                                                 </t>
                                             </t>

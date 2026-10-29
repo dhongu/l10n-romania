@@ -8,6 +8,8 @@
   liniei de comandă, ca pe avizul din transfer (`l10n_ro_picking_report` 19.0.1.3.6).
 - CIF-ul și NRC-ul destinatarului apar și când livrarea merge la o adresă de livrare
   (contact al firmei); condiția se verifica pe contact, nu pe firmă.
+- Valorile din comenzile în altă monedă se convertesc în moneda companiei, la cursul de la
+  data lotului; înainte se afișa aceeași cifră, cu simbolul monedei companiei.
 - Cantitatea apare în formatul limbii, cu precizia unității de produs („15,00”, nu „15.0”).
 
 ## 19.0.0.0.6 (2026-10-22)

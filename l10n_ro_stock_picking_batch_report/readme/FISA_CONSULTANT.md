@@ -110,7 +110,9 @@ Butonul **Tipăriți** din antetul formularului scoate alt document: fișa de op
      și **Total**;
    - sub tabel, **Delegat** și **Mijloc de transport** ③, de pe prima livrare.
 2. **Verificați:**
-   - destinatarul este clientul tuturor livrărilor din lot;
+   - destinatarul este clientul tuturor livrărilor din lot. Când livrarea merge la o adresă de
+     livrare a clientului, pe aviz apare adresa de livrare, iar CIF-ul și NRC-ul sunt cele ale
+     firmei;
    - fiecare produs apare o singură dată, cu suma cantităților din tab-ul **Operații**
      (în exemplu, 15 laptopuri și 4 monitoare);
    - prețul unitar este cel din comandă și nu e 0, iar **Valoare** = cantitate × preț
@@ -134,10 +136,10 @@ Butonul **Tipăriți** din antetul formularului scoate alt document: fișa de op
   - mișcare fără comandă: valoarea 0.
 - **Prețul unitar** de pe aviz este valoarea liniei împărțită la cantitate, pe unitatea de măsură
   a produsului, deci o medie când produsul vine din comenzi cu prețuri diferite.
-- Prețul din comandă se ia **înainte de reducere** și se afișează în moneda companiei, fără
-  conversie. Este prețul introdus pe comandă: la taxele cu preț inclus, valoarea conține TVA.
-  Pentru comenzile în altă monedă, cu reduceri sau cu taxe incluse, verificați valorile înainte de
-  predare.
+- Prețul din comandă se ia **înainte de reducere**. Comenzile în altă monedă se convertesc în
+  moneda companiei, la cursul de la **Dată planificată** a lotului. Este prețul introdus pe
+  comandă: la taxele cu preț inclus, valoarea conține TVA. Pentru comenzile cu reduceri sau cu taxe
+  incluse, verificați valorile înainte de predare.
 
 ## 7. Legături cu alte module / declarații
 
@@ -154,12 +156,13 @@ ale depozitului și ale destinatarului.
 
 **Ce rămâne manual:** gruparea în lot doar a livrărilor către același destinatar, completarea
 delegatului și a mijlocului de transport pe prima livrare, data lotului la ziua plecării,
-verificarea valorilor la comenzile cu reducere, cu taxe incluse sau în valută.
+verificarea valorilor la comenzile cu reducere sau cu taxe incluse.
 
 ## 8. Verificări pentru consultant
 
 - [ ] Rotița ⚙ a lotului are, sub **Tipăriți**, raportul **Aviz**.
 - [ ] Toate livrările din lot au același destinatar, iar acesta apare pe aviz.
+- [ ] La o livrare către o adresă de livrare, avizul tipărește CIF-ul și NRC-ul firmei clientului.
 - [ ] Un produs prezent în mai multe livrări apare o singură dată pe aviz, cu suma cantităților.
 - [ ] Cantitățile de pe aviz corespund coloanei **Cantitate** din tab-ul **Operații**.
 - [ ] Livrările din comenzi au preț unitar diferit de 0, iar totalul este suma valorilor.
@@ -177,7 +180,7 @@ verificarea valorilor la comenzile cu reducere, cu taxe incluse sau în valută.
 | Cantitatea apare fără unitate de măsură | Setarea **Unități de măsură** e inactivă | Activați-o în **Inventar → Configurare → Setări** |
 | Cantitate 0 pe o linie | Cantitatea nu a fost pregătită (doar **Necesar** e completat) | Rezervați sau completați **Cantitate** înainte de tipărire |
 | Raportul **Aviz** lipsește din meniu | Modulul nu e instalat, sau e instalat `l10n_ro_stock_picking_comment_template` | Instalați modulul; cele două se exclud reciproc |
-| Valori greșite la comenzile în valută, cu reducere sau cu taxe incluse | Prețul se ia din comandă, fără conversie valutară, fără reducere, cu taxa inclusă dacă așa e pe comandă | Verificați valorile față de factură; vezi „Note de monografie” |
+| Valori diferite de factură la comenzile cu reducere, cu taxe incluse sau în valută | Prețul se ia din comandă, fără reducere și cu taxa inclusă dacă așa e pe comandă. Valuta se convertește la cursul de la data lotului, nu de la data facturii | Verificați valorile față de factură; vezi „Note de monografie” |
 
 ## 10. Capturi de ecran
 
