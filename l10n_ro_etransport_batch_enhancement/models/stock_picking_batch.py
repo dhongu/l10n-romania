@@ -1,0 +1,183 @@
+# ©  2025 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+from odoo import api, fields, models
+from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
+
+
+class StockPickingBatch(models.Model):
+    _inherit = "stock.picking.batch"
+
+    l10n_ro_edi_stock_required = fields.Boolean(string="eTransport Required")
+    l10n_ro_edi_carrier_id = fields.Many2one(
+        "delivery.carrier",
+        string="Delivery",
+        compute="_compute_l10n_ro_edi_carrier_id",
+        inverse="_inverse_l10n_ro_edi_carrier_id",
+    )
+    carrier_tracking_ref = fields.Char(string="Tracking Reference", copy=False)
+    l10n_ro_shipping_weights = fields.Boolean(string="Custom Shipping Weights")
+    l10n_ro_shipping_weight_lines = fields.One2many(
+        "l10n.ro.stock.picking.weight.line", "batch_id", string="Shipping Weight Lines"
+    )
+    total_net_weight = fields.Float()
+    total_gross_weight = fields.Float()
+    # vezi câmpul omonim de pe transfer (`l10n_ro_etransport_enhancement`)
+    l10n_ro_etransport_post_outage = fields.Boolean(
+        string="Post-outage Declaration",
+        copy=False,
+        help="Check it only when the notification is submitted after an outage of the RO e-Transport system "
+        "(GEO 41/2022 art. 8 par. 1^3).",
+    )
+    l10n_ro_shipping_weight_lines_warning = fields.Char(compute="_compute_l10n_ro_shipping_weight_lines_warning")
+    # documentele declarate direct pe lot (un camion = un CMR)
+    l10n_ro_etransport_document_ids = fields.One2many(
+        "l10n.ro.etransport.document",
+        "batch_id",
+        string="Documente însoțitoare (lot)",
+        copy=False,
+    )
+    # tot ce se trimite la ANAF pentru lot: documentele lotului + cele ale
+    # transferurilor din el (avizele)
+    l10n_ro_etransport_all_document_ids = fields.Many2many(
+        "l10n.ro.etransport.document",
+        string="Documente însoțitoare (toate)",
+        compute="_compute_l10n_ro_etransport_all_document_ids",
+    )
+
+    @api.depends("l10n_ro_shipping_weights", "l10n_ro_shipping_weight_lines.move_id", "picking_ids.move_ids.quantity")
+    def _compute_l10n_ro_shipping_weight_lines_warning(self):
+        """Ca pe transfer, dar pe toate mișcările lotului: fără avertisment,
+        greutățile incomplete pleacă la ANAF fără să se vadă că lipsesc."""
+        for batch in self:
+            if not batch.l10n_ro_shipping_weights:
+                batch.l10n_ro_shipping_weight_lines_warning = False
+                continue
+            expected = batch.picking_ids.move_ids.filtered(lambda m: m.quantity > 0)
+            missing = expected - batch.l10n_ro_shipping_weight_lines.move_id
+            if missing:
+                batch.l10n_ro_shipping_weight_lines_warning = self.env._(
+                    '%(missing)s of %(total)s moves have no computed weight line. Press "Get lines".',
+                    missing=len(missing),
+                    total=len(expected),
+                )
+            else:
+                batch.l10n_ro_shipping_weight_lines_warning = False
+
+    @api.depends("l10n_ro_etransport_document_ids", "picking_ids.l10n_ro_etransport_document_ids")
+    def _compute_l10n_ro_etransport_all_document_ids(self):
+        for batch in self:
+            batch.l10n_ro_etransport_all_document_ids = (
+                batch.l10n_ro_etransport_document_ids | batch.picking_ids.l10n_ro_etransport_document_ids
+            )
+
+    l10n_ro_transport_partner_id = fields.Many2one(
+        "res.partner",
+        string="Transport Partner",
+        compute="_compute_l10n_ro_transport_partner_id",
+        inverse="_inverse_l10n_ro_transport_partner_id",
+        store=True,
+    )
+
+    @api.depends("picking_ids.l10n_ro_transport_partner_id")
+    def _compute_l10n_ro_transport_partner_id(self):
+        for batch in self:
+            # fără transferuri câmpul se golește, altfel păstra valoarea veche (e stocat)
+            batch.l10n_ro_transport_partner_id = batch.picking_ids[:1].l10n_ro_transport_partner_id
+
+    def _inverse_l10n_ro_transport_partner_id(self):
+        for batch in self:
+            for picking in batch.picking_ids:
+                picking.l10n_ro_transport_partner_id = batch.l10n_ro_transport_partner_id
+
+    @api.depends("picking_ids.carrier_id")
+    def _compute_l10n_ro_edi_carrier_id(self):
+        for batch in self:
+            # transferurile lotului curent, nu ale primului lot din `self`
+            batch.l10n_ro_edi_carrier_id = batch.picking_ids[:1].carrier_id
+
+    def _inverse_l10n_ro_edi_carrier_id(self):
+        for batch in self:
+            for picking in batch.picking_ids:
+                picking.carrier_id = batch.l10n_ro_edi_carrier_id
+
+    def _compute_l10n_ro_edi_stock_enable(self):
+        res = super()._compute_l10n_ro_edi_stock_enable()
+        for picking in self:
+            picking.l10n_ro_edi_stock_enable = picking.l10n_ro_edi_stock_required
+        return res
+
+    @api.depends("l10n_ro_edi_stock_enable", "state", "l10n_ro_edi_stock_state")
+    def _compute_l10n_ro_edi_stock_enable_send(self):
+        res = super()._compute_l10n_ro_edi_stock_enable_send()
+        for picking in self:
+            picking.l10n_ro_edi_stock_enable_send = (
+                picking.l10n_ro_edi_stock_enable
+                and picking.l10n_ro_edi_stock_state in (False, "stock_sending_failed")
+                and not picking._l10n_ro_edi_stock_get_last_document("stock_validated")
+            )
+        return res
+
+    def _l10n_ro_etransport_declared_documents(self):
+        """Pe lot se declară documentele lotului (ex. un CMR pentru tot camionul)
+        plus cele ale transferurilor din el (avizele)."""
+        return self.l10n_ro_etransport_all_document_ids
+
+    def action_l10n_ro_edi_stock_fetch_status(self):
+        res = super().action_l10n_ro_edi_stock_fetch_status()
+        for picking in self:
+            if picking.l10n_ro_edi_stock_state == "stock_validated":
+                picking.carrier_tracking_ref = picking.l10n_ro_edi_stock_document_uit
+
+        return res
+
+    def l10n_ro_compute_weight_lines(self):
+        self.picking_ids.l10n_ro_compute_weight_lines()
+
+    def l10n_ro_distribute_weights(self):
+        for batch in self:
+            if not batch.l10n_ro_shipping_weight_lines:
+                continue
+            if float_is_zero(batch.total_net_weight, precision_digits=4) or float_is_zero(
+                batch.total_gross_weight, precision_digits=4
+            ):
+                raise UserError(self.env._("Total net and gross weights must be greater than 0."))
+
+            current_net_total = sum(batch.l10n_ro_shipping_weight_lines.mapped("net_weight"))
+            current_gross_total = sum(batch.l10n_ro_shipping_weight_lines.mapped("gross_weight"))
+            net_diff = batch.total_net_weight - current_net_total
+            gross_diff = batch.total_gross_weight - current_gross_total
+
+            if not float_is_zero(net_diff, precision_digits=4) or not float_is_zero(gross_diff, precision_digits=4):
+                for line in batch.l10n_ro_shipping_weight_lines:
+                    if not float_is_zero(current_net_total, precision_digits=4):
+                        line.net_weight += net_diff * (line.net_weight / current_net_total)
+                    else:
+                        line.net_weight = batch.total_net_weight / len(batch.l10n_ro_shipping_weight_lines)
+
+                    if not float_is_zero(current_gross_total, precision_digits=4):
+                        line.gross_weight += gross_diff * (line.gross_weight / current_gross_total)
+                    else:
+                        line.gross_weight = batch.total_gross_weight / len(batch.l10n_ro_shipping_weight_lines)
+
+
+class StockPickingWeightLine(models.Model):
+    _inherit = "l10n.ro.stock.picking.weight.line"
+
+    batch_id = fields.Many2one("stock.picking.batch", index=True)
+
+    @api.onchange("picking_id")
+    def _onchange_picking_id(self):
+        self.batch_id = self.picking_id.batch_id
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get("batch_id") and vals.get("picking_id"):
+                picking = self.env["stock.picking"].browse(
+                    vals["picking_id"] if isinstance(vals["picking_id"], int) else vals["picking_id"][0]
+                )
+                vals["batch_id"] = picking.batch_id.id
+        return super().create(vals_list)

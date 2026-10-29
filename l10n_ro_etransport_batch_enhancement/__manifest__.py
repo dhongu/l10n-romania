@@ -1,0 +1,29 @@
+# ©  2025 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+{
+    "name": "e-Transport for Transfer Batches",
+    "version": "20.0.0.4.2",
+    "author": "Terrabit, Dorin Hongu",
+    "website": "https://www.terrabit.ro",
+    "summary": "eTransport Batch Enhancement",
+    "countries": ["ro"],
+    "category": "Localization",
+    "depends": [
+        "l10n_ro_edi",
+        "l10n_ro_edi_stock",
+        "l10n_ro_etransport_enhancement",
+        "l10n_ro_stock_picking_batch_report",
+    ],
+    "license": "AGPL-3",
+    # "price": 25.00,
+    # "currency": "EUR",
+    "data": [
+        "views/stock_picking_batch_view.xml",
+    ],
+    "images": ["static/description/main_screenshot.png"],
+    "development_status": "Mature",
+    "maintainers": ["dhongu"],
+    "extra_buy": True,
+}

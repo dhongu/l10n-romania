@@ -1,0 +1,21 @@
+# ©  2008-2020 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+{
+    "name": "Romania - Batch Delivery Note",
+    "summary": "Rapoarte din batch: aviz",
+    "images": ["static/description/main_screenshot.png"],
+    "license": "AGPL-3",
+    "version": "20.0.0.0.7",
+    "development_status": "Mature",
+    "author": "Dan Stoica, Terrabit",
+    "website": "https://www.terrabit.ro",
+    "category": "Localization",
+    "countries": ["ro"],
+    "depends": ["l10n_ro_picking_report", "stock"],
+    "excludes": ["l10n_ro_stock_picking_comment_template"],
+    "data": [
+        "views/l10n_ro_batch_report.xml",
+    ],
+}

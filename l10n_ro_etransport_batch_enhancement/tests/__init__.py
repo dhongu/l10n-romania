@@ -1,0 +1,8 @@
+# © 2025 Deltatech
+#              Dorin Hongu <dhongu(@)gmail(.)com
+# See README.rst file on addons root folder for license details
+
+from . import test_weight_lines_warning
+from . import test_batch_declaration
+from . import test_batch_carrier
+from . import test_screenshots

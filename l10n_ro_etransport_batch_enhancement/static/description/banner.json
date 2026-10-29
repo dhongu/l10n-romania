@@ -1,0 +1,10 @@
+{
+  "title": "e-Transport for Transfer Batches",
+  "summary": "Manage carrier and weights once per batch",
+  "lang": "en",
+  "features": [
+    "Carrier and transport partner on batch",
+    "Weights spread across batch lines",
+    "UIT number on the batch delivery report"
+  ]
+}
