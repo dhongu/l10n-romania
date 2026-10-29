@@ -26,13 +26,15 @@ msgstr "%(vat)s nu este un CUI valid."
 #: model_terms:ir.ui.view,arch_db:l10n_ro_partner_autocomplete.res_config_settings_view_form_anaf
 msgid ""
 "<i class=\"oi oi-filled me-1\" data-icon=\"info\" title=\"Info\"/>\n"
-"                    Romanian companies (a CUI, with or without RO) are filled in from ANAF, without\n"
-"                    IAP credits. The credits are used only for a search by name and for companies\n"
-"                    from other countries."
+"                    Romanian companies are filled in from ANAF, without IAP credits: type the CUI\n"
+"                    in the name or the Company ID, with or without RO, or in the Tax ID with RO.\n"
+"                    Credits are used only for a company chosen from a search by name and for\n"
+"                    companies from other countries."
 msgstr ""
 "<i class=\"oi oi-filled me-1\" data-icon=\"info\" title=\"Informații\"/>\n"
-"                    Firmele din România (un CUI, cu sau fără RO) se completează din ANAF, fără\n"
-"                    credite IAP. Creditele se folosesc doar la căutarea după nume și pentru firmele\n"
+"                    Firmele din România se completează din ANAF, fără credite IAP: tastați CUI-ul\n"
+"                    în nume sau în ID Companie, cu sau fără RO, ori în TVA cu RO. Creditele se\n"
+"                    folosesc doar pentru o firmă aleasă dintr-o căutare după nume și pentru firmele\n"
 "                    din alte țări."
 
 #. module: l10n_ro_partner_autocomplete
@@ -51,7 +53,7 @@ msgstr "La ANAF nu există nicio firmă înregistrată cu %(vat)s."
 #. odoo-python
 #: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
 msgid "ANAF lists the company as an inactive taxpayer."
-msgstr "ANAF arată firma ca și contribuabil inactiv."
+msgstr "ANAF arată firma drept contribuabil inactiv."
 
 #. module: l10n_ro_partner_autocomplete
 #. odoo-python

@@ -5,11 +5,14 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
-            <!-- In 20.0 the Tax ID shares a row with the identifiers button: the link goes below it -->
+            <!-- In 20.0 the Tax ID shares a row with the identifiers button: the link goes below it.
+                 The identifiers block is laid out in the cells of the group grid (display: contents),
+                 so the link takes a whole row, or it shifts the identifier labels off their values -->
             <xpath expr="//div[@id='vat_div']" position="after">
                 <field name="country_code" invisible="1" />
                 <div
                     class="d-flex justify-content-end"
+                    style="grid-column: 1 / -1"
                     invisible="not is_company or parent_id or country_code != 'RO' or not vat"
                 >
                     <button

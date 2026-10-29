@@ -8,6 +8,7 @@ from markupsafe import Markup, escape
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import format_date
 
 _logger = logging.getLogger(__name__)
 
@@ -136,7 +137,7 @@ class ResPartner(models.Model):
             partner.message_post(
                 body=self.env._(
                     "Company data taken from ANAF on %(date)s.",
-                    date=fields.Date.to_string(fields.Date.context_today(partner)),
+                    date=format_date(partner.env, fields.Date.context_today(partner)),
                 ),
                 subtype_xmlid="mail.mt_note",
             )
