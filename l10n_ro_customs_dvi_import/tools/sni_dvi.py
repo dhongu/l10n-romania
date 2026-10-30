@@ -33,6 +33,8 @@ HEADER_TOTAL_RE = re.compile(
     r"Suma totală\s*(?P<amount>[\d.]+)\s*/\s*Metoda de plată\s*(?P<method>[A-Z]?)"
 )
 TAX_START = "Tip taxă:"
+# The customs office of the declaration: the label carries its reference number, the name is to its right.
+CUSTOMS_OFFICE_RE = re.compile(r"^Biroul vamal (?P<code>RO[A-Z]{2}\d{4})$")
 # Supporting document ``N380`` = commercial invoice; the reference may contain slashes itself,
 # and ends at the first pair of empty sub-fields (`` /  /``).
 INVOICE_DOC_RE = re.compile(r"\bN380\s*/\s*(?P<ref>.+?)\s*/\s*/")
@@ -95,6 +97,8 @@ class SniDvi:
     lrn: str = ""
     release_date: date | None = None
     importer_vat: str = ""
+    customs_office_code: str = ""
+    customs_office_name: str = ""
     item_count: int = 0
     currency: str = ""
     exchange_rate: float = 0.0
@@ -251,6 +255,9 @@ def parse_lines(lines):
         elif line.text == "Importatorul - [13 04]" and not dvi.importer_vat:
             values = [value for value in _values_right(lines, line) if value.startswith("Nr:")]
             dvi.importer_vat = values[0][3:].strip() if values else ""
+        elif (match := CUSTOMS_OFFICE_RE.match(line.text)) and not dvi.customs_office_code:
+            dvi.customs_office_code = match["code"]
+            dvi.customs_office_name = next(iter(_values_right(lines, line)), "")
         elif line.text == "Total articole":
             dvi.item_count = int(_to_float(next(iter(_values_right(lines, line)), "")))
         elif line.text == "Moneda de facturare - [14 05]" and not dvi.currency:

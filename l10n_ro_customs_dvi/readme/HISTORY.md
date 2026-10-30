@@ -1,3 +1,17 @@
+## 19.0.2.3.0 (2026-10-31)
+
+- The customs office is a contact: *Customs Office Code* on the partner (named from the native list of
+  `l10n_ro_edi_stock`), *Customs Office* on the wizard and on the DVI. It is the partner of the lines on
+  account 446 (customs duty and import VAT paid at customs); the header of the entry keeps the foreign
+  supplier. The contact has a *DVIs* button and gets a note in its chatter for every posted DVI.
+- Customs payment of the DVI from the reconciliation of account 446: *Customs Payment* (Not Paid /
+  Partially Paid / Paid, native ribbon) and *Amount Due at Customs*, with filters and grouping.
+- Customs duty per article: the wizard takes the articles of the declaration (TARIC code, customs value,
+  customs duty) and creates one landed cost line per article, split only on the products of the
+  article, proposed from their commodity code (Intrastat, else HS). An article with customs duty and no
+  products blocks the validation; a product chosen by hand without commodity code gets the NC code of
+  the article. Without articles, the DVI works as before.
+
 ## 19.0.2.2.0 (2026-10-29)
 
 - The entry of a DVI has the document type *Import (DVI)* (`l10n_ro_account_move_document_type`,

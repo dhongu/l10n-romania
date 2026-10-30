@@ -230,3 +230,13 @@ msgstr ""
 #: model:ir.model,name:l10n_ro_customs_dvi_import.model_account_invoice_dvi
 msgid "account.invoice.dvi"
 msgstr "account.invoice.dvi"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The customs office %(code)s has no contact yet: it is created when the DVI "
+"is applied."
+msgstr ""
+"Biroul vamal %(code)s nu are încă un contact: acesta se creează la aplicarea"
+" DVI-ului."

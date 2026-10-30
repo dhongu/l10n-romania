@@ -224,28 +224,27 @@ alin. (1) lit. d)).
 Baza importului ajunge în decontul de TVA printr-o **pereche tehnică echilibrată pe contul 473**, de
 valoarea bazei, care poartă eticheta fiscală de bază; fără ea, rândul din D300 ar avea TVA şi bază zero.
 
-Biroul vamal nu este partener
-------------------------------
+Biroul vamal ca partener
+------------------------
 
-Întrebare recurentă la implementare: *se creează câte un partener pentru fiecare birou vamal, ca să i
-se urmărească soldul?* **Nu.**
+Drepturile de import se plătesc în **contul de Trezorerie al biroului vamal** la care s-a depus
+declaraţia: în listele de plată în vamă ale băncilor, fiecare birou apare cu cod de înregistrare şi
+cont IBAN propriu de Trezorerie. Entitatea juridică rămâne **Autoritatea Vamală Română** (Legea
+268/2021), dar biroul este creditorul la care se face plata şi documentul care trebuie urmărit:
+DVI-urile depuse acolo şi ce s-a plătit pentru fiecare.
 
-### Birourile vamale nu au CUI propriu
+### Contactul biroului vamal
 
-Entitatea juridică este **Autoritatea Vamală Română** — instituţie publică cu personalitate juridică
-în subordinea Ministerului Finanţelor (Legea 268/2021). Direcţiile regionale vamale şi birourile ori
-punctele vamale de interior se înfiinţează şi se desfiinţează **prin ordin al preşedintelui AVR**,
-cele de frontieră prin hotărâre de Guvern. Sunt structuri în subordine, nu entităţi juridice separate.
+* Un contact de tip companie, cu **Cod birou vamal** — codul de referinţă din DVI (ex. `ROBU1400`).
+  Denumirea vine din lista nativă `CUSTOMS_OFFICES` din `l10n_ro_edi_stock`, de forma
+  `('402802', "BVI Târguri și Expoziții (ROBU1400)")`.
+* Se creează automat la primul DVI importat din PDF-ul SNI (`l10n_ro_customs_dvi_import`), care
+  citeşte biroul din declaraţie; altfel se alege în wizard. CUI-ul şi IBAN-ul de Trezorerie se
+  completează o singură dată pe contact, iar reconcilierea bancară recunoaşte apoi plata după IBAN.
+* Pe contact, butonul **DVI-uri** deschide declaraţiile biroului, grupate după starea plăţii; la fiecare
+  DVI postat, în chatter-ul biroului rămâne o notă cu MRN-ul, taxa vamală şi TVA-ul.
 
-Ce are fiecare birou vamal este un **cod de nomenclator**, nu un cod fiscal: cod ANAF plus cod de
-birou vamal în format COL. Localizarea nativă îl modelează ca `Selection`, nu ca `res.partner` — vezi
-`CUSTOMS_OFFICES` din `l10n_ro_edi_stock/models/stock_picking.py`, de forma
-`('12801', "BVI Alba Iulia (ROBV0300)")`.
-
-### Soldul se urmăreşte pe cont, nu pe partener
-
-Taxa vamală, accizele şi TVA-ul vamal se varsă la **bugetul de stat, prin Trezorerie**, pe conturi de
-venituri bugetare. Nu există o relaţie de tip furnizor cu biroul vamal.
+### Soldul: pe cont şi pe birou
 
 Contrapartida este contul **446 „Alte impozite, taxe şi vărsăminte asimilate”**, cont de decontare cu
 bugetul statului; modulul îl foloseşte prin analiticul **4462** (scadenţă până la un an — în planul RO,
@@ -254,12 +253,32 @@ vamale aferente aprovizionărilor din import** (213, 214, 301, 302, 303, **371**
 cu „plăţile efectuate la bugetul de stat […] (512)”, iar „soldul contului reprezintă sumele datorate
 bugetului statului”.
 
-Soldul pe care doriţi să-l urmăriţi **există deja** — pe cont, nu pe o fişă de terţ. Urmărirea per
-declaraţie se face prin reconciliere pe 446, cu **MRN-ul ca ancoră**: modulul scrie numărul de DVI în
-`dvi_number` pe landed cost şi îl propagă ca `ref` pe nota contabilă, tocmai ca linia din extrasul
-bancar să poată fi potrivită cu obligaţia.
+Liniile de pe 446 — taxa vamală şi TVA-ul plătit în vamă — au **biroul vamal ca partener**; antetul notei
+păstrează furnizorul extern, pe care îl citeşte jurnalul de TVA. Urmărirea per declaraţie se face prin
+reconciliere pe 446, cu **MRN-ul ca ancoră**: numărul de DVI e `ref`-ul notei. Din reconciliere, DVI-ul
+arată **Plată la vamă** (Neachitat / Achitat parţial / Achitat, cu panglica nativă) şi **Rest de plată la
+vamă**. Fişa biroului se închide prin plăţi, nu prin facturi. Fără datorie la vamă (certificat de
+amânare, regim 4200, fără taxă vamală), DVI-ul nu are stare de plată.
 
-Un partener „Vama” ar adăuga doar o fişă de terţ care nu se închide niciodată prin facturi.
+Taxa vamală pe articol
+----------------------
+
+Taxa vamală se calculează **pe articol**, după codul TARIC: în aceeaşi declaraţie, un articol poate avea
+1,7%, altul 0%. Repartizată pe toate produsele recepţionate, taxa unui articol ajunge şi pe produsele
+altuia, iar costul de achiziţie al ambelor iese greşit (OMFP 1802/2014 pct. 75).
+
+* Fiecare articol din DVI devine o **linie de cost** în tabul nativ *Costuri adiţionale*, cu codul
+  TARIC şi taxa vamală (A00) a articolului — şi articolele cu taxă 0, ca produsele lor să primească
+  codul.
+* Coloana **Produse** a liniei propune produsele recepţionate al căror cod de mărfuri (codul Intrastat,
+  altfel codul HS) începe codul TARIC; produsele se pot schimba manual.
+* La calcul şi la validare, taxa liniei se repartizează **doar pe produsele ei**, cu metoda de repartizare
+  a liniei. Un articol cu taxă vamală, dar fără produse, **blochează validarea**.
+* La validare, produsul ales manual, fără cod de mărfuri, primeşte codul NC al articolului (primele opt
+  cifre din TARIC) în câmpul nativ; un cod existent nu se suprascrie. Ce s-a completat apare în
+  chatter-ul DVI-ului.
+* Articolele se completează din PDF-ul SNI (`l10n_ro_customs_dvi_import`) sau manual în wizard. Fără
+  articole, DVI-ul se comportă ca înainte: o singură linie de taxă vamală, pe toate produsele.
 
 ### Cine este totuşi partener
 

@@ -27,6 +27,7 @@ class TestSniDviParser(BaseCase):
         self.assertEqual(dvi.totals["B00"]["method"], "D")
         self.assertEqual([item.tax_amount("B00") for item in dvi.items], [5349.0, 792.0])
         self.assertEqual([item.taric for item in dvi.items], ["0808108090", "0809400500"])
+        self.assertEqual((dvi.customs_office_code, dvi.customs_office_name), ("ROIS4650", "BV Iasi"))
         self.assertEqual(
             [(ref.number, ref.date) for ref in dvi.invoice_refs],
             [("EXP/2026/00001", "10.09.2026"), ("002/I", "10.09.2026")],

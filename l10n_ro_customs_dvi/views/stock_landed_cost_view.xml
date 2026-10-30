@@ -13,6 +13,8 @@
                         <field name="landed_type"/>
                         <field name="dvi_number" invisible="landed_type == 'standard'"/>
                         <field name="customs_regime" invisible="landed_type == 'standard'"/>
+                        <field name="customs_office_id" invisible="landed_type == 'standard'"
+                               context="{'default_is_company': True}"/>
                     </group>
                     <group invisible="landed_type == 'standard'">
                         <field name="tax_id"/>
@@ -29,6 +31,20 @@
                     </group>
                 </group>
             </notebook>
+            <xpath expr="//sheet/div[hasclass('oe_title')]" position="before">
+                <widget name="web_ribbon" title="Paid" invisible="customs_payment_state != 'paid'"/>
+                <widget name="web_ribbon" title="Partially Paid" bg_color="text-bg-warning"
+                        invisible="customs_payment_state != 'partial'"/>
+            </xpath>
+            <!-- Un articol din DVI pe linie: codul TARIC și produsele pe care se repartizează taxa lui -->
+            <xpath expr="//field[@name='cost_lines']/list/field[@name='name']" position="after">
+                <field name="l10n_ro_dvi_taric_code" optional="show" column_invisible="parent.landed_type != 'dvi'"/>
+                <field name="l10n_ro_dvi_product_ids" widget="many2many_tags" optional="show"
+                       column_invisible="parent.landed_type != 'dvi'"/>
+            </xpath>
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="customs_amount_due" invisible="landed_type != 'dvi' or not customs_payment_state"/>
+            </xpath>
         </field>
     </record>
 
@@ -40,6 +56,7 @@
         <field name="arch" type="xml">
             <field name="picking_ids" position="after">
                 <field name="dvi_number"/>
+                <field name="customs_office_id"/>
             </field>
             <filter name="done" position="after">
                 <separator/>
@@ -49,6 +66,14 @@
                 <filter name="filter_vat_guarantee_blocked"
                         string="VAT Guarantee Blocked"
                         domain="[('vat_guarantee_state', '=', 'blocked')]"/>
+                <filter name="filter_customs_not_paid"
+                        string="Due at Customs"
+                        domain="[('customs_payment_state', 'in', ('not_paid', 'partial'))]"/>
+            </filter>
+            <filter name="group_by_month" position="after">
+                <filter string="Customs Office" name="group_by_customs_office" context="{'group_by': 'customs_office_id'}"/>
+                <filter string="Customs Payment" name="group_by_customs_payment_state"
+                        context="{'group_by': 'customs_payment_state'}"/>
             </filter>
         </field>
     </record>
@@ -61,12 +86,18 @@
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <field name="dvi_number" optional="show"/>
+                <field name="customs_office_id" optional="hide"/>
             </field>
             <!-- Suma repartizată, ca lista lunară să poată fi confruntată cu evidența vamală -->
             <field name="date" position="after">
                 <field name="amount_total" optional="show" sum="Total"/>
                 <field name="vat_guarantee_amount" optional="hide" sum="Total"/>
                 <field name="vat_guarantee_state" optional="hide"/>
+                <field name="customs_amount_due" optional="show" sum="Total"/>
+                <field name="customs_payment_state" widget="badge" optional="show"
+                       decoration-danger="customs_payment_state == 'not_paid'"
+                       decoration-warning="customs_payment_state == 'partial'"
+                       decoration-success="customs_payment_state == 'paid'"/>
             </field>
         </field>
     </record>

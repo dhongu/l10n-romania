@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Biroul vamal: codul lui și DVI-urile depuse acolo, pe fișa nativă a contactului -->
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form.customs.office</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_customs_dvi" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                        invisible="not l10n_ro_customs_office_code">
+                    <field name="l10n_ro_customs_dvi_count" widget="statinfo" string="DVIs"/>
+                </button>
+            </div>
+            <field name="ref" position="after">
+                <field name="l10n_ro_customs_office_code" invisible="not is_company" placeholder="e.g. ROBU1400"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
