@@ -271,15 +271,18 @@ Accesați **Setări → Tehnic → Automatizare → Acțiuni planificate** (mod 
 
 | Cron | Orar implicit | Ce face |
 |---|---|---|
-| **e-Factura: Trimitere în SPV** | zilnic (prima rulare la 22:00 UTC, adică 00:00/01:00 ora României) | citește întâi starea facturilor trimise, apoi trimite în SPV facturile de vânzare confirmate, destinate SPV, cu data contabilă din ultimele 30 de zile **anterioare zilei curente în UTC** (la rularea de la 00:00/01:00 ora României se trimit facturile cu data de până **alaltăieri** inclusiv; cele de ieri pleacă la rularea din noaptea următoare), încă netrimise sau cu trimiterea eșuată; câte 20 pe rulare (dacă sunt mai multe, se reia după 5 minute); trimite raportul pe email |
+| **e-Factura: Trimitere în SPV** | zilnic (prima rulare la 22:00 UTC, adică 00:00/01:00 ora României) | citește întâi starea facturilor trimise, apoi trimite în SPV facturile de vânzare confirmate, destinate SPV, cu data contabilă din ultimele 30 de zile **anterioare zilei curente în UTC** (la rularea de la 00:00/01:00 ora României se trimit facturile cu data de până **alaltăieri** inclusiv; cele de ieri pleacă la rularea din noaptea următoare), încă netrimise sau cu trimiterea eșuată; câte 20 pe rulare (dacă sunt mai multe, se reia după 5 minute, dar numai dacă cel puțin o factură din lot a ajuns în SPV); trimite raportul pe email |
 | **e-Factura: Preluare din SPV** | la 4 ore | citește din SPV starea facturilor aflate „Trimis", cu data contabilă din ultimele 30 de zile anterioare zilei curente, câte 20 pe rulare; se reia după 2 minute **numai** dacă lotul a fost plin (20) și ANAF a răspuns pentru cel puțin o factură; altfel, la următoarea rulare (4 ore) |
 | **E-Factura: Trimite email facturi validate** | la 15 minute | trimite clientului factura pe email, o singură dată, după ce SPV a validat-o (aceeași fereastră: ultimele 30 de zile, fără ziua curentă) |
 
 Reguli de selecție la trimiterea automată:
 
 - o factură a cărei încărcare a eșuat (eroare de conexiune, XML invalid, CUI lipsă) rămâne fără
-  stare e-Factura și este reluată la fiecare rulare, până reușește sau iese din fereastra de 30 de
-  zile; eroarea se vede în istoricul facturii;
+  stare e-Factura și este reluată la rulările următoare, de cel mult **3 ori**; după al treilea eșec
+  cron-ul o sare și o raportează la *Sărite*. Eroarea se vede în istoricul facturii, iar eșecurile
+  se numără pe factură, în câmpul „Trimiteri SPV eșuate (cron)";
+- în lot intră întâi facturile netrimise încă, apoi cele care au mai eșuat;
+- o factură readusă în ciornă și reconfirmată primește din nou toate cele 3 încercări;
 - o factură **respinsă de ANAF** („Respins") **nu** este retrimisă automat: corectați-o și folosiți
   „Retrimite în SPV" (Pasul 9);
 - o factură **fără index** („Neindexat") nu este retrimisă automat (Pasul 8);
@@ -303,11 +306,13 @@ emailului este în UTC (ora serverului), nu ora României.
   epuizate (necesită atenție)*; pe fiecare rând numărul și lista facturilor.
 - **Verificați** — „Trimise în SPV" înseamnă doar că XML-ul a fost încărcat; confirmarea vine
   ulterior, la citirea stării. De aceea rândul „Validate de SPV" este de regulă **0**. Rândul
-  *Eșuate* include și facturile rămase fără index la această rulare. Pe Odoo 19 rândurile
-  *Reîncercări* și *Sărite* rămân **0** (vezi secțiunea 11).
+  *Eșuate* include și facturile rămase fără index la această rulare (acestea nu se numără ca
+  eșecuri și nu sunt retrimise). *Reîncercări* arată facturile care au mai eșuat cel puțin o dată,
+  *Sărite* pe cele care au epuizat cele 3 încercări.
 - **Acționați** — pentru fiecare factură de la *Eșuate*, deschideți factura, citiți eroarea din
-  istoric și corectați cauza; cron-ul o reia la rularea următoare. O factură cu starea „Neindexat"
-  se tratează ca în Pasul 8.
+  istoric și corectați cauza; cron-ul o reia la rularea următoare. O factură de la *Sărite* nu mai pleacă
+  automat: după corectare, trimiteți-o cu „Trimite în SPV" sau readuceți-o în ciornă și
+  reconfirmați-o. O factură cu starea „Neindexat" se tratează ca în Pasul 8.
 
 Dacă nu a existat nicio factură de procesat, raportul nu se trimite.
 
@@ -460,8 +465,8 @@ contabilă mai veche de 30 de zile (nu mai sunt trimise automat și nici nu li s
 | Generarea XML-ului eșuează după setarea `efactura.replace_unit_uom` | codul de unitate scris fără ghilimele | scrieți valoarea între ghilimele, ex. `'H87'` |
 | Generarea XML-ului eșuează după activarea `efactura.get_all_banks` | modulul care adaugă bifa pe contul bancar nu e instalat | instalați-l sau readuceți parametrul la `False` |
 | Raportul pe email nu sosește | „Email raport cron SPV" gol sau nicio factură de procesat la rulare | completați destinatarii; raportul se trimite doar când există facturi |
-| Aceeași factură apare zilnic la „Eșuate" | cauza erorii nu a fost corectată; cron-ul o reia la fiecare rulare | citiți eroarea din istoric și corectați partenerul sau factura |
-| Raport la fiecare 5 minute, cu aceleași facturi la „Eșuate" | peste 20 de facturi de trimis care eșuează persistent (ANAF indisponibil, token expirat): cron-ul se reia la 5 minute fără să avanseze; facturile mai vechi, chiar dacă sunt corecte, rămân netrimise | corectați cauza (token, parteneri) sau dezactivați temporar cron-ul; trimiteți între timp facturile mai vechi cu „Trimite în SPV" |
+| Aceeași factură apare la „Eșuate", apoi la „Sărite" | cauza erorii nu a fost corectată; după 3 eșecuri cron-ul nu o mai trimite | citiți eroarea din istoric, corectați partenerul sau factura, apoi „Trimite în SPV" |
+| Toate facturile din lot apar la „Eșuate" și cron-ul nu se reia | ANAF indisponibil sau token expirat: fără nicio factură încărcată, cron-ul așteaptă rularea următoare | verificați conexiunea SPV (token); facturile sunt reluate la rularea următoare, în limita celor 3 încercări |
 | Facturile nu pleacă deloc automat | compania nu are conexiune SPV (token ANAF) sau cron-ul e inactiv | configurați conexiunea SPV; activați cron-ul |
 | Clientul nu primește emailul după validare — opțiunea „Trimite în SPV fără email (cron)" e bifată | opțiunea oprește cron-ul de email pentru companie | debifați opțiunea: cron-ul trimite apoi emailul pentru **toate** facturile validate și netrimise din ultimele 30 de zile |
 | Clientul nu primește emailul după validare — fără adresă de email sau cu altă metodă de trimitere | cron-ul marchează și aceste facturi ca procesate și nu le mai reia | completați emailul clientului **și** trimiteți factura manual (butonul Trimite) |
@@ -503,10 +508,9 @@ Extrasul XML din Pasul 5 este text inline, nu fișier în folderul capturilor.
   mare. Operatorul are astfel cel puțin o zi pentru corecturi. Pentru o factură urgentă folosiți
   „Trimite în SPV", apoi, după câteva minute, „Preia starea E-Factura" (meniul Acțiuni) și
   trimiteți-o manual pe email: cron-urile de stare și de email nu iau factura din ziua curentă.
-- Pe Odoo 19, o încărcare eșuată nu lasă nicio urmă în starea e-Factura, deci limita de 3
-  reîncercări moștenită din 18.0 nu se mai aplică: factura este reluată la fiecare rulare, iar
-  rândurile *Reîncercări* și *Sărite* din raport rămân 0. Spuneți utilizatorilor să urmărească
-  rândul *Eșuate*.
+- Pe Odoo 19, o încărcare eșuată nu lasă nicio urmă în starea e-Factura, așa că modulul numără
+  eșecurile pe factură („Trimiteri SPV eșuate (cron)"). Spuneți utilizatorilor să urmărească
+  rândul *Sărite* din raport: acolo ajung facturile pe care cron-ul nu le mai încearcă.
 - Codul fiscal al clientului pleacă în XML exact cum e pe partener: subliniați în manual verificarea
   bifei „TVA aplicabil" pe clienții plătitori, altfel factura pleacă cu CUI fără „RO".
 - Parametrii `efactura.*` se schimbă doar din modul dezvoltator; păstrați tabelul din Pasul 2 în

@@ -11,3 +11,4 @@ from . import test_billing_reference
 from . import test_spv_reset_not_indexed
 from . import test_cron_fetch_status_retrigger
 from . import test_screenshots
+from . import test_cron_auto_send_retries

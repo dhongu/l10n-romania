@@ -1,3 +1,18 @@
+## 19.0.0.5.11 (2026-10-30)
+
+- **Limita de 3 reîncercări la trimiterea automată în SPV are efect.** Pe
+  Odoo 19+ o încărcare eșuată nu mai lasă niciun document e-Factura, deci limita nu
+  avea ce număra și factura era retrimisă la fiecare rulare.
+  - Cron-ul numără acum eșecurile pe factură (câmpul „Trimiteri SPV eșuate (cron)”);
+    după 3 eșecuri factura apare la „Sărite — reîncercări epuizate” în raport.
+  - Facturile netrimise încă au prioritate în lot față de cele care au mai eșuat.
+  - Readucerea facturii în ciornă resetează contorul.
+- **Cron-ul de trimitere se reia la 5 minute doar dacă a avansat.** Se reia când au
+  rămas facturi peste lot și cel puțin una a ajuns în SPV la rularea curentă; dacă
+  toate trimiterile eșuează (ANAF indisponibil, token expirat), se așteaptă rularea
+  următoare.
+- Necesită actualizarea modulului (câmp nou pe factură).
+
 ## 19.0.0.5.10 (2026-10-30)
 
 - **Cron-ul de fetch status nu se mai reia la nesfârșit.**
