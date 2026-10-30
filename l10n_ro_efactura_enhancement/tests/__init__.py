@@ -8,3 +8,4 @@ from . import test_monetary_total_payable
 from . import test_customer_company_vat
 from . import test_billing_reference
 from . import test_xml_parity_19
+from . import test_cron_auto_send_retries
