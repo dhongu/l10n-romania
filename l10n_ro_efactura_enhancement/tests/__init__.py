@@ -9,3 +9,4 @@ from . import test_customer_company_vat
 from . import test_billing_reference
 from . import test_xml_parity_19
 from . import test_cron_fetch_status_retrigger
+from . import test_screenshots
