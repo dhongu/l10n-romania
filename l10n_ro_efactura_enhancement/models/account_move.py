@@ -170,7 +170,22 @@ class AccountMove(models.Model):
                 invoices_name = invoices.mapped("name")
                 _logger.info(f"🔍 Fetch status for invoices: {invoices_name}")
                 invoices._l10n_ro_edi_fetch_invoice_sent_documents()
-                need_retrigger = True
+                # Retrigger only on real progress: the batch was full (more
+                # invoices may wait beyond the limit) AND at least one invoice
+                # left 'invoice_sent'. When ANAF has no answer yet nothing
+                # changes, and a retrigger would just re-fetch the same oldest
+                # invoices every 2 minutes; wait for the normal interval instead.
+                invoices.invalidate_recordset(["l10n_ro_edi_state"])
+                changed = invoices.filtered(lambda inv: inv.l10n_ro_edi_state != "invoice_sent")
+                if len(invoices) >= limit and changed:
+                    need_retrigger = True
+                else:
+                    _logger.info(
+                        "No retrigger for %s: %d of %d invoices changed state",
+                        company.name,
+                        len(changed),
+                        len(invoices),
+                    )
             else:
                 _logger.info("No invoices to fetch status")
 
