@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, models
+from odoo import _, api, models
 from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
@@ -21,6 +21,10 @@ class AccountMoveSend(models.AbstractModel):
         # on domestic B2C invoices that lack the country on the contact.
         partner_country = move.commercial_partner_id.country_id
         if partner_country and partner_country.code != "RO":
+            return False
+        # A previous send timed out: the upload may already be in the SPV, so
+        # any new upload (Send & Print, "Trimite in SPV") would be a duplicate.
+        if move.l10n_ro_edi_send_uncertain:
             return False
         return super()._is_ro_edi_applicable(move)
 
@@ -58,6 +62,19 @@ class AccountMoveSend(models.AbstractModel):
                 context = action.get("context", {})
                 context.pop("lastcall", None)
 
+        if uncertain_moves := moves.filtered("l10n_ro_edi_send_uncertain"):
+            alerts["l10n_ro_efactura_warning_uncertain_moves"] = {
+                "level": "warning",
+                "message": _(
+                    "Facturile următoare nu se trimit în SPV: trimiterea anterioară a expirat (timeout) "
+                    "fără răspuns de la ANAF și încărcarea poate fi deja în SPV: %s. "
+                    "Verificați în SPV; dacă factura nu a fost primită, apăsați „SPV: marchează verificat” "
+                    "pe factură și reluați trimiterea.",
+                    ", ".join(uncertain_moves.mapped("name")),
+                ),
+                "action_text": _("Vezi facturile"),
+                "action": uncertain_moves._get_records_action(name=_("Trimitere SPV incertă")),
+            }
         return alerts
 
 
@@ -89,6 +106,26 @@ class AccountMoveSendWizard(models.TransientModel):
             "views": [(False, "form")],
             "target": "new",
         }
+
+    def _compute_extra_edi_checkboxes(self):
+        # EXTENDS 'l10n_ro_edi'
+        res = super()._compute_extra_edi_checkboxes()
+        for wizard in self:
+            checkboxes = wizard.extra_edi_checkboxes or {}
+            if "ro_edi" not in checkboxes and wizard.move_id.l10n_ro_edi_send_uncertain:
+                readonly_checkbox = {
+                    "ro_spv": {
+                        "checked": False,
+                        "readonly": True,
+                        "label": _("Send E-Factura to SPV"),
+                        "question_circle": _(
+                            "Trimitere SPV incertă (timeout): verificați în SPV și apăsați "
+                            "„SPV: marchează verificat” înainte de a retrimite."
+                        ),
+                    }
+                }
+                wizard.extra_edi_checkboxes = {**checkboxes, **readonly_checkbox}
+        return res
 
     def _compute_l10n_ro_edi_send_enable(self):
         res = super()._compute_l10n_ro_edi_send_enable()
