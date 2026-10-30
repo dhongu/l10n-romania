@@ -1,3 +1,8 @@
+## 19.0.1.0.1 (2026-10-30)
+
+- Tests: the test partner gets a full Romanian address, so the posted customer invoices pass the
+  address check of `l10n_ro_efactura_enhancement` when both modules are installed (CI).
+
 ## 19.0.1.0.0 (2026-10-29)
 
 - New module (helpdesk ticket #9568): document type on journal entries, filled in automatically for
