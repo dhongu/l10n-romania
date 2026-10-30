@@ -76,11 +76,11 @@ După sosirea mărfii în vamă se înregistrează manual datele din DVI.
 - **4426** (TVA Deductibil) = **446** — suma TVA B00
 - **371.tranzit** (Taxe Vamale) = **446** — suma taxă vamală A00
 
-> **Nu este nevoie de un cont/partener „401.Vama”.** Taxele şi TVA-ul vamal se varsă la bugetul de
-> stat prin Trezorerie, nu către un furnizor; contul de decontare este **446**, al cărui sold
-> reprezintă chiar sumele datorate bugetului (OMFP 1802/2014, funcţiunea contului 446). Urmărirea per
-> declaraţie se face prin reconciliere pe 446, cu MRN-ul ca referinţă — vezi capitolul „Biroul vamal
-> nu este partener” din DESCRIPTION.
+> **Nu este nevoie de un cont „401.Vama”.** Taxele şi TVA-ul vamal se varsă la bugetul de stat prin
+> Trezorerie, nu către un furnizor; contul de decontare este **446**, al cărui sold reprezintă chiar
+> sumele datorate bugetului (OMFP 1802/2014, funcţiunea contului 446). Partenerul liniilor de pe 446
+> este **biroul vamal**, iar urmărirea per declaraţie se face prin reconciliere pe 446, cu MRN-ul ca
+> referinţă — vezi capitolul „Biroul vamal ca partener” din DESCRIPTION.
 >
 > Paşii 5 şi 6 de mai sus descriu varianta **manuală**, pentru fluxul cu locaţie de tranzit. Când se
 > foloseşte wizardul modulului, nota se generează automat — vezi „Completarea wizardului DVI” mai jos.
@@ -101,6 +101,8 @@ Se efectuează plata efectivă a taxelor vamale și a TVA-ului la import către 
 - Plata se face **exclusiv în RON**.
 - Nu generează diferențe de curs valutar.
 - După această plată, contul 446 rămâne cu sold zero pentru respectivul DVI.
+- Plata are ca partener **biroul vamal** (recunoscut după IBAN-ul de Trezorerie) şi se reconciliază cu
+  liniile de pe 446 ale DVI-ului; DVI-ul trece pe **Achitat**.
 
 ## Pasul 7 – Repartizarea Costurilor Adiționale (Landed Costs)
 
@@ -195,6 +197,8 @@ din factură.
 | **TVA la import** | cota aplicată de vamă la data acceptării declaraţiei **și regimul de plată** (vezi mai jos) | din declaraţie |
 | **Număr DVI** | MRN-ul declaraţiei | antetul declaraţiei |
 | **Data DVI** | data acceptării declaraţiei; determină cota și data notei | antetul declaraţiei |
+| **Birou vamal** | contactul biroului la care s-a depus declaraţia | antetul declaraţiei („Biroul vamal ROxx0000”) |
+| **Articole** | numărul, codul TARIC, valoarea în vamă şi taxa vamală a fiecărui articol; totalul dă **Taxă vamală** | segmentele de articol |
 
 **Taxa aleasă este comutatorul între cele două regimuri de la art. 326 din Codul fiscal:**
 
@@ -288,6 +292,10 @@ Butonul **este** switch-ul de politică contabilă; nu există un câmp separat 
 > **Onorariul poate fi scutit de TVA** dacă a fost efectiv inclus în baza B00 (art. 294 alin. (1)
 > lit. d), art. 289 alin. (2)): factura brokerului se emite atunci fără TVA, ca transportul.
 
+**Articol fără produse.** Când niciun produs recepţionat nu are codul de mărfuri al articolului,
+validarea se opreşte şi arată produsele fără cod. Alegeţi produsele pe linia articolului, în tabul
+*Costuri adiţionale*, sau completaţi codul de mărfuri pe produs.
+
 ## Verificări după validare
 
 - [ ] Baza din nota contabilă corespunde bazei poziţiei B00 din DVI.
@@ -296,4 +304,6 @@ Butonul **este** switch-ul de politică contabilă; nu există un câmp separat 
 - [ ] Regimul de plată este cel al societății: taxă obișnuită la plata efectivă, taxă cu două repartiții (4426 / 4427) fără plata în vamă.
 - [ ] Taxa vamală este creditată pe **4462**, iar TVA-ul de import apare pe **4426**, nu în costul mărfii.
 - [ ] Nota contabilă are ca referinţă MRN-ul declaraţiei.
+- [ ] Liniile de pe 446 au ca partener biroul vamal.
+- [ ] Taxa vamală a fiecărui articol a ajuns doar pe produsele lui (tabul *Ajustări de evaluare*).
 - [ ] Transportul extern apare o singură dată în costul stocului.

@@ -38,6 +38,7 @@
                             <field name="dvi_number" />
                             <field name="date" />
                             <field name="customs_regime" />
+                            <field name="customs_office_id" context="{'default_is_company': True}" />
                         </group>
                         <group string="Import VAT">
                             <field name="tax_id" />
@@ -46,9 +47,18 @@
                             <field name="vat_guarantee_amount" invisible="customs_regime != '4200'" />
                         </group>
                         <group string="Customs Duties">
-                            <field name="custom_duty" />
+                            <field name="custom_duty" readonly="line_ids" force_save="1" />
                         </group>
                     </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="number" />
+                            <field name="taric_code" />
+                            <field name="currency_id" column_invisible="True" />
+                            <field name="customs_value" sum="Total" />
+                            <field name="custom_duty" sum="Total" />
+                        </list>
+                    </field>
                     <footer>
                         <button name="do_create_dvi" string="Apply" type="object" class="oe_highlight" />
                         or

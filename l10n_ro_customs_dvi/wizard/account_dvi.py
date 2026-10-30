@@ -3,13 +3,42 @@
 
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 from ..models.stock_landed_cost import CUSTOMS_REGIMES
+
+
+class AccountInvoiceDVILine(models.TransientModel):
+    _name = "account.invoice.dvi.line"
+    _description = "Article of the customs declaration"
+    _order = "number, id"
+
+    wizard_id = fields.Many2one("account.invoice.dvi", required=True, ondelete="cascade")
+    currency_id = fields.Many2one(related="wizard_id.currency_id")
+    number = fields.Integer("Article")
+    taric_code = fields.Char("TARIC Code", required=True)
+    customs_value = fields.Monetary("Customs Value")
+    custom_duty = fields.Monetary("Customs Duty", help="Customs duty (A00) of the article.")
 
 
 class AccountInvoiceDVI(models.TransientModel):
     _name = "account.invoice.dvi"
     _description = "account.invoice.dvi"
+
+    customs_office_id = fields.Many2one(
+        "res.partner",
+        "Customs Office",
+        domain=[("l10n_ro_customs_office_code", "!=", False)],
+        help="Customs office where the declaration was lodged: the partner of the amounts due at customs.",
+    )
+    line_ids = fields.One2many(
+        "account.invoice.dvi.line",
+        "wizard_id",
+        "Articles",
+        help="Articles of the declaration, with their TARIC code and customs duty. Each article becomes a "
+        "line of the landed cost, split only on its own products. Without articles, the customs duty is "
+        "split on all the received products.",
+    )
 
     date = fields.Date(
         string="DVI Date",
@@ -77,6 +106,11 @@ class AccountInvoiceDVI(models.TransientModel):
         "deferral certificate, centralised clearance, entry in the declarant's records), so the "
         "entry is Dr 4426 = Cr 4427, with no payment and no debt to the budget.",
     )
+
+    @api.onchange("line_ids")
+    def _onchange_line_ids(self):
+        if self.line_ids:
+            self.custom_duty = sum(self.line_ids.mapped("custom_duty"))
 
     def _get_exempt_import_tax(self):
         """Taxa de achiziție scutită „0% EXEMPT” din planul RO (rd. 29 din D300, SAF-T 308302)."""
@@ -198,6 +232,36 @@ class AccountInvoiceDVI(models.TransientModel):
 
         return defaults
 
+    def _prepare_article_cost_lines(self):
+        """O linie de cost pe articol, cu taxa vamală a articolului (și 0, ca produsele să-și primească codul NC)."""
+        total = sum(self.line_ids.mapped("custom_duty"))
+        if self.currency_id.compare_amounts(total, self.custom_duty):
+            raise UserError(
+                self.env._(
+                    "The customs duty of the articles (%(articles)s) does not add up to the customs duty of the "
+                    "declaration (%(total)s).",
+                    articles=self.currency_id.format(total),
+                    total=self.currency_id.format(self.custom_duty),
+                )
+            )
+        product = self._get_or_create_custom_duty_product()
+        account = self._get_customs_account(product)
+        return [
+            (
+                0,
+                0,
+                {
+                    "name": self.env._("%(product)s - art. %(number)s", product=product.name, number=line.number),
+                    "product_id": product.id,
+                    "price_unit": line.custom_duty,
+                    "split_method": "by_current_cost_price",
+                    "account_id": account.id,
+                    "l10n_ro_dvi_taric_code": line.taric_code,
+                },
+            )
+            for line in self.line_ids
+        ]
+
     def do_create_dvi(self):
         active_id = self.env.context.get("active_id", False)
         invoice = self.env["account.move"].browse(active_id)
@@ -219,13 +283,16 @@ class AccountInvoiceDVI(models.TransientModel):
             "tax_id": self.tax_id.id,
             "tax_base": self.tax_base,
             "tax_value": self.tax_value,
+            "customs_office_id": self.customs_office_id.id,
         }
         if self.customs_regime == "4200" and self.vat_guarantee_amount:
             values.update(vat_guarantee_amount=self.vat_guarantee_amount, vat_guarantee_state="blocked")
         # câmpul nativ „Factură furnizor”; domeniul lui admite doar facturi (nu note de credit)
         if invoice.move_type == "in_invoice":
             values["vendor_bill_id"] = invoice.id
-        if self.custom_duty:
+        if self.line_ids:
+            values["cost_lines"] += self._prepare_article_cost_lines()
+        elif self.custom_duty:
             custom_duty_product = self._get_or_create_custom_duty_product()
 
             values["cost_lines"] += [

@@ -459,3 +459,267 @@ msgstr "Garanție TVA blocată"
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__vat_guarantee_amount
 msgid "VAT Held as Guarantee"
 msgstr "TVA reținut ca garanție"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/wizard/account_dvi.py:0
+msgid "%(product)s - art. %(number)s"
+msgstr "%(product)s - art. %(number)s"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__customs_amount_due
+msgid "Amount Due at Customs"
+msgstr "Rest de plată la vamă"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi_line__number
+msgid "Article"
+msgstr "Articol"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_account_invoice_dvi_line
+msgid "Article of the customs declaration"
+msgstr "Articol al declarației vamale"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__line_ids
+msgid "Articles"
+msgstr "Articole"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__line_ids
+msgid ""
+"Articles of the declaration, with their TARIC code and customs duty. Each "
+"article becomes a line of the landed cost, split only on its own products. "
+"Without articles, the customs duty is split on all the received products."
+msgstr ""
+"Articolele declarației, cu codul TARIC și taxa vamală. Fiecare articol "
+"devine o linie a costului adițional, repartizată doar pe produsele lui. Fără"
+" articole, taxa vamală se repartizează pe toate produsele recepționate."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_nc_code
+msgid "Combined Nomenclature code: the first eight digits of the TARIC code."
+msgstr ""
+"Codul din Nomenclatura Combinată: primele opt cifre ale codului TARIC."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid "Commodity code set from the DVI:"
+msgstr "Cod de mărfuri completat din DVI:"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__customs_office_id
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__customs_office_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_stock_landed_cost_search_dvi
+msgid "Customs Office"
+msgstr "Birou vamal"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_res_partner__l10n_ro_customs_office_code
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_res_users__l10n_ro_customs_office_code
+msgid "Customs Office Code"
+msgstr "Cod birou vamal"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__customs_payment_state
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_stock_landed_cost_search_dvi
+msgid "Customs Payment"
+msgstr "Plată la vamă"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi_line__customs_value
+msgid "Customs Value"
+msgstr "Valoare în vamă"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi_line__custom_duty
+msgid "Customs duty (A00) of the article."
+msgstr "Taxa vamală (A00) a articolului."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost__customs_amount_due
+msgid ""
+"Customs duty and import VAT on account 446 not yet reconciled with a "
+"payment."
+msgstr ""
+"Taxa vamală și TVA-ul de import de pe contul 446, încă nereconciliate cu o "
+"plată."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost__customs_office_id
+msgid ""
+"Customs office where the declaration was lodged. It is the partner of the "
+"customs duty and import VAT due on account 446, so that the payment to the "
+"Treasury is reconciled with the DVI."
+msgstr ""
+"Biroul vamal la care s-a depus declarația. Este partenerul taxei vamale și "
+"al TVA-ului de import datorate pe contul 446, ca plata la Trezorerie să se "
+"reconcilieze cu DVI-ul."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__customs_office_id
+msgid ""
+"Customs office where the declaration was lodged: the partner of the amounts "
+"due at customs."
+msgstr ""
+"Biroul vamal la care s-a depus declarația: partenerul sumelor datorate la "
+"vamă."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid ""
+"DVI %(dvi)s posted: MRN %(mrn)s, customs duty %(duty)s, import VAT %(vat)s."
+msgstr ""
+"DVI %(dvi)s postat: MRN %(mrn)s, taxă vamală %(duty)s, TVA de import "
+"%(vat)s."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_res_partner__l10n_ro_customs_dvi_count
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_res_users__l10n_ro_customs_dvi_count
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_partner_form
+msgid "DVIs"
+msgstr "DVI-uri"
+
+#. module: l10n_ro_customs_dvi
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_stock_landed_cost_search_dvi
+msgid "Due at Customs"
+msgstr "De plată la vamă"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_nc_code
+msgid "NC Code"
+msgstr "Cod NC"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__stock_landed_cost__customs_payment_state__not_paid
+msgid "Not Paid"
+msgstr "Neachitat"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__stock_landed_cost__customs_payment_state__paid
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_stock_landed_cost_form
+msgid "Paid"
+msgstr "Achitat"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields.selection,name:l10n_ro_customs_dvi.selection__stock_landed_cost__customs_payment_state__partial
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_stock_landed_cost_form
+msgid "Partially Paid"
+msgstr "Achitat parțial"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost__customs_payment_state
+msgid ""
+"Payment of the amounts due at customs, from the reconciliation of account "
+"446. Empty when nothing is due at customs (VAT deferral certificate, regime "
+"4200, no customs duty)."
+msgstr ""
+"Plata sumelor datorate la vamă, din reconcilierea contului 446. Goală când "
+"nu se datorează nimic la vamă (certificat de amânare a TVA, regim 4200, fără"
+" taxă vamală)."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_product_product
+msgid "Product Variant"
+msgstr "Variantă de produs"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_product_ids
+msgid "Products"
+msgstr "Produse"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_product_ids
+msgid ""
+"Received products of the article, proposed from their commodity code. A "
+"product without commodity code can be chosen by hand: it gets the code of "
+"the article when the DVI is posted."
+msgstr ""
+"Produsele recepționate ale articolului, propuse după codul lor de mărfuri. "
+"Un produs fără cod de mărfuri se poate alege manual: primește codul "
+"articolului la postarea DVI-ului."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid "Received products without commodity code:"
+msgstr "Produse recepționate fără cod de mărfuri:"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_res_partner__l10n_ro_customs_office_code
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_res_users__l10n_ro_customs_office_code
+msgid ""
+"Reference number of the customs office, as printed on the customs "
+"declaration (e.g. ROBU1400). The customs office is the creditor of the "
+"customs duty and of the import VAT paid at customs: the DVIs of the office "
+"and the amounts due to it are followed on its contact."
+msgstr ""
+"Codul de referință al biroului vamal, așa cum apare pe declarația vamală "
+"(ex. ROBU1400). Biroul vamal este creditorul taxei vamale și al TVA-ului "
+"plătit în vamă: DVI-urile biroului și sumele datorate lui se urmăresc pe "
+"contactul lui."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_stock_landed_cost_lines
+msgid "Stock Landed Cost Line"
+msgstr "Linie de cost adițional"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi_line__taric_code
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_taric_code
+msgid "TARIC Code"
+msgstr "Cod TARIC"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_taric_code
+msgid ""
+"TARIC code of the article of the customs declaration. The customs duty of "
+"the line is split only on the products of the article."
+msgstr ""
+"Codul TARIC al articolului din declarația vamală. Taxa vamală a liniei se "
+"repartizează doar pe produsele articolului."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid ""
+"The customs duty of %(article)s (TARIC %(taric)s, %(amount)s) cannot be split: no received product matches it.\n"
+"\n"
+"Choose the products of the article on its line, in the Additional Costs tab, or set the commodity code on the product.%(products)s"
+msgstr ""
+"Taxa vamală pentru %(article)s (TARIC %(taric)s, %(amount)s) nu poate fi repartizată: niciun produs recepționat nu corespunde articolului.\n"
+"\n"
+"Alegeți produsele articolului pe linia lui, în tabul Costuri adiționale, sau completați codul de mărfuri pe produs.%(products)s"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/wizard/account_dvi.py:0
+msgid ""
+"The customs duty of the articles (%(articles)s) does not add up to the "
+"customs duty of the declaration (%(total)s)."
+msgstr ""
+"Taxa vamală a articolelor (%(articles)s) nu dă taxa vamală a declarației "
+"(%(total)s)."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_stock_valuation_adjustment_lines
+msgid "Valuation Adjustment Lines"
+msgstr "Linii de ajustare a evaluării"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi_line__wizard_id
+msgid "Wizard"
+msgstr "Asistent"
+
+#. module: l10n_ro_customs_dvi
+#: model_terms:ir.ui.view,arch_db:l10n_ro_customs_dvi.view_partner_form
+msgid "e.g. ROBU1400"
+msgstr "ex. ROBU1400"

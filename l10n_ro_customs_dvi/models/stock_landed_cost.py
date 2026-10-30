@@ -3,8 +3,11 @@
 # See README.rst file on addons root folder for license details
 
 
+from markupsafe import Markup
+
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import float_round
 
 # Regimul vamal din caseta 37 a declarației (primele 4 cifre: regim solicitat + regim anterior).
 CUSTOMS_REGIMES = [
@@ -57,6 +60,60 @@ class LandedCost(models.Model):
     tax_base = fields.Float("Tax base")
     tax_id = fields.Many2one("account.tax")  # TVA la import (plătit în vamă sau cu certificat de amânare)
 
+    # Biroul vamal e creditorul drepturilor de import: partenerul liniilor de decontare cu bugetul (446),
+    # ca plata din extras să se potrivească cu el, iar DVI-urile şi soldul să se vadă pe contactul lui.
+    customs_office_id = fields.Many2one(
+        "res.partner",
+        "Customs Office",
+        tracking=True,
+        index="btree_not_null",
+        domain=[("l10n_ro_customs_office_code", "!=", False)],
+        help="Customs office where the declaration was lodged. It is the partner of the customs duty and "
+        "import VAT due on account 446, so that the payment to the Treasury is reconciled with the DVI.",
+    )
+    customs_amount_due = fields.Monetary(
+        "Amount Due at Customs",
+        compute="_compute_customs_payment",
+        store=True,
+        help="Customs duty and import VAT on account 446 not yet reconciled with a payment.",
+    )
+    customs_payment_state = fields.Selection(
+        [("not_paid", "Not Paid"), ("partial", "Partially Paid"), ("paid", "Paid")],
+        "Customs Payment",
+        compute="_compute_customs_payment",
+        store=True,
+        help="Payment of the amounts due at customs, from the reconciliation of account 446. Empty when "
+        "nothing is due at customs (VAT deferral certificate, regime 4200, no customs duty).",
+    )
+
+    def _get_customs_payable_account(self):
+        self.ensure_one()
+        return self.env["account.invoice.dvi"].with_company(self.company_id)._get_customs_payable_account()
+
+    def _get_customs_payable_lines(self):
+        self.ensure_one()
+        if not self.account_move_id:
+            return self.env["account.move.line"]
+        account = self._get_customs_payable_account()
+        return self.account_move_id.line_ids.filtered(lambda line: line.account_id == account and line.credit)
+
+    @api.depends("account_move_id.line_ids.amount_residual", "account_move_id.line_ids.account_id")
+    def _compute_customs_payment(self):
+        for cost in self:
+            lines = cost._get_customs_payable_lines() if cost.landed_type == "dvi" else False
+            if not lines:
+                cost.customs_amount_due = 0.0
+                cost.customs_payment_state = False
+                continue
+            due = -sum(lines.mapped("amount_residual"))
+            cost.customs_amount_due = due
+            if cost.currency_id.is_zero(due):
+                cost.customs_payment_state = "paid"
+            elif cost.currency_id.compare_amounts(due, sum(lines.mapped("credit"))) < 0:
+                cost.customs_payment_state = "partial"
+            else:
+                cost.customs_payment_state = "not_paid"
+
     @api.constrains("customs_regime", "tax_id", "tax_value")
     def _check_customs_regime_exempt(self):
         """La 4200 importul e scutit: nu există TVA de înregistrat, nici deductibil, nici de plată.
@@ -82,7 +139,108 @@ class LandedCost(models.Model):
         self.ensure_one()
         return self.dvi_number or self.name
 
+    def compute_landed_cost(self):
+        res = super().compute_landed_cost()
+        self.filtered(lambda c: c.landed_type == "dvi")._split_cost_by_article()
+        return res
+
+    def _get_article_cost_lines(self):
+        self.ensure_one()
+        return self.cost_lines.filtered("l10n_ro_dvi_taric_code")
+
+    def _split_cost_by_article(self):
+        """Taxa vamală a fiecărui articol din DVI merge doar pe produsele articolului.
+
+        Calculul nativ repartizează fiecare linie de cost pe toate produsele recepționate. Taxa vamală
+        diferă însă pe cod tarifar: un articol cu cotă 0% nu primește nimic din taxa altui articol. Liniile
+        de ajustare native rămân; se refac doar sumele liniilor de articol, cu metoda de repartizare a
+        fiecărei linii, aplicată numai pe produsele ei.
+        """
+        weight_fields = {"by_quantity": "quantity", "by_weight": "weight", "by_volume": "volume"}
+        for cost in self:
+            currency = cost.currency_id
+            for cost_line in cost._get_article_cost_lines():
+                adjustments = cost.valuation_adjustment_lines.filtered(lambda a, line=cost_line: a.cost_line_id == line)
+                targets = adjustments.filtered(lambda a, line=cost_line: a.product_id in line.l10n_ro_dvi_product_ids)
+                if not targets and not currency.is_zero(cost_line.price_unit):
+                    without_code = adjustments.product_id.filtered(lambda p: not p._l10n_ro_customs_nc_code())
+                    raise UserError(
+                        self.env._(
+                            "The customs duty of %(article)s (TARIC %(taric)s, %(amount)s) cannot be split: no "
+                            "received product matches it.\n\nChoose the products of the article on its line, in "
+                            "the Additional Costs tab, or set the commodity code on the product.%(products)s",
+                            article=cost_line.name,
+                            taric=cost_line.l10n_ro_dvi_taric_code,
+                            amount=currency.format(cost_line.price_unit),
+                            products=without_code
+                            and "\n\n"
+                            + self.env._("Received products without commodity code:")
+                            + "".join(f"\n- {name}" for name in without_code.mapped("display_name"))
+                            or "",
+                        )
+                    )
+                field_name = weight_fields.get(cost_line.split_method)
+                if cost_line.split_method == "by_current_cost_price":
+                    weights = targets.mapped("former_cost")
+                elif field_name:
+                    weights = targets.mapped(field_name)
+                else:
+                    weights = [1.0] * len(targets)
+                if not sum(weights):
+                    weights = [1.0] * len(targets)
+                total_weight = sum(weights)
+                values = {adjustment: 0.0 for adjustment in adjustments}
+                remaining = cost_line.price_unit
+                for adjustment, weight in zip(targets, weights, strict=True):
+                    value = float_round(
+                        cost_line.price_unit * weight / total_weight, precision_rounding=currency.rounding
+                    )
+                    values[adjustment] = value
+                    remaining -= value
+                if targets and not currency.is_zero(remaining):
+                    values[targets[-1]] += currency.round(remaining)
+                for adjustment, value in values.items():
+                    adjustment.additional_landed_cost = value
+
+    def _propagate_article_nc_codes(self):
+        """Codul NC din DVI pe produsele articolului care nu au niciunul (câmpul nativ, completat o dată)."""
+        for cost in self:
+            updated = []
+            for cost_line in cost._get_article_cost_lines():
+                for product in cost_line.l10n_ro_dvi_product_ids:
+                    if product._l10n_ro_customs_set_nc_code(cost_line.l10n_ro_dvi_nc_code):
+                        updated.append((product, cost_line.l10n_ro_dvi_nc_code))
+            if updated:
+                cost.message_post(
+                    body=Markup("<p>%s</p><ul>%s</ul>")
+                    % (
+                        self.env._("Commodity code set from the DVI:"),
+                        Markup().join(
+                            Markup("<li>%s → %s</li>") % (product.display_name, code) for product, code in updated
+                        ),
+                    )
+                )
+
+    def _log_on_customs_office(self):
+        for cost in self.filtered(lambda c: c.landed_type == "dvi" and c.customs_office_id):
+            cost.customs_office_id._message_log(
+                body=Markup("<p>%s</p>")
+                % self.env._(
+                    "DVI %(dvi)s posted: MRN %(mrn)s, customs duty %(duty)s, import VAT %(vat)s.",
+                    dvi=cost._get_html_link(),
+                    mrn=cost.dvi_number or "-",
+                    duty=cost.currency_id.format(cost.amount_total),
+                    vat=cost.currency_id.format(cost.tax_value),
+                )
+            )
+
     def button_validate(self):
+        # La validare se reface repartizarea pe articole: produsele unui articol se pot schimba după calcul.
+        for cost in self.filtered(lambda c: c.landed_type == "dvi" and c._get_article_cost_lines()):
+            if not cost.valuation_adjustment_lines:
+                cost.compute_landed_cost()
+            else:
+                cost._split_cost_by_article()
         res = super().button_validate()
 
         # nota principală e creată în super() cu ref = name; o corectăm cu numărul de DVI
@@ -123,6 +281,8 @@ class LandedCost(models.Model):
                 cost.account_move_id._post()
         self._set_dvi_move_partner()
         self._set_dvi_move_document_type()
+        self.filtered(lambda c: c.landed_type == "dvi")._propagate_article_nc_codes()
+        self._log_on_customs_office()
         return res
 
     def _set_dvi_move_document_type(self):
@@ -203,6 +363,7 @@ class LandedCost(models.Model):
                     "credit": self.tax_value,
                     "account_id": payable_account.id,
                     "move_id": self.account_move_id.id,
+                    "partner_id": self.customs_office_id.id,
                 }
             )
         return lines
@@ -276,3 +437,68 @@ class LandedCost(models.Model):
             #        for cost_line, val_amount in val_to_cost_lines.items()):
             #     return False
         return res
+
+
+class LandedCostLine(models.Model):
+    _inherit = "stock.landed.cost.lines"
+
+    # Un articol din DVI = o linie de cost: taxa vamală a articolului, repartizată doar pe produsele lui.
+    l10n_ro_dvi_taric_code = fields.Char(
+        "TARIC Code",
+        help="TARIC code of the article of the customs declaration. The customs duty of the line is split "
+        "only on the products of the article.",
+    )
+    l10n_ro_dvi_nc_code = fields.Char(
+        "NC Code",
+        compute="_compute_l10n_ro_dvi_nc_code",
+        store=True,
+        help="Combined Nomenclature code: the first eight digits of the TARIC code.",
+    )
+    l10n_ro_dvi_product_ids = fields.Many2many(
+        "product.product",
+        "l10n_ro_dvi_cost_line_product_rel",
+        "cost_line_id",
+        "product_id",
+        string="Products",
+        compute="_compute_l10n_ro_dvi_product_ids",
+        store=True,
+        readonly=False,
+        help="Received products of the article, proposed from their commodity code. A product without "
+        "commodity code can be chosen by hand: it gets the code of the article when the DVI is posted.",
+    )
+
+    @api.depends("l10n_ro_dvi_taric_code")
+    def _compute_l10n_ro_dvi_nc_code(self):
+        for line in self:
+            line.l10n_ro_dvi_nc_code = (line.l10n_ro_dvi_taric_code or "")[:8] or False
+
+    @api.depends("l10n_ro_dvi_taric_code", "cost_id.picking_ids")
+    def _compute_l10n_ro_dvi_product_ids(self):
+        for line in self:
+            if not line.l10n_ro_dvi_taric_code:
+                line.l10n_ro_dvi_product_ids = False
+                continue
+            products = line.cost_id._get_targeted_move_ids().product_id
+            line.l10n_ro_dvi_product_ids = products.filtered(
+                lambda p, taric=line.l10n_ro_dvi_taric_code: p._l10n_ro_customs_matches_taric(taric)
+            )
+
+
+class StockValuationAdjustmentLines(models.Model):
+    _inherit = "stock.valuation.adjustment.lines"
+
+    def _create_accounting_entries(self, remaining_qty):
+        # Produsele altui articol primesc 0 din taxa articolului: fără linii contabile de zero.
+        if self.cost_id.landed_type == "dvi" and self.currency_id.is_zero(self.additional_landed_cost):
+            return []
+        return super()._create_accounting_entries(remaining_qty)
+
+    def _create_account_move_line(self, credit_account_id, debit_account_id, remaining_qty):
+        """Biroul vamal ca partener pe linia de taxă vamală datorată (446)."""
+        lines = super()._create_account_move_line(credit_account_id, debit_account_id, remaining_qty)
+        office = self.cost_id.customs_office_id
+        if self.cost_id.landed_type == "dvi" and office:
+            for command in lines:
+                if command[2].get("account_id") == credit_account_id:
+                    command[2]["partner_id"] = office.id
+        return lines
