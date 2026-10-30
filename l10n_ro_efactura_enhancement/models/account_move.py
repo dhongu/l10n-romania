@@ -6,9 +6,10 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-# Maximum number of automatic SPV send retries for an invoice that keeps
-# failing. Each failed attempt creates a new ``invoice_sending_failed``
-# document, so we use that count as the natural retry counter.
+# Maximum number of automatic SPV send attempts for an invoice that keeps
+# failing. l10n_ro_edi keeps no trace of a failed upload (it only posts the
+# error in the chatter), so the auto-send cron counts its own failures in
+# ``l10n_ro_spv_send_failures``.
 MAX_SPV_SEND_RETRIES = 3
 
 # Currency used to decide the destination of an invoice whose customer has no
@@ -37,6 +38,16 @@ class AccountMove(models.Model):
         string="Email factură trimis după validare SPV",
         copy=False,
         default=False,
+    )
+
+    # Failed automatic SPV sends (the invoice was attempted by the auto-send
+    # cron and left with no e-Factura state). Reset when the invoice is reset
+    # to draft, so a corrected invoice gets a fresh set of retries.
+    l10n_ro_spv_send_failures = fields.Integer(
+        string="Trimiteri SPV eșuate (cron)",
+        copy=False,
+        default=0,
+        readonly=True,
     )
 
     def _l10n_ro_is_spv_target(self):
@@ -125,6 +136,11 @@ class AccountMove(models.Model):
                 move.check_partner(move.partner_id)
                 move.check_partner(move.partner_shipping_id)
         return super().action_post()
+
+    def button_draft(self):
+        res = super().button_draft()
+        self.filtered("l10n_ro_spv_send_failures").l10n_ro_spv_send_failures = 0
+        return res
 
     def _need_ubl_cii_xml(self, ubl_cii_format=None):
         res = super()._need_ubl_cii_xml(ubl_cii_format)
@@ -250,10 +266,11 @@ class AccountMove(models.Model):
         ro_companies = self or self.env["res.company"].sudo().search(domain)
         for company in ro_companies:
             # Both never-sent invoices and previously failed ones have
-            # l10n_ro_edi_state = False (the computed state only reflects
-            # 'invoice_sent'/'invoice_validated'). We select them together and
-            # filter out failed invoices that exceeded the retry limit, so a
-            # transient failure is retried automatically on the next runs.
+            # l10n_ro_edi_state = False: a failed upload creates no e-Factura
+            # document. We select them together and filter out failed invoices
+            # that exceeded the retry limit, so a transient failure is retried
+            # automatically on the next runs. Invoices refused by the SPV
+            # ('invoice_refused') are not retried: they need a correction first.
             domain = [
                 ("move_type", "in", ("out_invoice", "out_refund")),
                 ("state", "=", "posted"),
@@ -264,15 +281,13 @@ class AccountMove(models.Model):
                 ("company_id", "=", company.id),
             ]
 
-            candidates = self.search(domain, order="date desc")
+            # Never-attempted invoices first, so a batch full of failing
+            # invoices can't hold back the others until they exhaust their retries.
+            candidates = self.search(domain, order="l10n_ro_spv_send_failures, date desc")
 
             # Skip invoices whose send already failed MAX_SPV_SEND_RETRIES times
             # to avoid hammering SPV with the same broken document forever.
-            def _within_retry_limit(invoice):
-                failed = invoice.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sending_failed")
-                return len(failed) < MAX_SPV_SEND_RETRIES
-
-            exhausted = candidates.filtered(lambda inv: not _within_retry_limit(inv))
+            exhausted = candidates.filtered(lambda inv: inv.l10n_ro_spv_send_failures >= MAX_SPV_SEND_RETRIES)
             if exhausted:
                 _logger.info(
                     "❌ Invoices skipped (retry limit %d reached): %s",
@@ -281,20 +296,13 @@ class AccountMove(models.Model):
                 )
             candidates = candidates - exhausted
 
-            retrying = candidates.filtered(
-                lambda inv: inv.l10n_ro_edi_document_ids.filtered(lambda d: d.state == "invoice_sending_failed")
-            )
+            retrying = candidates.filtered("l10n_ro_spv_send_failures")
             if retrying:
                 _logger.info("🔁 Retrying previously failed invoices: %s", retrying.mapped("name"))
 
             _logger.info(f"📤 Invoices to send to SPV: {candidates.mapped('name')}")
 
-            if len(candidates) > limit:
-                invoices = candidates[:limit]
-                need_retrigger = True
-                _logger.info("🔁 More invoices to send to SPV, retriggering cron...")
-            else:
-                invoices = candidates
+            invoices = candidates[:limit]
 
             # daca au fost deja generate PDF-uri pentru facturi, le stergem
             invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
@@ -349,6 +357,27 @@ class AccountMove(models.Model):
             validated = invoices.filtered(lambda inv: inv.l10n_ro_edi_state == "invoice_validated")
             pending = invoices.filtered(lambda inv: inv.l10n_ro_edi_state == "invoice_sent")
             failed_now = invoices - validated - pending
+            # Count the failed uploads (no e-Factura state at all). A
+            # not-indexed invoice did reach the SPV: it is reported as failed but
+            # is neither counted nor resent by this cron.
+            send_failed = failed_now.filtered(lambda inv: not inv.l10n_ro_edi_state)
+            for invoice in send_failed:
+                invoice.l10n_ro_spv_send_failures += 1
+
+            # Retrigger only on real progress: more candidates wait beyond the
+            # limit AND at least one invoice of this batch reached the SPV. When
+            # every send fails (ANAF down, expired token, broken invoices) a
+            # retrigger would just fail again in 5 minutes; the failures are
+            # counted above and the next daily run retries them.
+            if len(candidates) > limit and invoices - send_failed:
+                need_retrigger = True
+                _logger.info("🔁 More invoices to send to SPV, retriggering cron...")
+            elif len(candidates) > limit:
+                _logger.info(
+                    "No retrigger for %s: all %d invoices of the batch failed",
+                    company.name,
+                    len(invoices),
+                )
             # Report email fully decoupled from the SPV send: isolated in a
             # savepoint so any failure is logged instead of aborting the cron
             # (the sends are already committed above).
@@ -372,11 +401,11 @@ class AccountMove(models.Model):
                     company.name,
                 )
 
-            if need_retrigger:
-                at = fields.Datetime.now() + timedelta(minutes=5)
-                # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
-                _logger.info("⏳ Retrigger cron scheduled in 5 minutes")
-                self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
+        if need_retrigger:
+            at = fields.Datetime.now() + timedelta(minutes=5)
+            # asteapata ca sa se termine trimiterea facturilor in SPV prin job-ul de mai sus
+            _logger.info("⏳ Retrigger cron scheduled in 5 minutes")
+            self.env.ref("l10n_ro_efactura_enhancement.ir_cron_l10n_ro_edi_auto_send")._trigger(at)
 
     def _l10n_ro_spv_send_cron_report(self, company, stats):
         """Send a statistics email summarizing one SPV auto-send cron run.
