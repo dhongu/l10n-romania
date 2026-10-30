@@ -1,3 +1,13 @@
+## 19.0.0.0.6 (2026-10-30)
+
+- Migrate recognized legacy SAL/SOL blocks in website-specific copies without
+  resetting the website layout or reactivating disabled views. Preserve unknown
+  customized badge contents and log them for manual review.
+- Render the managed SAL badge through a shared template so later module updates
+  update its image and link even when a website keeps a customized footer layout.
+- Verify migration idempotency, native repeated view loading, inactive copies,
+  preserved custom contents and future shared-template changes with Odoo ORM tests.
+
 ## 19.0.0.0.5 (2026-10-22)
 
 - Odoo Apps banner title: *ANPC footer* (was *ANPC Website Footer*), the same as the module name.
