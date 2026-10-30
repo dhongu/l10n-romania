@@ -9,3 +9,5 @@ from . import test_customer_company_vat
 from . import test_cius_ro_vat_compare
 from . import test_billing_reference
 from . import test_spv_reset_not_indexed
+from . import test_cron_fetch_status_retrigger
+from . import test_screenshots
