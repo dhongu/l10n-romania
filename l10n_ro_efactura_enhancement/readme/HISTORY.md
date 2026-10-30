@@ -1,3 +1,22 @@
+## 18.0.0.3.7 (2026-10-30)
+
+- **Timeout-ul la trimiterea în SPV nu mai oprește cron-ul de auto-send.**
+  La prima trimitere a unei facturi, un timeout de la ANAF marca factura ca
+  incertă, dar nu crea niciun document e-Factura; nucleul `l10n_ro_edi` citea
+  apoi ultimul document al facturii și arunca `IndexError`, iar restul lotului
+  nu se mai trimitea. Acum timeout-ul se înregistrează ca document în stare
+  *Error*, cu mesajul „Trimitere SPV incertă”, și lotul continuă.
+  - Documentul de eroare intră în numărătoarea reîncercărilor automate (3).
+- **„Trimitere SPV incertă” blochează și trimiterea manuală.** Marcajul
+  oprea doar cron-ul. Acum nici butonul *Trimite* (`account.move.send`), nici
+  acțiunea *Trimite in SPV* din listă nu mai încarcă factura a doua oară:
+  - *Trimite*: bifa „Send E-Factura to SPV” apare dezactivată, cu explicație,
+    și un avertisment listează facturile incerte; emailul se poate trimite.
+  - *Trimite in SPV*: refuză selecția cu un mesaj care numește facturile
+    incerte și pașii de urmat.
+  - După verificarea în SPV, butonul *SPV: marchează verificat* de pe factură
+    debifează marcajul și trimiterea se poate relua.
+
 ## 18.0.0.3.6 (2026-10-30)
 
 - **Cron-ul de fetch status nu se mai reia la nesfârșit.**

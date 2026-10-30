@@ -436,6 +436,20 @@ class AccountMove(models.Model):
         if not invoices:
             raise UserError(_("Facturile selectate au clienti din afara Romaniei si nu pot fi trimise in SPV."))
 
+        # O trimitere anterioara s-a incheiat cu timeout: incarcarea poate fi
+        # deja in SPV, iar o noua trimitere ar crea un duplicat la ANAF.
+        uncertain = invoices.filtered("l10n_ro_edi_send_uncertain")
+        if uncertain:
+            raise UserError(
+                _(
+                    "Facturile următoare au o trimitere SPV incertă (timeout fără răspuns de la ANAF) "
+                    "și nu se retrimit, ca să nu se creeze un duplicat: %s\n\n"
+                    "Verificați în SPV dacă au fost primite. Dacă nu, apăsați „SPV: marchează verificat” "
+                    "pe factură și reluați trimiterea; altfel deselectați-le.",
+                    ", ".join(uncertain.mapped("name")),
+                )
+            )
+
         self.env["account.move.send"]._generate_and_send_invoices(
             invoices,
             sending_methods={"manual"},
@@ -487,6 +501,20 @@ class AccountMove(models.Model):
             _logger.warning(
                 "Timeout la trimiterea E-Factura %s; marcată pentru verificare manuală în SPV.",
                 self.name,
+            )
+            # The core caller (account.move.send) reads the invoice's newest
+            # document right after this call: on a first send there is none,
+            # and the IndexError would abort the whole batch. Record the timeout
+            # as a failed document; the uncertain flag keeps it out of the
+            # automatic and manual re-sends.
+            self._l10n_ro_edi_create_document_invoice_sending_failed(
+                {
+                    "error": _(
+                        "Trimitere SPV incertă: timeout fără răspuns de la ANAF. "
+                        "Verificați în SPV dacă factura a fost primită înainte de a o retrimite."
+                    ),
+                    "attachment_raw": xml_data,
+                }
             )
             self.message_post(
                 body=_(
