@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Accounting Document Type",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "author": "Terrabit",
     "summary": "Supporting document type on journal entries: invoice, DVI, receipt, bank statement, journal entry",
     "development_status": "Mature",

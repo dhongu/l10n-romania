@@ -14,6 +14,15 @@ class TestL10nRoDocumentType(AccountTestInvoicingCommon):
     @AccountTestInvoicingCommon.setup_country("ro")
     def setUpClass(cls):
         super().setUpClass()
+        # adresă completă: `l10n_ro_efactura_enhancement`, dacă e instalat, nu postează factura fără ea
+        cls.partner_a.write(
+            {
+                "country_id": cls.env.ref("base.ro").id,
+                "state_id": cls.env.ref("base.RO_B").id,
+                "city": "București",
+                "street": "Str. Exemplu 1",
+            }
+        )
 
     def test_invoice_types(self):
         for move_type, doc_type in [
