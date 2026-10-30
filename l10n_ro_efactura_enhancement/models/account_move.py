@@ -354,14 +354,6 @@ class AccountMove(models.Model):
                     **kwargs,
                 )
 
-            # Persist the SPV sends immediately, before the (decoupled) report
-            # email below. The report is a non-critical internal notification:
-            # a failure there (SMTP error, serialization conflict during the
-            # mail's flush/unlink, …) must never roll back the actual uploads
-            # or the cron retrigger.
-            if not tools.config["test_enable"]:
-                self.env.cr.commit()  # pylint: disable=invalid-commit
-
             # Recompute states after the send to build the run report.
             # NB: 'invoice_sent' only means the XML was uploaded to the SPV and is
             # awaiting validation — the SPV can still reject it later (async, via
@@ -378,6 +370,15 @@ class AccountMove(models.Model):
             send_failed = failed_now.filtered(lambda inv: not inv.l10n_ro_edi_state)
             for invoice in send_failed:
                 invoice.l10n_ro_spv_send_failures += 1
+
+            # Persist the SPV sends immediately, before the (decoupled) report
+            # email below. The report is a non-critical internal notification:
+            # a failure there (SMTP error, serialization conflict during the
+            # mail's flush/unlink, …) must never roll back the actual uploads
+            # or the cron retrigger. The failure counter above is committed
+            # with them, so a later crash can't lose a counted attempt.
+            if not tools.config["test_enable"]:
+                self.env.cr.commit()  # pylint: disable=invalid-commit
 
             # Retrigger only on real progress: more candidates wait beyond the
             # limit AND at least one invoice of this batch reached the SPV. When
