@@ -13,6 +13,16 @@
   următoare.
 - Necesită actualizarea modulului (câmp nou pe factură).
 
+## 19.0.0.5.10 (2026-10-30)
+
+- **Cron-ul de fetch status nu se mai reia la nesfârșit.**
+  `_cron_l10n_ro_edi_fetch_status` se reprograma la +2 minute oricând exista o
+  factură `invoice_sent` în ultimele 30 de zile, chiar dacă ANAF nu răspundea și
+  nu se schimba nimic. Acum se reia doar dacă lotul a fost plin (`limit`) **și**
+  cel puțin o factură a ieșit din `invoice_sent`; altfel așteaptă intervalul
+  normal al cron-ului. Pauza de 2 minute (`_trigger(at)`) rămâne, pentru ANAF.
+  - Apelul intern din `_cron_l10n_ro_edi_auto_send` urmează aceeași regulă.
+
 ## 19.0.0.5.9 (2026-10-27)
 
 - **Furnizorul nu se mai dublează la importul e-Factura când CUI-ul diferă doar prin
