@@ -122,7 +122,6 @@ class TestEfacturaEnhancementScreenshots(AccountTestInvoicingCommon, ScreenshotC
         cls.client_srl = Partner.create(
             {
                 "name": "Alfa Distribuție SRL",
-                "is_company": True,
                 "vat": "RO30834857",
                 "street": "Bd. Unirii 20",
                 "city": "Sector 1",
@@ -143,7 +142,6 @@ class TestEfacturaEnhancementScreenshots(AccountTestInvoicingCommon, ScreenshotC
         cls.client_no_street = Partner.create(
             {
                 "name": "Beta Construct SRL",
-                "is_company": True,
                 "vat": "RO14399840",
                 "city": "Cluj-Napoca",
                 "state_id": state_cj.id,
@@ -153,7 +151,8 @@ class TestEfacturaEnhancementScreenshots(AccountTestInvoicingCommon, ScreenshotC
         cls.client_de = Partner.create(
             {
                 "name": "Gamma Handel GmbH",
-                "is_company": True,
+                # on 20.0 is_company is computed from the VAT number
+                "vat": "DE123456789",
                 "street": "Hauptstraße 1",
                 "city": "Berlin",
                 "country_id": env.ref("base.de").id,
