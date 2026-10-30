@@ -70,7 +70,12 @@ class TestFooterMigration(TransactionCase):
     def test_custom_badge_content_is_preserved(self):
         view = self._specific(self.legacy.replace("<img src=", "<b>Custom label</b><img src=", 1))
         before = view.arch_db
-        migrate_legacy_footer_views(self.env)
+        with self.assertLogs("odoo.addons.l10n_ro_footer_anpc.migration", level="WARNING") as logs:
+            migrate_legacy_footer_views(self.env)
+        self.assertEqual(
+            [record.getMessage() for record in logs.records],
+            [f"ANPC view {view.id} contains custom badge content; preserved"],
+        )
         self.assertEqual(view.arch_db, before)
 
     def test_unrelated_and_current_views_are_preserved(self):
