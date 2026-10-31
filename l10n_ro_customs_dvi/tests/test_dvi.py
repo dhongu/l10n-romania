@@ -3,7 +3,7 @@
 
 
 from odoo import fields
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
 from odoo.tools import SQL
@@ -799,7 +799,7 @@ class TestDVI(TransactionCase):
         picking.button_validate()
         self.assertEqual(picking.state, "done")
 
-    def _validate_dvi_with_duty(self, invoice, duty):
+    def _validate_dvi_with_duty(self, invoice, duty, price_unit=None):
         action = invoice.button_dvi()
         wizard = self.env[action["res_model"]].browse(action["res_id"])
         wizard_form = Form(wizard.with_context(active_id=invoice.id))
@@ -810,6 +810,8 @@ class TestDVI(TransactionCase):
         wizard_form.tax_value = 0.0
         wizard = wizard_form.save()
         dvi = self.env["stock.landed.cost"].browse(wizard.do_create_dvi()["res_id"])
+        if price_unit is not None:
+            dvi.cost_lines.price_unit = price_unit
         dvi.compute_landed_cost()
         dvi.button_validate()
         return dvi
@@ -859,3 +861,27 @@ class TestDVI(TransactionCase):
         self.assertAlmostEqual(
             sum(lines.filtered(lambda line: line.account_id.code == "371000").mapped("debit")), 100.0, places=2
         )
+
+    def test_custom_duty_delivered_goods_reversed(self):
+        """Cost negativ (stornarea taxei vamale): nota părţii livrate se inversează, Dr 4462 = Cr 607."""
+        invoice = self._create_received_invoice(10, 100)
+        self._deliver(self.product_1, 6)
+        dvi = self._validate_dvi_with_duty(invoice, 100.0, price_unit=-100.0)
+
+        payable = self.env["account.invoice.dvi"]._get_customs_payable_account()
+        lines = dvi.account_move_id.line_ids
+        self.assertAlmostEqual(
+            sum(lines.filtered(lambda line: line.account_id == payable).mapped("balance")), 100.0, places=2
+        )
+        self.assertAlmostEqual(
+            sum(lines.filtered(lambda line: line.account_id.code == "607000").mapped("balance")), -60.0, places=2
+        )
+
+    def test_custom_duty_delivered_goods_without_expense_account(self):
+        """Fără cont de cheltuieli pe produs, categorie şi companie, validarea se opreşte cu mesaj clar."""
+        invoice = self._create_received_invoice(10, 100)
+        self._deliver(self.product_1, 6)
+        self.category.property_account_expense_categ_id = False
+        self.env.company.expense_account_id = False
+        with self.assertRaisesRegex(UserError, "expense account of product"):
+            self._validate_dvi_with_duty(invoice, 100.0)

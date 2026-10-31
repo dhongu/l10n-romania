@@ -5,6 +5,9 @@
   delivered goes to the expense account of the product (`Dr 607 = Cr 4462`). Until now only the part
   still in stock was booked (`Dr 371 = Cr 4462`), so the debt to the state budget was understated
   (#722).
+- Consultant sheet: the entry of the goods delivered before the DVI (step 7 and the accounting notes),
+  the expense account on the product category (§5), the new error message (§9) and the check that
+  4462 equals A00 (§8).
 
 ## 19.0.2.2.0 (2026-10-29)
 
