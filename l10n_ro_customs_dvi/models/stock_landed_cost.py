@@ -288,10 +288,11 @@ class AdjustmentLines(models.Model):
         (`additional_landed_cost * remaining_qty / quantity`); pentru cantitatea deja livrată nu
         face nicio linie. La DVI contrapartida e datoria faţă de buget (446), care trebuie
         creditată cu toată taxa vamală A00 (funcţiunea contului 446, OMFP 1802/2014). Partea
-        mărfii ieşite se duce pe contul de cheltuieli al produsului: ``Dr 607 = Cr 4462``.
+        mărfii ieşite se duce pe contul de cheltuieli al produsului (607 la mărfuri, 601 la
+        materii prime): ``Dr 607 = Cr 4462``, forma contractată a Dr 371 = Cr 446 + Dr 607 = Cr 371.
 
         Doar pentru liniile creditate pe contul de buget: comisionul sau transportul de pe un DVI
-        au contrapartida în factura lor, unde restul rămâne corect pe cheltuială. Când cantitatea
+        au contrapartida în factura lor, tratată separat. Când cantitatea
         e înregistrată integral (ex. `l10n_ro_stock_account_landed_cost` trimite
         `remaining_qty = quantity`), nu se adaugă nimic.
         """

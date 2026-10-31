@@ -2,12 +2,14 @@
 
 - The customs duty of the goods delivered before the DVI is no longer lost: the entry credits account
   4462 with the full customs duty A00 of the declaration, and the part of the quantity already
-  delivered goes to the expense account of the product (`Dr 607 = Cr 4462`). Until now only the part
-  still in stock was booked (`Dr 371 = Cr 4462`), so the debt to the state budget was understated
-  (#722).
+  delivered goes to the expense account of the product (e.g. `Dr 607 = Cr 4462` for goods). Until
+  now only the part still in stock was booked (`Dr 371 = Cr 4462`), so the debt to the state budget
+  was understated (#722).
 - Consultant sheet: the entry of the goods delivered before the DVI (step 7 and the accounting notes),
   the expense account on the product category (§5), the new error message (§9) and the check that
-  4462 equals A00 (§8).
+  4462 equals A00 (§8); the expense account follows the product category (607 for goods, 601 for raw
+  materials), the silent fallback on the company expense account, and the FIFO order used by Odoo
+  to split the received quantity between stock and delivered, also on AVCO.
 
 ## 19.0.2.2.0 (2026-10-29)
 
