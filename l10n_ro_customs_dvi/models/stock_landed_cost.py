@@ -4,7 +4,7 @@
 
 
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 # Regimul vamal din caseta 37 a declarației (primele 4 cifre: regim solicitat + regim anterior).
 CUSTOMS_REGIMES = [
@@ -276,3 +276,62 @@ class LandedCost(models.Model):
             #        for cost_line, val_amount in val_to_cost_lines.items()):
             #     return False
         return res
+
+
+class AdjustmentLines(models.Model):
+    _inherit = "stock.valuation.adjustment.lines"
+
+    def _create_account_move_line(self, credit_account_id, debit_account_id, remaining_qty):
+        """Taxa vamală a mărfii ieșite înainte de DVI merge pe cheltuială, nu se pierde.
+
+        Core-ul (Odoo 19) înregistrează doar partea mărfii rămase în stoc
+        (`additional_landed_cost * remaining_qty / quantity`); pentru cantitatea deja livrată nu
+        face nicio linie. La DVI contrapartida e datoria faţă de buget (446), care trebuie
+        creditată cu toată taxa vamală A00 (funcţiunea contului 446, OMFP 1802/2014). Partea
+        mărfii ieşite se duce pe contul de cheltuieli al produsului: ``Dr 607 = Cr 4462``.
+
+        Doar pentru liniile creditate pe contul de buget: comisionul sau transportul de pe un DVI
+        au contrapartida în factura lor, unde restul rămâne corect pe cheltuială. Când cantitatea
+        e înregistrată integral (ex. `l10n_ro_stock_account_landed_cost` trimite
+        `remaining_qty = quantity`), nu se adaugă nimic.
+        """
+        lines = super()._create_account_move_line(credit_account_id, debit_account_id, remaining_qty)
+        cost = self.cost_id
+        if cost.landed_type != "dvi" or not self.quantity:
+            return lines
+        payable_account = self.env["account.invoice.dvi"].with_company(cost.company_id)._get_customs_payable_account()
+        if credit_account_id != payable_account.id:
+            return lines
+
+        currency = cost.currency_id
+        remaining_qty = min(max(remaining_qty, 0.0), self.quantity)
+        in_stock_value = currency.round(self.additional_landed_cost * remaining_qty / self.quantity)
+        sold_value = currency.round(self.additional_landed_cost) - in_stock_value
+        if currency.is_zero(sold_value):
+            return lines
+
+        expense_account = self.product_id.product_tmpl_id.with_company(cost.company_id).get_product_accounts()[
+            "expense"
+        ]
+        if not expense_account:
+            raise UserError(
+                self.env._(
+                    "Please configure the expense account of product %(product)s: the customs duty of the "
+                    "quantity already delivered is booked on it.",
+                    product=self.product_id.display_name,
+                )
+            )
+        base_line = dict(
+            self._prepare_account_move_line_values(),
+            name=self.env._("%(name)s - quantity already delivered", name=self.name),
+        )
+        debit_line = dict(base_line, account_id=expense_account.id)
+        credit_line = dict(base_line, account_id=credit_account_id)
+        if sold_value > 0:
+            debit_line["debit"] = sold_value
+            credit_line["credit"] = sold_value
+        else:
+            # cost negativ (stornare): nota se inversează
+            debit_line["credit"] = -sold_value
+            credit_line["debit"] = -sold_value
+        return [*lines, [0, 0, debit_line], [0, 0, credit_line]]

@@ -459,3 +459,19 @@ msgstr "Garanție TVA blocată"
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__vat_guarantee_amount
 msgid "VAT Held as Guarantee"
 msgstr "TVA reținut ca garanție"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid "%(name)s - quantity already delivered"
+msgstr "%(name)s - cantitate deja livrată"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid ""
+"Please configure the expense account of product %(product)s: the customs "
+"duty of the quantity already delivered is booked on it."
+msgstr ""
+"Configurați contul de cheltuieli al produsului %(product)s: pe el se "
+"înregistrează taxa vamală a cantității deja livrate."

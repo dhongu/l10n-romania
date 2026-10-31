@@ -1,3 +1,11 @@
+## 19.0.2.2.1 (2026-10-31)
+
+- The customs duty of the goods delivered before the DVI is no longer lost: the entry credits account
+  4462 with the full customs duty A00 of the declaration, and the part of the quantity already
+  delivered goes to the expense account of the product (`Dr 607 = Cr 4462`). Until now only the part
+  still in stock was booked (`Dr 371 = Cr 4462`), so the debt to the state budget was understated
+  (#722).
+
 ## 19.0.2.2.0 (2026-10-29)
 
 - The entry of a DVI has the document type *Import (DVI)* (`l10n_ro_account_move_document_type`,
