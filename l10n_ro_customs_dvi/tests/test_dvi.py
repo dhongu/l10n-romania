@@ -3,7 +3,7 @@
 
 
 from odoo import fields
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import Form
 from odoo.tests.common import TransactionCase
 from odoo.tools import SQL
@@ -768,3 +768,120 @@ class TestDVI(TransactionCase):
         # „factură furnizor -> landed cost”; cea a companiei care l-a creat rămâne neschimbată.
         self.assertEqual(template.with_company(company).property_account_expense_id, payable)
         self.assertEqual(template.with_company(other_company).property_account_expense_id, other_payable)
+
+    def _deliver(self, product, qty):
+        """Livrare către client din stocul companiei testului."""
+        warehouse = self.env["stock.warehouse"].search([("company_id", "=", self.env.company.id)], limit=1)
+        customers = self.env.ref("stock.stock_location_customers")
+        picking = self.env["stock.picking"].create(
+            {
+                "picking_type_id": warehouse.out_type_id.id,
+                "location_id": warehouse.lot_stock_id.id,
+                "location_dest_id": customers.id,
+                "move_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": product.id,
+                            "product_uom_qty": qty,
+                            "product_uom": product.uom_id.id,
+                            "location_id": warehouse.lot_stock_id.id,
+                            "location_dest_id": customers.id,
+                        },
+                    )
+                ],
+            }
+        )
+        picking.action_confirm()
+        picking.action_assign()
+        picking.move_ids.write({"quantity": qty, "picked": True})
+        picking.button_validate()
+        self.assertEqual(picking.state, "done")
+
+    def _validate_dvi_with_duty(self, invoice, duty, price_unit=None):
+        action = invoice.button_dvi()
+        wizard = self.env[action["res_model"]].browse(action["res_id"])
+        wizard_form = Form(wizard.with_context(active_id=invoice.id))
+        wizard_form.tax_id = self.tax_id
+        wizard_form.dvi_number = "26ROBU0000000722"
+        wizard_form.custom_duty = duty
+        wizard_form.tax_base = 0.0
+        wizard_form.tax_value = 0.0
+        wizard = wizard_form.save()
+        dvi = self.env["stock.landed.cost"].browse(wizard.do_create_dvi()["res_id"])
+        if price_unit is not None:
+            dvi.cost_lines.price_unit = price_unit
+        dvi.compute_landed_cost()
+        dvi.button_validate()
+        return dvi
+
+    def test_custom_duty_of_goods_delivered_before_dvi(self):
+        """Marfa vândută înainte de DVI: 4462 se creditează cu toată taxa vamală (#722).
+
+        Din 10 bucăţi s-au livrat 6. Core-ul înregistrează doar partea rămasă în stoc (40); partea
+        mărfii ieşite (60) merge pe cheltuială: Dr 607 = Cr 4462.
+        """
+        invoice = self._create_received_invoice(10, 100)
+        self._deliver(self.product_1, 6)
+        dvi = self._validate_dvi_with_duty(invoice, 100.0)
+
+        payable = self.env["account.invoice.dvi"]._get_customs_payable_account()
+        lines = dvi.account_move_id.line_ids
+        by_code = {
+            code: sum(lines.filtered(lambda line, code=code: line.account_id.code == code).mapped("balance"))
+            for code in ("371000", "607000", payable.code)
+        }
+        self.assertAlmostEqual(by_code[payable.code], -100.0, places=2, msg="Toată taxa vamală A00 pe 4462")
+        self.assertAlmostEqual(by_code["371000"], 40.0, places=2, msg="Partea mărfii din stoc")
+        self.assertAlmostEqual(by_code["607000"], 60.0, places=2, msg="Partea mărfii livrate, pe cheltuială")
+
+    def test_custom_duty_all_goods_delivered_before_dvi(self):
+        """Toată marfa livrată înainte de DVI: core-ul nu face nicio linie, taxa merge integral pe 607."""
+        invoice = self._create_received_invoice(10, 100)
+        self._deliver(self.product_1, 10)
+        dvi = self._validate_dvi_with_duty(invoice, 100.0)
+
+        payable = self.env["account.invoice.dvi"]._get_customs_payable_account()
+        lines = dvi.account_move_id.line_ids
+        self.assertAlmostEqual(
+            sum(lines.filtered(lambda line: line.account_id == payable).mapped("credit")), 100.0, places=2
+        )
+        self.assertAlmostEqual(
+            sum(lines.filtered(lambda line: line.account_id.code == "607000").mapped("debit")), 100.0, places=2
+        )
+        self.assertFalse(lines.filtered(lambda line: line.account_id.code == "371000"))
+
+    def test_custom_duty_nothing_delivered_before_dvi(self):
+        """Fără livrări înainte de DVI, nota rămâne cea de până acum: fără linie de cheltuială."""
+        invoice = self._create_received_invoice(10, 100)
+        dvi = self._validate_dvi_with_duty(invoice, 100.0)
+        lines = dvi.account_move_id.line_ids
+        self.assertFalse(lines.filtered(lambda line: line.account_id.code == "607000"))
+        self.assertAlmostEqual(
+            sum(lines.filtered(lambda line: line.account_id.code == "371000").mapped("debit")), 100.0, places=2
+        )
+
+    def test_custom_duty_delivered_goods_reversed(self):
+        """Cost negativ (stornarea taxei vamale): nota părţii livrate se inversează, Dr 4462 = Cr 607."""
+        invoice = self._create_received_invoice(10, 100)
+        self._deliver(self.product_1, 6)
+        dvi = self._validate_dvi_with_duty(invoice, 100.0, price_unit=-100.0)
+
+        payable = self.env["account.invoice.dvi"]._get_customs_payable_account()
+        lines = dvi.account_move_id.line_ids
+        self.assertAlmostEqual(
+            sum(lines.filtered(lambda line: line.account_id == payable).mapped("balance")), 100.0, places=2
+        )
+        self.assertAlmostEqual(
+            sum(lines.filtered(lambda line: line.account_id.code == "607000").mapped("balance")), -60.0, places=2
+        )
+
+    def test_custom_duty_delivered_goods_without_expense_account(self):
+        """Fără cont de cheltuieli pe produs, categorie şi companie, validarea se opreşte cu mesaj clar."""
+        invoice = self._create_received_invoice(10, 100)
+        self._deliver(self.product_1, 6)
+        self.category.property_account_expense_categ_id = False
+        self.env.company.expense_account_id = False
+        with self.assertRaisesRegex(UserError, "expense account of product"):
+            self._validate_dvi_with_duty(invoice, 100.0)
