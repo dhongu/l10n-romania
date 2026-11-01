@@ -7,12 +7,13 @@ Doua regimuri, pe sursa randului live:
         RENAME     -> UPDATE city (acelasi cod, nume schimbat)
         OFFICE_ADD -> UPDATE office (existent gol, live are)
     Un cod schimbat apare ca NEW + GONE (GONE doar raportat, nu sters).
-  - 'refresh'/'osm-new' (orase >50k): potrivire pe randurile EXISTENTE ale orasului
+  - 'code'/'refresh'/'osm-new' (orase >50k): potrivire pe randurile EXISTENTE ale orasului
         CITY_UPDATE -> UPDATE pe loc (id pastrat, deci si res_partner.zip_id)
                        pas 1: aceeasi strada + acelasi cod; pas 2: aceeasi strada de baza
                        + acelasi cod (re-segmentare bl./nr.); pas 3: aceeasi strada de baza,
                        cod schimbat; pas 4: acelasi cod, strada redenumita. Pasii 3-4 doar
-                       cand perechea e unica pe ambele parti.
+                       cand perechea e unica pe ambele parti. Pas 5: acelasi cod, nume
+                       asemanator (Horia/Horea, ordinea cuvintelor, prenume adaugat).
         CITY_NEW    -> INSERT
         CITY_GONE   -> DELETE doar daca randul nu e folosit de niciun partener
                        (FK res_partner.zip_id e ON DELETE SET NULL); altfel ramane.
@@ -30,6 +31,7 @@ la rulare partiala, ar lista tot restul tarii).
 
 import argparse
 import csv
+import difflib
 import json
 import os
 
@@ -114,7 +116,52 @@ def match_city(ex_city, live_rows):
         used = {id(m) for m, _r in matched}
         pending = [m for m in pending if id(m) not in used]
         live_rows = unmatched
-    return matched, unmatched, pending
+    fuzzy = match_similar(pending, live_rows)
+    matched.extend(fuzzy)
+    used_ex = {id(m) for m, _r in fuzzy}
+    used_live = {id(r) for _m, r in fuzzy}
+    return matched, [r for r in live_rows if id(r) not in used_live], [m for m in pending if id(m) not in used_ex]
+
+
+SIMILAR_MIN = 0.8
+
+
+def _tokens(street_name):
+    return posta.norm_key(street_name).split()
+
+
+def similarity(a, b):
+    """Asemanarea a doua nume de strada, insensibila la ordinea cuvintelor.
+
+    1.0 cand un set de cuvinte il contine pe celalalt (Martinovics / Martinovics Ignac).
+    """
+    ta, tb = _tokens(a), _tokens(b)
+    if not ta or not tb:
+        return 0.0
+    if set(ta) <= set(tb) or set(tb) <= set(ta):
+        return 1.0
+    return difflib.SequenceMatcher(None, " ".join(sorted(ta)), " ".join(sorted(tb))).ratio()
+
+
+def match_similar(pending, live_rows):
+    """Pas 5: acelasi cod, nume asemanator; perechile cu scorul cel mai mare intai, fiecare rand o data."""
+    by_zip = {}
+    for m in pending:
+        by_zip.setdefault(m["name"], []).append(m)
+    pairs = []
+    for r in live_rows:
+        for m in by_zip.get(r["name"], []):
+            score = similarity(m["street_name"], r["street_name"])
+            if score >= SIMILAR_MIN:
+                pairs.append((score, m, r))
+    pairs.sort(key=lambda p: -p[0])
+    out, used = [], set()
+    for _score, m, r in pairs:
+        if id(m) in used or id(r) in used:
+            continue
+        used.update((id(m), id(r)))
+        out.append((m, r))
+    return out
 
 
 def city_update(m, r, office_addr):
@@ -200,7 +247,7 @@ def main():
 
     live = load_live(args.live)
     small = [r for r in live if r["src"] == "small"]
-    big = [r for r in live if r["src"] in ("refresh", "osm-new")]
+    big = [r for r in live if r["src"] in ("code", "refresh", "osm-new")]
 
     # orase atinse (state_norm, city_norm)
     big_cities = {}
@@ -341,7 +388,7 @@ def main():
                     "",
                     "",
                     "",
-                    "refresh+osm",
+                    "+".join(sorted({r["src"] for r in rows})),
                 ]
             )
             for r in city_new:

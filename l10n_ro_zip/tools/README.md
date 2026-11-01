@@ -5,15 +5,19 @@ fără a rescrie baza.
 
 ## Cum funcționează
 
-| Regim                          | Sursă                                 | Acoperire                                          |
-| ------------------------------ | ------------------------------------- | -------------------------------------------------- |
-| Localități <50k (`sub_50_mii`) | endpoint oficial, adresă goală        | **completă** — un cod/localitate                   |
-| Orașe >50k — străzi existente  | re-query exact pe `res_zip`           | **~100%** — refresh cod + oficiu                   |
-| Orașe >50k — străzi noi        | OSM (Overpass) → query exact pe posta | **parțială** — doar cele pe care posta le codifică |
+| Regim                          | Sursă                                  | Acoperire                                          |
+| ------------------------------ | -------------------------------------- | -------------------------------------------------- |
+| Localități <50k (`sub_50_mii`) | endpoint oficial, adresă goală         | **completă** — un cod/localitate                   |
+| Orașe >50k — străzi existente  | re-query exact pe `res_zip`            | **~100%** — refresh cod + oficiu                   |
+| Orașe >50k — străzi noi        | OSM (Overpass) → query exact pe posta  | **parțială** — doar cele pe care posta le codifică |
+| Orașe >50k — `--by-code`       | căutare inversă pe blocurile de coduri | **completă** pe blocurile folosite de oraș         |
 
-> Limitarea orașelor: site-ul posta-romana.ro **nu permite enumerarea** străzilor (`k_adresa` cere nume exact). Fișierul
-> oficial descărcabil e blocat la Sept-2016. OSM dă numele curente, posta dă codul oficial — restul rămâne golul real al
-> sursei.
+> Căutarea pe stradă (`k_adresa`) cere numele exact, deci nu permite enumerarea străzilor. Căutarea inversă
+> (`cautare_cod.php`) întoarce însă **toate** străzile unui cod; pentru codul unui oficiu întoarce toate străzile
+> oficiului. Cu `--by-code`, `crawl.py` parcurge toate codurile din blocurile folosite de fiecare oraș mare (prefixul de
+> 4 cifre din `res_zip.sql`, 100 de coduri/bloc; `--prefix-len 3` = 1000/bloc) și găsește și străzile pe care nu le
+> avem. Străzile existente nevăzute în blocuri se caută apoi exact, ca plasă de siguranță. Fișierul oficial descărcabil
+> e blocat la Sept-2016.
 
 ## Rulare
 
@@ -28,9 +32,14 @@ python3 crawl.py --no-osm
 # TOT (lung, ~ore; resumabil — județele terminate sunt în done.txt)
 python3 crawl.py
 python3 build_delta.py
+
+# nomenclatorul complet pe orașe, prin blocurile de coduri (~6 h pe toată țara; OSM nu mai e necesar)
+python3 crawl.py --by-code --no-osm
+python3 build_delta.py
 ```
 
-Resume: re-rularea `crawl.py` sare județele din `done.txt` și adaugă în `live_rows.jsonl`.
+Resume: re-rularea `crawl.py` sare județele din `done.txt` și, cu `--by-code`, blocurile din `done_blocks.txt`;
+rândurile se adaugă în `live_rows.jsonl`.
 
 ## Ieșiri
 
