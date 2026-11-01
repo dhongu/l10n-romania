@@ -258,10 +258,39 @@ DELETE FROM res_zip z
 """
 
 
+def write_cities(f, cities, big_cities, office_addr, gone_ids):
+    """UPDATE/INSERT per oras + DELETE pentru randurile disparute nefolosite; intoarce nr. de UPDATE."""
+    n_upd = 0
+    start = len(gone_ids)
+    for key, (matched, city_new, city_gone) in cities.items():
+        rows = big_cities[key]
+        f.write(f"-- === oras {rows[0]['city']} ({rows[0]['state']}) ===\n")
+        for m, r in matched:
+            sets = city_update(m, r, office_addr)
+            if sets:
+                n_upd += 1
+                sql_sets = ", ".join(f"{k}=NULL" if v is None else f"{k}='{esc(v)}'" for k, v in sets.items())
+                f.write(f"UPDATE res_zip SET {sql_sets} WHERE id={m['id']};\n")
+        for r in city_new:
+            sector = posta.sector_for(r["state"], r["name"])
+            f.write(insert_stmt(r, sector, office_addr.get(posta.norm_key(r["office"]), "")))
+        gone_ids.extend(int(m["id"]) for m in city_gone)
+        f.write("\n")
+    if len(gone_ids) > start:
+        f.write(gone_sql(gone_ids[start:]))
+        f.write("\n")
+    return n_upd
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--live", default="live_rows.jsonl")
     ap.add_argument("--out-sql", default="res_zip_delta.sql")
+    ap.add_argument(
+        "--out-osm-sql",
+        default="res_zip_osm_delta.sql",
+        help="strazile oraselor mici din OSM (osm_towns.py), separat fiindca sunt sub ODbL",
+    )
     ap.add_argument("--out-report", default="raport.csv")
     args = ap.parse_args()
 
@@ -274,13 +303,14 @@ def main():
 
     live = load_live(args.live)
     small = [r for r in live if r["src"] == "small"]
-    big = [r for r in live if r["src"] in ("code", "refresh", "osm-new")]
+    big = [r for r in live if r["src"] in ("code", "refresh", "osm-new", "osm-town")]
 
     # orase atinse (state_norm, city_norm)
     big_cities = {}
     for r in big:
         big_cities.setdefault((posta.norm_key(r["state"]), posta.city_key(r["city"])), []).append(r)
-    touched_states = {posta.norm_key(r["state"]) for r in live}
+    # GONE la comune doar in judetele din care s-au citit comunele (nu si cele atinse doar de orase/OSM)
+    touched_states = {posta.norm_key(r["state"]) for r in small}
 
     # Comuna sub_50_mii = UN cod/localitate -> identitatea e (judet, cod), NU numele.
     # Asa prindem redenumirile (calificativ schimbat) ca update, nu ca new+gone.
@@ -317,17 +347,19 @@ def main():
     # orase: potrivire pe randurile existente (dupa id, nu dupa textul orasului)
     city_results = {}
     for (st, city), rows in big_cities.items():
-        # randurile-oras cu cod '*' si unitatile postale nu vin de la posta -> raman neatinse
+        # randurile-oras cu cod '*', unitatile postale si randul-localitate (fara strada,
+        # la orasele mici) nu sunt strazi de la posta/OSM -> raman neatinse
         ex_city = [
             m
             for m in ex_index_city(ex_index, st, city)
-            if m["name"].isdigit() and m["street_type"] not in posta.POSTAL_UNIT_TYPES
+            if m["name"].isdigit() and m["street_name"] and m["street_type"] not in posta.POSTAL_UNIT_TYPES
         ]
         city_results[(st, city)] = match_city(ex_city, rows)
 
     # ---- SQL ----
     n_city_upd = 0
     gone_ids = []
+    osm_cities = {k for k, rows in big_cities.items() if all(r["src"] == "osm-town" for r in rows)}
     with open(args.out_sql, "w", encoding="utf-8") as f:
         f.write("-- Delta posta-romana.ro (live) + OSM. Idempotent.\n")
         f.write("-- Comune: INSERT/UPDATE. Orase: UPDATE pe loc + INSERT + DELETE doar pt randuri nefolosite.\n")
@@ -357,27 +389,25 @@ def main():
                 f.write(f"UPDATE res_zip SET office='{esc(r['office'])}'{addr_set} WHERE id={m['id']};\n")
             f.write("\n")
 
-        for (_st, _city), (matched, city_new, city_gone) in city_results.items():
-            rows = big_cities[(_st, _city)]
-            f.write(f"-- === oras {rows[0]['city']} ({rows[0]['state']}) ===\n")
-            for m, r in matched:
-                sets = city_update(m, r, office_addr)
-                if sets:
-                    n_city_upd += 1
-                    sql_sets = ", ".join(f"{k}=NULL" if v is None else f"{k}='{esc(v)}'" for k, v in sets.items())
-                    f.write(f"UPDATE res_zip SET {sql_sets} WHERE id={m['id']};\n")
-            for r in city_new:
-                sector = posta.sector_for(r["state"], r["name"])
-                f.write(insert_stmt(r, sector, office_addr.get(posta.norm_key(r["office"]), "")))
-            gone_ids.extend(int(m["id"]) for m in city_gone)
-            f.write("\n")
-
-        if gone_ids:
-            f.write(gone_sql(gone_ids))
-            f.write("\n")
-
+        cities = {k: v for k, v in city_results.items() if k not in osm_cities}
+        n_city_upd += write_cities(f, cities, big_cities, office_addr, gone_ids)
         f.write(mapping_sql())
         f.write("COMMIT;\n")
+
+    osm_gone_ids = []
+    if osm_cities:
+        with open(args.out_osm_sql, "w", encoding="utf-8") as f:
+            f.write("-- Strazile oraselor mici: nume din OpenStreetMap, cod de la posta-romana.ro. Idempotent.\n")
+            f.write(
+                "-- Date OSM: (c) OpenStreetMap contributors, licenta ODbL (https://www.openstreetmap.org/copyright).\n"
+            )
+            f.write("BEGIN;\n")
+            f.write("SELECT setval('res_zip_id_seq', (SELECT MAX(id) FROM res_zip));\n\n")
+            cities = {k: v for k, v in city_results.items() if k in osm_cities}
+            n_city_upd += write_cities(f, cities, big_cities, office_addr, osm_gone_ids)
+            f.write(mapping_sql())
+            f.write("COMMIT;\n")
+    gone_ids += osm_gone_ids
 
     # ---- raport ----
     with open(args.out_report, "w", newline="", encoding="utf-8") as f:
@@ -431,7 +461,7 @@ def main():
         f"{sum(len(v[1]) for v in city_results.values())} NEW, {len(gone_ids)} GONE"
     )
     print(f"GONE comune (in judetele atinse, exclus orase): {len(gone)}")
-    print(f"-> {args.out_sql}  +  {args.out_report}")
+    print(f"-> {args.out_sql}  +  {args.out_report}" + (f"  +  {args.out_osm_sql}" if osm_cities else ""))
 
 
 def ex_index_city(ex_index, st, city):
