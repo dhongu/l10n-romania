@@ -3,7 +3,8 @@
 - Postal code refresh tools (`tools/`): `osm_towns.py` gives the towns under 50,000 inhabitants a street list. The
   post office has a single code for these towns and does not list their streets, so the street names come from
   OpenStreetMap (ODbL) and each street gets the town's code from posta-romana.ro. `build_delta.py` writes these rows
-  to a separate `res_zip_osm_delta.sql`. No change to the installed module.
+  to a separate `res_zip_osm_delta.sql`. `crawl.py --orase` reads a single big city, without the localities of its
+  county. No change to the installed module.
 
 ## 19.0.0.0.8 (2026-11-01)
 
