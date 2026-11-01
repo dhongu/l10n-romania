@@ -45,6 +45,10 @@ python3 build_delta.py
 python3 crawl.py --by-code --no-osm
 python3 build_delta.py
 
+# un singur oraș mare, fără comunele județului (pentru verificare oraș cu oraș)
+python3 crawl.py --by-code --no-osm --orase Iasi
+python3 build_delta.py
+
 # străzile orașelor mici din OSM (după crawl.py, în același workdir; ~42 de interogări Overpass)
 python3 osm_towns.py --judete Vaslui
 python3 build_delta.py   # -> și res_zip_osm_delta.sql
