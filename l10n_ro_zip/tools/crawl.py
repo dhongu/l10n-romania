@@ -20,7 +20,6 @@ Uz:
 import argparse
 import json
 import os
-import re
 import sys
 import time
 
@@ -41,11 +40,6 @@ SQL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "re
 DELAY = 0.45
 OUT = "live_rows.jsonl"
 DONE = "done.txt"
-
-
-def base_street(street_name):
-    """Numele de baza pt query exact (fara sufix 'bl.'/'nr.')."""
-    return re.split(r"\s+(?:bl\.|nr\.)", street_name)[0].strip()
 
 
 def to_schema(r, src):
@@ -79,7 +73,9 @@ def crawl_judet(jud_eticheta, jud_val, ex_index, use_osm, fout, osm_cache):
             existing_bases = set()
             for k, lst in ex_index.items():
                 if k[0] == posta.norm_key(state_ascii) and k[1] == posta.norm_key(city_ascii):
-                    existing_bases.add(base_street(lst[0]["street_name"]))
+                    if lst[0]["street_type"] in posta.POSTAL_UNIT_TYPES:
+                        continue
+                    existing_bases.add(posta.base_street(lst[0]["street_name"]))
             existing_bases.discard("")
             seen_bases = set()
             for b in sorted(existing_bases):

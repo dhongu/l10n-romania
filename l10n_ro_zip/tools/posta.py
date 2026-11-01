@@ -150,6 +150,9 @@ STREET_TYPE_MAP = {
     "Parc": "Parc",
     "Curtea": "Curte",
 }
+# randuri de unitati postale (oficii, ghisee, uz intern): nu sunt strazi, posta nu le
+# intoarce la cautarea pe strada -> nu se reimprospateaza si nu se sterg.
+POSTAL_UNIT_TYPES = {"O.P.", "Gh.P.", "O.P.R.M.", "O.P.D.C.", "Uz intern"}
 STREET_TYPE_PREFIXES = sorted(STREET_TYPE_MAP, key=len, reverse=True)
 
 
@@ -187,6 +190,21 @@ def split_street(combined):
             return STREET_TYPE_MAP[pref], strip_diacritics(rest)
     # fara tip recunoscut -> tot in street_name
     return "", strip_diacritics(combined)
+
+
+def base_street(street_name):
+    """Numele de baza pt query exact (fara sufix 'bl.'/'nr.')."""
+    return re.split(r"\s+(?:bl\.|nr\.)", street_name or "")[0].strip()
+
+
+def sector_for(state, zip_code):
+    """Bucuresti: sectorul e a doua cifra a codului (01xxxx = sector 1 ... 06xxxx = sector 6).
+
+    Posta nu intoarce sectorul, iar post_init_hook leaga city_id de sector.
+    """
+    if norm_key(state) == "bucuresti" and len(zip_code) == 6 and zip_code[1] in "123456":
+        return zip_code[1]
+    return ""
 
 
 def _post(endpoint, data, retries=3):
