@@ -7,6 +7,7 @@
   install and, for existing databases, by a migration; partners keep their postal code.
 - Postal code refresh tools (`tools/`): the delta updates and deletes a row only if it still has the county and city it
   has in `res_zip.sql`.
+- Consultant sheet (`readme/FISA_CONSULTANT.md`) and usage guide (`readme/USAGE.md`), with screenshots.
 
 ## 19.0.0.0.10 (2026-11-01)
 
