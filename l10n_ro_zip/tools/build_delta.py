@@ -7,12 +7,14 @@ Doua regimuri, pe sursa randului live:
         RENAME     -> UPDATE city (acelasi cod, nume schimbat)
         OFFICE_ADD -> UPDATE office (existent gol, live are)
     Un cod schimbat apare ca NEW + GONE (GONE doar raportat, nu sters).
-  - 'refresh'/'osm-new' (orase >50k): potrivire pe randurile EXISTENTE ale orasului
+  - 'code'/'refresh'/'osm-new' (orase >50k): potrivire pe randurile EXISTENTE ale orasului
         CITY_UPDATE -> UPDATE pe loc (id pastrat, deci si res_partner.zip_id)
                        pas 1: aceeasi strada + acelasi cod; pas 2: aceeasi strada de baza
                        + acelasi cod (re-segmentare bl./nr.); pas 3: aceeasi strada de baza,
                        cod schimbat; pas 4: acelasi cod, strada redenumita. Pasii 3-4 doar
-                       cand perechea e unica pe ambele parti.
+                       cand perechea e unica pe ambele parti. Pas 5: acelasi cod, nume
+                       asemanator (Horia/Horea, ordinea cuvintelor) sau prenume adaugat, doar
+                       cand perechea e unica in acel cod.
         CITY_NEW    -> INSERT
         CITY_GONE   -> DELETE doar daca randul nu e folosit de niciun partener
                        (FK res_partner.zip_id e ON DELETE SET NULL); altfel ramane.
@@ -30,6 +32,7 @@ la rulare partiala, ar lista tot restul tarii).
 
 import argparse
 import csv
+import difflib
 import json
 import os
 
@@ -114,12 +117,83 @@ def match_city(ex_city, live_rows):
         used = {id(m) for m, _r in matched}
         pending = [m for m in pending if id(m) not in used]
         live_rows = unmatched
-    return matched, unmatched, pending
+    fuzzy = match_similar(pending, live_rows)
+    matched.extend(fuzzy)
+    used_ex = {id(m) for m, _r in fuzzy}
+    used_live = {id(r) for _m, r in fuzzy}
+    return matched, [r for r in live_rows if id(r) not in used_live], [m for m in pending if id(m) not in used_ex]
+
+
+SIMILAR_MIN = 0.8
+
+
+def _tokens(street_name):
+    return posta.norm_key(street_name).split()
+
+
+def similarity(a, b):
+    """Asemanarea a doua nume de strada, insensibila la ordinea cuvintelor.
+
+    1.0 la acelasi set de cuvinte (Romulus Cioflec / Cioflec Romulus). Incluziunea
+    (Martinovics / Martinovics Ignac) e tratata separat, in is_subset_pair.
+    """
+    ta, tb = set(_tokens(a)), set(_tokens(b))
+    if not ta or not tb:
+        return 0.0
+    if ta == tb:
+        return 1.0
+    return difflib.SequenceMatcher(None, " ".join(sorted(ta)), " ".join(sorted(tb))).ratio()
+
+
+def is_subset_pair(a, b):
+    """Un nume e celalalt plus cel mult un cuvant (prenume adaugat), iar partea comuna
+    are un cuvant de cel putin 3 litere — nu '1' / '1 Mai'."""
+    ta, tb = set(_tokens(a)), set(_tokens(b))
+    small, big = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
+    if not small or small == big or not small <= big or len(big - small) > 1:
+        return False
+    return any(len(t) >= 3 and t.isalpha() for t in small)
+
+
+def match_similar(pending, live_rows):
+    """Pas 5: acelasi cod, nume asemanator; fiecare rand o data.
+
+    Asemanarea de text (Horia/Horea) se ia de la scorul cel mai mare in jos. Incluziunea
+    de cuvinte se accepta doar cand perechea e unica pe ambele parti in acel cod, ca la
+    pasii 3-4 — altfel 'Mihai' s-ar putea lega de 'Mihai Viteazul' in loc de 'Mihai Eminescu'.
+    """
+    by_zip = {}
+    for m in pending:
+        by_zip.setdefault(m["name"], []).append(m)
+    pairs, subset = [], []
+    for r in live_rows:
+        for m in by_zip.get(r["name"], []):
+            score = similarity(m["street_name"], r["street_name"])
+            if score >= SIMILAR_MIN:
+                pairs.append((score, m, r))
+            elif is_subset_pair(m["street_name"], r["street_name"]):
+                subset.append((m, r))
+    n_ex, n_live = {}, {}
+    for m, r in subset:
+        n_ex[id(m)] = n_ex.get(id(m), 0) + 1
+        n_live[id(r)] = n_live.get(id(r), 0) + 1
+    pairs.sort(key=lambda p: -p[0])
+    pairs += [(0.0, m, r) for m, r in subset if n_ex[id(m)] == 1 and n_live[id(r)] == 1]
+    out, used = [], set()
+    for _score, m, r in pairs:
+        if id(m) in used or id(r) in used:
+            continue
+        used.update((id(m), id(r)))
+        out.append((m, r))
+    return out
 
 
 def city_update(m, r, office_addr):
     """SET-urile pentru un rand de oras potrivit; gol daca nu s-a schimbat nimic."""
     sets = {}
+    if r["city"] != m["city"]:  # ex. nume trunchiat in res_zip.sql ('Drobeta-Turnu S')
+        sets["city"] = r["city"]
+        sets["country_id"] = None
     if r["name"] != m["name"]:
         sets["name"] = r["name"]
         # codul poate muta randul in alt sector -> sector si relatii recalculate
@@ -200,12 +274,12 @@ def main():
 
     live = load_live(args.live)
     small = [r for r in live if r["src"] == "small"]
-    big = [r for r in live if r["src"] in ("refresh", "osm-new")]
+    big = [r for r in live if r["src"] in ("code", "refresh", "osm-new")]
 
     # orase atinse (state_norm, city_norm)
     big_cities = {}
     for r in big:
-        big_cities.setdefault((posta.norm_key(r["state"]), posta.norm_key(r["city"])), []).append(r)
+        big_cities.setdefault((posta.norm_key(r["state"]), posta.city_key(r["city"])), []).append(r)
     touched_states = {posta.norm_key(r["state"]) for r in live}
 
     # Comuna sub_50_mii = UN cod/localitate -> identitatea e (judet, cod), NU numele.
@@ -224,7 +298,7 @@ def main():
         if not m:
             new.append(r)
             continue
-        if posta.norm_key(m["city"]) != posta.norm_key(r["city"]):
+        if posta.city_key(m["city"]) != posta.city_key(r["city"]):
             rename.append((m, r))  # acelasi cod, nume schimbat
         elif not m["office"] and r["office"]:
             office_add.append((m, r))
@@ -235,7 +309,7 @@ def main():
     for (st, zipc), m in ex_loc_by_zip.items():
         if st not in touched_states:
             continue
-        if (st, posta.norm_key(m["city"])) in big_cities:
+        if (st, posta.city_key(m["city"])) in big_cities:
             continue
         if (st, zipc) not in seen_zip:
             gone.append(m)
@@ -341,7 +415,7 @@ def main():
                     "",
                     "",
                     "",
-                    "refresh+osm",
+                    "+".join(sorted({r["src"] for r in rows})),
                 ]
             )
             for r in city_new:

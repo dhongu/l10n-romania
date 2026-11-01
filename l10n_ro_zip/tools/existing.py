@@ -2,7 +2,7 @@
 
 import re
 
-from posta import norm_key
+from posta import city_key, norm_key
 
 # res_zip.sql e impartit in mai multe INSERT-uri: ultimul rand din fiecare se termina cu ");",
 # restul cu "),". Valorile pot contine apostrof dublat ('').
@@ -31,7 +31,7 @@ def load(sql_path):
 
 def key(state, city, street_name):
     """Cheie de identitate a unei strazi/localitati (insensibila la diacritice/ortografie)."""
-    return (norm_key(state), norm_key(city), norm_key(street_name))
+    return (norm_key(state), city_key(city), norm_key(street_name))
 
 
 def build_index(rows):

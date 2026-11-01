@@ -1,3 +1,11 @@
+## 19.0.0.0.8 (2026-11-01)
+
+- Postal code refresh tools (`tools/`): `crawl.py --by-code` reads every street of the big cities from posta-romana.ro
+  by looking up all the codes in the blocks each city uses, instead of only the streets we already know. Streets whose
+  name is spelled differently by the post office (`Horia`/`Horea`, word order, an added first name) are now matched to
+  the existing row under the same code. Drobeta-Turnu Severin, cut to `Drobeta-Turnu S` in `res_zip.sql`, is now
+  recognised and gets its full name back instead of a duplicate set of streets. No change to the installed module.
+
 ## 19.0.0.0.7 (2026-11-01)
 
 - Postal code refresh tools (`tools/`): the generated delta now updates city streets in place instead of deleting and
