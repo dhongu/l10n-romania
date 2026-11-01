@@ -22,7 +22,9 @@ Doua regimuri, pe sursa randului live:
                        (FK res_partner.zip_id e ON DELETE SET NULL); altfel ramane.
 
 Delta e idempotent: INSERT-urile nu au id (vin din secventa) si sunt pazite de
-NOT EXISTS, UPDATE/DELETE se refac fara efect. Sectorul (Bucuresti) si adresa
+NOT EXISTS, UPDATE/DELETE se refac fara efect. UPDATE/DELETE tintesc randul dupa id
+si dupa judetul + orasul din res_zip.sql (row_where), ca sa nu atinga alt rand intr-o baza
+in care res_zip nu vine din res_zip.sql. Sectorul (Bucuresti) si adresa
 oficiului se pastreaza de pe randul existent sau se deduc (cod / nume oficiu).
 La final, randurile noi si cele redenumite primesc country_id/state_id/city_id
 cu aceleasi reguli ca post_init_hook.
@@ -212,6 +214,11 @@ def match_similar(pending, live_rows):
     return out
 
 
+def row_where(m):
+    """Conditia pentru un rand din res_zip.sql: id-ul, plus judetul si orasul pe care le avea."""
+    return f"id={m['id']} AND state='{esc(m['state'])}' AND city='{esc(m['city'])}'"
+
+
 def city_update(m, r, office_addr):
     """SET-urile pentru un rand de oras potrivit; gol daca nu s-a schimbat nimic."""
     sets = {}
@@ -246,6 +253,7 @@ def mapping_sql():
     cu aceleasi reguli ca post_init_hook."""
     sector_cases = " ".join(f"WHEN '{s}' THEN '{x}'" for s, x in SECTOR_CITY.items())
     return f"""-- === relatii pentru randurile noi/redenumite (ca post_init_hook) ===
+DROP TABLE IF EXISTS _zip_remap;
 CREATE TEMP TABLE _zip_remap ON COMMIT DROP AS SELECT id FROM res_zip WHERE country_id IS NULL;
 UPDATE res_zip z SET country_id = c.id FROM res_country c, _zip_remap t WHERE z.id = t.id AND c.code = 'RO';
 UPDATE res_zip z SET state_id = s.id
@@ -267,17 +275,18 @@ UPDATE res_zip z SET city_id = rc.id, state_id = rc.state_id
 """
 
 
-def gone_sql(gone_ids):
+def gone_sql(gone_rows):
     """Randurile de oras disparute: stergem doar ce nu e folosit de niciun partener.
 
     FK res_partner.zip_id e ON DELETE SET NULL, deci o stergere directa ar goli codul.
     Nu mutam partenerii pe alt rand cu acelasi cod: ar ajunge pe alta strada.
     """
-    ids = ", ".join(str(i) for i in sorted(gone_ids))
-    arr = f"ARRAY[{ids}]"
-    return f"""-- === orase GONE ({len(gone_ids)} randuri; cele folosite de parteneri raman) ===
+    rows = ", ".join(
+        f"({m['id']}, '{esc(m['state'])}', '{esc(m['city'])}')" for m in sorted(gone_rows, key=lambda m: int(m["id"]))
+    )
+    return f"""-- === orase GONE ({len(gone_rows)} randuri; cele folosite de parteneri raman) ===
 DELETE FROM res_zip z
- WHERE z.id = ANY({arr})
+ WHERE (z.id, z.state, z.city) IN (VALUES {rows})
    AND NOT EXISTS (SELECT 1 FROM res_partner p WHERE p.zip_id = z.id);
 """
 
@@ -294,11 +303,11 @@ def write_cities(f, cities, big_cities, office_addr, gone_ids):
             if sets:
                 n_upd += 1
                 sql_sets = ", ".join(f"{k}=NULL" if v is None else f"{k}='{esc(v)}'" for k, v in sets.items())
-                f.write(f"UPDATE res_zip SET {sql_sets} WHERE id={m['id']};\n")
+                f.write(f"UPDATE res_zip SET {sql_sets} WHERE {row_where(m)};\n")
         for r in city_new:
             sector = posta.sector_for(r["state"], r["name"])
             f.write(insert_stmt(r, sector, office_addr.get(posta.norm_key(r["office"]), "")))
-        gone_ids.extend(int(m["id"]) for m in city_gone)
+        gone_ids.extend(city_gone)
         f.write("\n")
     if len(gone_ids) > start:
         f.write(gone_sql(gone_ids[start:]))
@@ -402,7 +411,7 @@ def main():
                 # city_id/country_id resetate -> recalculate in sectiunea de relatii
                 f.write(
                     f"UPDATE res_zip SET city='{esc(r['city'])}'{office_set}, city_id=NULL, country_id=NULL "
-                    f"WHERE id={m['id']};  -- {m['city']} -> {r['city']} ({r['name']})\n"
+                    f"WHERE {row_where(m)};  -- {m['city']} -> {r['city']} ({r['name']})\n"
                 )
             f.write("\n")
         if office_add:
@@ -410,7 +419,7 @@ def main():
             for m, r in office_add:
                 addr = office_addr.get(posta.norm_key(r["office"]), "")
                 addr_set = f", address='{esc(addr)}'" if addr and not m["address"] else ""
-                f.write(f"UPDATE res_zip SET office='{esc(r['office'])}'{addr_set} WHERE id={m['id']};\n")
+                f.write(f"UPDATE res_zip SET office='{esc(r['office'])}'{addr_set} WHERE {row_where(m)};\n")
             f.write("\n")
 
         cities = {k: v for k, v in city_results.items() if k not in osm_cities}

@@ -85,37 +85,31 @@ Ce se păstrează sau se deduce, fiindcă posta nu le întoarce:
 - `address` (adresa oficiului): rămâne de pe rândul existent; la oficiu nou se ia de pe alt rând cu același oficiu.
 
 Delta e **idempotent**: `INSERT`-urile nu au id (vin din secvență) și sunt păzite de `NOT EXISTS`, iar `UPDATE`/`DELETE`
-nu mai au efect la a doua rulare. La final, rândurile noi și cele redenumite primesc `country_id`/`state_id`/`city_id`
-cu aceleași reguli ca `post_init_hook`.
+nu mai au efect la a doua rulare. `UPDATE`/`DELETE` țintesc rândul după id și după județul + orașul pe care le avea în
+`res_zip.sql`, ca să nu atingă alt rând într-o bază în care `res_zip` nu vine din `res_zip.sql`. La final, rândurile noi
+și cele redenumite primesc `country_id`/`state_id`/`city_id` cu aceleași reguli ca `post_init_hook`.
 
 `existing.py` oprește rularea dacă un rând din `res_zip.sql` nu poate fi citit (altfel id-ul maxim și lista de străzi de
 reîmprospătat ar fi greșite).
 
-## STARE și PLAN DE RELUAT (la 2026-06-19)
+## Integrarea în modul
 
-Validat complet pe **Covasna** și **Iași**. Iași: 2 NEW, 3 RENAME, 411 OFFICE_ADD, oraș 1221→1335 rânduri (322 străzi
-noi, ~10 din OSM), 0 GONE fals.
+Delta-urile intră în modul ca `data/res_zip_delta.sql` și `data/res_zip_osm.sql` (copii ale `res_zip_delta.sql` și
+`res_zip_osm_delta.sql`). `res_zip.sql` rămâne neschimbat: id-urile lui sunt cele pe care delta le actualizează.
+`apply_zip_delta()` din `__init__.py` le rulează în tranzacția Odoo (fără `BEGIN`/`COMMIT`): la instalare din
+`post_init_hook`, după `res_zip.sql`, iar la bazele existente din `migrations/<versiune>/post-migration.py`. La o
+reîmprospătare nouă se regenerează ambele fișiere față de `res_zip.sql` și se adaugă o migrare pe versiunea nouă; delta
+nou îl acoperă pe cel vechi, deci bazele care l-au aplicat deja nu se strică.
 
-Capcane de date rezolvate în normalizator (`posta.py`): mojibake `ª`=Ș corupt în baza 2013; unificare ortografie veche
-`â`↔`î`; dedup fără `src` (altfel refresh+osm-new dublau rândul).
-
-**Rămas de făcut (neînceput):**
-
-1. Full country: `python3 prefetch_osm.py` (~10 min) → `python3 crawl.py` (~2-3h, resumabil prin `done.txt`) →
-   `python3 build_delta.py`. Rulează dintr-un workdir extern (ex. scratchpad), nu din `tools/`, ca să nu lași artefacte
-   în modul.
-2. Review `raport.csv` național (mai ales `GONE` — nimic nu se șterge automat în afara orașelor).
-3. Integrare — decizie deschisă:
-   - **recomandat**: fuzionează datele în `data/res_zip.sql` (instalări noi primesc date curente fără migrare) + delta
-     rulat dintr-un script în `migrations/` pentru instalări existente (delta e idempotent și nu pierde `zip_id`); SAU
-   - delta separat în `data/`, apelat din `post_init_hook` după `res_zip.sql`. Pe branch dedicat + PR; nu s-a atins încă
-     `res_zip.sql`.
+Pași pentru toată țara: `python3 crawl.py --by-code --no-osm` (~6 h, resumabil prin `done.txt`/`done_blocks.txt`) →
+`python3 osm_towns.py` → `python3 build_delta.py`, dintr-un workdir extern (ex. scratchpad), nu din `tools/`. Înainte de
+integrare, revezi `raport.csv` (mai ales `CITY_GONE` și `GONE`).
 
 ## Note legale / politețe
 
 - `DELAY=0.45s` între request-uri; verifică robots.txt + ToS înainte de crawl complet.
 - OSM Overpass cere UA descriptiv (nu „Mozilla"), altfel 406.
-- Datele OSM sunt © OpenStreetMap contributors, sub licența ODbL (https://www.openstreetmap.org/copyright). Când
-  străzile orașelor mici intră în modul, se pun într-un fișier de date separat, cu atribuirea și licența ODbL menționate
-  în fișier, în README-ul modulului și pe pagina din Apps Store; codul modulului își păstrează licența.
+- Datele OSM sunt © OpenStreetMap contributors, sub licența ODbL (https://www.openstreetmap.org/copyright). Străzile
+  orașelor mici stau în `data/res_zip_osm.sql`, separat, cu atribuirea în fișier și în `readme/CREDITS.md` (deci și în
+  README-ul modulului și pe pagina din Apps Store); codul modulului își păstrează licența.
 - București: tratat ca oraș >50k, dar coloana `sector` cere mapare separată (vezi post_init_hook).
