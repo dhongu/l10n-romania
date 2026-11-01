@@ -1,3 +1,27 @@
+## 20.0.0.0.9 (2026-11-01)
+
+- Postal code refresh tools (`tools/`): `osm_towns.py` gives the towns under 50,000 inhabitants a street list. The
+  post office has a single code for these towns and does not list their streets, so the street names come from
+  OpenStreetMap (ODbL) and each street gets the town's code from posta-romana.ro. `build_delta.py` writes these rows
+  to a separate `res_zip_osm_delta.sql`. No change to the installed module.
+
+## 20.0.0.0.8 (2026-11-01)
+
+- Postal code refresh tools (`tools/`): `crawl.py --by-code` reads every street of the big cities from posta-romana.ro
+  by looking up all the codes in the blocks each city uses, instead of only the streets we already know. Streets whose
+  name is spelled differently by the post office (`Horia`/`Horea`, word order, an added first name) are now matched to
+  the existing row under the same code. Drobeta-Turnu Severin, cut to `Drobeta-Turnu S` in `res_zip.sql`, is now
+  recognised and gets its full name back instead of a duplicate set of streets. No change to the installed module.
+
+## 20.0.0.0.7 (2026-11-01)
+
+- Postal code refresh tools (`tools/`): the generated delta now updates city streets in place instead of deleting and
+  re-inserting them, so partners keep their postal code; a renamed street or a street with a new code is updated on
+  the same row, and rows still used by a partner are never deleted. Post office rows (`O.P.`, `Uz intern`...) are left
+  as they are. The Bucharest sector and the post office address are kept (or derived for new rows), the delta can be
+  run more than once, and reading `res_zip.sql` no longer skips the last row of each `INSERT` block. No change to the
+  installed module.
+
 ## 20.0.0.0.6 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Postal Codes* (was *Romania - Coduri Postale*), with the same title on the Apps banner.

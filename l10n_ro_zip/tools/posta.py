@@ -150,6 +150,9 @@ STREET_TYPE_MAP = {
     "Parc": "Parc",
     "Curtea": "Curte",
 }
+# randuri de unitati postale (oficii, ghisee, uz intern): nu sunt strazi, posta nu le
+# intoarce la cautarea pe strada -> nu se reimprospateaza si nu se sterg.
+POSTAL_UNIT_TYPES = {"O.P.", "Gh.P.", "O.P.R.M.", "O.P.D.C.", "Uz intern"}
 STREET_TYPE_PREFIXES = sorted(STREET_TYPE_MAP, key=len, reverse=True)
 
 
@@ -176,6 +179,18 @@ def norm_key(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
+# nume de oras trunchiate in res_zip.sql (coloana veche de 15 caractere) -> numele intreg
+CITY_FIX = {
+    "drobeta turnu s": "drobeta turnu severin",
+}
+
+
+def city_key(name):
+    """Cheia unui oras pentru comparatii; repara numele trunchiate din res_zip.sql."""
+    k = norm_key(strip_diacritics(name))
+    return CITY_FIX.get(k, k)
+
+
 def split_street(combined):
     """'Șoseaua Păcurari nr. 59-T' -> ('Sosea', 'Pacurari nr. 59-T') in stil res_zip."""
     combined = (combined or "").strip()
@@ -187,6 +202,21 @@ def split_street(combined):
             return STREET_TYPE_MAP[pref], strip_diacritics(rest)
     # fara tip recunoscut -> tot in street_name
     return "", strip_diacritics(combined)
+
+
+def base_street(street_name):
+    """Numele de baza pt query exact (fara sufix 'bl.'/'nr.')."""
+    return re.split(r"\s+(?:bl\.|nr\.)", street_name or "")[0].strip()
+
+
+def sector_for(state, zip_code):
+    """Bucuresti: sectorul e a doua cifra a codului (01xxxx = sector 1 ... 06xxxx = sector 6).
+
+    Posta nu intoarce sectorul, iar post_init_hook leaga city_id de sector.
+    """
+    if norm_key(state) == "bucuresti" and len(zip_code) == 6 and zip_code[1] in "123456":
+        return zip_code[1]
+    return ""
 
 
 def _post(endpoint, data, retries=3):
@@ -241,7 +271,22 @@ def search_address(judet_val, localitate, adresa=""):
             "k_lang": "ro",
         },
     )
-    formular = data.get("formular", "")
+    return _parse_rows(data.get("formular", ""))
+
+
+def search_code(zip_code):
+    """Cautare inversa: TOATE strazile/localitatile care au codul dat (lista goala daca nu exista).
+
+    Spre deosebire de search_address (care cere numele exact al strazii), asta permite
+    enumerarea strazilor unui oras parcurgand blocurile lui de coduri.
+    """
+    data = _post("cautare_cod.php", {"k_cod_postal": zip_code, "k_lang": "ro"})
+    if not data.get("found"):
+        return []
+    return _parse_rows(data.get("formular", ""))
+
+
+def _parse_rows(formular):
     rows = []
     if "nu a furnizat" in formular or "completati toate" in formular:
         return rows
