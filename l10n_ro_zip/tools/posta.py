@@ -259,7 +259,22 @@ def search_address(judet_val, localitate, adresa=""):
             "k_lang": "ro",
         },
     )
-    formular = data.get("formular", "")
+    return _parse_rows(data.get("formular", ""))
+
+
+def search_code(zip_code):
+    """Cautare inversa: TOATE strazile/localitatile care au codul dat (lista goala daca nu exista).
+
+    Spre deosebire de search_address (care cere numele exact al strazii), asta permite
+    enumerarea strazilor unui oras parcurgand blocurile lui de coduri.
+    """
+    data = _post("cautare_cod.php", {"k_cod_postal": zip_code, "k_lang": "ro"})
+    if not data.get("found"):
+        return []
+    return _parse_rows(data.get("formular", ""))
+
+
+def _parse_rows(formular):
     rows = []
     if "nu a furnizat" in formular or "completati toate" in formular:
         return rows
