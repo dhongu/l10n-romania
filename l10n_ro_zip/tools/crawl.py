@@ -107,7 +107,7 @@ def crawl_codes(jud_eticheta, ex_rows, cities, prefix_len, fout):
                     other += 1  # strada din alt oras/judet (ex. oras mic cu coduri pe strazi)
                     continue
                 row = to_schema(r, "code")
-                rk = (ck, posta.norm_key(row["street_name"]), row["name"])
+                rk = (ck, posta.norm_key(row["street_type"]), posta.norm_key(row["street_name"]), row["name"])
                 if rk in seen_rows:
                     continue
                 seen_rows.add(rk)
@@ -225,7 +225,10 @@ def main():
     only_cities = None
     if args.orase:
         only_cities = {posta.city_key(c) for c in args.orase}
-        states = {posta.norm_key(r["state"]) for r in ex_rows if posta.city_key(r["city"]) in only_cities}
+        # judetul orasului mare = cel in care orasul are strazi (exista si sate cu acelasi nume)
+        states = {
+            posta.norm_key(r["state"]) for r in ex_rows if r["street_name"] and posta.city_key(r["city"]) in only_cities
+        }
         items = [(k, v) for k, v in items if posta.norm_key(posta.STATE_NAME[k]) in states]
         if not items:
             sys.exit(f"niciun judet gasit pentru {args.orase}")
