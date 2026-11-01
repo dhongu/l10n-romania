@@ -62,10 +62,6 @@ def to_schema(r, src):
     }
 
 
-def city_key(name):
-    return posta.norm_key(posta.strip_diacritics(name))
-
-
 def code_blocks(ex_rows, state_ascii, cities, prefix_len):
     """Prefixele de cod folosite de strazile oraselor mari din judet (fara unitati postale)."""
     blocks = set()
@@ -75,7 +71,7 @@ def code_blocks(ex_rows, state_ascii, cities, prefix_len):
             and r["name"].isdigit()
             and r["street_type"] not in posta.POSTAL_UNIT_TYPES
             and posta.norm_key(r["state"]) == posta.norm_key(state_ascii)
-            and city_key(r["city"]) in cities
+            and posta.city_key(r["city"]) in cities
         ):
             blocks.add(r["name"][:prefix_len])
     return sorted(blocks)
@@ -105,7 +101,7 @@ def crawl_codes(jud_eticheta, ex_rows, cities, prefix_len, fout):
             for r in posta.search_code(code):
                 if not r["street"]:
                     continue  # rand-localitate: il ia cautarea pe localitati
-                ck = city_key(r["city"])
+                ck = posta.city_key(r["city"])
                 if ck not in cities:
                     other += 1  # strada din alt oras/judet (ex. oras mic cu coduri pe strazi)
                     continue
@@ -133,7 +129,7 @@ def crawl_judet(jud_eticheta, jud_val, ex_index, use_osm, fout, osm_cache, ex_ro
     print(f"  {len(locs)} localitati")
     code_seen = None
     if prefix_len:
-        cities = {city_key(loc) for loc, _label, klass in locs if klass != "sub_50_mii"}
+        cities = {posta.city_key(loc) for loc, _label, klass in locs if klass != "sub_50_mii"}
         n_code, code_seen = crawl_codes(jud_eticheta, ex_rows, cities, prefix_len, fout)
         n += n_code
     for loc, _label, klass in locs:
@@ -148,7 +144,7 @@ def crawl_judet(jud_eticheta, jud_val, ex_index, use_osm, fout, osm_cache, ex_ro
             # 1) refresh strazi existente (din res_zip pentru acest oras)
             existing_bases = set()
             for k, lst in ex_index.items():
-                if k[0] == posta.norm_key(state_ascii) and k[1] == posta.norm_key(city_ascii):
+                if k[0] == posta.norm_key(state_ascii) and k[1] == posta.city_key(city_ascii):
                     if lst[0]["street_type"] in posta.POSTAL_UNIT_TYPES:
                         continue
                     existing_bases.add(posta.base_street(lst[0]["street_name"]))
@@ -156,7 +152,7 @@ def crawl_judet(jud_eticheta, jud_val, ex_index, use_osm, fout, osm_cache, ex_ro
             seen_bases = set()
             if code_seen is not None:
                 # --by-code: cautam exact doar strazile existente pe care blocurile nu le-au adus
-                got = code_seen.get(city_key(loc), set())
+                got = code_seen.get(posta.city_key(loc), set())
                 existing_bases = {b for b in existing_bases if posta.norm_key(b) not in got}
                 seen_bases |= got
             for b in sorted(existing_bases):

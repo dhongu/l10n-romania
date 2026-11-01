@@ -179,6 +179,18 @@ def norm_key(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
+# nume de oras trunchiate in res_zip.sql (coloana veche de 15 caractere) -> numele intreg
+CITY_FIX = {
+    "drobeta turnu s": "drobeta turnu severin",
+}
+
+
+def city_key(name):
+    """Cheia unui oras pentru comparatii; repara numele trunchiate din res_zip.sql."""
+    k = norm_key(strip_diacritics(name))
+    return CITY_FIX.get(k, k)
+
+
 def split_street(combined):
     """'Șoseaua Păcurari nr. 59-T' -> ('Sosea', 'Pacurari nr. 59-T') in stil res_zip."""
     combined = (combined or "").strip()
