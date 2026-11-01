@@ -19,7 +19,7 @@ def apply_zip_delta(env):
     """Apply the delta files on top of res_zip.sql, inside the current transaction."""
     for name in DELTA_FILES:
         _logger.info("Applying postal code update %s", name)
-        with open(file_path(f"l10n_ro_zip/data/{name}")) as sql_file:
+        with open(file_path(f"l10n_ro_zip/data/{name}"), encoding="utf-8") as sql_file:
             # the files are also run with psql: their BEGIN/COMMIT would end Odoo's transaction
             sql_script = "".join(line for line in sql_file if line.strip() not in ("BEGIN;", "COMMIT;"))
         env.cr.execute(sql_script)
@@ -34,7 +34,7 @@ def post_init_hook(env):
     env.cr.execute("SELECT COUNT(*) FROM res_zip")
     count = env.cr.fetchone()[0]
     if count == 0:
-        with open(sql_file_path) as sql_file:
+        with open(sql_file_path, encoding="utf-8") as sql_file:
             sql_script = sql_file.read()
             env.cr.execute(sql_script)
         # Resetăm secvența pentru a evita conflicte la inserări ulterioare prin ORM
