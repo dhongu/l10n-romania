@@ -1,3 +1,12 @@
+## 20.0.0.0.7 (2026-11-01)
+
+- Postal code refresh tools (`tools/`): the generated delta now updates city streets in place instead of deleting and
+  re-inserting them, so partners keep their postal code; a renamed street or a street with a new code is updated on
+  the same row, and rows still used by a partner are never deleted. Post office rows (`O.P.`, `Uz intern`...) are left
+  as they are. The Bucharest sector and the post office address are kept (or derived for new rows), the delta can be
+  run more than once, and reading `res_zip.sql` no longer skips the last row of each `INSERT` block. No change to the
+  installed module.
+
 ## 20.0.0.0.6 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Postal Codes* (was *Romania - Coduri Postale*), with the same title on the Apps banner.
