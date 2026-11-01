@@ -5,12 +5,13 @@ fără a rescrie baza.
 
 ## Cum funcționează
 
-| Regim                          | Sursă                                  | Acoperire                                          |
-| ------------------------------ | -------------------------------------- | -------------------------------------------------- |
-| Localități <50k (`sub_50_mii`) | endpoint oficial, adresă goală         | **completă** — un cod/localitate                   |
-| Orașe >50k — străzi existente  | re-query exact pe `res_zip`            | **~100%** — refresh cod + oficiu                   |
-| Orașe >50k — străzi noi        | OSM (Overpass) → query exact pe posta  | **parțială** — doar cele pe care posta le codifică |
-| Orașe >50k — `--by-code`       | căutare inversă pe blocurile de coduri | **completă** pe blocurile folosite de oraș         |
+| Regim                          | Sursă                                                      | Acoperire                                          |
+| ------------------------------ | ---------------------------------------------------------- | -------------------------------------------------- |
+| Localități <50k (`sub_50_mii`) | endpoint oficial, adresă goală                             | **completă** — un cod/localitate                   |
+| Orașe >50k — străzi existente  | re-query exact pe `res_zip`                                | **~100%** — refresh cod + oficiu                   |
+| Orașe >50k — străzi noi        | OSM (Overpass) → query exact pe posta                      | **parțială** — doar cele pe care posta le codifică |
+| Orașe >50k — `--by-code`       | căutare inversă pe blocurile de coduri                     | **completă** pe blocurile folosite de oraș         |
+| Orașe <50k — străzi            | nume din OSM + codul orașului de la posta (`osm_towns.py`) | cât are OSM; un singur cod pe oraș                 |
 
 > Căutarea pe stradă (`k_adresa`) cere numele exact, deci nu permite enumerarea străzilor. Căutarea inversă
 > (`cautare_cod.php`) întoarce însă **toate** străzile unui cod; pentru codul unui oficiu întoarce toate străzile
@@ -18,6 +19,13 @@ fără a rescrie baza.
 > 4 cifre din `res_zip.sql`, 100 de coduri/bloc; `--prefix-len 3` = 1000/bloc) și găsește și străzile pe care nu le
 > avem. Străzile existente nevăzute în blocuri se caută apoi exact, ca plasă de siguranță. Fișierul oficial descărcabil
 > e blocat la Sept-2016.
+
+> Orașele <50k au la posta **un singur cod** pe localitate și nu își listează străzile (căutarea inversă întoarce doar
+> localitatea). `osm_towns.py` ia numele străzilor din OpenStreetMap — o interogare Overpass pe județ, cu localitățile
+> și străzile cu nume — dă fiecare stradă localității celei mai apropiate (sub 5 km) și le păstrează doar pe cele ale
+> orașelor (`place=city/town`), fiindcă satele componente au cod propriu. Rămân doar nume care încep cu un tip de stradă
+> (scoate „Parcare”, „DN24”) și drumuri de adresă (fără `service`, `track`, `footway`...). Codul și oficiul vin din
+> rândurile `small` ale crawl-ului sau, dacă lipsesc, direct de la posta.
 
 ## Rulare
 
@@ -36,6 +44,10 @@ python3 build_delta.py
 # nomenclatorul complet pe orașe, prin blocurile de coduri (~6 h pe toată țara; OSM nu mai e necesar)
 python3 crawl.py --by-code --no-osm
 python3 build_delta.py
+
+# străzile orașelor mici din OSM (după crawl.py, în același workdir; ~42 de interogări Overpass)
+python3 osm_towns.py --judete Vaslui
+python3 build_delta.py   # -> și res_zip_osm_delta.sql
 ```
 
 Resume: re-rularea `crawl.py` sare județele din `done.txt` și, cu `--by-code`, blocurile din `done_blocks.txt`;
@@ -45,6 +57,7 @@ rândurile se adaugă în `live_rows.jsonl`.
 
 - `live_rows.jsonl` — toate rândurile live (schema res_zip), o linie/rând.
 - `res_zip_delta.sql` — INSERT/UPDATE/DELETE, înfășurat în BEGIN…COMMIT.
+- `res_zip_osm_delta.sql` — străzile orașelor mici (`src=osm-town`), separat: datele OSM sunt sub licența ODbL.
 - `raport.csv` — NEW / RENAME / OFFICE_ADD / CITY (sumar per oraș) / CITY_NEW / CITY_GONE / GONE pentru review uman.
 
 Categorii:
@@ -98,4 +111,7 @@ Capcane de date rezolvate în normalizator (`posta.py`): mojibake `ª`=Ș corupt
 
 - `DELAY=0.45s` între request-uri; verifică robots.txt + ToS înainte de crawl complet.
 - OSM Overpass cere UA descriptiv (nu „Mozilla"), altfel 406.
+- Datele OSM sunt © OpenStreetMap contributors, sub licența ODbL (https://www.openstreetmap.org/copyright). Când
+  străzile orașelor mici intră în modul, se pun într-un fișier de date separat, cu atribuirea și licența ODbL menționate
+  în fișier, în README-ul modulului și pe pagina din Apps Store; codul modulului își păstrează licența.
 - București: tratat ca oraș >50k, dar coloana `sector` cere mapare separată (vezi post_init_hook).
