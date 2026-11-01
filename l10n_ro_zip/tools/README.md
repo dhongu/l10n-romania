@@ -36,14 +36,34 @@ Resume: re-rularea `crawl.py` sare județele din `done.txt` și adaugă în `liv
 
 - `live_rows.jsonl` — toate rândurile live (schema res_zip), o linie/rând.
 - `res_zip_delta.sql` — INSERT/UPDATE/DELETE, înfășurat în BEGIN…COMMIT.
-- `raport.csv` — NEW / RENAME / OFFICE_ADD / CITY_REPLACE / GONE pentru review uman.
+- `raport.csv` — NEW / RENAME / OFFICE_ADD / CITY (sumar per oraș) / CITY_NEW / CITY_GONE / GONE pentru review uman.
 
 Categorii:
 
 - **comune** (`sub_50_mii`, un cod/localitate): identitate pe `(județ, cod)`, nu pe nume → `NEW` (cod nou), `RENAME`
-  (același cod, nume schimbat), `OFFICE_ADD`.
-- **orașe** (`peste_50_mii`, street-level): `CITY_REPLACE` (DELETE + INSERT setul live), fiindcă re-segmentarea
-  `bl./nr.` face diff-ul pe rând inutilizabil.
+  (același cod, nume schimbat), `OFFICE_ADD`. Un cod schimbat apare ca `NEW` + `GONE`; `GONE` doar se raportează.
+- **orașe** (`peste_50_mii`, street-level): rândurile live se potrivesc pe rândurile existente ale orașului, după id —
+  întâi aceeași stradă și același cod, apoi aceeași stradă de bază (fără `bl.`/`nr.`) și același cod, apoi — doar când
+  perechea e unică pe ambele părți — aceeași stradă de bază cu cod schimbat și același cod cu stradă redenumită:
+  - `CITY_UPDATE` — `UPDATE` pe loc; id-ul rămâne, deci și `res_partner.zip_id`;
+  - `CITY_NEW` — `INSERT`;
+  - `CITY_GONE` — `DELETE` doar dacă niciun partener nu folosește rândul; cele folosite rămân (FK-ul
+    `res_partner.zip_id` e `ON DELETE SET NULL`, deci o ștergere directă ar goli codul la parteneri). Partenerii nu se
+    mută pe alt rând cu același cod, fiindcă ar ajunge pe altă stradă.
+- Rândurile-oraș cu cod `*` și unitățile poștale (`O.P.`, `Gh.P.`, `O.P.R.M.`, `O.P.D.C.`, `Uz intern`) nu vin de la
+  poștă la căutarea pe stradă, deci nu se reîmprospătează și rămân neatinse.
+
+Ce se păstrează sau se deduce, fiindcă posta nu le întoarce:
+
+- `sector` (București): rămâne de pe rândul existent; la rândurile noi e a doua cifră a codului (`01xxxx` = sector 1).
+- `address` (adresa oficiului): rămâne de pe rândul existent; la oficiu nou se ia de pe alt rând cu același oficiu.
+
+Delta e **idempotent**: `INSERT`-urile nu au id (vin din secvență) și sunt păzite de `NOT EXISTS`, iar `UPDATE`/`DELETE`
+nu mai au efect la a doua rulare. La final, rândurile noi și cele redenumite primesc `country_id`/`state_id`/`city_id`
+cu aceleași reguli ca `post_init_hook`.
+
+`existing.py` oprește rularea dacă un rând din `res_zip.sql` nu poate fi citit (altfel id-ul maxim și lista de străzi de
+reîmprospătat ar fi greșite).
 
 ## STARE și PLAN DE RELUAT (la 2026-06-19)
 
@@ -60,8 +80,8 @@ Capcane de date rezolvate în normalizator (`posta.py`): mojibake `ª`=Ș corupt
    în modul.
 2. Review `raport.csv` național (mai ales `GONE` — nimic nu se șterge automat în afara orașelor).
 3. Integrare — decizie deschisă:
-   - **recomandat**: fuzionează delta în `data/res_zip.sql` (instalări noi primesc date curente fără migrare) + script
-     în `migrations/` pentru instalări existente; SAU
+   - **recomandat**: fuzionează datele în `data/res_zip.sql` (instalări noi primesc date curente fără migrare) + delta
+     rulat dintr-un script în `migrations/` pentru instalări existente (delta e idempotent și nu pierde `zip_id`); SAU
    - delta separat în `data/`, apelat din `post_init_hook` după `res_zip.sql`. Pe branch dedicat + PR; nu s-a atins încă
      `res_zip.sql`.
 

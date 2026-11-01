@@ -7,7 +7,7 @@
     "countries": ["ro"],
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.0.0.6",
+    "version": "19.0.0.0.7",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
