@@ -48,3 +48,20 @@ class TestResZipDelta(TransactionCase):
         zip_code = self.env["res.zip"].browse(UPDATED_ID)
         self.assertEqual(zip_code.city, "Zzother")
         self.assertFalse(zip_code.office)
+
+    def test_new_row_gets_links(self):
+        """A row the delta inserts gets country, county and city, as on an upgrade (no post_init_hook)."""
+        domain = [("city", "=", "Husi"), ("street_name", "!=", False), ("name", "=", "735100")]
+        row = self.env["res.zip"].search(domain, limit=1)
+        self.assertTrue(row, "the OSM streets of Husi are applied on install")
+        street = (row.street_type, row.street_name)
+        self.env.cr.execute("DELETE FROM res_zip WHERE id = %s", (row.id,))
+        self.env.invalidate_all()
+        apply_zip_delta(self.env)
+        new_row = self.env["res.zip"].search(
+            domain + [("street_type", "=", street[0]), ("street_name", "=", street[1])]
+        )
+        self.assertEqual(len(new_row), 1)
+        self.assertEqual(new_row.country_id, self.env.ref("base.ro"))
+        self.assertEqual(new_row.state_id.l10n_ro_prefix_zip, "73")
+        self.assertEqual(new_row.city_id.zipcode, "735100")
