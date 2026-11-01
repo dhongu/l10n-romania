@@ -13,7 +13,8 @@ Doua regimuri, pe sursa randului live:
                        + acelasi cod (re-segmentare bl./nr.); pas 3: aceeasi strada de baza,
                        cod schimbat; pas 4: acelasi cod, strada redenumita. Pasii 3-4 doar
                        cand perechea e unica pe ambele parti. Pas 5: acelasi cod, nume
-                       asemanator (Horia/Horea, ordinea cuvintelor, prenume adaugat).
+                       asemanator (Horia/Horea, ordinea cuvintelor) sau prenume adaugat, doar
+                       cand perechea e unica in acel cod.
         CITY_NEW    -> INSERT
         CITY_GONE   -> DELETE doar daca randul nu e folosit de niciun partener
                        (FK res_partner.zip_id e ON DELETE SET NULL); altfel ramane.
@@ -133,28 +134,51 @@ def _tokens(street_name):
 def similarity(a, b):
     """Asemanarea a doua nume de strada, insensibila la ordinea cuvintelor.
 
-    1.0 cand un set de cuvinte il contine pe celalalt (Martinovics / Martinovics Ignac).
+    1.0 la acelasi set de cuvinte (Romulus Cioflec / Cioflec Romulus). Incluziunea
+    (Martinovics / Martinovics Ignac) e tratata separat, in is_subset_pair.
     """
-    ta, tb = _tokens(a), _tokens(b)
+    ta, tb = set(_tokens(a)), set(_tokens(b))
     if not ta or not tb:
         return 0.0
-    if set(ta) <= set(tb) or set(tb) <= set(ta):
+    if ta == tb:
         return 1.0
     return difflib.SequenceMatcher(None, " ".join(sorted(ta)), " ".join(sorted(tb))).ratio()
 
 
+def is_subset_pair(a, b):
+    """Un nume e celalalt plus cel mult un cuvant (prenume adaugat), iar partea comuna
+    are un cuvant de cel putin 3 litere — nu '1' / '1 Mai'."""
+    ta, tb = set(_tokens(a)), set(_tokens(b))
+    small, big = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
+    if not small or small == big or not small <= big or len(big - small) > 1:
+        return False
+    return any(len(t) >= 3 and t.isalpha() for t in small)
+
+
 def match_similar(pending, live_rows):
-    """Pas 5: acelasi cod, nume asemanator; perechile cu scorul cel mai mare intai, fiecare rand o data."""
+    """Pas 5: acelasi cod, nume asemanator; fiecare rand o data.
+
+    Asemanarea de text (Horia/Horea) se ia de la scorul cel mai mare in jos. Incluziunea
+    de cuvinte se accepta doar cand perechea e unica pe ambele parti in acel cod, ca la
+    pasii 3-4 — altfel 'Mihai' s-ar putea lega de 'Mihai Viteazul' in loc de 'Mihai Eminescu'.
+    """
     by_zip = {}
     for m in pending:
         by_zip.setdefault(m["name"], []).append(m)
-    pairs = []
+    pairs, subset = [], []
     for r in live_rows:
         for m in by_zip.get(r["name"], []):
             score = similarity(m["street_name"], r["street_name"])
             if score >= SIMILAR_MIN:
                 pairs.append((score, m, r))
+            elif is_subset_pair(m["street_name"], r["street_name"]):
+                subset.append((m, r))
+    n_ex, n_live = {}, {}
+    for m, r in subset:
+        n_ex[id(m)] = n_ex.get(id(m), 0) + 1
+        n_live[id(r)] = n_live.get(id(r), 0) + 1
     pairs.sort(key=lambda p: -p[0])
+    pairs += [(0.0, m, r) for m, r in subset if n_ex[id(m)] == 1 and n_live[id(r)] == 1]
     out, used = [], set()
     for _score, m, r in pairs:
         if id(m) in used or id(r) in used:
