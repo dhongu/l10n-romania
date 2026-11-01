@@ -167,6 +167,9 @@ def match_similar(pending, live_rows):
 def city_update(m, r, office_addr):
     """SET-urile pentru un rand de oras potrivit; gol daca nu s-a schimbat nimic."""
     sets = {}
+    if r["city"] != m["city"]:  # ex. nume trunchiat in res_zip.sql ('Drobeta-Turnu S')
+        sets["city"] = r["city"]
+        sets["country_id"] = None
     if r["name"] != m["name"]:
         sets["name"] = r["name"]
         # codul poate muta randul in alt sector -> sector si relatii recalculate
@@ -252,7 +255,7 @@ def main():
     # orase atinse (state_norm, city_norm)
     big_cities = {}
     for r in big:
-        big_cities.setdefault((posta.norm_key(r["state"]), posta.norm_key(r["city"])), []).append(r)
+        big_cities.setdefault((posta.norm_key(r["state"]), posta.city_key(r["city"])), []).append(r)
     touched_states = {posta.norm_key(r["state"]) for r in live}
 
     # Comuna sub_50_mii = UN cod/localitate -> identitatea e (judet, cod), NU numele.
@@ -271,7 +274,7 @@ def main():
         if not m:
             new.append(r)
             continue
-        if posta.norm_key(m["city"]) != posta.norm_key(r["city"]):
+        if posta.city_key(m["city"]) != posta.city_key(r["city"]):
             rename.append((m, r))  # acelasi cod, nume schimbat
         elif not m["office"] and r["office"]:
             office_add.append((m, r))
@@ -282,7 +285,7 @@ def main():
     for (st, zipc), m in ex_loc_by_zip.items():
         if st not in touched_states:
             continue
-        if (st, posta.norm_key(m["city"])) in big_cities:
+        if (st, posta.city_key(m["city"])) in big_cities:
             continue
         if (st, zipc) not in seen_zip:
             gone.append(m)
