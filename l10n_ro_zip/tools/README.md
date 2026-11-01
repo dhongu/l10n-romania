@@ -43,11 +43,13 @@ Categorii:
 - **comune** (`sub_50_mii`, un cod/localitate): identitate pe `(județ, cod)`, nu pe nume → `NEW` (cod nou), `RENAME`
   (același cod, nume schimbat), `OFFICE_ADD`. Un cod schimbat apare ca `NEW` + `GONE`; `GONE` doar se raportează.
 - **orașe** (`peste_50_mii`, street-level): rândurile live se potrivesc pe rândurile existente ale orașului, după id —
-  întâi aceeași stradă și același cod, apoi aceeași stradă de bază (fără `bl.`/`nr.`) și același cod:
+  întâi aceeași stradă și același cod, apoi aceeași stradă de bază (fără `bl.`/`nr.`) și același cod, apoi — doar când
+  perechea e unică pe ambele părți — aceeași stradă de bază cu cod schimbat și același cod cu stradă redenumită:
   - `CITY_UPDATE` — `UPDATE` pe loc; id-ul rămâne, deci și `res_partner.zip_id`;
   - `CITY_NEW` — `INSERT`;
-  - `CITY_GONE` — partenerii trec pe alt rând cu același cod, apoi `DELETE` doar dacă rândul nu mai e folosit (FK-ul
-    `res_partner.zip_id` e `ON DELETE SET NULL`, deci o ștergere directă ar goli codul la parteneri).
+  - `CITY_GONE` — `DELETE` doar dacă niciun partener nu folosește rândul; cele folosite rămân (FK-ul
+    `res_partner.zip_id` e `ON DELETE SET NULL`, deci o ștergere directă ar goli codul la parteneri). Partenerii nu se
+    mută pe alt rând cu același cod, fiindcă ar ajunge pe altă stradă.
 - Rândurile-oraș cu cod `*` și unitățile poștale (`O.P.`, `Gh.P.`, `O.P.R.M.`, `O.P.D.C.`, `Uz intern`) nu vin de la
   poștă la căutarea pe stradă, deci nu se reîmprospătează și rămân neatinse.
 
