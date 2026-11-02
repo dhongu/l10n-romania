@@ -70305,8 +70305,9 @@ DROP TABLE IF EXISTS _zip_remap;
 CREATE TEMP TABLE _zip_remap ON COMMIT DROP AS SELECT id FROM res_zip WHERE country_id IS NULL;
 UPDATE res_zip z SET country_id = c.id FROM res_country c, _zip_remap t WHERE z.id = t.id AND c.code = 'RO';
 UPDATE res_zip z SET state_id = s.id
-  FROM res_country_state s, _zip_remap t
- WHERE z.id = t.id AND s.l10n_ro_prefix_zip = SUBSTRING(z.name, 1, 2);
+  FROM (VALUES ('01', 'B'), ('02', 'B'), ('03', 'B'), ('04', 'B'), ('05', 'B'), ('06', 'B'), ('07', 'IF'), ('08', 'GR'), ('10', 'PH'), ('11', 'AG'), ('12', 'BZ'), ('13', 'DB'), ('14', 'TR'), ('20', 'DJ'), ('21', 'GJ'), ('22', 'MH'), ('23', 'OT'), ('24', 'VL'), ('30', 'TM'), ('31', 'AR'), ('32', 'CS'), ('33', 'HD'), ('40', 'CJ'), ('41', 'BH'), ('42', 'BN'), ('43', 'MM'), ('44', 'SM'), ('45', 'SJ'), ('50', 'BV'), ('51', 'AB'), ('52', 'CV'), ('53', 'HR'), ('54', 'MS'), ('55', 'SB'), ('60', 'BC'), ('61', 'NT'), ('62', 'VN'), ('70', 'IS'), ('71', 'BT'), ('72', 'SV'), ('73', 'VS'), ('80', 'GL'), ('81', 'BR'), ('82', 'TL'), ('90', 'CT'), ('91', 'CL'), ('92', 'IL')) AS p (prefix, code), res_country_state s, res_country c, _zip_remap t
+ WHERE z.id = t.id AND c.code = 'RO' AND s.country_id = c.id AND s.code = p.code
+   AND SUBSTRING(z.name, 1, 2) = p.prefix;
 CREATE EXTENSION IF NOT EXISTS unaccent;
 UPDATE res_zip z SET city_id = rc.id
   FROM res_city rc, _zip_remap t
@@ -70317,7 +70318,8 @@ UPDATE res_zip z SET city_id = rc.id
  WHERE z.id = t.id AND unaccent(z.city) = unaccent(rc.name->>'en_US')
    AND z.state_id = rc.state_id AND z.city_id IS NULL;
 UPDATE res_zip z SET city_id = rc.id, state_id = rc.state_id
-  FROM ir_model_data d, res_city rc, _zip_remap t
- WHERE z.id = t.id AND d.module = 'l10n_ro_city' AND d.model = 'res.city' AND d.res_id = rc.id
-   AND d.name = CASE z.sector WHEN '1' THEN 'RO_179141' WHEN '2' THEN 'RO_179150' WHEN '3' THEN 'RO_179169' WHEN '4' THEN 'RO_179178' WHEN '5' THEN 'RO_179187' WHEN '6' THEN 'RO_179196' END;
+  FROM res_city rc, res_country_state s, res_country c, _zip_remap t
+ WHERE z.id = t.id AND c.code = 'RO' AND s.country_id = c.id AND s.code = 'B' AND rc.state_id = s.id
+   AND COALESCE(z.sector, '') != ''
+   AND lower(replace(rc.name->>'en_US', ' ', '')) = 'sector' || trim(z.sector);
 COMMIT;

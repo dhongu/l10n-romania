@@ -1,3 +1,13 @@
+## 19.0.0.0.18 (2026-11-02)
+
+- The module no longer depends on `l10n_ro_city`: the county of each postal code comes from its first two
+  digits, from a list in the module (Bucharest 01–06, Giurgiu 08), and the Bucharest codes are linked to their
+  sector by its name. The codes are linked to the localities of `l10n_ro_city` when it is installed, as
+  before, also when `l10n_ro_city` is installed in the same run or later: creating Romanian localities links
+  the codes that have none. Without it they have the county only. The 19.0.0.0.17 migration becomes 19.0.0.0.18 and fills the
+  county of the codes that had none, such as the Bucharest codes outside the sectors.
+- The postal code is indexed: applying the update on install or upgrade takes about 5 seconds instead of 19.
+
 ## 19.0.0.0.17 (2026-11-02)
 
 - More postal codes linked to their locality: the post office writes some names with a hyphen (Miercurea-Ciuc,

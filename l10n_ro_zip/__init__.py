@@ -7,7 +7,10 @@ from . import models
 
 import logging
 from odoo.tools import SQL
+from odoo.tools.sql import column_exists
 from odoo.tools.misc import file_path
+
+from .zip_prefix import ZIP_PREFIX_STATE
 
 _logger = logging.getLogger(__name__)
 
@@ -66,6 +69,12 @@ def link_cities(env):
     also when the post office writes "Village (Commune)". A row is linked only to a single
     candidate, or to the single candidate with the same postal code."""
     zip_city = _city_key(SQL("z.city"))
+    same_name = SQL("%s = %s", zip_city, _city_key(SQL("c.name->>'en_US'")))
+    # the commune of a village comes with l10n_ro_city, when it is installed; the column, not the
+    # field: without the dependency, l10n_ro_city may be loaded after this module on an upgrade
+    if column_exists(env.cr, "res_city", "l10n_ro_municipality"):
+        city_commune = _city_key(SQL("(c.name->>'en_US') || ' (' || c.l10n_ro_municipality || ')'"))
+        same_name = SQL("(%s OR %s = %s)", same_name, zip_city, city_commune)
     env.cr.execute(
         SQL(
             """
@@ -74,20 +83,80 @@ def link_cities(env):
                        COUNT(*) OVER (PARTITION BY z.id) AS n,
                        COUNT(*) FILTER (WHERE c.zipcode = z.name) OVER (PARTITION BY z.id) AS n_zip
                   FROM res_zip z
-                  JOIN res_city c ON c.state_id = z.state_id
-                   AND (%(zip_city)s = %(city)s OR %(zip_city)s = %(city_commune)s)
+                  JOIN res_city c ON c.state_id = z.state_id AND %(same_name)s
                  WHERE z.city_id IS NULL
             )
             UPDATE res_zip z SET city_id = cand.city_id
               FROM cand
              WHERE z.id = cand.zip_id AND (cand.n = 1 OR (cand.n_zip = 1 AND cand.same_zip))
             """,
-            zip_city=zip_city,
-            city=_city_key(SQL("c.name->>'en_US'")),
-            city_commune=_city_key(SQL("(c.name->>'en_US') || ' (' || c.l10n_ro_municipality || ')'")),
+            same_name=same_name,
         )
     )
     return env.cr.rowcount
+
+
+def link_states(env, only_missing=True):
+    """County of the rows of res_zip from the first two digits of the postal code."""
+    prefixes = SQL(", ").join(SQL("(%s, %s)", prefix, code) for prefix, code in ZIP_PREFIX_STATE.items())
+    env.cr.execute(
+        SQL(
+            """
+            UPDATE res_zip z SET state_id = s.id
+              FROM (VALUES %s) AS p (prefix, code), res_country_state s, res_country c
+             WHERE c.code = 'RO' AND s.country_id = c.id AND s.code = p.code
+               AND SUBSTRING(z.name, 1, 2) = p.prefix %s
+            """,
+            prefixes,
+            SQL("AND z.state_id IS NULL") if only_missing else SQL(),
+        )
+    )
+    return env.cr.rowcount
+
+
+def link_sectors(env):
+    """The rows of Bucharest go to the locality of their sector ("Sector1" ... "Sector6")."""
+    env.cr.execute(
+        SQL(
+            """
+            UPDATE res_zip z SET city_id = rc.id, state_id = rc.state_id
+              FROM res_city rc, res_country_state s, res_country c
+             WHERE c.code = 'RO' AND s.country_id = c.id AND s.code = 'B' AND rc.state_id = s.id
+               AND COALESCE(z.sector, '') != ''
+               AND lower(replace(rc.name->>'en_US', ' ', '')) = 'sector' || trim(z.sector)
+            """
+        )
+    )
+    return env.cr.rowcount
+
+
+def link_localities(env):
+    """Link the rows without a locality to res_city: same name and postal code first, then
+    same name, then the names written differently, and the Bucharest codes to their sector.
+    Run on install and whenever Romanian localities are created (l10n_ro_city installed in the
+    same run or later)."""
+    env.cr.execute("CREATE EXTENSION IF NOT EXISTS unaccent")
+    env.cr.execute(
+        """
+        UPDATE res_zip rz
+           SET city_id = rc.id FROM res_city rc
+         WHERE unaccent(rz.city) = unaccent(rc.name->>'en_US')
+           AND rz.state_id = rc.state_id
+           AND rz.name = rc.zipcode
+           AND rz.city_id IS NULL
+        """
+    )
+    env.cr.execute(
+        """
+        UPDATE res_zip rz
+           SET city_id = rc.id FROM res_city rc
+         WHERE unaccent(rz.city) = unaccent(rc.name->>'en_US')
+           AND rz.state_id = rc.state_id
+           AND rz.city_id IS NULL
+        """
+    )
+    link_cities(env)
+    link_sectors(env)
 
 
 def post_init_hook(env):
@@ -115,67 +184,12 @@ def post_init_hook(env):
     if country_ro:
         env.cr.execute("""UPDATE res_zip SET country_id = %s WHERE country_id IS NULL""", (country_ro.id,))
 
-    # Obținem toate înregistrările din res.country.state care au l10n_ro_prefix_zip setat
-    states = env["res.country.state"].search([("l10n_ro_prefix_zip", "!=", False)])
-
     sql = "CREATE EXTENSION IF NOT EXISTS unaccent;"
     env.cr.execute(sql)
 
-    # Pentru fiecare judet, actualizăm înregistrările din res_zip care au state-ul potrivit
-    for state in states:
-        sql = """
-              UPDATE res_zip
-              SET state_id = %s
-              WHERE SUBSTRING(name, 1, 2) = %s
-              """
-        env.cr.execute(sql, (state.id, state.l10n_ro_prefix_zip))
+    # județul, după primele două cifre ale codului poștal
+    link_states(env, only_missing=False)
 
-    # Actualizăm și city_id dacă există potriviri
-    sql = """
-          UPDATE res_zip rz
-          SET city_id = rc.id FROM res_city rc
-          WHERE unaccent(rz.city) = unaccent(rc.name->>'en_US')
-            AND rz.state_id = rc.state_id
-            AND rz.name = rc.zipcode
-          """
-    env.cr.execute(sql)
-
-    # Actualizăm și city_id dacă există potriviri
-    sql = """
-          UPDATE res_zip rz
-          SET city_id = rc.id FROM res_city rc
-          WHERE unaccent(rz.city) = unaccent(rc.name->>'en_US')
-            AND rz.state_id = rc.state_id
-            AND city_id is null
-          """
-    env.cr.execute(sql)
-
-    link_cities(env)
-
-    sectors = {
-        "1": "l10n_ro_city.RO_179141",
-        "2": "l10n_ro_city.RO_179150",
-        "3": "l10n_ro_city.RO_179169",
-        "4": "l10n_ro_city.RO_179178",
-        "5": "l10n_ro_city.RO_179187",
-        "6": "l10n_ro_city.RO_179196",
-    }
-    for sector, city_ref in sectors.items():
-        city = env.ref(city_ref)
-        sql = """
-              UPDATE res_zip
-              SET city_id = %(city_id)s,
-                  state_id = %(state_id)s
-              WHERE sector = %(sector)s
-              """
-        env.cr.execute(
-            sql,
-            {
-                "sector": sector,
-                "city_id": city.id,
-                "city": city.name,
-                "state_id": city.state_id.id,
-            },
-        )
+    link_localities(env)
 
     _logger.info("State_id, country_id and city_id update completed")

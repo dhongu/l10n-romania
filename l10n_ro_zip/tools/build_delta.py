@@ -42,21 +42,17 @@ import csv
 import difflib
 import json
 import os
+import runpy
 
 import existing
 import posta
 
 SQL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "res_zip.sql")
 
-# post_init_hook: sector Bucuresti -> res.city (l10n_ro_city)
-SECTOR_CITY = {
-    "1": "RO_179141",
-    "2": "RO_179150",
-    "3": "RO_179169",
-    "4": "RO_179178",
-    "5": "RO_179187",
-    "6": "RO_179196",
-}
+# primele doua cifre ale codului -> judetul (codul res.country.state), aceeasi lista ca modulul
+ZIP_PREFIX_STATE = runpy.run_path(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "zip_prefix.py"))[
+    "ZIP_PREFIX_STATE"
+]
 
 # erori de date la posta: (judet, localitate, prefix cod) -> localitatea corecta
 # (strazile noi din Timisoara apar cu localitatea "Timis")
@@ -276,14 +272,15 @@ def full_update(m, sets):
 def mapping_sql():
     """country_id/state_id/city_id pentru randurile fara country_id (noi sau redenumite),
     cu aceleasi reguli ca post_init_hook."""
-    sector_cases = " ".join(f"WHEN '{s}' THEN '{x}'" for s, x in SECTOR_CITY.items())
+    prefixes = ", ".join(f"('{p}', '{c}')" for p, c in ZIP_PREFIX_STATE.items())
     return f"""-- === relatii pentru randurile noi/redenumite (ca post_init_hook) ===
 DROP TABLE IF EXISTS _zip_remap;
 CREATE TEMP TABLE _zip_remap ON COMMIT DROP AS SELECT id FROM res_zip WHERE country_id IS NULL;
 UPDATE res_zip z SET country_id = c.id FROM res_country c, _zip_remap t WHERE z.id = t.id AND c.code = 'RO';
 UPDATE res_zip z SET state_id = s.id
-  FROM res_country_state s, _zip_remap t
- WHERE z.id = t.id AND s.l10n_ro_prefix_zip = SUBSTRING(z.name, 1, 2);
+  FROM (VALUES {prefixes}) AS p (prefix, code), res_country_state s, res_country c, _zip_remap t
+ WHERE z.id = t.id AND c.code = 'RO' AND s.country_id = c.id AND s.code = p.code
+   AND SUBSTRING(z.name, 1, 2) = p.prefix;
 CREATE EXTENSION IF NOT EXISTS unaccent;
 UPDATE res_zip z SET city_id = rc.id
   FROM res_city rc, _zip_remap t
@@ -294,9 +291,10 @@ UPDATE res_zip z SET city_id = rc.id
  WHERE z.id = t.id AND unaccent(z.city) = unaccent(rc.name->>'en_US')
    AND z.state_id = rc.state_id AND z.city_id IS NULL;
 UPDATE res_zip z SET city_id = rc.id, state_id = rc.state_id
-  FROM ir_model_data d, res_city rc, _zip_remap t
- WHERE z.id = t.id AND d.module = 'l10n_ro_city' AND d.model = 'res.city' AND d.res_id = rc.id
-   AND d.name = CASE z.sector {sector_cases} END;
+  FROM res_city rc, res_country_state s, res_country c, _zip_remap t
+ WHERE z.id = t.id AND c.code = 'RO' AND s.country_id = c.id AND s.code = 'B' AND rc.state_id = s.id
+   AND COALESCE(z.sector, '') != ''
+   AND lower(replace(rc.name->>'en_US', ' ', '')) = 'sector' || trim(z.sector);
 """
 
 
