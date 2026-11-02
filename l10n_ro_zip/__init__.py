@@ -6,6 +6,7 @@ from . import models
 
 
 import logging
+from odoo.tools import SQL
 from odoo.tools.misc import file_path
 
 _logger = logging.getLogger(__name__)
@@ -47,6 +48,44 @@ def remove_duplicate_streets(env):
            AND NOT EXISTS (SELECT 1 FROM res_partner p WHERE p.zip_id = z.id)
         """,
         (RES_ZIP_SQL_MAX_ID,),
+    )
+    return env.cr.rowcount
+
+
+def _city_key(expr):
+    """Locality name as compared between res_zip and res_city: without diacritics, case,
+    hyphens and double spaces. The old res_zip.sql has "ª" for "Ș"."""
+    return SQL(
+        "lower(regexp_replace(replace(unaccent(replace(%s, 'ª', 'S')), '-', ' '), '\\s+', ' ', 'g'))",
+        expr,
+    )
+
+
+def link_cities(env):
+    """Link to res_city the rows of res_zip that have none, by county and locality name,
+    also when the post office writes "Village (Commune)". A row is linked only to a single
+    candidate, or to the single candidate with the same postal code."""
+    zip_city = _city_key(SQL("z.city"))
+    env.cr.execute(
+        SQL(
+            """
+            WITH cand AS (
+                SELECT z.id AS zip_id, c.id AS city_id, c.zipcode = z.name AS same_zip,
+                       COUNT(*) OVER (PARTITION BY z.id) AS n,
+                       COUNT(*) FILTER (WHERE c.zipcode = z.name) OVER (PARTITION BY z.id) AS n_zip
+                  FROM res_zip z
+                  JOIN res_city c ON c.state_id = z.state_id
+                   AND (%(zip_city)s = %(city)s OR %(zip_city)s = %(city_commune)s)
+                 WHERE z.city_id IS NULL
+            )
+            UPDATE res_zip z SET city_id = cand.city_id
+              FROM cand
+             WHERE z.id = cand.zip_id AND (cand.n = 1 OR (cand.n_zip = 1 AND cand.same_zip))
+            """,
+            zip_city=zip_city,
+            city=_city_key(SQL("c.name->>'en_US'")),
+            city_commune=_city_key(SQL("(c.name->>'en_US') || ' (' || c.l10n_ro_municipality || ')'")),
+        )
     )
     return env.cr.rowcount
 
@@ -110,6 +149,8 @@ def post_init_hook(env):
             AND city_id is null
           """
     env.cr.execute(sql)
+
+    link_cities(env)
 
     sectors = {
         "1": "l10n_ro_city.RO_179141",
