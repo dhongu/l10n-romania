@@ -1,3 +1,9 @@
+## 19.0.0.0.19 (2026-11-02)
+
+- The streets of the small towns from OpenStreetMap (ODbL) move to the new module `l10n_ro_zip_osm`, installed
+  automatically with this one. The streets already in a database stay; a new database gets them with the new
+  module.
+
 ## 19.0.0.0.18 (2026-11-02)
 
 - The module no longer depends on `l10n_ro_city`: the county of each postal code comes from its first two

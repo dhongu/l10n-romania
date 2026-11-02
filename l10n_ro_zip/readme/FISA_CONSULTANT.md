@@ -23,10 +23,10 @@ alege codul din listă; Odoo completează apoi codul poștal, localitatea și ju
   transmisă în e-Factura, iar curierii îl folosesc la rutare.
 - **Sursa datelor**: nomenclatorul public al codurilor poștale de pe
   [posta-romana.ro](https://www.posta-romana.ro), încărcat la instalare. Pentru orașele sub
-  50.000 de locuitori, Poșta are un singur cod pe oraș și nu publică străzile; pentru unele dintre
-  ele (de ex. Huși, Negrești, Murgeni, Tecuci, Târgu Bujor, Berești), denumirile străzilor vin din
-  [OpenStreetMap](https://www.openstreetmap.org/copyright) (licența ODbL, menționată în
-  `readme/CREDITS.md`) și primesc codul poștal unic al orașului.
+  50.000 de locuitori, Poșta are un singur cod pe oraș și nu publică străzile; pentru 269 dintre
+  ele (de ex. Pantelimon, Voluntari, Lugoj, Tecuci, Câmpina, Huși), denumirile străzilor vin din
+  [OpenStreetMap](https://www.openstreetmap.org/copyright) (licența ODbL), prin modulul
+  `l10n_ro_zip_osm`, instalat automat, și primesc codul poștal unic al orașului.
 - Actualizările nomenclatorului vin cu versiunile noi ale modulului: la actualizare, rândurile
   existente se corectează pe loc, iar partenerii rămân legați de rândul ales. Dacă Poșta a
   schimbat codul unei străzi, câmpul din nomenclator arată codul nou, dar codul din adresa
@@ -147,6 +147,7 @@ poștal din adresa partenerului (câmpul standard, ③ din pasul 4).
 |---|---|
 | `l10n_ro_city` (opțional) | localitățile României, de care se leagă fiecare cod poștal; localitatea din listă pe partener |
 | `base_address_extended` | câmpul de localitate din listă pe partener, sub care modulul pune codul poștal din nomenclator |
+| `l10n_ro_zip_osm` (automat) | străzile din OpenStreetMap ale orașelor mici cu un singur cod poștal |
 | `l10n_ro_anaf_partner_lookup` (opțional) | la crearea firmei după CUI, codul poștal vine de la ANAF; nomenclatorul ajută la găsirea localității după acel cod, când numele dat de ANAF nu se potrivește cu lista, și, când ANAF nu trimite cod, dă codul străzii din nomenclator (dacă găsește un singur rând potrivit). Câmpul din nomenclator rămâne gol |
 | e-Factura / rapoartele de factură | preiau codul poștal din adresa partenerului |
 
