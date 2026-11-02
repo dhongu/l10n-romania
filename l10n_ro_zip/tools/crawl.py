@@ -20,6 +20,7 @@ Uz:
   python crawl.py --no-osm             # fara descoperire OSM (doar refresh + comune)
   python crawl.py --by-code            # nomenclator complet pe orase, prin blocuri de coduri
   python crawl.py --by-code --prefix-len 3   # blocuri de 1000 de coduri (mai lent, mai larg)
+  python crawl.py --by-code --no-osm --orase Iasi   # doar orasul (fara comunele judetului)
 """
 # pylint: disable=print-used
 
@@ -106,7 +107,7 @@ def crawl_codes(jud_eticheta, ex_rows, cities, prefix_len, fout):
                     other += 1  # strada din alt oras/judet (ex. oras mic cu coduri pe strazi)
                     continue
                 row = to_schema(r, "code")
-                rk = (ck, posta.norm_key(row["street_name"]), row["name"])
+                rk = (ck, posta.norm_key(row["street_type"]), posta.norm_key(row["street_name"]), row["name"])
                 if rk in seen_rows:
                     continue
                 seen_rows.add(rk)
@@ -122,10 +123,15 @@ def crawl_codes(jud_eticheta, ex_rows, cities, prefix_len, fout):
     return n, seen_bases
 
 
-def crawl_judet(jud_eticheta, jud_val, ex_index, use_osm, fout, osm_cache, ex_rows=None, prefix_len=0):
+def crawl_judet(
+    jud_eticheta, jud_val, ex_index, use_osm, fout, osm_cache, ex_rows=None, prefix_len=0, only_cities=None
+):
     n = 0
     locs = posta.get_localities(jud_val)
     time.sleep(DELAY)
+    if only_cities:
+        # --orase: doar orasele cerute; comunele judetului nu se citesc
+        locs = [x for x in locs if x[2] != "sub_50_mii" and posta.city_key(x[0]) in only_cities]
     print(f"  {len(locs)} localitati")
     code_seen = None
     if prefix_len:
@@ -202,6 +208,7 @@ def main():
     ap.add_argument("--out", default=OUT)
     ap.add_argument("--by-code", action="store_true", help="orase: cautare inversa pe blocurile de coduri")
     ap.add_argument("--prefix-len", type=int, default=4, choices=(3, 4), help="lungimea prefixului de bloc")
+    ap.add_argument("--orase", nargs="*", help="doar aceste orase mari (judetul se deduce din res_zip.sql)")
     args = ap.parse_args()
 
     ex_rows = existing.load(SQL)
@@ -215,6 +222,16 @@ def main():
     items = list(posta.JUDETE.items())
     if args.judete:
         items = [(k, v) for k, v in items if k in args.judete]
+    only_cities = None
+    if args.orase:
+        only_cities = {posta.city_key(c) for c in args.orase}
+        # judetul orasului mare = cel in care orasul are strazi (exista si sate cu acelasi nume)
+        states = {
+            posta.norm_key(r["state"]) for r in ex_rows if r["street_name"] and posta.city_key(r["city"]) in only_cities
+        }
+        items = [(k, v) for k, v in items if posta.norm_key(posta.STATE_NAME[k]) in states]
+        if not items:
+            sys.exit(f"niciun judet gasit pentru {args.orase}")
 
     osm_cache = load_osm_cache()
     print(f"osm cache: {len(osm_cache)} orase")
@@ -222,7 +239,7 @@ def main():
     mode = "a" if os.path.exists(args.out) else "w"
     with open(args.out, mode, encoding="utf-8") as fout:
         for eticheta, val in items:
-            if eticheta in done:
+            if eticheta in done and not only_cities:
                 print(f"== {eticheta}: deja facut, skip")
                 continue
             print(f"== {eticheta}")
@@ -235,10 +252,12 @@ def main():
                 osm_cache,
                 ex_rows,
                 args.prefix_len if args.by_code else 0,
+                only_cities,
             )
             print(f"   {n} randuri live")
-            with open(DONE, "a", encoding="utf-8") as fd:
-                fd.write(eticheta + "\n")
+            if not only_cities:  # judetul e complet doar fara --orase
+                with open(DONE, "a", encoding="utf-8") as fd:
+                    fd.write(eticheta + "\n")
     print("gata.")
 
 

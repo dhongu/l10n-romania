@@ -9,6 +9,8 @@ Doua regimuri, pe sursa randului live:
     Un cod schimbat apare ca NEW + GONE (GONE doar raportat, nu sters).
   - 'code'/'refresh'/'osm-new' (orase >50k): potrivire pe randurile EXISTENTE ale orasului
         CITY_UPDATE -> UPDATE pe loc (id pastrat, deci si res_partner.zip_id)
+                       pasii 1-2 intai cu tipul strazii (Alee X si Strada X sunt doua strazi),
+                       apoi fara (tip schimbat).
                        pas 1: aceeasi strada + acelasi cod; pas 2: aceeasi strada de baza
                        + acelasi cod (re-segmentare bl./nr.); pas 3: aceeasi strada de baza,
                        cod schimbat; pas 4: acelasi cod, strada redenumita. Pasii 3-4 doar
@@ -68,7 +70,14 @@ def load_live(path):
             # dedup pe identitatea reala a randului — FARA src (altfel acelasi rand
             # venit si din 'refresh' si din 'osm-new' supravietuieste de 2 ori).
             # 'refresh' e scris inaintea 'osm-new' -> prima aparitie (refresh) castiga.
-            k = (posta.norm_key(r["state"]), posta.norm_key(r["city"]), posta.norm_key(r["street_name"]), r["name"])
+            # tipul face parte din identitate: 'Alee X' si 'Strada X' cu acelasi cod sunt doua strazi
+            k = (
+                posta.norm_key(r["state"]),
+                posta.norm_key(r["city"]),
+                posta.norm_key(r["street_type"]),
+                posta.norm_key(r["street_name"]),
+                r["name"],
+            )
             if k not in seen:
                 seen.add(k)
                 rows.append(r)
@@ -82,7 +91,8 @@ def insert_stmt(r, sector, address):
         f"SELECT '{esc(r['state'])}', '{esc(r['city'])}', '{esc(r['street_type'])}', "
         f"'{esc(r['street_name'])}', '{esc(r['name'])}', '{esc(sector)}', '{esc(r['office'])}', '{esc(address)}'\n"
         f"WHERE NOT EXISTS (SELECT 1 FROM res_zip WHERE name='{esc(r['name'])}' AND state='{esc(r['state'])}' "
-        f"AND city='{esc(r['city'])}' AND COALESCE(street_name, '')='{esc(r['street_name'])}');\n"
+        f"AND city='{esc(r['city'])}' AND COALESCE(street_type, '')='{esc(r['street_type'])}' "
+        f"AND COALESCE(street_name, '')='{esc(r['street_name'])}');\n"
     )
 
 
@@ -93,22 +103,36 @@ def match_city(ex_city, live_rows):
     """
     pending = list(ex_city)
     matched, unmatched = [], []
+
+    def typ(x):
+        return posta.norm_key(x["street_type"])
+
+    def name(x):
+        return posta.norm_key(x["street_name"])
+
+    def base(x):
+        return posta.norm_key(posta.base_street(x["street_name"]))
+
+    # intai cu tipul strazii ('Alee X' si 'Strada X' cu acelasi cod sunt doua strazi), apoi fara
+    # (tip schimbat: Stradela -> Strada)
     for keyf, unique in (
-        (lambda street_name, zip_code: (posta.norm_key(street_name), zip_code), False),
-        (lambda street_name, zip_code: (posta.norm_key(posta.base_street(street_name)), zip_code), False),
-        (lambda street_name, zip_code: posta.norm_key(posta.base_street(street_name)), True),
-        (lambda street_name, zip_code: zip_code, True),
+        (lambda x: (typ(x), name(x), x["name"]), False),
+        (lambda x: (name(x), x["name"]), False),
+        (lambda x: (typ(x), base(x), x["name"]), False),
+        (lambda x: (base(x), x["name"]), False),
+        (lambda x: base(x), True),
+        (lambda x: x["name"], True),
     ):
         by_key = {}
         for m in pending:
-            by_key.setdefault(keyf(m["street_name"], m["name"]), []).append(m)
+            by_key.setdefault(keyf(m), []).append(m)
         live_count = {}
         for r in live_rows:
-            k = keyf(r["street_name"], r["name"])
+            k = keyf(r)
             live_count[k] = live_count.get(k, 0) + 1
         unmatched = []
         for r in live_rows:
-            k = keyf(r["street_name"], r["name"])
+            k = keyf(r)
             lst = by_key.get(k)
             if lst and (not unique or (len(lst) == 1 and live_count[k] == 1)):
                 matched.append((lst.pop(0), r))

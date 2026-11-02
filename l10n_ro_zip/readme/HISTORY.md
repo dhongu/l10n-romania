@@ -1,3 +1,10 @@
+## 20.0.0.0.10 (2026-11-01)
+
+- Postal code refresh tools (`tools/`): `crawl.py --orase` reads a single big city, without the localities of its
+  county, and takes the county where the city has streets, not a village with the same name. The street type is now
+  part of a street's identity, so *Alee X* and *Strada X* under the same code are no longer merged into one row (Iași
+  had 61 such rows reported as gone). No change to the installed module.
+
 ## 20.0.0.0.9 (2026-11-01)
 
 - Postal code refresh tools (`tools/`): `osm_towns.py` gives the towns under 50,000 inhabitants a street list. The
