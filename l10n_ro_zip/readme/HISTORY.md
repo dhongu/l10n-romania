@@ -1,3 +1,15 @@
+## 19.0.0.0.11 (2026-11-01)
+
+- Postal codes refreshed from posta-romana.ro for Sfântu Gheorghe, Bacău and Iași: 1,968 streets updated in place, 454
+  new streets, and 61 streets the post office no longer lists are removed unless a partner uses them. The localities of
+  Covasna get their post office. The towns of Huși, Negrești, Murgeni (Vaslui), Tecuci, Târgu Bujor and Berești
+  (Galați) get 521 streets from OpenStreetMap (ODbL, see Credits), with the town's postal code. The update is applied on
+  install and, for existing databases, by a migration; partners keep their postal code.
+- Postal code refresh tools (`tools/`): the delta updates and deletes a row only if it still has the county and city it
+  has in `res_zip.sql`.
+- The postal code SQL files are read as UTF-8, whatever the server locale.
+- Consultant sheet (`readme/FISA_CONSULTANT.md`) and usage guide (`readme/USAGE.md`), with screenshots.
+
 ## 19.0.0.0.10 (2026-11-01)
 
 - Postal code refresh tools (`tools/`): the street type is now part of a street's identity, so *Alee X* and *Strada X*
