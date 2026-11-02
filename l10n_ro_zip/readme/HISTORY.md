@@ -1,3 +1,12 @@
+## 19.0.0.0.14 (2026-11-02)
+
+- Postal codes refreshed from posta-romana.ro for 18 more counties: Dâmbovița, Dolj, Galați, Giurgiu, Gorj, Harghita,
+  Hunedoara, Ialomița, Iași (the whole county), Ilfov, Maramureș, Mehedinți, Mureș, Neamț, Olt, Prahova, Sălaj and Satu
+  Mare. With the counties of 19.0.0.0.13, the update now covers 34 counties: 22,088 city streets updated in place, 5,504
+  new (plus the 521 OSM streets of six small towns), 1,022 no longer listed and removed unless a partner uses them,
+  10,693 localities get their post office, 25 new localities, 29 renamed. The 19.0.0.0.13 migration becomes
+  19.0.0.0.14 and applies the larger update.
+
 ## 19.0.0.0.13 (2026-11-02)
 
 - Postal codes refreshed from posta-romana.ro for seven more counties: București, Buzău, Călărași, Caraș-Severin, Cluj,
