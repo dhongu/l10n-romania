@@ -1,3 +1,10 @@
+## 19.0.0.0.16 (2026-11-02)
+
+- Street names from OpenStreetMap (ODbL, see Credits) for the small towns where the post office has a single postal
+  code: 269 towns (Pantelimon, Voluntari, Lugoj, Râmnicu Sărat, Tecuci, Câmpina, Bușteni and others) get 15,968
+  streets with the town's postal code, instead of the 521 streets of six towns. The nomenclature now has about 73,000
+  postal codes. The 19.0.0.0.15 migration becomes 19.0.0.0.16.
+
 ## 19.0.0.0.15 (2026-11-02)
 
 - Postal codes refreshed from posta-romana.ro for the last eight counties: Sibiu, Suceava, Teleorman, Timiș, Tulcea,
