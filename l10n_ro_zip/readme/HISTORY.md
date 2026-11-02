@@ -4,10 +4,13 @@
   Botoșani, Brăila and Brașov, on top of Sfântu Gheorghe and Iași: the streets of Alba Iulia, Arad, Pitești, Bacău,
   Onești, Oradea, Bistrița, Botoșani, Brăila and Brașov are read by postal code (7,384 streets updated in place, 1,972
   new, 281 no longer listed and removed unless a partner uses them), 3,565 localities get their post office, 9 new
-  localities, 7 renamed. The 19.0.0.0.11 migration becomes 19.0.0.0.12 and applies the larger update.
+  localities, 7 renamed. The 19.0.0.0.11 migration becomes 19.0.0.0.12 and applies the larger update. On a database
+  already at 19.0.0.0.11, two Iași street segments matched to the wrong street are put back, and the copies left twice
+  are removed unless a partner uses them.
 - Postal code refresh tools (`tools/`): a street segment whose name is unchanged but whose code changed (Brăila renumbered
   its streets) is matched to its existing row when the pair is unique; a row whose code belongs to another county is
-  ignored.
+  ignored. Every matched city row gets all its columns from the post office, not only those that differ from
+  `res_zip.sql`, so the result is the same whichever earlier update the database had.
 
 ## 19.0.0.0.11 (2026-11-01)
 

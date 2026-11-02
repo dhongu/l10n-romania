@@ -23,7 +23,9 @@ Doua regimuri, pe sursa randului live:
                        (FK res_partner.zip_id e ON DELETE SET NULL); altfel ramane.
 
 Delta e idempotent: INSERT-urile nu au id (vin din secventa) si sunt pazite de
-NOT EXISTS, UPDATE/DELETE se refac fara efect. UPDATE/DELETE tintesc randul dupa id
+NOT EXISTS, UPDATE/DELETE se refac fara efect. Fiecare rand de oras potrivit primeste toate
+coloanele cu valorile de acum (full_update), deci rezultatul e acelasi si pe o baza la care s-a
+aplicat un delta anterior, cu alta potrivire. UPDATE/DELETE tintesc randul dupa id
 si dupa judetul + orasul din res_zip.sql (row_where), ca sa nu atinga alt rand intr-o baza
 in care res_zip nu vine din res_zip.sql. Sectorul (Bucuresti) si adresa
 oficiului se pastreaza de pe randul existent sau se deduc (cod / nume oficiu).
@@ -251,6 +253,17 @@ def city_update(m, r, office_addr):
     return sets
 
 
+def full_update(m, sets):
+    """Toate coloanele randului, cu valorile de acum, nu doar ce difera de res_zip.sql.
+
+    Un delta anterior poate fi lasat randul altfel (alta potrivire); scriind tot, rezultatul nu
+    depinde de delta-urile aplicate inainte. country_id=NULL -> relatiile se recalculeaza.
+    """
+    full = {k: sets.get(k, m[k]) for k in ("city", "name", "street_type", "street_name", "office", "sector", "address")}
+    full["country_id"] = None
+    return full
+
+
 def mapping_sql():
     """country_id/state_id/city_id pentru randurile fara country_id (noi sau redenumite),
     cu aceleasi reguli ca post_init_hook."""
@@ -305,8 +318,10 @@ def write_cities(f, cities, big_cities, office_addr, gone_ids):
             sets = city_update(m, r, office_addr)
             if sets:
                 n_upd += 1
-                sql_sets = ", ".join(f"{k}=NULL" if v is None else f"{k}='{esc(v)}'" for k, v in sets.items())
-                f.write(f"UPDATE res_zip SET {sql_sets} WHERE {row_where(m)};\n")
+            sql_sets = ", ".join(
+                f"{k}=NULL" if v is None else f"{k}='{esc(v)}'" for k, v in full_update(m, sets).items()
+            )
+            f.write(f"UPDATE res_zip SET {sql_sets} WHERE {row_where(m)};\n")
         for r in city_new:
             sector = posta.sector_for(r["state"], r["name"])
             f.write(insert_stmt(r, sector, office_addr.get(posta.norm_key(r["office"]), "")))
