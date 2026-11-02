@@ -1,3 +1,12 @@
+## 19.0.0.0.13 (2026-11-02)
+
+- Postal codes refreshed from posta-romana.ro for seven more counties: București, Buzău, Călărași, Caraș-Severin, Cluj,
+  Constanța and Covasna (the whole county, not only Sfântu Gheorghe). With the counties of 19.0.0.0.12, the update now
+  covers 16 counties and Iași: 13,231 city streets updated in place, 3,423 new (plus the 521 OSM streets of six small
+  towns), 718 no longer listed and removed unless a partner uses them, 5,148 localities get their post office, 11 new
+  localities, 10 renamed (Basarabi is now Murfatlar). The 19.0.0.0.12 migration becomes 19.0.0.0.13 and applies the
+  larger update.
+
 ## 19.0.0.0.12 (2026-11-02)
 
 - Postal codes refreshed from posta-romana.ro for the counties Alba, Arad, Argeș, Bacău, Bihor, Bistrița-Năsăud,
