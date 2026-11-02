@@ -1,3 +1,13 @@
+## 19.0.0.0.17 (2026-11-02)
+
+- More postal codes linked to their locality: the post office writes some names with a hyphen (Miercurea-Ciuc,
+  Popești-Leordeni, Târgu-Jiu), others as "Village (Commune)" for the villages with the same name in a county, and the
+  old list has "ª" for "Ș". A row is linked only to a single locality, or to the single one with its postal code. On a
+  new database, the rows without a locality go from 1,656 to 193.
+- Needs l10n_ro_city 19.0.1.10.2, which adds Breaza (Prahova), Băile Govora, Băile Olănești, Ocnele Mari and Eforie and
+  fixes Sfântu Gheorghe and Popești-Leordeni. On update, the existing rows are linked again where they have no locality,
+  and the Giurgiu rows get their county (prefix fixed in l10n_ro_city 19.0.1.10.1).
+
 ## 19.0.0.0.16 (2026-11-02)
 
 - Street names from OpenStreetMap (ODbL, see Credits) for the small towns where the post office has a single postal
