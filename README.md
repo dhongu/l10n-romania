@@ -63,7 +63,6 @@ addon | version | maintainers | summary
 [l10n_ro_storno_enhancement](l10n_ro_storno_enhancement/) | 19.0.1.0.1 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Romania - Storno Enhancements
 [l10n_ro_website_anaf](l10n_ro_website_anaf/) | 19.0.1.2.0 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | ANAF on the website address forms: company filled in while the tax code is typed, checked when the address is sent
 [l10n_ro_website_legal_guarantee](l10n_ro_website_legal_guarantee/) | 19.0.1.0.1 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Displays the EU harmonised notice on the legal guarantee of conformity on the website
-[l10n_ro_zip](l10n_ro_zip/) | 19.0.0.0.6 | <a href='https://github.com/dhongu'><img src='https://github.com/dhongu.png' width='32' height='32' style='border-radius:50%;' alt='dhongu'/></a> | Romania - Coduri Postale
 [terrabit_dvi](terrabit_dvi/) | 19.0.1.3.2 |  | Transitional module, kept only so existing dependencies keep resolving. It installs l10n_ro_customs_dvi and will NOT be ported to 20.0.
 
 [//]: # (end addons)
