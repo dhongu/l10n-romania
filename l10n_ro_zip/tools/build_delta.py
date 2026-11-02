@@ -12,7 +12,8 @@ Doua regimuri, pe sursa randului live:
                        pasii 1-2 intai cu tipul strazii (Alee X si Strada X sunt doua strazi),
                        apoi fara (tip schimbat).
                        pas 1: aceeasi strada + acelasi cod; pas 2: aceeasi strada de baza
-                       + acelasi cod (re-segmentare bl./nr.); pas 3: aceeasi strada de baza,
+                       + acelasi cod (re-segmentare bl./nr.); pas 3: acelasi tronson (tip +
+                       nume complet), cod schimbat; pas 3b: aceeasi strada de baza,
                        cod schimbat; pas 4: acelasi cod, strada redenumita. Pasii 3-4 doar
                        cand perechea e unica pe ambele parti. Pas 5: acelasi cod, nume
                        asemanator (Horia/Horea, ordinea cuvintelor) sau prenume adaugat, doar
@@ -22,7 +23,9 @@ Doua regimuri, pe sursa randului live:
                        (FK res_partner.zip_id e ON DELETE SET NULL); altfel ramane.
 
 Delta e idempotent: INSERT-urile nu au id (vin din secventa) si sunt pazite de
-NOT EXISTS, UPDATE/DELETE se refac fara efect. UPDATE/DELETE tintesc randul dupa id
+NOT EXISTS, UPDATE/DELETE se refac fara efect. Fiecare rand de oras potrivit primeste toate
+coloanele cu valorile de acum (full_update), deci rezultatul e acelasi si pe o baza la care s-a
+aplicat un delta anterior, cu alta potrivire. UPDATE/DELETE tintesc randul dupa id
 si dupa judetul + orasul din res_zip.sql (row_where), ca sa nu atinga alt rand intr-o baza
 in care res_zip nu vine din res_zip.sql. Sectorul (Bucuresti) si adresa
 oficiului se pastreaza de pe randul existent sau se deduc (cod / nume oficiu).
@@ -122,6 +125,8 @@ def match_city(ex_city, live_rows):
         (lambda x: (name(x), x["name"]), False),
         (lambda x: (typ(x), base(x), x["name"]), False),
         (lambda x: (base(x), x["name"]), False),
+        # acelasi tronson, cod schimbat (Braila si-a renumerotat strazile), doar cand e unic
+        (lambda x: (typ(x), name(x)), True),
         (lambda x: base(x), True),
         (lambda x: x["name"], True),
     ):
@@ -248,6 +253,17 @@ def city_update(m, r, office_addr):
     return sets
 
 
+def full_update(m, sets):
+    """Toate coloanele randului, cu valorile de acum, nu doar ce difera de res_zip.sql.
+
+    Un delta anterior poate fi lasat randul altfel (alta potrivire); scriind tot, rezultatul nu
+    depinde de delta-urile aplicate inainte. country_id=NULL -> relatiile se recalculeaza.
+    """
+    full = {k: sets.get(k, m[k]) for k in ("city", "name", "street_type", "street_name", "office", "sector", "address")}
+    full["country_id"] = None
+    return full
+
+
 def mapping_sql():
     """country_id/state_id/city_id pentru randurile fara country_id (noi sau redenumite),
     cu aceleasi reguli ca post_init_hook."""
@@ -302,8 +318,10 @@ def write_cities(f, cities, big_cities, office_addr, gone_ids):
             sets = city_update(m, r, office_addr)
             if sets:
                 n_upd += 1
-                sql_sets = ", ".join(f"{k}=NULL" if v is None else f"{k}='{esc(v)}'" for k, v in sets.items())
-                f.write(f"UPDATE res_zip SET {sql_sets} WHERE {row_where(m)};\n")
+            sql_sets = ", ".join(
+                f"{k}=NULL" if v is None else f"{k}='{esc(v)}'" for k, v in full_update(m, sets).items()
+            )
+            f.write(f"UPDATE res_zip SET {sql_sets} WHERE {row_where(m)};\n")
         for r in city_new:
             sector = posta.sector_for(r["state"], r["name"])
             f.write(insert_stmt(r, sector, office_addr.get(posta.norm_key(r["office"]), "")))
@@ -335,6 +353,18 @@ def main():
             office_addr.setdefault(posta.norm_key(r["office"]), r["address"])
 
     live = load_live(args.live)
+    # codul incepe cu prefixul judetului (ex. 31 = Arad); un rand cu alt prefix e o eroare
+    # de la sursa (strada din Arad trecuta la Alba) si ar crea strada in alt judet
+    state_prefixes = {}
+    for r in ex_rows:
+        if r["name"].isdigit():
+            state_prefixes.setdefault(posta.norm_key(r["state"]), set()).add(r["name"][:2])
+    wrong_state = [
+        r for r in live if r["name"][:2] not in state_prefixes.get(posta.norm_key(r["state"]), {r["name"][:2]})
+    ]
+    if wrong_state:
+        print(f"{len(wrong_state)} randuri cu codul din alt judet, ignorate")
+        live = [r for r in live if r not in wrong_state]
     small = [r for r in live if r["src"] == "small"]
     big = [r for r in live if r["src"] in ("code", "refresh", "osm-new", "osm-town")]
 

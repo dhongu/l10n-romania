@@ -4,7 +4,7 @@
 
 from odoo.tests.common import TransactionCase, tagged
 
-from odoo.addons.l10n_ro_zip import apply_zip_delta
+from odoo.addons.l10n_ro_zip import apply_zip_delta, remove_duplicate_streets
 
 # rows of res_zip.sql named in data/res_zip_delta.sql
 GONE_ID = 1789  # Bacau, 600057: no longer listed by the post office
@@ -65,3 +65,27 @@ class TestResZipDelta(TransactionCase):
         self.assertEqual(new_row.country_id, self.env.ref("base.ro"))
         self.assertEqual(new_row.state_id.l10n_ro_prefix_zip, "73")
         self.assertEqual(new_row.city_id.zipcode, "735100")
+
+    def test_remove_duplicate_streets(self):
+        """A copy of a street inserted after res_zip.sql goes, unless a partner uses it."""
+        self.env.flush_all()
+        self.env.cr.execute(
+            "SELECT state, city, street_type, street_name, name, sector, office, address FROM res_zip WHERE id = %s",
+            (UPDATED_ID,),
+        )
+        values = self.env.cr.fetchone()
+        copies = []
+        for _i in range(2):
+            self.env.cr.execute(
+                """INSERT INTO res_zip (state, city, street_type, street_name, name, sector, office, address)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+                values,
+            )
+            copies.append(self.env.cr.fetchone()[0])
+        partner = self.env["res.partner"].create({"name": "Zip copy partner", "zip_id": copies[1]})
+        self.env.flush_all()
+        remove_duplicate_streets(self.env)
+        self.env.invalidate_all()
+        zips = self.env["res.zip"].browse([UPDATED_ID] + copies).exists()
+        self.assertEqual(zips.ids, [UPDATED_ID, copies[1]])
+        self.assertEqual(partner.zip_id.id, copies[1])
