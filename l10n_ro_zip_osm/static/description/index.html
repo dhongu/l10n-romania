@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:053640edb3ad4296b5cf550807c2bf6b22d57b9136cb39d5a4e035ed44848688
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/license-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_zip_osm"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_zip_osm"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <p>Străzile orașelor mici din România, pentru nomenclatorul de coduri
 poștale din modulul <tt class="docutils literal">l10n_ro_zip</tt>.</p>
 <ul class="simple">
@@ -388,24 +388,59 @@ oară.</li>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.0.0 (2026-11-02)</a></li>
+<li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a></li>
+<li><a class="reference internal" href="#changelog" id="toc-entry-2">Changelog</a><ul>
+<li><a class="reference internal" href="#section-1" id="toc-entry-3">19.0.1.0.0 (2026-11-02)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-6">Contributors</a></li>
-<li><a class="reference internal" href="#other-credits" id="toc-entry-7">Other credits</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-8">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-7">Contributors</a></li>
+<li><a class="reference internal" href="#other-credits" id="toc-entry-8">Other credits</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-9">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="usage">
+<h1><a class="toc-backref" href="#toc-entry-1">Usage</a></h1>
+<p>On a new database, the module is installed automatically with
+<tt class="docutils literal">l10n_ro_zip</tt>; where <tt class="docutils literal">l10n_ro_zip</tt> was already installed, install it
+from <strong>Apps</strong>. It has nothing to configure. It adds the streets of 269
+small towns to the postal codes; you use them exactly as the other
+postal codes of <tt class="docutils literal">l10n_ro_zip</tt>.</p>
+<ol class="arabic">
+<li><p class="first"><strong>See the streets of a small town.</strong> As an administrator, go to
+<strong>Contacts → Configuration → Localization → Zip Codes</strong> and search
+the town’s postal code (for Huși, type <tt class="docutils literal">735100</tt> and press Enter).
+The first row, with no street, is the town row of the post office;
+the other rows are the streets added by the module, all with the same
+postal code. A town whose code returns a single row is not covered.</p>
+<p><img alt="Postal Codes list filtered on the code 735100: 163 rows, the first one without a street, then the streets of Huși (Alee Dobrina, Bulevard 1 Mai, Strada 1 Decembrie 1918 and others), all with the code 735100, city Huși (VS), state Vaslui (RO) and country Romania; the search bar is highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_zip_osm/static/description/en/01_lista_strazi_oras_mic.png" /></p>
+</li>
+<li><p class="first"><strong>Find the street on a partner.</strong> On the partner form, pick the city
+from the list first (1); the state and the town’s postal code follow.
+Then type the street name in the postal code field right below the
+city (2), the one with the dropdown arrow. The streets of the
+partner’s city are offered, each with the town’s postal code. The
+street names have no diacritics, so typing without them is safer. If
+a street is missing, pick the town row: the postal code is the same.</p>
+<p><img alt="Partner Exemplu Distribuție SRL with the city Huși (VS), the state Vaslui (RO) and the ZIP 735100 already filled in: Stefan cel Mare typed in the postal code field below the city, and the dropdown offers Strada Stefan cel Mare with 735100 · Husi, VS; the city and the search field are highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_zip_osm/static/description/en/02_partener_cautare_strada.png" /></p>
+</li>
+<li><p class="first"><strong>Pick the street and save.</strong> The ZIP field keeps the town’s postal
+code (3), with the city (1), the state (2) and the country, and the
+chosen street fills the postal code field (4); the street and number
+of the address stay as you typed them. The screenshot shows the form
+before saving.</p>
+<p><img alt="The partner after picking the street: city Huși (VS), state Vaslui (RO), ZIP 735100 and the postal code field with Strada Stefan cel Mare (735100), highlighted 1 to 4; country Romania; the form has unsaved changes" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_zip_osm/static/description/en/03_partener_cod_completat.png" /></p>
+</li>
+</ol>
+</div>
 <div class="section" id="changelog">
-<h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-2">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-2">19.0.1.0.0 (2026-11-02)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.0.0 (2026-11-02)</a></h2>
 <ul class="simple">
 <li>The streets of the small towns from OpenStreetMap (ODbL) move here
 from <tt class="docutils literal">l10n_ro_zip</tt>: 15,968 streets of 269 towns where the post
@@ -415,21 +450,21 @@ with <tt class="docutils literal">l10n_ro_zip</tt>.</li>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-4">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-5">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-5">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">Authors</a></h2>
 <ul class="simple">
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-6">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -440,7 +475,7 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="other-credits">
-<h2><a class="toc-backref" href="#toc-entry-7">Other credits</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-8">Other credits</a></h2>
 <p>The street names of the towns under 50,000 inhabitants in
 <tt class="docutils literal">data/res_zip_osm.sql</tt> come from
 <a class="reference external" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, ©
@@ -449,7 +484,7 @@ OpenStreetMap contributors, available under the <a class="reference external" hr
 codes come from <a class="reference external" href="https://www.posta-romana.ro">posta-romana.ro</a>.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-8">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_zip_osm">dhongu/l10n-romania</a> project on GitHub.</p>

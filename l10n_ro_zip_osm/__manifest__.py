@@ -1,5 +1,5 @@
 # Copyright (C) 2026 Terrabit
-# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 # The street data in data/res_zip_osm.sql is © OpenStreetMap contributors, under the ODbL.
 
 {
@@ -7,7 +7,7 @@
     "summary": "Streets of the Romanian towns with a single postal code, from OpenStreetMap",
     "countries": ["ro"],
     "images": ["static/description/main_screenshot.png"],
-    "license": "LGPL-3",
+    "license": "AGPL-3",
     "version": "19.0.1.0.0",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
