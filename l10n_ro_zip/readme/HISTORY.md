@@ -1,3 +1,13 @@
+## 19.0.0.0.15 (2026-11-02)
+
+- Postal codes refreshed from posta-romana.ro for the last eight counties: Sibiu, Suceava, Teleorman, Timiș, Tulcea,
+  Vaslui, Vâlcea and Vrancea. The update now covers the whole country: 26,937 city streets updated in place, 6,821 new
+  (plus the 521 OSM streets of six small towns), 1,276 no longer listed and removed unless a partner uses them, 13,297
+  localities get their post office, 25 new localities, 37 renamed. The 19.0.0.0.14 migration becomes 19.0.0.0.15 and
+  applies the larger update.
+- Postal code refresh tools (`tools/`): the new streets of Timișoara, which the post office lists under the locality
+  "Timiș", are put back under Timișoara.
+
 ## 19.0.0.0.14 (2026-11-02)
 
 - Postal codes refreshed from posta-romana.ro for 18 more counties: Dâmbovița, Dolj, Galați, Giurgiu, Gorj, Harghita,
