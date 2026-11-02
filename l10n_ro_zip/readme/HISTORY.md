@@ -7,6 +7,7 @@
   applies the larger update.
 - Postal code refresh tools (`tools/`): the new streets of Timișoara, which the post office lists under the locality
   "Timiș", are put back under Timișoara.
+- Description, consultant sheet and Apps banner give the new size of the nomenclature: about 58,000 postal codes.
 
 ## 19.0.0.0.14 (2026-11-02)
 

@@ -12,7 +12,7 @@
 clădirii): Iașiul, Clujul sau Bucureștiul au sute de coduri. Operatorii îl completează de mână,
 din memorie sau de pe site-ul Poștei, și greșesc des, iar codul greșit ajunge pe factură, pe
 eticheta de curier și pe adresa trimisă în e-Factura. Modulul aduce în Odoo **nomenclatorul
-codurilor poștale din România** (circa 52.800 de rânduri: cod, localitate, județ, tip și nume de
+codurilor poștale din România** (circa 58.000 de rânduri: cod, localitate, județ, tip și nume de
 stradă, sector, oficiu poștal) și adaugă pe partener un câmp în care operatorul tastează strada și
 alege codul din listă; Odoo completează apoi codul poștal, localitatea și județul partenerului.
 
