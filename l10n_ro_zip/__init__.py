@@ -25,6 +25,32 @@ def apply_zip_delta(env):
         env.cr.execute(sql_script)
 
 
+# last id in res_zip.sql: rows above it were inserted later (delta files, users)
+RES_ZIP_SQL_MAX_ID = 51898
+
+
+def remove_duplicate_streets(env):
+    """Delete the street rows a delta inserted twice: a row above res_zip.sql's ids that
+    repeats an older row (same code, county, city, street type, street, sector and office).
+    The older row stays, and a row a partner uses is never deleted."""
+    env.cr.execute(
+        """
+        DELETE FROM res_zip z
+         USING res_zip k
+         WHERE z.id > %s AND k.id < z.id
+           AND COALESCE(z.street_name, '') != ''
+           AND k.name = z.name AND k.state = z.state AND k.city = z.city
+           AND COALESCE(k.street_type, '') = COALESCE(z.street_type, '')
+           AND COALESCE(k.street_name, '') = COALESCE(z.street_name, '')
+           AND COALESCE(k.sector, '') = COALESCE(z.sector, '')
+           AND COALESCE(k.office, '') = COALESCE(z.office, '')
+           AND NOT EXISTS (SELECT 1 FROM res_partner p WHERE p.zip_id = z.id)
+        """,
+        (RES_ZIP_SQL_MAX_ID,),
+    )
+    return env.cr.rowcount
+
+
 def post_init_hook(env):
     """Import SQL file res_zip.sql to populate res_zip table"""
     _logger.info("Importing zip codes from res_zip.sql")
