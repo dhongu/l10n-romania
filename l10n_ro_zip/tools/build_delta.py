@@ -58,6 +58,12 @@ SECTOR_CITY = {
     "6": "RO_179196",
 }
 
+# erori de date la posta: (judet, localitate, prefix cod) -> localitatea corecta
+# (strazile noi din Timisoara apar cu localitatea "Timis")
+CITY_FIXES = {
+    ("timis", "timis", "300"): "Timisoara",
+}
+
 
 def esc(s):
     return (s or "").replace("'", "''")
@@ -72,6 +78,9 @@ def load_live(path):
             if not line:
                 continue
             r = json.loads(line)
+            fix = CITY_FIXES.get((posta.norm_key(r["state"]), posta.norm_key(r["city"]), r["name"][:3]))
+            if fix:
+                r["city"] = fix
             # dedup pe identitatea reala a randului — FARA src (altfel acelasi rand
             # venit si din 'refresh' si din 'osm-new' supravietuieste de 2 ori).
             # 'refresh' e scris inaintea 'osm-new' -> prima aparitie (refresh) castiga.
