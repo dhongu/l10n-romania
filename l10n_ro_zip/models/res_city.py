@@ -22,7 +22,7 @@ class ResCity(models.Model):
         return cities
 
     def _link_zip_localities(self):
-        from odoo.addons.l10n_ro_zip import link_localities  # noqa: PLC0415 (the package imports the models)
+        from .. import link_localities  # noqa: PLC0415 (the package imports the models)
 
         self.env.flush_all()
         link_localities(self.env)
