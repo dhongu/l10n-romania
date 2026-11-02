@@ -14,9 +14,9 @@ from .zip_prefix import ZIP_PREFIX_STATE
 
 _logger = logging.getLogger(__name__)
 
-# Refresh of res_zip.sql from posta-romana.ro, and the streets of small towns from OpenStreetMap
-# (ODbL), both made by tools/build_delta.py. Each file can be applied more than once.
-DELTA_FILES = ("res_zip_delta.sql", "res_zip_osm.sql")
+# Refresh of res_zip.sql from posta-romana.ro, made by tools/build_delta.py; it can be applied more
+# than once. The streets of small towns from OpenStreetMap (ODbL) are in the module l10n_ro_zip_osm.
+DELTA_FILES = ("res_zip_delta.sql",)
 
 
 def apply_zip_delta(env):

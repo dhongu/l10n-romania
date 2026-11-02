@@ -50,9 +50,10 @@ class TestResZipDelta(TransactionCase):
 
     def test_new_row_gets_links(self):
         """A row the delta inserts gets country, county and city, as on an upgrade (no post_init_hook)."""
-        domain = [("city", "=", "Husi"), ("street_name", "!=", False), ("name", "=", "735100")]
+        # a street of Buzău the post office lists and res_zip.sql did not have
+        domain = [("city", "=", "Buzau"), ("street_name", "=", "Cosmin"), ("name", "=", "120162")]
         row = self.env["res.zip"].search(domain, limit=1)
-        self.assertTrue(row, "the OSM streets of Husi are applied on install")
+        self.assertTrue(row, "the delta is applied on install")
         street = (row.street_type, row.street_name)
         self.env.cr.execute("DELETE FROM res_zip WHERE id = %s", (row.id,))
         self.env.invalidate_all()
@@ -62,10 +63,10 @@ class TestResZipDelta(TransactionCase):
         )
         self.assertEqual(len(new_row), 1)
         self.assertEqual(new_row.country_id, self.env.ref("base.ro"))
-        self.assertEqual(new_row.state_id, self.env.ref("base.RO_VS"))
-        if self.env.ref("l10n_ro_city.RO_161838", raise_if_not_found=False):
+        self.assertEqual(new_row.state_id, self.env.ref("base.RO_BZ"))
+        if "l10n_ro_municipality" in self.env["res.city"]._fields:
             # the localities come with l10n_ro_city, when it is installed
-            self.assertEqual(new_row.city_id.zipcode, "735100")
+            self.assertEqual(new_row.city_id.state_id, new_row.state_id)
 
     def test_remove_duplicate_streets(self):
         """A copy of a street inserted after res_zip.sql goes, unless a partner uses it."""

@@ -94,8 +94,9 @@ reîmprospătat ar fi greșite).
 
 ## Integrarea în modul
 
-Delta-urile intră în modul ca `data/res_zip_delta.sql` și `data/res_zip_osm.sql` (copii ale `res_zip_delta.sql` și
-`res_zip_osm_delta.sql`). `res_zip.sql` rămâne neschimbat: id-urile lui sunt cele pe care delta le actualizează.
+Delta-urile intră ca `l10n_ro_zip/data/res_zip_delta.sql` și `l10n_ro_zip_osm/data/res_zip_osm.sql` (copii ale
+`res_zip_delta.sql` și `res_zip_osm_delta.sql`); străzile din OSM au modulul lor, `l10n_ro_zip_osm`, care le aplică din
+`post_init_hook`. `res_zip.sql` rămâne neschimbat: id-urile lui sunt cele pe care delta le actualizează.
 `apply_zip_delta()` din `__init__.py` le rulează în tranzacția Odoo (fără `BEGIN`/`COMMIT`): la instalare din
 `post_init_hook`, după `res_zip.sql`, iar la bazele existente din `migrations/<versiune>/post-migration.py`. La o
 reîmprospătare nouă se regenerează ambele fișiere față de `res_zip.sql` și se adaugă o migrare pe versiunea nouă; delta
@@ -110,6 +111,6 @@ integrare, revezi `raport.csv` (mai ales `CITY_GONE` și `GONE`).
 - `DELAY=0.45s` între request-uri; verifică robots.txt + ToS înainte de crawl complet.
 - OSM Overpass cere UA descriptiv (nu „Mozilla"), altfel 406.
 - Datele OSM sunt © OpenStreetMap contributors, sub licența ODbL (https://www.openstreetmap.org/copyright). Străzile
-  orașelor mici stau în `data/res_zip_osm.sql`, separat, cu atribuirea în fișier și în `readme/CREDITS.md` (deci și în
-  README-ul modulului și pe pagina din Apps Store); codul modulului își păstrează licența.
+  orașelor mici stau în modulul `l10n_ro_zip_osm` (`data/res_zip_osm.sql`), cu atribuirea în fișier și în
+  `readme/CREDITS.md` al acelui modul (deci și în README-ul lui și pe pagina din Apps Store).
 - București: tratat ca oraș >50k, dar coloana `sector` cere mapare separată (vezi post_init_hook).

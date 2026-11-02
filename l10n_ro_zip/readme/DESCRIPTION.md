@@ -5,8 +5,9 @@ Funcționalități principale:
 - Adaugă modelul `res.zip` cu ~73.000 de înregistrări de coduri poștale românești,
   fiecare conținând: cod poștal, localitate, județ, tip stradă, nume stradă, sector (București), oficiu poștal.
 - Nomenclatorul este actualizat după posta-romana.ro (noiembrie 2026) pentru toate cele 42 de județe:
-  străzile celor 54 de orașe cu coduri pe stradă și oficiul poștal al fiecărei localități. Pentru 269 de orașe
-  mici, la care Poșta are un singur cod, străzile vin din OpenStreetMap (ODbL).
+  străzile celor 54 de orașe cu coduri pe stradă și oficiul poștal al fiecărei localități. Străzile celor 269
+  de orașe mici la care Poșta are un singur cod vin din OpenStreetMap (ODbL), în modulul separat
+  `l10n_ro_zip_osm`, care se instalează automat.
 - Datele sunt importate automat la instalare dintr-un fișier SQL. Fiecare cod e legat de județ după
   primele două cifre și, când modulul `l10n_ro_city` e instalat, de localitatea din nomenclatorul lui.
 - Extinde formularul partenerului (`res.partner`) cu câmpul `Cod Poștal (zip_id)`,
