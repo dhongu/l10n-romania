@@ -21,7 +21,6 @@ class TestResZipDelta(TransactionCase):
         """The delta is already applied on install: applying it again changes nothing."""
         count = self._count()
         apply_zip_delta(self.env)
-        apply_zip_delta(self.env)
         self.assertEqual(self._count(), count)
         self.assertEqual(self.env["res.zip"].browse(UPDATED_ID).office, "Bacau 1 Oficiu")
 
@@ -63,8 +62,10 @@ class TestResZipDelta(TransactionCase):
         )
         self.assertEqual(len(new_row), 1)
         self.assertEqual(new_row.country_id, self.env.ref("base.ro"))
-        self.assertEqual(new_row.state_id.l10n_ro_prefix_zip, "73")
-        self.assertEqual(new_row.city_id.zipcode, "735100")
+        self.assertEqual(new_row.state_id, self.env.ref("base.RO_VS"))
+        if self.env.ref("l10n_ro_city.RO_161838", raise_if_not_found=False):
+            # the localities come with l10n_ro_city, when it is installed
+            self.assertEqual(new_row.city_id.zipcode, "735100")
 
     def test_remove_duplicate_streets(self):
         """A copy of a street inserted after res_zip.sql goes, unless a partner uses it."""

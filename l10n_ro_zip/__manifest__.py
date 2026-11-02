@@ -7,11 +7,11 @@
     "countries": ["ro"],
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.0.0.17",
+    "version": "19.0.0.0.18",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
-    "depends": ["base_address_extended", "l10n_ro_city"],
+    "depends": ["base_address_extended"],
     "data": [
         "views/res_partner_view.xml",
         "views/res_zip_view.xml",
