@@ -39,6 +39,19 @@ class TestResZipLinkCities(TransactionCase):
         self.assertEqual(rows.city_id.zipcode, rows.name)
 
     def test_new_town(self):
-        """Breaza, Prahova, added to l10n_ro_city as a town."""
-        rows = self._relink([("city", "=", "Breaza"), ("state_id", "=", self.env.ref("base.RO_PH").id)])
-        self.assertEqual(rows.city_id, self.env.ref("l10n_ro_city.RO_131103"))
+        """Breaza, Prahova, added to l10n_ro_city as a town (19.0.1.10.2): its rows get linked on update."""
+        state = self.env.ref("base.RO_PH")
+        city = self.env.ref("l10n_ro_city.RO_131103", raise_if_not_found=False)
+        if not city:
+            # l10n_ro_city without the town, e.g. the OCA package
+            city = self.env["res.city"].create(
+                {
+                    "name": "Breaza",
+                    "country_id": state.country_id.id,
+                    "state_id": state.id,
+                    "zipcode": "105400",
+                    "l10n_ro_municipality": "Breaza",
+                }
+            )
+        rows = self._relink([("city", "=", "Breaza"), ("state_id", "=", state.id)])
+        self.assertEqual(rows.city_id, city)
