@@ -12,7 +12,8 @@ Doua regimuri, pe sursa randului live:
                        pasii 1-2 intai cu tipul strazii (Alee X si Strada X sunt doua strazi),
                        apoi fara (tip schimbat).
                        pas 1: aceeasi strada + acelasi cod; pas 2: aceeasi strada de baza
-                       + acelasi cod (re-segmentare bl./nr.); pas 3: aceeasi strada de baza,
+                       + acelasi cod (re-segmentare bl./nr.); pas 3: acelasi tronson (tip +
+                       nume complet), cod schimbat; pas 3b: aceeasi strada de baza,
                        cod schimbat; pas 4: acelasi cod, strada redenumita. Pasii 3-4 doar
                        cand perechea e unica pe ambele parti. Pas 5: acelasi cod, nume
                        asemanator (Horia/Horea, ordinea cuvintelor) sau prenume adaugat, doar
@@ -122,6 +123,8 @@ def match_city(ex_city, live_rows):
         (lambda x: (name(x), x["name"]), False),
         (lambda x: (typ(x), base(x), x["name"]), False),
         (lambda x: (base(x), x["name"]), False),
+        # acelasi tronson, cod schimbat (Braila si-a renumerotat strazile), doar cand e unic
+        (lambda x: (typ(x), name(x)), True),
         (lambda x: base(x), True),
         (lambda x: x["name"], True),
     ):
@@ -335,6 +338,18 @@ def main():
             office_addr.setdefault(posta.norm_key(r["office"]), r["address"])
 
     live = load_live(args.live)
+    # codul incepe cu prefixul judetului (ex. 31 = Arad); un rand cu alt prefix e o eroare
+    # de la sursa (strada din Arad trecuta la Alba) si ar crea strada in alt judet
+    state_prefixes = {}
+    for r in ex_rows:
+        if r["name"].isdigit():
+            state_prefixes.setdefault(posta.norm_key(r["state"]), set()).add(r["name"][:2])
+    wrong_state = [
+        r for r in live if r["name"][:2] not in state_prefixes.get(posta.norm_key(r["state"]), {r["name"][:2]})
+    ]
+    if wrong_state:
+        print(f"{len(wrong_state)} randuri cu codul din alt judet, ignorate")
+        live = [r for r in live if r not in wrong_state]
     small = [r for r in live if r["src"] == "small"]
     big = [r for r in live if r["src"] in ("code", "refresh", "osm-new", "osm-town")]
 
