@@ -41,6 +41,6 @@ locations menu and the source and destination locations on transfers.
    ![The done consume transfer DC/CONS/00001, from DC/Stoc to the Consume location](static/description/en/05_bon_consum.png)
 
 6. On the product, the **Inventory** tab shows the **Net Weight** under the weight, in
-   the same unit. Fill it in after the product is saved for the first time.
+   the same unit.
 
    ![The Inventory tab of a product, with the Net Weight field highlighted](static/description/en/06_produs_greutate_neta.png)

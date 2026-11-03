@@ -115,8 +115,6 @@ Pentru a reveni (material neconsumat, obiect de inventar returnat), folosiți bu
 
 **Inventar → Produse → Produse**, deschideți produsul, tab-ul **Inventar**, grupul *Logistică*. Câmpul **Greutate netă** apare sub *Masă* (greutatea brută), în aceeași unitate de greutate (implicit kg). La produsele cu variante, greutatea netă se completează pe fiecare variantă.
 
-Completați greutatea netă **după prima salvare** a produsului: valoarea introdusă direct pe un produs nou, înainte de salvare, nu se păstrează.
-
 ![Produsul Detergent industrial 5 L, tab-ul Inventar: în grupul Logistică, Masă 5,40 kg, Greutate netă 5,00 kg evidențiată și Volum 0,01 m³](../static/description/06_produs_greutate_neta.png)
 
 ### Note de monografie și raportare
@@ -170,7 +168,6 @@ Modulul **nu generează note contabile** și nu alege conturi. Locațiile *Consu
 | Locațiile se numesc *Folosință*, *Consume* sau *Usage* | Denumirea vine din limba de la instalare | Redenumiți locațiile; modulul le găsește după tip |
 | Meniul *Locații* lipsește; pe transfer nu se văd locațiile sursă și destinație | *Locații de stocare* nu este activat | Activați *Locații de stocare* în Inventar → Configurare → Setări |
 | Tab-ul *Inventar* lipsește de pe produs | Utilizatorul nu are drept de Inventar sau produsul este de tip serviciu sau combo | Dați dreptul *Inventar / Utilizator*; tab-ul apare la produsele de tip *Bunuri* |
-| Greutatea netă introdusă pe un produs nou dispare după salvare | Valoarea se scrie pe variantă, care se creează abia la salvare | Completați greutatea netă după prima salvare a produsului |
 
 ## 10. Capturi de ecran
 
@@ -198,4 +195,4 @@ Regenerare — **restrângeți la clasă**, pe o bază fără `l10n_ro_hide_net_
 2. **Depozitele vechi trebuie tratate o dată**, după instalare (secțiunea 5, pasul 3). Altfel, operatorul nu găsește cardul *Consum* pe depozitul lui.
 3. **Tipul locației contează, nu numele.** Locațiile pot fi redenumite fără efect; schimbarea tipului lor scoate mișcările din categoria consumului.
 4. **Modulul nu face contabilitate.** Nota contabilă a consumului se verifică în modulul de evaluare a stocului.
-5. **Greutatea netă** se completează după prima salvare a produsului. Nu intră în calculele acestui modul, dar e-Transport o poate folosi (secțiunea 7); dacă firma nu o folosește, câmpul poate fi ascuns cu `l10n_ro_hide_net_weight`.
+5. **Greutatea netă** nu intră în calculele acestui modul, dar e-Transport o poate folosi (secțiunea 7); dacă firma nu o folosește, câmpul poate fi ascuns cu `l10n_ro_hide_net_weight`.

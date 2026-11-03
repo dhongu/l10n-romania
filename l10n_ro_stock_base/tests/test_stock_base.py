@@ -101,6 +101,13 @@ class TestStockBase(TransactionCase):
         move.location_id, move.location_dest_id = consume, stock
         self.assertTrue(move._is_incoming())
 
+    def test_create_template_keeps_net_weight(self):
+        template = self.env["product.template"].create(
+            {"name": "Template", "is_storable": True, "l10n_ro_net_weight": 3.0}
+        )
+        self.assertEqual(template.l10n_ro_net_weight, 3.0)
+        self.assertEqual(template.product_variant_id.l10n_ro_net_weight, 3.0)
+
     def test_create_product(self):
         product = self.env["product.product"].create(
             {
