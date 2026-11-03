@@ -13,6 +13,7 @@
     "author": "Terrabit, Dorin Hongu",
     "maintainers": ["dhongu"],
     "website": "https://www.terrabit.ro",
+    "images": ["static/description/main_screenshot.png"],
     "depends": ["stock_account", "l10n_ro_stock_base"],
     "installable": True,
     "development_status": "Beta",

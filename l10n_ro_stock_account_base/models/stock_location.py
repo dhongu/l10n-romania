@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import fields, models
+
 from odoo.addons.account.models.product import ACCOUNT_DOMAIN
 
 
@@ -13,16 +14,14 @@ class StockLocation(models.Model):
         company_dependent=True,
         string="Income Account",
         domain=ACCOUNT_DOMAIN,
-        help="This account will overwrite the income accounts from product "
-        "or category.",
+        help="This account will overwrite the income accounts from product or category.",
     )
     l10n_ro_property_account_expense_location_id = fields.Many2one(
         "account.account",
         company_dependent=True,
         string="Expense Account",
         domain=ACCOUNT_DOMAIN,
-        help="This account will overwrite the expense accounts from product "
-        "or category.",
+        help="This account will overwrite the expense accounts from product or category.",
     )
     l10n_ro_property_stock_valuation_account_id = fields.Many2one(
         "account.account",
