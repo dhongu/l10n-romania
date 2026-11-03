@@ -58,7 +58,7 @@ Date minime pentru demo:
 ## 5. Configurare inițială
 
 1. Verificați că **țara fiscală** a companiei este România (implicit, țara companiei din Setări → Utilizatori și companii → Companii). Locațiile și tipurile de operație se creează doar pentru companiile românești.
-2. Instalați modulul `l10n_ro_stock_base`. La instalare, fiecare companie românească primește locațiile **Consum** și **Dare în folosință** (dacă există deja câte o locație de acest tip în companie, de exemplu din modulul OCA, este preluată, nu dublată). Denumirea locațiilor vine din limba în care s-a făcut instalarea: în română ies *Consum* și *Folosință*, în engleză *Consume* și *Usage*. Le puteți redenumi (în capturi, a doua se numește *Dare în folosință*) — modulul le găsește după tip, nu după nume.
+2. Instalați modulul `l10n_ro_stock_base`. La instalare, fiecare companie românească primește locațiile **Consum** și **Dare în folosință** (dacă există deja câte o locație de acest tip în companie, de exemplu din modulul OCA, este preluată, nu dublată). Denumirea locațiilor vine din limba în care s-a făcut instalarea: în română ies *Consum* și *Dare în folosință*, în engleză *Consume* și *Usage*. Le puteți redenumi — modulul le găsește după tip, nu după nume.
 3. **Depozitele existente la instalare primesc** tipurile de operație Consum și Dare în folosință la instalarea modulului; cele care le aveau deja din modulul OCA le păstrează. Depozitele create după instalare le primesc la creare. Dacă unui depozit tot îi lipsesc (de exemplu, țara fiscală a companiei a devenit România după instalare), deschideți depozitul (Inventar → Configurare → Depozite), modificați **Nume scurt** și salvați, apoi readuceți-l la valoarea inițială și salvați din nou: Odoo completează tipurile care lipsesc, cu codul de bare după numele scurt.
 4. Activați **Locații de stocare** (Inventar → Configurare → Setări, secțiunea *Depozit*). Fără această setare, meniul *Locații* nu apare, iar pe tipul de operație și pe transfer nu se văd locația sursă și locația destinație.
 
@@ -164,7 +164,7 @@ Modulul **nu generează note contabile** și nu alege conturi. Locațiile *Consu
 |---|---|---|
 | Câmpurile *România - Tip consum* / *Tip dare în folosință* sunt goale pe depozit | Compania nu avea țara fiscală România la instalarea modulului | Schimbați *Nume scurt* al depozitului, salvați, apoi readuceți-l (secțiunea 5, pasul 3) |
 | Nu există locațiile *Consum* și *Dare în folosință* | Țara fiscală a companiei nu era România la instalare | Setați țara fiscală România, actualizați modulul din Aplicații, apoi tratați depozitele ca în secțiunea 5, pasul 3 |
-| Locațiile se numesc *Folosință*, *Consume* sau *Usage* | Denumirea vine din limba de la instalare | Redenumiți locațiile; modulul le găsește după tip |
+| Locațiile se numesc *Consume* sau *Usage* | Denumirea vine din limba de la instalare (engleză) | Redenumiți locațiile; modulul le găsește după tip |
 | Meniul *Locații* lipsește; pe transfer nu se văd locațiile sursă și destinație | *Locații de stocare* nu este activat | Activați *Locații de stocare* în Inventar → Configurare → Setări |
 | Tab-ul *Inventar* lipsește de pe produs | Utilizatorul nu are drept de Inventar sau produsul este de tip serviciu sau combo | Dați dreptul *Inventar / Utilizator*; tab-ul apare la produsele de tip *Bunuri* |
 
