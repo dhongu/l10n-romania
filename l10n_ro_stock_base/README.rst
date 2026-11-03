@@ -87,12 +87,13 @@ locations menu and the source and destination locations on transfers.
 
 4. The **Consume** operation type is an internal transfer from the
    warehouse stock to the company consume location, numbered with the
-   ``CONS`` sequence prefix (``<warehouse code>/CONS/00001``). The
-   **Usage Giving** type is the same, towards the usage giving location,
-   with the ``USAGE`` prefix.
+   ``<warehouse code>/CONS/`` sequence prefix
+   (``<warehouse code>/CONS/00001``). The **Usage Giving** type is the
+   same, towards the usage giving location, with the
+   ``<warehouse code>/USAGE/`` prefix.
 
-   |The Consume operation type, with the Sequence Prefix CONS and the
-   Consume destination location highlighted|
+   |The Consume operation type, with the Sequence Prefix and the Consume
+   destination location highlighted|
 
 5. Create a transfer of type **Consume** from **Inventory → Overview**,
    add the products and quantities, then **Mark as Todo** and
@@ -114,12 +115,20 @@ locations menu and the source and destination locations on transfers.
 .. |The locations of type Consume and Usage Giving of the company, with the Location Type column highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/01_locatii_consum_dare.png
 .. |The Consume location form, with Location Type Consume highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/02_locatie_consum.png
 .. |The Technical Information tab of the warehouse, with the Romania - Consume Type and Romania - Usage Giving Type fields highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/03_depozit_tipuri_operatie.png
-.. |The Consume operation type, with the Sequence Prefix CONS and the Consume destination location highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/04_tip_operatie_consum.png
+.. |The Consume operation type, with the Sequence Prefix and the Consume destination location highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/04_tip_operatie_consum.png
 .. |The done consume transfer DC/CONS/00001, from DC/Stoc to the Consume location| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/05_bon_consum.png
 .. |The Inventory tab of a product, with the Net Weight field highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/06_produs_greutate_neta.png
 
 Changelog
 =========
+
+20.0.0.0.1 (2026-11-03)
+-----------------------
+
+- Migration to 20.0. The consume and usage giving operation types no
+  longer set ``sequence_code``: on 20.0 it is the prefix of the
+  sequence, which keeps the warehouse code (e.g. ``WH/CONS/``).
+  Screenshots retaken on 20.0.
 
 19.0.0.0.1 (2026-10-07)
 -----------------------

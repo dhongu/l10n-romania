@@ -81,6 +81,11 @@ definit de ``l10n_ro_stock_base`` (înainte, de modulul OCA
 Changelog
 =========
 
+20.0.0.0.5 (2026-11-03)
+-----------------------
+
+- Migration to 20.0.
+
 19.0.0.0.5 (2026-11-03)
 -----------------------
 
