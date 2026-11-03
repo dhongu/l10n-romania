@@ -98,6 +98,8 @@ Changelog
   module without logic and views, plus the company accounts of
   ``l10n_ro_config`` that the stock accounting reads (picking payable
   and receivable, usage giving, stock transfer, not eligible tax).
+  Romanian translation of the field labels, taken from the OCA module
+  where they exist.
 
 Bug Tracker
 ===========

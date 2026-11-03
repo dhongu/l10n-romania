@@ -35,18 +35,18 @@ Operatorii de stoc nu lucrează cu acest modul.
 
 ## 4. Conturi și date implicate
 
-Modulul **nu folosește conturi la înregistrare**. Păstrează următoarele câmpuri (etichetele sunt cele din interfață, deocamdată în engleză):
+Modulul **nu folosește conturi la înregistrare**. Păstrează următoarele câmpuri (etichetele sunt cele din interfața în română):
 
 | Unde | Câmpuri păstrate |
 |---|---|
-| **Companie** | conturile *Romania - Picking Account Payable* / *Receivable* (aviz de însoțire), *Romania - Usage Giving Account*, *Romania - Company Stock Transfer Account*, *Romania - Not Eligible Tax Account*; opțiunile *FIFO per Location* și *FIFO Negative Stock Compensation* |
-| **Cont** | *Consume Account*, *Romania - Reception in Progress Account* |
-| **Categorie produs** | *Allow stock account change from locations* |
-| **Produs** (și variantă) | *Stock Valuation Account* |
-| **Locație** | *Income Account*, *Expense Account*, *Stock Valuation Account Romania* |
-| **Depozit** | *Fiscal Position* |
-| **Transfer** | indicatorii de aviz (*L10N Ro Notice*) și de recepție în curs (*L10N Ro Reception In Progress*) |
-| **Mișcare de stoc** | *Romanian - Move Type*, *Romania - Valuation Account*, *Romania - Transfer Valuation Account*, notele contabile suplimentare legate, cantitatea și valoarea stocului negativ FIFO în așteptare, notele de compensare |
+| **Companie** | conturile *România - Cont furnizori pentru avize* / *România - Cont clienți pentru avize* (aviz de însoțire), *România - Cont dare în folosință*, *România - Cont de transfer între gestiunile companiei*, *România - Cont TVA nedeductibilă*; opțiunile *FIFO pe locație* și *Compensare stoc negativ FIFO* |
+| **Cont** | *Cont consum*, *Cont Recepție în Curs* |
+| **Categorie produs** | *Permite schimbarea contului de stoc din locații* |
+| **Produs** (și variantă) | *Contul de evaluare a stocurilor* |
+| **Locație** | *Cont venit*, *Cont cheltuieli*, *Cont evaluare stoc România* |
+| **Depozit** | *Poziție Fiscală* |
+| **Transfer** | indicatorii de aviz (*Aviz*) și de recepție în curs (*Recepție în curs*) |
+| **Mișcare de stoc** | *Tip mișcare*, *Cont evaluare*, *Cont evaluare transfer*, notele contabile suplimentare legate, cantitatea și valoarea stocului negativ FIFO în așteptare, notele de compensare |
 | **Înregistrare jurnal** (notă contabilă) | legătura cu mișcarea de stoc suplimentară și cu mișcarea de intrare care a compensat un stoc negativ |
 
 Cele cinci conturi ale companiei de mai sus vin din `l10n_ro_config`. Modulul păstrează **doar** aceste cinci câmpuri ale lui `l10n_ro_config`, nu tot modulul: celelalte câmpuri ale acestuia (de exemplu contul de custodie, conturile de discount comercial, pozițiile fiscale pentru TVA la încasare și taxare inversă, datele de pe jurnale și de pe parteneri) **se pierd** la dezinstalarea lui, dacă nu le preia alt modul.
@@ -148,4 +148,3 @@ Regenerare — **restrângeți la clasă**, altfel se rescriu capturile tuturor 
 2. **Ordinea e totul:** instalare, apoi dezinstalare. `l10n_ro_config` se scoate ultimul și doar după ce restul câmpurilor lui sunt preluate. Invers, datele se pierd și se recuperează doar din copia de siguranță.
 3. **Câmpurile păstrate sunt istoric.** Pe documentele noi rămân goale.
 4. **Fără ecrane.** Valorile se citesc din meniul tehnic sau prin export.
-5. Etichetele câmpurilor apar deocamdată în engleză și în interfața română (modulul nu are încă traducere).
