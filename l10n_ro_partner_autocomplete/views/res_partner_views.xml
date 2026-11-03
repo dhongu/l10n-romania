@@ -20,6 +20,9 @@
                         icon="fa-refresh"
                     />
                 </div>
+            </xpath>
+            <!-- In the group, with its label: base_vat moves the Tax ID into a div of its own -->
+            <xpath expr="//field[@name='website']" position="before">
                 <field
                     name="l10n_ro_vat_subjected"
                     invisible="not is_company or parent_id or country_code != 'RO'"

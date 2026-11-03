@@ -243,6 +243,8 @@ class TestPartnerAutocomplete(TransactionCase):
             partner.action_l10n_ro_anaf_refresh()
         self.assertFalse(partner.l10n_ro_vat_subjected)
         self.assertEqual(partner.l10n_ro_vat_number, CUI)
+        # A check box is listed as Yes / No, not as True / False
+        self.assertIn("Yes → No", partner.message_ids[0].body)
 
     def test_vat_number_without_prefix(self):
         partner = self._partner(vat="RO " + CUI)

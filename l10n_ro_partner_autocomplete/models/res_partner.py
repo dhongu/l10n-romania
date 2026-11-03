@@ -178,6 +178,8 @@ class ResPartner(models.Model):
                 old, new = old.display_name, new.display_name
             elif (old or False) == (value or False):
                 continue
+            elif field.type == "boolean":
+                old, new = (self.env._("Yes") if flag else self.env._("No") for flag in (old, value))
             else:
                 new = value
             changes.append((field._description_string(self.env), old or "", new or ""))
