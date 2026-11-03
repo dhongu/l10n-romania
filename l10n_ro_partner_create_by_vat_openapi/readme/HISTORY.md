@@ -1,3 +1,8 @@
+## 19.0.1.0.6 (2026-11-03)
+
+- The description says the module is no longer developed: for a Romanian company,
+  `l10n_ro_partner_autocomplete` replaces it. No functional change.
+
 ## 19.0.1.0.5 (2026-10-22)
 
 - Listed on Odoo Apps as *Partner Data from OpenAPI* (was *Partner Create by VAT from OpenAPI*). The technical name `l10n_ro_partner_create_by_vat_openapi` does not change.
