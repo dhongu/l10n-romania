@@ -1,0 +1,10 @@
+{
+  "title": "Stock Base",
+  "summary": "Consume and usage giving for Romanian stock",
+  "lang": "en",
+  "features": [
+    "Usage and consume locations per company",
+    "Consume and Usage Giving operation types",
+    "Net weight on products"
+  ]
+}
