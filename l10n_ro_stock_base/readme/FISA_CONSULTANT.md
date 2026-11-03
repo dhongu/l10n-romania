@@ -52,14 +52,14 @@ Modulul **nu folosește conturi contabile** și nu generează note contabile. El
 Date minime pentru demo:
 
 - o companie cu țara fiscală **România**;
-- un depozit creat după instalarea modulului (sau un depozit existent tratat ca în secțiunea 5, pasul 3);
+- un depozit al companiei (existent la instalare sau creat după);
 - un produs stocabil, cu stoc în depozit;
 
 ## 5. Configurare inițială
 
 1. Verificați că **țara fiscală** a companiei este România (implicit, țara companiei din Setări → Utilizatori și companii → Companii). Locațiile și tipurile de operație se creează doar pentru companiile românești.
 2. Instalați modulul `l10n_ro_stock_base`. La instalare, fiecare companie românească primește locațiile **Consum** și **Dare în folosință** (dacă există deja câte o locație de acest tip în companie, de exemplu din modulul OCA, este preluată, nu dublată). Denumirea locațiilor vine din limba în care s-a făcut instalarea: în română ies *Consum* și *Folosință*, în engleză *Consume* și *Usage*. Le puteți redenumi (în capturi, a doua se numește *Dare în folosință*) — modulul le găsește după tip, nu după nume.
-3. **Depozitele existente la instalare nu primesc automat** tipurile de operație Consum și Dare în folosință (cu excepția celor care le aveau deja din modulul OCA). Ca să le creați, deschideți depozitul (Inventar → Configurare → Depozite), modificați **Nume scurt** și salvați, apoi readuceți-l la valoarea inițială și salvați din nou. La schimbarea codului, Odoo completează tipurile de operație care lipsesc. Tipurile create astfel primesc **codul de bare** cu numele scurt temporar (de exemplu `TMP-CONSUME`), care nu se mai actualizează la revenire: corectați *Cod de bare* pe cele două tipuri (`<cod>-CONSUME`, `<cod>-USAGE`). Depozitele create după instalare le primesc direct.
+3. **Depozitele existente la instalare primesc** tipurile de operație Consum și Dare în folosință la instalarea modulului; cele care le aveau deja din modulul OCA le păstrează. Depozitele create după instalare le primesc la creare. Dacă unui depozit tot îi lipsesc (de exemplu, țara fiscală a companiei a devenit România după instalare), deschideți depozitul (Inventar → Configurare → Depozite), modificați **Nume scurt** și salvați, apoi readuceți-l la valoarea inițială și salvați din nou: Odoo completează tipurile care lipsesc, cu codul de bare după numele scurt.
 4. Activați **Locații de stocare** (Inventar → Configurare → Setări, secțiunea *Depozit*). Fără această setare, meniul *Locații* nu apare, iar pe tipul de operație și pe transfer nu se văd locația sursă și locația destinație.
 
 ## 6. Flux de utilizare
@@ -84,7 +84,7 @@ Nu schimbați tipul locațiilor create de modul: tipul este cel care face ca ie�
 
 **Inventar → Configurare → Depozite**, deschideți depozitul. Cu **modul dezvoltator activ**, tab-ul **Informații tehnice** arată, în grupul *Tip operație*, două câmpuri noi: **România - Tip consum** și **România - Tip dare în folosință**, cu tipurile de operație create pentru acest depozit. Câmpurile sunt doar pentru citire.
 
-Dacă cele două câmpuri sunt goale, depozitul exista înainte de instalarea modulului: aplicați secțiunea 5, pasul 3.
+Dacă cele două câmpuri sunt goale, aplicați secțiunea 5, pasul 3.
 
 ![Depozitul Depozit Central, cu cod DC, tab-ul Informații tehnice deschis: în grupul Tip operație, România - Tip consum are valoarea Depozit Central: Consum și România - Tip dare în folosință are valoarea Depozit Central: Dare în folosință, ambele evidențiate](../static/description/03_depozit_tipuri_operatie.png)
 
@@ -97,7 +97,7 @@ Din formularul depozitului, deschideți **Depozit Central: Consum** (sau din **I
 - **Locația destinație** — locația **Consum** a companiei (la dare în folosință: locația *Dare în folosință*);
 - **Cod de bare** `DC-CONSUME` (respectiv `DC-USAGE`).
 
-Locațiile implicite pot fi schimbate, de exemplu dacă materialele se consumă dintr-o altă sublocație. Dacă redenumiți depozitul sau îi schimbați codul, secvențele celor două tipuri se redenumesc automat; **codul de bare** al celor două tipuri rămâne însă pe codul vechi și trebuie corectat manual (`<cod nou>-CONSUME`, `<cod nou>-USAGE`).
+Locațiile implicite pot fi schimbate, de exemplu dacă materialele se consumă dintr-o altă sublocație. Dacă redenumiți depozitul sau îi schimbați codul, secvențele și **codul de bare** al celor două tipuri urmează automat noul cod (`<cod nou>-CONSUME`, `<cod nou>-USAGE`).
 
 ![Tipul de operație Consum al depozitului Depozit Central: Tip operație Transfer intern, Prefix secvență CONS evidențiat, cod de bare DC-CONSUME, locația sursă DC/Stoc și locația destinație Consum evidențiată](../static/description/04_tip_operatie_consum.png)
 
@@ -142,7 +142,6 @@ Modulul **nu generează note contabile** și nu alege conturi. Locațiile *Consu
 
 **Ce rămâne manual:**
 
-- tipurile de operație pentru depozitele existente la instalare (secțiunea 5, pasul 3);
 - emiterea și validarea bonurilor de consum și a dărilor în folosință;
 - completarea greutății nete pe produse;
 - nota contabilă, prin modulul de evaluare a stocului.
@@ -163,7 +162,7 @@ Modulul **nu generează note contabile** și nu alege conturi. Locațiile *Consu
 
 | Mesaj / simptom | Cauză | Remediere |
 |---|---|---|
-| Câmpurile *România - Tip consum* / *Tip dare în folosință* sunt goale pe depozit | Depozitul exista înainte de instalarea modulului | Schimbați *Nume scurt* al depozitului, salvați, apoi readuceți-l (secțiunea 5, pasul 3) |
+| Câmpurile *România - Tip consum* / *Tip dare în folosință* sunt goale pe depozit | Compania nu avea țara fiscală România la instalarea modulului | Schimbați *Nume scurt* al depozitului, salvați, apoi readuceți-l (secțiunea 5, pasul 3) |
 | Nu există locațiile *Consum* și *Dare în folosință* | Țara fiscală a companiei nu era România la instalare | Setați țara fiscală România, actualizați modulul din Aplicații, apoi tratați depozitele ca în secțiunea 5, pasul 3 |
 | Locațiile se numesc *Folosință*, *Consume* sau *Usage* | Denumirea vine din limba de la instalare | Redenumiți locațiile; modulul le găsește după tip |
 | Meniul *Locații* lipsește; pe transfer nu se văd locațiile sursă și destinație | *Locații de stocare* nu este activat | Activați *Locații de stocare* în Inventar → Configurare → Setări |
@@ -192,7 +191,7 @@ Regenerare — **restrângeți la clasă**, pe o bază fără `l10n_ro_hide_net_
 ## 11. Observații pentru manual
 
 1. **Locațiile sunt pe companie, tipurile de operație pe depozit.** Toate depozitele unei companii consumă în aceeași locație *Consum*; numărul bonului arată depozitul din care s-a consumat.
-2. **Depozitele vechi trebuie tratate o dată**, după instalare (secțiunea 5, pasul 3). Altfel, operatorul nu găsește cardul *Consum* pe depozitul lui.
+2. **Verificați depozitele după instalare** (secțiunea 6, pasul 3): fiecare trebuie să aibă tipurile Consum și Dare în folosință, altfel operatorul nu găsește cardul *Consum* pe depozitul lui.
 3. **Tipul locației contează, nu numele.** Locațiile pot fi redenumite fără efect; schimbarea tipului lor scoate mișcările din categoria consumului.
 4. **Modulul nu face contabilitate.** Nota contabilă a consumului se verifică în modulul de evaluare a stocului.
 5. **Greutatea netă** nu intră în calculele acestui modul, dar e-Transport o poate folosi (secțiunea 7); dacă firma nu o folosește, câmpul poate fi ascuns cu `l10n_ro_hide_net_weight`.

@@ -77,11 +77,10 @@ locations menu and the source and destination locations on transfers.
 3. Go to **Inventory → Configuration → Warehouses** and open the
    warehouse. With the developer mode on, the **Technical Information**
    tab shows **Romania - Consume Type** and **Romania - Usage Giving
-   Type**. Warehouses that existed before the installation do not get
-   them automatically: change the warehouse **Short Name**, save, then
-   set it back and save again, and the missing operation types are
-   created; then correct their **Barcode**, which keeps the temporary
-   short name.
+   Type**. The warehouses that exist at the installation get them when
+   the module is installed, the new ones when they are created. If they
+   are still missing (the fiscal country became Romania later), change
+   the warehouse **Short Name**, save, then set it back and save again.
 
    |The Technical Information tab of the warehouse, with the Romania -
    Consume Type and Romania - Usage Giving Type fields highlighted|
@@ -134,6 +133,9 @@ Changelog
   warehouse operation types are shown only once on the forms. The module
   depends on ``account``, which gives the fiscal country of the company.
   The net weight given when a product is created is kept on its variant.
+  The warehouses that exist when the module is installed get the consume
+  and usage giving operation types, and their barcodes follow the
+  warehouse code when it changes.
 
 Bug Tracker
 ===========

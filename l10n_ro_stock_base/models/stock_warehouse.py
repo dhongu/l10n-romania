@@ -29,11 +29,34 @@ class StockWarehouse(models.Model):
     def _get_picking_type_update_values(self):
         res = super()._get_picking_type_update_values()
         if self.company_id._l10n_ro_stock_is_romanian():
+            code = self.code.replace(" ", "").upper()
             if self.company_id.l10n_ro_consume_location_id:
-                res.update({"l10n_ro_consume_type_id": {}})
+                res.update({"l10n_ro_consume_type_id": {"barcode": code + "-CONSUME"}})
             if self.company_id.l10n_ro_usage_location_id:
-                res.update({"l10n_ro_usage_type_id": {}})
+                res.update({"l10n_ro_usage_type_id": {"barcode": code + "-USAGE"}})
         return res
+
+    def _l10n_ro_create_missing_picking_types(self):
+        """Create the consume and usage giving operation types of the warehouses
+        that existed before the module was installed. The other operation types
+        of the warehouse are not touched."""
+        picking_types = self.env["stock.picking.type"]
+        for warehouse in self.filtered(lambda w: w.company_id._l10n_ro_stock_is_romanian()):
+            missing = [field for field in ("l10n_ro_consume_type_id", "l10n_ro_usage_type_id") if not warehouse[field]]
+            if not missing:
+                continue
+            max_sequence = picking_types.search_read(
+                [("sequence", "!=", False)], ["sequence"], limit=1, order="sequence desc"
+            )
+            max_sequence = max_sequence and max_sequence[0]["sequence"] or 0
+            create_data = warehouse._get_picking_type_create_values(max_sequence)[0]
+            sequence_data = warehouse._get_sequence_values()
+            for field in missing:
+                if field not in create_data:
+                    continue
+                sequence = self.env["ir.sequence"].sudo().create(sequence_data[field])
+                values = dict(create_data[field], warehouse_id=warehouse.id, sequence_id=sequence.id)
+                warehouse[field] = picking_types.create(values)
 
     def _get_picking_type_create_values(self, max_sequence):
         create_data, max_sequence = super()._get_picking_type_create_values(max_sequence)
