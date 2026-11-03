@@ -215,7 +215,14 @@ bifa **Plătitor TVA**.
 
 Faceți clic pe **Actualizează din ANAF**. Odoo rescrie numele, adresa, codul fiscal, NRC-ul și bifa
 **Plătitor TVA** cu datele de la ANAF; **telefonul existent se păstrează** (un telefon introdus local este de obicei
-mai bun decât cel din registru).
+mai bun decât cel din registru). Când ANAF nu are **strada**, **detaliile adresei** sau **codul
+poștal** (firme din localități fără nomenclator de străzi), iar localitatea și județul de la ANAF
+sunt cele ale partenerului (iar ANAF nu dă o altă stradă), **valorile existente rămân**: strada cumpărătorului este obligatorie pe
+factura e-Factura (CIUS-RO). Localitatea se compară fără diacritice; un partener fără județ se
+compară doar după localitate, iar unul fără localitate nu se consideră în aceeași localitate. Dacă
+ANAF dă **altă localitate** sau **altă stradă**, ori partenerul nu are localitate, strada, detaliile
+adresei și codul poștal pe care ANAF nu le are se golesc, ca să nu rămână o adresă care nu există (strada veche în orașul nou, blocul
+vechi lângă strada nouă); completați-le de mână.
 
 În istoric apare nota **„Actualizat din ANAF:”** cu fiecare câmp modificat, **valoarea veche →
 valoarea nouă** (în captură: Nume, Stradă, Cod poștal, NRC și **Plătitor TVA: Nu → Da**). O firmă
@@ -312,6 +319,12 @@ duplicatelor.
   are data în formatul limbii utilizatorului (zz.ll.aaaa în română), nu în format ISO.
 - [ ] După **Actualizează din ANAF**, nota din istoric listează fiecare câmp schimbat (vechi →
       nou), iar telefonul existent rămâne.
+- [ ] La o firmă pentru care ANAF nu are stradă sau cod poștal, în aceeași localitate,
+      **Actualizează din ANAF** păstrează strada, detaliile adresei și codul poștal existente, iar
+      nota din istoric nu le listează ca modificate.
+- [ ] Dacă ANAF dă altă localitate și nu are stradă, strada, detaliile adresei și codul poștal vechi
+      se golesc, iar nota din istoric le arată ca modificate; la o stradă nouă fără detalii,
+      detaliile vechi se golesc.
 - [ ] La o firmă pe care ANAF o arată ca neplătitoare de TVA, **Actualizează din ANAF** debifează
       **Plătitor TVA**, scoate `RO` din codul fiscal și notează în istoric „Plătitor TVA: Da → Nu”.
 - [ ] **Enrich** pe mai mulți parteneri cu cod fiscal românesc completează doar câmpurile goale.
@@ -374,7 +387,9 @@ Regenerare:
   CUI-ul se tastează cu `RO`; în **Nume** și **ID Companie**, cu sau fără.
 - Insistați pe diferența dintre cele două acțiuni de pe un partener existent: **Actualizează din
   ANAF** rescrie numele și adresa (păstrează doar telefonul) și lasă urmă în istoric; **Enrich**
-  completează numai câmpurile goale, fără nota ANAF.
+  completează numai câmpurile goale, fără nota ANAF. Strada, detaliile adresei și codul poștal
+  lăsate goale de ANAF nu șterg valorile partenerului cât timp localitatea și județul sunt
+  aceleași; la o localitate nouă se golesc.
 - Explicați că în Odoo 20 **bifa „Companie” nu mai există**: un partener cu cod fiscal este
   companie, iar **ID Companie** (CUI-ul) se deduce din codul fiscal.
 - Prefixul `RO` la TVA este o informație fiscală, nu de formatare: îl are doar firma plătitoare de
