@@ -215,8 +215,9 @@ mai bun decât cel din registru). Când ANAF nu are **strada**, **detaliile adre
 poștal** (firme din localități fără nomenclator de străzi), iar localitatea și județul de la ANAF
 sunt cele ale partenerului (iar ANAF nu dă o altă stradă), **valorile existente rămân**: strada cumpărătorului este obligatorie pe
 factura e-Factura (CIUS-RO). Localitatea se compară fără diacritice; un partener fără județ se
-compară doar după localitate. Dacă ANAF dă **altă localitate** sau **altă stradă**, valorile vechi
-lipsă la ANAF se golesc, ca să nu rămână o adresă care nu există (strada veche în orașul nou, blocul
+compară doar după localitate, iar unul fără localitate nu se consideră în aceeași localitate. Dacă
+ANAF dă **altă localitate** sau **altă stradă**, ori partenerul nu are localitate, strada, detaliile
+adresei și codul poștal pe care ANAF nu le are se golesc, ca să nu rămână o adresă care nu există (strada veche în orașul nou, blocul
 vechi lângă strada nouă); completați-le de mână.
 
 În istoric apare nota **„Actualizat din ANAF:”** cu fiecare câmp modificat, **valoarea veche →
@@ -287,8 +288,9 @@ verificarea duplicatelor.
 - [ ] La o firmă pentru care ANAF nu are stradă sau cod poștal, în aceeași localitate,
       **Actualizează din ANAF** păstrează strada, detaliile adresei și codul poștal existente, iar
       nota din istoric nu le listează ca modificate.
-- [ ] Dacă ANAF dă altă localitate și nu are stradă, strada și codul poștal vechi se golesc, iar nota
-      din istoric le arată ca modificate; la o stradă nouă fără detalii, detaliile vechi se golesc.
+- [ ] Dacă ANAF dă altă localitate și nu are stradă, strada, detaliile adresei și codul poștal vechi
+      se golesc, iar nota din istoric le arată ca modificate; la o stradă nouă fără detalii,
+      detaliile vechi se golesc.
 - [ ] La o firmă pe care ANAF o arată ca neplătitoare de TVA, **Actualizează din ANAF** debifează
       **Plătitor TVA**, scoate `RO` din codul fiscal și notează în istoric „Plătitor TVA: Da → Nu”.
 - [ ] Căutarea după o denumire (ex. „Forest”) și un cod fiscal din altă țară merg în continuare la
