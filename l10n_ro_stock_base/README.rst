@@ -128,7 +128,8 @@ Changelog
 - Migration to 20.0. The consume and usage giving operation types no
   longer set ``sequence_code``: on 20.0 it is the prefix of the
   sequence, which keeps the warehouse code (e.g. ``WH/CONS/``).
-  Screenshots retaken on 20.0.
+  Screenshots retaken on 20.0. The view test reads the form arch both as
+  text and as bytes, as returned by ``get_view`` on recent 20.0 builds.
 
 19.0.0.0.1 (2026-10-07)
 -----------------------

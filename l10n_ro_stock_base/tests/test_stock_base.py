@@ -150,6 +150,11 @@ class TestStockBase(TransactionCase):
         product.product_tmpl_id.l10n_ro_net_weight = 2.0
         self.assertEqual(product.l10n_ro_net_weight, 2.0)
 
+    def _form_arch(self, model):
+        arch = self.env[model].get_view(view_type="form")["arch"]
+        # get_view returns the arch as bytes on recent 20.0 builds
+        return arch.decode() if isinstance(arch, bytes) else arch
+
     def test_fields_shown_once_next_to_oca_views(self):
         # The OCA l10n_ro_stock views add the same block to the product form.
         self.env["ir.ui.view"].create(
@@ -184,9 +189,9 @@ class TestStockBase(TransactionCase):
             }
         )
         for model in ("product.template", "product.product"):
-            arch = self.env[model].get_view(view_type="form")["arch"]
+            arch = self._form_arch(model)
             self.assertEqual(arch.count('name="l10n_ro_net_weight"'), 2, model)  # div + field
             self.assertEqual(arch.count('for="l10n_ro_net_weight"'), 1, model)
-        arch = self.warehouse_obj.get_view(view_type="form")["arch"]
+        arch = self._form_arch("stock.warehouse")
         self.assertEqual(arch.count('name="l10n_ro_consume_type_id"'), 1)
         self.assertEqual(arch.count('name="l10n_ro_usage_type_id"'), 1)
