@@ -52,8 +52,10 @@ the ones for goods (<code class="border rounded px-2" style="font-family:ui-mono
 D300 rows, but the EU fiscal positions map them by type: a service sold to or
 bought from an EU partner must carry <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">21% S</code> to land on the intra-community
 services rows (D300 row 3, rows 7/22) instead of the goods rows (row 1,
-rows 5/20). Odoo has a single pair of default taxes per company, so a new
-service product would otherwise get the goods taxes.</p>
+rows 5/20), and with the services codes (P, S) instead of the goods codes
+(L, A) in the recapitulative statement D390. Odoo has a single pair of
+default taxes per company, so a new service product would otherwise get the
+goods taxes.</p>
 <p>The module adds:</p>
 <ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div><em>Default Service Taxes</em> in <strong>Accounting &gt; Settings &gt; Taxes</strong>, next to the
   standard default taxes (visible for companies with Romania as fiscal country);</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>the values <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">tvac_21_s</code> / <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">tvad_21_s</code> filled in when the Romanian chart of

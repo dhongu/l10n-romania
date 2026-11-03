@@ -2,7 +2,7 @@
 
 **Modul:** `l10n_ro_service_tax`
 **Utilizator principal:** Contabil, Responsabil nomenclator produse
-**Prioritate:** 🟡 Medie (un serviciu facturat unui partener din UE cu taxa de bunuri ajunge pe rândurile de bunuri intracomunitare din decontul de TVA)
+**Prioritate:** 🟡 Medie (un serviciu facturat unui partener din UE cu taxa de bunuri ajunge pe rândurile de bunuri din D300 și cu cod greșit în D390)
 
 ---
 
@@ -19,6 +19,11 @@ lui devine serviciu.
 
 ## 2. Bază legală și context
 
+- **Codul fiscal (Legea 227/2015):** art. 291 alin. (1) — cota standard de 21%; art. 278
+  alin. (2)–(4) — locul prestării serviciilor (regula generală B2B, regula B2C și excepțiile);
+  art. 307 alin. (2) — taxarea inversă la achiziția de servicii din UE; art. 325 alin. (1)
+  lit. a), c), d), e) — declarația recapitulativă (D390), unde livrările și achizițiile de bunuri
+  (L, A) se declară separat de prestările și achizițiile de servicii (P, S).
 - **Regim intern:** în planul de conturi RO standard Odoo, `21% G` și `21% S` se raportează pe
   aceleași rânduri din decontul de TVA (D300): rândul 9 la livrări și prestări, rândul 24 la
   achiziții, cu aceleași conturi (4427, respectiv 4426).
@@ -26,11 +31,20 @@ lui devine serviciu.
 
   | Operațiune | Din taxa `21% G` | Din taxa `21% S` |
   |---|---|---|
-  | Livrare / prestare către un partener din UE cu cod de TVA (poziția *Schema intracomunitară*) | `0% EU G`, D300 rândul 1 | `0% EU S`, D300 rândul 3 |
-  | Achiziție din UE (taxare inversă) | D300 rândurile 5/5.1 și 20/20.1 | D300 rândurile 7/7.1 și 22/22.1 |
+  | Livrare / prestare către un partener din UE cu cod de TVA (poziția *Schema intracomunitară*) | `0% EU G`, D300 rândul 1; D390 cod L | `0% EU S`, D300 rândul 3 (și 3.1, doar cu `l10n_ro_anaf_d300`); D390 cod P |
+  | Achiziție din UE (taxare inversă) | D300 rândurile 5/5.1 și 20/20.1; D390 cod A | D300 rândurile 7/7.1 și 22/22.1; D390 cod S |
 
   De aceea tipul taxei de pe produs contează: un serviciu cu taxa de bunuri ajunge pe rândurile
-  de bunuri intracomunitare.
+  de bunuri din D300 și cu cod de bunuri (L sau A) în D390. Facturile deja validate își păstrează
+  taxele.
+- **Atenție, cazuri în care maparea automată nu e corectă:**
+  - partener din UE **fără cod de TVA** (persoană neimpozabilă): poziția *Regim intracomunitar
+    scutit* dă tot `0% EU S`, dar locul prestării e în România (art. 278 alin. (3)), deci se
+    aplică 21% — corectați taxa pe factură;
+  - **excepțiile de la art. 278 alin. (4)** (ex. servicii legate de imobile, transport de
+    persoane): locul prestării nu e la beneficiar, iar taxa se pune de mână;
+  - parteneri **din afara UE**: pe planul standard, maparea serviciilor are goluri pe care le
+    corectează `l10n_ro_anaf_d300`; instalarea lui este recomandată.
 - Modulul nu schimbă cotele sau maparea pe rânduri, care vin din planul de conturi RO standard
   Odoo (`l10n_ro`); stabilește doar ce taxă primește implicit un produs de tip serviciu.
 
@@ -107,7 +121,9 @@ Modulul nu generează note contabile. Linia de factură cu produsul de tip servi
 se folosesc aceleași conturi; monografia rămâne cea standard (ex. vânzare `4111 = 704 + 4427`,
 cumpărare `628 + 4426 = 401`). Diferența apare la partenerii cu poziție fiscală intracomunitară:
 taxa `21% S` devine taxa de servicii UE (D300 rândul 3 la prestări, rândurile 7/7.1 și 22/22.1 la
-achiziții), nu cea de bunuri (rândul 1, respectiv 5/5.1 și 20/20.1).
+achiziții), nu cea de bunuri (rândul 1, respectiv 5/5.1 și 20/20.1). Notele intracomunitare
+rezultate (ex.): prestare către UE `4111 = 704`, fără TVA; achiziție din UE `628 = 401` și
+autolichidarea `4426 = 4427`.
 
 ## 7. Legături cu alte module / declarații
 
@@ -115,6 +131,8 @@ achiziții), nu cea de bunuri (rândul 1, respectiv 5/5.1 și 20/20.1).
 |---|---|
 | `l10n_ro` | planul de conturi RO, taxele `21% S` / `21% G` și pozițiile fiscale UE care le transformă după tip |
 | `account` | setările de taxe implicite și formularul de produs |
+| `l10n_ro_anaf_d300` (recomandat) | completează maparea pe rândurile D300 (rândul 3.1, serviciile cu parteneri din afara UE) |
+| `l10n_ro_anaf_d390` | declarația recapitulativă: codul P/S vine din taxa de servicii UE |
 | `l10n_ro_config` (OCA, opțional) | aceleași câmpuri; cele două module pot fi instalate împreună |
 
 **Ce e automat:** completarea taxelor de serviciu la instalare și la încărcarea planului RO;
@@ -132,8 +150,9 @@ produsele create prin import sau prin API, fără formular, primesc taxele impli
 - [ ] Trecut înapoi pe *Bunuri*, produsul primește `21% G`.
 - [ ] Trecut de pe *Service* pe *Bunuri*, un produs cu taxe puse de mână (altele decât `21% S`)
       își păstrează taxele; la trecerea pe *Service*, taxele se înlocuiesc întotdeauna.
-- [ ] Factura cu produsul de tip serviciu are `21% S` pe linie; către un partener cu poziție
-      fiscală intracomunitară, taxa devine `0% EU S`.
+- [ ] Factura cu produsul de tip serviciu are `21% S` pe linie; către un partener din UE cu cod
+      de TVA valid (poziția *Schema intracomunitară*), taxa devine `0% EU S`.
+- [ ] Către un partener din UE fără cod de TVA, factura de serviciu are 21%, nu `0% EU S`.
 - [ ] După dezinstalarea `l10n_ro_config`, taxele de serviciu din setări au rămas aceleași.
 
 ## 9. Mesaje de eroare frecvente
