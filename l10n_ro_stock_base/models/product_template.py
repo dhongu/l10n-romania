@@ -5,6 +5,24 @@
 from odoo import api, fields, models
 
 
+def _l10n_ro_remove_duplicates(arch, xpaths):
+    """Keep only the first node of each xpath.
+
+    While the OCA ``l10n_ro_stock`` module is still installed, its views add
+    the same fields to the same forms, so they would be shown twice.
+    """
+    for xpath in xpaths:
+        for node in arch.xpath(xpath)[1:]:
+            node.getparent().remove(node)
+    return arch
+
+
+NET_WEIGHT_XPATHS = [
+    "//label[@for='l10n_ro_net_weight']",
+    "//div[@name='l10n_ro_net_weight']",
+]
+
+
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
@@ -30,8 +48,22 @@ class ProductTemplate(models.Model):
     def _inverse_l10n_ro_net_weight(self):
         self._set_product_variant_field("l10n_ro_net_weight")
 
+    @api.model
+    def _get_view(self, view_id=None, view_type="form", **options):
+        arch, view = super()._get_view(view_id, view_type, **options)
+        if view_type == "form":
+            _l10n_ro_remove_duplicates(arch, NET_WEIGHT_XPATHS)
+        return arch, view
+
 
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
     l10n_ro_net_weight = fields.Float("Net Weight", digits="Stock Weight")
+
+    @api.model
+    def _get_view(self, view_id=None, view_type="form", **options):
+        arch, view = super()._get_view(view_id, view_type, **options)
+        if view_type == "form":
+            _l10n_ro_remove_duplicates(arch, NET_WEIGHT_XPATHS)
+        return arch, view
