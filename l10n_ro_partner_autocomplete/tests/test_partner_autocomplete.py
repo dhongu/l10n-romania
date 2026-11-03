@@ -141,6 +141,47 @@ class TestPartnerAutocomplete(TransactionCase):
             partner.action_l10n_ro_anaf_refresh()
         self.assertEqual(partner.phone, "0356179038")
 
+    def _anaf_result_without_street(self):
+        result = anaf_result(codPostal="")
+        result["adresa_domiciliu_fiscal"].update(
+            ddenumire_Strada="", dnumar_Strada="", ddetalii_Adresa="", dcod_Postal=""
+        )
+        return result
+
+    def test_refresh_keeps_an_address_anaf_does_not_hold(self):
+        # The same locality, written without diacritics and without the county
+        partner = self._partner(city="Timisoara", street2="Bl. A1, Sc. 2", zip="300001")
+        with patch(REQUEST_PATH, return_value=self._anaf_result_without_street()):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertEqual(partner.street, "Str. Veche 1")
+        self.assertEqual(partner.street2, "Bl. A1, Sc. 2")
+        self.assertEqual(partner.zip, "300001")
+        # What ANAF does hold is still updated
+        self.assertEqual(partner.city, "Timișoara")
+        self.assertEqual(partner.state_id.code, "TM")
+        self.assertNotIn("Str. Veche 1", partner.message_ids[0].body)
+
+    def test_refresh_clears_the_details_of_another_street(self):
+        # ANAF has a new street without details: the old block and postal code went with the old one
+        partner = self._partner(city="Timișoara", street2="Bl. A1, Sc. 2", zip="300001")
+        result = anaf_result(codPostal="")
+        result["adresa_domiciliu_fiscal"].update(ddetalii_Adresa="", dcod_Postal="")
+        with patch(REQUEST_PATH, return_value=result):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertEqual(partner.street, "Str. Ciprian Porumbescu Nr. 12")
+        self.assertFalse(partner.street2)
+        self.assertNotEqual(partner.zip, "300001")
+
+    def test_refresh_clears_the_street_of_another_locality(self):
+        # The old street does not exist in the city ANAF gives: kept, it would make a false address
+        partner = self._partner(street2="Bl. A1, Sc. 2", zip="310130")
+        with patch(REQUEST_PATH, return_value=self._anaf_result_without_street()):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertFalse(partner.street)
+        self.assertFalse(partner.street2)
+        self.assertFalse(partner.zip)
+        self.assertEqual(partner.city, "Timișoara")
+
     def test_refresh_without_change(self):
         partner = self._partner()
         with patch(REQUEST_PATH, return_value=anaf_result()):
