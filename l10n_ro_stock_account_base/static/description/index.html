@@ -389,22 +389,57 @@ dependency on the <tt class="docutils literal">l10n.ro.mixin</tt>.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.0.0.1 (2026-10-09)</a></li>
+<li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a></li>
+<li><a class="reference internal" href="#changelog" id="toc-entry-2">Changelog</a><ul>
+<li><a class="reference internal" href="#section-1" id="toc-entry-3">19.0.0.0.1 (2026-10-09)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-6">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-7">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="usage">
+<h1><a class="toc-backref" href="#toc-entry-1">Usage</a></h1>
+<p>The module has no screens and no accounting logic. It only keeps the
+fields of the OCA stock accounting modules when they are removed. Work
+on a copy of the database and make a backup first.</p>
+<ol class="arabic">
+<li><p class="first">In <strong>Apps</strong>, install <tt class="docutils literal">l10n_ro_stock_base</tt> and this module (<em>Romania
+- Stock Accounting Fields</em>) <strong>before</strong> uninstalling anything. Then
+uninstall the OCA module <tt class="docutils literal">l10n_ro_stock_account</tt> (and
+<tt class="docutils literal">l10n_ro_stock</tt>, if no longer needed). Read the confirmation
+dialog: Odoo also uninstalls every module that depends on the one you
+remove. Only five company accounts of <tt class="docutils literal">l10n_ro_config</tt> are kept by
+this module: uninstall <tt class="docutils literal">l10n_ro_config</tt> only after its other fields
+(custody account, trade discount accounts, VAT fiscal positions,
+journal and partner fields) are taken over by other modules or
+confirmed unused, otherwise they are lost.</p>
+<p><img alt="The Romania - Stock Accounting Fields module installed in Apps, with the Upgrade and Uninstall buttons" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_account_base/static/description/en/01_modul_instalat.png" /></p>
+</li>
+<li><p class="first">With the developer mode on, open <strong>Settings → Technical → Database
+Structure → Fields</strong> and search by <strong>Field Name</strong> or group by
+<strong>Model</strong>: the fields of the module are still there, with <strong>Stored</strong>
+checked on their own model (the ones on the bank statement line and
+the product variant are inherited and show as not stored), and keep
+their values. Read the values with <strong>Actions → Export</strong> on the
+matching list (locations, stock moves, …).</p>
+<p><img alt="The fields declared by the module, grouped by model, with their technical name, label, type and the Stored column" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_account_base/static/description/en/02_campuri_modul.png" /></p>
+</li>
+</ol>
+<p>The computed fields of the OCA module (the Romanian move type, the
+valuation account of the move, the FIFO options) are plain stored fields
+here: records created after the OCA module is removed leave them empty.
+The stock accounting entries are made by the stock valuation module
+installed in the database, not by this one.</p>
+</div>
 <div class="section" id="changelog">
-<h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-2">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-2">19.0.0.0.1 (2026-10-09)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-3">19.0.0.0.1 (2026-10-09)</a></h2>
 <ul class="simple">
 <li>Initial version: the fields of the OCA <tt class="docutils literal">l10n_ro_stock_account</tt>
 module without logic and views, plus the company accounts of
@@ -414,22 +449,22 @@ and receivable, usage giving, stock transfer, not eligible tax).</li>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-4">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-5">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-5">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">Authors</a></h2>
 <ul class="simple">
 <li>Terrabit</li>
 <li>Dorin Hongu</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-6">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_base">dhongu/l10n-romania</a> project on GitHub.</p>
