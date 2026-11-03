@@ -21,6 +21,11 @@ given explicitly are kept; a partner that already has a Tax ID, a contact person
 from another country is left as it is. The `l10n_ro_anaf_no_autofill` context key turns it off,
 for instance for a bulk import.
 
+**VAT payer.** A Romanian company shows **VAT Payer** next to its Tax ID, filled in from ANAF together
+with the rest of the data. The partner also keeps its Tax ID without the country prefix. Both
+fields have the names used by the other Romanian localization modules, so no other module is
+needed for them.
+
 **City and postal code.** With the list of Romanian cities (`l10n_ro_city`), the city is chosen
 from it as well. Choosing a city then keeps the postal code the partner already has, instead of
 replacing it with the city's.

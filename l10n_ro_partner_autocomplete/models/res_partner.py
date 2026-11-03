@@ -3,6 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 import logging
+import re
 
 from markupsafe import Markup, escape
 
@@ -21,6 +22,24 @@ ANAF_FILL_IF_EMPTY = ("phone",)
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    # The Romanian VAT fields, with the names and types l10n_ro_config (OCA) and l10n_ro_anaf_partner
+    # also declare: the data stays when one of them is installed or removed
+    l10n_ro_vat_subjected = fields.Boolean(
+        string="VAT Payer",
+        help="The partner is registered for VAT purposes (scpTVA). Filled in from ANAF.",
+    )
+    l10n_ro_vat_number = fields.Char(
+        string="VAT Number Digits",
+        compute="_compute_l10n_ro_vat_number",
+        store=True,
+        help="The Tax ID without the country prefix.",
+    )
+
+    @api.depends("vat")
+    def _compute_l10n_ro_vat_number(self):
+        for partner in self:
+            partner.l10n_ro_vat_number = re.sub(r"\D", "", partner.vat or "")
 
     @api.model
     def autocomplete_by_vat(self, vat, query_country_id, timeout=15):
@@ -159,6 +178,8 @@ class ResPartner(models.Model):
                 old, new = old.display_name, new.display_name
             elif (old or False) == (value or False):
                 continue
+            elif field.type == "boolean":
+                old, new = (self.env._("Yes") if flag else self.env._("No") for flag in (old, value))
             else:
                 new = value
             changes.append((field._description_string(self.env), old or "", new or ""))

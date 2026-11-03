@@ -17,7 +17,7 @@ Cu modulul, un **CUI românesc** (cu sau fără `RO`) tastat acolo unde Odoo ofe
 automată — **numele** sau câmpul **TVA** (codul fiscal) al partenerului, câmpul **Client** dintr-o
 ofertă sau factură, fișa clientului deschisă din Punctul de vânzare — aduce sugestia direct de la
 ANAF. Alegerea ei completează partenerul: tipul **Companie**, denumire, cod fiscal (cu `RO` doar
-pentru plătitorii de TVA), stradă și număr, detalii de adresă, localitate (pentru București,
+pentru plătitorii de TVA), bifa **Plătitor TVA**, stradă și număr, detalii de adresă, localitate (pentru București,
 sectorul), județ, cod poștal, număr de înregistrare la Registrul Comerțului (NRC) și telefon. Când
 sugestia e aleasă în formularul partenerului (Nume, TVA), istoricul primește o notă că datele vin
 de la ANAF.
@@ -74,8 +74,13 @@ Modulul **nu generează note contabile** și nu folosește conturi; lucrează do
 - acces la internet spre serverul ANAF (în capturi, răspunsul ANAF e simulat).
 
 Câmpurile completate: tipul **Companie** (bifa *Persoană / Companie* din capul formularului),
-**Nume**, **TVA** (codul fiscal), **Stradă**, **Strada 2** (detaliile de adresă: bloc, etaj, zonă),
+**Nume**, **TVA** (codul fiscal), **Plătitor TVA** (bifat pentru o firmă înregistrată în scopuri de
+TVA, debifat altfel), **Stradă**, **Strada 2** (detaliile de adresă: bloc, etaj, zonă),
 **Localitate**, **Județ**, **Cod poștal**, **Țară**, **NRC**, **Telefon**.
+
+Pe lângă ele, partenerul păstrează codul fiscal fără prefixul de țară (câmp tehnic, nevăzut pe
+formular). **Plătitor TVA** și acest câmp au aceleași nume ca în celelalte module de localizare
+românească, deci nu e nevoie de alt modul pentru ele.
 
 ## 5. Configurare inițială
 
@@ -132,6 +137,8 @@ Faceți clic pe sugestie. Formularul se completează și partenerul se salvează
 - **Nume** = denumirea de la ANAF;
 - **Adresa** = stradă cu număr, detalii (zonă, etaj), localitate, județ, cod poștal, țara România;
 - **TVA** = `RO30834857` (cu `RO` pentru că firma este plătitoare de TVA; fără `RO` altfel);
+- **Plătitor TVA**, sub NRC = bifat, pentru că ANAF arată firma înregistrată în scopuri de
+  TVA (debifat pentru un neplătitor);
 - **NRC** = numărul de la Registrul Comerțului (J…);
 - **Telefon**, dacă ANAF îl are.
 
@@ -142,8 +149,8 @@ preluării în forma an-lună-zi (ex. *2026-10-29*). Sub rândul **TVA**, în dr
 ![Partenerul completat din ANAF, cu nota în istoric](../static/description/03_partener_completat.png)
 
 **Verificați:** adresa vine dintr-un singur bloc (sediul social, altfel domiciliul fiscal);
-pentru București, localitatea este sectorul; prefixul `RO` apare doar la plătitorii de TVA; NRC-ul
-este completat. Nu s-a consumat niciun credit IAP.
+pentru București, localitatea este sectorul; prefixul `RO` apare doar la plătitorii de TVA și
+**Plătitor TVA** e bifat exact atunci; NRC-ul este completat. Nu s-a consumat niciun credit IAP.
 
 > **Variantă — partener creat cu CUI-ul ca nume.** Dacă într-un câmp de tip *Client* tastați un CUI
 > și alegeți **Creează** (pe ofertă) sau **Creează și editează...** urmat de **Salvează**, fără să
@@ -190,21 +197,27 @@ captură, *Mobila Design Banat*, cu o adresă veche).
 
 Linkul **Actualizează din ANAF** apare sub rândul **TVA** doar pentru un partener de tip
 **Companie** (bifa din capul formularului), din **România**, cu cod fiscal și fără firmă-mamă. Nu
-apare pe un partener de tip *Persoană* și nici pe persoanele de contact ale unei firme.
+apare pe un partener de tip *Persoană* și nici pe persoanele de contact ale unei firme. Mai jos,
+sub rândul **NRC**, este bifa **Plătitor TVA**, afișată în aceleași condiții, dar și fără cod fiscal.
+În captură, bifa e goală: firma a fost introdusă manual, înainte de modul.
 
 ![Linkul Actualizează din ANAF pe un client existent](../static/description/06_buton_actualizare_anaf.png)
 
-**Găsiți pe ecran:** numele și adresa actuale ale partenerului, codul fiscal și linkul de sub el.
+**Găsiți pe ecran:** numele și adresa actuale ale partenerului, codul fiscal, linkul de sub el și
+bifa **Plătitor TVA**.
 Dacă linkul lipsește pe o firmă, verificați că tipul este **Companie**, nu *Persoană*.
 
 ### Pasul 7 — După actualizare: datele noi și modificările în istoric
 
-Faceți clic pe **Actualizează din ANAF**. Odoo rescrie numele, adresa, codul fiscal și NRC-ul cu
-datele de la ANAF; **telefonul existent se păstrează** (un telefon introdus local este de obicei
+Faceți clic pe **Actualizează din ANAF**. Odoo rescrie numele, adresa, codul fiscal, NRC-ul și bifa
+**Plătitor TVA** cu datele de la ANAF; **telefonul existent se păstrează** (un telefon introdus local este de obicei
 mai bun decât cel din registru).
 
 În istoric apare nota **„Actualizat din ANAF:”** cu fiecare câmp modificat, **valoarea veche →
-valoarea nouă** (în captură: Nume, Stradă, Cod poștal, NRC). Deasupra ei, urmărirea standard a
+valoarea nouă** (în captură: Nume, Stradă, Cod poștal, NRC și **Plătitor TVA: Nu → Da**). O firmă care a ieșit din
+evidența plătitorilor de TVA primește **Plătitor TVA: Da → Nu**, iar codul fiscal rămâne fără
+`RO` (cu `l10n_ro_config` din OCA instalat, acesta pune prefixul la loc; se rezolvă la scoaterea
+lui). Deasupra ei, urmărirea standard a
 Odoo arată aceleași schimbări pentru câmpurile urmărite. Dacă nimic nu s-a schimbat, nota spune
 **„Verificat în ANAF: nicio modificare.”**. Când ANAF arată firma ca radiată sau inactivă, nota
 are în plus, îngroșat, **„ANAF arată firma ca radiată.”** sau **„ANAF arată firma ca și
@@ -212,7 +225,8 @@ contribuabil inactiv.”**
 
 ![Partenerul actualizat, cu lista modificărilor în istoric](../static/description/07_actualizare_istoric.png)
 
-**Verificați:** fiecare câmp din notă are valoarea nouă și pe formular; telefonul a rămas cel vechi
+**Verificați:** fiecare câmp din notă are valoarea nouă și pe formular (inclusiv bifa **Plătitor
+TVA**, acum pusă); telefonul a rămas cel vechi
 (*0722 111 222*); nicio mențiune de radiere sau inactivitate — dacă apare, informați contabilul
 înainte de a mai înregistra facturi de la acel furnizor.
 
@@ -251,6 +265,8 @@ verificarea duplicatelor.
       denumirea oficială și localitatea.
 - [ ] După alegere: tipul **Companie**, TVA cu `RO` doar pentru plătitorii de TVA, NRC completat,
       adresa dintr-un singur bloc.
+- [ ] După alegerea sugestiei pentru un plătitor de TVA, **Plătitor TVA** (sub NRC) e bifat;
+      pentru un neplătitor, e debifat.
 - [ ] Pentru o firmă din București, localitatea este sectorul.
 - [ ] În istoricul partenerului apare „Datele firmei au fost preluate din ANAF la …”.
 - [ ] CUI-ul tastat în **TVA** (cu sau fără `RO`) aduce aceeași sugestie.
@@ -262,6 +278,8 @@ verificarea duplicatelor.
       fiscal și fără firmă-mamă.
 - [ ] După **Actualizează din ANAF**, nota din istoric listează fiecare câmp schimbat (vechi →
       nou), iar telefonul existent rămâne.
+- [ ] La o firmă pe care ANAF o arată ca neplătitoare de TVA, **Actualizează din ANAF** debifează
+      **Plătitor TVA**, scoate `RO` din codul fiscal și notează în istoric „Plătitor TVA: Da → Nu”.
 - [ ] Căutarea după o denumire (ex. „Forest”) și un cod fiscal din altă țară merg în continuare la
       IAP (alegerea unei sugestii IAP consumă un credit).
 - [ ] Un CUI cu cifra de control greșită nu interoghează ANAF; căutarea merge la IAP, ca în
@@ -292,14 +310,14 @@ consumă credite:
    partenerului**, cu nota despre ANAF.
 2. `02_sugestie_cui_nume.png` — partener nou, CUI tastat în nume, sugestia ANAF.
 3. `03_partener_completat.png` — partenerul completat și salvat din sugestie (tip **Companie**), cu
-   nota ANAF în istoric și linkul **Actualizează din ANAF** sub rândul TVA.
+   nota ANAF în istoric, linkul **Actualizează din ANAF** sub rândul TVA și bifa **Plătitor TVA**.
 4. `04_sugestie_cui_tva.png` — partener nou, CUI tastat fără `RO` în **TVA**, sugestia ANAF.
 5. `05_sugestie_client_factura.png` — factură nouă, CUI tastat la **Client**, sugestia ANAF sub
    **Creează și editează...**.
 6. `06_buton_actualizare_anaf.png` — client existent cu date vechi și linkul **Actualizează din
-   ANAF**.
+   ANAF**, cu bifa **Plătitor TVA** încă goală.
 7. `07_actualizare_istoric.png` — clientul după actualizare, cu nota **Actualizat din ANAF:**
-   (vechi → nou) și telefonul păstrat.
+   (vechi → nou), **Plătitor TVA** bifat și telefonul păstrat.
 
 Regenerare:
 

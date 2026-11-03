@@ -226,3 +226,28 @@ class TestPartnerAutocomplete(TransactionCase):
         result = self.Partner.onchange(values, ["zip", "city_id", "state_id"], spec)
         self.assertNotIn("city_id", result["value"])
         self.assertNotIn("zip", result["value"])
+
+    # -- the Romanian VAT fields ------------------------------------------
+
+    def test_create_sets_the_vat_payer(self):
+        with patch(REQUEST_PATH, return_value=anaf_result()):
+            partner = self.Partner.create({"name": CUI})
+        self.assertTrue(partner.l10n_ro_vat_subjected)
+        self.assertEqual(partner.l10n_ro_vat_number, CUI)
+
+    def test_refresh_clears_the_vat_payer(self):
+        partner = self._partner(l10n_ro_vat_subjected=True)
+        answer = anaf_result()
+        answer["inregistrare_scop_Tva"]["scpTVA"] = False
+        with patch(REQUEST_PATH, return_value=answer):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertFalse(partner.l10n_ro_vat_subjected)
+        self.assertEqual(partner.l10n_ro_vat_number, CUI)
+        # A check box is listed as Yes / No, not as True / False
+        self.assertIn("Yes → No", partner.message_ids[0].body)
+
+    def test_vat_number_without_prefix(self):
+        partner = self._partner(vat="RO " + CUI)
+        self.assertEqual(partner.l10n_ro_vat_number, CUI)
+        partner.vat = False
+        self.assertFalse(partner.l10n_ro_vat_number)
