@@ -13,7 +13,7 @@
     "maintainers": ["dhongu"],
     "website": "https://www.terrabit.ro",
     "images": ["static/description/main_screenshot.png"],
-    "depends": ["stock"],
+    "depends": ["account", "stock"],
     "data": [
         "data/stock_data.xml",
         "views/stock_warehouse_view.xml",

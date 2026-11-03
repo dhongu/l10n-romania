@@ -54,7 +54,6 @@ Date minime pentru demo:
 - o companie cu țara fiscală **România**;
 - un depozit creat după instalarea modulului (sau un depozit existent tratat ca în secțiunea 5, pasul 3);
 - un produs stocabil, cu stoc în depozit;
-- aplicația **Facturare** sau **Contabilitate** instalată: modulul citește țara fiscală a companiei, care vine din ea (vezi secțiunea 7).
 
 ## 5. Configurare inițială
 
@@ -129,7 +128,7 @@ Modulul **nu generează note contabile** și nu alege conturi. Locațiile *Consu
 | Modul | Rol |
 |---|---|
 | `stock` | Locațiile, tipurile de operație și transferurile pe care modulul le extinde |
-| `account` (Facturare) | Dă țara fiscală a companiei, după care modulul decide dacă firma e românească. Nu este încă declarat ca dependență: pe o bază doar cu Inventar, instalarea eșuează |
+| `account` (Facturare) | Dă țara fiscală a companiei, după care modulul decide dacă firma e românească; se instalează odată cu modulul |
 | `l10n_ro_stock_account_base` | Păstrează câmpurile contabile ale stocului românesc (conturi pe locație, tip mișcare RO); depinde de acest modul |
 | `l10n_ro_hide_net_weight` | Ascunde câmpul *Greutate netă* de pe produs, unde nu e folosit |
 | `l10n_ro_picking_report` | Tipărește bonul de consum și celelalte documente de stoc românești; depinde deocamdată de modulul OCA `l10n_ro_stock`, care se instalează odată cu el (câmpurile apar tot o singură dată) |
@@ -170,7 +169,6 @@ Modulul **nu generează note contabile** și nu alege conturi. Locațiile *Consu
 | Nu există locațiile *Consum* și *Dare în folosință* | Țara fiscală a companiei nu era România la instalare | Setați țara fiscală România, actualizați modulul din Aplicații, apoi tratați depozitele ca în secțiunea 5, pasul 3 |
 | Locațiile se numesc *Folosință*, *Consume* sau *Usage* | Denumirea vine din limba de la instalare | Redenumiți locațiile; modulul le găsește după tip |
 | Meniul *Locații* lipsește; pe transfer nu se văd locațiile sursă și destinație | *Locații de stocare* nu este activat | Activați *Locații de stocare* în Inventar → Configurare → Setări |
-| Instalarea eșuează cu o eroare despre `account_fiscal_country_id` | Aplicația Facturare/Contabilitate nu este instalată | Instalați întâi Facturare, apoi modulul |
 | Tab-ul *Inventar* lipsește de pe produs | Utilizatorul nu are drept de Inventar sau produsul este de tip serviciu sau combo | Dați dreptul *Inventar / Utilizator*; tab-ul apare la produsele de tip *Bunuri* |
 | Greutatea netă introdusă pe un produs nou dispare după salvare | Valoarea se scrie pe variantă, care se creează abia la salvare | Completați greutatea netă după prima salvare a produsului |
 
@@ -187,7 +185,7 @@ Capturile (`static/description/`) sunt **generate automat** din `tests/test_scre
 
 Aceleași ecrane, cu interfața în engleză, sunt în `static/description/en/`, pentru `readme/USAGE.md`.
 
-Regenerare — **restrângeți la clasă**, pe o bază fără `l10n_ro_hide_net_weight` (care ascunde greutatea netă), cu modulul `account` instalat:
+Regenerare — **restrângeți la clasă**, pe o bază fără `l10n_ro_hide_net_weight` (care ascunde greutatea netă):
 
 ```bash
 ./odoo/odoo-bin -c odoo.conf -d <db> -i l10n_ro_stock_base,stock_account,l10n_ro_doc_screenshots \

@@ -1,6 +1,6 @@
 The consume and usage giving locations are created for every company whose fiscal
 country is Romania, and the matching operation types for every new warehouse of such a
-company. The fiscal country comes from the Invoicing app, which must be installed.
+company. The fiscal country comes from the Invoicing app, installed together with the module.
 Enable **Storage Locations** in **Inventory → Configuration → Settings** to see the
 locations menu and the source and destination locations on transfers.
 
