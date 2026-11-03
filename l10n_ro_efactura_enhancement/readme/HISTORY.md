@@ -1,3 +1,11 @@
+## 19.0.0.5.12 (2026-11-03)
+
+- **No longer depends directly on the OCA module `l10n_ro_config`.** The only field
+  used from it, `res.partner.bank.l10n_ro_print_report` (bank accounts written in the
+  e-Factura XML when `efactura.get_all_banks` is enabled), is now taken from
+  `l10n_ro_report_common`, which defines it with the same name and column, so
+  existing data is kept. No functional change; requires a module update.
+
 ## 19.0.0.5.11 (2026-10-30)
 
 - **Limita de 3 reîncercări la trimiterea automată în SPV are efect.** Pe
