@@ -107,8 +107,7 @@ locations menu and the source and destination locations on transfers.
    location|
 
 6. On the product, the **Inventory** tab shows the **Net Weight** under
-   the weight, in the same unit. Fill it in after the product is saved
-   for the first time.
+   the weight, in the same unit.
 
    |The Inventory tab of a product, with the Net Weight field
    highlighted|
@@ -134,6 +133,7 @@ Changelog
   ``l10n_ro_stock`` module is still installed, the net weight and the
   warehouse operation types are shown only once on the forms. The module
   depends on ``account``, which gives the fiscal country of the company.
+  The net weight given when a product is created is kept on its variant.
 
 Bug Tracker
 ===========

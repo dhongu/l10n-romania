@@ -48,6 +48,10 @@ class ProductTemplate(models.Model):
     def _inverse_l10n_ro_net_weight(self):
         self._set_product_variant_field("l10n_ro_net_weight")
 
+    def _get_related_fields_variant_template(self):
+        # Written on the first variant after it is created, like the weight.
+        return super()._get_related_fields_variant_template() + ["l10n_ro_net_weight"]
+
     @api.model
     def _get_view(self, view_id=None, view_type="form", **options):
         arch, view = super()._get_view(view_id, view_type, **options)
