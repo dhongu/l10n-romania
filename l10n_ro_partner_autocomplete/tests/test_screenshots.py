@@ -176,6 +176,7 @@ class TestPartnerAutocompleteScreenshots(AccountTestInvoicingCommon, ScreenshotC
                             "div[name='name']",
                             ".o_address_format",
                             "#vat_div",
+                            "div[name='l10n_ro_vat_subjected']",
                             ".o-mail-Message:has-text('ANAF')",
                         ],
                         "settle": 2000,
@@ -233,7 +234,11 @@ class TestPartnerAutocompleteScreenshots(AccountTestInvoicingCommon, ScreenshotC
                         "click_btn": "button[name='action_l10n_ro_anaf_refresh']",
                         "wait_after": ".o-mail-Message:has-text('ANAF')",
                         "hide_chatter": False,
-                        "highlight": [".o_address_format", ".o-mail-Message:has-text('ANAF')"],
+                        "highlight": [
+                            ".o_address_format",
+                            "div[name='l10n_ro_vat_subjected']",
+                            ".o-mail-Message:has-text('ANAF')",
+                        ],
                         "settle": 2500,
                     },
                     # 8. Lista clienților: doi parteneri selectați, acțiunea „Enrich"

@@ -5,7 +5,7 @@ With this module, typing a Romanian CUI where Odoo offers the autocomplete — t
 *Name* of a partner, the *Customer* of a quotation or an invoice, the customer form opened from the
 Point of Sale — shows the company found at ANAF. Choosing it fills the partner in:
 
-- name, Tax ID (with `RO` only for a VAT payer), street with its number, address details,
+- name, Tax ID (with `RO` only for a VAT payer), VAT payer flag, street with its number, address details,
   locality, county, postal code, trade register number and phone;
 - for Bucharest, the sector as the locality, as e-Factura requires;
 - a note in the chatter that the data was taken from ANAF, with the date.
@@ -21,6 +21,11 @@ choosing *Create*, or importing partners whose name is a CUI, fills them in from
 given explicitly are kept; a partner that already has a Tax ID, a contact person or a partner
 from another country is left as it is. The `l10n_ro_anaf_no_autofill` context key turns it off,
 for instance for a bulk import.
+
+**VAT payer.** A Romanian company shows **VAT Payer** on its form, filled in from ANAF together
+with the rest of the data. The partner also keeps its Tax ID without the country prefix. Both
+fields have the names used by the other Romanian localization modules, so no other module is
+needed for them.
 
 **City and postal code.** With the list of Romanian cities (`l10n_ro_city`), the city is chosen
 from it as well. Choosing a city then keeps the postal code the partner already has, instead of
