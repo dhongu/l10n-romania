@@ -9,6 +9,7 @@ from markupsafe import Markup, escape
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import remove_accents
 
 _logger = logging.getLogger(__name__)
 
@@ -18,6 +19,10 @@ ANAF_ENTITY_TYPE = "l10n_ro_anaf"
 
 # Kept on refresh when the partner already has one: a local phone is usually the better one
 ANAF_FILL_IF_EMPTY = ("phone",)
+
+# Kept on refresh when ANAF leaves them empty and the address is the same (villages without a
+# street register): the street is required on an e-Factura invoice
+ANAF_KEEP_IF_EMPTY = ("street", "street2", "zip")
 
 
 class ResPartner(models.Model):
@@ -154,15 +159,39 @@ class ResPartner(models.Model):
                 raise UserError(self.env._("ANAF did not answer. Try again in a moment."))
             if result["state"] != "found":
                 raise UserError(self.env._("ANAF has no company registered under %(vat)s.", vat=partner.vat))
+            same_address = partner._l10n_ro_anaf_same_address(result["partner"])
             values = {
                 name: value
                 for name, value in result["partner"].items()
-                if name in partner._fields and not (name in ANAF_FILL_IF_EMPTY and partner[name])
+                if name in partner._fields
+                and not (
+                    partner[name]
+                    and (name in ANAF_FILL_IF_EMPTY or (not value and same_address and name in ANAF_KEEP_IF_EMPTY))
+                )
             }
             changes = partner._l10n_ro_anaf_changes(values)
             partner.write(values)
             partner._l10n_ro_anaf_post_refresh(changes, result)
         return True
+
+    def _l10n_ro_anaf_same_address(self, values):
+        """ANAF gives the partner's city and county, and no other street: the partner's address
+        details still belong there.
+
+        In another locality, or next to a new street, the old street details and postal code would
+        make an address that does not exist, so they are cleared as ANAF has them. A partner without
+        a county matches on the city.
+        """
+        self.ensure_one()
+
+        def normalized(text):
+            return remove_accents(text or "").strip().casefold()
+
+        if self.state_id and self.state_id.id != values.get("state_id"):
+            return False
+        if values.get("street") and normalized(values["street"]) != normalized(self.street):
+            return False
+        return bool(self.city) and normalized(self.city) == normalized(values.get("city"))
 
     def _l10n_ro_anaf_changes(self, values):
         """``[(label, old, new)]`` for the values that differ from the partner's"""
