@@ -370,8 +370,8 @@ ul.auto-toc {
 !! source digest: sha256:80e403a95fdc7ee33bacb462e373d6920f2cd3c6cc99a0cc7d99f5387f337751
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_hide_net_weight"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
-<p>Ascunde campul “Greutate neta” (l10n_ro_net_weight) de pe formularul
-produsului, deoarece genereaza confuzii de interpretare pentru
+<p>Ascunde câmpul „Greutate netă” (<tt class="docutils literal">l10n_ro_net_weight</tt>) de pe formularul
+produsului, deoarece generează confuzii de interpretare pentru
 utilizatori.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
@@ -424,17 +424,17 @@ Variants</strong>), or do not install this module.</p>
 <h1><a class="toc-backref" href="#toc-entry-2">Known issues / Roadmap</a></h1>
 <div class="section" id="retragerea-l10n-ro-net-weight">
 <h2><a class="toc-backref" href="#toc-entry-3">Retragerea <tt class="docutils literal">l10n_ro_net_weight</tt></a></h2>
-<p>Modulul există doar pentru a ascunde câmpul <tt class="docutils literal">l10n_ro_net_weight</tt> din
-<tt class="docutils literal">l10n_ro_stock</tt>.</p>
+<p>Modulul există doar pentru a ascunde câmpul <tt class="docutils literal">l10n_ro_net_weight</tt>,
+definit de <tt class="docutils literal">l10n_ro_stock_base</tt> (înainte, de modulul OCA
+<tt class="docutils literal">l10n_ro_stock</tt>).</p>
 <ol class="arabic simple">
-<li>Se păstrează cât timp <tt class="docutils literal">l10n_ro_stock</tt> definește câmpul.</li>
-<li>Când câmpul este scos din <tt class="docutils literal">l10n_ro_stock</tt> (vezi ROADMAP-ul acelui
-modul), vederile ascunse nu mai au țintă: modulul se declară învechit
-și se elimină (inclusiv din <tt class="docutils literal">depends</tt> ale proiectelor care îl
-folosesc).</li>
-<li>Până atunci nu se adaugă logică nouă pe <tt class="docutils literal">l10n_ro_net_weight</tt>;
-e-Transport folosește <tt class="docutils literal">product.weight</tt> (vezi <tt class="docutils literal">l10n_ro_edi_stock</tt>
-și <tt class="docutils literal">l10n_ro_etransport_enhancement</tt>).</li>
+<li>Se păstrează cât timp <tt class="docutils literal">l10n_ro_stock_base</tt> definește câmpul.</li>
+<li>Dacă câmpul este scos din <tt class="docutils literal">l10n_ro_stock_base</tt>, vederile ascunse nu
+mai au țintă: modulul se declară învechit și se elimină (inclusiv din
+<tt class="docutils literal">depends</tt> ale proiectelor care îl folosesc).</li>
+<li>Ascunderea nu golește valorile: <tt class="docutils literal">l10n_ro_etransport_enhancement</tt>
+calculează greutatea netă a liniilor de greutăți la expediere din
+<tt class="docutils literal">l10n_ro_net_weight</tt>, când câmpul există.</li>
 </ol>
 </div>
 </div>
@@ -445,7 +445,9 @@ e-Transport folosește <tt class="docutils literal">product.weight</tt> (vezi <t
 <ul class="simple">
 <li>Depends on <tt class="docutils literal">l10n_ro_stock_base</tt> instead of the OCA module
 <tt class="docutils literal">l10n_ro_stock</tt>; the <tt class="docutils literal">l10n_ro_net_weight</tt> field comes from the new
-module.</li>
+module. Description with Romanian diacritics; the roadmap names
+<tt class="docutils literal">l10n_ro_stock_base</tt> and the e-Transport weight lines that read the
+field.</li>
 </ul>
 </div>
 <div class="section" id="section-2">

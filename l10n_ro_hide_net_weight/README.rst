@@ -22,8 +22,8 @@ Romania - Hide Net Weight
 
 |badge1| |badge2| |badge3|
 
-Ascunde campul "Greutate neta" (l10n_ro_net_weight) de pe formularul
-produsului, deoarece genereaza confuzii de interpretare pentru
+Ascunde câmpul „Greutate netă” (``l10n_ro_net_weight``) de pe formularul
+produsului, deoarece generează confuzii de interpretare pentru
 utilizatori.
 
 **Table of contents**
@@ -66,17 +66,17 @@ Known issues / Roadmap
 Retragerea ``l10n_ro_net_weight``
 ---------------------------------
 
-Modulul există doar pentru a ascunde câmpul ``l10n_ro_net_weight`` din
-``l10n_ro_stock``.
+Modulul există doar pentru a ascunde câmpul ``l10n_ro_net_weight``,
+definit de ``l10n_ro_stock_base`` (înainte, de modulul OCA
+``l10n_ro_stock``).
 
-1. Se păstrează cât timp ``l10n_ro_stock`` definește câmpul.
-2. Când câmpul este scos din ``l10n_ro_stock`` (vezi ROADMAP-ul acelui
-   modul), vederile ascunse nu mai au țintă: modulul se declară învechit
-   și se elimină (inclusiv din ``depends`` ale proiectelor care îl
-   folosesc).
-3. Până atunci nu se adaugă logică nouă pe ``l10n_ro_net_weight``;
-   e-Transport folosește ``product.weight`` (vezi ``l10n_ro_edi_stock``
-   și ``l10n_ro_etransport_enhancement``).
+1. Se păstrează cât timp ``l10n_ro_stock_base`` definește câmpul.
+2. Dacă câmpul este scos din ``l10n_ro_stock_base``, vederile ascunse nu
+   mai au țintă: modulul se declară învechit și se elimină (inclusiv din
+   ``depends`` ale proiectelor care îl folosesc).
+3. Ascunderea nu golește valorile: ``l10n_ro_etransport_enhancement``
+   calculează greutatea netă a liniilor de greutăți la expediere din
+   ``l10n_ro_net_weight``, când câmpul există.
 
 Changelog
 =========
@@ -86,7 +86,9 @@ Changelog
 
 - Depends on ``l10n_ro_stock_base`` instead of the OCA module
   ``l10n_ro_stock``; the ``l10n_ro_net_weight`` field comes from the new
-  module.
+  module. Description with Romanian diacritics; the roadmap names
+  ``l10n_ro_stock_base`` and the e-Transport weight lines that read the
+  field.
 
 19.0.0.0.4 (2026-10-22)
 -----------------------
