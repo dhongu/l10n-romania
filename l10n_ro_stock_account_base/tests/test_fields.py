@@ -55,17 +55,13 @@ class TestStockAccountFields(TransactionCase):
             }
         )
         location.invalidate_recordset()
-        self.assertEqual(
-            location.l10n_ro_property_stock_valuation_account_id, account
-        )
+        self.assertEqual(location.l10n_ro_property_stock_valuation_account_id, account)
         picking_type = self.env["stock.picking.type"].search([], limit=1)
         picking = self.env["stock.picking"].create(
             {
                 "picking_type_id": picking_type.id,
-                "location_id": picking_type.default_location_src_id.id
-                or location.id,
-                "location_dest_id": picking_type.default_location_dest_id.id
-                or location.id,
+                "location_id": picking_type.default_location_src_id.id or location.id,
+                "location_dest_id": picking_type.default_location_dest_id.id or location.id,
                 "l10n_ro_notice": True,
             }
         )

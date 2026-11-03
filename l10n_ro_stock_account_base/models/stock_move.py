@@ -57,8 +57,7 @@ class StockMove(models.Model):
     )
 
     _fifo_neg_pending_idx = models.Index(
-        "(product_id, location_id, company_id, date, id) "
-        "WHERE fifo_neg_pending_qty > 0 AND state = 'done'"
+        "(product_id, location_id, company_id, date, id) WHERE fifo_neg_pending_qty > 0 AND state = 'done'"
     )
 
     fifo_neg_pending_qty = fields.Float(

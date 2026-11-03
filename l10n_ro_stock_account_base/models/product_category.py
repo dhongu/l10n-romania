@@ -9,6 +9,5 @@ class ProductCategory(models.Model):
 
     l10n_ro_stock_account_change = fields.Boolean(
         string="Allow stock account change from locations",
-        help="Only for Romania, to change the accounts to the ones defined "
-        "on stock locations",
+        help="Only for Romania, to change the accounts to the ones defined on stock locations",
     )

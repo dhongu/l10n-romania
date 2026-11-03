@@ -18,6 +18,5 @@ class AccountMove(models.Model):
         index="btree_not_null",
         readonly=True,
         copy=False,
-        help="The incoming stock move that triggered this FIFO negative "
-        "stock compensation accounting entry.",
+        help="The incoming stock move that triggered this FIFO negative stock compensation accounting entry.",
     )
