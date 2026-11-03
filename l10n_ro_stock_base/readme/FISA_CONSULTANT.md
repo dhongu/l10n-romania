@@ -92,14 +92,14 @@ Dacă cele două câmpuri sunt goale, aplicați secțiunea 5, pasul 3.
 
 Din formularul depozitului, deschideți **Depozit Central: Consum** (sau din **Inventar → Configurare → Tipuri operații**). Tipul este un **transfer intern** cu:
 
-- **Prefix secvență** `CONS` — bonurile se numerotează `DC/CONS/00001`, `DC/CONS/00002`… (la dare în folosință: `USAGE`, adică `DC/USAGE/00001`);
+- **Prefix secvență** `DC/CONS/` — bonurile se numerotează `DC/CONS/00001`, `DC/CONS/00002`… (la dare în folosință: `DC/USAGE/`, adică `DC/USAGE/00001`);
 - **Locația sursă** — stocul depozitului (`DC/Stoc`);
 - **Locația destinație** — locația **Consum** a companiei (la dare în folosință: locația *Dare în folosință*);
 - **Cod de bare** `DC-CONSUME` (respectiv `DC-USAGE`).
 
 Locațiile implicite pot fi schimbate, de exemplu dacă materialele se consumă dintr-o altă sublocație. Dacă redenumiți depozitul sau îi schimbați codul, secvențele și **codul de bare** al celor două tipuri urmează automat noul cod (`<cod nou>-CONSUME`, `<cod nou>-USAGE`).
 
-![Tipul de operație Consum al depozitului Depozit Central: Tip operație Transfer intern, Prefix secvență CONS evidențiat, cod de bare DC-CONSUME, locația sursă DC/Stoc și locația destinație Consum evidențiată](../static/description/04_tip_operatie_consum.png)
+![Tipul de operație Consum al depozitului Depozit Central: Tip operație Transfer intern, Prefix secvență DC/CONS/ evidențiat, locația sursă DC/Stoc și locația destinație Consum evidențiată](../static/description/04_tip_operatie_consum.png)
 
 ### Pasul 5 — Bonul de consum
 

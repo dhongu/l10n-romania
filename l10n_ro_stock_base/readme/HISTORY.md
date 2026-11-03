@@ -1,6 +1,6 @@
 ## 20.0.0.0.1 (2026-11-03)
 
-- Migration to 20.0. The consume and usage giving operation types no longer set `sequence_code`: on 20.0 it is the prefix of the sequence, which keeps the warehouse code (e.g. `WH/CONS/`).
+- Migration to 20.0. The consume and usage giving operation types no longer set `sequence_code`: on 20.0 it is the prefix of the sequence, which keeps the warehouse code (e.g. `WH/CONS/`). Screenshots retaken on 20.0.
 
 ## 19.0.0.0.1 (2026-10-07)
 
