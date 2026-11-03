@@ -135,7 +135,8 @@ Changelog
   The net weight given when a product is created is kept on its variant.
   The warehouses that exist when the module is installed get the consume
   and usage giving operation types, and their barcodes follow the
-  warehouse code when it changes.
+  warehouse code when it changes. The net weight field has the same
+  width as the weight.
 
 Bug Tracker
 ===========

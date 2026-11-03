@@ -15,7 +15,7 @@
                     name="l10n_ro_net_weight"
                     invisible="product_variant_count > 1 and not is_product_variant"
                 >
-                    <field name="l10n_ro_net_weight" />
+                    <field name="l10n_ro_net_weight" class="oe_inline" style="max-width: 7rem;" />
                     <span>
                         <field name="l10n_ro_net_weight_uom_name" />
                     </span>
