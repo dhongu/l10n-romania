@@ -78,13 +78,13 @@ msgstr "Taxă de cumpărare"
 #: model:ir.model.fields,help:l10n_ro_service_tax.field_res_company__l10n_ro_account_serv_purchase_tax_id
 #: model:ir.model.fields,help:l10n_ro_service_tax.field_res_config_settings__l10n_ro_serv_purchase_tax_id
 msgid "Purchase tax set on a product when its type becomes Service."
-msgstr "Taxa de cumpărare pusă pe produs când tipul lui devine Serviciu."
+msgstr "Taxa de cumpărare pusă pe produs când tipul lui devine Service."
 
 #. module: l10n_ro_service_tax
 #: model:ir.model.fields,help:l10n_ro_service_tax.field_res_company__l10n_ro_account_serv_sale_tax_id
 #: model:ir.model.fields,help:l10n_ro_service_tax.field_res_config_settings__l10n_ro_serv_sale_tax_id
 msgid "Sale tax set on a product when its type becomes Service."
-msgstr "Taxa de vânzare pusă pe produs când tipul lui devine Serviciu."
+msgstr "Taxa de vânzare pusă pe produs când tipul lui devine Service."
 
 #. module: l10n_ro_service_tax
 #: model_terms:ir.ui.view,arch_db:l10n_ro_service_tax.res_config_settings_view_form
@@ -94,4 +94,4 @@ msgstr "Taxă de vânzare"
 #. module: l10n_ro_service_tax
 #: model_terms:ir.ui.view,arch_db:l10n_ro_service_tax.res_config_settings_view_form
 msgid "Taxes set on a product when its type becomes Service."
-msgstr "Taxele puse pe produs când tipul lui devine Serviciu."
+msgstr "Taxele puse pe produs când tipul lui devine Service."

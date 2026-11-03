@@ -26,10 +26,14 @@ Default sale and purchase taxes for **service** products on Romanian
 companies.
 
 The Romanian chart of accounts ships separate VAT taxes for services
-(*TVA colectat 21% Servicii*, *TVA deductibil 21% Servicii*), reported
-on other D300 rows than the taxes for goods. Odoo has a single pair of
+(*TVA colectat 21% Servicii*, *TVA deductibil 21% Servicii*, ``21% S``)
+next to the ones for goods (``21% G``). On domestic invoices both report
+on the same D300 rows, but the EU fiscal positions map them by type: a
+service sold to or bought from an EU partner must carry ``21% S`` to
+land on the intra-community services rows (D300 row 3, rows 7/22)
+instead of the goods rows (row 1, rows 5/20). Odoo has a single pair of
 default taxes per company, so a new service product would otherwise get
-the goods taxes and land on the wrong declaration row.
+the goods taxes.
 
 The module adds:
 
@@ -40,9 +44,9 @@ The module adds:
   chart of accounts is loaded, and at install time for companies that
   already have it;
 - on the product form, when the type becomes *Service*, the service
-  taxes replace the product taxes; when the type changes back, the
-  service taxes are replaced by the company default taxes (taxes set by
-  hand are kept).
+  taxes replace the product taxes (including taxes set by hand); when
+  the type changes back, the service taxes are replaced by the company
+  default taxes (taxes set by hand are kept).
 
 The field names match the ones historically provided by the OCA
 ``l10n_ro_config`` module, so databases migrating away from the OCA
@@ -57,11 +61,27 @@ can be installed side by side.
 Usage
 =====
 
-1. Go to **Accounting > Configuration > Settings > Taxes** and check the
-   *Default Service Taxes* (they are preset from the Romanian chart of
-   accounts).
-2. Create a product and set **Product Type** to *Service*: the *Customer
-   Taxes* and *Vendor Taxes* become the service taxes.
+1. Go to **Invoicing > Configuration > Settings > Taxes**. Next to
+   *Default Taxes*, the *Default Service Taxes* block holds the **Sales
+   Tax** and **Purchase Tax** used for services (preset to ``21% S``
+   from the Romanian chart of accounts).
+
+   |Settings, Taxes section: Default Taxes with 21% G and the
+   highlighted Default Service Taxes block with 21% S|
+
+2. Create a product and set **Product Type** to *Service*: **Sales
+   Taxes** and **Purchase Taxes** become the service taxes (``21% S``).
+
+   |Product form with Product Type Service and both taxes 21% S|
+
+3. If the type goes back to *Goods*, the service taxes are replaced by
+   the company default taxes (``21% G``). Taxes set by hand are kept.
+
+   |Product form with Product Type Goods and both taxes 21% G|
+
+.. |Settings, Taxes section: Default Taxes with 21% G and the highlighted Default Service Taxes block with 21% S| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_service_tax/static/description/en/01_setari_taxe_servicii.png
+.. |Product form with Product Type Service and both taxes 21% S| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_service_tax/static/description/en/02_produs_tip_serviciu.png
+.. |Product form with Product Type Goods and both taxes 21% G| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_service_tax/static/description/en/03_produs_revenire_bunuri.png
 
 Changelog
 =========
