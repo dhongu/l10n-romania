@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.l10n_ro_service_tax</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <setting id="default_taxes" position="after">
+                <setting
+                    id="l10n_ro_service_taxes"
+                    string="Default Service Taxes"
+                    company_dependent="1"
+                    help="Taxes set on a product when its type becomes Service."
+                    invisible="country_code != 'RO'"
+                >
+                    <div class="content-group">
+                        <div class="row mt16" invisible="vat_disabled">
+                            <label string="Sales Tax" for="l10n_ro_serv_sale_tax_id" class="col-lg-3 o_light_label" />
+                            <field
+                                name="l10n_ro_serv_sale_tax_id"
+                                domain="[('type_tax_use', 'in', ('sale', 'all'))]"
+                            />
+                        </div>
+                        <div class="row">
+                            <label
+                                string="Purchase Tax"
+                                for="l10n_ro_serv_purchase_tax_id"
+                                class="col-lg-3 o_light_label"
+                            />
+                            <field
+                                name="l10n_ro_serv_purchase_tax_id"
+                                domain="[('type_tax_use', 'in', ('purchase', 'all'))]"
+                            />
+                        </div>
+                    </div>
+                </setting>
+            </setting>
+        </field>
+    </record>
+</odoo>
