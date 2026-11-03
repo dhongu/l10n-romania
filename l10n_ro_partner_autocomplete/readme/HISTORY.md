@@ -1,8 +1,9 @@
 ## 19.0.1.4.1 (2026-11-03)
 
 - **Update from ANAF** no longer clears the street, the street details or the postal code
-  when ANAF has none for the company: an empty text from ANAF leaves the partner's value. The
-  street is required on an e-Factura invoice (CIUS-RO).
+  when ANAF has none for the company and the city and county are the partner's: the street is
+  required on an e-Factura invoice (CIUS-RO). When ANAF gives another locality they are still
+  cleared, so the old street does not stay on the new city.
 
 ## 19.0.1.4.0 (2026-11-03)
 
