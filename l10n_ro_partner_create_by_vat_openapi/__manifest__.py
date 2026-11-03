@@ -4,7 +4,7 @@
 {
     "name": "Partner Data from OpenAPI",
     "summary": "Romania - Partner Create by VAT from OpenAPI",
-    "version": "19.0.1.0.5",
+    "version": "19.0.1.0.6",
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
