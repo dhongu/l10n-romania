@@ -127,6 +127,17 @@ class TestPartnerAutocomplete(TransactionCase):
         self.assertEqual(partner.state_id.code, "TM")
         self.assertNotIn("Str. Veche 1", partner.message_ids[0].body)
 
+    def test_refresh_clears_the_details_of_another_street(self):
+        # ANAF has a new street without details: the old block and postal code went with the old one
+        partner = self._partner(city="Timișoara", street2="Bl. A1, Sc. 2", zip="300001")
+        result = anaf_result(codPostal="")
+        result["adresa_domiciliu_fiscal"].update(ddetalii_Adresa="", dcod_Postal="")
+        with patch(REQUEST_PATH, return_value=result):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertEqual(partner.street, "Str. Ciprian Porumbescu Nr. 12")
+        self.assertFalse(partner.street2)
+        self.assertNotEqual(partner.zip, "300001")
+
     def test_refresh_clears_the_street_of_another_locality(self):
         # The old street does not exist in the city ANAF gives: kept, it would make a false address
         partner = self._partner(street2="Bl. A1, Sc. 2", zip="310130")

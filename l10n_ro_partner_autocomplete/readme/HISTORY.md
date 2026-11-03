@@ -3,7 +3,8 @@
 - **Update from ANAF** no longer clears the street, the street details or the postal code
   when ANAF has none for the company and the city and county are the partner's: the street is
   required on an e-Factura invoice (CIUS-RO). When ANAF gives another locality they are still
-  cleared, so the old street does not stay on the new city.
+  cleared, so the old street does not stay on the new city; next to a new street from ANAF the
+  old street details and postal code are cleared too.
 
 ## 19.0.1.4.0 (2026-11-03)
 
