@@ -414,9 +414,9 @@ one removed.</p>
 <p>The consume and usage giving locations are created for every company
 whose fiscal country is Romania, and the matching operation types for
 every new warehouse of such a company. The fiscal country comes from the
-Invoicing app, which must be installed. Enable <strong>Storage Locations</strong> in
-<strong>Inventory → Configuration → Settings</strong> to see the locations menu and
-the source and destination locations on transfers.</p>
+Invoicing app, installed together with the module. Enable <strong>Storage
+Locations</strong> in <strong>Inventory → Configuration → Settings</strong> to see the
+locations menu and the source and destination locations on transfers.</p>
 <ol class="arabic">
 <li><p class="first">Go to <strong>Inventory → Configuration → Locations</strong>, remove the
 <em>Internal</em> filter and look for the two locations of the company: one
@@ -472,7 +472,8 @@ locations, warehouse operation types and sequences, net weight. The
 sequences of the consume and usage operation types follow the
 warehouse name and code when they are changed. While the OCA
 <tt class="docutils literal">l10n_ro_stock</tt> module is still installed, the net weight and the
-warehouse operation types are shown only once on the forms.</li>
+warehouse operation types are shown only once on the forms. The module
+depends on <tt class="docutils literal">account</tt>, which gives the fiscal country of the company.</li>
 </ul>
 </div>
 </div>
