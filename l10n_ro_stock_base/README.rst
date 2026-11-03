@@ -136,7 +136,8 @@ Changelog
   The warehouses that exist when the module is installed get the consume
   and usage giving operation types, and their barcodes follow the
   warehouse code when it changes. The net weight field has the same
-  width as the weight.
+  width as the weight. The usage giving location is named *Dare în
+  folosință* in Romanian.
 
 Bug Tracker
 ===========

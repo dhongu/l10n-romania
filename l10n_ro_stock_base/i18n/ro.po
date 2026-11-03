@@ -126,7 +126,7 @@ msgstr "Mișcare de stoc"
 #. odoo-python
 #: code:addons/l10n_ro_stock_base/models/res_company.py:0
 msgid "Usage"
-msgstr "Folosință"
+msgstr "Dare în folosință"
 
 #. module: l10n_ro_stock_base
 #. odoo-python
@@ -138,7 +138,7 @@ msgstr "Dare în folosință"
 #. module: l10n_ro_stock_base
 #: model:ir.model.fields,field_description:l10n_ro_stock_base.field_res_company__l10n_ro_usage_location_id
 msgid "Usage Location"
-msgstr "Locație de folosință"
+msgstr "Locație de dare în folosință"
 
 #. module: l10n_ro_stock_base
 #: model:ir.model,name:l10n_ro_stock_base.model_stock_warehouse
