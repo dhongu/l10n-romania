@@ -20,6 +20,10 @@
                         icon="fa-refresh"
                     />
                 </div>
+                <field
+                    name="l10n_ro_vat_subjected"
+                    invisible="not is_company or parent_id or country_code != 'RO'"
+                />
             </xpath>
         </field>
     </record>
