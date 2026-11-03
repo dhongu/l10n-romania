@@ -74,7 +74,6 @@ class StockWarehouse(models.Model):
                     "default_location_dest_id": consume_location.id,
                     "sequence": max_sequence + 6,
                     "barcode": code + "-CONSUME",
-                    "sequence_code": "CONS",
                     "company_id": self.company_id.id,
                 }
             if usage_location:
@@ -87,7 +86,6 @@ class StockWarehouse(models.Model):
                     "default_location_dest_id": usage_location.id,
                     "sequence": max_sequence + 7,
                     "barcode": code + "-USAGE",
-                    "sequence_code": "USAGE",
                     "company_id": self.company_id.id,
                 }
             max_sequence += 2

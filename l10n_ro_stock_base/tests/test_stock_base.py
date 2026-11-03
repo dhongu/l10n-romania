@@ -63,8 +63,8 @@ class TestStockBase(TransactionCase):
             usage_type.default_location_dest_id,
             self.company.l10n_ro_usage_location_id,
         )
-        self.assertEqual(consume_type.sequence_code, "CONS")
-        self.assertEqual(usage_type.sequence_code, "USAGE")
+        self.assertEqual(consume_type.sequence_code, "ROW/CONS/")
+        self.assertEqual(usage_type.sequence_code, "ROW/USAGE/")
 
     def test_existing_warehouse_gets_operation_types(self):
         warehouse = self.warehouse_obj.create({"name": "Warehouse Romania", "code": "ROW"})

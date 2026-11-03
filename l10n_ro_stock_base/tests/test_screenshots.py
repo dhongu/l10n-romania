@@ -103,7 +103,7 @@ class TestStockBaseScreenshots(ScreenshotCase or object):
                         {
                             "product_id": cls.product_variant.id,
                             "product_uom_qty": 6,
-                            "product_uom": cls.product_variant.uom_id.id,
+                            "uom_id": cls.product_variant.uom_id.id,
                             "location_id": cls.consume_type.default_location_src_id.id,
                             "location_dest_id": cls.consume_type.default_location_dest_id.id,
                         },

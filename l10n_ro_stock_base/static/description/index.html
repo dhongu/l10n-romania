@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:e84f06be935267da3afb43939f114fb5190f902ddd732432d0a21b5859850700
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_base"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Mature" src="https://img.shields.io/badge/maturity-Mature-brightgreen.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_base"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
 <p>Locations and operations for Romanian consumption and usage giving, and
 the net weight of the products. It is the Terrabit replacement of the
 OCA <tt class="docutils literal">l10n_ro_stock</tt> module, written without a dependency on
@@ -421,12 +421,12 @@ locations menu and the source and destination locations on transfers.</p>
 <li><p class="first">Go to <strong>Inventory → Configuration → Locations</strong>, remove the
 <em>Internal</em> filter and look for the two locations of the company: one
 with the <strong>Location Type</strong> <em>Consume</em>, one with <em>Usage Giving</em>.</p>
-<p><img alt="The locations of type Consume and Usage Giving of the company, with the Location Type column highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/01_locatii_consum_dare.png" /></p>
+<p><img alt="The locations of type Consume and Usage Giving of the company, with the Location Type column highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/01_locatii_consum_dare.png" /></p>
 </li>
 <li><p class="first">Open the consume location: its <strong>Location Type</strong> is <em>Consume</em>. The
 location names come from the language used at installation and can be
 renamed; the module finds them by their type.</p>
-<p><img alt="The Consume location form, with Location Type Consume highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/02_locatie_consum.png" /></p>
+<p><img alt="The Consume location form, with Location Type Consume highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/02_locatie_consum.png" /></p>
 </li>
 <li><p class="first">Go to <strong>Inventory → Configuration → Warehouses</strong> and open the
 warehouse. With the developer mode on, the <strong>Technical Information</strong>
@@ -435,14 +435,14 @@ Type</strong>. The warehouses that exist at the installation get them when
 the module is installed, the new ones when they are created. If they
 are still missing (the fiscal country became Romania later), change
 the warehouse <strong>Short Name</strong>, save, then set it back and save again.</p>
-<p><img alt="The Technical Information tab of the warehouse, with the Romania - Consume Type and Romania - Usage Giving Type fields highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/03_depozit_tipuri_operatie.png" /></p>
+<p><img alt="The Technical Information tab of the warehouse, with the Romania - Consume Type and Romania - Usage Giving Type fields highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/03_depozit_tipuri_operatie.png" /></p>
 </li>
 <li><p class="first">The <strong>Consume</strong> operation type is an internal transfer from the
 warehouse stock to the company consume location, numbered with the
 <tt class="docutils literal">CONS</tt> sequence prefix (<tt class="docutils literal">&lt;warehouse <span class="pre">code&gt;/CONS/00001</span></tt>). The
 <strong>Usage Giving</strong> type is the same, towards the usage giving location,
 with the <tt class="docutils literal">USAGE</tt> prefix.</p>
-<p><img alt="The Consume operation type, with the Sequence Prefix CONS and the Consume destination location highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/04_tip_operatie_consum.png" /></p>
+<p><img alt="The Consume operation type, with the Sequence Prefix CONS and the Consume destination location highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/04_tip_operatie_consum.png" /></p>
 </li>
 <li><p class="first">Create a transfer of type <strong>Consume</strong> from <strong>Inventory → Overview</strong>,
 add the products and quantities, then <strong>Mark as Todo</strong> and
@@ -451,11 +451,11 @@ brings it back, numbered in the same <tt class="docutils literal">CONS</tt> sequ
 <strong>Return Type</strong> is set on the operation type. Moves to the consume
 and usage giving locations count as outgoing for the stock valuation,
 and moves from them as incoming.</p>
-<p><img alt="The done consume transfer DC/CONS/00001, from DC/Stoc to the Consume location" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/05_bon_consum.png" /></p>
+<p><img alt="The done consume transfer DC/CONS/00001, from DC/Stoc to the Consume location" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/05_bon_consum.png" /></p>
 </li>
 <li><p class="first">On the product, the <strong>Inventory</strong> tab shows the <strong>Net Weight</strong> under
 the weight, in the same unit.</p>
-<p><img alt="The Inventory tab of a product, with the Net Weight field highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/06_produs_greutate_neta.png" /></p>
+<p><img alt="The Inventory tab of a product, with the Net Weight field highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/06_produs_greutate_neta.png" /></p>
 </li>
 </ol>
 </div>
@@ -500,7 +500,7 @@ In case of trouble, please check there if your issue has already been reported.<
 <h2><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_base">dhongu/l10n-romania</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_base">dhongu/l10n-romania</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>
 </div>

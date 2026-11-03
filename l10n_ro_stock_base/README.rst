@@ -17,7 +17,7 @@ Romania - Stock Base
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_base
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_base
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -111,12 +111,12 @@ locations menu and the source and destination locations on transfers.
    |The Inventory tab of a product, with the Net Weight field
    highlighted|
 
-.. |The locations of type Consume and Usage Giving of the company, with the Location Type column highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/01_locatii_consum_dare.png
-.. |The Consume location form, with Location Type Consume highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/02_locatie_consum.png
-.. |The Technical Information tab of the warehouse, with the Romania - Consume Type and Romania - Usage Giving Type fields highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/03_depozit_tipuri_operatie.png
-.. |The Consume operation type, with the Sequence Prefix CONS and the Consume destination location highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/04_tip_operatie_consum.png
-.. |The done consume transfer DC/CONS/00001, from DC/Stoc to the Consume location| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/05_bon_consum.png
-.. |The Inventory tab of a product, with the Net Weight field highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/06_produs_greutate_neta.png
+.. |The locations of type Consume and Usage Giving of the company, with the Location Type column highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/01_locatii_consum_dare.png
+.. |The Consume location form, with Location Type Consume highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/02_locatie_consum.png
+.. |The Technical Information tab of the warehouse, with the Romania - Consume Type and Romania - Usage Giving Type fields highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/03_depozit_tipuri_operatie.png
+.. |The Consume operation type, with the Sequence Prefix CONS and the Consume destination location highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/04_tip_operatie_consum.png
+.. |The done consume transfer DC/CONS/00001, from DC/Stoc to the Consume location| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/05_bon_consum.png
+.. |The Inventory tab of a product, with the Net Weight field highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_base/static/description/en/06_produs_greutate_neta.png
 
 Changelog
 =========
@@ -167,6 +167,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_base>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_base>`_ project on GitHub.
 
 You are welcome to contribute.

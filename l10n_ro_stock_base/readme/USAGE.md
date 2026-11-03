@@ -26,11 +26,11 @@ locations menu and the source and destination locations on transfers.
    ![The Technical Information tab of the warehouse, with the Romania - Consume Type and Romania - Usage Giving Type fields highlighted](static/description/en/03_depozit_tipuri_operatie.png)
 
 4. The **Consume** operation type is an internal transfer from the warehouse stock to
-   the company consume location, numbered with the `CONS` sequence prefix
+   the company consume location, numbered with the `<warehouse code>/CONS/` sequence prefix
    (`<warehouse code>/CONS/00001`). The **Usage Giving** type is the same, towards the
-   usage giving location, with the `USAGE` prefix.
+   usage giving location, with the `<warehouse code>/USAGE/` prefix.
 
-   ![The Consume operation type, with the Sequence Prefix CONS and the Consume destination location highlighted](static/description/en/04_tip_operatie_consum.png)
+   ![The Consume operation type, with the Sequence Prefix and the Consume destination location highlighted](static/description/en/04_tip_operatie_consum.png)
 
 5. Create a transfer of type **Consume** from **Inventory → Overview**, add the products
    and quantities, then **Mark as Todo** and **Validate**. The quantity leaves the
