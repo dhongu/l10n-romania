@@ -17,7 +17,7 @@ Romania - Hide Net Weight
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_hide_net_weight
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_hide_net_weight
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -58,7 +58,7 @@ hidden. Clear the saved net weights first (export, set to 0, import; for
 products with variants, from **Inventory → Products → Product
 Variants**), or do not install this module.
 
-.. |The Inventory tab of a product: the Logistics group shows Weight and Volume, highlighted, without the Net Weight field| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_hide_net_weight/static/description/en/01_produs_fara_greutate_neta.png
+.. |The Inventory tab of a product: the Logistics group shows Weight and Volume, highlighted, without the Net Weight field| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_hide_net_weight/static/description/en/01_produs_fara_greutate_neta.png
 
 Known issues / Roadmap
 ======================
@@ -135,6 +135,6 @@ Current maintainer:
 
 |maintainer-danila12| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_hide_net_weight>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_hide_net_weight>`_ project on GitHub.
 
 You are welcome to contribute.
