@@ -1,0 +1,97 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_service_tax
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-03 10:30+0000\n"
+"PO-Revision-Date: 2026-11-03 10:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model,name:l10n_ro_service_tax.model_account_chart_template
+msgid "Account Chart Template"
+msgstr "Plan de Conturi"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model,name:l10n_ro_service_tax.model_res_company
+msgid "Companies"
+msgstr "Companii"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model,name:l10n_ro_service_tax.model_res_config_settings
+msgid "Config Settings"
+msgstr "Setări de configurare"
+
+#. module: l10n_ro_service_tax
+#: model_terms:ir.ui.view,arch_db:l10n_ro_service_tax.res_config_settings_view_form
+msgid "Default Service Taxes"
+msgstr "Taxe implicite pentru servicii"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_res_company__l10n_ro_account_serv_purchase_tax_id
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_res_config_settings__l10n_ro_serv_purchase_tax_id
+msgid "Default Services Purchase Tax"
+msgstr "Taxă implicită de cumpărare pentru servicii"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_res_company__l10n_ro_account_serv_sale_tax_id
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_res_config_settings__l10n_ro_serv_sale_tax_id
+msgid "Default Services Sale Tax"
+msgstr "Taxă implicită de vânzare pentru servicii"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_account_chart_template__display_name
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_product_template__display_name
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_account_chart_template__id
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_product_template__id
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ro_service_tax.field_res_config_settings__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model,name:l10n_ro_service_tax.model_product_template
+msgid "Product"
+msgstr "Produs"
+
+#. module: l10n_ro_service_tax
+#: model_terms:ir.ui.view,arch_db:l10n_ro_service_tax.res_config_settings_view_form
+msgid "Purchase Tax"
+msgstr "Taxă de cumpărare"
+
+#. module: l10n_ro_service_tax
+#: model:ir.model.fields,help:l10n_ro_service_tax.field_res_company__l10n_ro_account_serv_purchase_tax_id
+#: model:ir.model.fields,help:l10n_ro_service_tax.field_res_config_settings__l10n_ro_serv_purchase_tax_id
+msgid "Purchase tax set on a product when its type becomes Service."
+msgstr "Taxa de cumpărare pusă pe produs când tipul lui devine Serviciu."
+
+#. module: l10n_ro_service_tax
+#: model:ir.model.fields,help:l10n_ro_service_tax.field_res_company__l10n_ro_account_serv_sale_tax_id
+#: model:ir.model.fields,help:l10n_ro_service_tax.field_res_config_settings__l10n_ro_serv_sale_tax_id
+msgid "Sale tax set on a product when its type becomes Service."
+msgstr "Taxa de vânzare pusă pe produs când tipul lui devine Serviciu."
+
+#. module: l10n_ro_service_tax
+#: model_terms:ir.ui.view,arch_db:l10n_ro_service_tax.res_config_settings_view_form
+msgid "Sales Tax"
+msgstr "Taxă de vânzare"
+
+#. module: l10n_ro_service_tax
+#: model_terms:ir.ui.view,arch_db:l10n_ro_service_tax.res_config_settings_view_form
+msgid "Taxes set on a product when its type becomes Service."
+msgstr "Taxele puse pe produs când tipul lui devine Serviciu."
