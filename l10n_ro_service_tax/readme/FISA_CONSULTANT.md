@@ -20,7 +20,7 @@ lui devine serviciu.
 ## 2. Bază legală și context
 
 - **Codul fiscal (Legea 227/2015):** art. 291 alin. (1) — cota standard de 21%; art. 278
-  alin. (2)–(4) — locul prestării serviciilor (regula generală B2B, regula B2C și excepțiile);
+  alin. (2)–(5) — locul prestării serviciilor (regula generală B2B, regula B2C și excepțiile);
   art. 307 alin. (2) — taxarea inversă la achiziția de servicii din UE; art. 325 alin. (1)
   lit. a), c), d), e) — declarația recapitulativă (D390), unde livrările și achizițiile de bunuri
   (L, A) se declară separat de prestările și achizițiile de servicii (P, S).
@@ -39,10 +39,13 @@ lui devine serviciu.
   taxele.
 - **Atenție, cazuri în care maparea automată nu e corectă:**
   - partener din UE **fără cod de TVA** (persoană neimpozabilă): poziția *Regim intracomunitar
-    scutit* dă tot `0% EU S`, dar locul prestării e în România (art. 278 alin. (3)), deci se
-    aplică 21% — corectați taxa pe factură;
+    scutit* dă automat `0% EU S`, dar de regulă locul prestării e în România (art. 278 alin. (3)),
+    deci se aplică 21% — corectați taxa pe factură; excepție, printre altele, serviciile
+    electronice și de telecomunicații (art. 278 alin. (5) lit. h)), cu TVA-ul statului clientului,
+    prin OSS;
   - **excepțiile de la art. 278 alin. (4)** (ex. servicii legate de imobile, transport de
-    persoane): locul prestării nu e la beneficiar, iar taxa se pune de mână;
+    persoane): locul prestării nu se stabilește după sediul beneficiarului, iar taxa se pune de
+    mână;
   - parteneri **din afara UE**: pe planul standard, maparea serviciilor are goluri pe care le
     corectează `l10n_ro_anaf_d300`; instalarea lui este recomandată.
 - Modulul nu schimbă cotele sau maparea pe rânduri, care vin din planul de conturi RO standard
@@ -119,8 +122,9 @@ face doar când pe produs era exact taxa implicită pentru servicii.
 Modulul nu generează note contabile. Linia de factură cu produsul de tip serviciu primește taxa
 `21% S`. În regim intern, rezultatul în D300 e același ca la `21% G` (rândul 9, respectiv 24) și
 se folosesc aceleași conturi; monografia rămâne cea standard (ex. vânzare `4111 = 704 + 4427`,
-cumpărare `628 + 4426 = 401`). Diferența apare la partenerii cu poziție fiscală intracomunitară:
-taxa `21% S` devine taxa de servicii UE (D300 rândul 3 la prestări, rândurile 7/7.1 și 22/22.1 la
+cumpărare `628 + 4426 = 401`). Diferența apare la partenerii din UE cu poziția *Schema
+intracomunitară*: taxa `21% S` devine taxa de servicii UE (D300 rândul 3, și 3.1 cu
+`l10n_ro_anaf_d300`, la prestări, rândurile 7/7.1 și 22/22.1 la
 achiziții), nu cea de bunuri (rândul 1, respectiv 5/5.1 și 20/20.1). Notele intracomunitare
 rezultate (ex.): prestare către UE `4111 = 704`, fără TVA; achiziție din UE `628 = 401` și
 autolichidarea `4426 = 4427`.
@@ -152,7 +156,8 @@ produsele create prin import sau prin API, fără formular, primesc taxele impli
       își păstrează taxele; la trecerea pe *Service*, taxele se înlocuiesc întotdeauna.
 - [ ] Factura cu produsul de tip serviciu are `21% S` pe linie; către un partener din UE cu cod
       de TVA valid (poziția *Schema intracomunitară*), taxa devine `0% EU S`.
-- [ ] Către un partener din UE fără cod de TVA, factura de serviciu are 21%, nu `0% EU S`.
+- [ ] Către un partener din UE fără cod de TVA, factura de serviciu primește automat `0% EU S`;
+      verificați că taxa a fost corectată manual la 21% (cu excepțiile art. 278 alin. (4)–(5)).
 - [ ] După dezinstalarea `l10n_ro_config`, taxele de serviciu din setări au rămas aceleași.
 
 ## 9. Mesaje de eroare frecvente
