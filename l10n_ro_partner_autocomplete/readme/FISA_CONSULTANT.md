@@ -211,7 +211,10 @@ Dacă linkul lipsește pe o firmă, verificați că tipul este **Companie**, nu 
 
 Faceți clic pe **Actualizează din ANAF**. Odoo rescrie numele, adresa, codul fiscal, NRC-ul și bifa
 **Plătitor TVA** cu datele de la ANAF; **telefonul existent se păstrează** (un telefon introdus local este de obicei
-mai bun decât cel din registru).
+mai bun decât cel din registru). Un text pe care ANAF nu îl are (de exemplu **strada**, **detaliile
+adresei** sau **codul poștal**, la firmele din localități fără nomenclator de străzi) **nu șterge**
+valoarea de pe partener: rămâne cea existentă, fiindcă strada cumpărătorului este obligatorie pe
+factura e-Factura (CIUS-RO). Dacă partenerul nu are nimic în acel câmp, se scrie ce vine de la ANAF.
 
 În istoric apare nota **„Actualizat din ANAF:”** cu fiecare câmp modificat, **valoarea veche →
 valoarea nouă** (în captură: Nume, Stradă, Cod poștal, NRC și **Plătitor TVA: Nu → Da**). O firmă care a ieșit din
@@ -278,6 +281,9 @@ verificarea duplicatelor.
       fiscal și fără firmă-mamă.
 - [ ] După **Actualizează din ANAF**, nota din istoric listează fiecare câmp schimbat (vechi →
       nou), iar telefonul existent rămâne.
+- [ ] La o firmă pentru care ANAF nu are stradă sau cod poștal, **Actualizează din ANAF** păstrează
+      strada, detaliile adresei și codul poștal existente, iar nota din istoric nu le listează ca
+      modificate.
 - [ ] La o firmă pe care ANAF o arată ca neplătitoare de TVA, **Actualizează din ANAF** debifează
       **Plătitor TVA**, scoate `RO` din codul fiscal și notează în istoric „Plătitor TVA: Da → Nu”.
 - [ ] Căutarea după o denumire (ex. „Forest”) și un cod fiscal din altă țară merg în continuare la
@@ -336,8 +342,9 @@ Regenerare:
   În **Nume** și în **TVA**, CUI-ul se poate tasta cu sau fără `RO`.
 - La alegerea unei sugestii ANAF, tipul partenerului devine **Companie**; linkul **Actualizează din
   ANAF** apare doar pe partenerii de tip *Companie*. Un partener lăsat pe *Persoană* nu are linkul.
-- **Actualizează din ANAF** rescrie numele și adresa (păstrează doar telefonul) și lasă urmă în
-  istoric. Pe 19.0 nu există actualizare în masă: fiecare partener se actualizează din fișa lui.
+- **Actualizează din ANAF** rescrie numele și adresa (păstrează telefonul existent) și lasă urmă în
+  istoric. Un text lăsat gol de ANAF (stradă, detalii adresă, cod poștal) nu șterge valoarea
+  existentă a partenerului. Pe 19.0 nu există actualizare în masă: fiecare partener se actualizează din fișa lui.
 - Prefixul `RO` la TVA este o informație fiscală, nu de formatare: îl are doar firma plătitoare de
   TVA. Nu-l adăugați manual la un neplătitor.
 - Mențiunea de **radiere / inactivitate** apare doar la **Actualizează din ANAF**, nu la sugestie;
