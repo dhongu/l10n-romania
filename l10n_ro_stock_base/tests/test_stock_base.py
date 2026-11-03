@@ -113,3 +113,44 @@ class TestStockBase(TransactionCase):
         self.assertTrue(product.product_tmpl_id.l10n_ro_net_weight_uom_name)
         product.product_tmpl_id.l10n_ro_net_weight = 2.0
         self.assertEqual(product.l10n_ro_net_weight, 2.0)
+
+    def test_fields_shown_once_next_to_oca_views(self):
+        # The OCA l10n_ro_stock views add the same block to the product form.
+        self.env["ir.ui.view"].create(
+            {
+                "name": "duplicate net weight",
+                "model": "product.template",
+                "inherit_id": self.env.ref("l10n_ro_stock_base.l10n_ro_stock_base_product_template_form").id,
+                "arch": """
+                    <xpath expr="//label[@for='volume']" position="before">
+                        <label for="l10n_ro_net_weight" />
+                        <div class="o_row" name="l10n_ro_net_weight">
+                            <field name="l10n_ro_net_weight" />
+                        </div>
+                    </xpath>
+                """,
+            }
+        )
+        self.env["ir.ui.view"].create(
+            {
+                "name": "duplicate operation types",
+                "model": "stock.warehouse",
+                "inherit_id": self.env.ref("l10n_ro_stock_base.view_warehouse_l10n_ro_stock_base").id,
+                # Before the technical page (removed without debug mode): the first one is kept.
+                "arch": """
+                    <xpath expr="//notebook" position="before">
+                        <field name="l10n_ro_consume_type_id" />
+                        <field name="l10n_ro_usage_type_id" />
+                        <field name="l10n_ro_consume_type_id" />
+                        <field name="l10n_ro_usage_type_id" />
+                    </xpath>
+                """,
+            }
+        )
+        for model in ("product.template", "product.product"):
+            arch = self.env[model].get_view(view_type="form")["arch"]
+            self.assertEqual(arch.count('name="l10n_ro_net_weight"'), 2, model)  # div + field
+            self.assertEqual(arch.count('for="l10n_ro_net_weight"'), 1, model)
+        arch = self.warehouse_obj.get_view(view_type="form")["arch"]
+        self.assertEqual(arch.count('name="l10n_ro_consume_type_id"'), 1)
+        self.assertEqual(arch.count('name="l10n_ro_usage_type_id"'), 1)

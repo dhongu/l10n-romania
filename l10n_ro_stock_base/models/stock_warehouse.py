@@ -2,7 +2,9 @@
 # Copyright (C) 2026 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models
+from odoo import api, fields, models
+
+from .product_template import _l10n_ro_remove_duplicates
 
 
 class StockWarehouse(models.Model):
@@ -10,6 +12,19 @@ class StockWarehouse(models.Model):
 
     l10n_ro_consume_type_id = fields.Many2one("stock.picking.type", string="Romania - Consume Type")
     l10n_ro_usage_type_id = fields.Many2one("stock.picking.type", string="Romania - Usage Giving Type")
+
+    @api.model
+    def _get_view(self, view_id=None, view_type="form", **options):
+        arch, view = super()._get_view(view_id, view_type, **options)
+        if view_type == "form":
+            _l10n_ro_remove_duplicates(
+                arch,
+                [
+                    "//field[@name='l10n_ro_consume_type_id']",
+                    "//field[@name='l10n_ro_usage_type_id']",
+                ],
+            )
+        return arch, view
 
     def _get_picking_type_update_values(self):
         res = super()._get_picking_type_update_values()
