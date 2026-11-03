@@ -89,6 +89,24 @@ msgid "ID"
 msgstr "ID"
 
 #. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "No"
+msgstr "Nu"
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,help:l10n_ro_partner_autocomplete.field_res_partner__l10n_ro_vat_number
+#: model:ir.model.fields,help:l10n_ro_partner_autocomplete.field_res_users__l10n_ro_vat_number
+msgid "The Tax ID without the country prefix."
+msgstr "Codul fiscal fără prefixul de țară."
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,help:l10n_ro_partner_autocomplete.field_res_partner__l10n_ro_vat_subjected
+#: model:ir.model.fields,help:l10n_ro_partner_autocomplete.field_res_users__l10n_ro_vat_subjected
+msgid "The partner is registered for VAT purposes (scpTVA). Filled in from ANAF."
+msgstr "Partenerul este înregistrat în scopuri de TVA (scpTVA). Completat din ANAF."
+
+#. module: l10n_ro_partner_autocomplete
 #: model_terms:ir.ui.view,arch_db:l10n_ro_partner_autocomplete.view_partner_form_anaf_refresh
 msgid "Update from ANAF"
 msgstr "Actualizează din ANAF"
@@ -98,3 +116,21 @@ msgstr "Actualizează din ANAF"
 #: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
 msgid "Updated from ANAF:"
 msgstr "Actualizat din ANAF:"
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_partner__l10n_ro_vat_number
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_users__l10n_ro_vat_number
+msgid "VAT Number Digits"
+msgstr "CUI (doar cifre)"
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_partner__l10n_ro_vat_subjected
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_users__l10n_ro_vat_subjected
+msgid "VAT Payer"
+msgstr "Plătitor TVA"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Yes"
+msgstr "Da"

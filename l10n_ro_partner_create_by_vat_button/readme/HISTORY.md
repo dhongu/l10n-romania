@@ -1,3 +1,8 @@
+## 20.0.1.1.12 (2026-11-03)
+
+- The description says the module is no longer developed: `l10n_ro_partner_autocomplete`
+  replaces it. No functional change.
+
 ## 20.0.1.1.11 (2026-10-22)
 
 - Odoo Apps banner title: *Partner Create by VAT Button* (was *Partner Data Refresh by VAT*), the same as the module name.

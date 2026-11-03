@@ -1,3 +1,13 @@
+## 20.0.1.4.0 (2026-11-03)
+
+- The partner has the Romanian VAT fields of its own, so it no longer needs `l10n_ro_config`
+  for them: **VAT Payer** (`l10n_ro_vat_subjected`), shown on the form of a Romanian company
+  and filled in from ANAF, and `l10n_ro_vat_number`, the Tax ID without the country prefix.
+  The names and types are those of `l10n_ro_config` and `l10n_ro_anaf_partner`, so the data
+  already there is kept.
+- The chatter note of **Update from ANAF** shows a check box as *Yes* / *No*, not as
+  *True* / *False*.
+
 ## 20.0.1.3.1 (2026-10-29)
 
 - The **Update from ANAF** link takes a whole row, so the identifiers keep their labels; the
