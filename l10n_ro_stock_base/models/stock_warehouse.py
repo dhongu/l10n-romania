@@ -41,15 +41,15 @@ class StockWarehouse(models.Model):
         that existed before the module was installed. The other operation types
         of the warehouse are not touched."""
         picking_types = self.env["stock.picking.type"]
+        max_sequence = picking_types.search_read(
+            [("sequence", "!=", False)], ["sequence"], limit=1, order="sequence desc"
+        )
+        max_sequence = max_sequence and max_sequence[0]["sequence"] or 0
         for warehouse in self.filtered(lambda w: w.company_id._l10n_ro_stock_is_romanian()):
             missing = [field for field in ("l10n_ro_consume_type_id", "l10n_ro_usage_type_id") if not warehouse[field]]
             if not missing:
                 continue
-            max_sequence = picking_types.search_read(
-                [("sequence", "!=", False)], ["sequence"], limit=1, order="sequence desc"
-            )
-            max_sequence = max_sequence and max_sequence[0]["sequence"] or 0
-            create_data = warehouse._get_picking_type_create_values(max_sequence)[0]
+            create_data, max_sequence = warehouse._get_picking_type_create_values(max_sequence)
             sequence_data = warehouse._get_sequence_values()
             for field in missing:
                 if field not in create_data:
