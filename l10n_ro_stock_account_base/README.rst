@@ -17,7 +17,7 @@ Romania - Stock Accounting Fields
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_base
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_base
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -85,8 +85,8 @@ here: records created after the OCA module is removed leave them empty.
 The stock accounting entries are made by the stock valuation module
 installed in the database, not by this one.
 
-.. |The Romania - Stock Accounting Fields module installed in Apps, with the Upgrade and Uninstall buttons| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_account_base/static/description/en/01_modul_instalat.png
-.. |The fields declared by the module, grouped by model, with their technical name, label, type and the Stored column| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_account_base/static/description/en/02_campuri_modul.png
+.. |The Romania - Stock Accounting Fields module installed in Apps, with the Upgrade and Uninstall buttons| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_account_base/static/description/en/01_modul_instalat.png
+.. |The fields declared by the module, grouped by model, with their technical name, label, type and the Stored column| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_account_base/static/description/en/02_campuri_modul.png
 
 Changelog
 =========
@@ -129,6 +129,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_base>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_base>`_ project on GitHub.
 
 You are welcome to contribute.
