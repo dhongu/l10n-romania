@@ -1,3 +1,9 @@
+## 19.0.1.4.1 (2026-11-03)
+
+- **Update from ANAF** no longer clears the street, the street details or the postal code
+  when ANAF has none for the company: an empty text from ANAF leaves the partner's value. The
+  street is required on an e-Factura invoice (CIUS-RO).
+
 ## 19.0.1.4.0 (2026-11-03)
 
 - The partner has the Romanian VAT fields of its own, so it no longer needs `l10n_ro_config`

@@ -107,6 +107,21 @@ class TestPartnerAutocomplete(TransactionCase):
             partner.action_l10n_ro_anaf_refresh()
         self.assertEqual(partner.phone, "0356179038")
 
+    def test_refresh_keeps_an_address_anaf_does_not_hold(self):
+        partner = self._partner(street2="Bl. A1, Sc. 2", zip="310130")
+        result = anaf_result(codPostal="")
+        result["adresa_domiciliu_fiscal"].update(
+            ddenumire_Strada="", dnumar_Strada="", ddetalii_Adresa="", dcod_Postal=""
+        )
+        with patch(REQUEST_PATH, return_value=result):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertEqual(partner.street, "Str. Veche 1")
+        self.assertEqual(partner.street2, "Bl. A1, Sc. 2")
+        self.assertEqual(partner.zip, "310130")
+        # What ANAF does hold is still updated
+        self.assertEqual(partner.city, "Timișoara")
+        self.assertNotIn("Str. Veche 1", partner.message_ids[0].body)
+
     def test_refresh_without_change(self):
         partner = self._partner()
         with patch(REQUEST_PATH, return_value=anaf_result()):

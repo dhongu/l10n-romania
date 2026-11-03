@@ -154,10 +154,16 @@ class ResPartner(models.Model):
                 raise UserError(self.env._("ANAF did not answer. Try again in a moment."))
             if result["state"] != "found":
                 raise UserError(self.env._("ANAF has no company registered under %(vat)s.", vat=partner.vat))
+            # A text ANAF leaves empty (a street or a postal code it does not hold) clears nothing:
+            # the street is required on an e-Factura invoice
             values = {
                 name: value
                 for name, value in result["partner"].items()
-                if name in partner._fields and not (name in ANAF_FILL_IF_EMPTY and partner[name])
+                if name in partner._fields
+                and not (
+                    partner[name]
+                    and (name in ANAF_FILL_IF_EMPTY or (not value and partner._fields[name].type in ("char", "text")))
+                )
             }
             changes = partner._l10n_ro_anaf_changes(values)
             partner.write(values)
