@@ -431,11 +431,10 @@ renamed; the module finds them by their type.</p>
 <li><p class="first">Go to <strong>Inventory → Configuration → Warehouses</strong> and open the
 warehouse. With the developer mode on, the <strong>Technical Information</strong>
 tab shows <strong>Romania - Consume Type</strong> and <strong>Romania - Usage Giving
-Type</strong>. Warehouses that existed before the installation do not get
-them automatically: change the warehouse <strong>Short Name</strong>, save, then
-set it back and save again, and the missing operation types are
-created; then correct their <strong>Barcode</strong>, which keeps the temporary
-short name.</p>
+Type</strong>. The warehouses that exist at the installation get them when
+the module is installed, the new ones when they are created. If they
+are still missing (the fiscal country became Romania later), change
+the warehouse <strong>Short Name</strong>, save, then set it back and save again.</p>
 <p><img alt="The Technical Information tab of the warehouse, with the Romania - Consume Type and Romania - Usage Giving Type fields highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_base/static/description/en/03_depozit_tipuri_operatie.png" /></p>
 </li>
 <li><p class="first">The <strong>Consume</strong> operation type is an internal transfer from the
@@ -473,7 +472,10 @@ warehouse name and code when they are changed. While the OCA
 <tt class="docutils literal">l10n_ro_stock</tt> module is still installed, the net weight and the
 warehouse operation types are shown only once on the forms. The module
 depends on <tt class="docutils literal">account</tt>, which gives the fiscal country of the company.
-The net weight given when a product is created is kept on its variant.</li>
+The net weight given when a product is created is kept on its variant.
+The warehouses that exist when the module is installed get the consume
+and usage giving operation types, and their barcodes follow the
+warehouse code when it changes.</li>
 </ul>
 </div>
 </div>

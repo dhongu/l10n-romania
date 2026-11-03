@@ -19,6 +19,7 @@
         "views/stock_warehouse_view.xml",
         "views/product_template_view.xml",
     ],
+    "post_init_hook": "post_init_hook",
     "installable": True,
     "development_status": "Mature",
 }

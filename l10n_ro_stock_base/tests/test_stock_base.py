@@ -4,6 +4,8 @@
 
 from odoo.tests import TransactionCase, tagged
 
+from odoo.addons.l10n_ro_stock_base import post_init_hook
+
 
 @tagged("post_install", "-at_install")
 class TestStockBase(TransactionCase):
@@ -63,6 +65,33 @@ class TestStockBase(TransactionCase):
         )
         self.assertEqual(consume_type.sequence_code, "CONS")
         self.assertEqual(usage_type.sequence_code, "USAGE")
+
+    def test_existing_warehouse_gets_operation_types(self):
+        warehouse = self.warehouse_obj.create({"name": "Warehouse Romania", "code": "ROW"})
+        consume_type = warehouse.l10n_ro_consume_type_id
+        in_type = warehouse.in_type_id
+        consume_type.unlink()
+        warehouse.l10n_ro_usage_type_id.unlink()
+        self.assertFalse(warehouse.l10n_ro_consume_type_id)
+        post_init_hook(self.env)
+        self.assertTrue(warehouse.l10n_ro_consume_type_id)
+        self.assertTrue(warehouse.l10n_ro_usage_type_id)
+        self.assertEqual(
+            warehouse.l10n_ro_consume_type_id.default_location_dest_id,
+            self.company.l10n_ro_consume_location_id,
+        )
+        self.assertEqual(warehouse.l10n_ro_consume_type_id.barcode, "ROW-CONSUME")
+        self.assertEqual(warehouse.l10n_ro_usage_type_id.sequence_id.prefix, "ROW/USAGE/")
+        self.assertEqual(warehouse.in_type_id, in_type)
+        types = warehouse.l10n_ro_consume_type_id | warehouse.l10n_ro_usage_type_id
+        post_init_hook(self.env)
+        self.assertEqual(warehouse.l10n_ro_consume_type_id | warehouse.l10n_ro_usage_type_id, types)
+
+    def test_warehouse_code_change_updates_barcode(self):
+        warehouse = self.warehouse_obj.create({"name": "Warehouse Romania", "code": "ROW"})
+        warehouse.code = "WRO"
+        self.assertEqual(warehouse.l10n_ro_consume_type_id.barcode, "WRO-CONSUME")
+        self.assertEqual(warehouse.l10n_ro_usage_type_id.barcode, "WRO-USAGE")
 
     def test_warehouse_rename(self):
         warehouse = self.warehouse_obj.create({"name": "Warehouse Romania", "code": "ROW"})
