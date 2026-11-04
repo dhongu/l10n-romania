@@ -2,10 +2,10 @@
 <!-- tb-gen v1 -->
 <div class="rounded-4 shadow px-4 py-4 mt-2 mb-4" style="background-color:#006F42;color:#ffffff;">
   <div class="d-flex flex-wrap align-items-center">
-    <span class="d-inline-block rounded-4 p-2 flex-shrink-0 my-2" style="background-color:#ffffff;margin-right:24px;"><img src="icon.png" alt="Partner Autocomplete from ANAF" style="width:80px;height:80px;border:none;"/></span>
+    <span class="d-inline-block rounded-4 p-2 flex-shrink-0 my-2" style="background-color:#ffffff;margin-right:24px;"><img src="icon.png" alt="Partner Autocomplete from ANAF and VIES" style="width:80px;height:80px;border:none;"/></span>
     <div class="flex-grow-1 my-2" style="width:320px;min-width:0;margin-right:24px;">
-      <h1 class="fw-bold mb-2" style="color:#ffffff;font-size:36px;line-height:1.1;letter-spacing:-0.5px;border:none;">Partner Autocomplete from ANAF</h1>
-      <p class="mb-3" style="font-size:18px;color:#cdeccf;line-height:1.45;">Romanian CUI answered from ANAF instead of IAP, without credits</p>
+      <h1 class="fw-bold mb-2" style="color:#ffffff;font-size:36px;line-height:1.1;letter-spacing:-0.5px;border:none;">Partner Autocomplete from ANAF and VIES</h1>
+      <p class="mb-3" style="font-size:18px;color:#cdeccf;line-height:1.45;">Romanian and EU companies filled in for free, without IAP credits</p>
       <div>
         <span class="d-inline-block rounded-pill fw-bold me-2 mb-2" style="background-color:#ffffff;border:1px solid #ffffff;color:#006F42;padding:6px 14px;font-size:12px;">Odoo 20.0</span>
         <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px solid #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;">Localization</span>
@@ -45,28 +45,95 @@ fill the partner in. For a Romanian company the authoritative source is ANAF, an
 <p>With this module, typing a Romanian CUI where Odoo offers the autocomplete &#8212; the <em>Tax ID</em> or the
 <em>Name</em> of a partner, the <em>Customer</em> of a quotation or an invoice, the customer form opened from the
 Point of Sale &#8212; shows the company found at ANAF. Choosing it fills the partner in:</p>
-<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>name, Tax ID (with <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">RO</code> only for a VAT payer), street with its number, address details,
+<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>name, Tax ID (with <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">RO</code> only for a VAT payer), VAT payer flag, street with its number, address details,
   locality, county, postal code, trade register number and phone;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>for Bucharest, the sector as the locality, as e-Factura requires;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>a note in the chatter that the data was taken from ANAF, with the date.</div></div></li></ul>
-<p><strong>Update from ANAF.</strong> On a Romanian company with a Tax ID, the <strong>Update from ANAF</strong> button below
-the Tax ID reloads the data from ANAF: name, address, Tax ID and trade register number are
+<p><strong>Companies from other EU countries, from VIES.</strong> A VAT number with the prefix of another EU country
+(<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">IT00743110157</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">HU10773381</code>) is looked up in VIES, the free service of the European Commission:
+the name, street, postal code, city and country are filled in, with a note in the chatter, and no IAP
+credit is used. When VIES does not answer, does not know the number or the country keeps the name to
+itself (Germany, Spain), IAP is asked as before. The update button next to the Tax ID of such a
+company reloads the data from VIES and sets <em>Intra-Community Valid</em>.</p>
+<p><strong>VIES for a Romanian company.</strong> For a VAT payer, the note after the ANAF data says whether the company
+is in VIES, that is registered for intra-community operations; a VAT payer is not always.</p>
+<p><strong>Update from ANAF.</strong> On a Romanian company with a Tax ID, the <strong>Update from ANAF</strong> button (the refresh
+icon) next to the Tax ID reloads the data from ANAF: name, address, Tax ID and trade register number are
 rewritten, a phone already on the partner is kept. The chatter lists every field changed, with
-its old and new value, and says when ANAF lists the company as struck off or inactive.</p>
+its old and new value, and says when ANAF lists the company as struck off or inactive. With
+<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner</code>, the <em>VAT on Payment (RTVAI)</em> flag is filled in and updated the same way.</p>
 <p><strong>A partner created with its CUI as the name.</strong> Typing a CUI in a field such as <em>Customer</em> and
 choosing <em>Create</em>, or importing partners whose name is a CUI, fills them in from ANAF too. Values
 given explicitly are kept; a partner that already has a Tax ID, a contact person or a partner
 from another country is left as it is. The <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_no_autofill</code> context key turns it off,
 for instance for a bulk import.</p>
+<p><strong>VAT payer.</strong> A Romanian company shows <strong>VAT Payer</strong> on its form, filled in from ANAF together
+with the rest of the data. The partner also keeps its Tax ID without the country prefix. Both
+fields have the names used by the other Romanian localization modules, so no other module is
+needed for them.</p>
 <p><strong>City and postal code.</strong> With the list of Romanian cities (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_city</code>), the city is chosen
 from it as well. Choosing a city then keeps the postal code the partner already has, instead of
 replacing it with the city's.</p>
 <p>No IAP credit is used for a Romanian CUI: neither the search nor the enrichment goes to IAP.</p>
 <p>The CUI is recognised with or without <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">RO</code>. The rest is left to IAP as before: a search by company
-name, a company from another country, and a Romanian CUI when ANAF does not answer.</p>
+name, a company from outside the EU, a company from the EU that VIES does not describe, and a
+Romanian CUI when ANAF does not answer.</p>
 <p>The <strong>Enrich</strong> action of the partner list and form (Odoo 20) asks ANAF as well for a Romanian
-company, by its Tax ID or its Company ID, and fills only the fields the partner does not have yet.</p>
+company, by its Tax ID or its Company ID, and VIES for a company from another EU country, and fills
+only the fields the partner does not have yet.</p>
+<p><em>Intra-Community Valid</em> comes with the standard <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_eu_account_vies</code> module (installed by
+<strong>Verify VAT Numbers</strong> in the accounting settings); without it, the VIES answer is only written in
+the chatter.</p>
 </div>
 <div class="tab-pane fade py-2" id="tb-panel-versions" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Versions</h2>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">20.0.1.5.0 (2026-11-04)</h2>
+<ul>
+<li>A VAT number of another EU country is answered from VIES, without IAP credits: name, street,
+  postal code, city and country. IAP is asked as before when VIES does not answer, does not know
+  the number, or the member state keeps the name to itself (Germany, Spain).</li>
+<li><strong>Update from VIES</strong> on a company from another EU country rewrites the name and the address VIES
+  gives, keeps what it does not give, and sets <em>Intra-Community Valid</em>.</li>
+<li>For a Romanian VAT payer the note after the ANAF data, and the one after <strong>Update from ANAF</strong>,
+  say whether the company is in VIES, that is registered for intra-community operations.</li>
+<li>The update buttons show only their icon, in the row of the Tax ID instead of a whole row below
+  it; the name is in the tooltip.</li>
+<li>The <strong>Enrich</strong> action fills a partner with a VAT number of another EU country from VIES too, without
+  IAP credits, when VIES gives the name and the address.</li>
+<li><em>Intra-Community Valid</em> is the field of <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_eu_account_vies</code> in 20.0 (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">base_vat</code> in 19.0): it is
+  set only when that module is installed (<strong>Verify VAT Numbers</strong> in the accounting settings).</li>
+<li>The Apps banner and the summary of the manifest name VIES next to ANAF.</li>
+<li><strong>Update from VIES</strong> is also shown for a United Kingdom partner with an <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">XI</code> number (Northern
+  Ireland, which stays in VIES for goods); a <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">GB</code> number is not in VIES.</li>
+<li><strong>Update from VIES</strong> clears the old street details next to a new street and the old state next
+  to a new city, as <strong>Update from ANAF</strong> does.</li>
+<li>With <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_config</code> (OCA) installed, the partner form showed <strong>VAT Payer</strong> twice: the box this
+  module puts with the Tax ID and the one <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_config</code> adds under the trade register number.
+  The <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_config</code> one is dropped from the form.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">20.0.1.4.1 (2026-11-03)</h2>
+<ul>
+<li><strong>Update from ANAF</strong> no longer clears the street, the street details or the postal code
+  when ANAF has none for the company and the city and county are the partner's: the street is
+  required on an e-Factura invoice (CIUS-RO). When ANAF gives another locality they are still
+  cleared, so the old street does not stay on the new city; next to a new street from ANAF the
+  old street details and postal code are cleared too.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">20.0.1.4.0 (2026-11-03)</h2>
+<ul>
+<li>The partner has the Romanian VAT fields of its own, so it no longer needs <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_config</code>
+  for them: <strong>VAT Payer</strong> (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_vat_subjected</code>), shown on the form of a Romanian company
+  and filled in from ANAF, and <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_vat_number</code>, the Tax ID without the country prefix.
+  The names and types are those of <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_config</code> and <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner</code>, so the data
+  already there is kept.</li>
+<li>The chatter note of <strong>Update from ANAF</strong> shows a check box as <em>Yes</em> / <em>No</em>, not as
+  <em>True</em> / <em>False</em>.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">20.0.1.3.1 (2026-10-29)</h2>
+<ul>
+<li>The <strong>Update from ANAF</strong> link takes a whole row, so the identifiers keep their labels; the
+  chatter note of an ANAF suggestion shows the date in the user's language format.</li>
+<li>The settings note says that the Tax ID field needs the <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">RO</code> prefix for the suggestions.
+  Consultant sheet with screenshots.</li>
+</ul>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">20.0.1.3.0 (2026-10-28)</h2>
 <ul>
 <li>Migration to 20.0. <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">is_company</code> is computed from the Tax ID and the CUI is the Company ID
@@ -103,23 +170,7 @@ company, by its Tax ID or its Company ID, and fills only the fields the partner 
   same CUI, as <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_partner_create_by_vat_button</code> sets it before this module runs; a Tax ID
   of another company still leaves the partner as it is.</li>
 </ul>
-<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.1.1.0 (2026-10-23)</h2>
-<ul>
-<li><strong>Update from ANAF</strong> button on a Romanian company: the data is reloaded from ANAF, a phone
-  already set is kept, and the chatter lists the changed fields with their old and new value.</li>
-<li>A partner created with a Romanian CUI as its name (quick create, import, API) is filled in
-  from ANAF; the <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_no_autofill</code> context key turns it off.</li>
-</ul>
-<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.1.0.1 (2026-10-22)</h2>
-<ul>
-<li>Depends on <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner_lookup</code>, the new name of <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_lookup</code>.</li>
-</ul>
-<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.1.0.0 (2026-10-22)</h2>
-<ul>
-<li>Initial version: the partner autocomplete answers a Romanian CUI (with or without <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">RO</code>) from
-  ANAF instead of IAP, search and enrichment, without IAP credits; IAP keeps the name search,
-  the other countries and the case when ANAF does not answer.</li>
-</ul>
+<p><em>Older releases are listed in the module's HISTORY file.</em></p>
 </div>
 </div>
 
@@ -281,6 +332,26 @@ company, by its Tax ID or its Company ID, and fills only the fields the partner 
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_etransport_batch_enhancement" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">ET</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_etransport_batch_enhancement/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">e-Transport for Transfer Batches</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">eTransport Batch Enhancement</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
       <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_etransport_enhancement" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
@@ -297,26 +368,6 @@ company, by its Tax ID or its Company ID, and fills only the fields the partner 
             </span>
           </div>
           <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">eTransport enhancement</p>
-        </div>
-      </a>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_footer_anpc" target="_blank" rel="noopener"
-         class="card h-100 text-decoration-none border" style="color:#212529;">
-        <div class="card-body p-3">
-          <div class="d-flex align-items-center mb-2">
-            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
-              <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
-              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_footer_anpc/icon.png" alt="" loading="lazy"
-                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
-            </span>
-            <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANPC footer</span>
-              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
-            </span>
-          </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Displays the ANPC SAL pictogram in the website footer</p>
         </div>
       </a>
     </div>

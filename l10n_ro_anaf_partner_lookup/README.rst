@@ -47,12 +47,22 @@ without depending on other localization modules.
   stays empty.
 - **Correct diacritics**: ANAF answers with the old cedilla letters
   (``ş``, ``ţ``); they are turned into the comma ones (``ș``, ``ț``).
-- **Status**: VAT payer, inactive and struck off, for the caller to warn
-  about.
+- **Status**: VAT payer, VAT on payment (RTVAI), inactive and struck
+  off, for the caller to warn about. Where ``l10n_ro_anaf_partner`` is
+  installed, the partner values also carry its *VAT on Payment (RTVAI)*
+  flag, as they carry the VAT payer flag.
 - **A clear answer**: found, not found, invalid CUI, or ANAF unavailable
   — the caller can tell a company that does not exist from a service
   that is down. The wait is short, since somebody is usually waiting for
   the answer.
+
+**VIES.** For a company from another EU country, ``vies_lookup()`` asks
+VIES, the free service of the European Commission, about its
+intra-community VAT number (with the country prefix: ``IT…``, ``HU…``,
+``EL…`` for Greece) and gives back the name and the address split into
+street, postal code and city. Some member states (Germany, Spain) only
+say whether the number is valid. For a Romanian company VIES tells
+whether it is registered for intra-community operations.
 
 The module has no screen of its own; it is used by
 `l10n_ro_pos_partner_efactura <../l10n_ro_pos_partner_efactura>`__ to
@@ -60,7 +70,8 @@ bring a company customer in at the till.
 
 Optional system parameters: ``l10n_ro_anaf_partner_lookup.url`` (the
 ANAF service) and ``l10n_ro_anaf_partner_lookup.timeout`` (seconds, 10
-by default).
+by default), and for VIES ``l10n_ro_anaf_partner_lookup.vies_url`` and
+``l10n_ro_anaf_partner_lookup.vies_timeout``.
 
 **Table of contents**
 
@@ -69,6 +80,33 @@ by default).
 
 Changelog
 =========
+
+20.0.1.4.0 (2026-11-04)
+-----------------------
+
+- ``vies_lookup(vat)`` looks an intra-community VAT number up in VIES,
+  the REST service of the European Commission (free, no key), with the
+  same shape of answer as ``lookup()``: the state, and the partner
+  values with the name, the street, the postal code and the city split
+  from the free text address VIES gives. Greece is ``EL`` and Northern
+  Ireland ``XI``, as in VIES. The check digits are checked before VIES
+  is asked; a member state that keeps the name to itself (Germany,
+  Spain) gives only the Tax ID and the country (``has_details`` false).
+  Whether the number is registered comes from ``isValid``; ``userError``
+  only says whether VIES could process the request.
+- As in ``lookup()``, the partner values carry no ``is_company``: Odoo
+  20 computes it from the Tax ID. The VIES system parameters are read
+  with ``get_str`` / ``get_int``: an invalid timeout falls back to the
+  10 s default.
+
+20.0.1.3.0 (2026-10-29)
+-----------------------
+
+- The answer also says whether the company applies VAT on payment
+  (``vat_on_payment``, from the ANAF RTVAI register). Where
+  ``l10n_ro_anaf_partner`` defines the *VAT on Payment (RTVAI)* flag,
+  the partner values carry it too; an answer without the RTVAI block
+  leaves it untouched.
 
 20.0.1.2.1 (2026-10-28)
 -----------------------

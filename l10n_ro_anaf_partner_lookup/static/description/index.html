@@ -38,14 +38,22 @@ other modules can create or check a customer without depending on other localiza
   not write it, it is read from the postal code (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">030167</code> is in Sector 3).</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">The city from the list</span><div>where the partner has a <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">city_id</code> (with the cities of <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_city</code>),
   it is chosen too, by name and county, the commune of a village or the postal code; without a
   single match it stays empty.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Correct diacritics</span><div>ANAF answers with the old cedilla letters (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">&#351;</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">&#355;</code>); they are turned into
-  the comma ones (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">&#537;</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">&#539;</code>).</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Status</span><div>VAT payer, inactive and struck off, for the caller to warn about.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">A clear answer</span><div>found, not found, invalid CUI, or ANAF unavailable &#8212; the caller can tell a
+  the comma ones (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">&#537;</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">&#539;</code>).</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Status</span><div>VAT payer, VAT on payment (RTVAI), inactive and struck off, for the caller to warn
+  about. Where <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner</code> is installed, the partner values also carry its <em>VAT on
+  Payment (RTVAI)</em> flag, as they carry the VAT payer flag.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">A clear answer</span><div>found, not found, invalid CUI, or ANAF unavailable &#8212; the caller can tell a
   company that does not exist from a service that is down. The wait is short, since somebody is
   usually waiting for the answer.</div></div></li></ul>
+<p><strong>VIES.</strong> For a company from another EU country, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">vies_lookup()</code> asks VIES, the free service of the
+European Commission, about its intra-community VAT number (with the country prefix: <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">IT&#8230;</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">HU&#8230;</code>,
+<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">EL&#8230;</code> for Greece) and gives back the name and the address split into street, postal code and city.
+Some member states (Germany, Spain) only say whether the number is valid. For a Romanian company VIES
+tells whether it is registered for intra-community operations.</p>
 <p>The module has no screen of its own; it is used by
 <a href="../l10n_ro_pos_partner_efactura">l10n_ro_pos_partner_efactura</a> to bring a company customer in at
 the till.</p>
 <p>Optional system parameters: <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner_lookup.url</code> (the ANAF service) and
-<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner_lookup.timeout</code> (seconds, 10 by default).</p>
+<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner_lookup.timeout</code> (seconds, 10 by default), and for VIES
+<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner_lookup.vies_url</code> and <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_partner_lookup.vies_timeout</code>.</p>
 </div>
 
 <div class="row text-center mt-4 mb-1 g-3">
@@ -186,6 +194,26 @@ the till.</p>
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_etransport_batch_enhancement" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">ET</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_etransport_batch_enhancement/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">e-Transport for Transfer Batches</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">eTransport Batch Enhancement</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
       <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_etransport_enhancement" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
@@ -222,26 +250,6 @@ the till.</p>
             </span>
           </div>
           <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Displays the ANPC SAL pictogram in the website footer</p>
-        </div>
-      </a>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_invoice_report" target="_blank" rel="noopener"
-         class="card h-100 text-decoration-none border" style="color:#212529;">
-        <div class="card-body p-3">
-          <div class="d-flex align-items-center mb-2">
-            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
-              <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RI</span>
-              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_invoice_report/icon.png" alt="" loading="lazy"
-                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
-            </span>
-            <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Invoice Report</span>
-              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
-            </span>
-          </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Localizare Terrabit - Facturi, Chitanta</p>
         </div>
       </a>
     </div>
