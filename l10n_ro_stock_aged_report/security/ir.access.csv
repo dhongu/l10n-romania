@@ -1,0 +1,4 @@
+id,name,model_id,group_id/id,operation,domain
+access_l10n_ro_stock_age_report,access_l10n_ro_stock_age_report,l10n.ro.stock.age.report,base.group_user,crud,
+access_l10n_ro_stock_age_report_location,access_l10n_ro_stock_age_report_location,l10n.ro.stock.age.report.location,base.group_user,crud,
+access_l10n_ro_stock_age_report_line,access_l10n_ro_stock_age_report_line,l10n.ro.stock.age.report.line,base.group_user,crud,

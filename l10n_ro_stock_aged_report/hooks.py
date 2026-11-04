@@ -83,7 +83,8 @@ def post_init_hook(env):
     # for quants that have no last in date yet.
     # We use subqueries for better performance on large datasets.
 
-    query_in = """
+    query_in = SQL(
+        """
         UPDATE stock_quant sq
         SET l10n_ro_last_in_date = last_in.max_date
         FROM (
@@ -97,13 +98,15 @@ def post_init_hook(env):
           AND sq.location_id = last_in.location_dest_id
           AND sq.l10n_ro_last_in_date IS NULL
           AND sq.quantity > 0;
-    """
+        """
+    )
     cr.execute(query_in)
 
     # Update last out date based on latest 'done' stock move where source is the quant location
     # for quants that have no last out date yet.
 
-    query_out = """
+    query_out = SQL(
+        """
         UPDATE stock_quant sq
         SET l10n_ro_last_out_date = last_out.max_date
         FROM (
@@ -117,5 +120,6 @@ def post_init_hook(env):
           AND sq.location_id = last_out.location_id
           AND sq.l10n_ro_last_out_date IS NULL
           AND sq.quantity > 0;
-    """
+        """
+    )
     cr.execute(query_out)

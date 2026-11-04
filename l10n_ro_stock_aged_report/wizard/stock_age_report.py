@@ -216,7 +216,9 @@ class StockAgeReportLine(models.TransientModel):
 
     def action_show_products(self):
         products = self.mapped("product_id")
-        action = self.env["ir.actions.actions"]._for_xml_id("product.product_normal_action_sell")
+        # product.product_normal_action_sell nu mai există în 20.0; contextul acțiunii de
+        # variante din core (search_default_product_tmpl_id: active_id) e înlocuit mai jos
+        action = self.env["ir.actions.actions"]._for_xml_id("product.product_variant_action")
         action["domain"] = [("id", "in", products.ids)]
         action["context"] = {"default_is_storable": True}
         return action

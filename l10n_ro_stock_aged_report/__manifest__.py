@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Aged Report",
-    "version": "19.0.1.0.4",
+    "version": "20.0.1.0.4",
     "category": "Localization",
     "summary": "Romania - Stock Aged Report",
     "author": "Terrabit, NextERP Romania, Dakai Soft",
@@ -17,7 +17,7 @@
     "license": "AGPL-3",
     "data": [
         "wizard/stock_age_report.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
     ],
     "installable": True,
     "pre_init_hook": "pre_init_hook",
