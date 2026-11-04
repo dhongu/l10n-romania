@@ -18,10 +18,17 @@ class StockQuant(models.Model):
         return super().create(vals_list)
 
     def write(self, vals):
-        if "quantity" in vals:
-            for quant in self:
-                if vals["quantity"] > quant.quantity:
-                    vals["l10n_ro_last_in_date"] = fields.Datetime.now()
-                elif vals["quantity"] < quant.quantity:
-                    vals["l10n_ro_last_out_date"] = fields.Datetime.now()
-        return super().write(vals)
+        if "quantity" not in vals:
+            return super().write(vals)
+        # datele se decid per cuantă: un write pe mai multe cuante poate fi intrare pentru
+        # unele și ieșire pentru altele, deci nu se pun în `vals`, comun tuturor
+        quantity = vals["quantity"]
+        incoming = self.filtered(lambda q: quantity > q.quantity)
+        outgoing = self.filtered(lambda q: quantity < q.quantity)
+        res = super().write(vals)
+        now = fields.Datetime.now()
+        if incoming:
+            super(StockQuant, incoming).write({"l10n_ro_last_in_date": now})
+        if outgoing:
+            super(StockQuant, outgoing).write({"l10n_ro_last_out_date": now})
+        return res

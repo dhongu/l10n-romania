@@ -1,3 +1,14 @@
+## 20.0.1.0.5 (2026-11-04)
+
+- Migration to Odoo 20.0: access rights in `security/ir.access.csv`; the *Products* button
+  of the report lines opens the product variants (`product.product_variant_action`), since
+  `product.product_normal_action_sell` no longer exists.
+- A quantity written on several quants at once sets the last in date only on the quants
+  whose stock increases and the last out date only on those whose stock decreases. Before,
+  both dates could be set on all of them.
+- The report reads only the quants of the report's company, even when the location list is
+  edited by hand.
+
 ## 19.0.1.0.4 (2026-10-21)
 
 - The report dialog shows the list of locations again, in a *Locations* tab, and the list

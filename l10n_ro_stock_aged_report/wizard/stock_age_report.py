@@ -83,16 +83,13 @@ class StockAgeReport(models.TransientModel):
 
     @api.depends("warehouse_id")
     def _compute_location_ids(self):
-        self.location_ids = [(5, 0, 0)]
-
-        locs = self.env["stock.location"].search([("usage", "=", "internal")], order="id")
-        locs = locs.filtered(lambda l: l.warehouse_id == self.warehouse_id)
-        location_ids = []
-        idx = 10
-        for loc in locs:
-            location_ids.append((0, 0, {"sequence": idx, "location_id": loc.id}))
-            idx += 10
-        self.location_ids = location_ids
+        for report in self:
+            locs = self.env["stock.location"].search(
+                [("usage", "=", "internal"), ("warehouse_id", "=", report.warehouse_id.id)], order="id"
+            )
+            report.location_ids = [(5, 0, 0)] + [
+                (0, 0, {"sequence": (idx + 1) * 10, "location_id": loc.id}) for idx, loc in enumerate(locs)
+            ]
 
     def do_compute_report(self):
         # fără produs ales raportul acoperă tot stocul: cuantele se filtrează doar pe locații
@@ -104,6 +101,8 @@ class StockAgeReport(models.TransientModel):
         return True
 
     def _run_aged_inventory(self, products, locations):
+        # sudo: liniile raportului (tranzitorii) și cuantele se citesc indiferent de drepturile
+        # de stoc ale utilizatorului; firma se filtrează explicit în domeniul cuantelor
         self = self.sudo()
         # un recalcul pe același dialog înlocuiește liniile, nu le adaugă peste cele vechi
         self.line_ids.unlink()
@@ -135,7 +134,7 @@ class StockAgeReport(models.TransientModel):
             )
 
         # Căutăm quants
-        domain = [("location_id", "in", locations), ("quantity", ">", 0)]
+        domain = [("location_id", "in", locations), ("quantity", ">", 0), ("company_id", "=", self.company_id.id)]
         if products:
             domain.append(("product_id", "in", products.ids))
         quants = self.env["stock.quant"].search(domain)

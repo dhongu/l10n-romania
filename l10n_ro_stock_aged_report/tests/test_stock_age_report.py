@@ -46,6 +46,23 @@ class TestStockAgeReport(TransactionCase):
             "l10n_ro_last_in_date ar trebui să fie actualizat la creșterea cantității.",
         )
 
+    def test_01b_multi_quant_write_dates(self):
+        """Un write pe mai multe cuante pune data de intrare/ieșire doar unde se potrivește."""
+        location_2 = self.env["stock.location"].create({"name": "Raft test", "location_id": self.location.id})
+        quant_low = self.env["stock.quant"].create(
+            {"product_id": self.product.id, "location_id": location_2.id, "quantity": 2.0}
+        )
+        quant_low.l10n_ro_last_out_date = False
+        self.quant.write({"l10n_ro_last_in_date": False, "l10n_ro_last_out_date": False})
+        quant_low.l10n_ro_last_in_date = False
+
+        (self.quant | quant_low).write({"quantity": 5.0})
+
+        self.assertTrue(self.quant.l10n_ro_last_out_date)
+        self.assertFalse(self.quant.l10n_ro_last_in_date)
+        self.assertTrue(quant_low.l10n_ro_last_in_date)
+        self.assertFalse(quant_low.l10n_ro_last_out_date)
+
     def test_02_report_generation(self):
         """Verifică generarea raportului și calculul intervalelor."""
         # Setăm o dată de intrare în trecut pentru a testa intervalele
