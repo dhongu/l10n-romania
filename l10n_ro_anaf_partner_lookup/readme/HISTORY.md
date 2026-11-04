@@ -5,7 +5,8 @@
   values with the name, the street, the postal code and the city split from the free text address
   VIES gives. Greece is `EL` and Northern Ireland `XI`, as in VIES. The check digits are checked
   before VIES is asked; a member state that keeps the name to itself (Germany, Spain) gives only
-  the Tax ID and the country (`has_details` false).
+  the Tax ID and the country (`has_details` false). Whether the number is registered comes from
+  `isValid`; `userError` only says whether VIES could process the request.
 
 ## 19.0.1.2.2 (2026-10-29)
 
