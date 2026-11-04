@@ -28,8 +28,9 @@ VIES_PREFIXES = {
     "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK", "XI",
 }  # fmt: skip
 VIES_COUNTRY_CODE = {"EL": "GR", "XI": "GB"}
-# The answers of a member state that could not be asked, as opposed to VALID and INVALID
-VIES_FOUND, VIES_NOT_FOUND = "VALID", "INVALID"
+# `userError` says whether VIES processed the request, `isValid` whether the number is registered:
+# any other value (MS_UNAVAILABLE, TIMEOUT, MS_MAX_CONCURRENT_REQ...) means nothing is known
+VIES_PROCESSED = ("VALID", "INVALID")
 # A postal code, alone on its line or between the street and the city: "20122 MILANO MI",
 # "KONYVES KALMAN KÖRÚT 36 1097 BUDAPEST", "ΑΙΟΛΟΥ 86   10559 - ΑΘΗΝΑ", "111 43 STOCKHOLM",
 # "00-950 WARSZAWA", "1012 AB AMSTERDAM", "1000-001 LISBOA", "LV-1050 RIGA", "VLT 1117 VALLETTA"
@@ -339,12 +340,12 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
         if answer is None:
             return {"state": "unavailable"}
         status = answer.get("userError")
-        if status == VIES_NOT_FOUND:
-            return {"state": "not_found"}
-        if status != VIES_FOUND or not answer.get("isValid"):
+        if status not in VIES_PROCESSED:
             # The member state did not answer, or VIES is overloaded: nothing is known
             _logger.info("VIES could not check %s%s: %s", prefix, number, status)
             return {"state": "unavailable"}
+        if not answer.get("isValid"):
+            return {"state": "not_found"}
         values = self._prepare_vies_partner_values(prefix, number, answer)
         return {"state": "found", "partner": values, "has_details": bool(values.get("name"))}
 

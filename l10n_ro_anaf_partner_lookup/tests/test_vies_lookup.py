@@ -83,6 +83,12 @@ class TestViesLookup(TransactionCase):
     def test_not_found(self):
         self.assertEqual(self._vies(vies_answer("INVALID", "---", "---"))[0]["state"], "not_found")
 
+    def test_not_valid_although_processed(self):
+        # `userError` is the state of the request, `isValid` the answer: VALID with isValid false
+        # is a number that is not registered
+        answer = dict(vies_answer("VALID", "---", "---"), isValid=False)
+        self.assertEqual(self._vies(answer)[0]["state"], "not_found")
+
     def test_member_state_busy_is_unavailable(self):
         self.assertEqual(self._vies(vies_answer("MS_MAX_CONCURRENT_REQ", "---", "---"))[0]["state"], "unavailable")
 
