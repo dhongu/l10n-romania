@@ -26,8 +26,8 @@ msgstr ""
 msgid ""
 "<i class=\"fa fa-info-circle me-1\" title=\"Info\"/>\n"
 "                    Romanian companies (a CUI, with or without RO) are filled in from ANAF, without\n"
-"                    IAP credits. The credits are used only for a search by name and for companies\n"
-"                    from other countries."
+"                    IAP credits, and companies from other EU countries from VIES. The credits are used\n"
+"                    only for a search by name and for the companies VIES does not describe."
 msgstr ""
 
 #. module: l10n_ro_partner_autocomplete
@@ -127,4 +127,57 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
 msgid "Yes"
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "%(vat)s is not a VAT number of an EU country."
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Checked against VIES: no change."
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Company data taken from VIES on %(date)s."
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_autocomplete.view_partner_form_anaf_refresh
+msgid "Update from VIES"
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Updated from VIES:"
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES did not answer. Try again in a moment."
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES did not answer: the intra-community status was not checked."
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES: not registered for intra-community operations."
+msgstr ""
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES: valid for intra-community operations."
 msgstr ""
