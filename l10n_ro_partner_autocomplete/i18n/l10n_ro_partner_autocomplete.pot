@@ -26,8 +26,8 @@ msgstr ""
 msgid ""
 "<i class=\"fa fa-info-circle me-1\" title=\"Info\"/>\n"
 "                    Romanian companies (a CUI, with or without RO) are filled in from ANAF, without\n"
-"                    IAP credits. The credits are used only for a search by name and for companies\n"
-"                    from other countries."
+"                    IAP credits, and companies from other EU countries from VIES. The credits are used\n"
+"                    only for a search by name and for the companies VIES does not describe."
 msgstr ""
 
 #. module: l10n_ro_partner_autocomplete

@@ -27,13 +27,13 @@ msgstr "%(vat)s nu este un CUI valid."
 msgid ""
 "<i class=\"fa fa-info-circle me-1\" title=\"Info\"/>\n"
 "                    Romanian companies (a CUI, with or without RO) are filled in from ANAF, without\n"
-"                    IAP credits. The credits are used only for a search by name and for companies\n"
-"                    from other countries."
+"                    IAP credits, and companies from other EU countries from VIES. The credits are used\n"
+"                    only for a search by name and for the companies VIES does not describe."
 msgstr ""
 "<i class=\"fa fa-info-circle me-1\" title=\"Informații\"/>\n"
 "                    Firmele din România (un CUI, cu sau fără RO) se completează din ANAF, fără\n"
-"                    credite IAP. Creditele se folosesc doar la căutarea după nume și pentru firmele\n"
-"                    din alte țări."
+"                    credite IAP, iar firmele din alte țări UE din VIES. Creditele se folosesc doar\n"
+"                    la căutarea după nume și pentru firmele pe care VIES nu le descrie."
 
 #. module: l10n_ro_partner_autocomplete
 #. odoo-python

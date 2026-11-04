@@ -128,9 +128,7 @@ class ResPartner(models.Model):
         l10n_ro_config (OCA) adds one more under the trade register number"""
         arch, view = super()._get_view(view_id, view_type, **options)
         if view_type == "form":
-            for node in arch.xpath(
-                "//div[@name='l10n_ro_vat_subjected_info'] | //label[@for='l10n_ro_vat_subjected']"
-            ):
+            for node in arch.xpath("//div[@name='l10n_ro_vat_subjected_info'] | //label[@for='l10n_ro_vat_subjected']"):
                 node.getparent().remove(node)
         return arch, view
 
@@ -328,6 +326,12 @@ class ResPartner(models.Model):
                     for name, value in result["partner"].items()
                     if name in partner._fields and value and name not in ("vat", "is_company")
                 }
+                # Next to a new street the old street details do not belong; a new city does not
+                # keep the old state, which VIES never gives
+                if values.get("street") and values["street"] != partner.street:
+                    values.setdefault("street2", False)
+                if values.get("city") and values["city"] != partner.city:
+                    values["state_id"] = False
                 changes = partner._l10n_ro_anaf_changes(values)
                 partner.write(values)
             else:

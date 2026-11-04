@@ -137,8 +137,9 @@ românească, deci nu e nevoie de alt modul pentru ele.
 **Setări → Configurări generale → secțiunea Contacte → Completarea automată a partenerului.**
 
 Sub opțiunea standard, modulul adaugă o notă: firmele din România (un CUI, cu sau fără `RO`) se
-completează din ANAF, fără credite IAP; creditele se folosesc doar la căutarea după nume și pentru
-firmele din alte țări. (Nota din setări nu pomenește VIES; firmele din UE sunt tratate la pașii 8–10.)
+completează din ANAF, fără credite IAP, iar firmele din alte țări UE din VIES; creditele se folosesc
+doar la căutarea după nume și pentru firmele pe care VIES nu le descrie (firmele din UE sunt tratate
+la pașii 8–10).
 
 ![Setarea „Completarea automată a partenerului” cu nota despre ANAF](../static/description/01_setari_autocomplete.png)
 
@@ -330,7 +331,8 @@ tip **Companie**, fără firmă-mamă, cu cod fiscal și cu țara într-un stat 
 Faceți clic pe ea.
 
 Odoo rescrie numele și adresa cu ce dă VIES și bifează **Valabil în comunitate**; un câmp pe care
-VIES nu îl dă (ex. **Strada 2**, **Județ**, telefonul) rămâne cum era. Pentru o țară care nu comunică
+VIES nu îl dă (ex. telefonul) rămâne cum era. Lângă o stradă nouă, **Strada 2** veche se golește, iar
+lângă un oraș nou se golește **Județ** (VIES nu dă județul), ca la **Actualizează din ANAF**. Pentru o țară care nu comunică
 datele (Germania, Spania) se actualizează doar bifa. În istoric apare nota **„Actualizat din VIES:”**
 cu fiecare câmp schimbat (vechi → nou) și rândul **„VIES: validă pentru operațiuni
 intracomunitare.”** Dacă nimic nu s-a schimbat, nota spune **„Verificat în VIES: nicio
@@ -344,7 +346,7 @@ operațiuni intracomunitare.”**
 comunitate** bifat; ④ nota **Actualizat din VIES:** din istoric.
 
 **Verificați:** fiecare câmp din notă are valoarea nouă și pe formular; **Valabil în comunitate**
-este bifat. Dacă strada s-a schimbat, verificați **Strada 2**: rămâne cea veche. La un partener
+este bifat. Dacă orașul s-a schimbat, completați **Județ** de mână, unde țara îl cere. La un partener
 care a pierdut validarea VIES, spuneți contabilului: livrările către el nu mai pot fi facturate ca
 livrări intracomunitare scutite.
 
@@ -375,7 +377,7 @@ nume; trimiterea la IAP doar a căutărilor nerecunoscute de ANAF sau VIES ori c
 
 **Ce rămâne manual:** actualizarea partenerilor existenți (**Actualizează din ANAF** / **din VIES**,
 pe rând — nu există o acțiune de actualizare în masă); decizia contabilă la un partener radiat,
-inactiv sau scos din VIES; verificarea duplicatelor; **Strada 2** și **Județ** la firmele din UE.
+inactiv sau scos din VIES; verificarea duplicatelor; **Județ** la firmele din UE care și-au schimbat orașul.
 
 ## 8. Verificări pentru consultant
 
@@ -499,8 +501,6 @@ Regenerare:
   UE, cu **Actualizează din VIES**).
 - Rândul VIES din nota ANAF apare doar la firmele cu **Plătitor TVA** bifat; o firmă înregistrată
   în scopuri de TVA numai pentru operațiuni intracomunitare (art. 317) nu îl are.
-- Nota din **Setări** (pasul 1) încă spune că firmele din alte țări consumă credite; pentru firmele
-  din UE cunoscute de VIES nu mai e cazul.
 - Limitări de spus clientului: nota „Datele firmei au fost preluate din ANAF” apare doar când
   sugestia e aleasă în formularul partenerului, nu și la partenerul creat din câmpul **Client** sau
   cu **Creează**; data din notă e în format ISO (aaaa-ll-zz); modulul nu se instalează împreună cu
