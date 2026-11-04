@@ -18,6 +18,7 @@
                         icon="fa-refresh"
                         invisible="country_code != 'RO'"
                     />
+                    <!-- The EU, and Northern Ireland (XI) for goods: a GB number is not in VIES -->
                     <button
                         name="action_l10n_ro_vies_refresh"
                         type="object"
@@ -25,7 +26,7 @@
                         aria-label="Update from VIES"
                         class="btn btn-link p-0"
                         icon="fa-refresh"
-                        invisible="country_code not in ('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'GR', 'ES', 'FI', 'FR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'SE', 'SI', 'SK')"
+                        invisible="country_code not in ('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'GR', 'ES', 'FI', 'FR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'SE', 'SI', 'SK') and not (country_code == 'GB' and 'XI' in (vat or '').upper())"
                     />
                 </span>
             </xpath>

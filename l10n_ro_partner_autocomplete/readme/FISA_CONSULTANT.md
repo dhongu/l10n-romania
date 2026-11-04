@@ -20,7 +20,10 @@ ANAF. Alegerea ei completează partenerul: tipul **Companie**, denumire, cod fis
 pentru plătitorii de TVA), bifa **Plătitor TVA**, stradă și număr, detalii de adresă, localitate (pentru București,
 sectorul), județ, cod poștal, număr de înregistrare la Registrul Comerțului (NRC) și telefon. Când
 sugestia e aleasă în formularul partenerului (Nume, TVA), istoricul primește o notă că datele vin
-de la ANAF.
+de la ANAF; la o firmă din UE, nota spune că datele vin din VIES, iar **Valabil în comunitate** se
+bifează. La partenerul creat din câmpul **Client** sau cu **Creează** nu apare nota și bifa nu se pune
+de modul: o setează verificarea standard din `base_vat`, dacă e pornită, ori butonul
+**Actualizează din VIES**.
 
 Pe un partener deja existent, butonul **Actualizează din ANAF** (iconița ⟳ din dreapta codului
 fiscal) reîncarcă datele și lasă în istoric lista câmpurilor modificate (valoarea veche → valoarea
@@ -431,6 +434,7 @@ inactiv sau scos din VIES; verificarea duplicatelor; **Județ** la firmele din U
 | *(iconița **Actualizează din ANAF** / **din VIES** lipsește)* | Partenerul e de tip *Persoană*, are firmă-mamă, nu are cod fiscal sau țara nu e România (ANAF), respectiv un stat UE (VIES) | Bifați **Companie**, completați **TVA** și țara |
 | *(sugestie din IAP pentru un cod de TVA UE)* | Cod fără prefixul țării, VIES indisponibil, codul nu e în VIES sau statul nu comunică denumirea (Germania, Spania) | Tastați codul cu prefix (`EL` pentru Grecia); altfel acceptați IAP sau completați manual |
 | *(**Valabil în comunitate** nu se vede)* | **Verificare cod de TVA** e oprită pe companie, sau partenerul e din România | Porniți setarea din secțiunea 5; pentru firmele românești, citiți rândul VIES din notă |
+| *(firma din UE creată din **Client** fără **Valabil în comunitate** bifat și fără nota VIES)* | Sugestia VIES aleasă din câmpul **Client** al unei oferte sau facturi, ori cu **Creează**: nota și bifa se pun doar la alegerea în formularul partenerului | Deschideți partenerul și apăsați iconița ⟳ **Actualizează din VIES** |
 | „… nu este un cod de TVA dintr-o țară UE.” | La **Actualizează din VIES**, codul fiscal nu are prefixul unui stat UE sau cifrele de control greșite | Corectați **TVA** (cu prefixul țării) |
 | „VIES nu a răspuns. Încercați din nou peste puțin timp.” | Serviciul VIES sau statul membru nu răspunde | Reîncercați mai târziu |
 | „VIES nu a răspuns: statutul intracomunitar nu a fost verificat.” (în notă) | VIES nu a răspuns în 5 secunde la verificarea unei firme românești | Verificați mai târziu cu **Actualizează din ANAF** |
@@ -501,7 +505,8 @@ Regenerare:
   UE, cu **Actualizează din VIES**).
 - Rândul VIES din nota ANAF apare doar la firmele cu **Plătitor TVA** bifat; o firmă înregistrată
   în scopuri de TVA numai pentru operațiuni intracomunitare (art. 317) nu îl are.
-- Limitări de spus clientului: nota „Datele firmei au fost preluate din ANAF” apare doar când
-  sugestia e aleasă în formularul partenerului, nu și la partenerul creat din câmpul **Client** sau
-  cu **Creează**; data din notă e în format ISO (aaaa-ll-zz); modulul nu se instalează împreună cu
+- Limitări de spus clientului: nota „Datele firmei au fost preluate din ANAF” sau „… din VIES” și,
+  la o firmă din UE, bifa **Valabil în comunitate** se pun doar când sugestia e aleasă în formularul
+  partenerului, nu și la partenerul creat din câmpul **Client** sau cu **Creează** (acolo bifa o pune
+  verificarea standard `base_vat`, dacă e pornită, ori **Actualizează din VIES**); data din notă e în format ISO (aaaa-ll-zz); modulul nu se instalează împreună cu
   `l10n_ro_partner_create_by_vat` (OCA).
