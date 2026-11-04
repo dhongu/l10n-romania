@@ -285,8 +285,8 @@ intracomunitară cu codul ei românesc — spuneți contabilului.
 
 Pe un partener nou, tastați în **TVA** (sau în nume) codul de TVA al firmei, **cu prefixul țării**
 (în captură, `IT00743110157`, o firmă din Italia). Prefixul este cel din VIES: codul ISO al țării,
-cu excepția Greciei (`EL`; `XI` pentru Irlanda de Nord este acceptat la sugestie, dar butonul de
-actualizare nu apare pentru Regatul Unit). Cifrele de control ale țării se verifică înainte ca VIES să fie
+cu excepția Greciei (`EL`), iar `XI` pentru Irlanda de Nord (rămasă în VIES pentru bunuri). Un cod
+`GB` nu este în VIES. Cifrele de control ale țării se verifică înainte ca VIES să fie
 întrebat.
 
 Sub câmp apare sugestia găsită în VIES: **denumirea** și **localitatea** firmei (ex. *MOTOROLA
@@ -330,7 +330,8 @@ alt format.
 **Facturare → Furnizori → Furnizori →** deschideți o firmă dintr-o țară UE, cu codul de TVA cu
 prefix (în captură, *Duna Trade*, din Ungaria, cu o adresă veche și **Valabil în comunitate**
 nebifat). Iconița ⟳ **Actualizează din VIES** stă în dreapta codului fiscal, pentru un partener de
-tip **Companie**, fără firmă-mamă, cu cod fiscal și cu țara într-un stat UE, alta decât România.
+tip **Companie**, fără firmă-mamă, cu cod fiscal și cu țara într-un stat UE, alta decât România,
+sau cu țara Regatul Unit și un cod fiscal `XI` (Irlanda de Nord).
 Faceți clic pe ea.
 
 Odoo rescrie numele și adresa cu ce dă VIES și bifează **Valabil în comunitate**; un câmp pe care
@@ -418,7 +419,8 @@ inactiv sau scos din VIES; verificarea duplicatelor; **Județ** la firmele din U
       comunitate**, cu nota „Datele firmei au fost preluate din VIES la …”.
 - [ ] Un cod de TVA din Germania sau Spania (VIES nu dă denumirea) și un cod pe care VIES nu îl
       cunoaște merg la IAP.
-- [ ] Iconița ⟳ **Actualizează din VIES** apare pe o firmă cu țara în UE (nu România); după clic,
+- [ ] Iconița ⟳ **Actualizează din VIES** apare pe o firmă cu țara în UE (nu România) și pe o firmă din
+      Regatul Unit cu cod `XI`, nu și cu cod `GB`; după clic,
       nota listează câmpurile schimbate, iar **Valabil în comunitate** urmează răspunsul VIES.
 - [ ] Căutarea după o denumire (ex. „Forest”) și un cod fiscal din afara UE merg în continuare la
       IAP (alegerea unei sugestii IAP consumă un credit).
@@ -431,7 +433,7 @@ inactiv sau scos din VIES; verificarea duplicatelor; **Județ** la firmele din U
 |---|---|---|
 | *(nicio sugestie la tastarea CUI-ului)* | CUI cu cifra de control greșită; mai puțin de 3 caractere; ANAF nu are firma | Verificați CUI-ul pe certificatul de înregistrare |
 | *(sugestii din IAP în loc de ANAF / credite consumate)* | CUI fără `RO` cu altă țară decât România în câmpul **Țară** al partenerului (sau, dacă e gol, al companiei), ANAF indisponibil, ori s-a apăsat **Căutare la nivel mondial** | Tastați CUI-ul cu `RO`, setați România (sau goliți) câmpul **Țară** al partenerului, ori setați țara companiei România |
-| *(iconița **Actualizează din ANAF** / **din VIES** lipsește)* | Partenerul e de tip *Persoană*, are firmă-mamă, nu are cod fiscal sau țara nu e România (ANAF), respectiv un stat UE (VIES) | Bifați **Companie**, completați **TVA** și țara |
+| *(iconița **Actualizează din ANAF** / **din VIES** lipsește)* | Partenerul e de tip *Persoană*, are firmă-mamă, nu are cod fiscal sau țara nu e România (ANAF), respectiv un stat UE ori Regatul Unit cu cod `XI` (VIES) | Bifați **Companie**, completați **TVA** și țara |
 | *(sugestie din IAP pentru un cod de TVA UE)* | Cod fără prefixul țării, VIES indisponibil, codul nu e în VIES sau statul nu comunică denumirea (Germania, Spania) | Tastați codul cu prefix (`EL` pentru Grecia); altfel acceptați IAP sau completați manual |
 | *(**Valabil în comunitate** nu se vede)* | **Verificare cod de TVA** e oprită pe companie, sau partenerul e din România | Porniți setarea din secțiunea 5; pentru firmele românești, citiți rândul VIES din notă |
 | *(firma din UE creată din **Client** fără **Valabil în comunitate** bifat și fără nota VIES)* | Sugestia VIES aleasă din câmpul **Client** al unei oferte sau facturi, ori cu **Creează**: nota și bifa se pun doar la alegerea în formularul partenerului | Deschideți partenerul și apăsați iconița ⟳ **Actualizează din VIES** |
