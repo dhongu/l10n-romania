@@ -453,3 +453,14 @@ class TestPartnerAutocomplete(TransactionCase):
         arch = arch.decode() if isinstance(arch, bytes) else arch
         self.assertEqual(arch.count('name="l10n_ro_vat_subjected"'), 1)
         self.assertNotIn("l10n_ro_vat_subjected_info", arch)
+
+    def test_refresh_from_vies_clears_old_street_details_and_state(self):
+        it = self.env.ref("base.it")
+        state = self.env["res.country.state"].search([("country_id", "=", it.id)], limit=1)
+        partner = self._eu_partner(street="Via Vecchia 1", street2="Scala B", city="Roma", state_id=state.id)
+        self.vies.return_value = vies_answer()
+        partner.action_l10n_ro_vies_refresh()
+        self.assertEqual(partner.street, "Largo Francesco Richini 6")
+        self.assertFalse(partner.street2)
+        self.assertEqual(partner.city, "Milano Mi")
+        self.assertFalse(partner.state_id)

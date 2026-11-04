@@ -10,8 +10,9 @@
                     <i class="oi oi-filled me-1" data-icon="info" title="Info" />
                     Romanian companies are filled in from ANAF, without IAP credits: type the CUI
                     in the name or the Company ID, with or without RO, or in the Tax ID with RO.
-                    Credits are used only for a company chosen from a search by name and for
-                    companies from other countries.
+                    Companies from other EU countries are filled in from VIES, by their VAT number.
+                    Credits are used only for a company chosen from a search by name and for the
+                    companies VIES does not describe.
                 </div>
             </setting>
         </field>

@@ -346,6 +346,12 @@ class ResPartner(models.Model):
                     for name, value in result["partner"].items()
                     if name in partner._fields and value and name not in ("vat", "is_company")
                 }
+                # Next to a new street the old street details do not belong; a new city does not
+                # keep the old state, which VIES never gives
+                if values.get("street") and values["street"] != partner.street:
+                    values.setdefault("street2", False)
+                if values.get("city") and values["city"] != partner.city:
+                    values["state_id"] = False
                 changes = partner._l10n_ro_anaf_changes(values)
                 partner.write(values)
             else:
