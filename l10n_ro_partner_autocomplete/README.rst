@@ -32,19 +32,35 @@ of a quotation or an invoice, the customer form opened from the Point of
 Sale — shows the company found at ANAF. Choosing it fills the partner
 in:
 
-- name, Tax ID (with ``RO`` only for a VAT payer), street with its
-  number, address details, locality, county, postal code, trade register
-  number and phone;
+- name, Tax ID (with ``RO`` only for a VAT payer), VAT payer flag,
+  street with its number, address details, locality, county, postal
+  code, trade register number and phone;
 - for Bucharest, the sector as the locality, as e-Factura requires;
 - a note in the chatter that the data was taken from ANAF, with the
   date.
 
+**Companies from other EU countries, from VIES.** A VAT number with the
+prefix of another EU country (``IT00743110157``, ``HU10773381``) is
+looked up in VIES, the free service of the European Commission: the
+name, street, postal code, city and country are filled in, with a note
+in the chatter, and no IAP credit is used. When VIES does not answer,
+does not know the number or the country keeps the name to itself
+(Germany, Spain), IAP is asked as before. The update button next to the
+Tax ID of such a company reloads the data from VIES and sets
+*Intra-Community Valid*.
+
+**VIES for a Romanian company.** For a VAT payer, the note after the
+ANAF data says whether the company is in VIES, that is registered for
+intra-community operations; a VAT payer is not always.
+
 **Update from ANAF.** On a Romanian company with a Tax ID, the **Update
-from ANAF** button below the Tax ID reloads the data from ANAF: name,
-address, Tax ID and trade register number are rewritten, a phone already
-on the partner is kept. The chatter lists every field changed, with its
-old and new value, and says when ANAF lists the company as struck off or
-inactive.
+from ANAF** button (the refresh icon) next to the Tax ID reloads the
+data from ANAF: name, address, Tax ID and trade register number are
+rewritten, a phone already on the partner is kept. The chatter lists
+every field changed, with its old and new value, and says when ANAF
+lists the company as struck off or inactive. With
+``l10n_ro_anaf_partner``, the *VAT on Payment (RTVAI)* flag is filled in
+and updated the same way.
 
 **A partner created with its CUI as the name.** Typing a CUI in a field
 such as *Customer* and choosing *Create*, or importing partners whose
@@ -52,6 +68,12 @@ name is a CUI, fills them in from ANAF too. Values given explicitly are
 kept; a partner that already has a Tax ID, a contact person or a partner
 from another country is left as it is. The ``l10n_ro_anaf_no_autofill``
 context key turns it off, for instance for a bulk import.
+
+**VAT payer.** A Romanian company shows **VAT Payer** on its form,
+filled in from ANAF together with the rest of the data. The partner also
+keeps its Tax ID without the country prefix. Both fields have the names
+used by the other Romanian localization modules, so no other module is
+needed for them.
 
 **City and postal code.** With the list of Romanian cities
 (``l10n_ro_city``), the city is chosen from it as well. Choosing a city
@@ -62,12 +84,18 @@ No IAP credit is used for a Romanian CUI: neither the search nor the
 enrichment goes to IAP.
 
 The CUI is recognised with or without ``RO``. The rest is left to IAP as
-before: a search by company name, a company from another country, and a
-Romanian CUI when ANAF does not answer.
+before: a search by company name, a company from outside the EU, a
+company from the EU that VIES does not describe, and a Romanian CUI when
+ANAF does not answer.
 
 The **Enrich** action of the partner list and form (Odoo 20) asks ANAF
 as well for a Romanian company, by its Tax ID or its Company ID, and
-fills only the fields the partner does not have yet.
+VIES for a company from another EU country, and fills only the fields
+the partner does not have yet.
+
+*Intra-Community Valid* comes with the standard ``l10n_eu_account_vies``
+module (installed by **Verify VAT Numbers** in the accounting settings);
+without it, the VIES answer is only written in the chatter.
 
 **Table of contents**
 
@@ -76,6 +104,64 @@ fills only the fields the partner does not have yet.
 
 Changelog
 =========
+
+20.0.1.5.0 (2026-11-04)
+-----------------------
+
+- A VAT number of another EU country is answered from VIES, without IAP
+  credits: name, street, postal code, city and country. IAP is asked as
+  before when VIES does not answer, does not know the number, or the
+  member state keeps the name to itself (Germany, Spain).
+- **Update from VIES** on a company from another EU country rewrites the
+  name and the address VIES gives, keeps what it does not give, and sets
+  *Intra-Community Valid*.
+- For a Romanian VAT payer the note after the ANAF data, and the one
+  after **Update from ANAF**, say whether the company is in VIES, that
+  is registered for intra-community operations.
+- The update buttons show only their icon, in the row of the Tax ID
+  instead of a whole row below it; the name is in the tooltip.
+- The **Enrich** action fills a partner with a VAT number of another EU
+  country from VIES too, without IAP credits, when VIES gives the name
+  and the address.
+- *Intra-Community Valid* is the field of ``l10n_eu_account_vies`` in
+  20.0 (``base_vat`` in 19.0): it is set only when that module is
+  installed (**Verify VAT Numbers** in the accounting settings).
+- The Apps banner and the summary of the manifest name VIES next to
+  ANAF.
+- **Update from VIES** is also shown for a United Kingdom partner with
+  an ``XI`` number (Northern Ireland, which stays in VIES for goods); a
+  ``GB`` number is not in VIES.
+- **Update from VIES** clears the old street details next to a new
+  street and the old state next to a new city, as **Update from ANAF**
+  does.
+- With ``l10n_ro_config`` (OCA) installed, the partner form showed **VAT
+  Payer** twice: the box this module puts with the Tax ID and the one
+  ``l10n_ro_config`` adds under the trade register number. The
+  ``l10n_ro_config`` one is dropped from the form.
+
+20.0.1.4.1 (2026-11-03)
+-----------------------
+
+- **Update from ANAF** no longer clears the street, the street details
+  or the postal code when ANAF has none for the company and the city and
+  county are the partner's: the street is required on an e-Factura
+  invoice (CIUS-RO). When ANAF gives another locality they are still
+  cleared, so the old street does not stay on the new city; next to a
+  new street from ANAF the old street details and postal code are
+  cleared too.
+
+20.0.1.4.0 (2026-11-03)
+-----------------------
+
+- The partner has the Romanian VAT fields of its own, so it no longer
+  needs ``l10n_ro_config`` for them: **VAT Payer**
+  (``l10n_ro_vat_subjected``), shown on the form of a Romanian company
+  and filled in from ANAF, and ``l10n_ro_vat_number``, the Tax ID
+  without the country prefix. The names and types are those of
+  ``l10n_ro_config`` and ``l10n_ro_anaf_partner``, so the data already
+  there is kept.
+- The chatter note of **Update from ANAF** shows a check box as *Yes* /
+  *No*, not as *True* / *False*.
 
 20.0.1.3.1 (2026-10-29)
 -----------------------

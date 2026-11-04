@@ -2,8 +2,10 @@
 # See README.rst file on addons root folder for license details
 #
 # Capturi de ecran pentru fișa „Completarea partenerilor din ANAF", în RO, pe planul RO.
-# Serviciul ANAF e simulat (patch pe `l10n.ro.anaf.partner.lookup._request`), deci capturile nu
-# depind de rețea și nu consumă credite IAP: răspunsurile sunt în forma reală a serviciului ANAF v9.
+# Serviciile ANAF și VIES sunt simulate (patch pe `l10n.ro.anaf.partner.lookup._request` și
+# `_vies_request`), la fel verificarea VIES standard a `l10n_eu_account_vies` (prin IAP), deci capturile
+# nu depind de rețea și nu consumă credite IAP: răspunsurile sunt în forma reală a serviciilor ANAF v9
+# și VIES. Bifa „Intra-Community Valid" (pașii 11–12) cere `l10n_eu_account_vies` instalat în bază.
 #
 # Rulare:
 #   ./odoo/odoo-bin -c odoo.conf -d <db> -u l10n_ro_partner_autocomplete \
@@ -15,6 +17,7 @@ from odoo.tests import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.addons.l10n_ro_anaf_partner_lookup.tests.test_anaf_partner_lookup import CUI, REQUEST_PATH, anaf_result
+from odoo.addons.l10n_ro_anaf_partner_lookup.tests.test_vies_lookup import VIES_PATH, VIES_VAT, vies_answer
 
 try:
     from odoo.addons.l10n_ro_doc_screenshots.tests.screenshot_case import ScreenshotCase
@@ -59,6 +62,28 @@ def _anaf_answer(cui, timeout=None):
         "dcod_Postal": zip_code,
     }
     return answer
+
+
+#: verificarea VIES standard a l10n_eu_account_vies (prin IAP), la salvarea unui cod de TVA din altă țară UE
+VIES_IAP_PATH = "odoo.addons.l10n_eu_account_vies.models.res_partner.ResPartner._check_vies_validity_iap"
+
+#: firma din altă țară UE, introdusă demult, de actualizat din VIES (pasul 12)
+VIES_VAT_REFRESH = "HU10773381"
+VIES_COMPANIES = {
+    VIES_VAT: vies_answer(),
+    VIES_VAT_REFRESH: vies_answer(name="DUNA TRADE KFT", address="KONYVES KALMAN KÖRÚT 36 1097 BUDAPEST"),
+}
+
+
+def _vies_answer(prefix, number, timeout=None):
+    """Răspunsul simulat al VIES: firmele de mai sus și firmele românești plătitoare de TVA ale
+    ANAF-ului simulat; orice alt cod e neînregistrat"""
+    vat = prefix + number
+    if vat in VIES_COMPANIES:
+        return VIES_COMPANIES[vat]
+    if prefix == "RO" and (number == CUI or number in COMPANIES):
+        return vies_answer(name="---", address="---")
+    return vies_answer("INVALID", "---", "---")
 
 
 #: JS care oprește salvarea automată a formularului la plecarea de pe pagină: un CUI doar tastat
@@ -130,8 +155,33 @@ class TestPartnerAutocompleteScreenshots(AccountTestInvoicingCommon, ScreenshotC
             ]
         )
 
+        # Pasul 12: o firmă din Ungaria, cu adresa veche; „Intra-Community Valid" există doar cu
+        # verificarea VIES pornită pe companie (setarea standard din Contabilitate, l10n_eu_account_vies)
+        with cls._vies_iap():
+            company.vat_check_vies = True
+            cls.eu_partner = Partner.create(
+                {
+                    "name": "Duna Trade",
+                    "vat": VIES_VAT_REFRESH,
+                    "country_id": env.ref("base.hu").id,
+                    "city": "Budapesta",
+                    "street": "Váci út 1",
+                    "zip": "1062",
+                    "supplier_rank": 1,
+                }
+            )
+            # vies_valid (calculat, stocat) se calculează la flush: tot sub patch
+            env.flush_all()
+
+    @classmethod
+    def _vies_iap(cls):
+        return patch(VIES_IAP_PATH, return_value="invalid")
+
     def _anaf(self):
         return patch(REQUEST_PATH, side_effect=_anaf_answer)
+
+    def _vies(self):
+        return patch(VIES_PATH, side_effect=_vies_answer)
 
     def test_capture_fise(self):
         settings = self.env.ref("base_setup.action_general_configuration")
@@ -140,7 +190,12 @@ class TestPartnerAutocompleteScreenshots(AccountTestInvoicingCommon, ScreenshotC
         new_partner = f"action={customers.id}&model=res.partner&view_type=form"
         name_input = "div[name='name'] input"
         suggestion = ".partner_autocomplete_dropdown_char"
-        with self._anaf():
+        vat_input = "div[name='vat'] input"
+        refresh = "button[name='action_l10n_ro_anaf_refresh']"
+        vies_refresh = "button[name='action_l10n_ro_vies_refresh']"
+        vendors = self.env.ref("account.res_partner_action_supplier")
+        eu_partner = f"action={vendors.id}&id={self.eu_partner.id}&model=res.partner&view_type=form"
+        with self._anaf(), self._vies(), self._vies_iap():
             self.capture_screenshots(
                 [
                     # 1. Setări generale: nota sub „Partner Autocomplete"
@@ -218,20 +273,20 @@ class TestPartnerAutocompleteScreenshots(AccountTestInvoicingCommon, ScreenshotC
                         "highlight": ["div[name='partner_id']", ".partner_autocomplete_dropdown_many2one"],
                         "settle": 1500,
                     },
-                    # 6. Firmă existentă: linkul „Actualizează din ANAF" sub codul fiscal
+                    # 6. Firmă existentă: butonul „Actualizează din ANAF" (iconița) lângă codul fiscal
                     {
                         "url": f"action={customers.id}&id={self.old_partner.id}&model=res.partner&view_type=form",
                         "name": "06_buton_actualizare_anaf.png",
-                        "wait": "button[name='action_l10n_ro_anaf_refresh']",
-                        "highlight": [".o_address_format", "button[name='action_l10n_ro_anaf_refresh']"],
+                        "wait": refresh,
+                        "highlight": [".o_address_format", refresh, "div[name='l10n_ro_vat_subjected']"],
                         "settle": 1500,
                     },
                     # 7. După actualizare: datele noi și lista modificărilor în istoric
                     {
                         "url": f"action={customers.id}&id={self.old_partner.id}&model=res.partner&view_type=form",
                         "name": "07_actualizare_istoric.png",
-                        "wait": "button[name='action_l10n_ro_anaf_refresh']",
-                        "click_btn": "button[name='action_l10n_ro_anaf_refresh']",
+                        "wait": refresh,
+                        "click_btn": refresh,
                         "wait_after": ".o-mail-Message:has-text('ANAF')",
                         "hide_chatter": False,
                         "highlight": [
@@ -279,6 +334,47 @@ class TestPartnerAutocompleteScreenshots(AccountTestInvoicingCommon, ScreenshotC
                         "wait": ".o_form_view",
                         "highlight": ["div[name='name']", ".o_address_format", "div[name='phone']"],
                         "settle": 1500,
+                    },
+                    # 10. Partener nou: codul de TVA al unei firme din Italia, tastat în TVA
+                    {
+                        "url": new_partner,
+                        "name": "10_sugestie_vies.png",
+                        "wait": vat_input,
+                        "eval": _type_js(vat_input, VIES_VAT),
+                        "eval_wait": 500,
+                        "highlight": [vat_input, suggestion],
+                        "settle": 1500,
+                    },
+                    # 11. Sugestia VIES aleasă din nume: firma completată, „Intra-Community Valid", nota VIES
+                    {
+                        "url": new_partner,
+                        "name": "11_partener_ue_completat.png",
+                        "wait": name_input,
+                        "eval": _type_js(name_input, VIES_VAT, pick=suggestion),
+                        "eval_wait": 1500,
+                        "hide_chatter": False,
+                        "highlight": [
+                            "div[name='name']",
+                            ".o_address_format",
+                            "#vat_div",
+                            ".o-mail-Message:has-text('preluate din VIES')",
+                        ],
+                        "settle": 2000,
+                    },
+                    # 12. Firmă UE existentă: „Actualizează din VIES", adresa nouă și nota în istoric
+                    {
+                        "url": eu_partner,
+                        "name": "12_actualizare_vies.png",
+                        "wait": vies_refresh,
+                        "click_btn": vies_refresh,
+                        "wait_after": ".o-mail-Message:has-text('Actualizat din VIES')",
+                        "hide_chatter": False,
+                        "highlight": [
+                            "#vat_div",
+                            ".o_address_format",
+                            ".o-mail-Message:has-text('Actualizat din VIES')",
+                        ],
+                        "settle": 2500,
                     },
                 ],
                 viewport=(1600, 950),

@@ -1,3 +1,27 @@
+## 20.0.1.5.0 (2026-11-04)
+
+- A VAT number of another EU country is answered from VIES, without IAP credits: name, street,
+  postal code, city and country. IAP is asked as before when VIES does not answer, does not know
+  the number, or the member state keeps the name to itself (Germany, Spain).
+- **Update from VIES** on a company from another EU country rewrites the name and the address VIES
+  gives, keeps what it does not give, and sets *Intra-Community Valid*.
+- For a Romanian VAT payer the note after the ANAF data, and the one after **Update from ANAF**,
+  say whether the company is in VIES, that is registered for intra-community operations.
+- The update buttons show only their icon, in the row of the Tax ID instead of a whole row below
+  it; the name is in the tooltip.
+- The **Enrich** action fills a partner with a VAT number of another EU country from VIES too, without
+  IAP credits, when VIES gives the name and the address.
+- *Intra-Community Valid* is the field of `l10n_eu_account_vies` in 20.0 (`base_vat` in 19.0): it is
+  set only when that module is installed (**Verify VAT Numbers** in the accounting settings).
+- The Apps banner and the summary of the manifest name VIES next to ANAF.
+- **Update from VIES** is also shown for a United Kingdom partner with an `XI` number (Northern
+  Ireland, which stays in VIES for goods); a `GB` number is not in VIES.
+- **Update from VIES** clears the old street details next to a new street and the old state next
+  to a new city, as **Update from ANAF** does.
+- With `l10n_ro_config` (OCA) installed, the partner form showed **VAT Payer** twice: the box this
+  module puts with the Tax ID and the one `l10n_ro_config` adds under the trade register number.
+  The `l10n_ro_config` one is dropped from the form.
+
 ## 20.0.1.4.1 (2026-11-03)
 
 - **Update from ANAF** no longer clears the street, the street details or the postal code
