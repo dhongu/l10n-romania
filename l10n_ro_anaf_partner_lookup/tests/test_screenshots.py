@@ -5,7 +5,7 @@
 #
 # Modulul nu are ecran propriu: capturile arată parametrii de sistem opționali și partenerii
 # creați din valorile întoarse de `lookup`, cum îi creează modulele care îl folosesc. Răspunsul
-# ANAF este simulat, deci rularea nu depinde de serviciul ANAF. Pe 19.0, ID Companie
+# ANAF și cel al VIES sunt simulate, deci rularea nu depinde de serviciile ANAF și VIES. Pe 19.0, ID Companie
 # (company_registry, calculat de l10n_ro din TVA) stă în tabul „Vânzări & Achiziții”.
 #
 # Rulare — RESTRÂNSĂ LA CLASĂ, altfel se rescriu capturile tuturor modulelor cu test de fișe:
@@ -17,6 +17,7 @@ from unittest.mock import patch
 from odoo.tests import tagged
 
 from .test_anaf_partner_lookup import REQUEST_PATH
+from .test_vies_lookup import VIES_PATH, VIES_VAT, vies_answer
 
 try:
     from odoo.addons.l10n_ro_doc_screenshots.tests.screenshot_case import ScreenshotCase
@@ -30,6 +31,12 @@ const style = document.createElement("style");
 style.textContent = ".o_form_view [data-fise-badge] { width: 24px !important; min-width: 24px !important;"
     + " max-width: none !important; padding: 0 !important; }";
 document.head.appendChild(style);
+"""
+
+# butoanele de actualizare ale modulului l10n_ro_partner_autocomplete, dacă e instalat în bază: nu țin
+# de acest modul
+HIDE_REFRESH = """
+document.querySelectorAll("button[name^='action_l10n_ro_']").forEach((b) => { b.style.display = "none"; });
 """
 
 PARTNER_FIELDS = [
@@ -74,6 +81,11 @@ class TestAnafPartnerLookupScreenshots(ScreenshotCase or object):
         params = env["ir.config_parameter"].sudo()
         params.set_param("l10n_ro_anaf_partner_lookup.url", "https://webservicesp.anaf.ro/api/PlatitorTvaRest/v9/tva")
         params.set_param("l10n_ro_anaf_partner_lookup.timeout", "10")
+        params.set_param(
+            "l10n_ro_anaf_partner_lookup.vies_url",
+            "https://ec.europa.eu/taxation_customs/vies/rest-api/ms/{country}/vat/{number}",
+        )
+        params.set_param("l10n_ro_anaf_partner_lookup.vies_timeout", "10")
         cls.params_action = env["ir.actions.act_window"].create(
             {
                 "name": "Parametri sistem",
@@ -128,11 +140,16 @@ class TestAnafPartnerLookupScreenshots(ScreenshotCase or object):
             cls.office_result = lookup.lookup("RO 12345674")
         with patch(REQUEST_PATH, return_value=bucharest_answer):
             cls.bucharest_result = lookup.lookup("45678900")
+        # Firmă din Italia, după codul de TVA intracomunitar: VIES dă denumirea și adresa pe două rânduri
+        with patch(VIES_PATH, return_value=vies_answer()):
+            cls.vies_result = lookup.vies_lookup(VIES_VAT)
         assert cls.office_result["state"] == "found" and cls.bucharest_result["state"] == "found"
+        assert cls.vies_result["state"] == "found"
         # limba nu vine de la ANAF: o fixăm doar ca formularul să nu arate „English (US)"
         lang = {"lang": "ro_RO"} if env["res.lang"].search_count([("code", "=", "ro_RO")]) else {}
         cls.office_partner = env["res.partner"].create({**cls.office_result["partner"], **lang})
         cls.bucharest_partner = env["res.partner"].create({**cls.bucharest_result["partner"], **lang})
+        cls.vies_partner = env["res.partner"].create({**cls.vies_result["partner"], **lang})
         env.flush_all()
 
     def test_capture_fise(self):
@@ -168,6 +185,21 @@ class TestAnafPartnerLookupScreenshots(ScreenshotCase or object):
                     "click_tab": "Vânzări & Achiziții",
                     "highlight": ["div[name='vat']", "div[name='company_registry']"],
                     "eval": SHOW_BADGES,
+                    "settle": 2000,
+                },
+                {
+                    # firmă din altă țară UE, din VIES: adresa liberă împărțită în stradă, cod poștal, oraș
+                    "url": f"id={self.vies_partner.id}&model=res.partner&view_type=form",
+                    "name": "05_firma_ue_vies.png",
+                    "wait": ".o_form_view",
+                    "highlight": [
+                        "div[name='vat']",
+                        "div[name='street']",
+                        "div[name='zip']",
+                        "div[name='city']",
+                        "div[name='country_id']",
+                    ],
+                    "eval": SHOW_BADGES + HIDE_REFRESH,
                     "settle": 2000,
                 },
             ]
