@@ -5,6 +5,7 @@ from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.l10n_ro_anaf_partner_lookup.tests.test_anaf_partner_lookup import CUI, REQUEST_PATH, anaf_result
+from odoo.addons.l10n_ro_anaf_partner_lookup.tests.test_vies_lookup import VIES_PATH, VIES_VAT, vies_answer
 
 IAP_PATH = (
     "odoo.addons.partner_autocomplete.models.iap_autocomplete_api.IapAutocompleteApi._request_partner_autocomplete"
@@ -19,6 +20,11 @@ class TestPartnerAutocomplete(TransactionCase):
         cls.ro = cls.env.ref("base.ro")
         cls.be = cls.env.ref("base.be")
         cls.Partner = cls.env["res.partner"]
+
+    def setUp(self):
+        super().setUp()
+        # No test goes to VIES: unless a test says otherwise, VIES does not answer
+        self.vies = self.startPatcher(patch(VIES_PATH, return_value=None))
 
     def _iap(self):
         """IAP must not be asked about a Romanian CUI"""
@@ -292,3 +298,123 @@ class TestPartnerAutocomplete(TransactionCase):
         self.assertEqual(partner.l10n_ro_vat_number, CUI)
         partner.vat = False
         self.assertFalse(partner.l10n_ro_vat_number)
+
+    # -- VIES -------------------------------------------------------------
+
+    def test_eu_vat_from_vies_without_iap(self):
+        self.vies.return_value = vies_answer()
+        with self._iap():
+            suggestions = self.Partner.autocomplete_by_vat(VIES_VAT, self.ro.id)
+        self.assertEqual(len(suggestions), 1)
+        suggestion = suggestions[0]
+        self.assertEqual(suggestion["entity_type"], "l10n_ro_vies")
+        self.assertEqual(suggestion["name"], "MOTOROLA SOLUTIONS ITALIA SRL")
+        self.assertEqual(suggestion["country_id"]["id"], self.env.ref("base.it").id)
+        self.assertEqual(suggestion["city"], "Milano Mi")
+        with self._iap():
+            data = self.Partner.with_context(enriched_company_data=suggestion).enrich_by_duns(False)
+        self.assertEqual(data["zip"], "20122")
+
+    def test_eu_vat_without_details_goes_to_iap(self):
+        self.vies.return_value = vies_answer(name="---", address="---")
+        with patch(IAP_PATH, return_value=({"data": []}, False)) as iap:
+            self.Partner.autocomplete_by_vat("DE811569869", self.ro.id)
+        iap.assert_called_once()
+
+    def test_eu_vat_vies_down_goes_to_iap(self):
+        with patch(IAP_PATH, return_value=({"data": []}, False)) as iap:
+            self.Partner.autocomplete_by_vat(VIES_VAT, self.ro.id)
+        iap.assert_called_once()
+
+    def test_name_like_a_vat_number_not_asked_at_vies(self):
+        with patch(IAP_PATH, return_value=({"data": []}, False)):
+            self.Partner.autocomplete_by_name("Delta 2000", self.ro.id)
+        self.vies.assert_not_called()
+
+    def test_romanian_cui_not_asked_at_vies_for_suggestion(self):
+        with patch(REQUEST_PATH, return_value=anaf_result()), self._iap():
+            self.Partner.autocomplete_by_vat("RO" + CUI, self.ro.id)
+        self.vies.assert_not_called()
+
+    def test_message_after_save_from_anaf_has_vies_status(self):
+        partner = self._partner(l10n_ro_vat_subjected=True)
+        self.vies.return_value = vies_answer(name="FOREST AND BIOMASS", address="---")
+        partner.enrich_company_message_post({"entity_type": "l10n_ro_anaf"})
+        body = partner.message_ids[0].body
+        self.assertIn("ANAF", body)
+        self.assertIn("valid for intra-community operations", body)
+
+    def test_non_payer_not_asked_at_vies(self):
+        partner = self._partner(vat=CUI, l10n_ro_vat_subjected=False)
+        partner.enrich_company_message_post({"entity_type": "l10n_ro_anaf"})
+        self.vies.assert_not_called()
+
+    def test_refresh_from_anaf_says_not_in_vies(self):
+        partner = self._partner()
+        self.vies.return_value = vies_answer("INVALID", "---", "---")
+        with patch(REQUEST_PATH, return_value=anaf_result()):
+            partner.action_l10n_ro_anaf_refresh()
+        self.assertIn("not registered for intra-community operations", partner.message_ids[0].body)
+
+    def _eu_partner(self, **vals):
+        values = {
+            "name": "Motorola Vechi",
+            "is_company": True,
+            "vat": VIES_VAT,
+            "country_id": self.env.ref("base.it").id,
+        }
+        values.update(vals)
+        return self.Partner.create(values)
+
+    def test_message_after_save_from_vies(self):
+        partner = self._eu_partner()
+        partner.enrich_company_message_post({"entity_type": "l10n_ro_vies"})
+        self.assertIn("VIES", partner.message_ids[0].body)
+        if "vies_valid" in partner._fields:
+            self.assertTrue(partner.vies_valid)
+        self.vies.assert_not_called()
+
+    def test_refresh_from_vies(self):
+        partner = self._eu_partner(street="Via Vecchia 1")
+        self.vies.return_value = vies_answer()
+        partner.action_l10n_ro_vies_refresh()
+        self.assertEqual(partner.name, "MOTOROLA SOLUTIONS ITALIA SRL")
+        self.assertEqual(partner.street, "Largo Francesco Richini 6")
+        self.assertEqual(partner.zip, "20122")
+        body = partner.message_ids[0].body
+        self.assertIn("Via Vecchia 1", body)
+        self.assertIn("valid for intra-community operations", body)
+        if "vies_valid" in partner._fields:
+            self.assertTrue(partner.vies_valid)
+
+    def test_refresh_from_vies_keeps_what_vies_does_not_know(self):
+        partner = self._eu_partner(
+            name="Siemens", vat="DE811569869", country_id=self.env.ref("base.de").id, street="X 1"
+        )
+        self.vies.return_value = vies_answer(name="---", address="---")
+        partner.action_l10n_ro_vies_refresh()
+        self.assertEqual(partner.name, "Siemens")
+        self.assertEqual(partner.street, "X 1")
+        self.assertIn("no change", partner.message_ids[0].body)
+
+    def test_refresh_from_vies_not_found(self):
+        partner = self._eu_partner()
+        if "vies_valid" in partner._fields:
+            partner.vies_valid = True
+        self.vies.return_value = vies_answer("INVALID", "---", "---")
+        partner.action_l10n_ro_vies_refresh()
+        self.assertIn("not registered for intra-community operations", partner.message_ids[0].body)
+        if "vies_valid" in partner._fields:
+            self.assertFalse(partner.vies_valid)
+
+    def test_refresh_from_vies_errors(self):
+        partner = self._eu_partner()
+        with self.assertRaisesRegex(UserError, "VIES did not answer"):
+            partner.action_l10n_ro_vies_refresh()
+
+    def test_vat_payer_once_on_the_form(self):
+        arch = self.Partner.get_views([(False, "form")])["views"]["form"]["arch"]
+        arch = arch.decode() if isinstance(arch, bytes) else arch
+        self.assertEqual(arch.count('name="l10n_ro_vat_subjected"'), 1)
+        self.assertNotIn("l10n_ro_vat_subjected_info", arch)
+

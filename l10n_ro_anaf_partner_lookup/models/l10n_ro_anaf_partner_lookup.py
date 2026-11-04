@@ -7,6 +7,7 @@ import re
 import unicodedata
 
 import requests
+from stdnum.eu import vat as stdnum_eu_vat
 
 from odoo import api, fields, models
 
@@ -16,6 +17,27 @@ _logger = logging.getLogger(__name__)
 ANAF_URL = "https://webservicesp.anaf.ro/api/PlatitorTvaRest/v9/tva"
 # The caller usually waits for the answer (a cashier, a customer): better no answer than a long wait
 ANAF_TIMEOUT = 10
+# VIES REST service of the European Commission: one VAT number per request, free, no key
+VIES_URL = "https://ec.europa.eu/taxation_customs/vies/rest-api/ms/{country}/vat/{number}"
+VIES_TIMEOUT = 10
+# What VIES answers for a name or an address the member state does not share (Germany, Spain)
+VIES_NO_DATA = "---"
+# The VIES prefixes: the ISO codes of the member states, but EL for Greece and XI for Northern Ireland
+VIES_PREFIXES = {
+    "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "ES", "FI", "FR", "HR", "HU", "IE", "IT",
+    "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK", "XI",
+}  # fmt: skip
+VIES_COUNTRY_CODE = {"EL": "GR", "XI": "GB"}
+# The answers of a member state that could not be asked, as opposed to VALID and INVALID
+VIES_FOUND, VIES_NOT_FOUND = "VALID", "INVALID"
+# A postal code, alone on its line or between the street and the city: "20122 MILANO MI",
+# "KONYVES KALMAN KÖRÚT 36 1097 BUDAPEST", "ΑΙΟΛΟΥ 86   10559 - ΑΘΗΝΑ", "111 43 STOCKHOLM",
+# "00-950 WARSZAWA", "1012 AB AMSTERDAM", "1000-001 LISBOA", "LV-1050 RIGA", "VLT 1117 VALLETTA"
+VIES_ZIP = (
+    r"(?:[A-Z]{2}-)?"
+    r"(?:\d{2}-\d{3}|\d{3} \d{2}|\d{4} [A-Z]{2}|\d{4}-\d{3}|[A-Z]{3} ?\d{4}|\d{4,5})"
+)
+VIES_ZIP_CITY_RE = re.compile(rf"^(?:(?P<street>.*?)\s+)??(?P<zip>{VIES_ZIP})\s*-?\s+(?P<city>\S.*)$")
 # Control key of the Romanian CUI
 CUI_KEY = "753217532"
 # ANAF still answers with the old cedilla diacritics
@@ -280,3 +302,100 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
             # Without either, the locality is left as it is for the e-Factura check to point out
             return f"Sector {match.group(1)}" if match else locality
         return self._title(LOCALITY_PARENT_RE.sub("", LOCALITY_PREFIX_RE.sub("", locality)))
+
+    # ------------------------------------------------------------------
+    # VIES: the intra-community VAT number of a company from the EU
+    # ------------------------------------------------------------------
+
+    @api.model
+    def split_eu_vat(self, vat):
+        """``("IT", "00743110157")`` for ``IT 007-43110157``; ``("", "")`` when it has no EU prefix"""
+        vat = re.sub(r"[\s.\-/]", "", vat or "").upper()
+        prefix, number = vat[:2], vat[2:]
+        if prefix not in VIES_PREFIXES or not number:
+            return "", ""
+        return prefix, number
+
+    @api.model
+    def vies_lookup(self, vat, timeout=None):
+        """Look the intra-community VAT number ``vat`` (with its country prefix) up in VIES.
+
+        :param timeout: seconds to wait for VIES; the system parameter, else 10, when not given
+        :return: dict with ``state`` (``found``, ``not_found``, ``invalid`` or ``unavailable``) and,
+            when found, ``partner`` (values ready for ``res.partner.create``; only the Tax ID and the
+            country when the member state does not share the name, as Germany) and ``has_details``
+        """
+        prefix, number = self.split_eu_vat(vat)
+        # The check digits of the member state are checked before VIES is asked
+        if not prefix or not stdnum_eu_vat.is_valid(prefix + number):
+            return {"state": "invalid"}
+        answer = self._vies_request(prefix, number, timeout)
+        if answer is None:
+            return {"state": "unavailable"}
+        status = answer.get("userError")
+        if status == VIES_NOT_FOUND:
+            return {"state": "not_found"}
+        if status != VIES_FOUND or not answer.get("isValid"):
+            # The member state did not answer, or VIES is overloaded: nothing is known
+            _logger.info("VIES could not check %s%s: %s", prefix, number, status)
+            return {"state": "unavailable"}
+        values = self._prepare_vies_partner_values(prefix, number, answer)
+        return {"state": "found", "partner": values, "has_details": bool(values.get("name"))}
+
+    @api.model
+    def _vies_request(self, prefix, number, timeout=None):
+        """The answer of VIES as a dict; ``None`` when VIES did not answer"""
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        url = get_param("l10n_ro_anaf_partner_lookup.vies_url", VIES_URL)
+        try:
+            response = requests.get(
+                url.format(country=prefix, number=number),
+                timeout=timeout or int(get_param("l10n_ro_anaf_partner_lookup.vies_timeout", VIES_TIMEOUT)),
+            )
+            response.raise_for_status()
+            return response.json()
+        except (requests.RequestException, ValueError) as error:
+            _logger.warning("VIES did not answer for %s%s: %s", prefix, number, error)
+            return None
+
+    @api.model
+    def _vies_text(self, text):
+        text = (text or "").strip()
+        return "" if text == VIES_NO_DATA else text
+
+    @api.model
+    def _prepare_vies_partner_values(self, prefix, number, answer):
+        country = self.env["res.country"].search([("code", "=", VIES_COUNTRY_CODE.get(prefix, prefix))], limit=1)
+        values = {"vat": prefix + number, "country_id": country.id, "is_company": True}
+        name = re.sub(r"\s+", " ", self._vies_text(answer.get("name")))
+        if name:
+            values["name"] = name
+        values.update(self._parse_vies_address(self._vies_text(answer.get("address"))))
+        return values
+
+    @api.model
+    def _parse_vies_address(self, address):
+        """Street, address details, postal code and city from the free text VIES gives.
+
+        Each member state writes the address its own way, on one line or on several; the line with
+        the postal code gives the city. Without a postal code the whole text stays in the street,
+        for the user to sort out.
+        """
+        lines = [re.sub(r"\s+", " ", line).strip(" ,") for line in address.splitlines()]
+        lines = [line for line in lines if line]
+        if not lines:
+            return {}
+        for index in range(len(lines) - 1, -1, -1):
+            match = VIES_ZIP_CITY_RE.match(lines[index])
+            if not match:
+                continue
+            street_lines = lines[:index] + ([match["street"]] if match["street"] else [])
+            if not street_lines:
+                break
+            return {
+                "street": self._title(street_lines[0]),
+                "street2": self._title(", ".join(street_lines[1:] + lines[index + 1 :])),
+                "zip": match["zip"],
+                "city": self._title(match["city"].strip(" -")),
+            }
+        return {"street": self._title(", ".join(lines))}
