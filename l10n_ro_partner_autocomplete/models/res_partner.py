@@ -76,7 +76,11 @@ class ResPartner(models.Model):
         country = self.country_id if len(self) == 1 else self.env["res.country"]
         result = self._l10n_ro_anaf_lookup(vat, country.id or False)
         if result is None:
-            return super().enrich_by_vat(vat, timeout=timeout)
+            # A VAT number of another EU country: from VIES, when it gives the name and the address
+            vies_result = self._l10n_ro_vies_lookup(vat)
+            if vies_result is None:
+                return super().enrich_by_vat(vat, timeout=timeout)
+            return dict(vies_result["partner"], entity_type=VIES_ENTITY_TYPE)
         if result["state"] != "found":
             return {}
         return dict(result["partner"], entity_type=ANAF_ENTITY_TYPE)
@@ -115,6 +119,15 @@ class ResPartner(models.Model):
     def _l10n_ro_vies_autocomplete(self, query):
         """The suggestion from VIES for the VAT number of a company from another EU country;
         ``None`` to leave the query to IAP"""
+        result = self._l10n_ro_vies_lookup(query)
+        if result is None:
+            return None
+        return [self._l10n_ro_anaf_suggestion(result["partner"], entity_type=VIES_ENTITY_TYPE)]
+
+    @api.model
+    def _l10n_ro_vies_lookup(self, query):
+        """The VIES answer for the VAT number of a company from another EU country, found with its
+        name; ``None`` to leave the query to IAP"""
         lookup = self.env["l10n.ro.anaf.partner.lookup"]
         prefix, number = lookup.split_eu_vat((query or "").strip())
         # A Romanian CUI is ANAF's
@@ -128,7 +141,7 @@ class ResPartner(models.Model):
         # IAP may still know the company
         if result["state"] != "found" or not result["has_details"]:
             return None
-        return [self._l10n_ro_anaf_suggestion(result["partner"], entity_type=VIES_ENTITY_TYPE)]
+        return result
 
     @api.model
     def _l10n_ro_anaf_suggestion(self, values, entity_type=ANAF_ENTITY_TYPE):
@@ -235,7 +248,7 @@ class ResPartner(models.Model):
         return Markup("<p>%s</p>") % line
 
     def _l10n_ro_set_vies_valid(self, valid):
-        """``Intra-Community Valid`` (base_vat) from the VIES answer, for a partner from another EU
+        """``Intra-Community Valid`` (l10n_eu_account_vies) from the VIES answer, for a partner from another EU
         country: the fiscal position of intra-community supplies is chosen from it"""
         if "vies_valid" not in self._fields:
             return

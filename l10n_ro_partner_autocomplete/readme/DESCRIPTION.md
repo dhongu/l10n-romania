@@ -48,4 +48,9 @@ name, a company from outside the EU, a company from the EU that VIES does not de
 Romanian CUI when ANAF does not answer.
 
 The **Enrich** action of the partner list and form (Odoo 20) asks ANAF as well for a Romanian
-company, by its Tax ID or its Company ID, and fills only the fields the partner does not have yet.
+company, by its Tax ID or its Company ID, and VIES for a company from another EU country, and fills
+only the fields the partner does not have yet.
+
+*Intra-Community Valid* comes with the standard `l10n_eu_account_vies` module (installed by
+**Verify VAT Numbers** in the accounting settings); without it, the VIES answer is only written in
+the chatter.

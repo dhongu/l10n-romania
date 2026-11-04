@@ -352,12 +352,12 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
     @api.model
     def _vies_request(self, prefix, number, timeout=None):
         """The answer of VIES as a dict; ``None`` when VIES did not answer"""
-        get_param = self.env["ir.config_parameter"].sudo().get_param
-        url = get_param("l10n_ro_anaf_partner_lookup.vies_url", VIES_URL)
+        params = self.env["ir.config_parameter"].sudo()
+        url = params.get_str("l10n_ro_anaf_partner_lookup.vies_url", VIES_URL)
         try:
             response = requests.get(
                 url.format(country=prefix, number=number),
-                timeout=timeout or int(get_param("l10n_ro_anaf_partner_lookup.vies_timeout", VIES_TIMEOUT)),
+                timeout=timeout or params.get_int("l10n_ro_anaf_partner_lookup.vies_timeout", VIES_TIMEOUT),
             )
             response.raise_for_status()
             return response.json()
@@ -373,7 +373,8 @@ class L10nRoAnafPartnerLookup(models.AbstractModel):
     @api.model
     def _prepare_vies_partner_values(self, prefix, number, answer):
         country = self.env["res.country"].search([("code", "=", VIES_COUNTRY_CODE.get(prefix, prefix))], limit=1)
-        values = {"vat": prefix + number, "country_id": country.id, "is_company": True}
+        # No is_company: Odoo computes it from the Tax ID, as for ANAF
+        values = {"vat": prefix + number, "country_id": country.id}
         name = re.sub(r"\s+", " ", self._vies_text(answer.get("name")))
         if name:
             values["name"] = name

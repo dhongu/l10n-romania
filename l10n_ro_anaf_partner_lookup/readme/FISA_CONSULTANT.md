@@ -71,7 +71,7 @@ Modulul nu generează note contabile și nu atinge conturi. Întoarce valorile p
 | TVA la încasare (RTVAI) | TVA la încasare (RTVAI) | doar dacă există câmpul (`l10n_ro_anaf_partner`); neatins când ANAF nu trimite blocul RTVAI |
 
 Din VIES (firmă din altă țară UE), valorile sunt mai puține: **Nume** (spațiile multiple
-eliminate), **TVA** (codul cu prefixul țării), tip **Companie**, **Țară** (după prefix; `EL` →
+eliminate), **TVA** (codul cu prefixul țării; din el Odoo face partenerul de tip **Companie**), **Țară** (după prefix; `EL` →
 Grecia, `XI` → Regatul Unit / Irlanda de Nord) și, din adresa liberă dată de VIES, **Stradă**,
 **Stradă 2** (rândurile în plus), **Cod poștal** și **Localitate**, scrise cu majusculă doar la
 început de cuvânt. Dacă adresa nu are un cod poștal recunoscut, rămâne întreagă în **Stradă**. Unele

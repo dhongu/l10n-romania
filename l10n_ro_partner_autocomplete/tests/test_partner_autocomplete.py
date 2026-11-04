@@ -471,3 +471,20 @@ class TestPartnerAutocomplete(TransactionCase):
         partner.action_l10n_ro_vies_refresh()
         self.assertIn("1 High Street", partner.street)
         self.assertIn("valid for intra-community operations", partner.message_ids[0].body)
+
+    def test_enrich_action_from_vies_without_iap(self):
+        partner = self._eu_partner(name="Motorola")
+        self.vies.return_value = vies_answer()
+        with self._iap():
+            data = partner.enrich_by_vat(partner.vat)
+        self.assertEqual(data["entity_type"], "l10n_ro_vies")
+        self.assertEqual(data["street"], "Largo Francesco Richini 6")
+        self.assertEqual(data["zip"], "20122")
+        self.assertEqual(data["country_id"], self.env.ref("base.it").id)
+
+    def test_enrich_action_vies_without_details_goes_to_iap(self):
+        partner = self._eu_partner(name="Siemens", vat="DE811569869", country_id=self.env.ref("base.de").id)
+        self.vies.return_value = vies_answer(name="---", address="---")
+        with patch(IAP_PATH, return_value=({}, False)) as iap:
+            partner.enrich_by_vat(partner.vat)
+        iap.assert_called_once()

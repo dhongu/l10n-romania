@@ -7,7 +7,12 @@
   gives, keeps what it does not give, and sets *Intra-Community Valid*.
 - For a Romanian VAT payer the note after the ANAF data, and the one after **Update from ANAF**,
   say whether the company is in VIES, that is registered for intra-community operations.
-- The update buttons under the Tax ID show only their icon; the name is in the tooltip.
+- The update buttons show only their icon, in the row of the Tax ID instead of a whole row below
+  it; the name is in the tooltip.
+- The **Enrich** action fills a partner with a VAT number of another EU country from VIES too, without
+  IAP credits, when VIES gives the name and the address.
+- *Intra-Community Valid* is the field of `l10n_eu_account_vies` in 20.0 (`base_vat` in 19.0): it is
+  set only when that module is installed (**Verify VAT Numbers** in the accounting settings).
 - The Apps banner and the summary of the manifest name VIES next to ANAF.
 - **Update from VIES** is also shown for a United Kingdom partner with an `XI` number (Northern
   Ireland, which stays in VIES for goods); a `GB` number is not in VIES.
