@@ -464,3 +464,10 @@ class TestPartnerAutocomplete(TransactionCase):
         self.assertFalse(partner.street2)
         self.assertEqual(partner.city, "Milano Mi")
         self.assertFalse(partner.state_id)
+
+    def test_refresh_from_vies_northern_ireland(self):
+        partner = self._eu_partner(vat="XI123456782", country_id=self.env.ref("base.uk").id)
+        self.vies.return_value = vies_answer(address="1 HIGH STREET\nBT1 1AA BELFAST")
+        partner.action_l10n_ro_vies_refresh()
+        self.assertIn("1 High Street", partner.street)
+        self.assertIn("valid for intra-community operations", partner.message_ids[0].body)
