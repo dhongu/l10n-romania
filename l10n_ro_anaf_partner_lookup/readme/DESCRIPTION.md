@@ -23,9 +23,16 @@ other modules can create or check a customer without depending on other localiza
   company that does not exist from a service that is down. The wait is short, since somebody is
   usually waiting for the answer.
 
+**VIES.** For a company from another EU country, `vies_lookup()` asks VIES, the free service of the
+European Commission, about its intra-community VAT number (with the country prefix: `IT…`, `HU…`,
+`EL…` for Greece) and gives back the name and the address split into street, postal code and city.
+Some member states (Germany, Spain) only say whether the number is valid. For a Romanian company VIES
+tells whether it is registered for intra-community operations.
+
 The module has no screen of its own; it is used by
 [l10n_ro_pos_partner_efactura](../l10n_ro_pos_partner_efactura) to bring a company customer in at
 the till.
 
 Optional system parameters: `l10n_ro_anaf_partner_lookup.url` (the ANAF service) and
-`l10n_ro_anaf_partner_lookup.timeout` (seconds, 10 by default).
+`l10n_ro_anaf_partner_lookup.timeout` (seconds, 10 by default), and for VIES
+`l10n_ro_anaf_partner_lookup.vies_url` and `l10n_ro_anaf_partner_lookup.vies_timeout`.

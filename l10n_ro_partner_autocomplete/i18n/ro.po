@@ -134,3 +134,56 @@ msgstr "Plătitor TVA"
 #: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
 msgid "Yes"
 msgstr "Da"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "%(vat)s is not a VAT number of an EU country."
+msgstr "%(vat)s nu este un cod de TVA dintr-o țară UE."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Checked against VIES: no change."
+msgstr "Verificat în VIES: nicio modificare."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Company data taken from VIES on %(date)s."
+msgstr "Datele firmei au fost preluate din VIES la %(date)s."
+
+#. module: l10n_ro_partner_autocomplete
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_autocomplete.view_partner_form_anaf_refresh
+msgid "Update from VIES"
+msgstr "Actualizează din VIES"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Updated from VIES:"
+msgstr "Actualizat din VIES:"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES did not answer. Try again in a moment."
+msgstr "VIES nu a răspuns. Încercați din nou peste puțin timp."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES did not answer: the intra-community status was not checked."
+msgstr "VIES nu a răspuns: statutul intracomunitar nu a fost verificat."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES: not registered for intra-community operations."
+msgstr "VIES: nu este înregistrată pentru operațiuni intracomunitare."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES: valid for intra-community operations."
+msgstr "VIES: validă pentru operațiuni intracomunitare."

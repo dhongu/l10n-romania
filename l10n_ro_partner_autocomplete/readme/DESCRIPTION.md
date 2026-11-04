@@ -10,8 +10,18 @@ Point of Sale — shows the company found at ANAF. Choosing it fills the partner
 - for Bucharest, the sector as the locality, as e-Factura requires;
 - a note in the chatter that the data was taken from ANAF, with the date.
 
-**Update from ANAF.** On a Romanian company with a Tax ID, the **Update from ANAF** button below
-the Tax ID reloads the data from ANAF: name, address, Tax ID and trade register number are
+**Companies from other EU countries, from VIES.** A VAT number with the prefix of another EU country
+(`IT00743110157`, `HU10773381`) is looked up in VIES, the free service of the European Commission:
+the name, street, postal code, city and country are filled in, with a note in the chatter, and no IAP
+credit is used. When VIES does not answer, does not know the number or the country keeps the name to
+itself (Germany, Spain), IAP is asked as before. The update button under the Tax ID of such a
+company reloads the data from VIES and sets *Intra-Community Valid*.
+
+**VIES for a Romanian company.** For a VAT payer, the note after the ANAF data says whether the company
+is in VIES, that is registered for intra-community operations; a VAT payer is not always.
+
+**Update from ANAF.** On a Romanian company with a Tax ID, the **Update from ANAF** button (the refresh
+icon) below the Tax ID reloads the data from ANAF: name, address, Tax ID and trade register number are
 rewritten, a phone already on the partner is kept. The chatter lists every field changed, with
 its old and new value, and says when ANAF lists the company as struck off or inactive. With
 `l10n_ro_anaf_partner`, the *VAT on Payment (RTVAI)* flag is filled in and updated the same way.

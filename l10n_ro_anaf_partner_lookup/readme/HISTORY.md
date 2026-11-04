@@ -1,3 +1,12 @@
+## 20.0.1.4.0 (2026-11-04)
+
+- `vies_lookup(vat)` looks an intra-community VAT number up in VIES, the REST service of the European
+  Commission (free, no key), with the same shape of answer as `lookup()`: the state, and the partner
+  values with the name, the street, the postal code and the city split from the free text address
+  VIES gives. Greece is `EL` and Northern Ireland `XI`, as in VIES. The check digits are checked
+  before VIES is asked; a member state that keeps the name to itself (Germany, Spain) gives only
+  the Tax ID and the country (`has_details` false).
+
 ## 20.0.1.3.0 (2026-10-29)
 
 - The answer also says whether the company applies VAT on payment (`vat_on_payment`, from the ANAF

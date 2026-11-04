@@ -5,24 +5,32 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
-            <!-- In 20.0 the Tax ID shares a row with the identifiers button: the link goes below it.
-                 The identifiers block is laid out in the cells of the group grid (display: contents),
-                 so the link takes a whole row, or it shifts the identifier labels off their values -->
-            <xpath expr="//div[@id='vat_div']" position="after">
+            <xpath expr="//div[@id='vat_div']" position="before">
                 <field name="country_code" invisible="1" />
-                <div
-                    class="d-flex justify-content-end"
-                    style="grid-column: 1 / -1"
-                    invisible="not is_company or parent_id or country_code != 'RO' or not vat"
-                >
+            </xpath>
+            <!-- In 20.0 the Tax ID shares a row with the identifiers button: the buttons show only their
+                 icon, so they fit in that row, right after the Tax ID -->
+            <xpath expr="//div[@id='vat_div']/field[@name='vat']" position="after">
+                <span class="ps-1 text-nowrap" invisible="not is_company or parent_id or not vat">
                     <button
                         name="action_l10n_ro_anaf_refresh"
                         type="object"
-                        string="Update from ANAF"
+                        title="Update from ANAF"
+                        aria-label="Update from ANAF"
                         class="btn btn-link p-0"
                         icon="refresh"
+                        invisible="country_code != 'RO'"
                     />
-                </div>
+                    <button
+                        name="action_l10n_ro_vies_refresh"
+                        type="object"
+                        title="Update from VIES"
+                        aria-label="Update from VIES"
+                        class="btn btn-link p-0"
+                        icon="refresh"
+                        invisible="country_code not in ('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'GR', 'ES', 'FI', 'FR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'SE', 'SI', 'SK')"
+                    />
+                </span>
             </xpath>
             <!-- In the group, with its label: the Tax ID sits in a div of its own -->
             <xpath expr="//field[@name='website']" position="before">
