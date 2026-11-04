@@ -1,12 +1,12 @@
 {
-  "title": "Partner Autocomplete from ANAF",
-  "summary": "Romanian CUI answered from ANAF instead of IAP, without credits",
+  "title": "Partner Autocomplete from ANAF and VIES",
+  "summary": "Romanian and EU companies filled in for free, without IAP credits",
   "icon": "people",
   "edition": "community",
   "lang": "en",
   "features": [
-    "Fills the partner in from the CUI",
-    "Update from ANAF button with chatter log",
-    "No IAP credits for a Romanian CUI"
+    "Romanian CUI filled in from ANAF",
+    "EU VAT number filled in from VIES",
+    "Update buttons with chatter log"
   ]
 }

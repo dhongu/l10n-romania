@@ -4,7 +4,7 @@
 
 {
     "name": "Romania - Partner Autocomplete from ANAF",
-    "summary": "Partner autocomplete answers a Romanian CUI from ANAF instead of IAP, without credits",
+    "summary": "Partner autocomplete answers a Romanian CUI from ANAF and an EU VAT number from VIES, without IAP credits",
     "license": "AGPL-3",
     "version": "20.0.1.5.0",
     "images": ["static/description/main_screenshot.png"],
