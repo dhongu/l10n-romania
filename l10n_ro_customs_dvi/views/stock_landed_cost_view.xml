@@ -29,6 +29,12 @@
                     </group>
                 </group>
             </notebook>
+            <!-- Un articol din DVI pe linie: codul TARIC și produsele pe care se repartizează taxa lui -->
+            <xpath expr="//field[@name='cost_lines']/list/field[@name='name']" position="after">
+                <field name="l10n_ro_dvi_taric_code" optional="show" column_invisible="parent.landed_type != 'dvi'"/>
+                <field name="l10n_ro_dvi_product_ids" widget="many2many_tags" optional="show"
+                       column_invisible="parent.landed_type != 'dvi'"/>
+            </xpath>
         </field>
     </record>
 

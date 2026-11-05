@@ -3,8 +3,11 @@
 # See README.rst file on addons root folder for license details
 
 
+from markupsafe import Markup
+
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import float_round
 
 # Regimul vamal din caseta 37 a declarației (primele 4 cifre: regim solicitat + regim anterior).
 CUSTOMS_REGIMES = [
@@ -82,7 +85,111 @@ class LandedCost(models.Model):
         self.ensure_one()
         return self.dvi_number or self.name
 
+    def compute_landed_cost(self):
+        res = super().compute_landed_cost()
+        self.filtered(lambda c: c.landed_type == "dvi")._split_cost_by_article()
+        return res
+
+    def _get_article_cost_lines(self):
+        self.ensure_one()
+        return self.cost_lines.filtered("l10n_ro_dvi_taric_code")
+
+    def _split_cost_by_article(self):
+        """Taxa vamală a fiecărui articol din DVI merge doar pe produsele articolului.
+
+        Calculul nativ repartizează fiecare linie de cost pe toate produsele recepționate. Taxa vamală
+        diferă însă pe cod tarifar: un articol cu cotă 0% nu primește nimic din taxa altui articol. Liniile
+        de ajustare native rămân; se refac doar sumele liniilor de articol, cu metoda de repartizare a
+        fiecărei linii, aplicată numai pe produsele ei.
+        """
+        weight_fields = {"by_quantity": "quantity", "by_weight": "weight", "by_volume": "volume"}
+        for cost in self:
+            currency = cost.currency_id
+            article_lines = cost._get_article_cost_lines()
+            # Un produs recepționat fără cod de mărfuri și fără articol ar rămâne tăcut fără taxă vamală, iar
+            # taxa articolului lui s-ar duce pe celelalte produse. Un produs cu alt cod NC nu e în declarație.
+            unassigned = (cost.valuation_adjustment_lines.product_id - article_lines.l10n_ro_dvi_product_ids).filtered(
+                lambda p: not p._l10n_ro_customs_nc_code()
+            )
+            # Fără taxă vamală (ex. preferința UE–MD) nu e nimic de repartizat: nu se blochează nimic.
+            if unassigned and not currency.is_zero(sum(article_lines.mapped("price_unit"))):
+                raise UserError(
+                    self.env._(
+                        "The customs duty cannot be split: these received products have no commodity code and "
+                        "belong to no article of the DVI:%(products)s\n\nChoose them on the line of their article, "
+                        "in the Additional Costs tab, or set the commodity code on the product.",
+                        products="".join(f"\n- {name}" for name in unassigned.mapped("display_name")),
+                    )
+                )
+            for cost_line in article_lines:
+                adjustments = cost.valuation_adjustment_lines.filtered(lambda a, line=cost_line: a.cost_line_id == line)
+                targets = adjustments.filtered(lambda a, line=cost_line: a.product_id in line.l10n_ro_dvi_product_ids)
+                if not targets and not currency.is_zero(cost_line.price_unit):
+                    without_code = adjustments.product_id.filtered(lambda p: not p._l10n_ro_customs_nc_code())
+                    raise UserError(
+                        self.env._(
+                            "The customs duty of %(article)s (TARIC %(taric)s, %(amount)s) cannot be split: no "
+                            "received product matches it.\n\nChoose the products of the article on its line, in "
+                            "the Additional Costs tab, or set the commodity code on the product.%(products)s",
+                            article=cost_line.name,
+                            taric=cost_line.l10n_ro_dvi_taric_code,
+                            amount=currency.format(cost_line.price_unit),
+                            products=without_code
+                            and "\n\n"
+                            + self.env._("Received products without commodity code:")
+                            + "".join(f"\n- {name}" for name in without_code.mapped("display_name"))
+                            or "",
+                        )
+                    )
+                field_name = weight_fields.get(cost_line.split_method)
+                if cost_line.split_method == "by_current_cost_price":
+                    weights = targets.mapped("former_cost")
+                elif field_name:
+                    weights = targets.mapped(field_name)
+                else:
+                    weights = [1.0] * len(targets)
+                if not sum(weights):
+                    weights = [1.0] * len(targets)
+                total_weight = sum(weights)
+                values = {adjustment: 0.0 for adjustment in adjustments}
+                remaining = cost_line.price_unit
+                for adjustment, weight in zip(targets, weights, strict=True):
+                    value = float_round(
+                        cost_line.price_unit * weight / total_weight, precision_rounding=currency.rounding
+                    )
+                    values[adjustment] = value
+                    remaining -= value
+                if targets and not currency.is_zero(remaining):
+                    values[targets[-1]] += currency.round(remaining)
+                for adjustment, value in values.items():
+                    adjustment.additional_landed_cost = value
+
+    def _propagate_article_nc_codes(self):
+        """Codul NC din DVI pe produsele articolului care nu au niciunul (câmpul nativ, completat o dată)."""
+        for cost in self:
+            updated = []
+            for cost_line in cost._get_article_cost_lines():
+                for product in cost_line.l10n_ro_dvi_product_ids:
+                    if product._l10n_ro_customs_set_nc_code(cost_line.l10n_ro_dvi_nc_code):
+                        updated.append((product, cost_line.l10n_ro_dvi_nc_code))
+            if updated:
+                cost.message_post(
+                    body=Markup("<p>%s</p><ul>%s</ul>")
+                    % (
+                        self.env._("Commodity code set from the DVI:"),
+                        Markup().join(
+                            Markup("<li>%s → %s</li>") % (product.display_name, code) for product, code in updated
+                        ),
+                    )
+                )
+
     def button_validate(self):
+        # La validare se reface repartizarea pe articole: produsele unui articol se pot schimba după calcul.
+        for cost in self.filtered(lambda c: c.landed_type == "dvi" and c._get_article_cost_lines()):
+            if not cost.valuation_adjustment_lines:
+                cost.compute_landed_cost()
+            else:
+                cost._split_cost_by_article()
         res = super().button_validate()
 
         # nota principală e creată în super() cu ref = name; o corectăm cu numărul de DVI
@@ -123,6 +230,7 @@ class LandedCost(models.Model):
                 cost.account_move_id._post()
         self._set_dvi_move_partner()
         self._set_dvi_move_document_type()
+        self.filtered(lambda c: c.landed_type == "dvi")._propagate_article_nc_codes()
         return res
 
     def _set_dvi_move_document_type(self):
@@ -276,3 +384,67 @@ class LandedCost(models.Model):
             #        for cost_line, val_amount in val_to_cost_lines.items()):
             #     return False
         return res
+
+
+class LandedCostLine(models.Model):
+    _inherit = "stock.landed.cost.lines"
+
+    # Un articol din DVI = o linie de cost: taxa vamală a articolului, repartizată doar pe produsele lui.
+    l10n_ro_dvi_taric_code = fields.Char(
+        "TARIC Code",
+        help="TARIC code of the article of the customs declaration. The customs duty of the line is split "
+        "only on the products of the article.",
+    )
+    l10n_ro_dvi_nc_code = fields.Char(
+        "NC Code",
+        compute="_compute_l10n_ro_dvi_nc_code",
+        store=True,
+        help="Combined Nomenclature code: the first eight digits of the TARIC code.",
+    )
+    l10n_ro_dvi_product_ids = fields.Many2many(
+        "product.product",
+        "l10n_ro_dvi_cost_line_product_rel",
+        "cost_line_id",
+        "product_id",
+        string="Products",
+        compute="_compute_l10n_ro_dvi_product_ids",
+        store=True,
+        readonly=False,
+        help="Received products of the article, proposed from their commodity code. A product without "
+        "commodity code can be chosen by hand: it gets the code of the article when the DVI is posted.",
+    )
+
+    @api.depends("l10n_ro_dvi_taric_code")
+    def _compute_l10n_ro_dvi_nc_code(self):
+        for line in self:
+            line.l10n_ro_dvi_nc_code = (line.l10n_ro_dvi_taric_code or "")[:8] or False
+
+    @api.depends("l10n_ro_dvi_taric_code", "cost_id.picking_ids", "cost_id.cost_lines.l10n_ro_dvi_taric_code")
+    def _compute_l10n_ro_dvi_product_ids(self):
+        """Propune produsele recepționate al căror cod de mărfuri începe codul TARIC al articolului.
+
+        Un produs se propune doar dacă se potrivește cu **un singur** articol al DVI-ului: cu un cod HS pe
+        6 cifre, de pildă, poate începe codurile TARIC a două articole cu taxe diferite. Atunci produsul nu
+        se propune nicăieri și îl alege operatorul; altfel ar primi taxa vamală a ambelor articole.
+        """
+        for line in self:
+            if not line.l10n_ro_dvi_taric_code:
+                line.l10n_ro_dvi_product_ids = False
+                continue
+            articles = line.cost_id.cost_lines.filtered("l10n_ro_dvi_taric_code")
+            products = line.cost_id._get_targeted_move_ids().product_id
+            line.l10n_ro_dvi_product_ids = products.filtered(
+                lambda p, line=line, articles=articles: p._l10n_ro_customs_matches_taric(line.l10n_ro_dvi_taric_code)
+                and len(articles.filtered(lambda a, p=p: p._l10n_ro_customs_matches_taric(a.l10n_ro_dvi_taric_code)))
+                == 1
+            )
+
+
+class StockValuationAdjustmentLines(models.Model):
+    _inherit = "stock.valuation.adjustment.lines"
+
+    def _create_accounting_entries(self, remaining_qty):
+        # Produsele altui articol primesc 0 din taxa articolului: fără linii contabile de zero.
+        if self.cost_id.landed_type == "dvi" and self.currency_id.is_zero(self.additional_landed_cost):
+            return []
+        return super()._create_accounting_entries(remaining_qty)

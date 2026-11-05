@@ -6,7 +6,7 @@ import re
 
 from markupsafe import Markup, escape
 
-from odoo import api, fields, models
+from odoo import Command, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.misc import format_date, formatLang
 
@@ -161,8 +161,30 @@ class AccountInvoiceDVI(models.TransientModel):
 
         self.dvi_number = dvi.mrn
         self.date = dvi.acceptance_date or dvi.release_date or self.date
-        self.custom_duty = dvi.duty_total
         self.tax_base = dvi.vat_base
+        # Articolele, cu taxa vamală a fiecăruia: taxa unui articol se repartizează doar pe produsele lui.
+        # Fără codul TARIC al tuturor articolelor, rămâne repartizarea pe toate produsele, ca înainte.
+        if all(item.taric for item in dvi.items):
+            self.line_ids = [Command.clear()] + [
+                Command.create(
+                    {
+                        "number": item.number,
+                        "taric_code": item.taric,
+                        "customs_value": item.customs_value,
+                        "custom_duty": item.tax_amount("A00"),
+                    }
+                )
+                for item in dvi.items
+            ]
+        else:
+            self.line_ids = [Command.clear()]
+            warnings.append(
+                self.env._(
+                    "The TARIC code of some articles was not read: the customs duty is split on all the "
+                    "received products."
+                )
+            )
+        self.custom_duty = dvi.duty_total
 
         regime = dvi.regimes[0] if dvi.regimes else ""
         self.customs_regime = regime if regime in ("4000", "4200") else "other"

@@ -224,6 +224,36 @@ alin. (1) lit. d)).
 Baza importului ajunge în decontul de TVA printr-o **pereche tehnică echilibrată pe contul 473**, de
 valoarea bazei, care poartă eticheta fiscală de bază; fără ea, rândul din D300 ar avea TVA şi bază zero.
 
+Taxa vamală pe articol
+----------------------
+
+Vama calculează taxa vamală **pe articol**, după codul TARIC: în aceeaşi declaraţie, un articol poate avea
+1,7%, altul 0%. Repartizată pe toate produsele recepţionate, taxa unui articol ajunge şi pe produsele
+altuia, iar costul de achiziţie al ambelor iese greşit (OMFP 1802/2014 pct. 75).
+
+* Fiecare articol din DVI devine o **linie de cost** în tabul nativ *Costuri adiţionale*, cu codul TARIC
+  şi taxa vamală (A00) a articolului. Şi articolele cu taxă 0 devin linii, ca produsele lor să primească
+  codul NC.
+* Coloana **Produse** a liniei propune produsele recepţionate al căror cod de mărfuri (codul Intrastat,
+  altfel codul HS) începe codul TARIC. Un produs se propune doar dacă se potriveşte cu **un singur**
+  articol: cu un cod HS pe 6 cifre poate începe codurile a două articole cu taxe diferite, iar atunci îl
+  alege operatorul. Produsele se pot schimba manual pe fiecare linie.
+* La calcul şi la validare, taxa liniei se repartizează **doar pe produsele ei**, cu metoda de repartizare
+  a liniei. Produsele celorlalte articole primesc 0, fără linii contabile de zero.
+* Validarea se opreşte când taxa nu poate fi repartizată corect:
+  * un articol cu taxă vamală nu are niciun produs;
+  * DVI-ul are taxă vamală, iar un produs recepţionat nu are cod de mărfuri şi nu e ales la niciun
+    articol — altfel ar rămâne tăcut fără taxă, iar taxa articolului lui s-ar duce pe celelalte produse.
+
+  Un produs cu alt cod NC decât articolele DVI-ului nu face parte din declaraţie şi nu primeşte nimic.
+* La validare, produsul ales manual, fără cod de mărfuri, primeşte codul NC al articolului (primele opt
+  cifre din TARIC), o singură dată; un cod existent nu se suprascrie. Ce s-a completat apare în chatter-ul
+  DVI-ului. Codul Intrastat (`account_intrastat`) se scrie pe **varianta** de produs; codul HS
+  (`stock_delivery`) e pe şablon, deci se aplică **tuturor variantelor**.
+* Articolele se completează din PDF-ul SNI (`l10n_ro_customs_dvi_import`) sau manual în wizard; taxa
+  vamală a articolelor trebuie să dea totalul A00. Fără articole, DVI-ul funcţionează ca înainte: o
+  singură linie de taxă vamală, repartizată pe toate produsele.
+
 Biroul vamal nu este partener
 ------------------------------
 
