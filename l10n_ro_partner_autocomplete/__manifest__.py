@@ -6,7 +6,7 @@
     "name": "Romania - Partner Autocomplete from ANAF",
     "summary": "Partner autocomplete answers a Romanian CUI from ANAF and an EU VAT number from VIES, without IAP credits",
     "license": "AGPL-3",
-    "version": "19.0.1.5.0",
+    "version": "19.0.1.5.1",
     "images": ["static/description/main_screenshot.png"],
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
