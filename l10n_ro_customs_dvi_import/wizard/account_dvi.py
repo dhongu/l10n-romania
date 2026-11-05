@@ -162,31 +162,29 @@ class AccountInvoiceDVI(models.TransientModel):
         self.dvi_number = dvi.mrn
         self.date = dvi.acceptance_date or dvi.release_date or self.date
         self.tax_base = dvi.vat_base
-        self.line_ids = [Command.clear()] + [
-            Command.create(
-                {
-                    "number": item.number,
-                    "taric_code": item.taric,
-                    "customs_value": item.customs_value,
-                    "custom_duty": item.tax_amount("A00"),
-                }
-            )
-            for item in dvi.items
-        ]
-        self.custom_duty = dvi.duty_total
-
-        # Biroul citit din declaraţie: fără contact încă, acesta se creează abia la Aplică (nu din onchange).
-        office = self.env["res.partner"]
-        if dvi.customs_office_code:
-            office = office.search([("l10n_ro_customs_office_code", "=", dvi.customs_office_code)], limit=1)
-        self.customs_office_id = office
-        if dvi.customs_office_code and not office:
+        # Articolele, cu taxa vamală a fiecăruia: taxa unui articol se repartizează doar pe produsele lui.
+        # Fără codul TARIC al tuturor articolelor, rămâne repartizarea pe toate produsele, ca înainte.
+        if all(item.taric for item in dvi.items):
+            self.line_ids = [Command.clear()] + [
+                Command.create(
+                    {
+                        "number": item.number,
+                        "taric_code": item.taric,
+                        "customs_value": item.customs_value,
+                        "custom_duty": item.tax_amount("A00"),
+                    }
+                )
+                for item in dvi.items
+            ]
+        else:
+            self.line_ids = [Command.clear()]
             warnings.append(
                 self.env._(
-                    "The customs office %(code)s has no contact yet: it is created when the DVI is applied.",
-                    code=dvi.customs_office_code,
+                    "The TARIC code of some articles was not read: the customs duty is split on all the "
+                    "received products."
                 )
             )
+        self.custom_duty = dvi.duty_total
 
         regime = dvi.regimes[0] if dvi.regimes else ""
         self.customs_regime = regime if regime in ("4000", "4200") else "other"
@@ -225,10 +223,6 @@ class AccountInvoiceDVI(models.TransientModel):
 
     def do_create_dvi(self):
         dvi = self._parse_dvi_file() if self.dvi_file else None
-        if dvi and dvi.customs_office_code and not self.customs_office_id:
-            self.customs_office_id = self.env["res.partner"]._l10n_ro_get_customs_office(
-                dvi.customs_office_code, dvi.customs_office_name
-            )
         action = super().do_create_dvi()
         if dvi:
             landed_cost = self.env["stock.landed.cost"].browse(action["res_id"])

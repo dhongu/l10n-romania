@@ -60,60 +60,6 @@ class LandedCost(models.Model):
     tax_base = fields.Float("Tax base")
     tax_id = fields.Many2one("account.tax")  # TVA la import (plătit în vamă sau cu certificat de amânare)
 
-    # Biroul vamal e creditorul drepturilor de import: partenerul liniilor de decontare cu bugetul (446),
-    # ca plata din extras să se potrivească cu el, iar DVI-urile şi soldul să se vadă pe contactul lui.
-    customs_office_id = fields.Many2one(
-        "res.partner",
-        "Customs Office",
-        tracking=True,
-        index="btree_not_null",
-        domain=[("l10n_ro_customs_office_code", "!=", False)],
-        help="Customs office where the declaration was lodged. It is the partner of the customs duty and "
-        "import VAT due on account 446, so that the payment to the Treasury is reconciled with the DVI.",
-    )
-    customs_amount_due = fields.Monetary(
-        "Amount Due at Customs",
-        compute="_compute_customs_payment",
-        store=True,
-        help="Customs duty and import VAT on account 446 not yet reconciled with a payment.",
-    )
-    customs_payment_state = fields.Selection(
-        [("not_paid", "Not Paid"), ("partial", "Partially Paid"), ("paid", "Paid")],
-        "Customs Payment",
-        compute="_compute_customs_payment",
-        store=True,
-        help="Payment of the amounts due at customs, from the reconciliation of account 446. Empty when "
-        "nothing is due at customs (VAT deferral certificate, regime 4200, no customs duty).",
-    )
-
-    def _get_customs_payable_account(self):
-        self.ensure_one()
-        return self.env["account.invoice.dvi"].with_company(self.company_id)._get_customs_payable_account()
-
-    def _get_customs_payable_lines(self):
-        self.ensure_one()
-        if not self.account_move_id:
-            return self.env["account.move.line"]
-        account = self._get_customs_payable_account()
-        return self.account_move_id.line_ids.filtered(lambda line: line.account_id == account and line.credit)
-
-    @api.depends("account_move_id.line_ids.amount_residual", "account_move_id.line_ids.account_id")
-    def _compute_customs_payment(self):
-        for cost in self:
-            lines = cost._get_customs_payable_lines() if cost.landed_type == "dvi" else False
-            if not lines:
-                cost.customs_amount_due = 0.0
-                cost.customs_payment_state = False
-                continue
-            due = -sum(lines.mapped("amount_residual"))
-            cost.customs_amount_due = due
-            if cost.currency_id.is_zero(due):
-                cost.customs_payment_state = "paid"
-            elif cost.currency_id.compare_amounts(due, sum(lines.mapped("credit"))) < 0:
-                cost.customs_payment_state = "partial"
-            else:
-                cost.customs_payment_state = "not_paid"
-
     @api.constrains("customs_regime", "tax_id", "tax_value")
     def _check_customs_regime_exempt(self):
         """La 4200 importul e scutit: nu există TVA de înregistrat, nici deductibil, nici de plată.
@@ -159,7 +105,23 @@ class LandedCost(models.Model):
         weight_fields = {"by_quantity": "quantity", "by_weight": "weight", "by_volume": "volume"}
         for cost in self:
             currency = cost.currency_id
-            for cost_line in cost._get_article_cost_lines():
+            article_lines = cost._get_article_cost_lines()
+            # Un produs recepționat fără cod de mărfuri și fără articol ar rămâne tăcut fără taxă vamală, iar
+            # taxa articolului lui s-ar duce pe celelalte produse. Un produs cu alt cod NC nu e în declarație.
+            unassigned = (cost.valuation_adjustment_lines.product_id - article_lines.l10n_ro_dvi_product_ids).filtered(
+                lambda p: not p._l10n_ro_customs_nc_code()
+            )
+            # Fără taxă vamală (ex. preferința UE–MD) nu e nimic de repartizat: nu se blochează nimic.
+            if unassigned and not currency.is_zero(sum(article_lines.mapped("price_unit"))):
+                raise UserError(
+                    self.env._(
+                        "The customs duty cannot be split: these received products have no commodity code and "
+                        "belong to no article of the DVI:%(products)s\n\nChoose them on the line of their article, "
+                        "in the Additional Costs tab, or set the commodity code on the product.",
+                        products="".join(f"\n- {name}" for name in unassigned.mapped("display_name")),
+                    )
+                )
+            for cost_line in article_lines:
                 adjustments = cost.valuation_adjustment_lines.filtered(lambda a, line=cost_line: a.cost_line_id == line)
                 targets = adjustments.filtered(lambda a, line=cost_line: a.product_id in line.l10n_ro_dvi_product_ids)
                 if not targets and not currency.is_zero(cost_line.price_unit):
@@ -221,19 +183,6 @@ class LandedCost(models.Model):
                     )
                 )
 
-    def _log_on_customs_office(self):
-        for cost in self.filtered(lambda c: c.landed_type == "dvi" and c.customs_office_id):
-            cost.customs_office_id._message_log(
-                body=Markup("<p>%s</p>")
-                % self.env._(
-                    "DVI %(dvi)s posted: MRN %(mrn)s, customs duty %(duty)s, import VAT %(vat)s.",
-                    dvi=cost._get_html_link(),
-                    mrn=cost.dvi_number or "-",
-                    duty=cost.currency_id.format(cost.amount_total),
-                    vat=cost.currency_id.format(cost.tax_value),
-                )
-            )
-
     def button_validate(self):
         # La validare se reface repartizarea pe articole: produsele unui articol se pot schimba după calcul.
         for cost in self.filtered(lambda c: c.landed_type == "dvi" and c._get_article_cost_lines()):
@@ -282,7 +231,6 @@ class LandedCost(models.Model):
         self._set_dvi_move_partner()
         self._set_dvi_move_document_type()
         self.filtered(lambda c: c.landed_type == "dvi")._propagate_article_nc_codes()
-        self._log_on_customs_office()
         return res
 
     def _set_dvi_move_document_type(self):
@@ -363,7 +311,6 @@ class LandedCost(models.Model):
                     "credit": self.tax_value,
                     "account_id": payable_account.id,
                     "move_id": self.account_move_id.id,
-                    "partner_id": self.customs_office_id.id,
                 }
             )
         return lines
@@ -472,15 +419,24 @@ class LandedCostLine(models.Model):
         for line in self:
             line.l10n_ro_dvi_nc_code = (line.l10n_ro_dvi_taric_code or "")[:8] or False
 
-    @api.depends("l10n_ro_dvi_taric_code", "cost_id.picking_ids")
+    @api.depends("l10n_ro_dvi_taric_code", "cost_id.picking_ids", "cost_id.cost_lines.l10n_ro_dvi_taric_code")
     def _compute_l10n_ro_dvi_product_ids(self):
+        """Propune produsele recepționate al căror cod de mărfuri începe codul TARIC al articolului.
+
+        Un produs se propune doar dacă se potrivește cu **un singur** articol al DVI-ului: cu un cod HS pe
+        6 cifre, de pildă, poate începe codurile TARIC a două articole cu taxe diferite. Atunci produsul nu
+        se propune nicăieri și îl alege operatorul; altfel ar primi taxa vamală a ambelor articole.
+        """
         for line in self:
             if not line.l10n_ro_dvi_taric_code:
                 line.l10n_ro_dvi_product_ids = False
                 continue
+            articles = line.cost_id.cost_lines.filtered("l10n_ro_dvi_taric_code")
             products = line.cost_id._get_targeted_move_ids().product_id
             line.l10n_ro_dvi_product_ids = products.filtered(
-                lambda p, taric=line.l10n_ro_dvi_taric_code: p._l10n_ro_customs_matches_taric(taric)
+                lambda p, line=line, articles=articles: p._l10n_ro_customs_matches_taric(line.l10n_ro_dvi_taric_code)
+                and len(articles.filtered(lambda a, p=p: p._l10n_ro_customs_matches_taric(a.l10n_ro_dvi_taric_code)))
+                == 1
             )
 
 
@@ -492,13 +448,3 @@ class StockValuationAdjustmentLines(models.Model):
         if self.cost_id.landed_type == "dvi" and self.currency_id.is_zero(self.additional_landed_cost):
             return []
         return super()._create_accounting_entries(remaining_qty)
-
-    def _create_account_move_line(self, credit_account_id, debit_account_id, remaining_qty):
-        """Biroul vamal ca partener pe linia de taxă vamală datorată (446)."""
-        lines = super()._create_account_move_line(credit_account_id, debit_account_id, remaining_qty)
-        office = self.cost_id.customs_office_id
-        if self.cost_id.landed_type == "dvi" and office:
-            for command in lines:
-                if command[2].get("account_id") == credit_account_id:
-                    command[2]["partner_id"] = office.id
-        return lines

@@ -1,9 +1,8 @@
-## 19.0.1.1.0 (2026-10-31)
+## 19.0.1.1.0 (2026-11-05)
 
-- The customs office is read from the declaration ("Biroul vamal ROxx0000") and set on the DVI; its
-  contact is created when the DVI is applied, if it does not exist yet (never from the onchange).
 - The articles of the declaration (TARIC code, customs value, customs duty A00) fill in the articles of
-  the wizard: the customs duty of each article is split only on its own products.
+  the wizard: the customs duty of each article is split only on its own products. When the TARIC code of
+  an article is not read, the customs duty is split on all the received products, as before.
 
 ## 19.0.1.0.1 (2026-10-24)
 

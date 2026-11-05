@@ -25,12 +25,6 @@ class AccountInvoiceDVI(models.TransientModel):
     _name = "account.invoice.dvi"
     _description = "account.invoice.dvi"
 
-    customs_office_id = fields.Many2one(
-        "res.partner",
-        "Customs Office",
-        domain=[("l10n_ro_customs_office_code", "!=", False)],
-        help="Customs office where the declaration was lodged: the partner of the amounts due at customs.",
-    )
     line_ids = fields.One2many(
         "account.invoice.dvi.line",
         "wizard_id",
@@ -283,7 +277,6 @@ class AccountInvoiceDVI(models.TransientModel):
             "tax_id": self.tax_id.id,
             "tax_base": self.tax_base,
             "tax_value": self.tax_value,
-            "customs_office_id": self.customs_office_id.id,
         }
         if self.customs_regime == "4200" and self.vat_guarantee_amount:
             values.update(vat_guarantee_amount=self.vat_guarantee_amount, vat_guarantee_state="blocked")

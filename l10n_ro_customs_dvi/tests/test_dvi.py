@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
+from unittest.mock import patch
+
 from odoo import fields
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import Form
@@ -769,7 +771,7 @@ class TestDVI(TransactionCase):
         self.assertEqual(template.with_company(company).property_account_expense_id, payable)
         self.assertEqual(template.with_company(other_company).property_account_expense_id, other_payable)
 
-    # --- Biroul vamal ca partener şi taxa vamală pe articol -------------------------------------
+    # --- Taxa vamală pe articol -------------------------------------------------------------
 
     def _create_received_invoice_two_products(self):
         """Comandă de import cu două produse (1.000 şi 2.000 lei), recepţionată şi facturată."""
@@ -791,125 +793,66 @@ class TestDVI(TransactionCase):
         invoice.action_post()
         return invoice
 
-    def _create_dvi(self, invoice, **values):
+    def _create_dvi(self, invoice, articles, **values):
+        """DVI cu articolele date ca (TARIC, taxă vamală); taxa vamală a declaraţiei e suma lor."""
+        lines = [
+            (0, 0, {"number": number, "taric_code": taric, "custom_duty": duty})
+            for number, (taric, duty) in enumerate(articles, 1)
+        ]
         wizard = (
             self.env["account.invoice.dvi"]
             .with_context(active_id=invoice.id)
-            .create({"tax_id": self.tax_id.id, "dvi_number": "26ROBU1400000123R4", **values})
+            .create(
+                {
+                    "tax_id": self.tax_id.id,
+                    "dvi_number": "26ROBU1400000123R4",
+                    "custom_duty": sum(duty for _taric, duty in articles),
+                    "line_ids": lines,
+                    **values,
+                }
+            )
         )
         return self.env["stock.landed.cost"].browse(wizard.do_create_dvi()["res_id"])
 
-    def _pay_customs(self, dvi, amount):
-        """Plata la Trezorerie (Dr 4462 = Cr 512), reconciliată cu datoria DVI-ului."""
-        payable = dvi._get_customs_payable_account()
-        bank = self.env["account.account"].search(
-            self._company_domain("account.account", ("code", "=like", "512%")), limit=1
+    def _nc_codes(self, codes):
+        """Codurile de mărfuri ale produselor testului, fără `account_intrastat` / `stock_delivery`."""
+        codes = {product.id: code for product, code in codes.items()}
+        return patch.object(
+            type(self.env["product.product"]), "_l10n_ro_customs_nc_code", lambda product: codes.get(product.id, "")
         )
-        if not bank:
-            bank = self.env["account.account"].create({"name": "Bank", "code": "512100", "account_type": "asset_cash"})
-        journal = self.env["account.journal"].search(
-            self._company_domain("account.journal", ("type", "=", "general")), limit=1
-        )
-        payment = self.env["account.move"].create(
-            {
-                "journal_id": journal.id,
-                "ref": dvi.dvi_number,
-                "line_ids": [
-                    (0, 0, {"account_id": payable.id, "partner_id": dvi.customs_office_id.id, "debit": amount}),
-                    (0, 0, {"account_id": bank.id, "credit": amount}),
-                ],
-            }
-        )
-        payment.action_post()
-        (
-            dvi._get_customs_payable_lines() + payment.line_ids.filtered(lambda line: line.account_id == payable)
-        ).reconcile()
 
-    def test_customs_office_contact(self):
-        """Contactul biroului vamal se creează o singură dată, cu denumirea din lista nativă e-Transport."""
-        Partner = self.env["res.partner"]
-        office = Partner._l10n_ro_get_customs_office("ROBU1400", "BV Bucuresti")
-        self.assertEqual(office.l10n_ro_customs_office_code, "ROBU1400")
-        self.assertTrue(office.is_company)
-        self.assertEqual(office.country_id, self.env.ref("base.ro"))
-        self.assertIn("ROBU1400", office.name)
-        if Partner._l10n_ro_customs_office_name("ROBU1400"):
-            self.assertEqual(office.name, Partner._l10n_ro_customs_office_name("ROBU1400"))
-        self.assertEqual(Partner._l10n_ro_get_customs_office("robu1400"), office, "Acelaşi birou, acelaşi contact")
-        self.assertFalse(Partner._l10n_ro_get_customs_office(""))
-
-    def test_customs_office_partner_and_payment(self):
-        """Biroul vamal e partenerul liniilor de pe 446; plata reconciliată închide DVI-ul."""
-        office = self.env["res.partner"]._l10n_ro_get_customs_office("ROBU1400")
-        invoice = self._create_received_invoice_two_products()
-        dvi = self._create_dvi(invoice, custom_duty=30.0, tax_base=3030.0, tax_value=575.7, customs_office_id=office.id)
-        self.assertEqual(dvi.customs_office_id, office)
-        self.assertFalse(dvi.customs_payment_state, "În ciornă nu e nimic de plată")
-        dvi.compute_landed_cost()
-        dvi.button_validate()
-
-        payable_lines = dvi._get_customs_payable_lines()
-        self.assertEqual(sum(payable_lines.mapped("credit")), 605.7, "Taxa vamală 30 + TVA 575,70 pe 4462")
-        self.assertEqual(payable_lines.partner_id, office, "Toate liniile de pe 446 au biroul vamal ca partener")
-        self.assertEqual(dvi.account_move_id.partner_id, invoice.commercial_partner_id, "Antetul rămâne furnizorul")
-        self.assertEqual(dvi.customs_payment_state, "not_paid")
-        self.assertEqual(dvi.customs_amount_due, 605.7)
-
-        self._pay_customs(dvi, 300.0)
-        self.assertEqual(dvi.customs_payment_state, "partial")
-        self.assertAlmostEqual(dvi.customs_amount_due, 305.7, places=2)
-        self._pay_customs(dvi, 305.7)
-        self.assertEqual(dvi.customs_payment_state, "paid")
-        self.assertEqual(dvi.customs_amount_due, 0.0)
-
-        self.assertEqual(office.l10n_ro_customs_dvi_count, 1)
-        self.assertEqual(office.action_view_customs_dvi()["domain"][-1], ("customs_office_id", "=", office.id))
-        self.assertIn(dvi.dvi_number, office.message_ids[:1].body, "DVI-ul postat apare în chatter-ul biroului")
-
-    def test_customs_payment_state_without_customs_debt(self):
-        """Fără datorie la vamă (TVA amânat, fără taxă vamală) nu există stare de plată."""
-        invoice = self._create_received_invoice_two_products()
-        tax_rc, _acc_4426, _acc_4427 = self._build_reverse_charge_tax()
-        dvi = self._create_dvi(invoice, tax_id=tax_rc.id, tax_base=3000.0, tax_value=570.0)
-        dvi.button_validate()
-        self.assertFalse(dvi._get_customs_payable_lines())
-        self.assertFalse(dvi.customs_payment_state)
-
-    def test_customs_duty_split_by_article(self):
-        """Taxa vamală a fiecărui articol merge doar pe produsele lui; produsele primesc codul NC."""
-        invoice = self._create_received_invoice_two_products()
-        dvi = self._create_dvi(
-            invoice,
-            custom_duty=144.0,
-            tax_base=3144.0,
-            tax_value=597.36,
-            line_ids=[
-                (0, 0, {"number": 1, "taric_code": "8462909000", "customs_value": 1000.0, "custom_duty": 144.0}),
-                (0, 0, {"number": 2, "taric_code": "8466940000", "customs_value": 2000.0, "custom_duty": 0.0}),
-            ],
-        )
-        article_1, article_2 = dvi.cost_lines.sorted("l10n_ro_dvi_taric_code")
-        self.assertEqual(len(dvi.cost_lines), 2, "O linie de cost pe articol")
-        self.assertEqual(article_1.l10n_ro_dvi_nc_code, "84629090")
-        self.assertEqual(article_1.price_unit, 144.0)
-        self.assertEqual(article_2.price_unit, 0.0)
-        # produsele testului nu au cod NC: se aleg manual, cum face operatorul
-        article_1.l10n_ro_dvi_product_ids = self.product_1
-        article_2.l10n_ro_dvi_product_ids = self.product_2
-
-        dvi.compute_landed_cost()
-        adjustments = dvi.valuation_adjustment_lines.filtered(lambda a: a.cost_line_id == article_1)
-        self.assertEqual(adjustments.filtered(lambda a: a.product_id == self.product_1).additional_landed_cost, 144.0)
-        self.assertEqual(adjustments.filtered(lambda a: a.product_id == self.product_2).additional_landed_cost, 0.0)
-        dvi.button_validate()
-
-        values = dict(
+    def _received_values(self):
+        return dict(
             self.env["stock.move"]._read_group(
                 [("product_id", "in", (self.product_1 + self.product_2).ids), ("is_in", "=", True)],
                 ["product_id"],
                 ["value:sum"],
             )
         )
+
+    def _article_adjustment(self, dvi, article, product):
+        return dvi.valuation_adjustment_lines.filtered(
+            lambda a: a.cost_line_id == article and a.product_id == product
+        ).additional_landed_cost
+
+    def test_customs_duty_split_by_article(self):
+        """Taxa vamală a fiecărui articol merge doar pe produsele lui; produsele primesc codul NC."""
+        invoice = self._create_received_invoice_two_products()
+        dvi = self._create_dvi(invoice, [("8462909000", 144.0), ("8466940000", 0.0)], tax_base=3144.0, tax_value=597.36)
+        article_1, article_2 = dvi.cost_lines.sorted("l10n_ro_dvi_taric_code")
+        self.assertEqual(len(dvi.cost_lines), 2, "O linie de cost pe articol, inclusiv cel fără taxă")
+        self.assertEqual(article_1.l10n_ro_dvi_nc_code, "84629090")
+        self.assertEqual((article_1.price_unit, article_2.price_unit), (144.0, 0.0))
+        # produsele testului nu au cod de mărfuri: se aleg manual, cum face operatorul
+        article_1.l10n_ro_dvi_product_ids = self.product_1
+        article_2.l10n_ro_dvi_product_ids = self.product_2
+
+        dvi.compute_landed_cost()
+        self.assertEqual(self._article_adjustment(dvi, article_1, self.product_1), 144.0)
+        self.assertEqual(self._article_adjustment(dvi, article_1, self.product_2), 0.0)
+        dvi.button_validate()
+
+        values = self._received_values()
         self.assertAlmostEqual(values[self.product_1], 1000 + 144, places=2, msg="Toată taxa articolului 1")
         self.assertAlmostEqual(values[self.product_2], 2000, places=2, msg="Articolul 2 (0%) nu primeşte nimic")
         move_lines = dvi.account_move_id.line_ids
@@ -921,36 +864,87 @@ class TestDVI(TransactionCase):
             self.assertIn("84669400", dvi.message_ids[:1].body)
 
     def test_article_products_proposed_from_nc_code(self):
-        """Produsul cu cod NC e propus automat pe articolul cu acelaşi cod."""
-        if "hs_code" not in self.product_1._fields:
-            self.skipTest("fără câmpul nativ hs_code (stock_delivery)")
-        self.product_1.hs_code = "8462.90"
+        """Produsele se propun după codul de mărfuri; taxa articolului se împarte între produsele lui."""
         invoice = self._create_received_invoice_two_products()
-        dvi = self._create_dvi(
-            invoice,
-            custom_duty=10.0,
-            line_ids=[(0, 0, {"number": 1, "taric_code": "8462909000", "custom_duty": 10.0})],
-        )
-        self.assertEqual(dvi.cost_lines.l10n_ro_dvi_product_ids, self.product_1)
+        with self._nc_codes({self.product_1: "84629090", self.product_2: "84629090"}):
+            dvi = self._create_dvi(invoice, [("8462909000", 30.0)])
+            self.assertEqual(dvi.cost_lines.l10n_ro_dvi_product_ids, self.product_1 + self.product_2)
+            dvi.button_validate()
+        values = self._received_values()
+        # după costul curent (metoda liniei): 1.000 / 2.000 → 10 / 20
+        self.assertAlmostEqual(values[self.product_1], 1010, places=2)
+        self.assertAlmostEqual(values[self.product_2], 2020, places=2)
+
+    def test_product_matching_two_articles_is_not_proposed(self):
+        """Un cod HS pe 6 cifre poate începe codurile a două articole: produsul nu se propune la niciunul."""
+        invoice = self._create_received_invoice_two_products()
+        with self._nc_codes({self.product_1: "846290", self.product_2: "84669400"}):
+            dvi = self._create_dvi(invoice, [("8462909000", 10.0), ("8462901000", 0.0), ("8466940000", 0.0)])
+            article_1, article_2, article_3 = dvi.cost_lines.sorted("name")
+            self.assertFalse(article_1.l10n_ro_dvi_product_ids, "Altfel ar primi taxa ambelor articole")
+            self.assertFalse(article_2.l10n_ro_dvi_product_ids)
+            self.assertEqual(article_3.l10n_ro_dvi_product_ids, self.product_2)
+            with self.assertRaisesRegex(UserError, "no received product matches"):
+                dvi.button_validate()
+            article_1.l10n_ro_dvi_product_ids = self.product_1
+            dvi.button_validate()
+        self.assertAlmostEqual(self._received_values()[self.product_1], 1010, places=2)
+
+    def test_product_without_code_and_article_blocks_validation(self):
+        """Un produs fără cod de mărfuri şi fără articol ar rămâne tăcut fără taxă vamală: se blochează."""
+        invoice = self._create_received_invoice_two_products()
+        with self._nc_codes({self.product_1: "84629090"}):
+            dvi = self._create_dvi(invoice, [("8462909000", 30.0)])
+            self.assertEqual(dvi.cost_lines.l10n_ro_dvi_product_ids, self.product_1)
+            with self.assertRaisesRegex(UserError, "no commodity code and belong to no article"):
+                dvi.button_validate()
+            # operatorul îl alege pe articolul lui: taxa se împarte pe ambele produse
+            dvi.cost_lines.l10n_ro_dvi_product_ids = self.product_1 + self.product_2
+            dvi.button_validate()
+        self.assertAlmostEqual(self._received_values()[self.product_2], 2020, places=2)
+
+    def test_product_of_another_declaration_gets_no_duty(self):
+        """Un produs recepţionat cu alt cod NC decât articolele DVI-ului nu primeşte nimic din taxa vamală."""
+        invoice = self._create_received_invoice_two_products()
+        with self._nc_codes({self.product_1: "84629090", self.product_2: "73181500"}):
+            dvi = self._create_dvi(invoice, [("8462909000", 30.0)])
+            dvi.button_validate()
+        values = self._received_values()
+        self.assertAlmostEqual(values[self.product_1], 1030, places=2)
+        self.assertAlmostEqual(values[self.product_2], 2000, places=2)
 
     def test_article_without_products_blocks_validation(self):
         """Un articol cu taxă vamală, dar fără produse, nu se poate repartiza: DVI-ul nu se validează."""
         invoice = self._create_received_invoice_two_products()
-        dvi = self._create_dvi(
-            invoice,
-            custom_duty=10.0,
-            line_ids=[(0, 0, {"number": 1, "taric_code": "8466940000", "custom_duty": 10.0})],
-        )
-        dvi.cost_lines.l10n_ro_dvi_product_ids = False
-        with self.assertRaises(UserError):
-            dvi.button_validate()
+        with self._nc_codes({self.product_1: "84629090", self.product_2: "84629090"}):
+            dvi = self._create_dvi(invoice, [("8466940000", 10.0)])
+            self.assertFalse(dvi.cost_lines.l10n_ro_dvi_product_ids)
+            with self.assertRaisesRegex(UserError, "no received product matches"):
+                dvi.button_validate()
+
+    def test_articles_without_customs_duty(self):
+        """Fără taxă vamală pe niciun articol (ex. preferinţa UE–MD) nu e nimic de repartizat: DVI-ul se validează."""
+        invoice = self._create_received_invoice_two_products()
+        dvi = self._create_dvi(invoice, [("0808108090", 0.0), ("0809400500", 0.0)], tax_base=3000.0, tax_value=570.0)
+        dvi.button_validate()
+        self.assertEqual(dvi.state, "done")
+        values = self._received_values()
+        self.assertAlmostEqual(values[self.product_1], 1000, places=2)
+        self.assertAlmostEqual(values[self.product_2], 2000, places=2)
+        self.assertEqual(dvi.account_move_id.state, "posted", "Nota TVA-ului de import se creează tot de DVI")
+
+    def test_without_articles_split_on_all_products(self):
+        """Fără articole, DVI-ul rămâne cum era: o linie de taxă vamală, pe toate produsele."""
+        invoice = self._create_received_invoice_two_products()
+        dvi = self._create_dvi(invoice, [], custom_duty=30.0)
+        self.assertFalse(dvi.cost_lines.l10n_ro_dvi_taric_code)
+        dvi.button_validate()
+        values = self._received_values()
+        self.assertAlmostEqual(values[self.product_1], 1010, places=2)
+        self.assertAlmostEqual(values[self.product_2], 2020, places=2)
 
     def test_article_duty_must_match_declaration(self):
         """Taxa vamală a articolelor trebuie să dea totalul A00 al declaraţiei."""
         invoice = self._create_received_invoice_two_products()
-        with self.assertRaises(UserError):
-            self._create_dvi(
-                invoice,
-                custom_duty=100.0,
-                line_ids=[(0, 0, {"number": 1, "taric_code": "8466940000", "custom_duty": 10.0})],
-            )
+        with self.assertRaisesRegex(UserError, "does not add up"):
+            self._create_dvi(invoice, [("8466940000", 10.0)], custom_duty=100.0)

@@ -130,27 +130,24 @@ class TestDviImport(TransactionCase):
         with self.assertRaisesRegex(UserError, "is not the current company"):
             self._wizard_form(self._create_bill("EXP/2026/00002"), "dvi_4000_one_item")
 
-    def test_customs_office_and_articles(self):
-        """The customs office and the articles of the declaration are filled in from the PDF."""
+    def test_articles(self):
+        """The articles of the declaration fill in the articles of the wizard, one landed cost line each."""
         bill = self._create_bill("CI-20260101-ABC-001")
         wizard_form = self._wizard_form(bill, "dvi_4000_customs_duty")
-        self.assertFalse(wizard_form.customs_office_id, "No contact is created from the onchange")
-        self.assertIn("ROBU1400", wizard_form.dvi_import_info)
         self.assertEqual(len(wizard_form.line_ids), 1)
         with wizard_form.line_ids.edit(0) as article:
+            self.assertEqual(article.number, 1)
             self.assertEqual(article.taric_code, "8462909000")
             self.assertEqual(article.custom_duty, 144.0)
             self.assertEqual(article.customs_value, 8473.13)
+        self.assertEqual(wizard_form.custom_duty, 144.0, "The customs duty of the declaration stays A00")
 
         landed_cost = self._apply(wizard_form, "dvi_4000_customs_duty")
-        office = landed_cost.customs_office_id
-        self.assertEqual(office.l10n_ro_customs_office_code, "ROBU1400")
         self.assertEqual(landed_cost.cost_lines.l10n_ro_dvi_taric_code, "8462909000")
         self.assertEqual(landed_cost.cost_lines.price_unit, 144.0)
 
-    def test_existing_customs_office(self):
-        office = self.env["res.partner"]._l10n_ro_get_customs_office("ROIS4650", "BV Iasi")
+    def test_articles_without_customs_duty(self):
+        """Articles without customs duty still become lines, so that their products get the NC code."""
         wizard_form = self._wizard_form(self._create_bill("EXP/2026/00001"), "dvi_4000_two_items")
-        self.assertEqual(wizard_form.customs_office_id, office)
-        self.assertNotIn("has no contact yet", wizard_form.dvi_import_info)
         self.assertEqual([line.taric_code for line in wizard_form.save().line_ids], ["0808108090", "0809400500"])
+        self.assertEqual(wizard_form.custom_duty, 0.0)

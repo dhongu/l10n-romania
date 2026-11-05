@@ -38,7 +38,6 @@
                             <field name="dvi_number" />
                             <field name="date" />
                             <field name="customs_regime" />
-                            <field name="customs_office_id" context="{'default_is_company': True}" />
                         </group>
                         <group string="Import VAT">
                             <field name="tax_id" />
