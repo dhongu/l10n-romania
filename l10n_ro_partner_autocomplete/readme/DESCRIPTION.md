@@ -17,6 +17,19 @@ credit is used. When VIES does not answer, does not know the number or the count
 itself (Germany, Spain), IAP is asked as before. The update button next to the Tax ID of such a
 company reloads the data from VIES and sets *Intra-Community Valid*.
 
+**Why *Intra-Community Valid* matters.** The box comes from Odoo's `base_vat` and means that the VAT
+number of the partner is valid in VIES. Only then can a supply to it be invoiced as an exempt
+intra-community supply (B2B): the customer accounts for the VAT in its own country, and OSS does not
+apply. With *Verify VAT Numbers* on, Odoo applies a fiscal position marked *VAT required*, such as
+*Intra-Community Scheme*, only to a partner with the box ticked. A customer from the EU without a VAT
+number valid in VIES is treated as a non-taxable person (B2C), even when it is a company: Romanian
+VAT while the distance sales and electronic services to such customers in the whole EU stay below
+EUR 10,000 a year, the VAT of the customer's country above it, declared through OSS (the
+`l10n_eu_oss` module adds an *OSS B2C* fiscal position for each country). A wrong box puts the wrong
+VAT treatment on the invoice. Without OSS, the standard Romanian chart of accounts applies the
+*Exempted Intra-Community Regime* (0%) to such a customer: check the fiscal positions when the
+company sells to EU consumers.
+
 **VIES for a Romanian company.** For a VAT payer, the note after the ANAF data says whether the company
 is in VIES, that is registered for intra-community operations; a VAT payer is not always.
 

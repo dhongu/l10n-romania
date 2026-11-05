@@ -1,3 +1,10 @@
+## 19.0.1.5.1 (2026-11-05)
+
+- The description and the consultant sheet explain what *Intra-Community Valid* means for VAT: a
+  valid VIES number makes the customer B2B (exempt intra-community supply), without it the customer
+  is B2C (Romanian VAT below the EUR 10,000 threshold, the VAT of its country through OSS above it),
+  and how Odoo picks the fiscal position from the box.
+
 ## 19.0.1.5.0 (2026-11-04)
 
 - A VAT number of another EU country is answered from VIES, without IAP credits: name, street,

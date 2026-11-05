@@ -68,6 +68,34 @@ intracomunitare. Căutarea după denumire și firmele din afara UE rămân la IA
   orice plătitor de TVA are codul valabil pentru operațiuni intracomunitare; de aceea nota din
   istoric o spune separat. Modulul verifică VIES doar pentru firmele cu **Plătitor TVA** bifat: la o
   firmă înregistrată numai după art. 317, nota nu are rândul VIES.
+- **Ce înseamnă „Valabil în comunitate”** — bifa este câmpul `vies_valid` din `base_vat`: codul de
+  TVA al partenerului este valabil în VIES. Ea decide tratamentul de TVA al clientului din UE:
+  - **cu bifa (B2B)** — livrarea intracomunitară este scutită dacă bunurile sunt transportate în
+    alt stat membru și livrarea apare în declarația recapitulativă **D390** (**art. 294 alin. (2^1)**);
+    TVA-ul îl datorează cumpărătorul în statul lui, ca achiziție intracomunitară, iar la servicii
+    prin taxare inversă (**art. 278 alin. (2)**). OSS nu se aplică;
+  - **fără bifa (B2C)** — fără un cod valabil, livrarea nu poate fi scutită ca livrare
+    intracomunitară (excepție: mijloacele de transport noi și produsele accizabile livrate în
+    regim de accize, **art. 294 alin. (2) lit. b) și c)**), iar clientul este tratat ca persoană
+    neimpozabilă, chiar dacă este o firmă (**art. 266 alin. (1) pct. 35**; la servicii **HG 1/2016,
+    Titlul VII, pct. 15 alin. (9)**). La vânzările intracomunitare de bunuri la distanță (fără cele
+    livrate cu instalare sau montaj) și la serviciile de telecomunicații, radiodifuziune și
+    televiziune și cele furnizate pe cale electronică se aplică **TVA din România** cât timp totalul
+    lor, pe toate statele UE și fără TVA, nu depășește **10.000 EUR (46.337 lei)** nici în anul
+    curent, nici în cel precedent (**art. 278^1**). Peste prag, de la operațiunea care îl depășește,
+    sau prin opțiune (cel puțin doi ani) se aplică **TVA-ul statului clientului**, declarat prin
+    înregistrare în acel stat sau, opțional, prin regimul special **OSS – Uniune**, cu declarația
+    trimestrială **D398** (**art. 315**). Celelalte servicii către persoane neimpozabile au, ca
+    regulă generală, locul în România (**art. 278 alin. (3)**).
+- **Cum alege Odoo poziția fiscală** — cu **Verificare cod de TVA** pornită pe companie, o poziție
+  fiscală marcată *TVA obligatoriu* (în planul `l10n_ro`: **Schema intracomunitară (TVA)**) se aplică
+  automat doar unui partener cu **Valabil în comunitate** bifat. Unui client din UE fără bifă i se
+  aplică următoarea poziție automată fără *TVA obligatoriu*: cu `l10n_eu_oss` (butonul OSS din
+  setările de contabilitate), poziția **OSS B2C <țară>**, cu TVA-ul statului clientului; fără OSS, în
+  planul `l10n_ro` standard, **Regim intracomunitar scutit**, care înlocuiește TVA-ul colectat cu
+  0% intracomunitar. Pentru o firmă sub prag, care trebuie să factureze clientului B2C din UE cu TVA
+  din România, contabilul corectează configurarea: scoate aplicarea automată a acelei poziții sau
+  o leagă de cotele românești.
 - **Contribuabili inactivi** — achizițiile de la un furnizor declarat inactiv au regim fiscal
   defavorabil (deducerea cheltuielilor și a TVA-ului). Modulul **doar semnalează** starea, la
   actualizarea din ANAF; nu blochează documentele.
@@ -352,7 +380,8 @@ comunitate** bifat; ④ nota **Actualizat din VIES:** din istoric.
 **Verificați:** fiecare câmp din notă are valoarea nouă și pe formular; **Valabil în comunitate**
 este bifat. Dacă orașul s-a schimbat, completați **Județ** de mână, unde țara îl cere. La un partener
 care a pierdut validarea VIES, spuneți contabilului: livrările către el nu mai pot fi facturate ca
-livrări intracomunitare scutite.
+livrări intracomunitare scutite, ci ca unui client B2C (TVA din România sub prag, altfel TVA-ul
+statului lui, prin OSS); poziția fiscală a facturilor noi se schimbă singură (secțiunea 2).
 
 ### Note de monografie și raportare
 
@@ -422,6 +451,9 @@ inactiv sau scos din VIES; verificarea duplicatelor; **Județ** la firmele din U
 - [ ] Iconița ⟳ **Actualizează din VIES** apare pe o firmă cu țara în UE (nu România) și pe o firmă din
       Regatul Unit cu cod `XI`, nu și cu cod `GB`; după clic,
       nota listează câmpurile schimbate, iar **Valabil în comunitate** urmează răspunsul VIES.
+- [ ] O factură către o firmă din UE cu **Valabil în comunitate** bifat primește **Schema
+      intracomunitară (TVA)**; după ce bifa se scoate, o factură nouă primește poziția B2C a
+      companiei (**OSS B2C <țară>** cu `l10n_eu_oss`), nu pe cea intracomunitară.
 - [ ] Căutarea după o denumire (ex. „Forest”) și un cod fiscal din afara UE merg în continuare la
       IAP (alegerea unei sugestii IAP consumă un credit).
 - [ ] Un CUI cu cifra de control greșită nu interoghează ANAF; căutarea merge la IAP, ca în
@@ -507,6 +539,11 @@ Regenerare:
   UE, cu **Actualizează din VIES**).
 - Rândul VIES din nota ANAF apare doar la firmele cu **Plătitor TVA** bifat; o firmă înregistrată
   în scopuri de TVA numai pentru operațiuni intracomunitare (art. 317) nu îl are.
+- **Valabil în comunitate** schimbă TVA-ul de pe factură: bifat = B2B, livrare intracomunitară
+  scutită; nebifat = B2C, ca la o persoană fizică (TVA din România sub pragul de 10.000 EUR, peste
+  prag TVA-ul statului clientului, prin OSS). La implementare verificați pozițiile fiscale ale
+  companiei: fără `l10n_eu_oss`, planul `l10n_ro` aplică clientului B2C din UE **Regim
+  intracomunitar scutit** (0%), ceea ce e corect doar pentru excepțiile de la art. 294 alin. (2).
 - Limitări de spus clientului: nota „Datele firmei au fost preluate din ANAF” sau „… din VIES” și,
   la o firmă din UE, bifa **Valabil în comunitate** se pun doar când sugestia e aleasă în formularul
   partenerului, nu și la partenerul creat din câmpul **Client** sau cu **Creează** (acolo bifa o pune
