@@ -36,7 +36,7 @@ verifică declarația înainte de a completa ceva și atașează PDF-ul pe DVI, 
   |---|---|---|
   | **MRN** și data lui | numărul și data acceptării declarației | *Număr DVI*, *Data DVI* |
   | **Regim unificat** | 4000 = punere în liberă circulație; 4200 = import scutit, urmat de livrare intracomunitară | *Regim vamal* |
-  | **A00** | taxa vamală | *Taxă vamală* (suma tuturor articolelor) |
+  | **A00** | taxa vamală, pe fiecare articol, cu codul TARIC al articolului | tabelul *Articole* (taxa fiecărui articol); *Taxă vamală* e suma lor |
   | **B00** — cuantumul | baza TVA calculată de vamă | *Bază de impozitare* (suma articolelor) |
   | **B00** — de plătit | TVA-ul la import | *Valoare TVA la import* (4000) sau *TVA reținut ca garanție* (4200) |
   | **B00** — cota | cota TVA (0,11 / 0,21) | taxa de achiziție propusă |
@@ -101,8 +101,11 @@ declarației primit de la comisionar.
 ### Pasul 2 — Verificarea valorilor citite (regim 4000)
 
 La încărcare, wizardul se completează singur: **Număr DVI** (MRN-ul), **Data DVI** (data acceptării),
-**Regim vamal**, **Taxă vamală** (A00), **Bază de impozitare** și **Valoare TVA la import** (B00) și
-taxa de achiziție cu cota din declarație.
+**Regim vamal**, **Bază de impozitare** și **Valoare TVA la import** (B00), taxa de achiziție cu cota
+din declarație și tabelul **Articole**: câte o linie pe articol, cu numărul, **codul TARIC**, valoarea
+în vamă și **taxa vamală A00 a articolului**, inclusiv pentru articolele cu taxă 0. **Taxă vamală**
+(A00) devine suma taxelor articolelor și nu se mai editează. Taxa fiecărui articol se repartizează
+apoi doar pe produsele lui (fișa `l10n_ro_customs_dvi`, Pasul 6).
 
 **Găsiți pe ecran** caseta **Citit din declarație**, sub câmpul cu PDF-ul. Ea arată LRN-ul, data
 liberului de vamă, suma facturată cu moneda și cursul de schimb, facturile din declarație, numărul de
@@ -120,6 +123,9 @@ articole și metoda de plată pe fiecare poziție (A00, B00). Avertismentele apa
 - ④ *Valoare TVA la import* e totalul B00 din antetul declarației. În declarațiile văzute, vama
   dă TVA-ul pe fiecare articol în lei întregi, deci o diferență sub 1 leu pe articol față de
   bază × cotă e normală: nu o corectați (regula exactă de rotunjire e de confirmat cu vama);
+- tabelul **Articole** are câte o linie pe fiecare articol din PDF, cu codul TARIC al articolului,
+  iar suma taxelor lor este poziția A00 din antet. Dacă un cod TARIC nu s-a putut citi, tabelul rămâne
+  gol, iar un avertisment spune că taxa vamală se repartizează pe toate produsele;
 - factura furnizorului apare în rândul *Facturile din declarație*. Dacă nu apare, wizardul o spune
   într-un avertisment: verificați că ați încărcat declarația potrivită.
 
@@ -142,8 +148,10 @@ regimul după acest cod.
 
 ### Pasul 4 — DVI-ul creat, cu declarația atașată
 
-**Aplică** creează DVI-ul (costul de aterizare) ca în fluxul manual. Pe o declarație cu taxă
-vamală, tab-ul **Costuri adiționale** are linia **Taxă vamală**, cu suma A00, pe contul 4462. În
+**Aplică** creează DVI-ul (costul de aterizare) ca în fluxul manual. Tab-ul **Costuri adiționale**
+are **câte o linie pe articol**, „Taxă vamală - art. N”, cu taxa A00 a articolului, pe contul 4462,
+și cu coloanele **Cod TARIC** și **Produse**; și articolele cu taxă 0 au linie. Verificați pe fiecare
+linie produsele articolului și alegeți-le pe cele nepropuse (fișa `l10n_ro_customs_dvi`, Pasul 6). În
 plus, PDF-ul declarației e atașat pe DVI, iar în istoric apare mesajul „Completat din declarația
 SNI …”, cu valorile citite. Apăsați **Calculează**, apoi **Validează**, ca în fișa
 `l10n_ro_customs_dvi`, Pasul 6. Captura arată declarația cu taxă vamală și TVA 21%.
@@ -219,6 +227,9 @@ taxei; verificările de la §9; atașarea PDF-ului și rezumatul din istoric.
 - [ ] Taxa propusă e cea standard de achiziție („11% G” / „21% G”), nu o variantă nedeductibilă.
 - [ ] Taxa aleasă corespunde regimului real de plată (plătit în vamă sau amânat).
 - [ ] O declarație cu articole la cote de TVA diferite e refuzată.
+- [ ] Tabelul **Articole** din wizard are câte o linie pe articolul din declarație, cu codul TARIC și
+      taxa vamală a articolului, iar suma taxelor dă poziția A00 din antet.
+- [ ] După **Aplică**, costul adițional are câte o linie de taxă vamală pe articol, cu codul TARIC.
 - [ ] După **Aplică**, DVI-ul are PDF-ul atașat și mesajul „Completat din declarația SNI” în istoric.
 - [ ] A doua încărcare a aceleiași declarații e refuzată.
 - [ ] O declarație a altei firme e refuzată.
@@ -262,6 +273,7 @@ Avertismente, care nu opresc importul:
 | Referința furnizorului de pe factură (…) nu se află printre facturile din declarație. | verificați că declarația și factura sunt ale aceluiași import |
 | Regimul vamal … nu este tratat: verificați declarația. | regimul trece pe „Altul”, iar taxa e propusă după cotă: verificați în fișa `l10n_ro_customs_dvi` cum se tratează regimul respectiv înainte de a aplica |
 | Nu s-a găsit nicio taxă de achiziție cu cota … | alegeți taxa manual sau creați-o |
+| Codul TARIC al unor articole nu a fost citit: taxa vamală se repartizează pe toate produsele recepționate. | tabelul **Articole** rămâne gol, iar taxa vamală e o singură linie, pe toate produsele. Dacă articolele au taxe diferite, completați manual articolele în wizard, din PDF (număr, cod TARIC, taxă vamală), înainte de **Aplică**, și trimiteți PDF-ul la suport |
 
 ## 10. Capturi de ecran
 

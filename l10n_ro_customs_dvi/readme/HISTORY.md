@@ -4,8 +4,9 @@
   customs duty) and creates one landed cost line per article, split only on the products of the article,
   with the split method of the line. The products are proposed from their commodity code (Intrastat, else
   HS), only when they match a single article.
-- The validation stops when an article with customs duty has no products, or when a received product
-  has no commodity code and belongs to no article. A product chosen by hand without commodity code gets
+- The validation stops when an article with customs duty has no products, or when the DVI has customs
+  duty and a received product belongs to no article and has no commodity code or a code that matches an
+  article with customs duty. A product chosen by hand without commodity code gets
   the NC code of the article. Without articles, the DVI works as before.
 
 ## 19.0.2.2.0 (2026-10-29)

@@ -106,18 +106,23 @@ class LandedCost(models.Model):
         for cost in self:
             currency = cost.currency_id
             article_lines = cost._get_article_cost_lines()
-            # Un produs recepționat fără cod de mărfuri și fără articol ar rămâne tăcut fără taxă vamală, iar
-            # taxa articolului lui s-ar duce pe celelalte produse. Un produs cu alt cod NC nu e în declarație.
+            # Un produs recepționat neales la niciun articol ar rămâne tăcut fără taxă vamală, iar taxa
+            # articolului lui s-ar duce pe celelalte produse: produsul fără cod de mărfuri, și cel al cărui cod
+            # se potrivește cu un articol cu taxă (ex. un cod HS pe 6 cifre, nepropus pentru că se potrivește cu
+            # două articole). Un produs cu alt cod NC decât articolele nu e în declarație.
+            duty_articles = article_lines.filtered(lambda line: not currency.is_zero(line.price_unit))
             unassigned = (cost.valuation_adjustment_lines.product_id - article_lines.l10n_ro_dvi_product_ids).filtered(
                 lambda p: not p._l10n_ro_customs_nc_code()
+                or any(p._l10n_ro_customs_matches_taric(a.l10n_ro_dvi_taric_code) for a in duty_articles)
             )
             # Fără taxă vamală (ex. preferința UE–MD) nu e nimic de repartizat: nu se blochează nimic.
-            if unassigned and not currency.is_zero(sum(article_lines.mapped("price_unit"))):
+            if unassigned and duty_articles:
                 raise UserError(
                     self.env._(
-                        "The customs duty cannot be split: these received products have no commodity code and "
-                        "belong to no article of the DVI:%(products)s\n\nChoose them on the line of their article, "
-                        "in the Additional Costs tab, or set the commodity code on the product.",
+                        "The customs duty cannot be split: these received products belong to no article of the "
+                        "DVI, and have no commodity code or a code that matches an article with customs "
+                        "duty:%(products)s\n\nChoose them on the line of their article, in the Additional Costs "
+                        "tab, or set the commodity code on the product.",
                         products="".join(f"\n- {name}" for name in unassigned.mapped("display_name")),
                     )
                 )

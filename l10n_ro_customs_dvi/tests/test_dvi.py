@@ -884,11 +884,29 @@ class TestDVI(TransactionCase):
             self.assertFalse(article_1.l10n_ro_dvi_product_ids, "Altfel ar primi taxa ambelor articole")
             self.assertFalse(article_2.l10n_ro_dvi_product_ids)
             self.assertEqual(article_3.l10n_ro_dvi_product_ids, self.product_2)
-            with self.assertRaisesRegex(UserError, "no received product matches"):
+            with self.assertRaisesRegex(UserError, "belong to no article"):
                 dvi.button_validate()
             article_1.l10n_ro_dvi_product_ids = self.product_1
             dvi.button_validate()
         self.assertAlmostEqual(self._received_values()[self.product_1], 1010, places=2)
+
+    def test_unproposed_product_with_matching_code_blocks_validation(self):
+        """Produsul nepropus (codul lui se potriveşte cu două articole) şi neales nu scapă de taxa vamală."""
+        invoice = self._create_received_invoice_two_products()
+        with self._nc_codes({self.product_1: "846290", self.product_2: "84629090"}):
+            dvi = self._create_dvi(invoice, [("8462909000", 30.0), ("8462901000", 0.0)])
+            article_1, article_2 = dvi.cost_lines.sorted("name")
+            self.assertEqual(article_1.l10n_ro_dvi_product_ids, self.product_2, "Produsul 1 se potriveşte cu ambele")
+            self.assertFalse(article_2.l10n_ro_dvi_product_ids)
+            # altfel toată taxa articolului 1 s-ar duce tăcut pe produsul 2
+            with self.assertRaisesRegex(UserError, "belong to no article"):
+                dvi.button_validate()
+            # operatorul hotărăşte că produsul 1 e la articolul 2 (fără taxă)
+            article_2.l10n_ro_dvi_product_ids = self.product_1
+            dvi.button_validate()
+        values = self._received_values()
+        self.assertAlmostEqual(values[self.product_1], 1000, places=2)
+        self.assertAlmostEqual(values[self.product_2], 2030, places=2)
 
     def test_product_without_code_and_article_blocks_validation(self):
         """Un produs fără cod de mărfuri şi fără articol ar rămâne tăcut fără taxă vamală: se blochează."""
@@ -896,7 +914,7 @@ class TestDVI(TransactionCase):
         with self._nc_codes({self.product_1: "84629090"}):
             dvi = self._create_dvi(invoice, [("8462909000", 30.0)])
             self.assertEqual(dvi.cost_lines.l10n_ro_dvi_product_ids, self.product_1)
-            with self.assertRaisesRegex(UserError, "no commodity code and belong to no article"):
+            with self.assertRaisesRegex(UserError, "belong to no article"):
                 dvi.button_validate()
             # operatorul îl alege pe articolul lui: taxa se împarte pe ambele produse
             dvi.cost_lines.l10n_ro_dvi_product_ids = self.product_1 + self.product_2

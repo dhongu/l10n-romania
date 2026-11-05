@@ -346,7 +346,11 @@ Date minime pentru demo:
    `l10n_ro_anaf_d300`; fără acest modul, creați o taxă de achiziție cu două repartiții (Dr 4426,
    Cr 4427 cu −100%) și grilele D300 rd. 7 și 22. Pentru D406, completați pe taxă **Tipul fiscal SAF-T
    românesc** și **Cod Fiscal SAF-T Roman** — vezi §9.
-8. Nu există parametri proprii de configurat. Produsele de serviciu se creează automat la prima
+8. **Pentru taxa vamală pe articol** (Pasul 6): completați pe produsele importate **codul de
+   mărfuri** — câmpul **Cod mărfuri** (Intrastat, `account_intrastat`) sau, fără Intrastat, **Cod HS**
+   (`stock_delivery`). După el, DVI-ul propune singur produsele fiecărui articol. Fără cod, produsele se
+   aleg manual pe linia articolului, iar la validare primesc codul NC al articolului.
+9. Nu există parametri proprii de configurat. Produsele de serviciu se creează automat la prima
    utilizare și se memorează în parametrii de sistem.
 
 ## 6. Flux de utilizare
@@ -412,12 +416,18 @@ Butonul deschide wizardul. În capul lui se află o casetă de îndrumare cu map
 | **Taxă vamală** | taxa vamală datorată | poziția **A00** |
 | **Număr DVI** | MRN-ul | antetul declarației |
 | **Data DVI** | data acceptării declarației | antetul declarației |
+| **Articole** | câte o linie pe articol: numărul, **codul TARIC**, valoarea în vamă și **taxa vamală A00 a articolului**; și articolele cu taxă 0 | segmentele de articol |
 
 **Găsiți pe ecran:** câmpul *Bază de impozitare* vine precompletat cu **netul facturii furnizorului**.
+Sub câmpuri e tabelul **Articole**. Cu cel puțin un articol, câmpul **Taxă vamală** devine doar de
+citire și este **suma taxelor articolelor**: taxa vamală se transcrie atunci pe fiecare articol, nu ca
+total. Tabelul se poate lăsa gol; atunci taxa vamală se trece ca total și se repartizează pe toate
+produsele, ca înainte.
 
 **Verificați, înainte de a confirma:** baza propusă coincide cu baza poziției B00 din declarație? Dacă
 declarația include transportul extern sau taxa vamală, **nu coincide** — vezi §2.1. Cota propusă este
-cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate?
+cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate? Articolele au codul TARIC
+din declarație, iar taxele lor dau poziția A00 din antet?
 
 **Treceți mai departe:** abia după corectarea câmpurilor, apăsați **Aplică**.
 
@@ -428,10 +438,43 @@ cea din declarație? Valoarea TVA corespunde cotei aplicate bazei corectate?
 
 ### Pasul 6 — Validarea costului de aterizare
 
-Aplicarea creează un cost adițional legat de recepțiile comenzii, cu o linie pentru taxa vamală,
-plus câmpurile DVI în capul formularului. Câmpul **Factură furnizor** este factura de pe care ați
-pornit wizardul, iar pe factură apare butonul **Costuri adiționale**, care deschide DVI-ul. Apăsați
-**Calculează**, verificați repartizarea pe produse, apoi **Validează**.
+Aplicarea creează un cost adițional legat de recepțiile comenzii, plus câmpurile DVI în capul
+formularului. Câmpul **Factură furnizor** este factura de pe care ați pornit wizardul, iar pe factură
+apare butonul **Costuri adiționale**, care deschide DVI-ul.
+
+**Taxa vamală pe articol.** Vama calculează taxa pe articol, după codul TARIC: în aceeași declarație un
+articol poate avea 1,7%, altul 0%. De aceea, cu articole în wizard, tabul **Costuri adiționale** are
+**câte o linie pe articol**, denumită „Taxă vamală - art. N”, cu metoda **După cost** și contul 4462,
+inclusiv pentru articolele cu taxă 0. Linia are două coloane în plus:
+
+- **Cod TARIC** — codul articolului din declarație;
+- **Produse** — produsele recepționate pe care se repartizează taxa articolului. Se propun singure
+  produsele al căror **cod de mărfuri** (Intrastat, altfel HS) începe codul TARIC, dar **doar dacă se
+  potrivesc cu un singur articol**: un cod HS pe 6 cifre poate începe codurile a două articole cu taxe
+  diferite, iar atunci produsul nu se propune și îl alegeți voi. Pe fiecare linie produsele se pot
+  adăuga sau scoate manual.
+
+Apăsați **Calculează**. În tabul **Ajustări de evaluare**, taxa fiecărui articol apare **doar pe
+produsele lui**, după valoarea lor; produsele celorlalte articole primesc 0 și nu au linii în nota
+contabilă. Apoi **Validează**.
+
+**Validarea se oprește** (mesajele sunt în §9) când:
+
+- un articol cu taxă vamală nu are niciun produs;
+- DVI-ul are taxă vamală, iar un produs recepționat nu e ales la niciun articol și fie nu are cod de
+  mărfuri, fie codul lui se potrivește cu un articol cu taxă. Altfel produsul ar rămâne fără taxă
+  vamală, iar taxa lui s-ar duce pe celelalte produse.
+
+Un produs cu alt cod NC decât articolele DVI-ului nu face parte din declarație și nu primește nimic.
+
+**Codul de mărfuri completat din DVI.** La validare, produsul ales manual, **fără cod de mărfuri**,
+primește codul NC al articolului (primele opt cifre din TARIC). Codul existent nu se suprascrie. În
+istoricul DVI-ului apare mesajul „Cod de mărfuri completat din DVI:”, cu produsele și codurile.
+Codul Intrastat se scrie pe **varianta** de produs; codul HS e pe șablon, deci se aplică **tuturor
+variantelor**.
+
+Fără articole în wizard, costul adițional are o singură linie **Taxă vamală**, repartizată pe toate
+produsele, ca înainte.
 
 ![Costul de aterizare generat din DVI, cu numărul declarației](screenshots/06_landed_cost_dvi.png)
 
@@ -770,6 +813,13 @@ vamă și notele ei contabile.
 - [ ] Cota de TVA corespunde celei din declarație (atenție la cota redusă pentru alimente).
 - [ ] **Regimul de plată e cel corect**: taxă normală dacă TVA-ul se achită în vamă, taxă cu
       două repartiții (ex. „21% IMP AM”) dacă nu se face plata efectivă în vamă (§2.7).
+- [ ] Cu articole: costul adițional are **câte o linie pe articol**, cu codul TARIC din declarație,
+      iar suma liniilor dă poziția **A00**.
+- [ ] Fiecare linie de articol are **produsele articolului** în coloana *Produse*; produsul care se
+      potrivește cu două articole e ales manual.
+- [ ] În tabul **Ajustări de evaluare**, taxa fiecărui articol a ajuns **doar pe produsele lui**.
+- [ ] Produsele alese manual, fără cod de mărfuri, au primit codul NC al articolului, iar în istoricul
+      DVI-ului apare „Cod de mărfuri completat din DVI:”.
 - [ ] După validare, **costul unitar al produsului a crescut** cu taxa vamală / cantitate.
 - [ ] TVA-ul de import apare pe **4426**, nu în costul mărfii.
 - [ ] Nota contabilă are ca **referință numărul de DVI**, nu secvența internă.
@@ -809,6 +859,9 @@ vamă și notele ei contabile.
 | Wizardul nu găsește nicio recepție | Fluxul a fost dropship, fără recepție | Refaceți fluxul cu recepție; dropship-ul e incompatibil cu DVI |
 | TVA-ul din notă nu corespunde bazei | Baza a fost modificată fără actualizarea valorii TVA | Corectați prin cost de aterizare de corecție; valoarea nu se recalculează automat |
 | „În regimul vamal 4200 importul este scutit de TVA: alegeți o taxă scutită (0%)…" | Pe un DVI 4200 s-a completat TVA-ul la import sau s-a ales o taxă cu cotă | Lăsați **Valoare TVA la import** goală, alegeți „0% EXEMPT" și treceți TVA-ul blocat la **TVA reținut ca garanție** |
+| „Taxa vamală nu poate fi repartizată: aceste produse recepționate nu aparțin niciunui articol din DVI…" | Un produs nu e ales la niciun articol și nu are cod de mărfuri, sau codul lui se potrivește cu un articol cu taxă (de ex. un cod HS pe 6 cifre comun pentru două articole) | Alegeți produsul pe linia articolului lui, în tabul **Costuri adiționale**, sau completați **Cod mărfuri** pe produs, apoi **Validează** |
+| „Taxa vamală pentru Taxă vamală - art. N (TARIC …) nu poate fi repartizată: niciun produs recepționat nu corespunde articolului." | Articolul are taxă vamală, dar coloana *Produse* e goală | Alegeți produsele articolului pe linia lui, sau completați codul de mărfuri pe produs |
+| „Taxa vamală a articolelor (…) nu dă taxa vamală a declarației (…)." | Suma taxelor de pe articole diferă de **Taxă vamală** din wizard | Corectați taxa vamală pe articole, după declarație, astfel încât suma lor să fie poziția A00 |
 | Modulul nu se poate instala | `l10n_ro_dvi` (OCA) este instalat | Cele două se exclud reciproc; dezinstalați varianta OCA |
 | Nota DVI fără plata TVA are o linie de TVA pe **446** | S-a ales taxa obișnuită de achiziție, nu „IMP AM" | Costul adițional validat **nu se poate anula**. Corectați doar TVA-ul, printr-o notă manuală: Dr 446 = Cr 4426, cu grila rd. 24 / 25 (cea a taxei folosite) cu semn negativ, apoi perechea 473 cu taxa „IMP AM" (ca în tabelul restituirii). Cereți confirmarea consultantului înainte de postare |
 | Exportul D406: „Unele taxe nu au completate câmpurile „Tip taxă SAF-T România” și/sau „Cod taxă SAF-T România”." | Taxa de pe DVI (de exemplu „IMP AM") nu are tipul și codul SAF-T | **Contabilitate → Configurare → Taxe**, deschideți taxa și completați **Tipul fiscal SAF-T românesc** (300 – TVA) și **Cod Fiscal SAF-T Roman**. Pentru „IMP AM", codul din nomenclatorul D406 **e de confirmat** — maparea nu e încă livrată nici de Odoo, nici de `l10n_ro_saft_fix` |

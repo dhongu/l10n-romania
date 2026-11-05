@@ -242,8 +242,9 @@ altuia, iar costul de achiziţie al ambelor iese greşit (OMFP 1802/2014 pct. 75
   a liniei. Produsele celorlalte articole primesc 0, fără linii contabile de zero.
 * Validarea se opreşte când taxa nu poate fi repartizată corect:
   * un articol cu taxă vamală nu are niciun produs;
-  * DVI-ul are taxă vamală, iar un produs recepţionat nu are cod de mărfuri şi nu e ales la niciun
-    articol — altfel ar rămâne tăcut fără taxă, iar taxa articolului lui s-ar duce pe celelalte produse.
+  * DVI-ul are taxă vamală, iar un produs recepţionat nu e ales la niciun articol şi fie nu are cod de
+    mărfuri, fie codul lui se potriveşte cu un articol cu taxă — altfel ar rămâne tăcut fără taxă, iar
+    taxa articolului lui s-ar duce pe celelalte produse.
 
   Un produs cu alt cod NC decât articolele DVI-ului nu face parte din declaraţie şi nu primeşte nimic.
 * La validare, produsul ales manual, fără cod de mărfuri, primeşte codul NC al articolului (primele opt

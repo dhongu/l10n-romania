@@ -570,11 +570,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
 msgid ""
-"The customs duty cannot be split: these received products have no commodity code and belong to no article of the DVI:%(products)s\n"
+"The customs duty cannot be split: these received products belong to no article of the DVI, and have no commodity code or a code that matches an article with customs duty:%(products)s\n"
 "\n"
 "Choose them on the line of their article, in the Additional Costs tab, or set the commodity code on the product."
 msgstr ""
-"Taxa vamală nu poate fi repartizată: aceste produse recepționate nu au cod de mărfuri și nu aparțin niciunui articol din DVI:%(products)s\n"
+"Taxa vamală nu poate fi repartizată: aceste produse recepționate nu aparțin niciunui articol din DVI și nu au cod de mărfuri sau au un cod care se potrivește cu un articol cu taxă vamală:%(products)s\n"
 "\n"
 "Alegeți-le pe linia articolului lor, în tabul Costuri adiționale, sau completați codul de mărfuri pe produs."
 
