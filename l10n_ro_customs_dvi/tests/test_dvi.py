@@ -921,6 +921,30 @@ class TestDVI(TransactionCase):
             dvi.button_validate()
         self.assertAlmostEqual(self._received_values()[self.product_2], 2020, places=2)
 
+    def test_manual_products_kept_when_other_articles_change(self):
+        """Produsele alese manual pe un articol rămân când se schimbă sau se adaugă alt articol."""
+        invoice = self._create_received_invoice_two_products()
+        with self._nc_codes({self.product_1: "84629090"}):
+            dvi = self._create_dvi(invoice, [("8462909000", 30.0), ("8466940000", 0.0)])
+            article_1, article_2 = dvi.cost_lines.sorted("name")
+            article_2.l10n_ro_dvi_product_ids = self.product_2  # produsul fără cod, ales manual
+            article_1.l10n_ro_dvi_taric_code = "8462909090"
+            dvi.cost_lines = [
+                (
+                    0,
+                    0,
+                    {
+                        **article_2.copy_data()[0],
+                        "name": "Custom Duty - art. 3",
+                        "l10n_ro_dvi_taric_code": "7318150000",
+                    },
+                )
+            ]
+            self.assertEqual(article_2.l10n_ro_dvi_product_ids, self.product_2, "Alegerea operatorului rămâne")
+            self.assertEqual(article_1.l10n_ro_dvi_product_ids, self.product_1, "Articolul editat se repropune")
+            dvi.button_validate()
+        self.assertAlmostEqual(self._received_values()[self.product_1], 1030, places=2)
+
     def test_product_of_another_declaration_gets_no_duty(self):
         """Un produs recepţionat cu alt cod NC decât articolele DVI-ului nu primeşte nimic din taxa vamală."""
         invoice = self._create_received_invoice_two_products()

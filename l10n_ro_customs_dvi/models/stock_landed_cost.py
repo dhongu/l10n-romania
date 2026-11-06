@@ -424,13 +424,18 @@ class LandedCostLine(models.Model):
         for line in self:
             line.l10n_ro_dvi_nc_code = (line.l10n_ro_dvi_taric_code or "")[:8] or False
 
-    @api.depends("l10n_ro_dvi_taric_code", "cost_id.picking_ids", "cost_id.cost_lines.l10n_ro_dvi_taric_code")
+    # Doar codul TARIC al liniei: o dependență de celelalte articole sau de recepții ar recalcula toate liniile
+    # la orice schimbare și ar șterge produsele alese manual de operator.
+    @api.depends("l10n_ro_dvi_taric_code")
     def _compute_l10n_ro_dvi_product_ids(self):
         """Propune produsele recepționate al căror cod de mărfuri începe codul TARIC al articolului.
 
         Un produs se propune doar dacă se potrivește cu **un singur** articol al DVI-ului: cu un cod HS pe
         6 cifre, de pildă, poate începe codurile TARIC a două articole cu taxe diferite. Atunci produsul nu
         se propune nicăieri și îl alege operatorul; altfel ar primi taxa vamală a ambelor articole.
+
+        Propunerea se face când se completează codul TARIC al liniei; după aceea produsele rămân cum le-a
+        lăsat operatorul, chiar dacă se schimbă alte articole sau recepțiile.
         """
         for line in self:
             if not line.l10n_ro_dvi_taric_code:

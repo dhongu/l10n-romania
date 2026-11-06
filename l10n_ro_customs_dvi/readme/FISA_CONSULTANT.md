@@ -456,7 +456,13 @@ inclusiv pentru articolele cu taxă 0. Linia are două coloane în plus:
 
 Apăsați **Calculează**. În tabul **Ajustări de evaluare**, taxa fiecărui articol apare **doar pe
 produsele lui**, după valoarea lor; produsele celorlalte articole primesc 0 și nu au linii în nota
-contabilă. Apoi **Validează**.
+contabilă. Apoi **Validează**. **Validează** reface repartizarea pe articole cu produsele de pe linii în
+acel moment, așa că o schimbare de produse făcută după **Calculează** se ia în calcul și fără un nou
+**Calculează**.
+
+Produsele se propun **o singură dată**, când se completează codul TARIC al liniei. După aceea rămân cum
+le-ați lăsat, chiar dacă adăugați sau schimbați alte articole ori recepțiile: un produs ales manual nu
+dispare.
 
 **Validarea se oprește** (mesajele sunt în §9) când:
 
