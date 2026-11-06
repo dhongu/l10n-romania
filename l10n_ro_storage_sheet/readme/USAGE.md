@@ -12,3 +12,8 @@
    rows of each product are the opening and closing balances of the period.
 
    ![Stock sheet list with one row per move with the INITIAL and FINAL rows per product](static/description/en/03_lista_miscari.png)
+
+4. Back in the wizard, **Show Sheet Pdf** prints the storage sheet: per product and stock account,
+   the INITIAL row, each move and the FINAL row, with the stock after every operation.
+
+   ![Printed storage sheet: per product, under the 371000 stock account, the INITIAL, delivery and FINAL rows with the running stock](static/description/en/04_pdf_fisa_magazie.png)

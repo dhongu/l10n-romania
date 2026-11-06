@@ -78,12 +78,35 @@ Usage
    |Stock sheet list with one row per move with the INITIAL and FINAL
    rows per product|
 
+4. Back in the wizard, **Show Sheet Pdf** prints the storage sheet: per
+   product and stock account, the INITIAL row, each move and the FINAL
+   row, with the stock after every operation.
+
+   |Printed storage sheet: per product, under the 371000 stock account,
+   the INITIAL, delivery and FINAL rows with the running stock|
+
 .. |Stock sheet wizard with the location, the date range and the Show Sheet button highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/01_wizard_fisa_magazie.png
 .. |Stock sheet pivot grouped by product, with initial, input, output and final quantities and amounts| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/02_pivot_fisa_magazie.png
 .. |Stock sheet list with one row per move with the INITIAL and FINAL rows per product| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/03_lista_miscari.png
+.. |Printed storage sheet: per product, under the 371000 stock account, the INITIAL, delivery and FINAL rows with the running stock| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/04_pdf_fisa_magazie.png
 
 Changelog
 =========
+
+19.0.1.0.2 (2026-11-06)
+-----------------------
+
+- **The printed storage sheet (Show Sheet Pdf) came out without any
+  move.** Both PDF templates group the lines by account, but on 19.0 the
+  report never filled the account in: up to 18.0 it came from the
+  valuation layer, which no longer exists. The lines now get the stock
+  valuation account of the product (category account, then the company
+  default), and lines that still have no account are printed without the
+  account header instead of being left out. In the pivot the *Account*
+  grouping now shows the stock account instead of an empty row.
+- Consultant sheet: new step with the printed sheet. Printed sheet
+  header: *Date* column (was hard-coded in Romanian), *Valoare ieșire*
+  in the Romanian translation.
 
 19.0.1.0.1 (2026-11-06)
 -----------------------

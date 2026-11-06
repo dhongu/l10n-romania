@@ -2,6 +2,7 @@
 # Copyright (C) 2020 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import logging
+from collections import defaultdict
 
 import pytz
 from dateutil.relativedelta import relativedelta
@@ -224,6 +225,36 @@ class StorageSheet(models.TransientModel):
             # res = self.env.cr.dictfetchall()
             # self.line_product_ids.create(res)
         _logger.info("end select ")
+        self._set_valuation_accounts()
+
+    def _set_valuation_accounts(self):
+        """Fill in the stock valuation account on the lines that have none.
+
+        The SQL inserts leave ``account_id`` empty: up to 18.0 it came from the valuation
+        layer, which no longer exists on 19.0. The printed sheets group the lines by account,
+        so without it they came out empty. Lines that already carry an account (e.g. set by an
+        extension of the inserts) are kept.
+        """
+        lines = self.line_product_ids.filtered(lambda line: not line.account_id)
+        by_account = defaultdict(lambda: self.env["l10n.ro.storage.sheet.line"])
+        for product, product_lines in lines.grouped("product_id").items():
+            account = product.with_company(self.company_id)._get_product_accounts()["stock_valuation"]
+            by_account[account] |= product_lines
+        for account, account_lines in by_account.items():
+            if account:
+                account_lines.account_id = account
+
+    def _get_report_accounts(self, product):
+        """Accounts under which the printed sheets group the lines of ``product``.
+
+        An empty recordset stands for the lines without an account, so that they are still
+        printed when no valuation account is configured.
+        """
+        lines = self.line_product_ids.filtered(lambda line: line.product_id == product)
+        accounts = list(lines.account_id)
+        if any(not line.account_id for line in lines):
+            accounts.append(self.env["account.account"])
+        return accounts
 
     def _get_lot_fields(self):
         # In v19 we aggregate by move only; lot breakdown is disabled to avoid

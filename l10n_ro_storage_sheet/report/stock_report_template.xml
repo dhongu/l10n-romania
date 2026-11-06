@@ -36,7 +36,7 @@
                             t-call="l10n_ro_storage_sheet.report_storage_sheet_report_filters"
                         />
                         <t
-                            t-foreach="o.line_product_ids.filtered(lambda l: l.product_id == product).mapped('account_id')"
+                            t-foreach="o._get_report_accounts(product)"
                             t-as="account"
                         >
                             <t
@@ -44,7 +44,7 @@
                                 t-value="o.line_product_ids.filtered(lambda l: l.product_id == product and l.account_id == account
                                             and l.location_id == location)"
                             />
-                            <div class="row">
+                            <div class="row" t-if="account">
                                 <t t-esc="account.code" />
                                 -
                                 <t t-esc="account.name" />
@@ -248,7 +248,7 @@
     <template id="report_storage_sheet_lines_header">
         <div class="act_as_thead">
             <div class="act_as_row labels">
-                <div class="act_as_cell">Data</div>
+                <div class="act_as_cell">Date</div>
                 <div class="act_as_cell">Reference</div>
                 <div class="act_as_cell">Quantity Input</div>
                 <div class="act_as_cell">Amount Input</div>
@@ -345,7 +345,7 @@
                             </div>
                             <br />
                             <t
-                                t-foreach="o.line_product_ids.filtered(lambda l: l.product_id == product).mapped('account_id')"
+                                t-foreach="o._get_report_accounts(product)"
                                 t-as="account"
                             >
                                 <t
@@ -354,6 +354,7 @@
                                             and l.location_id == location)"
                                 />
                                 <div
+                                    t-if="account"
                                     style="position:absolute; font-size:14px; font-weight: bold; padding-left:15px;"
                                 >
                                     <t t-esc="account.code" />

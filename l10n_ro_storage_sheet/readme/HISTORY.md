@@ -1,3 +1,14 @@
+## 19.0.1.0.2 (2026-11-06)
+
+- **The printed storage sheet (Show Sheet Pdf) came out without any move.** Both PDF templates
+  group the lines by account, but on 19.0 the report never filled the account in: up to 18.0 it
+  came from the valuation layer, which no longer exists. The lines now get the stock valuation
+  account of the product (category account, then the company default), and lines that still have
+  no account are printed without the account header instead of being left out. In the pivot the
+  *Account* grouping now shows the stock account instead of an empty row.
+- Consultant sheet: new step with the printed sheet. Printed sheet header: *Date* column (was
+  hard-coded in Romanian), *Valoare ieșire* in the Romanian translation.
+
 ## 19.0.1.0.1 (2026-11-06)
 
 - No longer depends on the OCA module `l10n_ro_config`. It was used only to set
