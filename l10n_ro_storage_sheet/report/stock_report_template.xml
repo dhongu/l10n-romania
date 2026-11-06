@@ -15,12 +15,12 @@
                     href="/l10n_ro_storage_sheet/static/src/css/report.css"
                     rel="stylesheet"
                 />
-                <t t-raw="0" />
+                <t t-out="0" />
 
                 <div class="page">
                     <div class="row">
                         <t t-set="title">Stock Sheet -
-                            <t t-raw="product.name" />
+                            <t t-out="product.name" />
                         </t>
                         <h4
                             class="mt0"
