@@ -4,7 +4,7 @@
 
 {
     "name": "e-Factura Enhancements",
-    "version": "20.0.0.5.9",
+    "version": "20.0.0.5.10",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eFactura Enhancement",
@@ -12,7 +12,7 @@
     "category": "Localization",
     "depends": [
         "l10n_ro_edi",
-        "l10n_ro_config",
+        "l10n_ro_report_common",
         "spreadsheet_dashboard",
         "l10n_ro_message_spv",
         "account_edi_ubl_cii",
