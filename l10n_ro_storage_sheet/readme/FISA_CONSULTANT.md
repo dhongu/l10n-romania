@@ -48,7 +48,7 @@ curentă, în gestiunea principală.
 
 ## 5. Configurare inițială
 
-1. Instalați `l10n_ro_storage_sheet` (dependențe: `stock`, `account`, `purchase`, `sale`).
+1. Instalați `l10n_ro_storage_sheet` (dependențe: `stock`, `account`, `stock_account`, `purchase`, `sale`).
 2. Setați contul de stoc pe categoria de produs (ex. 371 „Mărfuri” la mărfuri); altfel fișa
    folosește contul de stoc implicit al companiei (pe planul RO, 301 „Materii prime”).
 3. Nu există setări proprii. Meniul apare în **Inventar → Raportare → Raport Fișă de magazie**
@@ -133,7 +133,7 @@ periodică, după nota de închidere a perioadei.
 |---|---|
 | `stock` | mișcările de stoc, gestiunile și locațiile |
 | `purchase`, `sale` | recepțiile și livrările care apar în fișă |
-| `stock_account` (instalat automat) | valorile mișcărilor de stoc |
+| `stock_account` | valorile mișcărilor de stoc și contul de stoc al produsului (din categorie sau implicit pe companie) |
 | `account` | moneda; dreptul de citire pe elementele de jurnal |
 
 **Ce e automat:** calculul soldurilor inițiale și finale, al intrărilor și ieșirilor pe produs și
@@ -150,6 +150,11 @@ gestiune, din mișcările validate.
       documentul ei.
 - [ ] Rândul FINAL al fiecărui produs are aceleași valori ca rândul produsului din pivot.
 - [ ] Cu **Produse cu mișcări** bifat, produsele fără mișcări în perioadă nu apar.
+- [ ] **Tipărire fișă** descarcă PDF-ul cu, pe fiecare produs, contul de stoc al categoriei
+      (ex. `371000 - Mărfuri`), rândul INITIAL, mișcările document cu document și rândul FINAL;
+      stocul de pe rândul FINAL este egal cu cel din pivot.
+- [ ] Un produs dintr-o categorie fără cont de stoc, pe o companie fără cont implicit, apare tot
+      în fișa tipărită, fără antetul de cont, cu toate rândurile lui.
 - [ ] Cu valorizare perpetuă, soldul final valoric însumat pe toate gestiunile unui cont de stoc
       corespunde soldului contului din balanță.
 - [ ] Un gestionar fără drept de citire pe elementele de jurnal primește eroare de acces la
@@ -161,7 +166,7 @@ gestiune, din mișcările validate.
 |---|---|---|
 | „Nu există mișcări ale stocurilor în perioada selectată” | Nicio mișcare validată în gestiune și perioadă, cu **Produse cu mișcări** bifat | Verificați gestiunea, perioada și dacă documentele sunt validate |
 | Eroare de acces la **Afișare fișă** | Utilizatorul nu are drept de citire pe elementele de jurnal | Adăugați *Contabilitate: doar citire* sau rolul de utilizator Vânzări / Achiziții |
-| Fișa tipărită are rânduri fără antet de cont | Nu există cont de stoc nici pe categoria produsului, nici pe companie | Completați contul de stoc pe categoria de produs |
+| Fișa tipărită are rânduri fără antet de cont | Nu există cont de stoc nici pe categoria produsului, nici pe companie; rândurile se tipăresc oricum, doar fără antetul de cont | Completați contul de stoc pe categoria de produs |
 
 ## 10. Capturi de ecran
 
