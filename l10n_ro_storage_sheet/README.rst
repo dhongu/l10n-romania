@@ -54,8 +54,45 @@ also installs the OCA stock valuation engine.
 
 The report models are transient, so no data is migrated.
 
+Usage
+=====
+
+1. Go to **Inventory > Reporting > Romanian Stock Sheet Report**, choose
+   the **Location** and the **Date** range (the current month by
+   default), then click **Show Sheet**.
+
+   |Stock sheet wizard with the location, the date range and the Show
+   Sheet button highlighted|
+
+2. The sheet opens as a pivot. Group the rows by **Product**: each
+   product shows the initial, input, output and final quantity and
+   amount. Export it with the download (XLSX) button.
+
+   |Stock sheet pivot grouped by product, with initial, input, output
+   and final quantities and amounts|
+
+3. Switch to the **list** view to see each move with its document; the
+   **INITIAL** and **FINAL** rows of each product are the opening and
+   closing balances of the period.
+
+   |Stock sheet list with one row per move with the INITIAL and FINAL
+   rows per product|
+
+.. |Stock sheet wizard with the location, the date range and the Show Sheet button highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/01_wizard_fisa_magazie.png
+.. |Stock sheet pivot grouped by product, with initial, input, output and final quantities and amounts| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/02_pivot_fisa_magazie.png
+.. |Stock sheet list with one row per move with the INITIAL and FINAL rows per product| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/03_lista_miscari.png
+
 Changelog
 =========
+
+19.0.1.0.1 (2026-11-06)
+-----------------------
+
+- No longer depends on the OCA module ``l10n_ro_config``. It was used
+  only to set ``is_l10n_ro_record`` on the *Romanian Stock Sheet Report*
+  menu, a field with no effect on menus. No functional change.
+- Consultant sheet with screenshots; Romanian translation fixes
+  (*Cantitate ieșită*, *Preț unitar ieșire*, *Factură fiscală*).
 
 19.0.1.0.0 (2026-10-14)
 -----------------------
