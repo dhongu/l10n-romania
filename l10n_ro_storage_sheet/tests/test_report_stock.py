@@ -14,13 +14,7 @@ _logger = logging.getLogger(__name__)
 class TestStockReport(TransactionCase):
     def setUp(self):
         super().setUp()
-        self.env.company.write(
-            {
-                "l10n_ro_accounting": True,
-                "anglo_saxon_accounting": True,
-                "l10n_ro_stock_acc_price_diff": True,
-            }
-        )
+        self.env.company.write({"anglo_saxon_accounting": True})
         self.account_difference = self.env["account.account"].search([("code", "=", "348000")])
         self.account_expense = self.env["account.account"].search([("code", "=", "607000")])
         self.account_income = self.env["account.account"].search([("code", "=", "707000")])

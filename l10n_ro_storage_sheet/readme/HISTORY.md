@@ -1,3 +1,9 @@
+## 19.0.1.0.1 (2026-11-06)
+
+- No longer depends on the OCA module `l10n_ro_config`. It was used only to set
+  `is_l10n_ro_record` on the *Romanian Stock Sheet Report* menu, a field with no effect on
+  menus. No functional change.
+
 ## 19.0.1.0.0 (2026-10-14)
 
 - Renamed from `l10n_ro_stock_report` to `l10n_ro_storage_sheet`, together
