@@ -129,3 +129,25 @@ class TestDviImport(TransactionCase):
         self.company.vat = "RO76543210"
         with self.assertRaisesRegex(UserError, "is not the current company"):
             self._wizard_form(self._create_bill("EXP/2026/00002"), "dvi_4000_one_item")
+
+    def test_articles(self):
+        """The articles of the declaration fill in the articles of the wizard, one landed cost line each."""
+        bill = self._create_bill("CI-20260101-ABC-001")
+        wizard_form = self._wizard_form(bill, "dvi_4000_customs_duty")
+        self.assertEqual(len(wizard_form.line_ids), 1)
+        with wizard_form.line_ids.edit(0) as article:
+            self.assertEqual(article.number, 1)
+            self.assertEqual(article.taric_code, "8462909000")
+            self.assertEqual(article.custom_duty, 144.0)
+            self.assertEqual(article.customs_value, 8473.13)
+        self.assertEqual(wizard_form.custom_duty, 144.0, "The customs duty of the declaration stays A00")
+
+        landed_cost = self._apply(wizard_form, "dvi_4000_customs_duty")
+        self.assertEqual(landed_cost.cost_lines.l10n_ro_dvi_taric_code, "8462909000")
+        self.assertEqual(landed_cost.cost_lines.price_unit, 144.0)
+
+    def test_articles_without_customs_duty(self):
+        """Articles without customs duty still become lines, so that their products get the NC code."""
+        wizard_form = self._wizard_form(self._create_bill("EXP/2026/00001"), "dvi_4000_two_items")
+        self.assertEqual([line.taric_code for line in wizard_form.save().line_ids], ["0808108090", "0809400500"])
+        self.assertEqual(wizard_form.custom_duty, 0.0)

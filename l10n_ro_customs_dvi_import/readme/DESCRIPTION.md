@@ -6,7 +6,8 @@ Din PDF se citesc:
 
 - **MRN**-ul și data acceptării declarației, care devin numărul și data DVI-ului;
 - **regimul vamal** (4000 sau 4200);
-- **taxa vamală** A00, care intră în costul mărfii prin landed cost;
+- **articolele**, cu codul TARIC, valoarea în vamă şi **taxa vamală** A00 a fiecăruia: taxa fiecărui
+  articol intră în costul mărfii prin landed cost, doar pe produsele articolului;
 - **baza și TVA-ul** B00, transcrise din declarație, nu recalculate. La regimul 4200, B00 devine
   TVA-ul reținut ca garanție, iar importul rămâne scutit;
 - cota de TVA, după care se propune taxa de achiziție;

@@ -4,7 +4,7 @@
     "name": "Romania - Import DVI from the SNI PDF",
     "summary": "Fill in the DVI wizard from the customs import declaration PDF printed by the National Import System (SNI)",
     "license": "AGPL-3",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.1.0",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
