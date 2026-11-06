@@ -12,6 +12,7 @@
     "depends": [
         "stock",
         "account",
+        "stock_account",
         "purchase",
         "sale",
     ],
