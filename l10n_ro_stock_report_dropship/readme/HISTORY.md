@@ -3,6 +3,8 @@
 - Readme: the module extends the OCA `l10n_ro_stock_report` on the OCA valuation engine
   `l10n_ro_stock_account`, not `l10n_ro_storage_sheet` (the storage sheet on the native
   valuation), which has no dropship extension.
+- Consultant sheet with screenshots: the dropship flow, its journal entries on the OCA engine and
+  the storage sheet rows.
 
 ## 19.0.1.1.2 (2026-10-09)
 

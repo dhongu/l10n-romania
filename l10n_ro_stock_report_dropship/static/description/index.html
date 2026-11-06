@@ -61,11 +61,26 @@ their storage sheet.</p>
 <div class="tab-pane fade py-2" id="tb-panel-usage" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Usage</h2>
 <p>This is a technical add-on for the OCA storage sheet report (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_stock_report</code>, on the OCA
-valuation engine <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_stock_account</code>): when dropshipping (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">stock_dropshipping</code>) is also
-installed, dropshipped stock movements are recognized as a "Dropship" valuation type and included
-in the storage sheet report lines, under the account the movement is valued on. There is no
-separate menu or setting to configure; simply generate the storage sheet report as usual
-(Inventory &gt; Reporting) and dropship lines will appear alongside purchase/sale lines.</p>
+valuation engine <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_stock_account</code>). There is no menu or setting of its own.</p>
+<ol>
+<li>Sell a product with the <em>Dropship</em> route, confirm the generated purchase order and validate
+   the dropship transfer (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">DS/&#8230;</code>) when the goods reach the customer.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Done dropship transfer from the vendor, operation type Dropship, with the product line" src="en/01_transfer_dropship.png" /></p>
+<p>The OCA valuation engine posts the transfer entry <em>607 = 371</em> at the purchase value; the
+   vendor bill posts <em>371 + 4426 = 401</em>.</p>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Journal entry of the dropship transfer: 607000 debit and 371000 credit, 3,000.00 each" src="en/02_nota_dropship.png" /></p>
+<ol start="2">
+<li>Open <strong>Inventory &gt; Reporting &gt; Romanian Stock Sheet Report</strong>, choose the location and the
+   period and click <strong>Show Sheet</strong>: in the list view the dropship transfer shows as an input and
+   an output row with the same quantity and amount.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Storage sheet list with the dropship transfer as one input and one output row of the same amount" src="en/03_lista_fisa_dropship.png" /></p>
+<ol start="3">
+<li><strong>Show Sheet Pdf</strong> prints the dropship rows under the stock account of the product category
+   (e.g. 371000); after both rows the stock is back to its previous value.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Printed storage sheet with the dropship input and output rows under the 371000 account" src="en/04_pdf_fisa_dropship.png" /></p>
 </div>
 <div class="tab-pane fade py-2" id="tb-panel-versions" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Versions</h2>
@@ -74,6 +89,8 @@ separate menu or setting to configure; simply generate the storage sheet report 
 <li>Readme: the module extends the OCA <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_stock_report</code> on the OCA valuation engine
   <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_stock_account</code>, not <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_storage_sheet</code> (the storage sheet on the native
   valuation), which has no dropship extension.</li>
+<li>Consultant sheet with screenshots: the dropship flow, its journal entries on the OCA engine and
+  the storage sheet rows.</li>
 </ul>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.1.1.2 (2026-10-09)</h2>
 <ul>

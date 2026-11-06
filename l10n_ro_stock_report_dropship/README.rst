@@ -50,13 +50,40 @@ Usage
 
 This is a technical add-on for the OCA storage sheet report
 (``l10n_ro_stock_report``, on the OCA valuation engine
-``l10n_ro_stock_account``): when dropshipping (``stock_dropshipping``)
-is also installed, dropshipped stock movements are recognized as a
-"Dropship" valuation type and included in the storage sheet report
-lines, under the account the movement is valued on. There is no separate
-menu or setting to configure; simply generate the storage sheet report
-as usual (Inventory > Reporting) and dropship lines will appear
-alongside purchase/sale lines.
+``l10n_ro_stock_account``). There is no menu or setting of its own.
+
+1. Sell a product with the *Dropship* route, confirm the generated
+   purchase order and validate the dropship transfer (``DS/…``) when the
+   goods reach the customer.
+
+   |Done dropship transfer from the vendor, operation type Dropship,
+   with the product line|
+
+   The OCA valuation engine posts the transfer entry *607 = 371* at the
+   purchase value; the vendor bill posts *371 + 4426 = 401*.
+
+   |Journal entry of the dropship transfer: 607000 debit and 371000
+   credit, 3,000.00 each|
+
+2. Open **Inventory > Reporting > Romanian Stock Sheet Report**, choose
+   the location and the period and click **Show Sheet**: in the list
+   view the dropship transfer shows as an input and an output row with
+   the same quantity and amount.
+
+   |Storage sheet list with the dropship transfer as one input and one
+   output row of the same amount|
+
+3. **Show Sheet Pdf** prints the dropship rows under the stock account
+   of the product category (e.g. 371000); after both rows the stock is
+   back to its previous value.
+
+   |Printed storage sheet with the dropship input and output rows under
+   the 371000 account|
+
+.. |Done dropship transfer from the vendor, operation type Dropship, with the product line| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_report_dropship/static/description/en/01_transfer_dropship.png
+.. |Journal entry of the dropship transfer: 607000 debit and 371000 credit, 3,000.00 each| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_report_dropship/static/description/en/02_nota_dropship.png
+.. |Storage sheet list with the dropship transfer as one input and one output row of the same amount| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_report_dropship/static/description/en/03_lista_fisa_dropship.png
+.. |Printed storage sheet with the dropship input and output rows under the 371000 account| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_report_dropship/static/description/en/04_pdf_fisa_dropship.png
 
 Changelog
 =========
@@ -68,6 +95,8 @@ Changelog
   valuation engine ``l10n_ro_stock_account``, not
   ``l10n_ro_storage_sheet`` (the storage sheet on the native valuation),
   which has no dropship extension.
+- Consultant sheet with screenshots: the dropship flow, its journal
+  entries on the OCA engine and the storage sheet rows.
 
 19.0.1.1.2 (2026-10-09)
 -----------------------
