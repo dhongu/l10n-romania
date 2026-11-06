@@ -61,6 +61,14 @@ alongside purchase/sale lines.
 Changelog
 =========
 
+19.0.1.1.3 (2026-11-06)
+-----------------------
+
+- Readme: the module extends the OCA ``l10n_ro_stock_report`` on the OCA
+  valuation engine ``l10n_ro_stock_account``, not
+  ``l10n_ro_storage_sheet`` (the storage sheet on the native valuation),
+  which has no dropship extension.
+
 19.0.1.1.2 (2026-10-09)
 -----------------------
 
