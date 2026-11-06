@@ -120,7 +120,7 @@ Date minime pentru demo:
 5. Verificați în **Setări → Tehnic → Automatizare → Acțiuni planificate** (căutați „factura") că
    cele trei cron-uri ale modulului sunt active și au orarul dorit.
 6. Pe clienții plătitori de TVA verificați bifa **„TVA aplicabil"** (în engleză „Romania - VAT Subjected"; vizibilă doar pe partenerii de tip companie) de
-   pe fișa partenerului (`l10n_ro_config`): ea decide dacă CUI-ul este salvat — și transmis în XML — cu prefixul „RO".
+   pe fișa partenerului (câmp din modulul OCA `l10n_ro_config`, dacă e instalat — acest modul nu îl mai aduce): ea decide dacă CUI-ul este salvat — și transmis în XML — cu prefixul „RO".
 7. Pe fiecare client din România verificați **țara, județul, orașul și strada** — fără ele factura
    nu se poate confirma — și, pe firme, **codul fiscal (CUI)**, **înainte de confirmarea primei
    facturi**: pe Odoo 20 un partener fără CUI valid este tratat automat ca persoană fizică, iar
@@ -256,7 +256,7 @@ Alte corecții la generare, fără acțiune din partea operatorului:
   XML ca identificator de înregistrare legală (BT-47 la cumpărător, BT-30 la vânzător), în locul
   codului fiscal; la cumpărătorul fără CUI rămâne `0000000000000`;
 - codul fiscal al cumpărătorului (BT-48) se transmite **exact** cum este pe fișa partenerului:
-  prefixul „RO" apare doar dacă CUI-ul e salvat cu el (la `l10n_ro_config`, partenerii bifați
+  prefixul „RO" apare doar dacă CUI-ul e salvat cu el (cu modulul OCA `l10n_ro_config` instalat, partenerii bifați
   „TVA aplicabil"). Un plătitor de TVA nebifat pleacă fără „RO";
 - proprietățile suplimentare ale articolului sunt golite, deci atributele variantelor de produs nu
   ajung în XML.
