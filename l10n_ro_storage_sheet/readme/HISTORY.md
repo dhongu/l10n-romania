@@ -5,7 +5,8 @@
   came from the valuation layer, which no longer exists. The lines now get the stock valuation
   account of the product (category account, then the company default), and lines that still have
   no account are printed without the account header instead of being left out. In the pivot the
-  *Account* grouping now shows the stock account instead of an empty row.
+  *Account* grouping now shows the stock account instead of an empty row. The per-product
+  template uses `t-out` instead of the deprecated `t-raw`.
 - Consultant sheet: new step with the printed sheet. Printed sheet header: *Date* column (was
   hard-coded in Romanian), *Valoare ieșire* in the Romanian translation.
 
