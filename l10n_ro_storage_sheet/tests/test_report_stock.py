@@ -351,3 +351,38 @@ class TestStockReport(TransactionCase):
         self.assertEqual(qty_in_2, 10)
         self.assertEqual(qty_out_2, 4)
         self.assertEqual(qty_final_2, 8)
+
+    def test_printed_sheet_has_lines(self):
+        """The printed sheets group the lines by account: the lines must carry the stock
+        valuation account, otherwise the PDF comes out without any move."""
+        self.create_po()
+
+        wizard = Form(self.env["l10n.ro.storage.sheet"])
+        wizard.location_id = self.location
+        wizard = wizard.save()
+        wizard.do_compute_product()
+
+        lines = wizard.line_product_ids.filtered(lambda line: line.product_id == self.product_1)
+        self.assertTrue(lines)
+        expected = self.product_1._get_product_accounts()["stock_valuation"]
+        self.assertEqual(lines.account_id, expected)
+
+        receipt = self.picking.name
+        for report in ("report_storage_sheet", "report_storage_sheet_all"):
+            html, _type = self.env["ir.actions.report"]._render_qweb_html(f"l10n_ro_storage_sheet.{report}", wizard.ids)
+            self.assertIn(receipt, html.decode(), f"{report}: the receipt is missing from the printed sheet")
+
+    def test_printed_sheet_lines_without_account(self):
+        """Lines left without an account are still printed."""
+        self.create_po()
+
+        wizard = Form(self.env["l10n.ro.storage.sheet"])
+        wizard.location_id = self.location
+        wizard = wizard.save()
+        wizard.do_compute_product()
+        wizard.line_product_ids.account_id = False
+
+        html, _type = self.env["ir.actions.report"]._render_qweb_html(
+            "l10n_ro_storage_sheet.report_storage_sheet_all", wizard.ids
+        )
+        self.assertIn(self.picking.name, html.decode())

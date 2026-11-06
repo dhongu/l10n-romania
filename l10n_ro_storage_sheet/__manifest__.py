@@ -4,7 +4,7 @@
     "summary": "Storage sheet (Fișă Magazie) without the OCA stock valuation engine",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "countries": ["ro"],
     "author": "Terrabit, NextERP Romania",
     "website": "https://www.terrabit.ro",

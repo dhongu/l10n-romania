@@ -35,8 +35,8 @@ PIVOT_BY_PRODUCT = """
                 const item = [...document.querySelectorAll('.o-dropdown-item, .dropdown-item')]
                     .find((el) => ['Produs', 'Product'].includes(el.textContent.trim()));
                 item?.click();
-            }, 600);
-        }, 600);
+            }, 1200);
+        }, 1200);
     }
 """
 
@@ -63,11 +63,15 @@ class TestStorageSheetScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
         # codul implicit al depozitului e luat din numele companiei de test („compa”)
         cls.warehouse.write({"name": "Depozit central", "code": "DEP"})
         cls.location = cls.warehouse.lot_stock_id
-        Product = cls.env["product.product"]
-        cls.cable = Product.create(
-            {"name": "Cablu UTP Cat6", "is_storable": True, "standard_price": 2.5, "list_price": 4.0}
+        # mărfuri: contul de stoc 371, nu contul implicit al companiei (301 Materii prime)
+        account_371 = cls.env["account.chart.template"].with_company(company).ref("pcg_371")
+        category = cls.env["product.category"].create(
+            {"name": "Mărfuri", "property_stock_valuation_account_id": account_371.id}
         )
-        cls.plug = Product.create({"name": "Mufă RJ45", "is_storable": True, "standard_price": 0.4, "list_price": 1.0})
+        Product = cls.env["product.product"]
+        product_vals = {"is_storable": True, "categ_id": category.id}
+        cls.cable = Product.create({**product_vals, "name": "Cablu UTP Cat6", "standard_price": 2.5, "list_price": 4.0})
+        cls.plug = Product.create({**product_vals, "name": "Mufă RJ45", "standard_price": 0.4, "list_price": 1.0})
         cls.vendor = cls.env["res.partner"].create({"name": "Furnizor Demo SRL"})
         cls.customer = cls.env["res.partner"].create({"name": "Client Demo SRL"})
 
@@ -132,9 +136,9 @@ class TestStorageSheetScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                 "wait": ".o_form_view",
                 "click_btn": "button[name='button_show_sheet']",
                 "wait_after": ".o_pivot",
-                # rândurile pivotului: pe produs, în loc de cont (gol pe valorizarea nativă)
+                # rândurile pivotului: pe produs, în loc de cont
                 "eval": PIVOT_BY_PRODUCT,
-                "settle": 3500,
+                "settle": 5000,
             },
             {
                 "url": self._wizard_url(),
@@ -145,6 +149,8 @@ class TestStorageSheetScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                 "eval": "document.querySelector('.o_switch_view.o_list')?.click();",
                 "settle": 3000,
             },
+            # fișa tipărită (Tipărire fișă, fără „O pagină per produs”)
+            self.report_shot("l10n_ro_storage_sheet.report_storage_sheet_all", self.wizard, "04_pdf_fisa_magazie.png"),
         ]
 
     def test_capture_fise(self):

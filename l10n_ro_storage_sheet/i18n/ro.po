@@ -58,7 +58,7 @@ msgstr "Valoare intrată"
 #. module: l10n_ro_storage_sheet
 #: model_terms:ir.ui.view,arch_db:l10n_ro_storage_sheet.report_storage_sheet_lines_header
 msgid "Amount Output"
-msgstr "Valoare iesită"
+msgstr "Valoare ieșire"
 
 #. module: l10n_ro_storage_sheet
 #: model_terms:ir.ui.view,arch_db:l10n_ro_storage_sheet.report_storage_sheet_lines_header
@@ -103,12 +103,8 @@ msgid "Currency"
 msgstr "Moneda"
 
 #. module: l10n_ro_storage_sheet
-#: model_terms:ir.ui.view,arch_db:l10n_ro_storage_sheet.report_storage_sheet_lines_header
-msgid "Data"
-msgstr "Date"
-
-#. module: l10n_ro_storage_sheet
 #: model:ir.model.fields,field_description:l10n_ro_storage_sheet.field_l10n_ro_storage_sheet_line__date
+#: model_terms:ir.ui.view,arch_db:l10n_ro_storage_sheet.report_storage_sheet_lines_header
 #: model_terms:ir.ui.view,arch_db:l10n_ro_storage_sheet.view_stock_sheet_report_form
 msgid "Date"
 msgstr "Data"
