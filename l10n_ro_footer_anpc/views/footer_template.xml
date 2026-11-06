@@ -4,23 +4,26 @@
     <!-- Ordinul ANPC 449/2022, modificat prin Ordinul ANPC 270/2026 (MO 420/19.05.2026):
          doar pictograma SAL, 250 x 50 px, cu link către platforma reclamatiisal.anpc.ro.
          Pictograma SOL a fost eliminată odată cu închiderea platformei europene ODR. -->
+    <template id="footer_anpc_sal" name="ANPC SAL pictogram">
+        <a
+            href="https://reclamatiisal.anpc.ro/"
+            class="o_footer_logo logo"
+            target="_blank"
+            rel="noopener"
+        >
+            <img
+                src="/l10n_ro_footer_anpc/static/src/img/anpc_sal.png"
+                alt="ANPC - Soluționarea alternativă a litigiilor (SAL)"
+                width="250"
+                height="50"
+                style="object-fit: contain;"
+            />
+        </a>
+    </template>
     <template id="footer_anpc_data" inherit_id="web.frontend_layout" priority="500">
         <xpath expr="//div[hasclass('o_footer_copyright')]/div/div" position="inside">
             <div class="o_footer_anpc col-md text-center text-md-end">
-                <a
-                    href="https://reclamatiisal.anpc.ro/"
-                    class="o_footer_logo logo"
-                    target="_blank"
-                    rel="noopener"
-                >
-                    <img
-                        src="/l10n_ro_footer_anpc/static/src/img/anpc_sal.png"
-                        alt="ANPC - Soluționarea alternativă a litigiilor (SAL)"
-                        width="250"
-                        height="50"
-                        style="object-fit: contain;"
-                    />
-                </a>
+                <t t-call="l10n_ro_footer_anpc.footer_anpc_sal" />
             </div>
         </xpath>
     </template>
