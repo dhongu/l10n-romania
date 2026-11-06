@@ -105,7 +105,7 @@ Date minime pentru demo:
 
 ## 5. Configurare inițială
 
-1. Instalați modulul `l10n_ro_efactura_enhancement` (aduce `l10n_ro_edi`, `l10n_ro_config`,
+1. Instalați modulul `l10n_ro_efactura_enhancement` (aduce `l10n_ro_edi`, `l10n_ro_report_common`,
    `l10n_ro_message_spv` și tablourile de bord spreadsheet).
 2. Configurați conexiunea SPV a companiei din e-Factura standard (certificat digital, token ANAF).
    Este condiția ca o companie să fie luată în calcul de cron-uri.
@@ -121,7 +121,7 @@ Date minime pentru demo:
 5. Verificați în **Setări → Tehnic → Automatizare → Acțiuni planificate** (căutați „factura") că
    cele trei cron-uri ale modulului sunt active și au orarul dorit.
 6. Pe clienții plătitori de TVA verificați bifa **„TVA aplicabil"** (în engleză „Romania - VAT Subjected"; vizibilă doar pe partenerii de tip companie) de
-   pe fișa partenerului (`l10n_ro_config`): ea decide dacă CUI-ul este salvat — și transmis în XML — cu prefixul „RO".
+   pe fișa partenerului (câmp din modulul OCA `l10n_ro_config`, dacă e instalat — acest modul nu îl mai aduce): ea decide dacă CUI-ul este salvat — și transmis în XML — cu prefixul „RO".
 7. Pe fiecare client din România verificați **țara, județul, orașul și strada** — fără ele factura
    nu se poate confirma — și, pe firme, **codul fiscal (CUI)**: fără el factura nu pleacă în SPV.
 
@@ -158,7 +158,7 @@ Accesați **Setări → Tehnic → Parametri → Parametri de sistem** (mod dezv
 | `efactura.embed_pdf` | `True` | include PDF-ul facturii în XML; `False` = XML fără PDF, pe toate căile de trimitere (buton, „Trimite în SPV", cron) |
 | `efactura.use_line_description` | `False` | `True` = în XML, numele articolului se ia din descrierea liniei de factură (fără numele produsului), nu din produs |
 | `efactura.replace_unit_uom` | `False` | un cod de unitate care înlocuiește în XML codul generic `C62` („unitate"). Valoarea se scrie **între ghilimele**, ex. `'H87'`; scris fără ghilimele, generarea XML-ului eșuează |
-| `efactura.get_all_banks` | `False` | `True` = XML-ul facturilor (nu și al notelor de credit) conține toate conturile bancare bifate pentru tipărire pe rapoarte, în moneda facturii. Necesită modulul care adaugă bifa pe contul bancar (`l10n_ro_report_common`); fără el, generarea XML-ului eșuează. Căutarea nu filtrează pe companie — în baze multi-companie bifați doar conturile companiei emitente |
+| `efactura.get_all_banks` | `False` | `True` = XML-ul facturilor (nu și al notelor de credit) conține toate conturile bancare bifate pentru tipărire pe rapoarte, în moneda facturii. Bifa de pe contul bancar vine din `l10n_ro_report_common`, instalat odată cu modulul. Căutarea nu filtrează pe companie — în baze multi-companie bifați doar conturile companiei emitente |
 
 ![Parametrii de sistem efactura.*](../static/description/02_parametri_sistem.png)
 
@@ -253,7 +253,7 @@ Alte corecții la generare, fără acțiune din partea operatorului:
   XML ca identificator de înregistrare legală (BT-47 la cumpărător, BT-30 la vânzător), în locul
   codului fiscal; la cumpărătorul fără CUI rămâne `0000000000000`;
 - codul fiscal al cumpărătorului (BT-48) se transmite **exact** cum este pe fișa partenerului:
-  prefixul „RO" apare doar dacă CUI-ul e salvat cu el (la `l10n_ro_config`, partenerii bifați
+  prefixul „RO" apare doar dacă CUI-ul e salvat cu el (cu modulul OCA `l10n_ro_config` instalat, partenerii bifați
   „TVA aplicabil"). Un plătitor de TVA nebifat pleacă fără „RO";
 - proprietățile suplimentare ale articolului sunt golite, deci atributele variantelor de produs nu
   ajung în XML.
@@ -393,7 +393,7 @@ de facturi și filtra cu filtrele standard de stare e-Factura.
 |---|---|
 | `l10n_ro_edi` (Odoo standard) | conexiunea SPV, generarea și încărcarea XML-ului, documentele e-Factura și stările lor, sincronizarea cu ANAF |
 | `account_edi_ubl_cii` | generatorul UBL peste care se aplică corecțiile CIUS-RO |
-| `l10n_ro_config` | configurările de localizare românească ale companiei |
+| `l10n_ro_report_common` | bifa „tipărire pe rapoarte” de pe conturile bancare, folosită de `efactura.get_all_banks` |
 | `l10n_ro_message_spv` | mesajele SPV afișate în tabloul de bord |
 | `spreadsheet_dashboard`, `spreadsheet_dashboard_account` | tabloul de bord „eFactura SPV" |
 | `point_of_sale` (dacă e instalat) | facturile emise din comenzi POS primesc tipul 751 în XML |
@@ -463,7 +463,6 @@ contabilă mai veche de 30 de zile (nu mai sunt trimise automat și nici nu li s
 | „Factura nu este în așteptarea indexului SPV." | „Resetează trimiterea SPV" pe o factură care nu mai e „Neindexat" | nimic de făcut — starea s-a schimbat între timp |
 | „SPV a răspuns cu un corp gol pe ..." sau „SPV a răspuns cu un conținut neașteptat pe ..." în istoric | ANAF a răspuns cu o eroare sau o pagină de mentenanță în loc de document | reîncercați mai târziu; cron-ul reia singur trimiterea |
 | Generarea XML-ului eșuează după setarea `efactura.replace_unit_uom` | codul de unitate scris fără ghilimele | scrieți valoarea între ghilimele, ex. `'H87'` |
-| Generarea XML-ului eșuează după activarea `efactura.get_all_banks` | modulul care adaugă bifa pe contul bancar nu e instalat | instalați-l sau readuceți parametrul la `False` |
 | Raportul pe email nu sosește | „Email raport cron SPV" gol sau nicio factură de procesat la rulare | completați destinatarii; raportul se trimite doar când există facturi |
 | Aceeași factură apare la „Eșuate", apoi la „Sărite" | cauza erorii nu a fost corectată; după 3 eșecuri cron-ul nu o mai trimite | citiți eroarea din istoric, corectați partenerul sau factura, apoi „Trimite în SPV" |
 | Toate facturile din lot apar la „Eșuate" și cron-ul nu se reia | ANAF indisponibil sau token expirat: fără nicio factură încărcată, cron-ul așteaptă rularea următoare | verificați conexiunea SPV (token); facturile sunt reluate la rularea următoare, în limita celor 3 încercări |
