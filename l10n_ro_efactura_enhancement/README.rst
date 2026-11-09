@@ -231,6 +231,52 @@ Alte îmbunătățiri planificate
 Changelog
 =========
 
+19.0.0.5.12 (2026-11-03)
+------------------------
+
+- **No longer depends directly on the OCA module ``l10n_ro_config``.**
+  The only field used from it, ``res.partner.bank.l10n_ro_print_report``
+  (bank accounts written in the e-Factura XML when
+  ``efactura.get_all_banks`` is enabled), is now taken from
+  ``l10n_ro_report_common``, which defines it with the same name and
+  column, so existing data is kept. No functional change; requires a
+  module update.
+
+19.0.0.5.11 (2026-10-30)
+------------------------
+
+- **Limita de 3 reîncercări la trimiterea automată în SPV are efect.**
+  Pe Odoo 19+ o încărcare eșuată nu mai lasă niciun document e-Factura,
+  deci limita nu avea ce număra și factura era retrimisă la fiecare
+  rulare.
+
+  - Cron-ul numără acum eșecurile pe factură (câmpul „Trimiteri SPV
+    eșuate (cron)”); după 3 eșecuri factura apare la „Sărite —
+    reîncercări epuizate” în raport.
+  - Facturile netrimise încă au prioritate în lot față de cele care au
+    mai eșuat.
+  - Readucerea facturii în ciornă resetează contorul.
+
+- **Cron-ul de trimitere se reia la 5 minute doar dacă a avansat.** Se
+  reia când au rămas facturi peste lot și cel puțin una a ajuns în SPV
+  la rularea curentă; dacă toate trimiterile eșuează (ANAF indisponibil,
+  token expirat), se așteaptă rularea următoare.
+- Necesită actualizarea modulului (câmp nou pe factură).
+
+19.0.0.5.10 (2026-10-30)
+------------------------
+
+- **Cron-ul de fetch status nu se mai reia la nesfârșit.**
+  ``_cron_l10n_ro_edi_fetch_status`` se reprograma la +2 minute oricând
+  exista o factură ``invoice_sent`` în ultimele 30 de zile, chiar dacă
+  ANAF nu răspundea și nu se schimba nimic. Acum se reia doar dacă lotul
+  a fost plin (``limit``) **și** cel puțin o factură a ieșit din
+  ``invoice_sent``; altfel așteaptă intervalul normal al cron-ului.
+  Pauza de 2 minute (``_trigger(at)``) rămâne, pentru ANAF.
+
+  - Apelul intern din ``_cron_l10n_ro_edi_auto_send`` urmează aceeași
+    regulă.
+
 19.0.0.5.9 (2026-10-27)
 -----------------------
 
