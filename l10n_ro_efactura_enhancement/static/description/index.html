@@ -570,6 +570,56 @@ existing <tt class="docutils literal">l10n_ro_spv_cron_no_email</tt> setting.</l
 <div class="section" id="changelog">
 <h1>Changelog</h1>
 <div class="section" id="section-1">
+<h2>19.0.0.5.12 (2026-11-03)</h2>
+<ul class="simple">
+<li><strong>No longer depends directly on the OCA module ``l10n_ro_config``.</strong>
+The only field used from it, <tt class="docutils literal">res.partner.bank.l10n_ro_print_report</tt>
+(bank accounts written in the e-Factura XML when
+<tt class="docutils literal">efactura.get_all_banks</tt> is enabled), is now taken from
+<tt class="docutils literal">l10n_ro_report_common</tt>, which defines it with the same name and
+column, so existing data is kept. No functional change; requires a
+module update.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2>19.0.0.5.11 (2026-10-30)</h2>
+<ul class="simple">
+<li><strong>Limita de 3 reîncercări la trimiterea automată în SPV are efect.</strong>
+Pe Odoo 19+ o încărcare eșuată nu mai lasă niciun document e-Factura,
+deci limita nu avea ce număra și factura era retrimisă la fiecare
+rulare.<ul>
+<li>Cron-ul numără acum eșecurile pe factură (câmpul „Trimiteri SPV
+eșuate (cron)”); după 3 eșecuri factura apare la „Sărite —
+reîncercări epuizate” în raport.</li>
+<li>Facturile netrimise încă au prioritate în lot față de cele care au
+mai eșuat.</li>
+<li>Readucerea facturii în ciornă resetează contorul.</li>
+</ul>
+</li>
+<li><strong>Cron-ul de trimitere se reia la 5 minute doar dacă a avansat.</strong> Se
+reia când au rămas facturi peste lot și cel puțin una a ajuns în SPV
+la rularea curentă; dacă toate trimiterile eșuează (ANAF indisponibil,
+token expirat), se așteaptă rularea următoare.</li>
+<li>Necesită actualizarea modulului (câmp nou pe factură).</li>
+</ul>
+</div>
+<div class="section" id="section-3">
+<h2>19.0.0.5.10 (2026-10-30)</h2>
+<ul class="simple">
+<li><strong>Cron-ul de fetch status nu se mai reia la nesfârșit.</strong>
+<tt class="docutils literal">_cron_l10n_ro_edi_fetch_status</tt> se reprograma la +2 minute oricând
+exista o factură <tt class="docutils literal">invoice_sent</tt> în ultimele 30 de zile, chiar dacă
+ANAF nu răspundea și nu se schimba nimic. Acum se reia doar dacă lotul
+a fost plin (<tt class="docutils literal">limit</tt>) <strong>și</strong> cel puțin o factură a ieșit din
+<tt class="docutils literal">invoice_sent</tt>; altfel așteaptă intervalul normal al cron-ului.
+Pauza de 2 minute (<tt class="docutils literal">_trigger(at)</tt>) rămâne, pentru ANAF.<ul>
+<li>Apelul intern din <tt class="docutils literal">_cron_l10n_ro_edi_auto_send</tt> urmează aceeași
+regulă.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="section-4">
 <h2>19.0.0.5.9 (2026-10-27)</h2>
 <ul class="simple">
 <li><strong>Furnizorul nu se mai dublează la importul e-Factura când CUI-ul
@@ -584,7 +634,7 @@ rămân distincte.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-2">
+<div class="section" id="section-5">
 <h2>19.0.0.5.8 (2026-10-23)</h2>
 <ul class="simple">
 <li><strong>Buton „Resetează trimiterea SPV” pentru facturile rămase fără
@@ -603,7 +653,7 @@ factura se retrimite din „Trimite” sau din „Retrimite în SPV”.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-3">
+<div class="section" id="section-6">
 <h2>19.0.0.5.7 (2026-10-22)</h2>
 <ul class="simple">
 <li>Listed on Odoo Apps as <em>e-Factura Enhancements</em> (was <em>eFactura
@@ -611,7 +661,7 @@ Enhancement</em>). The technical name <tt class="docutils literal">l10n_ro_efact
 does not change.</li>
 </ul>
 </div>
-<div class="section" id="section-4">
+<div class="section" id="section-7">
 <h2>19.0.0.5.6 (2026-10-17)</h2>
 <ul class="simple">
 <li><strong>Stornourile pleacă în SPV cu referința facturii corectate.</strong> Nota de
@@ -629,7 +679,7 @@ nu se schimbă.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-5">
+<div class="section" id="section-8">
 <h2>19.0.0.5.5 (2026-10-09)</h2>
 <ul class="simple">
 <li>Odoo Apps banner (<tt class="docutils literal">static/description/main_screenshot.png</tt>),
@@ -637,14 +687,14 @@ generated from <tt class="docutils literal">banner.json</tt>. Removed the obsole
 <tt class="docutils literal">description/</tt> folder with the old generic banner.</li>
 </ul>
 </div>
-<div class="section" id="section-6">
+<div class="section" id="section-9">
 <h2>19.0.0.5.4 (2026-09-30)</h2>
 <ul class="simple">
 <li>Own module icon in the flat style of the Terrabit modules, instead of
 the missing or generic one.</li>
 </ul>
 </div>
-<div class="section" id="section-7">
+<div class="section" id="section-10">
 <h2>19.0.0.5.3 (2026-09-23)</h2>
 <ul class="simple">
 <li><strong>O firmă din România fără CUI nu mai pleacă în SPV.</strong> <tt class="docutils literal">l10n_ro_edi</tt>
@@ -669,7 +719,7 @@ apărea în română: în <tt class="docutils literal">ro.po</tt> textul avea al
 iar Odoo sărea tăcut traducerea.</li>
 </ul>
 </div>
-<div class="section" id="section-8">
+<div class="section" id="section-11">
 <h2>19.0.0.5.2 (2026-09-23)</h2>
 <ul class="simple">
 <li><strong>Facturile din POS pleacă din nou în e-Factura cu tipul 751.</strong> Pe
@@ -687,7 +737,7 @@ de client, confirmat și la un al doilea client (751 până în mai 2026,
 </li>
 </ul>
 </div>
-<div class="section" id="section-9">
+<div class="section" id="section-12">
 <h2>19.0.0.4.4 (2026-09-10)</h2>
 <ul class="simple">
 <li><strong>Trunchiere referință aviz de expediție (BT-16) la 200 de
@@ -711,7 +761,7 @@ loc să taie în mijlocul unui nume (simetric cu
 </li>
 </ul>
 </div>
-<div class="section" id="section-10">
+<div class="section" id="section-13">
 <h2>19.0.0.4.3 (2026-09-09)</h2>
 <ul class="simple">
 <li><strong>Limita reală pentru Avizul de plată (BT-83) e 140 de caractere, nu
@@ -727,7 +777,7 @@ referința reală respinsă (43 de comenzi pe PTCDRO20689).</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-11">
+<div class="section" id="section-14">
 <h2>19.0.0.4.2 (2026-09-08)</h2>
 <ul class="simple">
 <li><strong>Fix: ``cbc:PrepaidAmount`` / ``cbc:PayableAmount`` nu mai depind de
@@ -755,7 +805,7 @@ care a trecut neobservată de la migrarea pe 19.0.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-12">
+<div class="section" id="section-15">
 <h2>19.0.0.4.0 (2026-08-21)</h2>
 <ul class="simple">
 <li><strong>Importul automat al facturilor primite din SPV este acum oprit
@@ -781,7 +831,7 @@ rămân neatinse, ca și până acum.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-13">
+<div class="section" id="section-16">
 <h2>19.0.0.3.23 (2026-07-29)</h2>
 <ul class="simple">
 <li><strong>O singură regulă decide dacă factura merge în SPV.</strong> Cele patru căi
@@ -812,7 +862,7 @@ modifica ușor pentru facturile emise către un contact al unei
 companii.</li>
 </ul>
 </div>
-<div class="section" id="section-14">
+<div class="section" id="section-17">
 <h2>19.0.0.3.22 (2026-07-29)</h2>
 <ul class="simple">
 <li><strong>Răspunsurile neașteptate de la SPV nu mai crapă interfața.</strong> ANAF
@@ -842,7 +892,7 @@ restart.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-15">
+<div class="section" id="section-18">
 <h2>19.0.0.3.21 (2026-07-29)</h2>
 <p>Port of the 18.0 fix (18.0.0.2.15 / 18.0.0.2.16) that was never
 forwarded to 19.0: the 19.0 catch-up port of this module predates it.</p>
@@ -870,7 +920,7 @@ through any path. The SPV upload path uses
 still emailed once, after validation.</li>
 </ul>
 </div>
-<div class="section" id="section-16">
+<div class="section" id="section-19">
 <h2>19.0.0.3.20 (2026-07-28)</h2>
 <ul class="simple">
 <li><strong>Import SPV: linia se recalculează din ``cbc:LineExtensionAmount``
@@ -898,7 +948,7 @@ apare în chatter-ul facturii.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-17">
+<div class="section" id="section-20">
 <h2>19.0.0.3.18 (2026-07-03)</h2>
 <ul class="simple">
 <li><strong>Opțiune de dezactivare a importului automat de facturi primite din
@@ -918,7 +968,7 @@ neindexate din același cron rămân neatinse.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-18">
+<div class="section" id="section-21">
 <h2>19.0.0.3.17 (2026-07-03)</h2>
 <ul class="simple">
 <li><strong>Descrierea nu mai apare dublată în Description + Name.</strong> Când linia
@@ -932,7 +982,7 @@ trunchiat la 100, Description la 200). Doar cod Python, nu necesită
 actualizarea modulului.</li>
 </ul>
 </div>
-<div class="section" id="section-19">
+<div class="section" id="section-22">
 <h2>19.0.0.3.16 (2026-07-03)</h2>
 <ul class="simple">
 <li><strong>Tag-ul ``cbc:Description`` este omis când linia nu are descriere
@@ -953,7 +1003,7 @@ nu mai apare deloc în XML. <tt class="docutils literal">cbc:Name</tt> rămâne 
 </li>
 </ul>
 </div>
-<div class="section" id="section-20">
+<div class="section" id="section-23">
 <h2>19.0.0.3.15 (2026-07-01)</h2>
 <ul class="simple">
 <li><strong>Emailul către client este acum un cron separat.</strong> Trimiterea
@@ -975,7 +1025,7 @@ nesetat, deci se reia la rularea următoare.</li>
 </li>
 </ul>
 </div>
-<div class="section" id="section-21">
+<div class="section" id="section-24">
 <h2>19.0.0.3.14 (2026-07-01)</h2>
 <ul class="simple">
 <li><strong>Emailul este complet separat de trimiterea facturilor în SPV.</strong>
@@ -1004,7 +1054,7 @@ statusurile citite din SPV, iar factura se reia la rularea următoare
 </li>
 </ul>
 </div>
-<div class="section" id="section-22">
+<div class="section" id="section-25">
 <h2>19.0.0.3.13 (2026-06-30)</h2>
 <ul class="simple">
 <li><strong>Trunchiere referință comandă (BT-13) la 200 de caractere.</strong> Pe

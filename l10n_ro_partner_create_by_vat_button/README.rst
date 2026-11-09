@@ -22,8 +22,17 @@ Romania - Partner Create by VAT Button
 
 |badge1| |badge2| |badge3|
 
-   - Adaugare buton in ecran pentru recitire date ANF
-   - 
+**No longer developed: use ``l10n_ro_partner_autocomplete``.** It fills
+a Romanian partner in from ANAF, for free, from the CUI typed in the
+name or the Tax ID, and has an **Update from ANAF** button on the
+partner. It does not depend on the OCA
+``l10n_ro_partner_create_by_vat``, which this module needs, and cannot
+be installed together with it. This module only receives fixes until the
+databases that use it have switched.
+
+Adds a button on the partner form to read the partner data again from
+ANAF (or VIES for a partner from another EU country), and fills a new
+partner in from the CUI typed in its name.
 
 **Table of contents**
 
@@ -32,6 +41,12 @@ Romania - Partner Create by VAT Button
 
 Changelog
 =========
+
+19.0.1.1.13 (2026-11-03)
+------------------------
+
+- The description says the module is no longer developed:
+  ``l10n_ro_partner_autocomplete`` replaces it. No functional change.
 
 19.0.1.1.12 (2026-10-23)
 ------------------------
