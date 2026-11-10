@@ -1,0 +1,10 @@
+{
+  "title": "Stock Journal per Warehouse (OCA stock)",
+  "summary": "Warehouse journals also for the OCA stock entries",
+  "icon": "clipboard",
+  "features": [
+    "RO stock entries in the warehouse journal",
+    "FIFO negative stock compensation",
+    "Installs itself with both modules"
+  ]
+}
