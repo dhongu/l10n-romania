@@ -376,15 +376,16 @@ journal (<em>Inventory &gt; Configuration &gt; Settings</em>). Companies that ke
 journal per warehouse - to number and check the stock entries of each
 warehouse separately - set it on the warehouse with this module:</p>
 <ul class="simple">
-<li><strong>Stock Journal</strong> on the warehouse (company dependent, <em>Accounting</em>
-tab rights): the entries of the moves that leave or enter a location
-of the warehouse are posted in it; empty, the company stock journal is
-used;</li>
+<li><strong>Stock Journal</strong> on the warehouse (company dependent, visible to
+<em>Accounting / Administrator</em> users): the entries of the moves that
+leave or enter a location of the warehouse are posted in it; empty,
+the company stock journal is used;</li>
 <li>covers the standard stock entry of the native Odoo 19 valuation; with
 <tt class="docutils literal">l10n_ro_stock_account</tt> installed, the bridge module
 <tt class="docutils literal">l10n_ro_stock_account_warehouse_journal_extra</tt> covers also its
 additional Romanian entries and the FIFO negative stock compensation;</li>
-<li>a transfer between two warehouses with different stock journals is
+<li>a move that generates a stock entry between two warehouses with
+different stock journals (e.g. with <tt class="docutils literal">l10n_ro_stock_account</tt>) is
 refused: its entry cannot belong to both.</li>
 </ul>
 <p>Up to 18.0 the field was part of <tt class="docutils literal">l10n_ro_stock_account</tt>; the 19.0
