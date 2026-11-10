@@ -4,7 +4,7 @@
   "lang": "en",
   "features": [
     "Stock Journal field on the warehouse",
-    "Covers RO stock and FIFO entries",
+    "Works on the native stock valuation",
     "Blocks mixed-journal transfers"
   ]
 }
