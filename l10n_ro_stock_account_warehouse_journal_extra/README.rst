@@ -17,7 +17,7 @@ Romania - Stock Journal per Warehouse (OCA stock)
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_warehouse_journal_extra
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_warehouse_journal_extra
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -38,7 +38,7 @@ the standard stock entry already is.
 Changelog
 =========
 
-19.0.1.0.0 (2026-11-10)
+20.0.1.0.0 (2026-11-10)
 -----------------------
 
 - Split from ``l10n_ro_stock_account_warehouse_journal``, which no
@@ -73,6 +73,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_warehouse_journal_extra>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_warehouse_journal_extra>`_ project on GitHub.
 
 You are welcome to contribute.
