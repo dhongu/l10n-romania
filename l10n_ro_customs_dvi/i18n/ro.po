@@ -459,3 +459,153 @@ msgstr "Garanție TVA blocată"
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__vat_guarantee_amount
 msgid "VAT Held as Guarantee"
 msgstr "TVA reținut ca garanție"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/wizard/account_dvi.py:0
+msgid "%(product)s - art. %(number)s"
+msgstr "%(product)s - art. %(number)s"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi_line__number
+msgid "Article"
+msgstr "Articol"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_account_invoice_dvi_line
+msgid "Article of the customs declaration"
+msgstr "Articol al declarației vamale"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi__line_ids
+msgid "Articles"
+msgstr "Articole"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi__line_ids
+msgid ""
+"Articles of the declaration, with their TARIC code and customs duty. Each "
+"article becomes a line of the landed cost, split only on its own products. "
+"Without articles, the customs duty is split on all the received products."
+msgstr ""
+"Articolele declarației, cu codul TARIC și taxa vamală. Fiecare articol "
+"devine o linie a costului adițional, repartizată doar pe produsele lui. Fără"
+" articole, taxa vamală se repartizează pe toate produsele recepționate."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_nc_code
+msgid "Combined Nomenclature code: the first eight digits of the TARIC code."
+msgstr ""
+"Codul din Nomenclatura Combinată: primele opt cifre ale codului TARIC."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid "Commodity code set from the DVI:"
+msgstr "Cod de mărfuri completat din DVI:"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi_line__customs_value
+msgid "Customs Value"
+msgstr "Valoare în vamă"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_account_invoice_dvi_line__custom_duty
+msgid "Customs duty (A00) of the article."
+msgstr "Taxa vamală (A00) a articolului."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_nc_code
+msgid "NC Code"
+msgstr "Cod NC"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_product_product
+msgid "Product Variant"
+msgstr "Variantă de produs"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_product_ids
+msgid "Products"
+msgstr "Produse"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_product_ids
+msgid ""
+"Received products of the article, proposed from their commodity code. A "
+"product without commodity code can be chosen by hand: it gets the code of "
+"the article when the DVI is posted."
+msgstr ""
+"Produsele recepționate ale articolului, propuse după codul lor de mărfuri. "
+"Un produs fără cod de mărfuri se poate alege manual: primește codul "
+"articolului la postarea DVI-ului."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid "Received products without commodity code:"
+msgstr "Produse recepționate fără cod de mărfuri:"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_stock_landed_cost_lines
+msgid "Stock Landed Cost Line"
+msgstr "Linie de cost adițional"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi_line__taric_code
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_taric_code
+msgid "TARIC Code"
+msgstr "Cod TARIC"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,help:l10n_ro_customs_dvi.field_stock_landed_cost_lines__l10n_ro_dvi_taric_code
+msgid ""
+"TARIC code of the article of the customs declaration. The customs duty of "
+"the line is split only on the products of the article."
+msgstr ""
+"Codul TARIC al articolului din declarația vamală. Taxa vamală a liniei se "
+"repartizează doar pe produsele articolului."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid ""
+"The customs duty cannot be split: these received products belong to no article of the DVI, and have no commodity code or a code that matches an article with customs duty:%(products)s\n"
+"\n"
+"Choose them on the line of their article, in the Additional Costs tab, or set the commodity code on the product."
+msgstr ""
+"Taxa vamală nu poate fi repartizată: aceste produse recepționate nu aparțin niciunui articol din DVI și nu au cod de mărfuri sau au un cod care se potrivește cu un articol cu taxă vamală:%(products)s\n"
+"\n"
+"Alegeți-le pe linia articolului lor, în tabul Costuri adiționale, sau completați codul de mărfuri pe produs."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_landed_cost.py:0
+msgid ""
+"The customs duty of %(article)s (TARIC %(taric)s, %(amount)s) cannot be split: no received product matches it.\n"
+"\n"
+"Choose the products of the article on its line, in the Additional Costs tab, or set the commodity code on the product.%(products)s"
+msgstr ""
+"Taxa vamală pentru %(article)s (TARIC %(taric)s, %(amount)s) nu poate fi repartizată: niciun produs recepționat nu corespunde articolului.\n"
+"\n"
+"Alegeți produsele articolului pe linia lui, în tabul Costuri adiționale, sau completați codul de mărfuri pe produs.%(products)s"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/wizard/account_dvi.py:0
+msgid ""
+"The customs duty of the articles (%(articles)s) does not add up to the "
+"customs duty of the declaration (%(total)s)."
+msgstr ""
+"Taxa vamală a articolelor (%(articles)s) nu dă taxa vamală a declarației "
+"(%(total)s)."
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model,name:l10n_ro_customs_dvi.model_stock_valuation_adjustment_lines
+msgid "Valuation Adjustment Lines"
+msgstr "Linii de ajustare a evaluării"
+
+#. module: l10n_ro_customs_dvi
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_account_invoice_dvi_line__wizard_id
+msgid "Wizard"
+msgstr "Asistent"
