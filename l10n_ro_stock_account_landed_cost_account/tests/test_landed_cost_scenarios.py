@@ -299,3 +299,16 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
             self._lines(landed.account_move_id),
             [("371000", 60.0, 0.0), ("482099", 0.0, -60.0), ("482099", 0.0, 60.0), ("607000", -60.0, 0.0)],
         )
+
+    def test_16_settings_warning_without_storno(self):
+        """Choosing the intermediary method warns the user when Storno accounting is off."""
+        settings = self.env["res.config.settings"].new(
+            {"company_id": self.company.id, "l10n_ro_landed_cost_method": "intermediary", "account_storno": False}
+        )
+        result = settings._onchange_l10n_ro_landed_cost_method_storno()
+        self.assertIn("warning", result)
+        settings.account_storno = True
+        self.assertFalse(settings._onchange_l10n_ro_landed_cost_method_storno())
+        settings.account_storno = False
+        settings.l10n_ro_landed_cost_method = "standard"
+        self.assertFalse(settings._onchange_l10n_ro_landed_cost_method_storno())

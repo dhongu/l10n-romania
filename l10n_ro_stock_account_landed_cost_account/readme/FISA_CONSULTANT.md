@@ -78,6 +78,8 @@ adițional** bifat, jurnal de stoc, contul 408 pentru recepțiile pe bază de av
 2. **Storno accounting**: *Contabilitate → Configurare → Setări → Contabilitate*, bifa **Storno accounting** (implicit
    pornită la companiile din România). Cu metoda *Prin cont intermediar*, bifa decide forma notei: a doua pereche în
    roșu (pornită) sau clasică (oprită); la metoda *Standard* nu schimbă nota.
+   Dacă alegeți metoda *Prin cont intermediar* cu Storno accounting oprit, Odoo afișează un avertisment în Setări
+   (mesaj în formular și fereastră la schimbarea metodei): activați bifa înainte de a lucra cu metoda.
 
 ![Setări, Contabilitate storno: bifa pornită](../static/description/19_settings_storno.png)
 

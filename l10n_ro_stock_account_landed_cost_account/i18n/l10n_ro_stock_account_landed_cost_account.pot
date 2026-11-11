@@ -16,6 +16,29 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ro_stock_account_landed_cost_account
+#. odoo-python
+#: code:addons/l10n_ro_stock_account_landed_cost_account/models/res_config_settings.py:0
+msgid ""
+"The intermediary account method needs Storno accounting. Enable it in the "
+"Accounting settings, otherwise the second pair of the landed cost note "
+"(class 6 and intermediary account) is not posted in red."
+msgstr ""
+
+#. module: l10n_ro_stock_account_landed_cost_account
+#. odoo-python
+#: code:addons/l10n_ro_stock_account_landed_cost_account/models/res_config_settings.py:0
+msgid "Storno accounting is off"
+msgstr "Contabilitatea storno este oprită"
+
+#. module: l10n_ro_stock_account_landed_cost_account
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_account_landed_cost_account.res_config_settings_view_form
+msgid ""
+"The intermediary account method needs Storno accounting: enable it in the "
+"Accounting settings, otherwise the second pair of the note is not posted in "
+"red."
+msgstr ""
+
+#. module: l10n_ro_stock_account_landed_cost_account
 #: model:ir.model,name:l10n_ro_stock_account_landed_cost_account.model_res_company
 msgid "Companies"
 msgstr ""
