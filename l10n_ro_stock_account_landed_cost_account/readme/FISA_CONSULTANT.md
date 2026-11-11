@@ -30,7 +30,11 @@ vândut** la validarea costului.
 ## 2. Bază legală și context
 
 - **OMFP 1802/2014**: cheltuielile de transport și alte cheltuieli direct atribuibile achiziției intră în
-  costul de achiziție al stocului (punctul exact din OMFP rămâne de completat).
+  costul de achiziție al stocului: OMFP 1802/2014, pct. 8 (definiția costului de achiziție) și pct. 75 alin. (1)
+  (verificat cu Pacioli, 11.11.2026: sumele și monografiile din fișă sunt corecte).
+- Atenție la forma notei: OMFP nu prevede 624 pe credit în corespondență cu 371. Varianta conformă cu funcțiunea
+  conturilor este transportul înregistrat direct Dr 371 / Cr 401 pe factura transportatorului. Metoda *Standard*
+  (implicită) lasă 624 pe credit; doar metoda *Prin cont intermediar* cu Storno accounting evită creditul pe clasa 6.
 - La recepția pe bază de aviz, marfa se înregistrează fără factură: Dr 371 / Cr 408 Furnizori – facturi
   nesosite, iar la sosirea facturii 408 se stinge prin 401 (verificat cu Pacioli).
 - Odoo capitalizează costul adițional **doar pe cantitatea rămasă în stoc** la data validării.
@@ -42,8 +46,8 @@ vândut** la validarea costului.
   nicio variantă, deci fișa **nu afirmă o monografie** pentru aceste două puncte.
 - **Storno accounting** (bifa din Setări → Contabilitate, implicit pornită în România): la metoda *Prin cont
   intermediar*, a doua pereche se postează în roșu, pe aceleași părți: **Dr 624 −100 / Cr intermediar −100**
-  (`624 = 4739` în roșu), în loc de Dr intermediar 100 / Cr 624 100. Efectul net pe conturi e același (624 se
-  creditează cu 100, intermediarul rămâne cu sold zero). La metoda *Standard* bifa nu schimbă nota.
+  (`624 = 4739` în roșu), în loc de Dr intermediar 100 / Cr 624 100. Efectul net pe conturi e același (rulajul
+  debitor al 624 scade cu 100, fără înregistrare pe credit; intermediarul rămâne cu sold zero). La metoda *Standard* bifa nu schimbă nota.
 - Contul intermediar este o soluție tehnică (exporturi care cer note echilibrate pe perechi de
   conturi). Îl alege firma prin politica contabilă; nu poate fi din clasa 6.
 
@@ -292,5 +296,7 @@ Cu bifa **Aviz** pe recepție, intrarea în stoc se postează la validarea recep
 - Costul adițional se validează cât mai aproape de recepție: după vânzare, partea vândută nu se mai
   capitalizează.
 - Stocul rezervat nu influențează costul adițional; modul de recepție (cu sau fără Aviz) nici el.
+- Recepția fără Aviz nu postează nicio notă: dacă marfa e primită fără factură sau factura sosește în luna
+  următoare, stocul nu apare în 371 la închiderea lunii. Pentru recepțiile fără factură se bifează **Aviz** (371 / 408).
 - Partea vândută rămâne pe contul de cheltuieli al liniei: manualul trebuie să spună că tratamentul ei îl decide
   politica contabilă a firmei.
