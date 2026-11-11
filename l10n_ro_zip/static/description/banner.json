@@ -1,0 +1,5 @@
+{
+  "title": "Romanian Postal Codes",
+  "summary": "Postal codes linked to cities",
+  "features": ["Romanian postal code database", "Postal code field on partners", "Fills city, state and country"]
+}

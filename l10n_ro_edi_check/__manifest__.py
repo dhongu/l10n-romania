@@ -1,6 +1,7 @@
 # ©  2024-now Dan Stoica <danila(@)terrabit(.)ro
 # See README.rst file on addons root folder for license details
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Romania - EDI data check and queue Obsolete",
     "license": "AGPL-3",
     "version": "18.0.0.1.1",

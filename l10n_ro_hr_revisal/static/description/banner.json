@@ -1,0 +1,5 @@
+{
+  "title": "HR Revisal Import",
+  "summary": "Import employees from Revisal",
+  "features": ["Wizard to upload the Revisal XML", "Creates and updates employees"]
+}

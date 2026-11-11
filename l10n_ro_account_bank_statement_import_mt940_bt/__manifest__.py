@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "MT940 BT Format Bank Statements Import",
     "category": "Localization",
     "countries": ["ro"],

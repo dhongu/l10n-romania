@@ -1,0 +1,5 @@
+{
+  "title": "EDI Data Check (Obsolete)",
+  "summary": "Pre-checks for ANAF e-Invoice submission",
+  "features": ["Data check on invoice validation", "Queue-job based sending", "Product/description length field"]
+}

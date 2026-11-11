@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Postal Codes",
     "summary": "Romania - Coduri Postale",
     "countries": ["ro"],

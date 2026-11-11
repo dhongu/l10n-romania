@@ -1,0 +1,6 @@
+{
+  "title": "Partner Create by VAT Button",
+  "summary": "Re-read partner details from the tax authority in one click",
+  "lang": "en",
+  "features": ["Refresh data from ANAF or VIES", "Button on the partner form", "Fills name, address and VAT status"]
+}

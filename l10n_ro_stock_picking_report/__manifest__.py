@@ -3,6 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Terrabit - Picking Reports",
     "summary": "Rapoarte: NIR, aviz, bon consum",
     "license": "AGPL-3",

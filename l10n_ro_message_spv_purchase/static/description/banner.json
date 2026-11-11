@@ -1,0 +1,10 @@
+{
+  "title": "SPV Messages to Purchase Orders",
+  "summary": "Link SPV messages to purchase orders",
+  "lang": "en",
+  "features": [
+    "Find or create a purchase order",
+    "Purchase reference read from the XML",
+    "SPV XML attached to the order"
+  ]
+}
