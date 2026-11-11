@@ -86,6 +86,7 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         cls.goods_bill.action_post()
         cls.carrier_bill = cls._carrier_bill("FT-2001")
         cls.landed_standard = cls._landed(cls.carrier_bill, cls.receipt)
+        company.account_storno = True
         company.write(
             {
                 "l10n_ro_landed_cost_method": "intermediary",
@@ -261,7 +262,7 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         )
         self.assertEqual(
             self._dr_cr(self.landed_routed.account_move_id),
-            [("371000", 100.0, 0.0), ("473900", 0.0, 100.0), ("473900", 100.0, 0.0), ("624000", 0.0, 100.0)],
+            [("371000", 100.0, 0.0), ("473900", 0.0, -100.0), ("473900", 0.0, 100.0), ("624000", -100.0, 0.0)],
         )
         self.assertEqual(
             self._dr_cr(self.landed_reserved.account_move_id), [("371000", 100.0, 0.0), ("624000", 0.0, 100.0)]
