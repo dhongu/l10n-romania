@@ -15,6 +15,7 @@
         "l10n_ro_edi_stock",
     ],
     "license": "LGPL-3",
+    "consultant_sheet": "full",
     "data": [
         "security/ir.model.access.csv",
         "data/template_etransport.xml",

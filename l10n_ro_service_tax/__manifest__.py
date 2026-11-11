@@ -16,6 +16,7 @@
     "post_init_hook": "post_init_hook",
     "images": ["static/description/main_screenshot.png"],
     "license": "LGPL-3",
+    "consultant_sheet": "full",
     "development_status": "Beta",
     "installable": True,
 }

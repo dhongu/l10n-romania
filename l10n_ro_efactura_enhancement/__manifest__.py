@@ -20,6 +20,7 @@
         # "l10n_ro_efactura",
     ],
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     # "price": 25.00,
     # "currency": "EUR",
     "data": [

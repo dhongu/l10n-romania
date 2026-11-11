@@ -11,6 +11,7 @@
         "l10n_ro_stock_base",
     ],
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     "data": [
         "views/product_template_views.xml",
     ],
