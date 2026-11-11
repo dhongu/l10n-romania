@@ -19,6 +19,16 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         # A Romanian company: the receipts, deliveries and landed cost use the
         # Romanian stock accounting (l10n_ro_stock_account).
         cls.company.write({"country_id": cls.env.ref("base.ro").id, "l10n_ro_accounting": True})
+        # 408 Furnizori - facturi nesosite: the account of a reception with notice
+        cls.account_408 = cls.env["account.account"].create(
+            {
+                "name": "Furnizori - facturi nesosite",
+                "code": "408000",
+                "account_type": "liability_current",
+                "company_ids": [(6, 0, cls.company.ids)],
+            }
+        )
+        cls.company.l10n_ro_property_stock_picking_payable_account_id = cls.account_408
 
     def _lines(self, move):
         return sorted((line.account_id.code, line.debit, line.credit) for line in move.line_ids)
@@ -27,7 +37,7 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         self.env.company.l10n_ro_landed_cost_method = "intermediary"
         self.env.company.l10n_ro_landed_cost_intermediary_account_id = self.intermediary_account
 
-    def _purchase_receipt(self, qty=10.0):
+    def _purchase_receipt(self, qty=10.0, notice=False):
         po = self.env["purchase.order"].create(
             {
                 "partner_id": self.vendor.id,
@@ -38,6 +48,7 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         )
         po.button_confirm()
         picking = po.picking_ids[0]
+        picking.l10n_ro_notice = notice
         picking.move_line_ids.write({"quantity": qty})
         picking.with_context(demo_mode=True).button_validate()
         return po, picking
@@ -168,4 +179,52 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         self._delivery(10.0, validate=True)
         landed = self._landed_from_bill(receipt)
         self.assertEqual(landed.state, "done")
+        self.assertFalse(landed.account_move_id.line_ids)
+
+    # Reception with notice (Aviz): the receipt posts Dr 371 / Cr 408 and the goods bill clears 408
+    def test_07_notice_flow(self):
+        """With notice the receipt already posted the stock entry (371 / 408); the goods bill
+        clears 408 and the landed cost adds only the transport to 371."""
+        po, receipt = self._purchase_receipt(notice=True)
+        self.assertEqual(
+            self._lines(receipt.move_ids.account_move_id), [("371000", 1000.0, 0.0), ("408000", 0.0, 1000.0)]
+        )
+        goods_bill = self.env["account.move"].browse(po.action_create_invoice()["res_id"])
+        goods_bill.invoice_date = "2026-11-11"
+        goods_bill.action_post()
+        bill_accounts = goods_bill.line_ids.filtered(lambda line: line.debit and line.product_id)
+        self.assertEqual(bill_accounts.account_id, self.account_408, "The bill line clears 408, not 371")
+        self.assertEqual(len(receipt.move_ids.account_move_id), 1, "The bill posts no second stock entry")
+        landed = self._landed_from_bill(receipt)
+        self.assertEqual(self._lines(landed.account_move_id), [("371000", 100.0, 0.0), ("607000", 0.0, 100.0)])
+        self.assertAlmostEqual(receipt.move_ids.value, 1100.0)
+
+    def test_08_notice_reserved(self):
+        """Reserved stock after a reception with notice: capitalized fully; the delivery
+        then leaves at 110 per piece and posts Dr 607 / Cr 371."""
+        __, receipt = self._purchase_receipt(notice=True)
+        delivery = self._delivery(4.0, validate=False)
+        landed = self._landed_from_bill(receipt)
+        self.assertEqual(self._lines(landed.account_move_id), [("371000", 100.0, 0.0), ("607000", 0.0, 100.0)])
+        delivery.move_line_ids.write({"quantity": 4.0})
+        delivery.with_context(demo_mode=True).button_validate()
+        self.assertAlmostEqual(delivery.move_ids.value, 440.0)
+        self.assertEqual(
+            self._lines(delivery.move_ids.account_move_id), [("371000", 0.0, 440.0), ("607000", 440.0, 0.0)]
+        )
+
+    def test_09_notice_sold(self):
+        """Stock already sold after a reception with notice: only the 6 pcs in stock are capitalized."""
+        __, receipt = self._purchase_receipt(notice=True)
+        delivery = self._delivery(4.0, validate=True)
+        self.assertEqual(
+            self._lines(delivery.move_ids.account_move_id), [("371000", 0.0, 400.0), ("607000", 400.0, 0.0)]
+        )
+        landed = self._landed_from_bill(receipt)
+        self.assertEqual(self._lines(landed.account_move_id), [("371000", 60.0, 0.0), ("607000", 0.0, 60.0)])
+
+    def test_10_notice_everything_sold(self):
+        __, receipt = self._purchase_receipt(notice=True)
+        self._delivery(10.0, validate=True)
+        landed = self._landed_from_bill(receipt)
         self.assertFalse(landed.account_move_id.line_ids)

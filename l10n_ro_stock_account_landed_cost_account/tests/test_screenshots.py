@@ -35,8 +35,12 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         company.l10n_ro_accounting = True
         cls.env.ref("base.user_admin").write({"company_ids": [(4, company.id)], "company_id": company.id})
         env = cls.env
+        warehouse = env["stock.warehouse"].search([("company_id", "=", company.id)], limit=1)
+        warehouse.write({"name": "Magazin central", "code": "MC"})
         cls.account_valuation = cls._ro_account("371%", "Mărfuri", "371000", "asset_current")
         cls.account_transport = cls._ro_account("624%", "Cheltuieli cu transportul", "624000", "expense")
+        cls.account_408 = cls._ro_account("408%", "Furnizori - facturi nesosite", "408000", "liability_current")
+        company.l10n_ro_property_stock_picking_payable_account_id = cls.account_408
         cls.account_inter = env["account.account"].create(
             {"name": "Costuri de repartizat (analitic tehnic)", "code": "473900", "account_type": "asset_current"}
         )
@@ -60,6 +64,7 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                 ("flow", "Marfă - flux complet"),
                 ("reserved", "Marfă - rezervată"),
                 ("sold", "Marfă - vândută"),
+                ("notice", "Marfă - recepție cu aviz"),
             )
         }
         cls.cost_product = env["product.product"].create(
@@ -100,8 +105,18 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         cls.delivery_sold = cls._delivery("sold", validate=True)
         cls.landed_sold = cls._landed(cls._carrier_bill("FT-2004"), cls.receipt_sold)
 
+        # recepție pe bază de aviz: 371 / 408 la recepție, 408 / 401 la factura mărfii
+        cls.po_notice, cls.receipt_notice = cls._purchase("notice", notice=True)
+        cls.po_notice.action_create_invoice()
+        cls.goods_bill_notice = cls.po_notice.invoice_ids
+        cls.goods_bill_notice.write({"invoice_date": fields.Date.today(), "ref": "FF-1002"})
+        cls.goods_bill_notice.action_post()
+        cls.landed_notice = cls._landed(cls._carrier_bill("FT-2005"), cls.receipt_notice)
+        # factura transportatorului încă fără cost adițional (butonul de pe ea)
+        cls.carrier_bill_pending = cls._carrier_bill("FT-2006")
+
     @classmethod
-    def _purchase(cls, key):
+    def _purchase(cls, key, notice=False):
         po = cls.env["purchase.order"].create(
             {
                 "partner_id": cls.vendor.id,
@@ -112,6 +127,7 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         )
         po.button_confirm()
         receipt = po.picking_ids[0]
+        receipt.l10n_ro_notice = notice
         receipt.move_line_ids.write({"quantity": 10.0})
         receipt.with_context(demo_mode=True).button_validate()
         return po, receipt
@@ -219,7 +235,7 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
             self._form(self.receipt, "03_receipt.png"),
             self._form(self.goods_bill, "04_goods_bill.png"),
             self._form(
-                self.carrier_bill,
+                self.carrier_bill_pending,
                 "05_transport_bill_button.png",
                 highlight=["button[name='button_create_landed_costs']"],
             ),
@@ -231,6 +247,11 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
             self._form(self.delivery_sold, "11_delivery_sold.png"),
             self._form(self.landed_sold, "12_landed_cost_sold.png"),
             self.account_move_shot(self.landed_sold.account_move_id, "13_note_sold.png"),
+            self.account_move_shot(self.carrier_bill, "14_transport_bill_note.png"),
+            self.account_move_shot(self.delivery_sold.move_ids.account_move_id, "15_delivery_sold_note.png"),
+            self.account_move_shot(self.receipt_notice.move_ids.account_move_id, "16_receipt_note_notice.png"),
+            self.account_move_shot(self.goods_bill_notice, "17_goods_bill_notice.png"),
+            self.account_move_shot(self.landed_notice.account_move_id, "18_note_notice.png"),
         ]
 
     def test_capture_fise(self):
@@ -247,6 +268,13 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         )
         self.assertEqual(self.delivery_reserved.state, "assigned")
         self.assertEqual(self._dr_cr(self.landed_sold.account_move_id), [("371000", 60.0, 0.0), ("624000", 0.0, 60.0)])
+        self.assertEqual(
+            self._dr_cr(self.receipt_notice.move_ids.account_move_id),
+            sorted([("371000", 1000.0, 0.0), (self.account_408.code[:6], 0.0, 1000.0)]),
+        )
+        self.assertEqual(
+            self._dr_cr(self.landed_notice.account_move_id), [("371000", 100.0, 0.0), ("624000", 0.0, 100.0)]
+        )
         self.capture_screenshots(self._shots())
 
     def test_capture_usage(self):

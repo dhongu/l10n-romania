@@ -1,6 +1,6 @@
 ## 19.0.1.1.4 (2026-11-11)
 
-- Tests for the landed cost created from the vendor bill and for stock that is already reserved or already sold (only the quantity in stock is capitalized), and a consultant sheet covering the three scenarios. No functional change.
+- Tests for the landed cost created from the vendor bill and for stock that is already reserved or already sold (only the quantity in stock is capitalized), both after a reception without and with notice (408), and a consultant sheet with 18 screenshots covering these scenarios. No functional change.
 
 ## 19.0.1.1.3 (2026-10-22)
 
