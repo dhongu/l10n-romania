@@ -78,6 +78,9 @@ adițional** bifat, jurnal de stoc, contul 408 pentru recepțiile pe bază de av
 2. **Storno accounting**: *Contabilitate → Configurare → Setări → Contabilitate*, bifa **Storno accounting** (implicit
    pornită la companiile din România). Cu metoda *Prin cont intermediar*, bifa decide forma notei: a doua pereche în
    roșu (pornită) sau clasică (oprită); la metoda *Standard* nu schimbă nota.
+
+![Setări, Contabilitate storno: bifa pornită](../static/description/19_settings_storno.png)
+
 3. Produsul de transport: serviciu, **Este cost adițional**, cu contul de cheltuieli (624).
 4. Marfa: stocabilă, categorie cu evaluare în timp real și cont de evaluare, jurnal de stoc.
 
@@ -155,7 +158,10 @@ Din cele 10 buc. recepționate, 4 sunt rezervate pe o livrare încă nevalidată
 ![Nota pentru stocul rezervat: Dr 371 100 lei, Cr 624 100 lei](../static/description/10_note_reserved.png)
 
    Cu metoda *Prin cont intermediar* și Storno accounting pornit, nota are aceleași patru linii ca în
-   Scenariul 1, pentru 100 lei (a doua pereche în roșu).
+   Scenariul 1, pentru 100 lei (a doua pereche în roșu: 624 pe debit cu minus, nu pe credit).
+
+![Nota prin cont intermediar pentru stocul rezervat, cu Storno accounting: 371 / 473900 și 624 = 473900 în roșu, câte 100 lei](../static/description/20_note_reserved_storno.png)
+
 3. Validați apoi livrarea. Cele 4 buc. ies la **110 lei** bucata (100 + 10 cost adițional): Dr 607 440 / Cr 371
    440. Costul adițional urmărește marfa în costul vânzărilor.
 
@@ -172,6 +178,9 @@ Din cele 10 buc., 4 au fost livrate și validate înainte de costul adițional. 
 2. **Verificați:** nota este **Dr 371 60 / Cr 624 60**, adică doar cele 6 buc. rămase în stoc (6/10 din 100).
    Cu metoda *Prin cont intermediar* și Storno accounting pornit: Dr 371 60 / Cr intermediar 60 și, în roșu,
    Dr 624 −60 / Cr intermediar −60 (fără storno: Dr intermediar 60 / Cr 624 60).
+
+![Nota prin cont intermediar pentru stocul vândut, cu Storno accounting: 624 pe debit cu −60 lei](../static/description/21_note_sold_storno.png)
+
 
 ![Costul adițional validat după livrare](../static/description/12_landed_cost_sold.png)
 
@@ -272,6 +281,9 @@ Cu bifa **Aviz** pe recepție, intrarea în stoc se postează la validarea recep
 | `16_receipt_note_notice.png` | Nota recepției cu aviz (371 / 408) |
 | `17_goods_bill_notice.png` | Factura mărfii pe 408 |
 | `18_note_notice.png` | Nota costului adițional după recepția cu aviz |
+| `19_settings_storno.png` | Setări: bifa Contabilitate storno |
+| `20_note_reserved_storno.png` | Nota prin intermediar cu storno, stoc rezervat (100 lei) |
+| `21_note_sold_storno.png` | Nota prin intermediar cu storno, stoc vândut (60 lei) |
 
 ## 11. Observații pentru manual
 
