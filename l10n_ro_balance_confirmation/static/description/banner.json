@@ -1,0 +1,9 @@
+{
+  "title": "Balance Confirmation",
+  "summary": "Partner balance confirmations for Romania",
+  "features": [
+    "Partner statements at a chosen date",
+    "Batch PDF for multiple partners",
+    "Response form with signatures"
+  ]
+}

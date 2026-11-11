@@ -1,6 +1,7 @@
 # © 2026 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Report Common",
     "summary": "Common QWeb building blocks for Romanian printed reports:"
     " company bank accounts and company identification header",

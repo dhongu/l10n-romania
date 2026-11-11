@@ -1,4 +1,5 @@
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Stock Storage Sheet Dropship",
     "version": "18.0.0.0.3",
     "category": "Inventory/Localizations",

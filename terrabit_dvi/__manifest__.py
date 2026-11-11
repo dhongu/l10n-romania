@@ -1,6 +1,7 @@
 # ©  2008-2020 Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Terrabit - DVI",
     "license": "AGPL-3",
     "version": "18.0.1.0.1",

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="560" height="280" viewBox="0 0 560 280">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#006F42"/>
+      <stop offset="1" stop-color="#57B952"/>
+    </linearGradient>
+  </defs>
+  <rect width="560" height="280" fill="#FFFFFF"/>
+  <rect width="190" height="280" fill="url(#g)"/>
+  <circle cx="95.0" cy="100" r="66" fill="white" opacity="0.10"/>
+  <circle cx="97.0" cy="103" r="56" fill="#006F42" opacity="0.30"/><circle cx="95.0" cy="100" r="56" fill="#E6F4EA"/><svg x="54.0" y="59.0" width="82" height="82" viewBox="0 0 106 106" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <mask id="mi-a" x="0" y="0" width="106" height="106" maskUnits="userSpaceOnUse">
+      <path d="M6.06,0H98.43C104.49,0,106,1.51,106,7.57V98.43c0,6.06-1.51,7.57-7.57,7.57H6.06C1.51,106,0,104.49,0,98.43V7.57C0,1.51,1.51,0,6.06,0Z" style="fill: #fff;fill-rule: evenodd"/>
+    </mask>
+    <mask id="mi-b" x="4.8" y="4.8" width="50.4" height="36.4" maskUnits="userSpaceOnUse">
+      <rect x="6.29" y="7.68" width="48.45" height="31.57" rx="1" style="fill: #fff"/>
+    </mask>
+    <symbol id="mi-c" data-name="account icon" viewBox="0 0 106 106">
+      <g style="mask: url(#mi-a)">
+        <g>
+          <path d="M0,0H106V106H0Z" style="fill: #5a5a64;fill-rule: evenodd"/>
+          <path d="M6.06,1.51H98.43q6.06,0,7.57,3V0H0V4.54Q1.52,1.51,6.06,1.51Z" style="fill: #fff;fill-opacity: 0.382999986410141;fill-rule: evenodd"/>
+          <path d="M6.06,104.49H98.43q6.06,0,7.57-4.55V106H0V99.94Q1.52,104.49,6.06,104.49Z" style="fill-opacity: 0.382999986410141;fill-rule: evenodd"/>
+          <g>
+            <path d="M70.38,104.49H6.06C3,104.49,0,103,0,98.43V61.28L28.77,19.69H59.06a77.33,77.33,0,0,0,21.2,13.87c.07,11.31.07,4.86,0,16.17h3.12l.21,36.82Z" style="fill: #393939;fill-rule: evenodd;opacity: 0.324000000953674;isolation: isolate"/>
+            <g style="opacity: 0.30000000000000004">
+              <g>
+                <path d="M68.77,58.54H76c.76,0,1,.12,1,.46v2.45c0,.31-.24.43-.93.43H61.44c-.66,0-.92-.12-.92-.42,0-.83,0-1.67,0-2.51,0-.29.26-.4.92-.41Z"/>
+                <path d="M64.33,77.42c.42.39.76.66,1,1a.89.89,0,0,1,0,1.31.92.92,0,0,1-1.32,0,4.25,4.25,0,0,1-.48-.47c-.14-.15-.26-.31-.49-.6-.32.37-.54.66-.79.91-.53.53-1.08.58-1.5.15s-.36-.94.15-1.45c.26-.26.54-.5.91-.83-.38-.34-.72-.61-1-.91a.9.9,0,0,1,0-1.36.91.91,0,0,1,1.36,0c.29.28.54.6.93,1A12.1,12.1,0,0,1,64,75.18a.91.91,0,0,1,1.36,0,.87.87,0,0,1,0,1.31C65.07,76.79,64.73,77.06,64.33,77.42Z"/>
+                <path d="M62.13,66.9c0-.47,0-.88,0-1.28a.92.92,0,0,1,.92-1,.91.91,0,0,1,1,1c0,.41,0,.81,0,1.3h1.14a1.16,1.16,0,0,1,1.22,1c0,.55-.42.85-1.18.86H64.12c0,.49,0,.91,0,1.34a.94.94,0,1,1-1.88,0c0-.41,0-.81,0-1.3H60.92a.94.94,0,1,1,0-1.88C61.3,66.89,61.68,66.9,62.13,66.9Z"/>
+                <path d="M74.31,76H72.23c-.67,0-1-.34-1-.93a.89.89,0,0,1,1-1q2.18,0,4.35,0a1,1,0,1,1,0,1.91c-.74,0-1.47,0-2.21,0Z"/>
+                <path d="M74.28,68.61c-.71,0-1.43,0-2.14,0a.86.86,0,0,1-1-.9.85.85,0,0,1,.92-1c1.5,0,3,0,4.48,0a.93.93,0,0,1,1,1,.91.91,0,0,1-1,.91c-.75,0-1.51,0-2.27,0Z"/>
+                <path d="M74.36,78.09c.72,0,1.44,0,2.15,0a1,1,0,0,1,1,1c0,.57-.38.93-1,.94H72.28c-.75,0-1.09-.32-1.09-.94s.37-1,1.09-1,1.39,0,2.08,0Z"/>
+                <path d="M81.29,90.55H56.14a4,4,0,0,1-4-4V53.73a4,4,0,0,1,4-4H81.29a4,4,0,0,1,4,4V86.55A4,4,0,0,1,81.29,90.55ZM56.14,53.73V86.55H81.29V53.73Z"/>
+              </g>
+              <path d="M43.49,83.26H31.8V25.71H56v10.6q0,4.55,4.54,4.55H75.71v5.78h4.55V34.8c-4.55-3-16.66-12.11-19.69-13.63H30.29a2.68,2.68,0,0,0-3,3V84.77a2.68,2.68,0,0,0,3,3H48.45V83.26ZM60.57,25.71l15.14,10.6H60.57Z"/>
+            </g>
+            <path d="M60.57,18.68H30.29a2.68,2.68,0,0,0-3,3V82.28a2.68,2.68,0,0,0,3,3H48.45V80.77H31.8V23.22H56v10.6q0,4.55,4.54,4.55H75.71v5.78h4.55V32.31C75.71,29.28,63.6,20.2,60.57,18.68Zm0,15.14V23.22l15.14,10.6Z" style="fill: #a8a9ab"/>
+            <g>
+              <path d="M68.77,55.78H76c.76,0,1,.13,1,.53v2.85c0,.37-.24.5-.93.5q-7.3,0-14.61,0c-.66,0-.92-.14-.92-.48,0-1,0-2,0-2.93,0-.34.26-.47.92-.47Z" style="fill: #a8a9ab"/>
+              <path d="M64.33,76.53c.42.38.76.65,1,1a.89.89,0,0,1,0,1.31.92.92,0,0,1-1.32,0,5.44,5.44,0,0,1-.48-.48c-.14-.14-.26-.31-.49-.59-.32.36-.54.65-.79.91-.53.53-1.08.57-1.5.14s-.36-.94.15-1.45c.26-.26.54-.49.91-.82-.38-.35-.72-.61-1-.92a.9.9,0,0,1,0-1.36.92.92,0,0,1,1.36,0c.29.28.54.61.93,1A13.78,13.78,0,0,1,64,74.28a.91.91,0,0,1,1.36,0,.88.88,0,0,1,0,1.32C65.07,75.89,64.73,76.16,64.33,76.53Z" style="fill: #a8a9ab"/>
+              <path d="M62.13,65.88c0-.48,0-.88,0-1.29a1,1,0,1,1,1.91,0c0,.4,0,.81,0,1.3h1.14a1.15,1.15,0,0,1,1.22,1c0,.54-.42.85-1.18.85H64.12c0,.49,0,.92,0,1.34a.94.94,0,1,1-1.88,0c0-.4,0-.81,0-1.3H60.92a.94.94,0,1,1,0-1.88Z" style="fill: #a8a9ab"/>
+              <path d="M74.31,75.11c-.69,0-1.38,0-2.08,0s-1-.35-1-.94a.89.89,0,0,1,1-1q2.18,0,4.35,0a.91.91,0,0,1,1,1,.93.93,0,0,1-1,1c-.74,0-1.47,0-2.21,0Z" style="fill: #a8a9ab"/>
+              <path d="M74.28,67.76H72.14a.87.87,0,0,1-1-.9.84.84,0,0,1,.92-1c1.5,0,3,0,4.48,0a.94.94,0,0,1,1,1,.91.91,0,0,1-1,.91H74.28Z" style="fill: #a8a9ab"/>
+              <path d="M74.36,77.2c.72,0,1.44,0,2.15,0a1,1,0,0,1,1,1c0,.56-.38.93-1,.93q-2.12,0-4.23,0c-.75,0-1.09-.32-1.09-.94s.37-.94,1.09-1,1.39,0,2.08,0Z" style="fill: #a8a9ab"/>
+              <path d="M81.29,88.06H56.14a4,4,0,0,1-4-4V51.24a4,4,0,0,1,4-4H81.29a4,4,0,0,1,4,4V84.06A4,4,0,0,1,81.29,88.06ZM56.14,51.24V84.06H81.29V51.24Z" style="fill: #a8a9ab"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </symbol>
+  </defs>
+  <g>
+    <use width="106" height="106" transform="translate(-0.07 0)" xlink:href="#mi-c"/>
+    <svg x="20" y="0" width="40" height="40" viewBox="0 0 3 2">
+        <rect width="3" height="2" x="0" y="0" fill="#002B7F" />
+        <rect width="2" height="2" x="1" y="0" fill="#FCD116" />
+        <rect width="1" height="2" x="2" y="0" fill="#CE1126" />
+    </svg>
+
+  </g>
+</svg>
+  <svg x="72.0" y="186" width="46" height="46" viewBox="4045 2535 3400 3400" preserveAspectRatio="xMidYMid meet"><path fill="#FFFFFF" d="M4648.32 4073.59l636.59 1365.17 -765.09 355.96 -308.63 -1517.87 437.13 -203.26zm725.61 1192.32l336.75 -167.88c105.65,140.85 282.69,170.72 576.82,18.8l819.92 -382.33c181.4,-90.13 164.26,-214.57 130.07,-328.43 -4.28,-14.25 -13.68,-24.81 -27.34,-30.7 -13.67,-5.89 -27.61,-5.11 -41.09,1.18l-422.32 196.93 -39.04 -83.72 538.07 -250.91c16.64,-7.76 24.7,-27.69 25.58,-46.04 6.48,-134.33 -44.36,-230.89 -105.84,-285.23 -15.2,-13.44 -35.71,-15.59 -54.12,-7l-513.92 239.64 -35.6 -76.34 506.31 -236.1c17.69,-8.25 22.52,-36.93 21.83,-56.45 -4.1,-117.31 -67.62,-232.74 -187.72,-290.66 -13.94,-6.72 -28.64,-6.36 -42.69,0.19l-511.21 238.38 -35.37 -75.86 448.98 -209.36c20.44,-9.53 25.81,-42.28 21.02,-64.32 -41.02,-189.07 -167.92,-247.8 -318.14,-237.87 -29.39,1.94 -589.86,273.16 -665.95,310.54l-281.84 -513.57c-59.06,-93.13 -112.7,-221.7 -276.47,-245.13 -211.24,-30.22 -291.56,94.38 -316.89,203.13 -25.32,108.75 223.84,365.99 276.05,473.69 85.52,184.27 -161.86,318.11 -68.41,617.99l-292.54 139.94 535.09 1147.51z"/></svg><text x="95.0" y="248" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="800" letter-spacing="1.4" fill="white">TERRABIT</text><text x="95.0" y="261" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="8" font-weight="500" letter-spacing="3.6" fill="white" opacity="0.85">SOLUTIONS</text>
+  <g><rect x="477.6" y="24" width="58.4" height="24" rx="12" fill="none" stroke="#57B952" stroke-width="1.5"/><text x="506.8" y="40" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" font-weight="700" fill="#006F42">Odoo 18</text></g><g><clipPath id="ro-flag"><rect x="445.6" y="28.0" width="24" height="16" rx="2"/></clipPath><g clip-path="url(#ro-flag)"><rect x="445.6" y="28.0" width="8.0" height="16" fill="#002B7F"/><rect x="453.6" y="28.0" width="8.0" height="16" fill="#FCD116"/><rect x="461.6" y="28.0" width="8.0" height="16" fill="#CE1126"/></g><rect x="445.6" y="28.0" width="24" height="16" rx="2" fill="none" stroke="#000000" stroke-opacity="0.15" stroke-width="1"/></g>
+  <text x="214" y="78" font-family="Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#00592F">BT MT940 Statement</text><text x="214" y="108" font-family="Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#00592F">Import</text>
+  
+  <circle cx="222" cy="138" r="9" fill="#57B952"/><path d="M217.5 138 l3 3 l5.5 -6" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="240" y="142" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#2F3A45">Imports BT MT940 files in one step</text><circle cx="222" cy="166" r="9" fill="#57B952"/><path d="M217.5 166 l3 3 l5.5 -6" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="240" y="170" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#2F3A45">Creates bank statements automatically</text><circle cx="222" cy="194" r="9" fill="#57B952"/><path d="M217.5 194 l3 3 l5.5 -6" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="240" y="198" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#2F3A45">Built on the shared MT940 importer</text>
+  
+  
+</svg>

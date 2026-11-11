@@ -1,0 +1,6 @@
+{
+  "title": "DVI Compatibility Stub",
+  "summary": "Keeps old DVI dependencies working",
+  "lang": "en",
+  "features": ["Pulls in l10n_ro_customs_dvi", "No code or data of its own", "Existing data is taken over on update"]
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Revolut MT940 Statement Import",
+  "summary": "Import Revolut Business MT940 exports as bank statements",
+  "lang": "en",
+  "features": [
+    "One file, one statement per currency",
+    "Each wallet goes to its own journal",
+    "Skips wallets with no matching journal"
+  ]
+}

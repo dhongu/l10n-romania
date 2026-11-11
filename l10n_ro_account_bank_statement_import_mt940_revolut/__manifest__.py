@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Revolut MT940 Statement Import",
     "category": "Localization",
     "countries": ["ro"],

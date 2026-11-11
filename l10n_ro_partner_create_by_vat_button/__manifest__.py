@@ -3,6 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Partner Create by VAT Button",
     "license": "AGPL-3",
     "version": "18.0.1.1.7",

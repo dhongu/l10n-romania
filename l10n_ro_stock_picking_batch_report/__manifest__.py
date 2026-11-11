@@ -3,6 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Batch Delivery Note",
     "summary": "Rapoarte din batch: aviz",
     "license": "AGPL-3",

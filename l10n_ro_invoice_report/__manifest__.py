@@ -2,6 +2,7 @@
 # See README.rst file on addons root folder for license details
 
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Invoice Report",
     "summary": "Localizare Terrabit - Facturi, Chitanta",
     "version": "18.0.3.4.29",

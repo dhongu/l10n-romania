@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
+    "images": ["static/description/main_screenshot.png"],
     "name": "CEC Bank MT940 Statement Import",
     "version": "18.0.0.1.2",
     "license": "AGPL-3",

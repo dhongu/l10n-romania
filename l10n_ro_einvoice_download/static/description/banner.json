@@ -1,0 +1,6 @@
+{
+  "title": "e-Invoice Files Export",
+  "summary": "Export SPV message files as a single ZIP",
+  "lang": "en",
+  "features": ["ZIP of signed XML and PDF files", "Folders grouped by partner VAT", "Ready to hand over to accounting"]
+}
