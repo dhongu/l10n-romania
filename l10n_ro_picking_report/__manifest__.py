@@ -7,6 +7,7 @@
     "summary": "Rapoarte: NIR, aviz, bon consum",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     "version": "19.0.2.0.2",
     "development_status": "Mature",
     "author": "Dorin Hongu, Terrabit",

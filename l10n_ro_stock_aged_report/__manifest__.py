@@ -15,6 +15,7 @@
     "development_status": "Production/Stable",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     "data": [
         "wizard/stock_age_report.xml",
         "security/ir.model.access.csv",

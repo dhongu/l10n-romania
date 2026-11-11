@@ -7,6 +7,7 @@
     "website": "https://www.terrabit.ro",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     "development_status": "Beta",
     "depends": ["l10n_ro_stock_report", "l10n_ro_stock_account", "stock_dropshipping"],
     "data": [],

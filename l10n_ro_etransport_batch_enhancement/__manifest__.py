@@ -18,6 +18,7 @@
         "l10n_ro_stock_picking_batch_report",
     ],
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     # "price": 25.00,
     # "currency": "EUR",
     "data": [

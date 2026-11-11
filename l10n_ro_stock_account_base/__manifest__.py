@@ -7,6 +7,7 @@
     "name": "Romania - Stock Accounting Fields",
     "summary": "Fields of the Romanian stock accounting, without the logic",
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     "countries": ["ro"],
     "version": "19.0.0.0.1",
     "category": "Localization",
