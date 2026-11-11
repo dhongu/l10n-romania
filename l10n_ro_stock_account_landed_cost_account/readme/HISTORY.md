@@ -1,3 +1,7 @@
+## 19.0.1.1.4 (2026-11-11)
+
+- Tests for the landed cost created from the vendor bill and for stock that is already reserved or already sold (only the quantity in stock is capitalized), and a consultant sheet covering the three scenarios. No functional change.
+
 ## 19.0.1.1.3 (2026-10-22)
 
 - Odoo Apps banner title: *Stock Accounting Landed Cost Account* (was *Landed Cost Accounts*), the same as the module name.
