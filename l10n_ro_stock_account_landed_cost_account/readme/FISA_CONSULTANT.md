@@ -75,43 +75,60 @@ adițional** bifat, jurnal de stoc, contul 408 pentru recepțiile pe bază de av
 
 ![Setări, blocul România: Metodă cost adițional clasa 6 = Standard](../static/description/01_settings_landed_cost.png)
 
-2. Produsul de transport: serviciu, **Este cost adițional**, cu contul de cheltuieli (624).
-3. Marfa: stocabilă, categorie cu evaluare în timp real și cont de evaluare, jurnal de stoc.
+2. **Storno accounting**: *Contabilitate → Configurare → Setări → Contabilitate*, bifa **Storno accounting** (implicit
+   pornită la companiile din România). Cu metoda *Prin cont intermediar*, bifa decide forma notei: a doua pereche în
+   roșu (pornită) sau clasică (oprită); la metoda *Standard* nu schimbă nota.
+3. Produsul de transport: serviciu, **Este cost adițional**, cu contul de cheltuieli (624).
+4. Marfa: stocabilă, categorie cu evaluare în timp real și cont de evaluare, jurnal de stoc.
 
 ## 6. Flux de utilizare
 
 Marfa din exemple: 10 buc. × 100 lei = 1.000 lei. Transport: 100 lei + TVA 21%.
 
-### Scenariul 1 — Fluxul complet, recepție fără Aviz
+**Scenariul 1 — fluxul complet, recepție fără Aviz** (Pașii 1–7).
 
-1. **Comanda de achiziție** către furnizor, 10 buc. × 100 lei, **Confirmă comanda**.
+### Pasul 1 — Comanda de achiziție
+
+Comandă către furnizor, 10 buc. × 100 lei, **Confirmă comanda**.
 
 ![Comanda de achiziție confirmată: 10 buc. de marfă, 100 lei bucata](../static/description/02_purchase_order.png)
 
-2. **Recepția**: **Validează**, fără bifa **Aviz**. La validare nu se postează notă de stoc.
+### Pasul 2 — Recepția
+
+**Validează**, fără bifa **Aviz**. La validare nu se postează notă de stoc.
 
 ![Recepția MC/IN validată, fără bifa Aviz](../static/description/03_receipt.png)
 
-3. **Factura mărfii** (**Creează factură** din comandă, apoi **Confirmă**): intrarea în stoc se postează aici:
+### Pasul 3 — Factura mărfii
+
+**Creează factură** din comandă, apoi **Confirmă**: intrarea în stoc se postează aici:
    Dr 371 1.000 + Dr 4426 210 / Cr 401 1.210.
 
 ![Factura furnizorului de marfă: 10 buc. × 100 lei, TVA 21%, total 1.210 lei](../static/description/04_goods_bill.png)
 
-4. **Factura transportatorului**: linie cu produsul de transport (**Este cost adițional**), 100 lei, cont 624;
+### Pasul 4 — Factura transportatorului
+
+Linie cu produsul de transport (**Este cost adițional**), 100 lei, cont 624;
    **Confirmă**. Nota facturii: Dr 624 100 + Dr 4426 21 / Cr 401 121.
 
 ![Nota facturii transportatorului: Dr 624 100, Dr 4426 21, Cr 401 121](../static/description/14_transport_bill_note.png)
 
-5. Pe aceeași factură apare butonul **Creați costuri adiționale**. Apăsați-l. Dacă factura nu are comandă de
+### Pasul 5 — Costul adițional din factură
+
+Pe aceeași factură apare butonul **Creați costuri adiționale**. Apăsați-l. Dacă factura nu are comandă de
    achiziție (cazul obișnuit), recepția se adaugă manual în **Transferuri**: completarea automată ia doar
    recepțiile comenzii de achiziție din factură și exclude recepțiile deja acoperite de un cost adițional validat.
    Alegeți **Jurnalul**.
 
 ![Factura transportatorului postată, cu butonul Creați costuri adiționale evidențiat](../static/description/05_transport_bill_button.png)
 
-6. **Calculează**, apoi **Validează**.
+### Pasul 6 — Calcul și validare
+
+**Calculează**, apoi **Validează**.
 
 ![Costul adițional validat, cu recepția în Transferuri și contul 624 din factură](../static/description/06_landed_cost_form.png)
+
+### Pasul 7 — Nota costului adițional
 
 Nota costului adițional (metoda *Standard*): **Dr 371 100 / Cr 624 100**. Valoarea recepției crește la
 1.100 lei.
@@ -125,7 +142,7 @@ Cr intermediar 100 și, **în roșu**, Dr 624 −100 / Cr intermediar −100. Cu
 
 ![Nota prin cont intermediar cu Storno accounting: Dr 371 / Cr 473900 și 624 = 473900 în roșu (−100 lei)](../static/description/08_note_intermediary.png)
 
-### Scenariul 2 — Stoc rezervat pentru o vânzare
+### Pasul 8 — Scenariul 2: stoc rezervat pentru o vânzare
 
 Din cele 10 buc. recepționate, 4 sunt rezervate pe o livrare încă nevalidată (stare *Pregătit*).
 
@@ -142,7 +159,7 @@ Din cele 10 buc. recepționate, 4 sunt rezervate pe o livrare încă nevalidată
 3. Validați apoi livrarea. Cele 4 buc. ies la **110 lei** bucata (100 + 10 cost adițional): Dr 607 440 / Cr 371
    440. Costul adițional urmărește marfa în costul vânzărilor.
 
-### Scenariul 3 — Stoc deja vândut
+### Pasul 9 — Scenariul 3: stoc deja vândut
 
 Din cele 10 buc., 4 au fost livrate și validate înainte de costul adițional. Livrarea a ieșit la
 100 lei/buc.: Dr 607 400 / Cr 371 400.
@@ -166,7 +183,7 @@ Din cele 10 buc., 4 au fost livrate și validate înainte de costul adițional. 
 4. Dacă **toată** cantitatea a fost vândută, costul adițional se validează, dar nu se postează nicio
    linie: tot costul rămâne pe 624.
 
-### Scenariul 4 — Recepție pe bază de aviz (408)
+### Pasul 10 — Scenariul 4: recepție pe bază de aviz (408)
 
 Cu bifa **Aviz** pe recepție, intrarea în stoc se postează la validarea recepției, nu la factură.
 
