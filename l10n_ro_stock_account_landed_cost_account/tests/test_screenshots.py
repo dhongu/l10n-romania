@@ -86,6 +86,7 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         cls.goods_bill.action_post()
         cls.carrier_bill = cls._carrier_bill("FT-2001")
         cls.landed_standard = cls._landed(cls.carrier_bill, cls.receipt)
+        company.account_storno = True
         company.write(
             {
                 "l10n_ro_landed_cost_method": "intermediary",
@@ -104,6 +105,17 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         __, cls.receipt_sold = cls._purchase("sold")
         cls.delivery_sold = cls._delivery("sold", validate=True)
         cls.landed_sold = cls._landed(cls._carrier_bill("FT-2004"), cls.receipt_sold)
+
+        # același cost, prin cont intermediar cu Storno accounting (a doua pereche în roșu)
+        company.write(
+            {
+                "l10n_ro_landed_cost_method": "intermediary",
+                "l10n_ro_landed_cost_intermediary_account_id": cls.account_inter.id,
+            }
+        )
+        cls.landed_reserved_routed = cls._landed(cls._carrier_bill("FT-2007"), cls.receipt_reserved)
+        cls.landed_sold_routed = cls._landed(cls._carrier_bill("FT-2008"), cls.receipt_sold)
+        company.l10n_ro_landed_cost_method = "standard"
 
         # recepție pe bază de aviz: 371 / 408 la recepție, 408 / 401 la factura mărfii
         cls.po_notice, cls.receipt_notice = cls._purchase("notice", notice=True)
@@ -252,6 +264,21 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
             self.account_move_shot(self.receipt_notice.move_ids.account_move_id, "16_receipt_note_notice.png"),
             self.account_move_shot(self.goods_bill_notice, "17_goods_bill_notice.png"),
             self.account_move_shot(self.landed_notice.account_move_id, "18_note_notice.png"),
+            {
+                "path": f"/web?debug=0#action={action}&view_type=form",
+                "name": "19_settings_storno.png",
+                "wait": ".o_form_view",
+                "eval": (
+                    "const tab = [...document.querySelectorAll('.settings_tab .tab')]"
+                    ".find((el) => /Factur|Invoic/.test(el.textContent)); if (tab) { tab.click(); } "
+                    "setTimeout(() => document.querySelector('[name=account_storno]')"
+                    "?.scrollIntoView({block: 'center'}), 800)"
+                ),
+                "highlight": ["div[name='account_storno']"],
+                "settle": 4500,
+            },
+            self.account_move_shot(self.landed_reserved_routed.account_move_id, "20_note_reserved_storno.png"),
+            self.account_move_shot(self.landed_sold_routed.account_move_id, "21_note_sold_storno.png"),
         ]
 
     def test_capture_fise(self):
@@ -261,7 +288,7 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         )
         self.assertEqual(
             self._dr_cr(self.landed_routed.account_move_id),
-            [("371000", 100.0, 0.0), ("473900", 0.0, 100.0), ("473900", 100.0, 0.0), ("624000", 0.0, 100.0)],
+            [("371000", 100.0, 0.0), ("473900", 0.0, -100.0), ("473900", 0.0, 100.0), ("624000", -100.0, 0.0)],
         )
         self.assertEqual(
             self._dr_cr(self.landed_reserved.account_move_id), [("371000", 100.0, 0.0), ("624000", 0.0, 100.0)]
@@ -274,6 +301,14 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
         )
         self.assertEqual(
             self._dr_cr(self.landed_notice.account_move_id), [("371000", 100.0, 0.0), ("624000", 0.0, 100.0)]
+        )
+        self.assertEqual(
+            self._dr_cr(self.landed_reserved_routed.account_move_id),
+            [("371000", 100.0, 0.0), ("473900", 0.0, -100.0), ("473900", 0.0, 100.0), ("624000", -100.0, 0.0)],
+        )
+        self.assertEqual(
+            self._dr_cr(self.landed_sold_routed.account_move_id),
+            [("371000", 60.0, 0.0), ("473900", 0.0, -60.0), ("473900", 0.0, 60.0), ("624000", -60.0, 0.0)],
         )
         self.capture_screenshots(self._shots())
 

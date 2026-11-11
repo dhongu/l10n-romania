@@ -39,7 +39,8 @@ class AdjustmentLines(models.Model):
         instead of crediting a class 6 account directly. Class 609 is never
         rerouted. Active only when the company landed cost method is set to
         'intermediary' and an intermediary account is configured; otherwise the
-        standard behaviour is preserved."""
+        standard behaviour is preserved. With storno accounting the second pair is
+        posted in red (class 6 debit / intermediary credit, both negative)."""
         company = self.cost_id.company_id
         if company.l10n_ro_landed_cost_method != "intermediary":
             return lines
@@ -56,6 +57,17 @@ class AdjustmentLines(models.Model):
             if is_class_6 and credit:
                 # 1) original credit line -> intermediary account (pairs with the stock valuation debit)
                 new_lines.append([0, 0, dict(vals, account_id=intermediary_account.id)])
+                if company.account_storno:
+                    # Storno accounting: the second pair is a red (negative) entry on the same
+                    # sides, class 6 debited and the intermediary account credited, both negative
+                    # (624 = 4739 in red), instead of intermediary debit / class 6 credit.
+                    new_lines.append(
+                        [0, 0, dict(vals, account_id=intermediary_account.id, credit=-credit, is_storno=True)]
+                    )
+                    new_lines.append(
+                        [0, 0, dict(vals, account_id=account.id, credit=0.0, debit=-credit, is_storno=True)]
+                    )
+                    continue
                 # 2) intermediary account on debit (pairs with the class 6 credit below)
                 new_lines.append([0, 0, dict(vals, account_id=intermediary_account.id, credit=0.0, debit=credit)])
                 # 3) class 6 account credited against the intermediary account

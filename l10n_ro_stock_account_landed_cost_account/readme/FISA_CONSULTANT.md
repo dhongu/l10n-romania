@@ -14,7 +14,8 @@ Modulul adaugă, la documentul standard Odoo **Costuri adiționale**:
 - **contul din locație** pentru nota de evaluare (locația de destinație la intrări, cea sursă la
   ieșiri) și poziția fiscală a jurnalului;
 - opțional, **rutarea creditului clasei 6 printr-un cont intermediar tehnic**, pe companie: o notă
-  cu două perechi echilibrate (stoc / intermediar și intermediar / 6xx).
+  cu două perechi echilibrate: stoc / intermediar și a doua pereche, care depinde de bifa
+  **Storno accounting** a companiei (vezi mai jos).
 
 Fișa tratează situațiile care apar între recepție și costul adițional, pentru **ambele moduri de
 recepție**:
@@ -29,7 +30,11 @@ vândut** la validarea costului.
 ## 2. Bază legală și context
 
 - **OMFP 1802/2014**: cheltuielile de transport și alte cheltuieli direct atribuibile achiziției intră în
-  costul de achiziție al stocului (punctul exact din OMFP rămâne de completat).
+  costul de achiziție al stocului: OMFP 1802/2014, pct. 8 (definiția costului de achiziție) și pct. 75 alin. (1)
+  (verificat cu Pacioli, 11.11.2026: sumele și monografiile din fișă sunt corecte).
+- Atenție la forma notei: OMFP nu prevede 624 pe credit în corespondență cu 371. Varianta conformă cu funcțiunea
+  conturilor este transportul înregistrat direct Dr 371 / Cr 401 pe factura transportatorului. Metoda *Standard*
+  (implicită) lasă 624 pe credit; doar metoda *Prin cont intermediar* cu Storno accounting evită creditul pe clasa 6.
 - La recepția pe bază de aviz, marfa se înregistrează fără factură: Dr 371 / Cr 408 Furnizori – facturi
   nesosite, iar la sosirea facturii 408 se stinge prin 401 (verificat cu Pacioli).
 - Odoo capitalizează costul adițional **doar pe cantitatea rămasă în stoc** la data validării.
@@ -39,6 +44,10 @@ vândut** la validarea costului.
   reclasifică în costul vânzărilor, și dacă e corectă creditarea unui cont de clasa 6 la repartizarea
   pe stoc, sunt decizii ale politicii contabile a firmei: Pacioli nu a găsit în sursele lui un temei pentru
   nicio variantă, deci fișa **nu afirmă o monografie** pentru aceste două puncte.
+- **Storno accounting** (bifa din Setări → Contabilitate, implicit pornită în România): la metoda *Prin cont
+  intermediar*, a doua pereche se postează în roșu, pe aceleași părți: **Dr 624 −100 / Cr intermediar −100**
+  (`624 = 4739` în roșu), în loc de Dr intermediar 100 / Cr 624 100. Efectul net pe conturi e același (rulajul
+  debitor al 624 scade cu 100, fără înregistrare pe credit; intermediarul rămâne cu sold zero). La metoda *Standard* bifa nu schimbă nota.
 - Contul intermediar este o soluție tehnică (exporturi care cer note echilibrate pe perechi de
   conturi). Îl alege firma prin politica contabilă; nu poate fi din clasa 6.
 
@@ -70,43 +79,65 @@ adițional** bifat, jurnal de stoc, contul 408 pentru recepțiile pe bază de av
 
 ![Setări, blocul România: Metodă cost adițional clasa 6 = Standard](../static/description/01_settings_landed_cost.png)
 
-2. Produsul de transport: serviciu, **Este cost adițional**, cu contul de cheltuieli (624).
-3. Marfa: stocabilă, categorie cu evaluare în timp real și cont de evaluare, jurnal de stoc.
+2. **Storno accounting**: *Contabilitate → Configurare → Setări → Contabilitate*, bifa **Storno accounting** (implicit
+   pornită la companiile din România). Cu metoda *Prin cont intermediar*, bifa decide forma notei: a doua pereche în
+   roșu (pornită) sau clasică (oprită); la metoda *Standard* nu schimbă nota.
+   Dacă alegeți metoda *Prin cont intermediar* cu Storno accounting oprit, Odoo afișează un avertisment în Setări
+   (mesaj în formular și fereastră la schimbarea metodei): activați bifa înainte de a lucra cu metoda.
+
+![Setări, Contabilitate storno: bifa pornită](../static/description/19_settings_storno.png)
+
+3. Produsul de transport: serviciu, **Este cost adițional**, cu contul de cheltuieli (624).
+4. Marfa: stocabilă, categorie cu evaluare în timp real și cont de evaluare, jurnal de stoc.
 
 ## 6. Flux de utilizare
 
 Marfa din exemple: 10 buc. × 100 lei = 1.000 lei. Transport: 100 lei + TVA 21%.
 
-### Scenariul 1 — Fluxul complet, recepție fără Aviz
+**Scenariul 1 — fluxul complet, recepție fără Aviz** (Pașii 1–7).
 
-1. **Comanda de achiziție** către furnizor, 10 buc. × 100 lei, **Confirmă comanda**.
+### Pasul 1 — Comanda de achiziție
+
+Comandă către furnizor, 10 buc. × 100 lei, **Confirmă comanda**.
 
 ![Comanda de achiziție confirmată: 10 buc. de marfă, 100 lei bucata](../static/description/02_purchase_order.png)
 
-2. **Recepția**: **Validează**, fără bifa **Aviz**. La validare nu se postează notă de stoc.
+### Pasul 2 — Recepția
+
+**Validează**, fără bifa **Aviz**. La validare nu se postează notă de stoc.
 
 ![Recepția MC/IN validată, fără bifa Aviz](../static/description/03_receipt.png)
 
-3. **Factura mărfii** (**Creează factură** din comandă, apoi **Confirmă**): intrarea în stoc se postează aici:
+### Pasul 3 — Factura mărfii
+
+**Creează factură** din comandă, apoi **Confirmă**: intrarea în stoc se postează aici:
    Dr 371 1.000 + Dr 4426 210 / Cr 401 1.210.
 
 ![Factura furnizorului de marfă: 10 buc. × 100 lei, TVA 21%, total 1.210 lei](../static/description/04_goods_bill.png)
 
-4. **Factura transportatorului**: linie cu produsul de transport (**Este cost adițional**), 100 lei, cont 624;
+### Pasul 4 — Factura transportatorului
+
+Linie cu produsul de transport (**Este cost adițional**), 100 lei, cont 624;
    **Confirmă**. Nota facturii: Dr 624 100 + Dr 4426 21 / Cr 401 121.
 
 ![Nota facturii transportatorului: Dr 624 100, Dr 4426 21, Cr 401 121](../static/description/14_transport_bill_note.png)
 
-5. Pe aceeași factură apare butonul **Creați costuri adiționale**. Apăsați-l. Dacă factura nu are comandă de
+### Pasul 5 — Costul adițional din factură
+
+Pe aceeași factură apare butonul **Creați costuri adiționale**. Apăsați-l. Dacă factura nu are comandă de
    achiziție (cazul obișnuit), recepția se adaugă manual în **Transferuri**: completarea automată ia doar
    recepțiile comenzii de achiziție din factură și exclude recepțiile deja acoperite de un cost adițional validat.
    Alegeți **Jurnalul**.
 
 ![Factura transportatorului postată, cu butonul Creați costuri adiționale evidențiat](../static/description/05_transport_bill_button.png)
 
-6. **Calculează**, apoi **Validează**.
+### Pasul 6 — Calcul și validare
+
+**Calculează**, apoi **Validează**.
 
 ![Costul adițional validat, cu recepția în Transferuri și contul 624 din factură](../static/description/06_landed_cost_form.png)
+
+### Pasul 7 — Nota costului adițional
 
 Nota costului adițional (metoda *Standard*): **Dr 371 100 / Cr 624 100**. Valoarea recepției crește la
 1.100 lei.
@@ -114,12 +145,13 @@ Nota costului adițional (metoda *Standard*): **Dr 371 100 / Cr 624 100**. Valoa
 ![Nota standard: Dr 371 100 lei, Cr 624 100 lei](../static/description/07_note_standard.png)
 
 Cu metoda *Prin cont intermediar*, pentru un alt cost adițional (exemplul folosește același produs, a doua
-factură de transport), nota are patru linii: Dr 371 100 / Cr intermediar 100 și Dr intermediar 100 / Cr 624 100;
-soldul intermediarului este 0.
+factură de transport), nota are patru linii. Cu **Storno accounting** pornit (cazul României): Dr 371 100 /
+Cr intermediar 100 și, **în roșu**, Dr 624 −100 / Cr intermediar −100. Cu bifa oprită: Dr 371 100 / Cr intermediar 100
+și Dr intermediar 100 / Cr 624 100. În ambele cazuri soldul intermediarului este 0.
 
-![Nota prin cont intermediar: două perechi de câte 100 lei](../static/description/08_note_intermediary.png)
+![Nota prin cont intermediar cu Storno accounting: Dr 371 / Cr 473900 și 624 = 473900 în roșu (−100 lei)](../static/description/08_note_intermediary.png)
 
-### Scenariul 2 — Stoc rezervat pentru o vânzare
+### Pasul 8 — Scenariul 2: stoc rezervat pentru o vânzare
 
 Din cele 10 buc. recepționate, 4 sunt rezervate pe o livrare încă nevalidată (stare *Pregătit*).
 
@@ -131,10 +163,15 @@ Din cele 10 buc. recepționate, 4 sunt rezervate pe o livrare încă nevalidată
 
 ![Nota pentru stocul rezervat: Dr 371 100 lei, Cr 624 100 lei](../static/description/10_note_reserved.png)
 
+   Cu metoda *Prin cont intermediar* și Storno accounting pornit, nota are aceleași patru linii ca în
+   Scenariul 1, pentru 100 lei (a doua pereche în roșu: 624 pe debit cu minus, nu pe credit).
+
+![Nota prin cont intermediar pentru stocul rezervat, cu Storno accounting: 371 / 473900 și 624 = 473900 în roșu, câte 100 lei](../static/description/20_note_reserved_storno.png)
+
 3. Validați apoi livrarea. Cele 4 buc. ies la **110 lei** bucata (100 + 10 cost adițional): Dr 607 440 / Cr 371
    440. Costul adițional urmărește marfa în costul vânzărilor.
 
-### Scenariul 3 — Stoc deja vândut
+### Pasul 9 — Scenariul 3: stoc deja vândut
 
 Din cele 10 buc., 4 au fost livrate și validate înainte de costul adițional. Livrarea a ieșit la
 100 lei/buc.: Dr 607 400 / Cr 371 400.
@@ -145,7 +182,11 @@ Din cele 10 buc., 4 au fost livrate și validate înainte de costul adițional. 
 
 1. Validați costul adițional de 100 lei.
 2. **Verificați:** nota este **Dr 371 60 / Cr 624 60**, adică doar cele 6 buc. rămase în stoc (6/10 din 100).
-   Cu metoda *Prin cont intermediar*: Dr 371 60 / Cr intermediar 60 și Dr intermediar 60 / Cr 624 60.
+   Cu metoda *Prin cont intermediar* și Storno accounting pornit: Dr 371 60 / Cr intermediar 60 și, în roșu,
+   Dr 624 −60 / Cr intermediar −60 (fără storno: Dr intermediar 60 / Cr 624 60).
+
+![Nota prin cont intermediar pentru stocul vândut, cu Storno accounting: 624 pe debit cu −60 lei](../static/description/21_note_sold_storno.png)
+
 
 ![Costul adițional validat după livrare](../static/description/12_landed_cost_sold.png)
 
@@ -157,7 +198,7 @@ Din cele 10 buc., 4 au fost livrate și validate înainte de costul adițional. 
 4. Dacă **toată** cantitatea a fost vândută, costul adițional se validează, dar nu se postează nicio
    linie: tot costul rămâne pe 624.
 
-### Scenariul 4 — Recepție pe bază de aviz (408)
+### Pasul 10 — Scenariul 4: recepție pe bază de aviz (408)
 
 Cu bifa **Aviz** pe recepție, intrarea în stoc se postează la validarea recepției, nu la factură.
 
@@ -191,7 +232,8 @@ Cu bifa **Aviz** pe recepție, intrarea în stoc se postează la validarea recep
 | Cost adițional, tot stocul în gestiune sau rezervat | 371 | 624 | 100 |
 | Cost adițional, 4 buc. vândute | 371 | 624 | 60 |
 | Cost adițional, toate vândute | – | – | 0 (rămâne pe 624) |
-| Metoda intermediar | 371 / intermediar | intermediar / 624 | suma capitalizată |
+| Metoda intermediar, fără storno | 371 / intermediar | intermediar / 624 | suma capitalizată |
+| Metoda intermediar, cu Storno accounting | 371; 624 (−) | intermediar; intermediar (−) | suma capitalizată; a doua pereche în roșu |
 
 ## 7. Legături cu alte module / declarații
 
@@ -206,7 +248,12 @@ Cu bifa **Aviz** pe recepție, intrarea în stoc se postează la validarea recep
 - Cantitatea rezervată nu scade capitalizarea; cantitatea livrată da.
 - Valoarea recepției crește cu costul în Scenariile 1 și 4 (1.000 → 1.100 lei).
 - La recepția cu aviz, factura mărfii stinge 408 și nu postează a doua notă de stoc.
-- La metoda intermediar, soldul contului intermediar este 0.
+- La metoda intermediar, soldul contului intermediar este 0, cu sau fără Storno accounting.
+- Cu Storno accounting, a doua pereche are sume negative (în roșu) pe 624 (debit) și pe intermediar (credit); nota
+  rămâne echilibrată și suma capitalizată nu se schimbă (100 în flux, în stoc rezervat și după recepția cu aviz; 60 cu
+  4 buc. vândute).
+- Costul adițional **negativ** (de exemplu o reducere de la transportator) se postează încă ca stornare clasică
+  (Dr 6xx / Cr 371), indiferent de bifă; nu este tratat în roșu.
 - Costul creat din factură: contul liniei este cel din factura transportatorului.
 
 ## 9. Mesaje de eroare frecvente
@@ -240,11 +287,16 @@ Cu bifa **Aviz** pe recepție, intrarea în stoc se postează la validarea recep
 | `16_receipt_note_notice.png` | Nota recepției cu aviz (371 / 408) |
 | `17_goods_bill_notice.png` | Factura mărfii pe 408 |
 | `18_note_notice.png` | Nota costului adițional după recepția cu aviz |
+| `19_settings_storno.png` | Setări: bifa Contabilitate storno |
+| `20_note_reserved_storno.png` | Nota prin intermediar cu storno, stoc rezervat (100 lei) |
+| `21_note_sold_storno.png` | Nota prin intermediar cu storno, stoc vândut (60 lei) |
 
 ## 11. Observații pentru manual
 
 - Costul adițional se validează cât mai aproape de recepție: după vânzare, partea vândută nu se mai
   capitalizează.
 - Stocul rezervat nu influențează costul adițional; modul de recepție (cu sau fără Aviz) nici el.
+- Recepția fără Aviz nu postează nicio notă: dacă marfa e primită fără factură sau factura sosește în luna
+  următoare, stocul nu apare în 371 la închiderea lunii. Pentru recepțiile fără factură se bifează **Aviz** (371 / 408).
 - Partea vândută rămâne pe contul de cheltuieli al liniei: manualul trebuie să spună că tratamentul ei îl decide
   politica contabilă a firmei.

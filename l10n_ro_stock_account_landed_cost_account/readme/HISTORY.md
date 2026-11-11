@@ -1,3 +1,7 @@
+## 19.0.1.2.0 (2026-11-11)
+
+- With the company **Storno accounting** setting on and the *Through intermediary account* method, the second pair of the landed cost note is now posted in red on the same sides (class 6 debit, intermediary credit, both negative, `624 = 4739` in red), instead of intermediary debit / class 6 credit. The net effect on the accounts is the same. The standard method and the companies without storno accounting are unchanged. Choosing the intermediary method in the settings warns the user (an alert in the form and an onchange warning) when Storno accounting is off. Tests for storno on and off with reserved and sold stock and a reception with notice, and the consultant sheet updated.
+
 ## 19.0.1.1.4 (2026-11-11)
 
 - Tests for the landed cost created from the vendor bill and for stock that is already reserved or already sold (only the quantity in stock is capitalized), both after a reception without and with notice (408), and a consultant sheet with 18 screenshots covering these scenarios. No functional change.

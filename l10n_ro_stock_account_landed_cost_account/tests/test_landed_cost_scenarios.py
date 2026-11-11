@@ -130,6 +130,7 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
 
     def test_02_flow_intermediary(self):
         """Same flow, through the intermediary account: two balanced pairs."""
+        self.company.account_storno = False
         self._enable_intermediary()
         __, receipt = self._purchase_receipt()
         landed = self._landed_from_bill(receipt)
@@ -164,6 +165,7 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         self.assertEqual(delivery.move_ids.value, 400.0, "The delivered cost is not restated")
 
     def test_05_sold_stock_intermediary(self):
+        self.company.account_storno = False
         self._enable_intermediary()
         __, receipt = self._purchase_receipt()
         self._delivery(4.0, validate=True)
@@ -228,3 +230,85 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         self._delivery(10.0, validate=True)
         landed = self._landed_from_bill(receipt)
         self.assertFalse(landed.account_move_id.line_ids)
+
+    # Storno accounting: the second pair of the intermediary note is posted in red
+    def test_11_flow_intermediary_storno(self):
+        """With storno accounting the note is Dr 371 / Cr intermediary and then the class 6
+        account debited and the intermediary account credited, both in red (negative)."""
+        self.company.account_storno = True
+        self._enable_intermediary()
+        __, receipt = self._purchase_receipt()
+        landed = self._landed_from_bill(receipt)
+        self.assertEqual(
+            self._lines(landed.account_move_id),
+            [("371000", 100.0, 0.0), ("482099", 0.0, -100.0), ("482099", 0.0, 100.0), ("607000", -100.0, 0.0)],
+        )
+        storno = landed.account_move_id.line_ids.filtered("is_storno")
+        self.assertCountEqual(storno.mapped("account_id.code"), ["482099", "607000"])
+        intermediary = landed.account_move_id.line_ids.filtered(
+            lambda line: line.account_id == self.intermediary_account
+        )
+        self.assertAlmostEqual(sum(intermediary.mapped("balance")), 0.0, msg="Intermediary account nets to zero")
+        self.assertAlmostEqual(
+            landed.account_move_id.line_ids.filtered(lambda line: line.account_id == self.account_expense).balance,
+            -100.0,
+        )
+
+    def test_12_sold_intermediary_storno(self):
+        """4 pcs sold, storno on: the 60 capitalized go through the intermediary account in red."""
+        self.company.account_storno = True
+        self._enable_intermediary()
+        __, receipt = self._purchase_receipt()
+        self._delivery(4.0, validate=True)
+        landed = self._landed_from_bill(receipt)
+        self.assertEqual(
+            self._lines(landed.account_move_id),
+            [("371000", 60.0, 0.0), ("482099", 0.0, -60.0), ("482099", 0.0, 60.0), ("607000", -60.0, 0.0)],
+        )
+
+    def test_13_standard_not_affected_by_storno(self):
+        """The standard method (no intermediary account) posts the same entry with or without storno."""
+        for storno in (False, True):
+            self.company.account_storno = storno
+            __, receipt = self._purchase_receipt()
+            landed = self._landed_from_bill(receipt)
+            self.assertEqual(self._lines(landed.account_move_id), [("371000", 100.0, 0.0), ("607000", 0.0, 100.0)])
+
+    def test_14_reserved_intermediary_storno(self):
+        """Stock reserved for a sale, storno on, intermediary method: the whole cost (100) is
+        capitalized and the second pair is in red; the reservation is not touched."""
+        self.company.account_storno = True
+        self._enable_intermediary()
+        __, receipt = self._purchase_receipt()
+        delivery = self._delivery(4.0, validate=False)
+        landed = self._landed_from_bill(receipt)
+        self.assertEqual(delivery.state, "assigned")
+        self.assertEqual(
+            self._lines(landed.account_move_id),
+            [("371000", 100.0, 0.0), ("482099", 0.0, -100.0), ("482099", 0.0, 100.0), ("607000", -100.0, 0.0)],
+        )
+
+    def test_15_notice_sold_intermediary_storno(self):
+        """Reception with notice, 4 pcs sold, storno on, intermediary method: 60 capitalized, second pair in red."""
+        self.company.account_storno = True
+        self._enable_intermediary()
+        __, receipt = self._purchase_receipt(notice=True)
+        self._delivery(4.0, validate=True)
+        landed = self._landed_from_bill(receipt)
+        self.assertEqual(
+            self._lines(landed.account_move_id),
+            [("371000", 60.0, 0.0), ("482099", 0.0, -60.0), ("482099", 0.0, 60.0), ("607000", -60.0, 0.0)],
+        )
+
+    def test_16_settings_warning_without_storno(self):
+        """Choosing the intermediary method warns the user when Storno accounting is off."""
+        settings = self.env["res.config.settings"].new(
+            {"company_id": self.company.id, "l10n_ro_landed_cost_method": "intermediary", "account_storno": False}
+        )
+        result = settings._onchange_l10n_ro_landed_cost_method_storno()
+        self.assertIn("warning", result)
+        settings.account_storno = True
+        self.assertFalse(settings._onchange_l10n_ro_landed_cost_method_storno())
+        settings.account_storno = False
+        settings.l10n_ro_landed_cost_method = "standard"
+        self.assertFalse(settings._onchange_l10n_ro_landed_cost_method_storno())
