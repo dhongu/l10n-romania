@@ -5,13 +5,11 @@ from odoo import api, fields, models
 
 
 class StockPickingType(models.Model):
-    _name = "stock.picking.type"
-    _inherit = ["stock.picking.type", "l10n.ro.mixin"]
+    _inherit = "stock.picking.type"
 
     l10n_ro_notice_default = fields.Boolean(
         string="Romania - Is a notice",
-        help="Transfers created for this operation type are marked as notice (aviz) "
-        "by default.",
+        help="Transfers created for this operation type are marked as notice (aviz) by default.",
     )
 
 

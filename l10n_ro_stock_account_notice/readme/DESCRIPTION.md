@@ -4,4 +4,4 @@ by default, so receptions and deliveries use the 408/418 accounts without the
 user having to tick the box on each transfer.
 
 The notice logic itself (field `l10n_ro_notice` on transfers, valuation types and
-accounting entries) is part of `l10n_ro_stock_account`.
+accounting entries) is part of `l10n_ro_stock_account_base`.
