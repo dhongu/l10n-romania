@@ -14,7 +14,7 @@
         "views/stock_picking_type_view.xml",
     ],
     "images": ["static/description/main_screenshot.png"],
-    "development_status": "Mature",
+    "development_status": "Beta",
     "installable": True,
     "auto_install": False,
     "maintainers": ["feketemihai", "mcojocaru", "dhongu"],
