@@ -4,9 +4,5 @@
   "icon": "truck",
   "module_icon": false,
   "lang": "en",
-  "features": [
-    "Notice flag on operation types",
-    "Transfers marked as notice by default",
-    "Receipts and deliveries via 408/418"
-  ]
+  "features": ["Notice flag on operation types", "Transfers marked as notice by default", "Applied on new transfers"]
 }
