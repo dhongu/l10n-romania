@@ -281,7 +281,7 @@ Coloana **Nr. anexe** numără atașamentele notei contabile (documentele justif
 ### Pasul 5 — Închiderea zilei
 
 După ce ultima operațiune a zilei este înregistrată și registrul verificat, casierul apasă
-**Închide ziua**. Apare confirmarea:
+**Închide ziua** (operatorul de casă poate închide ziua pe casieria la care este alocat; vezi pașii 14–15). Apare confirmarea:
 
 ![Confirmarea închiderii zilei](screenshots/06_confirmare_inchidere.png)
 
@@ -432,6 +432,31 @@ Ziua se poate închide acum (pasul 5).
 Pe o casierie cu **Monetar obligatoriu la închiderea zilei**, **Închide ziua** refuză ziua fără
 monetar sau cu diferență nenulă (secțiunea 9). După închidere, cantitățile din monetar nu se mai pot
 modifica până la redeschiderea zilei.
+
+### Pasul 14 — Alocarea operatorilor pe casierie
+
+Contabilul alocă operatorii pe fiecare casierie: **Facturare / Contabilitate → Configurare → Jurnale**
+→ jurnalul de tip **Numerar** (de exemplu **Casa lei**) → câmpul **Operatori casă**. Câmpul apare doar
+contabililor și doar pe jurnalele de tip **Numerar**; se pot adăuga mai mulți operatori pe aceeași
+casierie, iar un operator poate lucra pe mai multe casierii:
+
+![Jurnalul Casa lei, în fila Note contabile, cu câmpul Operatori casă completat cu Ioana Marinescu și evidențiat portocaliu, sub bifa Monetar obligatoriu la închiderea zilei](screenshots/16_jurnal_operatori_casa.png)
+
+Operatorul trebuie să aibă grupul **Operator registru de casă** (fișa utilizatorului, secțiunea
+**Contabilitate**, rândul **Registru de casă**). Cu lista **goală**, casieria nu este vizibilă
+niciunui operator, doar contabililor.
+
+### Pasul 15 — Registrul văzut de operator
+
+Operatorul își deschide registrul din aplicația proprie **Registru de casă** (meniul principal),
+fără niciun meniu de contabilitate. Vede doar registrele casieriilor la care este alocat. În
+formular are **Operație**, **Numără numerarul** și **Închide ziua**; nu are **Încasare**, **Plată**
+și **Redeschide**, rezervate contabililor:
+
+![Registrul de casă CASA/2026/00002 văzut de operator, în aplicația Registrul de casă: butoanele Operație, Numără numerarul și Închide ziua sunt evidențiate, iar Încasare, Plată și Redeschide lipsesc; sold inițial 1.000,00 lei, sold final 1.150,00 lei](screenshots/17_formular_operator.png)
+
+Pe orice altă casierie, confirmarea unei **Operații** este refuzată, iar un cont de numerar sau de
+bancă nu poate fi ales ca cont corespondent (vezi pasul 3).
 
 ### Note de monografie și raportare
 
@@ -601,12 +626,11 @@ Capturile din `readme/screenshots/` sunt **generate automat** de `tests/test_scr
     cont 658810).
 15. `15_monetar_inregistrat.png` — registrul după înregistrarea lipsei: linia de −5,00, diferență zero.
 
-**Capturi planificate pentru operatorul de casă (de generat cu `fisa-screenshots`; încă nu există ca
-fișiere și nu sunt referite în pașii din secțiunea 6):**
-
-16. `16_jurnal_operatori_casa.png` — jurnalul de numerar, cu câmpul **Operatori casă** completat.
-17. `17_formular_operator.png` — registrul văzut de un operator: butoanele **Operație**, **Numără
-    numerarul**, **Închide ziua** fără **Încasare / Plată / Redeschide**.
+16. `16_jurnal_operatori_casa.png` — jurnalul de numerar „Casa lei”, cu câmpul **Operatori casă**
+    completat (alocarea făcută de contabil).
+17. `17_formular_operator.png` — registrul zilei văzut de operator, în aplicația **Registru de
+    casă**: butoanele **Operație**, **Numără numerarul**, **Închide ziua**, fără **Încasare / Plată /
+    Redeschide**.
 
 Regenerare (testele modulului rulează pe o bază cu date demo):
 
