@@ -15,5 +15,5 @@
     "data": [
         "views/footer_template.xml",
     ],
-    "maintainers": ["danila12"],
+    "maintainers": ["dhongu", "danila12"],
 }

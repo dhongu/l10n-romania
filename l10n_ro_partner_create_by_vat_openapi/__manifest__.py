@@ -18,6 +18,7 @@
     ],
     "installable": True,
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "VoicuStefan2001"],
     "application": False,
     "auto_install": False,
 }

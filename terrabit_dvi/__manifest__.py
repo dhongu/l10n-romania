@@ -4,6 +4,7 @@
     "images": ["static/description/main_screenshot.png"],
     "name": "Terrabit - DVI",
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "danila12"],
     "version": "18.0.1.0.1",
     "countries": ["ro"],
     "author": "Terrabit," "Odoo Community Association (OCA)",

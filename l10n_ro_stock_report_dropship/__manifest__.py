@@ -7,6 +7,7 @@
     "author": "Dan Stoica,Terrabit,Odoo Community Association (OCA)",
     "website": "https://www.terrabit.ro",
     "license": "AGPL-3",
+    "maintainers": ["danila12"],
     "development_status": "Beta",
     "depends": ["l10n_ro_stock_report", "l10n_ro_stock_account", "stock_dropshipping"],
     "data": [],

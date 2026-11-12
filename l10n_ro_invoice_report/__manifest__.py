@@ -9,6 +9,7 @@
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "danila12"],
     "category": "Localization",
     "development_status": "Mature",
     "countries": ["ro"],
