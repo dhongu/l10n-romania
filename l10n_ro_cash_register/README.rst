@@ -153,6 +153,8 @@ Changelog
   even if they also have the operator group.
 - The *Operation* wizard creates the journal entry with elevated rights,
   but only on a cash desk the user is assigned to.
+- The group sits under its own *Cash Register* privilege (user form,
+  *Accounting* section), so it can be assigned without developer mode.
 - The *Operation* wizard refuses, for an operator, a cash or bank
   account as counterpart account: transfers between cash desks or to the
   bank go through an accountant.

@@ -341,6 +341,7 @@ msgstr "Retragere"
 #: model:ir.actions.report,name:l10n_ro_cash_register.action_report_cash_register
 #: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_register
 #: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register_app
+#: model:res.groups.privilege,name:l10n_ro_cash_register.res_groups_privilege_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
 msgid "Cash Register"

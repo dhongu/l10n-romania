@@ -200,3 +200,7 @@ class TestL10nRoCashRegisterOperator(TransactionCase):
         both_menus = self.env["ir.ui.menu"].with_user(self.both)._visible_menu_ids()
         self.assertIn(app.id, both_menus)
         self.assertIn(classic.id, both_menus)
+
+    def test_operator_group_is_listed_under_a_privilege(self):
+        """Fără privilegiu, grupul se vede în fișa utilizatorului doar în modul dezvoltator."""
+        self.assertTrue(self.group_operator.privilege_id)

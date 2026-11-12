@@ -96,6 +96,9 @@ Reguli de reținut:
 - **Redeschide** și modificarea listei **Operatori casă** sunt rezervate contabililor; o redeschidere
   încercată de operator (inclusiv prin API) este refuzată.
 
+Un contabil nu are nevoie de grupul de operator; dacă îl primește, vede în continuare toate registrele
+(regula de contabil se aplică peste cea de operator).
+
 Separarea „casierul închide, contabilul-șef redeschide” este astfel impusă de program, nu doar de
 procedura internă; istoricul păstrează în plus urma (cine a închis, cine a redeschis, când și cu ce
 sold).
@@ -165,7 +168,7 @@ Date minime pentru demo (sunt cele din capturi):
    **inactiv**.
 5. Alocați casierii:
    - contabilului: grupul **Administrator** pe Facturare / Contabilitate;
-   - casierului: grupul **Operator registru de casă** (în fișa utilizatorului, la drepturile de acces), fără
+   - casierului: grupul **Operator registru de casă** (în fișa utilizatorului, secțiunea **Contabilitate**, rândul **Registru de casă**), fără
      grupul de administrator contabil — dacă îl are, vede toate registrele;
    - pe jurnalul fiecărei casierii (**Facturare / Contabilitate → Configurare → Jurnale** → jurnalul
      de numerar), în câmpul **Operatori casă**, adăugați casierii care lucrează pe ea. Câmpul apare

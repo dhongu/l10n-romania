@@ -5,6 +5,7 @@
 - New group *Cash register operator*: works on the cash registers (receipts, payments through the *Operation* wizard, cash count, closing the day) of the cash desks he is assigned to, without any accounting group: the group implies only the internal user, so the operator can also be, for instance, a point of sale user. It has its own *Cash Register* app (menu), and read-only access to the journal entries, journals and accounts needed to display and print the register.
 - New field *Cash Register Operators* on cash journals (*Accounting > Configuration > Journals*). An operator sees only the registers, and count lines, of the journals he is assigned to; an empty list hides the cash desk from all operators. Accountants see all cash registers, even if they also have the operator group.
 - The *Operation* wizard creates the journal entry with elevated rights, but only on a cash desk the user is assigned to.
+- The group sits under its own *Cash Register* privilege (user form, *Accounting* section), so it can be assigned without developer mode.
 - The *Operation* wizard refuses, for an operator, a cash or bank account as counterpart account: transfers between cash desks or to the bank go through an accountant.
 - Reopening a closed day, and the *Add Receipt* / *Add Payment* buttons (customer payments need invoicing rights), stay with accounting users.
 

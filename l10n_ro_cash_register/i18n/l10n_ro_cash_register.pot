@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 09:56+0000\n"
-"PO-Revision-Date: 2026-11-12 09:56+0000\n"
+"POT-Creation-Date: 2026-11-12 10:08+0000\n"
+"PO-Revision-Date: 2026-11-12 10:08+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -334,6 +334,7 @@ msgstr ""
 #: model:ir.actions.report,name:l10n_ro_cash_register.action_report_cash_register
 #: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_register
 #: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register_app
+#: model:res.groups.privilege,name:l10n_ro_cash_register.res_groups_privilege_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
 msgid "Cash Register"
