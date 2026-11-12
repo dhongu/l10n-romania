@@ -50,6 +50,16 @@ class TestL10nRoCashRegisterOperator(TransactionCase):
         cls.register_b = register.create({"journal_id": cls.journal_b.id, "date": date(2026, 3, 2)})
         cls.register_empty = register.create({"journal_id": cls.journal_empty.id, "date": date(2026, 3, 2)})
         cls.all_registers = cls.register_a | cls.register_b | cls.register_empty
+        # Compania de test poate avea altă monedă decât RON/EUR din datele modulului (ex. USD în CI):
+        # fără cupiuri pe moneda casei, „Numără numerarul” nu are ce adăuga.
+        currency = cls.env.company.currency_id
+        if not cls.env["l10n.ro.cash.denomination"].search_count([("currency_id", "=", currency.id)]):
+            cls.env["l10n.ro.cash.denomination"].create(
+                [
+                    {"currency_id": currency.id, "value": value, "kind": "banknote" if value >= 1 else "coin"}
+                    for value in (100, 10, 1, 0.1)
+                ]
+            )
         cls.counterpart = cls.env["account.account"].search(
             [("company_ids", "in", cls.env.company.id), ("account_type", "=", "income")], limit=1
         )
