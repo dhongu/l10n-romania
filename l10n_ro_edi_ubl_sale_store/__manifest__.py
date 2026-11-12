@@ -21,6 +21,6 @@
     "data": [],
     "images": ["static/description/main_screenshot.png"],
     "development_status": "Mature",
-    "maintainers": ["dhongu"],
+    "maintainers": ["dhongu", "danila12"],
     "extra_buy": True,
 }

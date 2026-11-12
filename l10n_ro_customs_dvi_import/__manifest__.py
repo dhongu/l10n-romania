@@ -4,6 +4,7 @@
     "name": "Romania - Import DVI from the SNI PDF",
     "summary": "Fill in the DVI wizard from the customs import declaration PDF printed by the National Import System (SNI)",
     "license": "AGPL-3",
+    "maintainers": ["dhongu"],
     "consultant_sheet": "full",
     "version": "19.0.1.0.1",
     "countries": ["ro"],

@@ -8,6 +8,7 @@
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "danila12"],
     "consultant_sheet": "full",
     "category": "Localization",
     "development_status": "Mature",

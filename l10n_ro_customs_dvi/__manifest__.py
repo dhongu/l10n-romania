@@ -4,6 +4,7 @@
     "name": "Romania - Customs Import Declaration (DVI)",
     "summary": "Record the customs import declaration (DVI) as a landed cost: customs duty, commission and import VAT",
     "license": "AGPL-3",
+    "maintainers": ["dhongu"],
     "consultant_sheet": "full",
     "version": "19.0.2.2.0",
     "countries": ["ro"],

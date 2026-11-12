@@ -9,6 +9,6 @@
     "depends": ["account", "l10n_ro_message_spv"],
     "data": ["security/ir.model.access.csv", "wizard/export_invoice_files_view.xml"],
     "development_status": "Beta",
-    "maintainers": ["VoicuStefan2001"],
+    "maintainers": ["dhongu", "VoicuStefan2001"],
     "images": ["static/description/main_screenshot.png"],
 }

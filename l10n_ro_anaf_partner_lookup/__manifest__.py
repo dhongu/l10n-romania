@@ -6,6 +6,7 @@
     "name": "Romania - ANAF Partner Lookup",
     "summary": "Look a Romanian company up at ANAF by its CUI and get the partner data, without other localization modules",
     "license": "AGPL-3",
+    "maintainers": ["dhongu"],
     "consultant_sheet": "full",
     "version": "19.0.1.3.0",
     "images": ["static/description/main_screenshot.png"],

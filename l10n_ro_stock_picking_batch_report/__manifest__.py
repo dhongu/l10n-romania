@@ -7,6 +7,7 @@
     "summary": "Rapoarte din batch: aviz",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
+    "maintainers": ["dhongu"],
     "consultant_sheet": "full",
     "version": "19.0.0.0.7",
     "development_status": "Mature",

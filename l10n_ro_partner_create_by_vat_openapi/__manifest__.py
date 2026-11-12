@@ -18,6 +18,7 @@
     "installable": True,
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "VoicuStefan2001"],
     "application": False,
     "auto_install": False,
     "development_status": "Production/Stable",

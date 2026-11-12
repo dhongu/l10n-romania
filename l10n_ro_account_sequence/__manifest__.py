@@ -13,6 +13,7 @@
         "views/account_payment_view.xml",
     ],
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "danila12"],
     "consultant_sheet": "full",
     "images": ["static/description/main_screenshot.png"],
 }

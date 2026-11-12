@@ -19,5 +19,5 @@
     "license": "AGPL-3",
     "installable": True,
     "development_status": "Mature",
-    "maintainers": ["dhongu"],
+    "maintainers": ["dhongu", "VoicuStefan2001"],
 }
