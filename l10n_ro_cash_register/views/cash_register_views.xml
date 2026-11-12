@@ -196,7 +196,24 @@
         id="menu_cash_register"
         name="Cash register"
         parent="account.account_transactions_menu"
-        groups="account.group_account_manager,l10n_ro_cash_register.group_cash_register_operator"
+        groups="account.group_account_manager"
+        action="action_cash_register"
+        sequence="10"
+    />
+
+    <!-- Aplicația operatorului de casă: nu depinde de meniurile de contabilitate. -->
+    <menuitem
+        id="menu_cash_register_app"
+        name="Cash Register"
+        web_icon="l10n_ro_cash_register,static/description/icon.png"
+        groups="l10n_ro_cash_register.group_cash_register_operator"
+        sequence="45"
+    />
+    <menuitem
+        id="menu_cash_register_app_registers"
+        name="Cash register"
+        parent="menu_cash_register_app"
+        groups="l10n_ro_cash_register.group_cash_register_operator"
         action="action_cash_register"
         sequence="10"
     />

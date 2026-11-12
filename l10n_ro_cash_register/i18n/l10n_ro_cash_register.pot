@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 09:23+0000\n"
-"PO-Revision-Date: 2026-11-12 09:23+0000\n"
+"POT-Creation-Date: 2026-11-12 09:56+0000\n"
+"PO-Revision-Date: 2026-11-12 09:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -241,6 +241,15 @@ msgid "Archived"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/wizard/cash_register_operation.py:0
+msgid ""
+"As cash register operator you cannot use a cash or bank account (%s) as the "
+"counterpart account. Ask an accountant to record transfers between cash "
+"desks or to the bank."
+msgstr ""
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
@@ -324,6 +333,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:l10n_ro_cash_register.action_cash_register
 #: model:ir.actions.report,name:l10n_ro_cash_register.action_report_cash_register
 #: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_register
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register_app
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
 msgid "Cash Register"
@@ -364,6 +374,7 @@ msgstr ""
 
 #. module: l10n_ro_cash_register
 #: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register_app_registers
 msgid "Cash register"
 msgstr ""
 
@@ -999,8 +1010,8 @@ msgstr ""
 #: model:res.groups,comment:l10n_ro_cash_register.group_cash_register_operator
 msgid ""
 "Works on the cash registers of the cash desks he is assigned to (Accounting "
-"> Configuration > Journals > Cash Register Operators). Everything else in "
-"accounting is read-only."
+"> Configuration > Journals > Cash Register Operators). It does not give "
+"access to the accounting menus."
 msgstr ""
 
 #. module: l10n_ro_cash_register

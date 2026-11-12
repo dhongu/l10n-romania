@@ -3,7 +3,7 @@
 
 from datetime import date
 
-from odoo.exceptions import AccessError
+from odoo.exceptions import AccessError, UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -57,7 +57,7 @@ class TestL10nRoCashRegisterOperator(TransactionCase):
     def _visible(self, user):
         return self.env["l10n.ro.cash.register"].with_user(user).search([("id", "in", self.all_registers.ids)])
 
-    def _operation(self, user, journal, amount=100.0):
+    def _operation(self, user, journal, amount=100.0, account=None):
         wizard = (
             self.env["l10n.ro.cash.register.operation"]
             .with_user(user)
@@ -68,7 +68,7 @@ class TestL10nRoCashRegisterOperator(TransactionCase):
                     "amount": amount,
                     "operation": "in",
                     "description": "Test operation",
-                    "counterpart_account_id": self.counterpart.id,
+                    "counterpart_account_id": (account or self.counterpart).id,
                 }
             )
         )
@@ -145,3 +145,58 @@ class TestL10nRoCashRegisterOperator(TransactionCase):
     def test_operator_cannot_edit_the_operator_list(self):
         with self.assertRaises(AccessError):
             self.journal_a.with_user(self.operator).write({"l10n_ro_cash_operator_ids": [(5, 0, 0)]})
+
+    def test_operator_cannot_use_a_cash_or_bank_account_as_counterpart(self):
+        """Fără transfer direct între case: contul corespondent de numerar sau bancă e refuzat."""
+        with self.assertRaises(UserError):
+            self._operation(self.operator, self.journal_a, account=self.journal_b.default_account_id)
+
+    def test_accountant_can_use_a_cash_account_as_counterpart(self):
+        move = self._operation(self.accountant, self.journal_a, account=self.journal_b.default_account_id)
+        self.assertEqual(move.state, "posted")
+
+    def test_operator_group_does_not_inherit_an_accounting_group(self):
+        """Operatorul poate fi doar utilizator intern (ex. operator POS): fără grup contabil moștenit."""
+        self.assertFalse(self.operator.has_group("account.group_account_readonly"))
+        self.assertFalse(self.operator.has_group("account.group_account_invoice"))
+
+    def test_operator_has_its_own_menu_and_no_accounting_menu(self):
+        visible = self.env["ir.ui.menu"].with_user(self.operator)._visible_menu_ids()
+        app = self.env.ref("l10n_ro_cash_register.menu_cash_register_app")
+        registers = self.env.ref("l10n_ro_cash_register.menu_cash_register_app_registers")
+        self.assertIn(app.id, visible)
+        self.assertIn(registers.id, visible)
+        self.assertNotIn(self.env.ref("account.menu_finance_entries").id, visible)
+
+    def test_operator_reads_the_lines_of_the_register(self):
+        move = self._operation(self.operator, self.journal_a)
+        register = self.register_a.with_user(self.operator)
+        register.action_refresh()
+        self.assertEqual(register.move_ids, move)
+        # câmpurile afișate în fila de linii se citesc fără grup contabil
+        self.assertEqual(register.move_line_ids.mapped("move_name"), [move.name] * len(register.move_line_ids))
+        self.assertTrue(register.move_line_ids.mapped("balance"))
+
+    def test_operator_prints_the_register_and_the_cash_count(self):
+        self._operation(self.operator, self.journal_a)
+        register = self.register_a.with_user(self.operator)
+        register.action_refresh()
+        report = self.env["ir.actions.report"].with_user(self.operator)
+        html, _fmt = report._render_qweb_html("l10n_ro_cash_register.report_cash_register", register.ids)
+        self.assertIn(register.name.encode(), html)
+        register.action_count_cash()
+        report._render_qweb_html("l10n_ro_cash_register.report_cash_count", register.ids)
+
+    def test_accountant_does_not_get_the_operator_app_menu(self):
+        """Contabilul are meniul sub Contabilitate; aplicația separată e doar a operatorilor."""
+        app = self.env.ref("l10n_ro_cash_register.menu_cash_register_app")
+        classic = self.env.ref("l10n_ro_cash_register.menu_cash_register")
+        accountant_menus = self.env["ir.ui.menu"].with_user(self.accountant)._visible_menu_ids()
+        self.assertNotIn(app.id, accountant_menus)
+        self.assertIn(classic.id, accountant_menus)
+        operator_menus = self.env["ir.ui.menu"].with_user(self.operator)._visible_menu_ids()
+        self.assertNotIn(classic.id, operator_menus)
+        # cine are ambele grupuri vede ambele meniuri
+        both_menus = self.env["ir.ui.menu"].with_user(self.both)._visible_menu_ids()
+        self.assertIn(app.id, both_menus)
+        self.assertIn(classic.id, both_menus)

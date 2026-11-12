@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 from odoo.exceptions import AccessError
 
 
@@ -21,13 +21,21 @@ class AccountJournal(models.Model):
         "An operator sees only the cash registers of the journals he is assigned to; accountants see all of them.",
     )
 
+    @api.model
+    def _l10n_ro_is_restricted_cash_operator(self):
+        """Operatorul de casă fără drepturi de contabil (cel pentru care se aplică alocarea pe casă)."""
+        user = self.env.user
+        return (
+            not self.env.su
+            and not user.has_group("account.group_account_manager")
+            and user.has_group("l10n_ro_cash_register.group_cash_register_operator")
+        )
+
     def _l10n_ro_check_cash_operator(self):
         """Operatorul de casă (fără drepturi de contabil) lucrează doar pe jurnalele alocate lui."""
+        if not self._l10n_ro_is_restricted_cash_operator():
+            return
         user = self.env.user
-        if self.env.su or user.has_group("account.group_account_manager"):
-            return
-        if not user.has_group("l10n_ro_cash_register.group_cash_register_operator"):
-            return
         for journal in self:
             if user not in journal.sudo().l10n_ro_cash_operator_ids:
                 raise AccessError(

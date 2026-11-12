@@ -7,3 +7,7 @@ access_l10n_ro_cash_register_count_line,l10n.ro.cash.register.count.line manager
 access_l10n_ro_cash_register_operator,cash_register operator,model_l10n_ro_cash_register,group_cash_register_operator,1,1,1,0
 access_l10n_ro_cash_register_operation_operator,cash_register operation operator,model_l10n_ro_cash_register_operation,group_cash_register_operator,1,1,1,0
 access_l10n_ro_cash_register_count_line_operator,l10n.ro.cash.register.count.line operator,model_l10n_ro_cash_register_count_line,group_cash_register_operator,1,1,1,0
+access_cash_operator_account_move,cash operator read journal entries,account.model_account_move,group_cash_register_operator,1,0,0,0
+access_cash_operator_account_move_line,cash operator read journal items,account.model_account_move_line,group_cash_register_operator,1,0,0,0
+access_cash_operator_account_journal,cash operator read journals,account.model_account_journal,group_cash_register_operator,1,0,0,0
+access_cash_operator_account_account,cash operator read accounts,account.model_account_account,group_cash_register_operator,1,0,0,0

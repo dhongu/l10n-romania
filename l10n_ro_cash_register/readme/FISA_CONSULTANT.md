@@ -81,7 +81,7 @@ Accesul la registru are două niveluri:
 | Grup | Ce vede și ce poate face |
 |---|---|
 | **Facturare / Contabilitate → Administrator** (`account.group_account_manager`) — contabilul | toate registrele, pe toate casieriile; **Încasare** și **Plată** pe factură; **Operație**; monetar; închide și **redeschide** ziua; alocă operatorii pe casierii |
-| **Operator registru de casă** (`l10n_ro_cash_register.group_cash_register_operator`) — casierul | doar registrele **casieriilor la care este alocat** (câmpul **Operatori casă** de pe jurnal): **Operație**, **Numără numerarul**, **Înregistrează diferența**, tipărire, **Închide ziua**. Nu poate **redeschide** ziua, nu șterge registre și nu are drepturi de contabil: restul contabilității (facturi, parteneri, conturi) îl vede doar în citire |
+| **Operator registru de casă** (`l10n_ro_cash_register.group_cash_register_operator`) — casierul | doar registrele **casieriilor la care este alocat** (câmpul **Operatori casă** de pe jurnal): **Operație**, **Numără numerarul**, **Înregistrează diferența**, tipărire, **Închide ziua**. Nu poate **redeschide** ziua, nu șterge registre și nu are drepturi de contabil. Grupul nu implică niciun grup contabil (poate fi, de exemplu, și operator POS) și nu dă acces la meniurile de contabilitate: operatorul își deschide registrul din aplicația proprie **Registru de casă** |
 
 Reguli de reținut:
 
@@ -90,6 +90,7 @@ Reguli de reținut:
   „Registru de casă general”, pe care îl lucrează doar contabilul.
 - Contabilul vede **toate** registrele, indiferent de lista de operatori, chiar dacă are și grupul
   de operator.
+- Operatorul are citire (doar în ORM, fără meniuri) pe notele contabile, jurnale și conturi, necesară pentru liniile și tipărirea registrului; nu are, în schimb, niciun meniu de contabilitate.
 - **Încasare** și **Plată** (chitanța, respectiv dispoziția de plată pe factură) cer drepturi de
   facturare: butoanele apar doar contabililor. Operatorul lucrează prin **Operație** (pasul 3).
 - **Redeschide** și modificarea listei **Operatori casă** sunt rezervate contabililor; o redeschidere
@@ -244,7 +245,8 @@ trezorerie (542), restituiri de avans, plusuri de casă etc.:
 - **Operație**: *Depunere* (intrare în casă) sau *Retragere* (ieșire din casă);
 - **Suma**, **Descriere** (apare ca explicație în registru), **Partener**;
 - **Cont** — contul corespondent; implicit 581, se schimbă după natura operațiunii (542, 7588
-  etc.);
+  etc.); operatorul de casă nu poate alege
+  un cont de numerar sau de bancă (transferul între case sau către bancă îl face contabilul);
 - **Jurnal** și **Data** vin din registru.
 
 Operatorul de casă poate confirma operațiunea **doar pe casieria la care este alocat**; pe oricare altă
@@ -522,6 +524,8 @@ valută (notă contabilă manuală, cu suma în valută).
       nimic (nici în listă, nici prin căutare).
 - [ ] O casierie cu **Operatori casă** goală nu apare niciunui operator, dar apare contabilului.
 - [ ] Un contabil care are și grupul de operator vede toate registrele.
+- [ ] Operatorul are aplicația **Registru de casă** în meniul principal și nu vede meniul **Contabilitate**.
+- [ ] Operatorul tipărește registrul și monetarul fără drepturi de contabil.
 - [ ] Operatorul poate **Numără numerarul**, **Operație** și **Închide ziua** pe casieria lui; butoanele
       **Încasare**, **Plată** și **Redeschide** nu apar.
 - [ ] **Operație** confirmată de operator pe altă casierie este refuzată cu mesajul de alocare.
@@ -563,6 +567,7 @@ valută (notă contabilă manuală, cu suma în valută).
 | Nu sunt definite cupiuri pentru …. Adăugați-le din Contabilitate > Configurare > Cupiuri numerar. | casieria are o monedă fără cupiuri (alta decât leu sau euro) | adăugați cupiurile valutei (pasul 9) |
 | Diferența unei casierii în valută se înregistrează printr-o notă contabilă în …, cu suma în valută. | **Înregistrează diferența** pe o casierie în valută | notă contabilă pe 5314 cu suma în valută și contul diferenței |
 | Nu sunteți alocat ca operator al casieriei … | un operator a confirmat **Operație** pe o casierie la care nu este alocat | adăugați-l în **Operatori casă** pe jurnal (contabilul), sau lucrați pe casieria proprie |
+| Ca operator de casă nu puteți folosi un cont de numerar sau de bancă (…) ca cont corespondent. … | un operator a ales ca **Cont** un cont de tip numerar sau bancă în wizardul **Operație** | transferul între case sau către bancă îl înregistrează contabilul |
 | Doar un contabil poate redeschide un registru de casă închis. | un operator a încercat să redeschidă ziua | redeschiderea o face contabilul (**Redeschide**) |
 | Registrul nu apare la operator | operatorul nu este în **Operatori casă** pe jurnal, sau lista e goală | contabilul îl adaugă pe jurnal |
 | Încasarea / plata nu apare în registru | metoda de plată a jurnalului folosește un cont de plăți în curs, nu contul casei | **Elimină conturile de plăți în curs** pe jurnal (secțiunea 5), apoi verificați registrul |
