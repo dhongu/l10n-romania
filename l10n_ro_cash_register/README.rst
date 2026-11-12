@@ -156,8 +156,9 @@ Changelog
 - The group sits under its own *Cash Register* privilege (user form,
   *Accounting* section), so it can be assigned without developer mode.
 - The *Operation* wizard refuses, for an operator, a cash or bank
-  account as counterpart account: transfers between cash desks or to the
-  bank go through an accountant.
+  account as counterpart account, except the company internal transfer
+  account (581, the default of the wizard): other transfers between cash
+  desks or to the bank go through an accountant.
 - Reopening a closed day, and the *Add Receipt* / *Add Payment* buttons
   (customer payments need invoicing rights), stay with accounting users.
 

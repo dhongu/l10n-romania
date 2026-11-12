@@ -6,7 +6,7 @@
 - New field *Cash Register Operators* on cash journals (*Accounting > Configuration > Journals*). An operator sees only the registers, and count lines, of the journals he is assigned to; an empty list hides the cash desk from all operators. Accountants see all cash registers, even if they also have the operator group.
 - The *Operation* wizard creates the journal entry with elevated rights, but only on a cash desk the user is assigned to.
 - The group sits under its own *Cash Register* privilege (user form, *Accounting* section), so it can be assigned without developer mode.
-- The *Operation* wizard refuses, for an operator, a cash or bank account as counterpart account: transfers between cash desks or to the bank go through an accountant.
+- The *Operation* wizard refuses, for an operator, a cash or bank account as counterpart account, except the company internal transfer account (581, the default of the wizard): other transfers between cash desks or to the bank go through an accountant.
 - Reopening a closed day, and the *Add Receipt* / *Add Payment* buttons (customer payments need invoicing rights), stay with accounting users.
 
 ## 19.0.1.4.3 (2026-10-22)

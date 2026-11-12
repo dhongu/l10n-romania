@@ -249,12 +249,12 @@ msgstr "Arhivat"
 #: code:addons/l10n_ro_cash_register/wizard/cash_register_operation.py:0
 msgid ""
 "As cash register operator you cannot use a cash or bank account (%s) as the "
-"counterpart account. Ask an accountant to record transfers between cash "
-"desks or to the bank."
+"counterpart account, except the internal transfer account. Ask an accountant "
+"to record other transfers between cash desks or to the bank."
 msgstr ""
 "Ca operator de casă nu puteți folosi un cont de numerar sau de bancă (%s) ca "
-"cont corespondent. Cereți unui contabil să înregistreze transferurile între "
-"case sau către bancă."
+"cont corespondent, cu excepția contului de transfer intern. Cereți unui "
+"contabil să înregistreze celelalte transferuri între case sau către bancă."
 
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_attachment_count

@@ -245,8 +245,8 @@ msgstr ""
 #: code:addons/l10n_ro_cash_register/wizard/cash_register_operation.py:0
 msgid ""
 "As cash register operator you cannot use a cash or bank account (%s) as the "
-"counterpart account. Ask an accountant to record transfers between cash "
-"desks or to the bank."
+"counterpart account, except the internal transfer account. Ask an accountant "
+"to record other transfers between cash desks or to the bank."
 msgstr ""
 
 #. module: l10n_ro_cash_register

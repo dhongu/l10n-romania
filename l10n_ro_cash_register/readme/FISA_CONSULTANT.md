@@ -249,7 +249,7 @@ trezorerie (542), restituiri de avans, plusuri de casă etc.:
 - **Suma**, **Descriere** (apare ca explicație în registru), **Partener**;
 - **Cont** — contul corespondent; implicit 581, se schimbă după natura operațiunii (542, 7588
   etc.); operatorul de casă nu poate alege
-  un cont de numerar sau de bancă (transferul între case sau către bancă îl face contabilul);
+  un cont de numerar sau de bancă, cu excepția contului de transfer intern al companiei (581), prin care se face alimentarea casei din bancă și depunerea la bancă; transferul direct între case sau către un cont de bancă îl face contabilul;
 - **Jurnal** și **Data** vin din registru.
 
 Operatorul de casă poate confirma operațiunea **doar pe casieria la care este alocat**; pe oricare altă
@@ -455,8 +455,7 @@ formular are **Operație**, **Numără numerarul** și **Închide ziua**; nu are
 
 ![Registrul de casă CASA/2026/00002 văzut de operator, în aplicația Registrul de casă: butoanele Operație, Numără numerarul și Închide ziua sunt evidențiate, iar Încasare, Plată și Redeschide lipsesc; sold inițial 1.000,00 lei, sold final 1.150,00 lei](screenshots/17_formular_operator.png)
 
-Pe orice altă casierie, confirmarea unei **Operații** este refuzată, iar un cont de numerar sau de
-bancă nu poate fi ales ca cont corespondent (vezi pasul 3).
+Pe orice altă casierie, confirmarea unei **Operații** este refuzată, iar un cont de numerar sau de bancă, în afară de contul de transfer intern (581), nu poate fi ales ca cont corespondent (vezi pasul 3).
 
 ### Note de monografie și raportare
 
@@ -595,7 +594,7 @@ valută (notă contabilă manuală, cu suma în valută).
 | Nu sunt definite cupiuri pentru …. Adăugați-le din Contabilitate > Configurare > Cupiuri numerar. | casieria are o monedă fără cupiuri (alta decât leu sau euro) | adăugați cupiurile valutei (pasul 9) |
 | Diferența unei casierii în valută se înregistrează printr-o notă contabilă în …, cu suma în valută. | **Înregistrează diferența** pe o casierie în valută | notă contabilă pe 5314 cu suma în valută și contul diferenței |
 | Nu sunteți alocat ca operator al casieriei … | un operator a confirmat **Operație** pe o casierie la care nu este alocat | adăugați-l în **Operatori casă** pe jurnal (contabilul), sau lucrați pe casieria proprie |
-| Ca operator de casă nu puteți folosi un cont de numerar sau de bancă (…) ca cont corespondent. … | un operator a ales ca **Cont** un cont de tip numerar sau bancă în wizardul **Operație** | transferul între case sau către bancă îl înregistrează contabilul |
+| Ca operator de casă nu puteți folosi un cont de numerar sau de bancă (…) ca cont corespondent, cu excepția contului de transfer intern. … | un operator a ales ca **Cont** un cont de tip numerar sau bancă, altul decât 581, în wizardul **Operație** | folosiți 581 pentru alimentarea din bancă sau depunere; alte transferuri le înregistrează contabilul |
 | Doar un contabil poate redeschide un registru de casă închis. | un operator a încercat să redeschidă ziua | redeschiderea o face contabilul (**Redeschide**) |
 | Registrul nu apare la operator | operatorul nu este în **Operatori casă** pe jurnal, sau lista e goală | contabilul îl adaugă pe jurnal |
 | Încasarea / plata nu apare în registru | metoda de plată a jurnalului folosește un cont de plăți în curs, nu contul casei | **Elimină conturile de plăți în curs** pe jurnal (secțiunea 5), apoi verificați registrul |

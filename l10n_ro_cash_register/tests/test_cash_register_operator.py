@@ -216,3 +216,15 @@ class TestL10nRoCashRegisterOperator(TransactionCase):
     def test_operator_group_is_listed_under_a_privilege(self):
         """Fără privilegiu, grupul se vede în fișa utilizatorului doar în modul dezvoltator."""
         self.assertTrue(self.group_operator.privilege_id)
+
+    def test_operator_can_use_the_internal_transfer_account(self):
+        """Alimentarea casei din bancă și depunerea la bancă merg prin contul de transfer al companiei."""
+        transfer = self.env["account.account"].create(
+            {"code": "581999", "name": "Transfer test", "account_type": "asset_cash"}
+        )
+        self.env.company.transfer_account_id = transfer
+        move = self._operation(self.operator, self.journal_a, account=transfer)
+        self.assertEqual(move.state, "posted")
+        # alt cont de numerar/bancă rămâne refuzat
+        with self.assertRaises(UserError):
+            self._operation(self.operator, self.journal_a, account=self.journal_b.default_account_id)

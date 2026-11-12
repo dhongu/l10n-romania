@@ -28,18 +28,22 @@ class CashRegisterOperation(models.TransientModel):
         return defaults
 
     def _check_counterpart_account(self):
-        """Operatorul nu poate muta numerar între case sau către bancă direct, alegând ca
-        cont corespondent un cont de numerar sau de bancă: transferul se face prin contabil."""
+        """Operatorul nu poate muta numerar între case sau către bancă direct, alegând ca cont
+        corespondent un cont de numerar sau de bancă; excepție: contul de transfer intern al
+        companiei (581), prin care se face alimentarea casei din bancă și depunerea la bancă."""
         self.ensure_one()
+        account = self.counterpart_account_id
         if (
             self.env["account.journal"]._l10n_ro_is_restricted_cash_operator()
-            and self.counterpart_account_id.account_type == "asset_cash"
+            and account.account_type == "asset_cash"
+            and account != self.journal_id.company_id.transfer_account_id
         ):
             raise UserError(
                 self.env._(
                     "As cash register operator you cannot use a cash or bank account (%s) as the "
-                    "counterpart account. Ask an accountant to record transfers between cash desks or to the bank.",
-                    self.counterpart_account_id.display_name,
+                    "counterpart account, except the internal transfer account. Ask an accountant to "
+                    "record other transfers between cash desks or to the bank.",
+                    account.display_name,
                 )
             )
 
