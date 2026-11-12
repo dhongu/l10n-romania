@@ -15,6 +15,7 @@
     ],
     "images": ["static/description/main_screenshot.png"],
     "development_status": "Beta",
+    "consultant_sheet": "simple",
     "installable": True,
     "auto_install": False,
     "maintainers": ["feketemihai", "mcojocaru", "dhongu"],
