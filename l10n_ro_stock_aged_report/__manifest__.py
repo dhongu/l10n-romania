@@ -23,5 +23,5 @@
     "installable": True,
     "pre_init_hook": "pre_init_hook",
     "post_init_hook": "post_init_hook",
-    "maintainers": ["feketemihai", "mcojocaru", "adrian-dks", "dhongu"],
+    "maintainers": ["dhongu", "feketemihai", "mcojocaru", "adrian-dks"],
 }

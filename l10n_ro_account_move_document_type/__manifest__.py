@@ -15,6 +15,7 @@
     "images": ["static/description/main_screenshot.png"],
     "pre_init_hook": "pre_init_hook",
     "license": "AGPL-3",
+    "maintainers": ["dhongu"],
     "consultant_sheet": "full",
     "installable": True,
 }

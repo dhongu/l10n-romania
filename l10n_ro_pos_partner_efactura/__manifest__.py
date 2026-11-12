@@ -6,6 +6,7 @@
     "name": "Romania - POS Partner e-Factura Check",
     "summary": "Customer by CUI from ANAF at the till, with the data e-Factura (SPV) needs",
     "license": "AGPL-3",
+    "maintainers": ["dhongu"],
     "consultant_sheet": "full",
     "version": "19.0.1.1.2",
     "images": ["static/description/main_screenshot.png"],

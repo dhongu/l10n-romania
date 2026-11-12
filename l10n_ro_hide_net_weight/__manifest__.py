@@ -15,7 +15,7 @@
     "data": [
         "views/product_template_views.xml",
     ],
-    "maintainers": ["danila12"],
+    "maintainers": ["dhongu", "danila12"],
     "development_status": "Mature",
     "images": ["static/description/main_screenshot.png"],
 }

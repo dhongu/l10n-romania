@@ -14,6 +14,6 @@
     "website": "https://www.terrabit.ro",
     "installable": True,
     "development_status": "Mature",
-    "maintainers": ["feketemihai", "dhongu"],
+    "maintainers": ["dhongu", "danila12", "feketemihai"],
     "images": ["static/description/main_screenshot.png"],
 }

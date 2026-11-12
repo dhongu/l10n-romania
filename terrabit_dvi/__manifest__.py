@@ -16,6 +16,7 @@
     "It installs l10n_ro_customs_dvi and will NOT be ported to 20.0.",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "danila12"],
     "version": "19.0.1.3.2",
     "countries": ["ro"],
     "author": "Terrabit",
