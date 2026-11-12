@@ -5,7 +5,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models, release
-from odoo.exceptions import UserError
+from odoo.exceptions import AccessError, UserError
 from odoo.orm.identifiers import NewId
 from odoo.tools import SQL, date_utils, format_date
 from odoo.tools.misc import formatLang
@@ -35,6 +35,10 @@ class CashRegister(models.Model):
         return records
 
     def write(self, vals):
+        if vals.get("state") == "open" and self.filtered(lambda r: r.state == "closed"):
+            # Redeschiderea unei zile închise rămâne a contabilului.
+            if not self.env.su and not self.env.user.has_group("account.group_account_manager"):
+                raise AccessError(self.env._("Only an accountant can reopen a closed cash register."))
         locked = {"date", "journal_id", "company_id", "name"} & set(vals)
         if locked and self.filtered(lambda r: r.state == "closed"):
             # Mutarea datei sau a casieriei ar muta blocarea fără redeschidere și fără urmă.

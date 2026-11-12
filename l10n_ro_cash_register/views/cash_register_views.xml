@@ -38,8 +38,20 @@
                 <header>
                     <button name="action_print" string="Print" type="object" icon="fa-print" />
                     <button name="action_refresh" string="Refresh" type="object" />
-                    <button name="action_receipt" string="Add Receipt" type="object" invisible="state == 'closed'" />
-                    <button name="action_payment" string="Add Payment" type="object" invisible="state == 'closed'" />
+                    <button
+                        name="action_receipt"
+                        string="Add Receipt"
+                        type="object"
+                        invisible="state == 'closed'"
+                        groups="account.group_account_invoice"
+                    />
+                    <button
+                        name="action_payment"
+                        string="Add Payment"
+                        type="object"
+                        invisible="state == 'closed'"
+                        groups="account.group_account_invoice"
+                    />
                     <button name="action_operation" string="Operation" type="object" invisible="state == 'closed'" />
                     <button
                         name="action_count_cash"
@@ -74,6 +86,7 @@
                         string="Reopen"
                         type="object"
                         invisible="state != 'closed'"
+                        groups="account.group_account_manager"
                         confirm="The later closed days of this cash desk are reopened too. Reopen?"
                     />
                     <field name="state" widget="statusbar" />
@@ -184,6 +197,23 @@
         name="Cash register"
         parent="account.account_transactions_menu"
         groups="account.group_account_manager"
+        action="action_cash_register"
+        sequence="10"
+    />
+
+    <!-- Aplicația operatorului de casă: nu depinde de meniurile de contabilitate. -->
+    <menuitem
+        id="menu_cash_register_app"
+        name="Cash Register"
+        web_icon="l10n_ro_cash_register,static/description/icon.png"
+        groups="l10n_ro_cash_register.group_cash_register_operator"
+        sequence="45"
+    />
+    <menuitem
+        id="menu_cash_register_app_registers"
+        name="Cash register"
+        parent="menu_cash_register_app"
+        groups="l10n_ro_cash_register.group_cash_register_operator"
         action="action_cash_register"
         sequence="10"
     />

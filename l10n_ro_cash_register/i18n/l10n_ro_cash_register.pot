@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-08 13:58+0000\n"
-"PO-Revision-Date: 2026-10-08 13:58+0000\n"
+"POT-Creation-Date: 2026-11-12 10:08+0000\n"
+"PO-Revision-Date: 2026-11-12 10:08+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -241,6 +241,15 @@ msgid "Archived"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/wizard/cash_register_operation.py:0
+msgid ""
+"As cash register operator you cannot use a cash or bank account (%s) as the "
+"counterpart account, except the internal transfer account. Ask an accountant "
+"to record other transfers between cash desks or to the bank."
+msgstr ""
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
@@ -324,6 +333,8 @@ msgstr ""
 #: model:ir.actions.act_window,name:l10n_ro_cash_register.action_cash_register
 #: model:ir.actions.report,name:l10n_ro_cash_register.action_report_cash_register
 #: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_register
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register_app
+#: model:res.groups.privilege,name:l10n_ro_cash_register.res_groups_privilege_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
 msgid "Cash Register"
@@ -347,6 +358,11 @@ msgid "Cash Register Operation"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_journal__l10n_ro_cash_operator_ids
+msgid "Cash Register Operators"
+msgstr ""
+
+#. module: l10n_ro_cash_register
 #: model:ir.actions.server,name:l10n_ro_cash_register.ir_cron_generate_missing_cash_register_ir_actions_server
 msgid "Cash Register: Generate missing cash register"
 msgstr ""
@@ -359,7 +375,13 @@ msgstr ""
 
 #. module: l10n_ro_cash_register
 #: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register_app_registers
 msgid "Cash register"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:res.groups,name:l10n_ro_cash_register.group_cash_register_operator
+msgid "Cash register operator"
 msgstr ""
 
 #. module: l10n_ro_cash_register
@@ -714,6 +736,12 @@ msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Only an accountant can reopen a closed cash register."
+msgstr ""
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_register__state__open
 #: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_search
 msgid "Open"
@@ -956,6 +984,14 @@ msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_account_journal__l10n_ro_cash_operator_ids
+msgid ""
+"Users of the Cash register operator group who work on the cash registers of "
+"this cash desk. An operator sees only the cash registers of the journals he "
+"is assigned to; accountants see all of them."
+msgstr ""
+
+#. module: l10n_ro_cash_register
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__value
 #: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__value
 msgid "Value"
@@ -969,6 +1005,20 @@ msgstr ""
 #. module: l10n_ro_cash_register
 #: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__website_message_ids
 msgid "Website communication history"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:res.groups,comment:l10n_ro_cash_register.group_cash_register_operator
+msgid ""
+"Works on the cash registers of the cash desks he is assigned to (Accounting "
+"> Configuration > Journals > Cash Register Operators). It does not give "
+"access to the accounting menus."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/account_journal_dashboard.py:0
+msgid "You are not assigned as operator of the cash desk %s."
 msgstr ""
 
 #. module: l10n_ro_cash_register

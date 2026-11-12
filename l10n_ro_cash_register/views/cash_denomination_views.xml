@@ -49,6 +49,12 @@
         <field name="arch" type="xml">
             <field name="loss_account_id" position="after">
                 <field name="l10n_ro_require_cash_count" invisible="type != 'cash'" />
+                <field
+                    name="l10n_ro_cash_operator_ids"
+                    widget="many2many_tags"
+                    invisible="type != 'cash'"
+                    groups="account.group_account_manager"
+                />
             </field>
         </field>
     </record>

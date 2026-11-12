@@ -75,6 +75,20 @@ class TestCashRegisterScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                 "loss_account_id": chart.ref("pcg_65881").id,
             }
         )
+        # Operatorul de casă: doar grupul „Operator registru de casă”, alocat pe casa de mai sus.
+        # Parola = login, ca să se poată autentifica `capture_screenshots(login=...)`.
+        cls.operator = users.create(
+            {
+                "name": "Ioana Marinescu",
+                "login": "ioana.marinescu",
+                "password": "ioana.marinescu",
+                "group_ids": [(6, 0, [cls.env.ref("l10n_ro_cash_register.group_cash_register_operator").id])],
+                "company_id": cls.env.company.id,
+                "company_ids": [(6, 0, cls.env.company.ids)],
+                "lang": "ro_RO",
+            }
+        )
+        cls.cash_journal.l10n_ro_cash_operator_ids = cls.operator
         cls.tax_sale = chart.ref("tvac_21")
         cls.tax_purchase = chart.ref("tvad_21")
         ro = cls.env.ref("base.ro").id
@@ -377,4 +391,37 @@ class TestCashRegisterScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                 ),
             ],
             viewport=viewport,
+        )
+
+    def test_capture_operator(self):
+        """Operatorul de casă: alocarea pe jurnal (contabil) și registrul văzut de operator."""
+        # 16. Jurnalul de casă cu câmpul „Operatori casă” (alocarea făcută de contabil)
+        self.capture_screenshots(
+            [
+                {
+                    "url": f"id={self.cash_journal.id}&model=account.journal&view_type=form",
+                    "name": "16_jurnal_operatori_casa.png",
+                    "wait": ".o_form_view",
+                    "settle": 2000,
+                    "highlight": ["div[name='l10n_ro_cash_operator_ids']"],
+                },
+            ],
+            viewport=(1500, 820),
+        )
+        # 17. Registrul zilei, așa cum îl vede operatorul: Operație, Numără numerarul, Închide ziua;
+        # fără Încasare / Plată / Redeschide
+        self.capture_screenshots(
+            [
+                self._register_form(
+                    "17_formular_operator.png",
+                    full=True,
+                    highlight=[
+                        "button[name='action_operation']",
+                        "button[name='action_count_cash']",
+                        "button[name='action_close']",
+                    ],
+                ),
+            ],
+            login="ioana.marinescu",
+            viewport=(1500, 820),
         )

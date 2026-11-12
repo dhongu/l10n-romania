@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import api, fields, models
+from odoo.exceptions import AccessError
 
 
 class AccountJournal(models.Model):
@@ -9,6 +10,37 @@ class AccountJournal(models.Model):
         help="The day of this cash desk can be closed only after the cash is counted by denomination "
         "and the counted amount equals the balance of the cash account.",
     )
+    l10n_ro_cash_operator_ids = fields.Many2many(
+        "res.users",
+        "account_journal_cash_operator_rel",
+        "journal_id",
+        "user_id",
+        string="Cash Register Operators",
+        domain=[("share", "=", False)],
+        help="Users of the Cash register operator group who work on the cash registers of this cash desk. "
+        "An operator sees only the cash registers of the journals he is assigned to; accountants see all of them.",
+    )
+
+    @api.model
+    def _l10n_ro_is_restricted_cash_operator(self):
+        """Operatorul de casă fără drepturi de contabil (cel pentru care se aplică alocarea pe casă)."""
+        user = self.env.user
+        return (
+            not self.env.su
+            and not user.has_group("account.group_account_manager")
+            and user.has_group("l10n_ro_cash_register.group_cash_register_operator")
+        )
+
+    def _l10n_ro_check_cash_operator(self):
+        """Operatorul de casă (fără drepturi de contabil) lucrează doar pe jurnalele alocate lui."""
+        if not self._l10n_ro_is_restricted_cash_operator():
+            return
+        user = self.env.user
+        for journal in self:
+            if user not in journal.sudo().l10n_ro_cash_operator_ids:
+                raise AccessError(
+                    self.env._("You are not assigned as operator of the cash desk %s.", journal.display_name)
+                )
 
     def open_action_with_context(self):
         if self.type == "cash" and self.company_id.country_id.code == "RO":

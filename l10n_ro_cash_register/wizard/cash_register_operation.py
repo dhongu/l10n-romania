@@ -1,4 +1,5 @@
 from odoo import fields, models
+from odoo.exceptions import UserError
 
 
 class CashRegisterOperation(models.TransientModel):
@@ -26,9 +27,33 @@ class CashRegisterOperation(models.TransientModel):
             defaults["counterpart_account_id"] = self.env.company.transfer_account_id.id
         return defaults
 
+    def _check_counterpart_account(self):
+        """Operatorul nu poate muta numerar între case sau către bancă direct, alegând ca cont
+        corespondent un cont de numerar sau de bancă; excepție: contul de transfer intern al
+        companiei (581), prin care se face alimentarea casei din bancă și depunerea la bancă."""
+        self.ensure_one()
+        account = self.counterpart_account_id
+        if (
+            self.env["account.journal"]._l10n_ro_is_restricted_cash_operator()
+            and account.account_type == "asset_cash"
+            and account != self.journal_id.company_id.transfer_account_id
+        ):
+            raise UserError(
+                self.env._(
+                    "As cash register operator you cannot use a cash or bank account (%s) as the "
+                    "counterpart account, except the internal transfer account. Ask an accountant to "
+                    "record other transfers between cash desks or to the bank.",
+                    account.display_name,
+                )
+            )
+
     def action_confirm(self):
         # se va genra o nota contabila cu operatia
         self.ensure_one()
+        # Operatorul fără drepturi de contabil emite operația doar pe casa lui; nota contabilă
+        # se creează apoi cu sudo, în numele lui (create_uid rămâne operatorul).
+        self.journal_id._l10n_ro_check_cash_operator()
+        self._check_counterpart_account()
         value = {
             "journal_id": self.journal_id.id,
             "date": self.date,
@@ -56,6 +81,6 @@ class CashRegisterOperation(models.TransientModel):
                 ),
             ],
         }
-        move = self.env["account.move"].create(value)
+        move = self.env["account.move"].sudo().create(value)
         move.write({"l10n_ro_cash_document_type": "other"})
         move._post()
