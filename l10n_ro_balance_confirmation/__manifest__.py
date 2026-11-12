@@ -21,5 +21,5 @@
         "security/ir.model.access.csv",
         "data/mail_templates.xml",
     ],
-    "maintainers": ["danila12"],
+    "maintainers": ["danila12", "dhongu"],
 }

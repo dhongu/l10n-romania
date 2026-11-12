@@ -6,6 +6,7 @@
     "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Picking Reports -Product Expiry",
     "license": "AGPL-3",
+    "maintainers": ["dhongu"],
     "version": "18.0.1.0.1",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",

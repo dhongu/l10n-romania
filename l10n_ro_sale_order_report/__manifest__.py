@@ -16,6 +16,7 @@
         # "deltatech_sale_payment"  # pentru ce e ?
     ],
     "license": "LGPL-3",
+    "maintainers": ["dhongu", "VoicuStefan2001", "danila12"],
     "data": [
         "views/sale_order.xml",
         "views/res_config_view.xml",

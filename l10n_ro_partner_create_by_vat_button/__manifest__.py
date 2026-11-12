@@ -6,6 +6,7 @@
     "images": ["static/description/main_screenshot.png"],
     "name": "Romania - Partner Create by VAT Button",
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "VoicuStefan2001", "danila12"],
     "version": "18.0.1.1.7",
     "author": "Dorin Hongu," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",

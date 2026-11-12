@@ -19,6 +19,6 @@
     ],
     "development_status": "Beta",
     "installable": True,
-    "maintainers": ["dhongu"],
+    "maintainers": ["dhongu", "danila12", "feketemihai"],
     "post_init_hook": "post_init_hook",
 }

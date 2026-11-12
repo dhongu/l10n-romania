@@ -20,4 +20,5 @@
         "data/ir_cron_data.xml",
     ],
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "danila12"],
 }

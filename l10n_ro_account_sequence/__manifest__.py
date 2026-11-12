@@ -14,4 +14,5 @@
         "views/account_payment_view.xml",
     ],
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "danila12"],
 }

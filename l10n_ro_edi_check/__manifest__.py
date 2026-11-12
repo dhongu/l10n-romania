@@ -4,6 +4,7 @@
     "images": ["static/description/main_screenshot.png"],
     "name": "Romania - EDI data check and queue Obsolete",
     "license": "AGPL-3",
+    "maintainers": ["dhongu", "danila12"],
     "version": "18.0.0.1.1",
     "author": "Terrabit," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/l10n-romania",

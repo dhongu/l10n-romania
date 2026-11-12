@@ -13,5 +13,5 @@
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],
     "installable": True,
     "development_status": "Mature",
-    "maintainers": ["feketemihai", "dhongu"],
+    "maintainers": ["dhongu", "danila12", "feketemihai"],
 }
