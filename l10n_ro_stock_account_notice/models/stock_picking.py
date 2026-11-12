@@ -21,7 +21,7 @@ class StockPicking(models.Model):
         """Web form: the client sends l10n_ro_notice explicitly, so create() alone
         is not enough; set the flag from the operation type on a new record."""
         res = super().default_get(fields_list)
-        if "l10n_ro_notice" in fields_list and res.get("picking_type_id"):
+        if "l10n_ro_notice" in fields_list and "l10n_ro_notice" not in res and res.get("picking_type_id"):
             picking_type = self.env["stock.picking.type"].browse(res["picking_type_id"])
             if picking_type.l10n_ro_notice_default:
                 res["l10n_ro_notice"] = True

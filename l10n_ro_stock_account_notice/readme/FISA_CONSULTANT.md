@@ -52,14 +52,16 @@ Deschideți **Inventar → Configurare → Tipuri operații → Recepții** și 
 
 Creați o recepție din **Inventar → Operațiuni → Recepții** (manual sau dintr-o comandă de achiziție) pe
 tipul de operațiune configurat.
-Câmpul **Aviz** este bifat de la început, indiferent de sursa transferului. Bifa se aplică doar la
-crearea transferului: transferurile deja create, sau schimbarea tipului de operațiune pe un transfer
-existent, nu o reaplică.
+Câmpul **Aviz** este bifat de la început, indiferent de sursa transferului. Bifa se aplică la
+crearea transferului și, în formular, la fiecare schimbare a tipului de operațiune: tipul ales
+stabilește din nou bifa (inclusiv o debifează, dacă tipul nu are „Este aviz”). Transferurile create
+înainte de bifarea tipului nu se modifică.
 
 ![Recepție nouă pe tipul configurat: bifa Aviz este deja bifată și partenerul este completat](../static/description/02_receptie_aviz_implicit.png)
 
 **Opțional:** Dacă o recepție anume nu e pe aviz, debifați **Aviz** înainte de validare. Valoarea setată
-explicit pe transfer are prioritate față de cea de pe tipul de operațiune. Pe un transfer marcat aviz,
+explicit pe transfer are prioritate față de cea de pe tipul de operațiune, dar o nouă schimbare a
+tipului de operațiune în formular o resetează după tipul ales. Pe un transfer marcat aviz,
 partenerul este obligatoriu.
 
 ### Pasul 3 — Validarea
@@ -93,6 +95,7 @@ de curs dintre aviz și factură se înregistrează automat la postarea facturii
 | NOT-04 | Bifa pornită pe tip, debifat manual pe transfer | rămâne debifat |
 | NOT-05 | Validarea recepției marcate aviz | note pe 408 în loc de furnizor |
 | NOT-06 | Recepție creată înainte de a bifa tipul, apoi tipul bifat | transferul vechi rămâne neschimbat |
+| NOT-07 | În formular, debifat manual, apoi schimbat tipul de operațiune | bifa e stabilită din nou după tipul ales |
 
 ## 9. Legături cu alte module
 
@@ -114,8 +117,9 @@ Capturile sunt făcute pe o bază de test, în română, cu `l10n_ro_stock_accou
 
 - Modulul este temporar, până la trecerea la contabilizarea pe conturi din categoria produsului
   (OBYC), unde avizul îl acoperă `l10n_ro_stock_gestiune`.
-- Manualul trebuie să spună că bifa de pe tip se aplică doar transferurilor noi, iar operatorul o
-  poate debifa pe fiecare transfer.
+- Manualul trebuie să spună că bifa de pe tip se aplică la crearea transferului și la schimbarea
+  tipului de operațiune în formular (care resetează bifa după tipul ales), iar operatorul o poate
+  debifa pe fiecare transfer. Transferurile deja create nu se modifică retroactiv.
 
 ---
 
