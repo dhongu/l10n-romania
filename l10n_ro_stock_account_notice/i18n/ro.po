@@ -1,0 +1,18 @@
+# Translation of Odoo Server.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. module: l10n_ro_stock_account_notice
+#: model:ir.model.fields,field_description:l10n_ro_stock_account_notice.field_stock_picking_type__l10n_ro_notice_default
+msgid "Romania - Is a notice"
+msgstr "România - Este aviz"
+
+#. module: l10n_ro_stock_account_notice
+#: model:ir.model.fields,help:l10n_ro_stock_account_notice.field_stock_picking_type__l10n_ro_notice_default
+msgid "Transfers created for this operation type are marked as notice (aviz) by default."
+msgstr "Transferurile create pentru acest tip de operațiune sunt marcate implicit ca aviz."
