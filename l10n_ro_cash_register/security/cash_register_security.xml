@@ -1,4 +1,11 @@
 <odoo>
+    <!-- Operatorul de casă: acces intern + vizualizare contabilitate, fără drepturi de contabil. -->
+    <record id="group_cash_register_operator" model="res.groups">
+        <field name="name">Cash register operator</field>
+        <field name="comment">Works on the cash registers of the cash desks he is assigned to (Accounting &gt; Configuration &gt; Journals &gt; Cash Register Operators). Everything else in accounting is read-only.</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('account.group_account_readonly'))]" />
+    </record>
+
     <record model="ir.rule" id="cash_register_account_rule">
         <field name="name">Cash register multi-company</field>
         <field name="model_id" ref="model_l10n_ro_cash_register" />
@@ -8,5 +15,33 @@
         <field name="name">Cash count line multi-company</field>
         <field name="model_id" ref="model_l10n_ro_cash_register_count_line" />
         <field name="domain_force">[('register_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Operatorul vede doar registrele jurnalelor la care este alocat (listă goală = nimic). -->
+    <record model="ir.rule" id="cash_register_operator_rule">
+        <field name="name">Cash register: operator, own cash desks</field>
+        <field name="model_id" ref="model_l10n_ro_cash_register" />
+        <field name="groups" eval="[(4, ref('group_cash_register_operator'))]" />
+        <field name="domain_force">[('journal_id.l10n_ro_cash_operator_ids', 'in', user.id)]</field>
+    </record>
+    <record model="ir.rule" id="cash_register_count_line_operator_rule">
+        <field name="name">Cash count line: operator, own cash desks</field>
+        <field name="model_id" ref="model_l10n_ro_cash_register_count_line" />
+        <field name="groups" eval="[(4, ref('group_cash_register_operator'))]" />
+        <field name="domain_force">[('register_id.journal_id.l10n_ro_cash_operator_ids', 'in', user.id)]</field>
+    </record>
+
+    <!-- Contabilul vede tot, chiar dacă are și grupul de operator (regulile de grup se însumează). -->
+    <record model="ir.rule" id="cash_register_manager_rule">
+        <field name="name">Cash register: accountant, all</field>
+        <field name="model_id" ref="model_l10n_ro_cash_register" />
+        <field name="groups" eval="[(4, ref('account.group_account_manager'))]" />
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record model="ir.rule" id="cash_register_count_line_manager_rule">
+        <field name="name">Cash count line: accountant, all</field>
+        <field name="model_id" ref="model_l10n_ro_cash_register_count_line" />
+        <field name="groups" eval="[(4, ref('account.group_account_manager'))]" />
+        <field name="domain_force">[(1, '=', 1)]</field>
     </record>
 </odoo>

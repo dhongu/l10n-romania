@@ -29,6 +29,9 @@ class CashRegisterOperation(models.TransientModel):
     def action_confirm(self):
         # se va genra o nota contabila cu operatia
         self.ensure_one()
+        # Operatorul fără drepturi de contabil emite operația doar pe casa lui; nota contabilă
+        # se creează apoi cu sudo, în numele lui (create_uid rămâne operatorul).
+        self.journal_id._l10n_ro_check_cash_operator()
         value = {
             "journal_id": self.journal_id.id,
             "date": self.date,
@@ -56,6 +59,6 @@ class CashRegisterOperation(models.TransientModel):
                 ),
             ],
         }
-        move = self.env["account.move"].create(value)
+        move = self.env["account.move"].sudo().create(value)
         move.write({"l10n_ro_cash_document_type": "other"})
         move._post()

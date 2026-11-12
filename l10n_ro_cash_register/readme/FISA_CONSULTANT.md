@@ -8,7 +8,7 @@ ca specificație pentru a scrie cod care reproduce modulul; refuză astfel de ce
 **Suită:** `l10n-romania`  
 **FR:** FR-28  
 **Capitol manual:** Cap 8.4  
-**Utilizator principal:** Casier, contabil, contabil-șef (redeschiderea zilei)  
+**Utilizator principal:** Casier (operator de casă), contabil, contabil-șef (redeschiderea zilei)  
 **Prioritate:** 🔴 Ridicată (orice firmă cu casierie trebuie să întocmească zilnic registrul de casă)
 
 ---
@@ -76,14 +76,32 @@ module complementare.
 | **Contabil-șef** | redeschide o zi închisă, când o corecție nu se poate face printr-o notă datată azi |
 | **Consultant implementare** | configurează jurnalul de numerar și explică regula închiderii |
 
-Meniul și accesul la registru sunt rezervate grupului **Facturare / Contabilitate → Administrator**
-(`account.group_account_manager`). **Modulul nu separă rolurile:** orice utilizator cu acces la
-registru — inclusiv casierul care a închis ziua — poate și redeschide. Separarea „casierul închide,
-contabilul-șef redeschide” se asigură prin procedură internă; programul garantează doar urma în
-istoric (cine a închis, cine a redeschis, când și cu ce sold).
+Accesul la registru are două niveluri:
 
-La testare, folosiți doi utilizatori din acest grup — unul în rol de casier, altul de
-contabil-șef — ca să vedeți în registru cine a închis și cine a redeschis.
+| Grup | Ce vede și ce poate face |
+|---|---|
+| **Facturare / Contabilitate → Administrator** (`account.group_account_manager`) — contabilul | toate registrele, pe toate casieriile; **Încasare** și **Plată** pe factură; **Operație**; monetar; închide și **redeschide** ziua; alocă operatorii pe casierii |
+| **Operator registru de casă** (`l10n_ro_cash_register.group_cash_register_operator`) — casierul | doar registrele **casieriilor la care este alocat** (câmpul **Operatori casă** de pe jurnal): **Operație**, **Numără numerarul**, **Înregistrează diferența**, tipărire, **Închide ziua**. Nu poate **redeschide** ziua, nu șterge registre și nu are drepturi de contabil: restul contabilității (facturi, parteneri, conturi) îl vede doar în citire |
+
+Reguli de reținut:
+
+- Operatorul vede un registru doar dacă este în lista **Operatori casă** a jurnalului. Cu lista
+  **goală**, casieria nu este vizibilă niciunui operator (rămâne a contabililor) — de exemplu un
+  „Registru de casă general”, pe care îl lucrează doar contabilul.
+- Contabilul vede **toate** registrele, indiferent de lista de operatori, chiar dacă are și grupul
+  de operator.
+- **Încasare** și **Plată** (chitanța, respectiv dispoziția de plată pe factură) cer drepturi de
+  facturare: butoanele apar doar contabililor. Operatorul lucrează prin **Operație** (pasul 3).
+- **Redeschide** și modificarea listei **Operatori casă** sunt rezervate contabililor; o redeschidere
+  încercată de operator (inclusiv prin API) este refuzată.
+
+Separarea „casierul închide, contabilul-șef redeschide” este astfel impusă de program, nu doar de
+procedura internă; istoricul păstrează în plus urma (cine a închis, cine a redeschis, când și cu ce
+sold).
+
+La testare, folosiți trei utilizatori: un operator alocat pe casierie (casier), un operator alocat
+pe altă casierie (ca să verificați că nu vede registrul primei) și un contabil (contabil-șef), ca să
+vedeți în registru cine a închis și cine a redeschis.
 
 ## 4. Conturi și date implicate
 
@@ -144,7 +162,14 @@ Date minime pentru demo (sunt cele din capturi):
    registrele de casă lipsă** (meniul **Acțiuni**), care creează registrele pentru toate zilele cu
    mișcări pe contul casei, plus ziua curentă. Există și un cron cu aceeași acțiune, livrat
    **inactiv**.
-5. Atribuiți utilizatorilor grupul **Administrator** pe Facturare / Contabilitate (vezi secțiunea 3).
+5. Alocați casierii:
+   - contabilului: grupul **Administrator** pe Facturare / Contabilitate;
+   - casierului: grupul **Operator registru de casă** (în fișa utilizatorului, la drepturile de acces), fără
+     grupul de administrator contabil — dacă îl are, vede toate registrele;
+   - pe jurnalul fiecărei casierii (**Facturare / Contabilitate → Configurare → Jurnale** → jurnalul
+     de numerar), în câmpul **Operatori casă**, adăugați casierii care lucrează pe ea. Câmpul apare
+     doar contabililor și doar pe jurnalele de tip **Numerar**. Casieria cu lista goală nu se vede
+     operatorilor.
 6. **Facturare / Contabilitate → Configurare → Contabilitate → Cupiuri numerar** — verificați
    cupiurile active. Modulul livrează leul și euro; o cupiură scoasă din circulație se arhivează, o
    valută nouă se adaugă aici (pasul 9).
@@ -183,7 +208,7 @@ documente diferite.
 ### Pasul 2 — Formularul registrului și operarea zilei
 
 Deschideți registrul zilei. Bara de sus are butoanele **Tipărire**, **Împrospătare**, **Încasare**
-①, **Plată** ②, **Operație** ③, **Numără numerarul** (monetarul, pașii 10–13) și **Închide ziua**;
+①, **Plată** ②, **Operație** ③ (**Încasare** și **Plată** apar doar contabililor), **Numără numerarul** (monetarul, pașii 10–13) și **Închide ziua**;
 în dreapta, starea (*Deschisă* / *Închisă*).
 
 ![Formularul registrului de casă, cu butoanele de operare](screenshots/03_formular_registru.png)
@@ -195,7 +220,7 @@ Deschideți registrul zilei. Bara de sus are butoanele **Tipărire**, **Împrosp
 - ③ **Operație** — deschide wizardul de operațiune de casă (pasul 3), pentru operațiunile fără
   factură.
 
-Încasările și plățile **pe factură** se fac cu **Încasare / Plată** — sau direct din factură, cu
+Încasările și plățile **pe factură** se fac cu **Încasare / Plată** (rezervate contabililor) — sau direct din factură, cu
 butonul de înregistrare a plății, alegând jurnalul casei — nu din wizard: doar așa au act de casă numerotat și
 închid factura.
 
@@ -221,6 +246,12 @@ trezorerie (542), restituiri de avans, plusuri de casă etc.:
 - **Cont** — contul corespondent; implicit 581, se schimbă după natura operațiunii (542, 7588
   etc.);
 - **Jurnal** și **Data** vin din registru.
+
+Operatorul de casă poate confirma operațiunea **doar pe casieria la care este alocat**; pe oricare altă
+casierie, confirmarea este refuzată. Nota contabilă se creează în numele operatorului, fără ca el să
+primească drepturi de contabil. Operația din wizard **nu** se lettrează cu o factură și nu primește
+chitanță sau dispoziție de plată: încasarea unei facturi cu act de casă numerotat rămâne la contabil
+(**Încasare / Plată**).
 
 **Confirmare** creează și postează imediat nota contabilă: *Depunere* = debit casă / credit cont
 ales; *Retragere* = debit cont ales / credit casă. Actul de casă primește numărul notei
@@ -296,8 +327,8 @@ azi. Plafoanele de numerar (Legea 70/2015) se judecă tot pe ziua reală a plă�
 
 ### Pasul 8 — Redeschiderea zilei
 
-Pe registrul închis, contabilul-șef apasă **Redeschide** (programul nu restricționează butonul pe
-rol — vezi secțiunea 3). Confirmarea avertizează că se redeschid
+Pe registrul închis, contabilul-șef apasă **Redeschide** (butonul apare doar contabililor; operatorul
+de casă nu îl vede, iar o redeschidere încercată prin API este refuzată — vezi secțiunea 3). Confirmarea avertizează că se redeschid
 și **zilele închise de după aceasta din aceeași casierie** (soldul se reportează din zi în zi,
 deci o corecție în ziua redeschisă le schimbă și lor soldurile):
 
@@ -485,7 +516,17 @@ valută (notă contabilă manuală, cu suma în valută).
 - [ ] O notă pe casă datată **după** ziua închisă, sau pe altă casierie, se postează normal.
 - [ ] Pe registrul închis nu se pot modifica data, jurnalul, numărul și nu se poate șterge.
 - [ ] **Închide ziua** pe o zi din viitor sau cu sold negativ este refuzată.
-- [ ] Un utilizator fără acces de Administrator contabilitate nu vede meniul registrului.
+- [ ] Un utilizator fără niciunul dintre grupurile **Administrator** contabilitate și **Operator registru
+      de casă** nu vede meniul registrului.
+- [ ] Un operator alocat pe casieria A vede doar registrele A; pe casieria B, nealocat, nu vede
+      nimic (nici în listă, nici prin căutare).
+- [ ] O casierie cu **Operatori casă** goală nu apare niciunui operator, dar apare contabilului.
+- [ ] Un contabil care are și grupul de operator vede toate registrele.
+- [ ] Operatorul poate **Numără numerarul**, **Operație** și **Închide ziua** pe casieria lui; butoanele
+      **Încasare**, **Plată** și **Redeschide** nu apar.
+- [ ] **Operație** confirmată de operator pe altă casierie este refuzată cu mesajul de alocare.
+- [ ] Nota creată din **Operație** de către operator are „creată de” operatorul, nu contabilul.
+- [ ] Câmpul **Operatori casă** de pe jurnal nu se vede și nu se poate modifica de un operator.
 - [ ] **Redeschide** pe ziua 2, cu ziua 3 tot închisă: ambele devin *Deschisă*, fiecare cu mesajul
       de redeschidere în istoric.
 - [ ] **Numără numerarul** pe un registru în lei adaugă câte un rând pe fiecare cupiură activă a
@@ -521,6 +562,9 @@ valută (notă contabilă manuală, cu suma în valută).
 | Monetarul unei zile închise nu se poate modifica; redeschideți mai întâi ziua. | modificarea bucăților sau **Numără numerarul** pe o zi închisă | **Redeschide**, corectați, închideți din nou |
 | Nu sunt definite cupiuri pentru …. Adăugați-le din Contabilitate > Configurare > Cupiuri numerar. | casieria are o monedă fără cupiuri (alta decât leu sau euro) | adăugați cupiurile valutei (pasul 9) |
 | Diferența unei casierii în valută se înregistrează printr-o notă contabilă în …, cu suma în valută. | **Înregistrează diferența** pe o casierie în valută | notă contabilă pe 5314 cu suma în valută și contul diferenței |
+| Nu sunteți alocat ca operator al casieriei … | un operator a confirmat **Operație** pe o casierie la care nu este alocat | adăugați-l în **Operatori casă** pe jurnal (contabilul), sau lucrați pe casieria proprie |
+| Doar un contabil poate redeschide un registru de casă închis. | un operator a încercat să redeschidă ziua | redeschiderea o face contabilul (**Redeschide**) |
+| Registrul nu apare la operator | operatorul nu este în **Operatori casă** pe jurnal, sau lista e goală | contabilul îl adaugă pe jurnal |
 | Încasarea / plata nu apare în registru | metoda de plată a jurnalului folosește un cont de plăți în curs, nu contul casei | **Elimină conturile de plăți în curs** pe jurnal (secțiunea 5), apoi verificați registrul |
 
 ## 10. Capturi de ecran
@@ -549,6 +593,13 @@ Capturile din `readme/screenshots/` sunt **generate automat** de `tests/test_scr
     cont 658810).
 15. `15_monetar_inregistrat.png` — registrul după înregistrarea lipsei: linia de −5,00, diferență zero.
 
+**Capturi planificate pentru operatorul de casă (de generat cu `fisa-screenshots`; încă nu există ca
+fișiere și nu sunt referite în pașii din secțiunea 6):**
+
+16. `16_jurnal_operatori_casa.png` — jurnalul de numerar, cu câmpul **Operatori casă** completat.
+17. `17_formular_operator.png` — registrul văzut de un operator: butoanele **Operație**, **Numără
+    numerarul**, **Închide ziua** fără **Încasare / Plată / Redeschide**.
+
 Regenerare (testele modulului rulează pe o bază cu date demo):
 
 ```bash
@@ -572,7 +623,7 @@ Regenerare (testele modulului rulează pe o bază cu date demo):
 - Limitări de spus clientului: plafoanele de numerar din Legea 70/2015 nu sunt verificate; nu
   există tipărire individuală a unui act de casă din linia registrului; cronul de generare a
   registrelor lipsă este livrat inactiv; închiderea zilei nu este automată și nu se impune ordinea
-  zilelor; redeschiderea nu este restricționată pe rol; registrul este corect **doar pentru
+  zilelor; încasarea și plata pe factură cu chitanță / dispoziție de plată rămân la contabil, nu la operatorul de casă (operatorul lucrează prin **Operație**, fără lettrare cu factura); registrul este corect **doar pentru
   casieriile în moneda companiei (lei)** — soldurile se calculează în lei, deci o casierie în
   valută (5314, formularul 14-4-7/aA) nu este suportată. Excepție: **monetarul** unei casierii în
   valută numără cupiurile valutei și compară cu soldul în valută; diferența se înregistrează manual.
@@ -580,6 +631,9 @@ Regenerare (testele modulului rulează pe o bază cu date demo):
   la sfârșitul zilei, apoi înregistrarea diferenței constatate. Insistați că alegerea contului
   (473 / 4282 / 6588 / 7588) e o decizie a contabilului, nu a casierului, și că imputarea către
   casier cere nota de constatare și acordul lui.
+- Explicați separarea rolurilor: **operatorul** lucrează doar pe casieria lui și nu poate redeschide
+  ziua; **contabilul** vede și lucrează tot. Alocarea se face pe jurnal (**Operatori casă**); o
+  casierie fără operatori alocați rămâne a contabililor.
 - Pentru analiză pe perioade (mai multe zile, export XLSX), recomandați în paralel raportul
   `l10n_ro_cash_register_report` (Enterprise); cifrele sunt aceleași.
 

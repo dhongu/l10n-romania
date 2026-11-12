@@ -133,6 +133,25 @@ verificări pe perioade.
 Changelog
 =========
 
+19.0.1.5.0 (2026-11-12)
+-----------------------
+
+**Nou** — operatorul de casă, fără drepturi de contabil.
+
+- New group *Cash register operator*: works on the cash registers
+  (receipts, payments through the *Operation* wizard, cash count,
+  closing the day) of the cash desks he is assigned to, with read-only
+  access to the rest of accounting.
+- New field *Cash Register Operators* on cash journals (*Accounting >
+  Configuration > Journals*). An operator sees only the registers, and
+  count lines, of the journals he is assigned to; an empty list hides
+  the cash desk from all operators. Accountants see all cash registers,
+  even if they also have the operator group.
+- The *Operation* wizard creates the journal entry with elevated rights,
+  but only on a cash desk the user is assigned to.
+- Reopening a closed day, and the *Add Receipt* / *Add Payment* buttons
+  (customer payments need invoicing rights), stay with accounting users.
+
 19.0.1.4.3 (2026-10-22)
 -----------------------
 
