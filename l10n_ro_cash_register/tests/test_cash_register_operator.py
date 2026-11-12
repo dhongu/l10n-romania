@@ -98,7 +98,9 @@ class TestL10nRoCashRegisterOperator(TransactionCase):
                 {"register_id": self.register_b.id, "denomination_id": denomination.id},
             ]
         )
-        visible = self.env["l10n.ro.cash.register.count.line"].with_user(self.operator).search([("id", "in", lines.ids)])
+        visible = (
+            self.env["l10n.ro.cash.register.count.line"].with_user(self.operator).search([("id", "in", lines.ids)])
+        )
         self.assertEqual(visible.register_id, self.register_a)
 
     def test_operator_can_close_own_register(self):
