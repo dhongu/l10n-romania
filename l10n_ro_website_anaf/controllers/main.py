@@ -61,7 +61,7 @@ class AnafPrefill(http.Controller):
             "street": values.get("street") or "",
             "city": values.get("city") or "",
             "zip": values.get("zip") or "",
-            "company_registry": values.get("nrc") or "",
+            "nrc": values.get("nrc") or "",
             "state_id": state.id if state else False,
             "vat_payer": bool(values.get("l10n_ro_vat_subjected")),
             "inactive": bool(values.get("anaf_inactive")),

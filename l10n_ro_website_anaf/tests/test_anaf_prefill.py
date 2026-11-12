@@ -57,7 +57,7 @@ class TestAnafPrefill(HttpCase):
         self.assertEqual(result["state"], "found")
         self.assertEqual(result["name"], "FIRMA ANAF SRL")
         self.assertEqual(result["state_id"], self.state_cj.id)
-        self.assertEqual(result["company_registry"], "J12/345/2020")
+        self.assertEqual(result["nrc"], "J12/345/2020")
         self.assertTrue(result["vat_payer"])
         self.assertTrue(result["inactive"])
         self.assertFalse(result["radiated"])
