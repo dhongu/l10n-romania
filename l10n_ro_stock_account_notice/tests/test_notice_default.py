@@ -40,3 +40,21 @@ class TestNoticeDefault(BaseCommon):
             }
         )
         self.assertFalse(picking.l10n_ro_notice)
+
+    def test_default_get_from_type(self):
+        self.picking_type.l10n_ro_notice_default = True
+        values = (
+            self.env["stock.picking"]
+            .with_context(default_picking_type_id=self.picking_type.id)
+            .default_get(["picking_type_id", "l10n_ro_notice"])
+        )
+        self.assertTrue(values.get("l10n_ro_notice"))
+
+    def test_onchange_picking_type(self):
+        self.picking_type.l10n_ro_notice_default = True
+        picking = self.env["stock.picking"].new({"picking_type_id": self.picking_type.id})
+        picking._onchange_picking_type_id_l10n_ro_notice()
+        self.assertTrue(picking.l10n_ro_notice)
+        self.picking_type.l10n_ro_notice_default = False
+        picking._onchange_picking_type_id_l10n_ro_notice()
+        self.assertFalse(picking.l10n_ro_notice)
