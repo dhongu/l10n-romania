@@ -14,8 +14,9 @@ Terrabit service, which asks ANAF and sends the data back to your database.
   **Buy Credits** and **Refresh Credits** are on the same screen (module *IAP Services for Odoo
   Online*, `deltatech_iap_online`, installed with this one).
 - **Who sees what**: the users who edit partners (*Contact Creation*) can read the service
-  account, because the ANAF button asks the service from their browser; the requests and their
-  answers are for administrators.
+  account, because the ANAF button asks the service from their browser. Every internal user can
+  create requests (the button, *Update from ANAF*), but only administrators read them and their
+  answers (access rights of `deltatech_iap_online`).
 - **What leaves your database**: only the CUI you look up, the request token and the address of
   your database (for the answer). The requests and their answers stay visible under *ANAF Requests*.
 
