@@ -17,3 +17,25 @@
         display: none;
     }
 }
+
+// The document and the lines built from the XML: the size of the text of the form (the field of
+// type Html would show them in the larger size of a text), in the panel and in the full form.
+.o_spv_document,
+.o_spv_lines {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+
+    .h4 {
+        font-size: 1rem;
+    }
+
+    .small {
+        font-size: 0.75rem;
+    }
+
+    .table {
+        font-size: 0.75rem;
+        --bs-table-cell-padding-y: 0.2rem;
+        --bs-table-cell-padding-x: 0.35rem;
+    }
+}

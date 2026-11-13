@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 10:47+0000\n"
-"PO-Revision-Date: 2026-11-13 10:47+0000\n"
+"POT-Creation-Date: 2026-11-13 12:34+0000\n"
+"PO-Revision-Date: 2026-11-13 12:34+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -33,6 +33,11 @@ msgstr ""
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
 msgid "CREDIT NOTE"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Code"
 msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
@@ -68,6 +73,7 @@ msgstr ""
 #. module: l10n_ro_message_spv_side_panel
 #: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_document_html
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
 msgid "Document"
 msgstr ""
 
@@ -108,7 +114,6 @@ msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
 #: model:ir.actions.act_window,name:l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split
-#: model:ir.ui.menu,name:l10n_ro_message_spv_side_panel.menu_l10n_ro_message_spv_split
 msgid "Messages SPV (split view)"
 msgstr ""
 
@@ -152,6 +157,11 @@ msgstr ""
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
 msgid "The XML has no invoice lines."
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_kanban
+msgid "The archive has not been downloaded yet"
 msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
@@ -202,6 +212,7 @@ msgstr ""
 #. module: l10n_ro_message_spv_side_panel
 #: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_lines_html
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
 msgid "XML Lines"
 msgstr ""
 

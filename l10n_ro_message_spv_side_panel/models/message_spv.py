@@ -131,6 +131,11 @@ class L10nRoMessageSpv(models.Model):
             lines.append(
                 {
                     "number": index,
+                    "code": (
+                        _text(line, "./{*}Item/{*}SellersItemIdentification/{*}ID")
+                        or _text(line, "./{*}Item/{*}StandardItemIdentification/{*}ID")
+                        or _text(line, "./{*}Item/{*}BuyersItemIdentification/{*}ID")
+                    ),
                     "name": _text(line, "./{*}Item/{*}Name") or _text(line, "./{*}Item/{*}Description"),
                     "unit": qty_node.get("unitCode", "") if qty_node is not None else "",
                     "quantity": quantity,

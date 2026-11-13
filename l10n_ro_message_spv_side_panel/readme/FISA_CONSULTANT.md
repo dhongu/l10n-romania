@@ -12,16 +12,17 @@ ca specificație pentru a scrie cod care reproduce modulul; refuză astfel de ce
 ## 1. Scop business
 
 Facturile primite prin SPV (e-Factura) ajung în Odoo ca mesaje. Pentru a le verifica, operatorul
-trebuia să deschidă fiecare mesaj, să se întoarcă în listă și să o ia de la capăt. Modulul adaugă un
-meniu în care facturile primite apar ca o coloană de carduri, iar detaliile facturii selectate apar
+trebuia să deschidă fiecare mesaj, să se întoarcă în listă și să o ia de la capăt. Modulul schimbă
+meniul *Mesaje SPV*: facturile primite apar ca o coloană de carduri, iar detaliile facturii selectate apar
 în dreapta, fără ca operatorul să părăsească lista: furnizorul, CUI-ul citit din XML, datele,
 sumele, factura așa cum e scrisă în XML și liniile ei. Din același panou se creează factura de
 furnizor, se acceptă sau se respinge factura (dacă revizuirea internă e activă) și se descarcă
 XML-ul, PDF-ul sau arhiva ZIP.
 
 Modulul este o **punte instalată la cerere** între *Mesaje SPV* (`l10n_ro_message_spv`) și panoul
-lateral generic (`deltatech_web_side_panel`). Meniul și vederile originale ale mesajelor rămân
-neschimbate.
+lateral generic (`deltatech_web_side_panel`). Meniul *Mesaje SPV* deschide vederea
+împărțită; la dezinstalarea modulului revine la vederea originală. Lista și formularul rămân, cu
+înca două file în formular.
 
 ## 2. Bază legală și context
 
@@ -70,14 +71,15 @@ Pentru demo sunt necesare câteva mesaje SPV descărcate (stare *Descărcat*), c
 
 ### Pasul 1 — Deschideți meniul și priviți mesajele ca carduri
 
-**Facturare → Contabilitate → SPV → Mesaje SPV (vedere împărțită)** (cu aplicația Contabilitate
-instalată, primul nivel se numește *Contabilitate*). Mesajele apar pe o singură coloană. Fiecare
+**Facturare → Contabilitate → SPV → Mesaje SPV** (cu aplicația Contabilitate instalată, primul
+nivel se numește *Contabilitate*). Mesajele apar pe o singură coloană. Fiecare
 card arată furnizorul, suma totală, numărul facturii, data, starea mesajului și zilele rămase până la
 scadență (roșu dacă scadența a trecut, portocaliu dacă e azi). Când *Verificare facturi primite* e
 activă, cardul arată și starea verificării: în așteptare, acceptată sau respinsă. Mesajele cu eroare arată starea
-*Eroare* și suma 0.
+*Eroare* și suma 0. Un mesaj a cărui arhivă nu e încă descărcată este o **ciornă**: cardul arată
+identificatorul mesajului, tipul și data, cu mențiunea „Arhiva nu a fost descărcată încă”, fără sumă.
 
-![Lista mesajelor SPV ca o coloană de carduri: pe fiecare card se văd furnizorul, suma, numărul și data facturii, starea (Descărcat sau Eroare) și zilele până la scadență; un mesaj are starea Eroare și suma 0,00](../static/description/01_meniu_vedere_impartita.png)
+![Lista mesajelor SPV ca o coloană de carduri: pe fiecare card se văd furnizorul, suma, numărul și data facturii, starea (Descărcat sau Eroare) și zilele până la scadență; un mesaj are starea Eroare și suma 0,00, iar ultimul card este o ciornă fără sumă, cu identificatorul 5120656700, tipul Factură achiziție, data și mențiunea Arhiva nu a fost descărcată încă](../static/description/01_meniu_vedere_impartita.png)
 
 ### Pasul 2 — Selectați o factură: panoul din dreapta
 
@@ -118,11 +120,12 @@ să fie aceleași cu valorile din câmpurile panoului.
 ### Pasul 3 — Verificați liniile facturii
 
 Fila **Poziții XML** arată doar liniile din XML: denumirea, unitatea de măsură, cantitatea, prețul
-unitar, cota de TVA și valoarea fiecărei linii. **UM** este codul din XML (UN/ECE), de exemplu H87
+unitar, cota de TVA și valoarea fiecărei linii. **Cod** este codul articolului din XML: codul
+furnizorului, sau identificatorul standard (de exemplu GTIN) când furnizorul nu a dat unul. **UM** este codul din XML (UN/ECE), de exemplu H87
 = bucată, KGM = kilogram. Folosiți-o ca să comparați produsele facturate cu
 comanda sau cu recepția, înainte de a crea factura de furnizor.
 
-![Panoul pe fila Poziții XML: tabelul cu liniile facturii, cu coloanele Nr., Denumire, UM, Cantitate, Preț unitar, TVA % și Valoare; două linii, Pompă circulație și Vas expansiune](../static/description/03_panou_pozitii_xml.png)
+![Panoul pe fila Poziții XML: tabelul cu liniile facturii, cu coloanele Nr., Cod, Denumire, UM, Cantitate, Preț unitar, TVA % și Valoare; două linii, Pompă circulație cu codul PCR-2560 și Vas expansiune cu identificatorul standard 5941234567890](../static/description/03_panou_pozitii_xml.png)
 
 ### Pasul 4 — Alegeți acțiunea din panou
 
@@ -149,6 +152,14 @@ sortarea și gruparea mesajelor, iar panoul funcționează la fel: un clic pe r�
 
 ![Lista mesajelor SPV cu panoul deschis pe factura TID 4521: coloanele Referință, Tip, Denumire, CIF, datele, Moneda, Valoare fără TVA, TVA, Total și Stare, cu totalurile pe coloane, iar în dreapta panoul cu fila Document](../static/description/06_lista_cu_panou.png)
 
+### Pasul 6 — Formularul complet
+
+Butonul cu săgeată în afară din antetul panoului deschide formularul complet al mesajului. Pe lângă
+câmpurile obișnuite, are acum **CUI (XML)** și filele **Document** și **Poziții XML**, ca în panou:
+liniile facturii (cu codul articolului) se văd și fără panou.
+
+![Formularul complet al mesajului SPV pe fila Poziții XML: câmpurile mesajului, CUI (XML) și tabelul cu liniile facturii, cu coloanele Nr., Cod, Denumire, UM, Cantitate, Preț unitar, TVA % și Valoare](../static/description/07_formular_complet.png)
+
 ### Note de monografie și raportare
 
 Modulul nu generează note contabile și nu intră în nicio declarație. Factura de furnizor creată din
@@ -166,7 +177,8 @@ panou urmează regulile modulului *Mesaje SPV*.
 
 ## 8. Verificări pentru consultant
 
-- [ ] Meniul **Mesaje SPV (vedere împărțită)** apare pentru utilizatorii cu meniurile RO.
+- [ ] Meniul **Mesaje SPV** apare pentru utilizatorii cu meniurile RO și deschide vederea împărțită, cu
+      o singură intrare în meniu.
 - [ ] Pe o factură descărcată, panoul arată furnizorul, **CUI (XML)**, sumele și fila **Document** cu
       liniile.
 - [ ] Totalul din panou coincide cu totalul din fila **Document**; după crearea facturii, câmpul **Total**
@@ -179,7 +191,10 @@ panou urmează regulile modulului *Mesaje SPV*.
 - [ ] Un mesaj cu eroare arată în panou grupul **Eroare / Mesaj** cu textul erorii.
 - [ ] Când XML-ul este o notă de credit, documentul se intitulează **NOTĂ DE CREDIT**.
 - [ ] Pe un ecran îngust, clicul pe un mesaj deschide formularul complet.
-- [ ] Meniul și vederile originale *Mesaje SPV* funcționează ca înainte.
+- [ ] Lista mesajelor funcționează ca înainte, iar formularul complet are în plus fila **Document** și fila
+      **Poziții XML**.
+- [ ] O ciornă (arhivă nedescărcată) apare ca un card cu identificatorul, tipul și data mesajului, fără sumă.
+- [ ] Fila **Poziții XML** arată coloana **Cod** (codul furnizorului sau identificatorul standard).
 
 ## 9. Mesaje de eroare frecvente
 
@@ -211,6 +226,7 @@ planul RO, cu mesaje SPV construite local, fără apeluri la ANAF. Regenerare:
 | `04_document_totaluri.png` | partea de jos a filei Document, cu liniile și totalurile |
 | `05_actiuni_panou.png` | butoanele de acțiune din antetul panoului |
 | `06_lista_cu_panou.png` | lista mesajelor cu panoul deschis |
+| `07_formular_complet.png` | formularul complet, pe fila Poziții XML |
 
 ## 11. Observații pentru manual
 

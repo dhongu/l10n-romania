@@ -53,6 +53,14 @@ OPEN_INVOICE_ROW = (
     "  await new Promise((r) => setTimeout(r, 3000));"
     "})()"
 )
+OPEN_LINES_TAB_FORM = (
+    "(async () => {"
+    "  const tab = [...document.querySelectorAll('.o_form_view .nav-link')]"
+    "    .find((a) => /XML Lines|Poziții XML/.test(a.innerText));"
+    "  if (tab) { tab.click(); }"
+    "  await new Promise((r) => setTimeout(r, 1000));"
+    "})()"
+)
 OPEN_TOTALS = (
     "(async () => {"
     "  const card = [...document.querySelectorAll('.o_kanban_record')].find((c) => c.innerText.includes('TID 4521'));"
@@ -95,6 +103,7 @@ class TestSpvSidePanelScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
 
         # fără CIF pe mesaj: CUI-ul furnizorului vine din XML, iar furnizorul nu există în Odoo
         messages = env["l10n.ro.message.spv"]
+        cls.invoice_message = None
         for name, ref, date, due, vat, message_id in INVOICES:
             xml = (
                 INVOICE_XML.replace(b"Termo Instal Distributie SRL", name.encode())
@@ -122,6 +131,19 @@ class TestSpvSidePanelScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                 }
             )
             message.get_xml_fom_zip()
+            if ref == "TID 4521":
+                cls.invoice_message = message
+        # a message whose archive has not been downloaded: a draft, with no data from the XML
+        messages.create(
+            {
+                "name": "5120656700",
+                "cif": False,
+                "message_type": "in_invoice",
+                "state": "draft",
+                "date": "2026-11-12 08:30:00",
+                "company_id": company.id,
+            }
+        )
         messages.create(
             {
                 "name": "5120656640",
@@ -185,6 +207,14 @@ class TestSpvSidePanelScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                     ".o_side_panel button[name='action_download_pdf']",
                     ".o_side_panel button[name='action_download_attachment']",
                 ],
+                "settle": 2000,
+            },
+            {
+                "url": f"action={self.env.ref(ACTION).id}&id={self.invoice_message.id}&view_type=form",
+                "name": "07_formular_complet.png",
+                "wait": ".o_form_view",
+                "eval": OPEN_LINES_TAB_FORM,
+                "eval_wait": 1500,
                 "settle": 2000,
             },
             {
