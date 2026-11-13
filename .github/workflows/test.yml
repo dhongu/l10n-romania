@@ -86,7 +86,7 @@ jobs:
       # pinned commit of dhongu/deltatech (update DELTATECH_SHA when deltatech_iap_online changes)
       - name: Install data-only dependencies
         env:
-          DELTATECH_SHA: a483096474c8480550128f0eded715eeb685ca01
+          DELTATECH_SHA: 78eb21a74e56625faa5f6dbc54b33023f934a668
         run: |
           git init --quiet /tmp/deltatech
           git -C /tmp/deltatech fetch --quiet --depth 1 https://github.com/dhongu/deltatech.git "$DELTATECH_SHA"
