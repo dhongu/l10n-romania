@@ -108,6 +108,25 @@ class TestMessageSpvSidePanel(TransactionCase):
         self.assertIn("Termo Instal Distributie SRL", str(message.spv_document_html))
         self.assertIn("2,299.00", data["total"])
 
+    def test_boxes_order_follows_the_direction(self):
+        """The other party on the left, the invoice in the middle and our company on the right."""
+        message = self._message(INVOICE_XML)
+        data = message._spv_read_invoice()
+        self.assertTrue(data["incoming"])
+        html = str(message.spv_document_html)
+        supplier = html.index(data["supplier"]["name"])
+        invoice = html.index("TID 4521")
+        customer = html.index(data["customer"]["name"])
+        self.assertLess(supplier, invoice, "received invoice: the supplier first")
+        self.assertLess(invoice, customer, "received invoice: our company (the customer) last")
+        message.message_type = "out_invoice"
+        message.invalidate_recordset()
+        data = message._spv_read_invoice()
+        self.assertFalse(data["incoming"])
+        html = str(message.spv_document_html)
+        self.assertLess(html.index(data["customer"]["name"]), html.index("TID 4521"))
+        self.assertLess(html.index("TID 4521"), html.index(data["supplier"]["name"]))
+
     def test_dates_follow_the_language_of_the_user(self):
         data = self._message(INVOICE_XML)._spv_read_invoice()
         self.assertNotEqual(data["issue_date"], "2026-11-03")
@@ -204,5 +223,7 @@ class TestMessageSpvSidePanel(TransactionCase):
         groups = {g.get("name"): {f.get("name") for f in g.iter("field")} for g in root.iter("group") if g.get("name")}
         self.assertLessEqual({"partner_name", "spv_party_vat", "partner_id"}, groups["spv_supplier"])
         self.assertLessEqual({"ref", "invoice_date", "invoice_date_due", "invoice_id"}, groups["spv_invoice"])
-        self.assertLessEqual({"amount_untaxed", "amount_tax", "amount", "state"}, groups["spv_amounts"])
+        self.assertLessEqual({"amount_untaxed", "amount_tax", "amount"}, groups["spv_amounts"])
+        header = {f.get("name"): f.get("widget") for f in root.find(".//header").iter("field")}
+        self.assertEqual(header.get("state"), "statusbar", "the state is a status bar in the header")
         self.assertLessEqual({"name", "message_type", "request_id", "cif"}, groups["spv_message"])
