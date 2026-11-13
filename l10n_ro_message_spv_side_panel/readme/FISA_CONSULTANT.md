@@ -189,7 +189,9 @@ panou urmează regulile modulului *Mesaje SPV*.
 - [ ] Un utilizator fără drept de Contabil nu vede butoanele *Creează factura*, *Acceptă*, *Respinge* și
       *Înapoi la verificare*.
 - [ ] Un mesaj cu eroare arată în panou grupul **Eroare / Mesaj** cu textul erorii.
-- [ ] Când XML-ul este o notă de credit, documentul se intitulează **NOTĂ DE CREDIT**.
+- [ ] Când XML-ul este o notă de credit, documentul se intitulează **Notă de credit** (în ecran apare cu majuscule).
+- [ ] În formularul complet, câmpurile sunt grupate: **Furnizor**, **Factură** și **Sume** pe un rând,
+      documentul dedesubt și grupul **Mesaj** (ID mesaj, tip, ID cerere, CIF, dată, detalii) la sfârșit.
 - [ ] Pe un ecran îngust, clicul pe un mesaj deschide formularul complet.
 - [ ] Lista mesajelor funcționează ca înainte, iar formularul complet are în plus documentul, fără file.
 - [ ] O ciornă (arhivă nedescărcată) apare ca un card cu identificatorul, tipul și data mesajului, fără sumă.
@@ -201,7 +203,7 @@ panou urmează regulile modulului *Mesaje SPV*.
 |---|---|---|
 | Panoul nu se deschide la clic, se deschide formularul | ecranul are sub 1200 px lățime (pragul „extra-large") | folosiți un ecran mai larg sau fereastra maximizată |
 | La **Creează factura**: „Only accepted invoices can be processed…” | verificarea facturilor primite e activă, iar factura nu e acceptată | apăsați întâi **Acceptă** |
-| Fila **Document** este goală, **CUI (XML)** lipsește | mesajul nu are arhiva descărcată sau arhiva nu conține XML | apăsați **Descarcă** din formularul complet al mesajului sau din listă, apoi **Reîncarcă** în panou |
+| Documentul din panou este gol, **CUI (XML)** lipsește | mesajul nu are arhiva descărcată sau arhiva nu conține XML | apăsați **Descarcă** din formularul complet al mesajului sau din listă, apoi **Reîncarcă** în panou |
 | **Partener** este gol | furnizorul nu există în Odoo | este normal; partenerul se creează din XML la *Creează factura* |
 | În panou apare grupul **Eroare** cu un text | descărcarea sau citirea arhivei SPV a eșuat pentru acest mesaj | corectați cauza (token, arhivă), apoi **Descarcă** din formularul complet al mesajului sau din listă și **Reîncarcă** în panou |
 | Datele din panou nu se schimbă după o acțiune | panoul nu se reîncarcă singur | apăsați **Reîncarcă** în antetul panoului |
