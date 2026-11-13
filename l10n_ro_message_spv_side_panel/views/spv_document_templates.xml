@@ -36,29 +36,29 @@
     <!-- A view of the document, built from the XML of the invoice. -->
     <template id="spv_invoice_document">
         <div class="o_spv_document">
-            <div class="d-flex justify-content-between flex-wrap gap-3 mb-3">
-                <div>
+            <div class="o_spv_boxes mb-3">
+                <div class="o_spv_box">
                     <div class="text-muted text-uppercase small">Supplier</div>
                     <div class="fw-bold" t-out="supplier.get('name')" />
                     <div t-if="supplier.get('vat')">VAT ID <t t-out="supplier.get('vat')" /></div>
                     <div t-if="supplier.get('address')" t-out="supplier.get('address')" />
                 </div>
-                <div class="text-end">
-                    <div class="h4 mb-0">
-                        <t t-if="is_credit_note">CREDIT NOTE</t>
-                        <t t-else="">INVOICE</t>
+                <div class="o_spv_box">
+                    <div class="text-muted text-uppercase small">Customer</div>
+                    <div class="fw-bold" t-out="customer.get('name')" />
+                    <div t-if="customer.get('vat')">VAT ID <t t-out="customer.get('vat')" /></div>
+                    <div t-if="customer.get('address')" t-out="customer.get('address')" />
+                </div>
+                <div class="o_spv_box">
+                    <div class="text-muted text-uppercase small">
+                        <t t-if="is_credit_note">Credit note</t>
+                        <t t-else="">Invoice</t>
                     </div>
-                    <div>No. <t t-out="number" /></div>
+                    <div class="fw-bold">No. <t t-out="number" /></div>
                     <div t-if="issue_date">Date: <t t-out="issue_date" /></div>
                     <div t-if="due_date">Due date: <t t-out="due_date" /></div>
                     <div t-if="currency">Currency: <t t-out="currency" /></div>
                 </div>
-            </div>
-            <div class="border rounded p-2 mb-3">
-                <div class="text-muted text-uppercase small">Customer</div>
-                <div class="fw-bold" t-out="customer.get('name')" />
-                <div t-if="customer.get('vat')">VAT ID <t t-out="customer.get('vat')" /></div>
-                <div t-if="customer.get('address')" t-out="customer.get('address')" />
             </div>
             <t t-call="l10n_ro_message_spv_side_panel.spv_invoice_lines" />
             <div class="d-flex justify-content-end">

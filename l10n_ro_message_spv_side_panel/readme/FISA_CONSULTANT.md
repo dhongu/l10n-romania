@@ -21,8 +21,8 @@ XML-ul, PDF-ul sau arhiva ZIP.
 
 Modulul este o **punte instalată la cerere** între *Mesaje SPV* (`l10n_ro_message_spv`) și panoul
 lateral generic (`deltatech_web_side_panel`). Meniul *Mesaje SPV* deschide vederea
-împărțită; la dezinstalarea modulului revine la vederea originală. Lista și formularul rămân, cu
-încă două file în formular.
+împărțită; la dezinstalarea modulului revine la vederea originală. Lista și formularul rămân; formularul are
+în plus documentul, fără file.
 
 ## 2. Bază legală și context
 
@@ -94,8 +94,9 @@ Un clic pe card deschide panoul. Cardul selectat se evidențiază. În panou cit
   create din mesaj: verificați diferența înainte de a continua;
 - un grup **Eroare / Mesaj**, care apare doar când mesajul are o eroare sau un text de la ANAF (de
   exemplu „Arhiva descărcată nu a putut fi citită"): citiți-l înainte de orice altă acțiune;
-- fila **Document**: factura așa cum e scrisă în XML (furnizor, client, linii, totaluri); documentul se
-  intitulează **FACTURĂ**, sau **NOTĂ DE CREDIT** când XML-ul este o notă de credit. Documentul arată
+- documentul: factura așa cum e scrisă în XML, pe o „foaie” cu umbră, sub datele mesajului: trei casete pe
+  un rând (furnizor, client, datele facturii), liniile și totalurile; caseta facturii se
+  intitulează **Factură**, sau **Notă de credit** când XML-ul este o notă de credit. Documentul arată
   și nota din XML (dacă există), iar scadența este cea din condițiile de plată când factura nu are
   o scadență proprie;
 
@@ -106,29 +107,25 @@ panoul.
 **Verificați pe ecran înainte de a crea factura:**
 
 1. Numele furnizorului și **CUI (XML)** corespund facturii așteptate.
-2. Valoarea fără TVA, TVA-ul și totalul din panou coincid cu totalurile din fila **Document** (iar
+2. Valoarea fără TVA, TVA-ul și totalul din panou coincid cu totalurile din document (iar
    **Total** nu este colorat în roșu).
 3. Data facturii și scadența sunt cele scrise pe factura furnizorului.
 
-Derulați fila **Document** până la tabelul de totaluri: **Total fără TVA**, **TVA** și **Total** trebuie
+Derulați documentul până la tabelul de totaluri: **Total fără TVA**, **TVA** și **Total** trebuie
 să fie aceleași cu valorile din câmpurile panoului.
 
-![Partea de jos a filei Document: tabelul cu cele două linii ale facturii (Pompă circulație 25/60 și Vas expansiune 24 L) și totalurile Total fără TVA 1.900,00, TVA 399,00 și Total 2.299,00 RON](../static/description/04_document_totaluri.png)
-
-![Lista de carduri cu panoul deschis pe factura TID 4521: câmpurile Referință, CUI (XML) și Monedă, butoanele Creează factura, XML, PDF și ZIP, valorile 1.900,00 fără TVA, 399,00 TVA și 2.299,00 total, iar dedesubt fila Document cu furnizorul, clientul și liniile facturii; CUI (XML) și butonul de mesaj următor sunt evidențiate](../static/description/02_panou_document.png)
-
-### Pasul 3 — Verificați liniile facturii
-
-Fila **Poziții XML** arată doar liniile din XML: denumirea, unitatea de măsură, cantitatea, prețul
+**Liniile** documentului vin din XML: denumirea, unitatea de măsură, cantitatea, prețul
 unitar, cota de TVA și valoarea fiecărei linii. **Cod** este codul articolului din XML: codul
 furnizorului, sau identificatorul standard (de exemplu GTIN) când furnizorul nu a dat unul, sau, ca
 ultimă variantă, codul dat articolului de cumpărător. **UM** este codul din XML (UN/ECE), de exemplu H87
-= bucată, KGM = kilogram. Folosiți-o ca să comparați produsele facturate cu
+= bucată, KGM = kilogram. Folosiți-le ca să comparați produsele facturate cu
 comanda sau cu recepția, înainte de a crea factura de furnizor.
 
-![Panoul pe fila Poziții XML: tabelul cu liniile facturii, cu coloanele Nr., Cod, Denumire, UM, Cantitate, Preț unitar, TVA % și Valoare; două linii, Pompă circulație cu codul PCR-2560 și Vas expansiune cu identificatorul standard 5941234567890](../static/description/03_panou_pozitii_xml.png)
+![Partea de jos a documentului: tabelul cu cele două linii ale facturii (Pompă circulație 25/60 și Vas expansiune 24 L) și totalurile Total fără TVA 1.900,00, TVA 399,00 și Total 2.299,00 RON](../static/description/04_document_totaluri.png)
 
-### Pasul 4 — Alegeți acțiunea din panou
+![Lista de carduri cu panoul deschis pe factura TID 4521: câmpurile Referință, CUI (XML) și Monedă, butoanele Creează factura, XML, PDF și ZIP, valorile 1.900,00 fără TVA, 399,00 TVA și 2.299,00 total, iar dedesubt documentul, cu furnizorul, clientul, datele facturii și liniile; CUI (XML) și butonul de mesaj următor sunt evidențiate](../static/description/02_panou_document.png)
+
+### Pasul 3 — Alegeți acțiunea din panou
 
 - **Creează factura** — creează factura de furnizor (în ciornă, fără postare) din mesaj, ca în formularul
   mesajului. Apare doar pe facturile primite și dispare după ce factura a fost creată. Dacă
@@ -142,24 +139,24 @@ comanda sau cu recepția, înainte de a crea factura de furnizor.
 - **XML**, **PDF**, **ZIP** — descarcă XML-ul facturii, PDF-ul (cel încorporat de furnizor în XML sau,
   dacă lipsește, cel generat de ANAF) și arhiva semnată de ANAF.
 
-Un mesaj fără arhivă descărcată nu are butoane de descărcare, iar fila **Document** rămâne goală.
+Un mesaj fără arhivă descărcată nu are butoane de descărcare, iar documentul rămâne gol.
 
 ![Antetul panoului pe factura TID 4521: butoanele Creează factura, XML, PDF și ZIP, evidențiate și numerotate de la 1 la 4, în rândul de sub săgețile de navigare](../static/description/05_actiuni_panou.png)
 
-### Pasul 5 — Lista, când aveți nevoie de coloane, sortare sau grupare
+### Pasul 4 — Lista, când aveți nevoie de coloane, sortare sau grupare
 
 Butonul de comutare din colțul dreapta-sus trece la **Listă**. Lista păstrează toate coloanele,
 sortarea și gruparea mesajelor, iar panoul funcționează la fel: un clic pe rând îl deschide.
 
-![Lista mesajelor SPV cu panoul deschis pe factura TID 4521: coloanele Referință, Tip, Denumire, CIF, datele, Moneda, Valoare fără TVA, TVA, Total și Stare, cu totalurile pe coloane, iar în dreapta panoul cu fila Document](../static/description/06_lista_cu_panou.png)
+![Lista mesajelor SPV cu panoul deschis pe factura TID 4521: coloanele Referință, Tip, Denumire, CIF, datele, Moneda, Valoare fără TVA, TVA, Total și Stare, cu totalurile pe coloane, iar în dreapta panoul cu documentul](../static/description/06_lista_cu_panou.png)
 
-### Pasul 6 — Formularul complet
+### Pasul 5 — Formularul complet
 
 Butonul cu săgeată în afară din antetul panoului deschide formularul complet al mesajului. Pe lângă
-câmpurile obișnuite, are acum **CUI (XML)** și filele **Document** și **Poziții XML**, ca în panou:
-liniile facturii (cu codul articolului) se văd și fără panou.
+câmpurile obișnuite, are acum **CUI (XML)** și, sub câmpuri, același document ca în panou:
+liniile facturii (cu codul articolului) se văd și fără panou, fără file.
 
-![Formularul complet al mesajului SPV pe fila Poziții XML: câmpurile mesajului, CUI (XML) și tabelul cu liniile facturii, cu coloanele Nr., Cod, Denumire, UM, Cantitate, Preț unitar, TVA % și Valoare](../static/description/07_formular_complet.png)
+![Formularul complet al mesajului SPV: câmpurile mesajului, CUI (XML) și, dedesubt, documentul cu cele trei casete (furnizor, client, factură) și tabelul cu liniile facturii, cu coloanele Nr., Cod, Denumire, UM, Cantitate, Preț unitar, TVA % și Valoare](../static/description/07_formular_complet.png)
 
 ### Note de monografie și raportare
 
@@ -180,11 +177,11 @@ panou urmează regulile modulului *Mesaje SPV*.
 
 - [ ] Meniul **Mesaje SPV** apare pentru utilizatorii cu meniurile RO și deschide vederea împărțită, cu
       o singură intrare în meniu.
-- [ ] Pe o factură descărcată, panoul arată furnizorul, **CUI (XML)**, sumele și fila **Document** cu
-      liniile.
-- [ ] Totalul din panou coincide cu totalul din fila **Document**; după crearea facturii, câmpul **Total**
+- [ ] Pe o factură descărcată, panoul arată furnizorul, **CUI (XML)**, sumele și documentul, cu cele trei
+      casete (furnizor, client, factură) și liniile.
+- [ ] Totalul din panou coincide cu totalul din document; după crearea facturii, câmpul **Total**
       se colorează în roșu dacă diferă de suma facturii create.
-- [ ] Fila **Poziții XML** arată toate liniile din XML.
+- [ ] Documentul arată toate liniile din XML.
 - [ ] Săgețile din panou trec la mesajul următor și la cel anterior, iar cardul selectat se evidențiază.
 - [ ] Un mesaj cu eroare, fără arhivă, se deschide în panou fără mesaje de eroare în ecran.
 - [ ] Un utilizator fără drept de Contabil nu vede butoanele *Creează factura*, *Acceptă*, *Respinge* și
@@ -192,10 +189,9 @@ panou urmează regulile modulului *Mesaje SPV*.
 - [ ] Un mesaj cu eroare arată în panou grupul **Eroare / Mesaj** cu textul erorii.
 - [ ] Când XML-ul este o notă de credit, documentul se intitulează **NOTĂ DE CREDIT**.
 - [ ] Pe un ecran îngust, clicul pe un mesaj deschide formularul complet.
-- [ ] Lista mesajelor funcționează ca înainte, iar formularul complet are în plus fila **Document** și fila
-      **Poziții XML**.
+- [ ] Lista mesajelor funcționează ca înainte, iar formularul complet are în plus documentul, fără file.
 - [ ] O ciornă (arhivă nedescărcată) apare ca un card cu identificatorul, tipul și data mesajului, fără sumă.
-- [ ] Fila **Poziții XML** arată coloana **Cod** (codul furnizorului sau identificatorul standard).
+- [ ] Tabelul de linii arată coloana **Cod** (codul furnizorului sau identificatorul standard).
 
 ## 9. Mesaje de eroare frecvente
 
@@ -222,12 +218,11 @@ planul RO, cu mesaje SPV construite local, fără apeluri la ANAF. Regenerare:
 | Fișier | Ce arată |
 |---|---|
 | `01_meniu_vedere_impartita.png` | mesajele SPV ca o coloană de carduri |
-| `02_panou_document.png` | panoul deschis pe o factură, cu fila Document |
-| `03_panou_pozitii_xml.png` | panoul pe fila Poziții XML |
-| `04_document_totaluri.png` | partea de jos a filei Document, cu liniile și totalurile |
+| `02_panou_document.png` | panoul deschis pe o factură, cu documentul |
+| `04_document_totaluri.png` | partea de jos a documentului, cu liniile și totalurile |
 | `05_actiuni_panou.png` | butoanele de acțiune din antetul panoului |
 | `06_lista_cu_panou.png` | lista mesajelor cu panoul deschis |
-| `07_formular_complet.png` | formularul complet, pe fila Poziții XML |
+| `07_formular_complet.png` | formularul complet, cu documentul sub câmpuri |
 
 ## 11. Observații pentru manual
 

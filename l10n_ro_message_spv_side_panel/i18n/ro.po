@@ -33,8 +33,8 @@ msgstr "Înapoi la verificare"
 
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
-msgid "CREDIT NOTE"
-msgstr "NOTĂ DE CREDIT"
+msgid "Credit note"
+msgstr "Notă de credit"
 
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
@@ -105,8 +105,8 @@ msgstr "ID"
 
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
-msgid "INVOICE"
-msgstr "FACTURĂ"
+msgid "Invoice"
+msgstr "Factură"
 
 #. module: l10n_ro_message_spv_side_panel
 #: model:ir.model,name:l10n_ro_message_spv_side_panel.model_l10n_ro_message_spv

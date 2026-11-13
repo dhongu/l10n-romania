@@ -190,14 +190,7 @@
                         <field name="error" invisible="not error" />
                         <field name="message" invisible="not message" />
                     </group>
-                    <notebook>
-                        <page string="Document" name="document">
-                            <field name="spv_document_html" nolabel="1" />
-                        </page>
-                        <page string="XML Lines" name="xml_lines">
-                            <field name="spv_lines_html" nolabel="1" />
-                        </page>
-                    </notebook>
+                    <field name="spv_document_html" nolabel="1" />
                 </sheet>
             </form>
         </field>
@@ -254,14 +247,7 @@
                 <field name="spv_party_vat" />
             </xpath>
             <xpath expr="//sheet" position="inside">
-                <notebook>
-                    <page string="Document" name="document">
-                        <field name="spv_document_html" nolabel="1" />
-                    </page>
-                    <page string="XML Lines" name="xml_lines">
-                        <field name="spv_lines_html" nolabel="1" />
-                    </page>
-                </notebook>
+                <field name="spv_document_html" nolabel="1" />
             </xpath>
         </field>
     </record>

@@ -1,3 +1,12 @@
+## 19.0.1.2.0 (2026-11-13)
+
+- The tabs *Document* and *XML Lines* are gone: the document (the invoice as written in the XML,
+  with its lines and totals) is shown directly under the data of the message, in the panel and in
+  the full form. The lines were shown twice, in both tabs.
+- The document looks like a sheet of paper (border and shadow), to show that it is the invoice as
+  received, and the supplier, the customer and the data of the invoice are three boxes on a row
+  (fewer on a narrow panel).
+
 ## 19.0.1.1.0 (2026-11-13)
 
 - One entry in the menu: *Messages SPV* (and its parent *SPV*) opens the split view; the extra entry

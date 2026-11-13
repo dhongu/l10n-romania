@@ -190,8 +190,8 @@ class TestMessageSpvSidePanel(TransactionCase):
         for xmlid in ("menu_l10n_ro_spv", "menu_l10n_ro_message_spv"):
             self.assertEqual(self.env.ref(f"l10n_ro_message_spv.{xmlid}").action, original)
 
-    def test_full_form_shows_the_document_and_the_lines(self):
+    def test_full_form_shows_the_document_without_tabs(self):
         arch = self.env["l10n.ro.message.spv"].get_view(view_type="form")["arch"]
         self.assertIn("spv_document_html", arch)
-        self.assertIn("spv_lines_html", arch)
+        self.assertNotIn("<notebook", arch.split("spv_document_html")[1])
         self.assertIn("spv_party_vat", arch)

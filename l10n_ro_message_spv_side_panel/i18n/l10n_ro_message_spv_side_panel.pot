@@ -32,7 +32,7 @@ msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
-msgid "CREDIT NOTE"
+msgid "Credit note"
 msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
@@ -104,7 +104,7 @@ msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
-msgid "INVOICE"
+msgid "Invoice"
 msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
