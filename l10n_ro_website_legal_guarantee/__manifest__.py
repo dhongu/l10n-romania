@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - EU Legal Guarantee Notice",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "images": ["static/description/main_screenshot.png"],
     "category": "Localization",
     "countries": ["ro"],
