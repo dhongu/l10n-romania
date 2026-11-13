@@ -7,6 +7,7 @@
                 <thead>
                     <tr>
                         <th>No.</th>
+                        <th>Code</th>
                         <th>Description</th>
                         <th>UoM</th>
                         <th class="text-end">Quantity</th>
@@ -18,6 +19,7 @@
                 <tbody>
                     <tr t-foreach="lines" t-as="line">
                         <td t-out="line['number']" />
+                        <td t-out="line['code']" />
                         <td t-out="line['name']" />
                         <td t-out="line['unit']" />
                         <td class="text-end" t-out="line['quantity']" />

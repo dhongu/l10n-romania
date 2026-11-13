@@ -1,3 +1,18 @@
+## 19.0.1.1.0 (2026-11-13)
+
+- One entry in the menu: *Messages SPV* (and its parent *SPV*) opens the split view; the extra entry
+  *Messages SPV (split view)* is gone. The uninstall hook puts the menus back on the original
+  action.
+- The full form of the message has the VAT ID read from the XML and the tabs *Document* and *XML
+  Lines*, like the panel.
+- The lines show the code of the item from the XML: the code of the seller, or the standard
+  identifier (e.g. GTIN) when there is none.
+- A draft (a message whose archive is not downloaded yet) is a useful card: it shows the id, the
+  type and the date of the message and says that the archive has not been downloaded, instead of an
+  empty card with 0.00.
+- The document and the lines built from the XML use the size of the text of the form, smaller than
+  before, in the panel and in the full form.
+
 ## 19.0.1.0.0 (2026-11-13)
 
 - First release: the menu *Messages SPV (split view)* with a kanban and a list that show the

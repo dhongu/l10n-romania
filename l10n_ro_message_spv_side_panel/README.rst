@@ -26,20 +26,23 @@ Split view for the SPV messages: the invoices received through SPV on
 the left, as cards, and the details of the selected one on the right,
 without leaving the list.
 
-- **Cards and list** — a new menu *Messages SPV (split view)*, with a
-  kanban of cards (supplier, amount, number, date, status, days to the
-  due date) and the usual list. A click selects the message and shows it
-  in the panel.
+- **Cards and list** — the menu *Messages SPV* opens a kanban of cards
+  (supplier, amount, number, date, status, days to the due date; a
+  message whose archive is not downloaded yet shows its id, type and
+  date) and the usual list. A click selects the message and shows it in
+  the panel.
 - **The panel** — the supplier, the VAT number read from the XML, the
   dates, the amounts, the review state and the buttons *Create Invoice*,
   *Accept*, *Reject*, *XML*, *PDF* and *ZIP*.
 - **The document** — a tab *Document* with the invoice as written in the
   XML (supplier, customer, lines and totals) and a tab *XML Lines* with
-  the lines only. Nothing is stored: the XML is read from the ZIP when
-  the message is opened.
+  the lines only: code, description, unit, quantity, price, VAT rate and
+  amount. The full form of the message has the same two tabs. Nothing is
+  stored: the XML is read from the ZIP when the message is opened.
 - **Installed on request** — it is a bridge between
-  *l10n_ro_message_spv* and *deltatech_web_side_panel*. The original
-  menu and views stay as they are.
+  *l10n_ro_message_spv* and *deltatech_web_side_panel*. The menu of the
+  SPV messages opens the split view; uninstalling the module puts it
+  back.
 
 **Table of contents**
 
@@ -49,11 +52,12 @@ without leaving the list.
 Usage
 =====
 
-1. Open *Invoicing > Accounting > SPV > Messages SPV (split view)* (with
-   the Accounting app installed, the first level is called
-   *Accounting*). The received invoices appear as a column of cards:
-   supplier, total, number, date, status and the days left to the due
-   date.
+1. Open *Invoicing > Accounting > SPV > Messages SPV* (with the
+   Accounting app installed, the first level is called *Accounting*).
+   The received invoices appear as a column of cards: supplier, total,
+   number, date, status and the days left to the due date. A message
+   whose archive is not downloaded yet is a draft: its card shows the
+   id, the type and the date of the message.
 
    |The SPV messages as a column of cards|
 
@@ -71,7 +75,7 @@ Usage
 
    |The totals of the document|
 
-3. Open the tab *XML Lines* to check the lines of the invoice:
+3. Open the tab *XML Lines* to check the lines of the invoice: code,
    description, unit, quantity, unit price, VAT rate and amount.
 
    |The tab XML Lines of the side panel|
@@ -89,8 +93,13 @@ Usage
 
    |The list with the side panel|
 
+6. The arrow-out button of the panel opens the full form: it has the VAT
+   ID read from the XML and the tabs *Document* and *XML Lines* too.
+
+   |The full form with the XML lines|
+
 On screens narrower than 1200 px (the extra-large breakpoint) the panel
-is off and a click opens the form, as in the original menu.
+is off and a click opens the form of the message.
 
 .. |The SPV messages as a column of cards| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/01_meniu_vedere_impartita.png
 .. |The side panel on the tab Document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/02_panou_document.png
@@ -98,9 +107,27 @@ is off and a click opens the form, as in the original menu.
 .. |The tab XML Lines of the side panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/03_panou_pozitii_xml.png
 .. |The action buttons of the panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/05_actiuni_panou.png
 .. |The list with the side panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/06_lista_cu_panou.png
+.. |The full form with the XML lines| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/07_formular_complet.png
 
 Changelog
 =========
+
+19.0.1.1.0 (2026-11-13)
+-----------------------
+
+- One entry in the menu: *Messages SPV* (and its parent *SPV*) opens the
+  split view; the extra entry *Messages SPV (split view)* is gone. The
+  uninstall hook puts the menus back on the original action.
+- The full form of the message has the VAT ID read from the XML and the
+  tabs *Document* and *XML Lines*, like the panel.
+- The lines show the code of the item from the XML: the code of the
+  seller, or the standard identifier (e.g. GTIN) when there is none.
+- A draft (a message whose archive is not downloaded yet) is a useful
+  card: it shows the id, the type and the date of the message and says
+  that the archive has not been downloaded, instead of an empty card
+  with 0.00.
+- The document and the lines built from the XML use the size of the text
+  of the form, smaller than before, in the panel and in the full form.
 
 19.0.1.0.0 (2026-11-13)
 -----------------------

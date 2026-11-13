@@ -374,34 +374,38 @@ ul.auto-toc {
 the left, as cards, and the details of the selected one on the right,
 without leaving the list.</p>
 <ul class="simple">
-<li><strong>Cards and list</strong> — a new menu <em>Messages SPV (split view)</em>, with a
-kanban of cards (supplier, amount, number, date, status, days to the
-due date) and the usual list. A click selects the message and shows it
-in the panel.</li>
+<li><strong>Cards and list</strong> — the menu <em>Messages SPV</em> opens a kanban of cards
+(supplier, amount, number, date, status, days to the due date; a
+message whose archive is not downloaded yet shows its id, type and
+date) and the usual list. A click selects the message and shows it in
+the panel.</li>
 <li><strong>The panel</strong> — the supplier, the VAT number read from the XML, the
 dates, the amounts, the review state and the buttons <em>Create Invoice</em>,
 <em>Accept</em>, <em>Reject</em>, <em>XML</em>, <em>PDF</em> and <em>ZIP</em>.</li>
 <li><strong>The document</strong> — a tab <em>Document</em> with the invoice as written in the
 XML (supplier, customer, lines and totals) and a tab <em>XML Lines</em> with
-the lines only. Nothing is stored: the XML is read from the ZIP when
-the message is opened.</li>
+the lines only: code, description, unit, quantity, price, VAT rate and
+amount. The full form of the message has the same two tabs. Nothing is
+stored: the XML is read from the ZIP when the message is opened.</li>
 <li><strong>Installed on request</strong> — it is a bridge between
-<em>l10n_ro_message_spv</em> and <em>deltatech_web_side_panel</em>. The original
-menu and views stay as they are.</li>
+<em>l10n_ro_message_spv</em> and <em>deltatech_web_side_panel</em>. The menu of the
+SPV messages opens the split view; uninstalling the module puts it
+back.</li>
 </ul>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a></li>
 <li><a class="reference internal" href="#changelog" id="toc-entry-2">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-3">19.0.1.0.0 (2026-11-13)</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-3">19.0.1.1.0 (2026-11-13)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-4">19.0.1.0.0 (2026-11-13)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-7">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-8">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-5">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-6">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-7">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-8">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-9">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -409,11 +413,12 @@ menu and views stay as they are.</li>
 <div class="section" id="usage">
 <h1><a class="toc-backref" href="#toc-entry-1">Usage</a></h1>
 <ol class="arabic">
-<li><p class="first">Open <em>Invoicing &gt; Accounting &gt; SPV &gt; Messages SPV (split view)</em> (with
-the Accounting app installed, the first level is called
-<em>Accounting</em>). The received invoices appear as a column of cards:
-supplier, total, number, date, status and the days left to the due
-date.</p>
+<li><p class="first">Open <em>Invoicing &gt; Accounting &gt; SPV &gt; Messages SPV</em> (with the
+Accounting app installed, the first level is called <em>Accounting</em>).
+The received invoices appear as a column of cards: supplier, total,
+number, date, status and the days left to the due date. A message
+whose archive is not downloaded yet is a draft: its card shows the
+id, the type and the date of the message.</p>
 <p><img alt="The SPV messages as a column of cards" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/01_meniu_vedere_impartita.png" /></p>
 </li>
 <li><p class="first">Click a card: the message opens in the panel on the right and the
@@ -427,7 +432,7 @@ next message.</p>
 and <em>Total</em> match the amounts of the panel.</p>
 <p><img alt="The totals of the document" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/04_document_totaluri.png" /></p>
 </li>
-<li><p class="first">Open the tab <em>XML Lines</em> to check the lines of the invoice:
+<li><p class="first">Open the tab <em>XML Lines</em> to check the lines of the invoice: code,
 description, unit, quantity, unit price, VAT rate and amount.</p>
 <p><img alt="The tab XML Lines of the side panel" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/03_panou_pozitii_xml.png" /></p>
 </li>
@@ -442,14 +447,36 @@ the panel.</p>
 the panel works there too.</p>
 <p><img alt="The list with the side panel" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/06_lista_cu_panou.png" /></p>
 </li>
+<li><p class="first">The arrow-out button of the panel opens the full form: it has the VAT
+ID read from the XML and the tabs <em>Document</em> and <em>XML Lines</em> too.</p>
+<p><img alt="The full form with the XML lines" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/07_formular_complet.png" /></p>
+</li>
 </ol>
 <p>On screens narrower than 1200 px (the extra-large breakpoint) the panel
-is off and a click opens the form, as in the original menu.</p>
+is off and a click opens the form of the message.</p>
 </div>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-2">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.0.0 (2026-11-13)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-3">19.0.1.1.0 (2026-11-13)</a></h2>
+<ul class="simple">
+<li>One entry in the menu: <em>Messages SPV</em> (and its parent <em>SPV</em>) opens the
+split view; the extra entry <em>Messages SPV (split view)</em> is gone. The
+uninstall hook puts the menus back on the original action.</li>
+<li>The full form of the message has the VAT ID read from the XML and the
+tabs <em>Document</em> and <em>XML Lines</em>, like the panel.</li>
+<li>The lines show the code of the item from the XML: the code of the
+seller, or the standard identifier (e.g. GTIN) when there is none.</li>
+<li>A draft (a message whose archive is not downloaded yet) is a useful
+card: it shows the id, the type and the date of the message and says
+that the archive has not been downloaded, instead of an empty card
+with 0.00.</li>
+<li>The document and the lines built from the XML use the size of the text
+of the form, smaller than before, in the panel and in the full form.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.0.0 (2026-11-13)</a></h2>
 <ul class="simple">
 <li>First release: the menu <em>Messages SPV (split view)</em> with a kanban and
 a list that show the selected message in a side panel
@@ -460,28 +487,28 @@ message is opened.</li>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-5">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-5">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-6">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-6">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Authors</a></h2>
 <ul class="simple">
 <li>Terrabit</li>
 <li>Dorin Hongu</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-7">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-8">Contributors</a></h2>
 <ul class="simple">
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt; (Terrabit)</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-8">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_message_spv_side_panel">dhongu/l10n-romania</a> project on GitHub.</p>
