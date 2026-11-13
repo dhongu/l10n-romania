@@ -14,6 +14,7 @@
     "depends": ["deltatech_iap_online", "contacts"],
     "data": [
         "data/ir_model_data.xml",
+        "security/ir.model.access.csv",
         "data/ir_actions_server_data.xml",
         "data/iap_online_service_data.xml",
         "views/res_partner_views.xml",

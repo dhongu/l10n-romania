@@ -32,5 +32,6 @@
         parent="menu_anaf_online_root"
         action="action_anaf_requests"
         sequence="20"
+        groups="base.group_system"
     />
 </odoo>

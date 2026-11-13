@@ -13,6 +13,9 @@ Terrabit service, which asks ANAF and sends the data back to your database.
   the service token is written in your database automatically, with free trial lookups.
   **Buy Credits** and **Refresh Credits** are on the same screen (module *IAP Services for Odoo
   Online*, `deltatech_iap_online`, installed with this one).
+- **Who sees what**: the users who edit partners (*Contact Creation*) can read the service
+  account, because the ANAF button asks the service from their browser; the requests and their
+  answers are for administrators.
 - **What leaves your database**: only the CUI you look up, the request token and the address of
   your database (for the answer). The requests and their answers stay visible under *ANAF Requests*.
 
