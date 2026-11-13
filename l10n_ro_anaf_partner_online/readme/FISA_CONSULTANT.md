@@ -21,15 +21,15 @@ mai mulți parteneri deodată din meniul **Acțiuni**. Pe partener rămân și s
 
 ## 2. Bază legală și context
 
-- **Sursa datelor:** serviciul public de verificare a contribuabililor înregistrați în scopuri de
-  TVA al ANAF (registrul plătitorilor de TVA), care dă denumirea, adresa, starea de plătitor de
+- **Sursa datelor:** serviciul public al ANAF de verificare în *Registrul persoanelor impozabile
+  înregistrate în scopuri de TVA*, care dă denumirea, adresa, starea de plătitor de
   TVA, starea de inactiv sau radiat și numărul de la registrul comerțului. Căutarea o face serviciul
   Terrabit, nu baza clientului.
 - **Contextul operațional:** datele firmei se iau o dată, la crearea partenerului, și se pot
   reverifica oricând. Modulul nu decide nimic pe baza stării fiscale (nu blochează facturarea unui
   partener inactiv); doar o arată pe partener, ca operatorul și contabilul să decidă.
-- **Ce iese din baza clientului:** CUI-ul căutat, tokenul contului și al cererii, identificatorul
-  (UUID) și adresa bazei (pentru răspuns). La activare, serviciul primește în plus denumirea și
+- **Ce iese din baza clientului:** CUI-ul căutat, tokenul contului și al cererii, id-ul cererii,
+  identificatorul (UUID) și adresa bazei (pentru răspuns). La activare, serviciul primește în plus denumirea și
   CIF-ul companiei.
 
 ## 3. Utilizatori și roluri
@@ -106,14 +106,16 @@ doar butonul **Activează** (administratori). După activare apar ① **Activeaz
 - **Găsiți pe ecran:** **Cod serviciu** `anaf_partner_online`, **URL server** (adresa serviciului
   Terrabit, implicit `https://terrabit.odoo.com`; în captură, serverul local de test) și **Credite
   rămase**.
-- **Verificați:** **Credite rămase** este mai mare decât zero: atunci serviciul e activ.
-  **Activează din nou** arată doar că activarea a fost trimisă, nu și că a reușit.
+- **Verificați:** serviciul e activ când cererea de activare din **Cereri ANAF** are starea
+  **Done** („Service activated”). **Activează din nou** apare de cum s-a trimis activarea, chiar
+  dacă serverul nu a răspuns încă; **Credite rămase** mai mare decât zero arată doar că se mai pot
+  face interogări.
   **Actualizează creditele** reîmprospătează valoarea în câteva secunde; ea se actualizează și la
   fiecare răspuns din coadă (**Actualizează din ANAF**), dar nu la butonul **ANAF**, care arată
   interogările rămase doar în notificare.
 - **Cumpără credite** deschide pagina de credite a contului pe serverul Terrabit.
 
-![Formularul Serviciul ANAF: ANAF Partner Data, cu Cod serviciu anaf_partner_online, URL server și Credite rămase 23,00 evidențiat (2); în antet sunt evidențiate butoanele Activează din nou, Actualizează creditele și Cumpără credite (1)](../static/description/02_serviciu_anaf.png)
+![Formularul Serviciul ANAF: ANAF Partner Data, cu Cod serviciu anaf_partner_online, URL server și Credite rămase 17,00 evidențiat (2); în antet sunt evidențiate butoanele Activează din nou, Actualizează creditele și Cumpără credite (1)](../static/description/02_serviciu_anaf.png)
 
 ### Pasul 3 — Partener nou: CIF-ul și butonul ANAF
 
@@ -138,7 +140,7 @@ Dacă browserul nu poate ajunge la serviciul Terrabit (rețea, politica browseru
 salvează partenerul și trimite cererea în coadă; partenerul se actualizează în câteva secunde, ca
 la pasul 7.
 
-![Formularul completat din ANAF înainte de salvare: nume DANTE INTERNATIONAL SA (1), CIF RO14399840 (2), adresa Șos. Virtuții Nr. 148, spatiul E47, Sector 6, București, 060787, România (3) și notificarea cu interogările rămase (4), în engleză: Filled in from ANAF. Lookups left: 22; sus, banda Posibile duplicate](../static/description/04_partener_completat.png)
+![Formularul completat din ANAF înainte de salvare: nume DANTE INTERNATIONAL SA (1), CIF RO14399840 (2), adresa Șos. Virtuții Nr. 148, spatiul E47, Sector 6, București, 060787, România (3) și notificarea cu interogările rămase (4), în engleză: Filled in from ANAF. Lookups left: 16; sus, banda Posibile duplicate](../static/description/04_partener_completat.png)
 
 ### Pasul 5 — Tabul ANAF al partenerului
 
@@ -150,7 +152,7 @@ dată.
 - **Verificați:** bifa de plătitor de TVA corespunde prefixului `RO` din CIF; dacă **Inactiv fiscal**
   sau **Radiat** este bifat, anunțați contabilul înainte de a factura partenerul.
 
-![Tabul ANAF al partenerului DANTE INTERNATIONAL SA: Plătitor de TVA bifat (1), Inactiv fiscal și Radiat nebifate, Nr. Registrul Comerțului J2002000372404 (2) și Ultima verificare ANAF 13 nov., 09:45 (3)](../static/description/05_tab_anaf.png)
+![Tabul ANAF al partenerului DANTE INTERNATIONAL SA: Plătitor de TVA bifat (1), Inactiv fiscal și Radiat nebifate, Nr. Registrul Comerțului J2002000372404 (2) și Ultima verificare ANAF 13 nov., 09:55 (3)](../static/description/05_tab_anaf.png)
 
 ### Pasul 6 — Mai mulți parteneri: Actualizează din ANAF
 
@@ -192,7 +194,7 @@ partenerilor (*request*), activarea (*register*) și citirea creditelor (*balanc
   **Eroare** (în exemplu, `Invalid CUI` pentru `1234567`). O cerere rămasă fără răspuns e trimisă din
   nou o singură dată, după 10 minute.
 
-![Lista Cereri ANAF: cererea pentru 1590082 cu starea Done; pe rândul pentru 1234567, celulele Stare (Error) și Eroare (Invalid CUI), evidențiate; mai jos, cereri de tip balance pentru credite](../static/description/09_cereri_anaf.png)
+![Lista Cereri ANAF cu cele două cereri ale actualizării din pasul 6, de tip request: 1590082 cu starea Done și, pe rândul roșu pentru 1234567, celulele Stare Error (1) și Eroare Invalid CUI (2), evidențiate](../static/description/09_cereri_anaf.png)
 
 ### Note de monografie și raportare
 
@@ -217,7 +219,8 @@ creditelor.
 
 ## 8. Verificări pentru consultant
 
-- [ ] **Serviciul ANAF** arată **Credite rămase** mai mari decât zero.
+- [ ] În **Cereri ANAF**, cererea de activare are starea **Done** (serviciul e activ), iar
+      **Credite rămase** pe **Serviciul ANAF** e mai mare decât zero (se mai pot face interogări).
 - [ ] Un utilizator cu *Creare contacte*, fără drept de administrator, vede **Serviciul ANAF**, dar nu
       vede **Cereri ANAF** și nici butoanele **Activează** și **Cumpără credite**.
 - [ ] Pe un partener nou, CUI `14399840` + **ANAF** completează numele, CIF-ul cu `RO` și adresa
@@ -241,7 +244,10 @@ creditelor.
 
 Notificările butonului **ANAF** au traducere în română în modul; la modulele importate ca zip,
 Odoo 19 nu le încarcă traducerile în interfață, deci pot apărea în engleză. Mesajele acțiunii
-**Actualizează din ANAF** și erorile din **Cereri ANAF** sunt doar în engleză.
+**Actualizează din ANAF** și erorile din **Cereri ANAF** sunt doar în engleză. Tot în engleză sunt,
+în lista **Cereri ANAF**, coloana *Created on*, stările *Done* / *Error* și tipurile *request* /
+*balance*. Pe cererile din coadă, erorile serviciului (fără credite, bază neînregistrată) apar în
+coloana **Eroare** ca coduri brute: `insufficient_credit`, `origin_refused`.
 
 | Mesaj | Cauză | Remediere |
 |---|---|---|
@@ -250,10 +256,13 @@ Odoo 19 nu le încarcă traducerile în interfață, deci pot apărea în englez
 | *Invalid CUI: check the control digit.* (buton) / `Invalid CUI` (Cereri ANAF) | cifra de control greșită, litere în CUI | verificați CUI-ul pe documentele firmei |
 | *CUI not found at ANAF.* / `CUI not found at ANAF` | CUI corect ca formă, dar ANAF nu are firma | verificați CUI-ul; completați manual o firmă nou înființată |
 | *ANAF did not answer, please try again later.* | ANAF indisponibil | reîncercați mai târziu; nu consumă credit |
-| *No ANAF lookups left on the Terrabit account.* | creditele s-au terminat | **Cumpără credite** în **Serviciul ANAF** |
-| *This database is not the one registered for the service.* | baza nu e cea activată (ex. o copie a bazei, cu altă adresă) | pe baza pe care lucrați, un administrator apasă **Activează din nou**: o copie primește astfel un cont propriu |
+| *No ANAF lookups left on the Terrabit account.* (buton) / `insufficient_credit` (Cereri ANAF) | creditele s-au terminat | **Cumpără credite** în **Serviciul ANAF** |
+| *This database is not the one registered for the service.* (buton) / `origin_refused` (Cereri ANAF) | baza nu e cea activată (ex. o copie a bazei, cu altă adresă) | pe baza pe care lucrați, un administrator apasă **Activează din nou**: o copie primește astfel un cont propriu |
+| *The service refused the request.* | serviciul Terrabit a refuzat cererea fără un motiv cunoscut de modul | verificați **Serviciul ANAF** (token, credite) și reîncercați; dacă se repetă, contactați Terrabit |
+| *No answer from ANAF.* | serviciul a răspuns cu o stare neașteptată pentru CUI | reîncercați mai târziu |
+| `The service is not active yet: Settings > Technical > Terrabit Services` (Cereri ANAF) | cererea a fost creată înainte de activarea serviciului | un administrator activează serviciul, apoi se trimite din nou **Actualizează din ANAF** |
 | *The service did not answer at once: the request is queued…* | browserul nu a ajuns la serviciu | nu e o eroare: partenerul se actualizează în câteva secunde |
-| `Not allowed to update this partner` (Cereri ANAF) | autorul cererii nu are drept să modifice partenerul | cererea o trimite un utilizator cu *Creare contacte* |
+| `Not allowed to update this partner` (Cereri ANAF) | autorul cererii nu are acces de scriere pe acel partener (ex. partenerul e al altei companii) | cererea o trimite un utilizator care poate modifica partenerul (cu *Creare contacte* și acces la compania lui) |
 | `The CUI of the partner has changed` (Cereri ANAF) | CIF-ul s-a schimbat după trimiterea cererii | trimiteți din nou **Actualizează din ANAF** |
 
 ## 10. Capturi de ecran
@@ -262,6 +271,9 @@ Modulul nu are cod Python, deci capturile nu vin dintr-un `tests/test_screenshot
 generate cu un script Playwright extern (în afara modulului), pe o bază locală de test cu
 `deltatech_iap_online` și acest modul importate, cu interfața în română și serviciul Terrabit de
 test. Căutările sunt reale, la ANAF, pe CUI-uri publice; partenerii de test au numele cu `TEST`.
+Baza de test are și alți parteneri cu aceleași CUI-uri, de aceea banda **Posibile duplicate** a
+fost ascunsă pe capturile 05 și 08; pe 04 a rămas, ca exemplu. Lista din captura 09 arată doar
+cererile rulării respective.
 Aceleași ecrane, cu interfața în engleză, sunt în `static/description/en/` pentru `readme/USAGE.md`.
 
 | # | Fișier | Conținut |

@@ -17,8 +17,9 @@ Terrabit service, which asks ANAF and sends the data back to your database.
   account, because the ANAF button asks the service from their browser; the button and *Update
   from ANAF* are for them. Only administrators activate the service, buy credits and read the
   requests and their answers (access rights of `deltatech_iap_online`).
-- **What leaves your database**: the CUI you look up, the account and request tokens, the UUID
-  and the address of your database (for the answer); at activation, also the name and the Tax ID
-  of the company. The requests, their status and errors stay visible under *ANAF Requests*.
+- **What leaves your database**: the CUI you look up, the account and request tokens, the id of
+  the request, the UUID and the address of your database (for the answer); at activation, also
+  the name and the Tax ID of the company. The requests, their status and errors stay visible
+  under *ANAF Requests*.
 
 The service is provided by Terrabit: after the trial lookups, more can be bought from Terrabit.
