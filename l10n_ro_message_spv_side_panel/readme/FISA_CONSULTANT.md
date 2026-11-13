@@ -85,9 +85,15 @@ Un clic pe card deschide panoul. Cardul selectat se evidențiază. În panou cit
 
 - butoanele **Creează factura**, **XML**, **PDF** și **ZIP** (și **Acceptă** / **Respinge** când
   verificarea facturilor primite e activă);
-- titlul cu **furnizorul** și câmpurile: referința, **CUI (XML)** (codul furnizorului citit din XML),
-  partenerul (gol dacă furnizorul nu există încă în Odoo), datele, valorile și starea;
-- fila **Document**: factura așa cum e scrisă în XML (furnizor, client, linii, totaluri).
+- titlul cu **furnizorul** și câmpurile: referința, **CUI (XML)**, partenerul (gol dacă furnizorul nu
+  există încă în Odoo), datele, valorile și starea. **CUI (XML)** este codul fiscal al **celeilalte
+  părți** din XML: al furnizorului pentru facturile primite, al clientului pentru celelalte tipuri de
+  mesaje. Câmpul **Total** se colorează în **roșu** când diferă de suma facturii de furnizor deja
+  create din mesaj: verificați diferența înainte de a continua;
+- un grup **Eroare / Mesaj**, care apare doar când mesajul are o eroare sau un text de la ANAF (de
+  exemplu „Arhiva descărcată nu a putut fi citită"): citiți-l înainte de orice altă acțiune;
+- fila **Document**: factura așa cum e scrisă în XML (furnizor, client, linii, totaluri); documentul se
+  intitulează **FACTURĂ**, sau **NOTĂ DE CREDIT** când XML-ul este o notă de credit.
 
 Săgețile din antetul panoului trec la mesajul anterior sau următor; butonul cu săgeată în afară
 deschide formularul complet; **Reîncarcă** citește din nou mesajul după o acțiune; **X** închide
@@ -96,7 +102,8 @@ panoul.
 **Verificați pe ecran înainte de a crea factura:**
 
 1. Numele furnizorului și **CUI (XML)** corespund facturii așteptate.
-2. Valoarea fără TVA, TVA-ul și totalul din panou coincid cu totalurile din fila **Document**.
+2. Valoarea fără TVA, TVA-ul și totalul din panou coincid cu totalurile din fila **Document** (iar
+   **Total** nu este colorat în roșu).
 3. Data facturii și scadența sunt cele scrise pe factura furnizorului.
 
 Derulați fila **Document** până la tabelul de totaluri: **Total fără TVA**, **TVA** și **Total** trebuie
@@ -177,6 +184,7 @@ panou urmează regulile modulului *Mesaje SPV*.
 | La **Creează factura**: „Only accepted invoices can be processed…” | verificarea facturilor primite e activă, iar factura nu e acceptată | apăsați întâi **Acceptă** |
 | Fila **Document** este goală, **CUI (XML)** lipsește | mesajul nu are arhiva descărcată sau arhiva nu conține XML | apăsați **Descarcă** din meniul original și reîncărcați panoul |
 | **Partener** este gol | furnizorul nu există în Odoo | este normal; partenerul se creează din XML la *Creează factura* |
+| În panou apare grupul **Eroare** cu un text | descărcarea sau citirea arhivei SPV a eșuat pentru acest mesaj | corectați cauza (token, arhivă), apoi **Descarcă** din meniul original și **Reîncarcă** în panou |
 | Datele din panou nu se schimbă după o acțiune | panoul nu se reîncarcă singur | apăsați **Reîncarcă** în antetul panoului |
 
 ## 10. Capturi de ecran
