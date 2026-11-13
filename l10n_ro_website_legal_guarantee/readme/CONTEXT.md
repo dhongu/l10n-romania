@@ -1,11 +1,11 @@
-Notificarea armonizată este o obligație a vânzătorului, la nivel de magazin, nu de produs.
-Ghidul Comisiei recomandă, pentru magazinele online, afișarea ca memento general pe site,
-cu notificarea întreagă și lizibilă, plus un link către portalul „Europa ta”. Eticheta
-GARAN (garanția comercială de durabilitate oferită de producător) este o obligație
-separată, per produs, și nu este acoperită de acest modul.
+The harmonised notice is a seller obligation at store level, not per product. For online
+shops, the Commission's guide recommends displaying it as a general reminder on the
+website, with the full and legible notice, plus a link to the "Your Europe" portal. The
+GARAN label (the commercial durability guarantee offered by the producer) is a separate,
+per-product obligation and is not covered by this module.
 
-Ghidul recomandă și includerea notificării în e-mailul de confirmare a comenzii; șabloanele
-de e-mail sunt `noupdate` și se adaptează per client.
+The guide also recommends including the notice in the order confirmation e-mail; the
+e-mail templates are `noupdate` and are adapted per customer.
 
-Fișierele oficiale (PDF, PNG, JPG, SVG, în toate limbile UE):
+Official files (PDF, PNG, JPG, SVG, in all EU languages):
 https://commission.europa.eu/publications/high-resolution-vector-files-eu-notice-and-label-product-guarantees_en

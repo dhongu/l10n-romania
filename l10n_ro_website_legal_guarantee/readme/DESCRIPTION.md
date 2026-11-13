@@ -1,22 +1,22 @@
-Afișează pe site notificarea armonizată a Uniunii Europene privind garanția legală de
-conformitate, obligatorie pentru vânzătorii de bunuri de la 27 septembrie 2026:
+Displays on the website the European Union's harmonised notice on the legal guarantee of
+conformity, mandatory for sellers of goods from 27 September 2026:
 
-- Regulamentul de punere în aplicare (UE) 2025/1960, anexa I (designul și conținutul
-  notificării);
-- Directiva (UE) 2024/825, care introduce art. 22a în Directiva 2011/83/UE;
-- OUG nr. 34/2014, art. 4 alin. (1) lit. e), art. 6 alin. (1) lit. l) și art. 22^1,
-  introduse prin OUG nr. 18/2026 (Monitorul Oficial nr. 236 din 26 martie 2026).
+- Implementing Regulation (EU) 2025/1960, Annex I (design and content of the notice);
+- Directive (EU) 2024/825, which introduces Art. 22a into Directive 2011/83/EU;
+- Romanian Government Emergency Ordinance (OUG) no. 34/2014, Art. 4(1)(e), Art. 6(1)(l)
+  and Art. 22^1, introduced by OUG no. 18/2026 (Official Gazette no. 236 of 26 March 2026).
 
-Modulul adaugă:
+The module adds:
 
-- pagina publică `/garantie`, cu notificarea oficială întreagă, linkul către portalul
-  „Europa ta” (aceeași destinație ca și codul QR), notificarea în PDF, drepturile
-  consumatorului pe scurt (OUG nr. 140/2021), cum se semnalează o problemă și datele
-  vânzătorului;
-- linkul „Garanția legală” în footer, pe rândul de copyright;
-- pe pagina de produs și la pasul de plată, linkul „Drepturile tale privind garanția
-  legală”, care deschide notificarea la primul clic, așa cum recomandă ghidul practic al
-  Comisiei (DG JUST, aprilie 2026).
+- the public page `/garantie`, with the full official notice, the link to the "Your
+  Europe" portal (the same destination as the QR code), the notice as a PDF, a short
+  summary of consumer rights (OUG no. 140/2021), how to report a problem and the seller's
+  details;
+- the "Legal guarantee" link in the footer, on the copyright row;
+- on the product page and at the payment step, the "Your legal guarantee rights" link,
+  which opens the notice on first click, as recommended by the Commission's practical
+  guide (DG JUST, April 2026).
 
-Notificarea este fișierul oficial publicat de Comisia Europeană, color (RGB), nemodificat:
-în română pentru site-urile în limba română și în engleză pentru celelalte limbi.
+The notice is the official file published by the European Commission, in colour (RGB),
+unmodified: in Romanian for Romanian-language websites and in English for the other
+languages.

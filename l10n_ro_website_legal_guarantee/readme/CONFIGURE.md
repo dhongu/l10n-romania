@@ -1,8 +1,7 @@
-În *Website → Configurare → Setări*, secțiunea *Notificarea UE privind garanția legală*,
-se aleg, pentru fiecare website, locurile în care apare linkul spre notificare: footer,
-pagina de produs, pasul de plată. Toate sunt bifate implicit.
+In *Website → Configuration → Settings*, section *EU legal guarantee notice*, choose for
+each website the places where the link to the notice appears: footer, product page,
+payment step. All are checked by default.
 
-Pagina `/garantie` folosește telefonul, e-mailul, codul fiscal
-și adresa companiei website-ului. Conținut suplimentar (de exemplu termenele proprii de
-service) se adaugă din editorul de site, în zonele de deasupra și de sub conținutul
-paginii.
+The `/garantie` page uses the phone, e-mail, tax ID and address of the website's company.
+Additional content (for example your own service terms) can be added from the website
+editor, in the areas above and below the page content.
