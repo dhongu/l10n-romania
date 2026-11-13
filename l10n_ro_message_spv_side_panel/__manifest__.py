@@ -4,7 +4,7 @@
 
 {
     "name": "SPV Messages Side Panel",
-    "version": "19.0.1.1.0",
+    "version": "19.0.1.2.0",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Split view for the SPV messages: the invoice details in a side panel",

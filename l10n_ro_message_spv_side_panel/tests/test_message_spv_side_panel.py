@@ -5,6 +5,8 @@
 import io
 import zipfile
 
+from lxml import etree
+
 from odoo.tests import TransactionCase, tagged
 
 from odoo.addons.l10n_ro_message_spv_side_panel import uninstall_hook
@@ -190,8 +192,17 @@ class TestMessageSpvSidePanel(TransactionCase):
         for xmlid in ("menu_l10n_ro_spv", "menu_l10n_ro_message_spv"):
             self.assertEqual(self.env.ref(f"l10n_ro_message_spv.{xmlid}").action, original)
 
-    def test_full_form_shows_the_document_and_the_lines(self):
+    def test_full_form_shows_the_document_without_tabs(self):
         arch = self.env["l10n.ro.message.spv"].get_view(view_type="form")["arch"]
         self.assertIn("spv_document_html", arch)
-        self.assertIn("spv_lines_html", arch)
+        self.assertNotIn("<notebook", arch.split("spv_document_html")[1])
         self.assertIn("spv_party_vat", arch)
+
+    def test_full_form_groups_the_fields(self):
+        arch = self.env["l10n.ro.message.spv"].get_view(view_type="form")["arch"]
+        root = etree.fromstring(arch)
+        groups = {g.get("name"): {f.get("name") for f in g.iter("field")} for g in root.iter("group") if g.get("name")}
+        self.assertLessEqual({"partner_name", "spv_party_vat", "partner_id"}, groups["spv_supplier"])
+        self.assertLessEqual({"ref", "invoice_date", "invoice_date_due", "invoice_id"}, groups["spv_invoice"])
+        self.assertLessEqual({"amount_untaxed", "amount_tax", "amount", "state"}, groups["spv_amounts"])
+        self.assertLessEqual({"name", "message_type", "request_id", "cif"}, groups["spv_message"])
