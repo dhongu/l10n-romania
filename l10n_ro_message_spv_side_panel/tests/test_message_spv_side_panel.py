@@ -7,6 +7,8 @@ import zipfile
 
 from odoo.tests import TransactionCase, tagged
 
+from odoo.addons.l10n_ro_message_spv_side_panel import uninstall_hook
+
 INVOICE_XML = b"""<?xml version="1.0" encoding="UTF-8"?>
 <Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
          xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
@@ -49,6 +51,7 @@ INVOICE_XML = b"""<?xml version="1.0" encoding="UTF-8"?>
     <cbc:LineExtensionAmount currencyID="RON">1690.00</cbc:LineExtensionAmount>
     <cac:Item>
       <cbc:Name>Pompa circulatie 25/60</cbc:Name>
+      <cac:SellersItemIdentification><cbc:ID>PCR-2560</cbc:ID></cac:SellersItemIdentification>
       <cac:ClassifiedTaxCategory><cbc:Percent>21</cbc:Percent></cac:ClassifiedTaxCategory>
     </cac:Item>
     <cac:Price><cbc:PriceAmount currencyID="RON">845.00</cbc:PriceAmount></cac:Price>
@@ -59,6 +62,7 @@ INVOICE_XML = b"""<?xml version="1.0" encoding="UTF-8"?>
     <cbc:LineExtensionAmount currencyID="RON">210.00</cbc:LineExtensionAmount>
     <cac:Item>
       <cbc:Name>Vas expansiune 24 L</cbc:Name>
+      <cac:StandardItemIdentification><cbc:ID schemeID="0160">5941234567890</cbc:ID></cac:StandardItemIdentification>
       <cac:ClassifiedTaxCategory><cbc:Percent>21</cbc:Percent></cac:ClassifiedTaxCategory>
     </cac:Item>
     <cac:Price><cbc:PriceAmount currencyID="RON">210.00</cbc:PriceAmount></cac:Price>
@@ -94,6 +98,10 @@ class TestMessageSpvSidePanel(TransactionCase):
         self.assertEqual(len(data["lines"]), 2)
         self.assertEqual(data["lines"][0]["name"], "Pompa circulatie 25/60")
         self.assertEqual(data["lines"][0]["tax_percent"], "21")
+        self.assertEqual(data["lines"][0]["code"], "PCR-2560", "the code of the seller")
+        self.assertEqual(
+            data["lines"][1]["code"], "5941234567890", "the standard identifier, when there is no code of the seller"
+        )
         self.assertIn("Pompa circulatie 25/60", str(message.spv_lines_html))
         self.assertIn("Termo Instal Distributie SRL", str(message.spv_document_html))
         self.assertIn("2,299.00", data["total"])
@@ -170,3 +178,20 @@ class TestMessageSpvSidePanel(TransactionCase):
         self.assertEqual(data["lines"][0]["price"], "inf")
         self.assertEqual(message.spv_party_vat, "RO14567890")
         self.assertTrue(message.spv_document_html)
+
+    def test_menus_open_the_split_view(self):
+        action = self.env.ref("l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split")
+        for xmlid in ("menu_l10n_ro_spv", "menu_l10n_ro_message_spv"):
+            self.assertEqual(self.env.ref(f"l10n_ro_message_spv.{xmlid}").action, action)
+
+    def test_uninstall_hook_puts_the_menus_back(self):
+        original = self.env.ref("l10n_ro_message_spv.action_l10n_ro_message_spv")
+        uninstall_hook(self.env)
+        for xmlid in ("menu_l10n_ro_spv", "menu_l10n_ro_message_spv"):
+            self.assertEqual(self.env.ref(f"l10n_ro_message_spv.{xmlid}").action, original)
+
+    def test_full_form_shows_the_document_and_the_lines(self):
+        arch = self.env["l10n.ro.message.spv"].get_view(view_type="form")["arch"]
+        self.assertIn("spv_document_html", arch)
+        self.assertIn("spv_lines_html", arch)
+        self.assertIn("spv_party_vat", arch)

@@ -9,16 +9,30 @@
                 <templates>
                     <t t-name="card">
                         <div class="d-flex justify-content-between gap-2">
-                            <field name="partner_name" class="fw-bold text-truncate" />
-                            <span class="fw-bold text-nowrap">
+                            <span class="fw-bold text-truncate">
+                                <t t-if="record.partner_name.raw_value">
+                                    <field name="partner_name" />
+                                </t>
+                                <t t-else="">
+                                    <field name="name" />
+                                </t>
+                            </span>
+                            <span t-if="record.amount.raw_value" class="fw-bold text-nowrap">
                                 <field name="amount" widget="monetary" />
                             </span>
                         </div>
                         <div class="d-flex justify-content-between gap-2 text-muted">
                             <span class="text-truncate">
-                                <field name="ref" />
-                                ·
-                                <field name="invoice_date" />
+                                <t t-if="record.ref.raw_value">
+                                    <field name="ref" />
+                                    ·
+                                    <field name="invoice_date" />
+                                </t>
+                                <t t-else="">
+                                    <field name="message_type" />
+                                    ·
+                                    <field name="date" />
+                                </t>
                             </span>
                             <field
                                 name="state"
@@ -29,11 +43,14 @@
                                 decoration-danger="state == 'error'"
                             />
                         </div>
+                        <div t-if="record.state.raw_value == 'draft'" class="text-muted small">
+                            The archive has not been downloaded yet
+                        </div>
                         <div class="d-flex justify-content-between gap-2">
                             <field
                                 name="invoice_date_due"
                                 widget="remaining_days"
-                                invisible="state == 'error'"
+                                invisible="state in ('error', 'draft')"
                             />
                             <field
                                 name="review_state"
@@ -212,11 +229,40 @@
         <field name="act_window_id" ref="action_l10n_ro_message_spv_split" />
     </record>
 
-    <menuitem
-        id="menu_l10n_ro_message_spv_split"
-        name="Messages SPV (split view)"
-        parent="l10n_ro_message_spv.menu_l10n_ro_spv"
-        action="action_l10n_ro_message_spv_split"
-        groups="l10n_ro_config.group_ro_menus"
-    />
+    <!-- One entry in the menu: the original ones open the split view (the uninstall hook puts them
+         back to the original action). -->
+    <record id="l10n_ro_message_spv.menu_l10n_ro_spv" model="ir.ui.menu">
+        <field
+            name="action"
+            eval="'ir.actions.act_window,%d' % ref('l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split')"
+        />
+    </record>
+    <record id="l10n_ro_message_spv.menu_l10n_ro_message_spv" model="ir.ui.menu">
+        <field
+            name="action"
+            eval="'ir.actions.act_window,%d' % ref('l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split')"
+        />
+    </record>
+
+    <!-- The full form shows the VAT ID, the document and the lines too. -->
+    <record id="view_l10n_ro_message_spv_form_side_panel" model="ir.ui.view">
+        <field name="name">l10n.ro.message.spv.form.side.panel</field>
+        <field name="model">l10n.ro.message.spv</field>
+        <field name="inherit_id" ref="l10n_ro_message_spv.view_l10n_ro_message_spv_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_name']" position="after">
+                <field name="spv_party_vat" />
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Document" name="document">
+                        <field name="spv_document_html" nolabel="1" />
+                    </page>
+                    <page string="XML Lines" name="xml_lines">
+                        <field name="spv_lines_html" nolabel="1" />
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
 </odoo>
