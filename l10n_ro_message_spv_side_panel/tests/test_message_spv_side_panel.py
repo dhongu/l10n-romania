@@ -159,3 +159,14 @@ class TestMessageSpvSidePanel(TransactionCase):
                 self.assertFalse(message.spv_party_vat)
                 self.assertFalse(message.spv_document_html)
                 message.unlink()
+
+    def test_non_finite_numbers_do_not_block_the_message(self):
+        """`inf` or `nan` in the XML are shown as written, the message still opens."""
+        xml = INVOICE_XML.replace(b">845.00<", b">inf<").replace(
+            b">2299.00</cbc:TaxInclusiveAmount", b">nan</cbc:TaxInclusiveAmount"
+        )
+        message = self._message(xml)
+        data = message._spv_read_invoice()
+        self.assertEqual(data["lines"][0]["price"], "inf")
+        self.assertEqual(message.spv_party_vat, "RO14567890")
+        self.assertTrue(message.spv_document_html)

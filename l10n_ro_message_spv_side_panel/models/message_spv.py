@@ -3,6 +3,7 @@
 # See README.rst file on addons root folder for license details
 
 import io
+import math
 import zipfile
 
 from lxml import etree
@@ -23,11 +24,13 @@ def _text(node, path):
 
 
 def _to_float(value):
-    """The number written in the XML, or None when it is not one."""
+    """The number written in the XML, or None when it is not a finite one."""
     try:
-        return float(value)
+        number = float(value)
     except (TypeError, ValueError):
         return None
+    # float() also accepts "nan", "inf" and "-Infinity": they cannot be formatted
+    return number if math.isfinite(number) else None
 
 
 class L10nRoMessageSpv(models.Model):
