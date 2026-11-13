@@ -37,5 +37,5 @@
 
    ![The full form with the XML lines](static/description/en/07_formular_complet.png)
 
-On screens narrower than 1200 px (the extra-large breakpoint) the panel is off and a click opens the form, as
-in the original menu.
+On screens narrower than 1200 px (the extra-large breakpoint) the panel is off and a click opens the form of
+the message.

@@ -22,7 +22,7 @@ XML-ul, PDF-ul sau arhiva ZIP.
 Modulul este o **punte instalată la cerere** între *Mesaje SPV* (`l10n_ro_message_spv`) și panoul
 lateral generic (`deltatech_web_side_panel`). Meniul *Mesaje SPV* deschide vederea
 împărțită; la dezinstalarea modulului revine la vederea originală. Lista și formularul rămân, cu
-înca două file în formular.
+încă două file în formular.
 
 ## 2. Bază legală și context
 
@@ -65,7 +65,7 @@ Pentru demo sunt necesare câteva mesaje SPV descărcate (stare *Descărcat*), c
 3. Opțional: activați **Verificare facturi primite** în **Facturare → Configurare → Setări**, secțiunea
    **E-Factura România**, dacă vreți ca facturile să treacă prin acceptare sau respingere înainte de a crea factura de furnizor.
 4. Panoul funcționează pe ecrane de cel puțin 1200 px lățime (pragul „extra-large" al Odoo). Pe ecrane
-   mai înguste, clicul pe un mesaj deschide formularul, ca în meniul original.
+   mai înguste, clicul pe un mesaj deschide formularul mesajului.
 
 ## 6. Flux de utilizare
 
@@ -121,7 +121,8 @@ să fie aceleași cu valorile din câmpurile panoului.
 
 Fila **Poziții XML** arată doar liniile din XML: denumirea, unitatea de măsură, cantitatea, prețul
 unitar, cota de TVA și valoarea fiecărei linii. **Cod** este codul articolului din XML: codul
-furnizorului, sau identificatorul standard (de exemplu GTIN) când furnizorul nu a dat unul. **UM** este codul din XML (UN/ECE), de exemplu H87
+furnizorului, sau identificatorul standard (de exemplu GTIN) când furnizorul nu a dat unul, sau, ca
+ultimă variantă, codul dat articolului de cumpărător. **UM** este codul din XML (UN/ECE), de exemplu H87
 = bucată, KGM = kilogram. Folosiți-o ca să comparați produsele facturate cu
 comanda sau cu recepția, înainte de a crea factura de furnizor.
 
@@ -129,8 +130,8 @@ comanda sau cu recepția, înainte de a crea factura de furnizor.
 
 ### Pasul 4 — Alegeți acțiunea din panou
 
-- **Creează factura** — creează factura de furnizor (în ciornă, fără postare) din mesaj, ca în meniul
-  original. Apare doar pe facturile primite și dispare după ce factura a fost creată. Dacă
+- **Creează factura** — creează factura de furnizor (în ciornă, fără postare) din mesaj, ca în formularul
+  mesajului. Apare doar pe facturile primite și dispare după ce factura a fost creată. Dacă
   furnizorul nu există în Odoo, partenerul se creează din datele XML la acest pas. Când
   *Verificare facturi primite* e activă, factura se creează doar din cele acceptate.
 - **Acceptă** / **Respinge** — apar doar pe facturile primite, când *Verificare facturi primite* e
@@ -202,9 +203,9 @@ panou urmează regulile modulului *Mesaje SPV*.
 |---|---|---|
 | Panoul nu se deschide la clic, se deschide formularul | ecranul are sub 1200 px lățime (pragul „extra-large") | folosiți un ecran mai larg sau fereastra maximizată |
 | La **Creează factura**: „Only accepted invoices can be processed…” | verificarea facturilor primite e activă, iar factura nu e acceptată | apăsați întâi **Acceptă** |
-| Fila **Document** este goală, **CUI (XML)** lipsește | mesajul nu are arhiva descărcată sau arhiva nu conține XML | apăsați **Descarcă** din meniul original și reîncărcați panoul |
+| Fila **Document** este goală, **CUI (XML)** lipsește | mesajul nu are arhiva descărcată sau arhiva nu conține XML | apăsați **Descarcă** din formularul complet al mesajului sau din listă, apoi **Reîncarcă** în panou |
 | **Partener** este gol | furnizorul nu există în Odoo | este normal; partenerul se creează din XML la *Creează factura* |
-| În panou apare grupul **Eroare** cu un text | descărcarea sau citirea arhivei SPV a eșuat pentru acest mesaj | corectați cauza (token, arhivă), apoi **Descarcă** din meniul original și **Reîncarcă** în panou |
+| În panou apare grupul **Eroare** cu un text | descărcarea sau citirea arhivei SPV a eșuat pentru acest mesaj | corectați cauza (token, arhivă), apoi **Descarcă** din formularul complet al mesajului sau din listă și **Reîncarcă** în panou |
 | Datele din panou nu se schimbă după o acțiune | panoul nu se reîncarcă singur | apăsați **Reîncarcă** în antetul panoului |
 
 ## 10. Capturi de ecran
