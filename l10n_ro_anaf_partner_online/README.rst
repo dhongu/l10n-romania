@@ -17,7 +17,7 @@ Romania - ANAF Partner Data for Odoo Online
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_anaf_partner_online
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_anaf_partner_online
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -154,18 +154,28 @@ Usage
    |The ANAF Requests list: a request Done and a red request in Error
    with Invalid CUI|
 
-.. |The Configuration menu of Contacts, open, with ANAF Service and ANAF Requests highlighted in the ANAF group| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/01_meniu_anaf.png
-.. |The ANAF Service form, active: Activate Again, Refresh Credits and Buy Credits in the header, Service Code anaf_partner_online and Credits Left highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/02_serviciu_anaf.png
-.. |A new company contact with 14399840 in VAT and the ANAF button highlighted next to it| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/03_buton_anaf.png
-.. |The form filled in from ANAF before saving: DANTE INTERNATIONAL SA, VAT RO14399840, the address in Sector 6, Bucharest, and the notification Filled in from ANAF with the lookups left| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/04_partener_completat.png
-.. |The ANAF tab of the partner: VAT Payer ticked, Fiscally Inactive and Struck Off not ticked, the trade register number and the date of the last check| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/05_tab_anaf.png
-.. |The list of contacts with three partners selected and Update from ANAF highlighted in the Actions menu| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/06_actiune_actualizare.png
-.. |The notification ANAF (Terrabit): 2 request(s) sent, over the list with three partners selected| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/07_cereri_trimise.png
-.. |The partner OMV PETROM SA updated from ANAF, with the tracked changes of name, VAT and address and the note in the chatter| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/08_nota_chatter.png
-.. |The ANAF Requests list: a request Done and a red request in Error with Invalid CUI| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/09_cereri_anaf.png
+.. |The Configuration menu of Contacts, open, with ANAF Service and ANAF Requests highlighted in the ANAF group| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/01_meniu_anaf.png
+.. |The ANAF Service form, active: Activate Again, Refresh Credits and Buy Credits in the header, Service Code anaf_partner_online and Credits Left highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/02_serviciu_anaf.png
+.. |A new company contact with 14399840 in VAT and the ANAF button highlighted next to it| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/03_buton_anaf.png
+.. |The form filled in from ANAF before saving: DANTE INTERNATIONAL SA, VAT RO14399840, the address in Sector 6, Bucharest, and the notification Filled in from ANAF with the lookups left| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/04_partener_completat.png
+.. |The ANAF tab of the partner: VAT Payer ticked, Fiscally Inactive and Struck Off not ticked, the trade register number and the date of the last check| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/05_tab_anaf.png
+.. |The list of contacts with three partners selected and Update from ANAF highlighted in the Actions menu| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/06_actiune_actualizare.png
+.. |The notification ANAF (Terrabit): 2 request(s) sent, over the list with three partners selected| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/07_cereri_trimise.png
+.. |The partner OMV PETROM SA updated from ANAF, with the tracked changes of name, VAT and address and the note in the chatter| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/08_nota_chatter.png
+.. |The ANAF Requests list: a request Done and a red request in Error with Invalid CUI| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_anaf_partner_online/static/description/en/09_cereri_anaf.png
 
 Changelog
 =========
+
+20.0.1.0.0
+==========
+
+- Migration to 20.0: access rights in ``security/ir.access.csv``; the
+  ANAF button sits after the Tax ID in the row ``vat_div`` of the
+  standard form (already a row on 20.0, no field move); Owl 3 widget
+  (``useProps``, ``proxy``, notification plugin, ``oi`` icons);
+  ``is_company`` is no longer written (computed on 20.0 from the Tax
+  ID).
 
 19.0.1.0.0
 ==========
@@ -204,6 +214,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_anaf_partner_online>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_anaf_partner_online>`_ project on GitHub.
 
 You are welcome to contribute.

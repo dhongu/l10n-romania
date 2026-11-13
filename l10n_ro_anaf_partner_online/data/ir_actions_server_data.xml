@@ -31,7 +31,6 @@ elif status == 'found' and partner:
         # An unknown country never removes the one of the partner
         vals.update({'country_id': country.id, 'state_id': region.id or False})
     vals.update({
-        'is_company': True,
         'x_anaf_vat_payer': bool(result.get('vat_payer')),
         'x_anaf_inactive': bool(result.get('inactive')),
         'x_anaf_struck_off': bool(result.get('struck_off')),

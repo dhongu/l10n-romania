@@ -5,15 +5,8 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
-            <!-- The button on the row of the Tax ID: the field is moved, unchanged, into a row -->
-            <xpath expr="//field[@name='vat']" position="before">
-                <label for="vat" />
-                <div class="o_row" name="anaf_vat_row" />
-            </xpath>
-            <xpath expr="//div[@name='anaf_vat_row']" position="inside">
-                <xpath expr="//field[@name='vat']" position="move" />
-            </xpath>
-            <xpath expr="//div[@name='anaf_vat_row']" position="inside">
+            <!-- The button on the row of the Tax ID (div#vat_div is already a row on 20.0) -->
+            <xpath expr="//div[@id='vat_div']/field[@name='vat']" position="after">
                 <widget name="tb_anaf_lookup" invisible="not is_company and parent_id" />
             </xpath>
             <xpath expr="//notebook" position="inside">

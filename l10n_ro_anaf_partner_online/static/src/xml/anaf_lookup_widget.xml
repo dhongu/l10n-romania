@@ -4,11 +4,14 @@
         <button
             type="button"
             class="btn btn-sm btn-secondary o_tb_anaf_lookup"
-            t-att-disabled="state.busy or props.readonly"
-            t-on-click="onClick"
+            t-att-disabled="this.state.busy or this.props.readonly"
+            t-on-click="this.onClick"
             title="Fill in the partner from ANAF by its CUI"
         >
-            <i t-attf-class="fa {{ state.busy ? 'fa-spinner fa-spin' : 'fa-search' }} me-1" />
+            <i
+                t-attf-class="oi me-1 {{ this.state.busy ? 'oi-spin' : '' }}"
+                t-att-data-icon="this.state.busy ? 'autorenew' : 'search'"
+            />
             ANAF
         </button>
     </t>

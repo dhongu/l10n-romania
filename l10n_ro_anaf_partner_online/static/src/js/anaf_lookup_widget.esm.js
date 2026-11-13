@@ -3,7 +3,8 @@
 // form, which the user then saves. Without an answer from the service (network, browser policy)
 // the lookup is queued instead and the partner is updated by the service a few seconds later.
 
-import {Component, useState} from "@odoo/owl";
+import {Component, proxy, usePlugin, useProps} from "@odoo/owl";
+import {NotificationPlugin} from "@web/core/notifications/notification_plugin";
 import {_t} from "@web/core/l10n/translation";
 import {registry} from "@web/core/registry";
 import {standardWidgetProps} from "@web/views/widgets/standard_widget_props";
@@ -14,12 +15,12 @@ const PARTNER_FIELDS = ["name", "vat", "street", "street2", "city", "zip", "phon
 
 export class AnafLookupWidget extends Component {
     static template = "l10n_ro_anaf_partner_online.AnafLookupWidget";
-    static props = {...standardWidgetProps};
+    props = useProps({...standardWidgetProps});
 
     setup() {
         this.orm = useService("orm");
-        this.notification = useService("notification");
-        this.state = useState({busy: false});
+        this.notification = usePlugin(NotificationPlugin);
+        this.state = proxy({busy: false});
     }
 
     get vat() {
@@ -145,7 +146,6 @@ export class AnafLookupWidget extends Component {
             values.state_id = region ? {id: region.id, display_name: region.display_name} : false;
         }
         Object.assign(values, {
-            is_company: true,
             x_anaf_vat_payer: Boolean(result.vat_payer),
             x_anaf_inactive: Boolean(result.inactive),
             x_anaf_struck_off: Boolean(result.struck_off),
