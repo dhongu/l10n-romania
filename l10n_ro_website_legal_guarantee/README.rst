@@ -22,32 +22,32 @@ Romania - EU Legal Guarantee Notice
 
 |badge1| |badge2| |badge3|
 
-Displays on the website the European Union's harmonised notice on the
-legal guarantee of conformity, mandatory for sellers of goods from 27
-September 2026:
+Afișează pe site notificarea armonizată a Uniunii Europene privind
+garanția legală de conformitate, obligatorie pentru vânzătorii de bunuri
+de la 27 septembrie 2026:
 
-- Implementing Regulation (EU) 2025/1960, Annex I (design and content of
-  the notice);
-- Directive (EU) 2024/825, which introduces Art. 22a into Directive
-  2011/83/EU;
-- Romanian Government Emergency Ordinance (OUG) no. 34/2014, Art.
-  4(1)(e), Art. 6(1)(l) and Art. 22^1, introduced by OUG no. 18/2026
-  (Official Gazette no. 236 of 26 March 2026).
+- Regulamentul de punere în aplicare (UE) 2025/1960, anexa I (designul
+  și conținutul notificării);
+- Directiva (UE) 2024/825, care introduce art. 22a în Directiva
+  2011/83/UE;
+- OUG nr. 34/2014, art. 4 alin. (1) lit. e), art. 6 alin. (1) lit. l) și
+  art. 22^1, introduse prin OUG nr. 18/2026 (Monitorul Oficial nr. 236
+  din 26 martie 2026).
 
-The module adds:
+Modulul adaugă:
 
-- the public page ``/garantie``, with the full official notice, the link
-  to the "Your Europe" portal (the same destination as the QR code), the
-  notice as a PDF, a short summary of consumer rights (OUG no.
-  140/2021), how to report a problem and the seller's details;
-- the "Legal guarantee" link in the footer, on the copyright row;
-- on the product page and at the payment step, the "Your legal guarantee
-  rights" link, which opens the notice on first click, as recommended by
-  the Commission's practical guide (DG JUST, April 2026).
+- pagina publică ``/garantie``, cu notificarea oficială întreagă, linkul
+  către portalul „Europa ta” (aceeași destinație ca și codul QR),
+  notificarea în PDF, drepturile consumatorului pe scurt (OUG nr.
+  140/2021), cum se semnalează o problemă și datele vânzătorului;
+- linkul „Garanția legală” în footer, pe rândul de copyright;
+- pe pagina de produs și la pasul de plată, linkul „Drepturile tale
+  privind garanția legală”, care deschide notificarea la primul clic,
+  așa cum recomandă ghidul practic al Comisiei (DG JUST, aprilie 2026).
 
-The notice is the official file published by the European Commission, in
-colour (RGB), unmodified: in Romanian for Romanian-language websites and
-in English for the other languages.
+Notificarea este fișierul oficial publicat de Comisia Europeană, color
+(RGB), nemodificat: în română pentru site-urile în limba română și în
+engleză pentru celelalte limbi.
 
 **Table of contents**
 
@@ -57,45 +57,35 @@ in English for the other languages.
 Use Cases / Context
 ===================
 
-The harmonised notice is a seller obligation at store level, not per
-product. For online shops, the Commission's guide recommends displaying
-it as a general reminder on the website, with the full and legible
-notice, plus a link to the "Your Europe" portal. The GARAN label (the
-commercial durability guarantee offered by the producer) is a separate,
-per-product obligation and is not covered by this module.
+Notificarea armonizată este o obligație a vânzătorului, la nivel de
+magazin, nu de produs. Ghidul Comisiei recomandă, pentru magazinele
+online, afișarea ca memento general pe site, cu notificarea întreagă și
+lizibilă, plus un link către portalul „Europa ta”. Eticheta GARAN
+(garanția comercială de durabilitate oferită de producător) este o
+obligație separată, per produs, și nu este acoperită de acest modul.
 
-The guide also recommends including the notice in the order confirmation
-e-mail; the e-mail templates are ``noupdate`` and are adapted per
-customer.
+Ghidul recomandă și includerea notificării în e-mailul de confirmare a
+comenzii; șabloanele de e-mail sunt ``noupdate`` și se adaptează per
+client.
 
-Official files (PDF, PNG, JPG, SVG, in all EU languages):
+Fișierele oficiale (PDF, PNG, JPG, SVG, în toate limbile UE):
 https://commission.europa.eu/publications/high-resolution-vector-files-eu-notice-and-label-product-guarantees_en
 
 Configuration
 =============
 
-In *Website → Configuration → Settings*, section *EU legal guarantee
-notice*, choose for each website the places where the link to the notice
-appears: footer, product page, payment step. All are checked by default.
+În *Website → Configurare → Setări*, secțiunea *Notificarea UE privind
+garanția legală*, se aleg, pentru fiecare website, locurile în care
+apare linkul spre notificare: footer, pagina de produs, pasul de plată.
+Toate sunt bifate implicit.
 
-The ``/garantie`` page uses the phone, e-mail, tax ID and address of the
-website's company. Additional content (for example your own service
-terms) can be added from the website editor, in the areas above and
-below the page content.
+Pagina ``/garantie`` folosește telefonul, e-mailul, codul fiscal și
+adresa companiei website-ului. Conținut suplimentar (de exemplu
+termenele proprii de service) se adaugă din editorul de site, în zonele
+de deasupra și de sub conținutul paginii.
 
 Changelog
 =========
-
-19.0.1.0.3 (2026-11-13)
------------------------
-
-- Readme fragments (description, configuration, context) rewritten in
-  English for the Apps Store.
-
-19.0.1.0.2 (2026-11-13)
------------------------
-
-- Regenerated the Apps Store banner with the Romanian localization flag.
 
 19.0.1.0.1 (2026-10-23)
 -----------------------

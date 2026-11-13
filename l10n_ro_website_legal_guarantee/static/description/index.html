@@ -370,93 +370,79 @@ ul.auto-toc {
 !! source digest: sha256:b3c8b166ccc4758a322bf580707175f83c45a99891469df77c9863f09ff4ad5d
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 <p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_website_legal_guarantee"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
-<p>Displays on the website the European Union’s harmonised notice on the
-legal guarantee of conformity, mandatory for sellers of goods from 27
-September 2026:</p>
+<p>Afișează pe site notificarea armonizată a Uniunii Europene privind
+garanția legală de conformitate, obligatorie pentru vânzătorii de bunuri
+de la 27 septembrie 2026:</p>
 <ul class="simple">
-<li>Implementing Regulation (EU) 2025/1960, Annex I (design and content of
-the notice);</li>
-<li>Directive (EU) 2024/825, which introduces Art. 22a into Directive
-2011/83/EU;</li>
-<li>Romanian Government Emergency Ordinance (OUG) no. 34/2014, Art.
-4(1)(e), Art. 6(1)(l) and Art. 22^1, introduced by OUG no. 18/2026
-(Official Gazette no. 236 of 26 March 2026).</li>
+<li>Regulamentul de punere în aplicare (UE) 2025/1960, anexa I (designul
+și conținutul notificării);</li>
+<li>Directiva (UE) 2024/825, care introduce art. 22a în Directiva
+2011/83/UE;</li>
+<li>OUG nr. 34/2014, art. 4 alin. (1) lit. e), art. 6 alin. (1) lit. l) și
+art. 22^1, introduse prin OUG nr. 18/2026 (Monitorul Oficial nr. 236
+din 26 martie 2026).</li>
 </ul>
-<p>The module adds:</p>
+<p>Modulul adaugă:</p>
 <ul class="simple">
-<li>the public page <tt class="docutils literal">/garantie</tt>, with the full official notice, the link
-to the “Your Europe” portal (the same destination as the QR code), the
-notice as a PDF, a short summary of consumer rights (OUG no.
-140/2021), how to report a problem and the seller’s details;</li>
-<li>the “Legal guarantee” link in the footer, on the copyright row;</li>
-<li>on the product page and at the payment step, the “Your legal guarantee
-rights” link, which opens the notice on first click, as recommended by
-the Commission’s practical guide (DG JUST, April 2026).</li>
+<li>pagina publică <tt class="docutils literal">/garantie</tt>, cu notificarea oficială întreagă, linkul
+către portalul „Europa ta” (aceeași destinație ca și codul QR),
+notificarea în PDF, drepturile consumatorului pe scurt (OUG nr.
+140/2021), cum se semnalează o problemă și datele vânzătorului;</li>
+<li>linkul „Garanția legală” în footer, pe rândul de copyright;</li>
+<li>pe pagina de produs și la pasul de plată, linkul „Drepturile tale
+privind garanția legală”, care deschide notificarea la primul clic,
+așa cum recomandă ghidul practic al Comisiei (DG JUST, aprilie 2026).</li>
 </ul>
-<p>The notice is the official file published by the European Commission, in
-colour (RGB), unmodified: in Romanian for Romanian-language websites and
-in English for the other languages.</p>
+<p>Notificarea este fișierul oficial publicat de Comisia Europeană, color
+(RGB), nemodificat: în română pentru site-urile în limba română și în
+engleză pentru celelalte limbi.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#use-cases-context" id="toc-entry-1">Use Cases / Context</a></li>
 <li><a class="reference internal" href="#configuration" id="toc-entry-2">Configuration</a></li>
 <li><a class="reference internal" href="#changelog" id="toc-entry-3">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-4">19.0.1.0.3 (2026-11-13)</a></li>
-<li><a class="reference internal" href="#section-2" id="toc-entry-5">19.0.1.0.2 (2026-11-13)</a></li>
-<li><a class="reference internal" href="#section-3" id="toc-entry-6">19.0.1.0.1 (2026-10-23)</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-4">19.0.1.0.1 (2026-10-23)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-7">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-8">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-9">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-10">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-11">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-5">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-6">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-7">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-8">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-9">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="use-cases-context">
 <h1><a class="toc-backref" href="#toc-entry-1">Use Cases / Context</a></h1>
-<p>The harmonised notice is a seller obligation at store level, not per
-product. For online shops, the Commission’s guide recommends displaying
-it as a general reminder on the website, with the full and legible
-notice, plus a link to the “Your Europe” portal. The GARAN label (the
-commercial durability guarantee offered by the producer) is a separate,
-per-product obligation and is not covered by this module.</p>
-<p>The guide also recommends including the notice in the order confirmation
-e-mail; the e-mail templates are <tt class="docutils literal">noupdate</tt> and are adapted per
-customer.</p>
-<p>Official files (PDF, PNG, JPG, SVG, in all EU languages):
+<p>Notificarea armonizată este o obligație a vânzătorului, la nivel de
+magazin, nu de produs. Ghidul Comisiei recomandă, pentru magazinele
+online, afișarea ca memento general pe site, cu notificarea întreagă și
+lizibilă, plus un link către portalul „Europa ta”. Eticheta GARAN
+(garanția comercială de durabilitate oferită de producător) este o
+obligație separată, per produs, și nu este acoperită de acest modul.</p>
+<p>Ghidul recomandă și includerea notificării în e-mailul de confirmare a
+comenzii; șabloanele de e-mail sunt <tt class="docutils literal">noupdate</tt> și se adaptează per
+client.</p>
+<p>Fișierele oficiale (PDF, PNG, JPG, SVG, în toate limbile UE):
 <a class="reference external" href="https://commission.europa.eu/publications/high-resolution-vector-files-eu-notice-and-label-product-guarantees_en">https://commission.europa.eu/publications/high-resolution-vector-files-eu-notice-and-label-product-guarantees_en</a></p>
 </div>
 <div class="section" id="configuration">
 <h1><a class="toc-backref" href="#toc-entry-2">Configuration</a></h1>
-<p>In <em>Website → Configuration → Settings</em>, section <em>EU legal guarantee
-notice</em>, choose for each website the places where the link to the notice
-appears: footer, product page, payment step. All are checked by default.</p>
-<p>The <tt class="docutils literal">/garantie</tt> page uses the phone, e-mail, tax ID and address of the
-website’s company. Additional content (for example your own service
-terms) can be added from the website editor, in the areas above and
-below the page content.</p>
+<p>În <em>Website → Configurare → Setări</em>, secțiunea <em>Notificarea UE privind
+garanția legală</em>, se aleg, pentru fiecare website, locurile în care
+apare linkul spre notificare: footer, pagina de produs, pasul de plată.
+Toate sunt bifate implicit.</p>
+<p>Pagina <tt class="docutils literal">/garantie</tt> folosește telefonul, e-mailul, codul fiscal și
+adresa companiei website-ului. Conținut suplimentar (de exemplu
+termenele proprii de service) se adaugă din editorul de site, în zonele
+de deasupra și de sub conținutul paginii.</p>
 </div>
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-3">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.0.3 (2026-11-13)</a></h2>
-<ul class="simple">
-<li>Readme fragments (description, configuration, context) rewritten in
-English for the Apps Store.</li>
-</ul>
-</div>
-<div class="section" id="section-2">
-<h2><a class="toc-backref" href="#toc-entry-5">19.0.1.0.2 (2026-11-13)</a></h2>
-<ul class="simple">
-<li>Regenerated the Apps Store banner with the Romanian localization flag.</li>
-</ul>
-</div>
-<div class="section" id="section-3">
-<h2><a class="toc-backref" href="#toc-entry-6">19.0.1.0.1 (2026-10-23)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-4">19.0.1.0.1 (2026-10-23)</a></h2>
 <ul class="simple">
 <li>Main image for the Odoo Apps Store (banner); the manifest points to it
 in <tt class="docutils literal">images</tt>.</li>
@@ -464,22 +450,22 @@ in <tt class="docutils literal">images</tt>.</li>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-7">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-5">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-8">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-6">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-9">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Authors</a></h2>
 <ul class="simple">
 <li>Terrabit</li>
 <li>Dorin Hongu</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-10">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-8">Contributors</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://www.terrabit.ro">Terrabit</a>:<ul>
 <li>Dorin Hongu &lt;<a class="reference external" href="mailto:dhongu&#64;gmail.com">dhongu&#64;gmail.com</a>&gt;</li>
@@ -490,7 +476,7 @@ In case of trouble, please check there if your issue has already been reported.<
 technical issues.</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-11">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-9">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_website_legal_guarantee">dhongu/l10n-romania</a> project on GitHub.</p>
