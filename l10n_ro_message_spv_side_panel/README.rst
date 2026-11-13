@@ -99,7 +99,7 @@ Usage
    |The full form with the XML lines|
 
 On screens narrower than 1200 px (the extra-large breakpoint) the panel
-is off and a click opens the form, as in the original menu.
+is off and a click opens the form of the message.
 
 .. |The SPV messages as a column of cards| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/01_meniu_vedere_impartita.png
 .. |The side panel on the tab Document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/02_panou_document.png
