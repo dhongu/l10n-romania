@@ -6,9 +6,9 @@
    ![The SPV messages as a column of cards](static/description/en/01_meniu_vedere_impartita.png)
 
 2. Click a card: the message opens in the panel on the right and the card is highlighted. The panel
-   shows the supplier, the VAT number read from the XML, the dates and the amounts, and the document:
-   the invoice as written in the XML, on a sheet of paper with three boxes (supplier, customer,
-   invoice data), the lines (code, description, unit, quantity, unit price, VAT rate and amount) and
+   shows the partner, the VAT number read from the XML and the total, with the state of the message as a status bar next to the buttons, and the document:
+   the invoice as written in the XML, on a sheet of paper with three boxes (the other party, the
+   invoice data and our own company), the lines (code, description, unit, quantity, unit price, VAT rate and amount) and
    the totals. Use the
    arrows of the panel to move to the previous or the next message.
 

@@ -141,39 +141,27 @@
                         invisible="not attachment_id"
                         title="Download the signed ANAF ZIP"
                     />
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,downloaded,invoice,done"
+                    />
                 </header>
                 <sheet>
                     <field name="review_required" invisible="1" />
                     <field name="attachment_id" invisible="1" />
                     <field name="invoice_amount" invisible="1" />
-                    <div class="oe_title">
-                        <h2>
-                            <field name="partner_name" placeholder="Supplier" />
-                        </h2>
-                    </div>
                     <group>
                         <group>
-                            <field name="ref" />
-                            <field name="spv_party_vat" />
                             <field name="partner_id" />
-                            <field name="invoice_date" />
-                            <field name="invoice_date_due" />
+                            <field name="spv_party_vat" />
+                            <field name="invoice_id" invisible="not invoice_id" />
                         </group>
                         <group>
-                            <field name="currency_id" />
-                            <field name="amount_untaxed" />
-                            <field name="amount_tax" />
+                            <field name="currency_id" invisible="1" />
                             <field
                                 name="amount"
                                 decoration-danger="invoice_amount and amount != invoice_amount"
-                            />
-                            <field
-                                name="state"
-                                widget="badge"
-                                decoration-success="state == 'done'"
-                                decoration-info="state == 'downloaded'"
-                                decoration-primary="state == 'invoice'"
-                                decoration-danger="state == 'error'"
                             />
                             <field
                                 name="review_state"
@@ -183,7 +171,6 @@
                                 decoration-success="review_state == 'accepted'"
                                 decoration-danger="review_state == 'rejected'"
                             />
-                            <field name="invoice_id" invisible="not invoice_id" />
                         </group>
                     </group>
                     <group invisible="not error and not message">
@@ -246,6 +233,18 @@
             <!-- Three groups on a row (supplier, invoice, amounts), the document under them and the
                  technical data of the message at the bottom. Fields are moved, so the xpath of the
                  other modules on these fields still work. -->
+            <!-- The state as a status bar, next to the buttons. -->
+            <xpath expr="//header" position="inside">
+                <xpath expr="//field[@name='state']" position="move" />
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="attributes">
+                <attribute name="widget">statusbar</attribute>
+                <attribute name="statusbar_visible">draft,downloaded,invoice,done</attribute>
+                <attribute name="decoration-success" />
+                <attribute name="decoration-info" />
+                <attribute name="decoration-primary" />
+                <attribute name="decoration-danger" />
+            </xpath>
             <xpath expr="//sheet/group" position="before">
                 <group col="3" name="spv_overview">
                     <group string="Supplier" name="spv_supplier" />
@@ -271,7 +270,6 @@
                 <xpath expr="//field[@name='amount_tax']" position="move" />
                 <xpath expr="//field[@name='amount']" position="move" />
                 <xpath expr="//field[@name='invoice_amount']" position="move" />
-                <xpath expr="//field[@name='state']" position="move" />
                 <xpath expr="//field[@name='review_required']" position="move" />
                 <xpath expr="//field[@name='attachment_id']" position="move" />
                 <xpath expr="//field[@name='review_state']" position="move" />

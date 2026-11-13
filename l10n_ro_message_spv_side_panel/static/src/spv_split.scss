@@ -48,13 +48,15 @@
     overflow-x: auto;
     padding: 1rem 1.25rem;
     background-color: var(--spv-paper);
-    border: 1px solid var(--border-color, #dee2e6);
     border-radius: 0.25rem;
     box-shadow:
         0 1px 3px rgba(0, 0, 0, 0.18),
-        0 8px 18px -6px rgba(0, 0, 0, 0.22),
-        4px 4px 0 -1px var(--spv-paper),
-        4px 4px 0 0 var(--border-color, #dee2e6);
+        0 8px 18px -6px rgba(0, 0, 0, 0.22);
+
+    // Our own company: the same data on every invoice, so it stays in the background.
+    .o_spv_box_own {
+        color: var(--text-muted, #6c757d);
+    }
 }
 
 // Supplier, customer and the data of the invoice: three boxes on a row (fewer on a narrow panel).

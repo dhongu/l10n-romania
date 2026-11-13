@@ -8,7 +8,7 @@ details of the selected one on the right, without leaving the list.
 - **The panel** — the supplier, the VAT number read from the XML, the dates, the amounts, the review
   state and the buttons *Create Invoice*, *Accept*, *Reject*, *XML*, *PDF* and *ZIP*.
 - **The document** — the invoice as written in the XML, shown as a sheet of paper under the data of
-  the message: three boxes on a row (supplier, customer, invoice data), the lines (code,
+  the message: three boxes on a row (the other party, the invoice data and our own company), the lines (code,
   description, unit, quantity, price, VAT rate and amount) and the totals. The panel and the full
   form of the message show the same document, with no tabs. Nothing is stored: the XML is read from
   the ZIP when the message is opened.

@@ -36,18 +36,19 @@
     <!-- A view of the document, built from the XML of the invoice. -->
     <template id="spv_invoice_document">
         <div class="o_spv_document">
+            <!-- The other party first, the invoice in the middle and our own company last:
+                 on a received invoice we are the customer, on an issued one the supplier. -->
+            <t t-set="other_party" t-value="supplier if incoming else customer" />
+            <t t-set="own_party" t-value="customer if incoming else supplier" />
             <div class="o_spv_boxes mb-3">
                 <div class="o_spv_box">
-                    <div class="text-muted text-uppercase small">Supplier</div>
-                    <div class="fw-bold" t-out="supplier.get('name')" />
-                    <div t-if="supplier.get('vat')">VAT ID <t t-out="supplier.get('vat')" /></div>
-                    <div t-if="supplier.get('address')" t-out="supplier.get('address')" />
-                </div>
-                <div class="o_spv_box">
-                    <div class="text-muted text-uppercase small">Customer</div>
-                    <div class="fw-bold" t-out="customer.get('name')" />
-                    <div t-if="customer.get('vat')">VAT ID <t t-out="customer.get('vat')" /></div>
-                    <div t-if="customer.get('address')" t-out="customer.get('address')" />
+                    <div class="text-muted text-uppercase small">
+                        <t t-if="incoming">Supplier</t>
+                        <t t-else="">Customer</t>
+                    </div>
+                    <div class="fw-bold" t-out="other_party.get('name')" />
+                    <div t-if="other_party.get('vat')">VAT ID <t t-out="other_party.get('vat')" /></div>
+                    <div t-if="other_party.get('address')" t-out="other_party.get('address')" />
                 </div>
                 <div class="o_spv_box">
                     <div class="text-muted text-uppercase small">
@@ -58,6 +59,15 @@
                     <div t-if="issue_date">Date: <t t-out="issue_date" /></div>
                     <div t-if="due_date">Due date: <t t-out="due_date" /></div>
                     <div t-if="currency">Currency: <t t-out="currency" /></div>
+                </div>
+                <div class="o_spv_box o_spv_box_own">
+                    <div class="text-muted text-uppercase small">
+                        <t t-if="incoming">Customer</t>
+                        <t t-else="">Supplier</t>
+                    </div>
+                    <div class="fw-bold" t-out="own_party.get('name')" />
+                    <div t-if="own_party.get('vat')">VAT ID <t t-out="own_party.get('vat')" /></div>
+                    <div t-if="own_party.get('address')" t-out="own_party.get('address')" />
                 </div>
             </div>
             <t t-call="l10n_ro_message_spv_side_panel.spv_invoice_lines" />
