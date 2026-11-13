@@ -17,10 +17,11 @@ if status == 'found' and partner:
     vals = {key: data[key] for key in ('name', 'vat', 'street', 'street2', 'city', 'zip', 'phone') if data.get(key)}
     country = env['res.country'].search([('code', '=', data.get('country_code') or 'RO')], limit=1)
     region = env['res.country.state'].search([('country_id', '=', country.id), ('code', '=', data.get('state_code') or '-')], limit=1)
+    if country:
+        # An unknown country never removes the one of the partner
+        vals.update({'country_id': country.id, 'state_id': region.id or False})
     vals.update({
         'is_company': True,
-        'country_id': country.id,
-        'state_id': region.id or False,
         'x_anaf_vat_payer': bool(result.get('vat_payer')),
         'x_anaf_inactive': bool(result.get('inactive')),
         'x_anaf_struck_off': bool(result.get('struck_off')),
