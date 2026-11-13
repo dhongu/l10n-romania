@@ -38,7 +38,7 @@
                 <div>
                     <div class="text-muted text-uppercase small">Supplier</div>
                     <div class="fw-bold" t-out="supplier.get('name')" />
-                    <div t-if="supplier.get('vat')">VAT <t t-out="supplier.get('vat')" /></div>
+                    <div t-if="supplier.get('vat')">VAT ID <t t-out="supplier.get('vat')" /></div>
                     <div t-if="supplier.get('address')" t-out="supplier.get('address')" />
                 </div>
                 <div class="text-end">
@@ -55,7 +55,7 @@
             <div class="border rounded p-2 mb-3">
                 <div class="text-muted text-uppercase small">Customer</div>
                 <div class="fw-bold" t-out="customer.get('name')" />
-                <div t-if="customer.get('vat')">VAT <t t-out="customer.get('vat')" /></div>
+                <div t-if="customer.get('vat')">VAT ID <t t-out="customer.get('vat')" /></div>
                 <div t-if="customer.get('address')" t-out="customer.get('address')" />
             </div>
             <t t-call="l10n_ro_message_spv_side_panel.spv_invoice_lines" />

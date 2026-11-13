@@ -4,7 +4,6 @@
 
 import io
 import zipfile
-from unittest.mock import patch
 
 from odoo.tests import TransactionCase, tagged
 
@@ -70,39 +69,43 @@ INVOICE_XML = b"""<?xml version="1.0" encoding="UTF-8"?>
 
 @tagged("post_install", "-at_install")
 class TestMessageSpvSidePanel(TransactionCase):
-    def _message(self, message_type="in_invoice"):
-        return self.env["l10n.ro.message.spv"].create(
+    def _message(self, xml_bytes=None, message_type="in_invoice"):
+        """A message whose ZIP holds the given XML (none: a message without file)."""
+        message = self.env["l10n.ro.message.spv"].create(
             {"name": "1234", "cif": "RO99999999", "message_type": message_type}
         )
-
-    def _read(self, message, xml_bytes):
-        model = type(message)
-        with patch.object(model, "_get_xml_bytes", return_value=("i.xml", xml_bytes)):
-            message.invalidate_recordset()
-            return {
-                "vat": message.spv_party_vat,
-                "document": message.spv_document_html,
-                "lines": message.spv_lines_html,
-                "data": message._spv_read_invoice(),
-            }
+        if xml_bytes is not None:
+            buffer = io.BytesIO()
+            with zipfile.ZipFile(buffer, "w") as archive:
+                archive.writestr("1234.xml", xml_bytes)
+            message.attachment_id = self.env["ir.attachment"].create({"name": "1234.zip", "raw": buffer.getvalue()})
+        # the web client reads with `bin_size`: the computed fields must still see the XML
+        message = message.with_context(bin_size=True)
+        message.invalidate_recordset()
+        return message
 
     def test_incoming_invoice(self):
-        result = self._read(self._message("in_invoice"), INVOICE_XML)
-        self.assertEqual(result["vat"], "RO14567890", "the supplier, for a received invoice")
-        data = result["data"]
+        message = self._message(INVOICE_XML)
+        self.assertEqual(message.spv_party_vat, "RO14567890", "the supplier, for a received invoice")
+        data = message._spv_read_invoice()
         self.assertEqual(data["number"], "TID 4521")
         self.assertEqual(data["supplier"]["name"], "Termo Instal Distributie SRL")
         self.assertEqual(data["supplier"]["address"], "Str. Fabricii 1, Cluj-Napoca, RO")
         self.assertEqual(len(data["lines"]), 2)
         self.assertEqual(data["lines"][0]["name"], "Pompa circulatie 25/60")
         self.assertEqual(data["lines"][0]["tax_percent"], "21")
-        self.assertIn("Pompa circulatie 25/60", str(result["lines"]))
-        self.assertIn("Termo Instal Distributie SRL", str(result["document"]))
+        self.assertIn("Pompa circulatie 25/60", str(message.spv_lines_html))
+        self.assertIn("Termo Instal Distributie SRL", str(message.spv_document_html))
         self.assertIn("2,299.00", data["total"])
 
+    def test_dates_follow_the_language_of_the_user(self):
+        data = self._message(INVOICE_XML)._spv_read_invoice()
+        self.assertNotEqual(data["issue_date"], "2026-11-03")
+        self.assertIn("2026", data["issue_date"])
+
     def test_outgoing_invoice_shows_the_customer(self):
-        result = self._read(self._message("out_invoice"), INVOICE_XML)
-        self.assertEqual(result["vat"], "RO99999999")
+        message = self._message(INVOICE_XML, message_type="out_invoice")
+        self.assertEqual(message.spv_party_vat, "RO99999999")
 
     def test_credit_note_lines(self):
         xml = (
@@ -111,27 +114,38 @@ class TestMessageSpvSidePanel(TransactionCase):
             .replace(b"cac:InvoiceLine", b"cac:CreditNoteLine")
             .replace(b"cbc:InvoicedQuantity", b"cbc:CreditedQuantity")
         )
-        data = self._read(self._message(), xml)["data"]
+        data = self._message(xml)._spv_read_invoice()
         self.assertTrue(data["is_credit_note"])
         self.assertEqual(len(data["lines"]), 2)
         self.assertEqual(data["lines"][1]["quantity"], "1")
 
     def test_message_without_xml(self):
         message = self._message()
-        message.invalidate_recordset()
         self.assertFalse(message.spv_party_vat)
         self.assertFalse(message.spv_document_html)
         self.assertEqual(message._spv_read_invoice(), {})
 
-    def test_read_from_zip_as_the_web_client_does(self):
-        """The web client reads with `bin_size`: the computed fields must still see the XML."""
-        buffer = io.BytesIO()
-        with zipfile.ZipFile(buffer, "w") as archive:
-            archive.writestr("1234.xml", INVOICE_XML)
-        attachment = self.env["ir.attachment"].create({"name": "1234.zip", "raw": buffer.getvalue()})
-        message = self._message()
-        message.attachment_id = attachment
-        message = message.with_context(bin_size=True)
-        message.invalidate_recordset()
+    def test_not_a_number_does_not_block_the_message(self):
+        """A value like `1.234,50` or `n/a` is shown as written, the message still opens."""
+        xml = INVOICE_XML.replace(b">845.00<", b">1.234,50<").replace(
+            b">2299.00</cbc:PayableAmount", b">n/a</cbc:PayableAmount"
+        )
+        message = self._message(xml)
+        data = message._spv_read_invoice()
+        self.assertEqual(data["lines"][0]["price"], "1.234,50")
         self.assertEqual(message.spv_party_vat, "RO14567890")
-        self.assertIn("Pompa circulatie 25/60", str(message.spv_lines_html))
+        self.assertIn("1.234,50", str(message.spv_lines_html))
+
+    def test_external_entities_are_not_resolved(self):
+        """The XML comes from a third party: a DOCTYPE with an external entity must not
+        bring the content of a local file into the document."""
+        xml = INVOICE_XML.replace(
+            b"<Invoice ",
+            b'<!DOCTYPE Invoice [<!ENTITY leak SYSTEM "file:///etc/hosts">]><Invoice ',
+            1,
+        ).replace(b"<cbc:InvoiceTypeCode>380", b"<cbc:Note>&leak;</cbc:Note><cbc:InvoiceTypeCode>380")
+        message = self._message(xml)
+        data = message._spv_read_invoice()
+        # `localhost` is in /etc/hosts and nowhere in the invoice
+        self.assertNotIn("localhost", str(data.get("note", "")))
+        self.assertNotIn("localhost", str(message.spv_document_html))
