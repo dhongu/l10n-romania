@@ -27,9 +27,8 @@ jobs:
           for reqfile in requirements.txt test-requirements.txt ; do
               if [ -f ${reqfile} ] ; then
                   result=0
-                  # reject non-comment lines that contain a / (i.e. URLs, relative paths),
-                  # except our own suites (e.g. deltatech_iap_online from dhongu/deltatech)
-                  grep "^[^#].*/" ${reqfile} | grep -v "github.com/\(dhongu\|terrabit-solutions\)/" || result=$?
+                  # reject non-comment lines that contain a / (i.e. URLs, relative paths)
+                  grep "^[^#].*/" ${reqfile} || result=$?
                   if [ $result -eq 0 ] ; then
                       echo "Unreleased dependencies found in ${reqfile}."
                       exit 1
@@ -82,6 +81,14 @@ jobs:
         run: pip freeze | grep -i '^cryptography==' >> test-requirements.txt
       - name: Install addons and dependencies
         run: oca_install_addons
+      # Data-only dependencies of our own suites (no __init__.py: whool cannot build them, so
+      # they cannot come from test-requirements.txt): copied into the addons path of Odoo
+      - name: Install data-only dependencies
+        run: |
+          git clone --quiet --depth 1 --filter=blob:none --sparse -b 19.0 https://github.com/dhongu/deltatech.git /tmp/deltatech
+          git -C /tmp/deltatech sparse-checkout set deltatech_iap_online
+          ADDONS_DIR=$(python -c "import odoo.addons; print(list(odoo.addons.__path__)[-1])")
+          cp -r /tmp/deltatech/deltatech_iap_online "$ADDONS_DIR/"
       - name: Check licenses
         run: manifestoo -d . check-licenses
       - name: Check development status
