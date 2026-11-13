@@ -53,14 +53,6 @@ OPEN_INVOICE_ROW = (
     "  await new Promise((r) => setTimeout(r, 3000));"
     "})()"
 )
-OPEN_LINES_TAB_FORM = (
-    "(async () => {"
-    "  const tab = [...document.querySelectorAll('.o_form_view .nav-link')]"
-    "    .find((a) => /XML Lines|Poziții XML/.test(a.innerText));"
-    "  if (tab) { tab.click(); }"
-    "  await new Promise((r) => setTimeout(r, 1000));"
-    "})()"
-)
 OPEN_TOTALS = (
     "(async () => {"
     "  const card = [...document.querySelectorAll('.o_kanban_record')].find((c) => c.innerText.includes('TID 4521'));"
@@ -69,17 +61,6 @@ OPEN_TOTALS = (
     "  const body = document.querySelector('.o_side_panel_body');"
     "  if (body) { body.scrollTop = body.scrollHeight; }"
     "  await new Promise((r) => setTimeout(r, 500));"
-    "})()"
-)
-OPEN_LINES_TAB = (
-    "(async () => {"
-    "  const card = [...document.querySelectorAll('.o_kanban_record')].find((c) => c.innerText.includes('TID 4521'));"
-    "  if (card) { card.click(); }"
-    "  await new Promise((r) => setTimeout(r, 3000));"
-    "  const tab = [...document.querySelectorAll('.o_side_panel .nav-link')]"
-    "    .find((a) => /XML Lines|Poziții XML/.test(a.innerText));"
-    "  if (tab) { tab.click(); }"
-    "  await new Promise((r) => setTimeout(r, 1000));"
     "})()"
 )
 
@@ -181,14 +162,6 @@ class TestSpvSidePanelScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
             },
             {
                 "url": self._url("kanban"),
-                "name": "03_panou_pozitii_xml.png",
-                "wait": ".o_kanban_record",
-                "eval": OPEN_LINES_TAB,
-                "eval_wait": 1500,
-                "settle": 2000,
-            },
-            {
-                "url": self._url("kanban"),
                 "name": "04_document_totaluri.png",
                 "wait": ".o_kanban_record",
                 "eval": OPEN_TOTALS,
@@ -213,8 +186,6 @@ class TestSpvSidePanelScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                 "url": f"action={self.env.ref(ACTION).id}&id={self.invoice_message.id}&view_type=form",
                 "name": "07_formular_complet.png",
                 "wait": ".o_form_view",
-                "eval": OPEN_LINES_TAB_FORM,
-                "eval_wait": 1500,
                 "settle": 2000,
             },
             {

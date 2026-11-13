@@ -39,3 +39,34 @@
         --bs-table-cell-padding-x: 0.35rem;
     }
 }
+
+// The document stands as a sheet of paper, with a shadow and a second sheet behind it, so that it
+// is clear that it is the invoice as it was received and not a part of the form.
+.o_spv_document {
+    --spv-paper: color-mix(in srgb, var(--body-bg, #fff) 94%, #fff);
+    margin: 1rem 0.25rem 1.25rem;
+    overflow-x: auto;
+    padding: 1rem 1.25rem;
+    background-color: var(--spv-paper);
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: 0.25rem;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.18),
+        0 8px 18px -6px rgba(0, 0, 0, 0.22),
+        4px 4px 0 -1px var(--spv-paper),
+        4px 4px 0 0 var(--border-color, #dee2e6);
+}
+
+// Supplier, customer and the data of the invoice: three boxes on a row (fewer on a narrow panel).
+.o_spv_document .o_spv_boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 0.75rem;
+
+    .o_spv_box {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--border-color, #dee2e6);
+        border-radius: 0.25rem;
+        overflow-wrap: anywhere;
+    }
+}

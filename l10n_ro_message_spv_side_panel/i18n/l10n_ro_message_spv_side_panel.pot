@@ -26,13 +26,18 @@ msgid "Amount"
 msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
+msgid "Amounts"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
 msgid "Back to Review"
 msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
-msgid "CREDIT NOTE"
+msgid "Credit note"
 msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
@@ -104,7 +109,13 @@ msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
-msgid "INVOICE"
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
+msgid "Invoice"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
+msgid "Message"
 msgstr ""
 
 #. module: l10n_ro_message_spv_side_panel
@@ -146,6 +157,7 @@ msgstr ""
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
 msgid "Supplier"
 msgstr ""
 
