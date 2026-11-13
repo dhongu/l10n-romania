@@ -149,3 +149,13 @@ class TestMessageSpvSidePanel(TransactionCase):
         # `localhost` is in /etc/hosts and nowhere in the invoice
         self.assertNotIn("localhost", str(data.get("note", "")))
         self.assertNotIn("localhost", str(message.spv_document_html))
+
+    def test_empty_or_invalid_xml_does_not_block_the_message(self):
+        """A ZIP whose XML is empty, or is not XML, opens as a message without a document."""
+        for content in (b"", b"This is not an XML document."):
+            with self.subTest(content=content):
+                message = self._message(content)
+                self.assertEqual(message._spv_read_invoice(), {})
+                self.assertFalse(message.spv_party_vat)
+                self.assertFalse(message.spv_document_html)
+                message.unlink()
