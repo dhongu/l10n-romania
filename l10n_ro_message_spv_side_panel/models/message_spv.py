@@ -82,8 +82,12 @@ class L10nRoMessageSpv(models.Model):
         if not names:
             return None
         parser = etree.XMLParser(recover=True, resolve_entities=False, no_network=True, load_dtd=False)
-        with archive.open(names[0]) as xml_file:
-            return etree.parse(xml_file, parser).getroot()
+        try:
+            with archive.open(names[0]) as xml_file:
+                return etree.parse(xml_file, parser).getroot()
+        except etree.XMLSyntaxError:
+            # an empty file, or a page of text instead of the XML
+            return None
 
     def _spv_read_invoice(self):
         """Read the invoice XML of the message into what the panel shows.
