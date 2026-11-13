@@ -1,0 +1,10 @@
+{
+  "title": "SPV Messages Split View",
+  "summary": "Review SPV invoices without leaving the list",
+  "lang": "en",
+  "features": [
+    "Kanban cards and list with side panel",
+    "Invoice shown from the XML, with its lines",
+    "Create, accept or reject from the panel"
+  ]
+}
