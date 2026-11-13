@@ -1,0 +1,19 @@
+// A single column of cards on the left, as in the split view of the bank reconciliation.
+.o_spv_split_kanban .o_kanban_renderer.o_kanban_ungrouped {
+    flex-direction: column;
+    flex-wrap: nowrap !important;
+    align-items: stretch;
+
+    .o_kanban_record {
+        flex: 0 0 auto !important;
+        width: auto;
+        max-width: none;
+        min-height: 0;
+        height: auto;
+        margin-right: 0;
+    }
+
+    .o_kanban_ghost {
+        display: none;
+    }
+}

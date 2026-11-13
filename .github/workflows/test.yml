@@ -79,6 +79,36 @@ jobs:
       # refuses an existing test-constraints.txt, so the pin goes into test-requirements.txt.
       - name: Keep the cryptography of the image
         run: pip freeze | grep -i '^cryptography==' >> test-requirements.txt
+      # Dependencies of our own suites that have Python code (unlike the data-only ones below):
+      # whool turns `depends` into `odoo-addon-<name>==19.0.*`, which pip cannot find on any index,
+      # so the module is installed first, from a pinned commit of dhongu/deltatech, and the
+      # requirement is already satisfied (update DELTATECH_CODE_SHA when deltatech_web_side_panel
+      # changes in a way these modules need).
+      - name: Install deltatech dependencies with code
+        env:
+          DELTATECH_CODE_SHA: be53afc6be8d8c811c82fa3259326d43cdd667e6
+          WHOOL_POST_VERSION_STRATEGY_OVERRIDE: none
+          SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE: none
+        run: |
+          git init --quiet /tmp/deltatech-code
+          git -C /tmp/deltatech-code fetch --quiet --depth 1 https://github.com/dhongu/deltatech.git "$DELTATECH_CODE_SHA"
+          git -C /tmp/deltatech-code checkout --quiet FETCH_HEAD -- deltatech_web_side_panel
+          pip install --no-deps /tmp/deltatech-code/deltatech_web_side_panel
+      # l10n_ro_message_spv from the Terrabit fork (19.0.2.16.1): l10n_ro_message_spv_side_panel
+      # needs its fields (partner_name, invoice_date_due, review_state ...), which OCA/l10n-romania
+      # (19.0.2.16.0, the wheel pip would pick) does not have yet. Installed first, with its own
+      # dependencies, so that `odoo-addon-l10n_ro_message_spv==19.0.*` is already satisfied.
+      # Remove this step when the fields reach OCA/l10n-romania.
+      - name: Install l10n_ro_message_spv from the Terrabit fork
+        env:
+          FORK_SHA: 299b85ca7f519fbf08a7467f7fb3eeaedc4636aa
+          WHOOL_POST_VERSION_STRATEGY_OVERRIDE: none
+          SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE: none
+        run: |
+          git init --quiet /tmp/terrabit-l10n-romania
+          git -C /tmp/terrabit-l10n-romania fetch --quiet --depth 1 https://github.com/terrabit-ro/l10n-romania.git "$FORK_SHA"
+          git -C /tmp/terrabit-l10n-romania checkout --quiet FETCH_HEAD -- l10n_ro_message_spv
+          pip install /tmp/terrabit-l10n-romania/l10n_ro_message_spv
       - name: Install addons and dependencies
         run: oca_install_addons
       # Data-only dependencies of our own suites (no __init__.py: whool cannot build them, so

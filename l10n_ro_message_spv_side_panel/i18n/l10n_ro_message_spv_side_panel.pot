@@ -1,0 +1,211 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_message_spv_side_panel
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 10:47+0000\n"
+"PO-Revision-Date: 2026-11-13 10:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Accept"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Amount"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Back to Review"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "CREDIT NOTE"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Create Invoice"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Currency:"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Customer"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Date:"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Description"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_document_html
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Document"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Download the invoice PDF"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Download the invoice XML"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Download the signed ANAF ZIP"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Due date:"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "INVOICE"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model,name:l10n_ro_message_spv_side_panel.model_l10n_ro_message_spv
+msgid "Message SPV"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.actions.act_window,name:l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split
+#: model:ir.ui.menu,name:l10n_ro_message_spv_side_panel.menu_l10n_ro_message_spv_split
+msgid "Messages SPV (split view)"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "No."
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "PDF"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Quantity"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Reject"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Representation generated from the e-Factura XML downloaded from SPV."
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Supplier"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,help:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_party_vat
+msgid "The VAT number of the other party, as written in the invoice XML."
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "The XML has no invoice lines."
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Total"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Total without VAT"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Unit price"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "UoM"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "VAT"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "VAT %"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_party_vat
+msgid "VAT (XML)"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "VAT ID"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "XML"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_lines_html
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "XML Lines"
+msgstr ""
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "ZIP"
+msgstr ""

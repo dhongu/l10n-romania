@@ -1,0 +1,212 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_message_spv_side_panel
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 10:47+0000\n"
+"PO-Revision-Date: 2026-11-13 10:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Accept"
+msgstr "Acceptă"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Amount"
+msgstr "Valoare"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Back to Review"
+msgstr "Înapoi la verificare"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "CREDIT NOTE"
+msgstr "NOTĂ DE CREDIT"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Create Invoice"
+msgstr "Creează factura"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Currency:"
+msgstr "Moneda:"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Customer"
+msgstr "Client"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Date:"
+msgstr "Data:"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Description"
+msgstr "Denumire"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_document_html
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Document"
+msgstr "Document"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Download the invoice PDF"
+msgstr "Descarcă PDF-ul facturii"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Download the invoice XML"
+msgstr "Descarcă XML-ul facturii"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Download the signed ANAF ZIP"
+msgstr "Descarcă arhiva ZIP semnată de ANAF"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Due date:"
+msgstr "Scadența:"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "INVOICE"
+msgstr "FACTURĂ"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model,name:l10n_ro_message_spv_side_panel.model_l10n_ro_message_spv
+msgid "Message SPV"
+msgstr "Mesaj SPV"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.actions.act_window,name:l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split
+#: model:ir.ui.menu,name:l10n_ro_message_spv_side_panel.menu_l10n_ro_message_spv_split
+msgid "Messages SPV (split view)"
+msgstr "Mesaje SPV (vedere împărțită)"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "No."
+msgstr "Nr."
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "PDF"
+msgstr "PDF"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Quantity"
+msgstr "Cantitate"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Reject"
+msgstr "Respinge"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Representation generated from the e-Factura XML downloaded from SPV."
+msgstr "Reprezentare generată din XML-ul e-Factura descărcat din SPV."
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "Supplier"
+msgstr "Furnizor"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,help:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_party_vat
+msgid "The VAT number of the other party, as written in the invoice XML."
+msgstr "Codul de TVA al celeilalte părți, așa cum este scris în XML-ul facturii."
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "The XML has no invoice lines."
+msgstr "XML-ul nu are linii de factură."
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Total"
+msgstr "Total"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "Total without VAT"
+msgstr "Total fără TVA"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "Unit price"
+msgstr "Preț unitar"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "UoM"
+msgstr "UM"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "VAT"
+msgstr "TVA"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_lines
+msgid "VAT %"
+msgstr "TVA %"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_party_vat
+msgid "VAT (XML)"
+msgstr "CUI (XML)"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+msgid "VAT ID"
+msgstr "CUI"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "XML"
+msgstr "XML"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_side_panel.field_l10n_ro_message_spv__spv_lines_html
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "XML Lines"
+msgstr "Poziții XML"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+msgid "ZIP"
+msgstr "ZIP"

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Kanban: one card per message, with the panel on the right. -->
+    <record id="view_l10n_ro_message_spv_kanban" model="ir.ui.view">
+        <field name="name">l10n.ro.message.spv.kanban.side.panel</field>
+        <field name="model">l10n.ro.message.spv</field>
+        <field name="arch" type="xml">
+            <kanban class="o_spv_split_kanban" js_class="side_panel_kanban" create="0">
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between gap-2">
+                            <field name="partner_name" class="fw-bold text-truncate" />
+                            <span class="fw-bold text-nowrap">
+                                <field name="amount" widget="monetary" />
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between gap-2 text-muted">
+                            <span class="text-truncate">
+                                <field name="ref" />
+                                ·
+                                <field name="invoice_date" />
+                            </span>
+                            <field
+                                name="state"
+                                widget="badge"
+                                decoration-success="state == 'done'"
+                                decoration-info="state == 'downloaded'"
+                                decoration-primary="state == 'invoice'"
+                                decoration-danger="state == 'error'"
+                            />
+                        </div>
+                        <div class="d-flex justify-content-between gap-2">
+                            <field
+                                name="invoice_date_due"
+                                widget="remaining_days"
+                                invisible="state == 'error'"
+                            />
+                            <field
+                                name="review_state"
+                                widget="badge"
+                                invisible="not review_state"
+                                decoration-warning="review_state == 'pending'"
+                                decoration-success="review_state == 'accepted'"
+                                decoration-danger="review_state == 'rejected'"
+                            />
+                        </div>
+                        <field name="currency_id" invisible="1" />
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- The list of the messages, with the same panel. -->
+    <record id="view_l10n_ro_message_spv_list_side_panel" model="ir.ui.view">
+        <field name="name">l10n.ro.message.spv.list.side.panel</field>
+        <field name="model">l10n.ro.message.spv</field>
+        <field name="inherit_id" ref="l10n_ro_message_spv.view_l10n_ro_message_spv_tree" />
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="js_class">side_panel_list</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- What the panel shows: the key data, the actions and the document. -->
+    <record id="view_l10n_ro_message_spv_form_quick" model="ir.ui.view">
+        <field name="name">l10n.ro.message.spv.form.quick</field>
+        <field name="model">l10n.ro.message.spv</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <header>
+                    <button
+                        name="create_invoice"
+                        groups="account.group_account_user"
+                        string="Create Invoice"
+                        type="object"
+                        invisible="message_type not in ('in_invoice','in_receipt') or invoice_id"
+                    />
+                    <button
+                        name="action_accept"
+                        string="Accept"
+                        type="object"
+                        class="btn-primary"
+                        groups="account.group_account_user"
+                        invisible="not review_required or message_type not in ('in_invoice', 'in_receipt') or review_state == 'accepted'"
+                    />
+                    <button
+                        name="action_reject"
+                        string="Reject"
+                        type="object"
+                        groups="account.group_account_user"
+                        invisible="not review_required or message_type not in ('in_invoice', 'in_receipt') or review_state == 'rejected'"
+                    />
+                    <button
+                        name="action_review_reset"
+                        string="Back to Review"
+                        type="object"
+                        groups="account.group_account_user"
+                        invisible="not review_required or review_state in (False, 'pending')"
+                    />
+                    <button
+                        name="action_download_xml"
+                        string="XML"
+                        type="object"
+                        icon="fa-file-code-o"
+                        invisible="not attachment_id"
+                        title="Download the invoice XML"
+                    />
+                    <button
+                        name="action_download_pdf"
+                        string="PDF"
+                        type="object"
+                        icon="fa-file-pdf-o"
+                        invisible="not attachment_id"
+                        title="Download the invoice PDF"
+                    />
+                    <button
+                        name="action_download_attachment"
+                        string="ZIP"
+                        type="object"
+                        icon="fa-file-archive-o"
+                        invisible="not attachment_id"
+                        title="Download the signed ANAF ZIP"
+                    />
+                </header>
+                <sheet>
+                    <field name="review_required" invisible="1" />
+                    <field name="attachment_id" invisible="1" />
+                    <field name="invoice_amount" invisible="1" />
+                    <div class="oe_title">
+                        <h2>
+                            <field name="partner_name" placeholder="Supplier" />
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="ref" />
+                            <field name="spv_party_vat" />
+                            <field name="partner_id" />
+                            <field name="invoice_date" />
+                            <field name="invoice_date_due" />
+                        </group>
+                        <group>
+                            <field name="currency_id" />
+                            <field name="amount_untaxed" />
+                            <field name="amount_tax" />
+                            <field
+                                name="amount"
+                                decoration-danger="invoice_amount and amount != invoice_amount"
+                            />
+                            <field
+                                name="state"
+                                widget="badge"
+                                decoration-success="state == 'done'"
+                                decoration-info="state == 'downloaded'"
+                                decoration-primary="state == 'invoice'"
+                                decoration-danger="state == 'error'"
+                            />
+                            <field
+                                name="review_state"
+                                widget="badge"
+                                invisible="not review_state"
+                                decoration-warning="review_state == 'pending'"
+                                decoration-success="review_state == 'accepted'"
+                                decoration-danger="review_state == 'rejected'"
+                            />
+                            <field name="invoice_id" invisible="not invoice_id" />
+                        </group>
+                    </group>
+                    <group invisible="not error and not message">
+                        <field name="error" invisible="not error" />
+                        <field name="message" invisible="not message" />
+                    </group>
+                    <notebook>
+                        <page string="Document" name="document">
+                            <field name="spv_document_html" nolabel="1" />
+                        </page>
+                        <page string="XML Lines" name="xml_lines">
+                            <field name="spv_lines_html" nolabel="1" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_ro_message_spv_split" model="ir.actions.act_window">
+        <field name="name">Messages SPV (split view)</field>
+        <field name="res_model">l10n.ro.message.spv</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field
+            name="search_view_id"
+            ref="l10n_ro_message_spv.view_l10n_ro_message_spv_search"
+        />
+        <field
+            name="context"
+            eval="{'side_panel_view_ref': 'l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick'}"
+        />
+    </record>
+    <record id="action_l10n_ro_message_spv_split_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1" />
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_l10n_ro_message_spv_kanban" />
+        <field name="act_window_id" ref="action_l10n_ro_message_spv_split" />
+    </record>
+    <record id="action_l10n_ro_message_spv_split_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2" />
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_l10n_ro_message_spv_list_side_panel" />
+        <field name="act_window_id" ref="action_l10n_ro_message_spv_split" />
+    </record>
+
+    <menuitem
+        id="menu_l10n_ro_message_spv_split"
+        name="Messages SPV (split view)"
+        parent="l10n_ro_message_spv.menu_l10n_ro_spv"
+        action="action_l10n_ro_message_spv_split"
+        groups="l10n_ro_config.group_ro_menus"
+    />
+</odoo>
