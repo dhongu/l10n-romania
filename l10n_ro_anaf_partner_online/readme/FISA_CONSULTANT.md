@@ -57,7 +57,7 @@ Modulul nu generează note contabile și nu atinge conturi. Câmpurile completat
 | CUI | CIF | cu `RO` doar pentru plătitorii de TVA |
 | Adresa sediului social | Stradă, Stradă 2, Localitate, Județ, Cod poștal, Țară | la București, localitatea este sectorul (ex. `Sector 6`) |
 | Telefon | Telefon | doar dacă ANAF îl are |
-| — | Tip **Companie** | partenerul devine întotdeauna firmă |
+| — | Tip (persoană / companie) | modulul nu îl scrie: pe Odoo 20 tipul se deduce din CIF |
 | Plătitor de TVA | **Plătitor de TVA (ANAF)** | tabul **ANAF** |
 | Inactiv fiscal | **Inactiv fiscal (ANAF)** | tabul **ANAF** |
 | Radiat | **Radiat (ANAF)** | tabul **ANAF** |
@@ -210,7 +210,7 @@ factura și XML-ul e-Factura preiau denumirea, CIF-ul și adresa sediului social
 | Serviciul Terrabit (în afara bazei clientului) | întreabă ANAF după CUI și trimite datele înapoi |
 
 **Ce e automat:** completarea formularului din ANAF, prefixul `RO` doar la plătitorii de TVA,
-județul și țara după cod, tipul **Companie**, starea fiscală și data verificării, nota din istoric la
+județul și țara după cod, starea fiscală și data verificării, nota din istoric la
 actualizarea din coadă, retrimiterea cererilor rămase fără răspuns, actualizarea creditelor.
 
 **Ce rămâne manual:** salvarea formularului după butonul **ANAF**; decizia ce se face cu un
@@ -243,7 +243,7 @@ creditelor.
 ## 9. Mesaje de eroare frecvente
 
 Notificările butonului **ANAF** au traducere în română în modul; la modulele importate ca zip,
-Odoo 19 nu le încarcă traducerile în interfață, deci pot apărea în engleză. Mesajele acțiunii
+Odoo poate să nu le încarce traducerile în interfață, deci pot apărea în engleză. Mesajele acțiunii
 **Actualizează din ANAF** și erorile din **Cereri ANAF** sunt doar în engleză. Tot în engleză sunt,
 în lista **Cereri ANAF**, coloana *Created on*, stările *Done* / *Error* și tipurile *request* /
 *balance*. Pe cererile din coadă, erorile serviciului (fără credite, bază neînregistrată) apar în
@@ -252,7 +252,7 @@ coloana **Eroare** ca coduri brute: `insufficient_credit`, `origin_refused`.
 | Mesaj | Cauză | Remediere |
 |---|---|---|
 | *Fill in the Tax ID (CUI) first.* / Completați mai întâi codul fiscal (CUI). | butonul **ANAF** apăsat cu CIF gol | scrieți CUI-ul, apoi Tab și **ANAF** |
-| *The ANAF service is not active yet: Contacts > Configuration > ANAF > ANAF Service, Activate.* | serviciul nu e activat | un administrator apasă **Activează** în **Serviciul ANAF** |
+| *The ANAF service is not active yet: Contacts > Configuration > ANAF > ANAF Service, Activate.* (butonul **ANAF** și **Actualizează din ANAF**) | serviciul nu e activat | un administrator apasă **Activează** în **Serviciul ANAF** |
 | *Invalid CUI: check the control digit.* (buton) / `Invalid CUI` (Cereri ANAF) | cifra de control greșită, litere în CUI | verificați CUI-ul pe documentele firmei |
 | *CUI not found at ANAF.* / `CUI not found at ANAF` | CUI corect ca formă, dar ANAF nu are firma | verificați CUI-ul; completați manual o firmă nou înființată |
 | *ANAF did not answer, please try again later.* | ANAF indisponibil | reîncercați mai târziu; nu consumă credit |
