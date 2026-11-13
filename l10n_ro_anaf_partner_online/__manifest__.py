@@ -11,14 +11,13 @@
     "website": "https://www.terrabit.ro",
     "category": "Localization",
     "countries": ["ro"],
-    "depends": ["base_automation", "contacts"],
+    "depends": ["deltatech_iap_online", "contacts"],
     "data": [
         "data/ir_model_data.xml",
-        "security/ir.model.access.csv",
         "data/ir_actions_server_data.xml",
-        "data/base_automation_data.xml",
+        "data/iap_online_service_data.xml",
         "views/res_partner_views.xml",
-        "views/x_tb_service_request_views.xml",
+        "views/menus.xml",
     ],
     "assets": {
         "web.assets_backend": [

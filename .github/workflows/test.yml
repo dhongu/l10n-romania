@@ -27,8 +27,9 @@ jobs:
           for reqfile in requirements.txt test-requirements.txt ; do
               if [ -f ${reqfile} ] ; then
                   result=0
-                  # reject non-comment lines that contain a / (i.e. URLs, relative paths)
-                  grep "^[^#].*/" ${reqfile} || result=$?
+                  # reject non-comment lines that contain a / (i.e. URLs, relative paths),
+                  # except our own suites (e.g. deltatech_iap_online from dhongu/deltatech)
+                  grep "^[^#].*/" ${reqfile} | grep -v "github.com/\(dhongu\|terrabit-solutions\)/" || result=$?
                   if [ $result -eq 0 ] ; then
                       echo "Unreleased dependencies found in ${reqfile}."
                       exit 1

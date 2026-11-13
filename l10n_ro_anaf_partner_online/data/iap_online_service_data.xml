@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- The ANAF service at Terrabit. noupdate: the activation writes the account token and the
+         credits on this record, and the server URL may be changed -->
+    <data noupdate="1">
+        <record id="iap_online_service_anaf" model="x_iap_online_service">
+            <field name="x_name">ANAF Partner Data</field>
+            <field name="x_code">anaf_partner_online</field>
+            <field name="x_server">https://terrabit.odoo.com</field>
+            <field name="x_apply_action_id" ref="action_anaf_apply" />
+        </record>
+    </data>
+</odoo>

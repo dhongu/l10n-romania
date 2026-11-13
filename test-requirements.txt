@@ -1,0 +1,2 @@
+# l10n_ro_anaf_partner_online depends on deltatech_iap_online (data-only, LGPL-3)
+odoo-addon-deltatech_iap_online @ git+https://github.com/dhongu/deltatech.git@19.0#subdirectory=deltatech_iap_online

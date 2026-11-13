@@ -9,8 +9,10 @@ Terrabit service, which asks ANAF and sends the data back to your database.
   answers in a few seconds and posts a note in the chatter of each partner.
 - **ANAF status on the partner**: VAT payer, fiscally inactive, struck off, the trade register
   number (J…) and the date of the last check, on the **ANAF** tab.
-- **Activation in one click**: *Contacts > Configuration > ANAF > Activate ANAF Service*; the
-  service token is written in your database automatically, with free trial lookups.
+- **Activation in one click**: *Contacts > Configuration > ANAF > ANAF Service*, **Activate**;
+  the service token is written in your database automatically, with free trial lookups.
+  **Buy Credits** and **Refresh Credits** are on the same screen (module *IAP Services for Odoo
+  Online*, `deltatech_iap_online`, installed with this one).
 - **What leaves your database**: only the CUI you look up, the request token and the address of
   your database (for the answer). The requests and their answers stay visible under *ANAF Requests*.
 
