@@ -82,11 +82,15 @@ jobs:
       - name: Install addons and dependencies
         run: oca_install_addons
       # Data-only dependencies of our own suites (no __init__.py: whool cannot build them, so
-      # they cannot come from test-requirements.txt): copied into the addons path of Odoo
+      # they cannot come from test-requirements.txt): copied into the addons path of Odoo, from a
+      # pinned commit of dhongu/deltatech (update DELTATECH_SHA when deltatech_iap_online changes)
       - name: Install data-only dependencies
+        env:
+          DELTATECH_SHA: a483096474c8480550128f0eded715eeb685ca01
         run: |
-          git clone --quiet --depth 1 --filter=blob:none --sparse -b 19.0 https://github.com/dhongu/deltatech.git /tmp/deltatech
-          git -C /tmp/deltatech sparse-checkout set deltatech_iap_online
+          git init --quiet /tmp/deltatech
+          git -C /tmp/deltatech fetch --quiet --depth 1 https://github.com/dhongu/deltatech.git "$DELTATECH_SHA"
+          git -C /tmp/deltatech checkout --quiet FETCH_HEAD -- deltatech_iap_online
           ADDONS_DIR=$(python -c "import odoo.addons; print(list(odoo.addons.__path__)[-1])")
           cp -r /tmp/deltatech/deltatech_iap_online "$ADDONS_DIR/"
       - name: Check licenses
