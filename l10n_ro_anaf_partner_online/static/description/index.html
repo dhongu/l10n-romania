@@ -379,9 +379,9 @@ which asks ANAF and sends the data back to your database.</p>
 the name, the address of the registered office (county, city, postal
 code), the Tax ID with <tt class="docutils literal">RO</tt> only for VAT payers and the phone,
 before you save.</li>
-<li><strong>Many partners at once</strong>: <em>Action &gt; Update from ANAF</em> on a selection
+<li><strong>Many partners at once</strong>: <em>Actions &gt; Update from ANAF</em> on a selection
 of partners; the service answers in a few seconds and posts a note in
-the chatter of each partner.</li>
+the chatter of each partner found.</li>
 <li><strong>ANAF status on the partner</strong>: VAT payer, fiscally inactive, struck
 off, the trade register number (J…) and the date of the last check, on
 the <strong>ANAF</strong> tab.</li>
@@ -392,12 +392,15 @@ Credits</strong> are on the same screen (module <em>IAP Services for Odoo
 Online</em>, <tt class="docutils literal">deltatech_iap_online</tt>, installed with this one).</li>
 <li><strong>Who sees what</strong>: the users who edit partners (<em>Contact Creation</em>)
 can read the service account, because the ANAF button asks the service
-from their browser. Every internal user can create requests (the
-button, <em>Update from ANAF</em>), but only administrators read them and
-their answers (access rights of <tt class="docutils literal">deltatech_iap_online</tt>).</li>
-<li><strong>What leaves your database</strong>: only the CUI you look up, the request
-token and the address of your database (for the answer). The requests
-and their answers stay visible under <em>ANAF Requests</em>.</li>
+from their browser; the button and <em>Update from ANAF</em> are for them.
+Only administrators activate the service, buy credits and read the
+requests and their answers (access rights of
+<tt class="docutils literal">deltatech_iap_online</tt>).</li>
+<li><strong>What leaves your database</strong>: the CUI you look up, the account and
+request tokens, the UUID and the address of your database (for the
+answer); at activation, also the name and the Tax ID of the company.
+The requests, their status and errors stay visible under <em>ANAF
+Requests</em>.</li>
 </ul>
 <p>The service is provided by Terrabit: after the trial lookups, more can
 be bought from Terrabit.</p>
@@ -410,44 +413,117 @@ Only for development or testing purpose, do not use in production.
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#changelog" id="toc-entry-1">Changelog</a></li>
-<li><a class="reference internal" href="#section-1" id="toc-entry-2">19.0.1.0.0</a></li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-6">Maintainers</a></li>
+<li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a></li>
+<li><a class="reference internal" href="#changelog" id="toc-entry-2">Changelog</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-3">19.0.1.0.0</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-4">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-5">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-6">Authors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-7">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="usage">
+<h1><a class="toc-backref" href="#toc-entry-1">Usage</a></h1>
+<p><strong>Activate the service</strong> (administrator, once)</p>
+<ol class="arabic">
+<li><p class="first">Go to <em>Contacts &gt; Configuration</em>: the <strong>ANAF</strong> group holds <strong>ANAF
+Service</strong> and <strong>ANAF Requests</strong> (administrators only).</p>
+<p><img alt="The Configuration menu of Contacts, open, with ANAF Service and ANAF Requests highlighted in the ANAF group" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/01_meniu_anaf.png" /></p>
+</li>
+<li><p class="first">Open <strong>ANAF Service</strong> and click <strong>Activate</strong>. The account token comes
+back by itself in a few seconds, with free trial lookups. Once
+active, the header shows <strong>Activate Again</strong>, <strong>Refresh Credits</strong> and
+<strong>Buy Credits</strong>, and <strong>Credits Left</strong> shows the lookups left on the
+Terrabit account (updated by <strong>Refresh Credits</strong> and by every queued
+answer). One credit is used per ANAF answer (company found or not
+found); an invalid CUI or ANAF not answering is free.</p>
+<p><img alt="The ANAF Service form, active: Activate Again, Refresh Credits and Buy Credits in the header, Service Code anaf_partner_online and Credits Left highlighted" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/02_serviciu_anaf.png" /></p>
+</li>
+</ol>
+<p><strong>Fill in a new partner</strong></p>
+<ol class="arabic" start="3">
+<li><p class="first">Create a contact, choose <strong>Company</strong> and type the CUI in <strong>VAT</strong>
+(with or without <tt class="docutils literal">RO</tt>). Press Tab so that the suggestion list of
+the field closes, then click <strong>ANAF</strong> next to it. The button is
+hidden on the contacts of a company.</p>
+<p><img alt="A new company contact with 14399840 in VAT and the ANAF button highlighted next to it" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/03_buton_anaf.png" /></p>
+</li>
+<li><p class="first">The form is filled in at once, before you save: name, <strong>VAT</strong> with
+<tt class="docutils literal">RO</tt> only for VAT payers, the address of the registered office (in
+Bucharest, the city is the sector) and the phone, if ANAF has it. A
+notification shows the lookups left. Check the data, then save. If
+the browser cannot reach the service, the partner is saved and the
+lookup is queued instead.</p>
+<p><img alt="The form filled in from ANAF before saving: DANTE INTERNATIONAL SA, VAT RO14399840, the address in Sector 6, Bucharest, and the notification Filled in from ANAF with the lookups left" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/04_partener_completat.png" /></p>
+</li>
+<li><p class="first">After saving, the <strong>ANAF</strong> tab shows <strong>VAT Payer (ANAF)</strong>, <strong>Fiscally
+Inactive (ANAF)</strong>, <strong>Struck Off (ANAF)</strong>, <strong>Trade Register No.</strong> and
+<strong>Last ANAF Check</strong>. The tab appears once the partner has been
+checked at ANAF.</p>
+<p><img alt="The ANAF tab of the partner: VAT Payer ticked, Fiscally Inactive and Struck Off not ticked, the trade register number and the date of the last check" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/05_tab_anaf.png" /></p>
+</li>
+</ol>
+<p><strong>Update many partners</strong></p>
+<ol class="arabic" start="6">
+<li><p class="first">In the list of contacts, select the partners and click <em>Actions &gt;
+Update from ANAF</em> (also in the <em>Actions</em> menu of the partner form).
+Partners without a VAT number are skipped.</p>
+<p><img alt="The list of contacts with three partners selected and Update from ANAF highlighted in the Actions menu" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/06_actiune_actualizare.png" /></p>
+</li>
+<li><p class="first">A notification tells how many requests were sent; the partners are
+updated in a few seconds.</p>
+<p><img alt="The notification ANAF (Terrabit): 2 request(s) sent, over the list with three partners selected" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/07_cereri_trimise.png" /></p>
+</li>
+<li><p class="first">Each partner found gets the ANAF data and the note <em>Partner data
+updated from ANAF (Terrabit service).</em> in the chatter, with the
+tracked changes. The answer is written only if the user who sent the
+request may edit the partner and the partner still has the same CUI.</p>
+<p><img alt="The partner OMV PETROM SA updated from ANAF, with the tracked changes of name, VAT and address and the note in the chatter" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/08_nota_chatter.png" /></p>
+</li>
+</ol>
+<p><strong>Follow the requests</strong> (administrator)</p>
+<ol class="arabic" start="9">
+<li><p class="first"><em>Contacts &gt; Configuration &gt; ANAF &gt; ANAF Requests</em> lists every request
+with its <strong>Request Type</strong>, <strong>Name</strong> (the CUI looked up), <strong>Status</strong>
+and <strong>Error</strong>; the requests in error are red (for example
+<tt class="docutils literal">Invalid CUI</tt>). A request still without answer after 10 minutes is
+sent once more.</p>
+<p><img alt="The ANAF Requests list: a request Done and a red request in Error with Invalid CUI" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_partner_online/static/description/en/09_cereri_anaf.png" /></p>
+</li>
+</ol>
+</div>
 <div class="section" id="changelog">
-<h1><a class="toc-backref" href="#toc-entry-1">Changelog</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-2">Changelog</a></h1>
 </div>
 <div class="section" id="section-1">
-<h1><a class="toc-backref" href="#toc-entry-2">19.0.1.0.0</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-3">19.0.1.0.0</a></h1>
 <ul class="simple">
+<li>Consultant sheet (<tt class="docutils literal">readme/FISA_CONSULTANT.md</tt>), <tt class="docutils literal">readme/USAGE.md</tt>
+and screenshots (RO, EN).</li>
 <li>First version: ANAF button on the partner form (immediate answer),
 <em>Update from ANAF</em> on a selection of partners (queued answer),
 activation by callback, ANAF status on the partner.</li>
 </ul>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-4">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
 In case of trouble, please check there if your issue has already been reported.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-4">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-5">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-5">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">Authors</a></h2>
 <ul class="simple">
 <li>Dorin Hongu</li>
 <li>Terrabit</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-6">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h2>
 <p>Current maintainer:</p>
 <p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
 <p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_anaf_partner_online">dhongu/l10n-romania</a> project on GitHub.</p>
