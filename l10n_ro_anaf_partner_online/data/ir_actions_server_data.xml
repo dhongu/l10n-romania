@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Writes the answer of the Terrabit service on the partner (called by deltatech_iap_online,
+         as superuser, with the answer in the context key iap_answer) -->
+    <record id="action_anaf_apply" model="ir.actions.server">
+        <field name="name">ANAF: write the answer on the partner</field>
+        <field name="model_id" ref="deltatech_iap_online.model_x_iap_online_request" />
+        <field name="state">code</field>
+        <field name="code">answer = env.context.get('iap_answer') or {}
+result = answer.get('result') or {}
+status = result.get('state')
+partner = env['res.partner']
+if record.x_res_model == 'res.partner' and record.x_res_id:
+    partner = env['res.partner'].browse(record.x_res_id).exists()
+# The answer is written as superuser: only on a partner the author of the request may change,
+# and only for the CUI of that partner (digits only: RO, spaces and dashes do not matter)
+allowed = bool(partner) and partner.with_user(record.create_uid).has_access('write')
+same_cui = bool(partner) and ''.join(c for c in (record.x_input or '') if c.isdigit()) == ''.join(c for c in (partner.vat or '') if c.isdigit())
+if status == 'found' and partner and not (allowed and same_cui):
+    record.write({
+        'x_state': 'error',
+        'x_error': 'Not allowed to update this partner' if not allowed else 'The CUI of the partner has changed',
+        'x_result': str(result),
+    })
+elif status == 'found' and partner:
+    data = result.get('partner') or {}
+    vals = {key: data[key] for key in ('name', 'vat', 'street', 'street2', 'city', 'zip', 'phone') if data.get(key)}
+    country = env['res.country'].search([('code', '=', data.get('country_code') or 'RO')], limit=1)
+    region = env['res.country.state'].search([('country_id', '=', country.id), ('code', '=', data.get('state_code') or '-')], limit=1)
+    if country:
+        # An unknown country never removes the one of the partner
+        vals.update({'country_id': country.id, 'state_id': region.id or False})
+    vals.update({
+        'x_anaf_vat_payer': bool(result.get('vat_payer')),
+        'x_anaf_inactive': bool(result.get('inactive')),
+        'x_anaf_struck_off': bool(result.get('struck_off')),
+        'x_anaf_trade_register': result.get('trade_register') or False,
+        'x_anaf_last_check': datetime.datetime.now(),
+    })
+    partner.write(vals)
+    partner.message_post(body='Partner data updated from ANAF (Terrabit service).')
+    record.write({'x_state': 'done', 'x_error': False, 'x_result': str(result)})
+else:
+    messages = {
+        'found': 'The partner no longer exists',
+        'not_found': 'CUI not found at ANAF',
+        'invalid': 'Invalid CUI',
+        'unavailable': 'ANAF did not answer, please try again later',
+    }
+    record.write({'x_state': 'error', 'x_error': messages.get(status, status or 'error'), 'x_result': str(result)})</field>
+    </record>
+
+    <!-- Action menu of the partners: queue a lookup for each selected partner with a Tax ID -->
+    <record id="action_anaf_lookup_partners" model="ir.actions.server">
+        <field name="name">Update from ANAF</field>
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_view_types">list,form</field>
+        <field name="group_ids" eval="[(4, ref('base.group_partner_manager'))]" />
+        <field name="state">code</field>
+        <field name="code">service = env.ref('l10n_ro_anaf_partner_online.iap_online_service_anaf')
+if not service.x_token:
+    raise UserError('The ANAF service is not active yet: Contacts > Configuration > ANAF > ANAF Service, Activate.')
+count = 0
+for partner in records.filtered('vat'):
+    env['x_iap_online_request'].create({
+        'x_name': partner.vat,
+        'x_service_id': service.id,
+        'x_kind': 'request',
+        'x_input': partner.vat,
+        'x_res_model': 'res.partner',
+        'x_res_id': partner.id,
+    })
+    count += 1
+action = {
+    'type': 'ir.actions.client',
+    'tag': 'display_notification',
+    'params': {
+        'title': 'ANAF (Terrabit)',
+        'message': '%s request(s) sent. The partners are updated in a few seconds.' % count,
+        'type': 'info',
+    },
+}</field>
+    </record>
+</odoo>

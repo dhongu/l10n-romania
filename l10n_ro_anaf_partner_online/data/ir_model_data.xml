@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): the fields are manual, prefixed x_ -->
+<odoo>
+    <!-- Partner: the ANAF status, filled by the service -->
+    <record id="field_res_partner_x_anaf_vat_payer" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_vat_payer</field>
+        <field name="field_description">VAT Payer (ANAF)</field>
+        <field name="ttype">boolean</field>
+    </record>
+    <record id="field_res_partner_x_anaf_inactive" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_inactive</field>
+        <field name="field_description">Fiscally Inactive (ANAF)</field>
+        <field name="ttype">boolean</field>
+    </record>
+    <record id="field_res_partner_x_anaf_struck_off" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_struck_off</field>
+        <field name="field_description">Struck Off (ANAF)</field>
+        <field name="ttype">boolean</field>
+    </record>
+    <record id="field_res_partner_x_anaf_trade_register" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_trade_register</field>
+        <field name="field_description">Trade Register No.</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_res_partner_x_anaf_last_check" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_last_check</field>
+        <field name="field_description">Last ANAF Check</field>
+        <field name="ttype">datetime</field>
+    </record>
+
+</odoo>

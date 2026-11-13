@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="l10n_ro_anaf_partner_online.AnafLookupWidget">
+        <button
+            type="button"
+            class="btn btn-sm btn-secondary o_tb_anaf_lookup"
+            t-att-disabled="this.state.busy or this.props.readonly"
+            t-on-click="this.onClick"
+            title="Fill in the partner from ANAF by its CUI"
+        >
+            <i
+                t-attf-class="oi me-1 {{ this.state.busy ? 'oi-spin' : '' }}"
+                t-att-data-icon="this.state.busy ? 'autorenew' : 'search'"
+            />
+            ANAF
+        </button>
+    </t>
+</templates>

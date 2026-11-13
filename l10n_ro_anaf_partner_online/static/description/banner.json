@@ -1,0 +1,7 @@
+{
+  "title": "ANAF Partner Data",
+  "summary": "Company data from ANAF by CUI, no Python",
+  "edition": "community",
+  "lang": "en",
+  "features": ["ANAF button on the partner form", "Update many partners at once", "VAT, inactive and struck-off status"]
+}
