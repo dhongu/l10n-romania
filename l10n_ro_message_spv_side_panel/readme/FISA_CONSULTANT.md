@@ -73,7 +73,8 @@ Pentru demo sunt necesare câteva mesaje SPV descărcate (stare *Descărcat*), c
 **Facturare → Contabilitate → SPV → Mesaje SPV (vedere împărțită)** (cu aplicația Contabilitate
 instalată, primul nivel se numește *Contabilitate*). Mesajele apar pe o singură coloană. Fiecare
 card arată furnizorul, suma totală, numărul facturii, data, starea mesajului și zilele rămase până la
-scadență (roșu dacă scadența a trecut, portocaliu dacă e azi). Mesajele cu eroare arată starea
+scadență (roșu dacă scadența a trecut, portocaliu dacă e azi). Când *Verificare facturi primite* e
+activă, cardul arată și starea verificării: în așteptare, acceptată sau respinsă. Mesajele cu eroare arată starea
 *Eroare* și suma 0.
 
 ![Lista mesajelor SPV ca o coloană de carduri: pe fiecare card se văd furnizorul, suma, numărul și data facturii, starea (Descărcat sau Eroare) și zilele până la scadență; un mesaj are starea Eroare și suma 0,00](../static/description/01_meniu_vedere_impartita.png)
@@ -130,12 +131,14 @@ comanda sau cu recepția, înainte de a crea factura de furnizor.
 
 Un mesaj fără arhivă descărcată nu are butoane de descărcare, iar fila **Document** rămâne goală.
 
+![Antetul panoului pe factura TID 4521: butoanele Creează factura, XML, PDF și ZIP, evidențiate și numerotate de la 1 la 4, în rândul de sub săgețile de navigare](../static/description/05_actiuni_panou.png)
+
 ### Pasul 5 — Lista, când aveți nevoie de coloane, sortare sau grupare
 
 Butonul de comutare din colțul dreapta-sus trece la **Listă**. Lista păstrează toate coloanele,
 sortarea și gruparea mesajelor, iar panoul funcționează la fel: un clic pe rând îl deschide.
 
-![Lista mesajelor SPV cu panoul deschis pe factura TID 4521: coloanele Referință, Tip, Denumire, CIF, datele, Moneda, Valoare fără TVA, TVA, Total și Stare, cu totalurile pe coloane, iar în dreapta panoul cu fila Document](../static/description/05_lista_cu_panou.png)
+![Lista mesajelor SPV cu panoul deschis pe factura TID 4521: coloanele Referință, Tip, Denumire, CIF, datele, Moneda, Valoare fără TVA, TVA, Total și Stare, cu totalurile pe coloane, iar în dreapta panoul cu fila Document](../static/description/06_lista_cu_panou.png)
 
 ### Note de monografie și raportare
 
@@ -157,7 +160,8 @@ panou urmează regulile modulului *Mesaje SPV*.
 - [ ] Meniul **Mesaje SPV (vedere împărțită)** apare pentru utilizatorii cu meniurile RO.
 - [ ] Pe o factură descărcată, panoul arată furnizorul, **CUI (XML)**, sumele și fila **Document** cu
       liniile.
-- [ ] Totalul din panou coincide cu totalul din fila **Document**.
+- [ ] Totalul din panou coincide cu totalul din fila **Document**; după crearea facturii, câmpul **Total**
+      se colorează în roșu dacă diferă de suma facturii create.
 - [ ] Fila **Poziții XML** arată toate liniile din XML.
 - [ ] Săgețile din panou trec la mesajul următor și la cel anterior, iar cardul selectat se evidențiază.
 - [ ] Un mesaj cu eroare, fără arhivă, se deschide în panou fără mesaje de eroare în ecran.
@@ -192,7 +196,8 @@ planul RO, cu mesaje SPV construite local, fără apeluri la ANAF. Regenerare:
 | `02_panou_document.png` | panoul deschis pe o factură, cu fila Document |
 | `03_panou_pozitii_xml.png` | panoul pe fila Poziții XML |
 | `04_document_totaluri.png` | partea de jos a filei Document, cu liniile și totalurile |
-| `05_lista_cu_panou.png` | lista mesajelor cu panoul deschis |
+| `05_actiuni_panou.png` | butoanele de acțiune din antetul panoului |
+| `06_lista_cu_panou.png` | lista mesajelor cu panoul deschis |
 
 ## 11. Observații pentru manual
 

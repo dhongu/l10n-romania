@@ -82,6 +82,8 @@ Usage
    action, the arrow-out button opens the full form and the cross closes
    the panel.
 
+   |The action buttons of the panel|
+
 5. The *List* view keeps all the columns, the grouping and the sorting;
    the panel works there too.
 
@@ -94,7 +96,8 @@ is off and a click opens the form, as in the original menu.
 .. |The side panel on the tab Document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/02_panou_document.png
 .. |The totals of the document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/04_document_totaluri.png
 .. |The tab XML Lines of the side panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/03_panou_pozitii_xml.png
-.. |The list with the side panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/05_lista_cu_panou.png
+.. |The action buttons of the panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/05_actiuni_panou.png
+.. |The list with the side panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/06_lista_cu_panou.png
 
 Changelog
 =========

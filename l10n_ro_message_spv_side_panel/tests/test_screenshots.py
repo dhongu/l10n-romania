@@ -174,8 +174,22 @@ class TestSpvSidePanelScreenshots(AccountTestInvoicingCommon, ScreenshotCase or 
                 "settle": 2000,
             },
             {
+                "url": self._url("kanban"),
+                "name": "05_actiuni_panou.png",
+                "wait": ".o_kanban_record",
+                "eval": OPEN_INVOICE_CARD,
+                "eval_wait": 1500,
+                "highlight": [
+                    ".o_side_panel button[name='create_invoice']",
+                    ".o_side_panel button[name='action_download_xml']",
+                    ".o_side_panel button[name='action_download_pdf']",
+                    ".o_side_panel button[name='action_download_attachment']",
+                ],
+                "settle": 2000,
+            },
+            {
                 "url": self._url("list"),
-                "name": "05_lista_cu_panou.png",
+                "name": "06_lista_cu_panou.png",
                 "wait": ".o_data_row",
                 "eval": OPEN_INVOICE_ROW,
                 "eval_wait": 1500,
