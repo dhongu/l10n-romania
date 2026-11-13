@@ -152,11 +152,13 @@ sortarea și gruparea mesajelor, iar panoul funcționează la fel: un clic pe r�
 
 ### Pasul 5 — Formularul complet
 
-Butonul cu săgeată în afară din antetul panoului deschide formularul complet al mesajului. Pe lângă
-câmpurile obișnuite, are acum **CUI (XML)** și, sub câmpuri, același document ca în panou:
-liniile facturii (cu codul articolului) se văd și fără panou, fără file.
+Butonul cu săgeată în afară din antetul panoului deschide formularul complet al mesajului. Câmpurile sunt grupate în trei
+coloane pe un rând: **Furnizor** (denumirea partenerului, **CUI (XML)**, partenerul din Odoo), **Factură**
+(referința, data, scadența, moneda, factura din Odoo) și **Sume** (valoarea fără TVA, TVA, total, starea).
+Sub ele este același document ca în panou, cu liniile facturii (și codul articolului), fără file, iar la
+sfârșit, în grupul **Mesaj**, datele tehnice ale mesajului: ID mesaj, tip, ID cerere, CIF, dată și detalii.
 
-![Formularul complet al mesajului SPV: câmpurile mesajului, CUI (XML) și, dedesubt, documentul cu cele trei casete (furnizor, client, factură) și tabelul cu liniile facturii, cu coloanele Nr., Cod, Denumire, UM, Cantitate, Preț unitar, TVA % și Valoare](../static/description/07_formular_complet.png)
+![Formularul complet al mesajului SPV: cele trei grupuri Furnizor, Factură și Sume, apoi documentul cu cele trei casete (furnizor, client, factură) și tabelul cu liniile facturii, cu coloanele Nr., Cod, Denumire, UM, Cantitate, Preț unitar, TVA % și Valoare](../static/description/07_formular_complet.png)
 
 ### Note de monografie și raportare
 

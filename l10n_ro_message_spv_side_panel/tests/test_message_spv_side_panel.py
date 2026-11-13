@@ -5,6 +5,8 @@
 import io
 import zipfile
 
+from lxml import etree
+
 from odoo.tests import TransactionCase, tagged
 
 from odoo.addons.l10n_ro_message_spv_side_panel import uninstall_hook
@@ -195,3 +197,12 @@ class TestMessageSpvSidePanel(TransactionCase):
         self.assertIn("spv_document_html", arch)
         self.assertNotIn("<notebook", arch.split("spv_document_html")[1])
         self.assertIn("spv_party_vat", arch)
+
+    def test_full_form_groups_the_fields(self):
+        arch = self.env["l10n.ro.message.spv"].get_view(view_type="form")["arch"]
+        root = etree.fromstring(arch)
+        groups = {g.get("name"): {f.get("name") for f in g.iter("field")} for g in root.iter("group") if g.get("name")}
+        self.assertLessEqual({"partner_name", "spv_party_vat", "partner_id"}, groups["spv_supplier"])
+        self.assertLessEqual({"ref", "invoice_date", "invoice_date_due", "invoice_id"}, groups["spv_invoice"])
+        self.assertLessEqual({"amount_untaxed", "amount_tax", "amount", "state"}, groups["spv_amounts"])
+        self.assertLessEqual({"name", "message_type", "request_id", "cif"}, groups["spv_message"])

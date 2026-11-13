@@ -30,7 +30,8 @@
    ![The list with the side panel](static/description/en/06_lista_cu_panou.png)
 
 5. The arrow-out button of the panel opens the full form: it has the VAT ID read from the XML and
-   the same document, with the lines, under the data of the message.
+   the same document, with the lines. The fields are in three groups on a row (*Supplier*, *Invoice* and
+   *Amounts*), the document is under them and the technical data of the message are at the bottom.
 
    ![The full form with the document](static/description/en/07_formular_complet.png)
 

@@ -27,6 +27,11 @@ msgid "Amount"
 msgstr "Valoare"
 
 #. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
+msgid "Amounts"
+msgstr "Sume"
+
+#. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
 msgid "Back to Review"
 msgstr "Înapoi la verificare"
@@ -105,8 +110,14 @@ msgstr "ID"
 
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
 msgid "Invoice"
 msgstr "Factură"
+
+#. module: l10n_ro_message_spv_side_panel
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
+msgid "Message"
+msgstr "Mesaj"
 
 #. module: l10n_ro_message_spv_side_panel
 #: model:ir.model,name:l10n_ro_message_spv_side_panel.model_l10n_ro_message_spv
@@ -147,6 +158,7 @@ msgstr "Reprezentare generată din XML-ul e-Factura descărcat din SPV."
 #. module: l10n_ro_message_spv_side_panel
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.spv_invoice_document
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_side_panel
 msgid "Supplier"
 msgstr "Furnizor"
 

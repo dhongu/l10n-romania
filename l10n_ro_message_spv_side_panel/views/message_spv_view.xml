@@ -237,17 +237,63 @@
         />
     </record>
 
-    <!-- The full form shows the VAT ID, the document and the lines too. -->
+    <!-- The full form: the VAT ID read from the XML and the document, with the fields regrouped. -->
     <record id="view_l10n_ro_message_spv_form_side_panel" model="ir.ui.view">
         <field name="name">l10n.ro.message.spv.form.side.panel</field>
         <field name="model">l10n.ro.message.spv</field>
         <field name="inherit_id" ref="l10n_ro_message_spv.view_l10n_ro_message_spv_form" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_name']" position="after">
+            <!-- Three groups on a row (supplier, invoice, amounts), the document under them and the
+                 technical data of the message at the bottom. Fields are moved, so the xpath of the
+                 other modules on these fields still work. -->
+            <xpath expr="//sheet/group" position="before">
+                <group col="3" name="spv_overview">
+                    <group string="Supplier" name="spv_supplier" />
+                    <group string="Invoice" name="spv_invoice" />
+                    <group string="Amounts" name="spv_amounts" />
+                </group>
+            </xpath>
+            <xpath expr="//group[@name='spv_supplier']" position="inside">
+                <xpath expr="//field[@name='partner_name']" position="move" />
                 <field name="spv_party_vat" />
+                <xpath expr="//field[@name='partner_id']" position="move" />
+            </xpath>
+            <xpath expr="//group[@name='spv_invoice']" position="inside">
+                <xpath expr="//field[@name='ref']" position="move" />
+                <xpath expr="//field[@name='invoice_date']" position="move" />
+                <xpath expr="//field[@name='invoice_date_due']" position="move" />
+                <xpath expr="//field[@name='currency_id']" position="move" />
+                <xpath expr="//field[@name='invoice_id']" position="move" />
+                <xpath expr="//field[@name='company_id']" position="move" />
+            </xpath>
+            <xpath expr="//group[@name='spv_amounts']" position="inside">
+                <xpath expr="//field[@name='amount_untaxed']" position="move" />
+                <xpath expr="//field[@name='amount_tax']" position="move" />
+                <xpath expr="//field[@name='amount']" position="move" />
+                <xpath expr="//field[@name='invoice_amount']" position="move" />
+                <xpath expr="//field[@name='state']" position="move" />
+                <xpath expr="//field[@name='review_required']" position="move" />
+                <xpath expr="//field[@name='attachment_id']" position="move" />
+                <xpath expr="//field[@name='review_state']" position="move" />
+                <xpath expr="//field[@name='review_reason']" position="move" />
+            </xpath>
+            <xpath expr="//sheet/group[2]/group[1]" position="attributes">
+                <attribute name="string" />
+            </xpath>
+            <xpath expr="//sheet/group[2]/group[2]" position="attributes">
+                <attribute name="string" />
             </xpath>
             <xpath expr="//sheet" position="inside">
                 <field name="spv_document_html" nolabel="1" />
+                <group string="Message" name="spv_message" col="6" />
+            </xpath>
+            <xpath expr="//group[@name='spv_message']" position="inside">
+                <xpath expr="//field[@name='name']" position="move" />
+                <xpath expr="//field[@name='message_type']" position="move" />
+                <xpath expr="//field[@name='request_id']" position="move" />
+                <xpath expr="//field[@name='cif']" position="move" />
+                <xpath expr="//field[@name='date']" position="move" />
+                <xpath expr="//field[@name='details']" position="move" />
             </xpath>
         </field>
     </record>

@@ -6,6 +6,9 @@
 - The document looks like a sheet of paper (border and shadow), to show that it is the invoice as
   received, and the supplier, the customer and the data of the invoice are three boxes on a row
   (fewer on a narrow panel).
+- The fields of the full form are regrouped in three groups on a row (*Supplier*, *Invoice* and
+  *Amounts*), followed by the document; the technical data of the message (message id, type,
+  request id, VAT number, date, details) are in the group *Message* at the bottom.
 
 ## 19.0.1.1.0 (2026-11-13)
 
