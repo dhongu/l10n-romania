@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form.anaf.online</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <!-- The button on the row of the Tax ID: the field is moved, unchanged, into a row -->
+            <xpath expr="//field[@name='vat']" position="before">
+                <label for="vat" />
+                <div class="o_row" name="anaf_vat_row" />
+            </xpath>
+            <xpath expr="//div[@name='anaf_vat_row']" position="inside">
+                <xpath expr="//field[@name='vat']" position="move" />
+            </xpath>
+            <xpath expr="//div[@name='anaf_vat_row']" position="inside">
+                <widget name="tb_anaf_lookup" invisible="not is_company and parent_id" />
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="ANAF" name="anaf" invisible="not x_anaf_last_check">
+                    <group>
+                        <group>
+                            <field name="x_anaf_vat_payer" />
+                            <field name="x_anaf_inactive" />
+                            <field name="x_anaf_struck_off" />
+                        </group>
+                        <group>
+                            <field name="x_anaf_trade_register" />
+                            <field name="x_anaf_last_check" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

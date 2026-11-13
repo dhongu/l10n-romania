@@ -81,6 +81,18 @@ jobs:
         run: pip freeze | grep -i '^cryptography==' >> test-requirements.txt
       - name: Install addons and dependencies
         run: oca_install_addons
+      # Data-only dependencies of our own suites (no __init__.py: whool cannot build them, so
+      # they cannot come from test-requirements.txt): copied into the addons path of Odoo, from a
+      # pinned commit of dhongu/deltatech (update DELTATECH_SHA when deltatech_iap_online changes)
+      - name: Install data-only dependencies
+        env:
+          DELTATECH_SHA: 78eb21a74e56625faa5f6dbc54b33023f934a668
+        run: |
+          git init --quiet /tmp/deltatech
+          git -C /tmp/deltatech fetch --quiet --depth 1 https://github.com/dhongu/deltatech.git "$DELTATECH_SHA"
+          git -C /tmp/deltatech checkout --quiet FETCH_HEAD -- deltatech_iap_online
+          ADDONS_DIR=$(python -c "import odoo.addons; print(list(odoo.addons.__path__)[-1])")
+          cp -r /tmp/deltatech/deltatech_iap_online "$ADDONS_DIR/"
       - name: Check licenses
         run: manifestoo -d . check-licenses
       - name: Check development status

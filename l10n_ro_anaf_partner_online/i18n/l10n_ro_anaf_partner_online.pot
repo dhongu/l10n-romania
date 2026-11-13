@@ -1,0 +1,148 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_anaf_partner_online
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-13 06:26+0000\n"
+"PO-Revision-Date: 2026-11-13 06:26+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+#: code:addons/l10n_ro_anaf_partner_online/static/src/xml/anaf_lookup_widget.xml:0
+#: model:ir.ui.menu,name:l10n_ro_anaf_partner_online.menu_anaf_online_root
+#: model_terms:ir.ui.view,arch_db:l10n_ro_anaf_partner_online.view_partner_form
+msgid "ANAF"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.actions.act_window,name:l10n_ro_anaf_partner_online.action_anaf_requests
+#: model:ir.ui.menu,name:l10n_ro_anaf_partner_online.menu_anaf_requests
+msgid "ANAF Requests"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.actions.act_window,name:l10n_ro_anaf_partner_online.action_anaf_service
+#: model:ir.ui.menu,name:l10n_ro_anaf_partner_online.menu_anaf_service
+msgid "ANAF Service"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "ANAF did not answer, please try again later."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.actions.server,name:l10n_ro_anaf_partner_online.action_anaf_apply
+msgid "ANAF: write the answer on the partner"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "CUI not found at ANAF."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "Fill in the Tax ID (CUI) first."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/xml/anaf_lookup_widget.xml:0
+msgid "Fill in the partner from ANAF by its CUI"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "Filled in from ANAF. Lookups left: %(balance)s"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_partner_x_anaf_inactive
+msgid "Fiscally Inactive (ANAF)"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "Invalid CUI: check the control digit."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_partner_x_anaf_last_check
+msgid "Last ANAF Check"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "No ANAF lookups left on the Terrabit account."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "No answer from ANAF."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_partner_x_anaf_struck_off
+msgid "Struck Off (ANAF)"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid ""
+"The ANAF service is not active yet: Contacts > Configuration > ANAF > ANAF "
+"Service, Activate."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid ""
+"The service did not answer at once: the request is queued and the partner is"
+" updated in a few seconds."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "The service refused the request."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#. odoo-javascript
+#: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
+msgid "This database is not the one registered for the service."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_partner_x_anaf_trade_register
+msgid "Trade Register No."
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.actions.server,name:l10n_ro_anaf_partner_online.action_anaf_lookup_partners
+msgid "Update from ANAF"
+msgstr ""
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_partner_x_anaf_vat_payer
+msgid "VAT Payer (ANAF)"
+msgstr ""
