@@ -76,7 +76,7 @@
                         groups="account.group_account_user"
                         string="Create Invoice"
                         type="object"
-                        invisible="message_type not in ('in_invoice','in_receipt')"
+                        invisible="message_type not in ('in_invoice','in_receipt') or invoice_id"
                     />
                     <button
                         name="action_accept"

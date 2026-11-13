@@ -2,10 +2,13 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
+import io
+import zipfile
+
 from lxml import etree
 
 from odoo import api, fields, models
-from odoo.tools.misc import formatLang
+from odoo.tools.misc import format_date, formatLang
 
 TEMPLATE_DOCUMENT = "l10n_ro_message_spv_side_panel.spv_invoice_document"
 TEMPLATE_LINES = "l10n_ro_message_spv_side_panel.spv_invoice_lines"
@@ -17,6 +20,14 @@ def _text(node, path):
         return ""
     value = node.findtext(path)
     return value.strip() if value else ""
+
+
+def _to_float(value):
+    """The number written in the XML, or None when it is not one."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 class L10nRoMessageSpv(models.Model):
@@ -44,9 +55,7 @@ class L10nRoMessageSpv(models.Model):
     def _compute_spv_invoice(self):
         qweb = self.env["ir.qweb"]
         for message in self:
-            # The web client reads with `bin_size`: the content of the ZIP would be
-            # replaced by its size.
-            data = message.with_context(bin_size=False)._spv_read_invoice()
+            data = message._spv_read_invoice()
             message.spv_party_vat = data.get("party", {}).get("vat", "")
             if data:
                 message.spv_document_html = qweb._render(TEMPLATE_DOCUMENT, data)
@@ -55,6 +64,27 @@ class L10nRoMessageSpv(models.Model):
                 message.spv_document_html = False
                 message.spv_lines_html = False
 
+    def _spv_xml_root(self):
+        """The root of the invoice XML kept in the ZIP of the message, or None.
+
+        The XML comes from a third party: it is read with a parser that does not resolve
+        entities, does not load the DTD and does not go to the network."""
+        self.ensure_one()
+        # the web client reads with `bin_size`: the content of the ZIP would be its size
+        attachment = self.attachment_id.sudo().with_context(bin_size=False)
+        if not attachment:
+            return None
+        try:
+            archive = zipfile.ZipFile(io.BytesIO(attachment.raw))
+        except zipfile.BadZipFile:
+            return None
+        names = [name for name in archive.namelist() if "semnatura" not in name]
+        if not names:
+            return None
+        parser = etree.XMLParser(recover=True, resolve_entities=False, no_network=True, load_dtd=False)
+        with archive.open(names[0]) as xml_file:
+            return etree.parse(xml_file, parser).getroot()
+
     def _spv_read_invoice(self):
         """Read the invoice XML of the message into what the panel shows.
 
@@ -62,11 +92,7 @@ class L10nRoMessageSpv(models.Model):
         or the ZIP holds none). Amounts are formatted strings, in the language of the
         user."""
         self.ensure_one()
-        _file_name, xml_bytes = self._get_xml_bytes()
-        if not xml_bytes:
-            return {}
-        parser = etree.XMLParser(recover=True)
-        root = etree.fromstring(xml_bytes, parser=parser)
+        root = self._spv_xml_root()
         if root is None:
             return {}
 
@@ -77,7 +103,16 @@ class L10nRoMessageSpv(models.Model):
         party = supplier if incoming else customer
 
         def money(value):
-            return formatLang(self.env, float(value), digits=2) if value else ""
+            number = _to_float(value)
+            if number is None:
+                return value or ""
+            return formatLang(self.env, number, digits=2)
+
+        def show_date(value):
+            try:
+                return format_date(self.env, fields.Date.to_date(value)) if value else ""
+            except (TypeError, ValueError):
+                return value or ""
 
         lines = []
         line_nodes = root.findall("./{*}InvoiceLine") + root.findall("./{*}CreditNoteLine")
@@ -99,16 +134,16 @@ class L10nRoMessageSpv(models.Model):
             )
 
         def total(path):
-            text = _text(root, f".//{{*}}LegalMonetaryTotal/{{*}}{path}")
-            return float(text) if text else 0.0
+            number = _to_float(_text(root, f".//{{*}}LegalMonetaryTotal/{{*}}{path}"))
+            return number or 0.0
 
         untaxed = total("TaxExclusiveAmount")
         with_tax = total("TaxInclusiveAmount")
         return {
             "is_credit_note": is_credit_note,
             "number": _text(root, "./{*}ID"),
-            "issue_date": _text(root, "./{*}IssueDate"),
-            "due_date": _text(root, "./{*}DueDate") or _text(root, "./{*}PaymentMeans/{*}PaymentDueDate"),
+            "issue_date": show_date(_text(root, "./{*}IssueDate")),
+            "due_date": show_date(_text(root, "./{*}DueDate") or _text(root, "./{*}PaymentMeans/{*}PaymentDueDate")),
             "currency": _text(root, "./{*}DocumentCurrencyCode"),
             "supplier": supplier,
             "customer": customer,
