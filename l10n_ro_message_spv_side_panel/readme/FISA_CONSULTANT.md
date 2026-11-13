@@ -34,7 +34,7 @@ facturii, generată de Odoo, și nu înlocuiește XML-ul semnat sau PDF-ul furni
 
 - **Contabil furnizori / operator** — verifică facturile primite și creează facturile de furnizor.
   Are dreptul *Contabil* (`account.group_account_user`), necesar pentru butoanele *Creează factura*,
-  *Acceptă* și *Respinge*.
+  *Acceptă*, *Respinge* și *Înapoi la verificare*.
 - **Utilizator cu meniurile RO** — vede meniul; este controlat de grupul de meniuri RO din
   localizarea `l10n_ro_config`. Meniul părinte *Contabilitate* cere și dreptul de **citire în
   contabilitate** (`account.group_account_readonly`).
