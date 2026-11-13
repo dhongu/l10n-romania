@@ -41,7 +41,7 @@ facturii, generată de Odoo, și nu înlocuiește XML-ul semnat sau PDF-ul furni
 
 Roluri recomandate la testare: un utilizator cu drept de Contabil și un utilizator doar cu drept de
 citire în contabilitate: acesta vede meniul și butoanele **XML**, **PDF** și **ZIP**, dar nu și
-**Creează factura**, **Acceptă** și **Respinge**.
+**Creează factura**, **Acceptă**, **Respinge** și **Înapoi la verificare**.
 
 ## 4. Conturi și date implicate
 
@@ -93,7 +93,9 @@ Un clic pe card deschide panoul. Cardul selectat se evidențiază. În panou cit
 - un grup **Eroare / Mesaj**, care apare doar când mesajul are o eroare sau un text de la ANAF (de
   exemplu „Arhiva descărcată nu a putut fi citită"): citiți-l înainte de orice altă acțiune;
 - fila **Document**: factura așa cum e scrisă în XML (furnizor, client, linii, totaluri); documentul se
-  intitulează **FACTURĂ**, sau **NOTĂ DE CREDIT** când XML-ul este o notă de credit.
+  intitulează **FACTURĂ**, sau **NOTĂ DE CREDIT** când XML-ul este o notă de credit. Documentul arată
+  și nota din XML (dacă există), iar scadența este cea din condițiile de plată când factura nu are
+  o scadență proprie;
 
 Săgețile din antetul panoului trec la mesajul anterior sau următor; butonul cu săgeată în afară
 deschide formularul complet; **Reîncarcă** citește din nou mesajul după o acțiune; **X** închide
@@ -172,7 +174,10 @@ panou urmează regulile modulului *Mesaje SPV*.
 - [ ] Fila **Poziții XML** arată toate liniile din XML.
 - [ ] Săgețile din panou trec la mesajul următor și la cel anterior, iar cardul selectat se evidențiază.
 - [ ] Un mesaj cu eroare, fără arhivă, se deschide în panou fără mesaje de eroare în ecran.
-- [ ] Un utilizator fără drept de Contabil nu vede butoanele *Creează factura*, *Acceptă* și *Respinge*.
+- [ ] Un utilizator fără drept de Contabil nu vede butoanele *Creează factura*, *Acceptă*, *Respinge* și
+      *Înapoi la verificare*.
+- [ ] Un mesaj cu eroare arată în panou grupul **Eroare / Mesaj** cu textul erorii.
+- [ ] Când XML-ul este o notă de credit, documentul se intitulează **NOTĂ DE CREDIT**.
 - [ ] Pe un ecran îngust, clicul pe un mesaj deschide formularul complet.
 - [ ] Meniul și vederile originale *Mesaje SPV* funcționează ca înainte.
 
