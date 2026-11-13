@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 06:02+0000\n"
-"PO-Revision-Date: 2026-11-13 06:02+0000\n"
+"POT-Creation-Date: 2026-11-13 06:26+0000\n"
+"PO-Revision-Date: 2026-11-13 06:26+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ro\n"
@@ -26,15 +26,16 @@ msgid "ANAF"
 msgstr "ANAF"
 
 #. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_company_x_tb_online_balance
-msgid "ANAF Lookups Left"
-msgstr "Interogări ANAF rămase"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.actions.act_window,name:l10n_ro_anaf_partner_online.action_x_tb_service_request
-#: model:ir.ui.menu,name:l10n_ro_anaf_partner_online.menu_x_tb_service_request
+#: model:ir.actions.act_window,name:l10n_ro_anaf_partner_online.action_anaf_requests
+#: model:ir.ui.menu,name:l10n_ro_anaf_partner_online.menu_anaf_requests
 msgid "ANAF Requests"
 msgstr "Cereri ANAF"
+
+#. module: l10n_ro_anaf_partner_online
+#: model:ir.actions.act_window,name:l10n_ro_anaf_partner_online.action_anaf_service
+#: model:ir.ui.menu,name:l10n_ro_anaf_partner_online.menu_anaf_service
+msgid "ANAF Service"
+msgstr "Serviciul ANAF"
 
 #. module: l10n_ro_anaf_partner_online
 #. odoo-javascript
@@ -43,41 +44,15 @@ msgid "ANAF did not answer, please try again later."
 msgstr "ANAF nu a răspuns, reîncercați mai târziu."
 
 #. module: l10n_ro_anaf_partner_online
-#: model:ir.actions.server,name:l10n_ro_anaf_partner_online.action_tb_activate
-#: model:ir.ui.menu,name:l10n_ro_anaf_partner_online.menu_tb_activate
-msgid "Activate ANAF Service"
-msgstr "Activează serviciul ANAF"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_result
-msgid "Answer"
-msgstr "Răspuns"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_input
-msgid "CUI"
-msgstr "CUI"
+#: model:ir.actions.server,name:l10n_ro_anaf_partner_online.action_anaf_apply
+msgid "ANAF: write the answer on the partner"
+msgstr "ANAF: scrie răspunsul pe partener"
 
 #. module: l10n_ro_anaf_partner_online
 #. odoo-javascript
 #: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
 msgid "CUI not found at ANAF."
 msgstr "CUI-ul nu a fost găsit la ANAF."
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_callback_url
-msgid "Callback URL"
-msgstr "URL de callback"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_db_uuid
-msgid "Database UUID"
-msgstr "UUID bază de date"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_error
-msgid "Error"
-msgstr "Eroare"
 
 #. module: l10n_ro_anaf_partner_online
 #. odoo-javascript
@@ -114,11 +89,6 @@ msgid "Last ANAF Check"
 msgstr "Ultima verificare ANAF"
 
 #. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_name
-msgid "Name"
-msgstr "Nume"
-
-#. module: l10n_ro_anaf_partner_online
 #. odoo-javascript
 #: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
 msgid "No ANAF lookups left on the Terrabit account."
@@ -131,79 +101,19 @@ msgid "No answer from ANAF."
 msgstr "Niciun răspuns de la ANAF."
 
 #. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_partner_id
-msgid "Partner"
-msgstr "Partener"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_token
-msgid "Request Token"
-msgstr "Token cerere"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_service
-msgid "Request Type"
-msgstr "Tip cerere"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_state
-msgid "Status"
-msgstr "Stare"
-
-#. module: l10n_ro_anaf_partner_online
 #: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_partner_x_anaf_struck_off
 msgid "Struck Off (ANAF)"
 msgstr "Radiat (ANAF)"
 
 #. module: l10n_ro_anaf_partner_online
-#: model:ir.model,name:l10n_ro_anaf_partner_online.model_x_tb_service_request
-msgid "Terrabit Service Request"
-msgstr "Cerere serviciu Terrabit"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_company_x_tb_online_token
-msgid "Terrabit Service Token"
-msgstr "Token serviciu Terrabit"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_company_x_tb_online_server
-msgid "Terrabit Service URL"
-msgstr "URL serviciu Terrabit"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:base.automation,name:l10n_ro_anaf_partner_online.automation_tb_callback
-msgid "Terrabit: answer of the service"
-msgstr "Terrabit: răspunsul serviciului"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.actions.server,name:l10n_ro_anaf_partner_online.action_tb_callback
-msgid "Terrabit: apply the answer"
-msgstr "Terrabit: aplică răspunsul"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.actions.server,name:l10n_ro_anaf_partner_online.action_tb_prepare
-msgid "Terrabit: prepare and send the request"
-msgstr "Terrabit: pregătește și trimite cererea"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:base.automation,name:l10n_ro_anaf_partner_online.automation_tb_request_create
-msgid "Terrabit: send a new request"
-msgstr "Terrabit: trimite o cerere nouă"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.actions.server,name:l10n_ro_anaf_partner_online.action_tb_send
-msgid "Terrabit: send the request"
-msgstr "Terrabit: trimite cererea"
-
-#. module: l10n_ro_anaf_partner_online
 #. odoo-javascript
 #: code:addons/l10n_ro_anaf_partner_online/static/src/js/anaf_lookup_widget.esm.js:0
 msgid ""
-"The ANAF service is not active yet: Contacts > Configuration > ANAF > "
-"Activate ANAF Service."
+"The ANAF service is not active yet: Contacts > Configuration > ANAF > ANAF "
+"Service, Activate."
 msgstr ""
-"Serviciul ANAF nu este încă activ: Contacte > Configurare > ANAF > Activează"
-" serviciul ANAF."
+"Serviciul ANAF nu este încă activ: Contacte > Configurare > ANAF > Serviciul"
+" ANAF, Activează."
 
 #. module: l10n_ro_anaf_partner_online
 #. odoo-javascript
@@ -241,9 +151,3 @@ msgstr "Actualizează din ANAF"
 #: model:ir.model.fields,field_description:l10n_ro_anaf_partner_online.field_res_partner_x_anaf_vat_payer
 msgid "VAT Payer (ANAF)"
 msgstr "Plătitor de TVA (ANAF)"
-
-#. module: l10n_ro_anaf_partner_online
-#: model:ir.model.fields,help:l10n_ro_anaf_partner_online.field_x_tb_service_request_x_service
-msgid "register: activation of the service; lookup: partner data for a CUI"
-msgstr ""
-"register: activarea serviciului; lookup: datele partenerului pentru un CUI"

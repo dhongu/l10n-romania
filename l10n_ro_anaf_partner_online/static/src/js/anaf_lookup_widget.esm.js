@@ -8,7 +8,6 @@ import {_t} from "@web/core/l10n/translation";
 import {registry} from "@web/core/registry";
 import {standardWidgetProps} from "@web/views/widgets/standard_widget_props";
 import {useService} from "@web/core/utils/hooks";
-import {user} from "@web/core/user";
 
 const SERVICE = "anaf_partner_online";
 const PARTNER_FIELDS = ["name", "vat", "street", "street2", "city", "zip", "phone"];
@@ -31,6 +30,13 @@ export class AnafLookupWidget extends Component {
         this.notification.add(message, {title: _t("ANAF"), type});
     }
 
+    async getService(fields) {
+        const [service] = await this.orm.searchRead("x_iap_online_service", [["x_code", "=", SERVICE]], fields, {
+            limit: 1,
+        });
+        return service;
+    }
+
     async onClick() {
         if (!this.vat) {
             this.notify(_t("Fill in the Tax ID (CUI) first."));
@@ -38,20 +44,16 @@ export class AnafLookupWidget extends Component {
         }
         this.state.busy = true;
         try {
-            const [company] = await this.orm.read(
-                "res.company",
-                [user.activeCompany.id],
-                ["x_tb_online_token", "x_tb_online_server"]
-            );
-            if (!company.x_tb_online_token || !company.x_tb_online_server) {
+            const service = await this.getService(["x_token", "x_server"]);
+            if (!service || !service.x_token || !service.x_server) {
                 this.notify(
-                    _t("The ANAF service is not active yet: Contacts > Configuration > ANAF > Activate ANAF Service.")
+                    _t("The ANAF service is not active yet: Contacts > Configuration > ANAF > ANAF Service, Activate.")
                 );
                 return;
             }
-            const answer = await this.askService(company);
+            const answer = await this.askService(service);
             if (!answer) {
-                await this.queue();
+                await this.queue(service);
                 return;
             }
             await this.apply(answer);
@@ -60,15 +62,12 @@ export class AnafLookupWidget extends Component {
         }
     }
 
-    async askService(company) {
+    async askService(service) {
         try {
-            const response = await fetch(`${company.x_tb_online_server}/iap_online/${SERVICE}/sync`, {
+            const response = await fetch(`${service.x_server.replace(/\/$/, "")}/iap_online/${SERVICE}/sync`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    token: company.x_tb_online_token,
-                    value: this.vat,
-                }),
+                body: JSON.stringify({token: service.x_token, value: this.vat}),
             });
             return await response.json();
         } catch {
@@ -77,17 +76,19 @@ export class AnafLookupWidget extends Component {
         }
     }
 
-    async queue() {
+    async queue(service) {
         const record = this.props.record;
         if (!(await record.save())) {
             return;
         }
-        await this.orm.create("x_tb_service_request", [
+        await this.orm.create("x_iap_online_request", [
             {
                 x_name: this.vat,
-                x_service: "lookup",
+                x_service_id: service.id,
+                x_kind: "request",
                 x_input: this.vat,
-                x_partner_id: record.resId,
+                x_res_model: "res.partner",
+                x_res_id: record.resId,
             },
         ]);
         this.notify(
