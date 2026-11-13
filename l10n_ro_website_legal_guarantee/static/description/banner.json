@@ -1,0 +1,12 @@
+{
+  "title": "Notificare garanție legală UE",
+  "summary": "Notificarea UE privind garanția legală, pe site-ul tău",
+  "icon": "globe",
+  "edition": "community",
+  "lang": "ro",
+  "features": [
+    "Pagină publică /garantie cu textul complet",
+    "Link în subsol, la produs și la plată",
+    "Notificare oficială în română sau engleză"
+  ]
+}
