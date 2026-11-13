@@ -8,8 +8,8 @@
 2. Open **ANAF Service** and click **Activate**. The account token comes back by itself in a few
    seconds, with free trial lookups. Once active, the header shows **Activate Again**, **Refresh
    Credits** and **Buy Credits**, and **Credits Left** shows the lookups left on the Terrabit
-   account (updated by **Refresh Credits** and by every queued answer). One credit is used per ANAF answer (company found or not found); an invalid CUI or ANAF
-   not answering is free.
+   account (updated by **Refresh Credits** and by every queued answer). One credit is used per
+   ANAF answer (company found or not found); an invalid CUI or ANAF not answering is free.
 
    ![The ANAF Service form, active: Activate Again, Refresh Credits and Buy Credits in the header, Service Code anaf_partner_online and Credits Left highlighted](static/description/en/02_serviciu_anaf.png)
 
