@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - EU Legal Guarantee Notice",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Displays the EU harmonised notice on the legal guarantee of conformity on the website",
@@ -10,6 +10,7 @@
     "depends": [
         "website_sale",
     ],
+    "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
     "data": [
         "views/templates.xml",
