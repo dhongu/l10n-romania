@@ -12,7 +12,17 @@ status = result.get('state')
 partner = env['res.partner']
 if record.x_res_model == 'res.partner' and record.x_res_id:
     partner = env['res.partner'].browse(record.x_res_id).exists()
-if status == 'found' and partner:
+# The answer is written as superuser: only on a partner the author of the request may change,
+# and only for the CUI of that partner (digits only: RO, spaces and dashes do not matter)
+allowed = bool(partner) and partner.with_user(record.create_uid).has_access('write')
+same_cui = bool(partner) and ''.join(c for c in (record.x_input or '') if c.isdigit()) == ''.join(c for c in (partner.vat or '') if c.isdigit())
+if status == 'found' and partner and not (allowed and same_cui):
+    record.write({
+        'x_state': 'error',
+        'x_error': 'Not allowed to update this partner' if not allowed else 'The CUI of the partner has changed',
+        'x_result': str(result),
+    })
+elif status == 'found' and partner:
     data = result.get('partner') or {}
     vals = {key: data[key] for key in ('name', 'vat', 'street', 'street2', 'city', 'zip', 'phone') if data.get(key)}
     country = env['res.country'].search([('code', '=', data.get('country_code') or 'RO')], limit=1)
