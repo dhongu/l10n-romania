@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- The invoice lines, as a table. -->
+    <template id="spv_invoice_lines">
+        <div class="table-responsive">
+            <table class="table table-sm o_spv_lines">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Description</th>
+                        <th>UoM</th>
+                        <th class="text-end">Quantity</th>
+                        <th class="text-end">Unit price</th>
+                        <th class="text-end">VAT %</th>
+                        <th class="text-end">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="lines" t-as="line">
+                        <td t-out="line['number']" />
+                        <td t-out="line['name']" />
+                        <td t-out="line['unit']" />
+                        <td class="text-end" t-out="line['quantity']" />
+                        <td class="text-end" t-out="line['price']" />
+                        <td class="text-end" t-out="line['tax_percent']" />
+                        <td class="text-end" t-out="line['amount']" />
+                    </tr>
+                </tbody>
+            </table>
+            <p t-if="not lines" class="text-muted">The XML has no invoice lines.</p>
+        </div>
+    </template>
+
+    <!-- A view of the document, built from the XML of the invoice. -->
+    <template id="spv_invoice_document">
+        <div class="o_spv_document">
+            <div class="d-flex justify-content-between flex-wrap gap-3 mb-3">
+                <div>
+                    <div class="text-muted text-uppercase small">Supplier</div>
+                    <div class="fw-bold" t-out="supplier.get('name')" />
+                    <div t-if="supplier.get('vat')">VAT <t t-out="supplier.get('vat')" /></div>
+                    <div t-if="supplier.get('address')" t-out="supplier.get('address')" />
+                </div>
+                <div class="text-end">
+                    <div class="h4 mb-0">
+                        <t t-if="is_credit_note">CREDIT NOTE</t>
+                        <t t-else="">INVOICE</t>
+                    </div>
+                    <div>No. <t t-out="number" /></div>
+                    <div t-if="issue_date">Date: <t t-out="issue_date" /></div>
+                    <div t-if="due_date">Due date: <t t-out="due_date" /></div>
+                    <div t-if="currency">Currency: <t t-out="currency" /></div>
+                </div>
+            </div>
+            <div class="border rounded p-2 mb-3">
+                <div class="text-muted text-uppercase small">Customer</div>
+                <div class="fw-bold" t-out="customer.get('name')" />
+                <div t-if="customer.get('vat')">VAT <t t-out="customer.get('vat')" /></div>
+                <div t-if="customer.get('address')" t-out="customer.get('address')" />
+            </div>
+            <t t-call="l10n_ro_message_spv_side_panel.spv_invoice_lines" />
+            <div class="d-flex justify-content-end">
+                <table class="table table-sm w-auto">
+                    <tr>
+                        <td>Total without VAT</td>
+                        <td class="text-end" t-out="untaxed" />
+                    </tr>
+                    <tr>
+                        <td>VAT</td>
+                        <td class="text-end" t-out="tax" />
+                    </tr>
+                    <tr class="fw-bold">
+                        <td>Total</td>
+                        <td class="text-end"><t t-out="total" /> <t t-out="currency" /></td>
+                    </tr>
+                </table>
+            </div>
+            <p t-if="note" class="text-muted small" t-out="note" />
+            <p class="text-muted small mb-0">Representation generated from the e-Factura XML downloaded from SPV.</p>
+        </div>
+    </template>
+</odoo>
