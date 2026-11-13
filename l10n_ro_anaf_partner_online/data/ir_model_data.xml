@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): models and fields are manual, prefixed x_ -->
+<odoo>
+    <!-- A request to the Terrabit service: sent by webhook, answered on the 'On webhook' automation -->
+    <record id="model_x_tb_service_request" model="ir.model">
+        <field name="name">Terrabit Service Request</field>
+        <field name="model">x_tb_service_request</field>
+        <field name="order">id desc</field>
+        <field name="info">Requests sent to the Terrabit service (ANAF partner data)</field>
+    </record>
+    <record id="field_x_tb_service_request_x_name" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_name</field>
+        <field name="field_description">Name</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_x_tb_service_request_x_service" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_service</field>
+        <field name="field_description">Request Type</field>
+        <field name="ttype">char</field>
+        <field name="help">register: activation of the service; lookup: partner data for a CUI</field>
+    </record>
+    <record id="field_x_tb_service_request_x_input" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_input</field>
+        <field name="field_description">CUI</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_x_tb_service_request_x_token" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_token</field>
+        <field name="field_description">Request Token</field>
+        <field name="ttype">char</field>
+        <field name="index">True</field>
+    </record>
+    <record id="field_x_tb_service_request_x_callback_url" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_callback_url</field>
+        <field name="field_description">Callback URL</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_x_tb_service_request_x_db_uuid" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_db_uuid</field>
+        <field name="field_description">Database UUID</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_x_tb_service_request_x_state" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_state</field>
+        <field name="field_description">Status</field>
+        <field name="ttype">selection</field>
+        <field name="selection">[('sent', 'Sent'), ('done', 'Done'), ('error', 'Error')]</field>
+    </record>
+    <record id="field_x_tb_service_request_x_error" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_error</field>
+        <field name="field_description">Error</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_x_tb_service_request_x_result" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_result</field>
+        <field name="field_description">Answer</field>
+        <field name="ttype">text</field>
+    </record>
+    <record id="field_x_tb_service_request_x_partner_id" model="ir.model.fields">
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="name">x_partner_id</field>
+        <field name="field_description">Partner</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">res.partner</field>
+        <field name="on_delete">cascade</field>
+    </record>
+
+    <!-- Partner: the ANAF status, filled by the service -->
+    <record id="field_res_partner_x_anaf_vat_payer" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_vat_payer</field>
+        <field name="field_description">VAT Payer (ANAF)</field>
+        <field name="ttype">boolean</field>
+    </record>
+    <record id="field_res_partner_x_anaf_inactive" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_inactive</field>
+        <field name="field_description">Fiscally Inactive (ANAF)</field>
+        <field name="ttype">boolean</field>
+    </record>
+    <record id="field_res_partner_x_anaf_struck_off" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_struck_off</field>
+        <field name="field_description">Struck Off (ANAF)</field>
+        <field name="ttype">boolean</field>
+    </record>
+    <record id="field_res_partner_x_anaf_trade_register" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_trade_register</field>
+        <field name="field_description">Trade Register No.</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_res_partner_x_anaf_last_check" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_anaf_last_check</field>
+        <field name="field_description">Last ANAF Check</field>
+        <field name="ttype">datetime</field>
+    </record>
+
+    <!-- Company: the account of the database at the Terrabit service, written by the registration -->
+    <record id="field_res_company_x_tb_online_token" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_tb_online_token</field>
+        <field name="field_description">Terrabit Service Token</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_res_company_x_tb_online_server" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_tb_online_server</field>
+        <field name="field_description">Terrabit Service URL</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_res_company_x_tb_online_balance" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_tb_online_balance</field>
+        <field name="field_description">ANAF Lookups Left</field>
+        <field name="ttype">float</field>
+    </record>
+</odoo>
