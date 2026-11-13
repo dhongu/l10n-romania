@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- The webhook to the Terrabit service. noupdate: the registration writes the account token in the URL -->
+    <data noupdate="1">
+        <record id="action_tb_send" model="ir.actions.server">
+            <field name="name">Terrabit: send the request</field>
+            <field name="model_id" ref="model_x_tb_service_request" />
+            <field name="state">webhook</field>
+            <field name="webhook_url">https://terrabit.odoo.com/iap_online/anaf_partner_online</field>
+            <field
+                name="webhook_field_ids"
+                eval="[(6, 0, [
+                    ref('field_x_tb_service_request_x_service'),
+                    ref('field_x_tb_service_request_x_input'),
+                    ref('field_x_tb_service_request_x_token'),
+                    ref('field_x_tb_service_request_x_callback_url'),
+                    ref('field_x_tb_service_request_x_db_uuid'),
+                ])]"
+            />
+        </record>
+    </data>
+
+    <!-- Menu entry: activate the service (the token comes back on the callback) -->
+    <record id="action_tb_activate" model="ir.actions.server">
+        <field name="name">Activate ANAF Service</field>
+        <field name="model_id" ref="model_x_tb_service_request" />
+        <field name="state">code</field>
+        <field name="code">env['x_tb_service_request'].create({'x_name': 'Activation', 'x_service': 'register'})
+action = {
+    'type': 'ir.actions.client',
+    'tag': 'display_notification',
+    'params': {
+        'title': 'ANAF (Terrabit)',
+        'message': 'Activation sent. The service answers in a few seconds: see Contacts > Configuration > ANAF > ANAF Requests.',
+        'type': 'info',
+    },
+}</field>
+    </record>
+
+    <!-- Action menu of the partners: queue a lookup for each selected partner with a Tax ID -->
+    <record id="action_anaf_lookup_partners" model="ir.actions.server">
+        <field name="name">Update from ANAF</field>
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_view_types">list,form</field>
+        <field name="group_ids" eval="[(4, ref('base.group_partner_manager'))]" />
+        <field name="state">code</field>
+        <field name="code">if not env.company.x_tb_online_token:
+    raise UserError('The ANAF service is not active yet: Contacts > Configuration > ANAF > Activate ANAF Service.')
+count = 0
+for partner in records.filtered('vat'):
+    env['x_tb_service_request'].create({
+        'x_name': partner.vat,
+        'x_service': 'lookup',
+        'x_input': partner.vat,
+        'x_partner_id': partner.id,
+    })
+    count += 1
+action = {
+    'type': 'ir.actions.client',
+    'tag': 'display_notification',
+    'params': {
+        'title': 'ANAF (Terrabit)',
+        'message': '%s request(s) sent. The partners are updated in a few seconds.' % count,
+        'type': 'info',
+    },
+}</field>
+    </record>
+</odoo>
