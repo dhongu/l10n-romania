@@ -25,9 +25,11 @@
    received invoices is on), or download the XML, the PDF or the ZIP. *Refresh* reads the message
    again after an action, the arrow-out button opens the full form and the cross closes the panel.
 
+   ![The action buttons of the panel](static/description/en/05_actiuni_panou.png)
+
 5. The *List* view keeps all the columns, the grouping and the sorting; the panel works there too.
 
-   ![The list with the side panel](static/description/en/05_lista_cu_panou.png)
+   ![The list with the side panel](static/description/en/06_lista_cu_panou.png)
 
 On screens narrower than 1200 px (the extra-large breakpoint) the panel is off and a click opens the form, as
 in the original menu.
