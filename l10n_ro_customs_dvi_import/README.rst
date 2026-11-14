@@ -17,7 +17,7 @@ Romania - Import DVI from the SNI PDF
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_customs_dvi_import
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_customs_dvi_import
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -165,6 +165,14 @@ technical issues.
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_customs_dvi_import>`_ project on GitHub.
+.. |maintainer-dhongu| image:: https://github.com/dhongu.png?size=40px
+    :target: https://github.com/dhongu
+    :alt: dhongu
+
+Current maintainer:
+
+|maintainer-dhongu| 
+
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_customs_dvi_import>`_ project on GitHub.
 
 You are welcome to contribute.

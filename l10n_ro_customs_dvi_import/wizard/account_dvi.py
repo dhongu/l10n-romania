@@ -1,7 +1,6 @@
 # Copyright (C) 2026 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import base64
 import re
 
 from markupsafe import Markup, escape
@@ -61,7 +60,7 @@ class AccountInvoiceDVI(models.TransientModel):
     def _parse_dvi_file(self):
         self.ensure_one()
         try:
-            dvi = parse_pdf(base64.b64decode(self.dvi_file))
+            dvi = parse_pdf(self.dvi_file.content)
         except SniDviError as e:
             raise UserError(self.env._("The DVI cannot be imported: %s", self._sni_error_message(e))) from e
         company_vat = _normalize_vat(self.env.company.vat)
@@ -207,7 +206,7 @@ class AccountInvoiceDVI(models.TransientModel):
             attachment = self.env["ir.attachment"].create(
                 {
                     "name": self.dvi_filename or f"{dvi.mrn}.pdf",
-                    "datas": self.dvi_file,
+                    "raw": self.dvi_file.content,
                     "res_model": landed_cost._name,
                     "res_id": landed_cost.id,
                     "mimetype": "application/pdf",

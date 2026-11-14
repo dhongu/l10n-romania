@@ -10,7 +10,7 @@ from odoo.tests import Form, TransactionCase, tagged
 from .common import IMPORTER_VAT, load_lines
 
 EXTRACT_LINES = "odoo.addons.l10n_ro_customs_dvi_import.tools.sni_dvi.extract_lines"
-PDF = base64.b64encode(b"%PDF-1.4 SNI declaration")
+PDF = base64.b64encode(b"%PDF-1.4 SNI declaration").decode()
 
 
 @tagged("post_install", "-at_install")

@@ -112,7 +112,7 @@ class TestCustomsDviImportScreenshots(AccountTestInvoicingCommon, ScreenshotCase
         # cu taxă vamală (A00 = 144) și TVA 21%, ca nota să arate și costul stocului
         with patch(EXTRACT_LINES, side_effect=_fake_extract_lines):
             wizard_form = Form(env["account.invoice.dvi"].with_context(active_id=cls.bill_done.id, lang="ro_RO"))
-            wizard_form.dvi_file = base64.b64encode(_fixture_content("dvi_4000_customs_duty"))
+            wizard_form.dvi_file = base64.b64encode(_fixture_content("dvi_4000_customs_duty")).decode()
             wizard = wizard_form.save()
             wizard.dvi_filename = "26ROXX0000000005R5.pdf"
             wizard.with_context(active_id=cls.bill_done.id, lang="ro_RO").do_create_dvi()

@@ -6,7 +6,7 @@
     "license": "AGPL-3",
     "maintainers": ["dhongu"],
     "consultant_sheet": "full",
-    "version": "19.0.1.0.1",
+    "version": "20.0.1.0.1",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",
