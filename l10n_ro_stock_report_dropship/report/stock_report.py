@@ -1,6 +1,8 @@
 # Copyright (C) 2024 Terrabit
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from collections import defaultdict
+
 from odoo import fields, models
 from odoo.tools import SQL
 
@@ -59,8 +61,8 @@ class StorageSheet(models.TransientModel):
     def _get_sql_dropship(self, column):
         """Build a dropship insert for the ``in`` or ``out`` side of the sheet.
 
-        In v19 valuation lives on stock.move (``value``/``quantity``) instead of
-        on the removed stock.valuation.layer, and a dropship move is a single
+        Since 19.0 valuation lives on stock.move (``value``/``quantity``) instead
+        of on the removed stock.valuation.layer, and a dropship move is a single
         move (no dual reception/delivery layers). A dropship is a pass-through:
         it is reported both on the input and the output side with the same
         positive magnitude so it nets to zero on the on-hand balance (it is
@@ -139,12 +141,11 @@ class StorageSheet(models.TransientModel):
         return super()._get_sql_select_out() + self._get_sql_dropship("out")
 
     def do_compute_product(self):
-        # The SQL inserts above value dropship lines from ``sm.value``. In v19 a
-        # dropship move is never valued on the stored ``value`` field (core
-        # ``stock.move._set_value`` only writes it for is_in/is_out moves, and
-        # l10n_ro_stock_account emits no accounting entries for dropship). The
-        # value is only available on demand via ``stock.move._get_value()``, so
-        # we recompute the dropship lines' amounts in Python afterwards.
+        # The SQL inserts above value dropship lines from ``sm.value``. The amounts
+        # are then rewritten from ``stock.move._get_value()``, the value the stock
+        # engine posts on the dropship entry (Dr 607 = Cr 371 at the purchase price),
+        # so the sheet matches the journal even when the stored value is missing
+        # (moves validated before 20.0) or signed differently (dropship returns).
         res = super().do_compute_product()
         self._l10n_ro_recompute_dropship_amounts()
         return res
@@ -153,31 +154,41 @@ class StorageSheet(models.TransientModel):
         """Fill the value of ``valued_type == 'dropship'`` lines from the moves.
 
         Each dropship line is one group of the report SQL, keyed by
-        (product_id, sm.date, sm.reference, partner_id). We re-select the
-        matching done dropship moves and sum ``_get_value()`` over them, then
-        write the amount on the side (in/out) the line represents.
+        (product_id, sm.date, sm.reference, partner_id). The matching done
+        dropship moves are read in a single search, grouped on the same key, and
+        their ``_get_value()`` is written on the side (in/out) the line represents.
         """
         lines = self.env["l10n.ro.stock.storage.sheet.line"].search(
             [("report_id", "in", self.ids), ("valued_type", "=", "dropship")]
         )
-        for line in lines:
-            domain = [
-                ("state", "=", "done"),
-                ("company_id", "=", line.report_id.company_id.id),
-                ("product_id", "=", line.product_id.id),
-                ("date", "=", line.date_time),
-                ("reference", "=", line.reference),
-            ]
-            if line.partner_id:
-                domain.append(("picking_id.partner_id", "=", line.partner_id.id))
-            else:
-                domain.append(("picking_id.partner_id", "=", False))
-            moves = (
-                self.env["stock.move"]
-                .search(domain)
-                .filtered(lambda m: m._is_dropshipped() or m._is_dropshipped_returned())
+        if not lines:
+            return
+        moves = (
+            self.env["stock.move"]
+            .search(
+                [
+                    ("state", "=", "done"),
+                    ("company_id", "in", lines.report_id.company_id.ids),
+                    ("product_id", "in", lines.product_id.ids),
+                    ("date", "in", list(set(lines.mapped("date_time")))),
+                    ("reference", "in", list(set(lines.mapped("reference")))),
+                ]
             )
-            value = sum(move.sudo()._get_value() for move in moves)
+            .filtered(lambda m: m._is_dropshipped() or m._is_dropshipped_returned())
+        )
+        values = defaultdict(float)
+        for move in moves:
+            key = (move.company_id.id, move.product_id.id, move.date, move.reference, move.picking_id.partner_id.id)
+            values[key] += move.sudo()._get_value()
+        for line in lines:
+            key = (
+                line.report_id.company_id.id,
+                line.product_id.id,
+                line.date_time,
+                line.reference,
+                line.partner_id.id,
+            )
+            value = values.get(key, 0.0)
             if line.quantity_in:
                 line.amount_in = value
                 line.unit_price_in = value / line.quantity_in

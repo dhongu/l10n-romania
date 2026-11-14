@@ -54,7 +54,7 @@ class TestDropshipReport(TransactionCase):
                 "is_storable": True,
                 "categ_id": cls.category.id,
                 "list_price": 100.0,
-                "standard_price": 60.0,
+                "standard_price": 55.0,
             }
         )
 
@@ -111,16 +111,18 @@ class TestDropshipReport(TransactionCase):
 
         self.assertEqual(picking.state, "done")
 
-        # In Odoo 19 the stock valuation layer model was removed. A dropship
-        # move is NOT valued on the stored stock.move.value field (core
-        # _set_value only writes it for is_in/is_out moves, and
-        # l10n_ro_stock_account emits no accounting entries for dropship). The
-        # value is only available on demand via stock.move._get_value(); the
-        # report recomputes it in Python from there.
+        # The dropship move is valued at the purchase price (60 x 10), not at the
+        # product cost (55), and the stock engine posts its entry: credit on the
+        # goods account at the same value (Dr 607 = Cr 371 on the Romanian chart).
         dropship_move = picking.move_ids.filtered(lambda m: m._is_dropshipped() or m._is_dropshipped_returned())
         self.assertTrue(dropship_move, "The picking should hold a dropship move")
         move_value = sum(m.sudo()._get_value() for m in dropship_move)
         self.assertTrue(move_value, "The dropship move should be valuable via _get_value()")
+        self.assertAlmostEqual(move_value, 600.0, msg="Purchase price x quantity, not the product cost")
+        stock_lines = dropship_move.account_move_id.line_ids.filtered(
+            lambda aml: aml.account_id == self.account_valuation
+        )
+        self.assertAlmostEqual(sum(stock_lines.mapped("credit")), 600.0, msg="The entry credits the goods account")
 
         # Now check the storage sheet wizard
         wizard_form = Form(self.env["l10n.ro.stock.storage.sheet"])
@@ -149,7 +151,7 @@ class TestDropshipReport(TransactionCase):
         self.assertEqual(sum(dropship_lines.mapped("quantity_out")), 10.0)
 
         # The Python post-pass must have valued the dropship lines from
-        # _get_value() (standard_price 60 x qty 10), since sm.value is 0.
+        # _get_value() (purchase price 60 x qty 10).
         self.assertEqual(sum(dropship_lines.mapped("amount_in")), move_value)
         self.assertEqual(sum(dropship_lines.mapped("amount_out")), move_value)
 
