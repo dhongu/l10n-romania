@@ -29,5 +29,5 @@ The module adds two fields, both manual (`x_`), as Odoo Online requires:
 ### Odoo Online
 
 The module contains no Python: it can be imported on Odoo Online (Custom plan) from
-Apps > Import Module. Do not install it next to `l10n_ro_report_common`: the two modules
-keep the same data in different fields.
+Apps > Import Module. It cannot be installed next to `l10n_ro_report_common` (the manifest
+excludes it): the two modules keep the same data in different fields.
