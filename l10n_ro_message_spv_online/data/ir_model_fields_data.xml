@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): the fields are manual, prefixed x_ -->
+<odoo>
+    <!-- Partner of the invoice: stored, so that the register can be grouped by partner -->
+    <record id="field_l10n_ro_edi_document_x_partner_id" model="ir.model.fields">
+        <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
+        <field name="name">x_partner_id</field>
+        <field name="field_description">Partner</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">res.partner</field>
+        <field name="related">invoice_id.partner_id</field>
+        <field name="store" eval="True" />
+        <field name="readonly" eval="True" />
+    </record>
+    <record id="field_l10n_ro_edi_document_x_invoice_date" model="ir.model.fields">
+        <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
+        <field name="name">x_invoice_date</field>
+        <field name="field_description">Invoice Date</field>
+        <field name="ttype">date</field>
+        <field name="related">invoice_id.invoice_date</field>
+        <field name="store" eval="False" />
+        <field name="readonly" eval="True" />
+    </record>
+    <record id="field_l10n_ro_edi_document_x_currency_id" model="ir.model.fields">
+        <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
+        <field name="name">x_currency_id</field>
+        <field name="field_description">Currency</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">res.currency</field>
+        <field name="related">invoice_id.currency_id</field>
+        <field name="store" eval="False" />
+        <field name="readonly" eval="True" />
+    </record>
+    <record id="field_l10n_ro_edi_document_x_amount_total" model="ir.model.fields">
+        <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
+        <field name="name">x_amount_total</field>
+        <field name="field_description">Total</field>
+        <field name="ttype">monetary</field>
+        <field name="currency_field">x_currency_id</field>
+        <field name="related">invoice_id.amount_total</field>
+        <field name="store" eval="False" />
+        <field name="readonly" eval="True" />
+    </record>
+    <!-- Direction of the message: an invoice sent by the company or a bill received from a vendor -->
+    <record id="field_l10n_ro_edi_document_x_received" model="ir.model.fields">
+        <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
+        <field name="name">x_received</field>
+        <field name="field_description">Received</field>
+        <field name="ttype">boolean</field>
+        <field name="store" eval="True" />
+        <field name="readonly" eval="True" />
+        <field name="depends">invoice_id.move_type</field>
+        <field name="compute">for record in self:
+    record['x_received'] = record.invoice_id.move_type in ('in_invoice', 'in_refund')</field>
+    </record>
+    <!-- Name of the XML kept on the message (the invoice sent, or the signature of ANAF) -->
+    <record id="field_l10n_ro_edi_document_x_attachment_name" model="ir.model.fields">
+        <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
+        <field name="name">x_attachment_name</field>
+        <field name="field_description">File Name</field>
+        <field name="ttype">char</field>
+        <field name="store" eval="False" />
+        <field name="readonly" eval="True" />
+        <field name="depends">state,invoice_id.name,key_download</field>
+        <field name="compute">for record in self:
+    name = (record.invoice_id.name or 'invoice').replace('/', '_')
+    if record.state == 'invoice_sent':
+        record['x_attachment_name'] = 'ciusro_%s.xml' % name
+    else:
+        record['x_attachment_name'] = 'signature_%s_%s.xml' % (name, record.key_download or record.id)</field>
+    </record>
+    <!-- Files attached to the invoice: the XML and the PDF of a received bill, the PDF sent -->
+    <record id="field_l10n_ro_edi_document_x_invoice_attachment_ids" model="ir.model.fields">
+        <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
+        <field name="name">x_invoice_attachment_ids</field>
+        <field name="field_description">Invoice Attachments</field>
+        <field name="ttype">many2many</field>
+        <field name="relation">ir.attachment</field>
+        <field name="relation_table">x_l10n_ro_edi_document_ir_attachment_rel</field>
+        <field name="column1">x_document_id</field>
+        <field name="column2">x_attachment_id</field>
+        <field name="store" eval="False" />
+        <field name="readonly" eval="True" />
+        <field name="depends">invoice_id</field>
+        <field name="compute">for record in self:
+    record['x_invoice_attachment_ids'] = self.env['ir.attachment'].search([
+        ('res_model', '=', 'account.move'),
+        ('res_id', '=', record.invoice_id.id),
+        ('res_field', '=', False),
+    ]) if record.invoice_id else False</field>
+    </record>
+</odoo>
