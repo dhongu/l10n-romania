@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Synchronize now: the standard synchronization of l10n_ro_edi (status of the invoices sent,
+         bills received), for the current company. Returns the action of the standard method. -->
+    <record id="action_spv_synchronize" model="ir.actions.server">
+        <field name="name">Synchronize now</field>
+        <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
+        <field name="group_ids" eval="[(4, ref('account.group_account_invoice'))]" />
+        <field name="state">code</field>
+        <field name="code">company = env.company
+# The standard synchronization fails with a technical error without these two (Odoo 19)
+if not company.vat:
+    raise UserError('Set the Tax ID of the company %s first.' % company.name)
+if not company.sudo().l10n_ro_edi_access_token:
+    raise UserError('The company %s is not connected to the SPV yet: Accounting > Configuration > Settings, Romanian E-Factura, Generate Token.' % company.name)
+action = env['account.move'].action_l10n_ro_edi_fetch_invoices()</field>
+    </record>
+</odoo>
