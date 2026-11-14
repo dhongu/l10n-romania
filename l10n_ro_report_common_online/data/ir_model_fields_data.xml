@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): the fields are manual, prefixed x_ -->
+<odoo>
+    <record id="field_res_company_x_l10n_ro_share_capital" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_share_capital</field>
+        <field name="field_description">Share Capital</field>
+        <field name="ttype">float</field>
+        <field name="help">Company share capital, printed on Romanian report headers.</field>
+    </record>
+    <record id="field_res_partner_bank_x_l10n_ro_print_report" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner_bank" />
+        <field name="name">x_l10n_ro_print_report</field>
+        <field name="field_description">Romania - Print in Report</field>
+        <field name="ttype">boolean</field>
+        <field name="help">If checked, this bank account is printed on Romanian report headers.</field>
+    </record>
+</odoo>
