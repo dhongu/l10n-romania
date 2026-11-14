@@ -75,7 +75,7 @@ repos:
       - id: oca-checks-odoo-module
         # Data-only modules for Odoo Online (Apps > Import Module) have no
         # __init__.py, which this hook reports as an error
-        exclude: ^(l10n_ro_anaf_partner_online|l10n_ro_message_spv_online)/
+        exclude: ^(l10n_ro_anaf_partner_online|l10n_ro_message_spv_online|l10n_ro_report_common_online)/
       - id: oca-checks-po
         args:
           - --disable=po-pretty-format
