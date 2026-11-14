@@ -1,0 +1,11 @@
+{
+  "title": "Accounting Document Type",
+  "summary": "Show which supporting document justifies each journal entry",
+  "icon": "file",
+  "edition": "community",
+  "features": [
+    "Document type on every journal entry",
+    "Auto-filled on invoices, payments, DVI",
+    "Editable by the accountant"
+  ]
+}
