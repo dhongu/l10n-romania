@@ -77,9 +77,10 @@ tipăresc.
 
 Deschideți **Contacte → Configurare → Conturi Bancare → Conturi Bancare** (*Contacts →
 Configuration → Bank Accounts → Bank Accounts*; meniul apare cu aplicația **Contacte** instalată) și intrați în contul companiei. Sub
-**Numar de Cont**, bifați **România - Tipărit în raport** și verificați **Moneda** contului: blocul
-tipărește doar conturile în moneda documentului. Câmpul **Moneda** apare doar dacă sunt active mai
-multe monede; un cont fără monedă se tipărește ca fiind în moneda companiei.
+**Numar de Cont**, bifați **România - Tipărit în raport**. Blocul tipărește doar conturile în
+moneda documentului. În Odoo 20 contul bancar nu mai are câmp de monedă: moneda contului este
+**Moneda** jurnalului bancar legat de cont (**Contabilitate → Configurare → Jurnale**); un cont
+fără jurnal sau legat de un jurnal fără monedă se tipărește ca fiind în moneda companiei.
 
 ![Formularul contului bancar RO49BTRL01301202K12345XX de la Banca Transilvania, cu moneda RON și bifa România - Tipărit în raport evidențiată și activă, sub Numar de Cont](../static/description/02_cont_bancar.png)
 
@@ -87,7 +88,7 @@ multe monede; un cont fără monedă se tipărește ca fiind în moneda companie
 
 În lista **Conturi Bancare**, coloana **România - Tipărit în raport** arată dintr-o privire ce
 conturi vor apărea pe documente. Verificați că sunt bifate cel mult trei conturi pe fiecare
-monedă: blocul tipărește doar primele trei.
+monedă (moneda jurnalului bancar legat): blocul tipărește doar primele trei.
 
 ![Lista Conturi Bancare cu coloana România - Tipărit în raport evidențiată: contul RO49BTRL01301202K12345XX este bifat, contul RO66BTRL01302202K12345XX nu, ambele la Banca Transilvania](../static/description/03_lista_conturi_bancare.png)
 
@@ -128,7 +129,7 @@ Modulul nu generează note contabile (Dr/Cr): adaugă două câmpuri de date și
 | `l10n_ro_report_common` | Varianta cu Python a aceluiași modul; nu se instalează împreună |
 | Rapoarte personalizate / alte module | Apelează blocurile modulului în antet sau la suma în litere |
 
-**Ce e automat:** alegerea conturilor tipărite după bifă și monedă (maximum 3); alegerea companiei
+**Ce e automat:** alegerea conturilor tipărite după bifă și moneda jurnalului bancar legat (maximum 3); alegerea companiei
 documentului; suma în litere în română pentru RON.
 
 **Ce rămâne manual:** completarea capitalului social, a NRC-ului și a conturilor bancare; bifarea
@@ -138,8 +139,9 @@ conturilor; includerea blocurilor în rapoartele care trebuie să le arate.
 
 - [ ] Formularul companiei are câmpul **Capital social** sub **ID Companie**, cu eticheta în română.
 - [ ] Formularul și lista conturilor bancare au **România - Tipărit în raport**.
-- [ ] Pe un document în RON apar doar conturile RON bifate (și cele fără monedă, dacă moneda
-  companiei e RON); conturile în alte monede sau nebifate lipsesc.
+- [ ] Pe un document în RON apar doar conturile bifate al căror jurnal bancar e în RON (și cele
+  fără jurnal sau cu jurnal fără monedă, dacă moneda companiei e RON); conturile ale căror jurnale
+  sunt în alte monede sau conturile nebifate lipsesc.
 - [ ] Cu patru conturi bifate în aceeași monedă se tipăresc doar trei.
 - [ ] Blocul firmei afișează NRC-ul de pe contactul companiei și capitalul social ca număr întreg.
 - [ ] Suma în litere: `12000` → *douăsprezece mii de lei*, `21000` → *douăzeci și una de mii de
@@ -153,7 +155,7 @@ conturilor; includerea blocurilor în rapoartele care trebuie să le arate.
 | Mesaj | Cauză | Remediere |
 |---|---|---|
 | Etichetele modulului apar în engleză (*Share Capital*, *Romania - Print in Report*) | Limba română a fost activată după importul modulului | Reimportați arhiva modulului din **Importați Modulul**, cu bifa **Forțează inițializarea**, după activarea limbii române |
-| Contul bancar nu apare pe document | Contul nu e bifat **România - Tipărit în raport** sau are altă monedă decât documentul | Bifați contul; verificați **Moneda** contului |
+| Contul bancar nu apare pe document | Contul nu e bifat **România - Tipărit în raport** sau jurnalul bancar legat are altă monedă decât documentul | Bifați contul; verificați **Moneda** jurnalului bancar legat de cont (**Contabilitate → Configurare → Jurnale**) |
 | Lipsește NRC-ul din antet | Câmpul **NRC** nu e completat pe contactul companiei | Completați **NRC** pe contactul companiei |
 | Lipsește capitalul social | **Capital social** e gol (zero) pe companie | Completați câmpul pe companie |
 | Datele se tipăresc din alte câmpuri decât cele completate | Pe bază e instalat și `l10n_ro_report_common` | Păstrați un singur modul; cele două nu folosesc aceleași câmpuri |

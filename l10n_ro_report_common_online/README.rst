@@ -29,7 +29,9 @@ Online** too: the module has no Python code and is imported as a zip
 
 - **``l10n_ro_report_common_online.banks``**: prints up to 3 of the
   partner's bank accounts ticked *Romania - Print in Report*, in the
-  currency of the document (or of the company).
+  currency of the document (or of the company); the currency of an
+  account is the one of its linked bank journal, else the company
+  currency.
 - **``l10n_ro_report_common_online.report_address_company``**: the
   company identification block: name, address, bank accounts, Tax ID,
   NRC and share capital.
@@ -89,6 +91,9 @@ The module needs ``l10n_ro``; the NRC printed in the header is the
 2. Open **Contacts > Configuration > Bank Accounts > Bank Accounts**,
    open the company account and tick **Romania - Print in Report**. Only
    the accounts in the currency of the document are printed, at most 3.
+   In Odoo 20 a bank account has no currency of its own: its currency is
+   the **Currency** of the linked bank journal, else the company
+   currency.
 
    |Bank account form RO49BTRL01301202K12345XX at Banca Transilvania,
    currency RON, with the highlighted Romania - Print in Report checkbox

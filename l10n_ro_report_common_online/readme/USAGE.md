@@ -9,7 +9,8 @@ header is the **NRC** field of the company contact.
 
 2. Open **Contacts > Configuration > Bank Accounts > Bank Accounts**, open the company account and tick
    **Romania - Print in Report**. Only the accounts in the currency of the document are
-   printed, at most 3.
+   printed, at most 3. In Odoo 20 a bank account has no currency of its own: its currency is
+   the **Currency** of the linked bank journal, else the company currency.
 
    ![Bank account form RO49BTRL01301202K12345XX at Banca Transilvania, currency RON, with the highlighted Romania - Print in Report checkbox ticked](static/description/en/02_cont_bancar.png)
 

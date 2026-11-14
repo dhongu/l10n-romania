@@ -44,7 +44,8 @@
 module has no Python code and is imported as a zip (Apps &gt; Import Module). It is the
 data-only variant of <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_report_common</code>, for databases where custom Python cannot run.</p>
 <ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold"><code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_report_common_online.banks</code></span><div>prints up to 3 of the partner's bank accounts
-  ticked <em>Romania - Print in Report</em>, in the currency of the document (or of the company).</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold"><code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_report_common_online.report_address_company</code></span><div>the company identification
+  ticked <em>Romania - Print in Report</em>, in the currency of the document (or of the company); the currency of an account is the one
+  of its linked bank journal, else the company currency.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold"><code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_report_common_online.report_address_company</code></span><div>the company identification
   block: name, address, bank accounts, Tax ID, NRC and share capital.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold"><code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_report_common_online.amount_in_words</code></span><div>the amount in words the way a Romanian
   receipt reads it, written in QWeb. Call it with <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">amount</code> and <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">currency</code>:</div></div></li></ul>
 <table class="table table-bordered" style="font-size:14px;">
@@ -102,7 +103,8 @@ header is the <strong>NRC</strong> field of the company contact.</p>
 <ol start="2">
 <li>Open <strong>Contacts &gt; Configuration &gt; Bank Accounts &gt; Bank Accounts</strong>, open the company account and tick
    <strong>Romania - Print in Report</strong>. Only the accounts in the currency of the document are
-   printed, at most 3.</li>
+   printed, at most 3. In Odoo 20 a bank account has no currency of its own: its currency is
+   the <strong>Currency</strong> of the linked bank journal, else the company currency.</li>
 </ol>
 <p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Bank account form RO49BTRL01301202K12345XX at Banca Transilvania, currency RON, with the highlighted Romania - Print in Report checkbox ticked" src="en/02_cont_bancar.png" /></p>
 <ol start="3">

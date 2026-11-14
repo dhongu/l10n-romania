@@ -3,7 +3,8 @@ module has no Python code and is imported as a zip (Apps > Import Module). It is
 data-only variant of `l10n_ro_report_common`, for databases where custom Python cannot run.
 
 - **`l10n_ro_report_common_online.banks`**: prints up to 3 of the partner's bank accounts
-  ticked *Romania - Print in Report*, in the currency of the document (or of the company).
+  ticked *Romania - Print in Report*, in the currency of the document (or of the company); the currency of an account is the one
+  of its linked bank journal, else the company currency.
 - **`l10n_ro_report_common_online.report_address_company`**: the company identification
   block: name, address, bank accounts, Tax ID, NRC and share capital.
 - **`l10n_ro_report_common_online.amount_in_words`**: the amount in words the way a Romanian
