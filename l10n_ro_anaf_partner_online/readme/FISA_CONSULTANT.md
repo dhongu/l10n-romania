@@ -86,6 +86,11 @@ SA), `1590082` (OMV PETROM SA), și un CUI greșit, ex. `1234567`.
    secunde; nu se copiază nimic.
 4. Utilizatorii care creează parteneri au dreptul *Creare contacte* (îl au de regulă toți cei care
    editează parteneri).
+5. Precondiție: pe bază nu sunt instalate `l10n_ro_partner_create_by_vat` sau
+   `l10n_ro_partner_autocomplete`, modulele cu cod Python care completează și ele partenerul de la
+   ANAF. Odoo refuză instalarea alături de ele (cheia `excludes` din manifest: *Modules … are
+   incompatible*), iar importul arhivei zip se oprește cu eroarea *External ID not found …
+   error_uninstall_…_first*. Dezinstalați întâi modulul cu cod Python.
 
 ## 6. Flux de utilizare
 

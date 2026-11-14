@@ -55,6 +55,10 @@ bifată la facturile de furnizor (mesaje primite) și debifată la facturile tri
 2. Importați arhiva modulului din **Aplicații → Import modul** (pe Odoo Online, planul Custom).
 3. Conectați compania la SPV: **Facturare → Configurare → Setări**, blocul **E-Factura România**:
    Client ID, Client Secret, apoi **Generare token**.
+4. Precondiție: pe bază nu este instalat `l10n_ro_message_spv`, modulul cu cod Python care ține tot
+   registrul mesajelor SPV. Odoo refuză instalarea alături de el (cheia `excludes` din manifest:
+   *Modules … are incompatible*), iar importul arhivei zip se oprește cu eroarea *External ID not
+   found … error_uninstall_l10n_ro_message_spv_first*. Dezinstalați întâi modulul cu cod Python.
 
 ## 6. Flux de utilizare
 
