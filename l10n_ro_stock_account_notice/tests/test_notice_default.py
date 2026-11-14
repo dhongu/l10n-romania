@@ -5,6 +5,9 @@ from odoo.addons.base.tests.common import BaseCommon
 
 @tagged("post_install", "-at_install")
 class TestNoticeDefault(BaseCommon):
+    # Odoo 20: BaseCommon runs the tests as a plain internal user
+    _test_user_groups = ("base.group_user", "stock.group_stock_manager")
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

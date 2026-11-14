@@ -10,26 +10,27 @@ Romania - Stock Accounting Notice
    !! source digest: sha256:e7d8cba88a84a7ad7129ca167de3a91632c04aad1ee107959d08b260df088f9e
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Mature-brightgreen.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Mature
+    :alt: Beta
 .. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_notice
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_notice
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
 
 Adds the "Romania - Is a notice" option on the stock operation types.
 Transfers created for an operation type that has it set are marked as
-notice (aviz) by default, so receptions and deliveries use the 408/418
-accounts without the user having to tick the box on each transfer.
+notice (aviz) by default, so that, with ``l10n_ro_stock_account``
+installed, receptions and deliveries use the 408/418 accounts without
+the user having to tick the box on each transfer.
 
-The notice logic itself (field ``l10n_ro_notice`` on transfers,
-valuation types and accounting entries) is part of
-``l10n_ro_stock_account_base``.
+The field ``l10n_ro_notice`` is kept by ``l10n_ro_stock_account_base``;
+the notice valuation and the 408/418 entries are done by
+``l10n_ro_stock_account``.
 
 **Table of contents**
 
@@ -39,9 +40,10 @@ valuation types and accounting entries) is part of
 Usage
 =====
 
-Go to *Inventory > Configuration > Operation Types*, open the operation
+Go to *Inventory > Configuration > Operations Types*, open the operation
 type (for example *Receipts*) and tick *Romania - Is a notice*. New
-transfers of this type will have *Is a notice* ticked.
+transfers of this type will have the notice flag set (shown by
+``l10n_ro_stock_account`` on the transfer form).
 
 Changelog
 =========
@@ -51,6 +53,10 @@ Changelog
 
 - Reduced to the default notice flag on operation types: the rest of the
   notice logic is now in ``l10n_ro_stock_account_base``.
+
+- Fix: the default notice flag is also set on a new transfer created
+  from the web form (``default_get`` and onchange on the operation
+  type), not only on ``create`` without the field.
 
 Bug Tracker
 ===========
@@ -101,6 +107,6 @@ Current maintainers:
 
 |maintainer-feketemihai| |maintainer-mcojocaru| |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_notice>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_notice>`_ project on GitHub.
 
 You are welcome to contribute.
