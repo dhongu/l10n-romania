@@ -777,8 +777,8 @@ factură.
 | **Bază de            | baza pe care vama a  | baza poziţiei        |
 | impozitare**         | calculat TVA-ul      | **B00**              |
 +----------------------+----------------------+----------------------+
-| **TVA plătit în      | TVA-ul efectiv       | valoarea poziţiei    |
-| vamă**               | datorat              | **B00**              |
+| **Valoare TVA la     | TVA-ul efectiv       | valoarea poziţiei    |
+| import**             | datorat              | **B00**              |
 +----------------------+----------------------+----------------------+
 | **TVA la import**    | cota aplicată de     | din declaraţie       |
 |                      | vamă la data         |                      |
@@ -830,9 +830,9 @@ propusă cu baza din DVI înainte de a confirma.**
 impozitare sunt mărimi diferite; pot coincide numeric, dar nu
 întotdeauna. Se ia baza poziţiei B00, nu valoarea statistică.
 
-**TVA nerecalculat după modificarea bazei.** Câmpul „TVA plătit în vamă”
-**nu se recalculează automat** la schimbarea bazei sau a cotei — nu
-există ``onchange`` în wizard. Dacă modificaţi baza, **modificaţi şi
+**TVA nerecalculat după modificarea bazei.** Câmpul „Valoare TVA la
+import” **nu se recalculează automat** la schimbarea bazei sau a cotei —
+nu există ``onchange`` în wizard. Dacă modificaţi baza, **modificaţi şi
 valoarea TVA**, altfel nota contabilă se postează cu suma veche, fără
 nicio eroare.
 
@@ -931,6 +931,29 @@ Verificări după validare
 Changelog
 =========
 
+20.0.2.2.0 (2026-11-14)
+-----------------------
+
+Forward-port of 19.0.2.1.4 – 19.0.2.2.0:
+
+- Customs regime 4200 (VAT-exempt import followed by an intra-Community
+  supply): the import VAT stays empty, only the base goes to row 29 of
+  the VAT return, and the VAT held by customs as a guarantee is tracked
+  on the DVI (blocked / released), without a journal entry.
+- The import VAT lines of the DVI entry are linked to the tax (SAF-T
+  D406, VAT closing); neutral "Import VAT" labels for both regimes; the
+  DVI entry is created and posted even without customs duty.
+- The DVI landed cost is linked to the vendor bill; the foreign supplier
+  is set on the header of the DVI entry (VAT purchase journal).
+- Multi-company: the customs payable account (446) is taken from the
+  chart of the DVI company.
+- The DVI entry has the document type *Import (DVI)*
+  (``l10n_ro_account_move_document_type``, new dependency). The entries
+  of the DVIs already validated get the supplier and the document type
+  on upgrade.
+- Consultant sheet: deferred import VAT, VAT refund, regime 4200 and its
+  sales flow.
+
 20.0.2.1.3 (2026-10-13)
 -----------------------
 
@@ -987,6 +1010,14 @@ technical issues.
 
 Maintainers
 -----------
+
+.. |maintainer-dhongu| image:: https://github.com/dhongu.png?size=40px
+    :target: https://github.com/dhongu
+    :alt: dhongu
+
+Current maintainer:
+
+|maintainer-dhongu| 
 
 This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_customs_dvi>`_ project on GitHub.
 
