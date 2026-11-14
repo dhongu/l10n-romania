@@ -1,3 +1,8 @@
+## 20.0.0.0.6 (2026-11-14)
+
+- Apps Store banner: the "Odoo Online" badge shows that the module has no Python code and installs on
+  Odoo Online.
+
 ## 20.0.0.0.5 (2026-10-22)
 
 - Odoo Apps banner title: *ANPC footer* (was *ANPC Website Footer*), the same as the module name.
