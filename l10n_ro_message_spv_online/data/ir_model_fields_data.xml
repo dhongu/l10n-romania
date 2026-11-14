@@ -11,6 +11,12 @@
         <field name="related">invoice_id.partner_id</field>
         <field name="store" eval="True" />
         <field name="readonly" eval="True" />
+        <!-- Guard: the zip import (Apps > Import Module) does not check "excludes"; a missing
+             external ID stops the import while l10n_ro_message_spv is installed -->
+        <field
+            name="help"
+            eval="ref('l10n_ro_message_spv_online.error_uninstall_l10n_ro_message_spv_first') if ref('l10n_ro_message_spv.model_l10n_ro_message_spv', False) else 'Partner of the invoice, stored so that the register can be grouped by partner'"
+        />
     </record>
     <record id="field_l10n_ro_edi_document_x_invoice_date" model="ir.model.fields">
         <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
