@@ -1,3 +1,8 @@
+# 20.0.1.0.1 (2026-11-14)
+
+- Cannot be installed together with `l10n_ro_message_spv`, the module with Python code that does the same
+  thing: the manifest lists it under `excludes`.
+
 # 20.0.1.0.0
 
 - Migration to 20.0: no change in the data; **Synchronize now** opens first the standard window that

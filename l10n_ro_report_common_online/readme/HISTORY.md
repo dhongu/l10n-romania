@@ -1,3 +1,8 @@
+## 20.0.1.0.1 (2026-11-14)
+
+- Cannot be installed together with `l10n_ro_report_common`, the module with Python code that does the same
+  thing: the manifest lists it under `excludes`.
+
 ## 20.0.1.0.0
 
 - First version: the data-only variant of `l10n_ro_report_common`, importable on Odoo Online.
