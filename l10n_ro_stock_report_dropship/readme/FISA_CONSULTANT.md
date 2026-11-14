@@ -26,7 +26,7 @@ fișă, deși a trecut prin 371.
   marfa trece contabil.
 - **Doar pe stiva OCA:** modulul extinde fișa de magazie OCA (`l10n_ro_stock_report`), pe motorul
   de valorizare OCA (`l10n_ro_stock_account`). Nu se aplică la `l10n_ro_storage_sheet`, fișa de
-  magazie pe valorizarea nativă Odoo 19, pentru care nu există o extensie dropship.
+  magazie pe valorizarea nativă Odoo (de la 19.0), pentru care nu există o extensie dropship.
 
 ## 3. Utilizatori și roluri
 
@@ -181,7 +181,7 @@ magazie OCA pe luna curentă.
 Regenerare:
 
 ```bash
-./odoo/odoo-bin -c odoo.conf -d test19 -i l10n_ro,l10n_ro_stock_report_dropship,l10n_ro_doc_screenshots --test-tags=fise_screenshots --stop-after-init
+./odoo/odoo-bin -c odoo.conf -d test20 -i l10n_ro,l10n_ro_stock_report_dropship,l10n_ro_doc_screenshots --test-tags=fise_screenshots --stop-after-init
 ```
 
 ## 11. Observații pentru manual

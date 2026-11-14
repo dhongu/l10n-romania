@@ -76,7 +76,7 @@ adițional** bifat, jurnal de stoc, contul 408 pentru recepțiile pe bază de av
 ## 5. Configurare inițială
 
 1. *Contabilitate → Configurare → Setări → România*: **Metodă cost adițional clasa 6**: *Standard*
-   (implicit) sau *Prin cont intermediar*; pentru a doua, completați **Contul intermediar**.
+   (implicit) sau *Prin cont intermediar*; pentru a doua, completați **Cont Intermediar**.
 
 ![Setări, blocul România: Metodă cost adițional clasa 6 = Standard](../static/description/01_settings_landed_cost.png)
 
@@ -118,7 +118,9 @@ Comandă către furnizor, 10 buc. × 100 lei, **Confirmă comanda**.
 
 ### Pasul 4 — Factura transportatorului
 
-Linie cu produsul de transport (**Este cost adițional**), 100 lei, cont 624;
+Linie cu produsul de transport (**Este cost adițional**), 100 lei. La bifarea **Este cost adițional**,
+   contul liniei se completează din produs: contul de cheltuieli (aici 624), respectiv de venituri pe o factură
+   de client;
    **Confirmă**. Nota facturii: Dr 624 100 + Dr 4426 21 / Cr 401 121.
 
 ![Nota facturii transportatorului: Dr 624 100, Dr 4426 21, Cr 401 121](../static/description/14_transport_bill_note.png)
