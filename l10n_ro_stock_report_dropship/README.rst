@@ -17,7 +17,7 @@ Romania - Stock Storage Sheet Dropship
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_report_dropship
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_report_dropship
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -80,10 +80,10 @@ This is a technical add-on for the OCA storage sheet report
    |Printed storage sheet with the dropship input and output rows under
    the 371000 account|
 
-.. |Done dropship transfer from the vendor, operation type Dropship, with the product line| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_report_dropship/static/description/en/01_transfer_dropship.png
-.. |Journal entry of the dropship transfer: 607000 debit and 371000 credit, 3,000.00 each| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_report_dropship/static/description/en/02_nota_dropship.png
-.. |Storage sheet list with the dropship transfer as one input and one output row of the same amount| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_report_dropship/static/description/en/03_lista_fisa_dropship.png
-.. |Printed storage sheet with the dropship input and output rows under the 371000 account| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_stock_report_dropship/static/description/en/04_pdf_fisa_dropship.png
+.. |Done dropship transfer from the vendor, operation type Dropship, with the product line| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_report_dropship/static/description/en/01_transfer_dropship.png
+.. |Journal entry of the dropship transfer: 607000 debit and 371000 credit, 3,000.00 each| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_report_dropship/static/description/en/02_nota_dropship.png
+.. |Storage sheet list with the dropship transfer as one input and one output row of the same amount| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_report_dropship/static/description/en/03_lista_fisa_dropship.png
+.. |Printed storage sheet with the dropship input and output rows under the 371000 account| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_report_dropship/static/description/en/04_pdf_fisa_dropship.png
 
 Changelog
 =========
@@ -144,6 +144,17 @@ Authors
 Maintainers
 -----------
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_report_dropship>`_ project on GitHub.
+.. |maintainer-danila12| image:: https://github.com/danila12.png?size=40px
+    :target: https://github.com/danila12
+    :alt: danila12
+.. |maintainer-dhongu| image:: https://github.com/dhongu.png?size=40px
+    :target: https://github.com/dhongu
+    :alt: dhongu
+
+Current maintainers:
+
+|maintainer-danila12| |maintainer-dhongu| 
+
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_report_dropship>`_ project on GitHub.
 
 You are welcome to contribute.
