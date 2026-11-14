@@ -115,7 +115,7 @@ Din factură, **⚙ Acțiuni → Tipăriți → Factură PDF** (același raport 
 
 **Găsiți pe ecran**, de sus în jos:
 - **antetul**: în stânga **Furnizor** cu adresa, **Punct de lucru** cu adresa lui, conturile bancare bifate pentru tipărire, CIF, NRC, Capital social și, dacă modulul `l10n_ro_vat_on_payment` e instalat și compania e bifată, **TVA la încasare**; în dreapta **Client** cu adresa, adresa de livrare (dacă diferă), CIF și NRC;
-- titlul: **Factura** pentru o factură confirmată, **Proforma** pentru o ciornă; **Nota de credit** (în ciornă: **Notă de credit în ciornă**), **Bon vânzare** pentru bonul de vânzare, **Factura furnizor** și **Nota de credit furnizor** pe documentele de furnizor; documentele anulate au „anulat(ă)” în titlu;
+- titlul: **Factura** pentru o factură confirmată, **Proformă** pentru o ciornă; **Nota de credit** (în ciornă: **Notă de credit în ciornă**), **Bon vânzare** pentru bonul de vânzare, **Factura furnizor** și **Nota de credit furnizor** pe documentele de furnizor; documentele anulate au „anulat(ă)” în titlu;
 - **liniile**: Nr. Crt., Descriere, Cantitate, Preț unitar (fără TVA), Disc.%, **Preț cu disc.%** (cu opțiunea de preț fără discount), Taxe, Suma (fără TVA), **Val. TVA**, **Total (cu TVA)**;
 - **subsolul**: Comunicație plată, **Întocmit**, **Delegat**, **Mijloc de transport**, **Livrări** (cu **AWB** dacă livrările au număr de urmărire), mențiunea legală, informațiile suplimentare ale clientului și, dacă e bifat, logoul Coface.
 
@@ -133,7 +133,7 @@ Pe **facturile de furnizor** (factură și notă de credit de furnizor) rolurile
 
 Pentru o factură încasată pe un jurnal de **numerar**, raportul **Factură PDF** adaugă sub factură, într-un chenar, **chitanța**: datele companiei, numărul plății și data, „Am primit de la" clientul cu CIF, NRC și oraș, suma în cifre și în litere și „Reprezentând contravaloarea facturii". Același chenar apare și pe un **bon de vânzare** (out_receipt), cu „Reprezentând contravaloarea bonului de vânzare". Pentru o restituire în numerar (notă de credit), același chenar devine **Dispoziție de plată**, cu „Am plătit către".
 
-Chitanța nu apare pe **PDF fără plată** și nici pe **Facturi în limba companiei**, iar plățile prin bancă nu produc chitanță.
+Chitanța nu apare pe **PDF fără plată** și nici pe **Facturi în limba companiei**, iar plățile prin bancă nu produc chitanță. Nici factura de client care are completat câmpul de bon fiscal (`receipt_print`, adus de modulele de casă de marcat) nu primește chenarul: documentul de încasare este bonul fiscal.
 
 **Verificați** că: suma în litere corespunde sumei în cifre și monedei facturii; numărul chitanței e cel al plății în numerar; suma încasată în numerar de la o persoană nu depășește plafonul legal de 5.000 lei pe zi.
 
@@ -141,7 +141,7 @@ Chitanța nu apare pe **PDF fără plată** și nici pe **Facturi în limba comp
 
 ### Pasul 9 — Raportul „Chitanță" de pe plată
 
-Din plată (**Facturare → Clienți → Plăți**, deschideți plata), **⚙ Acțiuni → Tipăriți → Chitanță** (raportul *Voucher / Payment*). Documentul are titlul după direcția plății: **Chitanță** pentru o încasare, **Dispoziție de plată** pentru o plată.
+Din plată (**Facturare → Clienți → Plăți**, deschideți plata), **⚙ Acțiuni → Tipăriți → Chitanță** (raportul *Voucher / Payment*). Documentul are titlul după direcția plății: **Chitanță** pentru o încasare, **Dispoziție de plată** pentru o plată. În Odoo 20 plata are doar aceste două direcții (transferurile interne nu mai sunt plăți), deci nu există al treilea titlu.
 
 **Găsiți pe ecran**: părțile față în față — pe jurnal de numerar **Beneficiar** și **Plătitor**, pe jurnal de bancă **Furnizor** și **Client** —, CIF, NRC, capital social, titlul cu numărul și data plății, codul formularului (**Cod 14-4-1** la încasare, **Cod 14-4-4** la plată, doar pe jurnal de numerar), apoi tabelul: Primit de la, Casieria, Act de identitate (doar la plata în numerar), Suma, Suma (în cuvinte), Reprezentând c/v cu facturile reconciliate.
 
@@ -209,7 +209,7 @@ Față de `l10n_ro_invoice_report`, varianta online nu modifică extrasele de ba
 | Contul bancar al companiei nu apare pe factură | Contul nu are bifa „România - Tipărit în raport" sau moneda lui diferă de moneda facturii | Bifați „România - Tipărit în raport"; pentru facturile în altă monedă adăugați un cont în acea monedă |
 | Mijlocul de transport nu se completează la alegerea delegatului | Fișa delegatului nu are Mijloc transport, sau factura nu mai e ciornă | Completați câmpul pe fișa delegatului; pe o factură confirmată treceți-o întâi în ciornă |
 | Delegatul dorit nu apare în listă | Câmpul acceptă persoane sau contacte ale unei companii, nu compania însăși | Creați delegatul ca persoană sau ca contact al companiei |
-| Chitanța nu apare sub factură | S-a tipărit „PDF fără plată" sau „Facturi în limba companiei", sau plata e pe jurnal de bancă | Tipăriți „Factură PDF"; chitanța apare doar pentru încasările pe jurnal de numerar |
+| Chitanța nu apare sub factură | S-a tipărit „PDF fără plată" sau „Facturi în limba companiei", plata e pe jurnal de bancă, sau factura are bon fiscal (`receipt_print`) | Tipăriți „Factură PDF"; chitanța apare doar pentru încasările pe jurnal de numerar |
 | Încasare în numerar peste 5.000 lei de la aceeași persoană, în aceeași zi | Odoo nu verifică plafonul; chitanța se tipărește oricum | Încasați diferența prin bancă; plafonul e din Legea 70/2015 |
 | „Completează originea din livrări" nu schimbă nimic | Factura nu vine dintr-o comandă cu livrări efectuate | Validați întâi livrarea, apoi rulați acțiunea |
 

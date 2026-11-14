@@ -187,7 +187,8 @@ Changelog
   description prints ``label``, ``t-esc`` becomes ``t-out``,
   ``amount_in_words`` gets its values as ``t-call`` attributes,
   ``report_file`` is dropped and the delegate also accepts the contacts
-  of a company.
+  of a company. The ``transfer`` branches of the payment report are
+  dropped: in 20.0 a payment is only inbound or outbound.
 
 19.0.1.0.0
 ----------

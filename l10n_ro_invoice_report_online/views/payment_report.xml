@@ -7,7 +7,7 @@
                     <div class="page">
                         <div class="row">
                             <div class="col-5">
-                                <t t-set="is_cash_order" t-value="o.journal_id.type == 'cash' and o.payment_type != 'transfer'" />
+                                <t t-set="is_cash_order" t-value="o.journal_id.type == 'cash'" />
                                 <t t-if="is_cash_order">
                                     <strong t-if="o.payment_type=='outbound'">Payer</strong>
                                     <strong t-else="">Recipient</strong><br />
@@ -88,16 +88,12 @@
                                 <t t-if="o.payment_type=='outbound'">
                             <span>Payment disposal:</span>
                         </t>
-
-                                <t t-if="o.payment_type=='transfer'">
-                            <span>Transfer:</span>
-                        </t>
                                 <span t-field="o.name" />
                                 /
                                 <span t-field="o.date" />
                             </h2>
                         <div
-                            t-if="o.journal_id.type == 'cash' and o.payment_type != 'transfer'"
+                            t-if="o.journal_id.type == 'cash'"
                             class="text-muted mb-3"
                             style="font-size: 9px;"
                         >
@@ -108,7 +104,6 @@
                             <tr>
                                 <td t-if="o.payment_type=='inbound'">Received from:</td>
                                 <td t-if="o.payment_type=='outbound'">For:</td>
-                                <td t-if="o.payment_type=='transfer'">To:</td>
                                 <td>
                                     <span t-field="o.partner_id.name" />
                                 </td>

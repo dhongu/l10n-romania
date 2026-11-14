@@ -551,11 +551,6 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ro_invoice_report_online
-#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
-msgid "To:"
-msgstr ""
-
-#. module: l10n_ro_invoice_report_online
 #: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
 msgid "VAT:"
 msgstr ""
