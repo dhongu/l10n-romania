@@ -68,7 +68,7 @@ Date minime pentru demo (prefix **TEST**):
 
 - **Adrese**: Arată marcator, Arată email, Arată telefon — ce apare în adresele tipărite;
 - **Linii**: Arată nr. crt., Afișează totalul cu taxe, Elimină numele produsului din linia de factură, Afișează prețul fără discount pe factură;
-- **Subsol**: Ascunde comunicarea de plată, Ascunde livrările, Ascunde delegatul, Afișează logo Coface.
+- **Subsol**: Ascunde comunicarea de plată, Ascunde livrările pe factură, Ascunde delegatul, Afișează logo Coface.
 
 Opțiunile sunt per companie și se aplică facturii; raportul „Chitanță" de pe plată (pasul 9) afișează mereu marcatorul în adrese. În modulul clasic ele stau în **Setări**; aici sunt pe compania însăși, fiindcă un modul fără Python nu poate adăuga câmpuri în setările generale.
 
@@ -97,7 +97,7 @@ Pe fișa partenerului (**Facturare → Clienți → Clienți**), în tabul **Vâ
 
 ### Pasul 5 — Delegatul și mijlocul de transport pe factură
 
-În **Facturare → Clienți → Facturi**, pe o factură de client în ciornă, câmpurile **Delegat** și **Mijloc transport** apar în antet, sub client. Delegatul se alege dintre persoanele fizice. Când alegeți delegatul, regula de automatizare copiază pe factură mijlocul de transport de pe fișa lui; îl puteți modifica apoi manual. După confirmare, cele două câmpuri devin needitabile.
+În **Facturare → Clienți → Facturi**, pe o factură de client în ciornă, câmpurile **Delegat** și **Mijloc transport** apar în antet, sub client. Delegatul se alege dintre persoane sau contactele unei companii. Când alegeți delegatul, regula de automatizare copiază pe factură mijlocul de transport de pe fișa lui; îl puteți modifica apoi manual. După confirmare, cele două câmpuri devin needitabile.
 
 Câmpurile apar doar pe facturile de client, nu pe note de credit sau facturi de furnizor. Tot în antet, modulul aduce câmpul **Referință plată** (comunicarea de plată tipărită pe factură), editabil cât factura e ciornă.
 
@@ -114,7 +114,7 @@ Pe o factură venită dintr-o comandă de vânzare (sau de achiziție) cu livră
 Din factură, **⚙ Acțiuni → Tipăriți → Factură PDF** (același raport ca butonul **Tipăriți**). Tot acolo, **Facturi în limba companiei** tipărește factura în limba partenerului companiei, iar **PDF fără plată** o tipărește fără chitanță.
 
 **Găsiți pe ecran**, de sus în jos:
-- **antetul**: în stânga **Furnizor** cu adresa, **Punct de lucru** cu adresa lui, conturile bancare bifate pentru tipărire, CIF, NRC, Capital social; în dreapta **Client** cu adresa, adresa de livrare (dacă diferă), CIF și NRC;
+- **antetul**: în stânga **Furnizor** cu adresa, **Punct de lucru** cu adresa lui, conturile bancare bifate pentru tipărire, CIF, NRC, Capital social și, dacă modulul `l10n_ro_vat_on_payment` e instalat și compania e bifată, **TVA la încasare**; în dreapta **Client** cu adresa, adresa de livrare (dacă diferă), CIF și NRC;
 - titlul: **Factura** pentru o factură confirmată, **Proforma** pentru o ciornă;
 - **liniile**: Nr. Crt., Descriere, Cantitate, Preț unitar (fără TVA), Disc.%, **Preț cu disc.%** (cu opțiunea de preț fără discount), Taxe, Suma (fără TVA), **Val. TVA**, **Total (cu TVA)**;
 - **subsolul**: Comunicație plată, **Întocmit**, **Delegat**, **Mijloc de transport**, **Livrări** (cu **AWB** dacă livrările au număr de urmărire), mențiunea legală, informațiile suplimentare ale clientului și, dacă e bifat, logoul Coface.
@@ -127,7 +127,7 @@ Din factură, **⚙ Acțiuni → Tipăriți → Factură PDF** (același raport 
 
 ### Pasul 8 — Chitanța de pe factura încasată în numerar
 
-Pentru o factură încasată pe un jurnal de **numerar**, raportul **Factură PDF** adaugă sub factură, într-un chenar, **chitanța**: datele companiei, numărul plății și data, „Am primit de la" clientul cu CIF, NRC și oraș, suma în cifre și în litere și „Reprezentând contravaloarea facturii". Pentru o restituire în numerar (notă de credit), același chenar devine **Dispoziție de plată**, cu „Am plătit către".
+Pentru o factură încasată pe un jurnal de **numerar**, raportul **Factură PDF** adaugă sub factură, într-un chenar, **chitanța**: datele companiei, numărul plății și data, „Am primit de la" clientul cu CIF, NRC și oraș, suma în cifre și în litere și „Reprezentând contravaloarea facturii". Același chenar apare și pe un **bon de vânzare** (out_receipt), cu „Reprezentând contravaloarea bonului de vânzare". Pentru o restituire în numerar (notă de credit), același chenar devine **Dispoziție de plată**, cu „Am plătit către".
 
 Chitanța nu apare pe **PDF fără plată** și nici pe **Facturi în limba companiei**, iar plățile prin bancă nu produc chitanță.
 
@@ -145,13 +145,13 @@ Din plată (**Facturare → Clienți → Plăți**, deschideți plata), **⚙ Ac
 
 ![Chitanța PCSH/2026/00003 din 14.11.2026, cu Beneficiar TEST Exemplu SRL și Plătitor TEST Client SRL, Cod 14-4-1 scris mărunt sub titlu, Casieria TEST Casa, Suma 1.633,50 lei în cifre și în cuvinte și Reprezentând c/v INV/2026/00009](../static/description/09_dispozitie_incasare.png)
 
-### Pasul 10 — Filtrele de scadență pe lista de facturi
+### Pasul 10 — Filtrele de scadență și restanțe pe lista de facturi
 
-În **Facturare → Clienți → Facturi**, meniul de filtre are șase filtre noi, toate pentru facturi confirmate și neîncasate integral: **Scadente mâine**, **Scadente azi**, **Scadente de 1-7 zile**, **Scadente de 8-14 zile**, **Scadente de 15-30 zile**, **Scadente de peste 30 zile**. Data de referință este ziua curentă.
+În **Facturare → Clienți → Facturi**, meniul de filtre are șase filtre noi, toate pentru facturi confirmate și neîncasate integral: **Scadente mâine**, **Scadente azi**, **Restante de 1-7 zile**, **Restante de 8-14 zile**, **Restante de 15-30 zile**, **Restante de peste 30 de zile**. Data de referință este ziua curentă.
 
-**Verificați** lista obținută: coloana Stare arată **Postat** (nu Plătit), iar data scadenței se încadrează în interval. Atenție la limite: **Scadente de 1-7 zile** include și facturile scadente azi, iar o factură depășită cu exact 14 zile apare atât la 8-14, cât și la 15-30 de zile.
+**Verificați** lista obținută: coloana Stare arată **Postat** (nu Plătit), iar data scadenței se încadrează în interval. Atenție la limită: **Restante de 1-7 zile** include și facturile scadente azi, deci acestea apar și la **Scadente azi**; celelalte intervale nu se suprapun (o factură depășită cu exact 14 zile apare doar la 8-14).
 
-![Lista de facturi cu filtrul Scadente de 1-7 zile activ în bara de căutare: INV/2026/00004 cu Data scadenței Azi și INV/2026/00005 cu Acum 3 zile, ambele TEST Client SRL, în starea Postat, cu totalurile 242,00 lei și 363,00 lei](../static/description/10_filtre_scadenta.png)
+![Lista de facturi cu filtrul Restante de 1-7 zile activ în bara de căutare: INV/2026/00004 cu Data scadenței Azi și INV/2026/00005 cu Acum 3 zile, ambele TEST Client SRL, în starea Postat, cu totalurile 242,00 lei și 363,00 lei](../static/description/10_filtre_scadenta.png)
 
 ### Note de monografie și raportare
 
@@ -189,10 +189,11 @@ Față de `l10n_ro_invoice_report`, varianta online nu modifică extrasele de ba
 - [ ] La alegerea clientului cu cont bancar de plată, contul se pune pe factură, iar factura se confirmă (contul companiei e de încredere).
 - [ ] „Completează originea din livrări" scrie livrările efectuate în Sursă.
 - [ ] Factura tipărită are Val. TVA pe linie, totalurile corecte, delegatul, mijlocul de transport, livrările și mențiunea legală.
-- [ ] Factura încasată în numerar are chitanța dedesubt pe „Factură PDF", iar „PDF fără plată" nu o are.
+- [ ] Factura încasată în numerar (și bonul de vânzare) are chitanța dedesubt pe „Factură PDF", iar „PDF fără plată" nu o are.
 - [ ] Raportul „Chitanță" de pe o plată în numerar are Cod 14-4-1 (încasare) sau Cod 14-4-4 cu rândul pentru actul de identitate (plată); pe jurnal de bancă nu are cod și nici casierie.
 - [ ] Nota de credit tipărită are valorile cu minus.
-- [ ] Filtrele de scadență întorc doar facturi confirmate și neîncasate, în intervalul din nume.
+- [ ] Filtrele de scadență întorc doar facturi confirmate și neîncasate, în intervalul din nume; doar „Scadente azi" și „Restante de 1-7 zile" se suprapun (ziua curentă).
+- [ ] Cu `l10n_ro_vat_on_payment` și compania bifată, antetul facturii are mențiunea „TVA la încasare".
 
 ## 9. Mesaje de eroare frecvente
 
@@ -203,7 +204,7 @@ Față de `l10n_ro_invoice_report`, varianta online nu modifică extrasele de ba
 | La confirmarea facturii, Odoo refuză cu mesajul că contul bancar al companiei legat de factură nu este de încredere | Automatizarea a pus pe factură contul de plată al clientului, iar contul companiei nu e marcat de încredere | Pe contul bancar al companiei apăsați *Send Money* (îl marcați de încredere), apoi confirmați factura |
 | Contul bancar al companiei nu apare pe factură | Contul nu are bifa „România - Tipărit în raport" sau moneda lui diferă de moneda facturii | Bifați „România - Tipărit în raport"; pentru facturile în altă monedă adăugați un cont în acea monedă |
 | Mijlocul de transport nu se completează la alegerea delegatului | Fișa delegatului nu are Mijloc transport, sau factura nu mai e ciornă | Completați câmpul pe fișa delegatului; pe o factură confirmată treceți-o întâi în ciornă |
-| Delegatul dorit nu apare în listă | Câmpul acceptă doar persoane fizice, nu companii | Creați delegatul ca persoană |
+| Delegatul dorit nu apare în listă | Câmpul acceptă persoane sau contacte ale unei companii, nu compania însăși | Creați delegatul ca persoană sau ca contact al companiei |
 | Chitanța nu apare sub factură | S-a tipărit „PDF fără plată" sau „Facturi în limba companiei", sau plata e pe jurnal de bancă | Tipăriți „Factură PDF"; chitanța apare doar pentru încasările pe jurnal de numerar |
 | Încasare în numerar peste 5.000 lei de la aceeași persoană, în aceeași zi | Odoo nu verifică plafonul; chitanța se tipărește oricum | Încasați diferența prin bancă; plafonul e din Legea 70/2015 |
 | „Completează originea din livrări" nu schimbă nimic | Factura nu vine dintr-o comandă cu livrări efectuate | Validați întâi livrarea, apoi rulați acțiunea |
@@ -221,7 +222,7 @@ Capturile din `static/description/` sunt făcute în **limba română**, pe baza
 7. `07_factura_tiparita.png` — factura în lei tipărită: antet cu punctul de lucru și contul bancar, linie cu discount și TVA 21%, subsol cu delegat, livrări, Coface și chitanță.
 8. `08_factura_chitanta.png` — chenarul chitanței de sub aceeași factură, încasată în numerar.
 9. `09_dispozitie_incasare.png` — raportul Chitanță de pe plata în numerar, cod 14-4-1.
-10. `10_filtre_scadenta.png` — lista de facturi cu filtrul Scadente de 1-7 zile activ.
+10. `10_filtre_scadenta.png` — lista de facturi cu filtrul Restante de 1-7 zile activ.
 
 Pentru regenerare: porniți serverul HTTP pe baza de test (PDF-urile au nevoie de el), puneți limba utilizatorului și a partenerilor pe română, apoi pe engleză, și refaceți aceleași cadre; documentele tipărite se capturează din randarea HTML a raportului (`/report/html/<raport>/<id>`).
 
