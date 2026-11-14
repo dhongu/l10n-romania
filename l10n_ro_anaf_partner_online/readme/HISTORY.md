@@ -1,3 +1,7 @@
+## 19.0.1.0.2 (2026-11-14)
+
+- Apps Store banner: the "IAP" label shows that the module works with IAP credits.
+
 ## 19.0.1.0.1 (2026-11-14)
 
 - Cannot be installed together with `l10n_ro_partner_create_by_vat` or `l10n_ro_partner_autocomplete`,

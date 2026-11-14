@@ -6,7 +6,13 @@
         <field name="name">x_l10n_ro_share_capital</field>
         <field name="field_description">Share Capital</field>
         <field name="ttype">float</field>
-        <field name="help">Company share capital, printed on Romanian report headers.</field>
+        <!-- Install guard: the zip import ignores "excludes" in the manifest. When
+             l10n_ro_report_common is installed, the import stops on this missing
+             external ID, whose name says what to do. -->
+        <field
+            name="help"
+            eval="ref('l10n_ro_report_common_online.error_uninstall_l10n_ro_report_common_first') if ref('l10n_ro_report_common.view_company_form', False) else 'Company share capital, printed on Romanian report headers.'"
+        />
     </record>
     <record id="field_res_partner_bank_x_l10n_ro_print_report" model="ir.model.fields">
         <field name="model_id" ref="base.model_res_partner_bank" />

@@ -6,7 +6,7 @@
     "name": "Romania - ANAF Partner Data for Odoo Online",
     "summary": "Fill in Romanian partners from ANAF by their CUI, on Odoo Online too (no Python, service by Terrabit)",
     "license": "AGPL-3",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
