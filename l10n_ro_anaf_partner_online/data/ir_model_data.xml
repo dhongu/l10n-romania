@@ -3,6 +3,12 @@
 <odoo>
     <!-- Partner: the ANAF status, filled by the service -->
     <record id="field_res_partner_x_anaf_vat_payer" model="ir.model.fields">
+        <!-- Guard: the zip import (Apps > Import Module) does not check "excludes"; a missing external ID
+             stops the import while l10n_ro_partner_create_by_vat or l10n_ro_partner_autocomplete is installed -->
+        <field
+            name="help"
+            eval="ref('l10n_ro_anaf_partner_online.error_uninstall_l10n_ro_partner_create_by_vat_first') if ref('l10n_ro_partner_create_by_vat.view_partner_create_by_vat_einvoice', False) else ref('l10n_ro_anaf_partner_online.error_uninstall_l10n_ro_partner_autocomplete_first') if ref('l10n_ro_partner_autocomplete.view_partner_form_anaf_refresh', False) else 'VAT payer at ANAF, filled in by the Terrabit service'"
+        />
         <field name="model_id" ref="base.model_res_partner" />
         <field name="name">x_anaf_vat_payer</field>
         <field name="field_description">VAT Payer (ANAF)</field>

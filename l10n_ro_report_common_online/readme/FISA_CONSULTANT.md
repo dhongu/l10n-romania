@@ -56,8 +56,9 @@ Nu se folosesc conturi contabile și nu se generează note contabile. Pentru dem
    lui să vină traduse.
 2. Importați arhiva zip a modulului din **Aplicații → Importați Modulul** (pe Odoo Online, planul
    Custom; meniul apare în modul dezvoltator). Modulul depinde de `l10n_ro` (localizarea contabilă România), care trebuie să fie
-   instalat. Nu îl instalați lângă `l10n_ro_report_common`: cele două țin aceleași date în câmpuri
-   diferite.
+   instalat. Precondiție: pe bază nu este instalat `l10n_ro_report_common`; cele două țin aceleași date în
+   câmpuri diferite, iar Odoo refuză instalarea alături (cheia `excludes` din manifest: *Modules …
+   are incompatible*). Dezinstalați întâi modulul cu cod Python.
 3. Pe contactul companiei completați **NRC** (câmpul vine din `l10n_ro`, vizibil când țara fiscală
    este România).
 

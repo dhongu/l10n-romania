@@ -3,6 +3,12 @@
 <odoo>
     <!-- Partner of the invoice: stored, so that the register can be grouped by partner -->
     <record id="field_l10n_ro_edi_document_x_partner_id" model="ir.model.fields">
+        <!-- Guard: the zip import (Apps > Import Module) does not check "excludes"; a missing external ID
+             stops the import while l10n_ro_message_spv is installed -->
+        <field
+            name="help"
+            eval="ref('l10n_ro_message_spv_online.error_uninstall_l10n_ro_message_spv_first') if ref('l10n_ro_message_spv.model_l10n_ro_message_spv', False) else 'Partner of the invoice, stored so that the register can be grouped by partner'"
+        />
         <field name="model_id" ref="l10n_ro_edi.model_l10n_ro_edi_document" />
         <field name="name">x_partner_id</field>
         <field name="field_description">Partner</field>
