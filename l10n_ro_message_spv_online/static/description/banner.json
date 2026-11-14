@@ -1,0 +1,11 @@
+{
+  "title": "e-Factura SPV Messages",
+  "summary": "Every e-Factura message in one register, no Python",
+  "edition": "community",
+  "lang": "en",
+  "features": [
+    "Invoices sent and bills received",
+    "Filters for refused and errors",
+    "XML, signature and PDF in one click"
+  ]
+}

@@ -1,0 +1,153 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_message_spv_online
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-14 02:18+0000\n"
+"PO-Revision-Date: 2026-11-14 02:18+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_online.field_l10n_ro_edi_document_x_currency_id
+msgid "Currency"
+msgstr "Monedă"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Date"
+msgstr "Dată"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Direction"
+msgstr "Direcție"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Errors"
+msgstr "Erori"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_form
+msgid "Fetch status"
+msgstr "Preia starea"
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_online.field_l10n_ro_edi_document_x_attachment_name
+msgid "File Name"
+msgstr "Nume fișier"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_form
+msgid "Files"
+msgstr "Fișiere"
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_online.field_l10n_ro_edi_document_x_invoice_attachment_ids
+msgid "Invoice Attachments"
+msgstr "Atașamente factură"
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_online.field_l10n_ro_edi_document_x_invoice_date
+msgid "Invoice Date"
+msgstr "Dată factură"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_form
+msgid "Invoice files (XML, PDF)"
+msgstr "Fișierele facturii (XML, PDF)"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_form
+msgid "Message"
+msgstr "Mesaj"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.actions.act_window,help:l10n_ro_message_spv_online.action_spv_messages
+msgid "No SPV message yet"
+msgstr "Încă nu există mesaje SPV"
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_online.field_l10n_ro_edi_document_x_partner_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Partner"
+msgstr "Partener"
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_online.field_l10n_ro_edi_document_x_received
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_list
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Received"
+msgstr "Primite"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Refused"
+msgstr "Respinse"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_form
+msgid "SPV Message"
+msgstr "Mesaj SPV"
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.actions.act_window,name:l10n_ro_message_spv_online.action_spv_messages
+#: model:ir.ui.menu,name:l10n_ro_message_spv_online.menu_spv_messages
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_list
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "SPV Messages"
+msgstr "Mesaje SPV"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Sent"
+msgstr "Trimise"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Status"
+msgstr "Stare"
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.actions.server,name:l10n_ro_message_spv_online.action_spv_synchronize
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_list
+msgid "Synchronize now"
+msgstr "Sincronizează acum"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.actions.act_window,help:l10n_ro_message_spv_online.action_spv_messages
+msgid ""
+"The invoices sent to e-Factura and the bills received from the SPV show up here.\n"
+"                Click <b>Synchronize now</b> to fetch the latest messages from ANAF."
+msgstr ""
+"Aici apar facturile trimise în e-Factura și facturile de furnizor primite din SPV.\n"
+"                Apăsați <b>Sincronizează acum</b> ca să preluați ultimele mesaje de la ANAF."
+
+#. module: l10n_ro_message_spv_online
+#: model:ir.model.fields,field_description:l10n_ro_message_spv_online.field_l10n_ro_edi_document_x_amount_total
+msgid "Total"
+msgstr "Total"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Validated"
+msgstr "Validate"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_search
+msgid "Waiting for ANAF"
+msgstr "În așteptare la ANAF"
+
+#. module: l10n_ro_message_spv_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_form
+msgid "XML of the message"
+msgstr "XML-ul mesajului"
