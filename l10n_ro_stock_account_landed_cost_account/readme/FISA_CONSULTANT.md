@@ -49,7 +49,8 @@ vândut** la validarea costului.
   (`624 = 4739` în roșu), în loc de Dr intermediar 100 / Cr 624 100. Efectul net pe conturi e același (rulajul
   debitor al 624 scade cu 100, fără înregistrare pe credit; intermediarul rămâne cu sold zero). La metoda *Standard* bifa nu schimbă nota.
 - Contul intermediar este o soluție tehnică (exporturi care cer note echilibrate pe perechi de
-  conturi). Îl alege firma prin politica contabilă; nu poate fi din clasa 6.
+  conturi). Îl alege firma prin politica contabilă; recomandăm să nu fie din clasa 6 (modulul nu verifică
+  clasa contului, alegerea rămâne în grija contabilului).
 
 ## 3. Utilizatori și roluri
 
@@ -66,7 +67,7 @@ vândut** la validarea costului.
 | 371 Mărfuri | Cont de evaluare (Dr), din locație sau din categoria produsului |
 | 624 Cheltuieli cu transportul | Contul liniei de cost (Dr la factura transportatorului, Cr la costul adițional) |
 | 408 Furnizori – facturi nesosite | Contrapartida recepției pe bază de aviz |
-| Cont intermediar tehnic | Opțional, cu sold zero, ales de firmă; nu clasa 6 |
+| Cont intermediar tehnic | Opțional, cu sold zero, ales de firmă; recomandat în afara clasei 6 (nevalidat de modul) |
 | 609 | Nu se rutează niciodată prin contul intermediar |
 
 Date: produs stocabil cu evaluare în timp real (FIFO sau cost mediu), produs de serviciu cu **Este cost

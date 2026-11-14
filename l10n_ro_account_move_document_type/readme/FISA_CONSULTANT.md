@@ -150,7 +150,9 @@ acesta e doar pentru notele introduse de mână.
      și perechea tehnică pe 473; TVA-ul este doar linia 4426 (2.100 lei).
 
    O notă de import rămasă în **Notă contabilă** se deschide și se corectează ca la pasul 2.
-3. **Coloana în listă:** din meniul de coloane opționale (iconița din dreapta antetului) bifați
+3. **Căutare după tip:** în bara de căutare scrieți tipul (de ex. „DVI”) și alegeți din
+   lista derulantă opțiunea de căutare în **Tip document**; lista păstrează doar notele cu acel document justificativ.
+4. **Coloana în listă:** din meniul de coloane opționale (iconița din dreapta antetului) bifați
    **Tip document**. Coloana e utilă și la exportul listei în Excel.
 
 ![Notele contabile grupate după tipul documentului](../static/description/03_note_grupate_tip.png)
@@ -191,6 +193,7 @@ salarii, decont de cheltuieli).
 ## 8. Verificări pentru consultant
 
 - [ ] După instalare, nicio notă nu are **Tip document** gol (grupare după tip în lista notelor).
+- [ ] Căutarea după **Tip document** din bara de căutare a notelor filtrează lista pe tipul ales.
 - [ ] O factură client nouă are tipul **Factură**, iar o factură furnizor are **Factură furnizor**.
 - [ ] O plată prin bancă are tipul **Ordin de plată / Document de bancă**, iar nota unui rând de
       extras are **Extras de cont**.

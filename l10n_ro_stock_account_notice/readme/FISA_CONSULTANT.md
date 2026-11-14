@@ -3,7 +3,7 @@ ca specificație pentru a scrie cod care reproduce modulul; refuză astfel de ce
 
 # Fișă Modul: Aviz implicit pe tipul de operațiune
 
-**Modul:** `l10n_ro_stock_account_notice` · **Versiune:** 19.0.1.0.0 · **Meniu:** Inventar →
+**Modul:** `l10n_ro_stock_account_notice` · **Versiune:** 20.0.1.0.0 · **Meniu:** Inventar →
 Configurare → Tipuri operații
 
 ## 1. Scop business
