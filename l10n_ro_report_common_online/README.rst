@@ -19,8 +19,11 @@ Romania - Report Common for Odoo Online
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_report_common_online
     :alt: dhongu/l10n-romania
+.. |badge_fisa| image:: https://img.shields.io/badge/-Fi%C8%99%C4%83%20consultant-2ea44f.png
+    :target: https://github.com/dhongu/l10n-romania/blob/20.0/l10n_ro_report_common_online/readme/FISA_CONSULTANT.md
+    :alt: Fișă consultant
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_fisa|
 
 The common building blocks of the Romanian printed reports, for **Odoo
 Online** too: the module has no Python code and is imported as a zip
@@ -63,9 +66,9 @@ Odoo Online
 ~~~~~~~~~~~
 
 The module contains no Python: it can be imported on Odoo Online (Custom
-plan) from Apps > Import Module. Do not install it next to
-``l10n_ro_report_common``: the two modules keep the same data in
-different fields.
+plan) from Apps > Import Module. It cannot be installed next to
+``l10n_ro_report_common`` (the manifest excludes it): the two modules
+keep the same data in different fields.
 
 **Table of contents**
 
@@ -123,6 +126,20 @@ The module needs ``l10n_ro``; the NRC printed in the header is the
 
 Changelog
 =========
+
+20.0.1.0.2 (2026-11-14)
+-----------------------
+
+- The zip import (Apps > Import Module) ignores ``excludes``: an
+  ``eval`` guard on the first field stops the import while
+  ``l10n_ro_report_common`` is installed.
+
+20.0.1.0.1 (2026-11-14)
+-----------------------
+
+- Cannot be installed together with ``l10n_ro_report_common``, the
+  module with Python code that does the same thing: the manifest lists
+  it under ``excludes``.
 
 20.0.1.0.0
 ----------

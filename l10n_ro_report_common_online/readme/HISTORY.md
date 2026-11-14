@@ -1,3 +1,8 @@
+## 20.0.1.0.2 (2026-11-14)
+
+- The zip import (Apps > Import Module) ignores `excludes`: an `eval` guard on the first field
+  stops the import while `l10n_ro_report_common` is installed.
+
 ## 20.0.1.0.1 (2026-11-14)
 
 - Cannot be installed together with `l10n_ro_report_common`, the module with Python code that does the same

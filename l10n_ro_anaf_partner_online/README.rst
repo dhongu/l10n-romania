@@ -19,8 +19,11 @@ Romania - ANAF Partner Data for Odoo Online
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_anaf_partner_online
     :alt: dhongu/l10n-romania
+.. |badge_fisa| image:: https://img.shields.io/badge/-Fi%C8%99%C4%83%20consultant-2ea44f.png
+    :target: https://github.com/dhongu/l10n-romania/blob/20.0/l10n_ro_anaf_partner_online/readme/FISA_CONSULTANT.md
+    :alt: Fișă consultant
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_fisa|
 
 Fill in Romanian companies from ANAF by their CUI (Tax ID), on **Odoo
 Online** too: the module has no Python code and is imported as a zip
@@ -166,6 +169,24 @@ Usage
 
 Changelog
 =========
+
+20.0.1.0.2 (2026-11-14)
+=======================
+
+- Apps Store banner: the "IAP" label shows that the module works with
+  IAP credits.
+
+20.0.1.0.1 (2026-11-14)
+=======================
+
+- Cannot be installed together with ``l10n_ro_partner_create_by_vat`` or
+  ``l10n_ro_partner_autocomplete``, the modules with Python code that
+  fill the partner from ANAF too: the manifest lists them under
+  ``excludes``.
+- The zip import (*Apps > Import Module*) does not check ``excludes``: a
+  guard on the first field stops it while
+  ``l10n_ro_partner_create_by_vat`` or ``l10n_ro_partner_autocomplete``
+  is installed.
 
 20.0.1.0.0
 ==========
