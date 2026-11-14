@@ -19,8 +19,11 @@ Romania - ANAF Partner Lookup
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_anaf_partner_lookup
     :alt: dhongu/l10n-romania
+.. |badge_fisa| image:: https://img.shields.io/badge/-Fi%C8%99%C4%83%20consultant-2ea44f.png
+    :target: https://github.com/dhongu/l10n-romania/blob/19.0/l10n_ro_anaf_partner_lookup/readme/FISA_CONSULTANT.md
+    :alt: Fișă consultant
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_fisa|
 
 Looks a Romanian company up at ANAF by its CUI and returns the data for
 the partner, so that other modules can create or check a customer
@@ -76,8 +79,189 @@ by default), and for VIES ``l10n_ro_anaf_partner_lookup.vies_url`` and
 .. contents::
    :local:
 
+Configuration
+=============
+
+The module installs automatically as a dependency of the modules that
+use it and needs no setup. It works out of the box with the default ANAF
+service and a 10-second wait.
+
+Optional system parameters, for administrators only (activate developer
+mode, then go to **Settings → Technical → Parameters → System
+Parameters** and add the keys you need):
+
+- ``l10n_ro_anaf_partner_lookup.url``: address of the ANAF service.
+  Change it only if ANAF changes it.
+- ``l10n_ro_anaf_partner_lookup.timeout``: seconds to wait for ANAF
+  (default 10). It applies to the back office and to the Point of Sale;
+  the website has its own fixed 5-second wait. The value must be a
+  **positive whole number** (for example ``15``). A value such as
+  ``10.5``, ``ten`` or ``0`` makes every back-office and POS lookup
+  report "ANAF unavailable" until it is corrected.
+- ``l10n_ro_anaf_partner_lookup.vies_url``: address of the VIES service
+  (default
+  ``https://ec.europa.eu/taxation_customs/vies/rest-api/ms/{country}/vat/{number}``).
+  Keep the ``{country}`` and ``{number}`` placeholders.
+- ``l10n_ro_anaf_partner_lookup.vies_timeout``: seconds to wait for VIES
+  (default 10, also a positive whole number).
+
+Optional modules that complete the result:
+
+- ``l10n_ro_zip``: fills the postal code by street and number when ANAF
+  does not provide it.
+- ``l10n_ro_city``: picks the city from the list of Romanian localities.
+- ``l10n_ro`` (Romanian localization): provides the **NRC** field and
+  computes **Company ID** from the Tax ID.
+
+Usage
+=====
+
+Before you start: the module needs no setup, but you can adjust the
+lookup services and their waiting times, see *Configuration*.
+
+The module has no menu, screen or button of its own. It is a shared
+service: the operator types a Romanian tax code (CUI) or an EU VAT
+number in a module that uses it (automatic partner completion, the Point
+of Sale customer search, the website cart). The module checks the code,
+asks ANAF or VIES, and the calling module fills in the partner with the
+values received.
+
+**Step 1 — Lookup parameters (optional, administrator)**
+
+Activate developer mode and go to **Settings → Technical → Parameters →
+System Parameters**, then search for ``l10n_ro_anaf_partner_lookup``. By
+default the list is empty and the module uses the default ANAF service
+and a 10-second wait. Add the keys with **New** only if you need to
+change a service address or a waiting time, for ANAF or for VIES. Keep
+the waiting time short and a positive whole number: somebody usually
+waits for the answer at the till or on the website.
+
+|System parameters of the ANAF and VIES lookup: url, timeout, vies_url
+and vies_timeout|
+
+**Step 2 — VAT-registered company: partner created from ANAF data**
+
+In the module that uses the service, the operator types the CUI in any
+form (``RO 12345674``, ``ro12345674``, ``12345674``). If the control
+digit does not match, ANAF is not asked at all. Otherwise the partner
+receives the data returned. In the example the company has its
+registered office in Timișoara and its fiscal domicile in Arad: the
+whole address comes from the **registered office**.
+
+- The partner is a **Company**.
+- **Tax ID** carries the ``RO`` prefix only because the company is
+  VAT-registered.
+- The street comes with its number (details such as the floor go on the
+  second line).
+- The locality has no ``Mun.`` prefix and uses the correct diacritics
+  (``ș``, ``ț`` with comma).
+- The county, the **NRC** (trade register number) and the 6-digit postal
+  code of the registered office are filled in.
+
+|VAT-registered company filled in from ANAF, with the address of the
+registered office|
+
+**Step 3 — Non-VAT-registered company from Bucharest**
+
+For a company that is not VAT-registered, **Tax ID** receives the CUI
+without ``RO``; the partner is still a **Company**. In the example ANAF
+wrote the address in capitals, the locality as ``Mun. București``
+without a sector and the postal code as ``30167``.
+
+- The street is shown in the usual form, not in capitals.
+- The locality becomes **Sector 3**, deduced from the postal code
+  (``03…`` means Sector 3), as e-Factura requires.
+- The postal code has 6 digits (``030167``).
+
+If neither the locality nor the postal code shows the sector, the
+locality stays exactly as ANAF wrote it, so that the e-Factura check can
+flag the missing sector.
+
+|Non-VAT-registered company from Bucharest, with the sector deduced from
+the postal code|
+
+**Step 4 — Company ID: the CUI without ``RO``**
+
+Open the **Sales & Purchases** tab of the VAT-registered company from
+step 2. In the **Misc** group you find **Company ID**. The module does
+not send it: the Romanian localization (``l10n_ro``) computes it from
+**Tax ID** when the partner is saved. Here **Tax ID** is ``RO12345674``
+and **Company ID** is ``12345674``. For a non-VAT-registered company,
+Company ID equals Tax ID. Without ``l10n_ro`` installed, Company ID
+stays empty.
+
+|Company ID computed from the Tax ID, in the Sales & Purchases tab|
+
+**Step 5 — Company from another EU country: partner created from VIES**
+
+The calling module sends the VAT number with the country prefix
+(``IT00743110157``, ``it 007-43110157``; ``EL`` for Greece). The
+country's control digits are checked before VIES is asked. In the
+example VIES gives the address on two lines,
+``LARGO FRANCESCO RICHINI 6`` and ``20122 MILANO MI``: the line with the
+postal code gives the city.
+
+- The partner is a **Company**; **Tax ID** keeps the country prefix.
+- The **country** is set from the prefix (Italy here).
+- The street, the postal code (``20122``) and the city (``Milano Mi``,
+  with the province code as VIES writes it) each go in their own field,
+  capitalized only at the start of each word.
+- County and phone stay empty, and NRC does not appear (it is for
+  Romanian companies only): VIES does not provide them.
+
+For Germany and Spain, VIES only confirms that the number is valid: the
+partner then receives only the Tax ID, the country and the **Company**
+type. If the address has no recognizable postal code, it stays whole in
+**Street**.
+
+|Company from Italy filled in from VIES, with the address split into
+street, postal code and city|
+
+**Service answers**
+
+The calling module receives one of four answers from ANAF, or the same
+four from VIES, and decides what to show the operator:
+
++--------------+---------------------------+---------------------------+
+| Answer       | When                      | What the calling module   |
+|              |                           | usually does              |
++==============+===========================+===========================+
+| Found        | ANAF (or VIES) knows the  | fills in the partner;     |
+|              | code                      | warns if the company is   |
+|              |                           | inactive or struck off    |
++--------------+---------------------------+---------------------------+
+| Not found    | correct code, but the     | tells that the company    |
+|              | company is not in the     | does not exist in the     |
+|              | register                  | register                  |
++--------------+---------------------------+---------------------------+
+| Invalid code | wrong control digit, a    | asks for the code to be   |
+|              | personal ID instead of a  | corrected, with no        |
+|              | CUI, letters              | request sent              |
++--------------+---------------------------+---------------------------+
+| Unavailable  | the service does not      | at the Point of Sale and  |
+|              | answer in time or returns | on the website: says that |
+|              | an error                  | ANAF does not respond and |
+|              |                           | leaves the data to be     |
+|              |                           | filled in manually        |
++--------------+---------------------------+---------------------------+
+
+When the service is unavailable the customer is never lost: the data can
+always be entered by hand.
+
+.. |System parameters of the ANAF and VIES lookup: url, timeout, vies_url and vies_timeout| image:: https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_lookup/01_parametri_sistem.png
+.. |VAT-registered company filled in from ANAF, with the address of the registered office| image:: https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_lookup/02_firma_platitoare_tva.png
+.. |Non-VAT-registered company from Bucharest, with the sector deduced from the postal code| image:: https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_lookup/03_firma_bucuresti_sector.png
+.. |Company ID computed from the Tax ID, in the Sales & Purchases tab| image:: https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_lookup/04_id_companie.png
+.. |Company from Italy filled in from VIES, with the address split into street, postal code and city| image:: https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_lookup/05_firma_ue_vies.png
+
 Changelog
 =========
+
+19.0.1.3.1 (2026-11-14)
+-----------------------
+
+- Documentation: the Usage and Configuration sections, with the
+  screenshots, now appear in the README and on the Apps Store page.
 
 19.0.1.3.0 (2026-11-04)
 -----------------------
@@ -194,6 +378,14 @@ technical issues.
 
 Maintainers
 -----------
+
+.. |maintainer-dhongu| image:: https://github.com/dhongu.png?size=40px
+    :target: https://github.com/dhongu
+    :alt: dhongu
+
+Current maintainer:
+
+|maintainer-dhongu| 
 
 This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_anaf_partner_lookup>`_ project on GitHub.
 

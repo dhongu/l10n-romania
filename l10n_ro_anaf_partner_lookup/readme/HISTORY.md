@@ -1,3 +1,8 @@
+## 19.0.1.3.1 (2026-11-14)
+
+- Documentation: the Usage and Configuration sections, with the screenshots, now appear in the README
+  and on the Apps Store page.
+
 ## 19.0.1.3.0 (2026-11-04)
 
 - `vies_lookup(vat)` looks an intra-community VAT number up in VIES, the REST service of the European
