@@ -1,3 +1,10 @@
+## 19.0.1.0.1 (2026-11-14)
+
+- Cannot be installed together with `l10n_ro_message_spv`, the module with Python code that does the same
+  thing: the manifest lists it under `excludes`.
+- The zip import (Apps > Import Module) does not check `excludes`, so the import now stops with a
+  missing external ID (`error_uninstall_..._first`) while that module is installed.
+
 # 19.0.1.0.0
 
 - First version: *SPV Messages* register over `l10n_ro_edi.document` (list, filters, form with
