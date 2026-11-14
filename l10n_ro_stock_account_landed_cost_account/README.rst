@@ -17,7 +17,7 @@ Romania - Stock Accounting Landed Cost Account
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_landed_cost_account
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_landed_cost_account
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -31,6 +31,29 @@ Romania - Stock Accounting Landed Cost Account
 
 Changelog
 =========
+
+19.0.1.2.0 (2026-11-11)
+-----------------------
+
+- With the company **Storno accounting** setting on and the *Through
+  intermediary account* method, the second pair of the landed cost note
+  is now posted in red on the same sides (class 6 debit, intermediary
+  credit, both negative, ``624 = 4739`` in red), instead of intermediary
+  debit / class 6 credit. The net effect on the accounts is the same.
+  The standard method and the companies without storno accounting are
+  unchanged. Choosing the intermediary method in the settings warns the
+  user (an alert in the form and an onchange warning) when Storno
+  accounting is off. Tests for storno on and off with reserved and sold
+  stock and a reception with notice, and the consultant sheet updated.
+
+19.0.1.1.4 (2026-11-11)
+-----------------------
+
+- Tests for the landed cost created from the vendor bill and for stock
+  that is already reserved or already sold (only the quantity in stock
+  is capitalized), both after a reception without and with notice (408),
+  and a consultant sheet with 18 screenshots covering these scenarios.
+  No functional change.
 
 19.0.1.1.3 (2026-10-22)
 -----------------------
@@ -119,11 +142,14 @@ Maintainers
 .. |maintainer-dhongu| image:: https://github.com/dhongu.png?size=40px
     :target: https://github.com/dhongu
     :alt: dhongu
+.. |maintainer-VoicuStefan2001| image:: https://github.com/VoicuStefan2001.png?size=40px
+    :target: https://github.com/VoicuStefan2001
+    :alt: VoicuStefan2001
 
-Current maintainer:
+Current maintainers:
 
-|maintainer-dhongu| 
+|maintainer-dhongu| |maintainer-VoicuStefan2001| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_stock_account_landed_cost_account>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_landed_cost_account>`_ project on GitHub.
 
 You are welcome to contribute.

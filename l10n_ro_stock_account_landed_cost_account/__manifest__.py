@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Stock Accounting Landed Cost Account",
-    "version": "19.0.1.2.0",
+    "version": "20.0.1.2.0",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Landed Cost account determination",

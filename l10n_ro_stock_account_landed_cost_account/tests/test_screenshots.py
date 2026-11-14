@@ -159,7 +159,7 @@ class TestLandedCostScreenshots(AccountTestInvoicingCommon, ScreenshotCase or ob
                         {
                             "product_id": cls.products[key].id,
                             "product_uom_qty": 4.0,
-                            "product_uom": cls.products[key].uom_id.id,
+                            "uom_id": cls.products[key].uom_id.id,
                             "location_id": stock.id,
                             "location_dest_id": customers.id,
                         }

@@ -64,7 +64,7 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
                         {
                             "product_id": self.product.id,
                             "product_uom_qty": qty,
-                            "product_uom": self.product.uom_id.id,
+                            "uom_id": self.product.uom_id.id,
                             "location_id": self.env.ref("stock.stock_location_stock").id,
                             "location_dest_id": self.env.ref("stock.stock_location_customers").id,
                         }
@@ -151,7 +151,8 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         self.assertEqual(delivery.state, "assigned", "The reservation is not touched")
         delivery.move_line_ids.write({"quantity": 4.0})
         delivery.with_context(demo_mode=True).button_validate()
-        self.assertAlmostEqual(delivery.move_ids.value, 440.0, msg="4 pcs leave at 110 (100 + 10 landed cost)")
+        # Odoo 20: stock.move.value is negative on outgoing moves
+        self.assertAlmostEqual(-delivery.move_ids.value, 440.0, msg="4 pcs leave at 110 (100 + 10 landed cost)")
 
     # Scenario 3: stock already sold
     def test_04_sold_stock_partially_capitalized(self):
@@ -159,10 +160,10 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         capitalized (60 of 100); the delivery keeps its cost and 40 stay on class 6."""
         __, receipt = self._purchase_receipt()
         delivery = self._delivery(4.0, validate=True)
-        self.assertEqual(delivery.move_ids.value, 400.0)
+        self.assertEqual(-delivery.move_ids.value, 400.0)
         landed = self._landed_from_bill(receipt)
         self.assertEqual(self._lines(landed.account_move_id), [("371000", 60.0, 0.0), ("607000", 0.0, 60.0)])
-        self.assertEqual(delivery.move_ids.value, 400.0, "The delivered cost is not restated")
+        self.assertEqual(-delivery.move_ids.value, 400.0, "The delivered cost is not restated")
 
     def test_05_sold_stock_intermediary(self):
         self.company.account_storno = False
@@ -210,7 +211,7 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         self.assertEqual(self._lines(landed.account_move_id), [("371000", 100.0, 0.0), ("607000", 0.0, 100.0)])
         delivery.move_line_ids.write({"quantity": 4.0})
         delivery.with_context(demo_mode=True).button_validate()
-        self.assertAlmostEqual(delivery.move_ids.value, 440.0)
+        self.assertAlmostEqual(-delivery.move_ids.value, 440.0)
         self.assertEqual(
             self._lines(delivery.move_ids.account_move_id), [("371000", 0.0, 440.0), ("607000", 440.0, 0.0)]
         )
