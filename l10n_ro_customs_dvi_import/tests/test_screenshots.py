@@ -86,13 +86,10 @@ class TestCustomsDviImportScreenshots(AccountTestInvoicingCommon, ScreenshotCase
         env.ref("base.user_admin").write({"company_ids": [(4, company.id)], "company_id": company.id})
         # autorul mesajului din istoricul DVI-ului, vizibil în captura 04
         env.user.name = "Contabil Importuri"
-        # Produsul „Taxă vamală” e unic pe bază și poate fi creat de o altă companie, fără cont
-        # pentru aceasta: atunci TVA-ul ar cădea pe contul categoriei (607) în captura notei.
-        dvi_wizard = env["account.invoice.dvi"]
-        duty_product = dvi_wizard.get_custom_duty_product()
+        # Produsul „Taxă vamală” e unic pe bază și poate fi creat într-o sesiune în engleză: în
+        # capturi, linia de cost ar apărea „Custom Duty”.
+        duty_product = env["account.invoice.dvi"].get_custom_duty_product()
         if duty_product:
-            duty_product.with_company(company).property_account_expense_id = dvi_wizard._get_customs_payable_account()
-            # creat poate într-o sesiune în engleză: în capturi, linia ar apărea „Custom Duty”
             duty_product.with_context(lang="ro_RO").name = "Taxă vamală"
 
         warehouse = env["stock.warehouse"].search([("company_id", "=", company.id)], limit=1)
