@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): the Python logic of l10n_ro_invoice_report
+     becomes server actions and automation rules -->
+<odoo>
+    <!-- The delegate brings its means of transport on the invoice -->
+    <record id="action_delegate_mean_transp" model="ir.actions.server">
+        <field name="name">Invoice: means of transport of the delegate</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="state">code</field>
+        <field name="code">if record.x_l10n_ro_delegate_id.x_l10n_ro_mean_transp:
+    record.update({'x_l10n_ro_mean_transp': record.x_l10n_ro_delegate_id.x_l10n_ro_mean_transp})</field>
+    </record>
+    <record id="automation_delegate_mean_transp" model="base.automation">
+        <field name="name">Invoice: means of transport of the delegate</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="trigger">on_change</field>
+        <field name="on_change_field_ids" eval="[(6, 0, [ref('field_account_move__x_l10n_ro_delegate_id')])]" />
+        <field name="action_server_ids" eval="[(6, 0, [ref('action_delegate_mean_transp')])]" />
+    </record>
+
+    <!-- The bank account in which the partner pays goes on its customer invoices -->
+    <record id="action_partner_payment_bank_onchange" model="ir.actions.server">
+        <field name="name">Invoice: payment bank account of the partner (form)</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="state">code</field>
+        <field name="code">bank = record.commercial_partner_id.x_l10n_ro_payment_bank_id
+if record.move_type in ('out_invoice', 'in_refund') and bank:
+    record.update({'partner_bank_id': bank.id})</field>
+    </record>
+    <record id="automation_partner_payment_bank_onchange" model="base.automation">
+        <field name="name">Invoice: payment bank account of the partner (form)</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="trigger">on_change</field>
+        <field name="on_change_field_ids" eval="[(6, 0, [ref('account.field_account_move__partner_id')])]" />
+        <field name="action_server_ids" eval="[(6, 0, [ref('action_partner_payment_bank_onchange')])]" />
+    </record>
+    <record id="action_partner_payment_bank" model="ir.actions.server">
+        <field name="name">Invoice: payment bank account of the partner</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="state">code</field>
+        <field name="code">for invoice in records:
+    bank = invoice.commercial_partner_id.x_l10n_ro_payment_bank_id
+    if bank and invoice.partner_bank_id != bank:
+        invoice.write({'partner_bank_id': bank.id})</field>
+    </record>
+    <record id="automation_partner_payment_bank" model="base.automation">
+        <field name="name">Invoice: payment bank account of the partner</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="trigger">on_create_or_write</field>
+        <field name="trigger_field_ids" eval="[(6, 0, [ref('account.field_account_move__partner_id')])]" />
+        <field
+            name="filter_domain"
+        >[('move_type', 'in', ['out_invoice', 'in_refund']), ('state', '=', 'draft'), ('commercial_partner_id.x_l10n_ro_payment_bank_id', '!=', False)]</field>
+        <field name="action_server_ids" eval="[(6, 0, [ref('action_partner_payment_bank')])]" />
+    </record>
+
+    <!-- Action menu: the origin of the invoice becomes the list of its deliveries / receptions -->
+    <record id="action_set_origin_with_picking" model="ir.actions.server">
+        <field name="name">Set origin from pickings</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="binding_model_id" ref="account.model_account_move" />
+        <field name="binding_view_types">list,form</field>
+        <field name="group_ids" eval="[(4, ref('account.group_account_invoice'))]" />
+        <field name="state">code</field>
+        <field name="code">if 'stock.picking' in env:
+    for invoice in records:
+        lines = invoice.invoice_line_ids
+        pickings = env['stock.picking']
+        if 'sale_line_ids' in lines._fields and 'move_ids' in lines.sale_line_ids._fields:
+            pickings |= lines.sale_line_ids.move_ids.picking_id.filtered(lambda p: p.state == 'done')
+        if 'purchase_line_id' in lines._fields and 'move_ids' in lines.purchase_line_id._fields:
+            pickings |= lines.purchase_line_id.move_ids.picking_id.filtered(lambda p: p.state == 'done')
+        if pickings:
+            invoice.write({'invoice_origin': ' '.join(pickings.mapped('name'))})</field>
+    </record>
+</odoo>

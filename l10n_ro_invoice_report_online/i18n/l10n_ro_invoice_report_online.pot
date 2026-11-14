@@ -1,0 +1,586 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_invoice_report_online
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-14 05:55+0000\n"
+"PO-Revision-Date: 2026-11-14 05:55+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.actions.report,print_report_name:l10n_ro_invoice_report_online.account_invoices_in_company_language
+msgid "(object._get_report_base_filename())"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid ""
+"<br/>\n"
+"                    <strong>AWB:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid ""
+"<br/>\n"
+"            <span>(without taxes)</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.document_tax_totals_template
+msgid "<span>-</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<span>/</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<span>I payed to</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<span>I received from</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<span>Payment disposal:</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<span>Price with disc.%</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<span>Taxes Values</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid ""
+"<span>Total amount</span>\n"
+"                <br/>\n"
+"                <span>(with taxes)</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<span>Transfer:</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "<span>Vat on payment</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<span>Voucher:</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<span>amount</span>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.document_tax_totals_template
+msgid "<strong>-</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<strong>Address:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<strong>CIF:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<strong>Customer</strong><br/>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<strong>Delegate:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<strong>Deliveries:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "<strong>Delivery address:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<strong>Elaborate:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<strong>Mean Transport:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<strong>NRC:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "<strong>Operating Unit:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "<strong>Receptions:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<strong>Share Capital:</strong>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "<strong>Supplier</strong><br/>"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_show_total_amount_with_taxes
+msgid "Add a column with the line total including taxes."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_partner__x_l10n_ro_info_for_invoice
+msgid "Additional info for invoice"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_company_form
+msgid "Addresses"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Amount (in words):"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Amount:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "Bacon Burger"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Beneficiary"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Cancelled Credit Note"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Cancelled Invoice"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Cancelled Sales Receipt"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Cash desk:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "Coface Logo"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_partner__x_l10n_ro_mean_transp
+msgid "Copied on the invoice when this partner is chosen as delegate."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Credit Note"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Customer:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_account_move__x_l10n_ro_delegate_id
+msgid "Delegate"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_show_coface_logo
+msgid ""
+"Display the Coface logo on the invoice to indicate that the debt is insured "
+"by Coface."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_hide_pickings_in_invoice
+msgid "Do not print the deliveries and receptions of the invoice."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_hide_invoice_delegate
+msgid "Do not print the issuer, the delegate and the means of transport."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Draft Credit Note"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Draft Sales Receipt"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_account_invoice_filter
+msgid "Due today"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_account_invoice_filter
+msgid "Due tomorrow"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_company_form
+msgid "Footer"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "For:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Form 14-4-1"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Form 14-4-4"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_hide_invoice_delegate
+msgid "Hide invoice delegate"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_hide_invoice_payment_communication
+msgid "Hide invoice payment communication"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_hide_pickings_in_invoice
+msgid "Hide picking in invoice"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Identity document:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Invoice"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid ""
+"Invoice valid without signature and stamp according to art.V, paragraph (2) of Ordinance\n"
+"                    no.17 / 2015, art. 319 paragraph (29) of Law no. 227/2015 on the Fiscal Code and\n"
+"                    subsequent amendments."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:base.automation,name:l10n_ro_invoice_report_online.automation_delegate_mean_transp
+#: model:ir.actions.server,name:l10n_ro_invoice_report_online.action_delegate_mean_transp
+msgid "Invoice: means of transport of the delegate"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:base.automation,name:l10n_ro_invoice_report_online.automation_partner_payment_bank
+#: model:ir.actions.server,name:l10n_ro_invoice_report_online.action_partner_payment_bank
+msgid "Invoice: payment bank account of the partner"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:base.automation,name:l10n_ro_invoice_report_online.automation_partner_payment_bank_onchange
+#: model:ir.actions.server,name:l10n_ro_invoice_report_online.action_partner_payment_bank_onchange
+msgid "Invoice: payment bank account of the partner (form)"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.actions.report,name:l10n_ro_invoice_report_online.account_invoices_in_company_language
+msgid "Invoices in company language"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_company_form
+msgid "Lines"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_account_move__x_l10n_ro_mean_transp
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_partner__x_l10n_ro_mean_transp
+msgid "Mean transport"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "NRC:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_index_line_on_invoice
+msgid "Number the invoice lines (Ord column)."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_account_journal__x_l10n_ro_operating_unit_id
+msgid "Operating Unit"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "Ord"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_account_invoice_filter
+msgid "Overdue 1-7 days"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_account_invoice_filter
+msgid "Overdue 15-30 days"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_account_invoice_filter
+msgid "Overdue 8-14 days"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_account_invoice_filter
+msgid "Overdue more than 30 days"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Payer"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_partner__x_l10n_ro_payment_bank_id
+msgid "Payment bank account"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_remove_product_name_from_invoice_line
+msgid "Print only the description of the line, without the product name."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_partner__x_l10n_ro_info_for_invoice
+msgid "Printed at the end of the invoices of this partner."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Proforma"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Received from:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Recipient"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_remove_product_name_from_invoice_line
+msgid "Remove product name from invoice line"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "Representing counter value of invoice"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "Representing counter value of sales receipt"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.report_payment
+msgid "Representing:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.view_company_form
+msgid "Romanian Invoice"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Sales Receipt"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.actions.server,name:l10n_ro_invoice_report_online.action_set_origin_with_picking
+msgid "Set origin from pickings"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_show_coface_logo
+msgid "Show Coface logo"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_email_on_invoice_address
+msgid "Show email"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_index_line_on_invoice
+msgid "Show index line"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_marker_on_invoice_address
+msgid "Show marker"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_phone_on_invoice_address
+msgid "Show phone"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_marker_on_invoice_address
+msgid "Show the address marker icons on the invoice."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_email_on_invoice_address
+msgid "Show the e-mail in the addresses printed on the invoice."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_phone_on_invoice_address
+msgid "Show the phone in the addresses printed on the invoice."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_show_total_amount_with_taxes
+msgid "Show total amount with taxes"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,field_description:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_show_undiscounted_price_on_invoice
+msgid "Show undiscounted price on invoice"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Supplier:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_partner__x_l10n_ro_payment_bank_id
+msgid ""
+"The bank account in which this partner will pay; set on its customer "
+"invoices."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "VAT:"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Vendor Bill"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.header_invoice
+msgid "Vendor Credit Note"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.actions.report,name:l10n_ro_invoice_report_online.action_report_payment
+msgid "Voucher / Payment"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model:ir.model.fields,help:l10n_ro_invoice_report_online.field_res_company__x_l10n_ro_show_undiscounted_price_on_invoice
+msgid "With discounts, print the list price and the price after discount."
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "from"
+msgstr ""
+
+#. module: l10n_ro_invoice_report_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_invoice_report_online.l10n_ro_report_invoice_document
+msgid "units"
+msgstr ""
