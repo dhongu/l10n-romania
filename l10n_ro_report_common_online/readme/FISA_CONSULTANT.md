@@ -56,8 +56,10 @@ Nu se folosesc conturi contabile și nu se generează note contabile. Pentru dem
    lui să vină traduse.
 2. Importați arhiva zip a modulului din **Aplicații → Importați Modulul** (pe Odoo Online, planul
    Custom; meniul apare în modul dezvoltator). Modulul depinde de `l10n_ro` (localizarea contabilă România), care trebuie să fie
-   instalat. Nu îl instalați lângă `l10n_ro_report_common`: cele două țin aceleași date în câmpuri
-   diferite.
+   instalat. Nu se poate instala lângă `l10n_ro_report_common`, fiindcă cele două țin aceleași date
+   în câmpuri diferite. Dacă `l10n_ro_report_common` e instalat, importul este refuzat, cu eroarea
+   *error_uninstall_l10n_ro_report_common_first*: dezinstalați întâi `l10n_ro_report_common`, apoi
+   importați din nou arhiva.
 3. Pe contactul companiei completați **NRC** (câmpul vine din `l10n_ro`, vizibil când țara fiscală
    este România).
 
@@ -146,7 +148,9 @@ conturilor; includerea blocurilor în rapoartele care trebuie să le arate.
   lei*, `1.01` → *un leu și un ban*, `-500.25` → *minus cinci sute de lei și douăzeci și cinci de
   bani*.
 - [ ] Pe un document în altă monedă decât RON suma în litere are formularea standard Odoo.
-- [ ] `l10n_ro_report_common` nu este instalat în aceeași bază.
+- [ ] `l10n_ro_report_common` nu este instalat în aceeași bază: dacă este, importul modulului se
+  oprește cu eroarea *error_uninstall_l10n_ro_report_common_first*, iar instalarea lui
+  `l10n_ro_report_common` după acest modul e refuzată („Modules ... are incompatible”).
 
 ## 9. Mesaje de eroare frecvente
 
@@ -156,7 +160,8 @@ conturilor; includerea blocurilor în rapoartele care trebuie să le arate.
 | Contul bancar nu apare pe document | Contul nu e bifat **România - Tipărit în raport** sau are altă monedă decât documentul | Bifați contul; verificați **Moneda** contului |
 | Lipsește NRC-ul din antet | Câmpul **NRC** nu e completat pe contactul companiei | Completați **NRC** pe contactul companiei |
 | Lipsește capitalul social | **Capital social** e gol (zero) pe companie | Completați câmpul pe companie |
-| Datele se tipăresc din alte câmpuri decât cele completate | Pe bază e instalat și `l10n_ro_report_common` | Păstrați un singur modul; cele două nu folosesc aceleași câmpuri |
+| La import: *External ID not found ... error_uninstall_l10n_ro_report_common_first* (pe câmpul **Capital social**) | Pe bază e instalat `l10n_ro_report_common`, varianta cu Python | Dezinstalați `l10n_ro_report_common`, apoi importați din nou arhiva modulului |
+| La instalarea lui `l10n_ro_report_common`: *Modules ... are incompatible* | Acest modul e deja instalat; cele două nu pot sta împreună | Păstrați un singur modul; pe Odoo Online, doar acesta |
 | Un raport nu arată blocul firmei | Raportul nu apelează blocurile modulului | Includeți `report_address_company` sau `banks` în raport |
 
 ## 10. Capturi de ecran

@@ -61,17 +61,77 @@ Odoo Online
 ~~~~~~~~~~~
 
 The module contains no Python: it can be imported on Odoo Online (Custom
-plan) from Apps > Import Module. Do not install it next to
-``l10n_ro_report_common``: the two modules keep the same data in
-different fields.
+plan) from Apps > Import Module. It cannot be installed next to
+``l10n_ro_report_common`` (the manifest excludes it): the two modules
+keep the same data in different fields.
 
 **Table of contents**
 
 .. contents::
    :local:
 
+Usage
+=====
+
+Activate the Romanian language before importing the module (Apps >
+Import Module, in developer mode), so that its labels are translated.
+The module needs ``l10n_ro``; the NRC printed in the header is the
+**NRC** field of the company contact.
+
+1. Open **Settings > Users & Companies > Companies**, open the company
+   and fill in **Share Capital** under **Company ID**. It is printed
+   without decimals.
+
+   |Company form, General Information tab: VAT RO18547290, Company ID
+   18547290 and the highlighted Share Capital field set to 200.00, above
+   Currency RON|
+
+2. Open **Contacts > Configuration > Bank Accounts > Bank Accounts**,
+   open the company account and tick **Romania - Print in Report**. Only
+   the accounts in the currency of the document are printed, at most 3.
+
+   |Bank account form RO49BTRL01301202K12345XX at Banca Transilvania,
+   currency RON, with the highlighted Romania - Print in Report checkbox
+   ticked|
+
+3. The **Romania - Print in Report** column of the bank account list
+   shows which accounts are printed.
+
+   |Bank Accounts list with the highlighted Romania - Print in Report
+   column: RO49BTRL01301202K12345XX is ticked, RO66BTRL01302202K12345XX
+   is not|
+
+4. The module has no report of its own: the result shows on the reports
+   that call its templates (``report_address_company``, ``banks``,
+   ``amount_in_words``). Below, a test rendering of the company block
+   and of the amount in words.
+
+   |Test rendering: company TEST Exemplu Distribuție SRL with address,
+   bank account RO49BTRL01301202K12345XX, VAT, NRC J12/1234/2020, Share
+   Capital 200, and a table of RON amounts in Romanian words such as
+   douăsprezece mii de lei and un leu și un ban|
+
+.. |Company form, General Information tab: VAT RO18547290, Company ID 18547290 and the highlighted Share Capital field set to 200.00, above Currency RON| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_report_common_online/static/description/en/01_capital_social.png
+.. |Bank account form RO49BTRL01301202K12345XX at Banca Transilvania, currency RON, with the highlighted Romania - Print in Report checkbox ticked| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_report_common_online/static/description/en/02_cont_bancar.png
+.. |Bank Accounts list with the highlighted Romania - Print in Report column: RO49BTRL01301202K12345XX is ticked, RO66BTRL01302202K12345XX is not| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_report_common_online/static/description/en/03_lista_conturi_bancare.png
+.. |Test rendering: company TEST Exemplu Distribuție SRL with address, bank account RO49BTRL01301202K12345XX, VAT, NRC J12/1234/2020, Share Capital 200, and a table of RON amounts in Romanian words such as douăsprezece mii de lei and un leu și un ban| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_report_common_online/static/description/en/04_antet_raport.png
+
 Changelog
 =========
+
+19.0.1.0.2 (2026-11-14)
+-----------------------
+
+- The zip import (Apps > Import Module) ignores ``excludes``: an
+  ``eval`` guard on the first field stops the import while
+  ``l10n_ro_report_common`` is installed.
+
+19.0.1.0.1 (2026-11-14)
+-----------------------
+
+- Cannot be installed together with ``l10n_ro_report_common``, the
+  module with Python code that does the same thing: the manifest lists
+  it under ``excludes``.
 
 19.0.1.0.0
 ----------

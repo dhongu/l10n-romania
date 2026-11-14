@@ -6,7 +6,7 @@
     "name": "Romania - Report Common for Odoo Online",
     "summary": "Romanian report header blocks and RON amounts in words, on Odoo Online too (no Python)",
     "license": "LGPL-3",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
