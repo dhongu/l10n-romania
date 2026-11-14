@@ -39,7 +39,7 @@ msgstr "Erori"
 #. module: l10n_ro_message_spv_online
 #: model_terms:ir.ui.view,arch_db:l10n_ro_message_spv_online.view_l10n_ro_edi_document_form
 msgid "Fetch status"
-msgstr "Preluare stare"
+msgstr "Preia starea"
 
 #. module: l10n_ro_message_spv_online
 #: model:ir.model.fields,field_description:l10n_ro_message_spv_online.field_l10n_ro_edi_document_x_attachment_name

@@ -20,6 +20,7 @@
                         string="Synchronize now"
                         class="btn-primary"
                         display="always"
+                        groups="account.group_account_invoice"
                     />
                 </header>
                 <field name="datetime" />
@@ -27,8 +28,6 @@
                 <field name="invoice_id" />
                 <field name="x_partner_id" />
                 <field name="x_invoice_date" optional="show" />
-                <field name="x_currency_id" column_invisible="1" />
-                <field name="x_amount_total" optional="show" />
                 <field name="state" widget="badge"
                     decoration-danger="state == 'invoice_refused'"
                     decoration-warning="state == 'invoice_sent'"
