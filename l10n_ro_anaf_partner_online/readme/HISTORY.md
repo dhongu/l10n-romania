@@ -3,6 +3,8 @@
 - Cannot be installed together with `l10n_ro_partner_create_by_vat` or `l10n_ro_partner_autocomplete`,
   the modules with Python code that fill the partner from ANAF too: the manifest lists them under
   `excludes`.
+- The zip import (*Apps > Import Module*) does not check `excludes`: a guard on the first field
+  stops it while `l10n_ro_partner_create_by_vat` or `l10n_ro_partner_autocomplete` is installed.
 
 # 20.0.1.0.0
 
