@@ -68,7 +68,7 @@ Date minime pentru demo (prefix **TEST**):
 
 - **Adrese**: Arată marcator, Arată email, Arată telefon — ce apare în adresele tipărite;
 - **Linii**: Arată nr. crt., Afișează totalul cu taxe, Elimină numele produsului din linia de factură, Afișează prețul fără discount pe factură;
-- **Subsol**: Ascunde comunicarea de plată, Ascunde livrările pe factură, Ascunde delegatul, Afișează logo Coface.
+- **Subsol**: Ascunde comunicarea de plată de pe factură, Ascunde livrările pe factură, Ascunde delegatul pe factură, Afișează logo Coface.
 
 Opțiunile sunt per companie și se aplică facturii; raportul „Chitanță" de pe plată (pasul 9) afișează mereu marcatorul în adrese. În modulul clasic ele stau în **Setări**; aici sunt pe compania însăși, fiindcă un modul fără Python nu poate adăuga câmpuri în setările generale.
 
@@ -115,11 +115,15 @@ Din factură, **⚙ Acțiuni → Tipăriți → Factură PDF** (același raport 
 
 **Găsiți pe ecran**, de sus în jos:
 - **antetul**: în stânga **Furnizor** cu adresa, **Punct de lucru** cu adresa lui, conturile bancare bifate pentru tipărire, CIF, NRC, Capital social și, dacă modulul `l10n_ro_vat_on_payment` e instalat și compania e bifată, **TVA la încasare**; în dreapta **Client** cu adresa, adresa de livrare (dacă diferă), CIF și NRC;
-- titlul: **Factura** pentru o factură confirmată, **Proforma** pentru o ciornă;
+- titlul: **Factura** pentru o factură confirmată, **Proforma** pentru o ciornă; **Nota de credit** (în ciornă: **Notă de credit în ciornă**), **Bon vânzare** pentru bonul de vânzare, **Factura furnizor** și **Nota de credit furnizor** pe documentele de furnizor; documentele anulate au „anulat(ă)” în titlu;
 - **liniile**: Nr. Crt., Descriere, Cantitate, Preț unitar (fără TVA), Disc.%, **Preț cu disc.%** (cu opțiunea de preț fără discount), Taxe, Suma (fără TVA), **Val. TVA**, **Total (cu TVA)**;
 - **subsolul**: Comunicație plată, **Întocmit**, **Delegat**, **Mijloc de transport**, **Livrări** (cu **AWB** dacă livrările au număr de urmărire), mențiunea legală, informațiile suplimentare ale clientului și, dacă e bifat, logoul Coface.
 
 **Verificați** că: suma coloanei Suma (fără TVA) dă Valoare fără taxe, suma coloanei Val. TVA dă rândul TVA 21%, iar împreună dau Totalul; prețul cu discount înmulțit cu cantitatea dă suma fără TVA; delegatul și mijlocul de transport sunt cele de la pasul 5; livrarea afișată e cea efectiv făcută pentru factură.
+
+Pe **nota de credit** de client, cantitățile și sumele de pe linii se tipăresc cu minus, iar pe orice notă de credit (de client sau de furnizor) și totalurile (Valoare fără taxe, TVA, Total) au minus în față.
+
+Pe **facturile de furnizor** (factură și notă de credit de furnizor) rolurile din antet se inversează: compania apare în stânga ca **Client**, iar partenerul în dreapta ca **Furnizor**.
 
 **Abia apoi** trimiteți sau descărcați PDF-ul.
 
