@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import fields, models
+from odoo.tools import SQL
 
 # Dropship detection: a move whose picking goes from a supplier (or
 # company-less transit) location to a customer (or company-less transit)
@@ -27,9 +28,10 @@ class StorageSheet(models.TransientModel):
 
         # Dropship products never touch an internal location, so the parent
         # query misses them. Add products having a dropship (supplier<->customer)
-        # move in the period. The location filter below is a hard-coded literal
-        # (no user input), so this is not an SQL injection risk.
-        query = """
+        # move in the period.
+        product_filter = SQL("AND sm.product_id IN %s", tuple(product_list)) if product_list else SQL()
+        query = SQL(
+            """
             SELECT sm.product_id as product_id
             FROM stock_move as sm
             LEFT JOIN stock_picking sp ON sm.picking_id = sp.id
@@ -38,27 +40,19 @@ class StorageSheet(models.TransientModel):
             WHERE
                 sm.state = 'done' AND
                 sm.company_id = %(company)s AND
-                (
-                  ((sl_src.usage = 'supplier' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
-                   (sl_dest.usage = 'customer' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL)))
-                  OR
-                  ((sl_src.usage = 'customer' OR (sl_src.usage = 'transit' AND sl_src.company_id IS NULL)) AND
-                   (sl_dest.usage = 'supplier' OR (sl_dest.usage = 'transit' AND sl_dest.company_id IS NULL)))
-                ) AND
+                %(location_filter)s AND
                 date_trunc('day', sm.date) >= %(date_from)s AND
                 date_trunc('day', sm.date) <= %(date_to)s
-        """
-        if product_list:
-            query += " AND sm.product_id in %(product_list)s"
-        query += " GROUP BY sm.product_id"
-
-        params = {
-            "date_from": self.date_from,
-            "date_to": self.date_to,
-            "product_list": tuple(product_list or []),
-            "company": self.company_id.id,
-        }
-        self.env.cr.execute(query, params=params)
+                %(product_filter)s
+            GROUP BY sm.product_id
+            """,
+            company=self.company_id.id,
+            location_filter=SQL(DROPSHIP_LOCATION_FILTER),
+            date_from=self.date_from,
+            date_to=self.date_to,
+            product_filter=product_filter,
+        )
+        self.env.cr.execute(query)
         dropship_product_list = [r["product_id"] for r in self.env.cr.dictfetchall()]
         return list(set(res + dropship_product_list))
 
@@ -79,6 +73,11 @@ class StorageSheet(models.TransientModel):
         (371000) the movement is actually valued on. Up to 18.0 the account came
         from the valuation layer, so dropping it on the 19.0 port silently made
         the dropship rows disappear from the account they belong to.
+
+        The result is a plain string on purpose: ``l10n_ro_stock_report`` concatenates
+        ``_get_sql_select_in/out`` and executes them with a ``params`` dict, so this
+        fragment must keep the same ``%(name)s`` contract. Only module constants are
+        interpolated here (column suffix, location filter, lot fields).
         """
         field, select, join, group = self._get_lot_fields()
         amount = f"amount_{column}"
