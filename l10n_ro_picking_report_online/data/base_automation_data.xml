@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): the Python logic of l10n_ro_picking_report
+     becomes server actions and automation rules -->
+<odoo>
+    <!-- The delegate brings its means of transport on the transfer -->
+    <record id="action_picking_delegate_mean_transp" model="ir.actions.server">
+        <field name="name">Transfer: means of transport of the delegate</field>
+        <field name="model_id" ref="stock.model_stock_picking" />
+        <field name="state">code</field>
+        <field name="code">if record.x_l10n_ro_delegate_id.x_l10n_ro_mean_transp:
+    record.update({'x_l10n_ro_mean_transp': record.x_l10n_ro_delegate_id.x_l10n_ro_mean_transp})</field>
+    </record>
+    <record id="automation_picking_delegate_mean_transp" model="base.automation">
+        <field name="name">Transfer: means of transport of the delegate</field>
+        <field name="model_id" ref="stock.model_stock_picking" />
+        <field name="trigger">on_change</field>
+        <field name="on_change_field_ids" eval="[(6, 0, [ref('field_stock_picking__x_l10n_ro_delegate_id')])]" />
+        <field name="action_server_ids" eval="[(6, 0, [ref('action_picking_delegate_mean_transp')])]" />
+    </record>
+
+    <!-- The sale price of a received product is frozen when the reception is done: from the
+         pricelist of the destination location, else the sale price of the product -->
+    <record id="action_move_freeze_sale_price" model="ir.actions.server">
+        <field name="name">Reception: freeze the sale price</field>
+        <field name="model_id" ref="stock.model_stock_move" />
+        <field name="state">code</field>
+        <field name="code">for move in records:
+    pricelist = move.location_dest_id.x_l10n_ro_store_pricelist_id
+    price = pricelist._get_product_price(move.product_id, 1) if pricelist else move.product_id.lst_price
+    move.write({'x_l10n_ro_sale_price': price})</field>
+    </record>
+    <record id="automation_move_freeze_sale_price" model="base.automation">
+        <field name="name">Reception: freeze the sale price</field>
+        <field name="model_id" ref="stock.model_stock_move" />
+        <field name="trigger">on_create_or_write</field>
+        <field name="trigger_field_ids" eval="[(6, 0, [ref('stock.field_stock_move__state')])]" />
+        <field
+            name="filter_domain"
+        >[('state', '=', 'done'), ('picking_id.picking_type_code', '=', 'incoming'), ('x_l10n_ro_sale_price', '=', 0)]</field>
+        <field name="action_server_ids" eval="[(6, 0, [ref('action_move_freeze_sale_price')])]" />
+    </record>
+
+    <!-- The reception carries the number of the vendor document (its reference on the purchase order),
+         printed on the NIR: the origin of the transfer becomes the vendor reference of the order -->
+    <record id="action_move_purchase_origin" model="ir.actions.server">
+        <field name="name">Reception: vendor reference as origin</field>
+        <field name="model_id" ref="stock.model_stock_move" />
+        <field name="state">code</field>
+        <field name="code">for move in records:
+    order = move.purchase_line_id.order_id
+    picking = move.picking_id
+    if picking and picking.origin == order.name:
+        picking.write({'origin': order.partner_ref or order.origin})</field>
+    </record>
+    <record id="automation_move_purchase_origin" model="base.automation">
+        <field name="name">Reception: vendor reference as origin</field>
+        <field name="model_id" ref="stock.model_stock_move" />
+        <field name="trigger">on_create</field>
+        <field
+            name="filter_domain"
+        >[('purchase_line_id', '!=', False), ('picking_id.picking_type_code', '=', 'incoming')]</field>
+        <field name="action_server_ids" eval="[(6, 0, [ref('action_move_purchase_origin')])]" />
+    </record>
+</odoo>

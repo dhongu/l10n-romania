@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): the fields are manual, prefixed x_ -->
+<odoo>
+    <!-- Company: what the stock documents print. Manual fields have no default, so the options of
+         l10n_ro_picking_report shown by default become "hide" options -->
+    <record id="field_res_company__x_l10n_ro_hide_taxes_on_reception" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_hide_taxes_on_reception</field>
+        <field name="field_description">Hide taxes on reception report</field>
+        <field name="ttype">boolean</field>
+        <!-- Install guard: the zip import ignores "excludes" in the manifest. When l10n_ro_picking_report
+             is installed, the import stops on this missing external ID, whose name says what to do. -->
+        <field
+            name="help"
+            eval="ref('l10n_ro_picking_report_online.error_uninstall_l10n_ro_picking_report_first') if ref('l10n_ro_picking_report.view_picking_form', False) else 'Do not print the VAT columns on the reception report (NIR).'"
+        />
+    </record>
+    <record id="field_res_company__x_l10n_ro_hide_banks_on_pickings" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_hide_banks_on_pickings</field>
+        <field name="field_description">Hide banks on picking reports</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Do not print the bank accounts of the company on the stock documents.</field>
+    </record>
+    <!-- Transfer: delegate, means of transport, delivery note -->
+    <record id="field_stock_picking__x_l10n_ro_delegate_id" model="ir.model.fields">
+        <field name="model_id" ref="stock.model_stock_picking" />
+        <field name="name">x_l10n_ro_delegate_id</field>
+        <field name="field_description">Delegate</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">res.partner</field>
+        <field name="index" eval="True" />
+    </record>
+    <record id="field_stock_picking__x_l10n_ro_mean_transp" model="ir.model.fields">
+        <field name="model_id" ref="stock.model_stock_picking" />
+        <field name="name">x_l10n_ro_mean_transp</field>
+        <field name="field_description">Mean transport</field>
+        <field name="ttype">char</field>
+    </record>
+    <record id="field_stock_picking__x_l10n_ro_notice" model="ir.model.fields">
+        <field name="model_id" ref="stock.model_stock_picking" />
+        <field name="name">x_l10n_ro_notice</field>
+        <field name="field_description">Delivery note (aviz)</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Goods delivered on a delivery note (aviz de însoțire a mărfii, 14-3-6A), to be invoiced later.</field>
+    </record>
+    <!-- Move: the sale price at reception, frozen when the reception is validated -->
+    <record id="field_stock_move__x_l10n_ro_sale_price" model="ir.model.fields">
+        <field name="model_id" ref="stock.model_stock_move" />
+        <field name="name">x_l10n_ro_sale_price</field>
+        <field name="field_description">Sale Price (at reception)</field>
+        <field name="ttype">float</field>
+        <field name="copied" eval="False" />
+        <field name="help">Sale price of the product when the reception was validated, printed on the reception report with sale price.</field>
+    </record>
+    <!-- Location: store with sale prices -->
+    <record id="field_stock_location__x_l10n_ro_store_pricelist_id" model="ir.model.fields">
+        <field name="model_id" ref="stock.model_stock_location" />
+        <field name="name">x_l10n_ro_store_pricelist_id</field>
+        <field name="field_description">Store Pricelist</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">product.pricelist</field>
+        <field name="help">Sale prices of the goods received in this location (reception with sale price).</field>
+    </record>
+    <record id="field_stock_location__x_l10n_ro_user_id" model="ir.model.fields">
+        <field name="model_id" ref="stock.model_stock_location" />
+        <field name="name">x_l10n_ro_user_id</field>
+        <field name="field_description">Manager</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">res.users</field>
+        <field name="help">Manager of the location (gestionar), printed on the reception and transfer reports.</field>
+    </record>
+    <record id="field_stock_location__x_l10n_ro_is_store" model="ir.model.fields">
+        <field name="model_id" ref="stock.model_stock_location" />
+        <field name="name">x_l10n_ro_is_store</field>
+        <field name="field_description">Is a Store Location</field>
+        <field name="ttype">boolean</field>
+        <field name="help">The internal transfers to or from this location print the sale prices.</field>
+    </record>
+</odoo>
