@@ -1,0 +1,12 @@
+{
+  "title": "Token SPV ANAF",
+  "summary": "Token reînnoit de Terrabit, și pe Odoo Online",
+  "lang": "ro",
+  "online": true,
+  "iap": true,
+  "features": [
+    "O singură autorizare cu certificatul digital",
+    "Token scris și reînnoit de Terrabit",
+    "Fără Python: se importă pe Odoo Online"
+  ]
+}

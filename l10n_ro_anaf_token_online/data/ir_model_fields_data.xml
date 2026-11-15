@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): the fields are manual, prefixed x_ -->
+<odoo>
+    <!-- The companies whose SPV token comes from Terrabit: the e-Factura renewal job is global, it stops
+         only when every company with an ANAF token gets it from Terrabit -->
+    <record id="field_res_company__x_l10n_ro_anaf_token_terrabit" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_anaf_token_terrabit</field>
+        <field name="field_description">SPV token renewed by Terrabit</field>
+        <field name="ttype">boolean</field>
+        <field name="readonly" eval="True" />
+        <field name="help">The ANAF token of this company comes from the Terrabit server, which renews it.</field>
+    </record>
+</odoo>
