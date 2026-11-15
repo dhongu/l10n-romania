@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online). The Terrabit server posts the ANAF token here, after
+     the authorization with the digital certificate and after each renewal. The URL (/web/hook/<uuid>)
+     is the secret; the company is the one with the Tax ID sent by the server. -->
+<odoo>
+    <record id="automation_anaf_token_receive" model="base.automation">
+        <!-- Install guard: the zip import ignores "excludes" in the manifest. When terrabit_iap_anaf
+             is installed, the import stops on this missing external ID, whose name says what to do. -->
+        <field
+            name="name"
+            eval="ref('l10n_ro_anaf_token_online.error_uninstall_terrabit_iap_anaf_first') if ref('terrabit_iap_anaf.res_config_settings_form_inherit_l10n_ro_edi', False) else 'ANAF: SPV token from Terrabit'"
+        />
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="trigger">on_webhook</field>
+        <field
+            name="record_getter"
+        >model.search([('vat', 'in', [str(payload.get('company_vat')), 'RO' + str(payload.get('company_vat')).upper().replace('RO', '', 1), str(payload.get('company_vat')).upper().replace('RO', '', 1)])], limit=1) if payload.get('company_vat') else (model.search([]) if model.search_count([]) == 1 else model)</field>
+    </record>
+    <record id="action_anaf_token_receive" model="ir.actions.server">
+        <field name="name">ANAF: write the SPV token</field>
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="base_automation_id" ref="automation_anaf_token_receive" />
+        <field name="usage">base_automation</field>
+        <field name="state">code</field>
+        <field name="code">token = payload or {}
+if record and token.get('anaf_access_token') and token.get('anaf_refresh_token'):
+    record.write({
+        'l10n_ro_edi_client_id': token.get('anaf_client_id') or record.l10n_ro_edi_client_id,
+        'l10n_ro_edi_client_secret': token.get('anaf_client_secret') or record.l10n_ro_edi_client_secret,
+        'l10n_ro_edi_access_token': token['anaf_access_token'],
+        'l10n_ro_edi_refresh_token': token['anaf_refresh_token'],
+        'l10n_ro_edi_access_expiry_date': token.get('anaf_access_expiry_date') or False,
+        'l10n_ro_edi_refresh_expiry_date': token.get('anaf_refresh_expiry_date') or False,
+        'x_l10n_ro_anaf_token_terrabit': True,
+    })
+    # One end only renews the token: ANAF invalidates the previous one at each renewal. The Terrabit
+    # server holds it now, so the renewal job of l10n_ro_edi stops (only after the token came). The job
+    # is global: it keeps running while another company still renews its own token locally.
+    local = env['res.company'].search_count([
+        ('l10n_ro_edi_refresh_token', '!=', False), ('x_l10n_ro_anaf_token_terrabit', '=', False),
+    ])
+    cron = env.ref('l10n_ro_edi.ir_cron_l10n_ro_edi_refresh_access_token', raise_if_not_found=False)
+    if cron and cron.active and not local:
+        cron.write({'active': False})
+    # Credits: an authorization costs credits (the renewals are free); it shows in Credit Usage
+    service = env.ref('l10n_ro_anaf_token_online.iap_online_service_anaf_token', raise_if_not_found=False)
+    if service and 'balance' in token:
+        service.write({'x_balance': token.get('balance') or 0})
+    # The entry is created already Done; deltatech_iap_online 20.0.1.2.0+ does not send such a record
+    send = env.ref('deltatech_iap_online.automation_iap_online_request_create', raise_if_not_found=False)
+    if service and token.get('cost') and send and 'x_state' in (send.filter_domain or ''):
+        env['x_iap_online_request'].create({
+            'x_name': 'ANAF authorization',
+            'x_kind': 'request',
+            'x_service_id': service.id,
+            'x_state': 'done',
+            'x_cost': token.get('cost'),
+            'x_balance_after': token.get('balance') or 0,
+        })</field>
+    </record>
+</odoo>
