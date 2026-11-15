@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form.l10n_ro_picking_report_online</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field
+                    name="x_l10n_ro_delegate_id"
+                    domain="[('type', '=', 'contact'), '|', ('parent_id', '!=', False), ('is_company', '=', False)]"
+                    context="{'simple_form': True, 'parent_partner_id': partner_id}"
+                />
+                <field name="x_l10n_ro_mean_transp" />
+                <field name="x_l10n_ro_notice" invisible="picking_type_code != 'outgoing'" />
+            </field>
+        </field>
+    </record>
+</odoo>

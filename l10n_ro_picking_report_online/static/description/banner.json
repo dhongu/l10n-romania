@@ -1,0 +1,11 @@
+{
+  "title": "NIR și aviz",
+  "summary": "Documente de stoc românești, și pe Odoo Online",
+  "lang": "ro",
+  "online": true,
+  "features": [
+    "NIR cu TVA, fără TVA sau cu preț de vânzare",
+    "Aviz de însoțire, livrare, bon de consum",
+    "Fără Python: se importă pe Odoo Online"
+  ]
+}
