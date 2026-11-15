@@ -11,7 +11,8 @@ dată, pe serverul Terrabit, care ține tokenul valabil și îl trimite în baza
   după autorizare și din nou după fiecare reînnoire. Firma se găsește după CUI.
 - **Reînnoire într-un singur loc**: când sosește tokenul, acțiunea programată standard de reînnoire
   e-Factura se oprește, pentru că ANAF invalidează tokenul anterior la fiecare reînnoire. Tokenul îl
-  reînnoiește serverul Terrabit.
+  reînnoiește serverul Terrabit. Acțiunea programată este comună tuturor firmelor din bază: într-o bază
+  cu mai multe firme se oprește doar când toate firmele care au token ANAF îl primesc de la Terrabit.
 - **Costul**: o autorizare costă 1 credit (1 credit = 1 EUR); reînnoirile sunt gratuite. Autorizarea
   apare în *Setări > Credite Terrabit > Consum credite*.
 - **Butonul standard Generează token este ascuns**: ar porni o autorizare locală, cu aplicația ANAF

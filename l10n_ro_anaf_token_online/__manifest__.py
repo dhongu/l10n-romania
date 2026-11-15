@@ -15,6 +15,7 @@
     # same token renewed by another channel: the two modules must not be installed together
     "excludes": ["terrabit_iap_anaf"],
     "data": [
+        "data/ir_model_fields_data.xml",
         "data/base_automation_data.xml",
         "data/ir_actions_server_data.xml",
         "data/iap_online_service_data.xml",

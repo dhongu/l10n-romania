@@ -388,7 +388,9 @@ nou după fiecare reînnoire. Firma se găsește după CUI.</li>
 <li><strong>Reînnoire într-un singur loc</strong>: când sosește tokenul, acțiunea
 programată standard de reînnoire e-Factura se oprește, pentru că ANAF
 invalidează tokenul anterior la fiecare reînnoire. Tokenul îl
-reînnoiește serverul Terrabit.</li>
+reînnoiește serverul Terrabit. Acțiunea programată este comună tuturor
+firmelor din bază: într-o bază cu mai multe firme se oprește doar când
+toate firmele care au token ANAF îl primesc de la Terrabit.</li>
 <li><strong>Costul</strong>: o autorizare costă 1 credit (1 credit = 1 EUR);
 reînnoirile sunt gratuite. Autorizarea apare în <em>Setări &gt; Credite
 Terrabit &gt; Consum credite</em>.</li>
@@ -481,7 +483,8 @@ automatizare</strong>) primește tokenul pe un URL secret. Nu apăsați
 </li>
 <li><p class="first">Odată primit tokenul, acțiunea planificată <strong>E-Factura:
 Reîmprospătare token de acces</strong> se oprește: tokenul îl reînnoiește
-serverul Terrabit.</p>
+serverul Terrabit. Într-o bază cu mai multe firme, acțiunea rămâne
+activă cât timp o altă firmă își reînnoiește singură tokenul.</p>
 <p><img alt="Acțiunea planificată E-Factura: Reîmprospătare token de acces cu comutatorul Activ oprit" src="https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_token_online/static/description/05_cron_reinnoire_oprit.png" /></p>
 </li>
 </ol>
@@ -501,8 +504,10 @@ serverul Terrabit pe o automatizare <em>On webhook</em> (în locul rutei
 <tt class="docutils literal">/iap/anaf_token_response</tt>), care oprește și acțiunea programată de
 reînnoire e-Factura; butonul Generează token (Terrabit) trimite adresa
 acestui webhook în linkul de autorizare. O autorizare costă 1 credit
-și apare în <em>Consum credite</em>. Necesită <tt class="docutils literal">terrabit_iap_server_anaf</tt>
-19.0.1.5.0 pe server și <tt class="docutils literal">deltatech_iap_online</tt> 19.0.1.2.0.</li>
+și apare în <em>Consum credite</em>. Acțiunea programată, comună tuturor
+firmelor, se oprește doar când toate firmele cu token ANAF îl primesc
+de la Terrabit. Necesită <tt class="docutils literal">terrabit_iap_server_anaf</tt> 19.0.1.5.0 pe
+server și <tt class="docutils literal">deltatech_iap_online</tt> 19.0.1.2.0.</li>
 </ul>
 </div>
 </div>

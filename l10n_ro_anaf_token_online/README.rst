@@ -40,7 +40,9 @@ reînnoiți tokenul manual.
 - **Reînnoire într-un singur loc**: când sosește tokenul, acțiunea
   programată standard de reînnoire e-Factura se oprește, pentru că ANAF
   invalidează tokenul anterior la fiecare reînnoire. Tokenul îl
-  reînnoiește serverul Terrabit.
+  reînnoiește serverul Terrabit. Acțiunea programată este comună tuturor
+  firmelor din bază: într-o bază cu mai multe firme se oprește doar când
+  toate firmele care au token ANAF îl primesc de la Terrabit.
 - **Costul**: o autorizare costă 1 credit (1 credit = 1 EUR);
   reînnoirile sunt gratuite. Autorizarea apare în *Setări > Credite
   Terrabit > Consum credite*.
@@ -134,7 +136,8 @@ Usage
 
 7. Odată primit tokenul, acțiunea planificată **E-Factura:
    Reîmprospătare token de acces** se oprește: tokenul îl reînnoiește
-   serverul Terrabit.
+   serverul Terrabit. Într-o bază cu mai multe firme, acțiunea rămâne
+   activă cât timp o altă firmă își reînnoiește singură tokenul.
 
    |Acțiunea planificată E-Factura: Reîmprospătare token de acces cu
    comutatorul Activ oprit|
@@ -162,8 +165,10 @@ Changelog
   ``/iap/anaf_token_response``), care oprește și acțiunea programată de
   reînnoire e-Factura; butonul Generează token (Terrabit) trimite adresa
   acestui webhook în linkul de autorizare. O autorizare costă 1 credit
-  și apare în *Consum credite*. Necesită ``terrabit_iap_server_anaf``
-  19.0.1.5.0 pe server și ``deltatech_iap_online`` 19.0.1.2.0.
+  și apare în *Consum credite*. Acțiunea programată, comună tuturor
+  firmelor, se oprește doar când toate firmele cu token ANAF îl primesc
+  de la Terrabit. Necesită ``terrabit_iap_server_anaf`` 19.0.1.5.0 pe
+  server și ``deltatech_iap_online`` 19.0.1.2.0.
 
 Bug Tracker
 ===========

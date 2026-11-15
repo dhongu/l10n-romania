@@ -34,7 +34,10 @@ Context operațional:
   certificat, dar ANAF îl invalidează pe cel anterior la fiecare reînnoire. De aceea, un singur
   capăt are voie să reînnoiască tokenul: serverul Terrabit.
 - Când primește tokenul, baza clientului oprește acțiunea planificată standard
-  **E-Factura: Reîmprospătare token de acces**. Până atunci, acțiunea rămâne activă.
+  **E-Factura: Reîmprospătare token de acces**. Până atunci, acțiunea rămâne activă. Acțiunea e comună
+  tuturor firmelor din bază: dacă o altă firmă are token ANAF obținut local (fără Terrabit), acțiunea
+  rămâne activă, ca tokenul acelei firme să nu expire. Firmele cu token de la Terrabit au bifa
+  **SPV token renewed by Terrabit**.
 - **Ce pleacă din baza clientului:** la activarea serviciului, adresa și UUID-ul bazei, numele și
   codul fiscal al firmei; la autorizare, adresa webhook-ului care primește tokenul. Tokenul vine de
   pe serverul Terrabit, prin HTTPS, pe o adresă webhook secretă.
@@ -234,7 +237,8 @@ poate fi reînnoit, cumpărarea creditelor, repornirea acțiunii planificate la 
 - [ ] La reînnoirile ulterioare ale tokenului nu apar intrări noi de consum (reînnoirile sunt gratuite).
 - [ ] După autorizare, pe companie sunt completate ID Client, Secret Client, Token de acces,
       Reîmprospătare Token și data de expirare a tokenului de acces, în viitor.
-- [ ] Acțiunea planificată **E-Factura: Reîmprospătare token de acces** are **Activ** oprit.
+- [ ] Acțiunea planificată **E-Factura: Reîmprospătare token de acces** are **Activ** oprit (într-o bază
+  cu mai multe firme, doar dacă toate firmele cu token ANAF îl primesc de la Terrabit).
 - [ ] Regula **ANAF: token SPV de la Terrabit** are declanșatorul **Pe webhook** și
       **Înregistrare apeluri** oprit.
 - [ ] Bifa **Utilizează mediu de testare** este debifată în producție.

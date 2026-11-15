@@ -35,7 +35,8 @@
    ![Regula de automatizare cu declanșatorul Pe webhook și URL-ul secret evidențiate](static/description/04_automatizare_webhook.png)
 
 7. Odată primit tokenul, acțiunea planificată **E-Factura: Reîmprospătare token de acces** se
-   oprește: tokenul îl reînnoiește serverul Terrabit.
+   oprește: tokenul îl reînnoiește serverul Terrabit. Într-o bază cu mai multe firme, acțiunea rămâne
+   activă cât timp o altă firmă își reînnoiește singură tokenul.
 
    ![Acțiunea planificată E-Factura: Reîmprospătare token de acces cu comutatorul Activ oprit](static/description/05_cron_reinnoire_oprit.png)
 

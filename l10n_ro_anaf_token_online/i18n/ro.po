@@ -33,6 +33,18 @@ msgid "Generate Token (Terrabit)"
 msgstr "Generează token (Terrabit)"
 
 #. module: l10n_ro_anaf_token_online
+#: model:ir.model.fields,field_description:l10n_ro_anaf_token_online.field_res_company__x_l10n_ro_anaf_token_terrabit
+msgid "SPV token renewed by Terrabit"
+msgstr "Token SPV reînnoit de Terrabit"
+
+#. module: l10n_ro_anaf_token_online
+#: model:ir.model.fields,help:l10n_ro_anaf_token_online.field_res_company__x_l10n_ro_anaf_token_terrabit
+msgid ""
+"The ANAF token of this company comes from the Terrabit server, which renews "
+"it."
+msgstr "Tokenul ANAF al acestei firme vine de la serverul Terrabit, care îl reînnoiește."
+
+#. module: l10n_ro_anaf_token_online
 #: model_terms:ir.ui.view,arch_db:l10n_ro_anaf_token_online.res_config_settings_view_form
 msgid ""
 "The authorization runs on the Terrabit server, with the digital certificate of the company.\n"

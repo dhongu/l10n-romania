@@ -31,11 +31,16 @@ if record and token.get('anaf_access_token') and token.get('anaf_refresh_token')
         'l10n_ro_edi_refresh_token': token['anaf_refresh_token'],
         'l10n_ro_edi_access_expiry_date': token.get('anaf_access_expiry_date') or False,
         'l10n_ro_edi_refresh_expiry_date': token.get('anaf_refresh_expiry_date') or False,
+        'x_l10n_ro_anaf_token_terrabit': True,
     })
     # One end only renews the token: ANAF invalidates the previous one at each renewal. The Terrabit
-    # server holds it now, so the renewal job of l10n_ro_edi stops (only after the token came).
+    # server holds it now, so the renewal job of l10n_ro_edi stops (only after the token came). The job
+    # is global: it keeps running while another company still renews its own token locally.
+    local = env['res.company'].search_count([
+        ('l10n_ro_edi_refresh_token', '!=', False), ('x_l10n_ro_anaf_token_terrabit', '=', False),
+    ])
     cron = env.ref('l10n_ro_edi.ir_cron_l10n_ro_edi_refresh_access_token', raise_if_not_found=False)
-    if cron and cron.active:
+    if cron and cron.active and not local:
         cron.write({'active': False})
     # Credits: an authorization costs credits (the renewals are free); it shows in Credit Usage
     service = env.ref('l10n_ro_anaf_token_online.iap_online_service_anaf_token', raise_if_not_found=False)

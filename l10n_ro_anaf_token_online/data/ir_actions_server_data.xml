@@ -14,6 +14,9 @@ if not service.x_token:
     ).run()
 else:
     hook = env.ref('l10n_ro_anaf_token_online.automation_anaf_token_receive').url
+    # URL-encoded by hand: no urllib in the server actions
+    for char, code in [('%', '%25'), (':', '%3A'), ('/', '%2F'), ('?', '%3F'), ('&amp;', '%26'), ('=', '%3D'), ('#', '%23'), ('+', '%2B'), (' ', '%20')]:
+        hook = hook.replace(char, code)
     action = {
         'type': 'ir.actions.act_url',
         'target': 'new',
