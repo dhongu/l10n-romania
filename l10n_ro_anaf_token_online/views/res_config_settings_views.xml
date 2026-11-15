@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- e-Factura settings: the token comes from Terrabit, which renews it. The standard button would
+         start a local authorization with your own ANAF application and invalidate the token. -->
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.form.l10n_ro_anaf_token_online</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="l10n_ro_edi.res_config_settings_form_inherit_l10n_ro_edi" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_l10n_ro_edi_generate_token']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//setting[@id='l10n_ro_edi_test_env_setting']" position="before">
+                <div class="my-3">
+                    <button
+                        name="%(action_anaf_token_authorize)d"
+                        type="action"
+                        string="Generate Token (Terrabit)"
+                        class="btn btn-primary"
+                    />
+                    <div class="text-muted mt-1">
+                        The authorization runs on the Terrabit server, with the digital certificate of the company.
+                        The token comes back here by itself and Terrabit renews it. The first click activates the
+                        service: click again after a few seconds.
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
