@@ -1,0 +1,56 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_anaf_token_online
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-14 07:51+0000\n"
+"PO-Revision-Date: 2026-11-14 07:51+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+#. module: l10n_ro_anaf_token_online
+#: model:base.automation,name:l10n_ro_anaf_token_online.automation_anaf_token_receive
+msgid "ANAF: SPV token from Terrabit"
+msgstr "ANAF: token SPV de la Terrabit"
+
+#. module: l10n_ro_anaf_token_online
+#: model:ir.actions.server,name:l10n_ro_anaf_token_online.action_anaf_token_receive
+msgid "ANAF: write the SPV token"
+msgstr "ANAF: scrie tokenul SPV"
+
+#. module: l10n_ro_anaf_token_online
+#: model:ir.actions.server,name:l10n_ro_anaf_token_online.action_anaf_token_authorize
+#: model_terms:ir.ui.view,arch_db:l10n_ro_anaf_token_online.res_config_settings_view_form
+msgid "Generate Token (Terrabit)"
+msgstr "Generează token (Terrabit)"
+
+#. module: l10n_ro_anaf_token_online
+#: model:ir.model.fields,field_description:l10n_ro_anaf_token_online.field_res_company__x_l10n_ro_anaf_token_terrabit
+msgid "SPV token renewed by Terrabit"
+msgstr "Token SPV reînnoit de Terrabit"
+
+#. module: l10n_ro_anaf_token_online
+#: model:ir.model.fields,help:l10n_ro_anaf_token_online.field_res_company__x_l10n_ro_anaf_token_terrabit
+msgid ""
+"The ANAF token of this company comes from the Terrabit server, which renews "
+"it."
+msgstr "Tokenul ANAF al acestei firme vine de la serverul Terrabit, care îl reînnoiește."
+
+#. module: l10n_ro_anaf_token_online
+#: model_terms:ir.ui.view,arch_db:l10n_ro_anaf_token_online.res_config_settings_view_form
+msgid ""
+"The authorization runs on the Terrabit server, with the digital certificate of the company.\n"
+"                        The token comes back here by itself and Terrabit renews it. The first click activates the\n"
+"                        service: click again after a few seconds."
+msgstr ""
+"Autorizarea se face pe serverul Terrabit, cu certificatul digital al firmei.\n"
+"                        Tokenul se completează singur aici, iar Terrabit îl reînnoiește. Primul clic\n"
+"                        activează serviciul: apăsați din nou după câteva secunde."
