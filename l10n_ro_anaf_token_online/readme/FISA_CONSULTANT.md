@@ -36,8 +36,9 @@ Context operațional:
 - Când primește tokenul, baza clientului oprește acțiunea planificată standard
   **E-Factura: Reîmprospătare token de acces**. Până atunci, acțiunea rămâne activă. Acțiunea e comună
   tuturor firmelor din bază: dacă o altă firmă are token ANAF obținut local (fără Terrabit), acțiunea
-  rămâne activă, ca tokenul acelei firme să nu expire. Firmele cu token de la Terrabit au bifa
-  **SPV token renewed by Terrabit**.
+  rămâne activă, ca tokenul acelei firme să nu expire. Firmele cu token de la Terrabit sunt marcate
+  automat cu câmpul **Token SPV reînnoit de Terrabit**; câmpul nu apare în formulare și se vede doar în
+  modul dezvoltator (**Setări → Tehnic → Câmpuri**, model Companii).
 - **Ce pleacă din baza clientului:** la activarea serviciului, adresa și UUID-ul bazei, numele și
   codul fiscal al firmei; la autorizare, adresa webhook-ului care primește tokenul. Tokenul vine de
   pe serverul Terrabit, prin HTTPS, pe o adresă webhook secretă.
@@ -197,7 +198,8 @@ pornit, ar păstra în jurnal conținutul apelurilor, adică tokenurile.
 Meniu: **Setări → Tehnic → Automatizare → Acțiuni planificate**, filtrul **Arhivat**, acțiunea
 **E-Factura: Reîmprospătare token de acces**.
 
-După primirea tokenului, comutatorul **Activ** (1) este oprit. De acum, tokenul îl reînnoiește doar
+După primirea tokenului, comutatorul **Activ** (1) este oprit, dacă nicio altă firmă din bază nu are
+token ANAF obținut local (fără Terrabit); altfel acțiunea rămâne activă pentru acea firmă. De acum, tokenul îl reînnoiește doar
 serverul Terrabit, iar fiecare token reînnoit ajunge pe companie prin același webhook. Nu reporniți
 acțiunea cât timp modulul e instalat: o reînnoire locală ar invalida tokenul serverului.
 
@@ -213,7 +215,7 @@ de serviciu, facturat de Terrabit în afara acestui modul.
 | Modul | Rol |
 |---|---|
 | `l10n_ro_edi` | e-Factura standard: câmpurile tokenului pe companie, trimiterea și primirea facturilor, acțiunea planificată de reîmprospătare |
-| `deltatech_iap_online` | serviciile Terrabit pentru Odoo Online: activarea serviciului, creditele, meniul **Credite Terrabit** |
+| `deltatech_iap_online` | serviciile Terrabit pentru Odoo Online: activarea serviciului, creditele, meniul **Credite Terrabit**; versiunea 19.0.1.2.0 sau mai nouă pentru intrarea de consum a autorizării |
 | `base_automation` | regula de automatizare *Pe webhook* care primește tokenul (adusă de `deltatech_iap_online`) |
 | `terrabit_iap_anaf` | varianta cu cod Python, pentru odoo.sh și instalări proprii; **nu se instalează împreună** cu acest modul |
 | `terrabit_iap_server_anaf` *(la Terrabit, nu la client)* | aplicația înregistrată la ANAF: autorizarea, reînnoirea și trimiterea tokenului |
