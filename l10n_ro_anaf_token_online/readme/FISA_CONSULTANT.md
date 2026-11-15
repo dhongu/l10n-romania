@@ -78,11 +78,14 @@ Client**, **Token de acces**, **Reîmprospătare Token** și cele două date de 
 - serviciul trebuie să aibă cel puțin 1 credit înainte de autorizare: fără credite suficiente,
   serverul refuză autorizarea înainte de alegerea certificatului;
 - autorizarea taxată apare în **Setări → Credite Terrabit → Consum credite** ca intrare
-  „ANAF authorization”, cu 1 credit consumat, iar **Credite rămase** de pe serviciu scade cu 1.
+  „ANAF authorization”, cu 1 credit consumat, iar **Credite rămase** de pe serviciu se actualizează
+  singur, cu soldul trimis de server odată cu tokenul. Intrarea de consum apare doar cu
+  `deltatech_iap_online` 19.0.1.2.0 sau mai nou.
 
 ## 5. Configurare inițială
 
-1. Importați întâi `deltatech_iap_online` (serviciile Terrabit), apoi `l10n_ro_anaf_token_online`,
+1. Importați întâi `deltatech_iap_online` (serviciile Terrabit, versiunea 19.0.1.2.0 sau mai nouă,
+   ca autorizarea să apară în **Consum credite**), apoi `l10n_ro_anaf_token_online`,
    din **Aplicații → Importați Modulul**. Aplicația **Facturare** cu localizarea `l10n_ro_edi` trebuie să
    fie deja instalată.
 2. Dacă baza are instalat `terrabit_iap_anaf`, dezinstalați-l întâi: cele două module primesc același
@@ -138,18 +141,21 @@ activarea.
 
 ### Pasul 3 — Autorizarea la ANAF cu certificatul digital
 
-Pagina de autorizare se deschide pe serverul Terrabit și continuă pe paginile ANAF, deci nu are
-captură generată din baza clientului. Titularul certificatului digital se autentifică la ANAF cu
-certificatul firmei și aprobă accesul aplicației Terrabit. La final, serverul Terrabit trimite
-tokenul pe webhook-ul bazei clientului și taxează autorizarea cu 1 credit.
+A doua apăsare pe **Generează token (Terrabit)** deschide, într-o filă nouă, pagina **Autorizare ANAF**
+a serverului Terrabit. Pagina arată firma (cu CUI-ul) și serverul Odoo cărora li se va atașa tokenul.
+Verificați-le, apoi apăsați **Confirm și continui la ANAF**. Titularul certificatului digital se
+autentifică pe paginile ANAF cu certificatul firmei și aprobă accesul aplicației Terrabit. La final,
+serverul Terrabit trimite tokenul pe webhook-ul bazei clientului și taxează autorizarea cu 1 credit.
+
+![Pagina Autorizare ANAF a serverului Terrabit: firma TEST Firma SRL cu CUI-ul și serverul Odoo test-firma.odoo.com, avertismentul să continuați doar dacă recunoașteți datele și butonul Confirm și continui la ANAF](../static/description/06_autorizare_server_terrabit.png)
 
 Dacă serviciul nu are credite suficiente, serverul refuză autorizarea cu mesajul „Not enough
 credits”, înainte de alegerea certificatului. Cumpărați credite din **Setări → Credite Terrabit →
 Servicii și credite** (**Cumpără credite**), apoi reluați autorizarea de la Pasul 1.
 
 După autorizare, în **Setări → Credite Terrabit → Consum credite** apare intrarea
-„ANAF authorization”, cu 1 credit consumat; **Credite rămase** de pe serviciu scade cu 1 după
-**Actualizează creditele**.
+„ANAF authorization”, cu 1 credit consumat, iar **Credite rămase** de pe serviciu se actualizează
+singur, cu soldul trimis de server odată cu tokenul.
 
 Nu există un pas de copiere manuală: Client ID, Client Secret și tokenurile ajung singure în Odoo.
 
@@ -232,8 +238,10 @@ poate fi reînnoit, cumpărarea creditelor, repornirea acțiunii planificate la 
       Cereri**, modul dezvoltator) are starea *Done*, iar a doua apăsare pe **Generează token
       (Terrabit)** deschide pagina de autorizare.
 - [ ] Înainte de autorizare, **Credite rămase** pe serviciul **ANAF SPV Token** este cel puțin 1.
+- [ ] `deltatech_iap_online` are versiunea 19.0.1.2.0 sau mai nouă (**Aplicații**, filtrul **Instalate**).
 - [ ] După autorizare, în **Setări → Credite Terrabit → Consum credite** apare intrarea
-      „ANAF authorization” cu 1 credit consumat, iar **Credite rămase** a scăzut cu 1.
+      „ANAF authorization” cu 1 credit consumat, iar **Credite rămase** a scăzut cu 1 fără să
+      apăsați **Actualizează creditele** (soldul vine odată cu tokenul).
 - [ ] La reînnoirile ulterioare ale tokenului nu apar intrări noi de consum (reînnoirile sunt gratuite).
 - [ ] După autorizare, pe companie sunt completate ID Client, Secret Client, Token de acces,
       Reîmprospătare Token și data de expirare a tokenului de acces, în viitor.
@@ -267,9 +275,8 @@ de test, nu tokenuri reale. Ordinea e cea a pașilor de mai sus:
 3. `03_setari_token_primit.png` — blocul E-Factura România cu tokenul primit și datele de expirare.
 4. `04_automatizare_webhook.png` — regula de automatizare *Pe webhook* care primește tokenul.
 5. `05_cron_reinnoire_oprit.png` — acțiunea planificată de reîmprospătare, oprită.
-
-Pagina de autorizare de la Pasul 3 aparține serverului Terrabit și paginilor ANAF, deci nu are
-captură generată din baza clientului.
+6. `06_autorizare_server_terrabit.png` — pagina **Autorizare ANAF** a serverului Terrabit (Pasul 3),
+   capturată pe un server de test; paginile ANAF de după ea nu au captură.
 
 ## 11. Observații pentru manual
 

@@ -111,13 +111,20 @@ Usage
    |Serviciul ANAF SPV Token activat, cu Cod serviciu anaf_token și
    Credite rămase evidențiate|
 
-4. Pe pagina de autorizare, titularul certificatului digital se
-   autentifică la ANAF. Serverul Terrabit trimite apoi tokenul în Odoo.
-   Fără credite suficiente, serverul refuză autorizarea cu „Not enough
-   credits”, înainte de alegerea certificatului: cumpărați credite din
-   **Servicii și credite** și reluați autorizarea. Autorizarea taxată
-   apare în **Setări → Credite Terrabit → Consum credite** ca „ANAF
-   authorization”, cu 1 credit.
+4. Pagina **Autorizare ANAF** a serverului Terrabit arată firma și
+   serverul Odoo cărora li se atașează tokenul; verificați-le și apăsați
+   **Confirm și continui la ANAF**. Titularul certificatului digital se
+   autentifică la ANAF, iar serverul Terrabit trimite apoi tokenul în
+   Odoo, împreună cu soldul actualizat. Fără credite suficiente,
+   serverul refuză autorizarea cu „Not enough credits”, înainte de
+   alegerea certificatului: cumpărați credite din **Servicii și
+   credite** și reluați autorizarea. Autorizarea taxată apare în
+   **Setări → Credite Terrabit → Consum credite** ca „ANAF
+   authorization”, cu 1 credit (cu ``deltatech_iap_online`` 19.0.1.2.0
+   sau mai nou).
+
+   |Pagina Autorizare ANAF a serverului Terrabit, cu firma, serverul
+   Odoo și butonul Confirm și continui la ANAF|
 
 5. Reîncărcați **Setări → Facturare**: ID Client, Secret Client,
    tokenurile și datele de expirare sunt completate pe firmă. Verificați
@@ -149,6 +156,7 @@ standard.
 
 .. |Blocul E-Factura România cu câmpurile tokenului goale și butonul Generează token (Terrabit) evidențiat| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_token_online/static/description/01_setari_buton_terrabit.png
 .. |Serviciul ANAF SPV Token activat, cu Cod serviciu anaf_token și Credite rămase evidențiate| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_token_online/static/description/02_serviciu_anaf_spv_token.png
+.. |Pagina Autorizare ANAF a serverului Terrabit, cu firma, serverul Odoo și butonul Confirm și continui la ANAF| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_token_online/static/description/06_autorizare_server_terrabit.png
 .. |Blocul E-Factura România cu tokenul primit și datele de expirare evidențiate| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_token_online/static/description/03_setari_token_primit.png
 .. |Regula de automatizare cu declanșatorul Pe webhook și URL-ul secret evidențiate| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_token_online/static/description/04_automatizare_webhook.png
 .. |Acțiunea planificată E-Factura: Reîmprospătare token de acces cu comutatorul Activ oprit| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_anaf_token_online/static/description/05_cron_reinnoire_oprit.png

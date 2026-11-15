@@ -17,11 +17,16 @@
 
    ![Serviciul ANAF SPV Token activat, cu Cod serviciu anaf_token și Credite rămase evidențiate](static/description/02_serviciu_anaf_spv_token.png)
 
-4. Pe pagina de autorizare, titularul certificatului digital se autentifică la ANAF. Serverul
-   Terrabit trimite apoi tokenul în Odoo. Fără credite suficiente, serverul refuză autorizarea cu
+4. Pagina **Autorizare ANAF** a serverului Terrabit arată firma și serverul Odoo cărora li se atașează
+   tokenul; verificați-le și apăsați **Confirm și continui la ANAF**. Titularul certificatului digital
+   se autentifică la ANAF, iar serverul Terrabit trimite apoi tokenul în Odoo, împreună cu soldul
+   actualizat. Fără credite suficiente, serverul refuză autorizarea cu
    „Not enough credits”, înainte de alegerea certificatului: cumpărați credite din
    **Servicii și credite** și reluați autorizarea. Autorizarea taxată apare în
-   **Setări → Credite Terrabit → Consum credite** ca „ANAF authorization”, cu 1 credit.
+   **Setări → Credite Terrabit → Consum credite** ca „ANAF authorization”, cu 1 credit
+   (cu `deltatech_iap_online` 19.0.1.2.0 sau mai nou).
+
+   ![Pagina Autorizare ANAF a serverului Terrabit, cu firma, serverul Odoo și butonul Confirm și continui la ANAF](static/description/06_autorizare_server_terrabit.png)
 
 5. Reîncărcați **Setări → Facturare**: ID Client, Secret Client, tokenurile și datele de expirare
    sunt completate pe firmă. Verificați că data de expirare a tokenului de acces e în viitor.
