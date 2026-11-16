@@ -1,3 +1,3 @@
-- Verificare pret de cost sa fie diferit de zero la miscarile de stoc.
-- Restricție la postarea facturilor (vânzare/achiziție) care conțin produse stocabile fără referință la o comandă de vânzare (SO) sau de achiziție (PO).
-- Posibilitatea de a activa/dezactiva această restricție din setările de configurare (Accounting -> România).
+- Oprește operațiile care calculează un preț unitar zero pe mișcări reale de stoc (de exemplu, livrarea unei mărfi fără cost); controlul se poate dezactiva din parametrul de sistem `l10n_ro_stock_account.skip_price_unit_check`.
+- Restricție la confirmarea facturilor și a notelor de credit (vânzare/achiziție) care conțin produse stocabile fără referință la o comandă de vânzare (SO) sau de achiziție (PO).
+- Posibilitatea de a activa/dezactiva această restricție din Setări → România, blocul Contabilitate (Accounting).
