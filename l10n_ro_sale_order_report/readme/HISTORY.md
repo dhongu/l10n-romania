@@ -2,6 +2,7 @@
 
 - The product image on the sale order lines (the `include_image_line` company setting and its report columns) moved to the new `deltatech_sale_order_image` module, which this module now depends on. The setting keeps its name and value; nothing changes on the printed report.
 - License changed from AGPL-3 to OPL-1, as the module now depends on an OPL-1 module.
+- Consultant sheet (`readme/FISA_CONSULTANT.md`, text only, `consultant_sheet: simple`) and `Proforma inițială` spelling fixed in `ro.po`.
 
 ## 19.0.1.0.14 (2026-10-22)
 

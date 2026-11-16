@@ -17,6 +17,7 @@
         # "deltatech_sale_payment"  # pentru ce e ?
     ],
     "license": "OPL-1",
+    "consultant_sheet": "simple",
     "maintainers": ["dhongu", "VoicuStefan2001", "danila12"],
     "data": [
         "views/sale_order.xml",
