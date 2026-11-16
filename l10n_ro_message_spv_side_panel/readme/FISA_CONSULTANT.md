@@ -108,13 +108,13 @@ panoul.
 
 **Verificați pe ecran înainte de a crea factura:**
 
-1. Numele furnizorului și **CUI (XML)** corespund facturii așteptate.
-2. Valoarea fără TVA, TVA-ul și totalul din panou coincid cu totalurile din document (iar
-   **Total** nu este colorat în roșu).
-3. Data facturii și scadența sunt cele scrise pe factura furnizorului.
+1. Numele furnizorului din prima casetă și **CUI (XML)** corespund facturii așteptate.
+2. **Total** din panou coincide cu totalul din tabelul de totaluri al documentului (iar câmpul nu
+   este colorat în roșu).
+3. Data facturii și scadența, din caseta cu datele facturii, sunt cele scrise pe factura furnizorului.
 
-Derulați documentul până la tabelul de totaluri: **Total fără TVA**, **TVA** și **Total** trebuie
-să fie aceleași cu valorile din câmpurile panoului.
+Derulați documentul până la tabelul de totaluri: **Total fără TVA**, **TVA** și **Total** sunt
+citite din XML; panoul nu le mai repetă, în afară de **Total**.
 
 **Liniile** documentului vin din XML: denumirea, unitatea de măsură, cantitatea, prețul
 unitar, cota de TVA și valoarea fiecărei linii. **Cod** este codul articolului din XML: codul
@@ -125,7 +125,7 @@ comanda sau cu recepția, înainte de a crea factura de furnizor.
 
 ![Partea de jos a documentului: tabelul cu cele două linii ale facturii (Pompă circulație 25/60 și Vas expansiune 24 L) și totalurile Total fără TVA 1.900,00, TVA 399,00 și Total 2.299,00 RON](../static/description/04_document_totaluri.png)
 
-![Lista de carduri cu panoul deschis pe factura TID 4521: câmpurile Referință, CUI (XML) și Monedă, butoanele Creează factura, XML, PDF și ZIP, valorile 1.900,00 fără TVA, 399,00 TVA și 2.299,00 total, iar dedesubt documentul, cu furnizorul, clientul, datele facturii și liniile; CUI (XML) și butonul de mesaj următor sunt evidențiate](../static/description/02_panou_document.png)
+![Lista de carduri cu panoul deschis pe factura TID 4521: bara de stare cu Descărcat, butoanele Creează factura, XML, PDF și ZIP, câmpurile Partener, CUI (XML) și Total (2.299,00 lei), iar dedesubt documentul, cu furnizorul, datele facturii, clientul (mai discret) și liniile; CUI (XML) și butonul de mesaj următor sunt evidențiate](../static/description/02_panou_document.png)
 
 ### Pasul 3 — Alegeți acțiunea din panou
 
@@ -156,7 +156,8 @@ sortarea și gruparea mesajelor, iar panoul funcționează la fel: un clic pe r�
 
 Butonul cu săgeată în afară din antetul panoului deschide formularul complet al mesajului. Câmpurile sunt grupate în trei
 coloane pe un rând: **Furnizor** (denumirea partenerului, **CUI (XML)**, partenerul din Odoo), **Factură**
-(referința, data, scadența, moneda, factura din Odoo) și **Sume** (valoarea fără TVA, TVA, total, starea).
+(referința, data, scadența, moneda, factura din Odoo) și **Sume** (valoarea fără TVA, TVA, total). Starea mesajului nu mai e în grup: este o bară de stare în antet, lângă
+butoane, ca în panou.
 Sub ele este același document ca în panou, cu liniile facturii (și codul articolului), fără file, iar la
 sfârșit, în grupul **Mesaj**, datele tehnice ale mesajului: ID mesaj, tip, ID cerere, CIF, dată și detalii.
 
@@ -183,6 +184,11 @@ panou urmează regulile modulului *Mesaje SPV*.
       o singură intrare în meniu.
 - [ ] Pe o factură descărcată, panoul arată partenerul, **CUI (XML)**, totalul și documentul, cu cele trei
       casete (cealaltă parte, factură, firma noastră) și liniile.
+- [ ] Starea mesajului apare ca bară de stare (Ciornă, Descărcat, Factură, Efectuat) lângă butoane, în
+      panou și în formularul complet.
+- [ ] Ordinea casetelor urmează direcția: la o factură primită furnizorul e în stânga și firma noastră
+      (clientul) în dreapta, mai discretă; la o factură emisă, clientul e în stânga și firma noastră
+      (furnizorul) în dreapta.
 - [ ] Totalul din panou coincide cu totalul din document; după crearea facturii, câmpul **Total**
       se colorează în roșu dacă diferă de suma facturii create.
 - [ ] Documentul arată toate liniile din XML.
