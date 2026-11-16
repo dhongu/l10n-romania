@@ -54,9 +54,10 @@ colțul din dreapta sus se comută pe listă.
 ### Pasul 2 — Panoul cu factura
 
 Clic pe un card sau pe un rând: în dreapta se deschide panoul cu partenerul, factura, data, totalul,
-starea, cheia de descărcare, mesajul ANAF și fișierul **XML-ul mesajului**, iar dedesubt factura
+starea, data mesajului, cheia de descărcare, mesajul ANAF și fișierul **XML-ul mesajului**, iar dedesubt factura
 desenată din XML: furnizorul (sau clientul), factura și firma noastră, liniile și totalurile, cu CUI-ul
-din XML. Săgețile din panou trec la mesajul anterior / următor; dublu clic deschide formularul complet.
+din XML, scadența, moneda și nota din XML. La o notă de credit (`CreditNote`), caseta se numește
+**Notă de credit**, iar liniile se citesc din `CreditNoteLine`. Săgețile din panou trec la mesajul anterior / următor; dublu clic deschide formularul complet.
 
 ![Panoul lateral cu factura din XML](static/description/01_vedere_impartita.png)
 
@@ -88,12 +89,13 @@ Modulul nu generează note contabile și nu are rapoarte proprii.
 - Factura trimisă în așteptare: se citește XML-ul trimis; clientul e în prima casetă; apare butonul
   **Preia starea**.
 - Factură trimisă deja validată: panoul spune că XML-ul nu e disponibil.
+- Nota de credit în XML: caseta se numește **Notă de credit**, liniile apar, totalurile coincid.
 - Contabil cu drept de citire: vede meniul și panoul.
 
 ## 9. Mesaje de eroare frecvente
 
-- „XML-ul facturii nu este disponibil pentru acest mesaj”: factură trimisă și validată, sau factură
-  fără XML atașat.
+- „XML-ul facturii nu este disponibil pentru acest mesaj (o factură trimisă și deja validată păstrează
+  doar semnătura ANAF)”: factură trimisă și validată, sau factură fără XML atașat.
 - Panoul nu se deschide: fereastra este prea îngustă (sub 1200 px), clicul deschide formularul.
 
 ## 10. Capturi de ecran

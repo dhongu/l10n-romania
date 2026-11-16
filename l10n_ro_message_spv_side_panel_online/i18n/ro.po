@@ -144,6 +144,8 @@ msgid ""
 "The XML of the invoice is not available for this message (an invoice sent "
 "and already validated keeps only the signature of ANAF)."
 msgstr ""
+"XML-ul facturii nu este disponibil pentru acest mesaj (o factură trimisă și "
+"deja validată păstrează doar semnătura ANAF)."
 
 #. module: l10n_ro_message_spv_side_panel_online
 #. odoo-javascript
