@@ -30,10 +30,13 @@ Funcții principale
 ------------------
 
 - **Preț de cost nenul pe mișcările de stoc**: calculul prețului unitar
-  al unei mișcări de stoc (``stock.move._get_price_unit``) se oprește cu
-  o eroare dacă mișcarea nu are valoare, în loc să ducă în contabilitate
-  o descărcare de gestiune la cost zero. Prețul folosit la costul
-  vânzării (COGS) de pe factură nu este verificat.
+  al unor mișcări reale de stoc (``stock.move._get_price_unit``) se
+  oprește cu o eroare când iese zero — de exemplu, la validarea livrării
+  unei mărfi fără cost cu modulul de marjă ``sale_stock_margin``
+  instalat, la închiderea sesiunii de punct de vânzare sau în raportul
+  comenzii de producție. Fără ``sale_stock_margin``, livrarea se
+  validează. Prețul folosit la costul vânzării (COGS) de pe factură nu
+  este verificat.
 - **Facturi cu produse stocabile doar din comenzi**: la validarea unei
   facturi de vânzare sau de achiziție (inclusiv storno), fiecare linie
   cu produs stocabil trebuie să provină dintr-o linie de comandă de
@@ -57,8 +60,98 @@ Parametri de sistem
 .. contents::
    :local:
 
+Usage
+=====
+
+The module adds two controls that protect the stock accounting entries.
+
+**1. Storable product lines must come from an order (optional)**
+
+Go to **Invoicing → Configuration → Settings**, open **România** in the
+left panel and tick **Check storable product line source**, then
+**Save**. The option applies to the whole database.
+
+|Settings, România section: the option Check storable product line
+source is ticked and highlighted|
+
+With the option on, a customer invoice or credit note with a storable
+product that does not come from a sales order cannot be confirmed:
+**Confirm** shows "Invoice line with storable product '...' must have a
+reference to a sales order line." Invoice from the sales order instead.
+
+|Draft customer invoice without a sales order and the Invalid Operation
+dialog about the missing sales order line|
+
+Vendor bills and refunds work the same way: a storable product line must
+come from a purchase order (fill the bill from the purchase order with
+**Auto-Complete**).
+
+|Draft vendor bill without a purchase order and the Invalid Operation
+dialog about the missing purchase order line|
+
+Lines with services or consumables are not checked.
+
+**2. Stock moves must have a unit price (always on)**
+
+When Odoo computes the unit price of real stock moves and gets 0, the
+operation stops with "Price unit is not set for product ...". For
+example, validating the delivery of a FIFO product without cost from a
+sales order (with the sales margin module installed) is blocked, and the
+delivery stays **Ready**. Set the product cost, or receive the goods
+with a price, then validate again.
+
+|Delivery of a product without cost and the Invalid Operation dialog:
+Price unit is not set for product|
+
+Computations on an empty set of moves (for example, the returns of a
+delivery that has none) are not checked.
+
+**System parameters**
+
+In developer mode, **Settings → Technical → Parameters → System
+Parameters** shows ``l10n_ro_stock_account.check_storable_line_source``
+(written by the setting above) and, if created,
+``l10n_ro_stock_account.skip_price_unit_check``. Set the latter to
+``True`` only to allow moves without cost temporarily (for example, an
+opening stock at zero cost), then back to ``False``.
+
+|System Parameters filtered on the l10n_ro_stock_account keys|
+
+.. |Settings, România section: the option Check storable product line source is ticked and highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_account_enhancement/static/description/en/01_setare_verificare_sursa.png
+.. |Draft customer invoice without a sales order and the Invalid Operation dialog about the missing sales order line| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_account_enhancement/static/description/en/02_factura_client_fara_comanda.png
+.. |Draft vendor bill without a purchase order and the Invalid Operation dialog about the missing purchase order line| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_account_enhancement/static/description/en/03_factura_furnizor_fara_comanda.png
+.. |Delivery of a product without cost and the Invalid Operation dialog: Price unit is not set for product| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_account_enhancement/static/description/en/04_livrare_pret_zero.png
+.. |System Parameters filtered on the l10n_ro_stock_account keys| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_stock_account_enhancement/static/description/en/05_parametri_sistem.png
+
 Changelog
 =========
+
+20.0.0.0.5 (2026-11-16)
+-----------------------
+
+- Fișa consultant (``readme/FISA_CONSULTANT.md``), portată de pe 19.0 și
+  adaptată la Odoo 20, cu capturi generate automat
+  (``tests/test_screenshots.py``), în română și în engleză, plus GIF-ul
+  demo.
+- ``readme/USAGE.md`` nou, în engleză.
+
+20.0.0.0.4 (2026-11-16)
+-----------------------
+
+- Corectare: validarea livrărilor din comenzi de vânzare nu mai eșuează
+  cu „Price unit is not set for product ...”. Cu ``sale_stock_margin``
+  instalat, recalcularea costului pe linia comenzii
+  (``_get_price_unit_delivery(product=...)``) apela ``_get_price_unit``
+  pe un recordset gol de mișcări. Verificarea prețului rămâne activă
+  pentru mișcările reale.
+
+20.0.0.0.3 (2026-10-22)
+-----------------------
+
+- Listed on Odoo Apps as *Romania - Stock Accounting Controls* (was
+  *Romania - Stock Accounting Enhancement*), with the same title on the
+  Apps banner. The technical name ``l10n_ro_stock_account_enhancement``
+  does not change.
 
 20.0.0.0.2 (2026-10-15)
 -----------------------
