@@ -1,3 +1,8 @@
+## 20.0.0.0.5 (2026-11-16)
+
+- Fișa consultant (`readme/FISA_CONSULTANT.md`), portată de pe 19.0 și adaptată la Odoo 20, cu capturi generate automat (`tests/test_screenshots.py`), în română și în engleză, plus GIF-ul demo.
+- `readme/USAGE.md` nou, în engleză.
+
 ## 20.0.0.0.4 (2026-11-16)
 
 - Corectare: validarea livrărilor din comenzi de vânzare nu mai eșuează cu „Price unit is not set for product ...”. Cu `sale_stock_margin` instalat, recalcularea costului pe linia comenzii (`_get_price_unit_delivery(product=...)`) apela `_get_price_unit` pe un recordset gol de mișcări. Verificarea prețului rămâne activă pentru mișcările reale.
