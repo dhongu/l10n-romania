@@ -1,3 +1,9 @@
+## 20.0.0.0.7 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.0.0.6 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Website Language by Visitor IP* (was *Romania - Set Lang to Romanian*), with the same title on the Apps banner.

@@ -1,3 +1,9 @@
+## 20.0.0.0.6 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.0.0.5 (2026-11-16)
 
 - Fișa consultant (`readme/FISA_CONSULTANT.md`), portată de pe 19.0 și adaptată la Odoo 20, cu capturi generate automat (`tests/test_screenshots.py`), în română și în engleză, plus GIF-ul demo.

@@ -3,7 +3,7 @@
 {
     "name": "Romania - Service Taxes",
     "summary": "Default sale and purchase taxes for service products",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "category": "Localization",
     "author": "Terrabit, Dorin Hongu",
     "maintainers": ["dhongu"],

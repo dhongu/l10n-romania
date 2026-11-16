@@ -1,3 +1,9 @@
+## 20.0.1.4.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.4.0 (2026-11-04)
 
 - `vies_lookup(vat)` looks an intra-community VAT number up in VIES, the REST service of the European

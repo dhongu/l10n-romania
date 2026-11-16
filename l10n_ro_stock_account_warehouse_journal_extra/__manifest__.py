@@ -4,7 +4,7 @@
     "summary": "Stock journal per warehouse for the additional entries of l10n_ro_stock_account",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",

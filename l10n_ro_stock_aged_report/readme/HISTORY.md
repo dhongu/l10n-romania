@@ -1,3 +1,9 @@
+## 20.0.1.0.6 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.0.5 (2026-11-04)
 
 - Migration to Odoo 20.0: access rights in `security/ir.access.csv`; the *Products* button

@@ -1,3 +1,9 @@
+## 20.0.1.0.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.0.0 (2026-11-03)
 
 - Port to 20.0. When the company is *Not Subject to VAT*, the service sale tax is not applied: Odoo deactivates the sale taxes and keeps its no-VAT tax as the default.

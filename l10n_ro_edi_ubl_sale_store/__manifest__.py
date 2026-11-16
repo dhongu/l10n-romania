@@ -4,7 +4,7 @@
 
 {
     "name": "Romania - e-Factura for Store Sales",
-    "version": "20.0.1.0.9",
+    "version": "20.0.1.0.10",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Sale from store",

@@ -8,7 +8,7 @@
     "summary": "Fields of the Romanian stock accounting, without the logic",
     "license": "AGPL-3",
     "countries": ["ro"],
-    "version": "20.0.0.0.1",
+    "version": "20.0.0.0.2",
     "category": "Localization",
     "author": "Terrabit, Dorin Hongu",
     "maintainers": ["dhongu"],

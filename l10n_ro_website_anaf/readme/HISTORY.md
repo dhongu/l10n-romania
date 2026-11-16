@@ -1,3 +1,9 @@
+## 20.0.1.2.2 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.2.1 (2026-10-29)
 
 - The tax code is normalised on save as while typing: spaces, dots and dashes between the digits

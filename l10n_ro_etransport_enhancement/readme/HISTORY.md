@@ -1,3 +1,9 @@
+## 20.0.0.10.2 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.0.10.1 (2026-10-29)
 
 Fișa consultant (`readme/FISA_CONSULTANT.md`) cu 8 capturi generate de `tests/test_screenshots.py`.
