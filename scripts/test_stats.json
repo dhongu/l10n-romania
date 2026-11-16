@@ -1,0 +1,178 @@
+{
+  "addons": {
+    "l10n_ro_account_move_document_type": {
+      "tests": 7
+    },
+    "l10n_ro_account_sequence": {
+      "coverage": 88.1,
+      "lines": 126,
+      "tests": 14
+    },
+    "l10n_ro_anaf_partner_lookup": {
+      "tests": 40
+    },
+    "l10n_ro_anaf_partner_online": {
+      "tests": 0
+    },
+    "l10n_ro_anaf_token_online": {
+      "tests": 0
+    },
+    "l10n_ro_cash_register": {
+      "coverage": 82.9,
+      "lines": 474,
+      "tests": 45
+    },
+    "l10n_ro_customs_dvi": {
+      "coverage": 82.3,
+      "lines": 164,
+      "tests": 10
+    },
+    "l10n_ro_customs_dvi_import": {
+      "tests": 13
+    },
+    "l10n_ro_edi_ubl_sale_store": {
+      "coverage": 64.3,
+      "lines": 28,
+      "tests": 0
+    },
+    "l10n_ro_efactura_enhancement": {
+      "coverage": 66.4,
+      "lines": 740,
+      "tests": 104
+    },
+    "l10n_ro_etransport_batch_enhancement": {
+      "tests": 10
+    },
+    "l10n_ro_etransport_enhancement": {
+      "coverage": 80.6,
+      "lines": 510,
+      "tests": 108
+    },
+    "l10n_ro_footer_anpc": {
+      "tests": 0
+    },
+    "l10n_ro_hide_net_weight": {
+      "tests": 2
+    },
+    "l10n_ro_invoice_report": {
+      "coverage": 77.8,
+      "lines": 180,
+      "tests": 15
+    },
+    "l10n_ro_invoice_report_online": {
+      "tests": 0
+    },
+    "l10n_ro_lang": {
+      "coverage": 94.1,
+      "lines": 17,
+      "tests": 2
+    },
+    "l10n_ro_message_spv_online": {
+      "tests": 0
+    },
+    "l10n_ro_message_spv_purchase": {
+      "coverage": 77.0,
+      "lines": 178,
+      "tests": 39
+    },
+    "l10n_ro_message_spv_self_billing": {
+      "coverage": 93.1,
+      "lines": 29,
+      "tests": 4
+    },
+    "l10n_ro_partner_autocomplete": {
+      "tests": 53
+    },
+    "l10n_ro_partner_create_by_vat_button": {
+      "coverage": 62.0,
+      "lines": 213,
+      "tests": 11
+    },
+    "l10n_ro_partner_create_by_vat_openapi": {
+      "coverage": 63.8,
+      "lines": 116,
+      "tests": 11
+    },
+    "l10n_ro_picking_report": {
+      "coverage": 76.9,
+      "lines": 399,
+      "tests": 28
+    },
+    "l10n_ro_picking_report_online": {
+      "tests": 0
+    },
+    "l10n_ro_pos_partner_efactura": {
+      "tests": 8
+    },
+    "l10n_ro_report_common": {
+      "coverage": 100.0,
+      "lines": 37,
+      "tests": 14
+    },
+    "l10n_ro_report_common_online": {
+      "tests": 0
+    },
+    "l10n_ro_sale_order_report": {
+      "coverage": 100.0,
+      "lines": 19,
+      "tests": 4
+    },
+    "l10n_ro_service_tax": {
+      "tests": 9
+    },
+    "l10n_ro_stock_account_base": {
+      "tests": 4
+    },
+    "l10n_ro_stock_account_enhancement": {
+      "coverage": 95.7,
+      "lines": 47,
+      "tests": 14
+    },
+    "l10n_ro_stock_account_landed_cost_account": {
+      "tests": 21
+    },
+    "l10n_ro_stock_account_notice": {
+      "tests": 6
+    },
+    "l10n_ro_stock_account_store": {
+      "coverage": 93.7,
+      "lines": 127,
+      "tests": 25
+    },
+    "l10n_ro_stock_account_warehouse_journal": {
+      "coverage": 96.8,
+      "lines": 63,
+      "tests": 6
+    },
+    "l10n_ro_stock_account_warehouse_journal_extra": {
+      "tests": 5
+    },
+    "l10n_ro_stock_aged_report": {
+      "tests": 7
+    },
+    "l10n_ro_stock_base": {
+      "tests": 15
+    },
+    "l10n_ro_stock_picking_batch_report": {
+      "tests": 3
+    },
+    "l10n_ro_stock_picking_report_product_expiry": {
+      "tests": 2
+    },
+    "l10n_ro_stock_report_dropship": {
+      "tests": 3
+    },
+    "l10n_ro_storno_enhancement": {
+      "coverage": 77.0,
+      "lines": 74,
+      "tests": 7
+    },
+    "l10n_ro_website_anaf": {
+      "tests": 19
+    }
+  },
+  "branch": "20.0",
+  "commit": "411a31f6fe22eccbd821033c6aeb4b5d91eda264",
+  "generated": "2026-11-16",
+  "source": "codecov:dhongu/l10n-romania"
+}

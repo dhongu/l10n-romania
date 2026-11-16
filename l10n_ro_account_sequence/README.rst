@@ -19,8 +19,11 @@ Romania - Cash Journal Numbering
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_account_sequence
     :alt: dhongu/l10n-romania
+.. |badge_tests| image:: https://img.shields.io/badge/-14%20automated%20tests%20%C2%B7%2088%25%20code%20coverage-2ea44f.png
+    :target: https://app.codecov.io/gh/dhongu/l10n-romania/tree/20.0/l10n_ro_account_sequence
+    :alt: 14 automated tests · 88% code coverage
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_tests|
 
 Functionalitati
 

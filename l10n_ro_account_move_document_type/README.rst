@@ -19,8 +19,11 @@ Romania - Accounting Document Type
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_account_move_document_type
     :alt: dhongu/l10n-romania
+.. |badge_tests| image:: https://img.shields.io/badge/-7%20automated%20tests-2ea44f.png
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_account_move_document_type/tests
+    :alt: 7 automated tests
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_tests|
 
 Adds the **supporting document type** (``l10n_ro_document_type``) to
 journal entries, so that the Romanian journals and registers can show

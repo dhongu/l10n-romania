@@ -19,8 +19,11 @@ Romania - Stock Accounting Notice
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_notice
     :alt: dhongu/l10n-romania
+.. |badge_tests| image:: https://img.shields.io/badge/-6%20automated%20tests-2ea44f.png
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_notice/tests
+    :alt: 6 automated tests
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_tests|
 
 Adds the "Romania - Is a notice" option on the stock operation types.
 Transfers created for an operation type that has it set are marked as

@@ -19,8 +19,11 @@ Romania - Stock Journal per Warehouse (OCA stock)
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_warehouse_journal_extra
     :alt: dhongu/l10n-romania
+.. |badge_tests| image:: https://img.shields.io/badge/-5%20automated%20tests-2ea44f.png
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_stock_account_warehouse_journal_extra/tests
+    :alt: 5 automated tests
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_tests|
 
 Bridge between ``l10n_ro_stock_account_warehouse_journal`` and
 ``l10n_ro_stock_account``.

@@ -19,8 +19,11 @@ e-Transport for Transfer Batches
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_etransport_batch_enhancement
     :alt: dhongu/l10n-romania
+.. |badge_tests| image:: https://img.shields.io/badge/-10%20automated%20tests-2ea44f.png
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_etransport_batch_enhancement/tests
+    :alt: 10 automated tests
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_tests|
 
 Extinde funcționalitatea e-Transport pentru loturile de transferuri
 (stock.picking.batch), oferind suport pentru gestionarea centralizată a

@@ -19,8 +19,11 @@ Romania - Stock Picking Reports
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_picking_report
     :alt: dhongu/l10n-romania
+.. |badge_tests| image:: https://img.shields.io/badge/-28%20automated%20tests%20%C2%B7%2076%25%20code%20coverage-2ea44f.png
+    :target: https://app.codecov.io/gh/dhongu/l10n-romania/tree/20.0/l10n_ro_picking_report
+    :alt: 28 automated tests · 76% code coverage
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_tests|
 
    - Reports for Reception, Delivery and Internal Transfer
    - Referinta din comanda de achizitie este copiata in NIR si factura
