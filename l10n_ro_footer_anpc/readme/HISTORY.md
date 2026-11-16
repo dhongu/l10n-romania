@@ -1,3 +1,10 @@
+## 20.0.0.0.7 (2026-11-16)
+
+- Modulul nu mai conține cod Python (`__init__.py` și testul Python au fost scoase), deci
+  se instalează și pe Odoo Online, prin importul arhivei zip (*Aplicații > Importă modul*).
+- Descrierea menționează instalarea pe Odoo Online; bannerul Apps Store este în română,
+  cu eticheta „Odoo Online”.
+
 ## 20.0.0.0.6 (2026-11-14)
 
 - Apps Store banner: the "Odoo Online" badge shows that the module has no Python code and installs on

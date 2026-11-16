@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - ANPC footer",
-    "version": "20.0.0.0.6",
+    "version": "20.0.0.0.7",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Displays the ANPC SAL pictogram in the website footer",

@@ -1,11 +1,7 @@
 {
-  "title": "ANPC footer",
+  "title": "Subsol ANPC",
   "online": true,
-  "summary": "ANPC badges and links in the footer",
-  "lang": "en",
-  "features": [
-    "ANPC images in the website footer",
-    "ANPC links in the website footer",
-    "Ready for Romanian online shops"
-  ]
+  "summary": "Pictograma ANPC SAL în subsolul site-ului",
+  "lang": "ro",
+  "features": ["Pictograma SAL de 250 x 50 px", "Link către reclamatiisal.anpc.ro", "Merge și pe Odoo Online"]
 }
