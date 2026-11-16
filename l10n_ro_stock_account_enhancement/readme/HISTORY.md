@@ -1,3 +1,7 @@
+## 20.0.0.0.4 (2026-11-16)
+
+- Corectare: validarea livrărilor din comenzi de vânzare nu mai eșuează cu „Price unit is not set for product ...”. Cu `sale_stock_margin` instalat, recalcularea costului pe linia comenzii (`_get_price_unit_delivery(product=...)`) apela `_get_price_unit` pe un recordset gol de mișcări. Verificarea prețului rămâne activă pentru mișcările reale.
+
 ## 20.0.0.0.3 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Stock Accounting Controls* (was *Romania - Stock Accounting Enhancement*), with the same title on the Apps banner.
