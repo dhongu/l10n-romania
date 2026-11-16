@@ -64,6 +64,8 @@ export class SpvInvoiceDocument extends Component {
     }
 
     async load(props) {
+        // A slower answer for a message left meanwhile must not overwrite the current one
+        const token = (this.loadToken = (this.loadToken || 0) + 1);
         this.state.loading = true;
         let data = null;
         try {
@@ -71,6 +73,9 @@ export class SpvInvoiceDocument extends Component {
             data = parseInvoiceXml(xml, {incoming: Boolean(props.record.data.x_received)});
         } catch {
             data = null;
+        }
+        if (token !== this.loadToken) {
+            return;
         }
         this.state.data = data;
         this.state.loading = false;

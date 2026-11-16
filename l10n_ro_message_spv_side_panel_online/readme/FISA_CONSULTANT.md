@@ -22,29 +22,90 @@ zip pe Odoo Online.
 Contextul este sistemul național RO e-Factura (SPV ANAF). Modulul nu transmite și nu modifică nimic:
 citește XML-ul pe care modulul standard `l10n_ro_edi` îl păstrează deja în baza de date.
 
-## 3. Configurare
+## 3. Utilizatori și roluri
 
-Fără configurare proprie. Cerințe: compania conectată la SPV și modulele `l10n_ro_message_spv_online`
-și `deltatech_web_side_panel` instalate. Nu se instalează cu `l10n_ro_message_spv_side_panel`.
+- **Operator facturare** (*Facturare: Facturare*): vede meniul, panoul și butonul **Preia starea**.
+- **Contabil / auditor** (*Contabilitate: Doar citire*): vede meniul și panoul, fără a modifica ceva.
+- **Administrator**: conectează compania la SPV (CIF, Client ID, Client Secret, **Generare token**).
 
-## 4. Flux de utilizare
+Roluri recomandate la testare: un utilizator cu *Facturare*.
 
-1. *Facturare > Mesaje SPV (vedere împărțită)*: carduri sau listă.
-2. Clic pe un mesaj: în dreapta apar datele mesajului și factura din XML.
-3. Săgețile panoului trec la mesajul următor; dublu clic deschide formularul complet.
+## 4. Conturi și date implicate
 
-![Panoul lateral cu factura din XML](static/description/en/01_vedere_impartita.png)
+Nu se mișcă conturi. Se citesc: mesajul SPV (`l10n_ro_edi.document`), factura asociată, partenerul,
+totalul și fișierele XML atașate facturii.
 
-## 5. Verificări
+## 5. Configurare inițială
 
-- Factura de furnizor primită: panoul arată furnizorul în prima casetă, factura la mijloc, firma
-  noastră în ultima; liniile și totalul coincid cu XML-ul atașat facturii.
-- Factura trimisă în așteptare: se citește XML-ul trimis; clientul e în prima casetă.
-- Factură trimisă deja validată: modulul standard păstrează doar semnătura ANAF, iar panoul spune că
-  XML-ul facturii nu e disponibil.
+Fără configurare proprie. Cerințe: compania are CIF și este conectată la SPV; modulele
+`l10n_ro_message_spv_online` și `deltatech_web_side_panel` sunt instalate. Nu se instalează cu
+`l10n_ro_message_spv_side_panel`. Drepturi de acces: meniul **Mesaje SPV (vedere împărțită)** este
+vizibil grupurilor *Facturare: Facturare* și *Contabilitate: Doar citire*. Panoul se deschide doar pe
+ecrane late; pe ecrane înguste, clicul deschide formularul.
 
-## 6. Limite
+## 6. Flux de utilizare
 
-Față de `l10n_ro_message_spv_side_panel` (cu Python): fără crearea facturii din mesaj, fără
-**Acceptă** / **Respinge**, fără potrivirea produselor după codul furnizorului. Pe Odoo Online importul
-zip nu a fost verificat încă pe o instanță reală (verificat doar în codul `base_import_module`).
+### Pasul 1 — Deschiderea vederii
+
+*Facturare > Mesaje SPV (vedere împărțită)*. Mesajele apar ca carduri: partener, total, număr și data
+facturii, starea, direcția **Primit** / **Trimis**, data mesajului și mesajul ANAF, dacă există. Din
+colțul din dreapta sus se comută pe listă.
+
+### Pasul 2 — Panoul cu factura
+
+Clic pe un card sau pe un rând: în dreapta se deschide panoul cu partenerul, factura, data, totalul,
+starea, cheia de descărcare, mesajul ANAF și fișierul **XML-ul mesajului**, iar dedesubt factura
+desenată din XML: furnizorul (sau clientul), factura și firma noastră, liniile și totalurile, cu CUI-ul
+din XML. Săgețile din panou trec la mesajul anterior / următor; dublu clic deschide formularul complet.
+
+![Panoul lateral cu factura din XML](static/description/01_vedere_impartita.png)
+
+### Pasul 3 — Preia starea
+
+La o factură trimisă și încă în așteptare apare în panou butonul **Preia starea**, care întreabă ANAF
+(acțiunea standard `action_l10n_ro_edi_fetch_status`). După răspuns, starea mesajului se schimbă în
+**Validat** sau **Eroare**.
+
+### Pasul 4 — Factură fără XML disponibil
+
+La o factură trimisă și deja validată, modulul standard păstrează doar semnătura ANAF; panoul spune că
+XML-ul facturii nu este disponibil.
+
+### Note de monografie și raportare
+
+Modulul nu generează note contabile și nu are rapoarte proprii.
+
+## 7. Legături cu alte module / declarații
+
+- `l10n_ro_message_spv_online` (registrul și câmpurile `x_*`), `l10n_ro_edi` (trimiterea și
+  descărcarea) și `deltatech_web_side_panel` (panoul).
+- Se exclude cu `l10n_ro_message_spv_side_panel` (varianta cu Python, pe model OCA).
+
+## 8. Verificări pentru consultant
+
+- Factura de furnizor primită: furnizorul în prima casetă, factura la mijloc, firma noastră în ultima;
+  liniile și totalul coincid cu XML-ul atașat facturii.
+- Factura trimisă în așteptare: se citește XML-ul trimis; clientul e în prima casetă; apare butonul
+  **Preia starea**.
+- Factură trimisă deja validată: panoul spune că XML-ul nu e disponibil.
+- Contabil cu drept de citire: vede meniul și panoul.
+
+## 9. Mesaje de eroare frecvente
+
+- „XML-ul facturii nu este disponibil pentru acest mesaj”: factură trimisă și validată, sau factură
+  fără XML atașat.
+- Panoul nu se deschide: fereastra este prea îngustă (sub 1200 px), clicul deschide formularul.
+
+## 10. Capturi de ecran
+
+Capturile sunt făcute manual pe o bază locală de test, cu date de test și interfața în engleză.
+
+| # | Fișier | Conținut |
+|---|--------|----------|
+| 1 | `static/description/01_vedere_impartita.png` | Vederea împărțită: cardurile și panoul cu factura din XML |
+
+## 11. Observații pentru manual
+
+- Față de varianta cu Python, lipsesc crearea facturii din mesaj, **Acceptă** / **Respinge** și
+  potrivirea produselor după codul furnizorului.
+- Importul zip pe Odoo Online nu a fost încă verificat pe o instanță reală.
