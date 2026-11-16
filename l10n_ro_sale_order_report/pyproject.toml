@@ -1,3 +1,6 @@
 [build-system]
 requires = ["whool"]
 build-backend = "whool.buildapi"
+
+[tool.whool.depends_override]
+deltatech_sale_order_image = "odoo-addon-deltatech-sale-order-image @ git+https://github.com/dhongu/deltatech.git@19.0#subdirectory=deltatech_sale_order_image"
