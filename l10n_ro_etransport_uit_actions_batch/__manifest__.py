@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "e-Transport UIT Actions for Batches",
-    "version": "19.0.1.0.3",
+    "name": "eTransport UIT Actions - Batch",
+    "version": "19.0.1.0.1",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Delete, confirm or change the vehicle of a UIT issued for a transfer batch",
@@ -22,5 +22,4 @@
     "auto_install": True,
     "development_status": "Beta",
     "maintainers": ["dhongu"],
-    "images": ["static/description/main_screenshot.png"],
 }
