@@ -8,3 +8,6 @@ name = "odoo-addon-l10n-ro-sale-order-report"
 # dependențele Odoo vin din clona terrabit-ro/l10n-romania@20.0 din ADDONS_PATH (vezi
 # workflow-ul CI), nu din pachetele odoo-addon-* generate automat de whool
 dependencies = []
+
+[tool.whool.depends_override]
+deltatech_sale_order_image = "odoo-addon-deltatech-sale-order-image @ git+https://github.com/dhongu/deltatech.git@20.0#subdirectory=deltatech_sale_order_image"

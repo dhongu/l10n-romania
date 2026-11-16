@@ -9,9 +9,6 @@
                 <setting help="Display a counter of the lines on the sale order">
                     <field name="counter_on_sale_order" />
                 </setting>
-                <setting help="Include image on sale order">
-                    <field name="include_image_line" />
-                </setting>
              <setting help="Exclude product name from sale order line description">
                     <field name="exclude_product_name_from_description_offer" />
                 </setting>

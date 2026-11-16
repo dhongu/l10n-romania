@@ -77,9 +77,9 @@ jobs:
         # deci le luăm din fork-ul terrabit-ro/l10n-romania (branch 20.0)
         run: git clone --depth 1 https://github.com/terrabit-ro/l10n-romania.git -b 20.0 /tmp/l10n-romania-oca
       # Dependencies of our own suites: whool turns `depends` into `odoo-addon-<name>==20.0.*`,
-      # which pip cannot find on any index, so the module is installed first, from a pinned
+      # which pip cannot find on any index, so the modules are installed first, from a pinned
       # commit of dhongu/deltatech 20.0, and the requirement is already satisfied (update
-      # DELTATECH_CODE_SHA when deltatech_iap_online changes in a way these modules need).
+      # DELTATECH_CODE_SHA when these modules change in a way the tests need).
       - name: Install deltatech dependencies
         env:
           DELTATECH_CODE_SHA: 28d1fb18e5c6a7de641233303170a611b75385b0
@@ -88,8 +88,8 @@ jobs:
         run: |
           git init --quiet /tmp/deltatech-code
           git -C /tmp/deltatech-code fetch --quiet --depth 1 https://github.com/dhongu/deltatech.git "$DELTATECH_CODE_SHA"
-          git -C /tmp/deltatech-code checkout --quiet FETCH_HEAD -- deltatech_iap_online
-          pip install --no-deps /tmp/deltatech-code/deltatech_iap_online
+          git -C /tmp/deltatech-code checkout --quiet FETCH_HEAD -- deltatech_iap_online deltatech_sale_order_image
+          pip install --no-deps /tmp/deltatech-code/deltatech_iap_online /tmp/deltatech-code/deltatech_sale_order_image
       - name: Install addons and dependencies
         run: |
           export ADDONS_PATH="/opt/odoo/addons,$(pwd),/tmp/l10n-romania-oca"
