@@ -153,6 +153,7 @@ class L10nRoMessageSpv(models.Model):
         with_tax = total("TaxInclusiveAmount")
         return {
             "is_credit_note": is_credit_note,
+            "incoming": incoming,
             "number": _text(root, "./{*}ID"),
             "issue_date": show_date(_text(root, "./{*}IssueDate")),
             "due_date": show_date(_text(root, "./{*}DueDate") or _text(root, "./{*}PaymentMeans/{*}PaymentDueDate")),
