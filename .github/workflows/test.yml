@@ -82,7 +82,7 @@ jobs:
       # DELTATECH_CODE_SHA when deltatech_iap_online changes in a way these modules need).
       - name: Install deltatech dependencies
         env:
-          DELTATECH_CODE_SHA: 193058802bfa345d6e4d6ca3ced78be5541a25f4
+          DELTATECH_CODE_SHA: 28d1fb18e5c6a7de641233303170a611b75385b0
           WHOOL_POST_VERSION_STRATEGY_OVERRIDE: none
           SETUPTOOLS_ODOO_POST_VERSION_STRATEGY_OVERRIDE: none
         run: |
