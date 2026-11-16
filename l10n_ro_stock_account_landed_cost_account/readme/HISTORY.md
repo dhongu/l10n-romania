@@ -1,5 +1,11 @@
 # Changelog
 
+## 19.0.1.1.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 18.0.1.1.0
 
 - Added a **Landed Cost Class 6 Method** company selector (Accounting / Romania

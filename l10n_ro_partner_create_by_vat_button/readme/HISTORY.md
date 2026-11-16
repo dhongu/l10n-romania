@@ -1,3 +1,9 @@
+## 19.0.1.1.9 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.1.1.8 (2026-07-30)
 
 - Remove the dead `_fix_vat_number` override. That hook was removed from

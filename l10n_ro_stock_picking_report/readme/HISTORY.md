@@ -1,3 +1,9 @@
+## 19.0.1.3.7 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.1.3.6 (2026-09-22)
 
 - **Avizul: aceeași eroare de unitate ca NIR-ul, acum închisă.** Fixul din 19.0.1.3.4

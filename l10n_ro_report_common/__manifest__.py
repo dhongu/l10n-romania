@@ -4,7 +4,7 @@
     "name": "Romania - Report Common",
     "summary": "Common building blocks for Romanian printed reports:"
     " company bank accounts, company identification header and amounts in words",
-    "version": "19.0.1.1.0",
+    "version": "19.0.1.1.1",
     "category": "Localization",
     "author": "Terrabit, Dorin Hongu",
     "maintainers": ["dhongu"],

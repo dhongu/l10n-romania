@@ -1,3 +1,9 @@
+## 19.0.0.9.3 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.0.9.2 (2026-09-21)
 
 **Fix:** partenerul comercial de pe declarația de dropship rămâne cel ales de

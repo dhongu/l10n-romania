@@ -6,7 +6,7 @@
     "name": "MT940 CEC Format Bank Statements Import",
     "summary": "Romania - Import bank statements from CEC",
     "countries": ["ro"],
-    "version": "19.0.0.2.1",
+    "version": "19.0.0.2.2",
     "license": "AGPL-3",
     "author": "NextERP Romania SRL, Terrabit",
     "website": "https://www.terrabit.ro",

@@ -3,7 +3,7 @@
     "name": "Romania - Stock Accounting Check",
     "summary": "Check the stock valuation against the general ledger",
     "license": "AGPL-3",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",

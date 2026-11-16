@@ -4,7 +4,7 @@
 
 {
     "name": "Self-Billing Message SPV",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Number self-billed documents with the number allocated by the customer, taken from the SPV message",

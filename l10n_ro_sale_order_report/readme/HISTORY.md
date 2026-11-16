@@ -1,3 +1,9 @@
+## 19.0.1.0.12 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.1.0.11 (2026-08-25)
 
 - Keep combo-row colspan calculation compatible with older Odoo 19 builds

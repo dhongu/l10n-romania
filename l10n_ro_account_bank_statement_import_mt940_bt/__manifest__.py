@@ -9,7 +9,7 @@
     "summary": "Romania - Import bank statements from BT",
     "depends": ["l10n_ro_account_bank_statement_import_mt940_base"],
     "license": "AGPL-3",
-    "version": "19.0.0.2.0",
+    "version": "19.0.0.2.1",
     "author": "Terrabit, NextERP Romania, Forest and Biomass Romania",
     "website": "https://www.terrabit.ro",
     "installable": True,

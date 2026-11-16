@@ -3,7 +3,7 @@
     "name": "Romania - Stock Report (Fișă Magazie)",
     "summary": "Stock Report (Fișă Magazie)",
     "license": "AGPL-3",
-    "version": "19.0.2.0.0",
+    "version": "19.0.2.0.1",
     "countries": ["ro"],
     "author": "Terrabit, NextERP Romania",
     "website": "https://www.terrabit.ro",

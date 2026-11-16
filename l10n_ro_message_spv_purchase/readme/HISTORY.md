@@ -1,3 +1,9 @@
+## 19.0.0.0.8 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.0.0.7 (2026-08-24)
 
 - Fix (ticket #9315, regression from the #9287 fix in 19.0.0.0.4/0.0.5): once

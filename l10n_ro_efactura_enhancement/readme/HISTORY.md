@@ -1,3 +1,9 @@
+## 19.0.0.5.4 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.0.5.3 (2026-09-23)
 
 - **O firmă din România fără CUI nu mai pleacă în SPV.** `l10n_ro_edi` completează
