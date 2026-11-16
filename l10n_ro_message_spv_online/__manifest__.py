@@ -6,7 +6,7 @@
     "name": "Romania - SPV Messages for Odoo Online",
     "summary": "Register of the e-Factura (SPV) messages on Odoo Online too: sent, received, refused (no Python)",
     "license": "AGPL-3",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

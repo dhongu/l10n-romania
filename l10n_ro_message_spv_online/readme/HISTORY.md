@@ -1,3 +1,11 @@
+## 19.0.1.0.2 (2026-11-16)
+
+- Am pus înapoi `__init__.py` gol: uneltele OCA (manifestoo, oca-checks-odoo-module) nu
+  recunosc un modul fără el, așa că pica CI-ul suitelor care depind de acest modul.
+  Modulul tot nu are cod Python și se importă în continuare pe Odoo Online.
+- Marcaj Odoo Online explicit: `"online": true` în `static/description/banner.json`
+  (bannerul nu îl mai deduce din lipsa fișierelor `.py`).
+
 ## 19.0.1.0.1 (2026-11-14)
 
 - Cannot be installed together with `l10n_ro_message_spv`, the module with Python code that does the same
