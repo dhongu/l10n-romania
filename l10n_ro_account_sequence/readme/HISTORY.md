@@ -1,3 +1,9 @@
+## 20.0.1.0.7 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.0.6 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Cash Journal Numbering* (was *Romania - Cash Sequence*), with the same title on the Apps banner.

@@ -1,3 +1,9 @@
+## 20.0.0.0.6 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.0.0.5 (2026-11-03)
 
 - Migration to 20.0.

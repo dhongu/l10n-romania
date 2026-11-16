@@ -1,3 +1,9 @@
+## 20.0.0.0.12 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.0.0.11 (2026-10-22)
 
 - Listed on Odoo Apps as *SPV Messages to Purchase Orders* (was *Purchase Message SPV*). The technical name `l10n_ro_message_spv_purchase` does not change.

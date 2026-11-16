@@ -1,3 +1,9 @@
+## 20.0.1.0.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.0.0 (2026-11-10)
 
 - Split from `l10n_ro_stock_account_warehouse_journal`, which no longer depends on

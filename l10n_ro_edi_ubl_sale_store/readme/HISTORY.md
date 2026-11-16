@@ -1,3 +1,9 @@
+## 20.0.1.0.10 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.0.9 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - e-Factura for Store Sales* (was *Deltatech Sale from Store UBL*), with the same title on the Apps banner.

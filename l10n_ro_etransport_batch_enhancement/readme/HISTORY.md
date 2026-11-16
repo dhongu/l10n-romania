@@ -1,3 +1,9 @@
+## 20.0.0.4.3 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.0.4.2 (2026-10-29)
 
 - Migrare pe Odoo 20: trimiterea din lot vine acum din `l10n_ro_edi_stock`, deoarece

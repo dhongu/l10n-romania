@@ -1,3 +1,9 @@
+## 20.0.2.0.4 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.2.0.3 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Stock Picking Reports* (was *Romania - Terrabit - Picking Reports*). The technical name `l10n_ro_picking_report` does not change.

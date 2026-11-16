@@ -4,7 +4,7 @@
     "summary": "Post the stock journal entries of each warehouse in its own journal",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "20.0.1.1.0",
+    "version": "20.0.1.1.1",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",

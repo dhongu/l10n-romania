@@ -1,3 +1,9 @@
+## 20.0.1.0.2 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.0.1 (2026-10-13)
 
 - Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`, with the Odoo 20 badge.

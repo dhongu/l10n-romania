@@ -7,7 +7,7 @@
     "summary": "Rapoarte din batch: aviz",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "20.0.0.0.7",
+    "version": "20.0.0.0.8",
     "development_status": "Mature",
     "author": "Dan Stoica, Terrabit",
     "website": "https://www.terrabit.ro",

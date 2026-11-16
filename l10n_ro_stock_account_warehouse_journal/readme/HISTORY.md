@@ -1,3 +1,9 @@
+## 20.0.1.1.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.1.0 (2026-11-10)
 
 - The module depends on `stock_account` instead of `l10n_ro_stock_account`, so the stock

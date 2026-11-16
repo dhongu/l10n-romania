@@ -1,3 +1,9 @@
+## 20.0.1.1.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.1.0 (2026-11-16)
 
 - The product image on the sale order lines (the `include_image_line` company setting and its report columns) moved to the new `deltatech_sale_order_image` module, which this module now depends on. The setting keeps its name and value; nothing changes on the printed report.

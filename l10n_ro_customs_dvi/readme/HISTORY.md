@@ -1,3 +1,9 @@
+## 20.0.2.2.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.2.2.0 (2026-11-14)
 
 Forward-port of 19.0.2.1.4 – 19.0.2.2.0:

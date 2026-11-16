@@ -1,3 +1,9 @@
+## 20.0.1.5.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.5.0 (2026-11-04)
 
 - A VAT number of another EU country is answered from VIES, without IAP credits: name, street,

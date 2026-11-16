@@ -1,3 +1,9 @@
+## 20.0.1.1.2 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 20.0.1.1.1 (2026-10-22)
 
 - Odoo Apps banner title: *Stock Accounting Store* (was *Retail Store Stock Accounting*), the same as the module name.
