@@ -22,8 +22,17 @@ Romania - Partner Create by VAT Button
 
 |badge1| |badge2| |badge3|
 
-   - Adaugare buton in ecran pentru recitire date ANF
-   - 
+**No longer developed: use ``l10n_ro_partner_autocomplete``.** It fills
+a Romanian partner in from ANAF, for free, from the CUI typed in the
+name or the Tax ID, and has an **Update from ANAF** button on the
+partner. It does not depend on the OCA
+``l10n_ro_partner_create_by_vat``, which this module needs, and cannot
+be installed together with it. This module only receives fixes until the
+databases that use it have switched.
+
+Adds a button on the partner form to read the partner data again from
+ANAF (or VIES for a partner from another EU country), and fills a new
+partner in from the CUI typed in its name.
 
 **Table of contents**
 
@@ -32,6 +41,38 @@ Romania - Partner Create by VAT Button
 
 Changelog
 =========
+
+19.0.1.1.13 (2026-11-03)
+------------------------
+
+- The description says the module is no longer developed:
+  ``l10n_ro_partner_autocomplete`` replaces it. No functional change.
+
+19.0.1.1.12 (2026-10-23)
+------------------------
+
+- VIES lookup over HTTPS. The European Commission now answers 403
+  Forbidden on the ``http://`` address of the VIES WSDL, so *Get partner
+  data* from VIES failed with a server error. When the service cannot be
+  reached, the user now gets a message instead of a traceback.
+
+19.0.1.1.11 (2026-10-22)
+------------------------
+
+- Odoo Apps banner title: *Partner Create by VAT Button* (was *Partner
+  Data Refresh by VAT*), the same as the module name.
+
+19.0.1.1.10 (2026-10-09)
+------------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.1.1.9 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 19.0.1.1.8 (2026-07-30)
 -----------------------

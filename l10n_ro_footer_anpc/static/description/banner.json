@@ -1,0 +1,7 @@
+{
+  "title": "Subsol ANPC",
+  "online": true,
+  "summary": "Pictograma ANPC SAL în subsolul site-ului",
+  "lang": "ro",
+  "features": ["Pictograma SAL de 250 x 50 px", "Link către reclamatiisal.anpc.ro", "Merge și pe Odoo Online"]
+}

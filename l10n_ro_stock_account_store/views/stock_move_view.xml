@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_move_tree_store" model="ir.ui.view">
+        <field name="name">stock.move.list.store</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock_account.stock_move_view_list" />
+        <field name="arch" type="xml">
+            <field name="value" position="after">
+                <field name="company_currency_id" column_invisible="True" />
+                <field name="l10n_ro_store_sale_amount" sum="Total" optional="hide" />
+                <field name="l10n_ro_store_markup_amount" sum="Total" optional="hide" />
+                <field name="l10n_ro_store_tax_amount" sum="Total" optional="hide" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_move_form_store" model="ir.ui.view">
+        <field name="name">stock.move.form.store</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group
+                    string="Store Valuation"
+                    name="l10n_ro_store"
+                    invisible="not l10n_ro_store_account_move_id"
+                >
+                    <field name="company_currency_id" invisible="1" />
+                    <field name="l10n_ro_store_sale_amount" />
+                    <field name="l10n_ro_store_markup_amount" />
+                    <field name="l10n_ro_store_tax_amount" />
+                    <field name="l10n_ro_store_account_move_id" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -5,8 +5,10 @@
 {
     "name": "Romania - Partner Create by VAT Button",
     "summary": "Partner Create by VAT Button",
+    "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.1.1.9",
+    "maintainers": ["dhongu", "VoicuStefan2001", "danila12"],
+    "version": "19.0.1.1.14",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

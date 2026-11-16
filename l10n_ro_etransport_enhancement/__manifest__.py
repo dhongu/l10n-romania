@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "eTransport Enhancement",
-    "version": "19.0.0.9.3",
+    "name": "e-Transport Enhancements",
+    "version": "19.0.0.10.2",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport enhancement",
@@ -15,6 +15,7 @@
         "l10n_ro_edi_stock",
     ],
     "license": "LGPL-3",
+    "consultant_sheet": "full",
     "data": [
         "security/ir.model.access.csv",
         "data/template_etransport.xml",
@@ -23,7 +24,7 @@
     ],
     "images": ["static/description/main_screenshot.png"],
     "development_status": "Mature",
-    "maintainers": ["dhongu"],
+    "maintainers": ["dhongu", "danila12"],
     "extra_buy": True,
     "post_init_hook": "post_init_hook",
 }

@@ -1,0 +1,6 @@
+{
+  "title": "Partner Data from OpenAPI",
+  "summary": "Create partners by VAT number using your OpenAPI key",
+  "lang": "en",
+  "features": ["Type the VAT in the name field", "One click to fetch company data", "Fills in the empty fields for you"]
+}

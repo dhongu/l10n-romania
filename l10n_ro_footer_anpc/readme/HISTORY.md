@@ -1,6 +1,50 @@
-## 19.0.0.0.2 (2026-11-16)
+## 19.0.0.0.9 (2026-11-16)
 
 **Changed**
 
 - Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
 
+## 19.0.0.0.8 (2026-11-16)
+
+- Am pus înapoi `__init__.py` gol: uneltele OCA (manifestoo, oca-checks-odoo-module) nu
+  recunosc un modul fără el, așa că pica CI-ul suitelor care depind de acest modul.
+  Modulul tot nu are cod Python și se importă în continuare pe Odoo Online.
+- Marcaj Odoo Online explicit: `"online": true` în `static/description/banner.json`
+  (bannerul nu îl mai deduce din lipsa fișierelor `.py`).
+
+## 19.0.0.0.7 (2026-11-16)
+
+- Modulul nu mai conține cod Python (`__init__.py` și testul Python au fost scoase), deci
+  se instalează și pe Odoo Online, prin importul arhivei zip (*Aplicații → Importați Modulul*).
+- Descrierea menționează instalarea pe Odoo Online; bannerul Apps Store este în română,
+  cu eticheta „Odoo Online”.
+- Fișa consultant (`readme/FISA_CONSULTANT.md`) și `readme/USAGE.md`, cu capturile importului și
+  ale subsolului pe desktop și pe mobil.
+
+## 19.0.0.0.6 (2026-11-14)
+
+- Apps Store banner: the "Odoo Online" badge shows that the module has no Python code and installs on
+  Odoo Online.
+
+## 19.0.0.0.5 (2026-10-22)
+
+- Odoo Apps banner title: *ANPC footer* (was *ANPC Website Footer*), the same as the module name.
+
+## 19.0.0.0.4 (2026-10-20)
+
+- Order ANPC 270/2026 (Monitorul Oficial no. 420 of 19 May 2026): only the SAL
+  pictogram remains, linked to `https://reclamatiisal.anpc.ro/` and shown in a
+  250 x 50 px box with the official ANPC image. The SOL pictogram and the link to the
+  EU ODR platform, closed on 20 July 2025, are removed.
+- The ANPC block follows the copyright row (`col-md`, Bootstrap 5 `text-md-end`
+  instead of the Bootstrap 4 `text-sm-right`); the image gets `alt` text and a valid
+  `width`; the link gets `rel="noopener"`.
+- Test that the homepage rendered for a public visitor shows the SAL link.
+
+## 19.0.0.0.3 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
+## 19.0.0.0.2 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.

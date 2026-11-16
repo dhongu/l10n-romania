@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "eTransport Batch Enhancement",
-    "version": "19.0.0.3.2",
+    "name": "e-Transport for Transfer Batches",
+    "version": "19.0.0.4.2",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eTransport Batch Enhancement",
@@ -18,6 +18,7 @@
         "l10n_ro_stock_picking_batch_report",
     ],
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     # "price": 25.00,
     # "currency": "EUR",
     "data": [
@@ -25,6 +26,6 @@
     ],
     "images": ["static/description/main_screenshot.png"],
     "development_status": "Mature",
-    "maintainers": ["dhongu"],
+    "maintainers": ["dhongu", "danila12", "VoicuStefan2001"],
     "extra_buy": True,
 }

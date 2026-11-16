@@ -1,0 +1,10 @@
+{
+  "title": "Stock Accounting Fields",
+  "summary": "Keeps the Romanian stock accounting data, without the logic",
+  "lang": "en",
+  "features": [
+    "Stock accounts per location and company",
+    "Romanian stock move type kept",
+    "FIFO per location fields kept"
+  ]
+}

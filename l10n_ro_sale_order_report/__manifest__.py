@@ -3,9 +3,9 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "Terrabit Sale Order Report",
+    "name": "Romania - Proforma Invoice Report",
     "summary": "Formular Factura Proformae",
-    "version": "19.0.1.0.12",
+    "version": "19.0.1.1.1",
     "author": "Terrabit, Dorin Hongu, Dan Stoica",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
@@ -13,13 +13,16 @@
     "depends": [
         "sale",
         "l10n_ro_report_common",
+        "deltatech_sale_order_image",
         # "deltatech_sale_payment"  # pentru ce e ?
     ],
-    "license": "AGPL-3",
+    "license": "OPL-1",
+    "consultant_sheet": "simple",
+    "maintainers": ["dhongu", "VoicuStefan2001", "danila12"],
     "data": [
         "views/sale_order.xml",
         "views/res_config_view.xml",
     ],
-    "images": ["images/main_screenshot.png"],
-    "development_status": "Mature",
+    "images": ["static/description/main_screenshot.png"],
+    "development_status": "Production/Stable",
 }

@@ -1,0 +1,10 @@
+{
+  "title": "Stock Accounting Controls",
+  "summary": "Safeguards for stock moves and invoice posting",
+  "lang": "en",
+  "features": [
+    "Blocks zero cost on stock moves",
+    "Stockable invoices need an SO or PO",
+    "Restriction can be switched off"
+  ]
+}

@@ -22,12 +22,110 @@ Romania - ANPC footer
 
 |badge1| |badge2| |badge3|
 
-Poze si link-uri ANPC in footer
+Afișează în footer-ul site-ului, pe rândul de copyright, pictograma ANPC
+„Soluționarea alternativă a litigiilor” (SAL), cu link către platforma
+https://reclamatiisal.anpc.ro, conform Ordinului ANPC nr. 449/2022,
+modificat prin Ordinul ANPC nr. 270/2026 (Monitorul Oficial nr. 420 din
+19 mai 2026).
+
+Pictograma este cea publicată de ANPC pe https://www.anpc.ro/sal,
+afișată într-o casetă de 250 x 50 pixeli. Pictograma SOL (platforma
+europeană ODR) nu mai este afișată: platforma a fost închisă la 20 iulie
+2025 (Regulamentul (UE) 2024/3228), iar Ordinul ANPC nr. 270/2026 a
+eliminat-o din obligația de afișare.
+
+Modulul funcționează și pe **Odoo Online**: nu conține cod Python și
+depinde doar de modulul standard ``website``, așa că se instalează prin
+importul arhivei zip a modulului (*Aplicații → Importați Modulul*).
 
 **Table of contents**
 
 .. contents::
    :local:
+
+Usage
+=====
+
+Modulul nu are setări: după instalare, pictograma ANPC SAL apare în
+subsolul tuturor paginilor site-ului.
+
+1. Pe Odoo Online, în modul dezvoltator, deschideți **Aplicații →
+   Importați Modulul**, încărcați arhiva zip a modulului (versiunea care
+   corespunde bazei) și apăsați **Instalare**.
+
+   |Fereastra Importați Modulul: butonul Încarcă fișier pentru Fișier
+   modul (.zip), bifele Forțează inițializarea și Încărcare date
+   Demonstrative debifate și butonul Instalare|
+
+2. Deschideți site-ul fără autentificare: pe rândul de copyright, în
+   dreapta, apare pictograma **Soluționarea alternativă a litigiilor**,
+   cu link către ``https://reclamatiisal.anpc.ro/``.
+
+   |Subsolul site-ului pe desktop, cu pictograma ANPC SAL evidențiată în
+   dreapta rândului de copyright|
+
+3. Pe telefon, pictograma apare centrată, sub textul de copyright.
+
+   |Subsolul site-ului pe telefon, cu pictograma ANPC SAL centrată sub
+   textul de copyright|
+
+.. |Fereastra Importați Modulul: butonul Încarcă fișier pentru Fișier modul (.zip), bifele Forțează inițializarea și Încărcare date Demonstrative debifate și butonul Instalare| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_footer_anpc/static/description/01_import_modul.png
+.. |Subsolul site-ului pe desktop, cu pictograma ANPC SAL evidențiată în dreapta rândului de copyright| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_footer_anpc/static/description/02_subsol_desktop.png
+.. |Subsolul site-ului pe telefon, cu pictograma ANPC SAL centrată sub textul de copyright| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_footer_anpc/static/description/03_subsol_mobil.png
+
+Changelog
+=========
+
+19.0.0.0.7 (2026-11-16)
+-----------------------
+
+- Modulul nu mai conține cod Python (``__init__.py`` și testul Python au
+  fost scoase), deci se instalează și pe Odoo Online, prin importul
+  arhivei zip (*Aplicații → Importați Modulul*).
+- Descrierea menționează instalarea pe Odoo Online; bannerul Apps Store
+  este în română, cu eticheta „Odoo Online”.
+- Fișa consultant (``readme/FISA_CONSULTANT.md``) și
+  ``readme/USAGE.md``, cu capturile importului și ale subsolului pe
+  desktop și pe mobil.
+
+19.0.0.0.6 (2026-11-14)
+-----------------------
+
+- Apps Store banner: the "Odoo Online" badge shows that the module has
+  no Python code and installs on Odoo Online.
+
+19.0.0.0.5 (2026-10-22)
+-----------------------
+
+- Odoo Apps banner title: *ANPC footer* (was *ANPC Website Footer*), the
+  same as the module name.
+
+19.0.0.0.4 (2026-10-20)
+-----------------------
+
+- Order ANPC 270/2026 (Monitorul Oficial no. 420 of 19 May 2026): only
+  the SAL pictogram remains, linked to
+  ``https://reclamatiisal.anpc.ro/`` and shown in a 250 x 50 px box with
+  the official ANPC image. The SOL pictogram and the link to the EU ODR
+  platform, closed on 20 July 2025, are removed.
+- The ANPC block follows the copyright row (``col-md``, Bootstrap 5
+  ``text-md-end`` instead of the Bootstrap 4 ``text-sm-right``); the
+  image gets ``alt`` text and a valid ``width``; the link gets
+  ``rel="noopener"``.
+- Test that the homepage rendered for a public visitor shows the SAL
+  link.
+
+19.0.0.0.3 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.0.0.2 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 Bug Tracker
 ===========
@@ -59,13 +157,16 @@ technical issues.
 Maintainers
 -----------
 
+.. |maintainer-dhongu| image:: https://github.com/dhongu.png?size=40px
+    :target: https://github.com/dhongu
+    :alt: dhongu
 .. |maintainer-danila12| image:: https://github.com/danila12.png?size=40px
     :target: https://github.com/danila12
     :alt: danila12
 
-Current maintainer:
+Current maintainers:
 
-|maintainer-danila12| 
+|maintainer-dhongu| |maintainer-danila12| 
 
 This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_footer_anpc>`_ project on GitHub.
 

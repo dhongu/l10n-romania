@@ -1,0 +1,8 @@
+{
+  "title": "Stock Accounting Store",
+  "summary": "Stock kept at sale price for retail locations",
+  "lang": "en",
+  "features": ["Trade markup booked automatically", "Non-exigible VAT booked automatically", "Returns reversed in red"],
+  "icon": "bag",
+  "module_icon": false
+}

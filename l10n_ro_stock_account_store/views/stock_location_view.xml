@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_location_store_form" model="ir.ui.view">
+        <field name="name">stock.location.store.form</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="l10n_ro_stock_account.view_location_form_inherit" />
+        <field name="arch" type="xml">
+            <field name="l10n_ro_property_account_income_location_id" position="before">
+                <field name="l10n_ro_merchandise_type" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_location_tree_store" model="ir.ui.view">
+        <field name="name">stock.location.list.store</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_tree2" />
+        <field name="arch" type="xml">
+            <field name="usage" position="after">
+                <field name="l10n_ro_merchandise_type" optional="show" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_location_search_store" model="ir.ui.view">
+        <field name="name">stock.location.search.store</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_search" />
+        <field name="arch" type="xml">
+            <filter name="in_location" position="after">
+                <filter
+                    name="l10n_ro_store"
+                    string="Store (sale price)"
+                    domain="[('l10n_ro_merchandise_type', '=', 'store')]"
+                />
+            </filter>
+        </field>
+    </record>
+</odoo>

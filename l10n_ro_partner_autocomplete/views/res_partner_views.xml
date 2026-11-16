@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_partner_form_anaf_refresh" model="ir.ui.view">
+        <field name="name">res.partner.form.anaf.refresh</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="country_code" invisible="1" />
+                <!-- Next to the Tax ID: base_vat puts it in a row, with Intra-Community Valid after it -->
+                <span class="ps-1 text-nowrap" invisible="not is_company or parent_id or not vat">
+                    <button
+                        name="action_l10n_ro_anaf_refresh"
+                        type="object"
+                        title="Update from ANAF"
+                        aria-label="Update from ANAF"
+                        class="btn btn-link p-0"
+                        icon="fa-refresh"
+                        invisible="country_code != 'RO'"
+                    />
+                    <!-- The EU, and Northern Ireland (XI) for goods: a GB number is not in VIES -->
+                    <button
+                        name="action_l10n_ro_vies_refresh"
+                        type="object"
+                        title="Update from VIES"
+                        aria-label="Update from VIES"
+                        class="btn btn-link p-0"
+                        icon="fa-refresh"
+                        invisible="country_code not in ('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'GR', 'ES', 'FI', 'FR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'SE', 'SI', 'SK') and not (country_code == 'GB' and 'XI' in (vat or '').upper())"
+                    />
+                </span>
+            </xpath>
+            <!-- In the group, with its label: base_vat moves the Tax ID into a div of its own -->
+            <xpath expr="//field[@name='website']" position="before">
+                <field
+                    name="l10n_ro_vat_subjected"
+                    invisible="not is_company or parent_id or country_code != 'RO'"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

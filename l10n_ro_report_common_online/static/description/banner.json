@@ -1,0 +1,11 @@
+{
+  "title": "Report Common",
+  "summary": "Romanian report blocks, also on Odoo Online",
+  "lang": "en",
+  "online": true,
+  "features": [
+    "Company ID block with bank accounts",
+    "RON amounts in words in proper Romanian",
+    "No Python: importable on Odoo Online"
+  ]
+}

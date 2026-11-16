@@ -1,8 +1,32 @@
-## 19.0.1.1.9 (2026-11-16)
+## 19.0.1.1.14 (2026-11-16)
 
 **Changed**
 
 - Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
+## 19.0.1.1.13 (2026-11-03)
+
+- The description says the module is no longer developed: `l10n_ro_partner_autocomplete`
+  replaces it. No functional change.
+
+## 19.0.1.1.12 (2026-10-23)
+
+- VIES lookup over HTTPS. The European Commission now answers 403 Forbidden on the
+  `http://` address of the VIES WSDL, so *Get partner data* from VIES failed with a server
+  error. When the service cannot be reached, the user now gets a message instead of a
+  traceback.
+
+## 19.0.1.1.11 (2026-10-22)
+
+- Odoo Apps banner title: *Partner Create by VAT Button* (was *Partner Data Refresh by VAT*), the same as the module name.
+
+## 19.0.1.1.10 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
+## 19.0.1.1.9 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
 
 ## 19.0.1.1.8 (2026-07-30)
 

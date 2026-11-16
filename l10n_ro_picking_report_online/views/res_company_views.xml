@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- The options of the stock documents, next to the ones of the invoice (l10n_ro_invoice_report_online) -->
+    <record id="view_company_form" model="ir.ui.view">
+        <field name="name">res.company.form.l10n_ro_picking_report_online</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="l10n_ro_invoice_report_online.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='l10n_ro_invoice_report_online']/group" position="inside">
+                <group string="Stock documents">
+                    <field name="x_l10n_ro_hide_taxes_on_reception" />
+                    <field name="x_l10n_ro_hide_banks_on_pickings" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

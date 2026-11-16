@@ -1,6 +1,6 @@
-====================
-eFactura Enhancement
-====================
+======================
+e-Factura Enhancements
+======================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -231,6 +231,158 @@ Alte îmbunătățiri planificate
 Changelog
 =========
 
+19.0.0.5.12 (2026-11-03)
+------------------------
+
+- **No longer depends directly on the OCA module ``l10n_ro_config``.**
+  The only field used from it, ``res.partner.bank.l10n_ro_print_report``
+  (bank accounts written in the e-Factura XML when
+  ``efactura.get_all_banks`` is enabled), is now taken from
+  ``l10n_ro_report_common``, which defines it with the same name and
+  column, so existing data is kept. No functional change; requires a
+  module update.
+
+19.0.0.5.11 (2026-10-30)
+------------------------
+
+- **Limita de 3 reîncercări la trimiterea automată în SPV are efect.**
+  Pe Odoo 19+ o încărcare eșuată nu mai lasă niciun document e-Factura,
+  deci limita nu avea ce număra și factura era retrimisă la fiecare
+  rulare.
+
+  - Cron-ul numără acum eșecurile pe factură (câmpul „Trimiteri SPV
+    eșuate (cron)”); după 3 eșecuri factura apare la „Sărite —
+    reîncercări epuizate” în raport.
+  - Facturile netrimise încă au prioritate în lot față de cele care au
+    mai eșuat.
+  - Readucerea facturii în ciornă resetează contorul.
+
+- **Cron-ul de trimitere se reia la 5 minute doar dacă a avansat.** Se
+  reia când au rămas facturi peste lot și cel puțin una a ajuns în SPV
+  la rularea curentă; dacă toate trimiterile eșuează (ANAF indisponibil,
+  token expirat), se așteaptă rularea următoare.
+- Necesită actualizarea modulului (câmp nou pe factură).
+
+19.0.0.5.10 (2026-10-30)
+------------------------
+
+- **Cron-ul de fetch status nu se mai reia la nesfârșit.**
+  ``_cron_l10n_ro_edi_fetch_status`` se reprograma la +2 minute oricând
+  exista o factură ``invoice_sent`` în ultimele 30 de zile, chiar dacă
+  ANAF nu răspundea și nu se schimba nimic. Acum se reia doar dacă lotul
+  a fost plin (``limit``) **și** cel puțin o factură a ieșit din
+  ``invoice_sent``; altfel așteaptă intervalul normal al cron-ului.
+  Pauza de 2 minute (``_trigger(at)``) rămâne, pentru ANAF.
+
+  - Apelul intern din ``_cron_l10n_ro_edi_auto_send`` urmează aceeași
+    regulă.
+
+19.0.0.5.9 (2026-10-27)
+-----------------------
+
+- **Furnizorul nu se mai dublează la importul e-Factura când CUI-ul
+  diferă doar prin prefixul RO.** Dacă partenerul are CUI-ul salvat cu
+  ``RO`` și factura vine fără (sau invers), importul XML (inclusiv din
+  SPV) folosește partenerul existent în loc să creeze unul nou.
+
+  - Se compară doar CUI-uri românești valide (cifră de control corectă),
+    indiferent de majuscule și spații; CUI-urile diferite sau invalide
+    rămân distincte.
+  - Partenerii, facturile și reconcilierile existente nu se modifică.
+
+19.0.0.5.8 (2026-10-23)
+-----------------------
+
+- **Buton „Resetează trimiterea SPV” pentru facturile rămase fără
+  index.** Când SPV nu returnează indexul la trimitere, factura rămâne
+  în „așteaptă răspunsul de la SPV” și nu poate fi retrimisă. Standardul
+  o deblochează abia după 3 zile, la sincronizare.
+
+  - Butonul apare doar în această stare, pentru utilizatorii cu drept de
+    facturare.
+  - Cere confirmare, apoi sincronizează întâi cu ANAF. Dacă factura e
+    găsită în SPV, i se completează starea și nu se resetează nimic,
+    deci nu apare un dublet.
+  - Altfel, trimiterea e marcată ca eșuată, cu nota în chatter, iar
+    factura se retrimite din „Trimite” sau din „Retrimite în SPV”.
+  - Necesită actualizarea modulului (buton nou în formularul facturii).
+
+19.0.0.5.7 (2026-10-22)
+-----------------------
+
+- Listed on Odoo Apps as *e-Factura Enhancements* (was *eFactura
+  Enhancement*). The technical name ``l10n_ro_efactura_enhancement``
+  does not change.
+
+19.0.0.5.6 (2026-10-17)
+-----------------------
+
+- **Stornourile pleacă în SPV cu referința facturii corectate.** Nota de
+  credit trimisă în e-Factura nu conținea ``cac:BillingReference``
+  (BT-25 / BT-26): în 19.0 standardul lasă nodul gol pentru CIUS-RO.
+  Cumpărătorul nu putea lega stornoul de factura inițială, iar art. 319
+  alin. (20) lit. r) din Codul fiscal cere numărul și data facturii
+  corectate.
+
+  - Numărul și data se iau din factura stornată (``reversed_entry_id``).
+  - Stornourile create fără legătură cu o factură și facturile obișnuite
+    nu se schimbă.
+  - Doar cod Python, nu necesită actualizarea modulului.
+  - Fixes dhongu/l10n-romania#637 (EFACTURA-001).
+
+19.0.0.5.5 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``. Removed the obsolete root
+  ``description/`` folder with the old generic banner.
+
+19.0.0.5.4 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
+
+19.0.0.5.3 (2026-09-23)
+-----------------------
+
+- **O firmă din România fără CUI nu mai pleacă în SPV.** ``l10n_ro_edi``
+  completează CUI-ul lipsă al clientului cu ``0000000000000``. Valoarea
+  e corectă pentru persoane fizice fără CNP, dar nucleul o pune și pe
+  firme: verifică doar CUI-ul furnizorului, nu și pe al clientului. O
+  factură către o firmă cu CUI-ul necompletat ajungea astfel la ANAF
+  fără cumpărător identificat.
+
+  - Blocajul se aplică clienților marcați ca firmă (``is_company``), cu
+    țara România, fără CUI sau cu CUI ``0000000000000``.
+  - Verificarea apare la generarea XML-ului (avertisment în „Trimite și
+    tipărește") și încă o dată chiar înainte de transmiterea în SPV,
+    pentru XML-urile generate mai devreme. Motivul se scrie în
+    chatter-ul facturii.
+  - Persoanele fizice și clienții din alte țări nu sunt afectați.
+  - Doar cod Python, nu necesită actualizarea modulului; traducerea în
+    română a mesajului se încarcă la actualizare.
+
+- Explicația opțiunii „Nu importa automat facturile primite din SPV" nu
+  apărea în română: în ``ro.po`` textul avea altă ghilimea decât în cod,
+  iar Odoo sărea tăcut traducerea.
+
+19.0.0.5.2 (2026-09-23)
+-----------------------
+
+- **Facturile din POS pleacă din nou în e-Factura cu tipul 751.** Pe
+  18.0 modulul schimba ``InvoiceTypeCode`` din 380 în 751 pentru orice
+  factură legată de o comandă POS (vânzare deja înregistrată pe bonul
+  fiscal). Regula s-a pierdut la rescrierea modulului pe 19.0, iar de la
+  migrare facturile din POS au plecat cu 380: ANAF număra vânzarea și
+  TVA-ul de două ori (casa de marcat + factura). Semnalat pe o instanță
+  de client, confirmat și la un al doilea client (751 până în mai 2026,
+  380 după trecerea pe 19).
+
+  - Stornourile (381) și autofacturarea (389) rămân neschimbate.
+  - XML-urile deja trimise nu se modifică.
+  - Doar cod Python, nu necesită actualizarea modulului.
+
 19.0.0.4.4 (2026-09-10)
 -----------------------
 
@@ -238,10 +390,9 @@ Changelog
   caractere.** Modulul ``deltatech_account_edi_ubl_advice`` (când e
   instalat) concatenează în ``cac:DespatchDocumentReference/cbc:ID``
   numele tuturor livrărilor (pickingurilor) facturate, fără nicio limită
-  de lungime. Pe comenzi cu multe livrări parțiale acumulate în timp
-  (tichet 9429), lista depășea cele 200 de caractere admise de ANAF
-  pentru BT-16, iar factura era respinsă la transmitere cu
-  **BR-RO-L200**.
+  de lungime. Pe comenzi cu multe livrări parțiale acumulate în timp,
+  lista depășea cele 200 de caractere admise de ANAF pentru BT-16, iar
+  factura era respinsă la transmitere cu **BR-RO-L200**.
 
   - Suprascriem ``_get_invoice_node`` (nu
     ``_add_invoice_header_nodes``), ca fix-ul să nu depindă de ordinea
@@ -258,13 +409,12 @@ Changelog
 -----------------------
 
 - **Limita reală pentru Avizul de plată (BT-83) e 140 de caractere, nu
-  200.** Tichet #9441. Trunchierea livrată la #9369 tăia
-  ``cbc:PaymentID`` / ``cbc:InstructionID`` la 200 de caractere, dar
-  limita impusă de CIUS-RO pentru BT-83 este 140, verificată de
-  schematronul ANAF prin regula **BR-RO-L140**. Cifra 200 fusese
-  preluată din corespondența tichetului #9369, nu din răspunsul ANAF —
-  facturile lungi rămâneau respinse și după trunchiere (11 refuzuri
-  BR-RO-L140 între 01.09 și 09.09.2026).
+  200.** Trunchierea livrată anterior tăia ``cbc:PaymentID`` /
+  ``cbc:InstructionID`` la 200 de caractere, dar limita impusă de
+  CIUS-RO pentru BT-83 este 140, verificată de schematronul ANAF prin
+  regula **BR-RO-L140**. Cifra 200 fusese preluată din corespondența
+  unui client, nu din răspunsul ANAF — facturile lungi rămâneau respinse
+  și după trunchiere (11 refuzuri BR-RO-L140 între 01.09 și 09.09.2026).
 
   - Testele ancorează acum limita în regula de schematron și reproduc
     referința reală respinsă (43 de comenzi pe PTCDRO20689).

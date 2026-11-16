@@ -3,5 +3,6 @@
 # See README.rst file on addons root folder for license details
 
 
+from . import stock_picking
 from . import stock_picking_batch
 from . import etransport_document

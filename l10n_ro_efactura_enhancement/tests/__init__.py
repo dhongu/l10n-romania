@@ -6,3 +6,10 @@ from . import test_spv_request
 from . import test_cius_ro_length_limits
 from . import test_monetary_total_payable
 from . import test_customer_company_vat
+from . import test_cius_ro_vat_compare
+from . import test_billing_reference
+from . import test_spv_reset_not_indexed
+from . import test_cron_fetch_status_retrigger
+from . import test_screenshots
+from . import test_cron_auto_send_retries
+from . import test_payment_means_all_banks

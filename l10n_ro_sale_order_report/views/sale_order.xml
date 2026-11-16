@@ -53,9 +53,6 @@
             <t t-if="res_company.counter_on_sale_order">
                 <th name="th_number" class="text-start">No.</th>
             </t>
-             <t t-if="res_company.include_image_line">
-                <th />
-             </t>
         </xpath>
         <!-- Numbering counts only real product lines: line_index also counts notes,
              sections and non-rendered lines, which would leave gaps in the sequence.
@@ -65,21 +62,11 @@
         <xpath expr="//t[@t-foreach='lines_to_report']" position="before">
             <t t-set="product_line_number" t-value="0" />
         </xpath>
-        <td name="td_product_name" position="before">
+        <td name="td_image" position="before">
              <t t-if="res_company.counter_on_sale_order">
                 <t t-set="product_line_number" t-value="product_line_number + 1" />
                 <td name="td_number">
                     <span t-esc="product_line_number" />
-                </td>
-             </t>
-             <t t-if="res_company.include_image_line">
-                <td name="td_image">
-                     <img
-                        t-if="line.product_id.image_256"
-                        t-attf-src="#{image_data_uri(line.product_id.image_256)}"
-                        alt="Image"
-                        style="max-width:50px;"
-                    />
                 </td>
              </t>
         </td>
@@ -177,9 +164,6 @@
             <t t-if="res_company.counter_on_sale_order">
                 <t t-set="section_name_colspan" t-value="section_name_colspan + 1" />
             </t>
-            <t t-if="res_company.include_image_line">
-                <t t-set="section_name_colspan" t-value="section_name_colspan + 1" />
-            </t>
             <t t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)">
                 <t t-set="section_name_colspan" t-value="section_name_colspan + 1" />
             </t>
@@ -209,9 +193,6 @@
             <t t-if="res_company.counter_on_sale_order">
                 <t t-set="combo_name_colspan" t-value="combo_name_colspan + 1" />
             </t>
-            <t t-if="res_company.include_image_line">
-                <t t-set="combo_name_colspan" t-value="combo_name_colspan + 1" />
-            </t>
             <t t-if="res_company.show_lead_time and any(line.customer_lead for line in doc.order_line)">
                 <t t-set="combo_name_colspan" t-value="combo_name_colspan + 1" />
             </t>
@@ -228,9 +209,6 @@
 
         <xpath expr="//td[@name='td_section_group_name']" position="before">
             <t t-if="res_company.counter_on_sale_order">
-                <td />
-            </t>
-            <t t-if="res_company.include_image_line">
                 <td />
             </t>
         </xpath>

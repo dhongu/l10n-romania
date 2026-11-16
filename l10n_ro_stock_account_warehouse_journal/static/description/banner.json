@@ -1,0 +1,10 @@
+{
+  "title": "Stock Journal per Warehouse",
+  "summary": "Post the stock entries of each warehouse in its own journal",
+  "lang": "en",
+  "features": [
+    "Stock Journal field on the warehouse",
+    "Works on the native stock valuation",
+    "Blocks mixed-journal transfers"
+  ]
+}

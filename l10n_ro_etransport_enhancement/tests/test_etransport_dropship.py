@@ -71,6 +71,7 @@ class TestEtransportDropship(TransactionCase):
                 "type": "consu",
                 "weight": 2,
                 "standard_price": 0,
+                "hs_code": "84713000",
             }
         )
         cls.sale = cls.env["sale.order"].create(

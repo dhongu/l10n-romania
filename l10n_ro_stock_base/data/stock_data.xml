@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <function model="res.company" name="l10n_ro_create_missing_stock_locations" />
+</odoo>

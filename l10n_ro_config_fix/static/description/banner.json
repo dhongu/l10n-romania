@@ -1,0 +1,10 @@
+{
+  "title": "Romanian Settings Visibility Fix",
+  "summary": "Keeps l10n_ro settings visible for Romanian companies",
+  "lang": "en",
+  "features": [
+    "Shows l10n_ro settings by fiscal country",
+    "Fixes settings hidden without the RO chart",
+    "Auto-installs, no OCA code changed"
+  ]
+}

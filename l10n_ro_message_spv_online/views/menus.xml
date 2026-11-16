@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem
+        id="menu_spv_messages"
+        name="SPV Messages"
+        parent="account.menu_finance"
+        action="action_spv_messages"
+        sequence="5"
+        groups="account.group_account_invoice,account.group_account_readonly"
+    />
+</odoo>

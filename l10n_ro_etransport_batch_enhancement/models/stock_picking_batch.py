@@ -24,6 +24,13 @@ class StockPickingBatch(models.Model):
     )
     total_net_weight = fields.Float()
     total_gross_weight = fields.Float()
+    # vezi câmpul omonim de pe transfer (`l10n_ro_etransport_enhancement`)
+    l10n_ro_etransport_post_outage = fields.Boolean(
+        string="Post-outage Declaration",
+        copy=False,
+        help="Check it only when the notification is submitted after an outage of the RO e-Transport system "
+        "(GEO 41/2022 art. 8 par. 1^3).",
+    )
     l10n_ro_shipping_weight_lines_warning = fields.Char(compute="_compute_l10n_ro_shipping_weight_lines_warning")
     # documentele declarate direct pe lot (un camion = un CMR)
     l10n_ro_etransport_document_ids = fields.One2many(
@@ -113,40 +120,10 @@ class StockPickingBatch(models.Model):
             )
         return res
 
-    @api.model
-    def _l10n_ro_edi_stock_get_template_data(self, data: dict):
-        res = super()._l10n_ro_edi_stock_get_template_data(data)
-        for key in ("locStartTraseuRutier", "locFinalTraseuRutier"):
-            locatie = res["data"]["notificare"][key].get("locatie", {})
-            if locatie and not locatie["alteInfo"]:
-                locatie["alteInfo"] = "-"
-        transport_partner = data["transport_partner_id"]
-        if transport_partner.country_code == "GR":
-            res["data"]["notificare"]["dateTransport"]["codTaraOrgTransport"] = "EL"
-        if res["data"]["notificare"]["partenerComercial"]["codTara"] == "GR":
-            res["data"]["notificare"]["partenerComercial"]["codTara"] = "EL"
-
-        # Documentele însoțitoare pentru declarația pe LOT: cele ale lotului
-        # (ex. un CMR pentru tot camionul) + cele ale transferurilor din el
-        # (avizele). Override-ul din `l10n_ro_etransport_enhancement` e pe
-        # `stock.picking`, deci nu se aplică aici — `self` e un lot.
-        native_doc = res["data"]["notificare"].get("documenteTransport")
-        docs = self.l10n_ro_etransport_all_document_ids if self else self.browse()
-        if docs:
-            res["data"]["notificare"]["documenteTransport"] = [
-                {
-                    "tipDocument": doc.document_type,
-                    "dataDocument": doc.date,
-                    "numarDocument": doc.name,
-                    # `Str200` cu minLength=1: atributul gol e respins de XSD-ul
-                    # ANAF, deci fără observație nu trimitem deloc atributul.
-                    "observatii": (doc.remarks or "").strip() or False,
-                }
-                for doc in docs
-            ]
-        elif isinstance(native_doc, dict):
-            res["data"]["notificare"]["documenteTransport"] = [native_doc]
-        return res
+    def _l10n_ro_etransport_declared_documents(self):
+        """Pe lot se declară documentele lotului (ex. un CMR pentru tot camionul)
+        plus cele ale transferurilor din el (avizele)."""
+        return self.l10n_ro_etransport_all_document_ids
 
     def action_l10n_ro_edi_stock_fetch_status(self):
         res = super().action_l10n_ro_edi_stock_fetch_status()
@@ -155,18 +132,6 @@ class StockPickingBatch(models.Model):
                 picking.carrier_tracking_ref = picking.l10n_ro_edi_stock_document_uit
 
         return res
-
-    @api.model
-    def _l10n_ro_edi_stock_validate_data(self, data: dict):
-        if self:
-            data["transport_partner_id"] = self.l10n_ro_transport_partner_id or data["transport_partner_id"]
-        errors = super()._l10n_ro_edi_stock_validate_data(data)
-
-        for error in errors:
-            if error == self.env._("The delivery carrier partner has to be located in Romania."):
-                errors.remove(error)
-
-        return errors
 
     def l10n_ro_compute_weight_lines(self):
         self.picking_ids.l10n_ro_compute_weight_lines()

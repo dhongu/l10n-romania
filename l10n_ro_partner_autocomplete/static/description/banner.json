@@ -1,0 +1,12 @@
+{
+  "title": "Partner Autocomplete from ANAF and VIES",
+  "summary": "Romanian and EU companies filled in for free, without IAP credits",
+  "icon": "people",
+  "edition": "community",
+  "lang": "en",
+  "features": [
+    "Romanian CUI filled in from ANAF",
+    "EU VAT number filled in from VIES",
+    "Update buttons with chatter log"
+  ]
+}

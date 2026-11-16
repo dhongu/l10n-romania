@@ -1,0 +1,27 @@
+# Copyright (C) 2022 NextERP Romania
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+{
+    "name": "Romania - Stock Accounting Store",
+    "version": "19.0.1.1.1",
+    "category": "Localization",
+    "countries": ["ro"],
+    "summary": "Romania - Stock Accounting Store",
+    "author": "Dorin Hongu, Terrabit",
+    "website": "https://www.terrabit.ro",
+    "depends": ["l10n_ro_stock_account"],
+    "images": ["static/description/main_screenshot.png"],
+    "license": "AGPL-3",
+    "data": [
+        "security/ir.model.access.csv",
+        "security/security.xml",
+        "data/ir_sequence.xml",
+        "views/product_category_view.xml",
+        "views/stock_location_view.xml",
+        "views/stock_move_view.xml",
+        "views/store_revaluation_view.xml",
+    ],
+    "installable": True,
+    "auto_install": False,
+    "development_status": "Mature",
+    "maintainers": ["dhongu"],
+}

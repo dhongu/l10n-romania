@@ -1,0 +1,10 @@
+{
+  "title": "e-Transport Enhancements",
+  "summary": "More robust e-Transport sending from transfers",
+  "lang": "en",
+  "features": [
+    "Configurable ANAF API timeout",
+    "Network errors handled, no duplicate UIT",
+    "Border crossing to customs office route"
+  ]
+}

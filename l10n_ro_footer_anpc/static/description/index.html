@@ -5,7 +5,7 @@
     <span class="d-inline-block rounded-4 p-2 flex-shrink-0 my-2" style="background-color:#ffffff;margin-right:24px;"><img src="icon.png" alt="Romania - ANPC footer" style="width:80px;height:80px;border:none;"/></span>
     <div class="flex-grow-1 my-2" style="width:320px;min-width:0;margin-right:24px;">
       <h1 class="fw-bold mb-2" style="color:#ffffff;font-size:36px;line-height:1.1;letter-spacing:-0.5px;border:none;">Romania - ANPC footer</h1>
-      <p class="mb-3" style="font-size:18px;color:#cdeccf;line-height:1.45;">Displays ANPC logos and links in website footer</p>
+      <p class="mb-3" style="font-size:18px;color:#cdeccf;line-height:1.45;">Displays the ANPC SAL pictogram in the website footer</p>
       <div>
         <span class="d-inline-block rounded-pill fw-bold me-2 mb-2" style="background-color:#ffffff;border:1px solid #ffffff;color:#006F42;padding:6px 14px;font-size:12px;">Odoo 19.0</span>
         <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px solid #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;">Localization</span>
@@ -32,23 +32,44 @@
        style="padding:10px 22px;">Overview</a>
   </li>
   <li class="nav-item mx-1 mb-2">
-    <a class="nav-link fw-semibold rounded-pill border" id="tb-tab-versions"
-       data-bs-toggle="pill" data-bs-target="#tb-panel-versions" href="#tb-panel-versions"
-       style="padding:10px 22px;">Versions</a>
+    <a class="nav-link fw-semibold rounded-pill border" id="tb-tab-usage"
+       data-bs-toggle="pill" data-bs-target="#tb-panel-usage" href="#tb-panel-usage"
+       style="padding:10px 22px;">Usage</a>
   </li>
 </ul>
 <div class="tab-content">
 <div class="tab-pane fade show active py-2" id="tb-panel-overview" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Overview</h2>
-<p class="mb-4" style="font-size:16px;line-height:1.65;max-width:780px;">Poze si link-uri ANPC in footer</p>
+<p class="mb-4" style="font-size:16px;line-height:1.65;max-width:780px;">Afi&#537;eaz&#259; &#238;n footer-ul site-ului, pe r&#226;ndul de copyright, pictograma ANPC
+&#8222;Solu&#539;ionarea alternativ&#259; a litigiilor&#8221; (SAL), cu link c&#259;tre platforma
+https://reclamatiisal.anpc.ro, conform Ordinului ANPC nr. 449/2022, modificat prin
+Ordinul ANPC nr. 270/2026 (Monitorul Oficial nr. 420 din 19 mai 2026).</p>
+<p>Pictograma este cea publicat&#259; de ANPC pe https://www.anpc.ro/sal, afi&#537;at&#259; &#238;ntr-o caset&#259;
+de 250 x 50 pixeli. Pictograma SOL (platforma european&#259; ODR) nu mai este afi&#537;at&#259;:
+platforma a fost &#238;nchis&#259; la 20 iulie 2025 (Regulamentul (UE) 2024/3228), iar Ordinul
+ANPC nr. 270/2026 a eliminat-o din obliga&#539;ia de afi&#537;are.</p>
+<p>Modulul func&#539;ioneaz&#259; &#537;i pe <strong>Odoo Online</strong>: nu con&#539;ine cod Python &#537;i depinde doar de
+modulul standard <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">website</code>, a&#537;a c&#259; se instaleaz&#259; prin importul arhivei zip a modulului
+(<em>Aplica&#539;ii &#8594; Importa&#539;i Modulul</em>).</p>
 </div>
-<div class="tab-pane fade py-2" id="tb-panel-versions" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
-<h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Versions</h2>
-<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.0.0.2 (2026-11-16)</h2>
-<p><strong>Changed</strong></p>
-<ul>
-<li>Apps Store page (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">static/description/index.html</code>) regenerated with the Terrabit template.</li>
-</ul>
+<div class="tab-pane fade py-2" id="tb-panel-usage" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
+<h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Usage</h2>
+<p>Modulul nu are set&#259;ri: dup&#259; instalare, pictograma ANPC SAL apare &#238;n subsolul tuturor paginilor
+site-ului.</p>
+<ol>
+<li>Pe Odoo Online, &#238;n modul dezvoltator, deschide&#539;i <strong>Aplica&#539;ii &#8594; Importa&#539;i Modulul</strong>, &#238;nc&#259;rca&#539;i
+   arhiva zip a modulului (versiunea care corespunde bazei) &#537;i ap&#259;sa&#539;i <strong>Instalare</strong>.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Fereastra Importa&#539;i Modulul: butonul &#206;ncarc&#259; fi&#537;ier pentru Fi&#537;ier modul (.zip), bifele For&#539;eaz&#259; ini&#539;ializarea &#537;i &#206;nc&#259;rcare date Demonstrative debifate &#537;i butonul Instalare" src="01_import_modul.png" /></p>
+<ol start="2">
+<li>Deschide&#539;i site-ul f&#259;r&#259; autentificare: pe r&#226;ndul de copyright, &#238;n dreapta, apare pictograma
+   <strong>Solu&#539;ionarea alternativ&#259; a litigiilor</strong>, cu link c&#259;tre <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">https://reclamatiisal.anpc.ro/</code>.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Subsolul site-ului pe desktop, cu pictograma ANPC SAL eviden&#539;iat&#259; &#238;n dreapta r&#226;ndului de copyright" src="02_subsol_desktop.png" /></p>
+<ol start="3">
+<li>Pe telefon, pictograma apare centrat&#259;, sub textul de copyright.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Subsolul site-ului pe telefon, cu pictograma ANPC SAL centrat&#259; sub textul de copyright" src="03_subsol_mobil.png" /></p>
 </div>
 </div>
 
@@ -116,12 +137,12 @@
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">MC</span>
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">CB</span>
               <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_bank_statement_import_mt940_cec/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">MT940 CEC Format Bank Statements Import</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">CEC Bank MT940 Statement Import</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
@@ -136,12 +157,12 @@
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">MR</span>
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RM</span>
               <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_bank_statement_import_mt940_revolut/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">MT940 Revolut Format Bank Statements Import</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Revolut MT940 Statement Import</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
@@ -150,22 +171,22 @@
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_report" target="_blank" rel="noopener"
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_move_document_type" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
                     style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
-              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_report/icon.png" alt="" loading="lazy"
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_move_document_type/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Account Reports</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Accounting Document Type</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Account Reports</p>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Supporting document type on journal entries: invoice, DVI, receipt, bank statement, journal entry</p>
         </div>
       </a>
     </div>
@@ -181,7 +202,7 @@
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Sequence</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Journal Numbering</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
@@ -190,62 +211,62 @@
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_storno" target="_blank" rel="noopener"
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_partner_lookup" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RS</span>
-              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_storno/icon.png" alt="" loading="lazy"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_lookup/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Storno Enhancements</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF Partner Lookup</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Storno Enhancements</p>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Look a Romanian company up at ANAF by its CUI and get the partner data, without other localization modules</p>
         </div>
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_cash_register" target="_blank" rel="noopener"
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_partner_online" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RC</span>
-              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_cash_register/icon.png" alt="" loading="lazy"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_online/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Register</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF Partner Data for Odoo Online</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Cash Register</p>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Fill in Romanian partners from ANAF by their CUI, on Odoo Online too (no Python, service by Terrabit)</p>
         </div>
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_config_fix" target="_blank" rel="noopener"
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_token_online" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RL</span>
-              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_config_fix/icon.png" alt="" loading="lazy"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_token_online/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Localization Config Fix</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF SPV Token for Odoo Online</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Fixes l10n_ro_config hiding unrelated l10n_ro_* fields on non-&#x27;ro&#x27; chart templates</p>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">e-Factura SPV token through Terrabit, renewed for you, on Odoo Online too (no Python)</p>
         </div>
       </a>
     </div>

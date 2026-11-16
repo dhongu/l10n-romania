@@ -11,3 +11,5 @@ from . import test_etransport_dropship
 from . import test_etransport_secondary_uom
 from . import test_etransport_unece_code
 from . import test_etransport_translations
+from . import test_etransport_declaration
+from . import test_screenshots

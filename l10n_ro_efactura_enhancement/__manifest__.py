@@ -3,8 +3,8 @@
 # See README.rst file on addons root folder for license details
 
 {
-    "name": "eFactura Enhancement",
-    "version": "19.0.0.5.4",
+    "name": "e-Factura Enhancements",
+    "version": "19.0.0.5.13",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eFactura Enhancement",
@@ -12,7 +12,7 @@
     "category": "Localization",
     "depends": [
         "l10n_ro_edi",
-        "l10n_ro_config",
+        "l10n_ro_report_common",
         "spreadsheet_dashboard",
         "l10n_ro_message_spv",
         "account_edi_ubl_cii",
@@ -20,6 +20,7 @@
         # "l10n_ro_efactura",
     ],
     "license": "AGPL-3",
+    "consultant_sheet": "full",
     # "price": 25.00,
     # "currency": "EUR",
     "data": [
@@ -39,6 +40,6 @@
     ],
     "images": ["static/description/main_screenshot.png"],
     "development_status": "Production/Stable",
-    "maintainers": ["dhongu"],
+    "maintainers": ["dhongu", "danila12"],
     "extra_buy": True,
 }

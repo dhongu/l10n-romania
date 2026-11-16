@@ -1,0 +1,11 @@
+{
+  "title": "Service Taxes",
+  "summary": "Default VAT for service products",
+  "lang": "en",
+  "edition": "community",
+  "features": [
+    "Service sale and purchase taxes per company",
+    "Preset from the Romanian chart of accounts",
+    "Applied when the product becomes a service"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Romanian Invoice",
+  "summary": "Invoice and receipt, also on Odoo Online",
+  "lang": "en",
+  "online": true,
+  "features": [
+    "Unit price and VAT per line, deliveries",
+    "Cash receipt (chitanta) with amount in words",
+    "No Python: importable on Odoo Online"
+  ]
+}

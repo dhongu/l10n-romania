@@ -1,0 +1,187 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_partner_autocomplete
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-03 10:25+0000\n"
+"PO-Revision-Date: 2026-10-22 20:08+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "%(vat)s is not a valid CUI."
+msgstr "%(vat)s nu este un CUI valid."
+
+#. module: l10n_ro_partner_autocomplete
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_autocomplete.res_config_settings_view_form_anaf
+msgid ""
+"<i class=\"fa fa-info-circle me-1\" title=\"Info\"/>\n"
+"                    Romanian companies (a CUI, with or without RO) are filled in from ANAF, without\n"
+"                    IAP credits, and companies from other EU countries from VIES. The credits are used\n"
+"                    only for a search by name and for the companies VIES does not describe."
+msgstr ""
+"<i class=\"fa fa-info-circle me-1\" title=\"Informații\"/>\n"
+"                    Firmele din România (un CUI, cu sau fără RO) se completează din ANAF, fără\n"
+"                    credite IAP, iar firmele din alte țări UE din VIES. Creditele se folosesc doar\n"
+"                    la căutarea după nume și pentru firmele pe care VIES nu le descrie."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "ANAF did not answer. Try again in a moment."
+msgstr "ANAF nu a răspuns. Încercați din nou peste puțin timp."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "ANAF has no company registered under %(vat)s."
+msgstr "La ANAF nu există nicio firmă înregistrată cu %(vat)s."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "ANAF lists the company as an inactive taxpayer."
+msgstr "ANAF arată firma ca și contribuabil inactiv."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "ANAF lists the company as struck off."
+msgstr "ANAF arată firma ca radiată."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Checked against ANAF: no change."
+msgstr "Verificat în ANAF: nicio modificare."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Company data taken from ANAF on %(date)s."
+msgstr "Datele firmei au fost preluate din ANAF la %(date)s."
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model,name:l10n_ro_partner_autocomplete.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "No"
+msgstr "Nu"
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,help:l10n_ro_partner_autocomplete.field_res_partner__l10n_ro_vat_number
+#: model:ir.model.fields,help:l10n_ro_partner_autocomplete.field_res_users__l10n_ro_vat_number
+msgid "The Tax ID without the country prefix."
+msgstr "Codul fiscal fără prefixul de țară."
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,help:l10n_ro_partner_autocomplete.field_res_partner__l10n_ro_vat_subjected
+#: model:ir.model.fields,help:l10n_ro_partner_autocomplete.field_res_users__l10n_ro_vat_subjected
+msgid "The partner is registered for VAT purposes (scpTVA). Filled in from ANAF."
+msgstr "Partenerul este înregistrat în scopuri de TVA (scpTVA). Completat din ANAF."
+
+#. module: l10n_ro_partner_autocomplete
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_autocomplete.view_partner_form_anaf_refresh
+msgid "Update from ANAF"
+msgstr "Actualizează din ANAF"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Updated from ANAF:"
+msgstr "Actualizat din ANAF:"
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_partner__l10n_ro_vat_number
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_users__l10n_ro_vat_number
+msgid "VAT Number Digits"
+msgstr "CUI (doar cifre)"
+
+#. module: l10n_ro_partner_autocomplete
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_partner__l10n_ro_vat_subjected
+#: model:ir.model.fields,field_description:l10n_ro_partner_autocomplete.field_res_users__l10n_ro_vat_subjected
+msgid "VAT Payer"
+msgstr "Plătitor TVA"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Yes"
+msgstr "Da"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "%(vat)s is not a VAT number of an EU country."
+msgstr "%(vat)s nu este un cod de TVA dintr-o țară UE."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Checked against VIES: no change."
+msgstr "Verificat în VIES: nicio modificare."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Company data taken from VIES on %(date)s."
+msgstr "Datele firmei au fost preluate din VIES la %(date)s."
+
+#. module: l10n_ro_partner_autocomplete
+#: model_terms:ir.ui.view,arch_db:l10n_ro_partner_autocomplete.view_partner_form_anaf_refresh
+msgid "Update from VIES"
+msgstr "Actualizează din VIES"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "Updated from VIES:"
+msgstr "Actualizat din VIES:"
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES did not answer. Try again in a moment."
+msgstr "VIES nu a răspuns. Încercați din nou peste puțin timp."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES did not answer: the intra-community status was not checked."
+msgstr "VIES nu a răspuns: statutul intracomunitar nu a fost verificat."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES: not registered for intra-community operations."
+msgstr "VIES: nu este înregistrată pentru operațiuni intracomunitare."
+
+#. module: l10n_ro_partner_autocomplete
+#. odoo-python
+#: code:addons/l10n_ro_partner_autocomplete/models/res_partner.py:0
+msgid "VIES: valid for intra-community operations."
+msgstr "VIES: validă pentru operațiuni intracomunitare."

@@ -135,6 +135,18 @@ class TestPartnerCreateByVatButton(TransactionCase):
         # Country must remain/set to RO
         self.assertEqual(partner.country_id.code, "RO")
 
+    def test_vies_client_uses_https(self):
+        partner = self._new_partner(vat="RO14826496")
+        with patch("zeep.Client") as client:
+            partner._get_vies_client()
+        self.assertTrue(client.call_args.args[0].startswith("https://"))
+
+    def test_vies_unreachable_raises_user_error(self):
+        partner = self._new_partner(vat="RO14826496")
+        with patch("zeep.Client", side_effect=OSError("403 Client Error: Forbidden")):
+            with self.assertRaisesRegex(UserError, "VIES service error"):
+                partner._get_vies_client()
+
     def test_get_partner_name_from_vies_invalid_raises(self):
         partner = self._new_partner(vat="RO7654321")
 

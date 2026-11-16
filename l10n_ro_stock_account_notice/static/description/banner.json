@@ -1,0 +1,8 @@
+{
+  "title": "Stock Accounting Notice",
+  "summary": "Default notice (aviz) on stock operation types",
+  "icon": "truck",
+  "module_icon": false,
+  "lang": "en",
+  "features": ["Notice flag on operation types", "Transfers marked as notice by default", "Applied on new transfers"]
+}

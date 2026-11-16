@@ -1,0 +1,10 @@
+{
+  "title": "Import Customs Declaration (DVI)",
+  "summary": "Link purchase invoices to the customs import declaration",
+  "lang": "en",
+  "features": [
+    "Landed cost created from the DVI",
+    "Customs duty and import VAT lines",
+    "Paid at customs or VAT deferred"
+  ]
+}

@@ -1,0 +1,1027 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_cash_register
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-12 10:08+0000\n"
+"PO-Revision-Date: 2026-11-12 10:08+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.report,print_report_name:l10n_ro_cash_register.action_report_cash_count
+msgid "\"Cash Count - %s\" % (object.name)"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.report,print_report_name:l10n_ro_cash_register.action_report_cash_register
+msgid "\"Cash Register\""
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "(shortage)"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "(surplus)"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<em>Subtotal</em>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Address:</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Balance at the end of the day</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Balance carried forward from the previous day</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Balance of the cash account</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>CIF:</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Cash Register</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Cashier</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Checked by</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Counted cash</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Currency</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Date</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "<strong>Difference</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Financial-accounting department</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Journal</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>NRC:</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Number</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Opening Date</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Total payments</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>Total receipts</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "<strong>User</strong>"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "A closed cash register cannot be changed; reopen it first."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "A closed cash register cannot be deleted; reopen it first."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "A day in the future cannot be closed (%s)."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_register_count_line_unique_denomination
+msgid "A denomination is counted only once per cash register."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__counterpart_account_id
+msgid "Account"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__active
+msgid "Active"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Add Payment"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Add Receipt"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid ""
+"After closing, no entry on the cash account can be dated on this day or "
+"earlier until the day is reopened. Close the day?"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__amount
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__amount
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Amount"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Annexes"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_register_unique_name
+msgid "Another cash register with the same number already exists."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_denomination_search
+msgid "Archived"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/wizard/cash_register_operation.py:0
+msgid ""
+"As cash register operator you cannot use a cash or bank account (%s) as the "
+"counterpart account, except the internal transfer account. Ask an accountant "
+"to record other transfers between cash desks or to the bank."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__closed_balance
+msgid "Balance at Closing"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__count_book_balance
+msgid ""
+"Balance of the cash account at the end of the day, in the currency of the "
+"cash desk."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_denomination__kind__banknote
+msgid "Banknote"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Banknotes"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_book_balance
+msgid "Book Balance"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_operation_form
+msgid "Cancel"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.report,name:l10n_ro_cash_register.action_report_cash_count
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_line_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Cash Count"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_journal__l10n_ro_require_cash_count
+msgid "Cash Count Required at Closing"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Cash Count by Denomination"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_denomination
+msgid "Cash Denomination"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.act_window,name:l10n_ro_cash_register.action_cash_denomination
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_denomination
+msgid "Cash Denominations"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Cash Document"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_register_operation__operation__in
+msgid "Cash In"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_register_operation__operation__out
+msgid "Cash Out"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.act_window,name:l10n_ro_cash_register.action_cash_register
+#: model:ir.actions.report,name:l10n_ro_cash_register.action_report_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_register
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register_app
+#: model:res.groups.privilege,name:l10n_ro_cash_register.res_groups_privilege_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Cash Register"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_register_count_line
+msgid "Cash Register Count Line"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Cash Register Lines"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.act_window,name:l10n_ro_cash_register.action_cash_register_operation
+#: model:ir.model,name:l10n_ro_cash_register.model_l10n_ro_cash_register_operation
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_operation_form
+msgid "Cash Register Operation"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_journal__l10n_ro_cash_operator_ids
+msgid "Cash Register Operators"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.server,name:l10n_ro_cash_register.ir_cron_generate_missing_cash_register_ir_actions_server
+msgid "Cash Register: Generate missing cash register"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Cash count difference %s"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register
+#: model:ir.ui.menu,name:l10n_ro_cash_register.menu_cash_register_app_registers
+msgid "Cash register"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:res.groups,name:l10n_ro_cash_register.group_cash_register_operator
+msgid "Cash register operator"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Cash register reopened by %(user)s (closing balance was %(balance)s)."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Close Day"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_register__state__closed
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_search
+msgid "Closed"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__closed_by_id
+msgid "Closed By"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__closed_on
+msgid "Closed On"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_denomination__kind__coin
+msgid "Coin"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Coins"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Company:"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_operation_form
+msgid "Confirm"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Count Cash"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_currency_id
+msgid "Count Currency"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__count_difference
+msgid "Count Difference"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Count the cash by denomination before closing cash register %s."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Count the cash by denomination before printing the cash count."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__counted_amount
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Counted Cash"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__count_difference
+msgid ""
+"Counted cash minus the balance of the cash account: positive is a surplus, "
+"negative a shortage."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__create_date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__create_date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__create_date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__currency_id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__currency_id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__currency_id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__currency_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_denomination_search
+msgid "Currency"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__date
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_search
+msgid "Date"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__denomination_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Denomination"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__description
+msgid "Description"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_journal__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_payment__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__display_name
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_register_unique_date_journal
+msgid "Duplicate date"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Explanations"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__balance_end
+msgid "Finished Balance"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Form code 14-4-7A"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.server,name:l10n_ro_cash_register.action_generate_missing_cash_register
+msgid "Generate Missing Cash Register"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_journal__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_move_line__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_account_payment__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__message_has_error
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__is_counted
+msgid "Is Counted"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_account_journal
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__journal_id
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__journal_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_search
+msgid "Journal"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_account_move
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_account_move_line
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__move_ids
+msgid "Journal Item"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__move_line_ids
+msgid "Journal Item Line"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__kind
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__kind
+msgid "Kind"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__write_date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__write_date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__write_date
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid ""
+"No denominations are defined for %s. Add them under Accounting > "
+"Configuration > Cash Denominations."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__name
+msgid "Number"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "Only an accountant can reopen a closed cash register."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields.selection,name:l10n_ro_cash_register.selection__l10n_ro_cash_register__state__open
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_search
+msgid "Open"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__operation
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Operation"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Ord"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__partner_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_search
+msgid "Partner"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Payment"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model,name:l10n_ro_cash_register.model_account_payment
+msgid "Payments"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_search
+msgid "Period"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_count
+msgid "Pieces"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_tree
+msgid "Print"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Print Cash Count"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__quantity
+msgid "Quantity"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Receipts"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Record Difference"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_tree
+msgid "Refresh"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__register_id
+msgid "Register"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.actions.server,name:l10n_ro_cash_register.action_remove_outstanding_accounts
+msgid "Remove Outstanding Accounts"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Reopen"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__sequence_number
+msgid "Sequence Number"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__sequence_prefix
+msgid "Sequence Prefix"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.report_cash_register
+msgid "Sold"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__balance_start
+msgid "Starting Balance"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__state
+msgid "State"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid ""
+"The balance of cash register %(register)s is negative (%(balance)s): the "
+"cash desk cannot pay more than it holds. Correct the entries before closing "
+"the day."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+#: code:addons/l10n_ro_cash_register/models/cash_register_count.py:0
+msgid ""
+"The cash count of a closed day cannot be changed; reopen the day first."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/account_move.py:0
+msgid ""
+"The cash register %(register)s of %(journal)s for %(date)s is closed. An "
+"entry on the cash account dated %(entry_date)s would change its balance: "
+"reopen the cash register first."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid ""
+"The counted cash of cash register %(register)s differs from the balance of "
+"the cash account by %(difference)s. Record the difference before closing the"
+" day."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_register_count_line_positive_quantity
+msgid "The counted quantity cannot be negative."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register_operation__currency_id
+msgid "The currency used to enter statement"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "The day is closed; reopen it before recording the difference."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_account_journal__l10n_ro_require_cash_count
+msgid ""
+"The day of this cash desk can be closed only after the cash is counted by "
+"denomination and the counted amount equals the balance of the cash account."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid ""
+"The difference of a foreign currency cash desk is recorded with a journal "
+"entry in %s, with the amount in currency."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__closed_balance
+msgid "The ending balance frozen when the day was closed."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "The later closed days of this cash desk are reopened too. Reopen?"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_denomination_positive_value
+msgid "The value of a denomination must be positive."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/cash_register.py:0
+msgid "There is no cash count difference to record."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.constraint,message:l10n_ro_cash_register.constraint_l10n_ro_cash_denomination_unique_value
+msgid "This denomination already exists for the currency."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Total"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "Total Amount"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_account_journal__l10n_ro_cash_operator_ids
+msgid ""
+"Users of the Cash register operator group who work on the cash registers of "
+"this cash desk. An operator sees only the cash registers of the journals he "
+"is assigned to; accountants see all of them."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_denomination__value
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register_count_line__value
+msgid "Value"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,field_description:l10n_ro_cash_register.field_l10n_ro_cash_register__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:ir.model.fields,help:l10n_ro_cash_register.field_l10n_ro_cash_register__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model:res.groups,comment:l10n_ro_cash_register.group_cash_register_operator
+msgid ""
+"Works on the cash registers of the cash desks he is assigned to (Accounting "
+"> Configuration > Journals > Cash Register Operators). It does not give "
+"access to the accounting menus."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#. odoo-python
+#: code:addons/l10n_ro_cash_register/models/account_journal_dashboard.py:0
+msgid "You are not assigned as operator of the cash desk %s."
+msgstr ""
+
+#. module: l10n_ro_cash_register
+#: model_terms:ir.ui.view,arch_db:l10n_ro_cash_register.view_cash_register_form
+msgid "e.g. CAS/2021/0001"
+msgstr ""

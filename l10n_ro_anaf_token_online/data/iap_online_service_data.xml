@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <!-- The ANAF token service at Terrabit. noupdate: the activation writes the account token and the
+     credits on this record, and the server URL may be changed -->
+    <record id="iap_online_service_anaf_token" model="x_iap_online_service">
+        <field name="x_name">ANAF SPV Token</field>
+        <field name="x_code">anaf_token</field>
+        <field name="x_server">https://terrabit.odoo.com</field>
+    </record>
+</odoo>

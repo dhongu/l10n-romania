@@ -1,6 +1,6 @@
-==================================
-Partner Create by VAT from OpenAPI
-==================================
+=========================
+Partner Data from OpenAPI
+=========================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -22,6 +22,12 @@ Partner Create by VAT from OpenAPI
 
 |badge1| |badge2| |badge3|
 
+**No longer developed.** For a Romanian company, use
+``l10n_ro_partner_autocomplete``: it fills the partner in from ANAF, for
+free and without an OpenAPI key, and does not depend on the OCA
+``l10n_ro_partner_create_by_vat``, which this module needs. This module
+only receives fixes until the databases that use it have switched.
+
 This modules adds the "Get Partner Data OpenAPI" in the contact from, by
 adding the vat number in the name field and pressing the button the
 modules starts a search using your OpenAPI key and fills in the
@@ -31,6 +37,35 @@ information in the empty fields.
 
 .. contents::
    :local:
+
+Changelog
+=========
+
+19.0.1.0.6 (2026-11-03)
+-----------------------
+
+- The description says the module is no longer developed: for a Romanian
+  company, ``l10n_ro_partner_autocomplete`` replaces it. No functional
+  change.
+
+19.0.1.0.5 (2026-10-22)
+-----------------------
+
+- Listed on Odoo Apps as *Partner Data from OpenAPI* (was *Partner
+  Create by VAT from OpenAPI*). The technical name
+  ``l10n_ro_partner_create_by_vat_openapi`` does not change.
+
+19.0.1.0.4 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner (``static/description/main_screenshot.png``),
+  generated from ``banner.json``.
+
+19.0.1.0.3 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 Bug Tracker
 ===========

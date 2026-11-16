@@ -2,10 +2,10 @@
 <!-- tb-gen v1 -->
 <div class="rounded-4 shadow px-4 py-4 mt-2 mb-4" style="background-color:#006F42;color:#ffffff;">
   <div class="d-flex flex-wrap align-items-center">
-    <span class="d-inline-block rounded-4 p-2 flex-shrink-0 my-2" style="background-color:#ffffff;margin-right:24px;"><img src="icon.png" alt="Romania - Customs Import Declaration (DVI)" style="width:80px;height:80px;border:none;"/></span>
+    <span class="d-inline-block rounded-4 p-2 flex-shrink-0 my-2" style="background-color:#ffffff;margin-right:24px;"><img src="icon.png" alt="Import Customs Declaration (DVI)" style="width:80px;height:80px;border:none;"/></span>
     <div class="flex-grow-1 my-2" style="width:320px;min-width:0;margin-right:24px;">
-      <h1 class="fw-bold mb-2" style="color:#ffffff;font-size:36px;line-height:1.1;letter-spacing:-0.5px;border:none;">Romania - Customs Import Declaration (DVI)</h1>
-      <p class="mb-3" style="font-size:18px;color:#cdeccf;line-height:1.45;">Record the customs import declaration (DVI) as a landed cost: customs duty, commission and import VAT</p>
+      <h1 class="fw-bold mb-2" style="color:#ffffff;font-size:36px;line-height:1.1;letter-spacing:-0.5px;border:none;">Import Customs Declaration (DVI)</h1>
+      <p class="mb-3" style="font-size:18px;color:#cdeccf;line-height:1.45;">Link purchase invoices to the customs import declaration</p>
       <div>
         <span class="d-inline-block rounded-pill fw-bold me-2 mb-2" style="background-color:#ffffff;border:1px solid #ffffff;color:#006F42;padding:6px 14px;font-size:12px;">Odoo 19.0</span>
         <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px solid #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;">Localization</span>
@@ -47,9 +47,12 @@
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Overview</h2>
 <h1 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">DVI - declara&#355;ie vamala de import</h1>
 <p class="mb-4" style="font-size:16px;line-height:1.65;max-width:780px;">Acest modul face leg&#259;tura &#238;ntre factura de achizi&#355;ie &#351;i DVI (landed cost).
-Se genereaz&#259; automat un DVI cu dou&#259; linii &#351;i cu TVA.</p>
-<p>Conturile de decontare cu bugetul folosite de modul (446) trebuie s&#259; fie conturi de reconciliere,
-pentru a se putea &#238;nchide prin banc&#259;, per declara&#355;ie vamal&#259;.</p>
+Se genereaz&#259; automat un cost adi&#539;ional (landed cost) de tip DVI, cu o linie pentru taxa vamal&#259; (A00)
+&#537;i cu nota de TVA la import (B00), &#238;n dou&#259; regimuri: plata efectiv&#259; &#238;n vam&#259; sau am&#226;narea de la plat&#259;
+(art. 326 din Codul fiscal).</p>
+<p>Contul de decontare cu bugetul folosit de modul este <strong>4462</strong> (analiticul de scaden&#539;&#259; scurt&#259; al lui 446;
+pe planurile f&#259;r&#259; defalcare, orice cont 446). Trebuie s&#259; fie cont de reconciliere, pentru a se putea
+&#238;nchide prin banc&#259;, per declara&#539;ie vamal&#259;.</p>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Baza legal&#259; privind &#238;nregistrarea contabil&#259; a opera&#355;iunilor de import</h2>
 <p>Prezentul capitol sintetizeaz&#259; cadrul legal aplicabil opera&#355;iunilor de import (achizi&#355;ie marf&#259; extern&#259; + Declara&#355;ie Vamal&#259; de Import &#8211; DVI), cu accent pe urm&#259;toarele aspecte:</p>
 <ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>Factura comercial&#259; extern&#259; se &#238;nregistreaz&#259; &#238;n contabilitate la cursul BNR din data emiterii facturii;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>Cursul valutar din vam&#259; (cursul vamal lunar) se utilizeaz&#259; exclusiv pentru calculul valorii &#238;n vam&#259;, al taxelor vamale (A00) &#351;i al TVA-ului la import (B00) din DVI;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex gap-2"><span class="flex-shrink-0 text-center fw-bold rounded d-inline-block" style="background-color:#57B952;color:#04331f;width:22px;height:22px;line-height:22px;font-size:13px;">&#10003;</span><div>Toate &#238;nregistr&#259;rile contabile (factur&#259;, taxe vamale, stocuri) se efectueaz&#259; &#351;i se prezint&#259; doar &#238;n moneda na&#355;ional&#259; (RON).</div></div></li></ul>
@@ -61,9 +64,9 @@ pentru a se putea &#238;nchide prin banc&#259;, per declara&#355;ie vamal&#259;.
 <p>Toate opera&#355;iunile de import (inclusiv factura furnizor &#351;i DVI) se &#238;nregistreaz&#259; &#351;i se prezint&#259; &#238;n situa&#355;iile financiare exclusiv &#238;n RON.</p>
 <h3 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:19px;letter-spacing:-0.3px;line-height:1.2;">2. OMFP nr. 1802/2014</h3>
 <ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Pct. 319:</span><div>&#8222;O tranzac&#355;ie &#238;n valut&#259; trebuie &#238;nregistrat&#259; ini&#355;ial la cursul de schimb valutar, comunicat de Banca Na&#355;ional&#259; a Rom&#226;niei, de la data efectu&#259;rii opera&#355;iunii.&#8221; -&gt; Factura comercial&#259; extern&#259; (Vendor Bill) se &#238;nregistreaz&#259; la cursul BNR din data emiterii facturii.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Pct. 6 (defini&#355;ia costului de achizi&#355;ie):</span><div>&#8222;Costul de achizi&#355;ie al bunurilor cuprinde pre&#355;ul de cump&#259;rare, taxele de import &#351;i alte taxe (cu excep&#355;ia acelora pe care persoana juridic&#259; le poate recupera de la autorit&#259;&#355;ile fiscale)&#8230;&#8221;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Pct. 75 alin. (1) lit. a):</span><div>Bunurile se evalueaz&#259; &#351;i se &#238;nregistreaz&#259; la data intr&#259;rii &#238;n entitate la cost de achizi&#355;ie (care include taxele vamale pl&#259;tite conform DVI).</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Pct. 94 lit. a):</span><div>Elementele monetare exprimate &#238;n valut&#259; se evalueaz&#259; la cursul BNR la data bilan&#355;ului; diferen&#355;ele de curs se &#238;nregistreaz&#259; pe conturile 665 sau 765.</div></div></li></ul>
-<p>Taxele vamale (A00) se capitalizeaz&#259; &#238;n costul stocurilor (contul 327 -&gt; 371), iar toate valorile finale r&#259;m&#226;n exclusiv &#238;n RON.</p>
+<p>Taxele vamale (A00) se capitalizeaz&#259; &#238;n costul stocurilor (contul 371 sau 301, prin costul adi&#539;ional), iar toate valorile finale r&#259;m&#226;n exclusiv &#238;n RON.</p>
 <h3 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:19px;letter-spacing:-0.3px;line-height:1.2;">3. Legea nr. 227/2015 &#8211; Codul Fiscal</h3>
-<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Art. 289 (Baza de impozitare pentru import):</span><div>vezi capitolul dedicat de mai jos &#8212; este articolul care stabile&#351;te <strong>ce sume intr&#259; &#238;n baza TVA la import</strong>.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Art. 290 alin. (1) (Cursul de schimb valutar):</span><div>&#8222;Dac&#259; elementele folosite la stabilirea bazei de impozitare a unui import de bunuri se exprim&#259; &#238;n valut&#259;, cursul de schimb valutar se stabile&#351;te conform prevederilor europene care reglementeaz&#259; calculul valorii &#238;n vam&#259;.&#8221;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Art. 299 alin. (1) lit. c):</span><div>Dreptul de deducere a TVA aferente importului de bunuri se exercit&#259; pe baza Declara&#355;iei vamale de import (DVI) sau a actului constatator emis de organele vamale (TVA B00 calculat la cursul vamal).</div></div></li></ul>
+<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Art. 289 (Baza de impozitare pentru import):</span><div>vezi capitolul dedicat de mai jos &#8212; este articolul care stabile&#351;te <strong>ce sume intr&#259; &#238;n baza TVA la import</strong>.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Art. 290 alin. (1) (Cursul de schimb valutar):</span><div>&#8222;Dac&#259; elementele folosite la stabilirea bazei de impozitare a unui import de bunuri se exprim&#259; &#238;n valut&#259;, cursul de schimb valutar se stabile&#351;te conform prevederilor europene care reglementeaz&#259; calculul valorii &#238;n vam&#259;.&#8221;</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Art. 299 alin. (1) lit. c) &#537;i d):</span><div>Dreptul de deducere a TVA aferente importului de bunuri se exercit&#259; pe baza Declara&#355;iei vamale de import (DVI) sau a actului constatator emis de organele vamale (TVA B00 calculat la cursul vamal); la plata efectiv&#259; &#238;n vam&#259; (lit. c)) &#351;i cu documentele de plat&#259;, iar la importul f&#259;r&#259; plata efectiv&#259; (lit. d)) cu &#238;nscrierea taxei ca tax&#259; colectat&#259; &#238;n aceea&#351;i perioad&#259;.</div></div></li></ul>
 <blockquote>
 <p><strong>Corec&#355;ie (2026-09-22).</strong> Textul despre cursul de schimb citat anterior &#238;n dreptul art. 289 apar&#355;ine de fapt <strong>art. 290 alin. (1)</strong>. Art. 289 reglementeaz&#259; cu totul altceva &#8212; componen&#355;a bazei de impozitare &#8212; iar omisiunea lui din acest capitol a fost sursa unei confuzii reale la client (baza propus&#259; de sistem interpretat&#259; ca baz&#259; legal&#259;). Vezi capitolul urm&#259;tor.</p>
 </blockquote>
@@ -103,8 +106,12 @@ remize, risturne &#351;i sconturi acordate la data exigibilit&#259;&#355;ii, dau
                 + taxa vamal&#259; (A00) + accize + alte drepturi de import
                 + cheltuieli accesorii p&#226;n&#259; la primul loc de destina&#355;ie &#238;n RO,
                   DOAR dac&#259; nu sunt deja &#238;n valoarea &#238;n vam&#259;
-                &#8722; TVA &#238;ns&#259;&#351;i
+                &#8722; rabaturi, remize, risturne, sconturi, daune-interese,
+                  penalit&#259;&#355;i, dob&#226;nzi de &#238;nt&#226;rziere (alin. (3))
 </code></pre>
+<p><strong>TVA-ul care urmeaz&#259; a fi perceput nu se adaug&#259; la baz&#259;</strong> (alin. (1), teza final&#259;): baza este prin
+construc&#355;ie o valoare f&#259;r&#259; TVA, deci nu exist&#259; etap&#259; de sc&#259;dere a TVA &#351;i nu se aplic&#259; calculul de tip
+sut&#259; m&#259;rit&#259;.</p>
 <p>Sintagma &#8222;<strong>&#238;n m&#259;sura &#238;n care nu au fost cuprinse</strong> &#238;n baza stabilit&#259; conform alin. (1)&#8221; este clauza
 anti-dubl&#259;-num&#259;rare: transportul deja inclus &#238;n valoarea &#238;n vam&#259; <strong>nu se mai adaug&#259; a doua oar&#259;</strong>.</p>
 <p><strong>Primul loc de destina&#355;ie nu este frontiera</strong>, ci destina&#355;ia din documentul de transport (CMR) &#8212; &#238;n
@@ -170,12 +177,15 @@ calcul al TVA, pozi&#355;ia B00), nu cu netul facturii externe. Nu se recalculea
    respective [&#8230;] Cheltuielile de transport sunt incluse &#238;n costul de achizi&#355;ie &#351;i atunci c&#226;nd func&#355;ia
    de aprovizionare este externalizat&#259;.&#8221;</li>
 </ol>
+<p>Nu se folose&#351;te 628 ca tranzit: func&#355;iunea lui din OMFP 1802/2014 nu prevede creditarea prin 371, iar
+mi&#351;carea &#238;n oglind&#259; las&#259; rulaj artificial pe un cont de clasa 6, vizibil &#238;n balan&#355;&#259; &#351;i &#238;n SAF-T. Contul 473
+este neutru &#351;i se soldeaz&#259;.</p>
 <p>Dubla &#238;nregistrare apare <strong>doar</strong> dac&#259; transportul e capitalizat de dou&#259; ori pe latura de stoc &#8212; o
 dat&#259; prin factura de transport pus&#259; direct pe 371 &#351;i &#238;nc&#259; o dat&#259; printr-o linie de landed cost.
 Alege&#355;i una dintre variante:</p>
 <pre class="border rounded-3 p-3 my-3" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-x:auto;"><code>Varianta A (prin landed cost, recomandat&#259; c&#226;nd marfa e deja recep&#355;ionat&#259;):
-    Dr 628/624 analitic &#8222;transport de repartizat&#8221; = Cr 401      la factura transportatorului
-    Dr 371                                        = Cr 628/624  la validarea landed cost-ului
+    Dr 473 = Cr 401     la factura transportatorului (cont neutru de clarificare)
+    Dr 371 = Cr 473     la validarea landed cost-ului
 
 Varianta B (direct pe stoc, f&#259;r&#259; landed cost):
     Dr 371 = Cr 401
@@ -201,6 +211,27 @@ alin. (1)&#8211;(2)): <strong>21% standard</strong>, <strong>11% redus&#259;</st
 141/2025, &#238;n vigoare de la 1 august 2025). Cota redus&#259; acoper&#259;, &#238;ntre altele, <strong>alimentele de baz&#259;</strong> &#8212;
 aten&#355;ie la importurile de produse alimentare, unde taxa de achizi&#355;ie implicit&#259; a companiei (de regul&#259;
 cea standard) nu este cota corect&#259;.</p>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Cele dou&#259; regimuri de plat&#259; a TVA &#238;n vam&#259; (art. 326)</h2>
+<p>Codul fiscal prevede dou&#259; tratamente, iar modulul le acoper&#259; pe am&#226;ndou&#259;. <strong>Taxa aleas&#259; &#238;n wizard este
+comutatorul</strong> &#8212; nu exist&#259; niciun c&#226;mp de configurat.</p>
+<ul>
+<li><strong>Plata efectiv&#259; la organul vamal &#8212; art. 326 alin. (3).</strong> Se alege o tax&#259; obi&#351;nuit&#259; de achizi&#355;ie
+  (o singur&#259; linie de reparti&#355;ie, pe 4426): <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Dr 4426 = Cr 4462</code>, stins&#259; ulterior prin plat&#259;.</li>
+<li><strong>F&#259;r&#259; plata efectiv&#259; la organul vamal &#8212; art. 326 alin. (4)-(5).</strong> Cu certificat de am&#226;nare de la
+  plat&#259;, v&#259;muire centralizat&#259;, &#238;nscriere &#238;n eviden&#355;ele declarantului sau pentru bunurile din art. 331
+  alin. (2) lit. b), c), i)&#8211;k) nu se face plata efectiv&#259; la organele vamale; taxa se eviden&#355;iaz&#259; &#238;n
+  decont at&#226;t ca tax&#259; colectat&#259;, c&#226;t &#351;i ca deductibil&#259; (D300 rd. 7 &#351;i 22). Se alege o tax&#259; cu <strong>dou&#259;
+  linii de reparti&#355;ie, pe 4426 &#351;i 4427</strong> &#8212; cu <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_d300</code> instalat, &#8222;21% IMP AM&#8221; sau
+  &#8222;11% IMP AM&#8221;: <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Dr 4426 = Cr 4427</code>, f&#259;r&#259; 446 &#351;i f&#259;r&#259; plat&#259;.</li>
+</ul>
+<p>&#206;nainte de prima declara&#355;ie trebuie stabilit ce regim are societatea: cu taxa gre&#351;it&#259;, nota iese fie cu o
+datorie la buget care nu exist&#259;, fie f&#259;r&#259; datoria care chiar trebuie pl&#259;tit&#259;.</p>
+<p>La plata efectiv&#259;, deducerea r&#259;m&#226;ne condi&#355;ionat&#259; de documentele care atest&#259; plata taxei (art. 299 alin. (1)
+lit. c)); nota se genereaz&#259; la data DVI, deci decalajul dintre declara&#355;ie &#351;i plat&#259; se verific&#259; la &#238;nchiderea
+lunii. F&#259;r&#259; plata efectiv&#259;, condi&#355;ia e &#238;nscrierea taxei ca tax&#259; colectat&#259; &#238;n decontul perioadei DVI (art. 299
+alin. (1) lit. d)).</p>
+<p>Baza importului ajunge &#238;n decontul de TVA printr-o <strong>pereche tehnic&#259; echilibrat&#259; pe contul 473</strong>, de
+valoarea bazei, care poart&#259; eticheta fiscal&#259; de baz&#259;; f&#259;r&#259; ea, r&#226;ndul din D300 ar avea TVA &#351;i baz&#259; zero.</p>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Biroul vamal nu este partener</h2>
 <p>&#206;ntrebare recurent&#259; la implementare: <em>se creeaz&#259; c&#226;te un partener pentru fiecare birou vamal, ca s&#259; i
 se urm&#259;reasc&#259; soldul?</em> <strong>Nu.</strong></p>
@@ -217,7 +248,8 @@ birou vamal &#238;n format COL. Localizarea nativ&#259; &#238;l modeleaz&#259; c
 <p>Taxa vamal&#259;, accizele &#351;i TVA-ul vamal se vars&#259; la <strong>bugetul de stat, prin Trezorerie</strong>, pe conturi de
 venituri bugetare. Nu exist&#259; o rela&#355;ie de tip furnizor cu biroul vamal.</p>
 <p>Contrapartida este contul <strong>446 &#8222;Alte impozite, taxe &#351;i v&#259;rs&#259;minte asimilate&#8221;</strong>, cont de decontare cu
-bugetul statului. Func&#355;iunea din OMFP 1802/2014 este explicit&#259;: se crediteaz&#259; cu &#8222;valoarea <strong>taxelor
+bugetul statului; modulul &#238;l folose&#351;te prin analiticul <strong>4462</strong> (scaden&#355;&#259; p&#226;n&#259; la un an &#8212; &#238;n planul RO,
+4461 este cel peste un an, ordinea fiind contraintuitiv&#259;). Func&#355;iunea din OMFP 1802/2014 este explicit&#259;: se crediteaz&#259; cu &#8222;valoarea <strong>taxelor
 vamale aferente aprovizion&#259;rilor din import</strong> (213, 214, 301, 302, 303, <strong>371</strong>, 381)&#8221;, se debiteaz&#259;
 cu &#8222;pl&#259;&#355;ile efectuate la bugetul de stat [&#8230;] (512)&#8221;, iar &#8222;soldul contului reprezint&#259; sumele datorate
 bugetului statului&#8221;.</p>
@@ -228,37 +260,45 @@ bancar s&#259; poat&#259; fi potrivit&#259; cu obliga&#355;ia.</p>
 <p>Un partener &#8222;Vama&#8221; ar ad&#259;uga doar o fi&#351;&#259; de ter&#355; care nu se &#238;nchide niciodat&#259; prin facturi.</p>
 <h3 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:19px;letter-spacing:-0.3px;line-height:1.2;">Cine este totu&#351;i partener</h3>
 <p><strong>Comisionarul vamal (brokerul).</strong> El emite factur&#259;, are CUI &#351;i are sold pe 401. Onorariul lui este o
-cheltuial&#259; cu serviciile (622/628), nu o datorie c&#259;tre un organism public &#8212; &#351;i <strong>nu se opereaz&#259; prin
+cheltuial&#259; cu serviciile (622), nu o datorie c&#259;tre un organism public &#8212; &#351;i <strong>nu se opereaz&#259; prin
 wizardul DVI</strong>.</p>
 <p>Se folose&#351;te mecanismul nativ Odoo, care rezolv&#259; deja tot ce trebuie: produs de tip serviciu cu
 <strong>&#8222;Is a Landed Cost&#8221;</strong> bifat, pus pe factura brokerului. Linia se marcheaz&#259; automat ca linie de landed
-cost, iar pe factur&#259; apare butonul <strong>&#8222;Create Landed Costs&#8221;</strong>, care creeaz&#259; un <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">stock.landed.cost</code> legat
+cost, iar pe factur&#259; apare butonul <strong>&#8222;Create Landed Costs&#8221;</strong> (&#8222;Crea&#539;i costuri adi&#539;ionale&#8221; &#238;n interfa&#355;a &#238;n rom&#226;n&#259;), care creeaz&#259; un <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">stock.landed.cost</code> legat
 de factur&#259; prin <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">vendor_bill_id</code>.</p>
-<pre class="border rounded-3 p-3 my-3" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-x:auto;"><code>Factura brokerului:        Dr 628  = Cr 401     onorariu
+<p>Contul de cheltuial&#259; al produsului este <strong>473</strong> dac&#259; onorariul se capitalizeaz&#259; (doar tranzit, se soldeaz&#259;
+la validarea costului adi&#355;ional) sau <strong>622</strong> &#8222;Cheltuieli privind comisioanele &#351;i onorariile&#8221; dac&#259; nu se
+capitalizeaz&#259;. Nu 628: acela e contul rezidual al grupei 62.</p>
+<pre class="border rounded-3 p-3 my-3" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-x:auto;"><code>Factura brokerului:        Dr 473  = Cr 401     onorariu (sau Dr 622, dac&#259; nu se capitalizeaz&#259;)
                            Dr 4426 = Cr 401     TVA deductibil&#259;
-Landed cost din factur&#259;:   Dr 371  = Cr 628     soldeaz&#259; contul de tranzit
+Landed cost din factur&#259;:   Dr 371  = Cr 473     soldeaz&#259; contul de tranzit
 </code></pre>
-<p>A&#351;a ob&#355;ine&#355;i partener, scaden&#355;ar, TVA deductibil&#259; &#351;i reconciliere &#8212; toate native. <strong>Switch-ul de
-politic&#259; contabil&#259; este chiar butonul:</strong> dac&#259; onorariul nu se capitalizeaz&#259;, nu ap&#259;sa&#355;i &#8222;Create Landed
-Costs&#8221; &#351;i factura r&#259;m&#226;ne cheltuial&#259; pe 628. Landed cost-urile create astfel intr&#259; automat &#351;i sub
-protec&#355;ia FIFO din <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_invoice_dvi_protect</code>, care verific&#259; leg&#259;tura <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">vendor_bill_id</code>.</p>
-<p>R&#259;m&#226;ne pentru <strong>comisionul datorat autorit&#259;&#355;ii vamale</strong>, nu pentru onorariul brokerului. Este creditat
-pe un cont <strong>446</strong> &#8212; datorie fa&#355;&#259; de bugetul de stat.</p>
+<p>A&#351;a ob&#355;ine&#355;i partener, scaden&#355;ar, TVA deductibil&#259; &#351;i reconciliere &#8212; toate native. <strong>Capitalizarea este
+regula</strong> (OMFP 1802/2014 pct. 8 subpct. 6: comisioanele atribuibile direct bunurilor intr&#259; &#238;n costul de
+achizi&#355;ie); excep&#355;ia este onorariul nesemnificativ sau nealocabil direct, justificat &#238;n politica
+contabil&#259; &#8212; atunci nu ap&#259;sa&#355;i &#8222;Create Landed Costs&#8221; &#351;i factura r&#259;m&#226;ne cheltuial&#259; pe 622. Landed
+cost-urile create astfel intr&#259; automat &#351;i sub protec&#355;ia FIFO din <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_invoice_dvi_protect</code>, care
+verific&#259; leg&#259;tura <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">vendor_bill_id</code>.</p>
 <blockquote>
-<p><strong>Schimbare &#238;n 19.0.1.3.0.</strong> P&#226;n&#259; la aceast&#259; versiune, comisionul era creditat pe <strong>447</strong>. Func&#355;iunea
-contului 447 &#8222;Fonduri speciale &#8212; taxe &#351;i v&#259;rs&#259;minte asimilate&#8221; din OMFP 1802/2014 &#238;l rezerv&#259;
-datoriilor &#8222;c&#259;tre <strong>alte organisme publice</strong>&#8221; &#351;i &#238;l arat&#259; creditat <strong>exclusiv prin 635</strong>; nu apare
-nic&#259;ieri creditat prin conturi de stoc.</p>
-<p>&#9888;&#65039; <strong>Migrare.</strong> Produsul folosit pentru comision este memorat &#238;n parametrul de sistem
-<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">dvi.customs_commission_product_id</code>, deci schimbarea se aplic&#259; <strong>numai instal&#259;rilor noi</strong>. Pe bazele
-existente produsul r&#259;m&#226;ne pe 447, cu istoric pe el &#8212; contul <strong>nu</strong> este repozi&#355;ionat automat, ca s&#259;
-nu se rescrie t&#259;cut &#238;nregistr&#259;ri deja f&#259;cute. Contul se schimb&#259; manual pe produs, dup&#259; ce soldul de
-447 a fost &#238;nchis.</p>
+<p><strong>Onorariul poate fi scutit de TVA.</strong> Art. 294 alin. (1) lit. d) acoper&#259; <em>prest&#259;rile de servicii</em>, iar
+art. 289 alin. (2) enumer&#259; expres comisioanele printre cheltuielile accesorii din baz&#259;. Dac&#259; onorariul a
+fost efectiv inclus &#238;n baza B00, factura brokerului se emite f&#259;r&#259; TVA, ca transportul.</p>
 </blockquote>
+<h3 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:19px;letter-spacing:-0.3px;line-height:1.2;">Nu exist&#259; &#8222;comision vamal&#8221;</h3>
+<p>Comisionul vamal de 0,5% a disp&#259;rut odat&#259; cu aderarea la UE; nu apare &#238;n Codul fiscal, &#238;n norme, &#238;n OMFP
+1802/2014 &#351;i nici printre drepturile de import din Codul Vamal al Uniunii. Wizardul a avut p&#226;n&#259; la
+versiunea 19.0.2.0.0 un c&#226;mp &#8222;Comision vamal&#8221;, mo&#351;tenit din 2008, folosit &#238;n practic&#259; gre&#351;it pentru
+onorariul brokerului (cont 446 &#238;n loc de 401, f&#259;r&#259; TVA). C&#226;mpul a fost eliminat, iar parametrul de sistem
+<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">dvi.customs_commission_product_id</code> nu mai este folosit. Onorariul se opereaz&#259; exclusiv prin factura
+brokerului, a&#351;a cum s-a ar&#259;tat mai sus.</p>
 </div>
 <div class="tab-pane fade py-2" id="tb-panel-usage" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Usage</h2>
 <h1 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Procedura general&#259; de operare &#238;n Odoo pentru importuri de marf&#259; cu loca&#539;ie de tranzit &#537;i Declara&#539;ie Vamal&#259; de Import (DVI)</h1>
+<blockquote>
+<p>Capitolul urm&#259;tor descrie fluxul <strong>manual</strong>, cu loca&#539;ie de tranzit. Pentru fluxul din modul (wizardul
+&#8222;DVI&#8221; de pe factura furnizorului), trece&#539;i direct la &#8222;Completarea wizardului DVI&#8221;.</p>
+</blockquote>
 <p>Prezentul capitol descrie fluxul complet, standardizat &#537;i optimizat de operare &#238;n sistemul Odoo pentru un import de marf&#259; din afara Uniunii Europene, &#238;n regim <strong>FOB</strong>, cu recep&#539;ie &#238;n loca&#539;ie virtual&#259; de tranzit &#537;i v&#259;muire prin Declara&#539;ie Vamal&#259; de Import (DVI).</p>
 <p>Fluxul asigur&#259;:
 - Respectarea integral&#259; a regulilor contabile rom&#226;ne&#537;ti (OMFP 1802/2014 &#537;i Legea 82/1991);
@@ -509,8 +549,9 @@ Pre&#539; marf&#259; (valut&#259; la cursul BNR recep&#539;ie) + Taxe vamale A00
 <p><strong>Not&#259; important&#259;:</strong>
 Incoterm-ul trebuie men&#539;ionat explicit &#238;n comanda de achizi&#539;ie (PO) &#537;i &#238;n factura furnizor. El determin&#259; direct modul &#238;n care se face recep&#539;ia &#238;n Odoo &#537;i care costuri intr&#259; &#238;n landed costs.</p>
 <h1 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Completarea wizardului DVI &#8212; ce cifr&#259; unde</h1>
-<p>Wizardul se deschide cu butonul <strong>&#8222;DVI&#8221;</strong> de pe factura furnizorului extern. Are patru c&#226;mpuri de
-sume, toate <strong>editabile liber</strong>. Valorile se <strong>transcriu din declara&#355;ia vamal&#259;</strong>, nu se recalculeaz&#259;
+<p>Wizardul se deschide cu butonul <strong>&#8222;DVI&#8221;</strong> de pe factura furnizorului extern (factur&#259; furnizor &#238;n stare
+<strong>Postat</strong>; furnizorul trebuie s&#259; aib&#259; &#539;ara completat&#259;). Are patru c&#226;mpuri de sume, toate <strong>editabile
+liber</strong>. Valorile se <strong>transcriu din declara&#355;ia vamal&#259;</strong>, nu se recalculeaz&#259;
 din factur&#259;.</p>
 <table class="table table-bordered" style="font-size:14px;">
 <thead>
@@ -532,13 +573,13 @@ din factur&#259;.</p>
 <td>baza pozi&#355;iei <strong>B00</strong></td>
 </tr>
 <tr>
-<td><strong>TVA pl&#259;tit &#238;n vam&#259;</strong></td>
+<td><strong>Valoare TVA la import</strong></td>
 <td>TVA-ul efectiv datorat</td>
 <td>valoarea pozi&#355;iei <strong>B00</strong></td>
 </tr>
 <tr>
-<td><strong>Cot&#259; TVA</strong></td>
-<td>cota aplicat&#259; de vam&#259; la data accept&#259;rii declara&#355;iei</td>
+<td><strong>TVA la import</strong></td>
+<td>cota aplicat&#259; de vam&#259; la data accept&#259;rii declara&#355;iei <strong>&#537;i regimul de plat&#259;</strong> (vezi mai jos)</td>
 <td>din declara&#355;ie</td>
 </tr>
 <tr>
@@ -546,12 +587,26 @@ din factur&#259;.</p>
 <td>MRN-ul declara&#355;iei</td>
 <td>antetul declara&#355;iei</td>
 </tr>
+<tr>
+<td><strong>Data DVI</strong></td>
+<td>data accept&#259;rii declara&#355;iei; determin&#259; cota &#537;i data notei</td>
+<td>antetul declara&#355;iei</td>
+</tr>
 </tbody>
 </table>
+<p><strong>Taxa aleas&#259; este comutatorul &#238;ntre cele dou&#259; regimuri de la art. 326 din Codul fiscal:</strong></p>
+<ul>
+<li>tax&#259; obi&#537;nuit&#259; de achizi&#539;ie = TVA pl&#259;tit efectiv &#238;n vam&#259; (alin. (3)): <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Dr 4426 = Cr 4462</code>;</li>
+<li>tax&#259; cu dou&#259; reparti&#539;ii, pe 4426 &#537;i 4427 (ex. &#8222;21% IMP AM&#8221; din <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_anaf_d300</code>) = f&#259;r&#259; plata
+  efectiv&#259; &#238;n vam&#259; &#8212; certificat de am&#226;nare, v&#259;muire centralizat&#259; etc. (alin. (4)-(5)):
+  <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Dr 4426 = Cr 4427</code>, f&#259;r&#259; datorie la buget &#537;i f&#259;r&#259; plat&#259;; &#238;n D300, rd. 7 &#537;i 22.</li>
+</ul>
+<p>Verifica&#539;i regimul societ&#259;&#539;ii &#238;nainte de prima declara&#539;ie; cu taxa gre&#537;it&#259; nota iese fie cu o datorie
+inexistent&#259;, fie f&#259;r&#259; datoria care trebuie pl&#259;tit&#259;.</p>
 <blockquote>
 <p>&#9888;&#65039; <strong>Valoarea propus&#259; nu este baza legal&#259;.</strong> La deschiderea wizardului, c&#226;mpul &#8222;Baz&#259; de impozitare&#8221;
 este precompletat cu <strong>netul facturii furnizorului</strong> (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">invoice.amount_untaxed_signed</code>). Este doar un
-punct de plecare comod, nu o determinare conform art. 289 &#8212; nu con&#355;ine taxa vamal&#259;, comisionul &#351;i
+punct de plecare comod, nu o determinare conform art. 289 &#8212; nu con&#355;ine taxa vamal&#259; &#351;i
 nici cheltuielile accesorii. Vezi capitolul &#8222;Baza de impozitare a TVA la import&#8221; din DESCRIPTION.</p>
 </blockquote>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Erori frecvente &#351;i cum se evit&#259;</h2>
@@ -561,7 +616,7 @@ este 67.663 lei, pentru c&#259; valoarea &#238;n vam&#259; include &#351;i trans
 DVI &#238;nainte de a confirma.</strong></p>
 <p><strong>Valoarea statistic&#259; folosit&#259; ca baz&#259;.</strong> Valoarea statistic&#259; &#351;i baza de impozitare sunt m&#259;rimi
 diferite; pot coincide numeric, dar nu &#238;ntotdeauna. Se ia baza pozi&#355;iei B00, nu valoarea statistic&#259;.</p>
-<p><strong>TVA nerecalculat dup&#259; modificarea bazei.</strong> C&#226;mpul &#8222;TVA pl&#259;tit &#238;n vam&#259;&#8221; <strong>nu se recalculeaz&#259;
+<p><strong>TVA nerecalculat dup&#259; modificarea bazei.</strong> C&#226;mpul &#8222;Valoare TVA la import&#8221; <strong>nu se recalculeaz&#259;
 automat</strong> la schimbarea bazei sau a cotei &#8212; nu exist&#259; <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">onchange</code> &#238;n wizard. Dac&#259; modifica&#355;i baza,
 <strong>modifica&#355;i &#351;i valoarea TVA</strong>, altfel nota contabil&#259; se posteaz&#259; cu suma veche, f&#259;r&#259; nicio eroare.</p>
 <p><strong>Cota implicit&#259; gre&#351;it&#259;.</strong> Cota propus&#259; este taxa de achizi&#355;ie implicit&#259; a companiei (de regul&#259; cea
@@ -572,52 +627,141 @@ achizi&#355;ie al m&#259;rfii (OMFP 1802/2014 pct. 6) &#8212; printr-o linie de 
 singur&#259; dat&#259;</strong>. Faptul c&#259; aceea&#351;i sum&#259; apare &#351;i &#238;n baza TVA nu este o dublare: baza TVA nu debiteaz&#259;
 niciun cont de stoc.</p>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Monografia generat&#259; de modul</h2>
-<p><strong>La validarea wizardului</strong> se creeaz&#259; un <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">stock.landed.cost</code> legat de recep&#355;iile comenzii de
-achizi&#355;ie, cu c&#226;te o linie pentru taxa vamal&#259; &#351;i pentru comision.</p>
-<p><strong>La validarea landed cost-ului:</strong></p>
-<pre class="border rounded-3 p-3 my-3" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-x:auto;"><code>Dr 371/301  = Cr 446    taxa vamal&#259;      -&gt; intr&#259; &#238;n costul stocului
-Dr 4426     = Cr 446    TVA la import    -&gt; deductibil&#259;, NU m&#259;re&#351;te costul
+<p><strong>La validarea wizardului</strong> se creeaz&#259; un <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">stock.landed.cost</code> (tip DVI) legat de recep&#355;iile comenzii de
+achizi&#355;ie, cu o linie pentru taxa vamal&#259; (A00), plus c&#226;mpurile DVI (num&#259;r, baz&#259;, valoare TVA, tax&#259;) &#238;n
+capul formularului.</p>
+<p><strong>La validarea costului adi&#355;ional:</strong></p>
+<pre class="border rounded-3 p-3 my-3" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-x:auto;"><code>Dr 371/301  = Cr 4462   taxa vamal&#259;      -&gt; intr&#259; &#238;n costul stocului
+Dr 4426     = Cr 4462   TVA la import    -&gt; deductibil&#259;, NU m&#259;re&#351;te costul   (plat&#259; efectiv&#259;, art. 326 alin. (3))
+Dr 4426     = Cr 4427   TVA la import    -&gt; f&#259;r&#259; 446 &#351;i f&#259;r&#259; plat&#259;           (f&#259;r&#259; plat&#259; &#238;n vam&#259;, art. 326 alin. (4)-(5))
 </code></pre>
+<p>Contul de buget este <strong>4462</strong> (scaden&#355;&#259; p&#226;n&#259; la un an); modulul cade pe orice cont 446 doar dac&#259; planul nu
+are defalcarea pe scaden&#355;e. Nota mai con&#355;ine o <strong>pereche tehnic&#259; echilibrat&#259; pe 473</strong>, de valoarea bazei,
+care duce baza importului &#238;n decontul de TVA (D300); f&#259;r&#259; contul 473 &#238;n plan, perechea nu se adaug&#259;.</p>
 <p>Nota contabil&#259; prime&#351;te ca referin&#355;&#259; <strong>num&#259;rul de DVI</strong> (MRN), nu secven&#355;a intern&#259;, astfel &#238;nc&#226;t plata
-din extrasul bancar s&#259; poat&#259; fi reconciliat&#259; pe contul 446 per declara&#355;ie.</p>
+din extrasul bancar s&#259; poat&#259; fi reconciliat&#259; pe contul de buget per declara&#355;ie.</p>
+<p><strong>La plata c&#259;tre vam&#259;</strong> (doar la regimul cu plat&#259; efectiv&#259;): <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Dr 4462 = Cr 5121</code>, exclusiv &#238;n lei.</p>
 <p><strong>La desc&#259;rcarea gestiunii:</strong> <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Dr 607 = Cr 371</code>.</p>
 <blockquote>
-<p>Din 19.0.1.3.0 comisionul vamal se crediteaz&#259; pe <strong>446</strong>, nu pe 447. Pe bazele existente contul nu se
-schimb&#259; automat &#8212; vezi nota de migrare din DESCRIPTION, capitolul &#8222;Biroul vamal nu este partener&#8221;.</p>
+<p>Wizardul nu mai are c&#226;mpul &#8222;Comision vamal&#8221; (eliminat dup&#259; 19.0.2.0.0): comisionul vamal nu mai
+exist&#259; dup&#259; aderarea la UE. Onorariul brokerului se opereaz&#259; doar prin factura lui, mai jos.</p>
 </blockquote>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Onorariul comisionarului vamal (brokerul)</h2>
 <p><strong>Nu se opereaz&#259; prin wizardul DVI.</strong> Brokerul e furnizor obi&#351;nuit: are CUI, emite factur&#259; cu TVA &#351;i
 are sold pe 401.</p>
 <ol>
-<li>Crea&#355;i un produs de tip <strong>serviciu</strong> cu bifa <strong>&#8222;Is a Landed Cost&#8221;</strong> (fila Achizi&#355;ii), cu cont de
-   cheltuial&#259; 628 (sau 622).</li>
+<li>Crea&#355;i un produs de tip <strong>serviciu</strong> cu bifa <strong>&#8222;Este un cost adi&#355;ional&#8221;</strong> (fila Achizi&#355;ii). Contul de
+   cheltuial&#259; al produsului este <strong>473</strong> dac&#259; onorariul se capitalizeaz&#259; (doar tranzit, se soldeaz&#259; la
+   validare), respectiv <strong>622</strong> dac&#259; nu se capitalizeaz&#259;. Nu 628.</li>
 <li>&#206;nregistra&#355;i factura brokerului pe acest produs, cu TVA-ul lui. Linia se marcheaz&#259; automat ca linie
-   de landed cost.</li>
-<li><strong>Dac&#259; politica contabil&#259; prevede capitalizarea</strong> onorariului &#238;n costul m&#259;rfii: ap&#259;sa&#355;i butonul
-   <strong>&#8222;Create Landed Costs&#8221;</strong> de pe factur&#259;, selecta&#355;i recep&#355;ia &#351;i valida&#355;i.
-   <strong>Dac&#259; nu se capitalizeaz&#259;:</strong> nu ap&#259;sa&#355;i nimic &#8212; factura r&#259;m&#226;ne cheltuial&#259; pe 628.</li>
+   de cost adi&#355;ional.</li>
+<li><strong>Capitalizarea este regula</strong> (OMFP 1802/2014 pct. 8 subpct. 6): ap&#259;sa&#355;i butonul <strong>&#8222;Crea&#539;i costuri
+   adi&#539;ionale&#8221;</strong> de pe factur&#259;, selecta&#355;i recep&#355;ia &#351;i valida&#355;i. <strong>Excep&#355;ia</strong> &#8212; onorariu nesemnificativ
+   sau nealocabil direct &#8212; se justific&#259; &#238;n politica contabil&#259;: nu ap&#259;sa&#355;i nimic, iar factura r&#259;m&#226;ne
+   cheltuial&#259; pe 622.</li>
 </ol>
-<pre class="border rounded-3 p-3 my-3" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-x:auto;"><code>Factura brokerului:        Dr 628  = Cr 401     onorariu
-                           Dr 4426 = Cr 401     TVA deductibil&#259;
-Landed cost din factur&#259;:   Dr 371  = Cr 628     doar dac&#259; se capitalizeaz&#259;
+<pre class="border rounded-3 p-3 my-3" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-x:auto;"><code>Factura brokerului:         Dr 473  = Cr 401     onorariu (sau Dr 622, dac&#259; nu se capitalizeaz&#259;)
+                            Dr 4426 = Cr 401     TVA deductibil&#259;
+Cost adi&#355;ional din factur&#259;: Dr 371  = Cr 473     doar dac&#259; se capitalizeaz&#259;
 </code></pre>
 <p>Butonul <strong>este</strong> switch-ul de politic&#259; contabil&#259;; nu exist&#259; un c&#226;mp separat de configurat.</p>
+<blockquote>
+<p><strong>Onorariul poate fi scutit de TVA</strong> dac&#259; a fost efectiv inclus &#238;n baza B00 (art. 294 alin. (1)
+lit. d), art. 289 alin. (2)): factura brokerului se emite atunci f&#259;r&#259; TVA, ca transportul.</p>
+</blockquote>
 <h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Verific&#259;ri dup&#259; validare</h2>
 <ul>
 <li>[ ] Baza din nota contabil&#259; corespunde bazei pozi&#355;iei B00 din DVI.</li>
 <li>[ ] TVA-ul din 4426 corespunde valorii B00 din DVI.</li>
-<li>[ ] Costul unitar al produsului a crescut cu (tax&#259; vamal&#259; + comision + transport) / cantitate.</li>
+<li>[ ] Costul unitar al produsului a crescut cu (tax&#259; vamal&#259; + transport capitalizat) / cantitate.</li>
+<li>[ ] Regimul de plat&#259; este cel al societ&#259;&#539;ii: tax&#259; obi&#537;nuit&#259; la plata efectiv&#259;, tax&#259; cu dou&#259; reparti&#539;ii (4426 / 4427) f&#259;r&#259; plata &#238;n vam&#259;.</li>
+<li>[ ] Taxa vamal&#259; este creditat&#259; pe <strong>4462</strong>, iar TVA-ul de import apare pe <strong>4426</strong>, nu &#238;n costul m&#259;rfii.</li>
 <li>[ ] Nota contabil&#259; are ca referin&#355;&#259; MRN-ul declara&#355;iei.</li>
 <li>[ ] Transportul extern apare o singur&#259; dat&#259; &#238;n costul stocului.</li>
 </ul>
 </div>
 <div class="tab-pane fade py-2" id="tb-panel-versions" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Versions</h2>
-<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.1 (2026-11-16)</h2>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.2.1 (2026-11-16)</h2>
 <p><strong>Changed</strong></p>
 <ul>
 <li>Apps Store page (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">static/description/index.html</code>) regenerated with the Terrabit template.</li>
 </ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.2.0 (2026-10-29)</h2>
+<ul>
+<li>The entry of a DVI has the document type <em>Import (DVI)</em> (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_account_move_document_type</code>,
+  installed as a dependency), so the VAT purchase journal shows the customs declaration as the
+  supporting document of the import VAT instead of <em>Journal Entry</em> (helpdesk ticket #9568). The
+  entries of the DVIs already validated are updated on upgrade.</li>
+<li>Consultant sheet: step 7 shows the <em>Import (DVI)</em> document type on the DVI entry (highlighted in
+  the screenshot) and in the VAT purchase journal, and its update on upgrade; new dependency in &#167;7,
+  new check in &#167;8; step 12 gets a screenshot of the intra-Community invoice with "0% EU G".</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.14 (2026-10-24)</h2>
+<ul>
+<li>Tests only: the journal and the accounts looked up by code in the test methods are restricted to
+  the company of the test. On a database with several Romanian companies, the lookup took the
+  journal or the 446200 account of another company and the DVI entry failed on posting ("company
+  inconsistencies"); the tests passed only on a database with a single company.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.13 (2026-10-24)</h2>
+<ul>
+<li>Consultant sheet, step 5: the DVI can be filled in from the PDF of the customs declaration
+  printed by the SNI, with the <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_customs_dvi_import</code> module; manual transcription stays for
+  declarations received without that PDF.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.12 (2026-10-24)</h2>
+<ul>
+<li>Fix (#685): on a database with several companies, the DVI entry of a company other than the one
+  that created the <em>Custom Duty</em> product credited the import VAT paid at customs and the custom duty
+  to the expense account of the product category (607) instead of 4462. The budget settlement
+  account is now taken directly from the chart of the DVI company, and the expense account of the
+  product is filled in for that company on first use.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.11 (2026-10-24)</h2>
+<ul>
+<li>Consultant sheet: the DVI journal entry carries the foreign supplier on its header (step 7, &#167;2.6),
+  the purchase VAT journal shows the import once, on the DVI entry, and D394 leaves it out (&#167;7), with
+  two new checks for the consultant (&#167;8).</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.10 (2026-10-24)</h2>
+<ul>
+<li>The DVI journal entry now carries the foreign supplier of the vendor bill on its header, so the
+  purchase VAT journal shows the import with the supplier name and tax ID. Only the header changes:
+  the VAT and customs duty lines keep their partner. On update, the posted 2026 DVI entries without
+  a partner are completed, except those in locked periods.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.9 (2026-10-16)</h2>
+<ul>
+<li>Consultant sheet, regime 4200: the intra-Community invoice is issued before customs clearance (customs
+  require it), new step 12 with the sales flow (invoicing policy on ordered quantities, intra-Community
+  fiscal position with "0% EU G", VIES check, delivery validated after all landed costs, quantity
+  differences), the reporting month of the intra-Community supply and the risk of a missing or wrong
+  D390.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.8 (2026-10-16)</h2>
+<ul>
+<li>New <em>Customs Regime</em> field on the DVI wizard and on the landed cost (4000 / 4200 / other).
+  Under regime 4200 (import exempt from VAT, art. 293(1)(m) of the Romanian Fiscal Code, followed
+  by an intra-Community supply) the wizard proposes the exempt tax "0% EXEMPT" with no import
+  VAT, and the DVI entry carries only the base, on row 29 of the VAT return (D300), through the
+  technical 473 pair. Until now an import without VAT left no trace in the VAT return. The VAT
+  held by customs as a guarantee is not posted; a 4200 DVI with import VAT is refused.</li>
+<li>Regime 4200: new informative fields <em>VAT Held as Guarantee</em> and <em>Guarantee Status</em>
+  (Blocked / Released) on the DVI, with a <em>Mark as Released</em> button and a <em>VAT Guarantee
+  Blocked</em> filter, to follow the release requests after the confirmed CMR. No journal entry is
+  generated: the guarantee entries on account 2678 stay manual.</li>
+<li>When the DVI has no customs duty, the entry created for the import VAT (or the exempt base) is
+  now posted; it used to stay in draft and was left out of the VAT return.</li>
+</ul>
+<h2 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">19.0.2.1.7 (2026-10-16)</h2>
+<ul>
+<li>The landed cost created by the DVI wizard is now linked to the supplier invoice through the
+  standard <em>Vendor Bill</em> field, which was left empty: the field shows the invoice, the invoice gets
+  the <em>Landed Costs</em> smart button and the stock valuation details name the invoice. Landed costs
+  created before this version keep the field empty.</li>
+</ul>
+<p><em>Older releases are listed in the module's HISTORY file.</em></p>
 </div>
 </div>
 
@@ -685,12 +829,12 @@ Landed cost din factur&#259;:   Dr 371  = Cr 628     doar dac&#259; se capitaliz
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">MC</span>
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">CB</span>
               <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_bank_statement_import_mt940_cec/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">MT940 CEC Format Bank Statements Import</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">CEC Bank MT940 Statement Import</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
@@ -705,12 +849,12 @@ Landed cost din factur&#259;:   Dr 371  = Cr 628     doar dac&#259; se capitaliz
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">MR</span>
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RM</span>
               <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_bank_statement_import_mt940_revolut/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">MT940 Revolut Format Bank Statements Import</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Revolut MT940 Statement Import</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
@@ -719,22 +863,22 @@ Landed cost din factur&#259;:   Dr 371  = Cr 628     doar dac&#259; se capitaliz
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_report" target="_blank" rel="noopener"
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_move_document_type" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
                     style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
-              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_report/icon.png" alt="" loading="lazy"
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_move_document_type/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Account Reports</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Accounting Document Type</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Account Reports</p>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Supporting document type on journal entries: invoice, DVI, receipt, bank statement, journal entry</p>
         </div>
       </a>
     </div>
@@ -750,7 +894,7 @@ Landed cost din factur&#259;:   Dr 371  = Cr 628     doar dac&#259; se capitaliz
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Sequence</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Journal Numbering</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
@@ -759,62 +903,62 @@ Landed cost din factur&#259;:   Dr 371  = Cr 628     doar dac&#259; se capitaliz
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_storno" target="_blank" rel="noopener"
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_partner_lookup" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RS</span>
-              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_storno/icon.png" alt="" loading="lazy"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_lookup/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Storno Enhancements</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF Partner Lookup</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Storno Enhancements</p>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Look a Romanian company up at ANAF by its CUI and get the partner data, without other localization modules</p>
         </div>
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_cash_register" target="_blank" rel="noopener"
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_partner_online" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RC</span>
-              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_cash_register/icon.png" alt="" loading="lazy"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_online/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Register</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF Partner Data for Odoo Online</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Cash Register</p>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Fill in Romanian partners from ANAF by their CUI, on Odoo Online too (no Python, service by Terrabit)</p>
         </div>
       </a>
     </div>
     <div class="col-md-3 col-sm-6">
-      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_config_fix" target="_blank" rel="noopener"
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_token_online" target="_blank" rel="noopener"
          class="card h-100 text-decoration-none border" style="color:#212529;">
         <div class="card-body p-3">
           <div class="d-flex align-items-center mb-2">
             <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
               <span class="d-inline-block text-center fw-bold rounded"
-                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RL</span>
-              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_config_fix/icon.png" alt="" loading="lazy"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_token_online/icon.png" alt="" loading="lazy"
                    class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
             </span>
             <span>
-              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Localization Config Fix</span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF SPV Token for Odoo Online</span>
               <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
             </span>
           </div>
-          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Fixes l10n_ro_config hiding unrelated l10n_ro_* fields on non-&#x27;ro&#x27; chart templates</p>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">e-Factura SPV token through Terrabit, renewed for you, on Odoo Online too (no Python)</p>
         </div>
       </a>
     </div>

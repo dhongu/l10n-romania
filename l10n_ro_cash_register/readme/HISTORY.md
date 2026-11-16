@@ -1,8 +1,90 @@
-## 19.0.1.2.2 (2026-11-16)
+## 19.0.1.5.1 (2026-11-16)
 
 **Changed**
 
 - Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
+## 19.0.1.5.0 (2026-11-12)
+
+**Nou** — operatorul de casă, fără drepturi de contabil.
+
+- New group *Cash register operator*: works on the cash registers (receipts, payments through the *Operation* wizard, cash count, closing the day) of the cash desks he is assigned to, without any accounting group: the group implies only the internal user, so the operator can also be, for instance, a point of sale user. It has its own *Cash Register* app (menu), and read-only access to the journal entries, journals and accounts needed to display and print the register.
+- New field *Cash Register Operators* on cash journals (*Accounting > Configuration > Journals*). An operator sees only the registers, and count lines, of the journals he is assigned to; an empty list hides the cash desk from all operators. Accountants see all cash registers, even if they also have the operator group.
+- The *Operation* wizard creates the journal entry with elevated rights, but only on a cash desk the user is assigned to.
+- The group sits under its own *Cash Register* privilege (user form, *Accounting* section), so it can be assigned without developer mode.
+- The *Operation* wizard refuses, for an operator, a cash or bank account as counterpart account, except the company internal transfer account (581, the default of the wizard): other transfers between cash desks or to the bank go through an accountant.
+- Reopening a closed day, and the *Add Receipt* / *Add Payment* buttons (customer payments need invoicing rights), stay with accounting users.
+
+## 19.0.1.4.3 (2026-10-22)
+
+- Odoo Apps banner title: *Cash Register* (was *Cash Register Document*), the same as the module name.
+
+## 19.0.1.4.1 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
+## 19.0.1.4.0
+
+**Nou** — monetarul casieriei: numărarea numerarului pe cupiuri.
+
+- Cupiuri de numerar pe monedă (*Contabilitate > Configurare > Cupiuri numerar*), livrate pentru
+  leu (500 lei – 1 ban) și euro (500 € – 1 cent).
+- Pe registrul de casă, **Numără numerarul** adaugă câte un rând pe fiecare cupiură a monedei
+  casieriei; registrul arată numerarul numărat și diferența față de soldul contului casei.
+- **Înregistrează diferența** deschide operațiunea de casă precompletată: plusul pe contul de profit,
+  lipsa pe contul de pierdere al jurnalului; fără conturi pe jurnal sau cu jurnalul rămas pe
+  conturile generice 999xxx de diferențe de numerar propuse de Odoo, pe planul RO 7588 și 65882.
+  Contul se poate schimba (473 în curs de clarificare, 4282 lipsă imputată casierului).
+- La o casierie în valută se numără cupiurile valutei, iar soldul scriptic al monetarului este
+  soldul în valută al contului casei; diferența se înregistrează prin notă contabilă în valută.
+- **Tipărește monetarul**: situația numerarului pe cupiuri, cu subtotal pe bancnote și monede,
+  sold scriptic, diferență și semnături.
+- Bifa **Monetar obligatoriu la închiderea zilei** pe jurnalul de casă: ziua nu se închide
+  nenumărată sau cu diferență neînregistrată. Monetarul unei zile închise nu se mai modifică.
+- Operațiunea de casă păstrează contul corespondent primit din context, în loc să-l înlocuiască
+  mereu cu contul de transfer al companiei.
+
+## 19.0.1.3.1
+
+**Corectat** — numărul registrului de casă continua numerotarea notelor de casă.
+
+Registrul și notele jurnalului de casă au același format (`CASA/2026/00001`), iar cache-ul de
+secvență din `sequence.mixin` are cheia (format, jurnal), comună ambelor. Un registru creat în
+aceeași tranzacție cu postarea unei note — de exemplu registrul zilei, creat automat la postarea
+unei plăți pe casierie — primea următorul număr al notelor, nu pe al lui: apăreau goluri în
+numerotarea registrelor. Registrul are acum cache-ul de secvență propriu.
+
+- Mesajele de blocare la o zi închisă și de refuz al unei zile din viitor afișează data în formatul
+  limbii utilizatorului (03.09.2026), nu ISO.
+- Formularul registrului: moneda și compania stau sub dată și jurnal, fără golul de sub solduri
+  după închidere.
+- Traduceri RO pentru acțiunile „Generează registrele de casă lipsă” și „Elimină conturile de
+  plăți în curs” și pentru mesajul de registru duplicat.
+- Fișa consultant actualizată cu închiderea zilei, blocarea postării și redeschiderea; capturi
+  regenerate.
+
+## 19.0.1.3.0
+
+**Nou** — închiderea zilei de casă.
+
+- Butonul **Închide ziua** pe registrul de casă îngheață soldul final (cine, când, cât). După
+  închidere, contul casei nu mai primește înregistrări datate în ziua închisă sau înaintea ei:
+  postarea, trecerea în ciornă și ștergerea unei astfel de note sunt refuzate. O mișcare în urmă
+  ar schimba soldul reportat în ziua închisă (OMFP 2634/2015, Anexa 1 pct. 58 lit. d) și h)).
+- **Redeschide** redeschide ziua și toate zilele închise de după ea din aceeași casierie (soldul se
+  reportează din zi în zi) și lasă urma în istoricul fiecărui registru.
+- Pe un registru închis nu se pot schimba data, casieria sau numărul (s-ar muta blocarea fără
+  urmă). Nu se poate închide o zi din viitor sau una cu sold negativ.
+- Corecțiile pentru o zi închisă se fac prin stornare sau notă de corecție datată în ziua curentă.
+- Un registru închis nu se poate șterge; butoanele de adăugare a încasărilor, plăților și
+  operațiunilor nu mai apar pe el.
+
+Ideea vine din modulul de casă și bancă scris de Alexandru Grecu pentru un client,
+unde închiderea doar semnala diferențele apărute după închidere; aici ea le previne.
+
+## 19.0.1.2.2
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
 
 ## 19.0.1.2.1
 

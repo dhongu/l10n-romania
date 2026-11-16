@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="view_partner_property_form" model="ir.ui.view">
+        <field name="name">res.partner.form.l10n_ro_invoice_report_online</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form" />
+        <field name="arch" type="xml">
+            <field name="property_account_payable_id" position="after">
+                <field name="x_l10n_ro_info_for_invoice" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form.l10n_ro_invoice_report_online</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <group name="misc" position="inside">
+                <field name="x_l10n_ro_mean_transp" />
+                <field name="x_l10n_ro_payment_bank_id" domain="['|', ('company_id', '=', company_id), ('company_id', '=', False)]" />
+            </group>
+        </field>
+    </record>
+</odoo>

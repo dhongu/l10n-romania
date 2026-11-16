@@ -1,8 +1,27 @@
-## 19.0.1.0.12 (2026-11-16)
+## 19.0.1.1.1 (2026-11-16)
 
 **Changed**
 
 - Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
+## 19.0.1.1.0 (2026-11-16)
+
+- The product image on the sale order lines (the `include_image_line` company setting and its report columns) moved to the new `deltatech_sale_order_image` module, which this module now depends on. The setting keeps its name and value; nothing changes on the printed report.
+- License changed from AGPL-3 to OPL-1, as the module now depends on an OPL-1 module.
+- Development status lowered from Mature to Production/Stable: the CI rule requires a module to be no more mature than its dependencies, and `deltatech_sale_order_image` is Production/Stable.
+- Consultant sheet (`readme/FISA_CONSULTANT.md`, text only, `consultant_sheet: simple`) and `Proforma inițială` spelling fixed in `ro.po`.
+
+## 19.0.1.0.14 (2026-10-22)
+
+- Listed on Odoo Apps as *Romania - Proforma Invoice Report* (was *Terrabit Sale Order Report*). The technical name `l10n_ro_sale_order_report` does not change.
+
+## 19.0.1.0.13 (2026-10-09)
+
+- Odoo Apps banner (`static/description/main_screenshot.png`), generated from `banner.json`.
+
+## 19.0.1.0.12 (2026-09-30)
+
+- Own module icon in the flat style of the Terrabit modules, instead of the missing or generic one.
 
 ## 19.0.1.0.11 (2026-08-25)
 

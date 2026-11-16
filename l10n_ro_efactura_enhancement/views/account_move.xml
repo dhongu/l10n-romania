@@ -20,6 +20,14 @@
                         string="Retrimite în SPV"
                         invisible="l10n_ro_edi_state != 'invoice_refused'"
                         groups="account.group_account_invoice"/>
+                <button name="action_l10n_ro_edi_reset_not_indexed"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-undo"
+                        string="Resetează trimiterea SPV"
+                        confirm="Odoo sincronizează întâi cu ANAF. Dacă factura este găsită în SPV, nu se resetează nimic. Altfel, trimiterea este marcată ca eșuată și factura poate fi retrimisă. Ați verificat în SPV că factura nu există?"
+                        invisible="l10n_ro_edi_state != 'invoice_not_indexed'"
+                        groups="account.group_account_invoice"/>
             </xpath>
         </field>
     </record>

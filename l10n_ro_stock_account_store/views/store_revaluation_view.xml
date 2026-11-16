@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_store_revaluation_list" model="ir.ui.view">
+        <field name="name">l10n.ro.store.revaluation.list</field>
+        <field name="model">l10n.ro.store.revaluation</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="name" />
+                <field name="date" />
+                <field name="product_id" />
+                <field name="location_id" />
+                <field name="quantity" />
+                <field name="new_price" optional="show" />
+                <field name="currency_id" column_invisible="True" />
+                <field name="old_sale_amount" optional="hide" sum="Total" />
+                <field name="new_sale_amount" optional="hide" sum="Total" />
+                <field name="sale_amount" sum="Total" />
+                <field name="markup_amount" sum="Total" />
+                <field name="tax_amount" sum="Total" />
+                <field name="account_move_id" optional="show" />
+                <field name="company_id" groups="base.group_multi_company" optional="hide" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_store_revaluation_form" model="ir.ui.view">
+        <field name="name">l10n.ro.store.revaluation.form</field>
+        <field name="model">l10n.ro.store.revaluation</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" />
+                            <field name="datetime" />
+                            <field name="product_id" />
+                            <field name="location_id" />
+                            <field name="quantity" />
+                            <field name="new_price" />
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1" />
+                            <field name="old_sale_amount" />
+                            <field name="new_sale_amount" />
+                            <field name="old_tax_amount" />
+                            <field name="new_tax_amount" />
+                            <field name="sale_amount" />
+                            <field name="markup_amount" />
+                            <field name="tax_amount" />
+                            <field name="account_move_id" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_store_revaluation_search" model="ir.ui.view">
+        <field name="name">l10n.ro.store.revaluation.search</field>
+        <field name="model">l10n.ro.store.revaluation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="product_id" />
+                <field name="location_id" />
+                <filter name="date" string="Date" date="date" />
+                <group>
+                    <filter name="group_store" string="Store" context="{'group_by': 'location_id'}" />
+                    <filter name="group_product" string="Product" context="{'group_by': 'product_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_store_revaluation" model="ir.actions.act_window">
+        <field name="name">Store Revaluations</field>
+        <field name="res_model">l10n.ro.store.revaluation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_store_revaluation"
+        action="action_store_revaluation"
+        parent="stock.menu_warehouse_report"
+        sequence="120"
+    />
+</odoo>

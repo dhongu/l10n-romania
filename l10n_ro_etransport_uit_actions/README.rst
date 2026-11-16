@@ -1,6 +1,6 @@
-======================
-eTransport UIT Actions
-======================
+=======================
+e-Transport UIT Actions
+=======================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -84,6 +84,25 @@ sent for the transport.
 
 Changelog
 =========
+
+19.0.1.1.3 (2026-10-22)
+-----------------------
+
+- Listed on Odoo Apps as *e-Transport UIT Actions* (was *eTransport UIT
+  Actions*). The technical name ``l10n_ro_etransport_uit_actions`` does
+  not change.
+
+19.0.1.1.2 (2026-10-09)
+-----------------------
+
+- Odoo Apps banner regenerated in the current Terrabit style, with the
+  module icon.
+
+19.0.1.1.1 (2026-09-30)
+-----------------------
+
+- Own module icon in the flat style of the Terrabit modules, instead of
+  the missing or generic one.
 
 19.0.1.0.0 (2026-09-10)
 -----------------------

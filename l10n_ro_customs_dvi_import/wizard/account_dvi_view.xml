@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_account_invoice_dvi_form" model="ir.ui.view">
+        <field name="name">DVI - import from the SNI PDF</field>
+        <field name="model">account.invoice.dvi</field>
+        <field name="inherit_id" ref="l10n_ro_customs_dvi.view_account_invoice_dvi_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form/group" position="before">
+                <group>
+                    <field name="dvi_file" filename="dvi_filename" />
+                    <field name="dvi_filename" invisible="1" />
+                </group>
+                <field name="dvi_import_info" nolabel="1" invisible="not dvi_import_info" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

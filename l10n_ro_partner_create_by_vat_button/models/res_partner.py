@@ -11,6 +11,11 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
+# The European Commission serves VIES over HTTPS only: the http:// address answers 403 Forbidden,
+# so the client could not even load the WSDL. Over HTTPS zeep also moves the service endpoint,
+# declared as http:// in the WSDL, to HTTPS.
+VIES_WSDL = "https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
+
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
@@ -130,7 +135,10 @@ class ResPartner(models.Model):
             raise UserError(
                 self.env._("The 'zeep' library is required for VIES lookups. Install it with: pip install zeep")
             ) from e
-        return Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")
+        try:
+            return Client(VIES_WSDL)
+        except Exception as e:
+            raise UserError(self.env._("VIES service error: %s", e)) from e
 
     def get_partner_name_from_vies(self):
         client = self._get_vies_client()

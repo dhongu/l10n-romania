@@ -10,9 +10,14 @@
                 <field name="l10n_ro_edi_carrier_id" invisible="not l10n_ro_edi_stock_required" />
                 <field name="l10n_ro_transport_partner_id" invisible="not l10n_ro_edi_stock_required" />
             </xpath>
+            <field name="l10n_ro_edi_stock_remarks" position="after">
+                <field name="l10n_ro_etransport_post_outage" readonly="l10n_ro_edi_stock_fields_readonly" />
+            </field>
             <page name="etransport" position="inside">
-                <group name="weights">
-                    <field name="l10n_ro_shipping_weights" />
+                <group name="weights" string="Greutăți cântărite">
+                    <group>
+                        <field name="l10n_ro_shipping_weights" />
+                    </group>
                     <group>
                         <field name="total_net_weight" invisible="not l10n_ro_shipping_weights" />
                         <field name="total_gross_weight" invisible="not l10n_ro_shipping_weights" />
@@ -81,7 +86,7 @@
         id="report_batch_report_batch_delivery"
         inherit_id="l10n_ro_stock_picking_batch_report.report_batch_delivery"
     >
-        <xpath expr="//t[@t-call='l10n_ro_stock_picking_report.report_delivery_sign']" position="after">
+        <xpath expr="//t[@t-call='l10n_ro_picking_report.report_delivery_sign']" position="after">
             <span t-if="batch.l10n_ro_edi_stock_required">
                 <t
                     t-set="filtered_documents"
@@ -89,7 +94,7 @@
                 />
                 <t t-if="filtered_documents">
                     <span>
-                        <strong>UIT:</strong><span t-field="filtered_documents[0].l10n_ro_edi_stock_uit" />
+                        <strong>UIT:</strong> <span t-field="filtered_documents[0].l10n_ro_edi_stock_uit" />
                     </span>
                 </t>
             </span>

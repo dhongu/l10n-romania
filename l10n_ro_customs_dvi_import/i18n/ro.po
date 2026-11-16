@@ -1,0 +1,232 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_customs_dvi_import
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 07:24+0000\n"
+"PO-Revision-Date: 2026-10-24 07:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "%(amount)s %(currency)s, exchange rate %(rate)s"
+msgstr "%(amount)s %(currency)s, curs de schimb %(rate)s"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "%(code)s: method %(method)s, payment type %(type)s"
+msgstr "%(code)s: metoda %(method)s, tip plată %(type)s"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Articles"
+msgstr "Articole"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"Check the tax: VAT paid at customs, or deferred (VAT deferral certificate). "
+"The declaration does not tell them apart."
+msgstr ""
+"Verificați taxa: TVA plătit în vamă sau amânat (certificat de amânare). "
+"Declarația nu le deosebește."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Customs Release"
+msgstr "Liber de vamă"
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,help:l10n_ro_customs_dvi_import.field_account_invoice_dvi__dvi_file
+msgid ""
+"Customs import declaration as printed by the National Import System (SNI). "
+"When it is uploaded, the wizard is filled in with the values of the "
+"declaration: MRN, acceptance date, customs regime, customs duty (A00), "
+"import VAT and its base (B00). Check them and apply."
+msgstr ""
+"Declarația vamală de import, așa cum e tipărită de Sistemul Național de "
+"Import (SNI). La încărcare, asistentul se completează cu valorile din "
+"declarație: MRN, data acceptării, regimul vamal, taxa vamală (A00), TVA-ul "
+"de import și baza lui (B00). Verificați-le și aplicați."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Customs regime %s is not handled: check the declaration."
+msgstr "Regimul vamal %s nu este tratat: verificați declarația."
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__dvi_file
+msgid "DVI PDF (SNI)"
+msgstr "PDF DVI (SNI)"
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__dvi_filename
+msgid "Dvi Filename"
+msgstr "Nume fișier DVI"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Filled in from the SNI declaration %s."
+msgstr "Completat din declarația SNI %s."
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Invoiced Amount"
+msgstr "Suma facturată"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Invoices on the Declaration"
+msgstr "Facturile din declarație"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "LRN"
+msgstr "LRN"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "No purchase tax with the rate %s was found."
+msgstr "Nu s-a găsit nicio taxă de achiziție cu cota %s."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "Payment Method"
+msgstr "Metoda de plată"
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model.fields,field_description:l10n_ro_customs_dvi_import.field_account_invoice_dvi__dvi_import_info
+msgid "Read from the Declaration"
+msgstr "Citit din declarație"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The %(code)s amounts of the articles (%(amount)s) do not add up to the total"
+" of the declaration (%(total)s)."
+msgstr ""
+"Sumele %(code)s de pe articole (%(amount)s) nu dau totalul declarației "
+"(%(total)s)."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The DVI cannot be imported: %s"
+msgstr "DVI-ul nu poate fi importat: %s"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The MRN of the declaration was not found."
+msgstr "Nu s-a găsit MRN-ul declarației."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The articles have different customs regimes (%s)."
+msgstr "Articolele au regimuri vamale diferite (%s)."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The articles of the declaration have different VAT rates (%s), and a DVI "
+"holds a single tax. Record the declaration by hand, one DVI per rate, with "
+"the same MRN."
+msgstr ""
+"Articolele declarației au cote de TVA diferite (%s), iar un DVI are o "
+"singură taxă. Înregistrați declarația manual, câte un DVI pe cotă, cu "
+"același MRN."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The declaration %(mrn)s is already recorded on %(dvi)s."
+msgstr "Declarația %(mrn)s este deja înregistrată pe %(dvi)s."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The declaration has %(count)s articles, but %(read)s were read from the "
+"document."
+msgstr ""
+"Declarația are %(count)s articole, dar din document s-au citit %(read)s."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The document is not an import customs declaration (DVI) printed by the SNI."
+msgstr ""
+"Documentul nu este o declarație vamală de import (DVI) tipărită de SNI."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The file cannot be read as a PDF: %s"
+msgstr "Fișierul nu poate fi citit ca PDF: %s"
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The importer of the declaration (%(importer)s) is not the current company "
+"(%(company)s)."
+msgstr ""
+"Importatorul din declarație (%(importer)s) nu este compania curentă "
+"(%(company)s)."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid "The pdfminer.six Python library is required to read the declaration."
+msgstr ""
+"Pentru citirea declarației este necesară biblioteca Python pdfminer.six."
+
+#. module: l10n_ro_customs_dvi_import
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi_import/wizard/account_dvi.py:0
+msgid ""
+"The vendor reference of the bill (%(ref)s) is not among the invoices of the "
+"declaration."
+msgstr ""
+"Referința furnizorului de pe factură (%(ref)s) nu se află printre facturile "
+"din declarație."
+
+#. module: l10n_ro_customs_dvi_import
+#: model:ir.model,name:l10n_ro_customs_dvi_import.model_account_invoice_dvi
+msgid "account.invoice.dvi"
+msgstr "account.invoice.dvi"

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- the tax code of the address form looks up the company at ANAF while it is typed -->
+    <template id="address_form_fields_anaf" inherit_id="portal.address_form_fields">
+        <xpath expr="//input[@name='vat']" position="attributes">
+            <attribute name="data-anaf-lookup">1</attribute>
+            <attribute name="t-att-data-anaf-country-id">request.env.ref('base.ro').id</attribute>
+            <attribute name="data-anaf-fill">{"name": "company_name", "street": "street", "city": "city", "zip": "zip", "state_id": "state_id"}</attribute>
+        </xpath>
+    </template>
+</odoo>

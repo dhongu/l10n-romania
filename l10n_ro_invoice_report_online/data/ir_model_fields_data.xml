@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Data-only module (importable on Odoo Online): the fields are manual, prefixed x_ -->
+<odoo>
+    <!-- Company: what the invoice prints -->
+    <record id="field_res_company__x_l10n_ro_email_on_invoice_address" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_email_on_invoice_address</field>
+        <field name="field_description">Show email</field>
+        <field name="ttype">boolean</field>
+        <!-- Install guard: the zip import ignores "excludes" in the manifest. When
+             l10n_ro_invoice_report is installed, the import stops on this missing
+             external ID, whose name says what to do. -->
+        <field
+            name="help"
+            eval="ref('l10n_ro_invoice_report_online.error_uninstall_l10n_ro_invoice_report_first') if ref('l10n_ro_invoice_report.l10n_ro_invoice_form_view', False) else 'Show the e-mail in the addresses printed on the invoice.'"
+        />
+    </record>
+    <record id="field_res_company__x_l10n_ro_phone_on_invoice_address" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_phone_on_invoice_address</field>
+        <field name="field_description">Show phone</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Show the phone in the addresses printed on the invoice.</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_marker_on_invoice_address" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_marker_on_invoice_address</field>
+        <field name="field_description">Show marker</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Show the address marker icons on the invoice.</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_index_line_on_invoice" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_index_line_on_invoice</field>
+        <field name="field_description">Show index line</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Number the invoice lines (Ord column).</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_show_total_amount_with_taxes" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_show_total_amount_with_taxes</field>
+        <field name="field_description">Show total amount with taxes</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Add a column with the line total including taxes.</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_hide_invoice_payment_communication" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_hide_invoice_payment_communication</field>
+        <field name="field_description">Hide invoice payment communication</field>
+        <field name="ttype">boolean</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_hide_pickings_in_invoice" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_hide_pickings_in_invoice</field>
+        <field name="field_description">Hide picking in invoice</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Do not print the deliveries and receptions of the invoice.</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_remove_product_name_from_invoice_line" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_remove_product_name_from_invoice_line</field>
+        <field name="field_description">Remove product name from invoice line</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Print only the description of the line, without the product name.</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_hide_invoice_delegate" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_hide_invoice_delegate</field>
+        <field name="field_description">Hide invoice delegate</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Do not print the issuer, the delegate and the means of transport.</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_show_undiscounted_price_on_invoice" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_show_undiscounted_price_on_invoice</field>
+        <field name="field_description">Show undiscounted price on invoice</field>
+        <field name="ttype">boolean</field>
+        <field name="help">With discounts, print the list price and the price after discount.</field>
+    </record>
+    <record id="field_res_company__x_l10n_ro_show_coface_logo" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_company" />
+        <field name="name">x_l10n_ro_show_coface_logo</field>
+        <field name="field_description">Show Coface logo</field>
+        <field name="ttype">boolean</field>
+        <field name="help">Display the Coface logo on the invoice to indicate that the debt is insured by Coface.</field>
+    </record>
+    <!-- Invoice: delegate and means of transport -->
+    <record id="field_account_move__x_l10n_ro_delegate_id" model="ir.model.fields">
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="name">x_l10n_ro_delegate_id</field>
+        <field name="field_description">Delegate</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">res.partner</field>
+        <field name="domain">[("is_company", "=", False)]</field>
+        <field name="index" eval="True" />
+    </record>
+    <record id="field_account_move__x_l10n_ro_mean_transp" model="ir.model.fields">
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="name">x_l10n_ro_mean_transp</field>
+        <field name="field_description">Mean transport</field>
+        <field name="ttype">char</field>
+    </record>
+    <!-- Partner -->
+    <record id="field_res_partner__x_l10n_ro_info_for_invoice" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_l10n_ro_info_for_invoice</field>
+        <field name="field_description">Additional info for invoice</field>
+        <field name="ttype">html</field>
+        <field name="help">Printed at the end of the invoices of this partner.</field>
+    </record>
+    <record id="field_res_partner__x_l10n_ro_mean_transp" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_l10n_ro_mean_transp</field>
+        <field name="field_description">Mean transport</field>
+        <field name="ttype">char</field>
+        <field name="help">Copied on the invoice when this partner is chosen as delegate.</field>
+    </record>
+    <record id="field_res_partner__x_l10n_ro_payment_bank_id" model="ir.model.fields">
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="name">x_l10n_ro_payment_bank_id</field>
+        <field name="field_description">Payment bank account</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">res.partner.bank</field>
+        <field name="company_dependent" eval="True" />
+        <field name="help">The bank account in which this partner will pay; set on its customer invoices.</field>
+    </record>
+    <!-- Journal: the operating unit printed on the invoice -->
+    <record id="field_account_journal__x_l10n_ro_operating_unit_id" model="ir.model.fields">
+        <field name="model_id" ref="account.model_account_journal" />
+        <field name="name">x_l10n_ro_operating_unit_id</field>
+        <field name="field_description">Operating Unit</field>
+        <field name="ttype">many2one</field>
+        <field name="relation">res.partner</field>
+    </record>
+</odoo>
