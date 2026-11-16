@@ -10,4 +10,4 @@ ANPC nr. 270/2026 a eliminat-o din obligația de afișare.
 
 Modulul funcționează și pe **Odoo Online**: nu conține cod Python și depinde doar de
 modulul standard `website`, așa că se instalează prin importul arhivei zip a modulului
-(*Aplicații > Importă modul*).
+(*Aplicații → Importați Modulul*).

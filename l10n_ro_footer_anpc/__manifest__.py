@@ -17,4 +17,5 @@
     "maintainers": ["dhongu", "danila12"],
     "development_status": "Mature",
     "images": ["static/description/main_screenshot.png"],
+    "consultant_sheet": "full",
 }
