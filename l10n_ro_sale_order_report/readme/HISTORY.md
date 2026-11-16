@@ -1,3 +1,8 @@
+## 19.0.1.1.0 (2026-11-16)
+
+- The product image on the sale order lines (the `include_image_line` company setting and its report columns) moved to the new `deltatech_sale_order_image` module, which this module now depends on. The setting keeps its name and value; nothing changes on the printed report.
+- License changed from AGPL-3 to OPL-1, as the module now depends on an OPL-1 module.
+
 ## 19.0.1.0.14 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Proforma Invoice Report* (was *Terrabit Sale Order Report*). The technical name `l10n_ro_sale_order_report` does not change.
