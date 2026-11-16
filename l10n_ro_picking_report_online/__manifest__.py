@@ -6,7 +6,7 @@
     "name": "Romania - Picking Reports for Odoo Online",
     "summary": "NIR, delivery note (aviz) and consumption voucher, Romanian layout, on Odoo Online too (no Python)",
     "license": "AGPL-3",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

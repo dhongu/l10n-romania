@@ -1,5 +1,6 @@
 {
   "title": "e-Factura SPV Messages",
+  "online": true,
   "summary": "Every e-Factura message in one register, no Python",
   "edition": "community",
   "lang": "en",
