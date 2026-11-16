@@ -19,8 +19,11 @@ Romania - Partner Autocomplete from ANAF
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
     :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_partner_autocomplete
     :alt: dhongu/l10n-romania
+.. |badge_tests| image:: https://img.shields.io/badge/-53%20automated%20tests-2ea44f.png
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_partner_autocomplete/tests
+    :alt: 53 automated tests
 
-|badge1| |badge2| |badge3|
+|badge1| |badge2| |badge3| |badge_tests|
 
 The standard partner autocomplete of Odoo suggests companies from IAP
 and spends credits to fill the partner in. For a Romanian company the
