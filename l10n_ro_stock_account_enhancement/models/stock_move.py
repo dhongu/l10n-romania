@@ -15,7 +15,8 @@ class StockMove(models.Model):
         )
         # In 19.0 the COGS of an invoice line used `_get_cogs_price_unit` (not checked here);
         # in 20.0 it goes through `_get_price_unit(include_consigned=True)`: keep it unchecked.
-        if include_consigned:
+        if include_consigned or not self:
+            # Recordset gol (ex. mișcările de retur din `_get_price_unit_delivery`): nimic de verificat.
             return price
         skip_price_unit_check = (
             self.env["ir.config_parameter"].sudo().get_bool("l10n_ro_stock_account.skip_price_unit_check")
