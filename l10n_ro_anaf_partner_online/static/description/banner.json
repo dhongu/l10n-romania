@@ -1,5 +1,6 @@
 {
   "title": "ANAF Partner Data",
+  "online": true,
   "summary": "Company data from ANAF by CUI, no Python",
   "edition": "community",
   "lang": "en",
