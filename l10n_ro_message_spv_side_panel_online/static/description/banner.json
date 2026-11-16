@@ -1,0 +1,12 @@
+{
+  "title": "SPV Messages Split View",
+  "online": true,
+  "summary": "Review the SPV invoices without leaving the list, no Python",
+  "edition": "community",
+  "lang": "en",
+  "features": [
+    "Kanban cards and list with side panel",
+    "Invoice drawn from its XML, with the lines",
+    "Works on Odoo Online"
+  ]
+}

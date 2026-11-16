@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Kanban: one card per message, with the panel on the right. -->
+    <record id="view_l10n_ro_edi_document_kanban" model="ir.ui.view">
+        <field name="name">l10n_ro_edi.document.kanban.spv.side.panel.online</field>
+        <field name="model">l10n_ro_edi.document</field>
+        <field name="arch" type="xml">
+            <kanban class="o_spv_split_kanban" js_class="side_panel_kanban" create="0">
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between gap-2">
+                            <span class="fw-bold text-truncate">
+                                <t t-if="record.x_partner_id.raw_value">
+                                    <field name="x_partner_id" />
+                                </t>
+                                <t t-else="">
+                                    <field name="invoice_id" />
+                                </t>
+                            </span>
+                            <span t-if="record.x_amount_total.raw_value" class="fw-bold text-nowrap">
+                                <field name="x_amount_total" widget="monetary" />
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between gap-2 text-muted">
+                            <span class="text-truncate">
+                                <field name="invoice_id" />
+                                ·
+                                <field name="x_invoice_date" />
+                            </span>
+                            <field
+                                name="state"
+                                widget="badge"
+                                decoration-danger="state == 'invoice_refused'"
+                                decoration-warning="state == 'invoice_sent'"
+                                decoration-success="state == 'invoice_validated'"
+                            />
+                        </div>
+                        <div class="d-flex justify-content-between gap-2 text-muted small">
+                            <span>
+                                <t t-if="record.x_received.raw_value">Received</t>
+                                <t t-else="">Sent</t>
+                                ·
+                                <field name="datetime" />
+                            </span>
+                            <span class="text-truncate text-danger" t-if="record.message.raw_value">
+                                <field name="message" />
+                            </span>
+                        </div>
+                        <field name="x_received" invisible="1" />
+                        <field name="x_currency_id" invisible="1" />
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- The list of the messages, with the same panel. -->
+    <record id="view_l10n_ro_edi_document_list_side_panel" model="ir.ui.view">
+        <field name="name">l10n_ro_edi.document.list.spv.side.panel.online</field>
+        <field name="model">l10n_ro_edi.document</field>
+        <field name="inherit_id" ref="l10n_ro_message_spv_online.view_l10n_ro_edi_document_list" />
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="js_class">side_panel_list</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- What the panel shows: the key data, the actions and the invoice drawn from its XML. -->
+    <record id="view_l10n_ro_edi_document_form_quick" model="ir.ui.view">
+        <field name="name">l10n_ro_edi.document.form.spv.quick.online</field>
+        <field name="model">l10n_ro_edi.document</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <header>
+                    <button
+                        name="action_l10n_ro_edi_fetch_status"
+                        type="object"
+                        string="Fetch status"
+                        class="btn-primary"
+                        invisible="not show_fetch_status_button"
+                    />
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <field name="show_fetch_status_button" invisible="1" />
+                    <field name="x_received" invisible="1" />
+                    <field name="x_currency_id" invisible="1" />
+                    <group>
+                        <group>
+                            <field name="x_partner_id" />
+                            <field name="invoice_id" />
+                            <field name="x_invoice_date" />
+                        </group>
+                        <group>
+                            <field name="x_amount_total" />
+                            <field name="datetime" />
+                            <field name="key_download" />
+                        </group>
+                    </group>
+                    <group invisible="not message">
+                        <field name="message" />
+                    </group>
+                    <group string="Files">
+                        <field
+                            name="attachment"
+                            string="XML of the message"
+                            filename="x_attachment_name"
+                            widget="binary"
+                        />
+                        <field name="x_attachment_name" invisible="1" />
+                    </group>
+                    <field name="x_invoice_attachment_ids" nolabel="1" widget="spv_invoice_document" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_spv_messages_split" model="ir.actions.act_window">
+        <field name="name">SPV Messages (split view)</field>
+        <field name="res_model">l10n_ro_edi.document</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="l10n_ro_message_spv_online.view_l10n_ro_edi_document_search" />
+        <field name="context">{
+            'side_panel_view_ref': 'l10n_ro_message_spv_side_panel_online.view_l10n_ro_edi_document_form_quick',
+        }</field>
+        <!-- Guard: the zip import (Apps > Import Module) does not check "excludes"; a missing
+             external ID stops the import while l10n_ro_message_spv_side_panel is installed -->
+        <field
+            name="help"
+            eval="ref('l10n_ro_message_spv_side_panel_online.error_uninstall_l10n_ro_message_spv_side_panel_first') if ref('l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split', False) else '&lt;p class=&quot;o_view_nocontent_smiling_face&quot;&gt;No SPV message yet&lt;/p&gt;'"
+        />
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_l10n_ro_edi_document_kanban')}),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_l10n_ro_edi_document_list_side_panel')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('l10n_ro_message_spv_online.view_l10n_ro_edi_document_form')})]"
+        />
+    </record>
+</odoo>
