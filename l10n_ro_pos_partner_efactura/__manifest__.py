@@ -6,7 +6,7 @@
     "name": "Romania - POS Partner e-Factura Check",
     "summary": "Require the partner data needed by e-Factura (SPV) when a customer is created in POS",
     "license": "AGPL-3",
-    "version": "20.0.1.0.1",
+    "version": "20.0.1.0.0",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",
