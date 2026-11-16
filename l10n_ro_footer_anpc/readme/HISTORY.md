@@ -1,9 +1,11 @@
 ## 20.0.0.0.7 (2026-11-16)
 
 - Modulul nu mai conține cod Python (`__init__.py` și testul Python au fost scoase), deci
-  se instalează și pe Odoo Online, prin importul arhivei zip (*Aplicații > Importă modul*).
+  se instalează și pe Odoo Online, prin importul arhivei zip (*Aplicații → Importați Modulul*).
 - Descrierea menționează instalarea pe Odoo Online; bannerul Apps Store este în română,
   cu eticheta „Odoo Online”.
+- Fișa consultant (`readme/FISA_CONSULTANT.md`) și `readme/USAGE.md`, cu capturile importului și
+  ale subsolului pe desktop și pe mobil.
 
 ## 20.0.0.0.6 (2026-11-14)
 

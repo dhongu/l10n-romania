@@ -34,13 +34,71 @@ europeană ODR) nu mai este afișată: platforma a fost închisă la 20 iulie
 2025 (Regulamentul (UE) 2024/3228), iar Ordinul ANPC nr. 270/2026 a
 eliminat-o din obligația de afișare.
 
+Modulul funcționează și pe **Odoo Online**: nu conține cod Python și
+depinde doar de modulul standard ``website``, așa că se instalează prin
+importul arhivei zip a modulului (*Aplicații → Importați Modulul*).
+
 **Table of contents**
 
 .. contents::
    :local:
 
+Usage
+=====
+
+Modulul nu are setări: după instalare, pictograma ANPC SAL apare în
+subsolul tuturor paginilor site-ului.
+
+1. Pe Odoo Online, în modul dezvoltator, deschideți **Aplicații →
+   Importați Modulul**, încărcați arhiva zip a modulului (versiunea care
+   corespunde bazei) și apăsați **Instalare**.
+
+   |Fereastra Importați Modulul: butonul Încarcă fișier pentru Fișier
+   modul (.zip), bifele Forțează inițializarea și Încărcare date
+   Demonstrative debifate și butonul Instalare|
+
+2. Deschideți site-ul fără autentificare: pe rândul de copyright, în
+   dreapta, apare pictograma **Soluționarea alternativă a litigiilor**,
+   cu link către ``https://reclamatiisal.anpc.ro/``.
+
+   |Subsolul site-ului pe desktop, cu pictograma ANPC SAL evidențiată în
+   dreapta rândului de copyright|
+
+3. Pe telefon, pictograma apare centrată, sub textul de copyright.
+
+   |Subsolul site-ului pe telefon, cu pictograma ANPC SAL centrată sub
+   textul de copyright|
+
+.. |Fereastra Importați Modulul: butonul Încarcă fișier pentru Fișier modul (.zip), bifele Forțează inițializarea și Încărcare date Demonstrative debifate și butonul Instalare| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_footer_anpc/static/description/01_import_modul.png
+.. |Subsolul site-ului pe desktop, cu pictograma ANPC SAL evidențiată în dreapta rândului de copyright| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_footer_anpc/static/description/02_subsol_desktop.png
+.. |Subsolul site-ului pe telefon, cu pictograma ANPC SAL centrată sub textul de copyright| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_footer_anpc/static/description/03_subsol_mobil.png
+
 Changelog
 =========
+
+20.0.0.0.7 (2026-11-16)
+-----------------------
+
+- Modulul nu mai conține cod Python (``__init__.py`` și testul Python au
+  fost scoase), deci se instalează și pe Odoo Online, prin importul
+  arhivei zip (*Aplicații → Importați Modulul*).
+- Descrierea menționează instalarea pe Odoo Online; bannerul Apps Store
+  este în română, cu eticheta „Odoo Online”.
+- Fișa consultant (``readme/FISA_CONSULTANT.md``) și
+  ``readme/USAGE.md``, cu capturile importului și ale subsolului pe
+  desktop și pe mobil.
+
+20.0.0.0.6 (2026-11-14)
+-----------------------
+
+- Apps Store banner: the "Odoo Online" badge shows that the module has
+  no Python code and installs on Odoo Online.
+
+20.0.0.0.5 (2026-10-22)
+-----------------------
+
+- Odoo Apps banner title: *ANPC footer* (was *ANPC Website Footer*), the
+  same as the module name.
 
 20.0.0.0.4 (2026-10-20)
 -----------------------
