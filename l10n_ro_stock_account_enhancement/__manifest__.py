@@ -2,7 +2,7 @@
 {
     "name": "Romania - Stock Accounting Controls",
     "consultant_sheet": "full",
-    "version": "19.0.0.0.5",
+    "version": "19.0.0.0.6",
     "category": "Localization",
     "countries": ["ro"],
     "summary": "Romania - Stock Accounting Enhancement",

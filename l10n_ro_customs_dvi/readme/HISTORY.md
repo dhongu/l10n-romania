@@ -1,3 +1,9 @@
+## 19.0.2.2.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.2.2.0 (2026-10-29)
 
 - The entry of a DVI has the document type *Import (DVI)* (`l10n_ro_account_move_document_type`,

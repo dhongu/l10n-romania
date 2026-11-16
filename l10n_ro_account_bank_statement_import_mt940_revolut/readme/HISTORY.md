@@ -1,3 +1,9 @@
+## 19.0.1.0.5 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.1.0.4 (2026-10-22)
 
 - Listed on Odoo Apps as *Revolut MT940 Statement Import* (was *MT940 Revolut Format Bank Statements Import*). The technical name `l10n_ro_account_bank_statement_import_mt940_revolut` does not change.

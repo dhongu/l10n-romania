@@ -1,3 +1,9 @@
+## 19.0.1.0.4 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.1.0.3 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Stock vs Ledger Check* (was *Romania - Stock Accounting Check*). The technical name `l10n_ro_stock_account_check` does not change.

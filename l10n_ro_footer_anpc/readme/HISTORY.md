@@ -1,3 +1,9 @@
+## 19.0.0.0.9 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.0.0.8 (2026-11-16)
 
 - Am pus înapoi `__init__.py` gol: uneltele OCA (manifestoo, oca-checks-odoo-module) nu

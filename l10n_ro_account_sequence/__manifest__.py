@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Romania - Cash Journal Numbering",
-    "version": "19.0.1.1.0",
+    "version": "19.0.1.1.1",
     "author": "Terrabit",
     "summary": "Romania - Cash Sequence",
     "development_status": "Mature",

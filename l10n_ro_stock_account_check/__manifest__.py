@@ -4,7 +4,7 @@
     "summary": "Check the stock valuation against the general ledger",
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
-    "version": "19.0.1.0.3",
+    "version": "19.0.1.0.4",
     "countries": ["ro"],
     "author": "Terrabit",
     "website": "https://www.terrabit.ro",

@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "maintainers": ["dhongu"],
     "consultant_sheet": "full",
-    "version": "19.0.0.0.7",
+    "version": "19.0.0.0.8",
     "development_status": "Mature",
     "author": "Dan Stoica, Terrabit",
     "website": "https://www.terrabit.ro",

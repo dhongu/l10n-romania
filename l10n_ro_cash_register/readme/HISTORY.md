@@ -1,3 +1,9 @@
+## 19.0.1.5.1 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.1.5.0 (2026-11-12)
 
 **Nou** — operatorul de casă, fără drepturi de contabil.

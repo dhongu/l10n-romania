@@ -1,3 +1,9 @@
+## 19.0.1.1.4 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.1.1.3 (2026-10-22)
 
 - Odoo Apps banner title: *Report Common* (was *Common Report Blocks*), the same as the module name.

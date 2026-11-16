@@ -4,7 +4,7 @@
 
 {
     "name": "e-Transport UIT Actions",
-    "version": "19.0.1.1.3",
+    "version": "19.0.1.1.4",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Delete, confirm or change the vehicle of an ANAF eTransport UIT",

@@ -4,7 +4,7 @@
 
 {
     "name": "e-Factura Enhancements",
-    "version": "19.0.0.5.12",
+    "version": "19.0.0.5.13",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "eFactura Enhancement",

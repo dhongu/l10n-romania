@@ -1,3 +1,9 @@
+## 19.0.1.1.4 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.1.1.3 (2026-10-22)
 
 - Listed on Odoo Apps as *e-Transport UIT Actions* (was *eTransport UIT Actions*). The technical name `l10n_ro_etransport_uit_actions` does not change.

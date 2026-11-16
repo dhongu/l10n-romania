@@ -1,3 +1,9 @@
+## 19.0.0.5.13 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.0.5.12 (2026-11-03)
 
 - **No longer depends directly on the OCA module `l10n_ro_config`.** The only field

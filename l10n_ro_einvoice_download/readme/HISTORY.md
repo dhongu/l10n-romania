@@ -1,3 +1,9 @@
+## 19.0.0.0.6 (2026-11-16)
+
+**Changed**
+
+- Apps Store page (`static/description/index.html`) regenerated with the Terrabit template.
+
 ## 19.0.0.0.5 (2026-10-22)
 
 - Listed on Odoo Apps as *e-Invoice Files Export* (was *Invoice Files Export*). The technical name `l10n_ro_einvoice_download` does not change.
