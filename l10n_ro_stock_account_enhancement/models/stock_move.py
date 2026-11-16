@@ -12,6 +12,9 @@ class StockMove(models.Model):
 
     def _get_price_unit(self):
         price = super()._get_price_unit()
+        if not self:
+            # Recordset gol (ex. sum/mapped pe nicio mișcare): nu există produs de verificat.
+            return price
         get_param = self.env["ir.config_parameter"].sudo().get_param
         skip_price_unit_check = get_param("l10n_ro_stock_account.skip_price_unit_check", default="False")
         skip_price_unit_check = safe_eval(skip_price_unit_check)
