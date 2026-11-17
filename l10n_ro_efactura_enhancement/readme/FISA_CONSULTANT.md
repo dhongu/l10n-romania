@@ -275,7 +275,7 @@ Accesați **Setări → Tehnic → Automatizare → Acțiuni planificate** (mod 
 | Cron | Orar implicit | Ce face |
 |---|---|---|
 | **e-Factura: Trimitere în SPV** | zilnic (prima rulare la 22:00 UTC, adică 00:00/01:00 ora României) | citește întâi starea facturilor trimise, apoi trimite în SPV facturile de vânzare confirmate, destinate SPV, cu data contabilă din ultimele 30 de zile **anterioare zilei curente în UTC** (la rularea de la 00:00/01:00 ora României se trimit facturile cu data de până **alaltăieri** inclusiv; cele de ieri pleacă la rularea din noaptea următoare), încă netrimise sau cu trimiterea eșuată; câte 20 pe rulare (dacă sunt mai multe, se reia după 5 minute, dar numai dacă cel puțin o factură din lot a ajuns în SPV); trimite raportul pe email |
-| **e-Factura: Preluare din SPV** | la 4 ore | citește din SPV starea facturilor aflate „Trimis", cu data contabilă din ultimele 30 de zile anterioare zilei curente, câte 20 pe rulare; se reia după 2 minute **numai** dacă lotul a fost plin (20) și ANAF a răspuns pentru cel puțin o factură; altfel, la următoarea rulare (4 ore) |
+| **e-Factura: Preluare din SPV** | la 4 ore | citește din SPV starea facturilor aflate „Trimis", cu data contabilă din ultimele 30 de zile anterioare zilei curente, câte 20 pe rulare; **sare facturile încărcate în SPV cu mai puțin de 10 minute în urmă**, ca să nu scrie pe aceleași facturi cu trimiterea automată aflată în lucru; se reia după 2 minute **numai** dacă lotul a fost plin (20) și ANAF a răspuns pentru cel puțin o factură; altfel, la următoarea rulare (4 ore) |
 | **E-Factura: Trimite email facturi validate** | la 15 minute | trimite clientului factura pe email, o singură dată, după ce SPV a validat-o (aceeași fereastră: ultimele 30 de zile, fără ziua curentă) |
 
 Reguli de selecție la trimiterea automată:
@@ -443,6 +443,7 @@ contabilă mai veche de 30 de zile (nu mai sunt trimise automat și nici nu li s
 - [ ] O factură respinsă de ANAF, corectată, se retrimite cu „Retrimite în SPV".
 - [ ] La o factură „Neindexat", „Resetează trimiterea SPV" o face retrimisibilă doar dacă nu e găsită în SPV.
 - [ ] Cron-ul „e-Factura: Trimitere în SPV" nu ia facturile cu data de azi (la rularea de noapte nici pe cele de ieri — fereastra e în UTC) și nici facturile către clienți externi.
+- [ ] Cron-ul „e-Factura: Preluare din SPV" nu citește starea unei facturi încărcate în SPV cu mai puțin de 10 minute în urmă; una încărcată de mai mult de 10 minute este luată.
 - [ ] După validarea în SPV, clientul primește factura pe email o singură dată; o factură trimisă
       manual pe email înainte nu se mai trimite.
 - [ ] Cu „Trimite în SPV fără email (cron)" bifat, facturile validate nu se trimit pe email.
@@ -510,6 +511,7 @@ Extrasul XML din Pasul 5 este text inline, nu fișier în folderul capturilor.
   mare. Operatorul are astfel cel puțin o zi pentru corecturi. Pentru o factură urgentă folosiți
   „Trimite în SPV", apoi, după câteva minute, „Preia starea E-Factura" (meniul Acțiuni) și
   trimiteți-o manual pe email: cron-urile de stare și de email nu iau factura din ziua curentă.
+  Butonul „Preia starea E-Factura" acționează direct pe factura selectată; limita de 10 minute se aplică doar cron-ului.
 - Pe Odoo 19, o încărcare eșuată nu lasă nicio urmă în starea e-Factura, așa că modulul numără
   eșecurile pe factură („Trimiteri SPV eșuate (cron)"). Spuneți utilizatorilor să urmărească
   rândul *Sărite* din raport: acolo ajung facturile pe care cron-ul nu le mai încearcă.

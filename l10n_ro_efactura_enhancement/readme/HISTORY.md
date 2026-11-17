@@ -1,3 +1,11 @@
+## 19.0.0.5.14 (2026-11-17)
+
+- **Cron-ul „E-Factura: Fetch From SPV” nu mai ia facturile încărcate în ultimele 10
+  minute.** Când rula în paralel cu trimiterea automată, citea și scria pe facturile
+  lotului aflat în trimitere, iar commit-ul trimiterii pica cu „could not serialize
+  access due to concurrent update”. Lanțul de loturi se oprea, iar facturile rămase
+  plecau abia la rularea din noaptea următoare (tichet #10006).
+
 ## 19.0.0.5.13 (2026-11-16)
 
 **Changed**
