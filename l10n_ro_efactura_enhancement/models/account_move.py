@@ -11,6 +11,10 @@ _logger = logging.getLogger(__name__)
 # error in the chatter), so the auto-send cron counts its own failures in
 # ``l10n_ro_spv_send_failures``.
 MAX_SPV_SEND_RETRIES = 3
+# Invoices uploaded to the SPV less than this many minutes ago are left out of
+# the fetch-status cron: the send cron may still be flushing the same rows, and
+# a concurrent write makes its commit fail with a serialization error.
+SPV_FETCH_MIN_AGE_MINUTES = 10
 
 # Currency used to decide the destination of an invoice whose customer has no
 # country set: an invoice issued in RON is considered domestic. See
@@ -152,6 +156,7 @@ class AccountMove(models.Model):
         _logger.info("⏱️ Cron job for fetch status from SPV")
         domain = [("l10n_ro_edi_access_token", "!=", False)]
         ro_companies = self or self.env["res.company"].sudo().search(domain)
+        fetch_cutoff = fields.Datetime.now() - timedelta(minutes=SPV_FETCH_MIN_AGE_MINUTES)
         for company in ro_companies:
             date_to = fields.Date.today() - timedelta(days=delay_days)
             date_from = fields.Date.today() - timedelta(days=days + delay_days)
@@ -161,6 +166,11 @@ class AccountMove(models.Model):
                 ("date", "<", date_to),
                 ("date", ">=", date_from),
                 ("l10n_ro_edi_state", "=", "invoice_sent"),
+                (
+                    "l10n_ro_edi_document_ids",
+                    "any",
+                    [("state", "=", "invoice_sent"), ("datetime", "<", fetch_cutoff)],
+                ),
                 ("company_id", "=", company.id),
             ]
 

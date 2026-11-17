@@ -41,7 +41,7 @@ class TestCronFetchStatusRetrigger(TransactionCase):
         # Isolate from invoices already waiting in the SPV in the test database.
         cls.env["account.move"].search([("l10n_ro_edi_state", "=", "invoice_sent")]).l10n_ro_edi_document_ids.unlink()
 
-    def _create_sent_invoice(self, index):
+    def _create_sent_invoice(self, index, uploaded_minutes_ago=60):
         invoice = self.env["account.move"].create(
             {
                 "move_type": "out_invoice",
@@ -56,7 +56,7 @@ class TestCronFetchStatusRetrigger(TransactionCase):
             {
                 "invoice_id": invoice.id,
                 "state": "invoice_sent",
-                "datetime": fields.Datetime.now(),
+                "datetime": fields.Datetime.now() - timedelta(minutes=uploaded_minutes_ago),
             }
         )
         self.assertEqual(invoice.l10n_ro_edi_state, "invoice_sent")
@@ -74,6 +74,17 @@ class TestCronFetchStatusRetrigger(TransactionCase):
     def _fetch_cron_triggers(self, mock_trigger):
         # auto_send reschedules its own cron through the same patched method
         return [c for c in mock_trigger.call_args_list if c.args[0] == self.cron]
+
+    @mute_logger(LOGGER)
+    def test_freshly_uploaded_invoices_are_not_fetched(self):
+        """Facturile încărcate de câteva minute sunt sărite: cronul de trimitere le poate scrie încă."""
+        fresh = self._create_sent_invoice("0001", uploaded_minutes_ago=1)
+        old = self._create_sent_invoice("0002", uploaded_minutes_ago=30)
+        mock_fetch, _mock_trigger = self._run_fetch(FETCH_VALIDATED, limit=5)
+        self.assertEqual(mock_fetch.call_count, 1)
+        (fresh | old).invalidate_recordset(["l10n_ro_edi_state"])
+        self.assertEqual(fresh.l10n_ro_edi_state, "invoice_sent")
+        self.assertEqual(old.l10n_ro_edi_state, "invoice_validated")
 
     @mute_logger(LOGGER)
     def test_no_answer_from_anaf_no_retrigger(self):
