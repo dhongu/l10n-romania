@@ -11,7 +11,6 @@ class ResCompany(models.Model):
     counter_on_sale_order = fields.Boolean(
         string="Counter sale order", help="Display a counter of the lines on the sale order", default=True
     )
-    include_image_line = fields.Boolean(string="Include image", help="Include image on sale order", default=True)
     exclude_product_name_from_description_offer = fields.Boolean(
         string="Exclude product name from description", help="Exclude product name from sale order line description"
     )
@@ -40,12 +39,6 @@ class ResConfigSettings(models.TransientModel):
         string="Counter sale order",
         readonly=False,
         help="Display a counter of the lines on the sale order",
-    )
-    include_image_line = fields.Boolean(
-        related="company_id.include_image_line",
-        string="Include image",
-        readonly=False,
-        help="Include image on sale order",
     )
     exclude_product_name_from_description_offer = fields.Boolean(
         related="company_id.exclude_product_name_from_description_offer",

@@ -1,3 +1,7 @@
+## 19.0.1.0.15 (2026-11-17)
+
+- Removed the product image column and its setting (`include_image_line`). The image is provided only by `deltatech_sale_order_image`, so the two modules no longer add the same column.
+
 ## 19.0.1.0.14 (2026-10-22)
 
 - Listed on Odoo Apps as *Romania - Proforma Invoice Report* (was *Terrabit Sale Order Report*). The technical name `l10n_ro_sale_order_report` does not change.
