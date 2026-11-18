@@ -261,10 +261,13 @@ Alte corecții la generare, fără acțiune din partea operatorului:
 - proprietățile suplimentare ale articolului sunt golite, deci atributele variantelor de produs nu
   ajung în XML.
 
-Atenție — modulul scrie și pe fișa partenerului, nu doar în XML: la o **persoană fizică** fără CUI
-completează `0000000000000` în câmpul de nr. de înregistrare; la o persoană fizică din România fără
-stradă completează strada „Principala"; la o persoană fizică din București fără sector în oraș
-scrie orașul „SECTOR1".
+Atenție — fișa partenerului: pentru o **persoană fizică** fără CUI, `0000000000000` apare **doar în
+XML** (îl pune `l10n_ro_edi`); modulul **nu** îl mai scrie în câmpul de nr. de înregistrare al
+partenerului. În schimb, modulul mai completează adresa lipsă pe fișa partenerului: la o persoană
+fizică din România fără stradă scrie strada „Principala"; la o persoană fizică din București fără
+oraș sau cu un oraș fără „SECTOR" scrie orașul „SECTOR1". La trimiterea automată, aceste valori
+sunt completate de cron-ul de trimitere, înainte de lot (Pasul 6); la trimiterea manuală, la
+generarea XML-ului.
 
 ### Pasul 6 — Cron-urile de trimitere, status și email
 
@@ -285,6 +288,11 @@ Reguli de selecție la trimiterea automată:
   cron-ul o sare și o raportează la *Sărite*. Eroarea se vede în istoricul facturii, iar eșecurile
   se numără pe factură, în câmpul „Trimiteri SPV eșuate (cron)";
 - în lot intră întâi facturile netrimise încă, apoi cele care au mai eșuat;
+- **înainte de fiecare lot**, cron-ul completează adresa lipsă a clienților persoane fizice din lot
+  (strada „Principala", orașul „SECTOR1", aceleași condiții ca la Pasul 5), pe fiecare partener, cu
+  salvare imediată și până la 3 reîncercări dacă partenerul e modificat în același timp de alt proces
+  (de exemplu importul de comenzi). Dacă nu reușește, lotul continuă, iar valorile se mai încearcă
+  o dată la generarea XML-ului;
 - o factură readusă în ciornă și reconfirmată primește din nou toate cele 3 încercări;
 - o factură **respinsă de ANAF** („Respins") **nu** este retrimisă automat: corectați-o și folosiți
   „Retrimite în SPV" (Pasul 9);
@@ -430,7 +438,11 @@ contabilă mai veche de 30 de zile (nu mai sunt trimise automat și nici nu li s
       refuzată cu mesaj care numește partenerul.
 - [ ] Confirmarea unei facturi este refuzată pentru orice client fără țară.
 - [ ] Coloanele opționale „Lungime prod." / „Lungime desc." arată lungimea corectă pe linii.
-- [ ] Un client persoană fizică fără CUI apare în XML cu `0000000000000`.
+- [ ] Un client persoană fizică fără CUI apare în XML cu `0000000000000`, iar câmpul de nr. de
+      înregistrare de pe fișa lui rămâne gol (nu se mai scrie `0000000000000` pe partener).
+- [ ] La o rulare a cron-ului „e-Factura: Trimitere în SPV", un client persoană fizică din România
+      fără stradă sau cu orașul „București" fără sector primește pe fișă strada „Principala",
+      respectiv orașul „SECTOR1" înainte de lot; la a doua rulare nu se mai modifică nimic.
 - [ ] Un client plătitor de TVA (bifat) apare în XML cu CUI-ul cu prefix „RO"; unul nebifat, fără.
 - [ ] O factură de furnizor importată cu BaseQuantity greșită are linia recalculată și mesajul în istoric.
 - [ ] O factură către o firmă din România fără CUI nu pleacă în SPV și are motivul în istoric.

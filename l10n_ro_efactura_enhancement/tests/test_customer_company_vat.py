@@ -2,8 +2,11 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from unittest.mock import patch
+from unittest.mock import Mock, call, patch
 
+from psycopg2.errors import SerializationFailure
+
+from odoo import tools
 from odoo.tests import tagged
 
 from odoo.addons.l10n_ro_edi.tests.common import TestROEdiCommon
@@ -65,12 +68,144 @@ class TestCustomerCompanyVat(TestROEdiCommon):
         _errors, send = self._send(invoice)
         send.assert_called_once()
 
+    def test_individual_without_vat_default_vat_in_xml_without_partner_write(self):
+        """Tichet 10006: placeholder-ul ajunge in XML, dar nu se scrie pe partener."""
+        partner = self._partner(name="Ion Popescu", is_company=False)
+        invoice = self.create_invoice(partner_id=partner.id)
+        partner.invalidate_recordset()
+        write_date = partner.write_date
+        xml, _errors = self.env["account.edi.xml.ubl_ro"]._export_invoice(invoice)
+        self.assertEqual(xml.decode().count("0000000000000"), 2)  # PartyTaxScheme + PartyLegalEntity
+        partner.invalidate_recordset()
+        self.assertFalse(partner.company_registry)
+        self.assertEqual(partner.write_date, write_date)
+
     def test_company_with_vat_is_sent(self):
         partner = self._partner(vat="RO1234567897")
         invoice = self.create_invoice(partner_id=partner.id)
         self.assertFalse(invoice._l10n_ro_customer_vat_missing_error())
         _errors, send = self._send(invoice)
         send.assert_called_once()
+
+    def test_spv_address_defaults_conditions(self):
+        """Aceleasi conditii ca inainte: scrie doar ce lipseste, doar pentru PF din Romania."""
+        ro_b = self.env.ref("base.RO_B")
+        cluj = self.env.ref("base.RO_CJ")
+        cases = [
+            # (kwargs, valori de scris asteptate)
+            ({"is_company": False, "street": False, "state_id": cluj.id, "city": "Cluj"}, {"street": "Principala"}),
+            ({"is_company": False, "street": "Str 1", "state_id": cluj.id, "city": "Cluj"}, {}),
+            ({"is_company": False, "street": "Str 1", "state_id": ro_b.id, "city": False}, {"city": "SECTOR1"}),
+            ({"is_company": False, "street": "Str 1", "state_id": ro_b.id, "city": "Bucuresti"}, {"city": "SECTOR1"}),
+            ({"is_company": False, "street": "Str 1", "state_id": ro_b.id, "city": "Sector3"}, {}),
+            ({"is_company": False, "street": "Str 1", "state_id": ro_b.id, "city": "sector 2"}, {}),
+            (
+                {"is_company": False, "street": False, "state_id": ro_b.id, "city": False},
+                {"street": "Principala", "city": "SECTOR1"},
+            ),
+            ({"is_company": True, "street": False, "state_id": ro_b.id, "city": False}, {}),
+            (
+                {
+                    "is_company": False,
+                    "street": False,
+                    "country_id": self.env.ref("base.us").id,
+                    "state_id": self.env.ref("base.state_us_5").id,
+                    "city": False,
+                },
+                {},
+            ),
+        ]
+        for kwargs, expected in cases:
+            with self.subTest(kwargs=kwargs):
+                partner = self._partner(name="Client Test", **kwargs)
+                self.assertEqual(partner._l10n_ro_spv_address_defaults(), expected)
+
+    def _invoice_with_incomplete_address(self):
+        """Factura postata (action_post cere adresa completa), apoi adresa clientului se goleste."""
+        partner = self._partner(name="Ion Fara Adresa", is_company=False, state_id=self.env.ref("base.RO_B").id)
+        invoice = self.create_invoice(partner_id=partner.id)
+        partner.write({"street": False, "city": "Bucuresti"})
+        return partner, invoice
+
+    def test_prepare_partners_completes_address_then_export_does_not_write(self):
+        partner, invoice = self._invoice_with_incomplete_address()
+        invoice._l10n_ro_prepare_partners_for_spv()
+        self.assertEqual((partner.street, partner.city), ("Principala", "SECTOR1"))
+        partner.invalidate_recordset()
+        write_date = partner.write_date
+        with patch.object(self.env.registry["res.partner"], "write") as write:
+            self.env["account.edi.xml.ubl_ro"]._export_invoice(invoice)
+        write.assert_not_called()
+        partner.invalidate_recordset()
+        self.assertEqual(partner.write_date, write_date)
+
+    def test_prepare_partners_retries_on_serialization_failure(self):
+        partner, invoice = self._invoice_with_incomplete_address()
+        partner_model = self.env.registry["res.partner"]
+        original_write = partner_model.write
+        calls = []
+
+        def flaky_write(records, vals):
+            calls.append(vals)
+            if len(calls) == 1:
+                raise SerializationFailure()
+            return original_write(records, vals)
+
+        with (
+            patch.object(partner_model, "write", flaky_write),
+            self.assertLogs("odoo.addons.l10n_ro_efactura_enhancement.models.account_move", "WARNING") as logs,
+        ):
+            invoice._l10n_ro_prepare_partners_for_spv()
+        self.assertTrue(any("changed concurrently" in line for line in logs.output))
+        self.assertEqual(len(calls), 2)
+        self.assertEqual((partner.street, partner.city), ("Principala", "SECTOR1"))
+
+    def test_prepare_partners_commits_before_the_loop_so_rollback_loses_nothing_else(self):
+        """Commit inainte de bucla (ce a scris deja cron-ul se salveaza), apoi rollback doar la conflict."""
+        partner, invoice = self._invoice_with_incomplete_address()
+        partner_model = self.env.registry["res.partner"]
+        original_write = partner_model.write
+        calls = []
+
+        def flaky_write(records, vals):
+            calls.append(vals)
+            if len(calls) == 1:
+                raise SerializationFailure()
+            return original_write(records, vals)
+
+        tracker = Mock()
+        with (
+            patch.dict(tools.config.options, {"test_enable": False}),
+            patch.object(self.env.cr, "commit", tracker.commit),
+            patch.object(self.env.cr, "rollback", tracker.rollback),
+            patch.object(partner_model, "write", flaky_write),
+            self.assertLogs("odoo.addons.l10n_ro_efactura_enhancement.models.account_move", "WARNING") as logs,
+        ):
+            invoice._l10n_ro_prepare_partners_for_spv()
+        self.assertTrue(any("changed concurrently" in line for line in logs.output))
+        self.assertEqual(tracker.mock_calls, [call.commit(), call.rollback(), call.commit()])
+        self.assertEqual((partner.street, partner.city), ("Principala", "SECTOR1"))
+
+    def test_prepare_partners_does_not_commit_when_nothing_to_complete(self):
+        partner = self._partner(name="Ion Cu Adresa", is_company=False)
+        invoice = self.create_invoice(partner_id=partner.id)
+        tracker = Mock()
+        with (
+            patch.dict(tools.config.options, {"test_enable": False}),
+            patch.object(self.env.cr, "commit", tracker.commit),
+        ):
+            invoice._l10n_ro_prepare_partners_for_spv()
+        tracker.commit.assert_not_called()
+
+    def test_prepare_partners_gives_up_without_raising(self):
+        _partner, invoice = self._invoice_with_incomplete_address()
+        with (
+            patch.object(self.env.registry["res.partner"], "write", side_effect=SerializationFailure()) as write,
+            self.assertLogs("odoo.addons.l10n_ro_efactura_enhancement.models.account_move", "WARNING") as logs,
+        ):
+            invoice._l10n_ro_prepare_partners_for_spv(retries=2)
+        self.assertEqual(write.call_count, 2)
+        self.assertTrue(any("not completed" in line for line in logs.output))
 
     def test_foreign_company_without_vat_not_checked(self):
         partner = self._partner(
