@@ -10,6 +10,14 @@
   apare la toți clienții. Valoarea o pune singur `l10n_ro_edi` în XML
   (`PartyTaxScheme` și `PartyLegalEntity`), deci XML-ul trimis la ANAF rămâne la fel
   (tichet #10006).
+- **Adresa lipsă a clienților persoane fizice se completează înainte de lot, în
+  tranzacții scurte.** Generarea XML-ului scria `street = "Principala"` și
+  `city = "SECTOR1"` pe partener (aceleași condiții ca înainte: doar persoane fizice din
+  România; `street` gol, respectiv București cu oraș gol sau fără „SECTOR") în tranzacția
+  lungă a lotului, cu același risc de conflict. Acum cron-ul scrie aceste valori înainte
+  de lot, pe fiecare partener, cu commit imediat și până la 3 reîncercări la
+  `SerializationFailure`; dacă tot nu reușește, lotul continuă, iar la generarea XML-ului
+  scrierea se mai încearcă o dată, ca înainte. Trimiterea manuală nu se schimbă.
 
 ## 19.0.0.5.14 (2026-11-17)
 

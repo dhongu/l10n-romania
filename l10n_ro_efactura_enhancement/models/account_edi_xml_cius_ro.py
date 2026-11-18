@@ -525,17 +525,11 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
         """New helper"""
         partner = invoice.commercial_partner_id
 
-        if partner.country_id.code == "RO" and not partner.is_company:
-            # if not partner.vat:
-            #     partner.with_context(no_vat_validation=True).write({"vat": "0000000000000"})
-            if not partner.street:
-                partner.write({"street": "Principala"})
-
-            if partner.state_id and partner.state_id.code == "B":
-                if not partner.city:
-                    partner.write({"city": "SECTOR1"})
-                if "SECTOR" not in partner.city.upper():
-                    partner.write({"city": "SECTOR1"})
+        # Cron-ul de trimitere completeaza deja aceste valori inainte de lot
+        # (AccountMove._l10n_ro_prepare_partners_for_spv), in tranzactii scurte; aici
+        # raman pentru trimiterea manuala si nu mai scriu nimic cand sunt completate.
+        if defaults := partner._l10n_ro_spv_address_defaults():
+            partner.write(defaults)
 
         constraints = super()._export_invoice_constraints(invoice, vals)
 

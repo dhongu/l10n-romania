@@ -1,6 +1,8 @@
 import logging
 from datetime import timedelta
 
+from psycopg2.errors import SerializationFailure
+
 from odoo import api, fields, models, tools
 from odoo.exceptions import UserError
 
@@ -280,6 +282,44 @@ class AccountMove(models.Model):
                     company.name,
                 )
 
+    def _l10n_ro_prepare_partners_for_spv(self, retries=3):
+        """Completeaza adresa lipsa a clientilor (persoane fizice) inainte de lotul SPV.
+
+        Generarea XML-ului scria aceste valori pe partener in tranzactia lotului, care
+        sta deschisa zeci de secunde (randarea PDF); daca alta tranzactie rescria intre
+        timp acelasi partener, commit-ul pica cu SerializationFailure si tot lotul se
+        anula. Aici fiecare partener e scris si commit-uit imediat, intr-o tranzactie
+        scurta, cu reincercari. Daca tot nu reuseste, lotul continua: generarea XML-ului
+        mai incearca o data scrierea, ca inainte.
+        """
+        in_test = tools.config["test_enable"]
+        for partner in self.commercial_partner_id:
+            defaults = partner._l10n_ro_spv_address_defaults()
+            for _attempt in range(retries):
+                if not defaults:
+                    break
+                try:
+                    partner.write(defaults)
+                    if not in_test:
+                        self.env.cr.commit()  # pylint: disable=invalid-commit
+                    break
+                except SerializationFailure:
+                    _logger.warning(
+                        "⚠️ Partner %s was changed concurrently, retrying the address completion",
+                        partner.id,
+                    )
+                    if not in_test:
+                        self.env.cr.rollback()
+                    partner.invalidate_recordset(["street", "city"])
+                    defaults = partner._l10n_ro_spv_address_defaults()
+                    if not defaults:  # completat intre timp de altcineva
+                        break
+            else:
+                _logger.warning(
+                    "⚠️ Address of partner %s not completed before the SPV batch (concurrent updates)",
+                    partner.id,
+                )
+
     def _cron_l10n_ro_edi_auto_send(self, limit=20, days=30, delay_days=0):
         """Trimiterea automata a facturilor din ziua precedenta in SPV"""
         _logger.info("⏱️ Cron job for sending invoices to SPV")
@@ -328,6 +368,10 @@ class AccountMove(models.Model):
             _logger.info(f"📤 Invoices to send to SPV: {candidates.mapped('name')}")
 
             invoices = candidates[:limit]
+
+            # Adresa lipsa a clientilor se completeaza acum, in tranzactii scurte, nu in
+            # tranzactia lunga a lotului (vezi _l10n_ro_prepare_partners_for_spv).
+            invoices._l10n_ro_prepare_partners_for_spv()
 
             # daca au fost deja generate PDF-uri pentru facturi, le stergem
             invoice_pdf_report_ids = invoices.mapped("invoice_pdf_report_id")
