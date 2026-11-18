@@ -15,8 +15,6 @@ from odoo.addons.account_edi_ubl_cii.models.account_edi_common import FloatFmt
 
 _logger = logging.getLogger(__name__)
 
-DEFAULT_VAT = "0000000000000"
-
 # Limitele CIUS-RO de lungime maxima impuse de schematronul ANAF (regulile
 # BR-RO-L020 .. BR-RO-L1000). Valorile sunt numar de caractere Unicode, ca in
 # semantica ``string-length`` folosita de validator.
@@ -141,10 +139,6 @@ NOTE_MAX_LEN = 300  # BR-RO-L300
 
 # Alias pastrat pentru codul si testele care citeau limita individual.
 PAYMENT_ID_MAX_LEN = PAYMENT_MEANS_LIMITS[("cbc:PaymentID",)].limit
-
-
-def _has_vat(vat):
-    return bool(vat and len(vat) > 1)
 
 
 class AccountEdiUBL(models.AbstractModel):
@@ -626,8 +620,10 @@ class AccountEdiXmlUBLBIS3(models.AbstractModel):
         # EXTENDS account.edi.xml.ubl_bis3, for boolean not iterable error
         partner = vals["party_vals"]["partner"]
         commercial_partner = partner.commercial_partner_id
-        if not _has_vat(commercial_partner.vat) and not commercial_partner.is_company:
-            commercial_partner.company_registry = DEFAULT_VAT
+        # Tichet 10006: nu scriem 0000000000000 pe partener. l10n_ro_edi il pune singur in
+        # XML pentru clientul fara CUI (PartyTaxScheme si PartyLegalEntity), iar un
+        # UPDATE res_partner in tranzactia cronului intra in conflict cu importul de
+        # comenzi si anuleaza tot lotul (SerializationFailure la commit).
         res = super()._ubl_add_accounting_customer_party_tax_scheme_nodes(vals)
         if vals["party_node"]["cac:PartyTaxScheme"]:
             if (

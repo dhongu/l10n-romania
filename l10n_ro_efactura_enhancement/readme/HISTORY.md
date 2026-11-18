@@ -1,3 +1,16 @@
+## 19.0.0.5.15 (2026-11-18)
+
+- **Generarea XML-ului nu mai scrie `company_registry` pe clientul fără CUI.** Pentru o
+  persoană fizică fără CUI, modulul punea `0000000000000` pe fișa partenerului în
+  tranzacția cron-ului „E-Factura: Send TO SPV”. Posibil ca această scriere să dea
+  „could not serialize access due to concurrent update”: la PTC, commit-ul a picat pe
+  `UPDATE res_partner SET company_registry`, tot lotul s-a anulat și lanțul de loturi
+  s-a oprit. Conflictul apare doar dacă același partener e rescris de altcineva (la
+  PTC, importul de comenzi marketplace) cât ține lotul tranzacția deschisă, deci nu
+  apare la toți clienții. Valoarea o pune singur `l10n_ro_edi` în XML
+  (`PartyTaxScheme` și `PartyLegalEntity`), deci XML-ul trimis la ANAF rămâne la fel
+  (tichet #10006).
+
 ## 19.0.0.5.14 (2026-11-17)
 
 - **Cron-ul „E-Factura: Fetch From SPV” nu mai ia facturile încărcate în ultimele 10

@@ -65,6 +65,18 @@ class TestCustomerCompanyVat(TestROEdiCommon):
         _errors, send = self._send(invoice)
         send.assert_called_once()
 
+    def test_individual_without_vat_default_vat_in_xml_without_partner_write(self):
+        """Tichet 10006: placeholder-ul ajunge in XML, dar nu se scrie pe partener."""
+        partner = self._partner(name="Ion Popescu", is_company=False)
+        invoice = self.create_invoice(partner_id=partner.id)
+        partner.invalidate_recordset()
+        write_date = partner.write_date
+        xml, _errors = self.env["account.edi.xml.ubl_ro"]._export_invoice(invoice)
+        self.assertEqual(xml.decode().count("0000000000000"), 2)  # PartyTaxScheme + PartyLegalEntity
+        partner.invalidate_recordset()
+        self.assertFalse(partner.company_registry)
+        self.assertEqual(partner.write_date, write_date)
+
     def test_company_with_vat_is_sent(self):
         partner = self._partner(vat="RO1234567897")
         invoice = self.create_invoice(partner_id=partner.id)
