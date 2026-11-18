@@ -2,10 +2,11 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from unittest.mock import patch
+from unittest.mock import Mock, call, patch
 
 from psycopg2.errors import SerializationFailure
 
+from odoo import tools
 from odoo.tests import tagged
 
 from odoo.addons.l10n_ro_edi.tests.common import TestROEdiCommon
@@ -150,10 +151,51 @@ class TestCustomerCompanyVat(TestROEdiCommon):
                 raise SerializationFailure()
             return original_write(records, vals)
 
-        with patch.object(partner_model, "write", flaky_write):
+        with (
+            patch.object(partner_model, "write", flaky_write),
+            self.assertLogs("odoo.addons.l10n_ro_efactura_enhancement.models.account_move", "WARNING") as logs,
+        ):
             invoice._l10n_ro_prepare_partners_for_spv()
+        self.assertTrue(any("changed concurrently" in line for line in logs.output))
         self.assertEqual(len(calls), 2)
         self.assertEqual((partner.street, partner.city), ("Principala", "SECTOR1"))
+
+    def test_prepare_partners_commits_before_the_loop_so_rollback_loses_nothing_else(self):
+        """Commit inainte de bucla (ce a scris deja cron-ul se salveaza), apoi rollback doar la conflict."""
+        partner, invoice = self._invoice_with_incomplete_address()
+        partner_model = self.env.registry["res.partner"]
+        original_write = partner_model.write
+        calls = []
+
+        def flaky_write(records, vals):
+            calls.append(vals)
+            if len(calls) == 1:
+                raise SerializationFailure()
+            return original_write(records, vals)
+
+        tracker = Mock()
+        with (
+            patch.dict(tools.config.options, {"test_enable": False}),
+            patch.object(self.env.cr, "commit", tracker.commit),
+            patch.object(self.env.cr, "rollback", tracker.rollback),
+            patch.object(partner_model, "write", flaky_write),
+            self.assertLogs("odoo.addons.l10n_ro_efactura_enhancement.models.account_move", "WARNING") as logs,
+        ):
+            invoice._l10n_ro_prepare_partners_for_spv()
+        self.assertTrue(any("changed concurrently" in line for line in logs.output))
+        self.assertEqual(tracker.mock_calls, [call.commit(), call.rollback(), call.commit()])
+        self.assertEqual((partner.street, partner.city), ("Principala", "SECTOR1"))
+
+    def test_prepare_partners_does_not_commit_when_nothing_to_complete(self):
+        partner = self._partner(name="Ion Cu Adresa", is_company=False)
+        invoice = self.create_invoice(partner_id=partner.id)
+        tracker = Mock()
+        with (
+            patch.dict(tools.config.options, {"test_enable": False}),
+            patch.object(self.env.cr, "commit", tracker.commit),
+        ):
+            invoice._l10n_ro_prepare_partners_for_spv()
+        tracker.commit.assert_not_called()
 
     def test_prepare_partners_gives_up_without_raising(self):
         _partner, invoice = self._invoice_with_incomplete_address()

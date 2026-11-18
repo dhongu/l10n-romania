@@ -291,9 +291,17 @@ class AccountMove(models.Model):
         anula. Aici fiecare partener e scris si commit-uit imediat, intr-o tranzactie
         scurta, cu reincercari. Daca tot nu reuseste, lotul continua: generarea XML-ului
         mai incearca o data scrierea, ca inainte.
+
+        Inainte de bucla se face commit pentru tot ce a scris deja cron-ul (starea citita
+        din SPV, companiile procesate anterior): rollback-ul de la reincercare anuleaza
+        toata tranzactia, deci trebuie sa nu poata pierde altceva decat scrierea pe
+        partener. Commit-ul da si un snapshot nou, fara de care reincercarea ar pica la fel.
         """
         in_test = tools.config["test_enable"]
-        for partner in self.commercial_partner_id:
+        partners = self.commercial_partner_id.filtered(lambda p: p._l10n_ro_spv_address_defaults())
+        if partners and not in_test:
+            self.env.cr.commit()  # pylint: disable=invalid-commit
+        for partner in partners:
             defaults = partner._l10n_ro_spv_address_defaults()
             for _attempt in range(retries):
                 if not defaults:
