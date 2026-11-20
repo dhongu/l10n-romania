@@ -334,7 +334,10 @@ Date minime pentru demo:
 2. **Inventar → Configurare → Categorii de produse**: pe categoria mărfurilor importate setați
    **Evaluarea stocurilor = Perpetuă (la facturare)** și **Metodă de cost = Costul mediu (AVCO)**
    sau FIFO. Pe **Periodic (la închidere)**, costul adițional **nu postează** note contabile și
-   costul nu se îmbogățește.
+   costul nu se îmbogățește. Pe aceeași categorie verificați **contul de cheltuieli** (607 la mărfuri,
+   601 la materii prime, 602x la materiale consumabile, 603 la obiectele de inventar, 608 la
+   ambalaje) și **contul de evaluare a stocului** (301, 302x, 303, 371 sau 381): pe ele se
+   înregistrează taxa vamală a cantității ieșite din stoc înainte de DVI (Pasul 7).
 3. Verificați că produsul este **stocabil** și are furnizorul completat în fila Achiziții.
 4. Verificați că furnizorul extern are **țara** completată.
 5. Verificați că există contul **4462**. Atenție la ordinea din planul RO, e contraintuitivă:
@@ -471,7 +474,24 @@ liniile pe 371 / 4462 / 4426 / 473.
 
 ![Nota contabilă cu MRN-ul ca referință și tipul documentului „Import (DVI)”](screenshots/07_nota_contabila_tva.png)
 
-Pe fișa produsului, costul unitar a crescut cu taxa vamală raportată la cantitate.
+**Marfă ieșită din stoc înainte de DVI.** Declarația ajunge des la contabil după ce o parte din
+marfă a fost deja vândută (sau consumată, dată în folosință). Nota DVI înregistrează totuși **toată
+taxa vamală** pe 4462: partea rămasă în stoc pe 371, iar partea ieșită prin două perechi de linii,
+cu eticheta „… (ieșit înainte de DVI)”:
+
+```
+Dr 371 = Cr 4462     taxa vamală a cantității ieșite (intră în costul de achiziție)
+Dr 607 = Cr 371      descărcarea ei pe cheltuială (contul de cheltuieli al categoriei)
+```
+
+Exemplu: 10 bucăți recepționate, 6 vândute, taxă vamală A00 = 100 → 4462 creditat cu 100, 371 cu
+40 (cele 4 bucăți rămase), 607 cu 60. La materii prime contul de cheltuială e 601, la materiale
+consumabile 602x, la obiecte de inventar date în folosință 603, la ambalaje 608. La materiile prime
+deja consumate în producție, taxa merge pe 601 (simplificare, pentru sume nesemnificative), nu pe
+costul produselor obținute — confirmați cu contabilul dacă suma e semnificativă.
+
+Pe fișa produsului, costul unitar a crescut cu taxa vamală raportată la cantitate; partea
+corespunzătoare cantității deja ieșite nu rămâne în stoc, ci merge pe cheltuială (607, 601 etc.).
 
 ![Costul produsului majorat cu taxele vamale](screenshots/08_cost_produs.png)
 
@@ -649,6 +669,18 @@ La validarea costului de aterizare:
 
 Perechea pe 473 se soldează; doar linia de debit poartă baza în decont și taxa (pentru SAF-T).
 
+Dacă o parte din marfă a ieșit din stoc înainte de DVI (Pasul 7), taxa vamală a acelei părți se
+înregistrează tot pe 446, cu corespondențele din OMFP 1802/2014 (funcțiunea contului 446: taxe
+vamale în contrapartidă cu 301, 302, 303, 371, 381):
+
+```
+Dr 371 / 301 / 302x / 303 / 381 = Cr 446     taxa vamală a cantității ieșite
+Dr 607 / 601 / 602x / 603 / 608 = Cr 371 …   descărcarea pe cheltuiala categoriei
+```
+
+Creditul pe 446 este astfel egal cu A00 din declarație, oricând s-ar valida DVI-ul. Pe un produs
+cu stocul pe alt cont (de exemplu 345), DVI-ul se oprește cu mesaj (§9).
+
 Fără plata TVA în vamă (Pasul 10), liniile de TVA devin:
 
 ```
@@ -784,6 +816,9 @@ vamă și notele ei contabile.
       coloana **Tip document** arată „Import (DVI)” pe rândul importului, nu „Notă contabilă”
       (cere `l10n_ro_account_vat_journal` 19.0.1.7.0 sau mai nou).
 - [ ] Taxa vamală este creditată pe **4462**, analiticul de scadență scurtă.
+- [ ] Creditul pe 4462 este egal cu **toată taxa vamală A00** din declarație, chiar dacă o parte din
+      marfă a ieșit din stoc înainte de DVI; partea ieșită apare pe cheltuială (607, 601 etc.), cu
+      liniile „… (ieșit înainte de DVI)”, nu pe stoc.
 - [ ] Onorariul brokerului **nu** a fost introdus în wizard, ci pe factura lui de furnizor.
 - [ ] Transportul extern apare **o singură dată** în costul stocului.
 - [ ] Contul 446 se închide la zero pentru declarația respectivă după plata către vamă.
@@ -812,6 +847,8 @@ vamă și notele ei contabile.
 | Wizardul nu găsește nicio recepție | Fluxul a fost dropship, fără recepție | Refaceți fluxul cu recepție; dropship-ul e incompatibil cu DVI |
 | TVA-ul din notă nu corespunde bazei | Baza a fost modificată fără actualizarea valorii TVA | Corectați prin cost de aterizare de corecție; valoarea nu se recalculează automat |
 | „În regimul vamal 4200 importul este scutit de TVA: alegeți o taxă scutită (0%)…" | Pe un DVI 4200 s-a completat TVA-ul la import sau s-a ales o taxă cu cotă | Lăsați **Valoare TVA la import** goală, alegeți „0% EXEMPT" și treceți TVA-ul blocat la **TVA reținut ca garanție** |
+| „Produsul … a ieșit din stoc (integral sau parțial) înainte de DVI, iar contul lui de stoc … nu poate primi taxe vamale…" | Produsul ieșit din stoc înainte de DVI are stocul pe alt cont decât 301, 302, 303, 371 sau 381 (de exemplu 345, produse finite) | Taxa vamală nu are contrapartidă legală pe acel cont (OMFP 1802/2014, funcțiunea contului 446). Verificați categoria produsului: un produs importat nu stă pe 345. Corectați contul de evaluare a stocului pe categorie și validați din nou DVI-ul |
+| „Configurați contul de cheltuieli pentru produsul …: pe el se înregistrează taxa vamală a cantității livrate înainte de DVI." | Produsul a ieșit din stoc înainte de DVI, iar nici produsul, nici categoria lui nu au cont de cheltuieli | Completați **contul de cheltuieli** pe categoria produsului (607 la mărfuri, 601 la materii prime etc.) și validați din nou DVI-ul |
 | Modulul nu se poate instala | `l10n_ro_dvi` (OCA) este instalat | Cele două se exclud reciproc; dezinstalați varianta OCA |
 | Nota DVI fără plata TVA are o linie de TVA pe **446** | S-a ales taxa obișnuită de achiziție, nu „IMP AM" | Costul adițional validat **nu se poate anula**. Corectați doar TVA-ul, printr-o notă manuală: Dr 446 = Cr 4426, cu grila rd. 24 / 25 (cea a taxei folosite) cu semn negativ, apoi perechea 473 cu taxa „IMP AM" (ca în tabelul restituirii). Cereți confirmarea consultantului înainte de postare |
 | Exportul D406: „Unele taxe nu au completate câmpurile „Tip taxă SAF-T România” și/sau „Cod taxă SAF-T România”." | Taxa de pe DVI (de exemplu „IMP AM") nu are tipul și codul SAF-T | **Contabilitate → Configurare → Taxe**, deschideți taxa și completați **Tipul fiscal SAF-T românesc** (300 – TVA) și **Cod Fiscal SAF-T Roman**. Pentru „IMP AM", codul din nomenclatorul D406 **e de confirmat** — maparea nu e încă livrată nici de Odoo, nici de `l10n_ro_saft_fix` |

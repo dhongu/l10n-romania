@@ -14,6 +14,8 @@
   pe alt cont decât 301, 302, 303, 371 sau 381 (de exemplu 345), DVI-ul se oprește cu mesaj: taxa
   vamală nu are contrapartidă legală pe acel cont. La materiile prime deja consumate în producție,
   taxa merge pe 601 (simplificare, pentru sume nesemnificative), nu pe costul produselor obținute.
+- Fișa consultant: nota pentru marfa ieșită înainte de DVI (Pasul 7 și monografia), contul de
+  cheltuieli al categoriei la configurare, verificarea creditului pe 446 și cele două mesaje noi.
 
 ## 19.0.2.2.1 (2026-11-16)
 
