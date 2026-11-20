@@ -459,3 +459,33 @@ msgstr "Garanție TVA blocată"
 #: model:ir.model.fields,field_description:l10n_ro_customs_dvi.field_stock_landed_cost__vat_guarantee_amount
 msgid "VAT Held as Guarantee"
 msgstr "TVA reținut ca garanție"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_valuation_adjustment_lines.py:0
+msgid "%s (out of stock before the DVI)"
+msgstr "%s (ieșit înainte de DVI)"
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_valuation_adjustment_lines.py:0
+msgid ""
+"Please configure the expense account for product %s: the customs duty of the "
+"quantity delivered before the DVI is booked on it."
+msgstr ""
+"Configurați contul de cheltuieli pentru produsul %s: pe el se înregistrează "
+"taxa vamală a cantității livrate înainte de DVI."
+
+#. module: l10n_ro_customs_dvi
+#. odoo-python
+#: code:addons/l10n_ro_customs_dvi/models/stock_valuation_adjustment_lines.py:0
+msgid ""
+"Product %(product)s left the stock (fully or partly) before the DVI, and its "
+"stock account %(account)s cannot take customs duties: under OMFP 1802/2014 "
+"(account 446), customs duties are added only to accounts 301, 302, 303, 371 or "
+"381. Check the product category."
+msgstr ""
+"Produsul %(product)s a ieșit din stoc (integral sau parțial) înainte de DVI, "
+"iar contul lui de stoc %(account)s nu poate primi taxe vamale: conform OMFP "
+"1802/2014 (funcțiunea contului 446), taxa vamală se înregistrează doar pe "
+"conturile 301, 302, 303, 371 sau 381. Verificați categoria produsului."

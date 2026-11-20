@@ -1,3 +1,22 @@
+## 19.0.2.3.0 (2026-11-20)
+
+**Corectat**
+
+- Taxa vamală a stocului ieșit (vândut, consumat) înainte de validarea DVI-ului se înregistrează
+  integral (#722). Core-ul înregistra doar partea rămasă în stoc (`Dr 371 = Cr 4462`), iar pentru
+  cantitatea deja ieșită nu crea nicio linie: 446 rămânea creditat sub taxa vamală din declarație
+  și, după plata ei, cu sold debitor. Pentru partea ieșită, nota DVI are acum `Dr stoc = Cr 4462`
+  și `Dr cheltuială = Cr stoc`, pe contul de cheltuieli al categoriei produsului (607 la mărfuri,
+  601 la materii prime, 602x la materiale consumabile, 603 la obiectele de inventar date în
+  folosință, 608 la ambalaje), cu corespondențele din OMFP 1802/2014 (funcțiunea contului 446).
+  Creditul pe 446 este egal cu taxa vamală din declarație.
+- Dacă produsul ieșit din stoc înainte de DVI (vândut, consumat sau dat în folosință) are stocul
+  pe alt cont decât 301, 302, 303, 371 sau 381 (de exemplu 345), DVI-ul se oprește cu mesaj: taxa
+  vamală nu are contrapartidă legală pe acel cont. La materiile prime deja consumate în producție,
+  taxa merge pe 601 (simplificare, pentru sume nesemnificative), nu pe costul produselor obținute.
+- Fișa consultant: nota pentru marfa ieșită înainte de DVI (Pasul 7 și monografia), contul de
+  cheltuieli al categoriei la configurare, verificarea creditului pe 446 și cele două mesaje noi.
+
 ## 19.0.2.2.1 (2026-11-16)
 
 **Changed**
