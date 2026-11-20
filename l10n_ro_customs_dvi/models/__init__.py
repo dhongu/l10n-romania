@@ -3,3 +3,4 @@
 
 from . import account_invoice
 from . import stock_landed_cost
+from . import stock_valuation_adjustment_lines
