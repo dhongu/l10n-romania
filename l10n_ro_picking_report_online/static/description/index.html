@@ -1,546 +1,329 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils: https://docutils.sourceforge.io/" />
-<title>Romania - Picking Reports for Odoo Online</title>
-<style type="text/css">
-
-/*
-:Author: David Goodger (goodger@python.org)
-:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
-:Copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-Despite the name, some widely supported CSS2 features are used.
-
-See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
-customize this style sheet.
-*/
-
-/* used to remove borders from tables and images */
-.borderless, table.borderless td, table.borderless th {
-  border: 0 }
-
-table.borderless td, table.borderless th {
-  /* Override padding for "table.docutils td" with "! important".
-     The right padding separates the table cells. */
-  padding: 0 0.5em 0 0 ! important }
-
-.first {
-  /* Override more specific margin styles with "! important". */
-  margin-top: 0 ! important }
-
-.last, .with-subtitle {
-  margin-bottom: 0 ! important }
-
-.hidden {
-  display: none }
-
-.subscript {
-  vertical-align: sub;
-  font-size: smaller }
-
-.superscript {
-  vertical-align: super;
-  font-size: smaller }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-blockquote.epigraph {
-  margin: 2em 5em ; }
-
-dl.docutils dd {
-  margin-bottom: 0.5em }
-
-object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
-  overflow: hidden;
-}
-
-/* Uncomment (and remove this text!) to get bold-faced definition list terms
-dl.docutils dt {
-  font-weight: bold }
-*/
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.admonition, div.attention, div.caution, div.danger, div.error,
-div.hint, div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.admonition p.admonition-title, div.hint p.admonition-title,
-div.important p.admonition-title, div.note p.admonition-title,
-div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title, .code .error {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-/* Uncomment (and remove this text!) to get reduced vertical space in
-   compound paragraphs.
-div.compound .compound-first, div.compound .compound-middle {
-  margin-bottom: 0.5em }
-
-div.compound .compound-last, div.compound .compound-middle {
-  margin-top: 0.5em }
-*/
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em ;
-  margin-right: 2em }
-
-div.footer, div.header {
-  clear: both;
-  font-size: smaller }
-
-div.line-block {
-  display: block ;
-  margin-top: 1em ;
-  margin-bottom: 1em }
-
-div.line-block div.line-block {
-  margin-top: 0 ;
-  margin-bottom: 0 ;
-  margin-left: 1.5em }
-
-div.sidebar {
-  margin: 0 0 0.5em 1em ;
-  border: medium outset ;
-  padding: 1em ;
-  background-color: #ffffee ;
-  width: 40% ;
-  float: right ;
-  clear: right }
-
-div.sidebar p.rubric {
-  font-family: sans-serif ;
-  font-size: medium }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
-h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
-  margin-top: 0.4em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr.docutils {
-  width: 75% }
-
-img.align-left, .figure.align-left, object.align-left, table.align-left {
-  clear: left ;
-  float: left ;
-  margin-right: 1em }
-
-img.align-right, .figure.align-right, object.align-right, table.align-right {
-  clear: right ;
-  float: right ;
-  margin-left: 1em }
-
-img.align-center, .figure.align-center, object.align-center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-table.align-center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.align-left {
-  text-align: left }
-
-.align-center {
-  clear: both ;
-  text-align: center }
-
-.align-right {
-  text-align: right }
-
-/* reset inner alignment in figures */
-div.align-right {
-  text-align: inherit }
-
-/* div.align-center * { */
-/*   text-align: left } */
-
-.align-top    {
-  vertical-align: top }
-
-.align-middle {
-  vertical-align: middle }
-
-.align-bottom {
-  vertical-align: bottom }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.attribution {
-  text-align: right ;
-  margin-left: 50% }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.rubric {
-  font-weight: bold ;
-  font-size: larger ;
-  color: maroon ;
-  text-align: center }
-
-p.sidebar-title {
-  font-family: sans-serif ;
-  font-weight: bold ;
-  font-size: larger }
-
-p.sidebar-subtitle {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font: inherit }
-
-pre.literal-block, pre.doctest-block, pre.math, pre.code {
-  margin-left: 2em ;
-  margin-right: 2em }
-
-pre.code .ln { color: gray; } /* line numbers */
-pre.code, code { background-color: #eeeeee }
-pre.code .comment, code .comment { color: #5C6576 }
-pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
-pre.code .literal.string, code .literal.string { color: #0C5404 }
-pre.code .name.builtin, code .name.builtin { color: #352B84 }
-pre.code .deleted, code .deleted { background-color: #DEB0A1}
-pre.code .inserted, code .inserted { background-color: #A3D289}
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option {
-  white-space: nowrap }
-
-span.pre {
-  white-space: pre }
-
-span.problematic, pre.problematic {
-  color: red }
-
-span.section-subtitle {
-  /* font-size relative to parent (h1..h6 element) */
-  font-size: 80% }
-
-table.citation {
-  border-left: solid 1px gray;
-  margin-left: 1px }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.docutils {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.footnote {
-  border-left: solid 1px black;
-  margin-left: 1px }
-
-table.docutils td, table.docutils th,
-table.docinfo td, table.docinfo th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-table.docutils th.field-name, table.docinfo th.docinfo-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap ;
-  padding-left: 0 }
-
-/* "booktabs" style (no vertical lines) */
-table.docutils.booktabs {
-  border: 0px;
-  border-top: 2px solid;
-  border-bottom: 2px solid;
-  border-collapse: collapse;
-}
-table.docutils.booktabs * {
-  border: 0px;
-}
-table.docutils.booktabs th {
-  border-bottom: thin solid;
-  text-align: left;
-}
-
-h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
-h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
-  font-size: 100% }
-
-ul.auto-toc {
-  list-style-type: none }
-
-</style>
-</head>
-<body>
-<div class="document" id="romania-picking-reports-for-odoo-online">
-<h1 class="title">Romania - Picking Reports for Odoo Online</h1>
-
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!! This file is generated by oca-gen-addon-readme !!
-!! changes will be overwritten.                   !!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!! source digest: sha256:ef951608a32e6b813e5f36954645b1a6160953fedf5ab6d3ce5a668b29345b3c
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_picking_report_online"><img alt="dhongu/l10n-romania" src="https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github" /></a></p>
-<p>Documentele de stoc românești, și pe <strong>Odoo Online</strong>: modulul nu conține
-cod Python și se importă ca arhivă zip (Aplicații &gt; Importați modulul).
-Este varianta fără Python a modulului <tt class="docutils literal">l10n_ro_picking_report</tt>, pentru
-bazele în care codul Python propriu nu poate rula. Are nevoie de
-<tt class="docutils literal">l10n_ro_invoice_report_online</tt> (și, prin el, de
-<tt class="docutils literal">l10n_ro_report_common_online</tt>), importate înainte.</p>
-<p>Rapoarte, din meniul <strong>Tipăriți</strong> al transferului:</p>
-<ul class="simple">
-<li><strong>Recepție (NIR)</strong>, <strong>Recepție fără TVA</strong> și <strong>Recepție cu preț de
-vânzare</strong> (tipăresc doar recepțiile): preț unitar, valoare, TVA, preț
-de vânzare, adaos în procente; cantitățile și prețurile în unitatea de
-pe document (o cutie de 13 kg rămâne cutie), prețul din comanda de
-achiziție sau din valoarea mișcării.</li>
-<li><strong>Aviz</strong> și <strong>Aviz cu preț</strong> (livrarea): prețul din comanda de vânzare
-(cu discount, cu TVA inclus sau nu); pe livrările fără comandă, prețul
-din lista de prețuri a clientului, altfel prețul de listă.</li>
-<li><strong>Aviz de însoțire a mărfii</strong> (14-3-6A): livrarea bifată <em>Aviz de
-însoțire</em> se tipărește cu acest titlu; celelalte au titlul <em>Livrare</em>.</li>
-<li><strong>Bon de consum</strong> și <strong>Transfer intern</strong> (cu prețuri de vânzare când
-locația e magazin).</li>
+<div class="mx-auto px-3 py-3 rounded-4" style="max-width:1100px;font-family:'Segoe UI','Avenir Next','Helvetica Neue',Arial,sans-serif;color:#212529;font-weight:400;background-color:#ffffff;--bs-body-color:#212529;--bs-body-bg:#ffffff;--bs-emphasis-color:#212529;--bs-border-color:#dee2e6;--bs-card-bg:#ffffff;--bs-card-color:#212529;--bs-card-border-color:#dee2e6;--bs-link-color:#006F42;--bs-link-hover-color:#00432a;--bs-nav-link-color:#212529;--bs-nav-pills-link-active-bg:#006F42;--bs-nav-pills-link-active-color:#ffffff;--bs-code-color:#b4266b;--bs-heading-color:#212529;">
+<!-- tb-gen v1 -->
+<div class="rounded-4 shadow px-4 py-4 mt-2 mb-4" style="background-color:#006F42;color:#ffffff;">
+  <div class="d-flex flex-wrap align-items-center">
+    <span class="d-inline-block rounded-4 p-2 flex-shrink-0 my-2" style="background-color:#ffffff;margin-right:24px;"><img src="icon.png" alt="Romania - Picking Reports for Odoo Online" style="width:80px;height:80px;border:none;"/></span>
+    <div class="flex-grow-1 my-2" style="width:320px;min-width:0;margin-right:24px;">
+      <h1 class="fw-bold mb-2" style="color:#ffffff;font-size:36px;line-height:1.1;letter-spacing:-0.5px;border:none;">Romania - Picking Reports for Odoo Online</h1>
+      <p class="mb-3" style="font-size:18px;color:#cdeccf;line-height:1.45;">NIR, delivery note (aviz) and consumption voucher, Romanian layout, on Odoo Online too (no Python)</p>
+      <div>
+        <span class="d-inline-block rounded-pill fw-bold me-2 mb-2" style="background-color:#ffffff;border:1px solid #ffffff;color:#006F42;padding:6px 14px;font-size:12px;">Odoo 20.0</span>
+        <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px solid #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;">Localization</span>
+        <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px solid #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;">Odoo.sh &bull; On-premise</span>
+        <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px dashed #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;">AGPL-3</span>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="d-flex align-items-start rounded-4 px-4 py-3 mb-4" style="background-color:#DEF1DD;color:#212529;">
+  <span class="flex-shrink-0 me-3" style="font-size:26px;line-height:1.2;color:#006F42;">&#9733;</span>
+  <div style="font-size:16px;line-height:1.55;">
+    <span class="fw-bold" style="color:#006F42;">Did this module help you?</span> It is free, built and maintained by the Terrabit developers. If it saved you time, a rating on this page is the best way to say thanks &mdash; and it helps other Odoo users find it too. Thank you for your support!
+  </div>
+</div>
+
+<ul class="nav nav-pills justify-content-center mb-4 pb-3 border-bottom" style="--bs-nav-pills-link-active-bg:#006F42;">
+  <li class="nav-item mx-1 mb-2">
+    <a class="nav-link active fw-semibold rounded-pill border" id="tb-tab-overview"
+       data-bs-toggle="pill" data-bs-target="#tb-panel-overview" href="#tb-panel-overview"
+       style="padding:10px 22px;">Overview</a>
+  </li>
+  <li class="nav-item mx-1 mb-2">
+    <a class="nav-link fw-semibold rounded-pill border" id="tb-tab-usage"
+       data-bs-toggle="pill" data-bs-target="#tb-panel-usage" href="#tb-panel-usage"
+       style="padding:10px 22px;">Usage</a>
+  </li>
 </ul>
-<p>Pe documente: datele firmei și conturile bancare, gestionarul locației,
-delegatul și mijlocul de transport, numărul AWB (când e instalat modulul
-de curierat), semnăturile.</p>
-<p><strong>Setări</strong>, pe firmă, în fila <em>Factură România</em>, grupul <em>Documente de
-stoc</em>: ascunde TVA pe NIR, ascunde băncile pe documentele de stoc. Pe
-locație: lista de prețuri a magazinului, gestionarul, <em>Este locație de
-tip magazin</em>.</p>
-<p><strong>Automatizări</strong> (în locul codului Python): delegatul aduce mijlocul de
-transport; prețul de vânzare se fixează pe mișcare la validarea
-recepției; recepția din comanda de achiziție primește ca document sursă
-referința furnizorului.</p>
-<p>Ce nu face, față de <tt class="docutils literal">l10n_ro_picking_report</tt>: rapoartele cumulative pe
-perioadă, butonul <em>Tipăriți</em> care alege singur raportul, facturarea din
-livrare cu delegatul și atașarea livrării semnate.</p>
-<div class="section" id="odoo-online">
-<h1>Odoo Online</h1>
-<p>Modulul nu conține Python: se poate importa pe Odoo Online (planul
-Custom) din Aplicații &gt; Importați modulul. Nu se poate instala împreună
-cu <tt class="docutils literal">l10n_ro_picking_report</tt> (manifestul îl exclude, iar importul zip
-este refuzat cât timp acel modul e instalat): cele două țin aceleași
-date în câmpuri diferite.</p>
-<p><strong>Table of contents</strong></p>
-<div class="contents local topic" id="contents">
-<ul class="simple">
-<li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a></li>
-</ul>
+<div class="tab-content">
+<div class="tab-pane fade show active py-2" id="tb-panel-overview" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
+<h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Overview</h2>
+<p class="mb-4" style="font-size:16px;line-height:1.65;max-width:780px;">Documentele de stoc rom&#226;ne&#537;ti, &#537;i pe <strong>Odoo Online</strong>: modulul nu con&#539;ine cod Python &#537;i se import&#259; ca
+arhiv&#259; zip (Aplica&#539;ii &gt; Importa&#539;i modulul). Este varianta f&#259;r&#259; Python a modulului
+<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_picking_report</code>, pentru bazele &#238;n care codul Python propriu nu poate rula. Are nevoie de
+<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_invoice_report_online</code> (&#537;i, prin el, de <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_report_common_online</code>), importate &#238;nainte.</p>
+<p>Rapoarte, din meniul <strong>Tip&#259;ri&#539;i</strong> al transferului:</p>
+<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Recep&#539;ie (NIR)</span><div>, <strong>Recep&#539;ie f&#259;r&#259; TVA</strong> &#537;i <strong>Recep&#539;ie cu pre&#539; de v&#226;nzare</strong> (tip&#259;resc doar
+  recep&#539;iile): pre&#539; unitar, valoare,
+  TVA, pre&#539; de v&#226;nzare, adaos &#238;n procente; cantit&#259;&#539;ile &#537;i pre&#539;urile &#238;n unitatea de pe document
+  (o cutie de 13 kg r&#259;m&#226;ne cutie), pre&#539;ul din comanda de achizi&#539;ie sau din valoarea mi&#537;c&#259;rii.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Aviz</span><div>&#537;i <strong>Aviz cu pre&#539;</strong> (livrarea): pre&#539;ul din comanda de v&#226;nzare (cu discount, cu TVA inclus
+  sau nu); pe livr&#259;rile f&#259;r&#259; comand&#259;, pre&#539;ul din lista de pre&#539;uri a clientului, altfel pre&#539;ul de list&#259;.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Aviz de &#238;nso&#539;ire a m&#259;rfii</span><div>(14-3-6A): livrarea bifat&#259; <em>Aviz de &#238;nso&#539;ire</em> se tip&#259;re&#537;te cu acest
+  titlu; celelalte au titlul <em>Livrare</em>.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100"><span class="fw-bold">Bon de consum</span><div>&#537;i <strong>Transfer intern</strong> (cu pre&#539;uri de v&#226;nzare c&#226;nd loca&#539;ia e magazin).</div></div></li></ul>
+<p>Pe documente: datele firmei &#537;i conturile bancare, gestionarul loca&#539;iei, delegatul &#537;i mijlocul de
+transport, num&#259;rul AWB (c&#226;nd e instalat modulul de curierat), semn&#259;turile.</p>
+<p><strong>Set&#259;ri</strong>, pe firm&#259;, &#238;n fila <em>Factur&#259; Rom&#226;nia</em>, grupul <em>Documente de stoc</em>: ascunde TVA pe NIR,
+ascunde b&#259;ncile pe documentele de stoc. Pe loca&#539;ie: lista de pre&#539;uri a magazinului, gestionarul,
+<em>Este loca&#539;ie de tip magazin</em>.</p>
+<p><strong>Automatiz&#259;ri</strong> (&#238;n locul codului Python): delegatul aduce mijlocul de transport; pre&#539;ul de v&#226;nzare
+se fixeaz&#259; pe mi&#537;care la validarea recep&#539;iei; recep&#539;ia din comanda de achizi&#539;ie prime&#537;te ca document
+surs&#259; referin&#539;a furnizorului.</p>
+<p>Ce nu face, fa&#539;&#259; de <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_picking_report</code>: rapoartele cumulative pe perioad&#259;, butonul <em>Tip&#259;ri&#539;i</em>
+care alege singur raportul, facturarea din livrare cu delegatul &#537;i ata&#537;area livr&#259;rii semnate.</p>
+<h3 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:19px;letter-spacing:-0.3px;line-height:1.2;">Odoo Online</h3>
+<p>Modulul nu con&#539;ine Python: se poate importa pe Odoo Online (planul Custom) din Aplica&#539;ii &gt; Importa&#539;i
+modulul. Nu se poate instala &#238;mpreun&#259; cu <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_picking_report</code> (manifestul &#238;l exclude, iar importul
+zip este refuzat c&#226;t timp acel modul e instalat): cele dou&#259; &#539;in acelea&#537;i date &#238;n c&#226;mpuri diferite.</p>
 </div>
-<div class="section" id="usage">
-<h2><a class="toc-backref" href="#toc-entry-1">Usage</a></h2>
-</div>
-</div>
-<div class="section" id="configurare">
-<h1>Configurare</h1>
-<ol class="arabic">
-<li><p class="first">Importați, în ordine, <tt class="docutils literal">l10n_ro_report_common_online</tt>,
-<tt class="docutils literal">l10n_ro_invoice_report_online</tt> și acest modul din <strong>Aplicații →
-Importați Modulul</strong> (mod dezvoltator), după instalarea limbii române.</p>
-</li>
-<li><p class="first">În <strong>Setări → Utilizatori &amp; Companii → Companii</strong>, pe firmă, fila
-<strong>Factură România</strong>, grupul <strong>Documente de stoc</strong>: bifați, după caz,
-<strong>Ascunde TVA pe NIR</strong> și <strong>Ascunde băncile pe documentele de stoc</strong>.</p>
-<p><img alt="Fila Factură România a firmei, cu grupul Documente de stoc și cele două bife evidențiate" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/01_setari_firma.png" /></p>
-</li>
-<li><p class="first">În <strong>Inventar → Configurare → Locații</strong>, pe fiecare gestiune: <strong>Listă
-de prețuri a magazinului</strong>, <strong>Gestionar</strong> și, la magazine, <strong>Este
-locație de tip magazin</strong>.</p>
-<p><img alt="Locația TEST Magazin, cu lista de prețuri, gestionarul și bifa de magazin evidențiate" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/02_locatie_gestionar.png" /></p>
-</li>
-<li><p class="first">Pe comanda de achiziție, completați <strong>Referința furnizorului</strong>
-înainte de confirmare: devine documentul sursă al recepției și
-numărul „conform documentului” de pe NIR.</p>
-</li>
+<div class="tab-pane fade py-2" id="tb-panel-usage" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
+<h2 class="fw-bold mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:24px;letter-spacing:-0.3px;line-height:1.2;">Usage</h2>
+<h3 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:19px;letter-spacing:-0.3px;line-height:1.2;">Configurare</h3>
+<ol>
+<li>Importa&#539;i, &#238;n ordine, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_report_common_online</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_invoice_report_online</code> &#537;i acest
+   modul din <strong>Aplica&#539;ii &#8594; Importa&#539;i Modulul</strong> (mod dezvoltator), dup&#259; instalarea limbii rom&#226;ne.</li>
+<li>&#206;n <strong>Set&#259;ri &#8594; Utilizatori &amp; Companii &#8594; Companii</strong>, pe firm&#259;, fila <strong>Factur&#259; Rom&#226;nia</strong>, grupul
+   <strong>Documente de stoc</strong>: bifa&#539;i, dup&#259; caz, <strong>Ascunde TVA pe NIR</strong> &#537;i <strong>Ascunde b&#259;ncile pe documentele
+   de stoc</strong>.</li>
 </ol>
-</div>
-<div class="section" id="utilizare">
-<h1>Utilizare</h1>
-<ol class="arabic">
-<li><p class="first">Pe transfer, fila <strong>Informații suplimentare</strong>: alegeți <strong>Delegat</strong>
-(mijlocul de transport vine din fișa lui), verificați <strong>Mijloc
-transport</strong> și, pe livrările facturate ulterior, bifați <strong>Aviz de
-însoțire</strong>. Validați transferul.</p>
-<p><img alt="Livrarea cu Delegat, Mijloc transport și Aviz de însoțire evidențiate" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/03_livrare_delegat_aviz.png" /></p>
-</li>
-<li><p class="first">Din roata dințată → <strong>Tipăriți</strong>, alegeți documentul: <strong>Recepție
-(NIR)</strong>, <strong>Recepție fără TVA</strong>, <strong>Recepție cu preț de vânzare</strong>,
-<strong>Aviz</strong>, <strong>Aviz cu preț</strong>, <strong>Bon de Consum</strong> sau <strong>Notă de
-Transfer</strong>.</p>
-<p><img alt="Meniul Tipăriți cu cele șapte rapoarte ale modulului" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/04_meniu_tiparire.png" /></p>
-</li>
-<li><p class="first"><strong>NIR-ul</strong> are prețul din comanda de achiziție sau, fără comandă, din
-valoarea mișcării, în unitatea de pe document (o cutie de 13 kg
-rămâne cutie).</p>
-<p><img alt="NIR pe recepția din comanda de achiziție" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/05_nir.png" /></p>
-<p><img alt="NIR pe recepția fără comandă, în cutii de 13 kg" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/06_nir_cutii.png" /></p>
-</li>
-<li><p class="first"><strong>NIR-ul cu preț de vânzare</strong> folosește prețul fixat la validarea
-recepției, din lista de prețuri a magazinului sau din prețul
-produsului; coloana <em>Valoare vânzare</em> este cu TVA.</p>
-<p><img alt="NIR cu preț de vânzare, marjă și totaluri la preț de vânzare" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/07_nir_pret_vanzare.png" /></p>
-</li>
-<li><p class="first">Livrarea bifată <strong>Aviz de însoțire</strong> se tipărește ca <strong>Aviz de
-însoțire a mărfii</strong>, cu delegatul și mijlocul de transport; prețul
-vine din comanda de vânzare sau, fără comandă, din lista de prețuri a
-clientului.</p>
-<p><img alt="Avizul de însoțire a mărfii, cu prețuri, delegat și mijloc de transport" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/08_aviz_insotire.png" /></p>
-<p><img alt="Livrarea fără comandă, cu prețuri din lista clientului" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/09_livrare_fara_comanda.png" /></p>
-</li>
-<li><p class="first"><strong>Bonul de consum</strong> arată valoarea de cost a mișcării; <strong>nota de
-transfer</strong> către un magazin arată și prețurile de vânzare. Între două
-locații interne, Odoo nu valorizează mișcarea și valoarea iese 0,00.</p>
-<p><img alt="Bonul de consum către o locație de consum" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/10_bon_consum.png" /></p>
-<p><img alt="Nota de transfer către locația de tip magazin" src="https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_picking_report_online/static/description/11_transfer_intern.png" /></p>
-</li>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Fila Factur&#259; Rom&#226;nia a firmei, cu grupul Documente de stoc &#537;i cele dou&#259; bife eviden&#539;iate" src="01_setari_firma.png" /></p>
+<ol start="3">
+<li>&#206;n <strong>Inventar &#8594; Configurare &#8594; Loca&#539;ii</strong>, pe fiecare gestiune: <strong>List&#259; de pre&#539;uri a magazinului</strong>,
+   <strong>Gestionar</strong> &#537;i, la magazine, <strong>Este loca&#539;ie de tip magazin</strong>.</li>
 </ol>
-<div class="section" id="changelog">
-<h2>Changelog</h2>
-<div class="section" id="section-1">
-<h3>20.0.1.0.0</h3>
-<ul class="simple">
-<li>Portare pe 20.0: mișcarea de stoc își ține unitatea de măsură în
-<tt class="docutils literal">uom_id</tt> (era <tt class="docutils literal">product_uom</tt>), <tt class="docutils literal"><span class="pre">t-esc</span></tt> devine <tt class="docutils literal"><span class="pre">t-out</span></tt>,
-<tt class="docutils literal">report_file</tt> dispare din acțiunile de raport, iar delegatul acceptă
-și contactele unei firme (în 20.0 contactele unei firme cu CUI au
-<tt class="docutils literal">is_company</tt> bifat).</li>
-</ul>
-</div>
-<div class="section" id="section-2">
-<h3>19.0.1.0.0</h3>
-<ul class="simple">
-<li>Prima versiune: varianta fără Python a modulului
-<tt class="docutils literal">l10n_ro_picking_report</tt>, importabilă pe Odoo Online. Calculul
-liniilor și al totalurilor din rapoarte (prețuri în unitatea
-documentului, TVA, preț de vânzare, adaos) este scris în QWeb și dă
-aceleași valori ca modelele Python ale modulului clasic (verificat
-linie cu linie). Câmpurile sunt manuale (<tt class="docutils literal">x_l10n_ro_*</tt>), setările
-sunt pe firmă, iar delegatul, prețul de vânzare la recepție și
-referința furnizorului sunt automatizări.</li>
-<li>Corecturi față de modulul clasic: rapoartele de recepție tipăresc doar
-recepțiile; gestionarul și capitalul social se tipăresc doar când sunt
-completate; starea <em>Ciornă</em> se vede pe documente; totalul bonului de
-consum e aliniat la dreapta; traducerile „Recepție fără TVA”,
-„Semnătura”, „Din locația”, „Document sursă”, „recepționarea
-mărfurilor”.</li>
-</ul>
-</div>
-</div>
-<div class="section" id="bug-tracker">
-<h2>Bug Tracker</h2>
-<p>Bugs are tracked on <a class="reference external" href="https://www.terrabit.ro/helpdesk">Terrabit Issues</a>.
-In case of trouble, please check there if your issue has already been reported.</p>
-<p>Do not contact contributors directly about support or help with technical issues.</p>
-</div>
-<div class="section" id="credits">
-<h2>Credits</h2>
-<div class="section" id="authors">
-<h3>Authors</h3>
-<ul class="simple">
-<li>Dorin Hongu</li>
-<li>Terrabit</li>
-</ul>
-</div>
-<div class="section" id="maintainers">
-<h3>Maintainers</h3>
-<p>Current maintainer:</p>
-<p><a class="reference external image-reference" href="https://github.com/dhongu"><img alt="dhongu" src="https://github.com/dhongu.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_picking_report_online">dhongu/l10n-romania</a> project on GitHub.</p>
-<p>You are welcome to contribute.</p>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Loca&#539;ia TEST Magazin, cu lista de pre&#539;uri, gestionarul &#537;i bifa de magazin eviden&#539;iate" src="02_locatie_gestionar.png" /></p>
+<ol start="4">
+<li>Pe comanda de achizi&#539;ie, completa&#539;i <strong>Referin&#539;a furnizorului</strong> &#238;nainte de confirmare: devine
+   documentul surs&#259; al recep&#539;iei &#537;i num&#259;rul &#8222;conform documentului" de pe NIR.</li>
+</ol>
+<h3 class="fw-bold mt-4 mb-3" style="border:none;border-left:4px solid #57B952;padding-left:16px;font-size:19px;letter-spacing:-0.3px;line-height:1.2;">Utilizare</h3>
+<ol>
+<li>Pe transfer, fila <strong>Informa&#539;ii suplimentare</strong>: alege&#539;i <strong>Delegat</strong> (mijlocul de transport vine din
+   fi&#537;a lui), verifica&#539;i <strong>Mijloc transport</strong> &#537;i, pe livr&#259;rile facturate ulterior, bifa&#539;i <strong>Aviz de
+   &#238;nso&#539;ire</strong>. Valida&#539;i transferul.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Livrarea cu Delegat, Mijloc transport &#537;i Aviz de &#238;nso&#539;ire eviden&#539;iate" src="03_livrare_delegat_aviz.png" /></p>
+<ol start="2">
+<li>Din roata din&#539;at&#259; &#8594; <strong>Tip&#259;ri&#539;i</strong>, alege&#539;i documentul: <strong>Recep&#539;ie (NIR)</strong>, <strong>Recep&#539;ie f&#259;r&#259; TVA</strong>,
+   <strong>Recep&#539;ie cu pre&#539; de v&#226;nzare</strong>, <strong>Aviz</strong>, <strong>Aviz cu pre&#539;</strong>, <strong>Bon de Consum</strong> sau <strong>Not&#259; de
+   Transfer</strong>.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Meniul Tip&#259;ri&#539;i cu cele &#537;apte rapoarte ale modulului" src="04_meniu_tiparire.png" /></p>
+<ol start="3">
+<li><strong>NIR-ul</strong> are pre&#539;ul din comanda de achizi&#539;ie sau, f&#259;r&#259; comand&#259;, din valoarea mi&#537;c&#259;rii, &#238;n
+   unitatea de pe document (o cutie de 13 kg r&#259;m&#226;ne cutie).</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="NIR pe recep&#539;ia din comanda de achizi&#539;ie" src="05_nir.png" /></p>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="NIR pe recep&#539;ia f&#259;r&#259; comand&#259;, &#238;n cutii de 13 kg" src="06_nir_cutii.png" /></p>
+<ol start="4">
+<li><strong>NIR-ul cu pre&#539; de v&#226;nzare</strong> folose&#537;te pre&#539;ul fixat la validarea recep&#539;iei, din lista de pre&#539;uri a
+   magazinului sau din pre&#539;ul produsului; coloana <em>Valoare v&#226;nzare</em> este cu TVA.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="NIR cu pre&#539; de v&#226;nzare, marj&#259; &#537;i totaluri la pre&#539; de v&#226;nzare" src="07_nir_pret_vanzare.png" /></p>
+<ol start="5">
+<li>Livrarea bifat&#259; <strong>Aviz de &#238;nso&#539;ire</strong> se tip&#259;re&#537;te ca <strong>Aviz de &#238;nso&#539;ire a m&#259;rfii</strong>, cu delegatul &#537;i
+   mijlocul de transport; pre&#539;ul vine din comanda de v&#226;nzare sau, f&#259;r&#259; comand&#259;, din lista de pre&#539;uri a
+   clientului.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Avizul de &#238;nso&#539;ire a m&#259;rfii, cu pre&#539;uri, delegat &#537;i mijloc de transport" src="08_aviz_insotire.png" /></p>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Livrarea f&#259;r&#259; comand&#259;, cu pre&#539;uri din lista clientului" src="09_livrare_fara_comanda.png" /></p>
+<ol start="6">
+<li><strong>Bonul de consum</strong> arat&#259; valoarea de cost a mi&#537;c&#259;rii; <strong>nota de transfer</strong> c&#259;tre un magazin arat&#259; &#537;i
+   pre&#539;urile de v&#226;nzare. &#206;ntre dou&#259; loca&#539;ii interne, Odoo nu valorizeaz&#259; mi&#537;carea &#537;i valoarea iese 0,00.</li>
+</ol>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Bonul de consum c&#259;tre o loca&#539;ie de consum" src="10_bon_consum.png" /></p>
+<p><img class="img-fluid d-block" style="max-width:100%;height:auto;" alt="Nota de transfer c&#259;tre loca&#539;ia de tip magazin" src="11_transfer_intern.png" /></p>
 </div>
 </div>
+
+<div class="row text-center mt-4 mb-1 g-3">
+  <div class="col-md-6">
+    <div class="border rounded-3 px-4 py-2 h-100">
+      <div class="fw-bold" style="font-size:2.2rem;color:#006F42;line-height:1;">350+</div>
+      <div class="mt-2" style="font-size:0.9rem;color:#3d4752;">Modules published on Odoo Apps</div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="border rounded-3 px-4 py-2 h-100">
+      <div class="fw-bold" style="font-size:2.2rem;color:#006F42;line-height:1;">Silver</div>
+      <div class="mt-2" style="font-size:0.9rem;color:#3d4752;">Odoo Partner &mdash; implementation &amp; support</div>
+    </div>
+  </div>
 </div>
+
+
+<div class="text-center rounded-4 px-4 pt-3 pb-4 mt-4 mb-3" style="background-color:#00432a;color:#ffffff;">
+  <h2 class="fw-bold mb-2" style="color:#ffffff;font-size:26px;letter-spacing:-0.3px;border:none;">Need help getting started?</h2>
+  <p class="mx-auto mb-2" style="color:#bfe3cc;max-width:660px;line-height:1.6;font-size:16px;">
+     Our 350+ apps on the Odoo Apps Store are used in Odoo implementations across Europe,
+     the Americas, Asia and Africa &mdash; by companies we have never even met. That is the
+     advantage of building modules that simply work.</p>
+  <p class="mx-auto mb-4" style="color:#bfe3cc;max-width:660px;line-height:1.6;font-size:16px;">
+     Questions about this module, or need it adapted to your processes?
+     Write to us &mdash; the developers who build it will answer.</p>
+  <a href="mailto:support@terrabit.ro" target="_blank" rel="noopener"
+     class="d-inline-block fw-bold text-decoration-none rounded-3"
+     style="background-color:#DEF1DD;color:#00432a;padding:14px 32px;font-size:15px;">Terrabit support &rarr;</a>
 </div>
-</body>
-</html>
+
+
+<section class="rounded-4 p-4 mb-3 border">
+  <h2 class="text-center fw-bold mb-1" style="color:#212529;font-size:24px;border:none;">More apps by Terrabit</h2>
+  <p class="text-center mb-4" style="color:#3d4752;">Other modules from the same publisher, built to work together.
+    <a href="https://apps.odoo.com/apps/browse?author=Terrabit" target="_blank" rel="noopener"
+       class="fw-semibold" style="color:#006F42;">All apps &rarr;</a></p>
+  <div class="row g-3">
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_account_move_document_type" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_account_move_document_type/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Accounting Document Type</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Supporting document type on journal entries: invoice, DVI, receipt, bank statement, journal entry</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_account_sequence" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RC</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_account_sequence/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Journal Numbering</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Cash Sequence</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_anaf_partner_lookup" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_anaf_partner_lookup/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF Partner Lookup</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Look a Romanian company up at ANAF by its CUI and get the partner data, without other localization modules</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_anaf_partner_online" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_anaf_partner_online/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF Partner Data for Odoo Online</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Fill in Romanian partners from ANAF by their CUI, on Odoo Online too (no Python, service by Terrabit)</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_anaf_token_online" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_anaf_token_online/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF SPV Token for Odoo Online</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">e-Factura SPV token through Terrabit, renewed for you, on Odoo Online too (no Python)</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_cash_register" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RC</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_cash_register/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Register</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Cash Register</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_customs_dvi" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RC</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_customs_dvi/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Customs Import Declaration (DVI)</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Record the customs import declaration (DVI) as a landed cost: customs duty, commission and import VAT</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/20.0/l10n_ro_customs_dvi_import" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RI</span>
+              <img src="https://apps.odoocdn.com/apps/assets/20.0/l10n_ro_customs_dvi_import/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Import DVI from the SNI PDF</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Fill in the DVI wizard from the customs import declaration PDF printed by the National Import System (SNI)</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+</div>
