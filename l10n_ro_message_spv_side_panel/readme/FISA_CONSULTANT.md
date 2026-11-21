@@ -76,10 +76,10 @@ nivel se numește *Contabilitate*). Mesajele apar pe o singură coloană. Fiecar
 card arată furnizorul, suma totală, numărul facturii, data, starea mesajului și zilele rămase până la
 scadență (roșu dacă scadența a trecut, portocaliu dacă e azi). Când *Verificare facturi primite* e
 activă, cardul arată și starea verificării: în așteptare, acceptată sau respinsă. Mesajele cu eroare arată starea
-*Eroare* și suma 0. Un mesaj a cărui arhivă nu e încă descărcată este o **ciornă**: cardul arată
+*Eroare*, fără sumă (cardul afișează suma doar când are valoare). Un mesaj a cărui arhivă nu e încă descărcată este o **ciornă**: cardul arată
 identificatorul mesajului, tipul și data, cu mențiunea „Arhiva nu a fost descărcată încă”, fără sumă.
 
-![Lista mesajelor SPV ca o coloană de carduri: pe fiecare card se văd furnizorul, suma, numărul și data facturii, starea (Descărcat sau Eroare) și zilele până la scadență; un mesaj are starea Eroare și suma 0,00, iar ultimul card este o ciornă fără sumă, cu identificatorul 5120656700, tipul Factură achiziție, data și mențiunea Arhiva nu a fost descărcată încă](../static/description/01_meniu_vedere_impartita.png)
+![Lista mesajelor SPV ca o coloană de carduri: pe fiecare card se văd furnizorul, suma, numărul și data facturii, starea (Descărcat sau Eroare) și zilele până la scadență; un mesaj are starea Eroare și nicio sumă, iar ultimul card este o ciornă fără sumă, cu identificatorul 5120656700, tipul Factură achiziție, data și mențiunea Arhiva nu a fost descărcată încă](../static/description/01_meniu_vedere_impartita.png)
 
 ### Pasul 2 — Selectați o factură: panoul din dreapta
 
@@ -156,7 +156,7 @@ sortarea și gruparea mesajelor, iar panoul funcționează la fel: un clic pe r�
 
 Butonul cu săgeată în afară din antetul panoului deschide formularul complet al mesajului. Câmpurile sunt grupate în trei
 coloane pe un rând: **Furnizor** (denumirea partenerului, **CUI (XML)**, partenerul din Odoo), **Factură**
-(referința, data, scadența, moneda, factura din Odoo) și **Sume** (valoarea fără TVA, TVA, total). Starea mesajului nu mai e în grup: este o bară de stare în antet, lângă
+(referința, data, scadența, moneda, factura din Odoo, compania — vizibilă doar cu mai multe companii) și **Sume** (valoarea fără TVA, TVA, total, plus starea verificării și motivul respingerii, când există). Starea mesajului nu mai e în grup: este o bară de stare în antet, lângă
 butoane, ca în panou.
 Sub ele este același document ca în panou, cu liniile facturii (și codul articolului), fără file, iar la
 sfârșit, în grupul **Mesaj**, datele tehnice ale mesajului: ID mesaj, tip, ID cerere, CIF, dată și detalii.

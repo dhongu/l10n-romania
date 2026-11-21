@@ -88,8 +88,8 @@ jobs:
         run: |
           git init --quiet /tmp/deltatech-code
           git -C /tmp/deltatech-code fetch --quiet --depth 1 https://github.com/dhongu/deltatech.git "$DELTATECH_CODE_SHA"
-          git -C /tmp/deltatech-code checkout --quiet FETCH_HEAD -- deltatech_iap_online deltatech_sale_order_image
-          pip install --no-deps /tmp/deltatech-code/deltatech_iap_online /tmp/deltatech-code/deltatech_sale_order_image
+          git -C /tmp/deltatech-code checkout --quiet FETCH_HEAD -- deltatech_iap_online deltatech_sale_order_image deltatech_web_side_panel
+          pip install --no-deps /tmp/deltatech-code/deltatech_iap_online /tmp/deltatech-code/deltatech_sale_order_image /tmp/deltatech-code/deltatech_web_side_panel
       - name: Install addons and dependencies
         run: |
           export ADDONS_PATH="/opt/odoo/addons,$(pwd),/tmp/l10n-romania-oca"
