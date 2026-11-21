@@ -29,8 +29,34 @@ class AdjustmentLines(models.Model):
             credit_account_id = fiscal_position.map_account(self.env["account.account"].browse(credit_account_id)).id
             debit_account_id = fiscal_position.map_account(self.env["account.account"].browse(debit_account_id)).id
 
+        if self.cost_id.company_id.l10n_ro_accounting and not remaining_qty:
+            # Everything was already delivered: the cost stays on class 6.
+            return []
         lines = super()._create_account_move_line(credit_account_id, debit_account_id, remaining_qty)
+        lines = self._l10n_ro_prorate_remaining_qty(lines, remaining_qty)
         return self._l10n_ro_route_class6_through_intermediary(lines)
+
+    def _l10n_ro_prorate_remaining_qty(self, lines, remaining_qty):
+        """Capitalize only the share of the landed cost still in stock.
+
+        Since odoo/odoo#300338 (20.0, Nov 2026) the core posts the full landed cost
+        to stock valuation and relies on the valuation replay to restate the units
+        already delivered. The Romanian stock accounting posts the delivery when it
+        is validated and does not restate it, so the delivered share must stay on
+        the class 6 account: post ``additional_landed_cost * remaining_qty / quantity``
+        as the core did before."""
+        if not self.cost_id.company_id.l10n_ro_accounting or not self.quantity:
+            return lines
+        if self.product_id.uom_id.compare(remaining_qty, self.quantity) == 0:
+            return lines
+        currency = self.cost_id.currency_id or self.cost_id.company_id.currency_id
+        factor = remaining_qty / self.quantity
+        for command in lines:
+            vals = command[2]
+            for field in ("debit", "credit"):
+                if vals.get(field):
+                    vals[field] = currency.round(vals[field] * factor)
+        return lines
 
     def _l10n_ro_route_class6_through_intermediary(self, lines):
         """Route class 6 (expense) credit lines through the technical intermediary
