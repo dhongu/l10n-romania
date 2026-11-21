@@ -1,3 +1,7 @@
+## 20.0.1.0.0 (2026-11-21)
+
+- Migrare la Odoo 20: componenta documentului pe Owl 3 (`props = useProps(...)`, starea cu `proxy`).
+
 ## 19.0.1.0.0 (2026-11-16)
 
 - Prima versiune: meniul *Mesaje SPV (vedere împărțită)* cu kanban și listă și panou lateral pe
