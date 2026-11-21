@@ -1,0 +1,74 @@
+// A single column of cards on the left, as in the split view of the bank reconciliation.
+.o_spv_split_kanban .o_kanban_renderer.o_kanban_ungrouped {
+    flex-direction: column;
+    flex-wrap: nowrap !important;
+    align-items: stretch;
+
+    .o_kanban_record {
+        flex: 0 0 auto !important;
+        width: auto;
+        max-width: none;
+        min-height: 0;
+        height: auto;
+        margin-right: 0;
+    }
+
+    .o_kanban_ghost {
+        display: none;
+    }
+}
+
+// The document and the lines built from the XML: the size of the text of the form (the field of
+// type Html would show them in the larger size of a text), in the panel and in the full form.
+.o_spv_document,
+.o_spv_lines {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+
+    .h4 {
+        font-size: 1rem;
+    }
+
+    .small {
+        font-size: 0.75rem;
+    }
+
+    .table {
+        font-size: 0.75rem;
+        --bs-table-cell-padding-y: 0.2rem;
+        --bs-table-cell-padding-x: 0.35rem;
+    }
+}
+
+// The document stands as a sheet of paper, with a shadow and a second sheet behind it, so that it
+// is clear that it is the invoice as it was received and not a part of the form.
+.o_spv_document {
+    --spv-paper: color-mix(in srgb, var(--body-bg, #fff) 94%, #fff);
+    margin: 1rem 0.25rem 1.25rem;
+    overflow-x: auto;
+    padding: 1rem 1.25rem;
+    background-color: var(--spv-paper);
+    border-radius: 0.25rem;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.18),
+        0 8px 18px -6px rgba(0, 0, 0, 0.22);
+
+    // Our own company: the same data on every invoice, so it stays in the background.
+    .o_spv_box_own {
+        color: var(--text-muted, #6c757d);
+    }
+}
+
+// Supplier, customer and the data of the invoice: three boxes on a row (fewer on a narrow panel).
+.o_spv_document .o_spv_boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 0.75rem;
+
+    .o_spv_box {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--border-color, #dee2e6);
+        border-radius: 0.25rem;
+        overflow-wrap: anywhere;
+    }
+}
