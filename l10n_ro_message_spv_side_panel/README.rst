@@ -17,7 +17,7 @@ SPV Messages Side Panel
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_message_spv_side_panel
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_message_spv_side_panel
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -34,11 +34,13 @@ without leaving the list.
 - **The panel** — the supplier, the VAT number read from the XML, the
   dates, the amounts, the review state and the buttons *Create Invoice*,
   *Accept*, *Reject*, *XML*, *PDF* and *ZIP*.
-- **The document** — a tab *Document* with the invoice as written in the
-  XML (supplier, customer, lines and totals) and a tab *XML Lines* with
-  the lines only: code, description, unit, quantity, price, VAT rate and
-  amount. The full form of the message has the same two tabs. Nothing is
-  stored: the XML is read from the ZIP when the message is opened.
+- **The document** — the invoice as written in the XML, shown as a sheet
+  of paper under the data of the message: three boxes on a row (the
+  other party, the invoice data and our own company), the lines (code,
+  description, unit, quantity, price, VAT rate and amount) and the
+  totals. The panel and the full form of the message show the same
+  document, with no tabs. Nothing is stored: the XML is read from the
+  ZIP when the message is opened.
 - **Installed on request** — it is a bridge between
   *l10n_ro_message_spv* and *deltatech_web_side_panel*. The menu of the
   SPV messages opens the split view; uninstalling the module puts it
@@ -62,25 +64,22 @@ Usage
    |The SPV messages as a column of cards|
 
 2. Click a card: the message opens in the panel on the right and the
-   card is highlighted. The panel shows the supplier, the VAT number
-   read from the XML, the dates and the amounts, and the tab *Document*
-   with the invoice as written in the XML (supplier, customer, lines and
-   totals). Use the arrows of the panel to move to the previous or the
-   next message.
+   card is highlighted. The panel shows the partner, the VAT number read
+   from the XML and the total, with the state of the message as a status
+   bar next to the buttons, and the document: the invoice as written in
+   the XML, on a sheet of paper with three boxes (the other party, the
+   invoice data and our own company), the lines (code, description,
+   unit, quantity, unit price, VAT rate and amount) and the totals. Use
+   the arrows of the panel to move to the previous or the next message.
 
-   |The side panel on the tab Document|
+   |The side panel with the document|
 
-   Scroll the tab *Document* to the totals: *Total without VAT*, *VAT*
-   and *Total* match the amounts of the panel.
+   Scroll the document to the totals: *Total without VAT*, *VAT* and
+   *Total* match the amounts of the panel.
 
    |The totals of the document|
 
-3. Open the tab *XML Lines* to check the lines of the invoice: code,
-   description, unit, quantity, unit price, VAT rate and amount.
-
-   |The tab XML Lines of the side panel|
-
-4. Use the buttons of the panel: *Create Invoice*, *Accept* and *Reject*
+3. Use the buttons of the panel: *Create Invoice*, *Accept* and *Reject*
    (when the review of the received invoices is on), or download the
    XML, the PDF or the ZIP. *Refresh* reads the message again after an
    action, the arrow-out button opens the full form and the cross closes
@@ -88,29 +87,63 @@ Usage
 
    |The action buttons of the panel|
 
-5. The *List* view keeps all the columns, the grouping and the sorting;
+4. The *List* view keeps all the columns, the grouping and the sorting;
    the panel works there too.
 
    |The list with the side panel|
 
-6. The arrow-out button of the panel opens the full form: it has the VAT
-   ID read from the XML and the tabs *Document* and *XML Lines* too.
+5. The arrow-out button of the panel opens the full form: it has the VAT
+   ID read from the XML and the same document, with the lines. The
+   fields are in three groups on a row (*Supplier*, *Invoice* and
+   *Amounts*), the document is under them and the technical data of the
+   message are at the bottom.
 
-   |The full form with the XML lines|
+   |The full form with the document|
 
 On screens narrower than 1200 px (the extra-large breakpoint) the panel
 is off and a click opens the form of the message.
 
-.. |The SPV messages as a column of cards| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/01_meniu_vedere_impartita.png
-.. |The side panel on the tab Document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/02_panou_document.png
-.. |The totals of the document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/04_document_totaluri.png
-.. |The tab XML Lines of the side panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/03_panou_pozitii_xml.png
-.. |The action buttons of the panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/05_actiuni_panou.png
-.. |The list with the side panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/06_lista_cu_panou.png
-.. |The full form with the XML lines| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel/static/description/en/07_formular_complet.png
+.. |The SPV messages as a column of cards| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_message_spv_side_panel/static/description/en/01_meniu_vedere_impartita.png
+.. |The side panel with the document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_message_spv_side_panel/static/description/en/02_panou_document.png
+.. |The totals of the document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_message_spv_side_panel/static/description/en/04_document_totaluri.png
+.. |The action buttons of the panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_message_spv_side_panel/static/description/en/05_actiuni_panou.png
+.. |The list with the side panel| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_message_spv_side_panel/static/description/en/06_lista_cu_panou.png
+.. |The full form with the document| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_message_spv_side_panel/static/description/en/07_formular_complet.png
 
 Changelog
 =========
+
+19.0.1.3.0 (2026-11-13)
+-----------------------
+
+- The state of the message is a status bar next to the buttons, in the
+  panel and in the full form.
+- The panel no longer repeats what the document shows (reference, dates,
+  currency, untaxed amount, tax and the title): it keeps the partner,
+  the VAT number read from the XML, the invoice, the total (red when it
+  differs from the invoice) and the review state.
+- The boxes of the document follow the direction of the invoice: the
+  other party on the left, the invoice in the middle and our own company
+  on the right, in a lighter color (the supplier on an issued invoice,
+  the customer on a received one).
+- The sheet of paper has only a soft shadow, without a border and
+  without the second "page" behind.
+
+19.0.1.2.0 (2026-11-13)
+-----------------------
+
+- The tabs *Document* and *XML Lines* are gone: the document (the
+  invoice as written in the XML, with its lines and totals) is shown
+  directly under the data of the message, in the panel and in the full
+  form. The lines were shown twice, in both tabs.
+- The document looks like a sheet of paper (border and shadow), to show
+  that it is the invoice as received, and the supplier, the customer and
+  the data of the invoice are three boxes on a row (fewer on a narrow
+  panel).
+- The fields of the full form are regrouped in three groups on a row
+  (*Supplier*, *Invoice* and *Amounts*), followed by the document; the
+  technical data of the message (message id, type, request id, VAT
+  number, date, details) are in the group *Message* at the bottom.
 
 19.0.1.1.0 (2026-11-13)
 -----------------------
@@ -171,6 +204,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_message_spv_side_panel>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_message_spv_side_panel>`_ project on GitHub.
 
 You are welcome to contribute.
