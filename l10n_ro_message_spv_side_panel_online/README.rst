@@ -17,7 +17,7 @@ Romania - SPV Messages Side Panel for Odoo Online
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_message_spv_side_panel_online
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_message_spv_side_panel_online
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -89,7 +89,7 @@ Panoul nu are **Acceptă**, **Respinge** sau **Creează factura**: pentru
 ele folosiți modulul cu Python ``l10n_ro_message_spv_side_panel``, pe o
 instalare care îl poate rula.
 
-.. |Panoul lateral cu factura TID 4521 desenată din XML: caseta furnizorului cu CUI, caseta facturii, firma noastră, liniile și totalurile| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_message_spv_side_panel_online/static/description/en/01_vedere_impartita.png
+.. |Panoul lateral cu factura TID 4521 desenată din XML: caseta furnizorului cu CUI, caseta facturii, firma noastră, liniile și totalurile| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_message_spv_side_panel_online/static/description/en/01_vedere_impartita.png
 
 Changelog
 =========
@@ -133,6 +133,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_message_spv_side_panel_online>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_message_spv_side_panel_online>`_ project on GitHub.
 
 You are welcome to contribute.

@@ -1,7 +1,7 @@
 /** @odoo-module **/
 // ©  2026 Terrabit
 // See README.rst file on addons root folder for license details
-import {Component, onWillStart, onWillUpdateProps, useState} from "@odoo/owl";
+import {Component, onWillStart, onWillUpdateProps, proxy, useProps} from "@odoo/owl";
 import {formatDate} from "@web/core/l10n/dates";
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
@@ -22,11 +22,11 @@ const {DateTime} = luxon;
  */
 export class SpvInvoiceDocument extends Component {
     static template = "l10n_ro_message_spv_side_panel_online.SpvInvoiceDocument";
-    static props = {...standardFieldProps};
+    props = useProps(standardFieldProps);
 
     setup() {
         this.orm = useService("orm");
-        this.state = useState({loading: true, data: null});
+        this.state = proxy({loading: true, data: null});
         onWillStart(() => this.load(this.props));
         onWillUpdateProps((nextProps) => this.load(nextProps));
     }

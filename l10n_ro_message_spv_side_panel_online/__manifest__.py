@@ -6,7 +6,7 @@
     "name": "Romania - SPV Messages Side Panel for Odoo Online",
     "summary": "Split view for the SPV messages on Odoo Online: the invoice read from its XML in a side panel (no Python)",
     "license": "AGPL-3",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "author": "Dorin Hongu, Terrabit",
     "website": "https://www.terrabit.ro",
     "category": "Localization",

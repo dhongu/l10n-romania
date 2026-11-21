@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="l10n_ro_message_spv_side_panel_online.SpvInvoiceDocument">
-        <div t-if="state.loading" class="o_spv_document o_spv_loading text-muted">Loading the invoice…</div>
-        <div t-elif="!state.data" class="o_spv_document o_spv_no_xml text-muted">
+        <div t-if="this.state.loading" class="o_spv_document o_spv_loading text-muted">Loading the invoice…</div>
+        <div t-elif="!this.state.data" class="o_spv_document o_spv_no_xml text-muted">
             The XML of the invoice is not available for this message (an invoice sent and already validated keeps only the signature of ANAF).
         </div>
         <div t-else="" class="o_spv_document">
-            <t t-set="data" t-value="state.data" />
+            <t t-set="data" t-value="this.state.data" />
             <div class="o_spv_boxes mb-3">
                 <div class="o_spv_box">
                     <div class="text-muted text-uppercase small">
                         <t t-if="data.incoming">Supplier</t>
                         <t t-else="">Customer</t>
                     </div>
-                    <div class="fw-bold" t-out="otherParty.name" />
-                    <div t-if="otherParty.vat">VAT ID <t t-out="otherParty.vat" /></div>
-                    <div t-if="otherParty.address" t-out="otherParty.address" />
+                    <div class="fw-bold" t-out="this.otherParty.name" />
+                    <div t-if="this.otherParty.vat">VAT ID <t t-out="this.otherParty.vat" /></div>
+                    <div t-if="this.otherParty.address" t-out="this.otherParty.address" />
                 </div>
                 <div class="o_spv_box">
                     <div class="text-muted text-uppercase small">
@@ -23,8 +23,8 @@
                         <t t-else="">Invoice</t>
                     </div>
                     <div class="fw-bold">No. <t t-out="data.number" /></div>
-                    <div t-if="data.issueDate">Date: <t t-out="date(data.issueDate)" /></div>
-                    <div t-if="data.dueDate">Due date: <t t-out="date(data.dueDate)" /></div>
+                    <div t-if="data.issueDate">Date: <t t-out="this.date(data.issueDate)" /></div>
+                    <div t-if="data.dueDate">Due date: <t t-out="this.date(data.dueDate)" /></div>
                     <div t-if="data.currency">Currency: <t t-out="data.currency" /></div>
                 </div>
                 <div class="o_spv_box o_spv_box_own">
@@ -32,9 +32,9 @@
                         <t t-if="data.incoming">Customer</t>
                         <t t-else="">Supplier</t>
                     </div>
-                    <div class="fw-bold" t-out="ownParty.name" />
-                    <div t-if="ownParty.vat">VAT ID <t t-out="ownParty.vat" /></div>
-                    <div t-if="ownParty.address" t-out="ownParty.address" />
+                    <div class="fw-bold" t-out="this.ownParty.name" />
+                    <div t-if="this.ownParty.vat">VAT ID <t t-out="this.ownParty.vat" /></div>
+                    <div t-if="this.ownParty.address" t-out="this.ownParty.address" />
                 </div>
             </div>
             <div class="table-responsive">
@@ -58,9 +58,9 @@
                             <td t-out="line.name" />
                             <td t-out="line.unit" />
                             <td class="text-end" t-out="line.quantity" />
-                            <td class="text-end" t-out="money(line.price)" />
+                            <td class="text-end" t-out="this.money(line.price)" />
                             <td class="text-end" t-out="line.taxPercent" />
-                            <td class="text-end" t-out="money(line.amount)" />
+                            <td class="text-end" t-out="this.money(line.amount)" />
                         </tr>
                     </tbody>
                 </table>
@@ -70,15 +70,15 @@
                 <table class="table table-sm w-auto">
                     <tr>
                         <td>Total without VAT</td>
-                        <td class="text-end" t-out="money(data.untaxed)" />
+                        <td class="text-end" t-out="this.money(data.untaxed)" />
                     </tr>
                     <tr>
                         <td>VAT</td>
-                        <td class="text-end" t-out="money(data.tax)" />
+                        <td class="text-end" t-out="this.money(data.tax)" />
                     </tr>
                     <tr class="fw-bold">
                         <td>Total</td>
-                        <td class="text-end"><t t-out="money(data.total)" /> <t t-out="data.currency" /></td>
+                        <td class="text-end"><t t-out="this.money(data.total)" /> <t t-out="data.currency" /></td>
                     </tr>
                 </table>
             </div>
