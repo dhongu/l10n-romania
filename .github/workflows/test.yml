@@ -44,13 +44,13 @@ jobs:
             # l10n_ro_partner_autocomplete excludes the OCA l10n_ro_partner_create_by_vat, which
             # these two depend on, and the Odoo Online variants exclude their classic modules:
             # both groups are tested on their own below
-            exclude: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi,l10n_ro_anaf_partner_online,l10n_ro_anaf_token_online,l10n_ro_invoice_report_online,l10n_ro_message_spv_online,l10n_ro_picking_report_online,l10n_ro_report_common_online
+            exclude: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi,l10n_ro_anaf_partner_online,l10n_ro_anaf_token_online,l10n_ro_invoice_report_online,l10n_ro_message_spv_online,l10n_ro_message_spv_side_panel_online,l10n_ro_picking_report_online,l10n_ro_report_common_online
           - container: ghcr.io/oca/oca-ci/py3.12-odoo20.0:latest
             name: test with Odoo (OCA create_by_vat)
             include: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi
           - container: ghcr.io/oca/oca-ci/py3.12-odoo20.0:latest
             name: test with Odoo (Odoo Online)
-            include: l10n_ro_anaf_partner_online,l10n_ro_anaf_token_online,l10n_ro_invoice_report_online,l10n_ro_message_spv_online,l10n_ro_picking_report_online,l10n_ro_report_common_online
+            include: l10n_ro_anaf_partner_online,l10n_ro_anaf_token_online,l10n_ro_invoice_report_online,l10n_ro_message_spv_online,l10n_ro_message_spv_side_panel_online,l10n_ro_picking_report_online,l10n_ro_report_common_online
 
     services:
       postgres:
@@ -88,8 +88,8 @@ jobs:
         run: |
           git init --quiet /tmp/deltatech-code
           git -C /tmp/deltatech-code fetch --quiet --depth 1 https://github.com/dhongu/deltatech.git "$DELTATECH_CODE_SHA"
-          git -C /tmp/deltatech-code checkout --quiet FETCH_HEAD -- deltatech_iap_online deltatech_sale_order_image
-          pip install --no-deps /tmp/deltatech-code/deltatech_iap_online /tmp/deltatech-code/deltatech_sale_order_image
+          git -C /tmp/deltatech-code checkout --quiet FETCH_HEAD -- deltatech_iap_online deltatech_sale_order_image deltatech_web_side_panel
+          pip install --no-deps /tmp/deltatech-code/deltatech_iap_online /tmp/deltatech-code/deltatech_sale_order_image /tmp/deltatech-code/deltatech_web_side_panel
       - name: Install addons and dependencies
         run: |
           export ADDONS_PATH="/opt/odoo/addons,$(pwd),/tmp/l10n-romania-oca"
