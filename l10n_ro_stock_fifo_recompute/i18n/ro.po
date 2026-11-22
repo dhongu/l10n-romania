@@ -1,0 +1,583 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_stock_fifo_recompute
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-22 05:04+0000\n"
+"PO-Revision-Date: 2026-11-22 05:04+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__account_id
+msgid "Account"
+msgstr "Cont"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__balance
+msgid "Account Balance"
+msgstr "Sold cont"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__check_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Account Control"
+msgstr "Control conturi"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__account_closed_id
+msgid ""
+"Account for the differences of closed financial years, usually 1174 (OMFP "
+"1802/2014, point 67)."
+msgstr ""
+"Contul pentru diferențele aferente exercițiilor financiare închise, de "
+"regulă 1174 (OMFP 1802/2014, pct. 67)."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__date
+msgid "Accounting date of the correction entry, in an open period."
+msgstr "Data contabilă a notei de corecție, într-o perioadă deschisă."
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "Accounts not determined: correct it by hand"
+msgstr "Conturile nu s-au putut determina: corectează manual"
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "An applied recompute cannot be computed again."
+msgstr "O recalculare aplicată nu se mai poate calcula din nou."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields.selection,name:l10n_ro_stock_fifo_recompute.selection__l10n_ro_fifo_recompute__state__applied
+msgid "Applied"
+msgstr "Aplicat"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Apply"
+msgstr "Aplică"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__balance_after
+msgid "Balance After Correction"
+msgstr "Sold după corecție"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__difference
+msgid ""
+"Balance after the correction minus the recomputed stock value: what the FIFO"
+" recompute does not explain."
+msgstr ""
+"Soldul după corecție minus valoarea stocului recalculată: ce nu explică "
+"recalcularea FIFO."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__closed_year
+msgid "Closed Year"
+msgstr "Exercițiu închis"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "Closed Years"
+msgstr "Exerciții închise"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__account_closed_id
+msgid "Closed Years Account"
+msgstr "Cont exerciții închise"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__company_id
+msgid "Company"
+msgstr "Companie"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Compute"
+msgstr "Calculează"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Compute Again"
+msgstr "Calculează din nou"
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "Compute the differences first."
+msgstr "Calculează întâi diferențele."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields.selection,name:l10n_ro_stock_fifo_recompute.selection__l10n_ro_fifo_recompute__state__computed
+msgid "Computed"
+msgstr "Calculat"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__new_pending_qty
+msgid "Correct Negative Qty"
+msgstr "Cantitate negativă corectă"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__new_value
+msgid "Correct Value"
+msgstr "Valoare corectă"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__correction
+msgid "Correction"
+msgstr "Corecție"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__date
+msgid "Correction Date"
+msgstr "Data corecției"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__account_move_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Correction Entry"
+msgstr "Notă de corecție"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__create_uid
+msgid "Created by"
+msgstr "Creat de"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__create_date
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__create_date
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__create_date
+msgid "Created on"
+msgstr "Creat la"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__account_credit_id
+msgid "Credit Account"
+msgstr "Cont credit"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__currency_id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__currency_id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__currency_id
+msgid "Currency"
+msgstr "Monedă"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__current_pending_qty
+msgid "Current Negative Qty"
+msgstr "Cantitate negativă actuală"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__current_value
+msgid "Current Value"
+msgstr "Valoare actuală"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__effective_date
+msgid ""
+"Date of the move in the FIFO order: the invoice date for a reception or a "
+"delivery not made on a notice."
+msgstr ""
+"Data mișcării în ordinea FIFO: data facturii pentru o recepție sau o livrare"
+" care nu e pe bază de aviz."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__account_debit_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "Debit Account"
+msgstr "Cont debit"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__delta
+msgid "Difference"
+msgstr "Diferență"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__line_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_list
+msgid "Differences"
+msgstr "Diferențe"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__closed_year_date
+msgid ""
+"Differences on moves dated up to this date belong to a closed financial year"
+" and are posted on the closed years account instead of the expense account."
+msgstr ""
+"Diferențele mișcărilor datate până la această dată aparțin unui exercițiu "
+"financiar închis și se înregistrează pe contul pentru exerciții închise, nu "
+"pe contul de cheltuieli."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__display_name
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__display_name
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__display_name
+msgid "Display Name"
+msgstr "Nume afișat"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields.selection,name:l10n_ro_stock_fifo_recompute.selection__l10n_ro_fifo_recompute__state__draft
+msgid "Draft"
+msgstr "Ciornă"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__correction
+msgid "Effect of the correction entry on the account."
+msgstr "Efectul notei de corecție asupra contului."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__effective_date
+msgid "Effective Date"
+msgstr "Data efectivă"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.actions.act_window,name:l10n_ro_stock_fifo_recompute.action_l10n_ro_fifo_recompute_line
+msgid "FIFO Differences"
+msgstr "Diferențe FIFO"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.actions.act_window,name:l10n_ro_stock_fifo_recompute.action_l10n_ro_fifo_recompute
+#: model:ir.ui.menu,name:l10n_ro_stock_fifo_recompute.menu_l10n_ro_fifo_recompute
+msgid "FIFO Recompute"
+msgstr "Recalculare FIFO"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model,name:l10n_ro_stock_fifo_recompute.model_l10n_ro_fifo_recompute
+msgid "FIFO Valuation Recompute"
+msgstr "Recalculare evaluare FIFO"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model,name:l10n_ro_stock_fifo_recompute.model_l10n_ro_fifo_recompute_check
+msgid "FIFO Valuation Recompute Account Control"
+msgstr "Control conturi la recalcularea evaluării FIFO"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model,name:l10n_ro_stock_fifo_recompute.model_l10n_ro_fifo_recompute_line
+msgid "FIFO Valuation Recompute Difference"
+msgstr "Diferență la recalcularea evaluării FIFO"
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "FIFO valuation correction %s"
+msgstr "Corecție evaluare FIFO %s"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__location_id
+msgid "From"
+msgstr "De la"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__closed_year_date
+msgid "Last Closed Year End"
+msgstr "Sfârșitul ultimului exercițiu închis"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__write_uid
+msgid "Last Updated by"
+msgstr "Ultima actualizare făcută de"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__write_date
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__write_date
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__write_date
+msgid "Last Updated on"
+msgstr "Ultima actualizare la"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__product_ids
+msgid ""
+"Leave empty, together with the categories, to recompute every FIFO product "
+"of the company."
+msgstr ""
+"Lasă gol, împreună cu categoriile, ca să recalculezi toate produsele FIFO "
+"ale companiei."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__line_count
+msgid "Line Count"
+msgstr "Număr linii"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__move_id
+msgid "Move"
+msgstr "Mișcare"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "Move Type"
+msgstr "Tip mișcare"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__name
+msgid "Name"
+msgstr "Nume"
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "Negative stock not covered by a later incoming move"
+msgstr "Stoc negativ neacoperit de o intrare ulterioară"
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "No stock entry for this move type: correct it by hand"
+msgstr "Tipul de mișcare nu are notă de stoc: corectează manual"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__note
+msgid "Note"
+msgstr "Observație"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__balance
+msgid "Posted balance of the account for the products of the run."
+msgstr "Soldul înregistrat al contului pentru produsele din recalculare."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__product_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "Product"
+msgstr "Produs"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__categ_ids
+msgid "Product Categories"
+msgstr "Categorii de produse"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__product_ids
+msgid "Products"
+msgstr "Produse"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__quantity
+msgid "Quantity"
+msgstr "Cantitate"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__recompute_id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__recompute_id
+msgid "Recompute"
+msgstr "Recalculare"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.actions.act_window,help:l10n_ro_stock_fifo_recompute.action_l10n_ro_fifo_recompute
+msgid "Recompute the FIFO valuation"
+msgstr "Recalculează evaluarea FIFO"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__stock_value
+msgid "Recomputed Stock Value"
+msgstr "Valoare stoc recalculată"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__reference
+msgid "Reference"
+msgstr "Referință"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__difference
+msgid "Remaining Difference"
+msgstr "Diferență rămasă"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.actions.act_window,help:l10n_ro_stock_fifo_recompute.action_l10n_ro_fifo_recompute
+msgid ""
+"Replays the per-location FIFO valuation in chronological order,\n"
+"                shows the moves valued wrongly and, on request, corrects them\n"
+"                and posts the correction entry."
+msgstr ""
+"Refă evaluarea FIFO pe locație în ordine cronologică,\n"
+"                arată mișcările evaluate greșit și, la cerere, le corectează\n"
+"                și postează nota de corecție."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__move_type
+msgid "Romanian - Move Type"
+msgstr "Tip mișcare"
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "Set a stock journal on the company before applying."
+msgstr "Setează jurnalul de stoc pe companie înainte de aplicare."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__move_type
+msgid "Specify the type of stock move for Romanian localization."
+msgstr ""
+"Specificați tipul de mișcare a stocului pentru localizarea românească."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__state
+msgid "State"
+msgstr "Stare"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__location_id
+msgid "The operation takes and suggests products from this location."
+msgstr "Operațiunea preia și sugerează produse din această locație."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__location_dest_id
+msgid "The operations brings product to this location"
+msgstr "Operațiunea aduce produsul în această locație"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid ""
+"The values of the moves will be corrected and the correction entry posted. "
+"Continue?"
+msgstr ""
+"Valorile mișcărilor vor fi corectate și nota de corecție va fi postată. "
+"Continui?"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__location_dest_id
+msgid "To"
+msgstr "Către"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "To Review"
+msgstr "De verificat"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_list
+msgid "Total"
+msgstr "Total"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__total_delta
+msgid "Total Difference"
+msgstr "Diferență totală"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__stock_value
+msgid ""
+"Value of the stock left in the locations of this account, after the "
+"recompute."
+msgstr "Valoarea stocului rămas în locațiile acestui cont, după recalculare."
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid ""
+"An applied recompute cannot be deleted: it is the trace of its correction "
+"entry."
+msgstr ""
+"O recalculare aplicată nu se poate șterge: este urma notei ei de corecție."
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid ""
+"Set the closed years account: the differences of a closed financial year "
+"cannot go to the expense account."
+msgstr ""
+"Setează contul pentru exerciții închise: diferențele unui exercițiu "
+"financiar închis nu pot merge pe contul de cheltuieli."
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid ""
+"The correction date %(date)s is in a locked period. Choose a date in an open"
+" period."
+msgstr ""
+"Data corecției %(date)s este într-o perioadă blocată. Alege o dată dintr-o "
+"perioadă deschisă."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__entry_date
+msgid ""
+"Date of the original stock entry of the move: it decides whether the "
+"difference belongs to a closed financial year."
+msgstr ""
+"Data notei de stoc originale a mișcării: de ea depinde dacă diferența "
+"aparține unui exercițiu financiar închis."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__entry_date
+msgid "Entry Date"
+msgstr "Data notei"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
+msgid ""
+"Amount of the correction entry on these accounts: the difference, negative "
+"(in red) when the move was overvalued in the current year. In a closed year "
+"the entry is in black, with the accounts swapped."
+msgstr ""
+"Suma notei de corecție pe aceste conturi: diferența, negativă (în roșu) când"
+" mișcarea a fost supraevaluată în exercițiul curent. Într-un exercițiu "
+"închis nota este în negru, cu conturile inversate."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
+msgid "Posted Amount"
+msgstr "Sumă înregistrată"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__no_entry
+msgid "No Entry"
+msgstr "Fără notă"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__no_entry
+msgid ""
+"Transfer between two locations on the same stock account: only the value of "
+"the move is corrected, nothing is posted."
+msgstr ""
+"Transfer între două locații pe același cont de stoc: se corectează doar "
+"valoarea mișcării, nu se postează nimic."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__new_pending_qty
+msgid ""
+"Quantity left on negative stock after the recompute. Applying only settles "
+"or reduces the negative quantity on record, it never adds one."
+msgstr ""
+"Cantitatea rămasă pe stoc negativ după recalculare. Aplicarea doar stinge "
+"sau micșorează cantitatea negativă înregistrată, nu adaugă niciodată una "
+"nouă."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__ignore_below
+msgid ""
+"A difference on a move up to this amount is a rounding of the unit price, "
+"not an error: it is not listed nor corrected."
+msgstr ""
+"O diferență pe o mișcare de până la această sumă este o rotunjire a prețului"
+" unitar, nu o eroare: nu se listează și nu se corectează."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__ignore_below
+msgid "Ignore Differences Up To"
+msgstr "Ignoră diferențele de până la"

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="rule_l10n_ro_fifo_recompute_company" model="ir.rule">
+        <field name="name">FIFO Recompute: multi-company</field>
+        <field name="model_id" ref="model_l10n_ro_fifo_recompute" />
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_l10n_ro_fifo_recompute_line_company" model="ir.rule">
+        <field name="name">FIFO Recompute Difference: multi-company</field>
+        <field name="model_id" ref="model_l10n_ro_fifo_recompute_line" />
+        <field
+            name="domain_force"
+        >[('recompute_id.company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_l10n_ro_fifo_recompute_check_company" model="ir.rule">
+        <field name="name">FIFO Recompute Account Control: multi-company</field>
+        <field name="model_id" ref="model_l10n_ro_fifo_recompute_check" />
+        <field
+            name="domain_force"
+        >[('recompute_id.company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

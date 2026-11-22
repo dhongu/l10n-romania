@@ -1,0 +1,11 @@
+{
+  "title": "Recalculare evaluare FIFO",
+  "summary": "Corectează valorile greșite ale ieșirilor din stoc, cu notă contabilă",
+  "lang": "ro",
+  "edition": "community",
+  "features": [
+    "Recalculare FIFO cronologică pe locație",
+    "Rulare de probă, cu control pe conturi",
+    "Notă de corecție: cont original sau 1174"
+  ]
+}

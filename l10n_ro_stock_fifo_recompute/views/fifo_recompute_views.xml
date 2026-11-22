@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_l10n_ro_fifo_recompute_line_list" model="ir.ui.view">
+        <field name="name">l10n.ro.fifo.recompute.line.list</field>
+        <field name="model">l10n.ro.fifo.recompute.line</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" decoration-warning="note">
+                <field name="effective_date" />
+                <field name="entry_date" optional="hide" />
+                <field name="reference" />
+                <field name="product_id" />
+                <field name="move_type" optional="show" />
+                <field name="location_id" optional="show" />
+                <field name="location_dest_id" optional="show" />
+                <field name="quantity" optional="show" />
+                <field name="current_value" sum="Total" />
+                <field name="new_value" sum="Total" />
+                <field name="delta" sum="Total" />
+                <field name="account_debit_id" optional="show" />
+                <field name="account_credit_id" optional="show" />
+                <field name="amount" optional="show" sum="Total" />
+                <field name="no_entry" optional="hide" />
+                <field name="closed_year" optional="show" />
+                <field name="current_pending_qty" optional="hide" />
+                <field name="new_pending_qty" optional="hide" />
+                <field name="note" optional="show" />
+                <field name="currency_id" column_invisible="1" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_l10n_ro_fifo_recompute_line_search" model="ir.ui.view">
+        <field name="name">l10n.ro.fifo.recompute.line.search</field>
+        <field name="model">l10n.ro.fifo.recompute.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id" />
+                <field name="reference" />
+                <filter
+                    name="filter_note"
+                    string="To Review"
+                    domain="[('note', '!=', False)]"
+                />
+                <filter
+                    name="filter_closed_year"
+                    string="Closed Years"
+                    domain="[('closed_year', '=', True)]"
+                />
+                <group>
+                    <filter
+                        name="group_product"
+                        string="Product"
+                        context="{'group_by': 'product_id'}"
+                    />
+                    <filter
+                        name="group_move_type"
+                        string="Move Type"
+                        context="{'group_by': 'move_type'}"
+                    />
+                    <filter
+                        name="group_debit"
+                        string="Debit Account"
+                        context="{'group_by': 'account_debit_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_l10n_ro_fifo_recompute_line" model="ir.actions.act_window">
+        <field name="name">FIFO Differences</field>
+        <field name="res_model">l10n.ro.fifo.recompute.line</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('recompute_id', '=', context.get('active_id'))]</field>
+    </record>
+
+    <record id="view_l10n_ro_fifo_recompute_form" model="ir.ui.view">
+        <field name="name">l10n.ro.fifo.recompute.form</field>
+        <field name="model">l10n.ro.fifo.recompute</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_compute"
+                        string="Compute"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+                    <button
+                        name="action_compute"
+                        string="Compute Again"
+                        type="object"
+                        invisible="state != 'computed'"
+                    />
+                    <button
+                        name="action_apply"
+                        string="Apply"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'computed'"
+                        confirm="The values of the moves will be corrected and the correction entry posted. Continue?"
+                    />
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="%(action_l10n_ro_fifo_recompute_line)d"
+                            type="action"
+                            class="oe_stat_button"
+                            icon="fa-list"
+                            context="{'active_id': id}"
+                            invisible="not line_count"
+                        >
+                            <field
+                                name="line_count"
+                                widget="statinfo"
+                                string="Differences"
+                            />
+                        </button>
+                        <button
+                            name="action_view_account_move"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-book"
+                            invisible="not account_move_id"
+                            string="Correction Entry"
+                        />
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                                readonly="state != 'draft'"
+                            />
+                            <field
+                                name="product_ids"
+                                widget="many2many_tags"
+                                readonly="state == 'applied'"
+                            />
+                            <field
+                                name="categ_ids"
+                                widget="many2many_tags"
+                                readonly="state == 'applied'"
+                            />
+                        </group>
+                        <group>
+                            <field name="date" readonly="state == 'applied'" />
+                            <field
+                                name="closed_year_date"
+                                readonly="state == 'applied'"
+                            />
+                            <field
+                                name="account_closed_id"
+                                readonly="state == 'applied'"
+                                required="closed_year_date"
+                            />
+                            <field name="ignore_below" readonly="state == 'applied'" />
+                            <field name="total_delta" />
+                            <field
+                                name="account_move_id"
+                                invisible="not account_move_id"
+                            />
+                            <field name="currency_id" invisible="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Differences" name="lines">
+                            <field name="line_ids" readonly="1" />
+                        </page>
+                        <page string="Account Control" name="checks">
+                            <field name="check_ids" readonly="1">
+                                <list>
+                                    <field name="account_id" />
+                                    <field name="stock_value" sum="Total" />
+                                    <field name="balance" sum="Total" />
+                                    <field name="correction" sum="Total" />
+                                    <field name="balance_after" sum="Total" />
+                                    <field
+                                        name="difference"
+                                        sum="Total"
+                                        decoration-danger="difference != 0"
+                                    />
+                                    <field name="currency_id" column_invisible="1" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_l10n_ro_fifo_recompute_list" model="ir.ui.view">
+        <field name="name">l10n.ro.fifo.recompute.list</field>
+        <field name="model">l10n.ro.fifo.recompute</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="date" />
+                <field name="company_id" groups="base.group_multi_company" />
+                <field name="line_count" string="Differences" />
+                <field name="total_delta" />
+                <field name="account_move_id" />
+                <field name="currency_id" column_invisible="1" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-info="state == 'computed'"
+                    decoration-success="state == 'applied'"
+                />
+            </list>
+        </field>
+    </record>
+
+    <record id="action_l10n_ro_fifo_recompute" model="ir.actions.act_window">
+        <field name="name">FIFO Recompute</field>
+        <field name="res_model">l10n.ro.fifo.recompute</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Recompute the FIFO valuation</p>
+            <p>
+                Replays the per-location FIFO valuation in chronological order,
+                shows the moves valued wrongly and, on request, corrects them
+                and posts the correction entry.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_l10n_ro_fifo_recompute"
+        action="action_l10n_ro_fifo_recompute"
+        parent="account.account_closing_menu"
+        groups="account.group_account_manager"
+        sequence="90"
+    />
+</odoo>
