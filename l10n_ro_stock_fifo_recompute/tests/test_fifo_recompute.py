@@ -370,7 +370,9 @@ class TestFifoRecompute(TestROStockCommon):
         line = self._line(recompute, out_move)
         self.assertTrue(line.closed_year)
         self.assertAlmostEqual(line.delta, -60.0)
-        self.assertEqual(line.account_debit_id, self.account_closed)
+        # The line shows the entry as posted: Dr stock / Cr 1174, in black.
+        self.assertEqual(line.account_credit_id, self.account_closed)
+        self.assertAlmostEqual(line.amount, 60.0)
 
         recompute.action_apply()
 
@@ -378,5 +380,5 @@ class TestFifoRecompute(TestROStockCommon):
         self.assertFalse(any(entry_lines.mapped("is_storno")))
         closed_lines = entry_lines.filtered(lambda r: r.account_id == self.account_closed)
         self.assertAlmostEqual(sum(closed_lines.mapped("credit")), 60.0)
-        stock_lines = entry_lines.filtered(lambda r: r.account_id == line.account_credit_id)
+        stock_lines = entry_lines.filtered(lambda r: r.account_id == line.account_debit_id)
         self.assertAlmostEqual(sum(stock_lines.mapped("debit")), 60.0)

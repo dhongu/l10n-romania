@@ -18,6 +18,7 @@
                 <field name="delta" sum="Total" />
                 <field name="account_debit_id" optional="show" />
                 <field name="account_credit_id" optional="show" />
+                <field name="amount" optional="show" sum="Total" />
                 <field name="closed_year" optional="show" />
                 <field name="current_pending_qty" optional="hide" />
                 <field name="new_pending_qty" optional="hide" />

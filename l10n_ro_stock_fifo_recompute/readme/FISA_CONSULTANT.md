@@ -69,6 +69,8 @@ fără, ca să verificați că meniul nu apare.
   recepție 4 buc la 100 lei în D2, livrare 4 buc din D3 (320 lei);
 - **Marfă C** (preț standard 120): livrare 3 buc din D1 pe stoc negativ (360 lei), apoi recepție
   5 buc la 100 lei;
+- **Marfă D** (preț standard 120), în decembrie 2025: livrare 3 buc din D1 pe stoc negativ
+  (360 lei), apoi recepție 5 buc la 100 lei;
 - exercițiul 2025 considerat închis (sfârșit 31.12.2025).
 
 ## 5. Configurare inițială
@@ -110,7 +112,7 @@ Completați formularul:
 
 Apăsați **Calculează**. Nimic nu se scrie în mișcări sau în contabilitate.
 
-![Rularea FIFO nouă, numerotată FIFO/2026/…, în starea Ciornă: Produse Marfă A, B și C, Data corecției 22 nov., Sfârșitul ultimului exercițiu închis 31 dec. 2025, Cont exerciții închise 117400 și butonul Calculează evidențiate](../static/description/02_rulare_noua.png)
+![Rularea FIFO nouă, numerotată FIFO/2026/…, în starea Ciornă: Produse Marfă A, B, C și D, Data corecției 22 nov., Sfârșitul ultimului exercițiu închis 31 dec. 2025, Cont exerciții închise 117400 și butonul Calculează evidențiate](../static/description/02_rulare_noua.png)
 
 ### Pasul 3 — Pagina Diferențe
 
@@ -118,8 +120,9 @@ Rularea trece în starea **Calculat**. Pagina **Diferențe** are câte o linie p
 evaluată greșit.
 
 1. **Găsiți pe ecran**: coloanele **Data efectivă**, **Referință**, **Produs**, **Tip mișcare**,
-   **De la** / **Către**, **Cantitate**, **Valoare actuală**, **Valoare corectă**, **Diferență**, **Cont debit** /
-   **Cont credit** ale notei de corecție, bifa **Exercițiu închis** și **Observație**.
+   **De la** / **Către**, **Cantitate**, **Valoare actuală**, **Valoare corectă**, **Diferență**,
+   **Cont debit** / **Cont credit** și **Sumă înregistrată** (exact ce intră în nota de corecție),
+   bifa **Exercițiu închis** și **Observație**.
 2. **Verificați** pe datele demo:
    - livrarea de **Marfă A** din D1: valoare actuală **240**, corectă **300**, diferență **60**,
      **607000 / 371000** (livrare pe stoc negativ, acoperită de recepția la 100);
@@ -127,12 +130,23 @@ evaluată greșit.
      deși este în exercițiul închis;
    - livrarea de **Marfă B** din D3: **320 → 400**, aceeași valoare ca a transferului corectat, iar
      fiind din decembrie 2025 (exercițiu închis) are **117400 / 371003**;
-   - livrarea de **Marfă C**: **360 → 300**, diferență **−60** (ieșire supraevaluată);
-   - **Diferență totală** din antet = suma coloanei Diferență (160 lei).
+   - livrarea de **Marfă C**: **360 → 300**, diferență **−60** (ieșire supraevaluată), **607000 /
+     371000** cu sumă înregistrată **−60** (storno în roșu, exercițiul curent);
+   - livrarea de **Marfă D**, din decembrie 2025: **360 → 300**, diferență **−60**, dar linia arată
+     **371000 / 117400** cu sumă înregistrată **+60**: într-un exercițiu închis corecția se face în
+     negru, cu conturile inversate;
+   - **Diferență totală** din antet = suma coloanei Diferență (100 lei); totalul coloanei Sumă
+     înregistrată (220 lei) este totalul notei de corecție.
+
+   **Diferență** față de **Sumă înregistrată**: Diferența este întotdeauna valoarea corectă minus
+   valoarea actuală, cu semnul ei. Suma înregistrată, împreună cu Cont debit și Cont credit, este
+   exact articolul din nota de corecție: în exercițiul curent este egală cu Diferența (negativă =
+   storno în roșu); într-un exercițiu închis, o diferență negativă apare cu suma pozitivă și cu
+   conturile inversate.
 3. **Treceți mai departe**: o linie cu **Observație** cere atenție (vezi pasul 5); dacă selecția nu
    e cea dorită, o modificați și apăsați **Calculează din nou**, de câte ori e nevoie.
 
-![Rularea în starea Calculat, pagina Diferențe: patru linii, transferul Marfă B 320 la 400 pe 371003 și 371001, livrarea Marfă B pe 117400 bifată Exercițiu închis, livrarea Marfă A 240 la 300 pe 607000 și 371000, livrarea Marfă C 360 la 300 cu diferența -60; Diferență totală 160,00 lei evidențiată](../static/description/03_diferente.png)
+![Rularea în starea Calculat, pagina Diferențe: cinci linii, transferul Marfă B 320 la 400 pe 371003 și 371001, livrarea Marfă D 360 la 300 cu diferența -60 dar Cont debit 371000, Cont credit 117400 și Sumă înregistrată 60, livrarea Marfă B pe 117400, primele trei linii bifate Exercițiu închis, livrarea Marfă A 240 la 300 pe 607000 și 371000, livrarea Marfă C cu diferența și suma înregistrată -60; Diferență totală 100,00 lei evidențiată, total Sumă înregistrată 220 lei](../static/description/03_diferente.png)
 
 Data efectivă este data mișcării în ordinea FIFO: la o recepție sau o livrare care nu este pe bază
 de aviz, este data facturii (furnizor, respectiv client), nu data transferului. Exercițiul în care
@@ -146,14 +160,14 @@ Deschideți pagina **Control conturi**. Pe fiecare cont de stoc:
 1. **Găsiți pe ecran**: **Valoare stoc recalculată** (stocul rămas în locațiile contului, după
    recalculare), **Sold cont** (soldul postat pentru produsele rulării), **Corecție** (efectul notei
    de corecție), **Sold după corecție** și **Diferență rămasă**.
-2. **Verificați**: **Diferență rămasă = 0** pe fiecare cont. În demo, 371001 are sold 80 lei și
-   corecție −80, deci sold după corecție 0, egal cu stocul recalculat; 371000 și 371003 rămân la
-   egalitate.
+2. **Verificați**: **Diferență rămasă = 0** pe fiecare cont. În demo, 371000 are sold 540 lei și
+   corecție +60, deci sold după corecție 600, egal cu stocul recalculat (2 buc × 100 lei pentru
+   fiecare dintre Marfă A, C și D); 371001 are sold 80 și corecție −80, deci 0; 371003 rămâne la 0.
 3. **Treceți mai departe**: o diferență rămasă (afișată în roșu) nu vine din FIFO (de exemplu note
    manuale pe conturi de stoc, conturi de stoc schimbate) și se analizează separat, înainte de
    aplicare.
 
-![Pagina Control conturi: conturile 371000, 371001 Mărfuri Depozit D2 și 371003 Mărfuri Depozit D3, cu Valoare stoc recalculată, Sold cont, Corecție -80 pe 371001 și Diferență rămasă 0,00 lei pe toate](../static/description/04_control_conturi.png)
+![Pagina Control conturi: 371000 cu Valoare stoc recalculată 600, Sold cont 540, Corecție 60 și Sold după corecție 600; 371001 Mărfuri Depozit D2 cu sold 80 și corecție -80; 371003 Mărfuri Depozit D3 la zero; Diferență rămasă 0,00 lei pe toate conturile](../static/description/04_control_conturi.png)
 
 ### Pasul 5 — Analiza diferențelor în listă
 
@@ -167,7 +181,7 @@ s-au putut determina: corectează manual" nu au conturi și **nu se aplică**: l
 Linia „Stoc negativ neacoperit de o intrare ulterioară" se aplică (valoarea rămâne cea de azi, se
 actualizează doar cantitatea negativă rămasă), dar arată un stoc negativ încă deschis.
 
-![Lista Diferențe FIFO a rulării, pe toată lățimea: cele patru linii, cu Cont debit 371003, 117400 și 607000 și Cont credit 371001, 371003 și 371000 (denumirile lungi apar trunchiate), și totalurile 1.240, 1.400 și 160 lei](../static/description/05_lista_diferente.png)
+![Lista Diferențe FIFO a rulării, pe toată lățimea: cele cinci linii, cu Cont debit 371003, 371000, 117400 și 607000, Cont credit 371001, 117400, 371003 și 371000 (denumirile lungi apar trunchiate), coloana Sumă înregistrată și totalurile 1.600, 1.700, 100 și 220 lei](../static/description/05_lista_diferente.png)
 
 ### Pasul 6 — Aplicarea
 
@@ -183,7 +197,7 @@ Rularea trece în starea **Aplicat**: valorile mișcărilor sunt cele din coloan
 câmpul **Notă de corecție** arată nota postată, iar butonul **Notă de corecție** o deschide. O
 rulare aplicată nu se mai poate recalcula, anula sau șterge: este urma notei de corecție.
 
-![Rularea în starea Aplicat, cu butonul Notă de corecție evidențiat și câmpul Notă de corecție STOC/2026/11/0005 (Corecție evaluare FIFO cu numărul rulării)](../static/description/07_rulare_aplicata.png)
+![Rularea în starea Aplicat, cu butonul Notă de corecție evidențiat și câmpul Notă de corecție STOC/2026/11/… (Corecție evaluare FIFO cu numărul rulării); pagina Diferențe cu cele cinci linii](../static/description/07_rulare_aplicata.png)
 
 ### Pasul 8 — Nota de corecție
 
@@ -192,7 +206,7 @@ Nota este în jurnalul de stoc, la data corecției, postată, cu eticheta „Cor
 exercițiul curent sunt în roșu (storno: sume negative pe aceeași parte), iar cele dintr-un
 exercițiu închis sunt în negru, cu conturile inversate (`371 = 1174`).
 
-![Nota STOC/2026/11/0005 postată în jurnalul Note de stoc la 22 nov.: 371003 debit 80 / 371001 credit 80, 117400 debit 80 / 371003 credit 80, 607000 debit 60 / 371000 credit 60 și 607000 debit -60 / 371000 credit -60, storno cu sume negative; total 160 lei](../static/description/08_nota_corectie.png)
+![Nota de corecție STOC/2026/11/… postată în jurnalul Note de stoc la 22 nov.: 371003 debit 80 / 371001 credit 80, 371000 debit 60 / 117400 credit 60 în negru, 117400 debit 80 / 371003 credit 80, 607000 debit 60 / 371000 credit 60 și 607000 debit -60 / 371000 credit -60, storno cu sume negative; total 220 lei](../static/description/08_nota_corectie.png)
 
 ### Note de monografie și raportare
 
@@ -204,6 +218,8 @@ Nota de corecție, pe datele demo (o singură notă, la data corecției):
 | Livrare Marfă B din D3, exercițiu închis | **1174** | 371003 | 80,00 |
 | Livrare Marfă A, exercițiul curent, subevaluată | 607 | 371000 | 60,00 |
 | Livrare Marfă C, exercițiul curent, supraevaluată | 607 | 371000 | **−60,00** (roșu) |
+| Livrare Marfă D, exercițiu închis, supraevaluată (în negru, conturi inversate) | 371000 | **1174** | 60,00 |
+| **Total notă** | | | **220,00** |
 
 Regula generală:
 
@@ -218,7 +234,8 @@ Regula generală:
   de exercițiu. La transferul prin tranzit, în doi pași, fiecare mișcare se corectează pe
   conturile notei ei.
 - **Retur de la client** al unei livrări corectate: primește valoarea livrării corectate,
-  proporțional cu cantitatea; corecția e inversă livrării (`371 = 607`).
+  proporțional cu cantitatea; corecția e inversă livrării (`371 = 607`; într-un exercițiu închis, 1174 în locul
+  lui 607).
 - Valoarea **intrărilor externe** (recepții, cu factura și costurile de achiziție) nu se schimbă.
 
 ## 7. Legături cu alte module / declarații
@@ -226,7 +243,7 @@ Regula generală:
 | Modul / declarație | Rol |
 |---|---|
 | `l10n_ro_stock_account` | FIFO pe locație, tipul de mișcare RO, conturile pe tip de mișcare, compensarea stocului negativ |
-| `stock_account` | valoarea mișcărilor (`stock.move.value`) corectată la aplicare |
+| `stock_account` | valoarea mișcării de stoc, corectată la aplicare |
 | Facturi de achiziție și vânzare | data efectivă a recepțiilor și livrărilor fără aviz |
 | D101 (impozit pe profit) | rectificativă pentru anul unei corecții pe 1174, făcută de contabil |
 
@@ -249,7 +266,8 @@ din componente corectate.
       (CA3).
 - [ ] Livrarea cu nota de stoc datată până la sfârșitul exercițiului închis are 1174 în locul lui
       607; transferul din aceeași perioadă rămâne 371 / 371 (CA5).
-- [ ] O diferență negativă dintr-un exercițiu închis apare în notă în negru, `371 = 1174`.
+- [ ] O diferență negativă dintr-un exercițiu închis apare în notă în negru, `371 = 1174`
+      (CA4).
 - [ ] În **Control conturi**, diferența rămasă e 0 pe fiecare cont de stoc (CA6).
 - [ ] După **Aplică**: starea **Aplicat**, valorile mișcărilor = valorile corecte, nota postată în
       jurnalul de stoc la data corecției, cu suma diferențelor pe cont și produs; diferențele

@@ -527,3 +527,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__entry_date
 msgid "Entry Date"
 msgstr "Data notei"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
+msgid ""
+"Amount of the correction entry on these accounts: the difference, negative "
+"(in red) when the move was overvalued in the current year. In a closed year "
+"the entry is in black, with the accounts swapped."
+msgstr ""
+"Suma notei de corecție pe aceste conturi: diferența, negativă (în roșu) când"
+" mișcarea a fost supraevaluată în exercițiul curent. Într-un exercițiu "
+"închis nota este în negru, cu conturile inversate."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
+msgid "Posted Amount"
+msgstr "Sumă înregistrată"

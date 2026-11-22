@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-22 06:45+0000\n"
-"PO-Revision-Date: 2026-11-22 06:45+0000\n"
+"POT-Creation-Date: 2026-11-22 06:48+0000\n"
+"PO-Revision-Date: 2026-11-22 06:48+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,6 +47,14 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
 msgid "Accounts not determined: correct it by hand"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
+msgid ""
+"Amount of the correction entry on these accounts: the difference, negative "
+"(in red) when the move was overvalued in the current year. In a closed year "
+"the entry is in black, with the accounts swapped."
 msgstr ""
 
 #. module: l10n_ro_stock_fifo_recompute
@@ -359,6 +367,11 @@ msgstr ""
 #. module: l10n_ro_stock_fifo_recompute
 #: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__note
 msgid "Note"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
+msgid "Posted Amount"
 msgstr ""
 
 #. module: l10n_ro_stock_fifo_recompute

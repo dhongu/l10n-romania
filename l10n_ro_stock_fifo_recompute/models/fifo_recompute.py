@@ -407,6 +407,13 @@ class L10nRoFifoRecompute(models.Model):
         entry_date = self._get_entry_date(move)
         closed = bool(self.closed_year_date and entry_date <= self.closed_year_date)
         debit, credit, note = self._get_line_accounts(move, delta, closed)
+        amount = delta
+        if closed and delta < 0 and debit and credit:
+            # A closed year is not reversed in red (OMFP 1802/2014, point 69
+            # is for the current year): a correction in black with the
+            # accounts swapped, e.g. Dr 371 / Cr 1174. The line shows the
+            # accounts and the amount as they are posted.
+            debit, credit, amount = credit, debit, -delta
         if new_pending and not note:
             note = self.env._("Negative stock not covered by a later incoming move")
         return {
@@ -421,6 +428,7 @@ class L10nRoFifoRecompute(models.Model):
             "closed_year": closed,
             "account_debit_id": debit.id,
             "account_credit_id": credit.id,
+            "amount": amount,
             "note": note,
         }
 
@@ -489,8 +497,8 @@ class L10nRoFifoRecompute(models.Model):
     def _create_checks(self, products, remaining_by_account, lines):
         delta_by_account = defaultdict(float)
         for line in lines.filtered(lambda rec: rec.account_debit_id and rec.account_credit_id):
-            delta_by_account[line.account_debit_id] += line.delta
-            delta_by_account[line.account_credit_id] -= line.delta
+            delta_by_account[line.account_debit_id] += line.amount
+            delta_by_account[line.account_credit_id] -= line.amount
         accounts = self.env["account.account"].concat(*(a for a in remaining_by_account if a))
         balances = dict(
             self.env["account.move.line"]._read_group(
@@ -530,14 +538,10 @@ class L10nRoFifoRecompute(models.Model):
         for line in lines:
             if currency.is_zero(line.delta):
                 continue
-            amount = line.delta
+            amount = line.amount
             debit, credit = line.account_debit_id, line.account_credit_id
+            # Negative only in the current year: reversed in red (storno).
             storno = amount < 0
-            if line.closed_year and storno:
-                # A closed year is not reversed in red (OMFP 1802/2014,
-                # point 69 is for the current year): a correction in black
-                # with the accounts swapped, e.g. Dr 371 / Cr 1174.
-                debit, credit, amount, storno = credit, debit, -amount, False
             product = line.move_id.product_id.id
             aml_vals[(debit.id, product, storno, "debit")] += amount
             aml_vals[(credit.id, product, storno, "credit")] += amount
@@ -633,6 +637,12 @@ class L10nRoFifoRecomputeLine(models.Model):
     closed_year = fields.Boolean()
     account_debit_id = fields.Many2one("account.account", string="Debit Account")
     account_credit_id = fields.Many2one("account.account", string="Credit Account")
+    amount = fields.Monetary(
+        string="Posted Amount",
+        help="Amount of the correction entry on these accounts: the difference, "
+        "negative (in red) when the move was overvalued in the current year. "
+        "In a closed year the entry is in black, with the accounts swapped.",
+    )
     note = fields.Char()
 
     @api.depends("current_value", "new_value")

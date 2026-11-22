@@ -23,7 +23,7 @@ Contabilul șef: grupul `account.group_account_manager` (Administrator contabili
 
 ## Încadrare
 
-- Suita și numele tehnic: `l10n-romania-oca`, `l10n_ro_stock_fifo_recompute`.
+- Suita și numele tehnic: `l10n-romania` (repo `dhongu/l10n-romania`, module Terrabit), `l10n_ro_stock_fifo_recompute`.
 - Modul nou. Un instrument folosit ocazional, la corecții, deci nu în modulul de bază încărcat la
   toți clienții.
 - `depends`: `l10n_ro_stock_account`, care are FIFO pe locație, tipul de mișcare RO
@@ -97,7 +97,7 @@ Contabilul șef: grupul `account.group_account_manager` (Administrator contabili
 
 | Decizie | Varianta aleasă | Motiv |
 |---|---|---|
-| Unde stă instrumentul | modul separat în `l10n-romania-oca` | ales de utilizator; folosit ocazional |
+| Unde stă instrumentul | modul separat în `dhongu/l10n-romania`, peste motorul din `l10n-romania-oca` | ales de utilizator; folosit ocazional, ca celelalte module Terrabit pe `l10n_ro_stock_account` |
 | Data notei de corecție | data aleasă în rulare, perioada curentă | Pacioli: corecția la data constatării (OMFP 1802, pct. 65) |
 | Conturi în exercițiul curent | conturile notei originale ale ieșirii, pe net (fără 482) | Pacioli: pct. 67 alin. 1; în aceeași contabilitate 371.dest / 371.sursă direct |
 | Exerciții închise | contul ales (1174) în locul contului de cheltuieli | Pacioli: pct. 67 alin. 2 |

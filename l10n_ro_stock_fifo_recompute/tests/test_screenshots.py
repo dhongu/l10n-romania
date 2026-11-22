@@ -12,7 +12,13 @@
 #     Depozit 2, livrare 4 buc din Depozit 3 (320) -> transferul și livrarea trebuie
 #     să fie 400 (CA2: 371 destinație / 371 sursă; CA5: livrarea pe 1174);
 #   - Marfă C (preț standard 120): livrare 3 buc pe stoc negativ (360), recepție
-#     5 buc @ 100 -> livrarea trebuie să fie 300, diferență negativă, storno (CA4).
+#     5 buc @ 100 -> livrarea trebuie să fie 300, diferență negativă, storno (CA4);
+#   - Marfă D (preț standard 120), în decembrie 2025, exercițiu închis: livrare 3 buc
+#     pe stoc negativ (360), recepție 5 buc @ 100 -> diferență -60, înregistrată în
+#     negru cu conturile inversate (Dr 371 / Cr 1174, sumă înregistrată 60).
+#
+# Încadrarea pe exercițiu se face după data notei de stoc originale, deci la mărfurile
+# B și D se mută în decembrie 2025 și data mișcării, și data notei de stoc.
 #
 # Rulare:
 #   ./odoo/odoo-bin -c odoo.conf -d <db> \
@@ -75,9 +81,19 @@ class TestFifoRecomputeScreenshots(TestROStockCommon, ScreenshotCase or object):
         cls.customers = cls.env.ref("stock.stock_location_customers")
         cls.supplier_1.name = "Furnizor Exemplu SRL"
         cls.customer_1.name = "Client Exemplu SRL"
+        # Unele module RO refuză postarea facturii fără adresă completă a partenerului
+        (cls.customer_1 | cls.supplier_1).write(
+            {
+                "country_id": cls.env.ref("base.ro").id,
+                "state_id": cls.env.ref("base.RO_B").id,
+                "city": "Sector 1",
+                "street": "Strada Exemplu 1",
+            }
+        )
         cls.marfa_a = cls._new_product("Marfă A", 80.0)
         cls.marfa_b = cls._new_product("Marfă B", 80.0)
         cls.marfa_c = cls._new_product("Marfă C", 120.0)
+        cls.marfa_d = cls._new_product("Marfă D", 120.0)
 
     @classmethod
     def _new_product(cls, name, standard_price):
@@ -157,6 +173,25 @@ class TestFifoRecomputeScreenshots(TestROStockCommon, ScreenshotCase or object):
         picking._action_done()
         return picking.move_ids
 
+    def _backdate(self, moves, day, invoices=None):
+        """Mută mișcarea, nota ei de stoc și, opțional, factura la ``day``."""
+        moves.date = datetime.combine(day, datetime.min.time().replace(hour=10))
+        entries = moves.account_move_id
+        if entries:
+            self.env.cr.execute(SQL("UPDATE account_move SET date = %s WHERE id IN %s", day, tuple(entries.ids)))
+            self.env.cr.execute(
+                SQL("UPDATE account_move_line SET date = %s WHERE move_id IN %s", day, tuple(entries.ids))
+            )
+        if invoices:
+            self.env.cr.execute(
+                SQL(
+                    "UPDATE account_move SET invoice_date = %s WHERE id IN %s",
+                    day,
+                    tuple(invoices.ids),
+                )
+            )
+        self.env.invalidate_all()
+
     def _seed(self):
         # CA1: livrare pe stoc negativ, evaluată la prețul standard, apoi recepție
         self.out_a = self._deliver(self.marfa_a, 3, "sa")
@@ -167,17 +202,15 @@ class TestFifoRecomputeScreenshots(TestROStockCommon, ScreenshotCase or object):
         self.transfer_b = self._picking(wh2.int_type_id, self.location1, self.location2, self.marfa_b, 4)
         purchase_b, receipt_b = self._receive(self.marfa_b, 4, 100, "pb", location=self.location1)
         self.out_b = self._picking(wh3.out_type_id, self.location2, self.customers, self.marfa_b, 4)
-        self.transfer_b.date = datetime(2025, 12, 10, 10, 0)
-        receipt_b.date = datetime(2025, 12, 12, 10, 0)
-        self.out_b.date = datetime(2025, 12, 15, 10, 0)
-        self.env.cr.execute(
-            SQL(
-                "UPDATE account_move SET invoice_date = %s WHERE id IN %s",
-                date(2025, 12, 12),
-                tuple(purchase_b.invoice_ids.ids),
-            )
-        )
-        self.env.invalidate_all()
+        self._backdate(self.transfer_b, date(2025, 12, 10))
+        self._backdate(receipt_b, date(2025, 12, 12), purchase_b.invoice_ids)
+        self._backdate(self.out_b, date(2025, 12, 15))
+        # Exercițiu închis, ieșire supraevaluată: corecție în negru, conturi inversate
+        wh1 = self.location.warehouse_id
+        self.out_d = self._picking(wh1.out_type_id, self.location, self.customers, self.marfa_d, 3)
+        purchase_d, receipt_d = self._receive(self.marfa_d, 5, 100, "pd")
+        self._backdate(self.out_d, date(2025, 12, 10))
+        self._backdate(receipt_d, date(2025, 12, 12), purchase_d.invoice_ids)
         # CA4: ieșire supraevaluată, corectată în roșu
         self.out_c = self._deliver(self.marfa_c, 3, "sc")
         self._receive(self.marfa_c, 5, 100, "pc")
@@ -209,7 +242,7 @@ class TestFifoRecomputeScreenshots(TestROStockCommon, ScreenshotCase or object):
         self._seed()
         recompute = self.env[model].create(
             {
-                "product_ids": [Command.set((self.marfa_a | self.marfa_b | self.marfa_c).ids)],
+                "product_ids": [Command.set((self.marfa_a | self.marfa_b | self.marfa_c | self.marfa_d).ids)],
                 "closed_year_date": date(2025, 12, 31),
                 "account_closed_id": self.account_closed.id,
             }
@@ -238,7 +271,12 @@ class TestFifoRecomputeScreenshots(TestROStockCommon, ScreenshotCase or object):
         )
 
         recompute.action_compute()
-        self.assertEqual(len(recompute.line_ids), 4)
+        self.assertEqual(len(recompute.line_ids), 5)
+        closed_neg = recompute.line_ids.filtered(lambda line: line.move_id == self.out_d)
+        self.assertTrue(closed_neg.closed_year)
+        self.assertAlmostEqual(closed_neg.delta, -60.0)
+        self.assertAlmostEqual(closed_neg.amount, 60.0)
+        self.assertEqual(closed_neg.account_credit_id, self.account_closed)
 
         # 3-6. Diferențe, Control conturi, lista filtrabilă, confirmarea aplicării
         self.capture_screenshots(
