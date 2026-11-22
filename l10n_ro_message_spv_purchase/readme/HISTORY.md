@@ -1,3 +1,16 @@
+## 20.0.0.0.13 (2026-11-22)
+
+**Changed**
+
+- *Find Order* on an SPV message now says when the reference belongs to a
+  purchase order that is already fully invoiced, naming the order and its
+  bills, instead of reporting that no order was found. Such an order is
+  still not linked again (#9290).
+- Consultant sheet added (`readme/FISA_CONSULTANT.md`, with screenshots),
+  and the module description rewritten from the code: the real button
+  names, the fully invoiced orders left out of *Find Order*, the guard
+  against a second click and the duplicate warnings.
+
 ## 20.0.0.0.12 (2026-11-16)
 
 **Changed**
