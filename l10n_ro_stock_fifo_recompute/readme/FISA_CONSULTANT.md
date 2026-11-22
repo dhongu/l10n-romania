@@ -127,8 +127,9 @@ evaluată greșit.
    bifa **Exercițiu închis** și **Observație**. Din selectorul de coloane se pot afișa și coloanele
    opționale:
    - **Data notei**: data notei de stoc originale, după care se stabilește exercițiul diferenței;
-   - **Fără notă**: transfer între două locații pe același cont de stoc; se corectează doar valoarea
-     mișcării, nu se postează nimic (fără conturi pe linie);
+   - **Fără notă**: transfer între două locații pe același cont de stoc, sau recepție ori retur la
+     furnizor (contul de stoc se înregistrează prin factură sau nota de credit); se corectează doar
+     valoarea mișcării, nu se postează nimic (fără conturi pe linie);
    - **Cantitate negativă actuală** / **Cantitate negativă corectă**: cantitatea rămasă pe stoc
      negativ înregistrată pe mișcare, respectiv cea rezultată din recalculare. Aplicarea doar stinge
      sau micșorează cantitatea actuală, nu adaugă una nouă.
@@ -208,7 +209,8 @@ ieșire veche).
 
 Rularea trece în starea **Aplicat**: valorile mișcărilor sunt cele din coloana **Valoare corectă**,
 câmpul **Notă de corecție** arată nota postată, iar butonul **Notă de corecție** o deschide. Dacă
-toate liniile sunt **Fără notă** (transferuri pe același cont de stoc) sau au doar cantitatea
+toate liniile sunt **Fără notă** (transferuri pe același cont de stoc, recepții sau retururi la
+furnizor) sau au doar cantitatea
 negativă schimbată, nu se postează nicio notă: câmpul și butonul **Notă de corecție** nu apar. O
 rulare aplicată nu se mai poate recalcula, anula sau șterge: este urma notei de corecție.
 
@@ -252,6 +254,9 @@ Regula generală:
   proporțional cu cantitatea; corecția e inversă livrării (`371 = 607`; într-un exercițiu închis, 1174 în locul
   lui 607).
 - Valoarea **intrărilor externe** (recepții, cu factura și costurile de achiziție) nu se schimbă.
+- **Retur la furnizor**: nu are notă de stoc, contul 371 îl creditează nota de credit a
+  furnizorului. Diferența FIFO a returului schimbă doar valoarea mișcării (bifa **Fără notă**) și nu
+  intră în nota de corecție.
 
 ## 7. Legături cu alte module / declarații
 
@@ -295,9 +300,9 @@ din componente corectate.
 - [ ] Cu sfârșitul exercițiului închis completat, câmpul Cont exerciții închise e obligatoriu, iar
       **Calculează** fără el e refuzat.
 - [ ] O rulare aplicată nu se poate șterge.
-- [ ] Un transfer între două locații pe același cont de stoc are bifa **Fără notă**: la aplicare i
-      se corectează doar valoarea, fără linii în nota de corecție; o rulare cu numai astfel de linii
-      nu postează nicio notă.
+- [ ] Un transfer între două locații pe același cont de stoc, o recepție și un retur la furnizor
+      au bifa **Fără notă**: la aplicare li se corectează doar valoarea, fără linii în nota de
+      corecție; o rulare cu numai astfel de linii nu postează nicio notă.
 - [ ] O ieșire pe stoc negativ neacoperit, fără cantitate negativă înregistrată, rămâne cu
       **Cantitate negativă actuală** 0 după aplicare.
 - [ ] Cu data de blocare globală la 31.10.2026, o rulare nouă propune Sfârșitul ultimului

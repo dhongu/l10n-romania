@@ -18,6 +18,9 @@ INVOICE_DATED_TYPES = {
     "delivery": ("sale_line_id", "out_invoice"),
     "delivery_return": ("sale_line_id", "out_refund"),
 }
+# Move types without a stock entry by design: the stock account is posted by
+# the vendor bill or the credit note, so only the value of the move changes.
+BILL_POSTED_TYPES = ("reception", "reception_return")
 # Stop the fixed point on negative stock settlements after this many passes.
 MAX_PASSES = 10
 
@@ -470,7 +473,12 @@ class L10nRoFifoRecompute(models.Model):
             "account_debit_id": debit.id,
             "account_credit_id": credit.id,
             "amount": amount,
-            "no_entry": bool(not debit and not credit and not note and not self.company_id.currency_id.is_zero(delta)),
+            "no_entry": bool(
+                not debit
+                and not credit
+                and (not note or move.l10n_ro_move_type in BILL_POSTED_TYPES)
+                and not self.company_id.currency_id.is_zero(delta)
+            ),
             "note": note,
         }
 
@@ -489,6 +497,12 @@ class L10nRoFifoRecompute(models.Model):
         empty = self.env["account.account"]
         if self.company_id.currency_id.is_zero(delta):
             return empty, empty, False
+        if move.l10n_ro_move_type in BILL_POSTED_TYPES:
+            return (
+                empty,
+                empty,
+                self.env._("Posted through the vendor bill or credit note: only the value of the move is corrected"),
+            )
         account_list = move._get_l10n_ro_move_type_account_list()
         if not account_list:
             return (
@@ -692,7 +706,8 @@ class L10nRoFifoRecomputeLine(models.Model):
     account_credit_id = fields.Many2one("account.account", string="Credit Account")
     no_entry = fields.Boolean(
         string="No Entry",
-        help="Transfer between two locations on the same stock account: only the "
+        help="Transfer between two locations on the same stock account, or a reception "
+        "or supplier return posted through the vendor bill or credit note: only the "
         "value of the move is corrected, nothing is posted.",
     )
     amount = fields.Monetary(
