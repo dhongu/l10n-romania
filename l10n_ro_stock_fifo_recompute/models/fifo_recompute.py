@@ -521,7 +521,12 @@ class L10nRoFifoRecompute(models.Model):
             product = line.move_id.product_id.id
             aml_vals[(line.account_debit_id.id, product, storno, "debit")] += line.delta
             aml_vals[(line.account_credit_id.id, product, storno, "credit")] += line.delta
-        product_value_obj = self.env["product.value"].sudo()
+        # Latest manual value of each move, read in one query.
+        latest_manual = {}
+        for manual in (
+            self.env["product.value"].sudo().search([("move_id", "in", lines.move_id.ids)], order="date desc, id desc")
+        ):
+            latest_manual.setdefault(manual.move_id.id, manual)
         for line in lines:
             move = line.move_id.sudo()
             vals = {"value": line.new_value}
@@ -540,7 +545,7 @@ class L10nRoFifoRecompute(models.Model):
             # is valued again: keep it in line, or a later revaluation of an
             # internal transfer would bring the old value back. Writing it does
             # not revalue the move, only creating one does.
-            manual = product_value_obj.search([("move_id", "=", move.id)], order="date desc, id desc", limit=1)
+            manual = latest_manual.get(move.id)
             if manual:
                 manual.write({"value": line.new_value})
         if not aml_vals:

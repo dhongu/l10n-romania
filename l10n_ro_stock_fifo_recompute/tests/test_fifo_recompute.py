@@ -26,6 +26,16 @@ class TestFifoRecompute(TestROStockCommon):
             "account.account"
         ].create({"code": "117400", "name": "Closed years", "account_type": "equity"})
         cls.customers = cls.env.ref("stock.stock_location_customers")
+        # Some Romanian modules refuse to post an invoice for a partner
+        # without a full Romanian address (l10n_ro_efactura_enhancement).
+        (cls.customer_1 | cls.supplier_1).write(
+            {
+                "country_id": cls.env.ref("base.ro").id,
+                "state_id": cls.env.ref("base.RO_B").id,
+                "city": "Sector 1",
+                "street": "Strada Test 1",
+            }
+        )
 
     # ------------------------------------------------------------------
     # Helpers
