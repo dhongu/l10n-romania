@@ -124,7 +124,14 @@ evaluată greșit.
 1. **Găsiți pe ecran**: coloanele **Data efectivă**, **Referință**, **Produs**, **Tip mișcare**,
    **De la** / **Către**, **Cantitate**, **Valoare actuală**, **Valoare corectă**, **Diferență**,
    **Cont debit** / **Cont credit** și **Sumă înregistrată** (exact ce intră în nota de corecție),
-   bifa **Exercițiu închis** și **Observație**.
+   bifa **Exercițiu închis** și **Observație**. Din selectorul de coloane se pot afișa și coloanele
+   opționale:
+   - **Data notei**: data notei de stoc originale, după care se stabilește exercițiul diferenței;
+   - **Fără notă**: transfer între două locații pe același cont de stoc; se corectează doar valoarea
+     mișcării, nu se postează nimic (fără conturi pe linie);
+   - **Cantitate negativă actuală** / **Cantitate negativă corectă**: cantitatea rămasă pe stoc
+     negativ înregistrată pe mișcare, respectiv cea rezultată din recalculare. Aplicarea doar stinge
+     sau micșorează cantitatea actuală, nu adaugă una nouă.
 2. **Verificați** pe datele demo:
    - livrarea de **Marfă A** din D1: valoare actuală **240**, corectă **300**, diferență **60**,
      **607000 / 371000** (livrare pe stoc negativ, acoperită de recepția la 100);
@@ -167,7 +174,9 @@ Deschideți pagina **Control conturi**. Pe fiecare cont de stoc:
    fiecare dintre Marfă A, C și D); 371001 are sold 80 și corecție −80, deci 0; 371003 rămâne la 0.
 3. **Treceți mai departe**: o diferență rămasă (afișată în roșu) nu vine din FIFO (de exemplu note
    manuale pe conturi de stoc, conturi de stoc schimbate) și se analizează separat, înainte de
-   aplicare.
+   aplicare. Tot aici se adună și diferențele de rotunjire ignorate prin pragul **Ignoră diferențele
+   de până la**: suma lor cumulată se urmărește și se corectează manual dacă devine semnificativă
+   (OMFP 1802/2014, pct. 67 alin. (4)).
 
 ![Pagina Control conturi: 371000 cu Valoare stoc recalculată 600, Sold cont 540, Corecție 60 și Sold după corecție 600; 371001 Mărfuri Depozit D2 cu sold 80 și corecție -80; 371003 Mărfuri Depozit D3 la zero; Diferență rămasă 0,00 lei pe toate conturile](../static/description/04_control_conturi.png)
 
@@ -198,7 +207,9 @@ ieșire veche).
 ### Pasul 7 — Rularea aplicată
 
 Rularea trece în starea **Aplicat**: valorile mișcărilor sunt cele din coloana **Valoare corectă**,
-câmpul **Notă de corecție** arată nota postată, iar butonul **Notă de corecție** o deschide. O
+câmpul **Notă de corecție** arată nota postată, iar butonul **Notă de corecție** o deschide. Dacă
+toate liniile sunt **Fără notă** (transferuri pe același cont de stoc) sau au doar cantitatea
+negativă schimbată, nu se postează nicio notă: câmpul și butonul **Notă de corecție** nu apar. O
 rulare aplicată nu se mai poate recalcula, anula sau șterge: este urma notei de corecție.
 
 ![Rularea în starea Aplicat, cu butonul Notă de corecție evidențiat și câmpul Notă de corecție STOC/2026/11/… (Corecție evaluare FIFO cu numărul rulării); pagina Diferențe cu cele cinci linii](../static/description/07_rulare_aplicata.png)
@@ -284,6 +295,11 @@ din componente corectate.
 - [ ] Cu sfârșitul exercițiului închis completat, câmpul Cont exerciții închise e obligatoriu, iar
       **Calculează** fără el e refuzat.
 - [ ] O rulare aplicată nu se poate șterge.
+- [ ] Un transfer între două locații pe același cont de stoc are bifa **Fără notă**: la aplicare i
+      se corectează doar valoarea, fără linii în nota de corecție; o rulare cu numai astfel de linii
+      nu postează nicio notă.
+- [ ] O ieșire pe stoc negativ neacoperit, fără cantitate negativă înregistrată, rămâne cu
+      **Cantitate negativă actuală** 0 după aplicare.
 - [ ] Cu data de blocare globală la 31.10.2026, o rulare nouă propune Sfârșitul ultimului
       exercițiu închis = 31.12.2025; cu blocarea la 31.12.2025 propune tot 31.12.2025.
 
