@@ -513,3 +513,17 @@ msgid ""
 msgstr ""
 "Data corecției %(date)s este într-o perioadă blocată. Alege o dată dintr-o "
 "perioadă deschisă."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__entry_date
+msgid ""
+"Date of the original stock entry of the move: it decides whether the "
+"difference belongs to a closed financial year."
+msgstr ""
+"Data notei de stoc originale a mișcării: de ea depinde dacă diferența "
+"aparține unui exercițiu financiar închis."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__entry_date
+msgid "Entry Date"
+msgstr "Data notei"

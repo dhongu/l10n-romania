@@ -11,6 +11,7 @@ calculul și arată, pe fiecare mișcare, valoarea actuală, valoarea corectă �
 - Mișcările efectuate ale fiecărui produs FIFO se parcurg în ordine cronologică, cu o coadă FIFO
   pentru fiecare locație.
 - Recepțiile și livrările care nu sunt pe bază de aviz se ordonează după data facturii.
+- Exercițiul unei diferențe e cel al notei de stoc originale a mișcării, nu cel al facturii.
 - Valoarea intrărilor din facturi și costuri de achiziție rămâne cea înregistrată; se recalculează
   ieșirile, transferurile interne (valoarea trece din gestiunea sursă în cea destinație) și
   retururile de la clienți (după valoarea livrării corectate).
@@ -26,7 +27,7 @@ data aleasă, în jurnalul de stoc:
 | Diferența | Înregistrare |
 |---|---|
 | Ieșire din exercițiul curent | pe conturile notei originale a ieșirii (de exemplu 607 = 371), în roșu dacă ieșirea a fost supraevaluată |
-| Ieșire dintr-un exercițiu închis | 1174 în locul contului de cheltuieli (OMFP 1802/2014, pct. 67 alin. 2) |
+| Ieșire dintr-un exercițiu închis | 1174 în locul contului de cheltuieli (OMFP 1802/2014, pct. 67 alin. 2), în negru, cu conturile inversate dacă ieșirea a fost supraevaluată (371 = 1174) |
 | Transfer între gestiuni | 371 gestiunea destinație = 371 gestiunea sursă, indiferent de exercițiu |
 
 O corecție pe 1174 cere de regulă declarația de impozit pe profit rectificativă pentru anul la care

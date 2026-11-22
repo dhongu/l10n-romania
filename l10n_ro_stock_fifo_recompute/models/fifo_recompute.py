@@ -401,7 +401,11 @@ class L10nRoFifoRecompute(models.Model):
 
     def _prepare_line_vals(self, move, effective_date, new_value, new_pending):
         delta = self.company_id.currency_id.round(new_value - move.value)
-        closed = bool(self.closed_year_date and effective_date.date() <= self.closed_year_date)
+        # The year of an error is the year it was booked in (OMFP 1802/2014,
+        # point 67): the date of the original stock entry, not the invoice date
+        # used for the FIFO order.
+        entry_date = self._get_entry_date(move)
+        closed = bool(self.closed_year_date and entry_date <= self.closed_year_date)
         debit, credit, note = self._get_line_accounts(move, delta, closed)
         if new_pending and not note:
             note = self.env._("Negative stock not covered by a later incoming move")
@@ -409,6 +413,7 @@ class L10nRoFifoRecompute(models.Model):
             "recompute_id": self.id,
             "move_id": move.id,
             "effective_date": effective_date,
+            "entry_date": entry_date,
             "current_value": move.value,
             "new_value": new_value,
             "current_pending_qty": move.fifo_neg_pending_qty,
@@ -418,6 +423,13 @@ class L10nRoFifoRecompute(models.Model):
             "account_credit_id": credit.id,
             "note": note,
         }
+
+    @api.model
+    def _get_entry_date(self, move):
+        """Accounting date of the original stock entry of ``move``."""
+        if move.account_move_id:
+            return move.account_move_id.date
+        return fields.Date.to_date(move.date)
 
     def _get_line_accounts(self, move, delta, closed):
         """Net accounts of the correction of ``move``: the accounts of its own
@@ -518,10 +530,17 @@ class L10nRoFifoRecompute(models.Model):
         for line in lines:
             if currency.is_zero(line.delta):
                 continue
-            storno = line.delta < 0
+            amount = line.delta
+            debit, credit = line.account_debit_id, line.account_credit_id
+            storno = amount < 0
+            if line.closed_year and storno:
+                # A closed year is not reversed in red (OMFP 1802/2014,
+                # point 69 is for the current year): a correction in black
+                # with the accounts swapped, e.g. Dr 371 / Cr 1174.
+                debit, credit, amount, storno = credit, debit, -amount, False
             product = line.move_id.product_id.id
-            aml_vals[(line.account_debit_id.id, product, storno, "debit")] += line.delta
-            aml_vals[(line.account_credit_id.id, product, storno, "credit")] += line.delta
+            aml_vals[(debit.id, product, storno, "debit")] += amount
+            aml_vals[(credit.id, product, storno, "credit")] += amount
         # Latest manual value of each move, read in one query.
         latest_manual = {}
         for manual in (
@@ -598,6 +617,10 @@ class L10nRoFifoRecomputeLine(models.Model):
     location_dest_id = fields.Many2one(related="move_id.location_dest_id", string="To")
     move_type = fields.Selection(related="move_id.l10n_ro_move_type")
     reference = fields.Char(related="move_id.reference")
+    entry_date = fields.Date(
+        help="Date of the original stock entry of the move: it decides whether "
+        "the difference belongs to a closed financial year."
+    )
     effective_date = fields.Datetime(
         help="Date of the move in the FIFO order: the invoice date for a reception or a delivery not made on a notice."
     )

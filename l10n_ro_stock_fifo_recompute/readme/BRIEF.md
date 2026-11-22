@@ -57,16 +57,21 @@ Contabilul șef: grupul `account.group_account_manager` (Administrator contabili
   proporțional cu cantitatea.
 - **CA4:** După **Aplică**, valorile mișcărilor sunt cele corecte, rularea trece în starea
   *Aplicat* și are o notă contabilă postată, în jurnalul de stoc, la data aleasă. Pe fiecare cont
-  și produs, nota conține suma diferențelor. Diferențele negative se postează în roșu (storno).
-- **CA5:** O diferență pe o ieșire datată până la data de închidere a exercițiului se postează pe
+  și produs, nota conține suma diferențelor. Diferențele negative din exercițiul curent se postează
+  în roșu (storno); cele dintr-un exercițiu închis, în negru, cu conturile inversate (Dr 371 /
+  Cr 1174).
+- **CA5:** O diferență pe o ieșire a cărei notă de stoc originală e datată până la data de
+  închidere a exercițiului se postează pe
   contul ales pentru exerciții închise (1174), nu pe 607; un transfer intern din aceeași perioadă
   rămâne pe 371 destinație / 371 sursă.
 - **CA6:** Controlul arată, pe fiecare cont de stoc, valoarea stocului recalculată, soldul
   contului pentru produsele rulării, soldul după corecție și diferența rămasă.
 - **CA7:** O a doua rulare, după aplicarea primei, nu mai găsește diferențe.
 - **CA8:** O recepție fără aviz are ca dată efectivă data facturii de achiziție, iar o livrare
-  fără aviz data facturii de vânzare. Ordinea FIFO și încadrarea pe exercițiu folosesc data
-  efectivă: o recepție validată după o livrare, dar facturată înaintea ei, acoperă livrarea.
+  fără aviz data facturii de vânzare. Ordinea FIFO folosește data efectivă: o recepție validată
+  după o livrare, dar facturată înaintea ei, acoperă livrarea. Încadrarea pe exercițiu folosește
+  data notei de stoc originale: o livrare înregistrată în anul curent, dar facturată într-un an
+  închis, rămâne pe conturile notei originale.
 
 ## Cazuri-limită
 
@@ -98,7 +103,9 @@ Contabilul șef: grupul `account.group_account_manager` (Administrator contabili
 | Exerciții închise | contul ales (1174) în locul contului de cheltuieli | Pacioli: pct. 67 alin. 2 |
 | Valoarea intrărilor externe | `move.value` actual (factură, cost de achiziție) | e sursa de adevăr; se corectează doar ieșirile, transferurile și retururile |
 | Stoc negativ | la prețul intrărilor care îl acoperă în aceeași locație | aceeași regulă ca la compensarea din motor |
-| Data efectivă la recepție/livrare fără aviz | data primei facturi înregistrate de pe linia comenzii, altfel data transferului | cerința utilizatorului |
+| Data efectivă la recepție/livrare fără aviz | data primei facturi înregistrate de pe linia comenzii, altfel data transferului; doar pentru ordinea FIFO | cerința utilizatorului |
+| Exercițiul unei diferențe | data notei de stoc originale a mișcării | Pacioli: eroarea aparține exercițiului în care a fost înregistrată (pct. 67 alin. 1–2) |
+| Diferență negativă într-un exercițiu închis | în negru, cu conturile inversate | Pacioli: stornarea în roșu (pct. 69) privește exercițiul curent |
 | Nota de corecție | o singură notă pe rulare, cumulată pe cont, produs și semn | trasabilitate; o notă pe mișcare ar fi prea multe |
 | Scrierea valorii | direct `stock.move.value` | prin `value_manual` s-ar reapela evaluarea |
 

@@ -135,7 +135,9 @@ evaluată greșit.
 ![Rularea în starea Calculat, pagina Diferențe: patru linii, transferul Marfă B 320 la 400 pe 371003 și 371001, livrarea Marfă B pe 117400 bifată Exercițiu închis, livrarea Marfă A 240 la 300 pe 607000 și 371000, livrarea Marfă C 360 la 300 cu diferența -60; Diferență totală 160,00 lei evidențiată](../static/description/03_diferente.png)
 
 Data efectivă este data mișcării în ordinea FIFO: la o recepție sau o livrare care nu este pe bază
-de aviz, este data facturii (furnizor, respectiv client), nu data transferului.
+de aviz, este data facturii (furnizor, respectiv client), nu data transferului. Exercițiul în care
+cade o diferență se stabilește însă după data notei de stoc originale (coloana opțională **Data
+notei**): eroarea aparține exercițiului în care a fost înregistrată.
 
 ### Pasul 4 — Pagina Control conturi
 
@@ -186,8 +188,9 @@ rulare aplicată nu se mai poate recalcula, anula sau șterge: este urma notei d
 ### Pasul 8 — Nota de corecție
 
 Nota este în jurnalul de stoc, la data corecției, postată, cu eticheta „Corecție evaluare FIFO
-<rulare>". Pe fiecare cont, produs și semn are suma diferențelor; diferențele negative sunt în
-roșu (storno: sume negative pe aceeași parte).
+<rulare>". Pe fiecare cont, produs și semn are suma diferențelor; diferențele negative din
+exercițiul curent sunt în roșu (storno: sume negative pe aceeași parte), iar cele dintr-un
+exercițiu închis sunt în negru, cu conturile inversate (`371 = 1174`).
 
 ![Nota STOC/2026/11/0005 postată în jurnalul Note de stoc la 22 nov.: 371003 debit 80 / 371001 credit 80, 117400 debit 80 / 371003 credit 80, 607000 debit 60 / 371000 credit 60 și 607000 debit -60 / 371000 credit -60, storno cu sume negative; total 160 lei](../static/description/08_nota_corectie.png)
 
@@ -207,7 +210,10 @@ Regula generală:
 - **Ieșire din exercițiul curent**: pe conturile notei originale a ieșirii: `607 = 371` cu
   diferența, în roșu dacă ieșirea a fost supraevaluată.
 - **Ieșire dintr-un exercițiu închis**: contul de cheltuieli se înlocuiește cu 1174:
-  `1174 = 371` (sau invers, în roșu). Cere de regulă D101 rectificativă pentru anul erorii.
+  `1174 = 371`; dacă ieșirea a fost supraevaluată, în negru, cu conturile inversate:
+  `371 = 1174` (stornarea în roșu, pct. 69, privește exercițiul curent). Exercițiul se
+  stabilește după data notei de stoc originale. Cere de regulă D101 rectificativă pentru anul
+  erorii.
 - **Transfer direct între gestiuni**: `371 destinație = 371 sursă`, net (fără 482), indiferent
   de exercițiu. La transferul prin tranzit, în doi pași, fiecare mișcare se corectează pe
   conturile notei ei.
@@ -241,12 +247,13 @@ din componente corectate.
       371 sursă; livrarea din gestiunea destinație are aceeași valoare corectată ca transferul (CA2).
 - [ ] Un retur de la client al livrării corectate are valoarea livrării corectate, proporțional
       (CA3).
-- [ ] Livrarea datată până la sfârșitul exercițiului închis are 1174 în locul lui 607; transferul
-      din aceeași perioadă rămâne 371 / 371 (CA5).
+- [ ] Livrarea cu nota de stoc datată până la sfârșitul exercițiului închis are 1174 în locul lui
+      607; transferul din aceeași perioadă rămâne 371 / 371 (CA5).
+- [ ] O diferență negativă dintr-un exercițiu închis apare în notă în negru, `371 = 1174`.
 - [ ] În **Control conturi**, diferența rămasă e 0 pe fiecare cont de stoc (CA6).
 - [ ] După **Aplică**: starea **Aplicat**, valorile mișcărilor = valorile corecte, nota postată în
       jurnalul de stoc la data corecției, cu suma diferențelor pe cont și produs; diferențele
-      negative în roșu (CA4).
+      negative din exercițiul curent în roșu (CA4).
 - [ ] O a doua rulare pe aceleași produse nu mai găsește diferențe (CA7).
 - [ ] O recepție fără aviz, validată după o livrare dar facturată înaintea ei, acoperă livrarea:
       data efectivă a recepției este data facturii (CA8).

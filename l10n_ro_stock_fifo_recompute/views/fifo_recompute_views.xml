@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <list create="0" edit="0" delete="0" decoration-warning="note">
                 <field name="effective_date" />
+                <field name="entry_date" optional="hide" />
                 <field name="reference" />
                 <field name="product_id" />
                 <field name="move_type" optional="show" />

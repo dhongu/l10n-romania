@@ -335,3 +335,48 @@ class TestFifoRecompute(TestROStockCommon):
             "l10n.ro.fifo.recompute.check",
         ):
             self.assertFalse(self.env[model].with_user(user).search([]), f"{model} leaks")
+
+    def test_closed_year_follows_entry_date_not_invoice(self):
+        """The year of a difference is the year of the original stock entry:
+        a delivery booked today but invoiced before the closed year end stays
+        on the expense account; the invoice date only orders the FIFO."""
+        out_move = self._negative_delivery()
+        today = fields.Date.today()
+        invoices = out_move.sale_line_id.invoice_lines.move_id
+        self.assertTrue(invoices)
+        self.env.cr.execute(
+            SQL(
+                "UPDATE account_move SET invoice_date = %s WHERE id IN %s",
+                today - timedelta(days=5),
+                tuple(invoices.ids),
+            )
+        )
+        self.env.invalidate_all()
+
+        recompute = self._recompute(closed_year_date=today - timedelta(days=1))
+
+        line = self._line(recompute, out_move)
+        self.assertEqual(line.entry_date, out_move.account_move_id.date)
+        self.assertFalse(line.closed_year)
+        self.assertNotEqual(line.account_debit_id, self.account_closed)
+        self.assertEqual(line.account_debit_id.account_type, "expense")
+
+    def test_closed_year_overvalued_in_black(self):
+        """An overvalued move of a closed year is corrected in black with the
+        accounts swapped (Dr stock / Cr 1174), not reversed in red."""
+        self.product_fifo.standard_price = 120.0
+        out_move = self._negative_delivery()
+        recompute = self._recompute(closed_year_date=fields.Date.today())
+        line = self._line(recompute, out_move)
+        self.assertTrue(line.closed_year)
+        self.assertAlmostEqual(line.delta, -60.0)
+        self.assertEqual(line.account_debit_id, self.account_closed)
+
+        recompute.action_apply()
+
+        entry_lines = recompute.account_move_id.line_ids
+        self.assertFalse(any(entry_lines.mapped("is_storno")))
+        closed_lines = entry_lines.filtered(lambda r: r.account_id == self.account_closed)
+        self.assertAlmostEqual(sum(closed_lines.mapped("credit")), 60.0)
+        stock_lines = entry_lines.filtered(lambda r: r.account_id == line.account_credit_id)
+        self.assertAlmostEqual(sum(stock_lines.mapped("debit")), 60.0)
