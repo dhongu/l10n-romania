@@ -192,7 +192,7 @@ class MessageSPV(models.Model):
         }
 
     @api.model
-    def _purchase_search_domain_from_ref(self, ref_to_use, partner_id=False, company_id=False):
+    def _purchase_search_domain_from_ref(self, ref_to_use, partner_id=False, company_id=False, include_invoiced=False):
         # Build a FLAT domain (no nested lists). Prefix AND conditions, then the OR group.
         # OR group for matching by reference fields
         or_group = [
@@ -208,7 +208,8 @@ class MessageSPV(models.Model):
         # O comandă deja complet facturată nu mai e candidat valid: o referință
         # reutilizată din greșeală (ex. #9290) nu trebuie să mai lege facturi noi
         # de o comandă epuizată.
-        domain = ["&", ("invoice_status", "!=", "invoiced")] + domain
+        if not include_invoiced:
+            domain = ["&", ("invoice_status", "!=", "invoiced")] + domain
 
         # Prepend AND conditions in flat form to avoid ValueError on nested lists
         if partner_id:
@@ -275,7 +276,29 @@ class MessageSPV(models.Model):
         if len(found) > 1:
             return self._action_open_purchase_list(domain)
 
-        # Niciun rezultat
+        # Niciun rezultat: spune dacă referința e pe o comandă deja facturată
+        # (filtrul de mai sus o exclude intenționat, vezi #9290).
+        invoiced = PurchaseOrder.search(
+            self._purchase_search_domain_from_ref(
+                ref_to_use,
+                partner_id=self.partner_id.id if self.partner_id else False,
+                company_id=self.company_id.id if self.company_id else False,
+                include_invoiced=True,
+            ),
+            limit=5,
+        ).filtered(lambda po: po.invoice_status == "invoiced")
+        if invoiced:
+            raise UserError(
+                self.env._(
+                    "Comanda de achiziție %(orders)s are referința '%(ref)s', dar este "
+                    "deja facturată complet (%(bills)s). Legați factura din câmpul "
+                    "Factură sau verificați dacă nu e o factură duplicat.",
+                    orders=", ".join(invoiced.mapped("name")),
+                    ref=ref_to_use,
+                    bills=", ".join(invoiced.invoice_ids.filtered(lambda m: m.state != "cancel").mapped("display_name"))
+                    or "-",
+                )
+            )
         raise UserError(
             self.env._(
                 "Nu a fost găsită nicio comandă de achiziție după referința '%s'.",

@@ -117,6 +117,15 @@ msgstr ""
 #. module: l10n_ro_message_spv_purchase
 #. odoo-python
 #: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
+msgid ""
+"Comanda de achiziție %(orders)s are referința '%(ref)s', dar este deja "
+"facturată complet (%(bills)s). Legați factura din câmpul Factură sau "
+"verificați dacă nu e o factură duplicat."
+msgstr ""
+
+#. module: l10n_ro_message_spv_purchase
+#. odoo-python
+#: code:addons/l10n_ro_message_spv_purchase/models/message_spv.py:0
 msgid "Nu a fost găsită nicio comandă de achiziție după referința '%s'."
 msgstr ""
 

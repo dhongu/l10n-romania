@@ -900,8 +900,11 @@ class TestMessageSPVPurchase(TransactionCase):
         self.assertEqual(po.invoice_status, "invoiced")
 
         msg = self._make_spv_message(ref="PO-9290-001")
-        with self.assertRaises(UserError):
+        # #10041: mesajul spune că referința e pe o comandă deja facturată
+        with self.assertRaisesRegex(UserError, "deja facturată complet") as error:
             msg.action_find_purchase()
+        self.assertIn(po.name, str(error.exception))
+        self.assertFalse(msg.purchase_order_id)
 
     def test_action_create_purchase_skips_fully_invoiced_po(self):
         """Tichet #9290: action_create_purchase creează o comandă nouă în loc să
