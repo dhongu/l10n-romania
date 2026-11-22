@@ -2,14 +2,11 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-from unittest.mock import patch
-
 from lxml import etree
 
 from odoo.tests import tagged
 from odoo.tools import file_open
 
-from odoo.addons.account_edi_ubl_cii.models.account_edi_common import AccountEdiCommon
 from odoo.addons.l10n_ro_edi.tests.common import TestROEdiCommon
 
 
@@ -60,13 +57,13 @@ class TestCiusRoVatCompare(TestROEdiCommon):
                 self.assertTrue(self.builder._vat_is_equal(stored, incoming, self.ro))
 
     def test_different_or_invalid_identifiers_are_not_equivalent(self):
+        # Perechile care difera doar prin prefixul RO nu mai apar aici: din
+        # odoo/odoo@b206dd0a2e (18.11.2026) core-ul ignora singur prefixul de tara,
+        # si pentru un CUI cu cifra de control invalida.
         for stored, incoming in [
             ("RO12345674", "1234567897"),
-            ("RO12345675", "12345675"),
-            ("RO00000000", "00000000"),
             ("RO012345674", "12345674"),
             ("RO123.45674", "12345674"),
-            ("RO8001011234567", "8001011234567"),
             ("DE12345674", "12345674"),
             ("RO12345674", ""),
             ("", "12345674"),
@@ -80,9 +77,6 @@ class TestCiusRoVatCompare(TestROEdiCommon):
                 self.assertFalse(self.builder._vat_is_equal("RO12345674", "12345674", country))
                 self.assertTrue(self.builder._vat_is_equal("DE 123456789", "de123456789", country))
 
-    def test_generic_ubl_comparison_is_unchanged(self):
-        self.assertFalse(self.env["account.edi.xml.ubl_bis3"]._vat_is_equal("RO12345674", "12345674", self.ro))
-
     def test_legacy_import_reuses_prefixed_partner(self):
         partner = self._supplier()
         before = self.env["res.partner"].search_count([])
@@ -91,15 +85,6 @@ class TestCiusRoVatCompare(TestROEdiCommon):
         self.assertEqual(partner.vat, "RO12345674")
         self.assertFalse(logs)
         self.assertEqual(self.env["res.partner"].search_count([]), before)
-
-    def test_native_comparison_reproduces_duplicate(self):
-        partner = self._supplier()
-        before = self.env["res.partner"].search_count([])
-        with patch.object(type(self.builder), "_vat_is_equal", AccountEdiCommon._vat_is_equal):
-            found, logs = self._legacy_import("12345674")
-        self.assertNotEqual(found, partner)
-        self.assertTrue(logs)
-        self.assertEqual(self.env["res.partner"].search_count([]), before + 1)
 
     def test_legacy_import_reuses_bare_partner(self):
         partner = self._supplier(vat="12345674")
