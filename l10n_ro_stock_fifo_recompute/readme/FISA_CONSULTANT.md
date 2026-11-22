@@ -178,8 +178,10 @@ verificat** = liniile cu observație, **Exerciții închise**), grupa (produs, t
 
 Liniile cu observația „Tipul de mișcare nu are notă de stoc: corectează manual" sau „Conturile nu
 s-au putut determina: corectează manual" nu au conturi și **nu se aplică**: le corectați manual.
-Linia „Stoc negativ neacoperit de o intrare ulterioară" se aplică (valoarea rămâne cea de azi, se
-actualizează doar cantitatea negativă rămasă), dar arată un stoc negativ încă deschis.
+Linia „Stoc negativ neacoperit de o intrare ulterioară" arată un stoc negativ încă deschis: valoarea
+rămâne cea de azi, iar aplicarea doar stinge sau micșorează cantitatea negativă deja înregistrată pe
+mișcare, fără să adauge una nouă (altfel la următoarea recepție în locație s-ar compensa automat o
+ieșire veche).
 
 ![Lista Diferențe FIFO a rulării, pe toată lățimea: cele cinci linii, cu Cont debit 371003, 371000, 117400 și 607000, Cont credit 371001, 117400, 371003 și 371000 (denumirile lungi apar trunchiate), coloana Sumă înregistrată și totalurile 1.600, 1.700, 100 și 220 lei](../static/description/05_lista_diferente.png)
 

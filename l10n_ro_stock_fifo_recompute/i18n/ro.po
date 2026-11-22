@@ -557,3 +557,13 @@ msgid ""
 msgstr ""
 "Transfer între două locații pe același cont de stoc: se corectează doar "
 "valoarea mișcării, nu se postează nimic."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__new_pending_qty
+msgid ""
+"Quantity left on negative stock after the recompute. Applying only settles "
+"or reduces the negative quantity on record, it never adds one."
+msgstr ""
+"Cantitatea rămasă pe stoc negativ după recalculare. Aplicarea doar stinge "
+"sau micșorează cantitatea negativă înregistrată, nu adaugă niciodată una "
+"nouă."

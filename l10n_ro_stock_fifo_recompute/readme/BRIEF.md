@@ -77,7 +77,8 @@ Contabilul șef: grupul `account.group_account_manager` (Administrator contabili
 
 - **Multi-companie:** se recalculează doar compania rulării; produsele se citesc cu acea companie.
 - **Stoc negativ fără nicio intrare ulterioară:** valoarea actuală rămâne, linia e marcată „stoc
-  negativ neacoperit”.
+  negativ neacoperit”. **Aplică** nu scrie o cantitate negativă nouă pe mișcare (doar stinge sau
+  micșorează una existentă): altfel motorul ar compensa la următoarea recepție o ieșire veche.
 - **Producție (`production`):** valoarea intrării se păstrează; propagarea în costul produselor
   finite nu se face.
 - **Produse evaluate pe loturi, linii cu proprietar terț, alte metode de cost decât FIFO:** se

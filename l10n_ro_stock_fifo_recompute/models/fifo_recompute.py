@@ -595,7 +595,10 @@ class L10nRoFifoRecompute(models.Model):
             move = line.move_id.sudo()
             vals = {"value": line.new_value}
             if move.is_out:
-                pending = line.new_pending_qty
+                # Only settle or reduce the negative quantity on record, never
+                # add one: the engine would compensate it on the next incoming
+                # move of the location, for a move possibly years old.
+                pending = min(line.new_pending_qty, move.fifo_neg_pending_qty)
                 quantity = move._get_valued_qty()
                 unit = line.new_value / quantity if quantity else 0.0
                 vals.update(
@@ -673,7 +676,11 @@ class L10nRoFifoRecomputeLine(models.Model):
     new_value = fields.Monetary(string="Correct Value")
     delta = fields.Monetary(string="Difference", compute="_compute_delta", store=True)
     current_pending_qty = fields.Float(string="Current Negative Qty")
-    new_pending_qty = fields.Float(string="Correct Negative Qty")
+    new_pending_qty = fields.Float(
+        string="Correct Negative Qty",
+        help="Quantity left on negative stock after the recompute. Applying only "
+        "settles or reduces the negative quantity on record, it never adds one.",
+    )
     closed_year = fields.Boolean()
     account_debit_id = fields.Many2one("account.account", string="Debit Account")
     account_credit_id = fields.Many2one("account.account", string="Credit Account")

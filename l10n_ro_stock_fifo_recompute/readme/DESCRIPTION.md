@@ -16,7 +16,8 @@ calculul și arată, pe fiecare mișcare, valoarea actuală, valoarea corectă �
   ieșirile, transferurile interne (valoarea trece din gestiunea sursă în cea destinație) și
   retururile de la clienți (după valoarea livrării corectate).
 - O ieșire făcută pe stoc negativ se evaluează la prețul intrărilor care o acoperă în aceeași
-  locație.
+  locație. Dacă nicio intrare ulterioară nu o acoperă, valoarea ei rămâne, iar aplicarea nu înregistrează
+  o cantitate negativă nouă pe mișcare, ca să nu fie compensată la o recepție viitoare.
 
 **Rularea de probă** nu modifică nimic: arată diferențele pe mișcări și un control pe fiecare cont
 de stoc (valoarea stocului recalculată, soldul contului, soldul după corecție și diferența rămasă).

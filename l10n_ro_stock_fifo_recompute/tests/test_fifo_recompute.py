@@ -409,3 +409,20 @@ class TestFifoRecompute(TestROStockCommon):
         line = self._line(recompute, transfer)
         self.assertAlmostEqual(line.new_value, 600.0)
         self.assertFalse(line.note)
+
+    def test_apply_does_not_add_negative_quantity(self):
+        """Applying never records a new negative quantity on a move: the engine
+        would compensate it on the next incoming move of the location."""
+        out_move = self._deliver(3, "rcn_so")
+        self.assertFalse(out_move.fifo_neg_pending_qty)
+        # A difference elsewhere so that the run has something to apply.
+        transfer = self._move(self.location1, self.location2, 4)
+        self._receive(4, 100, "rcn_po", location=self.location1)
+        recompute = self._recompute()
+        line = self._line(recompute, out_move)
+        self.assertAlmostEqual(line.new_pending_qty, 3.0)
+        self.assertTrue(self._line(recompute, transfer))
+
+        recompute.action_apply()
+
+        self.assertFalse(out_move.fifo_neg_pending_qty)
