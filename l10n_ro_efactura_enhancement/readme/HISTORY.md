@@ -1,3 +1,12 @@
+## 19.0.0.5.16 (2026-11-22)
+
+- **Testele comparației CUI urmează noul comportament din core.** Din 18.11.2026
+  (odoo/odoo@b206dd0a2e), `_vat_is_equal` din `account_edi_ubl_cii` ignoră singur
+  prefixul de țară, deci `RO12345675` și `12345675` sunt considerate egale și când
+  cifra de control e invalidă. Au fost scoase cazurile de test care cereau contrariul și
+  cele două teste care fixau vechiul comportament din core. Override-ul modulului rămâne
+  pentru instalările cu un core mai vechi; importul facturilor nu se schimbă.
+
 ## 19.0.0.5.15 (2026-11-18)
 
 - **Generarea XML-ului nu mai scrie `company_registry` pe clientul fără CUI.** Pentru o

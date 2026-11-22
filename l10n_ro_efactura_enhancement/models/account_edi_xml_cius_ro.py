@@ -151,6 +151,8 @@ class AccountEdiXmlUBLRO(models.AbstractModel):
     _inherit = "account.edi.xml.ubl_ro"
 
     def _vat_is_equal(self, partner_vat, other_vat, country=False):
+        # Din odoo/odoo@b206dd0a2e (18.11.2026) core-ul ignora singur prefixul de tara.
+        # Override-ul ramane pentru instalarile cu un core mai vechi.
         if country and country.code == "RO":
             identifiers = []
             for vat in (partner_vat, other_vat):
