@@ -44,13 +44,13 @@ jobs:
             # l10n_ro_partner_autocomplete excludes the OCA l10n_ro_partner_create_by_vat, which
             # these two depend on, and the Odoo Online variants exclude their classic modules:
             # both groups are tested on their own below
-            exclude: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi,l10n_ro_anaf_partner_online,l10n_ro_anaf_token_online,l10n_ro_invoice_report_online,l10n_ro_message_spv_online,l10n_ro_picking_report_online,l10n_ro_report_common_online
+            exclude: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi,l10n_ro_anaf_partner_online,l10n_ro_anaf_token_online,l10n_ro_invoice_report_online,l10n_ro_message_spv_online,l10n_ro_message_spv_side_panel_online,l10n_ro_picking_report_online,l10n_ro_report_common_online
           - container: ghcr.io/oca/oca-ci/py3.12-odoo20.0:latest
             name: test with Odoo (OCA create_by_vat)
             include: l10n_ro_partner_create_by_vat_button,l10n_ro_partner_create_by_vat_openapi
           - container: ghcr.io/oca/oca-ci/py3.12-odoo20.0:latest
             name: test with Odoo (Odoo Online)
-            include: l10n_ro_anaf_partner_online,l10n_ro_anaf_token_online,l10n_ro_invoice_report_online,l10n_ro_message_spv_online,l10n_ro_picking_report_online,l10n_ro_report_common_online
+            include: l10n_ro_anaf_partner_online,l10n_ro_anaf_token_online,l10n_ro_invoice_report_online,l10n_ro_message_spv_online,l10n_ro_message_spv_side_panel_online,l10n_ro_picking_report_online,l10n_ro_report_common_online
 
     services:
       postgres:
