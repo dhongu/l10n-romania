@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="seq_l10n_ro_fifo_recompute" model="ir.sequence">
+        <field name="name">FIFO Recompute</field>
+        <field name="code">l10n.ro.fifo.recompute</field>
+        <field name="prefix">FIFO/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False" />
+    </record>
+</odoo>

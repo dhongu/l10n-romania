@@ -1,0 +1,7 @@
+id,name,model_id,group_id/id,operation,domain
+access_l10n_ro_fifo_recompute,l10n.ro.fifo.recompute,l10n.ro.fifo.recompute,account.group_account_manager,crud,
+rule_l10n_ro_fifo_recompute_company,FIFO Recompute: multi-company,l10n.ro.fifo.recompute,,crud,"[('company_id', 'in', company_ids)]"
+access_l10n_ro_fifo_recompute_line,l10n.ro.fifo.recompute.line,l10n.ro.fifo.recompute.line,account.group_account_manager,crud,
+rule_l10n_ro_fifo_recompute_line_company,FIFO Recompute Difference: multi-company,l10n.ro.fifo.recompute.line,,crud,"[('recompute_id.company_id', 'in', company_ids)]"
+access_l10n_ro_fifo_recompute_check,l10n.ro.fifo.recompute.check,l10n.ro.fifo.recompute.check,account.group_account_manager,crud,
+rule_l10n_ro_fifo_recompute_check_company,FIFO Recompute Account Control: multi-company,l10n.ro.fifo.recompute.check,,crud,"[('recompute_id.company_id', 'in', company_ids)]"
