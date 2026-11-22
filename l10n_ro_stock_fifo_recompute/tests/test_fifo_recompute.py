@@ -382,3 +382,30 @@ class TestFifoRecompute(TestROStockCommon):
         self.assertAlmostEqual(sum(closed_lines.mapped("credit")), 60.0)
         stock_lines = entry_lines.filtered(lambda r: r.account_id == line.account_debit_id)
         self.assertAlmostEqual(sum(stock_lines.mapped("debit")), 60.0)
+
+    def test_unflagged_internal_transfer_moves_the_stock(self):
+        """An internal transfer not flagged in (inside a warehouse, or migrated
+        from an older version) still moves the stock: the delivery out of its
+        destination is covered by it instead of showing negative stock."""
+        self._receive(10, 100, "rcu_po")
+        transfer = self._move(self.location, self.location_sub_1, 6)
+        self.assertEqual(transfer.l10n_ro_move_type, "internal_transfer")
+        # As left by a migration: not valued, not flagged.
+        self.env.cr.execute(
+            SQL(
+                "UPDATE stock_move SET is_in = FALSE, is_out = FALSE, value = 0 WHERE id = %s",
+                transfer.id,
+            )
+        )
+        self.env.invalidate_all()
+        delivery = self._move(self.location_sub_1, self.customers, 6)
+
+        recompute = self._recompute()
+
+        # The delivery is covered by the transfer: no negative stock, and its
+        # value (600) was already right, so it is not listed.
+        self.assertFalse(recompute.line_ids.filtered(lambda r: r.move_id == delivery))
+        self.assertFalse(any(recompute.line_ids.mapped("new_pending_qty")))
+        line = self._line(recompute, transfer)
+        self.assertAlmostEqual(line.new_value, 600.0)
+        self.assertFalse(line.note)

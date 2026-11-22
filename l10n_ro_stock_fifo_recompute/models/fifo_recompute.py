@@ -218,8 +218,13 @@ class L10nRoFifoRecompute(models.Model):
                 ("company_id", "=", self.company_id.id),
                 ("state", "=", "done"),
                 "|",
+                "|",
                 ("is_in", "=", True),
                 ("is_out", "=", True),
+                # An internal transfer is not always flagged both in and out
+                # (out only inside a warehouse, neither when migrated from an
+                # older version), yet the goods did move between the locations.
+                ("l10n_ro_move_type", "=", "internal_transfer"),
             ]
         )
         dates = {move.id: self._get_effective_date(move) for move in moves}
@@ -291,6 +296,19 @@ class L10nRoFifoRecompute(models.Model):
 
         for move in moves:
             out_value = None
+            if self._is_internal_transfer(move):
+                # Consume from the source and enter the destination with the
+                # value consumed, like the engine does for new transfers.
+                out_value = 0.0
+                lines = self._get_transfer_lines(move)
+                for line in lines:
+                    line_qty = line.quantity_product_uom
+                    line_value = consume(move, line.location_id.id, line_qty)
+                    receive(line.location_dest_id.id, line_qty, line_value)
+                    out_value += line_value
+                valued_qty[move.id] = sum(lines.mapped("quantity_product_uom"))
+                values[move.id] = out_value
+                continue
             if move.is_out:
                 out_value = 0.0
                 lines = move._get_out_move_lines()
@@ -329,6 +347,23 @@ class L10nRoFifoRecompute(models.Model):
             "pending": pending_left,
             "remaining": remaining,
         }
+
+    @api.model
+    def _is_internal_transfer(self, move):
+        """A transfer between two internal locations, whatever its in/out
+        flags: inside a warehouse it is flagged out only, and a transfer
+        migrated from an older version neither in nor out."""
+        return move.l10n_ro_move_type == "internal_transfer"
+
+    def _get_transfer_lines(self, move):
+        """Lines of an internal transfer moving owned goods between two valued
+        locations."""
+        partner = self.company_id.partner_id
+        return move.move_line_ids.filtered(
+            lambda ml: ml.location_id._should_be_valued()
+            and ml.location_dest_id._should_be_valued()
+            and (not ml.owner_id or ml.owner_id == partner)
+        )
 
     @api.model
     def _get_in_value(self, move, out_value, values, valued_qty):
@@ -429,6 +464,7 @@ class L10nRoFifoRecompute(models.Model):
             "account_debit_id": debit.id,
             "account_credit_id": credit.id,
             "amount": amount,
+            "no_entry": bool(not debit and not credit and not note and not self.company_id.currency_id.is_zero(delta)),
             "note": note,
         }
 
@@ -459,6 +495,10 @@ class L10nRoFifoRecompute(models.Model):
         for vals in vals_list:
             balance[vals["account_id"]] += vals["debit"] - vals["credit"]
         currency = self.company_id.currency_id
+        if move.l10n_ro_move_type in TRANSFER_TYPES and all(currency.is_zero(b) for b in balance.values()):
+            # Between two locations on the same stock account: only the value
+            # of the move changes, there is nothing to post.
+            return empty, empty, False
         debit_ids = [a for a, b in balance.items() if not currency.is_zero(b) and (b > 0) == (delta > 0)]
         credit_ids = [a for a, b in balance.items() if not currency.is_zero(b) and (b > 0) != (delta > 0)]
         if len(debit_ids) != 1 or len(credit_ids) != 1:
@@ -532,11 +572,11 @@ class L10nRoFifoRecompute(models.Model):
         self.ensure_one()
         currency = self.company_id.currency_id
         lines = self.line_ids.filtered(
-            lambda rec: currency.is_zero(rec.delta) or (rec.account_debit_id and rec.account_credit_id)
+            lambda rec: currency.is_zero(rec.delta) or rec.no_entry or (rec.account_debit_id and rec.account_credit_id)
         )
         aml_vals = defaultdict(float)
         for line in lines:
-            if currency.is_zero(line.delta):
+            if currency.is_zero(line.delta) or line.no_entry:
                 continue
             amount = line.amount
             debit, credit = line.account_debit_id, line.account_credit_id
@@ -637,6 +677,11 @@ class L10nRoFifoRecomputeLine(models.Model):
     closed_year = fields.Boolean()
     account_debit_id = fields.Many2one("account.account", string="Debit Account")
     account_credit_id = fields.Many2one("account.account", string="Credit Account")
+    no_entry = fields.Boolean(
+        string="No Entry",
+        help="Transfer between two locations on the same stock account: only the "
+        "value of the move is corrected, nothing is posted.",
+    )
     amount = fields.Monetary(
         string="Posted Amount",
         help="Amount of the correction entry on these accounts: the difference, "

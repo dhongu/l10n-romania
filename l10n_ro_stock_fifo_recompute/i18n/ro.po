@@ -543,3 +543,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
 msgid "Posted Amount"
 msgstr "Sumă înregistrată"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__no_entry
+msgid "No Entry"
+msgstr "Fără notă"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__no_entry
+msgid ""
+"Transfer between two locations on the same stock account: only the value of "
+"the move is corrected, nothing is posted."
+msgstr ""
+"Transfer între două locații pe același cont de stoc: se corectează doar "
+"valoarea mișcării, nu se postează nimic."
