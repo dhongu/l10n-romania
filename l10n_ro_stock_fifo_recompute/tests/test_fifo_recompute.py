@@ -99,6 +99,7 @@ class TestFifoRecompute(TestROStockCommon):
                 "product_ids": [(6, 0, self.product_fifo.ids)],
                 "account_closed_id": self.account_closed.id,
                 "closed_year_date": False,
+                "ignore_below": 0.0,
                 **vals,
             }
         )
@@ -455,3 +456,13 @@ class TestFifoRecompute(TestROStockCommon):
             self.assertAlmostEqual(delivery_line.new_value, 400.0)
         else:
             self.assertAlmostEqual(abs(delivery.value), 400.0)
+
+    def test_rounding_differences_ignored(self):
+        """A difference up to the threshold is a rounding, not an error: it
+        is not listed nor corrected."""
+        out_move = self._negative_delivery()
+        recompute = self._recompute(ignore_below=60.0)
+        self.assertFalse(recompute.line_ids.filtered(lambda r: r.move_id == out_move))
+        recompute = self._recompute(ignore_below=59.99)
+        self.assertTrue(self._line(recompute, out_move))
+        self.assertAlmostEqual(self.env["l10n.ro.fifo.recompute"].new({}).ignore_below, 0.05)

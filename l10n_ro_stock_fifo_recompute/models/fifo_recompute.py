@@ -65,6 +65,12 @@ class L10nRoFifoRecompute(models.Model):
         default=lambda self: self._default_account_closed(),
         help="Account for the differences of closed financial years, usually 1174 (OMFP 1802/2014, point 67).",
     )
+    ignore_below = fields.Monetary(
+        string="Ignore Differences Up To",
+        default=0.05,
+        help="A difference on a move up to this amount is a rounding of the "
+        "unit price, not an error: it is not listed nor corrected.",
+    )
     line_ids = fields.One2many("l10n.ro.fifo.recompute.line", "recompute_id", string="Differences")
     check_ids = fields.One2many("l10n.ro.fifo.recompute.check", "recompute_id", string="Account Control")
     line_count = fields.Integer(compute="_compute_totals")
@@ -417,6 +423,9 @@ class L10nRoFifoRecompute(models.Model):
             for move in moves:
                 new_value = currency.round(result["values"].get(move.id, move.value))
                 delta = currency.round(new_value - move.value)
+                if abs(delta) <= self.ignore_below:
+                    # Rounding of the unit price: keep the value of the move.
+                    new_value, delta = move.value, 0.0
                 new_pending = result["pending"].get(move.id, 0.0)
                 pending_changed = move.is_out and not product.uom_id.is_zero(new_pending - move.fifo_neg_pending_qty)
                 if currency.is_zero(delta) and not pending_changed:

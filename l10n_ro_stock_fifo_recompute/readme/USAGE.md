@@ -2,7 +2,8 @@
 2. Alege produsele sau categoriile de recalculat. Lasă-le goale ca să recalculezi toate produsele
    FIFO ale companiei.
 3. Completează **Data corecției** (o dată dintr-o perioadă deschisă), **Sfârșitul ultimului
-   exercițiu închis** și **Cont exerciții închise** (de regulă 1174).
+   exercițiu închis** și **Cont exerciții închise** (de regulă 1174). **Ignoră diferențele de până la** (implicit 0,05 lei)
+   lasă deoparte rotunjirile prețului unitar.
 4. Apasă **Calculează**. În pagina *Diferențe* apare câte o linie pentru fiecare mișcare evaluată
    greșit, cu valoarea actuală, valoarea corectă, diferența și conturile notei de corecție. Liniile
    fără conturi (observația „corectează manual") nu se aplică: corectează-le manual. Linia „Stoc

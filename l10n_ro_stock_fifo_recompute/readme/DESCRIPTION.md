@@ -19,6 +19,9 @@ calculul și arată, pe fiecare mișcare, valoarea actuală, valoarea corectă �
   locație. Dacă nicio intrare ulterioară nu o acoperă, valoarea ei rămâne, iar aplicarea nu înregistrează
   o cantitate negativă nouă pe mișcare, ca să nu fie compensată la o recepție viitoare.
 
+Diferențele de până la un prag ales în rulare (implicit 0,05 lei pe mișcare) sunt rotunjiri ale
+prețului unitar și nu se listează și nu se corectează.
+
 **Rularea de probă** nu modifică nimic: arată diferențele pe mișcări și un control pe fiecare cont
 de stoc (valoarea stocului recalculată, soldul contului, soldul după corecție și diferența rămasă).
 

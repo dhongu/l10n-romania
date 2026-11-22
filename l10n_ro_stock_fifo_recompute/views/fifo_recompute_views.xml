@@ -162,6 +162,7 @@
                                 readonly="state == 'applied'"
                                 required="closed_year_date"
                             />
+                            <field name="ignore_below" readonly="state == 'applied'" />
                             <field name="total_delta" />
                             <field
                                 name="account_move_id"

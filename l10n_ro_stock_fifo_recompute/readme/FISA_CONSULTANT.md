@@ -109,6 +109,8 @@ Completați formularul:
 - **Cont exerciții închise**: de regulă 1174, propus automat. Devine obligatoriu cât timp
   sfârșitul exercițiului închis e completat: diferențele unui exercițiu închis nu pot merge pe
   contul de cheltuieli. Lăsați data goală doar dacă nu corectați exerciții închise.
+- **Ignoră diferențele de până la**: implicit 0,05 lei. O diferență pe o mișcare de până la
+  această sumă e o rotunjire a prețului unitar, nu o eroare: nu apare în listă și nu se corectează.
 
 Apăsați **Calculează**. Nimic nu se scrie în mișcări sau în contabilitate.
 

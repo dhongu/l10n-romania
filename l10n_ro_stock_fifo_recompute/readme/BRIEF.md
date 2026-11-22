@@ -107,6 +107,7 @@ Contabilul șef: grupul `account.group_account_manager` (Administrator contabili
 | Data efectivă la recepție/livrare fără aviz | data primei facturi înregistrate de pe linia comenzii, altfel data transferului; doar pentru ordinea FIFO | cerința utilizatorului |
 | Exercițiul unei diferențe | data notei de stoc originale a mișcării | Pacioli: eroarea aparține exercițiului în care a fost înregistrată (pct. 67 alin. 1–2) |
 | Diferență negativă într-un exercițiu închis | în negru, cu conturile inversate | Pacioli: stornarea în roșu (pct. 69) privește exercițiul curent |
+| Diferențe de rotunjire | ignorate până la un prag pe rulare (implicit 0,05 lei pe mișcare) | rotunjirea prețului unitar la împărțirea pe straturi nu e o eroare; pe o bază reală erau 38% din linii |
 | Nota de corecție | o singură notă pe rulare, cumulată pe cont, produs și semn | trasabilitate; o notă pe mișcare ar fi prea multe |
 | Scrierea valorii | direct `stock.move.value` | prin `value_manual` s-ar reapela evaluarea |
 

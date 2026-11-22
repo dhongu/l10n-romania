@@ -567,3 +567,17 @@ msgstr ""
 "Cantitatea rămasă pe stoc negativ după recalculare. Aplicarea doar stinge "
 "sau micșorează cantitatea negativă înregistrată, nu adaugă niciodată una "
 "nouă."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__ignore_below
+msgid ""
+"A difference on a move up to this amount is a rounding of the unit price, "
+"not an error: it is not listed nor corrected."
+msgstr ""
+"O diferență pe o mișcare de până la această sumă este o rotunjire a prețului"
+" unitar, nu o eroare: nu se listează și nu se corectează."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__ignore_below
+msgid "Ignore Differences Up To"
+msgstr "Ignoră diferențele de până la"
