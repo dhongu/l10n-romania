@@ -1,3 +1,12 @@
+## 19.0.0.0.14 (2026-11-22)
+
+**Changed**
+
+- *Find Order* on an SPV message now says when the reference belongs to a
+  purchase order that is already fully invoiced, naming the order and its
+  bills, instead of reporting that no order was found. Such an order is
+  still not linked again (#9290).
+
 ## 19.0.0.0.13 (2026-11-16)
 
 **Changed**
