@@ -466,3 +466,22 @@ class TestFifoRecompute(TestROStockCommon):
         recompute = self._recompute(ignore_below=59.99)
         self.assertTrue(self._line(recompute, out_move))
         self.assertAlmostEqual(self.env["l10n.ro.fifo.recompute"].new({}).ignore_below, 0.05)
+
+    def test_supplier_return_value_only(self):
+        """A supplier return has no stock entry (the credit note posts the stock
+        account): its correction changes the value of the move only."""
+        suppliers = self.env.ref("stock.stock_location_suppliers")
+        return_move = self._move(self.location1, suppliers, 3)
+        self.assertEqual(return_move.l10n_ro_move_type, "reception_return")
+        self.assertAlmostEqual(abs(return_move.value), 3 * self.product_fifo.standard_price)
+        self._receive(5, 100, "rr_po", location=self.location1)
+        recompute = self._recompute()
+        line = self._line(recompute, return_move)
+        self.assertAlmostEqual(line.new_value, 300.0)
+        self.assertTrue(line.no_entry)
+        self.assertFalse(line.account_debit_id or line.account_credit_id)
+
+        recompute.action_apply()
+
+        self.assertAlmostEqual(return_move.value, 300.0)
+        self.assertFalse(recompute.account_move_id)

@@ -127,8 +127,9 @@ evaluată greșit.
    bifa **Exercițiu închis** și **Observație**. Din selectorul de coloane se pot afișa și coloanele
    opționale:
    - **Data notei**: data notei de stoc originale, după care se stabilește exercițiul diferenței;
-   - **Fără notă**: transfer între două locații pe același cont de stoc; se corectează doar valoarea
-     mișcării, nu se postează nimic (fără conturi pe linie);
+   - **Fără notă**: transfer între două locații pe același cont de stoc, sau recepție ori retur la
+     furnizor (contul de stoc se înregistrează prin factură sau nota de credit); se corectează doar
+     valoarea mișcării, nu se postează nimic (fără conturi pe linie);
    - **Cantitate negativă actuală** / **Cantitate negativă corectă**: cantitatea rămasă pe stoc
      negativ înregistrată pe mișcare, respectiv cea rezultată din recalculare. Aplicarea doar stinge
      sau micșorează cantitatea actuală, nu adaugă una nouă.
@@ -295,8 +296,8 @@ din componente corectate.
 - [ ] Cu sfârșitul exercițiului închis completat, câmpul Cont exerciții închise e obligatoriu, iar
       **Calculează** fără el e refuzat.
 - [ ] O rulare aplicată nu se poate șterge.
-- [ ] Un transfer între două locații pe același cont de stoc are bifa **Fără notă**: la aplicare i
-      se corectează doar valoarea, fără linii în nota de corecție; o rulare cu numai astfel de linii
+- [ ] Un transfer între două locații pe același cont de stoc și un retur la furnizor au bifa
+      **Fără notă**: la aplicare li se corectează doar valoarea, fără linii în nota de corecție; o rulare cu numai astfel de linii
       nu postează nicio notă.
 - [ ] O ieșire pe stoc negativ neacoperit, fără cantitate negativă înregistrată, rămâne cu
       **Cantitate negativă actuală** 0 după aplicare.

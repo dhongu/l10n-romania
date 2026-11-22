@@ -552,11 +552,23 @@ msgstr "Fără notă"
 #. module: l10n_ro_stock_fifo_recompute
 #: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__no_entry
 msgid ""
-"Transfer between two locations on the same stock account: only the value of "
-"the move is corrected, nothing is posted."
+"Transfer between two locations on the same stock account, or a reception or "
+"supplier return posted through the vendor bill or credit note: only the value "
+"of the move is corrected, nothing is posted."
 msgstr ""
-"Transfer între două locații pe același cont de stoc: se corectează doar "
+"Transfer între două locații pe același cont de stoc, sau recepție ori retur la "
+"furnizor înregistrate prin factură sau nota de credit: se corectează doar "
 "valoarea mișcării, nu se postează nimic."
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid ""
+"Posted through the vendor bill or credit note: only the value of the move is "
+"corrected"
+msgstr ""
+"Înregistrată prin factură sau nota de credit: se corectează doar valoarea "
+"mișcării"
 
 #. module: l10n_ro_stock_fifo_recompute
 #: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__new_pending_qty
