@@ -313,3 +313,26 @@ class TestLandedCostScenarios(TestLandedCostIntermediary):
         settings.account_storno = False
         settings.l10n_ro_landed_cost_method = "standard"
         self.assertFalse(settings._onchange_l10n_ro_landed_cost_method_storno())
+
+    # Proration on the quantity still in stock (Odoo 20 core posts the full cost, odoo/odoo#300338)
+    def test_17_sold_stock_prorated_rounded(self):
+        """2 of 3 pcs still in stock: 100 * 2 / 3 = 66.67 capitalized, rounded on the
+        currency, the note stays balanced."""
+        __, receipt = self._purchase_receipt(qty=3.0)
+        self._delivery(1.0, validate=True)
+        landed = self._landed_from_bill(receipt)
+        self.assertEqual(self._lines(landed.account_move_id), [("371000", 66.67, 0.0), ("607000", 0.0, 66.67)])
+
+    def test_18_non_romanian_company_keeps_core(self):
+        """Without Romanian accounting the core behaviour is kept: the full cost is posted
+        even if part of the receipt was delivered (only the proration is checked here,
+        the receipt and delivery use the Romanian flow)."""
+        __, receipt = self._purchase_receipt()
+        self._delivery(4.0, validate=True)
+        bill = self._transport_bill()
+        landed = self.env["stock.landed.cost"].browse(bill.button_create_landed_costs()["res_id"])
+        landed.write({"picking_ids": [Command.set(receipt.ids)], "account_journal_id": self.stock_journal.id})
+        landed.compute_landed_cost()
+        self.company.l10n_ro_accounting = False
+        landed.button_validate()
+        self.assertEqual(self._lines(landed.account_move_id), [("371000", 100.0, 0.0), ("607000", 0.0, 100.0)])
