@@ -1,0 +1,548 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ro_stock_fifo_recompute
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-22 09:15+0000\n"
+"PO-Revision-Date: 2026-11-22 09:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__ignore_below
+msgid ""
+"A difference on a move up to this amount is a rounding of the unit price, "
+"not an error: it is not listed nor corrected."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__account_id
+msgid "Account"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__balance
+msgid "Account Balance"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__check_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Account Control"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__account_closed_id
+msgid ""
+"Account for the differences of closed financial years, usually 1174 (OMFP "
+"1802/2014, point 67)."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__date
+msgid "Accounting date of the correction entry, in an open period."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "Accounts not determined: correct it by hand"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
+msgid ""
+"Amount of the correction entry on these accounts: the difference, negative "
+"(in red) when the move was overvalued in the current year. In a closed year "
+"the entry is in black, with the accounts swapped."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "An applied recompute cannot be computed again."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid ""
+"An applied recompute cannot be deleted: it is the trace of its correction "
+"entry."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields.selection,name:l10n_ro_stock_fifo_recompute.selection__l10n_ro_fifo_recompute__state__applied
+msgid "Applied"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Apply"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__balance_after
+msgid "Balance After Correction"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__difference
+msgid ""
+"Balance after the correction minus the recomputed stock value: what the FIFO"
+" recompute does not explain."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__closed_year
+msgid "Closed Year"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "Closed Years"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__account_closed_id
+msgid "Closed Years Account"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Compute"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Compute Again"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "Compute the differences first."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields.selection,name:l10n_ro_stock_fifo_recompute.selection__l10n_ro_fifo_recompute__state__computed
+msgid "Computed"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__new_pending_qty
+msgid "Correct Negative Qty"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__new_value
+msgid "Correct Value"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__correction
+msgid "Correction"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__date
+msgid "Correction Date"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__account_move_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid "Correction Entry"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__create_uid
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__create_date
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__create_date
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__account_credit_id
+msgid "Credit Account"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__currency_id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__currency_id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__current_pending_qty
+msgid "Current Negative Qty"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__current_value
+msgid "Current Value"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__effective_date
+msgid ""
+"Date of the move in the FIFO order: the invoice date for a reception or a "
+"delivery not made on a notice."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__entry_date
+msgid ""
+"Date of the original stock entry of the move: it decides whether the "
+"difference belongs to a closed financial year."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__account_debit_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "Debit Account"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__delta
+msgid "Difference"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__line_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_list
+msgid "Differences"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__closed_year_date
+msgid ""
+"Differences on moves dated up to this date belong to a closed financial year"
+" and are posted on the closed years account instead of the expense account."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__display_name
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__display_name
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields.selection,name:l10n_ro_stock_fifo_recompute.selection__l10n_ro_fifo_recompute__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__correction
+msgid "Effect of the correction entry on the account."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__effective_date
+msgid "Effective Date"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__entry_date
+msgid "Entry Date"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.actions.act_window,name:l10n_ro_stock_fifo_recompute.action_l10n_ro_fifo_recompute_line
+msgid "FIFO Differences"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.actions.act_window,name:l10n_ro_stock_fifo_recompute.action_l10n_ro_fifo_recompute
+#: model:ir.ui.menu,name:l10n_ro_stock_fifo_recompute.menu_l10n_ro_fifo_recompute
+msgid "FIFO Recompute"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model,name:l10n_ro_stock_fifo_recompute.model_l10n_ro_fifo_recompute
+msgid "FIFO Valuation Recompute"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model,name:l10n_ro_stock_fifo_recompute.model_l10n_ro_fifo_recompute_check
+msgid "FIFO Valuation Recompute Account Control"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model,name:l10n_ro_stock_fifo_recompute.model_l10n_ro_fifo_recompute_line
+msgid "FIFO Valuation Recompute Difference"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "FIFO valuation correction %s"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__location_id
+msgid "From"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__ignore_below
+msgid "Ignore Differences Up To"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__closed_year_date
+msgid "Last Closed Year End"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__write_uid
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__write_date
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__write_date
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__product_ids
+msgid ""
+"Leave empty, together with the categories, to recompute every FIFO product "
+"of the company."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__line_count
+msgid "Line Count"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__move_id
+msgid "Move"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "Move Type"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__name
+msgid "Name"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "Negative stock not covered by a later incoming move"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__no_entry
+msgid "No Entry"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "No stock entry for this move type: correct it by hand"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__note
+msgid "Note"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__amount
+msgid "Posted Amount"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__balance
+msgid "Posted balance of the account for the products of the run."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__product_id
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "Product"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__categ_ids
+msgid "Product Categories"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__product_ids
+msgid "Products"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__quantity
+msgid "Quantity"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__new_pending_qty
+msgid ""
+"Quantity left on negative stock after the recompute. Applying only settles "
+"or reduces the negative quantity on record, it never adds one."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__recompute_id
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__recompute_id
+msgid "Recompute"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.actions.act_window,help:l10n_ro_stock_fifo_recompute.action_l10n_ro_fifo_recompute
+msgid "Recompute the FIFO valuation"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__stock_value
+msgid "Recomputed Stock Value"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__reference
+msgid "Reference"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__difference
+msgid "Remaining Difference"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.actions.act_window,help:l10n_ro_stock_fifo_recompute.action_l10n_ro_fifo_recompute
+msgid ""
+"Replays the per-location FIFO valuation in chronological order,\n"
+"                shows the moves valued wrongly and, on request, corrects them\n"
+"                and posts the correction entry."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__move_type
+msgid "Romanian - Move Type"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid "Set a stock journal on the company before applying."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid ""
+"Set the closed years account: the differences of a closed financial year "
+"cannot go to the expense account."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__move_type
+msgid "Specify the type of stock move for Romanian localization."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__state
+msgid "State"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#. odoo-python
+#: code:addons/l10n_ro_stock_fifo_recompute/models/fifo_recompute.py:0
+msgid ""
+"The correction date %(date)s is in a locked period. Choose a date in an open"
+" period."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__location_id
+msgid "The operation takes and suggests products from this location."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__location_dest_id
+msgid "The operations brings product to this location"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+msgid ""
+"The values of the moves will be corrected and the correction entry posted. "
+"Continue?"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__location_dest_id
+msgid "To"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_search
+msgid "To Review"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_stock_fifo_recompute.view_l10n_ro_fifo_recompute_line_list
+msgid "Total"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__total_delta
+msgid "Total Difference"
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_line__no_entry
+msgid ""
+"Transfer between two locations on the same stock account: only the value of "
+"the move is corrected, nothing is posted."
+msgstr ""
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__stock_value
+msgid ""
+"Value of the stock left in the locations of this account, after the "
+"recompute."
+msgstr ""
