@@ -221,10 +221,11 @@ class L10nRoFifoRecompute(models.Model):
                 "|",
                 ("is_in", "=", True),
                 ("is_out", "=", True),
-                # An internal transfer is not always flagged both in and out
-                # (out only inside a warehouse, neither when migrated from an
-                # older version), yet the goods did move between the locations.
-                ("l10n_ro_move_type", "=", "internal_transfer"),
+                # A transfer between internal locations, direct or through a
+                # transit location, is not always flagged both in and out (out
+                # only inside a warehouse, neither when migrated from an older
+                # version), yet the goods did move between the locations.
+                ("l10n_ro_move_type", "in", TRANSFER_TYPES),
             ]
         )
         dates = {move.id: self._get_effective_date(move) for move in moves}
@@ -350,10 +351,13 @@ class L10nRoFifoRecompute(models.Model):
 
     @api.model
     def _is_internal_transfer(self, move):
-        """A transfer between two internal locations, whatever its in/out
-        flags: inside a warehouse it is flagged out only, and a transfer
-        migrated from an older version neither in nor out."""
-        return move.l10n_ro_move_type == "internal_transfer"
+        """A transfer between two valued locations, direct or one leg of a
+        transfer through transit, whatever its in/out flags: inside a warehouse
+        it is flagged out only, and a transfer migrated from an older version
+        neither in nor out. The transit location has a FIFO queue of its own,
+        so the value goes from the source, through transit, to the
+        destination."""
+        return move.l10n_ro_move_type in TRANSFER_TYPES
 
     def _get_transfer_lines(self, move):
         """Lines of an internal transfer moving owned goods between two valued
@@ -375,13 +379,6 @@ class L10nRoFifoRecompute(models.Model):
         origin = move.origin_returned_move_id
         if origin and origin.id in values and valued_qty.get(origin.id):
             return values[origin.id] * move._get_valued_qty() / valued_qty[origin.id]
-        # Transit reception: valued from the moves that left for transit.
-        origins = move.move_orig_ids
-        if origins and not move.purchase_line_id and all(o.id in values for o in origins):
-            origin_qty = sum(valued_qty.get(o.id, 0.0) for o in origins)
-            if origin_qty:
-                origin_value = sum(values[o.id] for o in origins)
-                return origin_value * move._get_valued_qty() / origin_qty
         # External reception: its value (bill, order, landed costs) stands.
         return move.value
 

@@ -426,3 +426,32 @@ class TestFifoRecompute(TestROStockCommon):
         recompute.action_apply()
 
         self.assertFalse(out_move.fifo_neg_pending_qty)
+
+    def test_transit_legs_move_the_stock(self):
+        """A transfer through transit with both legs flagged neither in nor
+        out (as migrated) carries the stock and its value from the source,
+        through transit, to the destination."""
+        self._receive(10, 100, "rct_po")
+        leg_out = self._move(self.location, self.transit_loc, 4)
+        leg_in = self._move(self.transit_loc, self.location1, 4)
+        self.assertEqual(leg_out.l10n_ro_move_type, "internal_transit_out")
+        self.assertEqual(leg_in.l10n_ro_move_type, "internal_transit_in")
+        self.env.cr.execute(
+            SQL(
+                "UPDATE stock_move SET is_in = FALSE, is_out = FALSE, value = 0 WHERE id IN %s",
+                (leg_out.id, leg_in.id),
+            )
+        )
+        self.env.invalidate_all()
+        delivery = self._move(self.location1, self.customers, 4)
+
+        recompute = self._recompute()
+
+        self.assertFalse(any(recompute.line_ids.mapped("new_pending_qty")))
+        self.assertAlmostEqual(self._line(recompute, leg_out).new_value, 400.0)
+        self.assertAlmostEqual(self._line(recompute, leg_in).new_value, 400.0)
+        delivery_line = recompute.line_ids.filtered(lambda r: r.move_id == delivery)
+        if delivery_line:
+            self.assertAlmostEqual(delivery_line.new_value, 400.0)
+        else:
+            self.assertAlmostEqual(abs(delivery.value), 400.0)
