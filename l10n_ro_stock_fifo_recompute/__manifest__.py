@@ -13,6 +13,7 @@
     "license": "AGPL-3",
     "data": [
         "security/ir.model.access.csv",
+        "security/ir_rule.xml",
         "data/ir_sequence.xml",
         "views/fifo_recompute_views.xml",
     ],

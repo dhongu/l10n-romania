@@ -312,3 +312,26 @@ class TestFifoRecompute(TestROStockCommon):
         if mid_year < fields.Date.today():
             company.fiscalyear_lock_date = mid_year
             self.assertEqual(recompute_obj._default_closed_year_date(), last_year_end)
+
+    def test_multi_company_rule(self):
+        """A run, its differences and its control are visible only in the
+        companies of the user."""
+        out_move = self._negative_delivery()
+        recompute = self._recompute()
+        self.assertTrue(recompute.line_ids.filtered(lambda r: r.move_id == out_move))
+        other_company = self.env["res.company"].create({"name": "Other FIFO Co"})
+        user = self.env["res.users"].create(
+            {
+                "name": "FIFO other company",
+                "login": "fifo_other_company",
+                "company_id": other_company.id,
+                "company_ids": [(6, 0, other_company.ids)],
+                "group_ids": [(6, 0, self.env.ref("account.group_account_manager").ids)],
+            }
+        )
+        for model in (
+            "l10n.ro.fifo.recompute",
+            "l10n.ro.fifo.recompute.line",
+            "l10n.ro.fifo.recompute.check",
+        ):
+            self.assertFalse(self.env[model].with_user(user).search([]), f"{model} leaks")

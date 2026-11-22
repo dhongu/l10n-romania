@@ -41,6 +41,7 @@ class L10nRoFifoRecompute(models.Model):
     product_ids = fields.Many2many(
         "product.product",
         string="Products",
+        check_company=True,
         help="Leave empty, together with the categories, to recompute every FIFO product of the company.",
     )
     categ_ids = fields.Many2many("product.category", string="Product Categories")
