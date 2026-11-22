@@ -1,6 +1,6 @@
 ## 20.0.1.2.1 (2026-11-21)
 
-- Romanian stock accounting: the landed cost note again capitalizes only the share of the cost still in stock (`additional cost × remaining quantity / quantity`); when everything was already delivered, no note is posted and the cost stays on class 6. Odoo 20 (odoo/odoo#300338, 18.11.2026) started posting the full landed cost to stock valuation, relying on a valuation replay that the Romanian accounting does not post, so the delivered share was left on 371. Companies without Romanian accounting keep the standard behaviour.
+- Romanian stock accounting: the landed cost note again capitalizes only the share of the cost still in stock (`additional cost × remaining quantity / quantity`); when everything was already delivered, no note is posted and the cost stays on class 6. Odoo 20 (odoo/odoo#300338, 18.11.2026) started posting the full landed cost to stock valuation, relying on a valuation replay that the Romanian accounting does not post, so the delivered share was left on 371. Companies without Romanian accounting keep the standard behaviour. Tests for the proration rounded on the currency (2 of 3 pcs in stock) and for a company without Romanian accounting.
 
 ## 19.0.1.2.0 (2026-11-11)
 

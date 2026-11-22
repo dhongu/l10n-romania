@@ -46,7 +46,8 @@ Changelog
   landed cost to stock valuation, relying on a valuation replay that the
   Romanian accounting does not post, so the delivered share was left on
   371. Companies without Romanian accounting keep the standard
-  behaviour.
+  behaviour. Tests for the proration rounded on the currency (2 of 3
+  pcs in stock) and for a company without Romanian accounting.
 
 19.0.1.2.0 (2026-11-11)
 -----------------------
