@@ -1,0 +1,314 @@
+<div class="mx-auto px-3 py-3 rounded-4" style="max-width:1100px;font-family:'Segoe UI','Avenir Next','Helvetica Neue',Arial,sans-serif;color:#212529;font-weight:400;background-color:#ffffff;--bs-body-color:#212529;--bs-body-bg:#ffffff;--bs-emphasis-color:#212529;--bs-border-color:#dee2e6;--bs-card-bg:#ffffff;--bs-card-color:#212529;--bs-card-border-color:#dee2e6;--bs-link-color:#006F42;--bs-link-hover-color:#00432a;--bs-nav-link-color:#212529;--bs-nav-pills-link-active-bg:#006F42;--bs-nav-pills-link-active-color:#ffffff;--bs-code-color:#b4266b;--bs-heading-color:#212529;">
+<!-- tb-gen v1 -->
+<div class="rounded-4 shadow px-4 py-4 mt-2 mb-4" style="background-color:#006F42;background-image:radial-gradient(circle at 92% 8%, rgba(87,185,82,0.45), rgba(87,185,82,0) 38%),radial-gradient(circle at 4% 100%, rgba(255,255,255,0.12), rgba(255,255,255,0) 32%),linear-gradient(135deg, #007a49 0%, #005c38 55%, #00432a 100%);color:#ffffff;">
+  <div class="d-flex flex-wrap align-items-center">
+    <span class="d-inline-block rounded-4 p-2 flex-shrink-0 my-2" style="background-color:#ffffff;margin-right:24px;"><img src="icon.png" alt="Romania - FIFO Valuation Recompute" style="width:80px;height:80px;border:none;"/></span>
+    <div class="flex-grow-1 my-2" style="width:320px;min-width:0;margin-right:24px;">
+      <h1 class="fw-bold mb-2" style="color:#ffffff;font-size:36px;line-height:1.1;letter-spacing:-0.5px;border:none;">Romania - FIFO Valuation Recompute</h1>
+      <p class="mb-3" style="font-size:18px;color:#cdeccf;line-height:1.45;">Recompute the per-location FIFO valuation and post the correction</p>
+      <div>
+        <span class="d-inline-block rounded-pill fw-bold me-2 mb-2" style="background-color:#ffffff;border:1px solid #ffffff;color:#006F42;padding:6px 14px;font-size:12px;"><span class="fa fa-check-circle" style="margin-right:6px;" aria-hidden="true"></span>Odoo 19.0</span>
+        <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px solid #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;"><span class="fa fa-folder-open-o" style="margin-right:6px;" aria-hidden="true"></span>Localization</span>
+        <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px solid #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;"><span class="fa fa-cloud" style="margin-right:6px;" aria-hidden="true"></span>Odoo.sh &bull; On-premise</span>
+        <span class="d-inline-block rounded-pill fw-semibold me-2 mb-2" style="border:1px dashed #8fd1ad;color:#ffffff;padding:6px 14px;font-size:12px;"><span class="fa fa-balance-scale" style="margin-right:6px;" aria-hidden="true"></span>AGPL-3</span>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="d-flex align-items-start rounded-4 px-4 py-3 mb-4" style="background-color:#DEF1DD;color:#212529;">
+  <span class="flex-shrink-0 me-3" style="font-size:26px;line-height:1.2;color:#006F42;">&#9733;</span>
+  <div style="font-size:16px;line-height:1.55;">
+    <span class="fw-bold" style="color:#006F42;">Did this module help you?</span> It is free, built and maintained by the Terrabit developers. If it saved you time, a rating on this page is the best way to say thanks &mdash; and it helps other Odoo users find it too. Thank you for your support!
+  </div>
+</div>
+
+<ul class="nav nav-pills justify-content-center mb-4 pb-3 border-bottom" style="--bs-nav-pills-link-active-bg:#006F42;">
+  <li class="nav-item mx-1 mb-2">
+    <a class="nav-link active fw-semibold rounded-pill border" id="tb-tab-overview"
+       data-bs-toggle="pill" data-bs-target="#tb-panel-overview" href="#tb-panel-overview"
+       style="padding:10px 22px;"><span class="fa fa-star" style="margin-right:6px;" aria-hidden="true"></span>Overview</a>
+  </li>
+  <li class="nav-item mx-1 mb-2">
+    <a class="nav-link fw-semibold rounded-pill border" id="tb-tab-usage"
+       data-bs-toggle="pill" data-bs-target="#tb-panel-usage" href="#tb-panel-usage"
+       style="padding:10px 22px;"><span class="fa fa-book" style="margin-right:6px;" aria-hidden="true"></span>Usage</a>
+  </li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane fade show active py-2" id="tb-panel-overview" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
+<div class="mb-2"><span class="d-inline-block rounded-pill fw-bold text-uppercase" style="background-color:#DEF1DD;color:#006F42;padding:5px 14px;font-size:12px;letter-spacing:0.14em;"><span class="fa fa-star" style="margin-right:6px;" aria-hidden="true"></span>Overview</span></div>
+<p class="mb-4" style="font-size:16px;line-height:1.65;max-width:780px;">Recalculeaz&#259; evaluarea FIFO pe loca&#539;ie a mi&#537;c&#259;rilor de stoc, &#238;n ordine cronologic&#259;, &#537;i corecteaz&#259;
+valorile gre&#537;ite din trecut, cu nota contabil&#259; aferent&#259;.</p>
+<p>Cu FIFO pe loca&#539;ie (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_stock_account</code>), o ie&#537;ire evaluat&#259; gre&#537;it (pe stoc negativ
+necompensat, printr-o opera&#539;ie cu dat&#259; &#238;n urm&#259; sau printr-un bug reparat &#238;ntre timp) &#238;&#537;i p&#259;streaz&#259;
+valoarea, iar soldul conturilor de stoc nu mai corespunde cu valoarea stocului. Modulul ref&#259;
+calculul &#537;i arat&#259;, pe fiecare mi&#537;care, valoarea actual&#259;, valoarea corect&#259; &#537;i diferen&#539;a.</p>
+<p><strong>Cum se recalculeaz&#259;</strong></p>
+<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-cube" style="" aria-hidden="true"></span></span><div>Mi&#537;c&#259;rile efectuate ale fiec&#259;rui produs FIFO se parcurg &#238;n ordine cronologic&#259;, cu o coad&#259; FIFO
+  pentru fiecare loca&#539;ie.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-truck" style="" aria-hidden="true"></span></span><div>Recep&#539;iile &#537;i livr&#259;rile care nu sunt pe baz&#259; de aviz se ordoneaz&#259; dup&#259; data facturii.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-file-text-o" style="" aria-hidden="true"></span></span><div>Valoarea intr&#259;rilor din facturi &#537;i costuri de achizi&#539;ie r&#259;m&#226;ne cea &#238;nregistrat&#259;; se recalculeaz&#259;
+  ie&#537;irile, transferurile interne (valoarea trece din gestiunea surs&#259; &#238;n cea destina&#539;ie) &#537;i
+  retururile de la clien&#539;i (dup&#259; valoarea livr&#259;rii corectate).</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-tag" style="" aria-hidden="true"></span></span><div>O ie&#537;ire f&#259;cut&#259; pe stoc negativ se evalueaz&#259; la pre&#539;ul intr&#259;rilor care o acoper&#259; &#238;n aceea&#537;i
+  loca&#539;ie.</div></div></li></ul>
+<p><strong>Rularea de prob&#259;</strong> nu modific&#259; nimic: arat&#259; diferen&#539;ele pe mi&#537;c&#259;ri &#537;i un control pe fiecare cont
+de stoc (valoarea stocului recalculat&#259;, soldul contului, soldul dup&#259; corec&#539;ie &#537;i diferen&#539;a r&#259;mas&#259;).</p>
+<p><strong>La aplicare</strong> se corecteaz&#259; valorile mi&#537;c&#259;rilor &#537;i se posteaz&#259; o singur&#259; not&#259; de corec&#539;ie, la
+data aleas&#259;, &#238;n jurnalul de stoc:</p>
+<table class="table table-bordered" style="font-size:14px;">
+<thead>
+<tr>
+<th>Diferen&#539;a</th>
+<th>&#206;nregistrare</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ie&#537;ire din exerci&#539;iul curent</td>
+<td>pe conturile notei originale a ie&#537;irii (de exemplu 607 = 371), &#238;n ro&#537;u dac&#259; ie&#537;irea a fost supraevaluat&#259;</td>
+</tr>
+<tr>
+<td>Ie&#537;ire dintr-un exerci&#539;iu &#238;nchis</td>
+<td>1174 &#238;n locul contului de cheltuieli (OMFP 1802/2014, pct. 67 alin. 2)</td>
+</tr>
+<tr>
+<td>Transfer &#238;ntre gestiuni</td>
+<td>371 gestiunea destina&#539;ie = 371 gestiunea surs&#259;, indiferent de exerci&#539;iu</td>
+</tr>
+</tbody>
+</table>
+<p>O corec&#539;ie pe 1174 cere de regul&#259; declara&#539;ia de impozit pe profit rectificativ&#259; pentru anul la care
+se refer&#259; eroarea (art. 19 alin. 3 lit. a din Codul fiscal).</p>
+<p><strong>Leg&#259;tura cu verificarea stoc&#8211;contabilitate</strong></p>
+<p>Modulul <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_stock_account_check</code> compar&#259; valoarea mi&#537;c&#259;rilor cu soldurile din contabilitate &#537;i
+aliniaz&#259; contabilitatea la valoarea mi&#537;c&#259;rilor, consider&#226;nd-o corect&#259;. Recalcularea FIFO verific&#259;
+tocmai dac&#259; valoarea mi&#537;c&#259;rilor e corect&#259;. Ordinea recomandat&#259;: &#238;nt&#226;i recalcularea FIFO, apoi
+verificarea stoc&#8211;contabilitate pentru diferen&#539;ele r&#259;mase.</p>
+<p><strong>Limit&#259;ri</strong></p>
+<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-tag" style="" aria-hidden="true"></span></span><div>Costul produselor fabricate nu se recalculeaz&#259; dup&#259; componentele corectate.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-cube" style="" aria-hidden="true"></span></span><div>Produsele evaluate pe loturi &#537;i liniile cu proprietar ter&#539; nu se recalculeaz&#259;.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-check" style="" aria-hidden="true"></span></span><div>O rulare aplicat&#259; nu se poate anula: nota de corec&#539;ie se storneaz&#259; manual, iar valorile
+  mi&#537;c&#259;rilor r&#259;m&#226;n cele corectate.</div></div></li></ul>
+</div>
+<div class="tab-pane fade py-2" id="tb-panel-usage" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
+<div class="mb-2"><span class="d-inline-block rounded-pill fw-bold text-uppercase" style="background-color:#DEF1DD;color:#006F42;padding:5px 14px;font-size:12px;letter-spacing:0.14em;"><span class="fa fa-book" style="margin-right:6px;" aria-hidden="true"></span>Usage</span></div>
+<ol>
+<li>Deschide <em>Contabilitate &gt; Contabilitate &gt; &#206;nchidere &gt; Recalculare FIFO</em> &#537;i apas&#259; <strong>Nou</strong>.</li>
+<li>Alege produsele sau categoriile de recalculat. Las&#259;-le goale ca s&#259; recalculezi toate produsele
+   FIFO ale companiei.</li>
+<li>Completeaz&#259; <strong>Data corec&#539;iei</strong> (o dat&#259; dintr-o perioad&#259; deschis&#259;), <strong>Sf&#226;r&#537;itul ultimului
+   exerci&#539;iu &#238;nchis</strong> &#537;i <strong>Cont exerci&#539;ii &#238;nchise</strong> (de regul&#259; 1174).</li>
+<li>Apas&#259; <strong>Calculeaz&#259;</strong>. &#206;n pagina <em>Diferen&#539;e</em> apare c&#226;te o linie pentru fiecare mi&#537;care evaluat&#259;
+   gre&#537;it, cu valoarea actual&#259;, valoarea corect&#259;, diferen&#539;a &#537;i conturile notei de corec&#539;ie. Liniile
+   f&#259;r&#259; conturi (observa&#539;ia &#8222;corecteaz&#259; manual") nu se aplic&#259;: corecteaz&#259;-le manual. Linia &#8222;Stoc
+   negativ neacoperit de o intrare ulterioar&#259;" se aplic&#259;, dar arat&#259; un stoc negativ &#238;nc&#259; deschis.</li>
+<li>&#206;n pagina <em>Control conturi</em> verific&#259;, pe fiecare cont de stoc, c&#259; diferen&#539;a r&#259;mas&#259; dup&#259; corec&#539;ie
+   e zero. O diferen&#539;&#259; r&#259;mas&#259; nu vine din FIFO (de exemplu note vechi pe conturi gre&#537;ite) &#537;i se
+   analizeaz&#259; separat.</li>
+<li>Po&#539;i ap&#259;sa <strong>Calculeaz&#259; din nou</strong> de c&#226;te ori vrei, de exemplu dup&#259; ce schimbi selec&#539;ia.</li>
+<li>Apas&#259; <strong>Aplic&#259;</strong> &#537;i confirm&#259;. Valorile mi&#537;c&#259;rilor se corecteaz&#259;, iar nota de corec&#539;ie se
+   posteaz&#259; &#537;i se deschide din butonul <strong>Not&#259; de corec&#539;ie</strong>.</li>
+</ol>
+</div>
+</div>
+
+<div class="row text-center mt-4 mb-1 g-3">
+  <div class="col-md-6">
+    <div class="border rounded-3 px-4 py-2 h-100">
+      <div class="fw-bold" style="font-size:2.2rem;color:#006F42;line-height:1;">600+</div>
+      <div class="mt-2" style="font-size:0.9rem;color:#3d4752;">Modules published on Odoo Apps</div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="border rounded-3 px-4 py-2 h-100">
+      <div class="fw-bold" style="font-size:2.2rem;color:#006F42;line-height:1;">Silver</div>
+      <div class="mt-2" style="font-size:0.9rem;color:#3d4752;">Odoo Partner &mdash; implementation &amp; support</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="text-center rounded-4 px-4 pt-3 pb-4 mt-4 mb-3" style="background-color:#00432a;color:#ffffff;">
+  <h2 class="fw-bold mb-2" style="color:#ffffff;font-size:26px;letter-spacing:-0.3px;border:none;">Need help getting started?</h2>
+  <p class="mx-auto mb-2" style="color:#bfe3cc;max-width:660px;line-height:1.6;font-size:16px;">
+     Our 600+ apps on the Odoo Apps Store are used in Odoo implementations across Europe,
+     the Americas, Asia and Africa &mdash; by companies we have never even met. That is the
+     advantage of building modules that simply work.</p>
+  <p class="mx-auto mb-4" style="color:#bfe3cc;max-width:660px;line-height:1.6;font-size:16px;">
+     Questions about this module, or need it adapted to your processes?
+     Write to us &mdash; the developers who build it will answer.</p>
+  <a href="mailto:support@terrabit.ro" target="_blank" rel="noopener"
+     class="d-inline-block fw-bold text-decoration-none rounded-3"
+     style="background-color:#DEF1DD;color:#00432a;padding:14px 32px;font-size:15px;">Terrabit support &rarr;</a>
+</div>
+
+
+<section class="rounded-4 p-4 mb-3 border">
+  <h2 class="text-center fw-bold mb-1" style="color:#212529;font-size:24px;border:none;">More apps by Terrabit</h2>
+  <p class="text-center mb-4" style="color:#3d4752;">Other modules from the same publisher, built to work together.
+    <a href="https://apps.odoo.com/apps/browse?author=Terrabit" target="_blank" rel="noopener"
+       class="fw-semibold" style="color:#006F42;">All apps &rarr;</a></p>
+  <div class="row g-3">
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_bank_statement_import_mt940_bt" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">MB</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_bank_statement_import_mt940_bt/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">MT940 BT Format Bank Statements Import</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Import bank statements from BT</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_bank_statement_import_mt940_cec" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">CB</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_bank_statement_import_mt940_cec/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">CEC Bank MT940 Statement Import</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Import bank statements from CEC</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_bank_statement_import_mt940_revolut" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RM</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_bank_statement_import_mt940_revolut/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Revolut MT940 Statement Import</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Import bank statements from Revolut</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_move_document_type" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_move_document_type/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Accounting Document Type</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Supporting document type on journal entries: invoice, DVI, receipt, bank statement, journal entry</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_account_sequence" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RC</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_account_sequence/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - Cash Journal Numbering</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Romania - Cash Sequence</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_partner_lookup" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_lookup/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF Partner Lookup</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Look a Romanian company up at ANAF by its CUI and get the partner data, without other localization modules</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_partner_online" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_partner_online/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF Partner Data for Odoo Online</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">Fill in Romanian partners from ANAF by their CUI, on Odoo Online too (no Python, service by Terrabit)</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <a href="https://apps.odoo.com/apps/modules/19.0/l10n_ro_anaf_token_online" target="_blank" rel="noopener"
+         class="card h-100 text-decoration-none border" style="color:#212529;">
+        <div class="card-body p-3">
+          <div class="d-flex align-items-center mb-2">
+            <span class="d-inline-block position-relative me-2 flex-shrink-0" style="width:40px;height:40px;">
+              <span class="d-inline-block text-center fw-bold rounded"
+                    style="width:40px;height:40px;line-height:40px;font-size:14px;color:#ffffff;background-color:#006F42;">RA</span>
+              <img src="https://apps.odoocdn.com/apps/assets/19.0/l10n_ro_anaf_token_online/icon.png" alt="" loading="lazy"
+                   class="position-absolute top-0 start-0 rounded" style="width:40px;height:40px;border:none;background-color:#ffffff;"/>
+            </span>
+            <span>
+              <span class="d-block fw-semibold" style="font-size:16px;line-height:1.25;">Romania - ANAF SPV Token for Odoo Online</span>
+              <span class="d-block" style="font-size:13px;color:#3d4752;">Localization</span>
+            </span>
+          </div>
+          <p class="mb-0" style="font-size:15px;line-height:1.45;color:#3d4752;">e-Factura SPV token through Terrabit, renewed for you, on Odoo Online too (no Python)</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+</div>
