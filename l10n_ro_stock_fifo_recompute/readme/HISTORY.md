@@ -1,3 +1,9 @@
+## 19.0.1.2.0
+
+- Pagina **Control conturi** arată și **Sold fără produs** (liniile contului de stoc fără produs:
+  costul vânzărilor din sesiunile de punct de vânzare, note anglo-saxone sau manuale) și,
+  opțional, **Sold total cont**. Soldul pe produsele rulării și diferența rămasă nu se schimbă.
+
 ## 19.0.1.1.0
 
 - Recepțiile și retururile la furnizor nu mai apar cu „corectează manual”: nu au notă de stoc

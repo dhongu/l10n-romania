@@ -181,6 +181,8 @@
                                     <field name="account_id" />
                                     <field name="stock_value" sum="Total" />
                                     <field name="balance" sum="Total" />
+                                    <field name="balance_no_product" sum="Total" optional="show" />
+                                    <field name="account_balance" sum="Total" optional="hide" />
                                     <field name="correction" sum="Total" />
                                     <field name="balance_after" sum="Total" />
                                     <field
