@@ -3,7 +3,7 @@
 
 from datetime import timedelta
 
-from odoo import fields
+from odoo import Command, fields
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tools import SQL
@@ -485,3 +485,34 @@ class TestFifoRecompute(TestROStockCommon):
 
         self.assertAlmostEqual(return_move.value, 300.0)
         self.assertFalse(recompute.account_move_id)
+
+    def test_account_control_shows_lines_without_product(self):
+        """The account control shows apart the balance posted without a product
+        (e.g. point of sale cost of sales) and the balance of the whole account;
+        the remaining difference of the run's products is not changed."""
+        out_move = self._negative_delivery()
+        stock_account = self.env.company.account_stock_valuation_id
+        expense = self.env["account.account"].search(
+            [("code", "=like", "607%"), ("company_ids", "in", self.env.company.id)], limit=1
+        )
+        entry = self.env["account.move"].create(
+            {
+                "journal_id": self.env.company.account_stock_journal_id.id,
+                "line_ids": [
+                    Command.create({"account_id": stock_account.id, "debit": 50.0}),
+                    Command.create({"account_id": expense.id, "credit": 50.0}),
+                ],
+            }
+        )
+        entry.action_post()
+        recompute = self._recompute()
+        check = recompute.check_ids.filtered(
+            lambda c: c.account_id == self._line(recompute, out_move).account_credit_id
+        )
+        self.assertEqual(check.account_id, stock_account)
+        self.assertAlmostEqual(check.balance_no_product, 50.0)
+        posted = self.env["account.move.line"].search(
+            [("account_id", "=", stock_account.id), ("parent_state", "=", "posted")]
+        )
+        self.assertAlmostEqual(check.account_balance, sum(posted.mapped("balance")))
+        self.assertAlmostEqual(check.difference, 0.0)

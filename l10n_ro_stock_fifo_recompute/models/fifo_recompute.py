@@ -560,18 +560,25 @@ class L10nRoFifoRecompute(models.Model):
             delta_by_account[line.account_debit_id] += line.amount
             delta_by_account[line.account_credit_id] -= line.amount
         accounts = self.env["account.account"].concat(*(a for a in remaining_by_account if a))
-        balances = dict(
-            self.env["account.move.line"]._read_group(
-                [
-                    ("account_id", "in", accounts.ids),
-                    ("product_id", "in", products.ids),
-                    ("company_id", "=", self.company_id.id),
-                    ("parent_state", "=", "posted"),
-                ],
-                groupby=["account_id"],
-                aggregates=["balance:sum"],
+        domain = [
+            ("account_id", "in", accounts.ids),
+            ("company_id", "=", self.company_id.id),
+            ("parent_state", "=", "posted"),
+        ]
+
+        def balance_by_account(extra_domain):
+            return dict(
+                self.env["account.move.line"]._read_group(
+                    domain + extra_domain, groupby=["account_id"], aggregates=["balance:sum"]
+                )
             )
-        )
+
+        balances = balance_by_account([("product_id", "in", products.ids)])
+        # Entries posted without a product (cost of sales of point of sale
+        # sessions, anglo-saxon or manual entries) cannot be split by product:
+        # shown apart, with the balance of the whole account.
+        balances_no_product = balance_by_account([("product_id", "=", False)])
+        balances_total = balance_by_account([])
         self.env["l10n.ro.fifo.recompute.check"].create(
             [
                 {
@@ -579,6 +586,8 @@ class L10nRoFifoRecompute(models.Model):
                     "account_id": account.id,
                     "stock_value": remaining_by_account[account],
                     "balance": balances.get(account, 0.0),
+                    "balance_no_product": balances_no_product.get(account, 0.0),
+                    "account_balance": balances_total.get(account, 0.0),
                     "correction": delta_by_account.get(account, 0.0),
                 }
                 for account in accounts
@@ -739,6 +748,16 @@ class L10nRoFifoRecomputeCheck(models.Model):
     balance = fields.Monetary(
         string="Account Balance",
         help="Posted balance of the account for the products of the run.",
+    )
+    balance_no_product = fields.Monetary(
+        string="Balance Without Product",
+        help="Posted balance of the account on lines without a product (e.g. the cost of sales of "
+        "point of sale sessions, anglo-saxon or manual entries). It is not in the account balance "
+        "of the run and explains a remaining difference that does not come from FIFO.",
+    )
+    account_balance = fields.Monetary(
+        string="Total Account Balance",
+        help="Posted balance of the whole account: all products and the lines without a product.",
     )
     correction = fields.Monetary(help="Effect of the correction entry on the account.")
     balance_after = fields.Monetary(string="Balance After Correction", compute="_compute_difference", store=True)

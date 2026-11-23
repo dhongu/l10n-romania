@@ -593,3 +593,29 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute__ignore_below
 msgid "Ignore Differences Up To"
 msgstr "Ignoră diferențele de până la"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__balance_no_product
+msgid "Balance Without Product"
+msgstr "Sold fără produs"
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__balance_no_product
+msgid ""
+"Posted balance of the account on lines without a product (e.g. the cost of "
+"sales of point of sale sessions, anglo-saxon or manual entries). It is not "
+"in the account balance of the run and explains a remaining difference that "
+"does not come from FIFO."
+msgstr "Soldul postat al contului pe liniile fără produs (de exemplu costul vânzărilor din sesiunile de punct de vânzare, note anglo-saxone sau manuale). Nu intră în soldul contului pentru rulare și explică o diferență rămasă care nu vine din FIFO."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,help:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__account_balance
+msgid ""
+"Posted balance of the whole account: all products and the lines without a "
+"product."
+msgstr "Soldul postat al întregului cont: toate produsele și liniile fără produs."
+
+#. module: l10n_ro_stock_fifo_recompute
+#: model:ir.model.fields,field_description:l10n_ro_stock_fifo_recompute.field_l10n_ro_fifo_recompute_check__account_balance
+msgid "Total Account Balance"
+msgstr "Sold total cont"

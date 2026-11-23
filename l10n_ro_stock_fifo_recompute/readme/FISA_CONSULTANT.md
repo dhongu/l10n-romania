@@ -168,14 +168,17 @@ notei**): eroarea aparține exercițiului în care a fost înregistrată.
 Deschideți pagina **Control conturi**. Pe fiecare cont de stoc:
 
 1. **Găsiți pe ecran**: **Valoare stoc recalculată** (stocul rămas în locațiile contului, după
-   recalculare), **Sold cont** (soldul postat pentru produsele rulării), **Corecție** (efectul notei
+   recalculare), **Sold cont** (soldul postat pentru produsele rulării), **Sold fără produs**, **Corecție** (efectul notei
    de corecție), **Sold după corecție** și **Diferență rămasă**.
 2. **Verificați**: **Diferență rămasă = 0** pe fiecare cont. În demo, 371000 are sold 540 lei și
    corecție +60, deci sold după corecție 600, egal cu stocul recalculat (2 buc × 100 lei pentru
    fiecare dintre Marfă A, C și D); 371001 are sold 80 și corecție −80, deci 0; 371003 rămâne la 0.
 3. **Treceți mai departe**: o diferență rămasă (afișată în roșu) nu vine din FIFO (de exemplu note
    manuale pe conturi de stoc, conturi de stoc schimbate) și se analizează separat, înainte de
-   aplicare. Tot aici se adună și diferențele de rotunjire ignorate prin pragul **Ignoră diferențele
+   aplicare. Coloana **Sold fără produs** arată soldul contului pe liniile fără produs (costul
+   vânzărilor din sesiunile de punct de vânzare, note anglo-saxone sau manuale): nu intră în
+   **Sold cont**, care e doar pe produsele rulării, și explică de obicei o diferență mare. Coloana
+   opțională **Sold total cont** arată soldul întregului cont, pe toate produsele și fără produs. Tot aici se adună și diferențele de rotunjire ignorate prin pragul **Ignoră diferențele
    de până la**: suma lor cumulată se urmărește și se corectează manual dacă devine semnificativă
    (OMFP 1802/2014, pct. 67 alin. (4)).
 
