@@ -148,6 +148,13 @@ repos:
         args:
           - --rcfile=.pylintrc-mandatory
 
+  # Tipare XSS (după CVE-2026-130029), bloc separat: la v1.16.0 check-module-icon ar cere bannerul
+  # modulelor care încă nu-l au, deci hook-urile de mai jos rămân la v1.2.0 deocamdată.
+  - repo: https://github.com/dhongu/terrabit-pre-commit-hooks
+    rev: v1.16.0
+    hooks:
+      - id: check-xss-patterns
+
   # Hook-urile comune Terrabit (licență, pyproject, iconiță, traduceri)
   - repo: https://github.com/dhongu/terrabit-pre-commit-hooks
     rev: v1.2.0
