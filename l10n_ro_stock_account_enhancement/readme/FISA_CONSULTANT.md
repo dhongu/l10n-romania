@@ -242,7 +242,7 @@ companie românească cu planul de conturi RO:
 5. `05_parametri_sistem.png` — lista Parametri sistem filtrată pe cheile modulului.
 
 Aceleași ecrane, cu interfața în engleză, sunt în `static/description/en/`, pentru
-`readme/USAGE.md`. GIF-ul demo (`demo.gif`, `en/demo.gif`) arată blocarea facturii și a livrării.
+`readme/USAGE.md`. GIF-ul demo (`en/demo.gif`, doar în engleză, limba paginii din Apps Store) arată blocarea facturii și a livrării.
 
 Regenerare — **restrângeți la clasă**, altfel se rescriu capturile tuturor modulelor care au un test
 de fișe. Baza trebuie să aibă planul de conturi RO și modulul `sale_stock_margin`:
