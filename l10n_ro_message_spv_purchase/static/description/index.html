@@ -40,57 +40,83 @@
 <div class="tab-content">
 <div class="tab-pane fade show active py-2" id="tb-panel-overview" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <div class="mb-2"><span class="d-inline-block rounded-pill fw-bold text-uppercase" style="background-color:#DEF1DD;color:#006F42;padding:5px 14px;font-size:12px;letter-spacing:0.14em;"><span class="fa fa-star" style="margin-right:6px;" aria-hidden="true"></span>Overview</span></div>
-<h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;">Purchase Message SPV <span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">(Romania)</span></h2>
-<p class="mb-4" style="font-size:16px;line-height:1.65;max-width:780px;">This addon extends the Romanian SPV message model (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n.ro.message.spv</code>) to help
-procure-to-pay flows by linking SPV messages with Purchase Orders (PO) and
-keeping the PO&#8217;s chatter and attachments in sync.</p>
+<h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;">SPV Messages to Purchase Orders <span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">(Romania)</span></h2>
+<p class="mb-4" style="font-size:16px;line-height:1.65;max-width:780px;">This addon extends the Romanian SPV message model (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n.ro.message.spv</code>) to link
+vendor bills received through e-Factura with Purchase Orders (PO), copy the SPV
+XML on the PO and link the bill lines to the PO lines, so the PO is not invoiced
+twice.</p>
 <h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;">Key <span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">features</span></h2>
-<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-university" style="" aria-hidden="true"></span></span><div>New fields on SPV message:<ul class="ps-3 mt-1 mb-0">
-<li class="small"><code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Purchase Reference</code> (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">purchase_ref</code>) &#8211; extracted automatically from XML
+<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-university" style="" aria-hidden="true"></span></span><div>New fields on the SPV message:<ul class="ps-3 mt-1 mb-0">
+<li class="small"><code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Purchase Reference</code> (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">purchase_ref</code>) &#8211; extracted automatically from the XML
 at <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">OrderReference/ID</code> when available.</li>
 <li class="small"><code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Purchase Order</code> (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">purchase_order_id</code>) &#8211; the linked PO, if any.</li>
 </ul>
-</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-university" style="" aria-hidden="true"></span></span><div>Two dedicated actions on the SPV form:<ul class="ps-3 mt-1 mb-0">
-<li class="small">Find Purchase: searches purchase orders by reference (using
-<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">purchase_ref</code> or fallback to <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">ref</code>) across <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">partner_ref</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">origin</code>, or
-<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">name</code>, narrowed by partner/company when available.</li>
-<li class="small">Create Purchase: performs the same search; if none is found and a partner
-is set, creates a draft PO and links it.</li>
+</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-university" style="" aria-hidden="true"></span></span><div>Two buttons on the SPV message form, shown only on purchase messages
+  (vendor bills and vendor receipts):<ul class="ps-3 mt-1 mb-0">
+<li class="small"><em>G&#259;se&#537;te Comanda</em> (Find Order): searches purchase orders by reference
+(<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">purchase_ref</code>, or <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">ref</code> as fallback) in the vendor reference, source
+document or order number, restricted to the message partner and company and
+to orders that are not fully invoiced.</li>
+<li class="small"><em>Creeaz&#259; Comanda</em> (Create Order): performs the same search; if no order is
+found, creates a draft request for quotation for the message partner, with
+the reference as vendor reference, and links it.</li>
 </ul>
-</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-envelope-o" style="" aria-hidden="true"></span></span><div>When a PO is found or created, a note is posted to the PO&#8217;s chatter with a
-  contextual message and the SPV XML attached.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-university" style="" aria-hidden="true"></span></span><div>The SPV XML is not just referenced; a copy of the XML attachment is created
-  on the PO (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">ir.attachment</code> with <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">res_model='purchase.order'</code>), avoiding
-  cross&#8209;linking to the original message file.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-paperclip" style="" aria-hidden="true"></span></span><div>Duplicate prevention for attachments on the PO, based on checksum (with
-  fallback to name and mimetype).</div></div></li></ul>
+</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-shopping-bag" style="" aria-hidden="true"></span></span><div>When the reference only belongs to an order that is already fully invoiced,
+  <em>Find Order</em> does not link it again; the error names the order and its bills.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-envelope-o" style="" aria-hidden="true"></span></span><div>A second click on a message already linked to the found order is blocked, so
+  the document is not processed twice.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-university" style="" aria-hidden="true"></span></span><div>When a PO is found or created, a note is posted in the PO chatter with a copy
+  of the SPV XML attached (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">ir.attachment</code> on <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">purchase.order</code>, deduplicated by
+  checksum or by name and mimetype). When the vendor bill does not exist yet,
+  the XML is taken from the ZIP archive downloaded from ANAF.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-shopping-cart" style="" aria-hidden="true"></span></span><div>The vendor bill created from the SPV message is linked to the PO lines
+  (standard purchase matching), so the invoiced quantity is updated and the
+  standard "Create Bill" does not produce a second bill. Bill lines that are not
+  on the PO (transport, packaging) stay on the bill.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-shopping-cart" style="" aria-hidden="true"></span></span><div>With <em>Purchase UBL</em> (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">deltatech_purchase_ubl</code>) installed, the bill lines are
+  imported on the PO: directly, with a notification, when every line is matched
+  by vendor code or barcode and the totals match; otherwise the import wizard
+  opens in preview, so the user decides for each line (use a product, create a
+  new product or ignore it). The vendor bill option is off when the SPV bill
+  already exists.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-file-text-o" style="" aria-hidden="true"></span></span><div>Non-blocking duplicate warnings in the chatter: a PO that already has another
+  bill, "Create Bill" on a PO linked to an SPV bill, and a bill with the same
+  deduplication key when the module providing that key is installed.</div></div></li></ul>
 <h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;">How it <span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">works</span></h2>
 <ol>
-<li>Open an SPV message and ensure <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Partner</code> is set.</li>
-<li>Check <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Purchase Reference</code> (auto&#8209;filled from XML if present) or <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Reference</code>.</li>
+<li>Open an SPV message of type vendor bill.</li>
+<li>Check <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Purchase Reference</code> (auto-filled from the XML if present) or
+   <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Reference</code>, and <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">Partner</code>.</li>
 <li>Use one of the header buttons:<ul>
-<li>Find Purchase: links and opens the only match; if multiple matches are
- found, opens the filtered list; if none, shows a friendly error.</li>
-<li>Create Purchase: searches first; if none is found, it creates a draft PO
- for the selected partner, links it and opens it; otherwise behaves like
- Find.</li>
+<li><em>Find Order</em>: links the only match and continues with the import; if
+ several orders match, opens the filtered list; if none, shows an error,
+ naming the fully invoiced order when the reference belongs to one.</li>
+<li><em>Create Order</em>: searches first; if no order is found, creates a draft
+ request for quotation for the message partner (the partner is required),
+ links it and continues with the import; otherwise behaves like <em>Find Order</em>.</li>
 </ul>
 </li>
-<li>After linking/creating, the module posts a note on the PO and attaches a
-   cloned copy of the SPV XML to the PO record.</li>
 </ol>
 <h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;"><span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">Configuration</span></h2>
 <p>No special configuration is required. Ensure users have access rights to
-Purchase Orders and attachments as per standard Odoo security rules.</p>
+Purchase Orders and attachments as per standard Odoo security rules.
+Installing <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">deltatech_purchase_ubl</code> is recommended, so the order lines are
+imported from the XML.</p>
 <h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;"><span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">Compatibility</span></h2>
 <ul>
-<li>Odoo 17.0</li>
+<li>Odoo 19.0</li>
 <li>Depends on: <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">l10n_ro_message_spv</code>, <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">purchase</code></li>
 </ul>
-<h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;"><span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">Notes</span></h2>
-<ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-university" style="" aria-hidden="true"></span></span><div>If the SPV message has no XML attachment, only the note is posted to the PO.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-paperclip" style="" aria-hidden="true"></span></span><div>The attachment cloning uses <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">sudo()</code> to reliably create the copy on the PO.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-search" style="" aria-hidden="true"></span></span><div>The search domain is deliberately constrained by partner and company when
-  present to reduce false positives.</div></div></li></ul>
 </div>
 <div class="tab-pane fade py-2" id="tb-panel-versions" style="font-size:16px;line-height:1.65;color:#212529;font-weight:400;">
 <div class="mb-2"><span class="d-inline-block rounded-pill fw-bold text-uppercase" style="background-color:#DEF1DD;color:#006F42;padding:5px 14px;font-size:12px;letter-spacing:0.14em;"><span class="fa fa-history" style="margin-right:6px;" aria-hidden="true"></span>Versions</span></div>
+<h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;">19.0.0.0.14 <span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">(2026-11-22)</span></h2>
+<p><strong>Changed</strong></p>
+<ul>
+<li><em>Find Order</em> on an SPV message now says when the reference belongs to a
+  purchase order that is already fully invoiced, naming the order and its
+  bills, instead of reporting that no order was found. Such an order is
+  still not linked again (#9290).</li>
+<li>Consultant sheet added (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">readme/FISA_CONSULTANT.md</code>, with screenshots),
+  and the module description rewritten from the code: the real button
+  names, the fully invoiced orders left out of <em>Find Order</em>, the guard
+  against a second click and the duplicate warnings.</li>
+</ul>
 <h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;">19.0.0.0.13 <span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">(2026-11-16)</span></h2>
 <p><strong>Changed</strong></p>
 <ul>
@@ -167,17 +193,6 @@ Purchase Orders and attachments as per standard Odoo security rules.</p>
   production order: order total 2749.37 RON
   matched the XML <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">PayableAmount</code> exactly).</li>
 </ul>
-<h2 class="mt-5 mb-3" style="border:none;font-family:'Caveat',Georgia,'Times New Roman',serif;font-weight:700;color:#006F42;font-size:36px;line-height:1.1;letter-spacing:0;">19.0.0.0.4 <span style="display:inline-block;padding:0 6px;white-space:nowrap;background-image:url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);background-position:center 75%;background-repeat:no-repeat;background-size:100% 60%;">(2026-08-19)</span></h2>
-<ul>
-<li>Fix: purchase orders created from an SPV message before the vendor bill
-  existed (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">action_create_purchase</code>/<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">action_find_purchase</code>) ended up with no
-  order lines, because the XML attachment used to trigger the automatic UBL
-  import (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">deltatech_purchase_ubl</code>) is derived from the bill's attachments
-  (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">attachment_xml_id</code>, which needs <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">invoice_id</code>) and was always empty in this
-  case. <code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">_clone_xml_attachment_for_purchase</code> now falls back to extracting the
-  XML directly from the raw ANAF ZIP (<code class="border rounded px-2" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;">_get_xml_bytes</code>) when no bill exists
-  yet, so the purchase order lines get imported as expected.</li>
-</ul>
 <p><em>Older releases are listed in the module's HISTORY file.</em></p>
 </div>
 </div>
@@ -185,7 +200,7 @@ Purchase Orders and attachments as per standard Odoo security rules.</p>
 <div class="row text-center mt-4 mb-1 g-3">
   <div class="col-md-6">
     <div class="border rounded-3 px-4 py-2 h-100">
-      <div class="fw-bold" style="font-size:2.2rem;color:#006F42;line-height:1;">600+</div>
+      <div class="fw-bold" style="font-size:2.2rem;color:#006F42;line-height:1;">800+</div>
       <div class="mt-2" style="font-size:0.9rem;color:#3d4752;">Modules published on Odoo Apps</div>
     </div>
   </div>
@@ -201,7 +216,7 @@ Purchase Orders and attachments as per standard Odoo security rules.</p>
 <div class="text-center rounded-4 px-4 pt-3 pb-4 mt-4 mb-3" style="background-color:#00432a;color:#ffffff;">
   <h2 class="fw-bold mb-2" style="color:#ffffff;font-size:26px;letter-spacing:-0.3px;border:none;">Need help getting started?</h2>
   <p class="mx-auto mb-2" style="color:#bfe3cc;max-width:660px;line-height:1.6;font-size:16px;">
-     Our 600+ apps on the Odoo Apps Store are used in Odoo implementations across Europe,
+     Our 800+ apps on the Odoo Apps Store are used in Odoo implementations across Europe,
      the Americas, Asia and Africa &mdash; by companies we have never even met. That is the
      advantage of building modules that simply work.</p>
   <p class="mx-auto mb-4" style="color:#bfe3cc;max-width:660px;line-height:1.6;font-size:16px;">

@@ -48,10 +48,13 @@ valoarea, iar soldul conturilor de stoc nu mai corespunde cu valoarea stocului. 
 calculul &#537;i arat&#259;, pe fiecare mi&#537;care, valoarea actual&#259;, valoarea corect&#259; &#537;i diferen&#539;a.</p>
 <p><strong>Cum se recalculeaz&#259;</strong></p>
 <ul class="list-unstyled row row-cols-1 row-cols-md-2 g-2 mt-1 mb-4"><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-cube" style="" aria-hidden="true"></span></span><div>Mi&#537;c&#259;rile efectuate ale fiec&#259;rui produs FIFO se parcurg &#238;n ordine cronologic&#259;, cu o coad&#259; FIFO
-  pentru fiecare loca&#539;ie.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-truck" style="" aria-hidden="true"></span></span><div>Recep&#539;iile &#537;i livr&#259;rile care nu sunt pe baz&#259; de aviz se ordoneaz&#259; dup&#259; data facturii.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-file-text-o" style="" aria-hidden="true"></span></span><div>Valoarea intr&#259;rilor din facturi &#537;i costuri de achizi&#539;ie r&#259;m&#226;ne cea &#238;nregistrat&#259;; se recalculeaz&#259;
+  pentru fiecare loca&#539;ie.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-truck" style="" aria-hidden="true"></span></span><div>Recep&#539;iile &#537;i livr&#259;rile care nu sunt pe baz&#259; de aviz se ordoneaz&#259; dup&#259; data facturii.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-file-text-o" style="" aria-hidden="true"></span></span><div>Exerci&#539;iul unei diferen&#539;e e cel al notei de stoc originale a mi&#537;c&#259;rii, nu cel al facturii.</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-file-text-o" style="" aria-hidden="true"></span></span><div>Valoarea intr&#259;rilor din facturi &#537;i costuri de achizi&#539;ie r&#259;m&#226;ne cea &#238;nregistrat&#259;; se recalculeaz&#259;
   ie&#537;irile, transferurile interne (valoarea trece din gestiunea surs&#259; &#238;n cea destina&#539;ie) &#537;i
   retururile de la clien&#539;i (dup&#259; valoarea livr&#259;rii corectate).</div></div></li><li class="col"><div class="border rounded-3 px-3 py-2 h-100 d-flex align-items-start"><span class="flex-shrink-0 text-center rounded-3 d-inline-block me-2" style="background-color:#DEF1DD;color:#006F42;width:30px;height:30px;line-height:30px;font-size:15px;"><span class="fa fa-tag" style="" aria-hidden="true"></span></span><div>O ie&#537;ire f&#259;cut&#259; pe stoc negativ se evalueaz&#259; la pre&#539;ul intr&#259;rilor care o acoper&#259; &#238;n aceea&#537;i
-  loca&#539;ie.</div></div></li></ul>
+  loca&#539;ie. Dac&#259; nicio intrare ulterioar&#259; nu o acoper&#259;, valoarea ei r&#259;m&#226;ne, iar aplicarea nu &#238;nregistreaz&#259;
+  o cantitate negativ&#259; nou&#259; pe mi&#537;care, ca s&#259; nu fie compensat&#259; la o recep&#539;ie viitoare.</div></div></li></ul>
+<p>Diferen&#539;ele de p&#226;n&#259; la un prag ales &#238;n rulare (implicit 0,05 lei pe mi&#537;care) sunt rotunjiri ale
+pre&#539;ului unitar &#537;i nu se listeaz&#259; &#537;i nu se corecteaz&#259;.</p>
 <p><strong>Rularea de prob&#259;</strong> nu modific&#259; nimic: arat&#259; diferen&#539;ele pe mi&#537;c&#259;ri &#537;i un control pe fiecare cont
 de stoc (valoarea stocului recalculat&#259;, soldul contului, soldul dup&#259; corec&#539;ie &#537;i diferen&#539;a r&#259;mas&#259;).</p>
 <p><strong>La aplicare</strong> se corecteaz&#259; valorile mi&#537;c&#259;rilor &#537;i se posteaz&#259; o singur&#259; not&#259; de corec&#539;ie, la
@@ -70,7 +73,7 @@ data aleas&#259;, &#238;n jurnalul de stoc:</p>
 </tr>
 <tr>
 <td>Ie&#537;ire dintr-un exerci&#539;iu &#238;nchis</td>
-<td>1174 &#238;n locul contului de cheltuieli (OMFP 1802/2014, pct. 67 alin. 2)</td>
+<td>1174 &#238;n locul contului de cheltuieli (OMFP 1802/2014, pct. 67 alin. 2), &#238;n negru, cu conturile inversate dac&#259; ie&#537;irea a fost supraevaluat&#259; (371 = 1174)</td>
 </tr>
 <tr>
 <td>Transfer &#238;ntre gestiuni</td>
@@ -96,7 +99,8 @@ verificarea stoc&#8211;contabilitate pentru diferen&#539;ele r&#259;mase.</p>
 <li>Alege produsele sau categoriile de recalculat. Las&#259;-le goale ca s&#259; recalculezi toate produsele
    FIFO ale companiei.</li>
 <li>Completeaz&#259; <strong>Data corec&#539;iei</strong> (o dat&#259; dintr-o perioad&#259; deschis&#259;), <strong>Sf&#226;r&#537;itul ultimului
-   exerci&#539;iu &#238;nchis</strong> &#537;i <strong>Cont exerci&#539;ii &#238;nchise</strong> (de regul&#259; 1174).</li>
+   exerci&#539;iu &#238;nchis</strong> &#537;i <strong>Cont exerci&#539;ii &#238;nchise</strong> (de regul&#259; 1174). <strong>Ignor&#259; diferen&#539;ele de p&#226;n&#259; la</strong> (implicit 0,05 lei)
+   las&#259; deoparte rotunjirile pre&#539;ului unitar.</li>
 <li>Apas&#259; <strong>Calculeaz&#259;</strong>. &#206;n pagina <em>Diferen&#539;e</em> apare c&#226;te o linie pentru fiecare mi&#537;care evaluat&#259;
    gre&#537;it, cu valoarea actual&#259;, valoarea corect&#259;, diferen&#539;a &#537;i conturile notei de corec&#539;ie. Liniile
    f&#259;r&#259; conturi (observa&#539;ia &#8222;corecteaz&#259; manual") nu se aplic&#259;: corecteaz&#259;-le manual. Linia &#8222;Stoc
@@ -114,7 +118,7 @@ verificarea stoc&#8211;contabilitate pentru diferen&#539;ele r&#259;mase.</p>
 <div class="row text-center mt-4 mb-1 g-3">
   <div class="col-md-6">
     <div class="border rounded-3 px-4 py-2 h-100">
-      <div class="fw-bold" style="font-size:2.2rem;color:#006F42;line-height:1;">600+</div>
+      <div class="fw-bold" style="font-size:2.2rem;color:#006F42;line-height:1;">800+</div>
       <div class="mt-2" style="font-size:0.9rem;color:#3d4752;">Modules published on Odoo Apps</div>
     </div>
   </div>
@@ -130,7 +134,7 @@ verificarea stoc&#8211;contabilitate pentru diferen&#539;ele r&#259;mase.</p>
 <div class="text-center rounded-4 px-4 pt-3 pb-4 mt-4 mb-3" style="background-color:#00432a;color:#ffffff;">
   <h2 class="fw-bold mb-2" style="color:#ffffff;font-size:26px;letter-spacing:-0.3px;border:none;">Need help getting started?</h2>
   <p class="mx-auto mb-2" style="color:#bfe3cc;max-width:660px;line-height:1.6;font-size:16px;">
-     Our 600+ apps on the Odoo Apps Store are used in Odoo implementations across Europe,
+     Our 800+ apps on the Odoo Apps Store are used in Odoo implementations across Europe,
      the Americas, Asia and Africa &mdash; by companies we have never even met. That is the
      advantage of building modules that simply work.</p>
   <p class="mx-auto mb-4" style="color:#bfe3cc;max-width:660px;line-height:1.6;font-size:16px;">
