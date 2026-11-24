@@ -154,16 +154,15 @@ class TestStockAccountEnhancementScreenshots(ScreenshotCase or object):
                 "en_US": "Delivering goods without a cost stops: the unit price is zero",
             },
         }
-        for lang in ("en_US", "ro_RO"):
-            self.capture_gif(
-                [
-                    {"path": f"/odoo/action-account.action_move_out_invoice_type/{self.out_invoice.id}"},
-                    {"caption": captions["post"]},
-                    {"click": "button[name='action_post']", "wait_after": MODAL, "hold": 2500},
-                    {"press": "Escape"},
-                    {"path": f"/odoo/action-stock.action_picking_tree_outgoing/{self.picking.id}"},
-                    {"caption": captions["validate"]},
-                    {"click": "button[name='button_validate']", "wait_after": MODAL, "hold": 2500},
-                ],
-                lang=lang,
-            )
+        self.capture_gif(
+            [
+                {"path": f"/odoo/action-account.action_move_out_invoice_type/{self.out_invoice.id}"},
+                {"caption": captions["post"]},
+                {"click": "button[name='action_post']", "wait_after": MODAL, "hold": 2500},
+                {"press": "Escape"},
+                {"path": f"/odoo/action-stock.action_picking_tree_outgoing/{self.picking.id}"},
+                {"caption": captions["validate"]},
+                {"click": "button[name='button_validate']", "wait_after": MODAL, "hold": 2500},
+            ],
+            lang="en_US",
+        )

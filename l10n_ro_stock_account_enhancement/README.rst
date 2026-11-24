@@ -103,6 +103,23 @@ opening stock at zero cost), then back to ``False``.
 Changelog
 =========
 
+19.0.0.0.7 (2026-11-24)
+-----------------------
+
+**Changed**
+
+- The demo GIF is kept only in English
+  (``static/description/en/demo.gif``), the language of the Apps Store
+  page; the Romanian copy is removed.
+
+19.0.0.0.6 (2026-11-16)
+-----------------------
+
+**Changed**
+
+- Apps Store page (``static/description/index.html``) regenerated with
+  the Terrabit template.
+
 19.0.0.0.5 (2026-11-16)
 -----------------------
 
