@@ -148,7 +148,7 @@ repos:
   # Pagina Apps Store în stilul Terrabit (în loc de cea generată de oca-gen-addon-readme),
   # la cerere: `pre-commit run tb-gen-index --hook-stage manual --all-files`.
   - repo: https://github.com/dhongu/terrabit-pre-commit-hooks
-    rev: v1.17.0
+    rev: v1.18.0
     hooks:
       - id: tb-gen-index
 
