@@ -1,5 +1,7 @@
 1. Open *Invoicing > Accounting > SPV > Messages SPV* (with the Accounting app installed, the first
-   level is called *Accounting*). The received invoices appear as a column of cards: supplier, total,
+   level is called *Accounting*). The menu opens filtered on the received invoices (*In Invoices*);
+   remove the filter to see the issued invoices and the other messages too. The received invoices
+   appear as a column of cards: supplier, total,
    number, date, status and the days left to the due date. A message whose archive is not downloaded
    yet is a draft: its card shows the id, the type and the date of the message.
 

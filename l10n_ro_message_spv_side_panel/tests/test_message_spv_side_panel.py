@@ -8,6 +8,7 @@ import zipfile
 from lxml import etree
 
 from odoo.tests import TransactionCase, tagged
+from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.l10n_ro_message_spv_side_panel import uninstall_hook
 
@@ -204,6 +205,10 @@ class TestMessageSpvSidePanel(TransactionCase):
         action = self.env.ref("l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split")
         for xmlid in ("menu_l10n_ro_spv", "menu_l10n_ro_message_spv"):
             self.assertEqual(self.env.ref(f"l10n_ro_message_spv.{xmlid}").action, action)
+
+    def test_menu_opens_filtered_on_received_invoices(self):
+        action = self.env.ref("l10n_ro_message_spv_side_panel.action_l10n_ro_message_spv_split")
+        self.assertEqual(safe_eval(action.context).get("search_default_invoices"), 1)
 
     def test_uninstall_hook_puts_the_menus_back(self):
         original = self.env.ref("l10n_ro_message_spv.action_l10n_ro_message_spv")
