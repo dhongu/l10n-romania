@@ -193,7 +193,10 @@
         />
         <field
             name="context"
-            eval="{'side_panel_view_ref': 'l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick'}"
+            eval="{
+                'side_panel_view_ref': 'l10n_ro_message_spv_side_panel.view_l10n_ro_message_spv_form_quick',
+                'search_default_invoices': 1,
+            }"
         />
     </record>
     <record id="action_l10n_ro_message_spv_split_kanban" model="ir.actions.act_window.view">

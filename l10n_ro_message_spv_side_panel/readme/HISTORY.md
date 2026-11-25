@@ -1,3 +1,8 @@
+## 19.0.1.4.0 (2026-11-25)
+
+- The menu *Messages SPV* opens filtered on the received invoices (*In Invoices*). Remove the filter
+  to see the issued invoices and the other messages too.
+
 ## 19.0.1.3.0 (2026-11-13)
 
 - The state of the message is a status bar next to the buttons, in the panel and in the full form.

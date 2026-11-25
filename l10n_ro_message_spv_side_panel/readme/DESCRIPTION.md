@@ -1,7 +1,7 @@
 Split view for the SPV messages: the invoices received through SPV on the left, as cards, and the
 details of the selected one on the right, without leaving the list.
 
-- **Cards and list** — the menu *Messages SPV* opens a kanban of cards (supplier, amount, number,
+- **Cards and list** — the menu *Messages SPV* opens, filtered on the received invoices, a kanban of cards (supplier, amount, number,
   date, status, days to the due date; a message whose archive is not downloaded yet shows its id,
   type and date) and the usual list. A click selects the
   message and shows it in the panel.

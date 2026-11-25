@@ -72,7 +72,9 @@ Pentru demo sunt necesare câteva mesaje SPV descărcate (stare *Descărcat*), c
 ### Pasul 1 — Deschideți meniul și priviți mesajele ca carduri
 
 **Facturare → Contabilitate → SPV → Mesaje SPV** (cu aplicația Contabilitate instalată, primul
-nivel se numește *Contabilitate*). Mesajele apar pe o singură coloană. Fiecare
+nivel se numește *Contabilitate*). Meniul se deschide filtrat pe facturile primite (filtrul
+*Facturi achiziție*); scoateți filtrul ca să vedeți și facturile emise și celelalte mesaje.
+Mesajele apar pe o singură coloană. Fiecare
 card arată furnizorul, suma totală, numărul facturii, data, starea mesajului și zilele rămase până la
 scadență (roșu dacă scadența a trecut, portocaliu dacă e azi). Când *Verificare facturi primite* e
 activă, cardul arată și starea verificării: în așteptare, acceptată sau respinsă. Mesajele cu eroare arată starea
@@ -201,6 +203,7 @@ panou urmează regulile modulului *Mesaje SPV*.
 - [ ] În formularul complet, câmpurile sunt grupate: **Furnizor**, **Factură** și **Sume** pe un rând,
       documentul dedesubt și grupul **Mesaj** (ID mesaj, tip, ID cerere, CIF, dată, detalii) la sfârșit.
 - [ ] Pe un ecran îngust, clicul pe un mesaj deschide formularul complet.
+- [ ] Meniul *Mesaje SPV* se deschide cu filtrul *Facturi achiziție* aplicat.
 - [ ] Lista mesajelor funcționează ca înainte, iar formularul complet are în plus documentul, fără file.
 - [ ] O ciornă (arhivă nedescărcată) apare ca un card cu identificatorul, tipul și data mesajului, fără sumă.
 - [ ] Tabelul de linii arată coloana **Cod** (codul furnizorului sau identificatorul standard).
