@@ -1,3 +1,9 @@
+## 20.0.2.2.2 (2026-11-26)
+
+**Fixed**
+
+- The unlock button icon uses Material Symbols (`lock_open`) instead of `fa-unlock`, which Odoo 20 no longer renders.
+
 ## 20.0.2.2.1 (2026-11-16)
 
 **Changed**
