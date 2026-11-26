@@ -23,7 +23,7 @@
                         <div class="o_row" invisible="customs_regime != '4200'">
                             <field name="vat_guarantee_state"/>
                             <button name="action_release_vat_guarantee" type="object" string="Mark as Released"
-                                    class="btn-link" icon="fa-unlock"
+                                    class="btn-link" icon="lock_open"
                                     invisible="vat_guarantee_state != 'blocked'"/>
                         </div>
                     </group>
