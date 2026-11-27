@@ -9,3 +9,9 @@ pending no other event can be sent for the same UIT.
 
 Once a deletion is validated, the transfer shows a red *UIT deleted* banner and no further actions are
 offered; a new notification has to be sent for the transport.
+
+**Cancelling a transfer with a valid UIT.** On such a transfer, **Cancel** opens the same dialog locked on
+the deletion. After **Send to ANAF** the transfer is cancelled as soon as ANAF receives the deletion; if
+ANAF rejects the request right away, the transfer stays as it is. If ANAF refuses the deletion later, a
+warning activity *UIT … still valid at ANAF* is scheduled on the cancelled transfer: delete the UIT again.
+While another event of the UIT is pending, cancelling is blocked until its status is fetched.

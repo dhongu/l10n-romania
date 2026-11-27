@@ -301,7 +301,7 @@ msgstr ""
 #: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
 msgid ""
 "The document was cancelled, but ANAF refused the deletion of UIT %(uit)s. "
-"Delete the UIT again from the eTransport tab."
+"Delete the UIT again with the Delete UIT button of the document."
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
