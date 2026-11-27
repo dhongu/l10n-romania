@@ -43,8 +43,9 @@ prezente `l10n_ro_etransport_uit_actions` și `l10n_ro_edi_stock`.
 ### Pasul 1 — Acțiunile pe lot
 
 **Inventar → Operațiuni → Transferuri în lot**, deschideți lotul. Cu notificarea **Validat**, antetul
-arată **Șterge UIT**, **Confirmă UIT** și **Schimbă vehiculul**. Dialogul și regulile sunt aceleași ca
-pe transfer (vezi fișa `l10n_ro_etransport_uit_actions`, pasul 2).
+arată **Șterge UIT**, **Confirmă UIT** și **Schimbă vehiculul**. Dialogul e cel de pe transfer
+(vezi fișa `l10n_ro_etransport_uit_actions`, pasul 2), cu o diferență: în loc de câmpul **Transfer**
+arată câmpul **Lot de transfer**, completat cu lotul curent. Regulile sunt aceleași.
 
 ### Pasul 2 — Urmărirea evenimentelor
 
@@ -88,6 +89,8 @@ Nu se generează note contabile.
 
 | Mesaj | Cauză | Remediere |
 |---|---|---|
+| Transferul nu are un UIT validat. | Dialogul e deschis pe un document fără UIT validat de ANAF | Trimiteți notificarea și așteptați starea **Validat**, apoi reluați acțiunea |
+| Ștergeți UIT-ul fiecărui document înainte de anulare: … | **Anulează** pe mai multe loturi odată, unele cu UIT valabil | Anulați-le pe rând: fiecare trece prin dialogul de ștergere |
 | Un eveniment eTransport pentru UIT-ul … încă așteaptă răspunsul ANAF. Preia-i starea înainte de anulare. | **Anulează** cu un eveniment în așteptare | Preluați starea, apoi anulați |
 | UIT-ul nu este într-o stare care acceptă acțiuni (șters sau cu alt eveniment în așteptare). | Un eveniment așteaptă răspunsul ANAF | **Preia starea evenimentelor**, apoi reîncercați |
 | UIT-ul nu este într-o stare care acceptă acțiuni (șters sau cu alt eveniment în așteptare). | UIT-ul e deja șters (banda roșie pe tab-ul eTransport) | Nu mai există acțiuni pe acest UIT; transportul are nevoie de o notificare nouă |

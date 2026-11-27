@@ -76,8 +76,9 @@ rămâne în tabel cu starea **Eroare**.
 
 ### Pasul 3 — Urmărirea răspunsului ANAF
 
-Pe tab-ul **eTransport**, tabelul **Evenimente UIT** arată evenimentul cu starea **Trimis** și
-**Index încărcare ANAF**. Starea finală vine de la ANAF: așteptați acțiunea programată sau apăsați
+Pe tab-ul **eTransport**, tabelul **Evenimente UIT** arată evenimentul cu starea **Trimis**.
+Coloana **Index încărcare ANAF** e ascunsă implicit: o afișați din selectorul de coloane al tabelului
+(pictograma din capătul dreapta al antetului). Starea finală vine de la ANAF: așteptați acțiunea programată sau apăsați
 **Preia starea evenimentelor**. Evenimentul trece în **Validat** sau **Eroare**, iar chatter-ul
 transferului primește mesajul cu rezultatul.
 
@@ -127,7 +128,7 @@ avertizare la ștergerea refuzată pe un transfer anulat.
 ## 8. Verificări pentru consultant
 
 - [ ] Butoanele **Șterge UIT**, **Confirmă UIT** și **Schimbă vehiculul** apar doar cu notificarea **Validat**.
-- [ ] După trimitere, evenimentul e **Trimis** cu index de încărcare, iar butoanele dispar până la răspuns.
+- [ ] După trimitere, evenimentul e **Trimis** cu index de încărcare (coloana **Index încărcare ANAF**, afișată din selectorul de coloane), iar butoanele dispar până la răspuns.
 - [ ] O modificare de vehicul schimbă numerele pe transfer abia după **Validat**.
 - [ ] O ștergere validată afișează banda roșie pe tab-ul eTransport.
 - [ ] **Anulează** pe un transfer cu UIT valabil deschide dialogul de ștergere, nu anulează direct.
@@ -138,6 +139,8 @@ avertizare la ștergerea refuzată pe un transfer anulat.
 
 | Mesaj | Cauză | Remediere |
 |---|---|---|
+| Transferul nu are un UIT validat. | Dialogul e deschis pe un document fără UIT validat de ANAF | Trimiteți notificarea și așteptați starea **Validat**, apoi reluați acțiunea |
+| Ștergeți UIT-ul fiecărui document înainte de anulare: … | **Anulează** pe mai multe transferuri odată, unele cu UIT valabil | Anulați-le pe rând: fiecare trece prin dialogul de ștergere |
 | UIT-ul nu este într-o stare care acceptă acțiuni (șters sau cu alt eveniment în așteptare). | Un eveniment **Trimis** așteaptă răspunsul ANAF | **Preia starea evenimentelor**, apoi reîncercați |
 | UIT-ul nu este într-o stare care acceptă acțiuni (șters sau cu alt eveniment în așteptare). | UIT-ul e deja șters (banda roșie) | Nu mai există acțiuni pe acest UIT; transportul are nevoie de o notificare nouă |
 | Un eveniment eTransport pentru UIT-ul … încă așteaptă răspunsul ANAF. Preia-i starea înainte de anulare. | **Anulează** cu un eveniment în așteptare | Preluați starea, apoi anulați |
