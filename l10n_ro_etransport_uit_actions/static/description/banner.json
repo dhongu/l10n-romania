@@ -1,0 +1,6 @@
+{
+  "title": "e-Transport UIT Actions",
+  "summary": "ANAF UIT events from the transfer",
+  "lang": "en",
+  "features": ["Delete or confirm a UIT", "Change the vehicle on a UIT", "UIT event history on the transfer"]
+}

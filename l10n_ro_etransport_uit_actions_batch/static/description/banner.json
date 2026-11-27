@@ -1,0 +1,6 @@
+{
+  "title": "e-Transport UIT Actions for Batches",
+  "summary": "Delete, confirm or change vehicle on batch UITs",
+  "lang": "en",
+  "features": ["Delete or confirm a batch UIT", "Change the vehicle on a batch", "ANAF status tracked in the chatter"]
+}
