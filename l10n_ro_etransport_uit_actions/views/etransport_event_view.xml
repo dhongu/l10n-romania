@@ -22,7 +22,7 @@
                 <button name="action_fetch_status"
                     type="object"
                     string="Fetch Status"
-                    icon="fa-refresh"
+                    icon="refresh"
                     invisible="state != 'sent'"
                 />
             </list>

@@ -2,7 +2,6 @@
 #              Dorin Hongu <dhongu(@)gmail(.)com
 # See README.rst file on addons root folder for license details
 
-import base64
 import logging
 
 import markupsafe
@@ -10,6 +9,7 @@ import requests
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import BinaryBytes
 
 from .etransport_api_actions import ETransportActionsAPI
 
@@ -154,7 +154,7 @@ class EtransportEvent(models.Model):
         """
         for event in self:
             raw_xml = event._render_xml()
-            event.attachment = base64.b64encode(raw_xml.encode("utf-8"))
+            event.attachment = BinaryBytes(raw_xml.encode("utf-8"))
             try:
                 result = ETransportActionsAPI().upload_action(company_id=event.company_id, data=raw_xml)
             except requests.exceptions.RequestException as error:
@@ -275,7 +275,7 @@ class EtransportEvent(models.Model):
                     {
                         "name": f"etransport_{self.event_type}_{self.uit}.xml",
                         "type": "binary",
-                        "datas": self.attachment,
+                        "raw": self.attachment,
                         "res_model": parent._name,
                         "res_id": parent.id,
                     }

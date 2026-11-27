@@ -17,7 +17,7 @@ e-Transport UIT Actions
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_etransport_uit_actions
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_etransport_uit_actions
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -48,6 +48,13 @@ demand) and applies the effects on the transfer — the new vehicle
 number, the *UIT deleted* flag — **only after ANAF validates the
 event**, never right after the upload.
 
+**Cancelling a transfer with a valid UIT** goes through the deletion:
+*Cancel* opens the DEL wizard and the transfer is cancelled as soon as
+ANAF receives the deletion, so no cancelled transfer is left with a UIT
+that is still valid. If ANAF later refuses that deletion, a warning
+activity is scheduled on the transfer. Cancellations made from code (for
+example when a sale order is cancelled) are not affected.
+
 Optional *post-outage declaration* flag (``declPostAvarie``, OUG 41/2022
 art. 8 par. 1^3) on every event.
 
@@ -62,7 +69,7 @@ Configuration
 Nothing beyond the standard eTransport setup (ANAF access token and
 test/production environment on the company). The scheduled action *RO
 e-Transport: UIT event status update* runs every 15 minutes and can be
-adjusted under Settings → Technical → Scheduled Actions.
+adjusted under Settings → Technical → Automation → Scheduled Actions.
 
 Usage
 =====
@@ -82,8 +89,38 @@ Once a deletion is validated, the transfer shows a red *UIT deleted*
 banner and no further actions are offered; a new notification has to be
 sent for the transport.
 
+**Cancelling a transfer with a valid UIT.** On such a transfer,
+**Cancel** opens the same dialog locked on the deletion. After **Send to
+ANAF** the transfer is cancelled as soon as ANAF receives the deletion;
+if ANAF rejects the request right away, the transfer stays as it is. If
+ANAF refuses the deletion later, a warning activity *UIT … still valid
+at ANAF* is scheduled on the cancelled transfer: delete the UIT again.
+While another event of the UIT is pending, cancelling is blocked until
+its status is fetched.
+
 Changelog
 =========
+
+19.0.1.2.0 (2026-11-27)
+-----------------------
+
+**Added**
+
+- *Cancel* on a transfer with a valid UIT opens the deletion wizard
+  (DEL) instead of cancelling directly; the transfer is cancelled as
+  soon as ANAF receives the deletion. A transfer can no longer be
+  cancelled while its UIT stays valid at ANAF.
+- If ANAF later refuses the deletion of a cancelled transfer's UIT, a
+  warning activity is scheduled on the transfer so the UIT is deleted
+  again.
+
+19.0.1.1.4 (2026-11-16)
+-----------------------
+
+**Changed**
+
+- Apps Store page (``static/description/index.html``) regenerated with
+  the Terrabit template.
 
 19.0.1.1.3 (2026-10-22)
 -----------------------
@@ -145,6 +182,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_etransport_uit_actions>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_etransport_uit_actions>`_ project on GitHub.
 
 You are welcome to contribute.

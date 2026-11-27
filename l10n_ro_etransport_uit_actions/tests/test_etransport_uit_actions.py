@@ -8,7 +8,6 @@ ciclul de stare (sent → validated / failed) și că transferul e atins DOAR du
 validare — nu după upload, când ANAF încă poate refuza.
 """
 
-import base64
 from unittest.mock import patch
 
 from lxml import etree
@@ -16,6 +15,7 @@ from lxml import etree
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+from odoo.tools import BinaryBytes
 
 from odoo.addons.l10n_ro_etransport_uit_actions.models.etransport_api_actions import ETransportActionsAPI
 
@@ -69,7 +69,7 @@ class TestEtransportUitActions(TransactionCase):
                 "state": "stock_validated",
                 "l10n_ro_edi_stock_uit": "3000000000000001",
                 "l10n_ro_edi_stock_load_id": "4001",
-                "attachment": base64.b64encode(b"<eTransport/>"),
+                "attachment": BinaryBytes(b"<eTransport/>"),
             }
         )
         cls.picking.invalidate_recordset()
@@ -80,7 +80,7 @@ class TestEtransportUitActions(TransactionCase):
         )
 
     def _root(self, event):
-        return etree.fromstring(base64.b64decode(event.attachment))
+        return etree.fromstring(event.attachment.content)
 
     # ------------------------------------------------------------------
     # Precondiții

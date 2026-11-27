@@ -1,3 +1,11 @@
+## 20.0.1.2.0 (2026-11-27)
+
+**Changed**
+
+- Migrated to Odoo 20: access rights in `security/ir.access.csv`, the event XML stored as raw bytes
+  (Odoo 20 `Binary` fields) and attached to the chatter through `raw`, Material Symbols icon on
+  *Fetch Status*.
+
 ## 19.0.1.2.0 (2026-11-27)
 
 **Added**
