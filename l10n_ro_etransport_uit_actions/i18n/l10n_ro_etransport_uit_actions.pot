@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-10 06:56+0000\n"
-"PO-Revision-Date: 2026-09-10 06:56+0000\n"
+"POT-Creation-Date: 2026-11-27 12:12+0000\n"
+"PO-Revision-Date: 2026-11-27 12:12+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,8 +34,30 @@ msgid "Action"
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/stock_picking.py:0
+msgid ""
+"An eTransport event for UIT %(uit)s is still waiting for the ANAF answer. "
+"Fetch its status before cancelling."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
 msgid "Cancel"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__cancel_after_send
+msgid "Cancel After Sending"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid ""
+"Cancelled after sending the deletion of UIT %(uit)s to ANAF. If ANAF refuses"
+" the deletion, the UIT stays valid and must be deleted again."
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
@@ -94,6 +116,12 @@ msgstr ""
 #. module: l10n_ro_etransport_uit_actions
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
 msgid "Delete UIT"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/stock_picking.py:0
+msgid "Delete the UIT of each document before cancelling: %(names)s"
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
@@ -168,9 +196,22 @@ msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
 #. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "Only a deletion (DEL) can be sent when cancelling the document."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
 #: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
 msgid ""
 "Only events rejected by ANAF can be deleted; the others are an audit trail."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__cancel_after_send
+msgid ""
+"Opened from the Cancel button: the document is cancelled once ANAF receives "
+"the deletion."
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
@@ -236,9 +277,31 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_live
+msgid ""
+"The UIT is validated by ANAF and not deleted: cancelling the transfer "
+"deletes it first."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
 #: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_deleted
 msgid ""
 "The current UIT was deleted at ANAF; the notification is no longer valid."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid ""
+"The document has a valid UIT. It is cancelled right after ANAF receives the "
+"deletion."
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid ""
+"The document was cancelled, but ANAF refused the deletion of UIT %(uit)s. "
+"Delete the UIT again from the eTransport tab."
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
@@ -304,6 +367,12 @@ msgid "UIT"
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "UIT %(uit)s still valid at ANAF"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
 #: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_enable_actions
 msgid "UIT Actions Enabled"
 msgstr ""
@@ -322,6 +391,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_event_ids
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
 msgid "UIT Events"
+msgstr ""
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_live
+msgid "UIT Live"
 msgstr ""
 
 #. module: l10n_ro_etransport_uit_actions
