@@ -26,7 +26,7 @@ tipărită, grupată pe contul de stoc.
 - Pivotul și lista din acest modul sunt o **analiză** a mișcărilor (fără coloana de stoc după
   fiecare operație); documentul echivalent formularului 14-3-8 este fișa tipărită
   (**Tipărire fișă**), cu stocul după fiecare operație. Exportul XLSX nu o înlocuiește.
-- Modulul lucrează pe valorizarea nativă a stocului din Odoo 19; nu depinde de motorul de
+- Modulul lucrează pe valorizarea nativă a stocului din Odoo (19.0 și 20.0); nu depinde de motorul de
   valorizare OCA (`l10n_ro_stock_account`).
 
 ## 3. Utilizatori și roluri
@@ -68,7 +68,12 @@ Accesați **Inventar → Raportare → Raport Fișă de magazie**. Se deschide f
   locațiile din interiorul ei;
 - **Data** — perioada; implicit luna curentă;
 - opțional: **Numai pentru produsele** (doar anumite produse), **Produse cu mișcări** (ascunde
-  produsele fără mișcări în perioadă), **Detaliat pe locații**.
+  produsele fără mișcări în perioadă), **Detaliat pe locații** (câte un set separat de rânduri
+  INITIAL / mișcări / FINAL pentru fiecare locație inclusă, în loc de unul pe toată gestiunea);
+- **Afișați locația** — doar informativ: deschide în fereastră lista **Numai pentru locații**,
+  cu locațiile luate în calcul (locația aleasă și, cu sublocațiile incluse, cele din interiorul
+  ei; fără locație, toate locațiile interne). Lista nu se editează: se schimbă prin **Locație**
+  și **Includeți sublocații**.
 
 Apăsați **Afișare fișă**.
 
@@ -153,6 +158,12 @@ gestiune, din mișcările validate.
       documentul ei.
 - [ ] Rândul FINAL al fiecărui produs are aceleași valori ca rândul produsului din pivot.
 - [ ] Cu **Produse cu mișcări** bifat, produsele fără mișcări în perioadă nu apar.
+- [ ] Cu **Detaliat pe locații** bifat (și **Includeți sublocații**), fiecare locație cu mișcări
+      are propriile rânduri INITIAL, mișcări și FINAL, atât în pivot (grupat pe *Locație*), cât și
+      în fișa tipărită (titlul cu locația deasupra fiecărui bloc); suma pe locații a soldurilor
+      finale este egală cu soldul aceluiași produs fără detaliere.
+- [ ] Cu **Afișați locația** bifat, lista **Numai pentru locații** arată locația aleasă și
+      sublocațiile ei.
 - [ ] **Tipărire fișă** descarcă PDF-ul cu, pe fiecare produs, contul de stoc al categoriei
       (ex. `371000 - Mărfuri`), rândul INITIAL, mișcările document cu document și rândul FINAL;
       stocul de pe rândul FINAL este egal cu cel din pivot.
@@ -189,7 +200,7 @@ apoi calculează fișa pe luna curentă.
 Regenerare:
 
 ```bash
-./odoo/odoo-bin -c odoo.conf -d test19 -i l10n_ro,l10n_ro_storage_sheet,l10n_ro_doc_screenshots --test-tags=fise_screenshots --stop-after-init
+./odoo/odoo-bin -c odoo.conf -d test20 -i l10n_ro,l10n_ro_storage_sheet,l10n_ro_doc_screenshots --test-tags=fise_screenshots --stop-after-init
 ```
 
 ## 11. Observații pentru manual
