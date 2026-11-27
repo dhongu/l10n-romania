@@ -1,3 +1,13 @@
+## 19.0.1.2.0 (2026-11-27)
+
+**Added**
+
+- *Cancel* on a transfer with a valid UIT opens the deletion wizard (DEL) instead of cancelling directly;
+  the transfer is cancelled as soon as ANAF receives the deletion. A transfer can no longer be cancelled
+  while its UIT stays valid at ANAF.
+- If ANAF later refuses the deletion of a cancelled transfer's UIT, a warning activity is scheduled on the
+  transfer so the UIT is deleted again.
+
 ## 19.0.1.1.4 (2026-11-16)
 
 **Changed**

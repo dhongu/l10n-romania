@@ -108,3 +108,14 @@ class TestEtransportUitActionsBatch(TransactionCase):
         with patch.object(ETransportActionsAPI, "get_status", return_value={"content": {"stare": "ok"}}):
             event.action_fetch_status()
         self.assertEqual(self.batch.l10n_ro_edi_stock_vehicle_number, "CJ77LOT")
+
+    def test_cancel_batch_with_live_uit_sends_delete(self):
+        self.assertTrue(self.batch.l10n_ro_etransport_uit_live)
+        action = self.batch.action_l10n_ro_etransport_cancel()
+        wizard = self.env[action["res_model"]].with_context(**action["context"]).create({})
+        self.assertEqual((wizard.batch_id, wizard.event_type), (self.batch, "DEL"))
+        self.assertTrue(wizard.cancel_after_send)
+        with patch.object(ETransportActionsAPI, "upload_data", return_value=UPLOAD_OK):
+            wizard.action_send()
+        self.assertEqual(self.batch.l10n_ro_etransport_event_ids.event_type, "DEL")
+        self.assertEqual(self.batch.state, "cancel")

@@ -33,6 +33,18 @@
                     invisible="not l10n_ro_etransport_event_pending"
                 />
             </button>
+            <!-- cu UIT valabil, „Cancel” trece prin ștergerea UIT-ului (DEL) -->
+            <button name="action_cancel" position="attributes">
+                <attribute name="invisible">state != 'in_progress' or l10n_ro_etransport_uit_live</attribute>
+            </button>
+            <button name="action_cancel" position="after">
+                <field name="l10n_ro_etransport_uit_live" invisible="1" />
+                <button name="action_l10n_ro_etransport_cancel"
+                    string="Cancel"
+                    type="object"
+                    invisible="state != 'in_progress' or not l10n_ro_etransport_uit_live"
+                />
+            </button>
             <page name="etransport" position="inside">
                 <div class="alert alert-danger" role="alert" invisible="not l10n_ro_etransport_uit_deleted">
                     This UIT was deleted at ANAF. The transport can no longer travel under it.

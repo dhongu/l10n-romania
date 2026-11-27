@@ -29,6 +29,11 @@ class EtransportActionWizard(models.TransientModel):
     trailer_1_number = fields.Char(string="Trailer 1 Number", size=20)
     trailer_2_number = fields.Char(string="Trailer 2 Number", size=20)
     modification_date = fields.Datetime(string="Modification Date", default=fields.Datetime.now)
+    cancel_after_send = fields.Boolean(
+        string="Cancel After Sending",
+        readonly=True,
+        help="Opened from the Cancel button: the document is cancelled once ANAF receives the deletion.",
+    )
 
     def _get_parent(self):
         """Transferul aici; lotul în modulul de loturi. Aceleași câmpuri
@@ -63,6 +68,8 @@ class EtransportActionWizard(models.TransientModel):
             errors.append(
                 self.env._("The UIT is not in a state that accepts actions (deleted, or another event is pending).")
             )
+        if self.cancel_after_send and self.event_type != "DEL":
+            errors.append(self.env._("Only a deletion (DEL) can be sent when cancelling the document."))
         if self.event_type == "CON" and not self.confirmation_type:
             errors.append(self.env._("Choose the confirmation type."))
         if self.event_type == "MVH":
@@ -114,4 +121,14 @@ class EtransportActionWizard(models.TransientModel):
                     "next": {"type": "ir.actions.act_window_close"},
                 },
             }
+        if self.cancel_after_send:
+            parent = self._get_parent()
+            parent.action_cancel()
+            parent._message_log(
+                body=self.env._(
+                    "Cancelled after sending the deletion of UIT %(uit)s to ANAF. "
+                    "If ANAF refuses the deletion, the UIT stays valid and must be deleted again.",
+                    uit=self.uit,
+                )
+            )
         return {"type": "ir.actions.act_window_close"}
