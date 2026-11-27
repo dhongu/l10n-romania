@@ -16,4 +16,9 @@ polls the status every 15 minutes (or on demand) and applies the effects on the 
 vehicle number, the *UIT deleted* flag — **only after ANAF validates the event**, never right after
 the upload.
 
+**Cancelling a transfer with a valid UIT** goes through the deletion: *Cancel* opens the DEL wizard and
+the transfer is cancelled as soon as ANAF receives the deletion, so no cancelled transfer is left with a
+UIT that is still valid. If ANAF later refuses that deletion, a warning activity is scheduled on the
+transfer. Cancellations made from code (for example when a sale order is cancelled) are not affected.
+
 Optional *post-outage declaration* flag (`declPostAvarie`, OUG 41/2022 art. 8 par. 1^3) on every event.

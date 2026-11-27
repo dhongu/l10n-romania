@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-10 06:56+0000\n"
+"POT-Creation-Date: 2026-11-27 12:12+0000\n"
 "PO-Revision-Date: 2026-09-10 06:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
@@ -34,9 +34,35 @@ msgid "Action"
 msgstr "Acțiune"
 
 #. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/stock_picking.py:0
+msgid ""
+"An eTransport event for UIT %(uit)s is still waiting for the ANAF answer. "
+"Fetch its status before cancelling."
+msgstr ""
+"Un eveniment eTransport pentru UIT-ul %(uit)s încă așteaptă răspunsul ANAF. "
+"Preia-i starea înainte de anulare."
+
+#. module: l10n_ro_etransport_uit_actions
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
 msgid "Cancel"
 msgstr "Anulează"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__cancel_after_send
+msgid "Cancel After Sending"
+msgstr "Anulează după trimitere"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid ""
+"Cancelled after sending the deletion of UIT %(uit)s to ANAF. If ANAF refuses"
+" the deletion, the UIT stays valid and must be deleted again."
+msgstr ""
+"Anulat după trimiterea la ANAF a ștergerii UIT-ului %(uit)s. Dacă ANAF "
+"refuză ștergerea, UIT-ul rămâne valabil și trebuie șters din nou."
 
 #. module: l10n_ro_etransport_uit_actions
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
@@ -97,6 +123,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
 msgid "Delete UIT"
 msgstr "Șterge UIT"
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/stock_picking.py:0
+msgid "Delete the UIT of each document before cancelling: %(names)s"
+msgstr "Ștergeți UIT-ul fiecărui document înainte de anulare: %(names)s"
 
 #. module: l10n_ro_etransport_uit_actions
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
@@ -172,12 +204,27 @@ msgstr "Data modificării"
 
 #. module: l10n_ro_etransport_uit_actions
 #. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/wizards/etransport_action_wizard.py:0
+msgid "Only a deletion (DEL) can be sent when cancelling the document."
+msgstr "La anularea documentului se poate trimite doar ștergerea (DEL)."
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
 #: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
 msgid ""
 "Only events rejected by ANAF can be deleted; the others are an audit trail."
 msgstr ""
 "Pot fi șterse doar evenimentele respinse de ANAF; celelalte sunt pistă de "
 "audit."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_l10n_ro_etransport_action_wizard__cancel_after_send
+msgid ""
+"Opened from the Cancel button: the document is cancelled once ANAF receives "
+"the deletion."
+msgstr ""
+"Deschis din butonul Anulează: documentul se anulează după ce ANAF primește "
+"ștergerea."
 
 #. module: l10n_ro_etransport_uit_actions
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
@@ -244,10 +291,38 @@ msgstr ""
 " în așteptare)."
 
 #. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_live
+msgid ""
+"The UIT is validated by ANAF and not deleted: cancelling the transfer "
+"deletes it first."
+msgstr ""
+"UIT-ul e validat de ANAF și nu e șters: la anularea transferului se șterge "
+"întâi UIT-ul."
+
+#. module: l10n_ro_etransport_uit_actions
 #: model:ir.model.fields,help:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_deleted
 msgid ""
 "The current UIT was deleted at ANAF; the notification is no longer valid."
 msgstr "UIT-ul curent a fost șters la ANAF; notificarea nu mai este valabilă."
+
+#. module: l10n_ro_etransport_uit_actions
+#: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_etransport_action_wizard_form
+msgid ""
+"The document has a valid UIT. It is cancelled right after ANAF receives the "
+"deletion."
+msgstr ""
+"Documentul are un UIT valabil. Se anulează imediat după ce ANAF primește "
+"ștergerea."
+
+#. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid ""
+"The document was cancelled, but ANAF refused the deletion of UIT %(uit)s. "
+"Delete the UIT again with the Delete UIT button of the document."
+msgstr ""
+"Documentul a fost anulat, dar ANAF a refuzat ștergerea UIT-ului %(uit)s. "
+"Ștergeți din nou UIT-ul cu butonul Șterge UIT al documentului."
 
 #. module: l10n_ro_etransport_uit_actions
 #. odoo-python
@@ -315,6 +390,12 @@ msgid "UIT"
 msgstr "UIT"
 
 #. module: l10n_ro_etransport_uit_actions
+#. odoo-python
+#: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
+msgid "UIT %(uit)s still valid at ANAF"
+msgstr "UIT-ul %(uit)s e încă valabil la ANAF"
+
+#. module: l10n_ro_etransport_uit_actions
 #: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_enable_actions
 msgid "UIT Actions Enabled"
 msgstr "Acțiuni UIT disponibile"
@@ -334,6 +415,11 @@ msgstr "Eveniment UIT în așteptare"
 #: model_terms:ir.ui.view,arch_db:l10n_ro_etransport_uit_actions.view_picking_form
 msgid "UIT Events"
 msgstr "Evenimente UIT"
+
+#. module: l10n_ro_etransport_uit_actions
+#: model:ir.model.fields,field_description:l10n_ro_etransport_uit_actions.field_stock_picking__l10n_ro_etransport_uit_live
+msgid "UIT Live"
+msgstr "UIT valabil"
 
 #. module: l10n_ro_etransport_uit_actions
 #. odoo-python

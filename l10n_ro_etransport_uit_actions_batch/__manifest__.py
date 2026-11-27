@@ -4,7 +4,7 @@
 
 {
     "name": "e-Transport UIT Actions for Batches",
-    "version": "19.0.1.0.4",
+    "version": "19.0.1.1.0",
     "author": "Terrabit, Dorin Hongu",
     "website": "https://www.terrabit.ro",
     "summary": "Delete, confirm or change the vehicle of a UIT issued for a transfer batch",
@@ -15,6 +15,7 @@
         "l10n_ro_edi_stock_batch",
     ],
     "license": "LGPL-3",
+    "consultant_sheet": "simple",
     "data": [
         "views/etransport_event_view.xml",
         "views/stock_picking_batch_view.xml",

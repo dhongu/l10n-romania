@@ -9,7 +9,8 @@
                     <group>
                         <field name="picking_id" />
                         <field name="uit" />
-                        <field name="event_type" widget="radio" />
+                        <field name="cancel_after_send" invisible="1" />
+                        <field name="event_type" widget="radio" readonly="cancel_after_send" />
                     </group>
                     <group>
                         <field name="post_outage" />
@@ -31,6 +32,9 @@
                 </group>
                 <div class="alert alert-warning" role="alert" invisible="event_type != 'DEL'">
                     Deleting the notification invalidates the UIT at ANAF. The goods can no longer travel under it; a new notification is needed for the transport.
+                </div>
+                <div class="alert alert-info" role="alert" invisible="not cancel_after_send">
+                    The document has a valid UIT. It is cancelled right after ANAF receives the deletion.
                 </div>
                 <footer>
                     <button name="action_send" string="Send to ANAF" type="object" class="btn-primary" />

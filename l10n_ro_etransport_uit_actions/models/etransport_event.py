@@ -169,6 +169,7 @@ class EtransportEvent(models.Model):
             if "error" in result:
                 event.write({"state": "failed", "message": result["error"]})
                 event._log_on_picking(self.env._("eTransport %(event)s was rejected: %(message)s"))
+                event._warn_deletion_refused_on_cancelled()
                 continue
             event.write({"state": "sent", "load_id": result["content"]["index_incarcare"], "message": False})
             event._log_on_picking(
@@ -205,6 +206,7 @@ class EtransportEvent(models.Model):
             if "error" in result:
                 event.write({"state": "failed", "message": result["error"]})
                 event._log_on_picking(self.env._("eTransport %(event)s was rejected: %(message)s"))
+                event._warn_deletion_refused_on_cancelled()
                 continue
             match state := result["content"]["stare"]:
                 case "ok":
@@ -216,6 +218,7 @@ class EtransportEvent(models.Model):
                 case "XML cu erori nepreluat de sistem":
                     event.write({"state": "failed", "message": self.env._("XML contains errors.")})
                     event._log_on_picking(self.env._("eTransport %(event)s was rejected: %(message)s"))
+                    event._warn_deletion_refused_on_cancelled()
                 case _:
                     event._log_on_picking(
                         self.env._("Unhandled eTransport state for %(event)s: %(message)s"), message=state
@@ -236,6 +239,24 @@ class EtransportEvent(models.Model):
                         "l10n_ro_edi_stock_trailer_2_number": event.trailer_2_number or False,
                     }
                 )
+
+    def _warn_deletion_refused_on_cancelled(self):
+        """Documentul a fost anulat la trimiterea ștergerii, dar ANAF a refuzat-o:
+        UIT-ul e încă valabil. Lăsăm o activitate ca să nu treacă neobservat."""
+        for event in self.filtered(lambda e: e.event_type == "DEL"):
+            parent = event._get_parent()
+            if parent.state != "cancel":
+                continue
+            parent.activity_schedule(
+                "mail.mail_activity_data_warning",
+                summary=self.env._("UIT %(uit)s still valid at ANAF", uit=event.uit),
+                note=self.env._(
+                    "The document was cancelled, but ANAF refused the deletion of UIT %(uit)s. "
+                    "Delete the UIT again with the Delete UIT button of the document.",
+                    uit=event.uit,
+                ),
+                user_id=event.create_uid.id or self.env.uid,
+            )
 
     def _log_on_picking(self, body_template, attach=False, **extra):
         self.ensure_one()

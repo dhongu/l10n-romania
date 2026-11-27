@@ -227,3 +227,65 @@ class TestEtransportUitActions(TransactionCase):
             event.action_fetch_status()
         self.assertEqual(event.state, "failed")
         self.assertEqual(self.picking.l10n_ro_edi_stock_vehicle_number, "B123ABC")
+
+    # ------------------------------------------------------------------
+    # Anularea transferului cu UIT valabil
+    # ------------------------------------------------------------------
+
+    def _cancel_wizard(self):
+        action = self.picking.action_l10n_ro_etransport_cancel()
+        self.assertEqual(action["res_model"], "l10n.ro.etransport.action.wizard")
+        return self.env[action["res_model"]].with_context(**action["context"]).create({})
+
+    def test_cancel_with_live_uit_opens_del_wizard(self):
+        self.picking.action_confirm()
+        self.assertTrue(self.picking.l10n_ro_etransport_uit_live)
+        wizard = self._cancel_wizard()
+        self.assertEqual(wizard.event_type, "DEL")
+        self.assertTrue(wizard.cancel_after_send)
+        self.assertNotEqual(self.picking.state, "cancel")
+
+        with patch.object(ETransportActionsAPI, "upload_data", return_value=UPLOAD_OK):
+            wizard.action_send()
+        event = self.picking.l10n_ro_etransport_event_ids
+        self.assertEqual((event.event_type, event.state), ("DEL", "sent"))
+        self.assertEqual(self.picking.state, "cancel")
+
+    def test_cancel_upload_error_keeps_transfer(self):
+        self.picking.action_confirm()
+        wizard = self._cancel_wizard()
+        with patch.object(ETransportActionsAPI, "upload_data", return_value={"error": "Token expirat"}):
+            action = wizard.action_send()
+        self.assertEqual(action["params"]["type"], "danger")
+        self.assertNotEqual(self.picking.state, "cancel")
+
+    def test_cancel_deletion_refused_schedules_warning(self):
+        self.picking.action_confirm()
+        with patch.object(ETransportActionsAPI, "upload_data", return_value=UPLOAD_OK):
+            self._cancel_wizard().action_send()
+        self.assertEqual(self.picking.state, "cancel")
+        with patch.object(ETransportActionsAPI, "get_status", return_value={"error": "UIT inexistent"}):
+            self.picking.action_l10n_ro_etransport_fetch_event_status()
+        self.assertTrue(self.picking.activity_ids.filtered(lambda a: "3000000000000001" in a.summary))
+
+    def test_cancel_wizard_only_sends_delete(self):
+        wizard = self._cancel_wizard()
+        wizard.write({"event_type": "CON", "confirmation_type": "10"})
+        with self.assertRaises(UserError):
+            wizard.action_send()
+
+    def test_cancel_with_pending_event_is_blocked(self):
+        with patch.object(ETransportActionsAPI, "upload_data", return_value=UPLOAD_OK):
+            self._wizard("DEL").action_send()
+        with self.assertRaises(UserError):
+            self.picking.action_l10n_ro_etransport_cancel()
+
+    def test_cancel_after_uit_deleted_is_direct(self):
+        self.picking.action_confirm()
+        with patch.object(ETransportActionsAPI, "upload_data", return_value=UPLOAD_OK):
+            self._wizard("DEL").action_send()
+        with patch.object(ETransportActionsAPI, "get_status", return_value={"content": {"stare": "ok"}}):
+            self.picking.action_l10n_ro_etransport_fetch_event_status()
+        self.assertFalse(self.picking.l10n_ro_etransport_uit_live)
+        self.picking.action_l10n_ro_etransport_cancel()
+        self.assertEqual(self.picking.state, "cancel")

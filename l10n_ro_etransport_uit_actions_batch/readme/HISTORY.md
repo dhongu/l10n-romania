@@ -1,3 +1,10 @@
+## 19.0.1.1.0 (2026-11-27)
+
+**Added**
+
+- *Cancel* on a batch with a valid UIT opens the deletion wizard (DEL); the batch is cancelled as soon as
+  ANAF receives the deletion.
+
 ## 19.0.1.0.4 (2026-11-16)
 
 **Changed**
