@@ -3,7 +3,6 @@
 # See README.rst file on addons root folder for license details
 """Evenimentele UIT pe LOT: aceeași mecanică ca pe transfer, dar părintele e lotul."""
 
-import base64
 from unittest.mock import patch
 
 from lxml import etree
@@ -11,6 +10,7 @@ from lxml import etree
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+from odoo.tools import BinaryBytes
 
 from odoo.addons.l10n_ro_etransport_uit_actions.models.etransport_api_actions import ETransportActionsAPI
 
@@ -65,7 +65,7 @@ class TestEtransportUitActionsBatch(TransactionCase):
                 "state": "stock_validated",
                 "l10n_ro_edi_stock_uit": "3000000000000777",
                 "l10n_ro_edi_stock_load_id": "4777",
-                "attachment": base64.b64encode(b"<eTransport/>"),
+                "attachment": BinaryBytes(b"<eTransport/>"),
             }
         )
         cls.batch.invalidate_recordset()
@@ -87,7 +87,7 @@ class TestEtransportUitActionsBatch(TransactionCase):
         self.assertEqual(len(event), 1)
         self.assertFalse(event.picking_id)
         self.assertEqual(event.company_id, self.company)
-        root = etree.fromstring(base64.b64decode(event.attachment))
+        root = etree.fromstring(event.attachment.content)
         self.assertEqual(root.get("refDeclarant"), self.batch.name)
         self.assertEqual(root.find(f"{{{NS}}}stergere").get("uit"), "3000000000000777")
         self.assertFalse(self.batch.l10n_ro_etransport_enable_actions)

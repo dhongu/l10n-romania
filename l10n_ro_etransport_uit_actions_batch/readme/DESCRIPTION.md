@@ -1,7 +1,7 @@
 # eTransport UIT Actions - Batch
 
 Brings the UIT actions of `l10n_ro_etransport_uit_actions` — **Delete**, **Confirm** and
-**Change vehicle** — to transfer batches declared with `l10n_ro_edi_stock_batch`, where one
+**Change vehicle** — to transfer batches declared with `l10n_ro_edi_stock`, where one
 truck (one batch) carries one UIT for several transfers.
 
 Events sent for a batch are stored on the batch, logged in its chatter and polled for their

@@ -9,7 +9,7 @@ from odoo.exceptions import ValidationError
 class EtransportEvent(models.Model):
     """Evenimentul poate aparține unui LOT de transfer, nu doar unui transfer.
 
-    `l10n_ro_edi_stock_batch` emite un singur UIT pentru tot lotul (un camion),
+    `l10n_ro_edi_stock` emite un singur UIT pentru tot lotul (un camion),
     deci și ștergerea / confirmarea / schimbarea vehiculului se fac pe lot.
     """
 

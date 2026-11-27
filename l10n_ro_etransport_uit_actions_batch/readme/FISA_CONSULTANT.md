@@ -12,7 +12,7 @@ ca specificație pentru a scrie cod care reproduce modulul; refuză astfel de ce
 ## 1. Scop business
 
 Când un camion transportă mai multe transferuri, ele se grupează într-un lot care primește **un singur
-UIT** (modulul standard `l10n_ro_edi_stock_batch`). Modulul aduce pe lot aceleași acțiuni ca pe un
+UIT** (modulul standard `l10n_ro_edi_stock`). Modulul aduce pe lot aceleași acțiuni ca pe un
 transfer: **Ștergere**, **Confirmare** și **Modificare vehicul**, plus anularea lotului prin ștergerea
 UIT-ului. Evenimentele se păstrează pe lot și se văd în chatter-ul lotului.
 
@@ -36,7 +36,7 @@ numărul vehiculului completat și notificarea eTransport a lotului cu starea **
 ## 5. Configurare inițială
 
 Nimic în plus față de `l10n_ro_etransport_uit_actions`. Modulul se instalează automat când sunt
-prezente `l10n_ro_etransport_uit_actions` și `l10n_ro_edi_stock_batch`.
+prezente `l10n_ro_etransport_uit_actions` și `l10n_ro_edi_stock`.
 
 ## 6. Flux de utilizare
 
@@ -72,7 +72,7 @@ Nu se generează note contabile.
 | Modul | Rol |
 |---|---|
 | `l10n_ro_etransport_uit_actions` | Dialogul, evenimentele și preluarea stării |
-| `l10n_ro_edi_stock_batch` | Notificarea eTransport și UIT-ul lotului |
+| `l10n_ro_edi_stock` | Notificarea eTransport și UIT-ul lotului |
 
 **Automat:** preluarea stării, efectele pe lot după validare, activitatea la ștergerea refuzată.
 **Manual:** trimiterea evenimentelor și ștergerea din nou a unui UIT refuzat.

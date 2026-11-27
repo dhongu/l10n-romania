@@ -17,7 +17,7 @@ e-Transport UIT Actions for Batches
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_etransport_uit_actions_batch
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_etransport_uit_actions_batch
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -35,6 +35,9 @@ and polled for their ANAF status exactly like the ones sent for a single
 transfer; a validated vehicle change updates the plates on the batch,
 and a validated deletion flags the batch UIT as deleted.
 
+*Cancel* on a batch with a valid UIT opens the deletion wizard too, and
+cancels the batch once ANAF receives the deletion.
+
 Installs automatically when both parent modules are present.
 
 **Table of contents**
@@ -50,8 +53,28 @@ header shows **Delete UIT**, **Confirm UIT** and **Change Vehicle**, the
 same dialog as on a transfer. The events appear in the *UIT Events*
 table on the batch's eTransport tab.
 
+**Cancel** on a batch with a valid UIT opens the dialog locked on the
+deletion and cancels the batch as soon as ANAF receives it, as on a
+single transfer.
+
 Changelog
 =========
+
+19.0.1.1.0 (2026-11-27)
+-----------------------
+
+**Added**
+
+- *Cancel* on a batch with a valid UIT opens the deletion wizard (DEL);
+  the batch is cancelled as soon as ANAF receives the deletion.
+
+19.0.1.0.4 (2026-11-16)
+-----------------------
+
+**Changed**
+
+- Apps Store page (``static/description/index.html``) regenerated with
+  the Terrabit template.
 
 19.0.1.0.3 (2026-10-22)
 -----------------------
@@ -105,6 +128,6 @@ Current maintainer:
 
 |maintainer-dhongu| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_etransport_uit_actions_batch>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_etransport_uit_actions_batch>`_ project on GitHub.
 
 You are welcome to contribute.

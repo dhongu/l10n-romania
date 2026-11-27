@@ -1,3 +1,12 @@
+## 20.0.1.1.0 (2026-11-27)
+
+**Changed**
+
+- Migrated to Odoo 20. The eTransport notification of a batch comes from `l10n_ro_edi_stock`, because
+  `l10n_ro_edi_stock_batch` was merged into it; the batch form is `stock.stock_picking_batch_form`
+  (`stock_picking_batch` was merged into `stock`).
+- The event XML is stored as raw bytes (Odoo 20 `Binary` fields), no longer base64.
+
 ## 19.0.1.1.0 (2026-11-27)
 
 **Added**
