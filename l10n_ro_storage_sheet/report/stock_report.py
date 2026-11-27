@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import SQL
 
 # Local fallback; in v19 we do not depend on l10n_ro_stock_account
 VALUED_TYPE = [("indefinite", "Indefinite")]
@@ -118,7 +119,7 @@ class StorageSheet(models.TransientModel):
             "product_list": tuple(product_list or []),
             "company": self.company_id.id,
         }
-        self.env.cr.execute(query, params=params)
+        self.env.cr.execute(SQL(query, **params))
         product_list = [r["product_id"] for r in self.env.cr.dictfetchall()]
         return product_list
 
@@ -201,27 +202,21 @@ class StorageSheet(models.TransientModel):
             }
             _logger.info("start query_select_sold_init %s", location.name)
             # defalcare sold initial pe preturi
-            query_select_sold_init = self._get_sql_select_sold_init()
-
             params.update({"reference": "INITIAL"})
-            self.env.cr.execute(query_select_sold_init, params=params)
+            self.env.cr.execute(self._get_sql_select_sold_init(params))
             # res = self.env.cr.dictfetchall()
             # self.env["l10n.ro.storage.sheet.line"].create(res)
             _logger.info("start query_select_sold_final %s", location.name)
-            query_select_sold_final = self._get_sql_select_sold_final()
-
             params.update({"reference": "FINAL"})
-            self.env.cr.execute(query_select_sold_final, params=params)
+            self.env.cr.execute(self._get_sql_select_sold_final(params))
             # res = self.env.cr.dictfetchall()
             # self.env["l10n.ro.storage.sheet.line"].create(res)
             _logger.info("start query_in %s", location.name)
-            query_in = self._get_sql_select_in()
-            self.env.cr.execute(query_in, params=params)
+            self.env.cr.execute(self._get_sql_select_in(params))
             # res = self.env.cr.dictfetchall()
             # self.env["l10n.ro.storage.sheet.line"].create(res)
             _logger.info("start query_out %s", location.name)
-            query_out = self._get_sql_select_out()
-            self.env.cr.execute(query_out, params=params)
+            self.env.cr.execute(self._get_sql_select_out(params))
             # res = self.env.cr.dictfetchall()
             # self.line_product_ids.create(res)
         _logger.info("end select ")
@@ -259,20 +254,15 @@ class StorageSheet(models.TransientModel):
     def _get_lot_fields(self):
         # In v19 we aggregate by move only; lot breakdown is disabled to avoid
         # dependencies on move lines or SVL. Keep empty to simplify queries.
-        field = ""
-        select = ""
-        join = ""
-        group = ""
-        return field, select, join, group
+        # Extensions return SQL() fragments: field and select start with a comma
+        return {"field": SQL(), "select": SQL(), "join": SQL(), "group": SQL()}
 
-    def _get_sql_select_sold_init(self):
-        field, select, join, group = self._get_lot_fields()
-
-        sql = f"""
+    def _get_sql_select_sold_init(self, params):
+        sql = """
          insert into l10n_ro_storage_sheet_line
           (report_id, product_id, amount_initial, quantity_initial,
            account_id, date_time, date, reference, document,
-           location_id, categ_id {field})
+           location_id, categ_id %(field)s)
 
         select * from(
             SELECT %(report)s as report_id, x.product_id as product_id,
@@ -285,7 +275,7 @@ class StorageSheet(models.TransientModel):
                 %(reference)s as document,
                 %(location)s as location_id,
                 x.categ_id as categ_id
-                {select}
+                %(select)s
             from (
                 SELECT sm.product_id, pt.categ_id,
                        ABS(sm.value) as amount,
@@ -293,7 +283,7 @@ class StorageSheet(models.TransientModel):
                 from stock_move as sm
                     left join product_product prod on prod.id = sm.product_id
                     left join product_template pt on pt.id = prod.product_tmpl_id
-                    {join}
+                    %(join)s
                 where
                     sm.state = 'done' AND
                     sm.company_id = %(company)s AND
@@ -307,7 +297,7 @@ class StorageSheet(models.TransientModel):
                 from stock_move as sm
                     left join product_product prod on prod.id = sm.product_id
                     left join product_template pt on pt.id = prod.product_tmpl_id
-                    {join}
+                    %(join)s
                 where
                     sm.state = 'done' AND
                     sm.company_id = %(company)s AND
@@ -315,19 +305,17 @@ class StorageSheet(models.TransientModel):
                     sm.date <  %(datetime_from)s AND
                     sm.location_id in %(locations)s
             ) as x
-            GROUP BY x.product_id, x.categ_id {group})
+            GROUP BY x.product_id, x.categ_id %(group)s)
         a --where a.amount_initial!=0 and a.quantity_initial!=0
             """
-        return sql
+        return SQL(sql, **self._get_lot_fields(), **params)
 
-    def _get_sql_select_sold_final(self):
-        field, select, join, group = self._get_lot_fields()
-
-        sql = f"""
+    def _get_sql_select_sold_final(self, params):
+        sql = """
         insert into l10n_ro_storage_sheet_line
           (report_id, product_id, amount_final, quantity_final,
            account_id, date_time, date, reference, document,
-           location_id, categ_id {field})
+           location_id, categ_id %(field)s)
         select * from(
             SELECT %(report)s as report_id, x.product_id as product_id,
                 COALESCE(sum(x.amount), 0) as amount_final,
@@ -340,7 +328,7 @@ class StorageSheet(models.TransientModel):
                 %(reference)s as document,
                 %(location)s as location_id,
                 x.categ_id as categ_id
-                {select}
+                %(select)s
             from (
                 SELECT sm.product_id, pt.categ_id,
                        ABS(sm.value) as amount,
@@ -348,7 +336,7 @@ class StorageSheet(models.TransientModel):
                 from stock_move as sm
                     left join product_product prod on prod.id = sm.product_id
                     left join product_template pt on pt.id = prod.product_tmpl_id
-                    {join}
+                    %(join)s
                 where
                     sm.state = 'done' AND
                     sm.company_id = %(company)s AND
@@ -362,7 +350,7 @@ class StorageSheet(models.TransientModel):
                 from stock_move as sm
                     left join product_product prod on prod.id = sm.product_id
                     left join product_template pt on pt.id = prod.product_tmpl_id
-                    {join}
+                    %(join)s
                 where
                     sm.state = 'done' AND
                     sm.company_id = %(company)s AND
@@ -370,19 +358,17 @@ class StorageSheet(models.TransientModel):
                     sm.date <=  %(datetime_to)s AND
                     sm.location_id in %(locations)s
             ) as x
-            GROUP BY x.product_id, x.categ_id {group})
+            GROUP BY x.product_id, x.categ_id %(group)s)
         a
             """
-        return sql
+        return SQL(sql, **self._get_lot_fields(), **params)
 
-    def _get_sql_select_in(self):
-        field, select, join, group = self._get_lot_fields()
-
-        sql = f"""
+    def _get_sql_select_in(self, params):
+        sql = """
         insert into l10n_ro_storage_sheet_line
           (report_id, product_id, amount_in, quantity_in, unit_price_in,
            account_id, invoice_id, date_time, date, reference,  location_id,
-           partner_id, document, valued_type, categ_id {field} )
+           partner_id, document, valued_type, categ_id %(field)s )
         select * from(
 
         SELECT  %(report)s as report_id, sm.product_id as product_id,
@@ -403,12 +389,12 @@ class StorageSheet(models.TransientModel):
             sm.reference as document,
             'indefinite' as valued_type,
             pt.categ_id as categ_id
-                {select}
+                %(select)s
             from stock_move as sm
                 left join product_product prod on prod.id = sm.product_id
                 left join product_template pt on pt.id = prod.product_tmpl_id
                 left join stock_picking as sp on sm.picking_id = sp.id
-            {join}
+            %(join)s
             where
                 sm.state = 'done' AND
                 sm.company_id = %(company)s AND
@@ -417,19 +403,17 @@ class StorageSheet(models.TransientModel):
                 sm.location_dest_id in %(locations)s
             GROUP BY sm.product_id, sm.date,
              sm.reference, sp.partner_id,
-             pt.categ_id {group})
+             pt.categ_id %(group)s)
         a --where a.amount_in!=0 and a.quantity_in!=0
                 """
-        return sql
+        return SQL(sql, **self._get_lot_fields(), **params)
 
-    def _get_sql_select_out(self):
-        field, select, join, group = self._get_lot_fields()
-
-        sql = f"""
+    def _get_sql_select_out(self, params):
+        sql = """
         insert into l10n_ro_storage_sheet_line
           (report_id, product_id, amount_out, quantity_out, unit_price_out,
            account_id, invoice_id, date_time, date, reference,  location_id,
-           partner_id, document, valued_type, categ_id {field})
+           partner_id, document, valued_type, categ_id %(field)s)
 
         select * from(
 
@@ -451,12 +435,12 @@ class StorageSheet(models.TransientModel):
             sm.reference as document,
             'indefinite' as valued_type,
             pt.categ_id as categ_id
-            {select}
+            %(select)s
             from stock_move as sm
                 left join product_product prod on prod.id = sm.product_id
                 left join product_template pt on pt.id = prod.product_tmpl_id
                 left join stock_picking as sp on sm.picking_id = sp.id
-                {join}
+                %(join)s
             where
                 sm.state = 'done' AND
                 sm.company_id = %(company)s AND
@@ -465,10 +449,10 @@ class StorageSheet(models.TransientModel):
                 sm.location_id in %(locations)s
             GROUP BY sm.product_id, sm.date,
                      sm.reference, sp.partner_id,
-                     pt.categ_id {group})
+                     pt.categ_id %(group)s)
         a --where a.amount_out!=0 and a.quantity_out!=0
                 """
-        return sql
+        return SQL(sql, **self._get_lot_fields(), **params)
 
     def get_report_products(self):
         self.ensure_one()

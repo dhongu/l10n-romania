@@ -5,6 +5,8 @@
 - Quantities are reported in the product's unit of measure (`quantity_product_uom`). A receipt
   or delivery in another unit (e.g. 2 dozens of a product kept in units) was counted as 2
   instead of 24.
+- The report queries are built with `SQL()`; `_get_lot_fields()` returns `SQL()` fragments.
+- Own module icon (stock ledger with a box) instead of the generic OCA icon.
 
 ## 19.0.1.0.2 (2026-11-06)
 
