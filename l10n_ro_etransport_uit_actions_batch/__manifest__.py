@@ -15,6 +15,7 @@
         "l10n_ro_edi_stock_batch",
     ],
     "license": "LGPL-3",
+    "consultant_sheet": "simple",
     "data": [
         "views/etransport_event_view.xml",
         "views/stock_picking_batch_view.xml",

@@ -319,10 +319,10 @@ msgstr ""
 #: code:addons/l10n_ro_etransport_uit_actions/models/etransport_event.py:0
 msgid ""
 "The document was cancelled, but ANAF refused the deletion of UIT %(uit)s. "
-"Delete the UIT again from the eTransport tab."
+"Delete the UIT again with the Delete UIT button of the document."
 msgstr ""
 "Documentul a fost anulat, dar ANAF a refuzat ștergerea UIT-ului %(uit)s. "
-"Ștergeți din nou UIT-ul din tab-ul eTransport."
+"Ștergeți din nou UIT-ul cu butonul Șterge UIT al documentului."
 
 #. module: l10n_ro_etransport_uit_actions
 #. odoo-python

@@ -252,7 +252,7 @@ class EtransportEvent(models.Model):
                 summary=self.env._("UIT %(uit)s still valid at ANAF", uit=event.uit),
                 note=self.env._(
                     "The document was cancelled, but ANAF refused the deletion of UIT %(uit)s. "
-                    "Delete the UIT again from the eTransport tab.",
+                    "Delete the UIT again with the Delete UIT button of the document.",
                     uit=event.uit,
                 ),
                 user_id=event.create_uid.id or self.env.uid,

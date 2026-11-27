@@ -14,6 +14,7 @@
         "l10n_ro_etransport_enhancement",
     ],
     "license": "LGPL-3",
+    "consultant_sheet": "simple",
     "images": ["static/description/main_screenshot.png"],
     "data": [
         "security/ir.model.access.csv",
