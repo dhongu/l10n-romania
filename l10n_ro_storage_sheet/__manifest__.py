@@ -5,7 +5,7 @@
     "images": ["static/description/main_screenshot.png"],
     "license": "AGPL-3",
     "consultant_sheet": "full",
-    "version": "19.0.1.0.2",
+    "version": "20.0.1.0.2",
     "countries": ["ro"],
     "author": "Terrabit, NextERP Romania",
     "website": "https://www.terrabit.ro",
@@ -20,7 +20,7 @@
     "data": [
         "report/stock_report_view.xml",
         "report/stock_report_template.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
     ],
     "installable": True,
     "development_status": "Mature",

@@ -3,8 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import logging
 from collections import defaultdict
+from datetime import UTC
 
-import pytz
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
@@ -170,12 +170,12 @@ class StorageSheet(models.TransientModel):
         datetime_from = fields.Datetime.to_datetime(self.date_from)
         datetime_from = fields.Datetime.context_timestamp(self, datetime_from)
         datetime_from = datetime_from.replace(hour=0)
-        datetime_from = datetime_from.astimezone(pytz.utc)
+        datetime_from = datetime_from.astimezone(UTC)
 
         datetime_to = fields.Datetime.to_datetime(self.date_to)
         datetime_to = fields.Datetime.context_timestamp(self, datetime_to)
         datetime_to = datetime_to.replace(hour=23, minute=59, second=59)
-        datetime_to = datetime_to.astimezone(pytz.utc)
+        datetime_to = datetime_to.astimezone(UTC)
 
         if self.detailed_locations:
             all_locations = self.with_context(active_test=False).location_ids
@@ -288,8 +288,8 @@ class StorageSheet(models.TransientModel):
                 {select}
             from (
                 SELECT sm.product_id, pt.categ_id,
-                       sm.value as amount,
-                       sm.quantity as quantity
+                       ABS(sm.value) as amount,
+                       sm.quantity_product_uom as quantity
                 from stock_move as sm
                     left join product_product prod on prod.id = sm.product_id
                     left join product_template pt on pt.id = prod.product_tmpl_id
@@ -302,8 +302,8 @@ class StorageSheet(models.TransientModel):
                     sm.location_dest_id in %(locations)s
                 UNION ALL
                 SELECT sm.product_id, pt.categ_id,
-                       -sm.value as amount,
-                       -sm.quantity as quantity
+                       -ABS(sm.value) as amount,
+                       -sm.quantity_product_uom as quantity
                 from stock_move as sm
                     left join product_product prod on prod.id = sm.product_id
                     left join product_template pt on pt.id = prod.product_tmpl_id
@@ -343,8 +343,8 @@ class StorageSheet(models.TransientModel):
                 {select}
             from (
                 SELECT sm.product_id, pt.categ_id,
-                       sm.value as amount,
-                       sm.quantity as quantity
+                       ABS(sm.value) as amount,
+                       sm.quantity_product_uom as quantity
                 from stock_move as sm
                     left join product_product prod on prod.id = sm.product_id
                     left join product_template pt on pt.id = prod.product_tmpl_id
@@ -357,8 +357,8 @@ class StorageSheet(models.TransientModel):
                     sm.location_dest_id in %(locations)s
                 UNION ALL
                 SELECT sm.product_id, pt.categ_id,
-                       -sm.value as amount,
-                       -sm.quantity as quantity
+                       -ABS(sm.value) as amount,
+                       -sm.quantity_product_uom as quantity
                 from stock_move as sm
                     left join product_product prod on prod.id = sm.product_id
                     left join product_template pt on pt.id = prod.product_tmpl_id
@@ -386,11 +386,11 @@ class StorageSheet(models.TransientModel):
         select * from(
 
         SELECT  %(report)s as report_id, sm.product_id as product_id,
-            COALESCE(sum(sm.value),0)   as amount_in,
-            COALESCE(ROUND(sum(sm.quantity), 5), 0)   as quantity_in,
+            COALESCE(sum(ABS(sm.value)),0)   as amount_in,
+            COALESCE(ROUND(sum(sm.quantity_product_uom), 5), 0)   as quantity_in,
             CASE
-                WHEN ROUND(COALESCE(sum(sm.quantity), 0), 5) != 0
-                    THEN COALESCE(sum(sm.value),0) / NULLIF(sum(sm.quantity),0)
+                WHEN ROUND(COALESCE(sum(sm.quantity_product_uom), 0), 5) != 0
+                    THEN COALESCE(sum(ABS(sm.value)),0) / NULLIF(sum(sm.quantity_product_uom),0)
                 ELSE 0
             END as unit_price_in,
              NULL::int as account_id,
@@ -434,11 +434,11 @@ class StorageSheet(models.TransientModel):
         select * from(
 
         SELECT  %(report)s as report_id, sm.product_id as product_id,
-            COALESCE(sum(sm.value),0)   as amount_out,
-            COALESCE(ROUND(sum(sm.quantity), 5),0) as quantity_out,
+            COALESCE(sum(ABS(sm.value)),0)   as amount_out,
+            COALESCE(ROUND(sum(sm.quantity_product_uom), 5),0) as quantity_out,
             CASE
-                WHEN ROUND(COALESCE(sum(sm.quantity), 0), 5) != 0
-                    THEN COALESCE(sum(sm.value),0) / NULLIF(sum(sm.quantity),0)
+                WHEN ROUND(COALESCE(sum(sm.quantity_product_uom), 0), 5) != 0
+                    THEN COALESCE(sum(ABS(sm.value)),0) / NULLIF(sum(sm.quantity_product_uom),0)
                 ELSE 0
             END as unit_price_out,
             NULL::int as account_id,
@@ -533,9 +533,9 @@ class StorageSheetLine(models.TransientModel):
     report_id = fields.Many2one("l10n.ro.storage.sheet", index=True, ondelete="cascade")
     product_id = fields.Many2one("product.product", string="Product", index=True)
     amount_initial = fields.Monetary(currency_field="currency_id", string="Initial Amount", default=0.0)
-    quantity_initial = fields.Float(digits="Product Unit of Measure", string="Initial Quantity", default=0.0)
+    quantity_initial = fields.Float(digits="Product Unit", string="Initial Quantity", default=0.0)
     amount_in = fields.Monetary(currency_field="currency_id", string="Input Amount", default=0.0)
-    quantity_in = fields.Float(digits="Product Unit of Measure", string="Input Quantity", default=0.0)
+    quantity_in = fields.Float(digits="Product Unit", string="Input Quantity", default=0.0)
     unit_price_in = fields.Monetary(
         currency_field="currency_id",
         string="Price Unit In",
@@ -543,7 +543,7 @@ class StorageSheetLine(models.TransientModel):
         aggregator="avg",
     )
     amount_out = fields.Monetary(currency_field="currency_id", default=0.0, string="Output Amount")
-    quantity_out = fields.Float(digits="Product Unit of Measure", string="Output Quantity", default=0.0)
+    quantity_out = fields.Float(digits="Product Unit", string="Output Quantity", default=0.0)
     unit_price_out = fields.Monetary(
         currency_field="currency_id",
         string="Price Unit Out",
@@ -551,7 +551,7 @@ class StorageSheetLine(models.TransientModel):
         aggregator="avg",
     )
     amount_final = fields.Monetary(currency_field="currency_id", default=0.0, string="Final Amount")
-    quantity_final = fields.Float(digits="Product Unit of Measure", string="Final Quantity", default=0.0)
+    quantity_final = fields.Float(digits="Product Unit", string="Final Quantity", default=0.0)
     date_time = fields.Datetime(string="Datetime")
     date = fields.Date()
     reference = fields.Char()

@@ -252,7 +252,7 @@ class TestStockReport(TransactionCase):
         Move.create(
             {
                 "product_id": product.id,
-                "product_uom": product.uom_id.id,
+                "uom_id": product.uom_id.id,
                 "product_uom_qty": qty,
                 "picking_id": picking.id,
                 "location_id": picking.location_id.id,
@@ -386,3 +386,78 @@ class TestStockReport(TransactionCase):
             "l10n_ro_storage_sheet.report_storage_sheet_all", wizard.ids
         )
         self.assertIn(self.picking.name, html.decode())
+
+    def _sheet_totals(self, product, date_from, date_to):
+        wizard = Form(self.env["l10n.ro.storage.sheet"])
+        wizard.location_id = self.location
+        wizard.product_ids = product
+        wizard.date_from = date_from
+        wizard.date_to = date_to
+        wizard = wizard.save()
+        wizard.do_compute_product()
+        lines = wizard.line_product_ids.filtered(
+            lambda line: line.product_id == product and line.location_id == self.location
+        )
+        return {
+            field: sum(lines.mapped(field))
+            for field in (
+                "quantity_initial",
+                "quantity_in",
+                "quantity_out",
+                "quantity_final",
+                "amount_initial",
+                "amount_in",
+                "amount_out",
+                "amount_final",
+            )
+        }
+
+    def test_report_amounts_outgoing(self):
+        """On 20.0 stock.move.value is negative on outgoing moves: the sheet still shows
+        the output as a positive amount and deducts it from the final balance."""
+        product = self.product_1
+        move_date = fields.Datetime.now() - timedelta(days=5)
+        self._create_receipt(product, 4, move_date)
+        delivery = self._create_delivery(product, 1, move_date)
+        out_value = abs(delivery.move_ids.value)
+        self.assertTrue(out_value)
+
+        totals = self._sheet_totals(product, move_date.date() - timedelta(days=1), fields.Date.today())
+        self.assertEqual(totals["quantity_out"], 1)
+        self.assertAlmostEqual(totals["amount_out"], out_value)
+        self.assertAlmostEqual(totals["amount_final"], totals["amount_in"] - out_value)
+        self.assertEqual(totals["quantity_final"], 3)
+
+    def test_report_quantities_in_product_uom(self):
+        """A move in another unit of measure is reported in the product's unit."""
+        product = self.product_1
+        dozen = self.env.ref("uom.product_uom_dozen")
+        move_date = fields.Datetime.now() - timedelta(days=5)
+        picking_type_in = self.env.ref("stock.picking_type_in")
+        picking = self.env["stock.picking"].create(
+            {
+                "picking_type_id": picking_type_in.id,
+                "location_id": picking_type_in.default_location_src_id.id,
+                "location_dest_id": picking_type_in.default_location_dest_id.id,
+                "move_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": product.id,
+                            "uom_id": dozen.id,
+                            "product_uom_qty": 2,
+                            "location_id": picking_type_in.default_location_src_id.id,
+                            "location_dest_id": picking_type_in.default_location_dest_id.id,
+                        },
+                    )
+                ],
+            }
+        )
+        picking.action_confirm()
+        picking.button_validate()
+        picking.move_ids.date = move_date
+
+        totals = self._sheet_totals(product, move_date.date() - timedelta(days=1), fields.Date.today())
+        self.assertEqual(totals["quantity_in"], 24)
+        self.assertEqual(totals["quantity_final"], 24)

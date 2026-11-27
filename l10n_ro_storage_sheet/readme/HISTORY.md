@@ -1,3 +1,11 @@
+## 20.0.1.0.2 (2026-11-27)
+
+- Migration to 20.0. On 20.0 the value of an outgoing stock move is negative: the sheet keeps
+  showing outputs as positive amounts and deducts them from the final balance, as on 19.0.
+- Quantities are reported in the product's unit of measure (`quantity_product_uom`). A receipt
+  or delivery in another unit (e.g. 2 dozens of a product kept in units) was counted as 2
+  instead of 24.
+
 ## 19.0.1.0.2 (2026-11-06)
 
 - **The printed storage sheet (Show Sheet Pdf) came out without any move.** Both PDF templates

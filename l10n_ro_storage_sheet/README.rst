@@ -17,7 +17,7 @@ Romania - Storage Sheet (Fișă Magazie)
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-dhongu%2Fl10n--romania-lightgray.png?logo=github
-    :target: https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_storage_sheet
+    :target: https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_storage_sheet
     :alt: dhongu/l10n-romania
 
 |badge1| |badge2| |badge3|
@@ -85,13 +85,24 @@ Usage
    |Printed storage sheet: per product, under the 371000 stock account,
    the INITIAL, delivery and FINAL rows with the running stock|
 
-.. |Stock sheet wizard with the location, the date range and the Show Sheet button highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/01_wizard_fisa_magazie.png
-.. |Stock sheet pivot grouped by product, with initial, input, output and final quantities and amounts| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/02_pivot_fisa_magazie.png
-.. |Stock sheet list with one row per move with the INITIAL and FINAL rows per product| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/03_lista_miscari.png
-.. |Printed storage sheet: per product, under the 371000 stock account, the INITIAL, delivery and FINAL rows with the running stock| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/19.0/l10n_ro_storage_sheet/static/description/en/04_pdf_fisa_magazie.png
+.. |Stock sheet wizard with the location, the date range and the Show Sheet button highlighted| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_storage_sheet/static/description/en/01_wizard_fisa_magazie.png
+.. |Stock sheet pivot grouped by product, with initial, input, output and final quantities and amounts| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_storage_sheet/static/description/en/02_pivot_fisa_magazie.png
+.. |Stock sheet list with one row per move with the INITIAL and FINAL rows per product| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_storage_sheet/static/description/en/03_lista_miscari.png
+.. |Printed storage sheet: per product, under the 371000 stock account, the INITIAL, delivery and FINAL rows with the running stock| image:: https://raw.githubusercontent.com/dhongu/l10n-romania/20.0/l10n_ro_storage_sheet/static/description/en/04_pdf_fisa_magazie.png
 
 Changelog
 =========
+
+20.0.1.0.2 (2026-11-27)
+-----------------------
+
+- Migration to 20.0. On 20.0 the value of an outgoing stock move is
+  negative: the sheet keeps showing outputs as positive amounts and
+  deducts them from the final balance, as on 19.0.
+- Quantities are reported in the product's unit of measure
+  (``quantity_product_uom``). A receipt or delivery in another unit
+  (e.g. 2 dozens of a product kept in units) was counted as 2 instead of
+  24.
 
 19.0.1.0.2 (2026-11-06)
 -----------------------
@@ -187,6 +198,6 @@ Current maintainers:
 
 |maintainer-dhongu| |maintainer-feketemihai| 
 
-This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/19.0/l10n_ro_storage_sheet>`_ project on GitHub.
+This module is part of the `dhongu/l10n-romania <https://github.com/dhongu/l10n-romania/tree/20.0/l10n_ro_storage_sheet>`_ project on GitHub.
 
 You are welcome to contribute.
